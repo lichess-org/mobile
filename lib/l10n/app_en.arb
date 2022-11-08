@@ -1,0 +1,16 @@
+{
+  "testLoc": "In English, {name}",
+  "@testLoc": {
+    "description": "A test",
+    "placeholders": {
+      "name": {
+          "type": "String",
+          "example": "Jane"
+        }
+    }
+  },
+  "appTitle": "Lichess mobile",
+  "@appTitle": {
+    "description": "The title of the application"
+  }
+}

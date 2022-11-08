@@ -1,4 +1,4 @@
 {
   "appTitle": "Lichess mobile en français",
-  "testLoc": "En Français"
+  "testLoc": "En Français, {name}"
 }

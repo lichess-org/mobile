@@ -1,7 +1,0 @@
-{
-  "testLoc": "In English",
-  "appTitle": "Lichess mobile",
-  "@appTitle": {
-    "description": "The title of the application"
-  }
-}
