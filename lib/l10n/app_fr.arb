@@ -1,4 +1,7 @@
 {
-  "appTitle": "Lichess mobile en français",
-  "testLoc": "En Français, {name}"
+  "puzzles": "Puzzles",
+  "puzzleId": "Puzzle {param}",
+  "fromXGamesFound": "{param1} puzzles trouvés dans {param2} parties",
+  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Un point en dessous de votre classement de puzzle} other{{count} points en dessous de votre classement de puzzle}",
+  "nbPlayed": "{count, plural, =1{{count} problème fait} other{{count} problèmes faits}"
 }

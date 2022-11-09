@@ -20,7 +20,7 @@ class SampleItemListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).testLoc('World')),
+        title: Text(AppLocalizations.of(context).puzzles),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -50,7 +50,7 @@ class SampleItemListView extends StatelessWidget {
           final item = items[index];
 
           return ListTile(
-              title: Text('SampleItem ${item.id}'),
+              title: Text(AppLocalizations.of(context).puzzleId(item.id.toString())),
               leading: const CircleAvatar(),
               onTap: () {
                 // Navigate to the details page. If the user leaves and returns to

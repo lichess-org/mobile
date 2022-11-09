@@ -1,16 +1,159 @@
 {
-  "testLoc": "In English, {name}",
-  "@testLoc": {
-    "description": "A test",
+  "puzzles": "Puzzles",
+  "puzzleThemes": "Puzzle themes",
+  "recommended": "Recommended",
+  "phases": "Phases",
+  "motifs": "Motifs",
+  "advanced": "Advanced",
+  "lengths": "Lengths",
+  "mates": "Mates",
+  "goals": "Goals",
+  "origin": "Origin",
+  "specialMoves": "Special moves",
+  "didYouLikeThisPuzzle": "Did you like this puzzle?",
+  "voteToLoadNextOne": "Vote to load the next one!",
+  "upVote": "Up vote puzzle",
+  "downVote": "Down vote puzzle",
+  "yourPuzzleRatingWillNotChange": "Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps selecting the best puzzles for your current skill.",
+  "findTheBestMoveForWhite": "Find the best move for white.",
+  "findTheBestMoveForBlack": "Find the best move for black.",
+  "toGetPersonalizedPuzzles": "To get personalized puzzles:",
+  "puzzleId": "Puzzle {param}",
+  "@puzzleId": {
     "placeholders": {
-      "name": {
-          "type": "String",
-          "example": "Jane"
-        }
+      "param": {
+        "type": "String"
+      }
     }
   },
-  "appTitle": "Lichess mobile",
-  "@appTitle": {
-    "description": "The title of the application"
+  "puzzleOfTheDay": "Puzzle of the day",
+  "clickToSolve": "Click to solve",
+  "goodMove": "Good move",
+  "bestMove": "Best move!",
+  "keepGoing": "Keep going…",
+  "puzzleSuccess": "Success!",
+  "puzzleComplete": "Puzzle complete!",
+  "notTheMove": "That's not the move!",
+  "trySomethingElse": "Try something else.",
+  "ratingX": "Rating: {param}",
+  "@ratingX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "hidden": "hidden",
+  "fromGameLink": "From game {param}",
+  "@fromGameLink": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "continueTraining": "Continue training",
+  "difficultyLevel": "Difficulty level",
+  "normal": "Normal",
+  "easier": "Easier",
+  "easiest": "Easiest",
+  "harder": "Harder",
+  "hardest": "Hardest",
+  "example": "Example",
+  "addAnotherTheme": "Add another theme",
+  "nextPuzzle": "Next puzzle",
+  "jumpToNextPuzzleImmediately": "Jump to next puzzle immediately",
+  "puzzleDashboard": "Puzzle Dashboard",
+  "improvementAreas": "Improvement areas",
+  "strengths": "Strengths",
+  "history": "Puzzle history",
+  "solved": "solved",
+  "failed": "incorrect",
+  "streakDescription": "Solve progressively harder puzzles and build a win streak. There is no clock, so take your time. One wrong move, and it's game over! But you can skip one move per session.",
+  "yourStreakX": "Your streak: {param}",
+  "@yourStreakX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "streakSkipExplanation": "Skip this move to preserve your streak! Only works once per run.",
+  "continueTheStreak": "Continue the streak",
+  "newStreak": "New streak",
+  "fromMyGames": "From my games",
+  "lookupOfPlayer": "Lookup puzzles from a player's games",
+  "fromXGames": "Puzzles from {param}' games",
+  "@fromXGames": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "searchPuzzles": "Search puzzles",
+  "fromMyGamesNone": "You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!",
+  "fromXGamesFound": "{param1} puzzles found in {param2} games",
+  "@fromXGamesFound": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "puzzleDashboardDescription": "Train, analyse, improve",
+  "percentSolved": "{param} solved",
+  "@percentSolved": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "noPuzzlesToShow": "Nothing to show, go play some puzzles first!",
+  "improvementAreasDescription": "Train these to optimize your progress!",
+  "strengthDescription": "You perform the best in these themes",
+  "playedXTimes": "{count, plural, =1{Played {count} time} other{Played {count} times}",
+  "@playedXTimes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{One point below your puzzle rating} other{{count} points below your puzzle rating}",
+  "@nbPointsBelowYourPuzzleRating": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{One point above your puzzle rating} other{{count} points above your puzzle rating}",
+  "@nbPointsAboveYourPuzzleRating": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nbPlayed": "{count, plural, other{{count} played}",
+  "@nbPlayed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nbToReplay": "{count, plural, other{{count} to replay}",
+  "@nbToReplay": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }
