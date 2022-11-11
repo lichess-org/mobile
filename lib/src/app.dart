@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 
+import 'constants.dart';
 import 'sample_feature/sample_item_details_view.dart';
 import 'sample_feature/sample_item_list_view.dart';
 import 'settings/settings_controller.dart';
@@ -35,10 +36,7 @@ class MyApp extends StatelessWidget {
           // allows descendant Widgets to display the correct translations
           // depending on the user's locale.
           localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: const [
-            Locale('en', ''), // English, no country code
-            Locale('fr', ''), // French, no country code
-          ],
+          supportedLocales: kSupportedLocales,
 
           // Use AppLocalizations to configure the correct application title
           // depending on the user's locale.
