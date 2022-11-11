@@ -1,0 +1,7 @@
+targets:
+  $default:
+    builders:
+      freezed:freezed:
+        generate_for:
+          include:
+            - lib/**.codegen.dart

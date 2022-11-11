@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// TODO inject from .env
+const kLichessHost = 'https://lichess.org';
+
 const kSupportedLocales = [
   Locale('af', ''),
   Locale('ar', ''),
