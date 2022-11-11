@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { readFileSync, createWriteStream, writeFileSync, readdirSync, mkdirSync, existsSync } from 'fs'
+import { readFileSync, createWriteStream, writeFileSync, mkdirSync, existsSync } from 'fs'
 import { pipeline } from 'stream'
 import { promisify } from 'util'
 import { exec } from 'child_process'
@@ -19,16 +19,69 @@ const lilaSourcePath = `${tmpDir}/source`
 const lilaTranslationsPath = `${tmpDir}/[ornicar.lila] master/translation/dest`
 const unzipMaxBufferSize = 1024 * 1024 * 10 // Set maxbuffer to 10MB to avoid errors when default 1MB used
 
+// selection of lila translation modules to include
 const modules = ['puzzle']
+
+// order of locales with variants matters: the fallback must always be first
+// eg: 'de-DE' is before 'de-CH'
+// note that 'en-GB' is omitted here on purpose because it is the locale used in template ARB
+const locales = ['af-ZA', 'ar-SA', 'az-AZ', 'be-BY', 'bg-BG', 'bn-BD', 'br-FR', 'bs-BA', 'ca-ES', 'cs-CZ', 'da-DK', 'de-DE', 'de-CH', 'el-GR', 'en-US', 'eo-UY', 'es-ES', 'et-EE', 'eu-ES', 'fa-IR', 'fi-FI', 'fo-FO', 'fr-FR', 'ga-IE', 'gl-ES', 'he-IL', 'hi-IN', 'hr-HR', 'hu-HU', 'hy-AM', 'id-ID', 'it-IT', 'ja-JP', 'kk-KZ', 'ko-KR', 'lb-LU', 'lt-LT', 'lv-LV', 'mk-MK', 'nb-NO', 'nl-NL', 'nn-NO', 'pl-PL', 'pt-PT', 'pt-BR', 'ro-RO', 'ru-RU', 'sk-SK', 'sl-SI', 'sq-AL', 'sr-SP', 'sv-SE', 'tr-TR', 'tt-RU', 'uk-UA', 'vi-VN', 'zh-CN', 'zh-TW']
 
 async function main() {
   mkdirSync(`${tmpDir}`, {recursive: true})
 
-  // Download translations zip from crowdin
-  // const zipFile = createWriteStream(`${tmpDir}/out.zip`)
-  // await downloadTranslationsTo(zipFile)
-  // await unzipTranslations(`${tmpDir}/out.zip`)
+  await generateTemplateARB()
 
+  await generateLilaTranslationARBs()
+}
+
+main()
+
+// --
+
+async function generateLilaTranslationARBs() {
+  // Download translations zip from crowdin
+  const zipFile = createWriteStream(`${tmpDir}/out.zip`)
+  await downloadTranslationsTo(zipFile)
+  await unzipTranslations(`${tmpDir}/out.zip`)
+
+
+  const translations = {}
+  for (const module of modules) {
+    const xml = await loadXml(locales, module)
+    for (const locale in xml) {
+      try {
+        const trans = transformTranslations(xml[locale], locale, module)
+        translations[locale] = {
+          ...translations[locale],
+          ...trans
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    }
+  }
+  Object.keys(translations).forEach(locale => {
+    const parts = locale.split('-')
+    const lang = parts[0]
+    const country = parts[1]
+    const file = `${destDir}/lila_${lang}.arb`
+    try {
+      // the lang already exists, it means the locale is a variant, we'll specify the country code
+      // en-US is and exception because en-GB is the template file
+      if (existsSync(file) || locale === 'en-US') {
+        writeTranslations(`${destDir}/lila_${lang}_${country}.arb`, translations[locale])
+      } else {
+        writeTranslations(file, translations[locale])
+      }
+    } catch (e) {
+      console.error(e)
+      console.error(colors.red(`Could not write translations for ${colors.bold(locale)}, skipping...`))
+    }
+  })
+}
+
+async function generateTemplateARB() {
   // Download source translations (en-GB) from lila repo
   await downloadLilaSourcesTo(tmpDir)
 
@@ -38,7 +91,7 @@ async function main() {
   for (const module of modules) {
     const xml = await loadXml(['en-GB'], module)
     for (const locale in xml) {
-      const trans = transformTranslationsForTemplate(xml[locale], locale, module)
+      const trans = transformTranslations(xml[locale], locale, module, true)
       template[locale] = {
         ...template[locale],
         ...trans
@@ -103,22 +156,23 @@ function unescape(str) {
   return str.replace(/\\"/g, '"').replace(/\\'/g, '\'')
 }
 
-function transformTranslationsForTemplate(data, locale, module) {
-  console.log(colors.blue(`Transforming translations for ${colors.bold(locale)}...`))
-  const transformed = {}
-
+function transformTranslations(data, locale, module, makeTemplate = false) {
   if (!(data && data.resources && data.resources.string)) {
     throw `Missing translations in module ${module} and locale ${locale}`
   }
+
+  const transformed = {}
 
   for (const stringElement of data.resources.string) {
     const string = unescape(stringElement._)
     if (RegExp('%s', 'g').test(string)) {
       transformed[stringElement.$.name] = string.replace(/%s/g, '{param}')
-      transformed[`@${stringElement.$.name}`] = {
-        placeholders: {
-          param: {
-            type: 'String'
+      if (makeTemplate) {
+        transformed[`@${stringElement.$.name}`] = {
+          placeholders: {
+            param: {
+              type: 'String'
+            }
           }
         }
       }
@@ -132,11 +186,13 @@ function transformTranslationsForTemplate(data, locale, module) {
         params.push(param)
         transformed[stringElement.$.name] = transformed[stringElement.$.name].replace(result[0], `{${param}}`)
       }
-      const placeholders = {}
-      for (const param of params) {
-        placeholders[param] = { type: 'String' }
+      if (makeTemplate) {
+        const placeholders = {}
+        for (const param of params) {
+          placeholders[param] = { type: 'String' }
+        }
+        transformed[`@${stringElement.$.name}`] = { placeholders }
       }
-      transformed[`@${stringElement.$.name}`] = { placeholders }
     } else {
       transformed[stringElement.$.name] = string
     }
@@ -153,9 +209,11 @@ function transformTranslationsForTemplate(data, locale, module) {
       pluralString += ` ${quantity}{${childString}}`
     })
     transformed[plural.$.name] = pluralString
-    transformed[`@${plural.$.name}`] = {
-      placeholders: {
-        count: { type: 'int' }
+    if (makeTemplate) {
+      transformed[`@${plural.$.name}`] = {
+        placeholders: {
+          count: { type: 'int' }
+        }
       }
     }
   }
@@ -180,5 +238,3 @@ async function loadXml(locales, module) {
   }
   return sectionXml
 }
-
-main()
