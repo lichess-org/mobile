@@ -20,7 +20,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0
-  flutter_riverpod: ^2.0.2
+  flutter_riverpod: ^2.1.1
   cupertino_icons: ^1.0.2
   freezed_annotation: ^2.2.0
   json_annotation: ^4.7.0

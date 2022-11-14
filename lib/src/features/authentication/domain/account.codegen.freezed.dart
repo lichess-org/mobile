@@ -22,7 +22,7 @@ Account _$AccountFromJson(Map<String, dynamic> json) {
 mixin _$Account {
   String get id => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
+  String? get title => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +34,7 @@ abstract class $AccountCopyWith<$Res> {
   factory $AccountCopyWith(Account value, $Res Function(Account) then) =
       _$AccountCopyWithImpl<$Res, Account>;
   @useResult
-  $Res call({String id, String username, String title});
+  $Res call({String id, String username, String? title});
 }
 
 /// @nodoc
@@ -52,7 +52,7 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
   $Res call({
     Object? id = null,
     Object? username = null,
-    Object? title = null,
+    Object? title = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -63,10 +63,10 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
               as String,
-      title: null == title
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -78,7 +78,7 @@ abstract class _$$_AccountCopyWith<$Res> implements $AccountCopyWith<$Res> {
       __$$_AccountCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, String username, String title});
+  $Res call({String id, String username, String? title});
 }
 
 /// @nodoc
@@ -93,7 +93,7 @@ class __$$_AccountCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? username = null,
-    Object? title = null,
+    Object? title = freezed,
   }) {
     return _then(_$_Account(
       id: null == id
@@ -104,10 +104,10 @@ class __$$_AccountCopyWithImpl<$Res>
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
               as String,
-      title: null == title
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -115,7 +115,7 @@ class __$$_AccountCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Account implements _Account {
-  _$_Account({required this.id, required this.username, required this.title});
+  _$_Account({required this.id, required this.username, this.title});
 
   factory _$_Account.fromJson(Map<String, dynamic> json) =>
       _$$_AccountFromJson(json);
@@ -125,7 +125,7 @@ class _$_Account implements _Account {
   @override
   final String username;
   @override
-  final String title;
+  final String? title;
 
   @override
   String toString() {
@@ -165,7 +165,7 @@ abstract class _Account implements Account {
   factory _Account(
       {required final String id,
       required final String username,
-      required final String title}) = _$_Account;
+      final String? title}) = _$_Account;
 
   factory _Account.fromJson(Map<String, dynamic> json) = _$_Account.fromJson;
 
@@ -174,7 +174,7 @@ abstract class _Account implements Account {
   @override
   String get username;
   @override
-  String get title;
+  String? get title;
   @override
   @JsonKey(ignore: true)
   _$$_AccountCopyWith<_$_Account> get copyWith =>

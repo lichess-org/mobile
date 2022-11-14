@@ -8,7 +8,7 @@ class Account with _$Account {
   factory Account({
     required String id,
     required String username,
-    required String title,
+    String? title,
   }) = _Account;
 
   factory Account.fromJson(Map<String, dynamic> json) => _$AccountFromJson(json);

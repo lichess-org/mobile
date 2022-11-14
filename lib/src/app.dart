@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'features/authentication/data/auth_repository.dart';
+import 'features/authentication/presentation/sign_in_appbar_widget.dart';
 
 import 'constants.dart';
 
@@ -20,10 +23,17 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: Scaffold(
-        appBar: AppBar(title: const Text('lichess.org')),
-        body: const Center(
-          child: Text('coucou'),
-        ),
+        appBar: AppBar(title: const Text('lichess.org'), actions: const [
+          SignInAppBarWidget(),
+        ]),
+        body: Center(child: Consumer(builder: (_, WidgetRef ref, __) {
+          final authState = ref.watch(authStateChangesProvider);
+          return authState.maybeWhen(
+            data: (account) =>
+                account != null ? Text('Hello, ${account.username}') : const Text('Hello'),
+            orElse: () => const CircularProgressIndicator(),
+          );
+        })),
       ),
     );
   }
