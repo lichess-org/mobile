@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
