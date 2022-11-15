@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
@@ -7,6 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../utils/in_memory_store.dart';
+import '../../../utils/errors.dart';
 import '../../../constants.dart';
 import '../domain/account.codegen.dart';
 
@@ -16,9 +18,10 @@ const accountUrl = '$kLichessHost/api/account';
 const oauthScopes = ['board:play'];
 
 class AuthError {
-  AuthError(this.error);
+  AuthError(this.message, this.stackTrace);
 
-  final Object error;
+  final String message;
+  final StackTrace stackTrace;
 }
 
 class AuthRepository {
@@ -43,15 +46,16 @@ class AuthRepository {
   Account? get currentAccount => _authState.value;
 
   Future<void> init() {
-    return _getToken().andThen(getAccount).match((_) {
-      _log.info('No account found during init');
-    }, (account) {
+    return TaskEither<IOError, void>.tryCatch(
+            () => _storage.read(key: lichessClientId), (error, trace) => GenericError(trace))
+        .andThen(getAccount)
+        .map((account) {
       _authState.value = account;
     }).run();
   }
 
-  TaskEither<AuthError, void> signIn() {
-    return TaskEither.tryCatch(() async {
+  TaskEither<IOError, void> signIn() {
+    return TaskEither<IOError, void>.tryCatch(() async {
       final result = await _appAuth.authorizeAndExchangeCode(AuthorizationTokenRequest(
         lichessClientId,
         redirectUri,
@@ -63,17 +67,17 @@ class AuthRepository {
         _log.fine('Got accessToken ${result.accessToken}');
         await _storage.write(key: lichessClientId, value: result.accessToken);
       } else {
-        throw Exception('FlutterAppAuth.authorizeAndExchangeCode error');
+        throw Exception('FlutterAppAuth.authorizeAndExchangeCode null result');
       }
     }, (error, trace) {
-      _log.severe('Could not sign in', error, trace);
-      return AuthError(error);
+      _log.severe('signIn error', error, trace);
+      return GenericError(trace);
     }).andThen(getAccount).map((account) {
       _authState.value = account;
     });
   }
 
-  TaskEither<AuthError, void> signOut() {
+  TaskEither<IOError, void> signOut() {
     return TaskEither.tryCatch(() async {
       if (_authState.value != null) {
         await client.delete(Uri.parse('$kLichessHost/api/token'));
@@ -82,11 +86,11 @@ class AuthRepository {
       }
     }, (error, trace) {
       _log.severe('signOut error', error, trace);
-      return AuthError(error);
+      return ApiRequestError(trace);
     });
   }
 
-  TaskEither<AuthError, Account> getAccount() {
+  TaskEither<IOError, Account> getAccount() {
     return TaskEither.tryCatch(() async {
       final uri = Uri.parse('$kLichessHost/api/account');
       final response = await client.get(uri);
@@ -97,7 +101,7 @@ class AuthRepository {
       }
     }, (error, trace) {
       _log.warning('getAccount error', error, trace);
-      return AuthError(error);
+      return ApiRequestError(trace);
     });
   }
 
@@ -105,12 +109,6 @@ class AuthRepository {
     _authState.close();
     client.close();
   }
-
-  TaskEither<AuthError, String?> _getToken() =>
-      TaskEither.tryCatch(() => _storage.read(key: lichessClientId), (error, trace) {
-        _log.severe('_getToken error', error, trace);
-        return AuthError(error);
-      });
 }
 
 class AuthClient extends http.BaseClient {

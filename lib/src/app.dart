@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'features/authentication/data/auth_repository.dart';
-import 'features/authentication/presentation/sign_in_appbar_widget.dart';
+import 'features/authentication/presentation/auth_widget.dart';
 
 import 'constants.dart';
 
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(title: const Text('lichess.org'), actions: const [
-          SignInAppBarWidget(),
+          AuthWidget(),
         ]),
         body: Center(child: Consumer(builder: (_, WidgetRef ref, __) {
           final authState = ref.watch(authStateChangesProvider);
