@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'features/authentication/data/auth_repository.dart';
 import 'features/authentication/presentation/auth_widget.dart';
+import 'features/profile/presentation/profile_screen.dart';
 
 class PuzzlesLocation extends BeamLocation<BeamState> {
   PuzzlesLocation(RouteInformation routeInformation) : super(routeInformation);

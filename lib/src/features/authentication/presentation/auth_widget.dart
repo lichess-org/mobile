@@ -5,6 +5,8 @@ import '../../../utils/extensions.dart';
 import '../data/auth_repository.dart';
 import './auth_widget_controller.dart';
 
+import '../../profile/presentation/profile_screen.dart';
+
 enum AccountMenu { logout }
 
 class AuthWidget extends ConsumerWidget {
@@ -20,25 +22,16 @@ class AuthWidget extends ConsumerWidget {
     );
     return authState.maybeWhen(
         data: (account) => account != null
-            ? PopupMenuButton<AccountMenu>(
+            ? IconButton(
                 icon: const Icon(Icons.person),
-                onSelected: (AccountMenu item) {
-                  switch (item) {
-                    case AccountMenu.logout:
-                      if (!uiState.isLoading) {
-                        ref.read(authControllerProvider.notifier).signOut();
-                      }
-                      break;
-                  }
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ProfileScreen(),
+                      fullscreenDialog: true,
+                    ),
+                  );
                 },
-                itemBuilder: (BuildContext context) => <PopupMenuEntry<AccountMenu>>[
-                  PopupMenuItem<AccountMenu>(
-                    value: AccountMenu.logout,
-                    child: uiState.isLoading
-                        ? const CircularProgressIndicator()
-                        : const Text('Sign out'),
-                  ),
-                ],
               )
             : TextButton(
                 onPressed: uiState.isLoading

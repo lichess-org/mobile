@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     initialPath: '/puzzles',
     locationBuilder: RoutesLocationBuilder(
       routes: {
-        '*': (context, state, data) => const AppScaffold(),
+        '*': (_, __, ___) => const AppScaffold(),
       },
     ),
   );
