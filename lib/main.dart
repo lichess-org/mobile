@@ -18,5 +18,5 @@ void main() async {
   final container = ProviderContainer();
   final authRepo = container.read(authRepositoryProvider);
   await authRepo.init();
-  runApp(UncontrolledProviderScope(container: container, child: const MyApp()));
+  runApp(UncontrolledProviderScope(container: container, child: MyApp()));
 }

@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 // TODO inject from .env
 const kLichessHost = 'https://lichess.org';
 
+// COLORS
+const kOrange = Color(0xFFD64F00);
+
 const kSupportedLocales = [
   Locale('af', ''),
   Locale('ar', ''),
