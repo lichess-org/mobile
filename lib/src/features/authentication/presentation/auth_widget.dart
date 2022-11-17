@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:beamer/beamer.dart';
 
 import '../../../utils/extensions.dart';
 import '../data/auth_repository.dart';
@@ -25,12 +26,13 @@ class AuthWidget extends ConsumerWidget {
             ? IconButton(
                 icon: const Icon(Icons.person),
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const ProfileScreen(),
-                      fullscreenDialog: true,
-                    ),
-                  );
+                  Beamer.of(context, root: true).beamToNamed('/profile');
+                  // Navigator.of(context, rootNavigator: true).push(
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const ProfileScreen(),
+                  //     fullscreenDialog: true,
+                  //   ),
+                  // );
                 },
               )
             : TextButton(

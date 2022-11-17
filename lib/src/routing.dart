@@ -5,12 +5,49 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'features/authentication/data/auth_repository.dart';
 import 'features/authentication/presentation/auth_widget.dart';
 import 'features/profile/presentation/profile_screen.dart';
+import 'app_scaffold.dart';
+
+class TabsLocation extends BeamLocation<BeamState> {
+  @override
+  List<String> get pathPatterns => ['/tab/*'];
+
+  @override
+  List<BeamPage> buildPages(BuildContext context, BeamState state) => [
+        const BeamPage(
+          key: ValueKey('tab'),
+          title: 'Tabs',
+          type: BeamPageType.noTransition,
+          child: AppScaffold(),
+        ),
+      ];
+}
+
+class ProfileLocation extends BeamLocation<BeamState> {
+  @override
+  List<String> get pathPatterns => ['/profile/*'];
+
+  @override
+  List<BeamPage> buildPages(BuildContext context, BeamState state) => [
+        const BeamPage(
+          key: ValueKey('profile'),
+          title: 'Profile',
+          fullScreenDialog: true,
+          child: ProfileScreen(),
+        ),
+        if (state.uri.pathSegments.contains('inside'))
+          const BeamPage(
+            key: ValueKey('profile_inside'),
+            title: 'Profile Inside',
+            child: InsideProfile(),
+          ),
+      ];
+}
 
 class PuzzlesLocation extends BeamLocation<BeamState> {
   PuzzlesLocation(RouteInformation routeInformation) : super(routeInformation);
 
   @override
-  List<String> get pathPatterns => ['/puzzles'];
+  List<String> get pathPatterns => ['/tab/puzzles'];
 
   @override
   List<BeamPage> buildPages(BuildContext context, BeamState state) => [
@@ -27,7 +64,7 @@ class WatchLocation extends BeamLocation<BeamState> {
   WatchLocation(RouteInformation routeInformation) : super(routeInformation);
 
   @override
-  List<String> get pathPatterns => ['/watch'];
+  List<String> get pathPatterns => ['/tab/watch'];
 
   @override
   List<BeamPage> buildPages(BuildContext context, BeamState state) => [
