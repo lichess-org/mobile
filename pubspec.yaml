@@ -30,7 +30,7 @@ dependencies:
   rxdart: ^0.27.6
   fpdart: ^0.3.0
   logging: ^1.1.0
-  beamer: ^1.5.3
+  go_router: ^5.1.9
 
 dev_dependencies:
   flutter_test:

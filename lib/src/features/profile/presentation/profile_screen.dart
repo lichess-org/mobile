@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:beamer/beamer.dart';
 
 import './profile_screen_controller.dart';
 
@@ -28,7 +27,11 @@ class ProfileScreen extends ConsumerWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                Beamer.of(context, root: true).beamToNamed('/profile/inside');
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const InsideProfile(),
+                  ),
+                );
               },
               child: const Text('Test push route'),
             ),
