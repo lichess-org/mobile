@@ -6,7 +6,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'constants.dart';
 
 import 'features/authentication/data/auth_repository.dart';
-import 'features/authentication/presentation/auth_widget.dart';
+import 'features/authentication/ui/auth_widget.dart';
+
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      restorationScopeId: 'app',
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: kSupportedLocales,
+      onGenerateTitle: (BuildContext context) => 'lichess.org',
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        useMaterial3: true,
+      ),
+      routerConfig: goRouter,
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
 
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -76,26 +96,6 @@ final goRouter = GoRouter(
     ),
   ],
 );
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      restorationScopeId: 'app',
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: kSupportedLocales,
-      onGenerateTitle: (BuildContext context) => 'lichess.org',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        useMaterial3: true,
-      ),
-      routerConfig: goRouter,
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
 
 /// Representation of a tab item in a [ScaffoldWithNavBar]
 class ScaffoldWithNavBarTabItem extends BottomNavigationBarItem {
