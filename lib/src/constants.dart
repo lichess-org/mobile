@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 // TODO inject from .env
 const kLichessHost = 'https://lichess.org';
 
+const kLichessClientId = 'lichess_mobile';
+const kOAuthTokenStorageKey = 'oAuthToken';
+
 // COLORS
 const kOrange = Color(0xFFD64F00);
 

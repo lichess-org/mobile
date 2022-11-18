@@ -23,3 +23,33 @@ class ApiRequestError implements IOError {
   @override
   String get message => "Something went wrong with the request. Please try again later.";
 }
+
+class NotFoundError implements IOError {
+  @override
+  final StackTrace stackTrace;
+
+  NotFoundError(this.stackTrace);
+
+  @override
+  String get message => "Requested resource could not be found.";
+}
+
+class UnauthorizedError implements IOError {
+  @override
+  final StackTrace stackTrace;
+
+  UnauthorizedError(this.stackTrace);
+
+  @override
+  String get message => "You must sign in to access this resource.";
+}
+
+class ForbiddenError implements IOError {
+  @override
+  final StackTrace stackTrace;
+
+  ForbiddenError(this.stackTrace);
+
+  @override
+  String get message => "Requested resource access is forbidden.";
+}
