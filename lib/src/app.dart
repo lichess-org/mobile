@@ -55,12 +55,20 @@ final goRouter = GoRouter(
           path: '/watch',
           pageBuilder: (context, state) => NoTransitionPage(
             key: state.pageKey,
-            child: const RootScreen(label: 'Watch', detailsPath: '/watch/details'),
+            child: const RootScreen(
+                label: 'Watch',
+                detailsPath: '/watch/details',
+                fullScreenPath: '/watch/details_fullscreen'),
           ),
           routes: [
             GoRoute(
               path: 'details',
               builder: (context, state) => const DetailsScreen(label: 'Watch'),
+            ),
+            GoRoute(
+              path: 'details_fullscreen',
+              parentNavigatorKey: _rootNavigatorKey,
+              builder: (context, state) => const DetailsFullscreen(),
             ),
           ],
         ),
@@ -143,13 +151,16 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
 /// Widget for the root/initial pages in the bottom navigation bar.
 class RootScreen extends StatelessWidget {
   /// Creates a RootScreen
-  const RootScreen({required this.label, required this.detailsPath, Key? key}) : super(key: key);
+  const RootScreen(
+      {required this.label, required this.detailsPath, required this.fullScreenPath, Key? key})
+      : super(key: key);
 
   /// The label
   final String label;
 
   /// The path to the detail page
   final String detailsPath;
+  final String fullScreenPath;
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +178,33 @@ class RootScreen extends StatelessWidget {
               onPressed: () => context.go(detailsPath),
               child: const Text('View details'),
             ),
+            TextButton(
+              onPressed: () => context.go(fullScreenPath),
+              child: const Text('View details fullscreen'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DetailsFullscreen extends StatelessWidget {
+  /// Creates a RootScreen
+  const DetailsFullscreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Details fullscreen'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text('Details fullscreen', style: Theme.of(context).textTheme.titleLarge),
+            const Padding(padding: EdgeInsets.all(4)),
           ],
         ),
       ),
