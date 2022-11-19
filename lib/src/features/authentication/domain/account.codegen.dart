@@ -10,12 +10,15 @@ class Account with _$Account {
     required String username,
     String? title,
     required bool patron,
-    @JsonKey(fromJson: DateTime.fromMillisecondsSinceEpoch) required DateTime createdAt,
-    @JsonKey(fromJson: DateTime.fromMillisecondsSinceEpoch) required DateTime seenAt,
+    @JsonKey(fromJson: DateTime.fromMillisecondsSinceEpoch)
+        required DateTime createdAt,
+    @JsonKey(fromJson: DateTime.fromMillisecondsSinceEpoch)
+        required DateTime seenAt,
     required Profile profile,
   }) = _Account;
 
-  factory Account.fromJson(Map<String, dynamic> json) => _$AccountFromJson(json);
+  factory Account.fromJson(Map<String, dynamic> json) =>
+      _$AccountFromJson(json);
 }
 
 @Freezed(toJson: false)
@@ -30,5 +33,6 @@ class Profile with _$Profile {
     String? links,
   }) = _Profile;
 
-  factory Profile.fromJson(Map<String, dynamic> json) => _$ProfileFromJson(json);
+  factory Profile.fromJson(Map<String, dynamic> json) =>
+      _$ProfileFromJson(json);
 }

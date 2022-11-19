@@ -27,7 +27,8 @@ class ApiClient {
   TaskEither<IOError, Response> post(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) {
     return TaskEither<IOError, Response>.tryCatch(
-      () async => _client.post(url, headers: headers, body: body, encoding: encoding),
+      () async =>
+          _client.post(url, headers: headers, body: body, encoding: encoding),
       (error, trace) {
         _log.severe('Request error', error, trace);
         return ApiRequestError(trace);
@@ -38,7 +39,8 @@ class ApiClient {
   TaskEither<IOError, Response> delete(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) {
     return TaskEither<IOError, Response>.tryCatch(
-      () async => _client.delete(url, headers: headers, body: body, encoding: encoding),
+      () async =>
+          _client.delete(url, headers: headers, body: body, encoding: encoding),
       (error, trace) {
         _log.severe('Request error', error, trace);
         return ApiRequestError(trace);
@@ -48,7 +50,8 @@ class ApiClient {
 
   TaskEither<IOError, Response> _validateResponseStatus(Response response) {
     if (response.statusCode >= 400) {
-      _log.warning('Request response status ${response.statusCode}; ${response.body}');
+      _log.warning(
+          'Request response status ${response.statusCode}; ${response.body}');
     }
     return response.statusCode < 400
         ? TaskEither.right(response)
