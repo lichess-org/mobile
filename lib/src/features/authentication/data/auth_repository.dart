@@ -46,7 +46,8 @@ class AuthRepository {
 
   Future<void> init() {
     return TaskEither<IOError, void>.tryCatch(
-            () => _storage.read(key: kOAuthTokenStorageKey), (error, trace) => GenericError(trace))
+            () => _storage.read(key: kOAuthTokenStorageKey),
+            (error, trace) => GenericError(trace))
         .andThen(getAccount)
         .map((account) {
       _authState.value = account;
@@ -55,16 +56,19 @@ class AuthRepository {
 
   TaskEither<IOError, void> signIn() {
     return TaskEither<IOError, void>.tryCatch(() async {
-      final result = await _appAuth.authorizeAndExchangeCode(AuthorizationTokenRequest(
+      final result =
+          await _appAuth.authorizeAndExchangeCode(AuthorizationTokenRequest(
         kLichessClientId,
         redirectUri,
         serviceConfiguration: const AuthorizationServiceConfiguration(
-            authorizationEndpoint: '$kLichessHost/oauth', tokenEndpoint: '$kLichessHost/api/token'),
+            authorizationEndpoint: '$kLichessHost/oauth',
+            tokenEndpoint: '$kLichessHost/api/token'),
         scopes: oauthScopes,
       ));
       if (result != null) {
         _log.fine('Got accessToken ${result.accessToken}');
-        await _storage.write(key: kOAuthTokenStorageKey, value: result.accessToken);
+        await _storage.write(
+            key: kOAuthTokenStorageKey, value: result.accessToken);
       } else {
         throw Exception('FlutterAppAuth.authorizeAndExchangeCode null result');
       }
@@ -100,7 +104,8 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   const storage = FlutterSecureStorage();
   final authClient = AuthClient(storage, http.Client());
   final apiClient = ApiClient(Logger('ApiClient'), authClient);
-  final repo = AuthRepository(auth, storage, Logger('AuthRepository'), client: apiClient);
+  final repo = AuthRepository(auth, storage, Logger('AuthRepository'),
+      client: apiClient);
   ref.onDispose(() => repo.dispose());
   return repo;
 });

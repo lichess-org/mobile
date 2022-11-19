@@ -10,7 +10,8 @@ class GenericError implements IOError {
   GenericError(this.stackTrace);
 
   @override
-  String get message => "The operation could not be completed. Please try again later.";
+  String get message =>
+      "The operation could not be completed. Please try again later.";
 }
 
 /// Generic error for API requests.
@@ -21,7 +22,8 @@ class ApiRequestError implements IOError {
   ApiRequestError(this.stackTrace);
 
   @override
-  String get message => "Something went wrong with the request. Please try again later.";
+  String get message =>
+      "Something went wrong with the request. Please try again later.";
 }
 
 class NotFoundError implements IOError {

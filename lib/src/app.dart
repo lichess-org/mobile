@@ -66,7 +66,8 @@ final goRouter = GoRouter(
           routes: [
             GoRoute(
               path: 'details',
-              builder: (context, state) => const DetailsScreen(label: 'Puzzles'),
+              builder: (context, state) =>
+                  const DetailsScreen(label: 'Puzzles'),
             ),
           ],
         ),
@@ -109,18 +110,21 @@ class ScaffoldWithNavBarTabItem extends BottomNavigationBarItem {
 }
 
 class ScaffoldWithBottomNavBar extends StatefulWidget {
-  const ScaffoldWithBottomNavBar({Key? key, required this.child, required this.tabs})
+  const ScaffoldWithBottomNavBar(
+      {Key? key, required this.child, required this.tabs})
       : super(key: key);
   final Widget child;
   final List<ScaffoldWithNavBarTabItem> tabs;
 
   @override
-  State<ScaffoldWithBottomNavBar> createState() => _ScaffoldWithBottomNavBarState();
+  State<ScaffoldWithBottomNavBar> createState() =>
+      _ScaffoldWithBottomNavBarState();
 }
 
 class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
   int _locationToTabIndex(String location) {
-    final index = widget.tabs.indexWhere((t) => location.startsWith(t.initialLocation));
+    final index =
+        widget.tabs.indexWhere((t) => location.startsWith(t.initialLocation));
     // if index not found (-1), return 0
     return index < 0 ? 0 : index;
   }
@@ -152,7 +156,10 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
 class RootScreen extends StatelessWidget {
   /// Creates a RootScreen
   const RootScreen(
-      {required this.label, required this.detailsPath, required this.fullScreenPath, Key? key})
+      {required this.label,
+      required this.detailsPath,
+      required this.fullScreenPath,
+      Key? key})
       : super(key: key);
 
   /// The label
@@ -172,7 +179,8 @@ class RootScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text('Screen $label', style: Theme.of(context).textTheme.titleLarge),
+            Text('Screen $label',
+                style: Theme.of(context).textTheme.titleLarge),
             const Padding(padding: EdgeInsets.all(4)),
             TextButton(
               onPressed: () => context.go(detailsPath),
@@ -203,7 +211,8 @@ class DetailsFullscreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text('Details fullscreen', style: Theme.of(context).textTheme.titleLarge),
+            Text('Details fullscreen',
+                style: Theme.of(context).textTheme.titleLarge),
             const Padding(padding: EdgeInsets.all(4)),
           ],
         ),
@@ -271,8 +280,9 @@ class PuzzlesScreen extends StatelessWidget {
       body: Center(child: Consumer(builder: (_, WidgetRef ref, __) {
         final authState = ref.watch(authStateChangesProvider);
         return authState.maybeWhen(
-          data: (account) =>
-              account != null ? Text('Hello, ${account.username}') : const Text('Hello'),
+          data: (account) => account != null
+              ? Text('Hello, ${account.username}')
+              : const Text('Hello'),
           orElse: () => const CircularProgressIndicator(),
         );
       })),

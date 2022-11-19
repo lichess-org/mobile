@@ -31,7 +31,8 @@ class AuthWidget extends ConsumerWidget {
                       break;
                   }
                 },
-                itemBuilder: (BuildContext context) => <PopupMenuEntry<AccountMenu>>[
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<AccountMenu>>[
                   PopupMenuItem<AccountMenu>(
                     value: AccountMenu.logout,
                     child: uiState.isLoading
@@ -44,8 +45,9 @@ class AuthWidget extends ConsumerWidget {
                 onPressed: uiState.isLoading
                     ? null
                     : () => ref.read(authControllerProvider.notifier).signIn(),
-                child:
-                    uiState.isLoading ? const CircularProgressIndicator() : const Text('Sign in'),
+                child: uiState.isLoading
+                    ? const CircularProgressIndicator()
+                    : const Text('Sign in'),
               ),
         orElse: () => const CircularProgressIndicator());
   }
