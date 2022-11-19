@@ -9,7 +9,17 @@ open.
 
 For more information, see: https://github.com/lichess-org/mobile/discussions/9
 
-## Run the app
+## Setup
+
+Follow the [flutter guide](https://docs.flutter.dev/get-started/install)
+to install flutter on your operating system.
+
+This project is meant to run on iOS and Android, so you need to follow the
+"Platform setup" section of that guide to install the iOS and/or Android platform.
+
+Note that this project is not meant to be run on web platform.
+
+## Run
 
 First run the code generator:
 
