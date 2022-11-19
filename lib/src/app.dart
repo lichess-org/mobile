@@ -56,7 +56,6 @@ final goRouter = GoRouter(
         return ScaffoldWithBottomNavBar(tabs: tabs, child: child);
       },
       routes: [
-        // Products
         GoRoute(
           path: '/puzzles',
           pageBuilder: (context, state) => NoTransitionPage(
@@ -71,7 +70,6 @@ final goRouter = GoRouter(
             ),
           ],
         ),
-        // Shopping Cart
         GoRoute(
           path: '/watch',
           pageBuilder: (context, state) => NoTransitionPage(
