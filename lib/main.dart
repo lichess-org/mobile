@@ -2,10 +2,12 @@ import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logging/logging.dart';
 
 import 'src/app.dart';
 import 'src/features/authentication/data/auth_repository.dart';
+import 'src/features/settings/data/settings_repository.dart';
 
 void main() async {
   if (kDebugMode) {
@@ -17,8 +19,18 @@ void main() async {
   }
 
   WidgetsFlutterBinding.ensureInitialized();
-  final container = ProviderContainer();
+
+  final sharedPreferences = await SharedPreferences.getInstance();
+
+  final container = ProviderContainer(overrides: [
+    sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+  ]);
+
   final authRepo = container.read(authRepositoryProvider);
   await authRepo.init();
-  runApp(UncontrolledProviderScope(container: container, child: const App()));
+
+  runApp(UncontrolledProviderScope(
+    container: container,
+    child: const App(),
+  ));
 }

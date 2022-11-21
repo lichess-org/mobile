@@ -7,21 +7,29 @@ import 'constants.dart';
 
 import 'features/authentication/data/auth_repository.dart';
 import 'features/authentication/ui/auth_widget.dart';
+import 'features/settings/data/settings_repository.dart';
+import 'features/settings/ui/settings_screen.dart';
+import 'features/settings/ui/theme_mode_screen.dart';
 
-class App extends StatelessWidget {
+class App extends ConsumerWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settingsRepo = ref.watch(settingsRepositoryProvider);
     return MaterialApp.router(
       restorationScopeId: 'app',
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: kSupportedLocales,
       onGenerateTitle: (BuildContext context) => 'lichess.org',
       theme: ThemeData(
-        brightness: Brightness.dark,
+        brightness: Brightness.light,
         useMaterial3: true,
       ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+      ),
+      themeMode: settingsRepo.getThemeMode(),
       routerConfig: goRouter,
       debugShowCheckedModeBanner: false,
     );
@@ -42,6 +50,11 @@ const tabs = [
     initialLocation: '/watch',
     icon: Icon(Icons.live_tv),
     label: 'Watch',
+  ),
+  ScaffoldWithNavBarTabItem(
+    initialLocation: '/settings',
+    icon: Icon(Icons.settings),
+    label: 'Settings',
   ),
 ];
 
@@ -88,6 +101,19 @@ final goRouter = GoRouter(
               path: 'details_fullscreen',
               parentNavigatorKey: _rootNavigatorKey,
               builder: (context, state) => const DetailsFullscreen(),
+            ),
+          ],
+        ),
+        GoRoute(
+          path: '/settings',
+          pageBuilder: (context, state) => NoTransitionPage(
+            key: state.pageKey,
+            child: const SettingsScreen(),
+          ),
+          routes: [
+            GoRoute(
+              path: 'themeMode',
+              builder: (context, state) => const ThemeModeScreen(),
             ),
           ],
         ),
