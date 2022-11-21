@@ -16,42 +16,68 @@ class ApiClient {
 
   TaskEither<IOError, Response> get(Uri url, {Map<String, String>? headers}) {
     return TaskEither<IOError, Response>.tryCatch(
-      () async => _client.get(url, headers: headers),
+      () async => _sendRequest('GET', url, headers),
       (error, trace) {
         _log.severe('Request error', error, trace);
         return ApiRequestError(trace);
       },
-    ).flatMap(_validateResponseStatus);
+    ).flatMap((resp) => _validateResponseStatus(url, resp));
   }
 
   TaskEither<IOError, Response> post(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) {
     return TaskEither<IOError, Response>.tryCatch(
-      () async =>
-          _client.post(url, headers: headers, body: body, encoding: encoding),
+      () async => _sendRequest('POST', url, headers, body, encoding),
       (error, trace) {
         _log.severe('Request error', error, trace);
         return ApiRequestError(trace);
       },
-    ).flatMap(_validateResponseStatus);
+    ).flatMap((resp) => _validateResponseStatus(url, resp));
   }
 
   TaskEither<IOError, Response> delete(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) {
     return TaskEither<IOError, Response>.tryCatch(
-      () async =>
-          _client.delete(url, headers: headers, body: body, encoding: encoding),
+      () async => _sendRequest('DELETE', url, headers, body, encoding),
       (error, trace) {
         _log.severe('Request error', error, trace);
         return ApiRequestError(trace);
       },
-    ).flatMap(_validateResponseStatus);
+    ).flatMap((resp) => _validateResponseStatus(url, resp));
   }
 
-  TaskEither<IOError, Response> _validateResponseStatus(Response response) {
+  Future<Response> _sendRequest(
+      String method, Uri url, Map<String, String>? headers,
+      [Object? body, Encoding? encoding]) async {
+    var request = Request(method, url);
+
+    if (url.host == 'lichess.dev') {
+      const creds = '$kLichessDevUser:$kLichessDevPassword';
+      request.headers['authorization'] =
+          'Basic ${base64.encode(utf8.encode(creds))}';
+    }
+
+    if (headers != null) request.headers.addAll(headers);
+    if (encoding != null) request.encoding = encoding;
+    if (body != null) {
+      if (body is String) {
+        request.body = body;
+      } else if (body is List) {
+        request.bodyBytes = body.cast<int>();
+      } else if (body is Map) {
+        request.bodyFields = body.cast<String, String>();
+      } else {
+        throw ArgumentError('Invalid request body "$body".');
+      }
+    }
+
+    return Response.fromStream(await _client.send(request));
+  }
+
+  TaskEither<IOError, Response> _validateResponseStatus(
+      Uri url, Response response) {
     if (response.statusCode >= 400) {
-      _log.warning(
-          'Request response status ${response.statusCode}; ${response.body}');
+      _log.warning('$url responded with status ${response.statusCode}');
     }
     return response.statusCode < 400
         ? TaskEither.right(response)

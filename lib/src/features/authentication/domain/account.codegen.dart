@@ -9,12 +9,12 @@ class Account with _$Account {
     required String id,
     required String username,
     String? title,
-    required bool patron,
+    bool? patron,
     @JsonKey(fromJson: DateTime.fromMillisecondsSinceEpoch)
         required DateTime createdAt,
     @JsonKey(fromJson: DateTime.fromMillisecondsSinceEpoch)
         required DateTime seenAt,
-    required Profile profile,
+    Profile? profile,
   }) = _Account;
 
   factory Account.fromJson(Map<String, dynamic> json) =>

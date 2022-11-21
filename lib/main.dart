@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,8 +10,9 @@ import 'src/features/authentication/data/auth_repository.dart';
 void main() async {
   if (kDebugMode) {
     Logger.root.onRecord.listen((record) {
+      final time = DateFormat.Hms().format(record.time);
       debugPrint(
-          '${record.level.name}: ${record.time}: ${record.message}; ${record.error != null ? record.error.toString() : ''}');
+          '${record.level.name} at $time: [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error.toString()}' : ''}');
     });
   }
 

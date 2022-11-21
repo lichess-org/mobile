@@ -27,12 +27,12 @@ class AuthRepository {
     FlutterAppAuth appAuth,
     FlutterSecureStorage storage,
     Logger log, {
-    required this.client,
+    required this.apiClient,
   })  : _appAuth = appAuth,
         _storage = storage,
         _log = log;
 
-  final ApiClient client;
+  final ApiClient apiClient;
 
   final Logger _log;
   final FlutterAppAuth _appAuth;
@@ -81,21 +81,23 @@ class AuthRepository {
   }
 
   TaskEither<IOError, void> signOut() {
-    return client.delete(Uri.parse('$kLichessHost/api/token')).map((_) async {
+    return apiClient
+        .delete(Uri.parse('$kLichessHost/api/token'))
+        .map((_) async {
       await _storage.delete(key: kOAuthTokenStorageKey);
       _authState.value = null;
     });
   }
 
   TaskEither<IOError, Account> getAccount() {
-    return client
+    return apiClient
         .get(Uri.parse('$kLichessHost/api/account'))
         .map((response) => Account.fromJson(jsonDecode(response.body)));
   }
 
   void dispose() {
     _authState.close();
-    client.close();
+    apiClient.close();
   }
 }
 
@@ -105,7 +107,7 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final authClient = AuthClient(storage, http.Client());
   final apiClient = ApiClient(Logger('ApiClient'), authClient);
   final repo = AuthRepository(auth, storage, Logger('AuthRepository'),
-      client: apiClient);
+      apiClient: apiClient);
   ref.onDispose(() => repo.dispose());
   return repo;
 });
