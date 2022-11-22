@@ -7,16 +7,16 @@ import 'constants.dart';
 
 import 'features/authentication/data/auth_repository.dart';
 import 'features/authentication/ui/auth_widget.dart';
-import 'features/settings/data/settings_repository.dart';
 import 'features/settings/ui/settings_screen.dart';
 import 'features/settings/ui/theme_mode_screen.dart';
+import 'features/settings/ui/theme_mode_controller.dart';
 
 class App extends ConsumerWidget {
   const App({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settingsRepo = ref.watch(settingsRepositoryProvider);
+    final themeMode = ref.watch(themeModeControllerProvider);
     return MaterialApp.router(
       restorationScopeId: 'app',
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -29,7 +29,7 @@ class App extends ConsumerWidget {
       darkTheme: ThemeData(
         brightness: Brightness.dark,
       ),
-      themeMode: settingsRepo.getThemeMode(),
+      themeMode: themeMode,
       routerConfig: goRouter,
       debugShowCheckedModeBanner: false,
     );

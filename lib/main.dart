@@ -26,8 +26,7 @@ void main() async {
     sharedPreferencesProvider.overrideWithValue(sharedPreferences),
   ]);
 
-  final authRepo = container.read(authRepositoryProvider);
-  await authRepo.init();
+  await container.read(authRepositoryProvider).init();
 
   runApp(UncontrolledProviderScope(
     container: container,
