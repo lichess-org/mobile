@@ -33,6 +33,14 @@ dependencies:
   go_router: ^5.1.9
   shared_preferences: ^2.0.15
   cached_network_image: ^3.2.2
+  dartchess:
+    git:
+      url: https://github.com/lichess-org/dartchess.git
+      ref: 88c3c17a5d75b8228b82339728dc99e7f1175d7c
+  chessground:
+    git:
+      url: https://github.com/lichess-org/flutter-chessground.git
+      ref: 6953a7a2970577d0b051b94a4131f09de76f6f11
 
 dev_dependencies:
   flutter_test:

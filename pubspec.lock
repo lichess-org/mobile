@@ -127,6 +127,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  chessground:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "6953a7a2970577d0b051b94a4131f09de76f6f11"
+      resolved-ref: "6953a7a2970577d0b051b94a4131f09de76f6f11"
+      url: "https://github.com/lichess-org/flutter-chessground.git"
+    source: git
+    version: "0.0.1"
   clock:
     dependency: transitive
     description:
@@ -176,6 +185,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.4"
+  dartchess:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "88c3c17a5d75b8228b82339728dc99e7f1175d7c"
+      resolved-ref: "88c3c17a5d75b8228b82339728dc99e7f1175d7c"
+      url: "https://github.com/lichess-org/dartchess.git"
+    source: git
+    version: "0.1.0"
   fake_async:
     dependency: transitive
     description:
@@ -726,6 +744,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  tuple:
+    dependency: transitive
+    description:
+      name: tuple
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   typed_data:
     dependency: transitive
     description:
