@@ -51,5 +51,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  fonts:
+    - family:  LichessIcons
+      fonts:
+        - asset: assets/fonts/LichessIcons.ttf
+
   # Enable generation of localized Strings from arb files.
   generate: true

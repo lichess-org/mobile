@@ -9,6 +9,7 @@ import 'features/authentication/ui/auth_widget.dart';
 import 'features/settings/ui/settings_screen.dart';
 import 'features/settings/ui/theme_mode_screen.dart';
 import 'features/settings/ui/theme_mode_controller.dart';
+import './utils/lichess_icons.dart';
 
 class App extends ConsumerWidget {
   const App({super.key});
@@ -42,7 +43,7 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 const tabs = [
   ScaffoldWithNavBarTabItem(
     initialLocation: '/puzzles',
-    icon: Icon(Icons.home),
+    icon: Icon(LichessIcons.target),
     label: 'Puzzles',
   ),
   ScaffoldWithNavBarTabItem(

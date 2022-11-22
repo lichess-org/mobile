@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../constants.dart';
+import '../../../utils/lichess_icons.dart';
 import '../../authentication/data/auth_repository.dart';
 import '../../authentication/domain/account.codegen.dart';
 
@@ -27,7 +28,9 @@ class SettingsScreen extends ConsumerWidget {
                         child: Column(
                           children: [
                             ListTile(
-                              leading: const Icon(Icons.person),
+                              leading: account.patron == true
+                                  ? const Icon(LichessIcons.patron, size: 40)
+                                  : const Icon(Icons.person, size: 40),
                               title: Text(account.username),
                               subtitle: account.profile != null
                                   ? Location(profile: account.profile!)
