@@ -167,6 +167,10 @@ function unescape(str) {
   return str.replace(/\\"/g, '"').replace(/\\'/g, '\'')
 }
 
+function fixKey(str) {
+  return str.replace(/\./g, '_')
+}
+
 function transformTranslations(data, locale, module, makeTemplate = false) {
   if (!(data && data.resources && data.resources.string)) {
     throw `Missing translations in module ${module} and locale ${locale}`
@@ -176,10 +180,11 @@ function transformTranslations(data, locale, module, makeTemplate = false) {
 
   for (const stringElement of data.resources.string) {
     const string = unescape(stringElement._)
+    const transKey = fixKey(stringElement.$.name)
     if (RegExp('%s', 'g').test(string)) {
-      transformed[stringElement.$.name] = string.replace(/%s/g, '{param}')
+      transformed[transKey] = string.replace(/%s/g, '{param}')
       if (makeTemplate) {
-        transformed[`@${stringElement.$.name}`] = {
+        transformed[`@${transKey}`] = {
           placeholders: {
             param: {
               type: 'String'
@@ -188,24 +193,24 @@ function transformTranslations(data, locale, module, makeTemplate = false) {
         }
       }
     } else if (/%\d\$s/.test(string)) {
-      transformed[stringElement.$.name] = string
+      transformed[transKey] = string
       const regexp = /%(\d)\$s/g
       let result
       const params = []
       while ((result = regexp.exec(string)) !== null) {
         const param = `param${result[1]}`
         params.push(param)
-        transformed[stringElement.$.name] = transformed[stringElement.$.name].replace(result[0], `{${param}}`)
+        transformed[transKey] = transformed[transKey].replace(result[0], `{${param}}`)
       }
       if (makeTemplate) {
         const placeholders = {}
         for (const param of params) {
           placeholders[param] = { type: 'String' }
         }
-        transformed[`@${stringElement.$.name}`] = { placeholders }
+        transformed[`@${transKey}`] = { placeholders }
       }
     } else {
-      transformed[stringElement.$.name] = string
+      transformed[transKey] = string
     }
   }
 

@@ -493,7 +493,7 @@
   "importGameExplanation": "Paste a game PGN to get a browsable replay,\ncomputer analysis, game chat and shareable URL.",
   "thisIsAChessCaptcha": "This is a chess CAPTCHA.",
   "clickOnTheBoardToMakeYourMove": "Click on the board to make your move, and prove you are human.",
-  "captcha.fail": "Please solve the chess captcha.",
+  "captcha_fail": "Please solve the chess captcha.",
   "notACheckmate": "Not a checkmate",
   "whiteCheckmatesInOneMove": "White to checkmate in one move",
   "blackCheckmatesInOneMove": "Black to checkmate in one move",
@@ -690,7 +690,7 @@
   "ratingManipulation": "Rating manipulation",
   "other": "Other",
   "reportDescriptionHelp": "Paste the link to the game(s) and explain what is wrong about this user's behaviour. Don't just say \"they cheat\", but tell us how you came to this conclusion. Your report will be processed faster if written in English.",
-  "error.provideOneCheatedGameLink": "Please provide at least one link to a cheated game.",
+  "error_provideOneCheatedGameLink": "Please provide at least one link to a cheated game.",
   "by": "by {param}",
   "@by": {
     "placeholders": {
@@ -808,38 +808,38 @@
   "community": "Community",
   "tools": "Tools",
   "increment": "Increment",
-  "error.unknown": "Invalid value",
-  "error.required": "This field is required",
-  "error.email": "This email address is invalid",
-  "error.email_acceptable": "This email address is not acceptable. Please double-check it, and try again.",
-  "error.email_unique": "Email address invalid or already taken",
-  "error.email_different": "This is already your email address",
-  "error.minLength": "Must be at least {param} characters long",
-  "@error.minLength": {
+  "error_unknown": "Invalid value",
+  "error_required": "This field is required",
+  "error_email": "This email address is invalid",
+  "error_email_acceptable": "This email address is not acceptable. Please double-check it, and try again.",
+  "error_email_unique": "Email address invalid or already taken",
+  "error_email_different": "This is already your email address",
+  "error_minLength": "Must be at least {param} characters long",
+  "@error_minLength": {
     "placeholders": {
       "param": {
         "type": "String"
       }
     }
   },
-  "error.maxLength": "Must be at most {param} characters long",
-  "@error.maxLength": {
+  "error_maxLength": "Must be at most {param} characters long",
+  "@error_maxLength": {
     "placeholders": {
       "param": {
         "type": "String"
       }
     }
   },
-  "error.min": "Must be at least {param}",
-  "@error.min": {
+  "error_min": "Must be at least {param}",
+  "@error_min": {
     "placeholders": {
       "param": {
         "type": "String"
       }
     }
   },
-  "error.max": "Must be at most {param}",
-  "@error.max": {
+  "error_max": "Must be at most {param}",
+  "@error_max": {
     "placeholders": {
       "param": {
         "type": "String"
