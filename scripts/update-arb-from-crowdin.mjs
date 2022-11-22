@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { readFileSync, createWriteStream, writeFileSync, mkdirSync, existsSync } from 'fs'
+import { readdir, unlink } from 'node:fs/promises';
 import { pipeline } from 'stream'
 import { promisify } from 'util'
 import { exec } from 'child_process'
@@ -8,7 +9,7 @@ import colors from 'colors/safe.js'
 import { parseStringPromise } from 'xml2js'
 import fetch from 'node-fetch'
 import { request as octokitRequest } from '@octokit/request'
-import { dirname } from 'path'
+import { dirname, basename, extname, join } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -20,7 +21,7 @@ const lilaTranslationsPath = `${tmpDir}/[ornicar.lila] master/translation/dest`
 const unzipMaxBufferSize = 1024 * 1024 * 10 // Set maxbuffer to 10MB to avoid errors when default 1MB used
 
 // selection of lila translation modules to include
-const modules = ['puzzle']
+const modules = ['site', 'puzzle', 'settings']
 
 // Order of locales with variants matters: the fallback must always be first
 // eg: 'de-DE' is before 'de-CH'
@@ -46,7 +47,7 @@ async function generateLilaTranslationARBs() {
   await downloadTranslationsTo(zipFile)
   await unzipTranslations(`${tmpDir}/out.zip`)
 
-
+  // load all translations into a single object
   const translations = {}
   for (const module of modules) {
     const xml = await loadXml(locales, module)
@@ -62,6 +63,15 @@ async function generateLilaTranslationARBs() {
       }
     }
   }
+
+  // remove all existing translations files, because the write logic needs it
+  for (const file of await readdir(destDir)) {
+    if (basename(file) !== 'app_en.arb' && extname(file) === '.arb') {
+      await unlink(join(destDir, file))
+    }
+  }
+
+  // write translations, one file per locale
   Object.keys(translations).forEach(locale => {
     const parts = locale.split('-')
     const lang = parts[0]
@@ -69,7 +79,7 @@ async function generateLilaTranslationARBs() {
     const file = `${destDir}/lila_${lang}.arb`
     try {
       // the lang already exists, it means the locale is a variant, we'll specify the country code
-      // en-US is and exception because en-GB is the template file
+      // en-US is an exception because en-GB is the template file
       if (existsSync(file) || locale === 'en-US') {
         writeTranslations(`${destDir}/lila_${lang}_${country}.arb`, translations[locale])
       } else {
@@ -227,9 +237,9 @@ function writeTranslations(where, data) {
   writeFileSync(where, JSON.stringify(data, null, 2))
 }
 
-async function loadXml(locales, module) {
+async function loadXml(localesToLoad, module) {
   const sectionXml = {}
-  for (const locale of locales) {
+  for (const locale of localesToLoad) {
     console.log(colors.blue(`Loading translations for ${colors.bold(locale)}...`))
     try {
       sectionXml[locale] = await loadTranslations(module, locale)
