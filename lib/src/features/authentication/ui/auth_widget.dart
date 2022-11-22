@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/utils/extensions/async_value.dart';
 
-import '../../../utils/extensions.dart';
 import '../data/auth_repository.dart';
 import './auth_widget_controller.dart';
 

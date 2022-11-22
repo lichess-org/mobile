@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/utils/extensions/l10n_context.dart';
 
 import 'constants.dart';
 
@@ -40,24 +41,6 @@ class App extends ConsumerWidget {
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
-const tabs = [
-  ScaffoldWithNavBarTabItem(
-    initialLocation: '/puzzles',
-    icon: Icon(LichessIcons.target),
-    label: 'Puzzles',
-  ),
-  ScaffoldWithNavBarTabItem(
-    initialLocation: '/watch',
-    icon: Icon(Icons.live_tv),
-    label: 'Watch',
-  ),
-  ScaffoldWithNavBarTabItem(
-    initialLocation: '/settings',
-    icon: Icon(Icons.settings),
-    label: 'Settings',
-  ),
-];
-
 final goRouter = GoRouter(
   initialLocation: '/puzzles',
   navigatorKey: _rootNavigatorKey,
@@ -66,7 +49,7 @@ final goRouter = GoRouter(
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       builder: (context, state, child) {
-        return ScaffoldWithBottomNavBar(tabs: tabs, child: child);
+        return ScaffoldWithBottomNavBar(child: child);
       },
       routes: [
         GoRoute(
@@ -122,23 +105,10 @@ final goRouter = GoRouter(
   ],
 );
 
-/// Representation of a tab item in a [ScaffoldWithNavBar]
-class ScaffoldWithNavBarTabItem extends BottomNavigationBarItem {
-  /// Constructs an [ScaffoldWithNavBarTabItem].
-  const ScaffoldWithNavBarTabItem(
-      {required this.initialLocation, required Widget icon, String? label})
-      : super(icon: icon, label: label);
-
-  /// The initial location/path
-  final String initialLocation;
-}
-
 class ScaffoldWithBottomNavBar extends StatefulWidget {
-  const ScaffoldWithBottomNavBar(
-      {Key? key, required this.child, required this.tabs})
+  const ScaffoldWithBottomNavBar({Key? key, required this.child})
       : super(key: key);
   final Widget child;
-  final List<ScaffoldWithNavBarTabItem> tabs;
 
   @override
   State<ScaffoldWithBottomNavBar> createState() =>
@@ -146,9 +116,14 @@ class ScaffoldWithBottomNavBar extends StatefulWidget {
 }
 
 class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
+  final tabs = const [
+    '/puzzles',
+    '/watch',
+    '/settings',
+  ];
+
   int _locationToTabIndex(String location) {
-    final index =
-        widget.tabs.indexWhere((t) => location.startsWith(t.initialLocation));
+    final index = tabs.indexWhere((t) => location.startsWith(t));
     // if index not found (-1), return 0
     return index < 0 ? 0 : index;
   }
@@ -158,18 +133,34 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
   void _onItemTapped(BuildContext context, int tabIndex) {
     // Only navigate if the tab index has changed
     if (tabIndex != _currentIndex) {
-      context.go(widget.tabs[tabIndex].initialLocation);
+      context.go(tabs[tabIndex]);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    const icons = {
+      '/puzzles': Icon(LichessIcons.target),
+      '/watch': Icon(Icons.live_tv),
+      '/settings': Icon(Icons.settings),
+    };
+    final labels = {
+      '/puzzles': context.l10n.puzzles,
+      '/watch': context.l10n.watch,
+      '/settings': context.l10n.settings,
+    };
     return Scaffold(
       body: widget.child,
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: kOrange,
         currentIndex: _currentIndex,
-        items: widget.tabs,
+        items: <BottomNavigationBarItem>[
+          for (final tab in tabs)
+            BottomNavigationBarItem(
+              icon: icons[tab]!,
+              label: labels[tab]!,
+            )
+        ],
         onTap: (index) => _onItemTapped(context, index),
       ),
     );

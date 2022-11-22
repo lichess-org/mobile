@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lichess_mobile/src/utils/extensions/l10n_context.dart';
 
 import '../../../constants.dart';
 import '../../../utils/lichess_icons.dart';
@@ -41,7 +42,7 @@ class SettingsScreen extends ConsumerWidget {
                               children: [
                                 TextButton(
                                   onPressed: () {},
-                                  child: const Text('Profile'),
+                                  child: Text(context.l10n.profile),
                                 ),
                               ],
                             ),
@@ -56,7 +57,7 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 10),
           ListTile(
             leading: const Icon(Icons.brightness_medium),
-            title: const Text('Theme'),
+            title: Text('Theme'),
             onTap: () {
               context.go('/settings/themeMode');
             },

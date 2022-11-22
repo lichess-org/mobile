@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/utils/extensions/l10n_context.dart';
 
 import './theme_mode_controller.dart';
 
@@ -19,7 +20,7 @@ class ThemeModeScreen extends ConsumerWidget {
       body: Column(
         children: [
           ListTile(
-            title: const Text('Dark'),
+            title: Text(context.l10n.dark),
             leading: Radio<ThemeMode>(
               value: ThemeMode.dark,
               groupValue: themeMode,
@@ -27,7 +28,7 @@ class ThemeModeScreen extends ConsumerWidget {
             ),
           ),
           ListTile(
-            title: const Text('Light'),
+            title: Text(context.l10n.light),
             leading: Radio<ThemeMode>(
               value: ThemeMode.light,
               groupValue: themeMode,
