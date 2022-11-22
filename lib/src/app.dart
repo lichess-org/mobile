@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'constants.dart';
 
-import 'features/authentication/data/auth_repository.dart';
 import 'features/authentication/ui/auth_widget.dart';
 import 'features/settings/ui/settings_screen.dart';
 import 'features/settings/ui/theme_mode_screen.dart';
@@ -301,15 +300,7 @@ class PuzzlesScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('lichess.org'), actions: const [
         AuthWidget(),
       ]),
-      body: Center(child: Consumer(builder: (_, WidgetRef ref, __) {
-        final authState = ref.watch(authStateChangesProvider);
-        return authState.maybeWhen(
-          data: (account) => account != null
-              ? Text('Hello, ${account.username}')
-              : const Text('Hello'),
-          orElse: () => const CircularProgressIndicator(),
-        );
-      })),
+      body: const Center(child: Text('Todo')),
     );
   }
 }

@@ -1,37 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../constants.dart';
+import '../../authentication/data/auth_repository.dart';
+import '../../authentication/domain/account.codegen.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authStateChangesProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       body: ListView(
         padding: const EdgeInsets.all(8.0),
         children: [
-          const SizedBox(height: 20),
-          Card(
-            child: Column(
-              children: [
-                const ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text('Username'),
-                  subtitle: Text('Firstname Lastname'),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      child: const Text('Sign out'),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          authState.maybeWhen(
+            data: (account) => account != null
+                ? Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      Card(
+                        child: Column(
+                          children: [
+                            ListTile(
+                              leading: const Icon(Icons.person),
+                              title: Text(account.username),
+                              subtitle: account.profile != null
+                                  ? Location(profile: account.profile!)
+                                  : kEmptyWidget,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                  onPressed: () {},
+                                  child: const Text('Profile'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                : const SizedBox.shrink(),
+            orElse: () => const CircularProgressIndicator(),
           ),
           const SizedBox(height: 10),
           ListTile(
@@ -45,4 +62,28 @@ class SettingsScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+class Location extends StatelessWidget {
+  const Location({required this.profile, super.key});
+
+  final Profile profile;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: [
+      profile.country != null
+          ? CachedNetworkImage(
+              imageUrl: lichessFlagSrc(profile.country!),
+              errorWidget: (_, __, ___) => kEmptyWidget,
+            )
+          : kEmptyWidget,
+      const SizedBox(width: 10),
+      Text(profile.location ?? ''),
+    ]);
+  }
+}
+
+String lichessFlagSrc(String country) {
+  return '$kLichessHost/assets/images/flags/$country.png';
 }

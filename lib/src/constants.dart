@@ -11,6 +11,10 @@ const kOAuthTokenStorageKey = 'oAuthToken';
 
 // COLORS
 const kOrange = Color(0xFFD64F00);
+const kGold = Color(0xFFBF811D);
+
+// Misc
+const kEmptyWidget = SizedBox.shrink();
 
 const kSupportedLocales = [
   Locale('af', ''),
