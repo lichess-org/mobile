@@ -6,8 +6,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 
 import '../../authentication/ui/auth_widget.dart';
-import '../data/tv_repository.dart';
-import './tv_screen_controller.dart';
+import './tv_feed.dart';
 
 class TvScreen extends StatelessWidget {
   const TvScreen({super.key});
@@ -24,9 +23,8 @@ class TvScreen extends StatelessWidget {
         child: Consumer(
           builder: (_, WidgetRef ref, __) {
             final tvFeed = ref.watch(tvFeedProvider);
-            final tvState = ref.watch(tvScreenControllerProvider);
             return tvFeed.when(
-              data: (_) {
+              data: (tvState) {
                 final topPlayer = tvState.orientation == Side.white
                     ? tvState.players[Side.black]
                     : tvState.players[Side.white];

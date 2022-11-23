@@ -38,10 +38,11 @@ final tvRepositoryProvider = Provider<TvRepository>((ref) {
   return TvRepository(Logger('TvRepository'), apiClient: apiClient);
 });
 
-final tvFeedProvider = StreamProvider.autoDispose<Map<String, dynamic>>((ref) {
+final rawTvFeedProvider =
+    StreamProvider.autoDispose<Map<String, dynamic>>((ref) {
   final tvRepository = ref.watch(tvRepositoryProvider);
   ref.onDispose(() {
-    print('tvFeedProvider onDispose');
+    print('rawTvFeedProvider onDispose');
     tvRepository.dispose();
   });
   return tvRepository.tvFeed();
