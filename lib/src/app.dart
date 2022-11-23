@@ -10,6 +10,7 @@ import 'features/authentication/ui/auth_widget.dart';
 import 'features/settings/ui/settings_screen.dart';
 import 'features/settings/ui/theme_mode_screen.dart';
 import 'features/settings/ui/theme_mode_controller.dart';
+import 'features/tv/ui/tv_screen.dart';
 import './utils/lichess_icons.dart';
 
 class App extends ConsumerWidget {
@@ -58,34 +59,13 @@ final goRouter = GoRouter(
             key: state.pageKey,
             child: const PuzzlesScreen(),
           ),
-          routes: [
-            GoRoute(
-              path: 'details',
-              builder: (context, state) =>
-                  const DetailsScreen(label: 'Puzzles'),
-            ),
-          ],
         ),
         GoRoute(
           path: '/watch',
           pageBuilder: (context, state) => NoTransitionPage(
             key: state.pageKey,
-            child: const RootScreen(
-                label: 'Watch',
-                detailsPath: '/watch/details',
-                fullScreenPath: '/watch/details_fullscreen'),
+            child: const TvScreen(),
           ),
-          routes: [
-            GoRoute(
-              path: 'details',
-              builder: (context, state) => const DetailsScreen(label: 'Watch'),
-            ),
-            GoRoute(
-              path: 'details_fullscreen',
-              parentNavigatorKey: _rootNavigatorKey,
-              builder: (context, state) => const DetailsFullscreen(),
-            ),
-          ],
         ),
         GoRoute(
           path: '/settings',
@@ -162,122 +142,6 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
             )
         ],
         onTap: (index) => _onItemTapped(context, index),
-      ),
-    );
-  }
-}
-
-/// Widget for the root/initial pages in the bottom navigation bar.
-class RootScreen extends StatelessWidget {
-  /// Creates a RootScreen
-  const RootScreen(
-      {required this.label,
-      required this.detailsPath,
-      required this.fullScreenPath,
-      Key? key})
-      : super(key: key);
-
-  /// The label
-  final String label;
-
-  /// The path to the detail page
-  final String detailsPath;
-  final String fullScreenPath;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Tab root - $label'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text('Screen $label',
-                style: Theme.of(context).textTheme.titleLarge),
-            const Padding(padding: EdgeInsets.all(4)),
-            TextButton(
-              onPressed: () => context.go(detailsPath),
-              child: const Text('View details'),
-            ),
-            TextButton(
-              onPressed: () => context.go(fullScreenPath),
-              child: const Text('View details fullscreen'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class DetailsFullscreen extends StatelessWidget {
-  /// Creates a RootScreen
-  const DetailsFullscreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Details fullscreen'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text('Details fullscreen',
-                style: Theme.of(context).textTheme.titleLarge),
-            const Padding(padding: EdgeInsets.all(4)),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// The details screen for either the A or B screen.
-class DetailsScreen extends StatefulWidget {
-  /// Constructs a [DetailsScreen].
-  const DetailsScreen({
-    required this.label,
-    Key? key,
-  }) : super(key: key);
-
-  /// The label to display in the center of the screen.
-  final String label;
-
-  @override
-  State<StatefulWidget> createState() => DetailsScreenState();
-}
-
-/// The state for DetailsScreen
-class DetailsScreenState extends State<DetailsScreen> {
-  int _counter = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Details Screen - ${widget.label}'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text('Details for ${widget.label} - Counter: $_counter',
-                style: Theme.of(context).textTheme.titleLarge),
-            const Padding(padding: EdgeInsets.all(4)),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  _counter++;
-                });
-              },
-              child: const Text('Increment counter'),
-            ),
-          ],
-        ),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:logging/logging.dart';
 import 'package:http/http.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'constants.dart';
 import 'utils/errors.dart';
@@ -46,6 +47,11 @@ class ApiClient {
     ).flatMap((resp) => _validateResponseStatus(url, resp));
   }
 
+  /// Generic send request used to stream content.
+  Future<StreamedResponse> send(BaseRequest request) {
+    return _client.send(request);
+  }
+
   Future<Response> _sendRequest(
       String method, Uri url, Map<String, String>? headers,
       [Object? body, Encoding? encoding]) async {
@@ -74,8 +80,8 @@ class ApiClient {
     return Response.fromStream(await _client.send(request));
   }
 
-  TaskEither<IOError, Response> _validateResponseStatus(
-      Uri url, Response response) {
+  TaskEither<IOError, T> _validateResponseStatus<T extends BaseResponse>(
+      Uri url, T response) {
     if (response.statusCode >= 400) {
       _log.warning('$url responded with status ${response.statusCode}');
     }
@@ -91,6 +97,7 @@ class ApiClient {
   }
 
   void close() {
+    print('apiClient.close');
     _client.close();
   }
 }
@@ -105,7 +112,20 @@ class AuthClient extends BaseClient {
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
     final token = await storage.read(key: kOAuthTokenStorageKey);
-    request.headers['Authorization'] = 'Bearer ${(token ?? '')}';
+    if (token != null) {
+      request.headers['Authorization'] = 'Bearer $token';
+    }
     return _inner.send(request);
   }
 }
+
+final apiClientProvider = Provider<ApiClient>((ref) {
+  const storage = FlutterSecureStorage();
+  final authClient = AuthClient(storage, Client());
+  final apiClient = ApiClient(Logger('ApiClient'), authClient);
+  ref.onDispose(() {
+    print('apiClientProvider onDispose');
+    apiClient.close();
+  });
+  return apiClient;
+});

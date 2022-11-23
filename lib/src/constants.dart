@@ -15,6 +15,7 @@ const kGold = Color(0xFFBF811D);
 
 // Misc
 const kEmptyWidget = SizedBox.shrink();
+const kEmptyFen = '8/8/8/8/8/8/8/8 w - - 0 1';
 
 const kSupportedLocales = [
   Locale('af', ''),
