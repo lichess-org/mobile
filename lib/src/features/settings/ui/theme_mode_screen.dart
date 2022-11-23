@@ -19,29 +19,23 @@ class ThemeModeScreen extends ConsumerWidget {
       appBar: AppBar(title: const Text('Theme')),
       body: Column(
         children: [
-          ListTile(
+          RadioListTile<ThemeMode>(
             title: Text(context.l10n.dark),
-            leading: Radio<ThemeMode>(
-              value: ThemeMode.dark,
-              groupValue: themeMode,
-              onChanged: onChanged,
-            ),
+            value: ThemeMode.dark,
+            groupValue: themeMode,
+            onChanged: onChanged,
           ),
-          ListTile(
+          RadioListTile<ThemeMode>(
             title: Text(context.l10n.light),
-            leading: Radio<ThemeMode>(
-              value: ThemeMode.light,
-              groupValue: themeMode,
-              onChanged: onChanged,
-            ),
+            value: ThemeMode.light,
+            groupValue: themeMode,
+            onChanged: onChanged,
           ),
-          ListTile(
+          RadioListTile<ThemeMode>(
             title: const Text('System'),
-            leading: Radio<ThemeMode>(
-              value: ThemeMode.system,
-              groupValue: themeMode,
-              onChanged: onChanged,
-            ),
+            value: ThemeMode.system,
+            groupValue: themeMode,
+            onChanged: onChanged,
           ),
         ],
       ),
