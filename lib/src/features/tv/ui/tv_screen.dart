@@ -82,7 +82,8 @@ class TvScreen extends ConsumerWidget {
             fen: kEmptyFen,
           ),
           error: (err, __) {
-            debugPrint(err.toString());
+            debugPrint(
+                'SEVERE: [TvScreen] could not load stream; ${err.toString()}');
             return const Text('Could not load TV stream.');
           },
         ),
