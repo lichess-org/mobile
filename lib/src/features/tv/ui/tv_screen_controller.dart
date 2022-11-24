@@ -8,18 +8,6 @@ import '../domain/featured_player.dart';
 class TvScreenController extends StateNotifier<TvScreenState?> {
   TvScreenController() : super(null);
 
-  void onReceiveEvent(Map<String, dynamic> event) {
-    switch (event['t']) {
-      case 'featured':
-        onFeaturedEvent(FeaturedEvent.fromJson(event['d']));
-        break;
-
-      case 'fen':
-        onFenEvent(FenEvent.fromJson(event['d']));
-        break;
-    }
-  }
-
   void onFeaturedEvent(FeaturedEvent event) {
     state = TvScreenState.fromFeaturedEvent(event);
   }

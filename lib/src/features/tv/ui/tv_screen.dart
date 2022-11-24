@@ -76,7 +76,10 @@ class TvScreen extends StatelessWidget {
                 orientation: Side.white,
                 fen: kEmptyFen,
               ),
-              error: (_, __) => const Text('Could not load TV stream.'),
+              error: (err, __) {
+                debugPrint(err.toString());
+                return const Text('Could not load TV stream.');
+              },
             );
           },
         ),

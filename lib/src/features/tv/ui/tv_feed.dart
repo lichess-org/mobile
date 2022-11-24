@@ -17,21 +17,13 @@ class TvFeedEvent {
     this.lastMove,
   });
 
-  TvFeedEvent.fromFeaturedEvent(FeaturedEvent event)
-      : fen = event.fen,
-        position = Chess.fromSetup(Setup.parseFen(event.fen)),
-        turn = event.fen.substring(event.fen.length - 1) == 'w'
+  TvFeedEvent.fromJson(Map<String, dynamic> json)
+      : fen = json['fen'],
+        position = Chess.fromSetup(Setup.parseFen(json['fen'])),
+        turn = json['fen'].substring(json['fen'].length - 1) == 'w'
             ? cg.Side.white
             : cg.Side.black,
-        lastMove = null;
-
-  TvFeedEvent.fromFenEvent(FenEvent event)
-      : fen = event.fen,
-        position = Chess.fromSetup(Setup.parseFen(event.fen)),
-        turn = event.fen.substring(event.fen.length - 1) == 'w'
-            ? cg.Side.white
-            : cg.Side.black,
-        lastMove = event.lastMove;
+        lastMove = json['lm'] != null ? cg.Move.fromUci(json['lm']) : null;
 
   final String fen;
   final Chess position;
@@ -55,6 +47,18 @@ class TvFeedEvent {
       lastMove: lastMove,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is TvFeedEvent &&
+        other.fen == fen &&
+        other.position == position &&
+        other.turn == turn &&
+        other.lastMove == lastMove;
+  }
+
+  @override
+  int get hashCode => Object.hash(fen, position, turn, lastMove);
 }
 
 final tvFeedProvider = StreamProvider.autoDispose<TvFeedEvent>((ref) {
@@ -64,18 +68,18 @@ final tvFeedProvider = StreamProvider.autoDispose<TvFeedEvent>((ref) {
     print('tvFeedProvider onDispose');
     tvRepository.dispose();
   });
-  return tvRepository.tvFeed().map((event) {
-    tvControllerNotifier.onReceiveEvent(event);
-    switch (event['t']) {
+  return tvRepository.tvFeed().map((raw) {
+    switch (raw['t']) {
       case 'featured':
-        return TvFeedEvent.fromFeaturedEvent(
-            FeaturedEvent.fromJson(event['d']));
+        tvControllerNotifier.onFeaturedEvent(FeaturedEvent.fromJson(raw['d']));
+        return TvFeedEvent.fromJson(raw['d']);
 
       case 'fen':
-        return TvFeedEvent.fromFenEvent(FenEvent.fromJson(event['d']));
+        tvControllerNotifier.onFenEvent(FenEvent.fromJson(raw['d']));
+        return TvFeedEvent.fromJson(raw['d']);
 
       default:
-        throw Exception('Unsupported event $event');
+        throw Exception('Unsupported event $raw');
     }
   });
 });
