@@ -97,7 +97,7 @@ class ApiClient {
   }
 
   void close() {
-    print('apiClient.close');
+    _log.info('Closing ApiClient http connection.');
     _client.close();
   }
 }
@@ -124,7 +124,6 @@ final apiClientProvider = Provider<ApiClient>((ref) {
   final authClient = AuthClient(storage, Client());
   final apiClient = ApiClient(Logger('ApiClient'), authClient);
   ref.onDispose(() {
-    print('apiClientProvider onDispose');
     apiClient.close();
   });
   return apiClient;

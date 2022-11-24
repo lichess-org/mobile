@@ -65,7 +65,6 @@ final tvFeedProvider = StreamProvider.autoDispose<TvFeedEvent>((ref) {
   final tvRepository = ref.watch(tvRepositoryProvider);
   final tvControllerNotifier = ref.read(tvScreenControllerProvider.notifier);
   ref.onDispose(() {
-    print('tvFeedProvider onDispose');
     tvRepository.dispose();
   });
   return tvRepository.tvFeed().map((raw) {

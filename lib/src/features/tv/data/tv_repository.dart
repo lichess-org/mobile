@@ -31,9 +31,7 @@ class TvRepository {
 
 final tvRepositoryProvider = Provider<TvRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
-  ref.onDispose(() {
-    print('tvRepositoryProvider onDispose');
-    apiClient.close();
-  });
-  return TvRepository(Logger('TvRepository'), apiClient: apiClient);
+  final repo = TvRepository(Logger('TvRepository'), apiClient: apiClient);
+  ref.onDispose(() => repo.dispose());
+  return repo;
 });
