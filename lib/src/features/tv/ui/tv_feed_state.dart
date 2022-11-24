@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 import 'package:chessground/chessground.dart';
 
 import '../domain/stream_event.dart';

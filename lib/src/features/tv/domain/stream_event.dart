@@ -1,9 +1,9 @@
+import 'package:meta/meta.dart';
 import 'package:chessground/chessground.dart';
 
 import './featured_player.dart';
 
-class TvEvent {}
-
+@immutable
 class FeaturedEvent {
   const FeaturedEvent({
     required this.id,
@@ -42,6 +42,7 @@ class FeaturedEvent {
   int get hashCode => Object.hash(id, orientation, fen, white, black);
 }
 
+@immutable
 class FenEvent {
   const FenEvent({
     required this.fen,

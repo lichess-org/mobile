@@ -1,5 +1,7 @@
+import 'package:meta/meta.dart';
 import 'package:chessground/chessground.dart';
 
+@immutable
 class FeaturedPlayer {
   final Side side;
   final String name;
