@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/widgets/player.dart';
 
 import '../../authentication/ui/auth_widget.dart';
 import './tv_feed.dart';
+import './tv_screen_controller.dart';
 
 class TvScreen extends StatelessWidget {
   const TvScreen({super.key});
@@ -23,14 +24,19 @@ class TvScreen extends StatelessWidget {
         child: Consumer(
           builder: (_, WidgetRef ref, __) {
             final tvFeed = ref.watch(tvFeedProvider);
+            final tvState = ref.watch(tvScreenControllerProvider);
             return tvFeed.when(
-              data: (tvState) {
-                final topPlayer = tvState.orientation == Side.white
-                    ? tvState.players[Side.black]
-                    : tvState.players[Side.white];
-                final bottomPlayer = tvState.orientation == Side.white
-                    ? tvState.players[Side.white]
-                    : tvState.players[Side.black];
+              data: (tvEvent) {
+                final topPlayer = tvState != null
+                    ? tvState.orientation == Side.white
+                        ? tvState.black
+                        : tvState.white
+                    : null;
+                final bottomPlayer = tvState != null
+                    ? tvState.orientation == Side.white
+                        ? tvState.white
+                        : tvState.black
+                    : null;
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -40,17 +46,17 @@ class TvScreen extends StatelessWidget {
                             title: topPlayer.title,
                             rating: topPlayer.rating,
                             clock: Duration(seconds: topPlayer.seconds),
-                            active: tvState.isGameOngoing &&
-                                tvState.turn == topPlayer.side)
+                            active: tvEvent.isGameOngoing &&
+                                tvEvent.turn == topPlayer.side)
                         : const SizedBox.shrink(),
                     Board(
                       interactableSide: InteractableSide.none,
                       settings:
                           const Settings(animationDuration: Duration.zero),
                       size: screenWidth,
-                      orientation: tvState.orientation,
-                      fen: tvState.fen,
-                      lastMove: tvState.lastMove,
+                      orientation: tvState?.orientation ?? Side.white,
+                      fen: tvEvent.fen,
+                      lastMove: tvEvent.lastMove,
                     ),
                     bottomPlayer != null
                         ? Player(
@@ -58,8 +64,8 @@ class TvScreen extends StatelessWidget {
                             title: bottomPlayer.title,
                             rating: bottomPlayer.rating,
                             clock: Duration(seconds: bottomPlayer.seconds),
-                            active: tvState.isGameOngoing &&
-                                tvState.turn == bottomPlayer.side)
+                            active: tvEvent.isGameOngoing &&
+                                tvEvent.turn == bottomPlayer.side)
                         : const SizedBox.shrink(),
                   ],
                 );

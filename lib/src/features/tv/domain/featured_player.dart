@@ -32,6 +32,19 @@ class FeaturedPlayer {
   }
 
   @override
+  bool operator ==(Object other) {
+    return other is FeaturedPlayer &&
+        other.side == side &&
+        other.name == name &&
+        other.title == title &&
+        other.rating == rating &&
+        other.seconds == seconds;
+  }
+
+  @override
+  int get hashCode => Object.hash(side, name, title, rating, seconds);
+
+  @override
   toString() {
     return 'Player($side, $name, $rating, $title)';
   }
