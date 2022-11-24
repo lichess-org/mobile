@@ -1,69 +1,35 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:chessground/chessground.dart' as cg;
-import 'package:dartchess/dartchess.dart';
 
+import 'package:lichess_mobile/src/sound.dart';
 import '../domain/stream_event.dart';
-import '../domain/featured_player.dart';
 import '../data/tv_repository.dart';
-import './tv_screen_controller.dart';
+import './tv_feed_state.dart';
+import './tv_feed_event.dart';
 
-@immutable
-class TvFeedEvent {
-  const TvFeedEvent({
-    required this.fen,
-    required this.position,
-    required this.turn,
-    this.lastMove,
-  });
+class TvFeedStateNotifier extends StateNotifier<TvFeedState?> {
+  TvFeedStateNotifier() : super(null);
 
-  TvFeedEvent.fromJson(Map<String, dynamic> json)
-      : fen = json['fen'],
-        position = Chess.fromSetup(Setup.parseFen(json['fen'])),
-        turn = json['fen'].substring(json['fen'].length - 1) == 'w'
-            ? cg.Side.white
-            : cg.Side.black,
-        lastMove = json['lm'] != null ? cg.Move.fromUci(json['lm']) : null;
+  void onFeaturedEvent(FeaturedEvent event) {
+    state = TvFeedState.fromFeaturedEvent(event);
+  }
 
-  final String fen;
-  final Chess position;
-  final cg.Side turn;
-  final cg.Move? lastMove;
-
-  bool get isGameOngoing => !position.isGameOver;
-
-  TvFeedEvent copyWith({
-    cg.Side? orientation,
-    String? fen,
-    Chess? position,
-    cg.Side? turn,
-    cg.Move? lastMove,
-    Map<cg.Side, FeaturedPlayer>? players,
-  }) {
-    return TvFeedEvent(
-      fen: fen ?? this.fen,
-      position: position ?? this.position,
-      turn: turn ?? this.turn,
-      lastMove: lastMove,
+  void onFenEvent(FenEvent event) {
+    state = state?.copyWith(
+      white: state!.white.withSeconds(event.whiteSeconds),
+      black: state!.black.withSeconds(event.whiteSeconds),
     );
   }
-
-  @override
-  bool operator ==(Object other) {
-    return other is TvFeedEvent &&
-        other.fen == fen &&
-        other.position == position &&
-        other.turn == turn &&
-        other.lastMove == lastMove;
-  }
-
-  @override
-  int get hashCode => Object.hash(fen, position, turn, lastMove);
 }
 
+final tvFeedStateNotifierProvider =
+    StateNotifierProvider.autoDispose<TvFeedStateNotifier, TvFeedState?>((ref) {
+  return TvFeedStateNotifier();
+});
+
 final tvFeedProvider = StreamProvider.autoDispose<TvFeedEvent>((ref) {
+  final soundService = ref.watch(soundServiceProvider);
   final tvRepository = ref.watch(tvRepositoryProvider);
-  final tvControllerNotifier = ref.read(tvScreenControllerProvider.notifier);
+  final tvControllerNotifier = ref.read(tvFeedStateNotifierProvider.notifier);
   ref.onDispose(() {
     tvRepository.dispose();
   });
@@ -75,6 +41,7 @@ final tvFeedProvider = StreamProvider.autoDispose<TvFeedEvent>((ref) {
 
       case 'fen':
         tvControllerNotifier.onFenEvent(FenEvent.fromJson(raw['d']));
+        soundService.playMove();
         return TvFeedEvent.fromJson(raw['d']);
 
       default:

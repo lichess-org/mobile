@@ -41,6 +41,7 @@ dependencies:
     git:
       url: https://github.com/lichess-org/flutter-chessground.git
       ref: 6953a7a2970577d0b051b94a4131f09de76f6f11
+  soundpool: ^2.3.0
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +59,10 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/sounds/move.mp3
+    - assets/sounds/capture.mp3
 
   fonts:
     - family:  LichessIcons

@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+const prefix = 'SettingsRepository';
+
 class SettingsRepository {
   const SettingsRepository({
     required this.prefs,
   });
 
   final SharedPreferences prefs;
-  final prefix = 'SettingsRepository';
 
+  // Theme
   Future<bool> setThemeMode(ThemeMode mode) async {
-    return await prefs.setString(_key('backgroundMode'), mode.name);
+    return await prefs.setString(backgroundModeKey, mode.name);
   }
 
   ThemeMode getThemeMode() {
-    final str = prefs.getString(_key('backgroundMode')) ?? 'system';
+    final str = prefs.getString(backgroundModeKey) ?? 'system';
     switch (str) {
       case 'dark':
         return ThemeMode.dark;
@@ -28,7 +30,19 @@ class SettingsRepository {
     }
   }
 
-  String _key(String key) => '$prefix.$key';
+  // Sound
+  Future<bool> toggleSound() async {
+    return await prefs.setBool(soundMutedKey, !isSoundMuted());
+  }
+
+  bool isSoundMuted() {
+    return prefs.getBool(soundMutedKey) ?? false;
+  }
+
+  // --
+
+  static const backgroundModeKey = '$prefix.backgroundMode';
+  static const soundMutedKey = '$prefix.soundMuted';
 }
 
 // see lib/src/main.dart for initialization
