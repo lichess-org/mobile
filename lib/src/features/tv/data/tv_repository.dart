@@ -18,6 +18,7 @@ class TvRepository {
   Stream<Map<String, dynamic>> tvFeed() async* {
     final resp = await apiClient
         .send(http.Request('GET', Uri.parse('$kLichessHost/api/tv/feed')));
+    _log.fine('Start streaming TV.');
     yield* resp.stream
         .toStringStream()
         .where((event) => event.isNotEmpty && event != '\n')
