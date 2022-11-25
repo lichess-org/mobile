@@ -34,7 +34,7 @@ class TvScreen extends ConsumerWidget {
       ),
       body: Center(
         child: tvStream.when(
-          data: (tvEvent) {
+          data: (position) {
             final topPlayer = featuredGame != null
                 ? featuredGame.orientation == Side.white
                     ? featuredGame.black
@@ -54,16 +54,16 @@ class TvScreen extends ConsumerWidget {
                         title: topPlayer.title,
                         rating: topPlayer.rating,
                         clock: Duration(seconds: topPlayer.seconds),
-                        active: tvEvent.isGameOngoing &&
-                            tvEvent.turn == topPlayer.side)
+                        active: !position.isGameOver &&
+                            position.turn == topPlayer.side)
                     : const SizedBox.shrink(),
                 Board(
                   interactableSide: InteractableSide.none,
                   settings: const Settings(animationDuration: Duration.zero),
                   size: screenWidth,
                   orientation: featuredGame?.orientation.cg ?? Side.white,
-                  fen: tvEvent.fen,
-                  lastMove: tvEvent.lastMove?.cg,
+                  fen: position.fen,
+                  lastMove: position.lastMove?.cg,
                 ),
                 bottomPlayer != null
                     ? Player(
@@ -71,8 +71,8 @@ class TvScreen extends ConsumerWidget {
                         title: bottomPlayer.title,
                         rating: bottomPlayer.rating,
                         clock: Duration(seconds: bottomPlayer.seconds),
-                        active: tvEvent.isGameOngoing &&
-                            tvEvent.turn == bottomPlayer.side)
+                        active: !position.isGameOver &&
+                            position.turn == bottomPlayer.side)
                     : const SizedBox.shrink(),
               ],
             );

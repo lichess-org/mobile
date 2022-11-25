@@ -16,7 +16,7 @@ class FeaturedPosition {
   final Side turn;
   final Chess _position;
 
-  bool get isGameOngoing => !_position.isGameOver;
+  bool get isGameOver => _position.isGameOver;
 
   @override
   bool operator ==(Object other) {
