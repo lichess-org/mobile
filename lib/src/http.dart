@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:logging/logging.dart';
 import 'package:http/http.dart';
+import 'package:http/retry.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,16 +9,26 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'constants.dart';
 import 'utils/errors.dart';
 
+const retries = [
+  Duration(milliseconds: 200),
+  Duration(milliseconds: 300),
+  Duration(milliseconds: 500),
+];
+
 /// Convenient client that captures and returns API errors.
 class ApiClient {
-  ApiClient(this._log, this._client);
+  ApiClient(this._log, this._client)
+      : _retryClient = RetryClient.withDelays(_client, retries,
+            whenError: (_, __) => true);
 
   final Logger _log;
   final Client _client;
+  final RetryClient _retryClient;
 
-  TaskEither<IOError, Response> get(Uri url, {Map<String, String>? headers}) {
+  TaskEither<IOError, Response> get(Uri url,
+      {Map<String, String>? headers, bool retry = false}) {
     return TaskEither<IOError, Response>.tryCatch(
-      () async => _sendRequest('GET', url, headers),
+      () async => _sendRequest('GET', url, headers, retry),
       (error, trace) {
         _log.severe('Request error', error, trace);
         return ApiRequestError(trace);
@@ -26,9 +37,12 @@ class ApiClient {
   }
 
   TaskEither<IOError, Response> post(Uri url,
-      {Map<String, String>? headers, Object? body, Encoding? encoding}) {
+      {Map<String, String>? headers,
+      Object? body,
+      Encoding? encoding,
+      bool retry = false}) {
     return TaskEither<IOError, Response>.tryCatch(
-      () async => _sendRequest('POST', url, headers, body, encoding),
+      () async => _sendRequest('POST', url, headers, body, encoding, retry),
       (error, trace) {
         _log.severe('Request error', error, trace);
         return ApiRequestError(trace);
@@ -37,9 +51,12 @@ class ApiClient {
   }
 
   TaskEither<IOError, Response> delete(Uri url,
-      {Map<String, String>? headers, Object? body, Encoding? encoding}) {
+      {Map<String, String>? headers,
+      Object? body,
+      Encoding? encoding,
+      bool retry = false}) {
     return TaskEither<IOError, Response>.tryCatch(
-      () async => _sendRequest('DELETE', url, headers, body, encoding),
+      () async => _sendRequest('DELETE', url, headers, body, encoding, retry),
       (error, trace) {
         _log.severe('Request error', error, trace);
         return ApiRequestError(trace);
@@ -54,7 +71,7 @@ class ApiClient {
 
   Future<Response> _sendRequest(
       String method, Uri url, Map<String, String>? headers,
-      [Object? body, Encoding? encoding]) async {
+      [Object? body, Encoding? encoding, bool retry = false]) async {
     var request = Request(method, url);
 
     if (url.host == 'lichess.dev') {
@@ -77,7 +94,8 @@ class ApiClient {
       }
     }
 
-    return Response.fromStream(await _client.send(request));
+    return Response.fromStream(
+        await (retry ? _retryClient : _client).send(request));
   }
 
   TaskEither<IOError, T> _validateResponseStatus<T extends BaseResponse>(
@@ -97,8 +115,9 @@ class ApiClient {
   }
 
   void close() {
-    _log.info('Closing ApiClient http connection.');
+    _log.info('Closing ApiClient.');
     _client.close();
+    _retryClient.close();
   }
 }
 
