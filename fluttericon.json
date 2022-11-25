@@ -33,6 +33,12 @@
       "search": [
         "patron"
       ]
+    },
+    {
+      "uid": "b862845645d27949385f2bf3506ef52b",
+      "css": "chess_king",
+      "code": 62527,
+      "src": "fontawesome5"
     }
   ]
 }

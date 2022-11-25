@@ -53,7 +53,6 @@ dev_dependencies:
   freezed: ^2.2.1
   json_serializable: ^6.5.4
 
-
 flutter:
 
   # The following line ensures that the Material Icons font is

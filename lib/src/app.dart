@@ -30,6 +30,7 @@ class App extends ConsumerWidget {
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
+        useMaterial3: true,
       ),
       themeMode: themeMode,
       routerConfig: goRouter,
@@ -43,7 +44,7 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final goRouter = GoRouter(
-  initialLocation: '/puzzles',
+  initialLocation: '/play',
   navigatorKey: _rootNavigatorKey,
   debugLogDiagnostics: true,
   routes: [
@@ -53,6 +54,13 @@ final goRouter = GoRouter(
         return ScaffoldWithBottomNavBar(child: child);
       },
       routes: [
+        GoRoute(
+          path: '/play',
+          pageBuilder: (context, state) => NoTransitionPage(
+            key: state.pageKey,
+            child: const PuzzlesScreen(),
+          ),
+        ),
         GoRoute(
           path: '/puzzles',
           pageBuilder: (context, state) => NoTransitionPage(
@@ -97,6 +105,7 @@ class ScaffoldWithBottomNavBar extends StatefulWidget {
 
 class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
   final tabs = const [
+    '/play',
     '/puzzles',
     '/watch',
     '/settings',
@@ -120,28 +129,29 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
   @override
   Widget build(BuildContext context) {
     const icons = {
+      '/play': Icon(LichessIcons.chess_king),
       '/puzzles': Icon(LichessIcons.target),
       '/watch': Icon(Icons.live_tv),
       '/settings': Icon(Icons.settings),
     };
     final labels = {
+      '/play': context.l10n.play,
       '/puzzles': context.l10n.puzzles,
       '/watch': context.l10n.watch,
       '/settings': context.l10n.settings,
     };
     return Scaffold(
       body: widget.child,
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: kOrange,
-        currentIndex: _currentIndex,
-        items: <BottomNavigationBarItem>[
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentIndex,
+        destinations: <NavigationDestination>[
           for (final tab in tabs)
-            BottomNavigationBarItem(
+            NavigationDestination(
               icon: icons[tab]!,
               label: labels[tab]!,
             )
         ],
-        onTap: (index) => _onItemTapped(context, index),
+        onDestinationSelected: (index) => _onItemTapped(context, index),
       ),
     );
   }
@@ -149,6 +159,20 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
 
 class PuzzlesScreen extends StatelessWidget {
   const PuzzlesScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('lichess.org'), actions: const [
+        AuthWidget(),
+      ]),
+      body: const Center(child: Text('Todo')),
+    );
+  }
+}
+
+class GameScreen extends StatelessWidget {
+  const GameScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
