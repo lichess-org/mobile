@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 import 'dart:ui';
 
-class CountdownClock extends StatefulWidget {
+import '../features/settings/ui/theme_mode_controller.dart';
+
+class CountdownClock extends ConsumerStatefulWidget {
   final Duration duration;
   final bool active;
 
@@ -10,10 +13,10 @@ class CountdownClock extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<CountdownClock> createState() => _CountdownClockState();
+  ConsumerState<CountdownClock> createState() => _CountdownClockState();
 }
 
-class _CountdownClockState extends State<CountdownClock> {
+class _CountdownClockState extends ConsumerState<CountdownClock> {
   static const _period = Duration(milliseconds: 100);
   Timer? _timer;
   Duration timeLeft = Duration.zero;
@@ -58,16 +61,24 @@ class _CountdownClockState extends State<CountdownClock> {
   Widget build(BuildContext context) {
     final min = timeLeft.inMinutes.remainder(60);
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
+    final brightness = ref.watch(selectedBrigthnessProvider);
+    final clockStyle = brightness == Brightness.dark
+        ? ClockStyle.darkThemeStyle
+        : ClockStyle.lightThemeStyle;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
-        color: widget.active ? Colors.white : Colors.black,
+        color: widget.active
+            ? clockStyle.activeBackgroundColor
+            : clockStyle.backgroundColor,
       ),
       child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
           child: Text('$min:$secs',
               style: TextStyle(
-                color: widget.active ? Colors.black : Colors.grey,
+                color: widget.active
+                    ? clockStyle.activeTextColor
+                    : clockStyle.textColor,
                 fontSize: 30,
                 fontFeatures: const [
                   FontFeature.tabularFigures(),
@@ -75,4 +86,31 @@ class _CountdownClockState extends State<CountdownClock> {
               ))),
     );
   }
+}
+
+@immutable
+class ClockStyle {
+  const ClockStyle({
+    required this.textColor,
+    required this.activeTextColor,
+    required this.backgroundColor,
+    required this.activeBackgroundColor,
+  });
+
+  static const darkThemeStyle = ClockStyle(
+      textColor: Colors.grey,
+      activeTextColor: Colors.black,
+      backgroundColor: Colors.black,
+      activeBackgroundColor: Colors.white);
+
+  static const lightThemeStyle = ClockStyle(
+      textColor: Colors.grey,
+      activeTextColor: Colors.black,
+      backgroundColor: Colors.white,
+      activeBackgroundColor: Color(0xFFD0E0BD));
+
+  final Color textColor;
+  final Color activeTextColor;
+  final Color backgroundColor;
+  final Color activeBackgroundColor;
 }

@@ -57,7 +57,7 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 10),
           ListTile(
             leading: const Icon(Icons.brightness_medium),
-            title: Text('Theme'),
+            title: const Text('Theme'),
             onTap: () {
               context.go('/settings/themeMode');
             },

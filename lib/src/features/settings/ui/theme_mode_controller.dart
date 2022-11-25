@@ -18,7 +18,20 @@ class ThemeModeController extends StateNotifier<ThemeMode> {
 }
 
 final themeModeControllerProvider =
-    StateNotifierProvider.autoDispose<ThemeModeController, ThemeMode>((ref) {
+    StateNotifierProvider<ThemeModeController, ThemeMode>((ref) {
   final repository = ref.read(settingsRepositoryProvider);
   return ThemeModeController(ref, repository.getThemeMode());
+});
+
+final selectedBrigthnessProvider = Provider<Brightness>((ref) {
+  final themeMode = ref.watch(themeModeControllerProvider);
+
+  switch (themeMode) {
+    case ThemeMode.dark:
+      return Brightness.dark;
+    case ThemeMode.light:
+      return Brightness.light;
+    case ThemeMode.system:
+      return WidgetsBinding.instance.platformDispatcher.platformBrightness;
+  }
 });
