@@ -3,33 +3,20 @@ import 'package:dartchess/dartchess.dart';
 
 @immutable
 class FeaturedPosition {
-  const FeaturedPosition({
-    required this.fen,
-    this.lastMove,
-  });
-
   FeaturedPosition.fromJson(Map<String, dynamic> json)
       : fen = json['fen'],
+        _position = Chess.fromSetup(Setup.parseFen(json['fen'])),
+        turn = json['fen'].substring(json['fen'].length - 1) == 'w'
+            ? Side.white
+            : Side.black,
         lastMove = json['lm'] != null ? Move.fromUci(json['lm']) : null;
 
   final String fen;
   final Move? lastMove;
+  final Side turn;
+  final Chess _position;
 
-  Side get turn =>
-      fen.substring(fen.length - 1) == 'w' ? Side.white : Side.black;
-  bool get isGameOngoing => !Chess.fromSetup(Setup.parseFen(fen)).isGameOver;
-
-  FeaturedPosition copyWith({
-    String? fen,
-    Chess? position,
-    Side? turn,
-    Move? lastMove,
-  }) {
-    return FeaturedPosition(
-      fen: fen ?? this.fen,
-      lastMove: lastMove,
-    );
-  }
+  bool get isGameOngoing => !_position.isGameOver;
 
   @override
   bool operator ==(Object other) {
