@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart';
 
+import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 
-import './tv_feed.dart';
-import './tv_screen_controller.dart';
+import '../../settings/ui/is_sound_muted_notifier.dart';
+import './tv_stream.dart';
+import './featured_game_notifier.dart';
 
 class TvScreen extends ConsumerWidget {
   const TvScreen({super.key});
@@ -14,34 +16,34 @@ class TvScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    final tvFeed = ref.watch(tvFeedProvider);
-    final tvState = ref.watch(tvFeedStateNotifierProvider);
-    final isMuted = ref.watch(tvScreenControllerProvier);
+    final tvStream = ref.watch(tvStreamProvider);
+    final featuredGame = ref.watch(featuredGameNotifierProvider);
+    final isSoundMuted = ref.watch(isSoundMutedNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lichess TV'),
         actions: [
           IconButton(
-              icon: isMuted
+              icon: isSoundMuted
                   ? const Icon(Icons.volume_off)
                   : const Icon(Icons.volume_up),
               onPressed: () =>
-                  ref.read(tvScreenControllerProvier.notifier).toggleSound())
+                  ref.read(isSoundMutedNotifierProvider.notifier).toggleSound())
         ],
       ),
       body: Center(
-        child: tvFeed.when(
+        child: tvStream.when(
           data: (tvEvent) {
-            final topPlayer = tvState != null
-                ? tvState.orientation == Side.white
-                    ? tvState.black
-                    : tvState.white
+            final topPlayer = featuredGame != null
+                ? featuredGame.orientation == Side.white
+                    ? featuredGame.black
+                    : featuredGame.white
                 : null;
-            final bottomPlayer = tvState != null
-                ? tvState.orientation == Side.white
-                    ? tvState.white
-                    : tvState.black
+            final bottomPlayer = featuredGame != null
+                ? featuredGame.orientation == Side.white
+                    ? featuredGame.white
+                    : featuredGame.black
                 : null;
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -59,9 +61,9 @@ class TvScreen extends ConsumerWidget {
                   interactableSide: InteractableSide.none,
                   settings: const Settings(animationDuration: Duration.zero),
                   size: screenWidth,
-                  orientation: tvState?.orientation ?? Side.white,
+                  orientation: featuredGame?.orientation.cg ?? Side.white,
                   fen: tvEvent.fen,
-                  lastMove: tvEvent.lastMove,
+                  lastMove: tvEvent.lastMove?.cg,
                 ),
                 bottomPlayer != null
                     ? Player(

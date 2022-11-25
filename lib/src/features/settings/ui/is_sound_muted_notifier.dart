@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../settings/data/settings_repository.dart';
 
-class TvScreenController extends StateNotifier<bool> {
-  TvScreenController(this.settings, bool initialValue) : super(initialValue);
+class IsSoundMutedNotifier extends StateNotifier<bool> {
+  IsSoundMutedNotifier(this.settings, bool initialValue) : super(initialValue);
 
   final SettingsRepository settings;
 
@@ -15,9 +15,9 @@ class TvScreenController extends StateNotifier<bool> {
   }
 }
 
-final tvScreenControllerProvier =
-    StateNotifierProvider.autoDispose<TvScreenController, bool>((ref) {
+final isSoundMutedNotifierProvider =
+    StateNotifierProvider.autoDispose<IsSoundMutedNotifier, bool>((ref) {
   final settingsRepository = ref.watch(settingsRepositoryProvider);
-  return TvScreenController(
+  return IsSoundMutedNotifier(
       settingsRepository, settingsRepository.isSoundMuted());
 });

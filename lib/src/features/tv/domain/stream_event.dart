@@ -1,47 +1,7 @@
 import 'package:meta/meta.dart';
-import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart';
 
-import './featured_player.dart';
-
-@immutable
-class FeaturedEvent {
-  const FeaturedEvent({
-    required this.id,
-    required this.orientation,
-    required this.fen,
-    required this.white,
-    required this.black,
-  });
-
-  final String id;
-  final Side orientation;
-  final String fen;
-  final FeaturedPlayer white;
-  final FeaturedPlayer black;
-
-  FeaturedEvent.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        fen = json['fen'],
-        orientation = json['orientation'] == 'white' ? Side.white : Side.black,
-        white = FeaturedPlayer.fromJson(
-            json['players'].firstWhere((p) => p['color'] == 'white')),
-        black = FeaturedPlayer.fromJson(
-            json['players'].firstWhere((p) => p['color'] == 'black'));
-
-  @override
-  bool operator ==(Object other) {
-    return other is FeaturedEvent &&
-        other.id == id &&
-        other.orientation == orientation &&
-        other.fen == fen &&
-        other.white == white &&
-        other.black == black;
-  }
-
-  @override
-  int get hashCode => Object.hash(id, orientation, fen, white, black);
-}
-
+/// Event sent by lichess TV stream when the position of the game changes.
 @immutable
 class FenEvent {
   const FenEvent({
