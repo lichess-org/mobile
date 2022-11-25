@@ -142,16 +142,18 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
     };
     return Scaffold(
       body: widget.child,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
-        destinations: <NavigationDestination>[
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: kOrange,
+        currentIndex: _currentIndex,
+        items: <BottomNavigationBarItem>[
           for (final tab in tabs)
-            NavigationDestination(
+            BottomNavigationBarItem(
               icon: icons[tab]!,
               label: labels[tab]!,
             )
         ],
-        onDestinationSelected: (index) => _onItemTapped(context, index),
+        onTap: (index) => _onItemTapped(context, index),
       ),
     );
   }
