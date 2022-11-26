@@ -12,13 +12,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      
+
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
 
       - name: Install dependencies
         run: flutter pub get
+
+      - name: Code generation
+        run: flutter pub run build_runner build
 
       - name: Verify formatting
         run: flutter format --output=none --set-exit-if-changed .
