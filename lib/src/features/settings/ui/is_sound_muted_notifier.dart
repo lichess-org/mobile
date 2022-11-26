@@ -15,7 +15,7 @@ class IsSoundMutedNotifier extends StateNotifier<bool> {
   }
 }
 
-final isSoundMutedNotifierProvider =
+final isSoundMutedProvider =
     StateNotifierProvider.autoDispose<IsSoundMutedNotifier, bool>((ref) {
   final settingsRepository = ref.watch(settingsRepositoryProvider);
   return IsSoundMutedNotifier(

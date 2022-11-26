@@ -10,7 +10,7 @@ import './featured_game_notifier.dart';
 final tvStreamProvider = StreamProvider.autoDispose<FeaturedPosition>((ref) {
   final soundService = ref.watch(soundServiceProvider);
   final tvRepository = ref.watch(tvRepositoryProvider);
-  final featuredGameNotifier = ref.read(featuredGameNotifierProvider.notifier);
+  final featuredGameNotifier = ref.read(featuredGameProvider.notifier);
   ref.onDispose(() {
     tvRepository.dispose();
   });

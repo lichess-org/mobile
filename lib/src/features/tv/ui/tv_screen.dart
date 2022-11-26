@@ -17,8 +17,8 @@ class TvScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final tvStream = ref.watch(tvStreamProvider);
-    final featuredGame = ref.watch(featuredGameNotifierProvider);
-    final isSoundMuted = ref.watch(isSoundMutedNotifierProvider);
+    final featuredGame = ref.watch(featuredGameProvider);
+    final isSoundMuted = ref.watch(isSoundMutedProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -29,7 +29,7 @@ class TvScreen extends ConsumerWidget {
                   ? const Icon(Icons.volume_off)
                   : const Icon(Icons.volume_up),
               onPressed: () =>
-                  ref.read(isSoundMutedNotifierProvider.notifier).toggleSound())
+                  ref.read(isSoundMutedProvider.notifier).toggleSound())
         ],
       ),
       body: Center(

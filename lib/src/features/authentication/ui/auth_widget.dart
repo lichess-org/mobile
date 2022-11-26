@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
 
 import '../data/auth_repository.dart';
-import './auth_widget_controller.dart';
+import './auth_widget_notifier.dart';
 
 enum AccountMenu { logout }
 
@@ -13,9 +13,9 @@ class AuthWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateChangesProvider);
-    final uiState = ref.watch(authControllerProvider);
+    final authActionsAsync = ref.watch(authWidgetProvider);
     ref.listen<AsyncValue>(
-      authControllerProvider,
+      authWidgetProvider,
       (_, state) => state.showSnackbarOnError(context),
     );
     return authState.maybeWhen(
@@ -25,8 +25,8 @@ class AuthWidget extends ConsumerWidget {
                 onSelected: (AccountMenu item) {
                   switch (item) {
                     case AccountMenu.logout:
-                      if (!uiState.isLoading) {
-                        ref.read(authControllerProvider.notifier).signOut();
+                      if (!authActionsAsync.isLoading) {
+                        ref.read(authWidgetProvider.notifier).signOut();
                       }
                       break;
                   }
@@ -35,17 +35,17 @@ class AuthWidget extends ConsumerWidget {
                     <PopupMenuEntry<AccountMenu>>[
                   PopupMenuItem<AccountMenu>(
                     value: AccountMenu.logout,
-                    child: uiState.isLoading
+                    child: authActionsAsync.isLoading
                         ? const CircularProgressIndicator()
                         : const Text('Sign out'),
                   ),
                 ],
               )
             : TextButton(
-                onPressed: uiState.isLoading
+                onPressed: authActionsAsync.isLoading
                     ? null
-                    : () => ref.read(authControllerProvider.notifier).signIn(),
-                child: uiState.isLoading
+                    : () => ref.read(authWidgetProvider.notifier).signIn(),
+                child: authActionsAsync.isLoading
                     ? const CircularProgressIndicator()
                     : const Text('Sign in'),
               ),

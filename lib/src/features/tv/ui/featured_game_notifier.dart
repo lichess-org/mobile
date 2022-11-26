@@ -18,7 +18,7 @@ class FeaturedGameNotifier extends StateNotifier<FeaturedGame?> {
   }
 }
 
-final featuredGameNotifierProvider =
+final featuredGameProvider =
     StateNotifierProvider.autoDispose<FeaturedGameNotifier, FeaturedGame?>(
         (ref) {
   return FeaturedGameNotifier();
