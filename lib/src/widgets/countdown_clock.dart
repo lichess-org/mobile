@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 import 'dart:ui';
 
-import '../features/settings/ui/theme_mode_controller.dart';
+import '../features/settings/ui/theme_mode_notifier.dart';
 
 class CountdownClock extends ConsumerStatefulWidget {
   final Duration duration;

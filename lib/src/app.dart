@@ -9,7 +9,7 @@ import 'constants.dart';
 import 'features/authentication/ui/auth_widget.dart';
 import 'features/settings/ui/settings_screen.dart';
 import 'features/settings/ui/theme_mode_screen.dart';
-import 'features/settings/ui/theme_mode_controller.dart';
+import 'features/settings/ui/theme_mode_notifier.dart';
 import 'features/tv/ui/tv_screen.dart';
 import './utils/lichess_icons.dart';
 
@@ -18,7 +18,7 @@ class App extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeControllerProvider);
+    final themeMode = ref.watch(themeModeProvider);
     return MaterialApp.router(
       restorationScopeId: 'app',
       localizationsDelegates: AppLocalizations.localizationsDelegates,

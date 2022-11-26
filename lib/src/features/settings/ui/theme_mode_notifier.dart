@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/settings_repository.dart';
 
-class ThemeModeController extends StateNotifier<ThemeMode> {
-  ThemeModeController(this.ref, initialThemeMode) : super(initialThemeMode);
+class ThemeModeNotifier extends StateNotifier<ThemeMode> {
+  ThemeModeNotifier(this.ref, initialThemeMode) : super(initialThemeMode);
 
   final Ref ref;
 
@@ -17,14 +17,16 @@ class ThemeModeController extends StateNotifier<ThemeMode> {
   }
 }
 
-final themeModeControllerProvider =
-    StateNotifierProvider<ThemeModeController, ThemeMode>((ref) {
-  final repository = ref.read(settingsRepositoryProvider);
-  return ThemeModeController(ref, repository.getThemeMode());
+// keep is always available by not using autoDispose
+final themeModeProvider =
+    StateNotifierProvider<ThemeModeNotifier, ThemeMode>((ref) {
+  final repository = ref.watch(settingsRepositoryProvider);
+  return ThemeModeNotifier(ref, repository.getThemeMode());
 });
 
+// keep is always available by not using autoDispose
 final selectedBrigthnessProvider = Provider<Brightness>((ref) {
-  final themeMode = ref.watch(themeModeControllerProvider);
+  final themeMode = ref.watch(themeModeProvider);
 
   switch (themeMode) {
     case ThemeMode.dark:

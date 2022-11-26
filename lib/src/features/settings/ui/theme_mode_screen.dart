@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
-import './theme_mode_controller.dart';
+import './theme_mode_notifier.dart';
 
 class ThemeModeScreen extends ConsumerWidget {
   const ThemeModeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeControllerProvider);
+    final themeMode = ref.watch(themeModeProvider);
 
     void onChanged(value) => ref
-        .read(themeModeControllerProvider.notifier)
+        .read(themeModeProvider.notifier)
         .changeTheme(value ?? ThemeMode.system);
 
     return Scaffold(
