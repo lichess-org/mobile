@@ -28,7 +28,7 @@ class ApiClient {
   TaskEither<IOError, Response> get(Uri url,
       {Map<String, String>? headers, bool retry = false}) {
     return TaskEither<IOError, Response>.tryCatch(
-      () async => _sendRequest('GET', url, headers, retry),
+      () async => _sendRequest('GET', url, headers, null, null, retry),
       (error, trace) {
         _log.severe('Request error', error, trace);
         return ApiRequestError(trace);
