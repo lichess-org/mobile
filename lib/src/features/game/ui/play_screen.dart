@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:lichess_mobile/src/utils/lichess_icons.dart';
 import '../../authentication/ui/auth_widget.dart';
+import './time_control_modal.dart';
 
 class PlayScreen extends StatelessWidget {
   const PlayScreen({super.key});
@@ -30,7 +31,14 @@ class PlayScreen extends StatelessWidget {
               const MaiaChoices(),
               const SizedBox(height: 10),
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    MaterialPageRoute(
+                      builder: (context) => const TimeControlModal(),
+                      fullscreenDialog: true,
+                    ),
+                  );
+                },
                 style: buttonStyle,
                 child: Row(
                   children: const [
@@ -97,7 +105,7 @@ class MaiaOptionsState extends State<MaiaChoices> {
               subtitle: Row(
                 children: [1642, 1516, 1446].map((r) {
                   return Row(children: [
-                    const Icon(LichessIcons.chess_king, size: 12.0),
+                    const Icon(LichessIcons.rapid, size: 14.0),
                     const SizedBox(width: 3.0),
                     Text(r.toString()),
                     const SizedBox(width: 12.0),
