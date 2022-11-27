@@ -66,19 +66,24 @@ class ApiClient {
 
   /// Generic send request used to stream content.
   Future<StreamedResponse> send(BaseRequest request) {
-    return _client.send(request);
+    return TaskEither<IOError, StreamedResponse>.tryCatch(
+      () async => _client.send(request),
+      (error, trace) {
+        _log.severe('Request error', error, trace);
+        return ApiRequestError(trace);
+      },
+    )
+        .flatMap((resp) => _validateResponseStatus(request.url, resp))
+        .run()
+        .then((either) {
+      return either.match((err) => throw err, (resp) => resp);
+    });
   }
 
   Future<Response> _sendRequest(
       String method, Uri url, Map<String, String>? headers,
       [Object? body, Encoding? encoding, bool retry = false]) async {
-    var request = Request(method, url);
-
-    if (url.host == 'lichess.dev') {
-      const creds = '$kLichessDevUser:$kLichessDevPassword';
-      request.headers['authorization'] =
-          'Basic ${base64.encode(utf8.encode(creds))}';
-    }
+    final request = Request(method, url);
 
     if (headers != null) request.headers.addAll(headers);
     if (encoding != null) request.encoding = encoding;
@@ -134,6 +139,12 @@ class AuthClient extends BaseClient {
     if (token != null) {
       request.headers['Authorization'] = 'Bearer $token';
     }
+    if (request.url.host == 'lichess.dev') {
+      const creds = '$kLichessDevUser:$kLichessDevPassword';
+      request.headers['authorization'] =
+          'Basic ${base64.encode(utf8.encode(creds))}';
+    }
+
     return _inner.send(request);
   }
 }
