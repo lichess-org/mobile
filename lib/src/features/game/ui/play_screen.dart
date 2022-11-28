@@ -12,7 +12,7 @@ class PlayScreen extends StatelessWidget {
     final maiaSection = [
       const Text(
         'Play with maia',
-        style: TextStyle(fontSize: 22),
+        style: TextStyle(fontSize: 20),
       ),
       const SizedBox(height: 5),
       const Text(
@@ -24,7 +24,7 @@ class PlayScreen extends StatelessWidget {
     final stockfishSection = [
       const Text(
         'Play with the computer',
-        style: TextStyle(fontSize: 22),
+        style: TextStyle(fontSize: 20),
       ),
       const SizedBox(height: 10),
       Wrap(
@@ -67,19 +67,17 @@ class PlayScreen extends StatelessWidget {
             const SizedBox(height: 20),
             Card(
               margin: EdgeInsets.zero,
-              child: Center(
-                child: ListTile(
-                  title: const Text('maia1', style: _titleStyle),
-                  subtitle: Row(
-                    children: [1642, 1516, 1446].map((r) {
-                      return Row(children: [
-                        const Icon(LichessIcons.rapid, size: 14.0),
-                        const SizedBox(width: 3.0),
-                        Text(r.toString()),
-                        const SizedBox(width: 12.0),
-                      ]);
-                    }).toList(),
-                  ),
+              child: ListTile(
+                title: const Text('maia1', style: _titleStyle),
+                subtitle: Row(
+                  children: [1642, 1516, 1446].map((r) {
+                    return Row(children: [
+                      const Icon(LichessIcons.rapid, size: 14.0),
+                      const SizedBox(width: 3.0),
+                      Text(r.toString()),
+                      const SizedBox(width: 12.0),
+                    ]);
+                  }).toList(),
                 ),
               ),
             ),
