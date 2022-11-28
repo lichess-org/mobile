@@ -9,56 +9,116 @@ class PlayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final maiaSection = [
+      const Text(
+        'Play with maia',
+        style: TextStyle(fontSize: 22),
+      ),
+      const SizedBox(height: 5),
+      const Text(
+          'Maia is a human-like neural network chess engine. It was trained by learning from over 10 million Lichess games. For more information go to maiachess.com.'),
+      const SizedBox(height: 10),
+      const MaiaChoices(),
+    ];
+
+    final stockfishSection = [
+      const Text(
+        'Play with the computer',
+        style: TextStyle(fontSize: 22),
+      ),
+      const SizedBox(height: 10),
+      Wrap(
+        children: [
+          ChoiceChip(
+            label: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Text('Fairy-Stockfish 14'),
+              ],
+            ),
+            selected: false,
+            onSelected: (bool selected) {},
+          ),
+        ],
+      ),
+      const SizedBox(height: 5),
+      const Slider(
+        value: 2,
+        min: 1,
+        max: 8,
+        divisions: 8,
+        label: '2',
+        onChanged: null,
+      ),
+    ];
+
     return Scaffold(
       appBar: AppBar(title: const Text('lichess.org'), actions: const [
         AuthWidget(),
       ]),
       body: Center(
-        child: Padding(
+        child: ListView(
+          shrinkWrap: true,
           padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                'Play against maia',
-                style: TextStyle(fontSize: 22),
-              ),
-              const SizedBox(height: 5),
-              const Text(
-                  'Maia is a human-like neural network chess engine. It was trained by learning from over 10 million Lichess games. Maia Chess is an ongoing research project aiming to make a more human-friendly, useful, and fun chess AI. For more information go to maiachess.com.'),
-              const SizedBox(height: 15),
-              const MaiaChoices(),
-              const SizedBox(height: 10),
-              OutlinedButton(
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true).push(
-                    MaterialPageRoute(
-                      builder: (context) => const TimeControlModal(),
-                      fullscreenDialog: true,
-                    ),
-                  );
-                },
-                style: buttonStyle,
-                child: Row(
-                  children: const [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 28.0),
-                        child: Text('5 | 3', textAlign: TextAlign.center),
-                      ),
-                    ),
-                    Icon(Icons.keyboard_arrow_down, size: 28.0),
-                  ],
+          children: [
+            ...maiaSection,
+            const SizedBox(height: 20),
+            ...stockfishSection,
+            const SizedBox(height: 20),
+            Card(
+              margin: EdgeInsets.zero,
+              child: Center(
+                child: ListTile(
+                  title: const Text('maia1', style: _titleStyle),
+                  subtitle: Row(
+                    children: [1642, 1516, 1446].map((r) {
+                      return Row(children: [
+                        const Icon(LichessIcons.rapid, size: 14.0),
+                        const SizedBox(width: 3.0),
+                        Text(r.toString()),
+                        const SizedBox(width: 12.0),
+                      ]);
+                    }).toList(),
+                  ),
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {},
-                style: buttonStyle,
-                child: const Text('Play'),
+            ),
+            const SizedBox(height: 5),
+            OutlinedButton(
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).push(
+                  MaterialPageRoute(
+                    builder: (context) => const TimeControlModal(),
+                    fullscreenDialog: true,
+                  ),
+                );
+              },
+              style: _buttonStyle,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 28.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(LichessIcons.blitz, size: 20),
+                          SizedBox(width: 5),
+                          Text('5 | 3')
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Icon(Icons.keyboard_arrow_down, size: 28.0),
+                ],
               ),
-            ],
-          ),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              style: _buttonStyle,
+              child: const Text('Play'),
+            ),
+          ],
         ),
       ),
     );
@@ -73,7 +133,7 @@ class MaiaChoices extends StatefulWidget {
 }
 
 class MaiaOptionsState extends State<MaiaChoices> {
-  int? _value = 0;
+  int _value = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -86,43 +146,34 @@ class MaiaOptionsState extends State<MaiaChoices> {
             3,
             (int index) {
               return ChoiceChip(
-                label: Text('maia${index + 1}'),
+                label: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (_value == index) ...[
+                      const Icon(Icons.check, size: 18),
+                      const SizedBox(width: 3),
+                    ],
+                    Text('maia${index + 1}'),
+                  ],
+                ),
                 selected: _value == index,
                 onSelected: (bool selected) {
-                  setState(() {
-                    _value = selected ? index : null;
-                  });
+                  if (selected) {
+                    setState(() {
+                      _value = index;
+                    });
+                  }
                 },
               );
             },
           ).toList(),
-        ),
-        Card(
-          margin: EdgeInsets.zero,
-          child: Center(
-            child: ListTile(
-              title: const Text('maia1', style: titleStyle),
-              subtitle: Row(
-                children: [1642, 1516, 1446].map((r) {
-                  return Row(children: [
-                    const Icon(LichessIcons.rapid, size: 14.0),
-                    const SizedBox(width: 3.0),
-                    Text(r.toString()),
-                    const SizedBox(width: 12.0),
-                  ]);
-                }).toList(),
-              ),
-            ),
-          ),
         ),
       ],
     );
   }
 }
 
-final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
+final ButtonStyle _buttonStyle = ElevatedButton.styleFrom(
   textStyle: const TextStyle(fontSize: 20),
 );
-
-const TextStyle titleStyle = TextStyle(fontSize: 18);
-const TextStyle textStyle = TextStyle(fontSize: 16);
+const TextStyle _titleStyle = TextStyle(fontSize: 18);
