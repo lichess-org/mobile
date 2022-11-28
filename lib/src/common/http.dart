@@ -6,8 +6,8 @@ import 'package:fpdart/fpdart.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'constants.dart';
-import 'utils/errors.dart';
+import '../constants.dart';
+import 'errors.dart';
 
 const retries = [
   Duration(milliseconds: 200),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:lichess_mobile/src/utils/lichess_icons.dart';
+import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import '../../authentication/ui/auth_widget.dart';
 import './time_control_modal.dart';
 

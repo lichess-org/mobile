@@ -12,7 +12,7 @@ import 'features/settings/ui/settings_screen.dart';
 import 'features/settings/ui/theme_mode_screen.dart';
 import 'features/settings/ui/theme_mode_notifier.dart';
 import 'features/tv/ui/tv_screen.dart';
-import './utils/lichess_icons.dart';
+import 'common/lichess_icons.dart';
 
 class App extends ConsumerWidget {
   const App({super.key});

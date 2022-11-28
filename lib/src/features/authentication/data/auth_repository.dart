@@ -5,10 +5,10 @@ import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/common/errors.dart';
+import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/utils/in_memory_store.dart';
-import 'package:lichess_mobile/src/utils/errors.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/http.dart';
 import '../domain/account.codegen.dart';
 
 const redirectUri = 'org.lichess.mobile://login-callback';

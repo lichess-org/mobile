@@ -2,7 +2,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soundpool/soundpool.dart';
 
-import './features/settings/data/settings_repository.dart';
+import '../features/settings/data/settings_repository.dart';
 
 class SoundService {
   SoundService(this._pool, this._settings);

@@ -6,9 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logging/logging.dart';
 
 import 'src/app.dart';
-import 'src/sound.dart';
+import 'src/common/sound.dart';
+import 'src/common/shared_preferences.dart';
 import 'src/features/authentication/data/auth_repository.dart';
-import 'src/features/settings/data/settings_repository.dart';
 
 void main() async {
   if (kDebugMode) {
