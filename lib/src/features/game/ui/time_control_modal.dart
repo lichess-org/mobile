@@ -15,39 +15,37 @@ class TimeControlChoices extends State<TimeControlModal> {
   void onSelected(int value) {
     setState(() {
       _value = value;
+      Navigator.pop(context);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Time control')),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _SectionChoices(_value,
-                title: const _SectionTitle(
-                    title: 'Blitz', icon: LichessIcons.blitz),
-                numberOfElements: 4,
-                startAtIndex: 0,
-                onSelected: onSelected),
-            _SectionChoices(_value,
-                title: const _SectionTitle(
-                    title: 'Rapid', icon: LichessIcons.rapid),
-                numberOfElements: 3,
-                startAtIndex: 4,
-                onSelected: onSelected),
-            _SectionChoices(_value,
-                title: const _SectionTitle(
-                    title: 'Classical', icon: LichessIcons.classical),
-                numberOfElements: 2,
-                startAtIndex: 7,
-                onSelected: onSelected),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: [
+          _SectionChoices(_value,
+              title:
+                  const _SectionTitle(title: 'Blitz', icon: LichessIcons.blitz),
+              numberOfElements: 4,
+              startAtIndex: 0,
+              onSelected: onSelected),
+          const SizedBox(height: 30.0),
+          _SectionChoices(_value,
+              title:
+                  const _SectionTitle(title: 'Rapid', icon: LichessIcons.rapid),
+              numberOfElements: 3,
+              startAtIndex: 4,
+              onSelected: onSelected),
+          const SizedBox(height: 30.0),
+          _SectionChoices(_value,
+              title: const _SectionTitle(
+                  title: 'Classical', icon: LichessIcons.classical),
+              numberOfElements: 2,
+              startAtIndex: 7,
+              onSelected: onSelected),
+        ],
       ),
     );
   }
@@ -91,7 +89,6 @@ class _SectionChoices extends StatelessWidget {
             },
           ).toList(),
         ),
-        const SizedBox(height: 30.0),
       ],
     );
   }

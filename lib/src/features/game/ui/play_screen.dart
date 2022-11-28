@@ -86,11 +86,11 @@ class PlayScreen extends StatelessWidget {
             const SizedBox(height: 5),
             OutlinedButton(
               onPressed: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  MaterialPageRoute(
-                    builder: (context) => const TimeControlModal(),
-                    fullscreenDialog: true,
-                  ),
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const TimeControlModal();
+                  },
                 );
               },
               style: _buttonStyle,
@@ -104,7 +104,7 @@ class PlayScreen extends StatelessWidget {
                         children: const [
                           Icon(LichessIcons.blitz, size: 20),
                           SizedBox(width: 5),
-                          Text('5 | 3')
+                          Text('5 + 3')
                         ],
                       ),
                     ),
