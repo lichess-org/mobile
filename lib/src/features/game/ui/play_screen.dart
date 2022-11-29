@@ -1,14 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import '../../authentication/ui/auth_widget.dart';
 import './time_control_modal.dart';
 
-class PlayScreen extends StatelessWidget {
+enum ComputerOpponent {
+  maia1,
+  maia5,
+  maia9,
+  stockfish,
+}
+
+final computerOpponentPrefProvider = createPrefProvider(
+  prefKey: 'play.computerOpponent',
+  defaultValue: ComputerOpponent.maia1,
+  mapFrom: (v) => ComputerOpponent.values.firstWhere((e) => e.toString() == v,
+      orElse: () => ComputerOpponent.maia1),
+  mapTo: (v) => v.toString(),
+);
+
+final stockfishLevelProvider = createPrefProvider(
+  prefKey: 'play.stockfishLevel',
+  defaultValue: 1,
+);
+
+const opponentChoices = [
+  ComputerOpponent.maia1,
+  ComputerOpponent.maia5,
+  ComputerOpponent.maia9,
+  ComputerOpponent.stockfish,
+];
+
+class PlayScreen extends ConsumerWidget {
   const PlayScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final opponentPref = ref.watch(computerOpponentPrefProvider);
+    final stockfishLevel = ref.watch(stockfishLevelProvider);
+
     final maiaSection = [
       const Text(
         'Play with maia',
@@ -18,7 +50,30 @@ class PlayScreen extends StatelessWidget {
       const Text(
           'Maia is a human-like neural network chess engine. It was trained by learning from over 10 million Lichess games. For more information go to maiachess.com.'),
       const SizedBox(height: 10),
-      const MaiaChoices(),
+      Wrap(
+        spacing: 10.0,
+        children: opponentChoices.sublist(0, 3).map((opponent) {
+          final isSelected = opponentPref == opponent;
+          return ChoiceChip(
+            label: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (isSelected) ...[
+                  const Icon(Icons.check, size: 18),
+                  const SizedBox(width: 3),
+                ],
+                Text(opponent.name),
+              ],
+            ),
+            selected: isSelected,
+            onSelected: (bool selected) {
+              if (selected) {
+                ref.read(computerOpponentPrefProvider.notifier).set(opponent);
+              }
+            },
+          );
+        }).toList(),
+      ),
     ];
 
     final stockfishSection = [
@@ -32,24 +87,49 @@ class PlayScreen extends StatelessWidget {
           ChoiceChip(
             label: Row(
               mainAxisSize: MainAxisSize.min,
-              children: const [
-                Text('Fairy-Stockfish 14'),
+              children: [
+                if (opponentPref == ComputerOpponent.stockfish) ...[
+                  const Icon(Icons.check, size: 18),
+                  const SizedBox(width: 3),
+                ],
+                const Text('Fairy-Stockfish 14'),
               ],
             ),
-            selected: false,
-            onSelected: (bool selected) {},
+            selected: opponentPref == ComputerOpponent.stockfish,
+            onSelected: (bool selected) {
+              if (selected) {
+                ref
+                    .read(computerOpponentPrefProvider.notifier)
+                    .set(ComputerOpponent.stockfish);
+              }
+            },
           ),
         ],
       ),
       const SizedBox(height: 5),
-      const Slider(
-        value: 2,
-        min: 1,
-        max: 8,
-        divisions: 8,
-        label: '2',
-        onChanged: null,
-      ),
+      Builder(builder: (BuildContext context) {
+        int value = stockfishLevel;
+        return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+          return Slider(
+            value: value.toDouble(),
+            min: 1,
+            max: 8,
+            divisions: 8,
+            label: 'Level $value',
+            onChanged: opponentPref != ComputerOpponent.stockfish
+                ? null
+                : (double newVal) {
+                    setState(() {
+                      value = newVal.round();
+                    });
+                  },
+            onChangeEnd: (double value) {
+              ref.read(stockfishLevelProvider.notifier).set(value.round());
+            },
+          );
+        });
+      }),
     ];
 
     return Scaffold(
@@ -68,17 +148,21 @@ class PlayScreen extends StatelessWidget {
             Card(
               margin: EdgeInsets.zero,
               child: ListTile(
-                title: const Text('maia1', style: _titleStyle),
-                subtitle: Row(
-                  children: [1642, 1516, 1446].map((r) {
-                    return Row(children: [
-                      const Icon(LichessIcons.rapid, size: 14.0),
-                      const SizedBox(width: 3.0),
-                      Text(r.toString()),
-                      const SizedBox(width: 12.0),
-                    ]);
-                  }).toList(),
-                ),
+                title: opponentPref == ComputerOpponent.stockfish
+                    ? const Text('Fairy-Stockfish 14')
+                    : Text(opponentPref.name, style: _titleStyle),
+                subtitle: opponentPref == ComputerOpponent.stockfish
+                    ? Text('Level $stockfishLevel')
+                    : Row(
+                        children: [1642, 1516, 1446].map((r) {
+                          return Row(children: [
+                            const Icon(LichessIcons.rapid, size: 14.0),
+                            const SizedBox(width: 3.0),
+                            Text(r.toString()),
+                            const SizedBox(width: 12.0),
+                          ]);
+                        }).toList(),
+                      ),
               ),
             ),
             const SizedBox(height: 5),
@@ -119,54 +203,6 @@ class PlayScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class MaiaChoices extends StatefulWidget {
-  const MaiaChoices({super.key});
-
-  @override
-  State<MaiaChoices> createState() => MaiaOptionsState();
-}
-
-class MaiaOptionsState extends State<MaiaChoices> {
-  int _value = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Wrap(
-          spacing: 10.0,
-          children: List<Widget>.generate(
-            3,
-            (int index) {
-              return ChoiceChip(
-                label: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (_value == index) ...[
-                      const Icon(Icons.check, size: 18),
-                      const SizedBox(width: 3),
-                    ],
-                    Text('maia${index + 1}'),
-                  ],
-                ),
-                selected: _value == index,
-                onSelected: (bool selected) {
-                  if (selected) {
-                    setState(() {
-                      _value = index;
-                    });
-                  }
-                },
-              );
-            },
-          ).toList(),
-        ),
-      ],
     );
   }
 }

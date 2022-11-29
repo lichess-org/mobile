@@ -4,10 +4,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/features/user/domain/user.dart';
 
 import '../../../constants.dart';
 import '../../authentication/data/auth_repository.dart';
-import '../../authentication/domain/account.codegen.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
