@@ -2,35 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
-import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import '../../authentication/ui/auth_widget.dart';
 import './time_control_modal.dart';
+import './play_screen_providers.dart';
 
-enum ComputerOpponent {
-  maia1,
-  maia5,
-  maia9,
-  stockfish,
-}
-
-final computerOpponentPrefProvider = createPrefProvider(
-  prefKey: 'play.computerOpponent',
-  defaultValue: ComputerOpponent.maia1,
-  mapFrom: (v) => ComputerOpponent.values.firstWhere((e) => e.toString() == v,
-      orElse: () => ComputerOpponent.maia1),
-  mapTo: (v) => v.toString(),
-);
-
-final stockfishLevelProvider = createPrefProvider(
-  prefKey: 'play.stockfishLevel',
-  defaultValue: 1,
-);
-
-const opponentChoices = [
+const maiaChoices = [
   ComputerOpponent.maia1,
   ComputerOpponent.maia5,
   ComputerOpponent.maia9,
-  ComputerOpponent.stockfish,
 ];
 
 class PlayScreen extends ConsumerWidget {
@@ -41,49 +20,50 @@ class PlayScreen extends ConsumerWidget {
     final opponentPref = ref.watch(computerOpponentPrefProvider);
     final stockfishLevel = ref.watch(stockfishLevelProvider);
 
-    final maiaSection = [
-      const Text(
-        'Play with maia',
-        style: TextStyle(fontSize: 20),
-      ),
-      const SizedBox(height: 5),
-      const Text(
-          'Maia is a human-like neural network chess engine. It was trained by learning from over 10 million Lichess games. For more information go to maiachess.com.'),
-      const SizedBox(height: 10),
-      Wrap(
-        spacing: 10.0,
-        children: opponentChoices.sublist(0, 3).map((opponent) {
-          final isSelected = opponentPref == opponent;
-          return ChoiceChip(
-            label: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (isSelected) ...[
-                  const Icon(Icons.check, size: 18),
-                  const SizedBox(width: 3),
-                ],
-                Text(opponent.name),
-              ],
-            ),
-            selected: isSelected,
-            onSelected: (bool selected) {
-              if (selected) {
-                ref.read(computerOpponentPrefProvider.notifier).set(opponent);
-              }
-            },
-          );
-        }).toList(),
-      ),
-    ];
-
-    final stockfishSection = [
-      const Text(
-        'Play with the computer',
-        style: TextStyle(fontSize: 20),
+    final computerChoice = [
+      Row(
+        children: const [
+          Text(
+            'Play with the computer',
+            style: TextStyle(fontSize: 20),
+          ),
+          SizedBox(width: 5),
+          Tooltip(
+            message:
+                'Maia is a human-like neural network chess engine. It was trained by learning from over 10 million Lichess games.',
+            child: Icon(Icons.help_outline),
+          ),
+        ],
       ),
       const SizedBox(height: 10),
       Wrap(
         children: [
+          Wrap(
+            spacing: 10.0,
+            children: maiaChoices.map((opponent) {
+              final isSelected = opponentPref == opponent;
+              return ChoiceChip(
+                label: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (isSelected) ...[
+                      const Icon(Icons.check, size: 18),
+                      const SizedBox(width: 3),
+                    ],
+                    Text(opponent.name),
+                  ],
+                ),
+                selected: isSelected,
+                onSelected: (bool selected) {
+                  if (selected) {
+                    ref
+                        .read(computerOpponentPrefProvider.notifier)
+                        .set(opponent);
+                  }
+                },
+              );
+            }).toList(),
+          ),
           ChoiceChip(
             label: Row(
               mainAxisSize: MainAxisSize.min,
@@ -141,9 +121,7 @@ class PlayScreen extends ConsumerWidget {
           shrinkWrap: true,
           padding: const EdgeInsets.all(20.0),
           children: [
-            ...maiaSection,
-            const SizedBox(height: 20),
-            ...stockfishSection,
+            ...computerChoice,
             const SizedBox(height: 20),
             Card(
               margin: EdgeInsets.zero,

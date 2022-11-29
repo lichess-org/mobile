@@ -43,6 +43,7 @@ dependencies:
       ref: 6953a7a2970577d0b051b94a4131f09de76f6f11
   soundpool: ^2.3.0
   meta: ^1.8.0
+  tuple: ^2.0.1
 
 dev_dependencies:
   flutter_test:
