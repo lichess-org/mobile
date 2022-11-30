@@ -28,7 +28,7 @@ class ChallengeRepository {
   }
 }
 
-final userRepositoryProvider = Provider<ChallengeRepository>((ref) {
+final challengeRepositoryProvider = Provider<ChallengeRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
   final repo = ChallengeRepository(apiClient: apiClient);
   ref.onDispose(() => repo.dispose());
