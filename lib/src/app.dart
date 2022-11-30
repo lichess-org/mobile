@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'constants.dart';
 
 import 'features/authentication/ui/auth_widget.dart';
-import 'features/game/ui/play_screen.dart';
+import 'features/game/ui/play/screen.dart';
 import 'features/settings/ui/settings_screen.dart';
 import 'features/settings/ui/theme_mode_screen.dart';
 import 'features/settings/ui/theme_mode_notifier.dart';

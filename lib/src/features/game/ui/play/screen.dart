@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/features/user/domain/user.dart';
-import '../../authentication/ui/auth_widget.dart';
+import 'package:lichess_mobile/src/features/authentication/ui/auth_widget.dart';
+import '../board/screen.dart';
 import './time_control_modal.dart';
-import './play_screen_providers.dart';
+import './providers.dart';
 
 const maiaChoices = [
   ComputerOpponent.maia1,
@@ -191,7 +192,12 @@ class PlayScreen extends ConsumerWidget {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                // TODO create game
+                Navigator.of(context, rootNavigator: true).push(
+                  MaterialPageRoute(builder: (context) => const BoardScreen()),
+                );
+              },
               style: _buttonStyle,
               child: const Text('Play'),
             ),
