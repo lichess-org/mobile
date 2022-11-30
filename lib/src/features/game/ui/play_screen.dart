@@ -34,7 +34,7 @@ class PlayScreen extends ConsumerWidget {
           Tooltip(
             message:
                 'Maia is a human-like neural network chess engine. It was trained by learning from over 10 million Lichess games.',
-            child: Icon(Icons.help_outline),
+            child: Icon(Icons.help_sharp),
           ),
         ],
       ),
