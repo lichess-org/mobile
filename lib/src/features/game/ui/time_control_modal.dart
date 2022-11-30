@@ -1,49 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import './play_screen_providers.dart';
 
-class TimeControlModal extends StatefulWidget {
+class TimeControlModal extends ConsumerWidget {
   const TimeControlModal({super.key});
 
   @override
-  State<TimeControlModal> createState() => TimeControlChoices();
-}
-
-class TimeControlChoices extends State<TimeControlModal> {
-  int _value = 0;
-
-  void onSelected(int value) {
-    setState(() {
-      _value = value;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final timeControlPref = ref.watch(timeControlPrefProvider);
+    void onSelected(TimeControl choice) {
       Navigator.pop(context);
-    });
-  }
+      ref.read(timeControlPrefProvider.notifier).set(choice);
+    }
 
-  @override
-  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
         children: [
-          _SectionChoices(_value,
+          _SectionChoices(timeControlPref,
+              choices: const [
+                TimeControl.blitz1,
+                TimeControl.blitz2,
+                TimeControl.blitz3,
+                TimeControl.blitz4
+              ],
               title:
                   const _SectionTitle(title: 'Blitz', icon: LichessIcons.blitz),
-              numberOfElements: 4,
-              startAtIndex: 0,
               onSelected: onSelected),
           const SizedBox(height: 30.0),
-          _SectionChoices(_value,
+          _SectionChoices(timeControlPref,
+              choices: const [
+                TimeControl.rapid1,
+                TimeControl.rapid2,
+                TimeControl.rapid3
+              ],
               title:
                   const _SectionTitle(title: 'Rapid', icon: LichessIcons.rapid),
-              numberOfElements: 3,
-              startAtIndex: 4,
               onSelected: onSelected),
           const SizedBox(height: 30.0),
-          _SectionChoices(_value,
+          _SectionChoices(timeControlPref,
+              choices: const [TimeControl.classical1, TimeControl.classical2],
               title: const _SectionTitle(
                   title: 'Classical', icon: LichessIcons.classical),
-              numberOfElements: 2,
-              startAtIndex: 7,
               onSelected: onSelected),
         ],
       ),
@@ -53,16 +53,12 @@ class TimeControlChoices extends State<TimeControlModal> {
 
 class _SectionChoices extends StatelessWidget {
   const _SectionChoices(this.selected,
-      {required this.title,
-      required this.numberOfElements,
-      required this.startAtIndex,
-      required this.onSelected});
+      {required this.title, required this.choices, required this.onSelected});
 
-  final int selected;
+  final TimeControl selected;
+  final List<TimeControl> choices;
   final _SectionTitle title;
-  final int numberOfElements;
-  final int startAtIndex;
-  final void Function(int index) onSelected;
+  final void Function(TimeControl choice) onSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -73,21 +69,18 @@ class _SectionChoices extends StatelessWidget {
         const SizedBox(height: 10),
         Wrap(
           spacing: 10.0,
-          children: List<Widget>.generate(
-            numberOfElements,
-            (int index) {
-              return ChoiceChip(
-                label: Text(timeControls[index + startAtIndex].toString()),
-                selected: selected == index + startAtIndex,
-                onSelected: (bool selected) {
-                  if (selected) onSelected(index + startAtIndex);
-                },
-                labelStyle: const TextStyle(fontSize: 16),
-                labelPadding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-              );
-            },
-          ).toList(),
+          children: choices.map((choice) {
+            return ChoiceChip(
+              label: Text(choice.value.toString()),
+              selected: selected == choice,
+              onSelected: (bool selected) {
+                if (selected) onSelected(choice);
+              },
+              labelStyle: const TextStyle(fontSize: 16),
+              labelPadding:
+                  const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+            );
+          }).toList(),
         ),
       ],
     );
@@ -116,25 +109,3 @@ class _SectionTitle extends StatelessWidget {
 }
 
 const TextStyle _titleStyle = TextStyle(fontSize: 18);
-
-@immutable
-class TimeControl {
-  const TimeControl(this.time, this.increment);
-  final int time;
-  final int increment;
-
-  @override
-  toString() => '$time + $increment';
-}
-
-const timeControls = [
-  TimeControl(3, 0),
-  TimeControl(3, 2),
-  TimeControl(5, 0),
-  TimeControl(5, 3),
-  TimeControl(10, 0),
-  TimeControl(10, 5),
-  TimeControl(15, 10),
-  TimeControl(30, 0),
-  TimeControl(30, 20),
-];

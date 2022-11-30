@@ -21,6 +21,7 @@ class PlayScreen extends ConsumerWidget {
     final opponentPref = ref.watch(computerOpponentPrefProvider);
     final stockfishLevel = ref.watch(stockfishLevelProvider);
     final maiaBots = ref.watch(maiaBotsProvider);
+    final timeControlPref = ref.watch(timeControlPrefProvider);
 
     final computerChoice = [
       Row(
@@ -178,10 +179,10 @@ class PlayScreen extends ConsumerWidget {
                       padding: const EdgeInsets.only(left: 28.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(LichessIcons.blitz, size: 20),
-                          SizedBox(width: 5),
-                          Text('5 + 3')
+                        children: [
+                          Icon(timeControlPref.perf.icon, size: 20),
+                          const SizedBox(width: 5),
+                          Text(timeControlPref.value.toString())
                         ],
                       ),
                     ),

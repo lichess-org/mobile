@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart' hide Tuple2;
 import 'package:tuple/tuple.dart';
@@ -27,7 +28,7 @@ final stockfishLevelProvider = createPrefProvider(
 );
 
 final maiaBotsProvider =
-    FutureProvider<List<Tuple2<User, UserStatus>>>((ref) async {
+    FutureProvider.autoDispose<List<Tuple2<User, UserStatus>>>((ref) async {
   final userRepo = ref.watch(userRepositoryProvider);
   final maiaBotsTask = TaskEither.sequenceList([
     userRepo.getUser('maia1'),
@@ -42,5 +43,62 @@ final maiaBotsProvider =
             .toList(),
       ));
   final either = await task.run();
-  return either.match((error) => throw error, (data) => data);
+  // retry on error, cache indefinitely on success
+  return either.match((error) => throw error, (data) {
+    ref.keepAlive();
+    return data;
+  });
 });
+
+@immutable
+class TimeInc {
+  const TimeInc(this.time, this.increment);
+
+  final int time;
+  final int increment;
+
+  static TimeInc? fromString(String str) {
+    try {
+      final nums = str.split(' + ').map(int.parse).toList();
+      return TimeInc(nums[0], nums[1]);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  toString() => '$time + $increment';
+
+  @override
+  bool operator ==(Object other) {
+    return other.runtimeType == runtimeType && hashCode == other.hashCode;
+  }
+
+  @override
+  int get hashCode => Object.hash(time, increment);
+}
+
+enum TimeControl {
+  blitz1(TimeInc(3, 0), Perf.blitz),
+  blitz2(TimeInc(3, 2), Perf.blitz),
+  blitz3(TimeInc(5, 0), Perf.blitz),
+  blitz4(TimeInc(5, 3), Perf.blitz),
+  rapid1(TimeInc(10, 0), Perf.rapid),
+  rapid2(TimeInc(10, 5), Perf.rapid),
+  rapid3(TimeInc(15, 10), Perf.rapid),
+  classical1(TimeInc(30, 0), Perf.classical),
+  classical2(TimeInc(30, 20), Perf.classical);
+
+  const TimeControl(this.value, this.perf);
+  final TimeInc value;
+  final Perf perf;
+}
+
+final timeControlPrefProvider = createPrefProvider(
+  prefKey: 'play.TimeInc',
+  defaultValue: TimeControl.blitz4,
+  mapFrom: (v) => TimeControl.values.firstWhere(
+      (e) => v != null ? e.value == TimeInc.fromString(v) : false,
+      orElse: () => TimeControl.blitz4),
+  mapTo: (v) => v.value.toString(),
+);
