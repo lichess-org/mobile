@@ -1,4 +1,7 @@
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import 'package:lichess_mobile/src/common/lichess_icons.dart';
 
 part 'user.freezed.dart';
 part 'user.g.dart';
@@ -80,5 +83,18 @@ enum Perf {
   racingKings,
   crazyhouse,
   puzzle,
-  storm,
+  storm;
+
+  IconData get icon {
+    switch (this) {
+      case blitz:
+        return LichessIcons.blitz;
+      case rapid:
+        return LichessIcons.rapid;
+      case classical:
+        return LichessIcons.classical;
+      default:
+        throw UnimplementedError('Icon is not yet added!');
+    }
+  }
 }

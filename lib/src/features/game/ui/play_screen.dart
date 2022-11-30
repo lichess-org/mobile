@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/features/user/domain/user.dart';
 import '../../authentication/ui/auth_widget.dart';
 import './time_control_modal.dart';
 import './play_screen_providers.dart';
@@ -19,6 +20,7 @@ class PlayScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final opponentPref = ref.watch(computerOpponentPrefProvider);
     final stockfishLevel = ref.watch(stockfishLevelProvider);
+    final maiaBots = ref.watch(maiaBotsProvider);
 
     final computerChoice = [
       Row(
@@ -131,15 +133,30 @@ class PlayScreen extends ConsumerWidget {
                     : Text(opponentPref.name, style: _titleStyle),
                 subtitle: opponentPref == ComputerOpponent.stockfish
                     ? Text('Level $stockfishLevel')
-                    : Row(
-                        children: [1642, 1516, 1446].map((r) {
-                          return Row(children: [
-                            const Icon(LichessIcons.rapid, size: 14.0),
-                            const SizedBox(width: 3.0),
-                            Text(r.toString()),
-                            const SizedBox(width: 12.0),
-                          ]);
-                        }).toList(),
+                    : maiaBots.when(
+                        data: (bots) {
+                          final bot = bots
+                              .firstWhere(
+                                  (b) => b.item1.id == opponentPref.name)
+                              .item1;
+                          return Row(
+                            children: [Perf.blitz, Perf.rapid, Perf.classical]
+                                .map((p) {
+                              return Row(children: [
+                                Icon(p.icon, size: 14.0),
+                                const SizedBox(width: 3.0),
+                                Text(bot.perfs[p]!.rating.toString()),
+                                const SizedBox(width: 12.0),
+                              ]);
+                            }).toList(),
+                          );
+                        },
+                        error: (err, __) {
+                          debugPrint(
+                              'SEVERE [PlayScreen] could not load bot info: ${err.toString()}');
+                          return const Text('Could not load bot ratings.');
+                        },
+                        loading: () => const CircularProgressIndicator(),
                       ),
               ),
             ),

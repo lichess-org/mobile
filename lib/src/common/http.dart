@@ -105,7 +105,9 @@ class ApiClient {
 
   TaskEither<IOError, T> _validateResponseStatus<T extends BaseResponse>(
       Uri url, T response) {
-    if (response.statusCode >= 400) {
+    if (response.statusCode >= 500) {
+      _log.severe('$url responded with status ${response.statusCode}');
+    } else if (response.statusCode >= 400) {
       _log.warning('$url responded with status ${response.statusCode}');
     }
     return response.statusCode < 400

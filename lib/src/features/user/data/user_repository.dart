@@ -23,8 +23,9 @@ class UserRepository {
   TaskEither<IOError, List<UserStatus>> getUsersStatus(List<String> ids) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'))
-        .map((response) =>
-            jsonDecode(response.body).map((e) => UserStatus.fromJson(e)));
+        .map((response) => jsonDecode(response.body)
+            .map<UserStatus>((e) => UserStatus.fromJson(e))
+            .toList());
   }
 
   void dispose() {
