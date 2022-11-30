@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/features/user/domain/user.dart';
 import '../../authentication/ui/auth_widget.dart';
 import './time_control_modal.dart';
