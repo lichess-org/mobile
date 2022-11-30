@@ -1,10 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:chessground/chessground.dart';
 
-class BoardScreen extends StatelessWidget {
+import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/features/settings/ui/is_sound_muted_notifier.dart';
+
+class BoardScreen extends ConsumerWidget {
   const BoardScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final isSoundMuted = ref.watch(isSoundMutedProvider);
+
+    final Widget board = Board(
+      size: screenWidth,
+      interactableSide: InteractableSide.none,
+      orientation: Side.white,
+      fen: '8/8/8/8/8/8/8/8 w - - 0 1',
+    );
+    const Widget topPlayer = Player(
+      name: 'Black',
+      rating: 1850,
+      title: 'FM',
+      active: false,
+      clock: Duration(milliseconds: 10000),
+    );
+    const Widget bottomPlayer = Player(
+      name: 'White',
+      rating: 2030,
+      title: 'GM',
+      active: false,
+      clock: Duration(milliseconds: 10000),
+    );
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -13,6 +41,30 @@ class BoardScreen extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => _showExitConfirmDialog(context),
+          ),
+          actions: [
+            IconButton(
+                icon: isSoundMuted
+                    ? const Icon(Icons.volume_off)
+                    : const Icon(Icons.volume_up),
+                onPressed: () =>
+                    ref.read(isSoundMutedProvider.notifier).toggleSound())
+          ],
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              topPlayer,
+              board,
+              bottomPlayer,
+            ],
+          ),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [],
           ),
         ),
       ),
