@@ -36,14 +36,21 @@ class GameState {
       blackTime: json['btime'],
       status: GameStatus.values.firstWhere((e) => e.name == json['status'],
           orElse: () => GameStatus.unknown),
-      uciMoves: uciMoves,
-      sanMoves: sanMoves,
+      uciMoves: List.unmodifiable(uciMoves),
+      sanMoves: List.unmodifiable(sanMoves),
       position: pos,
     );
   }
 
   Move? get lastMove =>
       uciMoves.isNotEmpty ? Move.fromUci(uciMoves[uciMoves.length - 1]) : null;
+  bool get abortable => status == GameStatus.started && position.fullmoves < 1;
+  bool get resignable => status == GameStatus.started && position.fullmoves > 1;
+  bool get playing => status == GameStatus.started;
+  bool get isLastMoveCapture {
+    final lm = sanMoves.isNotEmpty ? sanMoves[sanMoves.length - 1] : null;
+    return lm != null ? lm.contains('x') : false;
+  }
 
   @override
   bool operator ==(Object other) {
