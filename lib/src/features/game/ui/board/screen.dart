@@ -1,38 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart';
+import 'package:chessground/chessground.dart' as cg;
 
+import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/features/settings/ui/is_sound_muted_notifier.dart';
 
+import '../../domain/game.dart' hide Player;
+
 class BoardScreen extends ConsumerWidget {
-  const BoardScreen({super.key});
+  const BoardScreen({required this.game, super.key});
+
+  final Game game;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final isSoundMuted = ref.watch(isSoundMutedProvider);
 
-    final Widget board = Board(
+    final Widget board = cg.Board(
       size: screenWidth,
-      interactableSide: InteractableSide.none,
-      orientation: Side.white,
-      fen: '8/8/8/8/8/8/8/8 w - - 0 1',
+      interactableSide: cg.InteractableSide.none,
+      orientation: game.orientation.cg,
+      fen: game.initialFen,
     );
-    const Widget topPlayer = Player(
-      name: 'Black',
-      rating: 1850,
-      title: 'FM',
+    final black = Player(
+      name: game.black.name,
+      rating: game.black.rating,
+      title: game.black.title,
       active: false,
-      clock: Duration(milliseconds: 10000),
+      clock: const Duration(milliseconds: 0),
     );
-    const Widget bottomPlayer = Player(
-      name: 'White',
-      rating: 2030,
-      title: 'GM',
+    final white = Player(
+      name: game.white.name,
+      rating: game.white.rating,
+      title: game.white.title,
       active: false,
-      clock: Duration(milliseconds: 10000),
+      clock: const Duration(milliseconds: 0),
     );
+    final topPlayer = game.orientation == Side.white ? black : white;
+    final bottomPlayer = game.orientation == Side.white ? white : black;
+
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(

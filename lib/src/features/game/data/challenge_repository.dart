@@ -42,18 +42,18 @@ class ChallengeRequest {
     this.side,
   });
 
-  /// Clock initial time in seconds.
-  final int time;
+  /// Clock initial time
+  final Duration time;
 
-  /// Clock increment in seconds
-  final int increment;
+  /// Clock increment
+  final Duration increment;
 
   /// Which side you get to play. Default is random.
   final ChallengeSide? side;
 
   Map<String, dynamic> get toRequestBody => {
-        'clock.limit': time,
-        'clock.increment': increment,
+        'clock.limit': time.inSeconds.toString(),
+        'clock.increment': increment.inSeconds.toString(),
         'color': side?.name ?? ChallengeSide.random.name,
       };
 }
@@ -71,9 +71,9 @@ class AiChallengeRequest extends ChallengeRequest {
 
   @override
   Map<String, dynamic> get toRequestBody => {
-        'level': level,
-        'clock.limit': time,
-        'clock.increment': increment,
+        'level': level.toString(),
+        'clock.limit': time.inSeconds.toString(),
+        'clock.increment': increment.inSeconds.toString(),
         'color': side?.name ?? ChallengeSide.random.name,
       };
 }

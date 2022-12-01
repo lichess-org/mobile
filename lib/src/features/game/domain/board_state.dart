@@ -4,7 +4,7 @@ import 'package:dartchess/dartchess.dart';
 import './game_status.dart';
 
 @immutable
-class GameState {
+class BoardState {
   final int whiteTime;
   final int blackTime;
   final GameStatus status;
@@ -12,7 +12,7 @@ class GameState {
   final List<String> sanMoves;
   final Position<Chess> position;
 
-  const GameState(
+  const BoardState(
       {required this.whiteTime,
       required this.blackTime,
       required this.status,
@@ -20,7 +20,7 @@ class GameState {
       required this.sanMoves,
       required this.position});
 
-  factory GameState.fromJson(Map<String, dynamic> json) {
+  factory BoardState.fromJson(Map<String, dynamic> json) {
     final uciMoves =
         json['moves'].split(' ').where((m) => m.isNotEmpty).toList();
     Position<Chess> pos = Chess.initial;
@@ -31,7 +31,7 @@ class GameState {
       pos = newPos.item1;
       sanMoves.add(newPos.item2);
     }
-    return GameState(
+    return BoardState(
       whiteTime: json['wtime'],
       blackTime: json['btime'],
       status: GameStatus.values.firstWhere((e) => e.name == json['status'],
@@ -54,7 +54,7 @@ class GameState {
 
   @override
   bool operator ==(Object other) {
-    return other is GameState &&
+    return other is BoardState &&
         other.whiteTime == whiteTime &&
         other.blackTime == blackTime &&
         other.status == status &&

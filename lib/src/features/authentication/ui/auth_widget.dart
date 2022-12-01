@@ -36,7 +36,7 @@ class AuthWidget extends ConsumerWidget {
                   PopupMenuItem<AccountMenu>(
                     value: AccountMenu.logout,
                     child: authActionsAsync.isLoading
-                        ? const CircularProgressIndicator()
+                        ? const CircularProgressIndicator.adaptive()
                         : const Text('Sign out'),
                   ),
                 ],
@@ -46,9 +46,9 @@ class AuthWidget extends ConsumerWidget {
                     ? null
                     : () => ref.read(authWidgetProvider.notifier).signIn(),
                 child: authActionsAsync.isLoading
-                    ? const CircularProgressIndicator()
+                    ? const CircularProgressIndicator.adaptive()
                     : const Text('Sign in'),
               ),
-        orElse: () => const CircularProgressIndicator());
+        orElse: () => const CircularProgressIndicator.adaptive());
   }
 }

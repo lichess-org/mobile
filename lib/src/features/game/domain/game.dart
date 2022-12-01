@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:dartchess/dartchess.dart';
 
 part 'game.freezed.dart';
 part 'game.g.dart';
@@ -9,9 +10,8 @@ class Game with _$Game {
     required String id,
     required bool rated,
     required Speed speed,
-    @JsonKey(fromJson: DateTime.fromMillisecondsSinceEpoch)
-        required DateTime createdAt,
     required String initialFen,
+    required Side orientation,
     required Player white,
     required Player black,
   }) = _Game;
@@ -22,9 +22,9 @@ class Game with _$Game {
 @Freezed(toJson: false)
 class Player with _$Player {
   factory Player({
-    required String id,
+    String? id,
     required String name,
-    required int rating,
+    int? rating,
     bool? provisional,
     String? title,
   }) = _Player;

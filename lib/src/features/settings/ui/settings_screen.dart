@@ -52,7 +52,7 @@ class SettingsScreen extends ConsumerWidget {
                     ],
                   )
                 : const SizedBox.shrink(),
-            orElse: () => const CircularProgressIndicator(),
+            orElse: () => const CircularProgressIndicator.adaptive(),
           ),
           const SizedBox(height: 10),
           ListTile(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
-import './providers.dart';
+import './form_providers.dart';
 
 class TimeControlModal extends ConsumerWidget {
   const TimeControlModal({super.key});
