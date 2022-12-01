@@ -19,7 +19,9 @@ const retries = [
 class ApiClient {
   ApiClient(this._log, this._client)
       : _retryClient = RetryClient.withDelays(_client, retries,
-            whenError: (_, __) => true);
+            whenError: (_, __) => true) {
+    _log.info('Creating new ApiClient.');
+  }
 
   final Logger _log;
   final Client _client;

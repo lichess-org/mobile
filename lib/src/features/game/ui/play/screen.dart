@@ -10,6 +10,7 @@ import '../../domain/game.dart';
 import '../board/screen.dart';
 import './time_control_modal.dart';
 import './form_providers.dart';
+import './play_action_notifier.dart';
 
 const maiaChoices = [
   ComputerOpponent.maia1,
