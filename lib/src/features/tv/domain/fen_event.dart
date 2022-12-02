@@ -1,36 +1,19 @@
-import 'package:meta/meta.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 
+part 'fen_event.freezed.dart';
+part 'fen_event.g.dart';
+
 /// Event sent by lichess TV stream when the position of the game changes.
-@immutable
-class FenEvent {
-  const FenEvent({
-    required this.fen,
-    required this.lastMove,
-    required this.whiteSeconds,
-    required this.blackSeconds,
-  });
+@Freezed(toJson: false)
+class FenEvent with _$FenEvent {
+  const factory FenEvent({
+    required String fen,
+    @JsonKey(name: 'lm', fromJson: Move.fromUci) required Move lastMove,
+    @JsonKey(name: 'wc') required int whiteSeconds,
+    @JsonKey(name: 'bc') required int blackSeconds,
+  }) = _FenEvent;
 
-  final String fen;
-  final Move lastMove;
-  final int whiteSeconds;
-  final int blackSeconds;
-
-  FenEvent.fromJson(Map<String, dynamic> json)
-      : fen = json['fen'],
-        lastMove = Move.fromUci(json['lm']),
-        whiteSeconds = json['wc'],
-        blackSeconds = json['bc'];
-
-  @override
-  bool operator ==(Object other) {
-    return other is FenEvent &&
-        other.fen == fen &&
-        other.lastMove == lastMove &&
-        other.whiteSeconds == whiteSeconds &&
-        other.blackSeconds == blackSeconds;
-  }
-
-  @override
-  int get hashCode => Object.hash(fen, lastMove, whiteSeconds, blackSeconds);
+  factory FenEvent.fromJson(Map<String, dynamic> json) =>
+      _$FenEventFromJson(json);
 }

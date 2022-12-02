@@ -11,7 +11,7 @@ Duration _durationFromJson(int value) => Duration(milliseconds: value);
 
 @Freezed(toJson: false)
 class GameClock with _$GameClock {
-  factory GameClock({
+  const factory GameClock({
     @JsonKey(fromJson: _durationFromJson, name: 'wtime')
         required Duration whiteTime,
     @JsonKey(fromJson: _durationFromJson, name: 'btime')

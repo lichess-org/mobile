@@ -6,7 +6,7 @@ part 'game.g.dart';
 
 @Freezed(toJson: false)
 class Game with _$Game {
-  factory Game({
+  const factory Game({
     required String id,
     required bool rated,
     required Speed speed,
@@ -21,7 +21,7 @@ class Game with _$Game {
 
 @Freezed(toJson: false)
 class Player with _$Player {
-  factory Player({
+  const factory Player({
     String? id,
     required String name,
     int? rating,

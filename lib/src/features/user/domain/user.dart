@@ -6,9 +6,9 @@ import 'package:lichess_mobile/src/common/lichess_icons.dart';
 part 'user.freezed.dart';
 part 'user.g.dart';
 
-@Freezed(toJson: false)
+@Freezed(fromJson: false, toJson: false)
 class User with _$User {
-  factory User({
+  const factory User({
     required String id,
     required String username,
     String? title,
@@ -21,12 +21,27 @@ class User with _$User {
     Profile? profile,
   }) = _User;
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'],
+      username: json['username'],
+      title: json['title'],
+      patron: json['patron'],
+      createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt']),
+      seenAt: DateTime.fromMillisecondsSinceEpoch(json['seenAt']),
+      profile: Profile.fromJson(json['profile']),
+      perfs: Map.unmodifiable({
+        for (final entry in json['perfs'].entries)
+          if (entry.key != 'storm')
+            Perf.values.byName(entry.key): UserPerf.fromJson(entry.value)
+      }),
+    );
+  }
 }
 
 @Freezed(toJson: false)
 class Profile with _$Profile {
-  factory Profile({
+  const factory Profile({
     String? country,
     String? location,
     String? bio,
@@ -42,7 +57,7 @@ class Profile with _$Profile {
 
 @Freezed(toJson: false)
 class UserPerf with _$UserPerf {
-  factory UserPerf({
+  const factory UserPerf({
     required int rating,
     @JsonKey(name: 'rd') required int ratingDeviation,
     @JsonKey(name: 'prog') required int progression,
@@ -56,7 +71,7 @@ class UserPerf with _$UserPerf {
 
 @Freezed(toJson: false)
 class UserStatus with _$UserStatus {
-  factory UserStatus({
+  const factory UserStatus({
     required String id,
     required String name,
     bool? online,
