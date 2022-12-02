@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:dartchess/dartchess.dart';
 
 import './featured_player.dart';
 
 @immutable
-class FeaturedGame {
+class FeaturedGame extends Equatable {
   const FeaturedGame({
     required this.id,
     required this.orientation,
@@ -12,6 +13,9 @@ class FeaturedGame {
     required this.white,
     required this.black,
   });
+
+  @override
+  List<Object> get props => [id, orientation, initialFen, white, black];
 
   final String id;
   final Side orientation;
@@ -41,17 +45,4 @@ class FeaturedGame {
       black: black ?? this.black,
     );
   }
-
-  @override
-  bool operator ==(Object other) {
-    return other is FeaturedGame &&
-        other.id == id &&
-        other.orientation == orientation &&
-        other.initialFen == initialFen &&
-        other.white == white &&
-        other.black == black;
-  }
-
-  @override
-  int get hashCode => Object.hash(id, orientation, initialFen, white, black);
 }

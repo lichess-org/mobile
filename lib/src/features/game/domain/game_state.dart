@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 
@@ -22,7 +23,7 @@ class GameClock with _$GameClock {
 }
 
 @immutable
-class GameState {
+class GameState extends Equatable {
   final GameStatus status;
   final List<String> uciMoves;
   final List<String> sanMoves;
@@ -33,6 +34,9 @@ class GameState {
       required this.uciMoves,
       required this.sanMoves,
       required this.position});
+
+  @override
+  List<Object> get props => [status, uciMoves, sanMoves, position];
 
   factory GameState.fromJson(Map<String, dynamic> json) {
     final String moves = json['moves'];
@@ -54,6 +58,17 @@ class GameState {
     );
   }
 
+  Move? get lastMove =>
+      uciMoves.isNotEmpty ? Move.fromUci(uciMoves[uciMoves.length - 1]) : null;
+  bool get abortable => status == GameStatus.started && position.fullmoves < 1;
+  bool get resignable => status == GameStatus.started && position.fullmoves > 1;
+  bool get playing => status == GameStatus.started;
+  Map<String, Set<String>> get validMoves => algebraicLegalMoves(position);
+  bool get isLastMoveCapture {
+    final lm = sanMoves.isNotEmpty ? sanMoves[sanMoves.length - 1] : null;
+    return lm != null ? lm.contains('x') : false;
+  }
+
   GameState copyWith({
     GameStatus? status,
     List<String>? uciMoves,
@@ -67,27 +82,4 @@ class GameState {
       position: position ?? this.position,
     );
   }
-
-  Move? get lastMove =>
-      uciMoves.isNotEmpty ? Move.fromUci(uciMoves[uciMoves.length - 1]) : null;
-  bool get abortable => status == GameStatus.started && position.fullmoves < 1;
-  bool get resignable => status == GameStatus.started && position.fullmoves > 1;
-  bool get playing => status == GameStatus.started;
-  Map<String, Set<String>> get validMoves => algebraicLegalMoves(position);
-  bool get isLastMoveCapture {
-    final lm = sanMoves.isNotEmpty ? sanMoves[sanMoves.length - 1] : null;
-    return lm != null ? lm.contains('x') : false;
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is GameState &&
-        other.status == status &&
-        other.uciMoves == uciMoves &&
-        other.sanMoves == sanMoves &&
-        other.position == position;
-  }
-
-  @override
-  int get hashCode => Object.hash(status, uciMoves, sanMoves, position);
 }

@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart' hide Tuple2;
@@ -62,7 +63,7 @@ enum ComputerOpponent {
 }
 
 @immutable
-class TimeInc {
+class TimeInc extends Equatable {
   const TimeInc(this.time, this.increment);
 
   /// Clock initial time in minutes
@@ -70,6 +71,9 @@ class TimeInc {
 
   /// Clock increment in seconds
   final int increment;
+
+  @override
+  List<Object> get props => [time, increment];
 
   static TimeInc? fromString(String str) {
     try {
@@ -82,14 +86,6 @@ class TimeInc {
 
   @override
   toString() => '$time + $increment';
-
-  @override
-  bool operator ==(Object other) {
-    return other.runtimeType == runtimeType && hashCode == other.hashCode;
-  }
-
-  @override
-  int get hashCode => Object.hash(time, increment);
 }
 
 enum TimeControl {
