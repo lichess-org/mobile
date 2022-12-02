@@ -85,9 +85,8 @@ class BoardScreen extends ConsumerWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Exit the game.'),
-          content: const Text('Are you sure you want to quit the game?\n'
-              'You won\'t be able to get back after.'),
+          title: const Text('Exit.'),
+          content: const Text('Are you sure you want to quit the game?'),
           actions: <Widget>[
             TextButton(
               style: TextButton.styleFrom(
