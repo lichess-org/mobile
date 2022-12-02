@@ -1,28 +1,42 @@
-import 'package:meta/meta.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 
 import './game_status.dart';
 
+part 'game_state.freezed.dart';
+part 'game_state.g.dart';
+
+Duration _durationFromJson(int value) => Duration(milliseconds: value);
+
+@Freezed(toJson: false)
+class GameClock with _$GameClock {
+  factory GameClock({
+    @JsonKey(fromJson: _durationFromJson, name: 'wtime')
+        required Duration whiteTime,
+    @JsonKey(fromJson: _durationFromJson, name: 'btime')
+        required Duration blackTime,
+  }) = _GameClock;
+
+  factory GameClock.fromJson(Map<String, dynamic> json) =>
+      _$GameClockFromJson(json);
+}
+
 @immutable
-class BoardState {
-  final int whiteTime;
-  final int blackTime;
+class GameState {
   final GameStatus status;
   final List<String> uciMoves;
   final List<String> sanMoves;
   final Position<Chess> position;
 
-  const BoardState(
-      {required this.whiteTime,
-      required this.blackTime,
-      required this.status,
+  const GameState(
+      {required this.status,
       required this.uciMoves,
       required this.sanMoves,
       required this.position});
 
-  factory BoardState.fromJson(Map<String, dynamic> json) {
-    final uciMoves =
-        json['moves'].split(' ').where((m) => m.isNotEmpty).toList();
+  factory GameState.fromJson(Map<String, dynamic> json) {
+    final String moves = json['moves'];
+    final uciMoves = moves.split(' ').where((m) => m.isNotEmpty).toList();
     Position<Chess> pos = Chess.initial;
     List<String> sanMoves = [];
     for (final m in uciMoves) {
@@ -31,9 +45,7 @@ class BoardState {
       pos = newPos.item1;
       sanMoves.add(newPos.item2);
     }
-    return BoardState(
-      whiteTime: json['wtime'],
-      blackTime: json['btime'],
+    return GameState(
       status: GameStatus.values.firstWhere((e) => e.name == json['status'],
           orElse: () => GameStatus.unknown),
       uciMoves: List.unmodifiable(uciMoves),
@@ -42,11 +54,26 @@ class BoardState {
     );
   }
 
+  GameState copyWith({
+    GameStatus? status,
+    List<String>? uciMoves,
+    List<String>? sanMoves,
+    Position<Chess>? position,
+  }) {
+    return GameState(
+      status: status ?? this.status,
+      uciMoves: uciMoves ?? this.uciMoves,
+      sanMoves: sanMoves ?? this.sanMoves,
+      position: position ?? this.position,
+    );
+  }
+
   Move? get lastMove =>
       uciMoves.isNotEmpty ? Move.fromUci(uciMoves[uciMoves.length - 1]) : null;
   bool get abortable => status == GameStatus.started && position.fullmoves < 1;
   bool get resignable => status == GameStatus.started && position.fullmoves > 1;
   bool get playing => status == GameStatus.started;
+  Map<String, Set<String>> get validMoves => algebraicLegalMoves(position);
   bool get isLastMoveCapture {
     final lm = sanMoves.isNotEmpty ? sanMoves[sanMoves.length - 1] : null;
     return lm != null ? lm.contains('x') : false;
@@ -54,9 +81,7 @@ class BoardState {
 
   @override
   bool operator ==(Object other) {
-    return other is BoardState &&
-        other.whiteTime == whiteTime &&
-        other.blackTime == blackTime &&
+    return other is GameState &&
         other.status == status &&
         other.uciMoves == uciMoves &&
         other.sanMoves == sanMoves &&
@@ -64,6 +89,5 @@ class BoardState {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(whiteTime, blackTime, status, uciMoves, sanMoves, position);
+  int get hashCode => Object.hash(status, uciMoves, sanMoves, position);
 }

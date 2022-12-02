@@ -41,12 +41,14 @@ class GameRepository {
 
   TaskEither<IOError, void> playMove(String gameId, Move move) {
     return apiClient.post(
-        Uri.parse('$kLichessHost/api/board/game/$gameId/move/${move.uci}'));
+        Uri.parse('$kLichessHost/api/board/game/$gameId/move/${move.uci}'),
+        retry: true);
   }
 
   TaskEither<IOError, void> resign(String gameId) {
-    return apiClient
-        .post(Uri.parse('$kLichessHost/api/board/game/$gameId/resign'));
+    return apiClient.post(
+        Uri.parse('$kLichessHost/api/board/game/$gameId/resign'),
+        retry: true);
   }
 
   void dispose() {

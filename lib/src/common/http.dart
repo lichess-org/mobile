@@ -13,6 +13,8 @@ const retries = [
   Duration(milliseconds: 200),
   Duration(milliseconds: 300),
   Duration(milliseconds: 500),
+  Duration(milliseconds: 800),
+  Duration(milliseconds: 1300),
 ];
 
 /// Convenient client that captures and returns API errors.
