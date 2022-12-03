@@ -61,7 +61,7 @@ class PlayActionNotifier extends AutoDisposeNotifier<AsyncValue<Game?>> {
                   name: game['opponent']['username'],
                   rating: game['opponent']['rating']);
               state = AsyncValue.data(Game(
-                id: GameId(value: game['gameId']),
+                id: GameId(value: game['gameId'] as String),
                 initialFen: game['fen'],
                 speed: Speed.values.firstWhere((v) => v.name == game['speed'],
                     orElse: () => Speed.blitz),
