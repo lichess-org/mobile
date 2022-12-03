@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 
+import 'package:lichess_mobile/src/common/models.dart';
 import '../../data/game_repository.dart';
 import '../../domain/game_state.dart';
 
@@ -14,7 +15,7 @@ class GameStateNotifier extends AutoDisposeNotifier<GameState?> {
     state = GameState.fromJson(json);
   }
 
-  onUserMove(String gameId, Move move) async {
+  onUserMove(GameId gameId, Move move) async {
     final gameRepository = ref.read(gameRepositoryProvider);
     final savedState = state;
     if (state != null) {

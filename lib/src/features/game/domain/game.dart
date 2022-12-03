@@ -1,13 +1,14 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 
-part 'game.freezed.dart';
-part 'game.g.dart';
+import 'package:lichess_mobile/src/common/models.dart';
 
-@Freezed(toJson: false)
+part 'game.freezed.dart';
+
+@freezed
 class Game with _$Game {
   const factory Game({
-    required String id,
+    required GameId id,
     required bool rated,
     required Speed speed,
     required String initialFen,
@@ -15,11 +16,9 @@ class Game with _$Game {
     required Player white,
     required Player black,
   }) = _Game;
-
-  factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
 }
 
-@Freezed(toJson: false)
+@freezed
 class Player with _$Player {
   const factory Player({
     String? id,
@@ -28,8 +27,6 @@ class Player with _$Player {
     bool? provisional,
     String? title,
   }) = _Player;
-
-  factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
 }
 
 enum Speed {

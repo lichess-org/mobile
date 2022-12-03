@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/common/lichess_icons.dart';
 part 'user.freezed.dart';
 part 'user.g.dart';
 
-@Freezed(fromJson: false, toJson: false)
+@freezed
 class User with _$User {
   const factory User({
     required String id,
@@ -39,7 +39,7 @@ class User with _$User {
   }
 }
 
-@Freezed(toJson: false)
+@freezed
 class Profile with _$Profile {
   const factory Profile({
     String? country,
@@ -55,7 +55,7 @@ class Profile with _$Profile {
       _$ProfileFromJson(json);
 }
 
-@Freezed(toJson: false)
+@freezed
 class UserPerf with _$UserPerf {
   const factory UserPerf({
     required int rating,
@@ -69,7 +69,7 @@ class UserPerf with _$UserPerf {
       _$UserPerfFromJson(json);
 }
 
-@Freezed(toJson: false)
+@freezed
 class UserStatus with _$UserStatus {
   const factory UserStatus({
     required String id,

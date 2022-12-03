@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 
@@ -9,7 +8,7 @@ part 'game_state.g.dart';
 
 Duration _durationFromJson(int value) => Duration(milliseconds: value);
 
-@Freezed(toJson: false)
+@freezed
 class GameClock with _$GameClock {
   const factory GameClock({
     @JsonKey(fromJson: _durationFromJson, name: 'wtime')
@@ -22,25 +21,21 @@ class GameClock with _$GameClock {
       _$GameClockFromJson(json);
 }
 
-@immutable
-class GameState extends Equatable {
-  final GameStatus status;
-  final List<String> uciMoves;
-  final List<String> sanMoves;
-  final Position<Chess> position;
+@freezed
+class GameState with _$GameState {
+  const GameState._();
 
-  const GameState(
-      {required this.status,
-      required this.uciMoves,
-      required this.sanMoves,
-      required this.position});
-
-  @override
-  List<Object> get props => [status, uciMoves, sanMoves, position];
+  const factory GameState(
+      {required GameStatus status,
+      required List<String> uciMoves,
+      required List<String> sanMoves,
+      required Position<Chess> position}) = _GameState;
 
   factory GameState.fromJson(Map<String, dynamic> json) {
-    final String moves = json['moves'];
-    final uciMoves = moves.split(' ').where((m) => m.isNotEmpty).toList();
+    final uciMoves = (json['moves'] as String)
+        .split(' ')
+        .where((m) => m.isNotEmpty)
+        .toList();
     Position<Chess> pos = Chess.initial;
     List<String> sanMoves = [];
     for (final m in uciMoves) {
@@ -67,19 +62,5 @@ class GameState extends Equatable {
   bool get isLastMoveCapture {
     final lm = sanMoves.isNotEmpty ? sanMoves[sanMoves.length - 1] : null;
     return lm != null ? lm.contains('x') : false;
-  }
-
-  GameState copyWith({
-    GameStatus? status,
-    List<String>? uciMoves,
-    List<String>? sanMoves,
-    Position<Chess>? position,
-  }) {
-    return GameState(
-      status: status ?? this.status,
-      uciMoves: uciMoves ?? this.uciMoves,
-      sanMoves: sanMoves ?? this.sanMoves,
-      position: position ?? this.position,
-    );
   }
 }

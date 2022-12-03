@@ -3,7 +3,7 @@ import 'package:dartchess/dartchess.dart';
 
 part 'featured_player.freezed.dart';
 
-@Freezed(toJson: false, fromJson: false)
+@freezed
 class FeaturedPlayer with _$FeaturedPlayer {
   const FeaturedPlayer._();
 

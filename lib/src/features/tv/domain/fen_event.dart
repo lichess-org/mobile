@@ -5,7 +5,7 @@ part 'fen_event.freezed.dart';
 part 'fen_event.g.dart';
 
 /// Event sent by lichess TV stream when the position of the game changes.
-@Freezed(toJson: false)
+@freezed
 class FenEvent with _$FenEvent {
   const factory FenEvent({
     required String fen,

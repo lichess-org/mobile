@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:dartchess/dartchess.dart' hide Tuple2;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/features/user/domain/user.dart';
 import '../../data/challenge_repository.dart';
 import '../../data/game_repository.dart';
@@ -60,7 +61,7 @@ class PlayActionNotifier extends AutoDisposeNotifier<AsyncValue<Game?>> {
                   name: game['opponent']['username'],
                   rating: game['opponent']['rating']);
               state = AsyncValue.data(Game(
-                id: game['gameId'],
+                id: GameId(value: game['gameId']),
                 initialFen: game['fen'],
                 speed: Speed.values.firstWhere((v) => v.name == game['speed'],
                     orElse: () => Speed.blitz),
