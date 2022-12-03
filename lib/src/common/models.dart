@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'models.freezed.dart';
 
-@Freezed(toStringOverride: false, copyWith: false)
+@Freezed(toStringOverride: false)
 class GameAnyId with _$GameAnyId {
   const GameAnyId._();
 
@@ -16,7 +16,7 @@ class GameAnyId with _$GameAnyId {
   String toString() => value;
 }
 
-@Freezed(toStringOverride: false, copyWith: false)
+@Freezed(toStringOverride: false)
 class GameId with _$GameId {
   const GameId._();
 
@@ -27,7 +27,7 @@ class GameId with _$GameId {
   String toString() => value;
 }
 
-@Freezed(toStringOverride: false, copyWith: false)
+@Freezed(toStringOverride: false)
 class GameFullId with _$GameFullId {
   const GameFullId._();
 
@@ -38,7 +38,7 @@ class GameFullId with _$GameFullId {
   String toString() => value;
 }
 
-@Freezed(toStringOverride: false, copyWith: false)
+@Freezed(toStringOverride: false)
 class GamePlayerId with _$GamePlayerId {
   const GamePlayerId._();
 
