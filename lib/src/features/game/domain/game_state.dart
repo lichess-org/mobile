@@ -55,9 +55,10 @@ class GameState with _$GameState {
 
   Move? get lastMove =>
       uciMoves.isNotEmpty ? Move.fromUci(uciMoves[uciMoves.length - 1]) : null;
-  bool get abortable => status == GameStatus.started && position.fullmoves < 1;
+  bool get abortable => status == GameStatus.started && position.fullmoves <= 1;
   bool get resignable => status == GameStatus.started && position.fullmoves > 1;
   bool get playing => status == GameStatus.started;
+  bool get gameOver => status.value > GameStatus.started.value;
   Map<String, Set<String>> get validMoves => algebraicLegalMoves(position);
   bool get isLastMoveCapture {
     final lm = sanMoves.isNotEmpty ? sanMoves[sanMoves.length - 1] : null;

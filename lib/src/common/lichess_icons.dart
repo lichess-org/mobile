@@ -12,6 +12,10 @@
 ///       - asset: fonts/LichessIcons.ttf
 ///
 ///
+/// * Font Awesome 4, Copyright (C) 2016 by Dave Gandy
+///         Author:    Dave Gandy
+///         License:   SIL ()
+///         Homepage:  http://fortawesome.github.com/Font-Awesome/
 /// * Font Awesome 5, Copyright (C) 2016 by Dave Gandy
 ///         Author:    Dave Gandy
 ///         License:   SIL (https://github.com/FortAwesome/Font-Awesome/blob/master/LICENSE.txt)
@@ -41,6 +45,8 @@ class LichessIcons {
       IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData correspondence =
       IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData cancel =
+      IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData chess_king =
       IconData(0xf43f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

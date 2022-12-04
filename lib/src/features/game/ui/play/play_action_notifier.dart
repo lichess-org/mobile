@@ -72,6 +72,8 @@ class PlayActionNotifier extends AutoDisposeNotifier<AsyncValue<Game?>> {
                 white: game['color'] == 'white' ? player : opponent,
                 black: game['color'] == 'white' ? opponent : player,
               ));
+
+              return;
             }
           }
       }

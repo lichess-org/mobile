@@ -123,6 +123,12 @@
       "css": "chess_king",
       "code": 62527,
       "src": "fontawesome5"
+    },
+    {
+      "uid": "5211af474d3a9848f67f945e2ccaf143",
+      "css": "cancel",
+      "code": 59401,
+      "src": "fontawesome"
     }
   ]
 }

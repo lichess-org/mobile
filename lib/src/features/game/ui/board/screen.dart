@@ -3,20 +3,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 
+import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/async_value.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/features/settings/ui/is_sound_muted_notifier.dart';
+import 'package:lichess_mobile/src/features/user/domain/user.dart';
 
 import '../../domain/game_status.dart';
 import '../../domain/game_state.dart';
 import '../../domain/game.dart' hide Player;
+import '../play/play_action_notifier.dart';
+import '../play/form_providers.dart';
 import './game_stream.dart';
 import './game_state_notifier.dart';
+import './game_action_notifier.dart';
 
 class BoardScreen extends ConsumerStatefulWidget {
-  const BoardScreen({required this.game, super.key});
+  const BoardScreen({required this.game, required this.account, super.key});
 
   final Game game;
+  final User account;
 
   @override
   ConsumerState<BoardScreen> createState() => _BoardScreenState();
@@ -31,6 +39,8 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
     final isSoundMuted = ref.watch(isSoundMutedProvider);
     final gameState = ref.watch(gameStateProvider);
     final gameStream = ref.watch(gameStreamProvider(widget.game.id));
+    final gameActionAsync = ref.watch(gameActionProvider);
+    final playActionAsync = ref.watch(playActionProvider);
 
     ref.listen<GameState?>(gameStateProvider, (_, state) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -43,6 +53,24 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
         }
       });
     });
+    ref.listen<AsyncValue>(
+      gameActionProvider,
+      (_, state) => state.showSnackbarOnError(context),
+    );
+    ref.listen<AsyncValue>(playActionProvider, (_, state) {
+      state.showSnackbarOnError(context);
+
+      if (state.valueOrNull is Game && state.value.id != widget.game.id) {
+        print(
+            'hoooooooooooooooooooooooooo ${state.value.id} ${widget.game.id}');
+        ref.invalidate(playActionProvider);
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+              builder: (context) =>
+                  BoardScreen(game: state.value!, account: widget.account)),
+        );
+      }
+    });
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -50,9 +78,14 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
         appBar: AppBar(
           title: const Text('lichess.org'),
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => _showExitConfirmDialog(context),
-          ),
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                if (gameState?.gameOver == true) {
+                  Navigator.of(context, rootNavigator: true).pop();
+                } else {
+                  _showExitConfirmDialog(context);
+                }
+              }),
           actions: [
             IconButton(
                 icon: isSoundMuted
@@ -173,7 +206,66 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
         bottomNavigationBar: BottomAppBar(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [],
+            children: [
+              IconButton(
+                onPressed: () {
+                  showAdaptiveActionSheet(
+                    context: context,
+                    actions: [
+                      if (gameState?.abortable == true)
+                        BottomSheetAction(
+                          leading: const Icon(LichessIcons.cancel),
+                          label: const Text('Abort'),
+                          onPressed: (context) {
+                            if (!gameActionAsync.isLoading) {
+                              ref
+                                  .read(gameActionProvider.notifier)
+                                  .abort(widget.game.id);
+                            }
+                          },
+                        ),
+                      if (gameState?.resignable == true)
+                        BottomSheetAction(
+                          leading: const Icon(Icons.flag),
+                          label: const Text('Resign'),
+                          onPressed: (context) {
+                            if (!gameActionAsync.isLoading) {
+                              ref
+                                  .read(gameActionProvider.notifier)
+                                  .resign(widget.game.id);
+                            }
+                          },
+                        ),
+                      if (gameState?.gameOver == true)
+                        BottomSheetAction(
+                            leading: const Icon(Icons.swap_vert),
+                            label: playActionAsync.isLoading
+                                ? const CircularProgressIndicator.adaptive()
+                                : const Text('Rematch'),
+                            onPressed: (context) {
+                              if (!playActionAsync.isLoading) {
+                                // TODO refactor with a service
+                                final opponentPref =
+                                    ref.read(computerOpponentPrefProvider);
+                                final stockfishLevel =
+                                    ref.read(stockfishLevelProvider);
+                                final timeControlPref =
+                                    ref.read(timeControlPrefProvider);
+                                ref
+                                    .read(playActionProvider.notifier)
+                                    .createGame(
+                                        account: widget.account,
+                                        opponent: opponentPref,
+                                        timeControl: timeControlPref.value,
+                                        level: stockfishLevel);
+                              }
+                            }),
+                    ],
+                  );
+                },
+                icon: const Icon(Icons.menu),
+              ),
+            ],
           ),
         ),
       ),

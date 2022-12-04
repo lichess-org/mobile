@@ -56,11 +56,12 @@ class PlayForm extends ConsumerWidget {
     ref.listen<AsyncValue>(playActionProvider, (_, state) {
       state.showSnackbarOnError(context);
 
-      if (state.valueOrNull is Game) {
+      if (state.valueOrNull is Game && account != null) {
         ref.invalidate(playActionProvider);
         Navigator.of(context, rootNavigator: true).push(
           MaterialPageRoute(
-              builder: (context) => BoardScreen(game: state.value!)),
+              builder: (context) =>
+                  BoardScreen(game: state.value!, account: account!)),
         );
       }
     });

@@ -46,6 +46,12 @@ class GameRepository {
         retry: true);
   }
 
+  TaskEither<IOError, void> abort(GameId gameId) {
+    return apiClient.post(
+        Uri.parse('$kLichessHost/api/board/game/$gameId/abort'),
+        retry: true);
+  }
+
   TaskEither<IOError, void> resign(GameId gameId) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/resign'),
