@@ -60,9 +60,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
     ref.listen<AsyncValue>(playActionProvider, (_, state) {
       state.showSnackbarOnError(context);
 
-      if (state.valueOrNull is Game && state.value.id != widget.game.id) {
-        print(
-            'hoooooooooooooooooooooooooo ${state.value.id} ${widget.game.id}');
+      if (state.valueOrNull is Game) {
         ref.invalidate(playActionProvider);
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
@@ -81,7 +79,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
                 if (gameState?.gameOver == true) {
-                  Navigator.of(context, rootNavigator: true).pop();
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                 } else {
                   _showExitConfirmDialog(context);
                 }
@@ -295,8 +293,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
               ),
               child: const Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context, rootNavigator: true).pop();
+                Navigator.of(context).popUntil((route) => route.isFirst);
               },
             ),
           ],
