@@ -19,6 +19,7 @@ import '../play/form_providers.dart';
 import './game_stream.dart';
 import './game_state_notifier.dart';
 import './game_action_notifier.dart';
+import './game_controls.dart';
 
 class BoardScreen extends ConsumerStatefulWidget {
   const BoardScreen({required this.game, required this.account, super.key});
@@ -38,9 +39,10 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final isSoundMuted = ref.watch(isSoundMutedProvider);
     final gameState = ref.watch(gameStateProvider);
-    final gameStream = ref.watch(gameStreamProvider(widget.game.id));
-    final gameActionAsync = ref.watch(gameActionProvider);
-    final playActionAsync = ref.watch(playActionProvider);
+    final gameClockStream = ref.watch(gameStreamProvider(widget.game.id));
+    final positionCursor = ref.watch(positionCursorProvider);
+    final isReplaying =
+        gameState != null && positionCursor < gameState.positionIndex;
 
     ref.listen<GameState?>(gameStateProvider, (_, state) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -94,7 +96,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
           ],
         ),
         body: Center(
-          child: gameStream.when(
+          child: gameClockStream.when(
             data: (clock) {
               final black = Player(
                 name: widget.game.black.name,
@@ -141,15 +143,21 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
                   topPlayer,
                   cg.Board(
                     size: screenWidth,
-                    interactableSide: gameState == null || !gameState.playing
-                        ? cg.InteractableSide.none
-                        : widget.game.orientation == Side.white
-                            ? cg.InteractableSide.white
-                            : cg.InteractableSide.black,
+                    interactableSide:
+                        gameState == null || !gameState.playing || isReplaying
+                            ? cg.InteractableSide.none
+                            : widget.game.orientation == Side.white
+                                ? cg.InteractableSide.white
+                                : cg.InteractableSide.black,
                     orientation: widget.game.orientation.cg,
-                    fen: gameState?.position.fen ?? widget.game.initialFen,
+                    fen: gameState?.positions[positionCursor].fen ??
+                        widget.game.initialFen,
                     validMoves: gameState?.validMoves,
-                    lastMove: gameState?.lastMove?.cg,
+                    lastMove: gameState != null && gameState.gameOver
+                        ? positionCursor > 0
+                            ? gameState.moveAtPly(positionCursor - 1)?.cg
+                            : null
+                        : gameState?.lastMove?.cg,
                     sideToMove: gameState?.position.turn.cg ??
                         widget.game.orientation.cg,
                     onMove: (cg.Move move, {bool? isPremove}) => ref
@@ -207,66 +215,104 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
             children: [
               IconButton(
                 onPressed: () {
-                  showAdaptiveActionSheet(
-                    context: context,
-                    actions: [
-                      if (gameState?.abortable == true)
-                        BottomSheetAction(
-                          leading: const Icon(LichessIcons.cancel),
-                          label: const Text('Abort'),
-                          onPressed: (context) {
-                            if (!gameActionAsync.isLoading) {
-                              ref
-                                  .read(gameActionProvider.notifier)
-                                  .abort(widget.game.id);
-                            }
-                          },
-                        ),
-                      if (gameState?.resignable == true)
-                        BottomSheetAction(
-                          leading: const Icon(Icons.flag),
-                          label: const Text('Resign'),
-                          onPressed: (context) {
-                            if (!gameActionAsync.isLoading) {
-                              ref
-                                  .read(gameActionProvider.notifier)
-                                  .resign(widget.game.id);
-                            }
-                          },
-                        ),
-                      if (gameState?.gameOver == true)
-                        BottomSheetAction(
-                            leading: const Icon(Icons.swap_vert),
-                            label: playActionAsync.isLoading
-                                ? const CircularProgressIndicator.adaptive()
-                                : const Text('Rematch'),
-                            onPressed: (context) {
-                              if (!playActionAsync.isLoading) {
-                                // TODO refactor with a service
-                                final opponentPref =
-                                    ref.read(computerOpponentPrefProvider);
-                                final stockfishLevel =
-                                    ref.read(stockfishLevelProvider);
-                                final timeControlPref =
-                                    ref.read(timeControlPrefProvider);
-                                ref
-                                    .read(playActionProvider.notifier)
-                                    .createGame(
-                                        account: widget.account,
-                                        opponent: opponentPref,
-                                        timeControl: timeControlPref.value,
-                                        level: stockfishLevel);
-                              }
-                            }),
-                    ],
-                  );
+                  _showGameMenu(context);
                 },
                 icon: const Icon(Icons.menu),
               ),
+              Row(children: [
+                IconButton(
+                  onPressed: positionCursor > 0
+                      ? () {
+                          ref.read(positionCursorProvider.notifier).state = 0;
+                        }
+                      : null,
+                  icon: const Icon(LichessIcons.fast_backward),
+                  iconSize: 20,
+                ),
+                IconButton(
+                  onPressed: positionCursor > 0
+                      ? () {
+                          ref.read(positionCursorProvider.notifier).state--;
+                        }
+                      : null,
+                  icon: const Icon(LichessIcons.step_backward),
+                  iconSize: 20,
+                ),
+                IconButton(
+                  onPressed: positionCursor < (gameState?.positionIndex ?? 0)
+                      ? () {
+                          ref.read(positionCursorProvider.notifier).state++;
+                        }
+                      : null,
+                  icon: const Icon(LichessIcons.step_forward),
+                  iconSize: 20,
+                ),
+                IconButton(
+                  onPressed: positionCursor < (gameState?.positionIndex ?? 0)
+                      ? () {
+                          ref.read(positionCursorProvider.notifier).state =
+                              gameState?.positionIndex ?? 0;
+                        }
+                      : null,
+                  icon: const Icon(LichessIcons.fast_forward),
+                  iconSize: 20,
+                ),
+              ]),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _showGameMenu(BuildContext context) {
+    final gameState = ref.watch(gameStateProvider);
+    final gameActionAsync = ref.watch(gameActionProvider);
+    final playActionAsync = ref.watch(playActionProvider);
+
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        if (gameState?.abortable == true)
+          BottomSheetAction(
+            leading: const Icon(LichessIcons.cancel),
+            label: const Text('Abort'),
+            onPressed: (context) {
+              if (!gameActionAsync.isLoading) {
+                ref.read(gameActionProvider.notifier).abort(widget.game.id);
+              }
+            },
+          ),
+        if (gameState?.resignable == true)
+          BottomSheetAction(
+            leading: const Icon(Icons.flag),
+            label: const Text('Resign'),
+            onPressed: (context) {
+              if (!gameActionAsync.isLoading) {
+                ref.read(gameActionProvider.notifier).resign(widget.game.id);
+              }
+            },
+          ),
+        if (gameState?.gameOver == true)
+          BottomSheetAction(
+              leading: const Icon(Icons.swap_vert),
+              label: playActionAsync.isLoading
+                  ? const CircularProgressIndicator.adaptive()
+                  : const Text('Rematch'),
+              onPressed: (context) {
+                if (!playActionAsync.isLoading) {
+                  // TODO refactor with a service
+                  final opponentPref = ref.read(computerOpponentPrefProvider);
+                  final stockfishLevel = ref.read(stockfishLevelProvider);
+                  final timeControlPref = ref.read(timeControlPrefProvider);
+                  ref.read(playActionProvider.notifier).createGame(
+                      account: widget.account,
+                      opponent: opponentPref,
+                      timeControl: timeControlPref.value,
+                      level: stockfishLevel);
+                }
+              }),
+      ],
     );
   }
 

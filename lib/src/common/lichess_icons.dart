@@ -12,6 +12,10 @@
 ///       - asset: fonts/LichessIcons.ttf
 ///
 ///
+/// * Material Design Icons, Copyright (C) Google, Inc
+///         Author:    Google
+///         License:   Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0)
+///         Homepage:  https://design.google.com/icons/
 /// * Font Awesome 4, Copyright (C) 2016 by Dave Gandy
 ///         Author:    Dave Gandy
 ///         License:   SIL ()
@@ -45,8 +49,18 @@ class LichessIcons {
       IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData correspondence =
       IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData dehaze =
+      IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData cancel =
       IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData step_backward =
+      IconData(0xf048, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData fast_backward =
+      IconData(0xf049, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData fast_forward =
+      IconData(0xf050, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData step_forward =
+      IconData(0xf051, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData chess_king =
       IconData(0xf43f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

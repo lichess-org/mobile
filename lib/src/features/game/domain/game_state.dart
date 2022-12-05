@@ -29,32 +29,38 @@ class GameState with _$GameState {
       {required GameStatus status,
       required List<String> uciMoves,
       required List<String> sanMoves,
-      required Position<Chess> position}) = _GameState;
+      required List<Position<Chess>> positions}) = _GameState;
 
   factory GameState.fromJson(Map<String, dynamic> json) {
     final uciMoves = (json['moves'] as String)
         .split(' ')
         .where((m) => m.isNotEmpty)
         .toList();
-    Position<Chess> pos = Chess.initial;
+    List<Position<Chess>> positions = [Chess.initial];
     List<String> sanMoves = [];
     for (final m in uciMoves) {
       final move = Move.fromUci(m);
-      final newPos = pos.playToSan(move);
-      pos = newPos.item1;
+      final newPos = positions.last.playToSan(move);
+      positions.add(newPos.item1);
       sanMoves.add(newPos.item2);
     }
     return GameState(
       status: GameStatus.values.firstWhere((e) => e.name == json['status'],
           orElse: () => GameStatus.unknown),
-      uciMoves: List.unmodifiable(uciMoves),
-      sanMoves: List.unmodifiable(sanMoves),
-      position: pos,
+      uciMoves: uciMoves,
+      sanMoves: sanMoves,
+      positions: positions,
     );
   }
 
+  Move? moveAtPly(int ply) =>
+      uciMoves.isNotEmpty ? Move.fromUci(uciMoves[ply]) : null;
+
+  /// Gets the current position
+  Position<Chess> get position => positions.last;
+  int get positionIndex => positions.length - 1;
   Move? get lastMove =>
-      uciMoves.isNotEmpty ? Move.fromUci(uciMoves[uciMoves.length - 1]) : null;
+      uciMoves.isNotEmpty ? Move.fromUci(uciMoves.last) : null;
   bool get abortable => status == GameStatus.started && position.fullmoves <= 1;
   bool get resignable => status == GameStatus.started && position.fullmoves > 1;
   bool get playing => status == GameStatus.started;

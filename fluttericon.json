@@ -129,6 +129,36 @@
       "css": "cancel",
       "code": 59401,
       "src": "fontawesome"
+    },
+    {
+      "uid": "d2b18743865e4d72c3558fa50e5939a6",
+      "css": "dehaze",
+      "code": 59400,
+      "src": "material"
+    },
+    {
+      "uid": "3c6dde3d8c5d0668bf0015b1e853c7a9",
+      "css": "step_forward",
+      "code": 61521,
+      "src": "fontawesome5"
+    },
+    {
+      "uid": "4e88c565826e21822ad1c33f91d1f74d",
+      "css": "fast_forward",
+      "code": 61520,
+      "src": "fontawesome5"
+    },
+    {
+      "uid": "990e2ebacf09605e7cd8505ee7bd58f0",
+      "css": "fast_backward",
+      "code": 61513,
+      "src": "fontawesome5"
+    },
+    {
+      "uid": "1e7cd687cfc325f959b897f2a36f0d22",
+      "css": "step_backward",
+      "code": 61512,
+      "src": "fontawesome5"
     }
   ]
 }
