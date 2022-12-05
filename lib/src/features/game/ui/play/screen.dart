@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart' hide Tuple2;
+import 'package:tuple/tuple.dart';
 
 import 'package:lichess_mobile/src/utils/async_value.dart';
 import 'package:lichess_mobile/src/features/user/domain/user.dart';
 import 'package:lichess_mobile/src/features/authentication/ui/auth_widget.dart';
 import 'package:lichess_mobile/src/features/authentication/ui/auth_widget_notifier.dart';
 import 'package:lichess_mobile/src/features/authentication/data/auth_repository.dart';
+import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
+import '../../data/play_preferences.dart';
 import '../../domain/game.dart';
+import '../../domain/computer_opponent.dart';
 import '../board/screen.dart';
 import './time_control_modal.dart';
-import './form_providers.dart';
 import './play_action_notifier.dart';
 
 const maiaChoices = [
@@ -17,6 +21,29 @@ const maiaChoices = [
   ComputerOpponent.maia5,
   ComputerOpponent.maia9,
 ];
+
+final maiaBotsProvider =
+    FutureProvider.autoDispose<List<Tuple2<User, UserStatus>>>((ref) async {
+  final userRepo = ref.watch(userRepositoryProvider);
+  final maiaBotsTask = TaskEither.sequenceList([
+    userRepo.getUser('maia1'),
+    userRepo.getUser('maia5'),
+    userRepo.getUser('maia9'),
+  ]);
+  final maiaStatusesTask = userRepo.getUsersStatus(['maia1', 'maia5', 'maia9']);
+  final task = maiaBotsTask.flatMap((bots) => maiaStatusesTask.map(
+        (statuses) => bots
+            .map((bot) => Tuple2<User, UserStatus>(
+                bot, statuses.firstWhere((s) => s.id == bot.id)))
+            .toList(),
+      ));
+  final either = await task.run();
+  // retry on error, cache indefinitely on success
+  return either.match((error) => throw error, (data) {
+    ref.keepAlive();
+    return data;
+  });
+});
 
 class PlayScreen extends ConsumerWidget {
   const PlayScreen({super.key});
@@ -46,9 +73,9 @@ class PlayForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final maiaBots = ref.watch(maiaBotsProvider);
     final opponentPref = ref.watch(computerOpponentPrefProvider);
     final stockfishLevel = ref.watch(stockfishLevelProvider);
-    final maiaBots = ref.watch(maiaBotsProvider);
     final timeControlPref = ref.watch(timeControlPrefProvider);
     final authActionsAsync = ref.watch(authWidgetProvider);
     final playActionAsync = ref.watch(playActionProvider);
@@ -231,11 +258,9 @@ class PlayForm extends ConsumerWidget {
                   : () => ref.read(authWidgetProvider.notifier).signIn()
               : playActionAsync.isLoading
                   ? null
-                  : () => ref.read(playActionProvider.notifier).createGame(
-                      account: account!,
-                      opponent: opponentPref,
-                      timeControl: timeControlPref.value,
-                      level: stockfishLevel),
+                  : () => ref
+                      .read(playActionProvider.notifier)
+                      .createGame(account: account!),
           style: _buttonStyle,
           child: authActionsAsync.isLoading || playActionAsync.isLoading
               ? const CircularProgressIndicator.adaptive()

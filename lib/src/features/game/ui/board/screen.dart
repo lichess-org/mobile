@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
@@ -15,7 +16,6 @@ import '../../domain/game_status.dart';
 import '../../domain/game_state.dart';
 import '../../domain/game.dart' hide Player;
 import '../play/play_action_notifier.dart';
-import '../play/form_providers.dart';
 import './game_stream.dart';
 import './game_state_notifier.dart';
 import './game_action_notifier.dart';
@@ -65,6 +65,9 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
 
       if (state.valueOrNull is Game) {
         ref.invalidate(playActionProvider);
+        ref.invalidate(positionCursorProvider);
+        ref.invalidate(isBoardTurnedProvider);
+        ref.invalidate(gameStateProvider);
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
               builder: (context) =>
@@ -225,6 +228,8 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
               ),
               Row(children: [
                 IconButton(
+                  // TODO add translation
+                  tooltip: 'First position',
                   onPressed: positionCursor > 0
                       ? () {
                           ref.read(positionCursorProvider.notifier).state = 0;
@@ -234,6 +239,8 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
                   iconSize: 20,
                 ),
                 IconButton(
+                  // TODO add translation
+                  tooltip: 'Backward',
                   onPressed: positionCursor > 0
                       ? () {
                           ref.read(positionCursorProvider.notifier).state--;
@@ -243,6 +250,8 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
                   iconSize: 20,
                 ),
                 IconButton(
+                  // TODO add translation
+                  tooltip: 'Forward',
                   onPressed: positionCursor < (gameState?.positionIndex ?? 0)
                       ? () {
                           ref.read(positionCursorProvider.notifier).state++;
@@ -252,6 +261,8 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
                   iconSize: 20,
                 ),
                 IconButton(
+                  // TODO add translation
+                  tooltip: 'Last position',
                   onPressed: positionCursor < (gameState?.positionIndex ?? 0)
                       ? () {
                           ref.read(positionCursorProvider.notifier).state =
@@ -279,7 +290,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
       actions: [
         BottomSheetAction(
           leading: const Icon(Icons.swap_vert),
-          label: const Text('Turn chessboard'),
+          label: Text(context.l10n.flipBoard),
           onPressed: (context) {
             if (!gameActionAsync.isLoading) {
               ref.read(isBoardTurnedProvider.notifier).state =
@@ -290,7 +301,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
         if (gameState?.abortable == true)
           BottomSheetAction(
             leading: const Icon(LichessIcons.cancel),
-            label: const Text('Abort'),
+            label: Text(context.l10n.abortGame),
             onPressed: (context) {
               if (!gameActionAsync.isLoading) {
                 ref.read(gameActionProvider.notifier).abort(widget.game.id);
@@ -300,7 +311,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
         if (gameState?.resignable == true)
           BottomSheetAction(
             leading: const Icon(Icons.flag),
-            label: const Text('Resign'),
+            label: Text(context.l10n.resignTheGame),
             onPressed: (context) {
               if (!gameActionAsync.isLoading) {
                 ref.read(gameActionProvider.notifier).resign(widget.game.id);
@@ -312,18 +323,12 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
               leading: const Icon(Icons.swap_vert),
               label: playActionAsync.isLoading
                   ? const CircularProgressIndicator.adaptive()
-                  : const Text('Rematch'),
+                  : Text(context.l10n.rematch),
               onPressed: (context) {
                 if (!playActionAsync.isLoading) {
-                  // TODO refactor with a service
-                  final opponentPref = ref.read(computerOpponentPrefProvider);
-                  final stockfishLevel = ref.read(stockfishLevelProvider);
-                  final timeControlPref = ref.read(timeControlPrefProvider);
                   ref.read(playActionProvider.notifier).createGame(
                       account: widget.account,
-                      opponent: opponentPref,
-                      timeControl: timeControlPref.value,
-                      level: stockfishLevel);
+                      side: widget.game.orientation.opposite);
                 }
               }),
       ],
@@ -342,7 +347,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
               style: TextButton.styleFrom(
                 textStyle: Theme.of(context).textTheme.labelLarge,
               ),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -351,7 +356,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
               style: TextButton.styleFrom(
                 textStyle: Theme.of(context).textTheme.labelLarge,
               ),
-              child: const Text('OK'),
+              child: Text(context.l10n.accept),
               onPressed: () {
                 Navigator.of(context).popUntil((route) => route.isFirst);
               },

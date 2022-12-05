@@ -6,20 +6,20 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError();
 });
 
-/// Creates an AutoDisposeNotifier backed by SharedPreferences and of value `T`.
-AutoDisposeNotifierProvider<PrefNotifier<T>, T> createPrefProvider<T>({
+/// Creates a Notifier backed by SharedPreferences and of value `T`.
+NotifierProvider<PrefNotifier<T>, T> createPrefProvider<T>({
   required String prefKey,
   required T defaultValue,
   T Function(String?)? mapFrom,
   String Function(T)? mapTo,
 }) {
-  return AutoDisposeNotifierProvider<PrefNotifier<T>, T>(() {
+  return NotifierProvider<PrefNotifier<T>, T>(() {
     return PrefNotifier<T>(prefKey, defaultValue,
         mapFrom: mapFrom, mapTo: mapTo);
   });
 }
 
-class PrefNotifier<T> extends AutoDisposeNotifier<T> {
+class PrefNotifier<T> extends Notifier<T> {
   PrefNotifier(this.prefKey, this.defaultValue, {this.mapFrom, this.mapTo})
       : assert(
             (mapFrom == null && mapTo == null) ||

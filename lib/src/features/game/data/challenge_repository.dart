@@ -1,4 +1,5 @@
 import 'package:fpdart/fpdart.dart';
+import 'package:dartchess/dartchess.dart' hide Tuple2;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
@@ -49,12 +50,12 @@ class ChallengeRequest {
   final Duration increment;
 
   /// Which side you get to play. Default is random.
-  final ChallengeSide? side;
+  final Side? side;
 
   Map<String, dynamic> get toRequestBody => {
         'clock.limit': time.inSeconds.toString(),
         'clock.increment': increment.inSeconds.toString(),
-        'color': side?.name ?? ChallengeSide.random.name,
+        'color': side?.name ?? 'random',
       };
 }
 
@@ -74,12 +75,6 @@ class AiChallengeRequest extends ChallengeRequest {
         'level': level.toString(),
         'clock.limit': time.inSeconds.toString(),
         'clock.increment': increment.inSeconds.toString(),
-        'color': side?.name ?? ChallengeSide.random.name,
+        'color': side?.name ?? 'random',
       };
-}
-
-enum ChallengeSide {
-  white,
-  black,
-  random;
 }
