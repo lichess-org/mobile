@@ -16,7 +16,7 @@ class AuthWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateChangesProvider);
     final authActionsAsync = ref.watch(authWidgetProvider);
-    final themeMode = ref.watch(themeModeProvider);
+    final brightness = ref.watch(selectedBrigthnessProvider);
     ref.listen<AsyncValue>(
       authWidgetProvider,
       (_, state) => state.showSnackbarOnError(context),
@@ -51,7 +51,7 @@ class AuthWidget extends ConsumerWidget {
                 child: authActionsAsync.isLoading
                     ? const CircularProgressIndicator.adaptive()
                     : Text(context.l10n.signIn,
-                        style: themeMode == ThemeMode.light
+                        style: brightness == Brightness.light
                             ? const TextStyle(color: Colors.white)
                             : null),
               ),
