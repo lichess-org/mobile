@@ -41,6 +41,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
     final gameState = ref.watch(gameStateProvider);
     final gameClockStream = ref.watch(gameStreamProvider(widget.game.id));
     final positionCursor = ref.watch(positionCursorProvider);
+    final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final isReplaying =
         gameState != null && positionCursor < gameState.positionIndex;
 
@@ -149,7 +150,10 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
                             : widget.game.orientation == Side.white
                                 ? cg.InteractableSide.white
                                 : cg.InteractableSide.black,
-                    orientation: widget.game.orientation.cg,
+                    orientation: (isBoardTurned
+                            ? widget.game.orientation.opposite
+                            : widget.game.orientation)
+                        .cg,
                     fen: gameState?.positions[positionCursor].fen ??
                         widget.game.initialFen,
                     validMoves: gameState?.validMoves,
@@ -273,6 +277,16 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
     return showAdaptiveActionSheet(
       context: context,
       actions: [
+        BottomSheetAction(
+          leading: const Icon(Icons.swap_vert),
+          label: const Text('Turn chessboard'),
+          onPressed: (context) {
+            if (!gameActionAsync.isLoading) {
+              ref.read(isBoardTurnedProvider.notifier).state =
+                  !ref.read(isBoardTurnedProvider);
+            }
+          },
+        ),
         if (gameState?.abortable == true)
           BottomSheetAction(
             leading: const Icon(LichessIcons.cancel),
