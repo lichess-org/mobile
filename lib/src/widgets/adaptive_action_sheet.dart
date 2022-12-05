@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+
 /// A action bottom sheet that adapts to the platform (Android/iOS).
 ///
 /// [actions] The Actions list that will appear on the ActionSheet. (required)
@@ -61,7 +63,7 @@ Future<T?> _showCupertinoBottomSheet<T>(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: Text(context.l10n.cancel),
         ),
       );
     },

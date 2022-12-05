@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
 
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import '../data/auth_repository.dart';
 import './auth_widget_notifier.dart';
 
@@ -37,7 +38,7 @@ class AuthWidget extends ConsumerWidget {
                     value: AccountMenu.logout,
                     child: authActionsAsync.isLoading
                         ? const CircularProgressIndicator.adaptive()
-                        : const Text('Sign out'),
+                        : Text(context.l10n.logOut),
                   ),
                 ],
               )
@@ -47,7 +48,7 @@ class AuthWidget extends ConsumerWidget {
                     : () => ref.read(authWidgetProvider.notifier).signIn(),
                 child: authActionsAsync.isLoading
                     ? const CircularProgressIndicator.adaptive()
-                    : const Text('Sign in'),
+                    : Text(context.l10n.signIn),
               ),
         orElse: () => const CircularProgressIndicator.adaptive());
   }
