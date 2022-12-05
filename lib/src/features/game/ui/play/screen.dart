@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart' hide Tuple2;
 import 'package:tuple/tuple.dart';
 
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
 import 'package:lichess_mobile/src/features/user/domain/user.dart';
 import 'package:lichess_mobile/src/features/authentication/ui/auth_widget.dart';
@@ -262,7 +263,9 @@ class PlayForm extends ConsumerWidget {
           style: _buttonStyle,
           child: authActionsAsync.isLoading || playActionAsync.isLoading
               ? const CircularProgressIndicator.adaptive()
-              : Text(account == null ? 'Sign in to start playing' : 'Play'),
+              : Text(account == null
+                  ? 'Sign in to start playing'
+                  : context.l10n.play),
         ),
       ],
     );
