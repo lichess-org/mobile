@@ -113,33 +113,31 @@ class PlayForm extends ConsumerWidget {
         ),
         const SizedBox(height: 10),
         Wrap(
+          spacing: 10.0,
+          children: maiaChoices.map((opponent) {
+            final isSelected = opponentPref == opponent;
+            return ChoiceChip(
+              label: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (isSelected) ...[
+                    const Icon(Icons.check, size: 18),
+                    const SizedBox(width: 3),
+                  ],
+                  Text(opponent.name),
+                ],
+              ),
+              selected: isSelected,
+              onSelected: (bool selected) {
+                if (selected) {
+                  ref.read(computerOpponentPrefProvider.notifier).set(opponent);
+                }
+              },
+            );
+          }).toList(),
+        ),
+        Wrap(
           children: [
-            Wrap(
-              spacing: 10.0,
-              children: maiaChoices.map((opponent) {
-                final isSelected = opponentPref == opponent;
-                return ChoiceChip(
-                  label: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (isSelected) ...[
-                        const Icon(Icons.check, size: 18),
-                        const SizedBox(width: 3),
-                      ],
-                      Text(opponent.name),
-                    ],
-                  ),
-                  selected: isSelected,
-                  onSelected: (bool selected) {
-                    if (selected) {
-                      ref
-                          .read(computerOpponentPrefProvider.notifier)
-                          .set(opponent);
-                    }
-                  },
-                );
-              }).toList(),
-            ),
             ChoiceChip(
               label: Row(
                 mainAxisSize: MainAxisSize.min,
