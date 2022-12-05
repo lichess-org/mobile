@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/features/settings/ui/theme_mode_notifier.dart';
 import '../data/auth_repository.dart';
 import './auth_widget_notifier.dart';
 
@@ -15,6 +16,7 @@ class AuthWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateChangesProvider);
     final authActionsAsync = ref.watch(authWidgetProvider);
+    final themeMode = ref.watch(themeModeProvider);
     ref.listen<AsyncValue>(
       authWidgetProvider,
       (_, state) => state.showSnackbarOnError(context),
@@ -48,7 +50,10 @@ class AuthWidget extends ConsumerWidget {
                     : () => ref.read(authWidgetProvider.notifier).signIn(),
                 child: authActionsAsync.isLoading
                     ? const CircularProgressIndicator.adaptive()
-                    : Text(context.l10n.signIn),
+                    : Text(context.l10n.signIn,
+                        style: themeMode == ThemeMode.light
+                            ? const TextStyle(color: Colors.white)
+                            : null),
               ),
         orElse: () => const CircularProgressIndicator.adaptive());
   }
