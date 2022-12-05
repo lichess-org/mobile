@@ -62,8 +62,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/sounds/move.mp3
-    - assets/sounds/capture.mp3
+    - assets/sounds/
 
   fonts:
     - family:  LichessIcons

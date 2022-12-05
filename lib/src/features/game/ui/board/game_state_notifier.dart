@@ -14,17 +14,23 @@ class GameStateNotifier extends AutoDisposeNotifier<GameState?> {
   }
 
   onGameStateEvent(Map<String, dynamic> json) {
+    final soundService = ref.read(soundServiceProvider);
+
     final newState = GameState.fromJson(json);
     final fen = newState.position.fen;
+
     if (fen != kInitialFEN && fen != state?.position.fen) {
       _updateCursor(newState);
 
-      final soundService = ref.read(soundServiceProvider);
       if (newState.isLastMoveCapture) {
         soundService.playCapture();
       } else {
         soundService.playMove();
       }
+    }
+
+    if (state?.gameOver == false && newState.gameOver) {
+      soundService.playDong();
     }
 
     state = newState;

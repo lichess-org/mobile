@@ -12,6 +12,7 @@ class SoundService {
 
   late int _moveId;
   late int _captureId;
+  late int _dongId;
 
   Future<void> init() async {
     _moveId = await rootBundle.load('assets/sounds/move.mp3').then((soundData) {
@@ -22,6 +23,10 @@ class SoundService {
         await rootBundle.load('assets/sounds/capture.mp3').then((soundData) {
       return _pool.load(soundData);
     });
+
+    _dongId = await rootBundle.load('assets/sounds/dong.mp3').then((soundData) {
+      return _pool.load(soundData);
+    });
   }
 
   void playMove() {
@@ -30,6 +35,10 @@ class SoundService {
 
   void playCapture() {
     if (!_settings.isSoundMuted()) _pool.play(_captureId);
+  }
+
+  void playDong() {
+    if (!_settings.isSoundMuted()) _pool.play(_dongId);
   }
 
   void dispose() {
