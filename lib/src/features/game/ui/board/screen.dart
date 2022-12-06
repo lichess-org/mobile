@@ -10,11 +10,11 @@ import 'package:lichess_mobile/src/utils/async_value.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/features/settings/ui/is_sound_muted_notifier.dart';
-import 'package:lichess_mobile/src/features/user/domain/user.dart';
+import 'package:lichess_mobile/src/features/user/model/user.dart';
 
-import '../../domain/game_status.dart';
-import '../../domain/game_state.dart';
-import '../../domain/game.dart' hide Player;
+import '../../model/game_status.dart';
+import '../../model/game_state.dart';
+import '../../model/game.dart' hide Player;
 import '../play/play_action_notifier.dart';
 import './game_stream.dart';
 import './game_state_notifier.dart';

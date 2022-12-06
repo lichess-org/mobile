@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../domain/fen_event.dart';
-import '../domain/featured_game.dart';
+import '../model/fen_event.dart';
+import '../model/featured_game.dart';
 
 class FeaturedGameNotifier extends StateNotifier<FeaturedGame?> {
   FeaturedGameNotifier() : super(null);

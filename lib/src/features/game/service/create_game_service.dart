@@ -5,12 +5,12 @@ import 'package:fpdart/fpdart.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/features/user/domain/user.dart';
+import 'package:lichess_mobile/src/features/user/model/user.dart';
 import '../data/play_preferences.dart';
 import '../data/challenge_repository.dart';
 import '../data/game_repository.dart';
-import '../domain/computer_opponent.dart';
-import '../domain/game.dart';
+import '../model/computer_opponent.dart';
+import '../model/game.dart';
 
 class CreateGameService {
   const CreateGameService(this._log, {required this.ref});

@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/utils/in_memory_store.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import '../../user/domain/user.dart';
+import '../../user/model/user.dart';
 
 const redirectUri = 'org.lichess.mobile://login-callback';
 const oauthScopes = ['board:play'];

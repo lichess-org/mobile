@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
-import '../../domain/game_state.dart';
+import '../../model/game_state.dart';
 import '../../data/game_repository.dart';
 import './game_state_notifier.dart';
 

@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/sound.dart';
-import '../domain/fen_event.dart';
-import '../domain/featured_game.dart';
-import '../domain/featured_position.dart';
+import '../model/fen_event.dart';
+import '../model/featured_game.dart';
+import '../model/featured_position.dart';
 import '../data/tv_repository.dart';
 import './featured_game_notifier.dart';
 

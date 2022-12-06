@@ -1,7 +1,7 @@
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
 
-import '../domain/computer_opponent.dart';
-import '../domain/time_control.dart';
+import '../model/computer_opponent.dart';
+import '../model/time_control.dart';
 
 final computerOpponentPrefProvider = createPrefProvider(
   prefKey: 'play.computerOpponent',

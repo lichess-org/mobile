@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import 'package:lichess_mobile/src/features/user/domain/user.dart';
+import 'package:lichess_mobile/src/features/user/model/user.dart';
 
 @immutable
 class TimeInc {

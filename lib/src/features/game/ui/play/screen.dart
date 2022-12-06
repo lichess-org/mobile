@@ -5,14 +5,14 @@ import 'package:tuple/tuple.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
-import 'package:lichess_mobile/src/features/user/domain/user.dart';
+import 'package:lichess_mobile/src/features/user/model/user.dart';
 import 'package:lichess_mobile/src/features/authentication/ui/auth_widget.dart';
 import 'package:lichess_mobile/src/features/authentication/ui/auth_widget_notifier.dart';
 import 'package:lichess_mobile/src/features/authentication/data/auth_repository.dart';
 import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
 import '../../data/play_preferences.dart';
-import '../../domain/game.dart';
-import '../../domain/computer_opponent.dart';
+import '../../model/game.dart';
+import '../../model/computer_opponent.dart';
 import '../board/screen.dart';
 import './time_control_modal.dart';
 import './play_action_notifier.dart';

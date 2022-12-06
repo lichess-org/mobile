@@ -4,7 +4,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/sound.dart';
 import '../../data/game_repository.dart';
-import '../../domain/game_state.dart';
+import '../../model/game_state.dart';
 import './game_controls.dart';
 
 class GameStateNotifier extends AutoDisposeNotifier<GameState?> {
