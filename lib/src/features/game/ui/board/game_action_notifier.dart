@@ -11,14 +11,14 @@ class GameActionNotifier extends AutoDisposeNotifier<AsyncValue<void>> {
 
   Future<void> abort(GameId id) async {
     state = const AsyncLoading();
-    state = (await ref.read(gameRepositoryProvider).abort(id).run()).match(
+    state = (await ref.read(gameRepositoryProvider).abortTask(id).run()).match(
         (error) => AsyncValue.error(error.message, error.stackTrace),
         AsyncValue.data);
   }
 
   Future<void> resign(GameId id) async {
     state = const AsyncLoading();
-    state = (await ref.read(gameRepositoryProvider).resign(id).run()).match(
+    state = (await ref.read(gameRepositoryProvider).resignTask(id).run()).match(
         (error) => AsyncValue.error(error.message, error.stackTrace),
         AsyncValue.data);
   }

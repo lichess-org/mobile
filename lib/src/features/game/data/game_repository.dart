@@ -40,19 +40,19 @@ class GameRepository {
         .map((event) => jsonDecode(event));
   }
 
-  TaskEither<IOError, void> playMove(GameId gameId, Move move) {
+  TaskEither<IOError, void> playMoveTask(GameId gameId, Move move) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/move/${move.uci}'),
         retry: true);
   }
 
-  TaskEither<IOError, void> abort(GameId gameId) {
+  TaskEither<IOError, void> abortTask(GameId gameId) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/abort'),
         retry: true);
   }
 
-  TaskEither<IOError, void> resign(GameId gameId) {
+  TaskEither<IOError, void> resignTask(GameId gameId) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/resign'),
         retry: true);

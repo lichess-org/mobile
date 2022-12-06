@@ -10,14 +10,14 @@ class AuthWidgetNotifier extends StateNotifier<AsyncValue<void>> {
 
   Future<void> signIn() async {
     state = const AsyncLoading();
-    state = (await authRepository.signIn().run()).match(
+    state = (await authRepository.signInTask().run()).match(
         (error) => AsyncValue.error(error.message, error.stackTrace),
         AsyncValue.data);
   }
 
   Future<void> signOut() async {
     state = const AsyncLoading();
-    state = (await authRepository.signOut().run()).match(
+    state = (await authRepository.signOutTask().run()).match(
         (error) => AsyncValue.error(error.message, error.stackTrace),
         AsyncValue.data);
   }

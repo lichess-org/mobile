@@ -14,13 +14,13 @@ class UserRepository {
 
   final ApiClient apiClient;
 
-  TaskEither<IOError, User> getUser(String username) {
+  TaskEither<IOError, User> getUserTask(String username) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/user/$username'))
         .map((response) => User.fromJson(jsonDecode(response.body)));
   }
 
-  TaskEither<IOError, List<UserStatus>> getUsersStatus(List<String> ids) {
+  TaskEither<IOError, List<UserStatus>> getUsersStatusTask(List<String> ids) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'))
         .map((response) => jsonDecode(response.body)

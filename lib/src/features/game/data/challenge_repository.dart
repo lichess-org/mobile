@@ -13,13 +13,13 @@ class ChallengeRepository {
 
   final ApiClient apiClient;
 
-  TaskEither<IOError, void> createChallenge(
+  TaskEither<IOError, void> createChallengeTask(
       String username, ChallengeRequest req) {
     return apiClient.post(Uri.parse('$kLichessHost/api/challenge/$username'),
         body: req.toRequestBody);
   }
 
-  TaskEither<IOError, void> challengeAI(AiChallengeRequest req) {
+  TaskEither<IOError, void> challengeAITask(AiChallengeRequest req) {
     return apiClient.post(Uri.parse('$kLichessHost/api/challenge/ai'),
         body: req.toRequestBody);
   }

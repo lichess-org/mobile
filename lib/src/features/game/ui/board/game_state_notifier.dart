@@ -59,7 +59,7 @@ class GameStateNotifier extends AutoDisposeNotifier<GameState?> {
       state = newState;
 
       // TODO show error
-      final resp = await gameRepository.playMove(gameId, move).run();
+      final resp = await gameRepository.playMoveTask(gameId, move).run();
       if (resp.isLeft()) {
         state = savedState;
       }

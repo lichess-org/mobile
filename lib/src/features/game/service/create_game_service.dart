@@ -25,12 +25,12 @@ class CreateGameService {
     final level = ref.read(stockfishLevelProvider);
 
     final createChallengeTask = opponent == ComputerOpponent.stockfish
-        ? challengeRepo.challengeAI(AiChallengeRequest(
+        ? challengeRepo.challengeAITask(AiChallengeRequest(
             time: Duration(minutes: timeControl.time),
             increment: Duration(seconds: timeControl.increment),
             side: side,
             level: level))
-        : challengeRepo.createChallenge(
+        : challengeRepo.createChallengeTask(
             opponent.name,
             ChallengeRequest(
                 time: Duration(minutes: timeControl.time),

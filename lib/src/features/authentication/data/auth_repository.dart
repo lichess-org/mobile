@@ -47,13 +47,13 @@ class AuthRepository {
     return TaskEither<IOError, void>.tryCatch(
             () => _storage.read(key: kOAuthTokenStorageKey),
             (error, trace) => GenericError(trace))
-        .andThen(getAccount)
+        .andThen(getAccountTask)
         .map((account) {
       _authState.value = account;
     }).run();
   }
 
-  TaskEither<IOError, void> signIn() {
+  TaskEither<IOError, void> signInTask() {
     return TaskEither<IOError, void>.tryCatch(() async {
       final result =
           await _appAuth.authorizeAndExchangeCode(AuthorizationTokenRequest(
@@ -74,12 +74,12 @@ class AuthRepository {
     }, (error, trace) {
       _log.severe('signIn error', error, trace);
       return GenericError(trace);
-    }).andThen(getAccount).map((account) {
+    }).andThen(getAccountTask).map((account) {
       _authState.value = account;
     });
   }
 
-  TaskEither<IOError, void> signOut() {
+  TaskEither<IOError, void> signOutTask() {
     return apiClient
         .delete(Uri.parse('$kLichessHost/api/token'))
         .map((_) async {
@@ -88,7 +88,7 @@ class AuthRepository {
     });
   }
 
-  TaskEither<IOError, User> getAccount() {
+  TaskEither<IOError, User> getAccountTask() {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/account'))
         .map((response) => User.fromJson(jsonDecode(response.body)));
