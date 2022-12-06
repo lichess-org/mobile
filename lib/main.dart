@@ -8,7 +8,7 @@ import 'package:logging/logging.dart';
 import 'src/app.dart';
 import 'src/common/sound.dart';
 import 'src/common/shared_preferences.dart';
-import 'src/features/authentication/data/auth_repository.dart';
+import 'src/features/auth/data/auth_repository.dart';
 
 void main() async {
   if (kDebugMode) {

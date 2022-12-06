@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
 
 import '../../../constants.dart';
-import '../../authentication/data/auth_repository.dart';
+import '../../auth/data/auth_repository.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
