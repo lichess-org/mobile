@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/sound.dart';
+import 'package:lichess_mobile/src/common/sound.dart';
 import '../domain/fen_event.dart';
 import '../domain/featured_game.dart';
 import '../domain/featured_position.dart';

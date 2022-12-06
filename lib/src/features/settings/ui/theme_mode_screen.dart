@@ -16,6 +16,7 @@ class ThemeModeScreen extends ConsumerWidget {
         .changeTheme(value ?? ThemeMode.system);
 
     return Scaffold(
+      // TODO translation
       appBar: AppBar(title: const Text('Theme')),
       body: Column(
         children: [
@@ -32,6 +33,7 @@ class ThemeModeScreen extends ConsumerWidget {
             onChanged: onChanged,
           ),
           RadioListTile<ThemeMode>(
+            // TODO translation
             title: const Text('System'),
             value: ThemeMode.system,
             groupValue: themeMode,

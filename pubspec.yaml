@@ -36,13 +36,14 @@ dependencies:
   dartchess:
     git:
       url: https://github.com/lichess-org/dartchess.git
-      ref: 4d53d13f86b0ff412c44e3baef11cca6e090f9e1
+      ref: 68c756354b53c9f210f78b49ee1caa03ab5003bd
   chessground:
     git:
       url: https://github.com/lichess-org/flutter-chessground.git
       ref: 6953a7a2970577d0b051b94a4131f09de76f6f11
   soundpool: ^2.3.0
   meta: ^1.8.0
+  tuple: ^2.0.1
 
 dev_dependencies:
   flutter_test:
@@ -61,8 +62,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/sounds/move.mp3
-    - assets/sounds/capture.mp3
+    - assets/sounds/
 
   fonts:
     - family:  LichessIcons

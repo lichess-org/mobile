@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/features/user/domain/user.dart';
 
 import '../../../constants.dart';
-import '../../../utils/lichess_icons.dart';
 import '../../authentication/data/auth_repository.dart';
-import '../../authentication/domain/account.codegen.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -16,7 +16,7 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateChangesProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(context.l10n.settings)),
       body: ListView(
         padding: const EdgeInsets.all(8.0),
         children: [
@@ -52,11 +52,12 @@ class SettingsScreen extends ConsumerWidget {
                     ],
                   )
                 : const SizedBox.shrink(),
-            orElse: () => const CircularProgressIndicator(),
+            orElse: () => const CircularProgressIndicator.adaptive(),
           ),
           const SizedBox(height: 10),
           ListTile(
             leading: const Icon(Icons.brightness_medium),
+            // TODO translation
             title: const Text('Theme'),
             onTap: () {
               context.go('/settings/themeMode');

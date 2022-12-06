@@ -5,6 +5,9 @@ import 'dart:ui';
 
 import '../features/settings/ui/theme_mode_notifier.dart';
 
+/// A simple countdown clock.
+///
+/// The clock starts only when [active] is `true`.
 class CountdownClock extends ConsumerStatefulWidget {
   final Duration duration;
   final bool active;

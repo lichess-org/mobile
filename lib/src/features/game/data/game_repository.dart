@@ -5,8 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
 
-import 'package:lichess_mobile/src/utils/errors.dart';
-import 'package:lichess_mobile/src/http.dart';
+import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/common/errors.dart';
+import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
 class GameRepository {
@@ -30,7 +31,7 @@ class GameRepository {
   }
 
   /// Stream the state of a game being played with the Board API, as ndjson.
-  Stream<Map<String, dynamic>> gameStateEvents(String id) async* {
+  Stream<Map<String, dynamic>> gameStateEvents(GameId id) async* {
     final resp = await apiClient.send(http.Request(
         'GET', Uri.parse('$kLichessHost/api/board/game/stream/$id')));
     yield* resp.stream
@@ -39,14 +40,22 @@ class GameRepository {
         .map((event) => jsonDecode(event));
   }
 
-  TaskEither<IOError, void> playMove(String gameId, Move move) {
+  TaskEither<IOError, void> playMove(GameId gameId, Move move) {
     return apiClient.post(
-        Uri.parse('$kLichessHost/api/board/game/$gameId/move/${move.uci}'));
+        Uri.parse('$kLichessHost/api/board/game/$gameId/move/${move.uci}'),
+        retry: true);
   }
 
-  TaskEither<IOError, void> resign(String gameId) {
-    return apiClient
-        .post(Uri.parse('$kLichessHost/api/board/game/$gameId/resign'));
+  TaskEither<IOError, void> abort(GameId gameId) {
+    return apiClient.post(
+        Uri.parse('$kLichessHost/api/board/game/$gameId/abort'),
+        retry: true);
+  }
+
+  TaskEither<IOError, void> resign(GameId gameId) {
+    return apiClient.post(
+        Uri.parse('$kLichessHost/api/board/game/$gameId/resign'),
+        retry: true);
   }
 
   void dispose() {

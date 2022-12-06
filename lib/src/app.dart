@@ -7,11 +7,12 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'constants.dart';
 
 import 'features/authentication/ui/auth_widget.dart';
+import 'features/game/ui/play/screen.dart';
 import 'features/settings/ui/settings_screen.dart';
 import 'features/settings/ui/theme_mode_screen.dart';
 import 'features/settings/ui/theme_mode_notifier.dart';
 import 'features/tv/ui/tv_screen.dart';
-import './utils/lichess_icons.dart';
+import 'common/lichess_icons.dart';
 
 class App extends ConsumerWidget {
   const App({super.key});
@@ -26,11 +27,9 @@ class App extends ConsumerWidget {
       onGenerateTitle: (BuildContext context) => 'lichess.org',
       theme: ThemeData(
         brightness: Brightness.light,
-        useMaterial3: true,
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
-        useMaterial3: true,
       ),
       themeMode: themeMode,
       routerConfig: goRouter,
@@ -58,7 +57,7 @@ final goRouter = GoRouter(
           path: '/play',
           pageBuilder: (context, state) => NoTransitionPage(
             key: state.pageKey,
-            child: const PuzzlesScreen(),
+            child: const PlayScreen(),
           ),
         ),
         GoRoute(
@@ -161,20 +160,6 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
 
 class PuzzlesScreen extends StatelessWidget {
   const PuzzlesScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('lichess.org'), actions: const [
-        AuthWidget(),
-      ]),
-      body: const Center(child: Text('Todo')),
-    );
-  }
-}
-
-class GameScreen extends StatelessWidget {
-  const GameScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

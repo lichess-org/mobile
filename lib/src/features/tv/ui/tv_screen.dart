@@ -83,9 +83,9 @@ class TvScreen extends ConsumerWidget {
             orientation: Side.white,
             fen: kEmptyFen,
           ),
-          error: (err, __) {
+          error: (err, stackTrace) {
             debugPrint(
-                'SEVERE: [TvScreen] could not load stream; ${err.toString()}');
+                'SEVERE: [TvScreen] could not load stream; ${err.toString()}\n$stackTrace');
             return const Text('Could not load TV stream.');
           },
         ),

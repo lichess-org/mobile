@@ -6,20 +6,24 @@ import 'package:fpdart/fpdart.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'constants.dart';
-import 'utils/errors.dart';
+import '../constants.dart';
+import 'errors.dart';
 
 const retries = [
   Duration(milliseconds: 200),
   Duration(milliseconds: 300),
   Duration(milliseconds: 500),
+  Duration(milliseconds: 800),
+  Duration(milliseconds: 1300),
 ];
 
 /// Convenient client that captures and returns API errors.
 class ApiClient {
   ApiClient(this._log, this._client)
       : _retryClient = RetryClient.withDelays(_client, retries,
-            whenError: (_, __) => true);
+            whenError: (_, __) => true) {
+    _log.info('Creating new ApiClient.');
+  }
 
   final Logger _log;
   final Client _client;
@@ -105,7 +109,9 @@ class ApiClient {
 
   TaskEither<IOError, T> _validateResponseStatus<T extends BaseResponse>(
       Uri url, T response) {
-    if (response.statusCode >= 400) {
+    if (response.statusCode >= 500) {
+      _log.severe('$url responded with status ${response.statusCode}');
+    } else if (response.statusCode >= 400) {
       _log.warning('$url responded with status ${response.statusCode}');
     }
     return response.statusCode < 400

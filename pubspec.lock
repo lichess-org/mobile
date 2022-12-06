@@ -189,8 +189,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "4d53d13f86b0ff412c44e3baef11cca6e090f9e1"
-      resolved-ref: "4d53d13f86b0ff412c44e3baef11cca6e090f9e1"
+      ref: "68c756354b53c9f210f78b49ee1caa03ab5003bd"
+      resolved-ref: "68c756354b53c9f210f78b49ee1caa03ab5003bd"
       url: "https://github.com/lichess-org/dartchess.git"
     source: git
     version: "0.1.0"
@@ -773,7 +773,7 @@ packages:
     source: hosted
     version: "1.0.0"
   tuple:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: tuple
       url: "https://pub.dartlang.org"

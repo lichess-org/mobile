@@ -1,10 +1,9 @@
 targets:
   $default:
     builders:
-      freezed:freezed:
-        generate_for:
-          include:
-            - lib/**.codegen.dart
+      freezed:
+        options:
+          to_json: false
       json_serializable:
         options:
           create_to_json: false

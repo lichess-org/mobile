@@ -1,30 +1,29 @@
-import 'package:meta/meta.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 
-@immutable
-class FeaturedPosition {
-  FeaturedPosition.fromJson(Map<String, dynamic> json)
-      : fen = json['fen'],
-        _position = Chess.fromSetup(Setup.parseFen(json['fen'])),
-        turn = json['fen'].substring(json['fen'].length - 1) == 'w'
-            ? Side.white
-            : Side.black,
-        lastMove = json['lm'] != null ? Move.fromUci(json['lm']) : null;
+part 'featured_position.freezed.dart';
 
-  final String fen;
-  final Move? lastMove;
-  final Side turn;
-  final Chess _position;
+@freezed
+class FeaturedPosition with _$FeaturedPosition {
+  const FeaturedPosition._();
 
-  bool get isGameOver => _position.isGameOver;
+  const factory FeaturedPosition({
+    required String fen,
+    Move? lastMove,
+    required Side turn,
+    required Chess position,
+  }) = _FeaturedPosition;
 
-  @override
-  bool operator ==(Object other) {
-    return other is FeaturedPosition &&
-        other.fen == fen &&
-        other.lastMove == lastMove;
+  factory FeaturedPosition.fromJson(Map<String, dynamic> json) {
+    return FeaturedPosition(
+      fen: json['fen'],
+      turn: json['fen'].substring(json['fen'].length - 1) == 'w'
+          ? Side.white
+          : Side.black,
+      lastMove: json['lm'] != null ? Move.fromUci(json['lm']) : null,
+      position: Chess.fromSetup(Setup.parseFen(json['fen'])),
+    );
   }
 
-  @override
-  int get hashCode => Object.hash(fen, lastMove);
+  bool get isGameOver => position.isGameOver;
 }

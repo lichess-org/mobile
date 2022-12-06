@@ -5,11 +5,11 @@ import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/common/errors.dart';
+import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/utils/in_memory_store.dart';
-import 'package:lichess_mobile/src/utils/errors.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/http.dart';
-import '../domain/account.codegen.dart';
+import '../../user/domain/user.dart';
 
 const redirectUri = 'org.lichess.mobile://login-callback';
 const oauthScopes = ['board:play'];
@@ -37,10 +37,10 @@ class AuthRepository {
   final FlutterAppAuth _appAuth;
   final FlutterSecureStorage _storage;
 
-  final _authState = InMemoryStore<Account?>(null);
+  final _authState = InMemoryStore<User?>(null);
 
-  Stream<Account?> authStateChanges() => _authState.stream;
-  Account? get currentAccount => _authState.value;
+  Stream<User?> authStateChanges() => _authState.stream;
+  User? get currentAccount => _authState.value;
   bool get isAuthenticated => _authState.value != null;
 
   Future<void> init() {
@@ -88,10 +88,10 @@ class AuthRepository {
     });
   }
 
-  TaskEither<IOError, Account> getAccount() {
+  TaskEither<IOError, User> getAccount() {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/account'))
-        .map((response) => Account.fromJson(jsonDecode(response.body)));
+        .map((response) => User.fromJson(jsonDecode(response.body)));
   }
 
   void dispose() {
@@ -110,7 +110,7 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return repo;
 });
 
-final authStateChangesProvider = StreamProvider.autoDispose<Account?>((ref) {
+final authStateChangesProvider = StreamProvider.autoDispose<User?>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   return authRepository.authStateChanges();
 });

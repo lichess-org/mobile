@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/common/shared_preferences.dart';
+
 const prefix = 'SettingsRepository';
 
 class SettingsRepository {
@@ -44,11 +46,6 @@ class SettingsRepository {
   static const backgroundModeKey = '$prefix.backgroundMode';
   static const soundMutedKey = '$prefix.soundMuted';
 }
-
-// see lib/src/main.dart for initialization
-final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
-  throw UnimplementedError();
-});
 
 final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
   final sharedPrefs = ref.watch(sharedPreferencesProvider);
