@@ -22,39 +22,40 @@ class AuthWidget extends ConsumerWidget {
       (_, state) => state.showSnackbarOnError(context),
     );
     return authState.maybeWhen(
-        data: (account) => account != null
-            ? PopupMenuButton<AccountMenu>(
-                icon: const Icon(Icons.person),
-                onSelected: (AccountMenu item) {
-                  switch (item) {
-                    case AccountMenu.logout:
-                      if (!authActionsAsync.isLoading) {
-                        ref.read(authWidgetProvider.notifier).signOut();
-                      }
-                      break;
-                  }
-                },
-                itemBuilder: (BuildContext context) =>
-                    <PopupMenuEntry<AccountMenu>>[
-                  PopupMenuItem<AccountMenu>(
-                    value: AccountMenu.logout,
-                    child: authActionsAsync.isLoading
-                        ? const CircularProgressIndicator.adaptive()
-                        : Text(context.l10n.logOut),
-                  ),
-                ],
-              )
-            : TextButton(
-                onPressed: authActionsAsync.isLoading
-                    ? null
-                    : () => ref.read(authWidgetProvider.notifier).signIn(),
-                child: authActionsAsync.isLoading
-                    ? const CircularProgressIndicator.adaptive()
-                    : Text(context.l10n.signIn,
-                        style: brightness == Brightness.light
-                            ? const TextStyle(color: Colors.white)
-                            : null),
-              ),
-        orElse: () => const CircularProgressIndicator.adaptive());
+      data: (account) => account != null
+          ? PopupMenuButton<AccountMenu>(
+              icon: const Icon(Icons.person),
+              onSelected: (AccountMenu item) {
+                switch (item) {
+                  case AccountMenu.logout:
+                    if (!authActionsAsync.isLoading) {
+                      ref.read(authWidgetProvider.notifier).signOut();
+                    }
+                    break;
+                }
+              },
+              itemBuilder: (BuildContext context) =>
+                  <PopupMenuEntry<AccountMenu>>[
+                PopupMenuItem<AccountMenu>(
+                  value: AccountMenu.logout,
+                  child: authActionsAsync.isLoading
+                      ? const CircularProgressIndicator.adaptive()
+                      : Text(context.l10n.logOut),
+                ),
+              ],
+            )
+          : TextButton(
+              onPressed: authActionsAsync.isLoading
+                  ? null
+                  : () => ref.read(authWidgetProvider.notifier).signIn(),
+              child: authActionsAsync.isLoading
+                  ? const CircularProgressIndicator.adaptive()
+                  : Text(context.l10n.signIn,
+                      style: brightness == Brightness.light
+                          ? const TextStyle(color: Colors.white)
+                          : null),
+            ),
+      orElse: () => const CircularProgressIndicator.adaptive(),
+    );
   }
 }

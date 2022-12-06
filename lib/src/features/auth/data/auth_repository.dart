@@ -22,17 +22,14 @@ class AuthError {
 }
 
 class AuthRepository {
-  AuthRepository(
-    FlutterAppAuth appAuth,
-    FlutterSecureStorage storage,
-    Logger log, {
-    required this.apiClient,
-  })  : _appAuth = appAuth,
+  AuthRepository(ApiClient apiClient, FlutterAppAuth appAuth,
+      FlutterSecureStorage storage, Logger log)
+      : _apiClient = apiClient,
+        _appAuth = appAuth,
         _storage = storage,
         _log = log;
 
-  final ApiClient apiClient;
-
+  final ApiClient _apiClient;
   final Logger _log;
   final FlutterAppAuth _appAuth;
   final FlutterSecureStorage _storage;
@@ -80,7 +77,7 @@ class AuthRepository {
   }
 
   TaskEither<IOError, void> signOutTask() {
-    return apiClient
+    return _apiClient
         .delete(Uri.parse('$kLichessHost/api/token'))
         .map((_) async {
       await _storage.delete(key: kOAuthTokenStorageKey);
@@ -89,14 +86,14 @@ class AuthRepository {
   }
 
   TaskEither<IOError, User> getAccountTask() {
-    return apiClient
+    return _apiClient
         .get(Uri.parse('$kLichessHost/api/account'))
         .map((response) => User.fromJson(jsonDecode(response.body)));
   }
 
   void dispose() {
     _authState.close();
-    apiClient.close();
+    _apiClient.close();
   }
 }
 
@@ -104,8 +101,8 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   const auth = FlutterAppAuth();
   const storage = FlutterSecureStorage();
   final apiClient = ref.watch(apiClientProvider);
-  final repo = AuthRepository(auth, storage, Logger('AuthRepository'),
-      apiClient: apiClient);
+  final repo =
+      AuthRepository(apiClient, auth, storage, Logger('AuthRepository'));
   ref.onDispose(() => repo.dispose());
   return repo;
 });
