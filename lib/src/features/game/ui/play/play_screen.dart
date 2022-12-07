@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
 import '../../data/play_preferences.dart';
 import '../../model/game.dart';
 import '../../model/computer_opponent.dart';
-import '../board/screen.dart';
+import '../board/board_screen.dart';
 import './time_control_modal.dart';
 import './play_action_notifier.dart';
 
