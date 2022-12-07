@@ -1,56 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_gen/gen_l10n/l10n.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/utils/in_memory_store.dart';
-import 'package:lichess_mobile/src/features/auth/ui/auth_widget.dart';
-import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
-import 'package:lichess_mobile/src/features/settings/ui/theme_mode_notifier.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
-
-void main() {
-  testWidgets('auth widget', (tester) async {
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          authRepositoryProvider.overrideWithValue(FakeAuthRepository(null)),
-          selectedBrigthnessProvider.overrideWithValue(Brightness.dark),
-        ],
-        child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          home: Consumer(builder: (context, ref, _) {
-            return Scaffold(
-              appBar: AppBar(
-                actions: const [
-                  AuthWidget(),
-                ],
-              ),
-            );
-          }),
-        ),
-      ),
-    );
-
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-    await tester.pump();
-
-    expect(find.text('Sign in'), findsOneWidget);
-
-    await tester.tap(find.text('Sign in'));
-
-    await tester.pump();
-
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-    await tester.pumpAndSettle();
-
-    expect(find.byIcon(Icons.person), findsOneWidget);
-  });
-}
+import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
 
 /// A fake AuthRepository
 ///
