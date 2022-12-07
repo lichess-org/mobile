@@ -32,7 +32,7 @@ class FakeAuthRepository implements AuthRepository {
   TaskEither<IOError, void> signInTask() {
     return TaskEither(() async {
       await Future.delayed(const Duration(milliseconds: 5));
-      _authState.value = _fakeUser;
+      _authState.value = fakeUser;
       return Either.right(null);
     });
   }
@@ -48,14 +48,14 @@ class FakeAuthRepository implements AuthRepository {
 
   @override
   TaskEither<IOError, User> getAccountTask() {
-    return TaskEither.right(_fakeUser);
+    return TaskEither.right(fakeUser);
   }
 
   @override
   void dispose() {}
 }
 
-final _fakeUser = User(
+final fakeUser = User(
   id: 'test',
   username: 'test',
   createdAt: DateTime.now(),

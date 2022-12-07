@@ -29,7 +29,8 @@ class User with _$User {
       patron: json['patron'],
       createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt']),
       seenAt: DateTime.fromMillisecondsSinceEpoch(json['seenAt']),
-      profile: Profile.fromJson(json['profile']),
+      profile:
+          json['profile'] != null ? Profile.fromJson(json['profile']) : null,
       perfs: Map.unmodifiable({
         for (final entry in json['perfs'].entries)
           if (entry.key != 'storm')

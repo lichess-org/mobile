@@ -120,6 +120,7 @@ class PlayForm extends ConsumerWidget {
             ...maiaChoices.map((opponent) {
               final isSelected = opponentPref == opponent;
               return ChoiceChip(
+                key: ValueKey(opponent.name),
                 label: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -141,6 +142,7 @@ class PlayForm extends ConsumerWidget {
               );
             }).toList(),
             ChoiceChip(
+              key: ValueKey(ComputerOpponent.stockfish.name),
               label: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
