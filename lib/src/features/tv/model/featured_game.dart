@@ -22,12 +22,10 @@ class FeaturedGame with _$FeaturedGame {
       initialFen: json['fen'] as String,
       orientation:
           json['orientation'] as String == 'white' ? Side.white : Side.black,
-      white: FeaturedPlayer.fromJson(
-          (json['players'] as List<Map<String, dynamic>>)
-              .firstWhere((p) => p['color'] == 'white')),
-      black: FeaturedPlayer.fromJson(
-          (json['players'] as List<Map<String, dynamic>>)
-              .firstWhere((p) => p['color'] == 'black')),
+      white: FeaturedPlayer.fromJson((json['players'] as List<dynamic>)
+          .firstWhere((p) => p['color'] == 'white') as Map<String, dynamic>),
+      black: FeaturedPlayer.fromJson((json['players'] as List<dynamic>)
+          .firstWhere((p) => p['color'] == 'black') as Map<String, dynamic>),
     );
   }
 }
