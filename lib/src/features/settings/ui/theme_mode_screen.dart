@@ -11,7 +11,7 @@ class ThemeModeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
 
-    void onChanged(value) => ref
+    void onChanged(ThemeMode? value) => ref
         .read(themeModeProvider.notifier)
         .changeTheme(value ?? ThemeMode.system);
 

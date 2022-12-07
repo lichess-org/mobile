@@ -20,11 +20,14 @@ class FeaturedGame with _$FeaturedGame {
     return FeaturedGame(
       id: GameId(value: json['id'] as String),
       initialFen: json['fen'] as String,
-      orientation: json['orientation'] == 'white' ? Side.white : Side.black,
+      orientation:
+          json['orientation'] as String == 'white' ? Side.white : Side.black,
       white: FeaturedPlayer.fromJson(
-          json['players'].firstWhere((p) => p['color'] == 'white')),
+          (json['players'] as List<Map<String, dynamic>>)
+              .firstWhere((p) => p['color'] == 'white')),
       black: FeaturedPlayer.fromJson(
-          json['players'].firstWhere((p) => p['color'] == 'black')),
+          (json['players'] as List<Map<String, dynamic>>)
+              .firstWhere((p) => p['color'] == 'black')),
     );
   }
 }

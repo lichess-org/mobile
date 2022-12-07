@@ -17,13 +17,15 @@ final tvStreamProvider = StreamProvider.autoDispose<FeaturedPosition>((ref) {
   return tvRepository.tvFeed().map((raw) {
     switch (raw['t']) {
       case 'featured':
-        featuredGameNotifier.onFeaturedEvent(FeaturedGame.fromJson(raw['d']));
-        return FeaturedPosition.fromJson(raw['d']);
+        featuredGameNotifier.onFeaturedEvent(
+            FeaturedGame.fromJson(raw['d'] as Map<String, dynamic>));
+        return FeaturedPosition.fromJson(raw['d'] as Map<String, dynamic>);
 
       case 'fen':
-        featuredGameNotifier.onFenEvent(FenEvent.fromJson(raw['d']));
+        featuredGameNotifier
+            .onFenEvent(FenEvent.fromJson(raw['d'] as Map<String, dynamic>));
         soundService.playMove();
-        return FeaturedPosition.fromJson(raw['d']);
+        return FeaturedPosition.fromJson(raw['d'] as Map<String, dynamic>);
 
       default:
         throw Exception('Unsupported event $raw');

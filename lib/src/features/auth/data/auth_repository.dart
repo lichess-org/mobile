@@ -86,9 +86,9 @@ class AuthRepository {
   }
 
   TaskEither<IOError, User> getAccountTask() {
-    return _apiClient
-        .get(Uri.parse('$kLichessHost/api/account'))
-        .map((response) => User.fromJson(jsonDecode(response.body)));
+    return _apiClient.get(Uri.parse('$kLichessHost/api/account')).map(
+        (response) =>
+            User.fromJson(jsonDecode(response.body) as Map<String, dynamic>));
   }
 
   void dispose() {

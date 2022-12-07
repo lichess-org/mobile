@@ -46,7 +46,7 @@ class ProviderLogger extends ProviderObserver {
 
   @override
   void didAddProvider(
-    ProviderBase provider,
+    ProviderBase<Object?> provider,
     Object? value,
     ProviderContainer container,
   ) {
@@ -56,7 +56,7 @@ class ProviderLogger extends ProviderObserver {
 
   @override
   void didDisposeProvider(
-    ProviderBase provider,
+    ProviderBase<Object?> provider,
     ProviderContainer container,
   ) {
     _logger.info('${provider.name ?? provider.runtimeType} disposed.');
@@ -64,7 +64,7 @@ class ProviderLogger extends ProviderObserver {
 
   @override
   void providerDidFail(
-    ProviderBase provider,
+    ProviderBase<Object?> provider,
     Object error,
     StackTrace stackTrace,
     ProviderContainer container,

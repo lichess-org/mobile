@@ -22,7 +22,7 @@ class TvRepository {
     yield* resp.stream
         .toStringStream()
         .where((event) => event.isNotEmpty && event != '\n')
-        .map((event) => jsonDecode(event));
+        .map((event) => jsonDecode(event) as Map<String, dynamic>);
   }
 
   void dispose() {

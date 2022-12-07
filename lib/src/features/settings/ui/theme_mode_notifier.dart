@@ -4,7 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/settings_repository.dart';
 
 class ThemeModeNotifier extends StateNotifier<ThemeMode> {
-  ThemeModeNotifier(this.ref, initialThemeMode) : super(initialThemeMode);
+  ThemeModeNotifier(this.ref, ThemeMode initialThemeMode)
+      : super(initialThemeMode);
 
   final Ref ref;
 

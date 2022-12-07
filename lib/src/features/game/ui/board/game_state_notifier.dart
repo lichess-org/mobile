@@ -13,7 +13,7 @@ class GameStateNotifier extends AutoDisposeNotifier<GameState?> {
     return null;
   }
 
-  onGameStateEvent(Map<String, dynamic> json) {
+  void onGameStateEvent(Map<String, dynamic> json) {
     final soundService = ref.read(soundServiceProvider);
 
     final newState = GameState.fromJson(json);
@@ -36,7 +36,7 @@ class GameStateNotifier extends AutoDisposeNotifier<GameState?> {
     state = newState;
   }
 
-  onUserMove(GameId gameId, Move move) async {
+  void onUserMove(GameId gameId, Move move) async {
     final gameRepository = ref.read(gameRepositoryProvider);
     final savedState = state;
     if (state != null) {

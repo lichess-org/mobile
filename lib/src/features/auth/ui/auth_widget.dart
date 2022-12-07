@@ -17,7 +17,7 @@ class AuthWidget extends ConsumerWidget {
     final authState = ref.watch(authStateChangesProvider);
     final authActionsAsync = ref.watch(authWidgetProvider);
     final brightness = ref.watch(selectedBrigthnessProvider);
-    ref.listen<AsyncValue>(
+    ref.listen<AsyncValue<void>>(
       authWidgetProvider,
       (_, state) => state.showSnackbarOnError(context),
     );

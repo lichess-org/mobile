@@ -27,7 +27,7 @@ class GameRepository {
     yield* resp.stream
         .toStringStream()
         .where((event) => event.isNotEmpty && event != '\n')
-        .map((event) => jsonDecode(event));
+        .map((event) => jsonDecode(event) as Map<String, dynamic>);
   }
 
   /// Stream the state of a game being played with the Board API, as ndjson.
@@ -37,7 +37,7 @@ class GameRepository {
     yield* resp.stream
         .toStringStream()
         .where((event) => event.isNotEmpty && event != '\n')
-        .map((event) => jsonDecode(event));
+        .map((event) => jsonDecode(event) as Map<String, dynamic>);
   }
 
   TaskEither<IOError, void> playMoveTask(GameId gameId, Move move) {

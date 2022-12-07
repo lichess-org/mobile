@@ -17,10 +17,10 @@ class FeaturedPlayer with _$FeaturedPlayer {
   factory FeaturedPlayer.fromJson(Map<String, dynamic> json) {
     return FeaturedPlayer(
       side: json['color'] == 'white' ? Side.white : Side.black,
-      name: json['user']['name'],
-      title: json['user']['title'],
-      rating: json['rating'],
-      seconds: json['seconds'],
+      name: json['user']['name'] as String,
+      title: json['user']['title'] as String?,
+      rating: json['rating'] as int?,
+      seconds: json['seconds'] as int,
     );
   }
 

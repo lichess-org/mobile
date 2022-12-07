@@ -18,8 +18,8 @@ final gameStreamProvider =
           event['type'] == 'gameFull' || event['type'] == 'gameState')
       .map((raw) {
     if (raw['type'] == 'gameFull') {
-      gameStateNotifier.onGameStateEvent(raw['state']);
-      return GameClock.fromJson(raw['state']);
+      gameStateNotifier.onGameStateEvent(raw['state'] as Map<String, dynamic>);
+      return GameClock.fromJson(raw['state'] as Map<String, dynamic>);
     } else {
       gameStateNotifier.onGameStateEvent(raw);
       return GameClock.fromJson(raw);

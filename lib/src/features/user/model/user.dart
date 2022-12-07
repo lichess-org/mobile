@@ -23,18 +23,20 @@ class User with _$User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'],
-      username: json['username'],
-      title: json['title'],
-      patron: json['patron'],
-      createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt']),
-      seenAt: DateTime.fromMillisecondsSinceEpoch(json['seenAt']),
-      profile:
-          json['profile'] != null ? Profile.fromJson(json['profile']) : null,
+      id: json['id'] as String,
+      username: json['username'] as String,
+      title: json['title'] as String?,
+      patron: json['patron'] as bool?,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt'] as int),
+      seenAt: DateTime.fromMillisecondsSinceEpoch(json['seenAt'] as int),
+      profile: json['profile'] != null
+          ? Profile.fromJson(json['profile'] as Map<String, dynamic>)
+          : null,
       perfs: Map.unmodifiable({
-        for (final entry in json['perfs'].entries)
+        for (final entry in (json['perfs'] as Map<String, dynamic>).entries)
           if (entry.key != 'storm')
-            Perf.values.byName(entry.key): UserPerf.fromJson(entry.value)
+            Perf.values.byName(entry.key):
+                UserPerf.fromJson(entry.value as Map<String, dynamic>)
       }),
     );
   }

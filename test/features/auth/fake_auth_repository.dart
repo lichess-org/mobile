@@ -31,7 +31,7 @@ class FakeAuthRepository implements AuthRepository {
   @override
   TaskEither<IOError, void> signInTask() {
     return TaskEither(() async {
-      await Future.delayed(const Duration(milliseconds: 5));
+      await Future<void>.delayed(const Duration(milliseconds: 5));
       _authState.value = fakeUser;
       return Either.right(null);
     });
@@ -40,7 +40,7 @@ class FakeAuthRepository implements AuthRepository {
   @override
   TaskEither<IOError, void> signOutTask() {
     return TaskEither(() async {
-      await Future.delayed(const Duration(milliseconds: 5));
+      await Future<void>.delayed(const Duration(milliseconds: 5));
       _authState.value = null;
       return Either.right(null);
     });

@@ -16,12 +16,12 @@ class FeaturedPosition with _$FeaturedPosition {
 
   factory FeaturedPosition.fromJson(Map<String, dynamic> json) {
     return FeaturedPosition(
-      fen: json['fen'],
+      fen: json['fen'] as String,
       turn: json['fen'].substring(json['fen'].length - 1) == 'w'
           ? Side.white
           : Side.black,
-      lastMove: json['lm'] != null ? Move.fromUci(json['lm']) : null,
-      position: Chess.fromSetup(Setup.parseFen(json['fen'])),
+      lastMove: json['lm'] != null ? Move.fromUci(json['lm'] as String) : null,
+      position: Chess.fromSetup(Setup.parseFen(json['fen'] as String)),
     );
   }
 

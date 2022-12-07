@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-extension AsyncValueUI on AsyncValue {
+extension AsyncValueUI on AsyncValue<Object?> {
   void showSnackbarOnError(BuildContext context) {
     if (!isRefreshing && hasError) {
       ScaffoldMessenger.of(context).showSnackBar(

@@ -51,7 +51,7 @@ class CreateGameService {
           switch (event['type']) {
             case 'gameStart':
               final game = event['game'];
-              if (game['compat']['board']) {
+              if (game['compat']['board'] as bool) {
                 final perf = Perf.values.firstWhere(
                     (v) => v.name == game['perf'],
                     orElse: () => Perf.blitz);
@@ -61,18 +61,18 @@ class CreateGameService {
                   rating: account.perfs[perf]!.rating,
                 );
                 final opponent = Player(
-                    id: game['opponent']['id'],
-                    name: game['opponent']['username'],
-                    rating: game['opponent']['rating']);
+                    id: game['opponent']['id'] as String?,
+                    name: game['opponent']['username'] as String,
+                    rating: game['opponent']['rating'] as int?);
                 return Game(
                   id: GameId(value: game['gameId'] as String),
-                  initialFen: game['fen'],
+                  initialFen: game['fen'] as String,
                   speed: Speed.values.firstWhere((v) => v.name == game['speed'],
                       orElse: () => Speed.blitz),
                   orientation: Side.values.firstWhere(
                       (v) => v.name == game['color'],
                       orElse: () => Side.white),
-                  rated: game['rated'],
+                  rated: game['rated'] as bool,
                   white: game['color'] == 'white' ? player : opponent,
                   black: game['color'] == 'white' ? opponent : player,
                 );

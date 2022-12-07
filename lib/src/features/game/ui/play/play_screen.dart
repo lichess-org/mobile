@@ -82,13 +82,13 @@ class PlayForm extends ConsumerWidget {
     final authActionsAsync = ref.watch(authWidgetProvider);
     final playActionAsync = ref.watch(playActionProvider);
 
-    ref.listen<AsyncValue>(playActionProvider, (_, state) {
+    ref.listen<AsyncValue<Game?>>(playActionProvider, (_, state) {
       state.showSnackbarOnError(context);
 
       if (state.valueOrNull is Game && account != null) {
         ref.invalidate(playActionProvider);
         Navigator.of(context, rootNavigator: true).push(
-          MaterialPageRoute(
+          MaterialPageRoute<void>(
               builder: (context) =>
                   BoardScreen(game: state.value!, account: account!)),
         );
@@ -214,9 +214,9 @@ class PlayForm extends ConsumerWidget {
                         }).toList(),
                       );
                     },
-                    error: (err, __) {
+                    error: (err, st) {
                       debugPrint(
-                          'SEVERE [PlayScreen] could not load bot info: ${err.toString()}');
+                          'SEVERE [PlayScreen] could not load bot info: ${err.toString()}\n$st');
                       return const Text('Could not load bot ratings.');
                     },
                     loading: () => const CircularProgressIndicator.adaptive(),

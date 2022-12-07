@@ -56,11 +56,11 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
         }
       });
     });
-    ref.listen<AsyncValue>(
+    ref.listen<AsyncValue<void>>(
       gameActionProvider,
       (_, state) => state.showSnackbarOnError(context),
     );
-    ref.listen<AsyncValue>(playActionProvider, (_, state) {
+    ref.listen<AsyncValue<Game?>>(playActionProvider, (_, state) {
       state.showSnackbarOnError(context);
 
       if (state.valueOrNull is Game) {
@@ -69,7 +69,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
         ref.invalidate(isBoardTurnedProvider);
         ref.invalidate(gameStateProvider);
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
+          MaterialPageRoute<void>(
               builder: (context) =>
                   BoardScreen(game: state.value!, account: widget.account)),
         );
