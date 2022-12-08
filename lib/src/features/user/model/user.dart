@@ -1,7 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:deep_pick/deep_pick.dart';
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
 
 part 'user.freezed.dart';
 part 'user.g.dart';
@@ -22,21 +24,24 @@ class User with _$User {
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) {
+    return User.fromPick(pick(json).required());
+  }
+
+  factory User.fromPick(RequiredPick pick) {
+    final perfsMap = pick('perfs').asMapOrThrow<String, Map<String, dynamic>>();
     return User(
-      id: json['id'] as String,
-      username: json['username'] as String,
-      title: json['title'] as String?,
-      patron: json['patron'] as bool?,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt'] as int),
-      seenAt: DateTime.fromMillisecondsSinceEpoch(json['seenAt'] as int),
-      profile: json['profile'] != null
-          ? Profile.fromJson(json['profile'] as Map<String, dynamic>)
-          : null,
+      id: pick('id').asStringOrThrow(),
+      username: pick('username').asStringOrThrow(),
+      title: pick('title').asStringOrNull(),
+      patron: pick('patron').asBoolOrNull(),
+      createdAt: pick('createdAt').asDateTimeFromIntOrThrow(),
+      seenAt: pick('seenAt').asDateTimeFromIntOrThrow(),
+      profile: pick('profile')
+          .letOrNull((it) => Profile.fromJson(it.asMapOrThrow())),
       perfs: Map.unmodifiable({
-        for (final entry in (json['perfs'] as Map<String, dynamic>).entries)
+        for (final entry in perfsMap.entries)
           if (entry.key != 'storm')
-            Perf.values.byName(entry.key):
-                UserPerf.fromJson(entry.value as Map<String, dynamic>)
+            Perf.values.byName(entry.key): UserPerf.fromJson(entry.value)
       }),
     );
   }
