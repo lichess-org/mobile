@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:lichess_mobile/src/features/auth/ui/auth_widget.dart';
 import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
 import 'package:lichess_mobile/src/features/settings/ui/theme_mode_notifier.dart';
-import '../fake_auth_repository.dart';
+import '../data/fake_auth_repository.dart';
 
 void main() {
   testWidgets('Auth widget sign in and sign out', (WidgetTester tester) async {
