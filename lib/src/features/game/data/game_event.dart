@@ -7,10 +7,12 @@ import '../model/game_status.dart';
 
 part 'game_event.freezed.dart';
 
-/// Represents a game board event from lichess API.
+/// Represents a game event from lichess API.
 ///
 /// Different types of events are possible.
 /// See: https://lichess.org/api#tag/Board/operation/boardGameStream
+///
+/// We supports here only `gameFull` and `gameState`.
 @freezed
 class GameEvent with _$GameEvent {
   const factory GameEvent.gameState({
@@ -51,8 +53,9 @@ class GameEvent with _$GameEvent {
       moves: pick('moves').asStringOrThrow(),
       whiteTime: pick('wtime').asIntOrThrow(),
       blackTime: pick('btime').asIntOrThrow(),
-      status: pick('status').letOrThrow((it) =>
-          GameStatus.values.firstWhere((e) => e.name == it.asStringOrThrow())),
+      status: pick('status').letOrThrow((it) => GameStatus.values.firstWhere(
+          (e) => e.name == it.asStringOrThrow(),
+          orElse: () => GameStatus.unknown)),
     );
   }
 }

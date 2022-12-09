@@ -37,24 +37,24 @@ class TvEvent with _$TvEvent {
     final type = pick('t').asStringOrThrow();
     switch (type) {
       case 'featured':
-        return pick('d').letOrThrow((data) => TvEvent.featured(
-              id: data('id').asGameIdOrThrow(),
-              orientation: data('orientation').asSideOrThrow(),
-              fen: data('fen').asStringOrThrow(),
-              white: data('players').letOrThrow((it) => it
+        return pick('d').letOrThrow((dataPick) => TvEvent.featured(
+              id: dataPick('id').asGameIdOrThrow(),
+              orientation: dataPick('orientation').asSideOrThrow(),
+              fen: dataPick('fen').asStringOrThrow(),
+              white: dataPick('players').letOrThrow((it) => it
                   .asListOrThrow(_featuredPlayerFromPick)
                   .firstWhere((p) => p.side == Side.white)),
-              black: data('players').letOrThrow((it) => it
+              black: dataPick('players').letOrThrow((it) => it
                   .asListOrThrow(_featuredPlayerFromPick)
                   .firstWhere((p) => p.side == Side.black)),
             ));
       case 'fen':
-        return pick('d').letOrThrow((data) => TvEvent.fen(
-              fen: data('fen').asStringOrThrow(),
-              lastMove: data('lm')
+        return pick('d').letOrThrow((dataPick) => TvEvent.fen(
+              fen: dataPick('fen').asStringOrThrow(),
+              lastMove: dataPick('lm')
                   .letOrThrow((it) => Move.fromUci(it.asStringOrThrow())),
-              whiteSeconds: data('wc').asIntOrThrow(),
-              blackSeconds: data('bc').asIntOrThrow(),
+              whiteSeconds: dataPick('wc').asIntOrThrow(),
+              blackSeconds: dataPick('bc').asIntOrThrow(),
             ));
       default:
         throw UnsupportedError('Unsupported event type $type');

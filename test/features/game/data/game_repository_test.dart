@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/features/game/data/game_repository.dart';
 import 'package:lichess_mobile/src/features/game/data/game_event.dart';
+import 'package:lichess_mobile/src/features/game/data/api_event.dart';
 
 class MockApiClient extends Mock implements ApiClient {}
 
@@ -23,6 +24,120 @@ void main() {
 
   setUpAll(() {
     reset(mockApiClient);
+  });
+
+  group('GameRepository.events', () {
+    test('can read all supported types of events', () async {
+      when(() =>
+              mockApiClient.stream(Uri.parse('$kLichessHost/api/stream/event')))
+          .thenAnswer((_) async {
+        return http.StreamedResponse(
+            Stream.fromIterable([
+              utf8.encode('''{
+  "type": "gameStart",
+  "game": {
+    "gameId": "rCRw1AuO",
+    "fullId": "rCRw1AuOvonq",
+    "color": "black",
+    "fen": "r1bqkbnr/pppp2pp/2n1pp2/8/8/3PP3/PPPB1PPP/RN1QKBNR w KQkq - 2 4",
+    "hasMoved": true,
+    "isMyTurn": false,
+    "lastMove": "b8c6",
+    "opponent": {
+      "id": "philippe",
+      "rating": 1790,
+      "username": "Philippe"
+    },
+    "perf": "correspondence",
+    "rated": false,
+    "secondsLeft": 1209600,
+    "source": "friend",
+    "speed": "correspondence",
+    "variant": {
+      "key": "standard",
+      "name": "Standard"
+    },
+    "compat": {
+      "bot": false,
+      "board": true
+    }
+  }
+}'''),
+            ]),
+            200);
+      });
+
+      final stream = repo.events();
+
+      expect(
+          stream,
+          emitsInOrder([
+            predicate((value) => value is GameStartEvent),
+          ]));
+    });
+
+    test('filter out unsupported types of events', () async {
+      when(() =>
+              mockApiClient.stream(Uri.parse('$kLichessHost/api/stream/event')))
+          .thenAnswer((_) async {
+        return http.StreamedResponse(
+            Stream.fromIterable([
+              utf8.encode('''{
+  "type": "challenge",
+  "challenge": {
+    "id": "7pGLxJ4F",
+    "url": "https://lichess.org/VU0nyvsW",
+    "status": "created",
+    "compat": {
+      "bot": false,
+      "board": true
+    },
+    "challenger": {
+      "id": "lovlas",
+      "name": "Lovlas",
+      "title": "IM",
+      "rating": 2506,
+      "patron": true,
+      "online": true,
+      "lag": 24
+    },
+    "destUser": {
+      "id": "thibot",
+      "name": "thibot",
+      "title": null,
+      "rating": 1500,
+      "provisional": true,
+      "online": true,
+      "lag": 45
+    },
+    "variant": {
+      "key": "standard",
+      "name": "Standard",
+      "short": "Std"
+    },
+    "rated": true,
+    "timeControl": {
+      "type": "clock",
+      "limit": 300,
+      "increment": 25,
+      "show": "5+25"
+    },
+    "color": "random",
+    "speed": "rapid",
+    "perf": {
+      "icon": "#",
+      "name": "Rapid"
+    }
+  }
+}'''),
+            ]),
+            200);
+      });
+
+      final stream = repo.events();
+
+      expect(stream, emitsInOrder([emitsDone]));
+    });
   });
 
   group('GameRepository.gameStateEvents', () {
