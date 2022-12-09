@@ -15,17 +15,4 @@ class FeaturedGame with _$FeaturedGame {
     required FeaturedPlayer white,
     required FeaturedPlayer black,
   }) = _FeaturedGame;
-
-  factory FeaturedGame.fromJson(Map<String, dynamic> json) {
-    return FeaturedGame(
-      id: GameId(json['id'] as String),
-      initialFen: json['fen'] as String,
-      orientation:
-          json['orientation'] as String == 'white' ? Side.white : Side.black,
-      white: FeaturedPlayer.fromJson((json['players'] as List<dynamic>)
-          .firstWhere((p) => p['color'] == 'white') as Map<String, dynamic>),
-      black: FeaturedPlayer.fromJson((json['players'] as List<dynamic>)
-          .firstWhere((p) => p['color'] == 'black') as Map<String, dynamic>),
-    );
-  }
 }

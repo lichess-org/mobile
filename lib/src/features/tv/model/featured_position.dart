@@ -1,6 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 
+import '../data/tv_event.dart';
+
 part 'featured_position.freezed.dart';
 
 @freezed
@@ -14,14 +16,14 @@ class FeaturedPosition with _$FeaturedPosition {
     required Chess position,
   }) = _FeaturedPosition;
 
-  factory FeaturedPosition.fromJson(Map<String, dynamic> json) {
+  factory FeaturedPosition.fromTvEvent(TvEvent event) {
     return FeaturedPosition(
-      fen: json['fen'] as String,
-      turn: json['fen'].substring(json['fen'].length - 1) == 'w'
+      fen: event.fen,
+      turn: event.fen.substring(event.fen.length - 1) == 'w'
           ? Side.white
           : Side.black,
-      lastMove: json['lm'] != null ? Move.fromUci(json['lm'] as String) : null,
-      position: Chess.fromSetup(Setup.parseFen(json['fen'] as String)),
+      position: Chess.fromSetup(Setup.parseFen(event.fen)),
+      lastMove: event is TvFenEvent ? event.lastMove : null,
     );
   }
 

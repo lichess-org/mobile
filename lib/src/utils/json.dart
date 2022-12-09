@@ -2,9 +2,33 @@ import 'dart:convert';
 import 'package:fpdart/fpdart.dart';
 import 'package:logging/logging.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/models.dart';
+
+extension SideFromStringPick on Pick {
+  Side asSideOrThrow() {
+    final value = required().value;
+    if (value is Side) {
+      return value;
+    }
+    if (value is String) {
+      return value == 'white' ? Side.white : Side.black;
+    }
+    throw PickException(
+        "value $value at $debugParsingExit can't be casted to Side");
+  }
+
+  Side? asSideOrNull() {
+    if (value == null) return null;
+    try {
+      return asSideOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+}
 
 extension DateTimeFromIntPick on Pick {
   DateTime asDateTimeFromIntOrThrow() {
