@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
 part 'user.freezed.dart';
-part 'user.g.dart';
 
 @freezed
 class User with _$User {
@@ -15,17 +14,14 @@ class User with _$User {
     required String username,
     String? title,
     bool? patron,
-    @JsonKey(fromJson: DateTime.fromMillisecondsSinceEpoch)
-        required DateTime createdAt,
-    @JsonKey(fromJson: DateTime.fromMillisecondsSinceEpoch)
-        required DateTime seenAt,
+    required DateTime createdAt,
+    required DateTime seenAt,
     required Map<Perf, UserPerf> perfs,
     Profile? profile,
   }) = _User;
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User.fromPick(pick(json).required());
-  }
+  factory User.fromJson(Map<String, dynamic> json) =>
+      User.fromPick(pick(json).required());
 
   factory User.fromPick(RequiredPick pick) {
     final perfsMap = pick('perfs').asMapOrThrow<String, Map<String, dynamic>>();
@@ -36,8 +32,7 @@ class User with _$User {
       patron: pick('patron').asBoolOrNull(),
       createdAt: pick('createdAt').asDateTimeFromIntOrThrow(),
       seenAt: pick('seenAt').asDateTimeFromIntOrThrow(),
-      profile: pick('profile')
-          .letOrNull((it) => Profile.fromJson(it.asMapOrThrow())),
+      profile: pick('profile').letOrNull(Profile.fromPick),
       perfs: Map.unmodifiable({
         for (final entry in perfsMap.entries)
           if (entry.key != 'storm')
@@ -59,22 +54,40 @@ class Profile with _$Profile {
     String? links,
   }) = _Profile;
 
-  factory Profile.fromJson(Map<String, dynamic> json) =>
-      _$ProfileFromJson(json);
+  factory Profile.fromJson(Map<String, dynamic> json) {
+    return Profile.fromPick(pick(json).required());
+  }
+
+  factory Profile.fromPick(RequiredPick pick) => Profile(
+        country: pick('country').asStringOrNull(),
+        location: pick('location').asStringOrNull(),
+        bio: pick('bio').asStringOrNull(),
+        firstName: pick('firstName').asStringOrNull(),
+        lastName: pick('lastName').asStringOrNull(),
+        fideRating: pick('fideRating').asIntOrNull(),
+        links: pick('links').asStringOrNull(),
+      );
 }
 
 @freezed
 class UserPerf with _$UserPerf {
   const factory UserPerf({
     required int rating,
-    @JsonKey(name: 'rd') required int ratingDeviation,
-    @JsonKey(name: 'prog') required int progression,
-    @JsonKey(name: 'games') required int numberOfGames,
+    required int ratingDeviation,
+    required int progression,
+    required int numberOfGames,
     bool? provisional,
   }) = _UserPerf;
 
   factory UserPerf.fromJson(Map<String, dynamic> json) =>
-      _$UserPerfFromJson(json);
+      UserPerf.fromPick(pick(json).required());
+
+  factory UserPerf.fromPick(RequiredPick pick) => UserPerf(
+        rating: pick('rating').asIntOrThrow(),
+        ratingDeviation: pick('rd').asIntOrThrow(),
+        progression: pick('prog').asIntOrThrow(),
+        numberOfGames: pick('games').asIntOrThrow(),
+      );
 }
 
 @freezed
@@ -87,7 +100,14 @@ class UserStatus with _$UserStatus {
   }) = _UserStatus;
 
   factory UserStatus.fromJson(Map<String, dynamic> json) =>
-      _$UserStatusFromJson(json);
+      UserStatus.fromPick(pick(json).required());
+
+  factory UserStatus.fromPick(RequiredPick pick) => UserStatus(
+        id: pick('id').asStringOrThrow(),
+        name: pick('name').asStringOrThrow(),
+        online: pick('online').asBoolOrNull(),
+        playing: pick('playing').asBoolOrNull(),
+      );
 }
 
 enum Perf {

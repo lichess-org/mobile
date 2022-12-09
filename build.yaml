@@ -3,7 +3,5 @@ targets:
     builders:
       freezed:
         options:
+          from_json: false
           to_json: false
-      json_serializable:
-        options:
-          create_to_json: false
