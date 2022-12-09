@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import './game_event.dart';
 
 class GameRepository {
   const GameRepository(
@@ -31,13 +32,16 @@ class GameRepository {
   }
 
   /// Stream the state of a game being played with the Board API, as ndjson.
-  Stream<Map<String, dynamic>> gameStateEvents(GameId id) async* {
-    final resp = await apiClient.send(http.Request(
-        'GET', Uri.parse('$kLichessHost/api/board/game/stream/$id')));
+  Stream<GameEvent> gameStateEvents(GameId id) async* {
+    final resp = await apiClient
+        .stream(Uri.parse('$kLichessHost/api/board/game/stream/$id'));
     yield* resp.stream
         .toStringStream()
         .where((event) => event.isNotEmpty && event != '\n')
-        .map((event) => jsonDecode(event) as Map<String, dynamic>);
+        .map((event) => jsonDecode(event) as Map<String, dynamic>)
+        .where((event) =>
+            event['type'] == 'gameFull' || event['type'] == 'gameState')
+        .map((json) => GameEvent.fromJson(json));
   }
 
   TaskEither<IOError, void> playMoveTask(GameId gameId, Move move) {

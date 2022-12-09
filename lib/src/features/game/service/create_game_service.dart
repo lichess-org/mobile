@@ -65,7 +65,7 @@ class CreateGameService {
                     name: game['opponent']['username'] as String,
                     rating: game['opponent']['rating'] as int?);
                 return Game(
-                  id: GameId(value: game['gameId'] as String),
+                  id: GameId(game['gameId'] as String),
                   initialFen: game['fen'] as String,
                   speed: Speed.values.firstWhere((v) => v.name == game['speed'],
                       orElse: () => Speed.blitz),

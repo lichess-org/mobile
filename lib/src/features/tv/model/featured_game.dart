@@ -18,7 +18,7 @@ class FeaturedGame with _$FeaturedGame {
 
   factory FeaturedGame.fromJson(Map<String, dynamic> json) {
     return FeaturedGame(
-      id: GameId(value: json['id'] as String),
+      id: GameId(json['id'] as String),
       initialFen: json['fen'] as String,
       orientation:
           json['orientation'] as String == 'white' ? Side.white : Side.black,

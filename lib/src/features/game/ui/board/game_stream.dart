@@ -12,17 +12,16 @@ final gameStreamProvider =
   ref.onDispose(() {
     gameRepository.dispose();
   });
-  return gameRepository
-      .gameStateEvents(gameId)
-      .where((event) =>
-          event['type'] == 'gameFull' || event['type'] == 'gameState')
-      .map((raw) {
-    if (raw['type'] == 'gameFull') {
-      gameStateNotifier.onGameStateEvent(raw['state'] as Map<String, dynamic>);
-      return GameClock.fromJson(raw['state'] as Map<String, dynamic>);
-    } else {
-      gameStateNotifier.onGameStateEvent(raw);
-      return GameClock.fromJson(raw);
-    }
+  return gameRepository.gameStateEvents(gameId).map((event) {
+    return event.map(
+      gameFull: (gameFull) {
+        gameStateNotifier.onGameStateEvent(gameFull.state);
+        return GameClock.fromEvent(gameFull.state);
+      },
+      gameState: (gameState) {
+        gameStateNotifier.onGameStateEvent(gameState);
+        return GameClock.fromEvent(gameState);
+      },
+    );
   });
 });

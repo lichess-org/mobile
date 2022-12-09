@@ -4,6 +4,7 @@ import 'package:logging/logging.dart';
 import 'package:deep_pick/deep_pick.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
+import 'package:lichess_mobile/src/common/models.dart';
 
 extension DateTimeFromIntPick on Pick {
   DateTime asDateTimeFromIntOrThrow() {
@@ -22,6 +23,29 @@ extension DateTimeFromIntPick on Pick {
     if (value == null) return null;
     try {
       return asDateTimeFromIntOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+}
+
+extension GameIdFromStringPick on Pick {
+  GameId asGameIdOrThrow() {
+    final value = required().value;
+    if (value is GameId) {
+      return value;
+    }
+    if (value is String) {
+      return GameId(value);
+    }
+    throw PickException(
+        "value $value at $debugParsingExit can't be casted to DateTime");
+  }
+
+  GameId? asGameIdOrNull() {
+    if (value == null) return null;
+    try {
+      return asGameIdOrThrow();
     } catch (_) {
       return null;
     }

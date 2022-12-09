@@ -84,6 +84,21 @@ class ApiClient {
     });
   }
 
+  Future<StreamedResponse> stream(Uri url) {
+    return TaskEither<IOError, StreamedResponse>.tryCatch(
+      () async => _client.send(Request('GET', url)),
+      (error, trace) {
+        _log.severe('Request error', error, trace);
+        return ApiRequestError(trace);
+      },
+    )
+        .flatMap((resp) => _validateResponseStatus(url, resp))
+        .run()
+        .then((either) {
+      return either.match((err) => throw err, (resp) => resp);
+    });
+  }
+
   Future<Response> _sendRequest(
       String method, Uri url, Map<String, String>? headers,
       [Object? body, Encoding? encoding, bool retry = false]) async {
