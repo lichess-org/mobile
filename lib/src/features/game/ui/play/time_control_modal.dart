@@ -72,6 +72,7 @@ class _SectionChoices extends StatelessWidget {
           spacing: 10.0,
           children: choices.map((choice) {
             return ChoiceChip(
+              key: ValueKey(choice),
               label: Text(choice.value.toString()),
               selected: selected == choice,
               onSelected: (bool selected) {

@@ -17,7 +17,7 @@ final stockfishLevelProvider = createPrefProvider(
 );
 
 final timeControlPrefProvider = createPrefProvider(
-  prefKey: 'play.TimeInc',
+  prefKey: 'play.timeControl',
   defaultValue: TimeControl.blitz4,
   mapFrom: (v) => TimeControl.values.firstWhere(
       (e) => v != null ? e.value == TimeInc.fromString(v) : false,
