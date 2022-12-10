@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import './tv_event.dart';
 
 class TvRepository {
   const TvRepository(
@@ -15,14 +15,15 @@ class TvRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  Stream<Map<String, dynamic>> tvFeed() async* {
-    final resp = await apiClient
-        .send(http.Request('GET', Uri.parse('$kLichessHost/api/tv/feed')));
+  Stream<TvEvent> tvFeed() async* {
+    final resp = await apiClient.stream(Uri.parse('$kLichessHost/api/tv/feed'));
     _log.fine('Start streaming TV.');
     yield* resp.stream
         .toStringStream()
         .where((event) => event.isNotEmpty && event != '\n')
-        .map((event) => jsonDecode(event) as Map<String, dynamic>);
+        .map((event) => jsonDecode(event) as Map<String, dynamic>)
+        .where((json) => json['t'] == 'featured' || json['t'] == 'fen')
+        .map((json) => TvEvent.fromJson(json));
   }
 
   void dispose() {

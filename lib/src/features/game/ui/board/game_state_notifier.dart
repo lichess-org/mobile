@@ -4,6 +4,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/sound.dart';
 import '../../data/game_repository.dart';
+import '../../data/game_event.dart';
 import '../../model/game_state.dart';
 import './game_controls.dart';
 
@@ -13,10 +14,10 @@ class GameStateNotifier extends AutoDisposeNotifier<GameState?> {
     return null;
   }
 
-  void onGameStateEvent(Map<String, dynamic> json) {
+  void onGameStateEvent(GameStateEvent event) {
     final soundService = ref.read(soundServiceProvider);
 
-    final newState = GameState.fromJson(json);
+    final newState = GameState.fromEvent(event);
     final fen = newState.position.fen;
 
     if (fen != kInitialFEN && fen != state?.position.fen) {

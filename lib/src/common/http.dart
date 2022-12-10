@@ -68,16 +68,15 @@ class ApiClient {
     ).flatMap((resp) => _validateResponseStatus(url, resp));
   }
 
-  /// Generic send request used to stream content.
-  Future<StreamedResponse> send(BaseRequest request) {
+  Future<StreamedResponse> stream(Uri url) {
     return TaskEither<IOError, StreamedResponse>.tryCatch(
-      () async => _client.send(request),
+      () async => _client.send(Request('GET', url)),
       (error, trace) {
         _log.severe('Request error', error, trace);
         return ApiRequestError(trace);
       },
     )
-        .flatMap((resp) => _validateResponseStatus(request.url, resp))
+        .flatMap((resp) => _validateResponseStatus(url, resp))
         .run()
         .then((either) {
       return either.match((err) => throw err, (resp) => resp);

@@ -11,7 +11,18 @@ class GenericError implements IOError {
 
   @override
   String get message =>
-      "The operation could not be completed. Please try again later.";
+      'The operation could not be completed. Please try again later.';
+}
+
+/// Error when json returned by server is not valid.
+class DataFormatError implements IOError {
+  @override
+  final StackTrace stackTrace;
+
+  DataFormatError(this.stackTrace);
+
+  @override
+  String get message => 'Could not read data from server.';
 }
 
 /// Generic error for API requests.
@@ -23,7 +34,7 @@ class ApiRequestError implements IOError {
 
   @override
   String get message =>
-      "Something went wrong with the request. Please try again later.";
+      'Something went wrong with the request. Please try again later.';
 }
 
 class NotFoundError implements IOError {
@@ -33,7 +44,7 @@ class NotFoundError implements IOError {
   NotFoundError(this.stackTrace);
 
   @override
-  String get message => "Requested resource could not be found.";
+  String get message => 'Requested resource could not be found.';
 }
 
 class UnauthorizedError implements IOError {
@@ -43,7 +54,7 @@ class UnauthorizedError implements IOError {
   UnauthorizedError(this.stackTrace);
 
   @override
-  String get message => "You must sign in to access this resource.";
+  String get message => 'You must sign in to access this resource.';
 }
 
 class ForbiddenError implements IOError {
@@ -53,5 +64,5 @@ class ForbiddenError implements IOError {
   ForbiddenError(this.stackTrace);
 
   @override
-  String get message => "Requested resource access is forbidden.";
+  String get message => 'Requested resource access is forbidden.';
 }

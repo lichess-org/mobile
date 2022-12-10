@@ -44,6 +44,7 @@ dependencies:
   soundpool: ^2.3.0
   meta: ^1.8.0
   tuple: ^2.0.1
+  deep_pick: ^0.10.0
 
 dev_dependencies:
   flutter_test:
@@ -52,7 +53,6 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   build_runner: ^2.3.2
   freezed: ^2.2.1
-  json_serializable: ^6.5.4
   mocktail: ^0.3.0
 
 # TODO Remove this after next flutter update

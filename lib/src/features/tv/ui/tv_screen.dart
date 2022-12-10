@@ -53,7 +53,7 @@ class TvScreen extends ConsumerWidget {
                         name: topPlayer.name,
                         title: topPlayer.title,
                         rating: topPlayer.rating,
-                        clock: Duration(seconds: topPlayer.seconds),
+                        clock: Duration(seconds: topPlayer.seconds ?? 0),
                         active: !position.isGameOver &&
                             position.turn == topPlayer.side)
                     : const SizedBox.shrink(),
@@ -70,7 +70,7 @@ class TvScreen extends ConsumerWidget {
                         name: bottomPlayer.name,
                         title: bottomPlayer.title,
                         rating: bottomPlayer.rating,
-                        clock: Duration(seconds: bottomPlayer.seconds),
+                        clock: Duration(seconds: bottomPlayer.seconds ?? 0),
                         active: !position.isGameOver &&
                             position.turn == bottomPlayer.side)
                     : const SizedBox.shrink(),

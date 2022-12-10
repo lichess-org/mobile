@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/features/game/ui/play/play_screen.dart';
-import '../../../auth/fake_auth_repository.dart';
+import '../../../auth/data/fake_auth_repository.dart';
 
 class MockApiClient extends Mock implements ApiClient {}
 

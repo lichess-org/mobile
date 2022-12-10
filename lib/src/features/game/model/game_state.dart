@@ -2,23 +2,21 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 
 import './game_status.dart';
+import '../data/game_event.dart';
 
 part 'game_state.freezed.dart';
-part 'game_state.g.dart';
-
-Duration _durationFromJson(int value) => Duration(milliseconds: value);
 
 @freezed
 class GameClock with _$GameClock {
   const factory GameClock({
-    @JsonKey(fromJson: _durationFromJson, name: 'wtime')
-        required Duration whiteTime,
-    @JsonKey(fromJson: _durationFromJson, name: 'btime')
-        required Duration blackTime,
+    required Duration whiteTime,
+    required Duration blackTime,
   }) = _GameClock;
 
-  factory GameClock.fromJson(Map<String, dynamic> json) =>
-      _$GameClockFromJson(json);
+  factory GameClock.fromEvent(GameStateEvent event) => GameClock(
+        whiteTime: Duration(milliseconds: event.whiteTime),
+        blackTime: Duration(milliseconds: event.blackTime),
+      );
 }
 
 @freezed
@@ -31,11 +29,8 @@ class GameState with _$GameState {
       required List<String> sanMoves,
       required List<Position<Chess>> positions}) = _GameState;
 
-  factory GameState.fromJson(Map<String, dynamic> json) {
-    final uciMoves = (json['moves'] as String)
-        .split(' ')
-        .where((m) => m.isNotEmpty)
-        .toList();
+  factory GameState.fromEvent(GameStateEvent event) {
+    final uciMoves = event.moves.split(' ').where((m) => m.isNotEmpty).toList();
     List<Position<Chess>> positions = [Chess.initial];
     List<String> sanMoves = [];
     for (final m in uciMoves) {
@@ -45,8 +40,7 @@ class GameState with _$GameState {
       sanMoves.add(newPos.item2);
     }
     return GameState(
-      status: GameStatus.values.firstWhere((e) => e.name == json['status'],
-          orElse: () => GameStatus.unknown),
+      status: event.status,
       uciMoves: uciMoves,
       sanMoves: sanMoves,
       positions: positions,

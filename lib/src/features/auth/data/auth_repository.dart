@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:logging/logging.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/utils/in_memory_store.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import '../../user/model/user.dart';
 
@@ -86,9 +86,9 @@ class AuthRepository {
   }
 
   TaskEither<IOError, User> getAccountTask() {
-    return _apiClient.get(Uri.parse('$kLichessHost/api/account')).map(
-        (response) =>
-            User.fromJson(jsonDecode(response.body) as Map<String, dynamic>));
+    return _apiClient.get(Uri.parse('$kLichessHost/api/account')).flatMap(
+        (response) => TaskEither.fromEither(readJsonObject(response.body,
+            mapper: User.fromJson, logger: _log)));
   }
 
   void dispose() {

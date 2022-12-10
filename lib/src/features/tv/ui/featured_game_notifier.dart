@@ -1,16 +1,22 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../model/fen_event.dart';
 import '../model/featured_game.dart';
+import '../data/tv_event.dart';
 
 class FeaturedGameNotifier extends StateNotifier<FeaturedGame?> {
   FeaturedGameNotifier() : super(null);
 
-  void onFeaturedEvent(FeaturedGame game) {
-    state = game;
+  void onFeaturedEvent(TvFeaturedEvent event) {
+    state = FeaturedGame(
+      id: event.id,
+      orientation: event.orientation,
+      initialFen: event.fen,
+      white: event.white,
+      black: event.black,
+    );
   }
 
-  void onFenEvent(FenEvent event) {
+  void onFenEvent(TvFenEvent event) {
     state = state?.copyWith(
       white: state!.white.withSeconds(event.whiteSeconds),
       black: state!.black.withSeconds(event.whiteSeconds),
