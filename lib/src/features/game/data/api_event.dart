@@ -55,7 +55,7 @@ class ApiEvent with _$ApiEvent {
               fen: gamePick('fen').asStringOrThrow(),
               hasMoved: gamePick('hasMoved').asBoolOrThrow(),
               isMyTurn: gamePick('isMyTurn').asBoolOrThrow(),
-              lastMove: gamePick('lastMove').asUciMoveOrThrow(),
+              lastMove: gamePick('lastMove').asUciMoveOrNull(),
               opponent: gamePick('opponent').letOrThrow(Opponent.fromPick),
               rated: gamePick('rated').asBoolOrThrow(),
               perf: gamePick('perf').letOrThrow((it) => Perf.values.firstWhere(

@@ -1,10 +1,11 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:dartchess/dartchess.dart' hide Tuple2;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
+
+import './challenge_request.dart';
 
 class ChallengeRepository {
   const ChallengeRepository({
@@ -13,7 +14,7 @@ class ChallengeRepository {
 
   final ApiClient apiClient;
 
-  TaskEither<IOError, void> createChallengeTask(
+  TaskEither<IOError, void> challengeTask(
       String username, ChallengeRequest req) {
     return apiClient.post(Uri.parse('$kLichessHost/api/challenge/$username'),
         body: req.toRequestBody);
@@ -35,46 +36,3 @@ final challengeRepositoryProvider = Provider<ChallengeRepository>((ref) {
   ref.onDispose(() => repo.dispose());
   return repo;
 });
-
-class ChallengeRequest {
-  const ChallengeRequest({
-    required this.time,
-    required this.increment,
-    this.side,
-  });
-
-  /// Clock initial time
-  final Duration time;
-
-  /// Clock increment
-  final Duration increment;
-
-  /// Which side you get to play. Default is random.
-  final Side? side;
-
-  Map<String, dynamic> get toRequestBody => {
-        'clock.limit': time.inSeconds.toString(),
-        'clock.increment': increment.inSeconds.toString(),
-        'color': side?.name ?? 'random',
-      };
-}
-
-class AiChallengeRequest extends ChallengeRequest {
-  const AiChallengeRequest({
-    required super.time,
-    required super.increment,
-    super.side,
-    required this.level,
-  });
-
-  /// AI Strength
-  final int level;
-
-  @override
-  Map<String, dynamic> get toRequestBody => {
-        'level': level.toString(),
-        'clock.limit': time.inSeconds.toString(),
-        'clock.increment': increment.inSeconds.toString(),
-        'color': side?.name ?? 'random',
-      };
-}

@@ -23,7 +23,8 @@ class TvRepository {
         .where((event) => event.isNotEmpty && event != '\n')
         .map((event) => jsonDecode(event) as Map<String, dynamic>)
         .where((json) => json['t'] == 'featured' || json['t'] == 'fen')
-        .map((json) => TvEvent.fromJson(json));
+        .map((json) => TvEvent.fromJson(json))
+        .handleError((Object error) => _log.warning(error));
   }
 
   void dispose() {

@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/features/game/data/game_repository.dart';
 import 'package:lichess_mobile/src/features/game/data/game_event.dart';
 import 'package:lichess_mobile/src/features/game/data/api_event.dart';
+import '../../../utils.dart';
 
 class MockApiClient extends Mock implements ApiClient {}
 
@@ -30,10 +31,8 @@ void main() {
     test('can read all supported types of events', () async {
       when(() =>
               mockApiClient.stream(Uri.parse('$kLichessHost/api/stream/event')))
-          .thenAnswer((_) async {
-        return http.StreamedResponse(
-            Stream.fromIterable([
-              utf8.encode('''{
+          .thenAnswer((_) => mockHttpStreamFromIterable([
+                '''{
   "type": "gameStart",
   "game": {
     "gameId": "rCRw1AuO",
@@ -62,15 +61,11 @@ void main() {
       "board": true
     }
   }
-}'''),
-            ]),
-            200);
-      });
-
-      final stream = repo.events();
+}'''
+              ]));
 
       expect(
-          stream,
+          repo.events(),
           emitsInOrder([
             predicate((value) => value is GameStartEvent),
           ]));
@@ -79,64 +74,11 @@ void main() {
     test('filter out unsupported types of events', () async {
       when(() =>
               mockApiClient.stream(Uri.parse('$kLichessHost/api/stream/event')))
-          .thenAnswer((_) async {
-        return http.StreamedResponse(
-            Stream.fromIterable([
-              utf8.encode('''{
-  "type": "challenge",
-  "challenge": {
-    "id": "7pGLxJ4F",
-    "url": "https://lichess.org/VU0nyvsW",
-    "status": "created",
-    "compat": {
-      "bot": false,
-      "board": true
-    },
-    "challenger": {
-      "id": "lovlas",
-      "name": "Lovlas",
-      "title": "IM",
-      "rating": 2506,
-      "patron": true,
-      "online": true,
-      "lag": 24
-    },
-    "destUser": {
-      "id": "thibot",
-      "name": "thibot",
-      "title": null,
-      "rating": 1500,
-      "provisional": true,
-      "online": true,
-      "lag": 45
-    },
-    "variant": {
-      "key": "standard",
-      "name": "Standard",
-      "short": "Std"
-    },
-    "rated": true,
-    "timeControl": {
-      "type": "clock",
-      "limit": 300,
-      "increment": 25,
-      "show": "5+25"
-    },
-    "color": "random",
-    "speed": "rapid",
-    "perf": {
-      "icon": "#",
-      "name": "Rapid"
-    }
-  }
-}'''),
-            ]),
-            200);
-      });
+          .thenAnswer((_) => mockHttpStreamFromIterable([
+                '{ "type": "challenge", "challenge": {}}',
+              ]));
 
-      final stream = repo.events();
-
-      expect(stream, emitsInOrder([emitsDone]));
+      expect(repo.events(), emitsInOrder([emitsDone]));
     });
   });
 
@@ -144,23 +86,14 @@ void main() {
     test('can read all supported types of events', () async {
       when(() => mockApiClient.stream(
               Uri.parse('$kLichessHost/api/board/game/stream/$gameIdTest')))
-          .thenAnswer((_) async {
-        return http.StreamedResponse(
-            Stream.fromIterable([
-              utf8.encode(
-                  '{ "type": "gameFull", "id": "$gameIdTest", "initialFen": "startPos", "state": { "type": "gameState", "moves": "e2e4 c7c5 f2f4 d7d6 g1f3", "wtime": 7598040, "btime": 8395220, "status": "started" }}'),
-              utf8.encode(
-                  '{ "type": "gameState", "moves": "e2e4 c7c5 f2f4 d7d6 g1f3 b8c6", "wtime": 7598140, "btime": 8395220, "status": "started" }'),
-              utf8.encode(
-                  '{ "type": "gameState", "moves": "e2e4 c7c5 f2f4 d7d6 g1f3 b8c6 f1c4", "wtime": 7598140, "btime": 8398220, "status": "started" }'),
-            ]),
-            200);
-      });
-
-      final stream = repo.gameStateEvents(gameIdTest);
+          .thenAnswer((_) => mockHttpStreamFromIterable([
+                '{ "type": "gameFull", "id": "$gameIdTest", "initialFen": "startPos", "state": { "type": "gameState", "moves": "e2e4 c7c5 f2f4 d7d6 g1f3", "wtime": 7598040, "btime": 8395220, "status": "started" }}',
+                '{ "type": "gameState", "moves": "e2e4 c7c5 f2f4 d7d6 g1f3 b8c6", "wtime": 7598140, "btime": 8395220, "status": "started" }',
+                '{ "type": "gameState", "moves": "e2e4 c7c5 f2f4 d7d6 g1f3 b8c6 f1c4", "wtime": 7598140, "btime": 8398220, "status": "started" }',
+              ]));
 
       expect(
-          stream,
+          repo.gameStateEvents(gameIdTest),
           emitsInOrder([
             predicate((value) => value is GameFullEvent),
             predicate((value) => value is GameStateEvent),
@@ -171,21 +104,13 @@ void main() {
     test('filter out unsupported types of events', () async {
       when(() => mockApiClient.stream(
               Uri.parse('$kLichessHost/api/board/game/stream/$gameIdTest')))
-          .thenAnswer((_) async {
-        return http.StreamedResponse(
-            Stream.fromIterable([
-              utf8.encode(
-                  '{ "type": "gameState", "moves": "e2e4 c7c5 f2f4 d7d6 g1f3 b8c6", "wtime": 7598140, "btime": 8395220, "status": "started" }'),
-              utf8.encode(
-                  '{ "type": "chatLine", "username": "testUser", "message": "oops" }'),
-            ]),
-            200);
-      });
-
-      final stream = repo.gameStateEvents(gameIdTest);
+          .thenAnswer((_) => mockHttpStreamFromIterable([
+                '{ "type": "gameState", "moves": "e2e4 c7c5 f2f4 d7d6 g1f3 b8c6", "wtime": 7598140, "btime": 8395220, "status": "started" }',
+                '{ "type": "chatLine", "username": "testUser", "message": "oops" }',
+              ]));
 
       expect(
-          stream,
+          repo.gameStateEvents(gameIdTest),
           emitsInOrder([
             predicate((value) => value is GameStateEvent),
           ]));

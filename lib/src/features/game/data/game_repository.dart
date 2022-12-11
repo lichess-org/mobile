@@ -31,7 +31,8 @@ class GameRepository {
         .map((event) => jsonDecode(event) as Map<String, dynamic>)
         .where((json) =>
             json['type'] == 'gameStart' || json['type'] == 'gameFinish')
-        .map((json) => ApiEvent.fromJson(json));
+        .map((json) => ApiEvent.fromJson(json))
+        .handleError((Object error) => _log.warning(error));
   }
 
   /// Stream the state of a game being played with the Board API, as ndjson.
@@ -44,7 +45,8 @@ class GameRepository {
         .map((event) => jsonDecode(event) as Map<String, dynamic>)
         .where((event) =>
             event['type'] == 'gameFull' || event['type'] == 'gameState')
-        .map((json) => GameEvent.fromJson(json));
+        .map((json) => GameEvent.fromJson(json))
+        .handleError((Object error) => _log.warning(error));
   }
 
   TaskEither<IOError, void> playMoveTask(GameId gameId, Move move) {
