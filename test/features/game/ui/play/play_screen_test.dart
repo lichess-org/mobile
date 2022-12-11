@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:dartchess/dartchess.dart';

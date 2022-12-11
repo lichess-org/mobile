@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
-import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
 import '../data/play_preferences.dart';
 import '../data/challenge_repository.dart';
