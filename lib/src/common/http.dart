@@ -35,7 +35,7 @@ class ApiClient {
       () async => _sendRequest('GET', url, headers, null, null, retry),
       (error, trace) {
         _log.severe('Request error', error, trace);
-        return ApiRequestError(trace);
+        return GenericError(trace);
       },
     ).flatMap((resp) => _validateResponseStatus(url, resp));
   }
@@ -49,7 +49,7 @@ class ApiClient {
       () async => _sendRequest('POST', url, headers, body, encoding, retry),
       (error, trace) {
         _log.severe('Request error', error, trace);
-        return ApiRequestError(trace);
+        return GenericError(trace);
       },
     ).flatMap((resp) => _validateResponseStatus(url, resp));
   }
@@ -63,7 +63,7 @@ class ApiClient {
       () async => _sendRequest('DELETE', url, headers, body, encoding, retry),
       (error, trace) {
         _log.severe('Request error', error, trace);
-        return ApiRequestError(trace);
+        return GenericError(trace);
       },
     ).flatMap((resp) => _validateResponseStatus(url, resp));
   }
@@ -73,7 +73,7 @@ class ApiClient {
       () async => _client.send(Request('GET', url)),
       (error, trace) {
         _log.severe('Request error', error, trace);
-        return ApiRequestError(trace);
+        return GenericError(trace);
       },
     )
         .flatMap((resp) => _validateResponseStatus(url, resp))

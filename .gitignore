@@ -11,6 +11,7 @@ build/
 # Code generation output
 *.freezed.dart
 *.g.dart
+*.mocks.dart
 
 # Directory created by dartdoc
 # If you don't generate documentation locally you can remove this line.
