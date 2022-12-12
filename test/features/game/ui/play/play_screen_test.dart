@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fpdart/fpdart.dart';
+import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,28 +19,32 @@ import 'package:lichess_mobile/src/features/game/model/time_control.dart';
 import '../../../auth/data/fake_auth_repository.dart';
 import '../../../../utils.dart';
 
-class MockApiClient extends Mock implements ApiClient {}
+class MockClient extends Mock implements http.Client {}
+
+class MockLogger extends Mock implements Logger {}
 
 class MockSoundService extends Mock implements SoundService {}
 
 void main() {
-  final mockApiClient = MockApiClient();
+  final mockLogger = MockLogger();
+  final mockClient = MockClient();
   final mockSoundService = MockSoundService();
 
   setUpAll(() {
-    reset(mockApiClient);
-    when(() => mockApiClient.get(Uri.parse('$kLichessHost/api/user/maia1')))
-        .thenReturn(
-            TaskEither.right(http.Response(maiaResponses['maia1']!, 200)));
-    when(() => mockApiClient.get(Uri.parse('$kLichessHost/api/user/maia5')))
-        .thenReturn(
-            TaskEither.right(http.Response(maiaResponses['maia5']!, 200)));
-    when(() => mockApiClient.get(Uri.parse('$kLichessHost/api/user/maia9')))
-        .thenReturn(
-            TaskEither.right(http.Response(maiaResponses['maia9']!, 200)));
-    when(() => mockApiClient.get(
+    reset(mockClient);
+    when(() => mockClient.get(Uri.parse('$kLichessHost/api/user/maia1')))
+        .thenAnswer((_) => mockResponse(maiaResponses['maia1']!, 200));
+
+    when(() => mockClient.get(Uri.parse('$kLichessHost/api/user/maia5')))
+        .thenAnswer((_) => mockResponse(maiaResponses['maia5']!, 200));
+
+    when(() => mockClient.get(Uri.parse('$kLichessHost/api/user/maia9')))
+        .thenAnswer((_) => mockResponse(maiaResponses['maia9']!, 200));
+    when(() => mockClient.get(
             Uri.parse('$kLichessHost/api/users/status?ids=maia1,maia5,maia9')))
-        .thenReturn(TaskEither.right(http.Response(maiaStatusResponses, 200)));
+        .thenAnswer((_) => mockResponse(maiaStatusResponses, 200));
+
+    registerFallbackValue(http.Request('GET', Uri.parse('http://api.test')));
   });
 
   testWidgets('PlayForm loads card opponent info', (tester) async {
@@ -51,7 +55,8 @@ void main() {
       ProviderScope(
         overrides: [
           sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-          apiClientProvider.overrideWithValue(mockApiClient),
+          apiClientProvider
+              .overrideWithValue(ApiClient(mockLogger, mockClient)),
         ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -71,7 +76,8 @@ void main() {
             matching: find.byType(CircularProgressIndicator)),
         findsOneWidget);
 
-    await tester.pump();
+    await tester.pump(const Duration(
+        milliseconds: 100)); // wait for maia bots request to return
 
     // loaded maia ratings
     expect(find.widgetWithIcon(Card, LichessIcons.blitz), findsOneWidget);
@@ -110,7 +116,8 @@ void main() {
       ProviderScope(
         overrides: [
           sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-          apiClientProvider.overrideWithValue(mockApiClient),
+          apiClientProvider
+              .overrideWithValue(ApiClient(mockLogger, mockClient)),
         ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -138,15 +145,16 @@ void main() {
 
     const gameIdTest = 'rCRw1AuO';
 
-    when(() => mockApiClient
-            .post(Uri.parse('$kLichessHost/api/challenge/maia1'), body: {
+    when(() =>
+        mockClient.post(Uri.parse('$kLichessHost/api/challenge/maia1'), body: {
           'clock.limit': '${5 * 60}',
           'clock.increment': '3',
           'color': 'random',
-        })).thenReturn(TaskEither.right(http.Response('ok', 200)));
+        })).thenAnswer((_) => mockResponse('ok', 200));
 
-    when(() =>
-            mockApiClient.stream(Uri.parse('$kLichessHost/api/stream/event')))
+    when(() => mockClient.send(any(
+            that: sameRequest(http.Request(
+                'GET', Uri.parse('$kLichessHost/api/stream/event'))))))
         .thenAnswer((_) => mockHttpStreamFromIterable([
               '''{
   "type": "gameStart",
@@ -179,8 +187,11 @@ void main() {
 }'''
             ]));
 
-    when(() => mockApiClient.stream(
-            Uri.parse('$kLichessHost/api/board/game/stream/$gameIdTest')))
+    when(() => mockClient.send(any(
+            that: sameRequest(http.Request(
+                'GET',
+                Uri.parse(
+                    '$kLichessHost/api/board/game/stream/$gameIdTest'))))))
         .thenAnswer((_) => mockHttpStreamFromIterable([
               '{ "type": "gameFull", "id": "$gameIdTest", "initialFen": "$kInitialFEN", "state": { "type": "gameState", "moves": "", "wtime": 180000, "btime": 180000, "status": "started" }}'
             ]));
@@ -189,7 +200,8 @@ void main() {
       ProviderScope(
         overrides: [
           sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-          apiClientProvider.overrideWithValue(mockApiClient),
+          apiClientProvider
+              .overrideWithValue(ApiClient(mockLogger, mockClient)),
           soundServiceProvider.overrideWithValue(mockSoundService),
         ],
         child: MediaQuery(
@@ -205,6 +217,10 @@ void main() {
       ),
     );
 
+    await tester.pump(const Duration(
+        milliseconds: 100)); // wait for maia bots request to return
+
+    expect(find.byType(CircularProgressIndicator), findsNothing);
     await tester.tap(find.text('Play'));
     await tester.pump(); // play action tapped
     expect(find.byType(CircularProgressIndicator), findsOneWidget);

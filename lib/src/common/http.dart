@@ -32,7 +32,7 @@ class ApiClient {
   TaskEither<IOError, Response> get(Uri url,
       {Map<String, String>? headers, bool retry = false}) {
     return TaskEither<IOError, Response>.tryCatch(
-      () async => _sendRequest('GET', url, headers, null, null, retry),
+      () async => (retry ? _retryClient : _client).get(url, headers: headers),
       (error, trace) {
         _log.severe('Request error', error, trace);
         return GenericError(trace);
@@ -46,7 +46,8 @@ class ApiClient {
       Encoding? encoding,
       bool retry = false}) {
     return TaskEither<IOError, Response>.tryCatch(
-      () async => _sendRequest('POST', url, headers, body, encoding, retry),
+      () async => (retry ? _retryClient : _client)
+          .post(url, headers: headers, body: body, encoding: encoding),
       (error, trace) {
         _log.severe('Request error', error, trace);
         return GenericError(trace);
@@ -60,7 +61,8 @@ class ApiClient {
       Encoding? encoding,
       bool retry = false}) {
     return TaskEither<IOError, Response>.tryCatch(
-      () async => _sendRequest('DELETE', url, headers, body, encoding, retry),
+      () async => (retry ? _retryClient : _client)
+          .delete(url, headers: headers, body: body, encoding: encoding),
       (error, trace) {
         _log.severe('Request error', error, trace);
         return GenericError(trace);
@@ -81,29 +83,6 @@ class ApiClient {
         .then((either) {
       return either.match((err) => throw err, (resp) => resp);
     });
-  }
-
-  Future<Response> _sendRequest(
-      String method, Uri url, Map<String, String>? headers,
-      [Object? body, Encoding? encoding, bool retry = false]) async {
-    final request = Request(method, url);
-
-    if (headers != null) request.headers.addAll(headers);
-    if (encoding != null) request.encoding = encoding;
-    if (body != null) {
-      if (body is String) {
-        request.body = body;
-      } else if (body is List) {
-        request.bodyBytes = body.cast<int>();
-      } else if (body is Map) {
-        request.bodyFields = body.cast<String, String>();
-      } else {
-        throw ArgumentError('Invalid request body "$body".');
-      }
-    }
-
-    return Response.fromStream(
-        await (retry ? _retryClient : _client).send(request));
   }
 
   TaskEither<IOError, T> _validateResponseStatus<T extends BaseResponse>(
