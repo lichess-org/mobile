@@ -20,7 +20,7 @@ void main() {
     registerFallbackValue(http.Request('GET', Uri.parse('http://api.test')));
   });
 
-  group('ApiClient', () {
+  group('ApiClient non stream', () {
     test('success responses are returned as success', () async {
       final apiClient = ApiClient(mockLogger, FakeClient());
 
@@ -117,12 +117,68 @@ void main() {
       expect(resp, isA<Right<IOError, http.Response>>());
     });
   });
+
+  group('ApiClient stream', () {
+    test('response is returned when success', () async {
+      final apiClient = ApiClient(mockLogger, FakeClient());
+
+      expect(
+          await apiClient.stream(Uri.parse('http://api.test/will/return/200')),
+          isA<http.StreamedResponse>());
+
+      expect(
+          await apiClient.stream(Uri.parse('http://api.test/will/return/301')),
+          isA<http.StreamedResponse>());
+
+      expect(
+          await apiClient.stream(Uri.parse('http://api.test/will/return/204')),
+          isA<http.StreamedResponse>());
+    });
+
+    test('throws on error', () async {
+      final apiClient = ApiClient(mockLogger, FakeClient());
+
+      expect(
+          () async => await apiClient
+              .stream(Uri.parse('http://api.test/will/return/401')),
+          throwsA(isA<UnauthorizedError>()));
+
+      expect(
+          () async => await apiClient
+              .stream(Uri.parse('http://api.test/will/return/403')),
+          throwsA(isA<ForbiddenError>()));
+
+      expect(
+          () async => await apiClient
+              .stream(Uri.parse('http://api.test/will/return/404')),
+          throwsA(isA<NotFoundError>()));
+
+      expect(
+          () async => await apiClient
+              .stream(Uri.parse('http://api.test/will/return/500')),
+          throwsA(isA<ApiRequestError>()));
+
+      expect(
+          () async => await apiClient
+              .stream(Uri.parse('http://api.test/will/return/503')),
+          throwsA(isA<ApiRequestError>()));
+    });
+
+    test('socket error is a GenericError', () async {
+      final apiClient = ApiClient(mockLogger, FakeClient());
+
+      expect(
+          () async => await apiClient
+              .stream(Uri.parse('http://api.test/will/throw/socket/exception')),
+          throwsA(isA<GenericError>()));
+    });
+  });
 }
 
 class FakeClient extends Fake implements http.Client {
   @override
   Future<http.Response> get(Uri url, {Map<String, String>? headers}) async {
-    return _responseBasedOnPath(url.path);
+    return _responseBasedOnPath(url.path) as http.Response;
   }
 
   @override
@@ -132,7 +188,7 @@ class FakeClient extends Fake implements http.Client {
     Object? body,
     Encoding? encoding,
   }) async {
-    return _responseBasedOnPath(url.path);
+    return _responseBasedOnPath(url.path) as http.Response;
   }
 
   @override
@@ -142,31 +198,55 @@ class FakeClient extends Fake implements http.Client {
     Object? body,
     Encoding? encoding,
   }) async {
-    return _responseBasedOnPath(url.path);
+    return _responseBasedOnPath(url.path) as http.Response;
   }
 
-  http.Response _responseBasedOnPath(String path) {
+  @override
+  Future<http.StreamedResponse> send(http.BaseRequest request) async {
+    return _responseBasedOnPath(request.url.path, true)
+        as http.StreamedResponse;
+  }
+
+  http.BaseResponse _responseBasedOnPath(String path, [bool stream = false]) {
     switch (path) {
       case '/will/throw/socket/exception':
         throw const SocketException('no internet');
       case '/will/return/500':
-        return http.Response('500', 500);
+        return stream
+            ? http.StreamedResponse(_streamBody('500'), 500)
+            : http.Response('500', 500);
       case '/will/return/503':
-        return http.Response('503', 503);
+        return stream
+            ? http.StreamedResponse(_streamBody('503'), 503)
+            : http.Response('503', 503);
       case '/will/return/400':
-        return http.Response('400', 400);
+        return stream
+            ? http.StreamedResponse(_streamBody('400'), 400)
+            : http.Response('400', 400);
       case '/will/return/404':
-        return http.Response('404', 404);
+        return stream
+            ? http.StreamedResponse(_streamBody('404'), 404)
+            : http.Response('404', 404);
       case '/will/return/401':
-        return http.Response('401', 401);
+        return stream
+            ? http.StreamedResponse(_streamBody('401'), 401)
+            : http.Response('401', 401);
       case '/will/return/403':
-        return http.Response('403', 403);
+        return stream
+            ? http.StreamedResponse(_streamBody('403'), 403)
+            : http.Response('403', 403);
       case '/will/return/204':
-        return http.Response('204', 204);
+        return stream
+            ? http.StreamedResponse(_streamBody('204'), 204)
+            : http.Response('204', 204);
       case '/will/return/301':
-        return http.Response('301', 301);
+        return stream
+            ? http.StreamedResponse(_streamBody('301'), 301)
+            : http.Response('301', 301);
       default:
-        return http.Response('ok', 200);
+        return stream
+            ? http.StreamedResponse(_streamBody('200'), 200)
+            : http.Response('200', 200);
     }
   }
 }
