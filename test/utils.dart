@@ -4,6 +4,23 @@ import 'package:http/http.dart' as http;
 
 Matcher sameRequest(http.BaseRequest request) => _SameRequest(request);
 
+Future<http.Response> mockResponse(String body, int code) async =>
+    Future<void>.delayed(const Duration(milliseconds: 20))
+        .then((_) => http.Response(body, code));
+
+Future<http.StreamedResponse> mockHttpStreamFromIterable(
+    Iterable<String> events) async {
+  await Future<void>.delayed(const Duration(milliseconds: 20));
+  return http.StreamedResponse(
+      _streamFromFutures(events.map((e) => _withDelay(utf8.encode(e)))), 200);
+}
+
+Future<http.StreamedResponse> mockHttpStream(Stream<String> stream) async =>
+    Future<void>.delayed(const Duration(milliseconds: 20))
+        .then((_) => http.StreamedResponse(stream.map(utf8.encode), 200));
+
+// --
+
 class _SameRequest extends Matcher {
   const _SameRequest(this._expected);
 
@@ -17,17 +34,6 @@ class _SameRequest extends Matcher {
   @override
   Description describe(Description description) =>
       description.add('same Request as ').addDescriptionOf(_expected);
-}
-
-Future<http.Response> mockResponse(String body, int code) async =>
-    Future<void>.delayed(const Duration(milliseconds: 20))
-        .then((_) => http.Response(body, code));
-
-Future<http.StreamedResponse> mockHttpStreamFromIterable(
-    Iterable<String> events) async {
-  await Future<void>.delayed(const Duration(milliseconds: 20));
-  return http.StreamedResponse(
-      _streamFromFutures(events.map((e) => _withDelay(utf8.encode(e)))), 200);
 }
 
 Stream<T> _streamFromFutures<T>(Iterable<Future<T>> futures) async* {

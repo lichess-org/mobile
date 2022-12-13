@@ -103,6 +103,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
           child: gameClockStream.when(
             data: (clock) {
               final black = Player(
+                key: const ValueKey('black-player'),
                 name: widget.game.black.name,
                 rating: widget.game.black.rating,
                 title: widget.game.black.title,
@@ -113,6 +114,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
                 clock: clock.blackTime,
               );
               final white = Player(
+                key: const ValueKey('white-player'),
                 name: widget.game.white.name,
                 rating: widget.game.white.rating,
                 title: widget.game.white.title,
@@ -228,6 +230,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
               ),
               Row(children: [
                 IconButton(
+                  key: const ValueKey('cursor-first'),
                   // TODO add translation
                   tooltip: 'First position',
                   onPressed: positionCursor > 0
@@ -239,6 +242,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
                   iconSize: 20,
                 ),
                 IconButton(
+                  key: const ValueKey('cursor-back'),
                   // TODO add translation
                   tooltip: 'Backward',
                   onPressed: positionCursor > 0
@@ -250,6 +254,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
                   iconSize: 20,
                 ),
                 IconButton(
+                  key: const ValueKey('cursor-forward'),
                   // TODO add translation
                   tooltip: 'Forward',
                   onPressed: positionCursor < (gameState?.positionIndex ?? 0)
@@ -261,6 +266,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
                   iconSize: 20,
                 ),
                 IconButton(
+                  key: const ValueKey('cursor-last'),
                   // TODO add translation
                   tooltip: 'Last position',
                   onPressed: positionCursor < (gameState?.positionIndex ?? 0)

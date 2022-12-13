@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants.dart';
 import 'errors.dart';
 
-const retries = [
+const defaultRetries = [
   Duration(milliseconds: 200),
   Duration(milliseconds: 300),
   Duration(milliseconds: 500),
@@ -19,7 +19,7 @@ const retries = [
 
 /// Convenient client that captures and returns API errors.
 class ApiClient {
-  ApiClient(this._log, this._client)
+  ApiClient(this._log, this._client, {List<Duration> retries = defaultRetries})
       : _retryClient = RetryClient.withDelays(_client, retries,
             whenError: (_, __) => true) {
     _log.info('Creating new ApiClient.');
