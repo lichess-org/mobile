@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/features/settings/ui/is_sound_muted_notifier.dart';
@@ -328,7 +329,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
           BottomSheetAction(
               leading: const Icon(Icons.swap_vert),
               label: playActionAsync.isLoading
-                  ? const CircularProgressIndicator.adaptive()
+                  ? const ButtonLoadingIndicator()
                   : Text(context.l10n.rematch),
               onPressed: (context) {
                 if (!playActionAsync.isLoading) {

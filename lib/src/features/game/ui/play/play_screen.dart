@@ -5,6 +5,7 @@ import 'package:tuple/tuple.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
 import 'package:lichess_mobile/src/features/auth/ui/auth_widget.dart';
 import 'package:lichess_mobile/src/features/auth/ui/auth_widget_notifier.dart';
@@ -219,8 +220,7 @@ class PlayForm extends ConsumerWidget {
                           'SEVERE [PlayScreen] could not load bot info: ${err.toString()}\n$st');
                       return const Text('Could not load bot ratings.');
                     },
-                    loading: () => const CircularProgressIndicator.adaptive(),
-                  ),
+                    loading: () => const ButtonLoadingIndicator()),
           ),
         ),
         const SizedBox(height: 5),
@@ -265,7 +265,7 @@ class PlayForm extends ConsumerWidget {
                       .createGame(account: account!),
           style: _buttonStyle,
           child: authActionsAsync.isLoading || playActionAsync.isLoading
-              ? const CircularProgressIndicator.adaptive()
+              ? const ButtonLoadingIndicator()
               : Text(account == null
                   ? 'Sign in to start playing'
                   : context.l10n.play),
