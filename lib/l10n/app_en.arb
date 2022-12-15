@@ -1124,6 +1124,7 @@
   "light": "Light",
   "dark": "Dark",
   "transparent": "Transparent",
+  "deviceTheme": "Device theme",
   "backgroundImageUrl": "Background image URL:",
   "boardGeometry": "Board geometry",
   "boardTheme": "Board theme",

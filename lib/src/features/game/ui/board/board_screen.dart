@@ -307,7 +307,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
         if (gameState?.abortable == true)
           BottomSheetAction(
             leading: const Icon(LichessIcons.cancel),
-            label: Text(context.l10n.abortGame),
+            label: Text(context.l10n.abortTheGame),
             onPressed: (context) {
               if (!gameActionAsync.isLoading) {
                 ref.read(gameActionProvider.notifier).abort(widget.game.id);

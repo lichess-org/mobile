@@ -17,7 +17,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const tmpDir = `${__dirname}/tmp/translations`
 const destDir = `${__dirname}/../lib/l10n`
 const lilaSourcePath = `${tmpDir}/source`
-const lilaTranslationsPath = `${tmpDir}/[ornicar.lila] master/translation/dest`
+const lilaTranslationsPath = `${tmpDir}/[lichess-org.lila] master/translation/dest`
 const unzipMaxBufferSize = 1024 * 1024 * 10 // Set maxbuffer to 10MB to avoid errors when default 1MB used
 
 // selection of lila translation modules to include
