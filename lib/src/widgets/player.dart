@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
 import './countdown_clock.dart';
 
 class Player extends StatelessWidget {
@@ -21,33 +20,38 @@ class Player extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget nameW = Text(name,
-        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600));
-    final Widget ratingW = rating != null
-        ? Text(rating.toString(), style: const TextStyle(fontSize: 13))
-        : kEmptyWidget;
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: title != null
-                ? [
-                    Text(title!,
-                        style: const TextStyle(
-                            fontSize: 20, color: Colors.orange)),
-                    const SizedBox(width: 5),
-                    nameW,
-                    const SizedBox(width: 3),
-                    ratingW,
-                  ]
-                : [
-                    nameW,
-                    const SizedBox(width: 3),
-                    ratingW,
-                  ],
-          ),
+          Expanded(
+              child: Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+              if (title != null) ...[
+                Text(
+                  title!,
+                  style: const TextStyle(fontSize: 18, color: Colors.orange),
+                ),
+                const SizedBox(width: 5),
+              ],
+              Flexible(
+                  child: Text(
+                name,
+                overflow: TextOverflow.ellipsis,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              )),
+              const SizedBox(width: 3),
+              if (rating != null)
+                Text(
+                  rating.toString(),
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 13),
+                ),
+            ]),
+          )),
           CountdownClock(
             duration: clock,
             active: active,

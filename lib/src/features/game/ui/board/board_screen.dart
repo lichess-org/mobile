@@ -81,7 +81,6 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('lichess.org'),
           leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
@@ -179,36 +178,32 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
               );
             },
             loading: () {
-              final black = Player(
-                name: widget.game.black.name,
-                rating: widget.game.black.rating,
-                title: widget.game.black.title,
+              final player = Player(
+                name: widget.game.player.name,
+                rating: widget.game.player.rating,
+                title: widget.game.player.title,
                 active: false,
                 clock: const Duration(milliseconds: 0),
               );
-              final white = Player(
-                name: widget.game.white.name,
-                rating: widget.game.white.rating,
-                title: widget.game.white.title,
+              final opponent = Player(
+                name: widget.game.opponent.name,
+                rating: widget.game.opponent.rating,
+                title: widget.game.opponent.title,
                 active: false,
                 clock: const Duration(milliseconds: 0),
               );
-              final topPlayer =
-                  widget.game.orientation == Side.white ? black : white;
-              final bottomPlayer =
-                  widget.game.orientation == Side.white ? white : black;
 
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  topPlayer,
+                  opponent,
                   cg.Board(
                     size: screenWidth,
                     interactableSide: cg.InteractableSide.none,
                     orientation: widget.game.orientation.cg,
                     fen: widget.game.initialFen,
                   ),
-                  bottomPlayer,
+                  player,
                 ],
               );
             },

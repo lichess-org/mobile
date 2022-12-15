@@ -7,6 +7,8 @@ part 'game.freezed.dart';
 
 @freezed
 class Game with _$Game {
+  const Game._();
+
   const factory Game({
     required GameId id,
     required bool rated,
@@ -16,6 +18,9 @@ class Game with _$Game {
     required Player white,
     required Player black,
   }) = _Game;
+
+  Player get player => orientation == Side.white ? white : black;
+  Player get opponent => orientation == Side.white ? black : white;
 }
 
 @freezed

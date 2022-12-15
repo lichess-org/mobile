@@ -102,10 +102,12 @@ class PlayForm extends ConsumerWidget {
       children: [
         Row(
           children: const [
-            Text(
+            Flexible(
+                child: Text(
               'Play with the computer',
               style: TextStyle(fontSize: 20),
-            ),
+              overflow: TextOverflow.ellipsis,
+            )),
             SizedBox(width: 5),
             Tooltip(
               message:
@@ -129,7 +131,7 @@ class PlayForm extends ConsumerWidget {
                       const Icon(Icons.check, size: 18),
                       const SizedBox(width: 3),
                     ],
-                    Text(opponent.name),
+                    Text(opponent.name, overflow: TextOverflow.fade),
                   ],
                 ),
                 selected: isSelected,
@@ -151,7 +153,9 @@ class PlayForm extends ConsumerWidget {
                     const Icon(Icons.check, size: 18),
                     const SizedBox(width: 3),
                   ],
-                  const Text('Fairy-Stockfish 14'),
+                  const Flexible(
+                      child: Text('Fairy-Stockfish 14',
+                          overflow: TextOverflow.fade)),
                 ],
               ),
               selected: opponentPref == ComputerOpponent.stockfish,

@@ -1,9 +1,12 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 import 'dart:ui';
 
 import '../features/settings/ui/theme_mode_notifier.dart';
+
+const _kMaxClockTextScaleFactor = 1.94;
 
 /// A simple countdown clock.
 ///
@@ -68,6 +71,8 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
     final clockStyle = brightness == Brightness.dark
         ? ClockStyle.darkThemeStyle
         : ClockStyle.lightThemeStyle;
+    final MediaQueryData mediaQueryData = MediaQuery.of(context);
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
@@ -76,17 +81,29 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
             : clockStyle.backgroundColor,
       ),
       child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
-          child: Text('$min:$secs',
-              style: TextStyle(
-                color: widget.active
-                    ? clockStyle.activeTextColor
-                    : clockStyle.textColor,
-                fontSize: 30,
-                fontFeatures: const [
-                  FontFeature.tabularFigures(),
-                ],
-              ))),
+        padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
+        child: MediaQuery(
+          data: mediaQueryData.copyWith(
+            textScaleFactor: math.min(
+              mediaQueryData.textScaleFactor,
+              _kMaxClockTextScaleFactor,
+            ),
+          ),
+          child: Text(
+            '$min:$secs',
+            style: TextStyle(
+              color: widget.active
+                  ? clockStyle.activeTextColor
+                  : clockStyle.textColor,
+              fontSize: 30,
+              fontFeatures: const [
+                FontFeature.tabularFigures(),
+              ],
+            ),
+            overflow: TextOverflow.fade,
+          ),
+        ),
+      ),
     );
   }
 }

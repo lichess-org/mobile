@@ -48,15 +48,14 @@ class TvScreen extends ConsumerWidget {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                topPlayer != null
-                    ? Player(
-                        name: topPlayer.name,
-                        title: topPlayer.title,
-                        rating: topPlayer.rating,
-                        clock: Duration(seconds: topPlayer.seconds ?? 0),
-                        active: !position.isGameOver &&
-                            position.turn == topPlayer.side)
-                    : const SizedBox.shrink(),
+                if (topPlayer != null)
+                  Player(
+                      name: topPlayer.name,
+                      title: topPlayer.title,
+                      rating: topPlayer.rating,
+                      clock: Duration(seconds: topPlayer.seconds ?? 0),
+                      active: !position.isGameOver &&
+                          position.turn == topPlayer.side),
                 Board(
                   interactableSide: InteractableSide.none,
                   settings: const Settings(animationDuration: Duration.zero),
@@ -65,15 +64,14 @@ class TvScreen extends ConsumerWidget {
                   fen: position.fen,
                   lastMove: position.lastMove?.cg,
                 ),
-                bottomPlayer != null
-                    ? Player(
-                        name: bottomPlayer.name,
-                        title: bottomPlayer.title,
-                        rating: bottomPlayer.rating,
-                        clock: Duration(seconds: bottomPlayer.seconds ?? 0),
-                        active: !position.isGameOver &&
-                            position.turn == bottomPlayer.side)
-                    : const SizedBox.shrink(),
+                if (bottomPlayer != null)
+                  Player(
+                      name: bottomPlayer.name,
+                      title: bottomPlayer.title,
+                      rating: bottomPlayer.rating,
+                      clock: Duration(seconds: bottomPlayer.seconds ?? 0),
+                      active: !position.isGameOver &&
+                          position.turn == bottomPlayer.side),
               ],
             );
           },
