@@ -47,116 +47,150 @@ void main() {
     registerFallbackValue(http.Request('GET', Uri.parse('http://api.test')));
   });
 
-  testWidgets('PlayForm loads card opponent info', (tester) async {
-    SharedPreferences.setMockInitialValues({});
-    final sharedPreferences = await SharedPreferences.getInstance();
+  group('PlayScreen', () {
+    testWidgets('meets accessibility guidelines', (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final sharedPreferences = await SharedPreferences.getInstance();
 
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-          apiClientProvider
-              .overrideWithValue(ApiClient(mockLogger, mockClient)),
-        ],
-        child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          home: Consumer(builder: (context, ref, _) {
-            return Scaffold(body: PlayForm(account: fakeUser));
-          }),
+      final SemanticsHandle handle = tester.ensureSemantics();
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+            apiClientProvider
+                .overrideWithValue(ApiClient(mockLogger, mockClient)),
+          ],
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            home: Consumer(builder: (context, ref, _) {
+              return Scaffold(body: PlayForm(account: fakeUser));
+            }),
+          ),
         ),
-      ),
-    );
+      );
 
-    // load maia1 default opponent info in card
-    // first frame is a loading state
-    expect(find.widgetWithText(Card, 'maia1'), findsOneWidget);
-    expect(
-        find.descendant(
-            of: find.byType(Card),
-            matching: find.byType(CircularProgressIndicator)),
-        findsOneWidget);
+      // wait for maia bots request to return
+      await tester.pump(const Duration(milliseconds: 100));
 
-    await tester.pump(const Duration(
-        milliseconds: 100)); // wait for maia bots request to return
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
 
-    // loaded maia ratings
-    expect(find.widgetWithIcon(Card, LichessIcons.blitz), findsOneWidget);
-    expect(find.widgetWithText(Card, '1541'), findsOneWidget);
-    expect(find.widgetWithIcon(Card, LichessIcons.rapid), findsOneWidget);
-    expect(find.widgetWithText(Card, '1477'), findsOneWidget);
-    expect(find.widgetWithIcon(Card, LichessIcons.classical), findsOneWidget);
-    expect(find.widgetWithText(Card, '1421'), findsOneWidget);
+      await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
 
-    // change maia opponent
-    await tester.tap(find.widgetWithText(ChoiceChip, 'maia5'));
-    await tester.pump();
-    expect(find.widgetWithIcon(Card, LichessIcons.blitz), findsOneWidget);
-    expect(find.widgetWithText(Card, '1643'), findsOneWidget);
-    expect(find.widgetWithIcon(Card, LichessIcons.rapid), findsOneWidget);
-    expect(find.widgetWithText(Card, '1577'), findsOneWidget);
-    expect(find.widgetWithIcon(Card, LichessIcons.classical), findsOneWidget);
-    expect(find.widgetWithText(Card, '1591'), findsOneWidget);
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
-    // choose stockfish opponent
-    await tester.tap(find.widgetWithText(ChoiceChip, 'Fairy-Stockfish 14'));
-    await tester.pump();
-    expect(find.widgetWithIcon(Card, LichessIcons.blitz), findsNothing);
-    expect(find.widgetWithIcon(Card, LichessIcons.rapid), findsNothing);
-    expect(find.widgetWithIcon(Card, LichessIcons.classical), findsNothing);
-    expect(find.widgetWithText(Card, 'Level 1'), findsOneWidget);
-  });
-
-  testWidgets('PlayForm changes time control', (tester) async {
-    SharedPreferences.setMockInitialValues({
-      'play.timeControl': '3 + 2',
+      await expectLater(tester, meetsGuideline(textContrastGuideline));
+      handle.dispose();
     });
-    final sharedPreferences = await SharedPreferences.getInstance();
 
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-          apiClientProvider
-              .overrideWithValue(ApiClient(mockLogger, mockClient)),
-        ],
-        child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          home: Consumer(builder: (context, ref, _) {
-            return Scaffold(body: PlayForm(account: fakeUser));
-          }),
+    testWidgets('loads card opponent info', (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final sharedPreferences = await SharedPreferences.getInstance();
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+            apiClientProvider
+                .overrideWithValue(ApiClient(mockLogger, mockClient)),
+          ],
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            home: Consumer(builder: (context, ref, _) {
+              return Scaffold(body: PlayForm(account: fakeUser));
+            }),
+          ),
         ),
-      ),
-    );
+      );
 
-    await tester.tap(find.text('3 + 2'));
-    await tester.pumpAndSettle(); // wait for the animation to finish
+      // load maia1 rating info in card first frame is a loading state
+      expect(
+          find.descendant(
+              of: find.byType(Card),
+              matching: find.byType(CircularProgressIndicator)),
+          findsOneWidget);
 
-    await tester.tap(find.byKey(const ValueKey(TimeControl.rapid1)));
-    await tester.pumpAndSettle(); // wait for the animation to finish
+      await tester.pump(const Duration(
+          milliseconds: 100)); // wait for maia bots request to return
 
-    expect(find.widgetWithText(OutlinedButton, '10 + 0'), findsOneWidget);
-    expect(find.widgetWithIcon(OutlinedButton, LichessIcons.rapid),
-        findsOneWidget);
-  });
+      // loaded maia ratings
+      expect(find.widgetWithIcon(Card, LichessIcons.blitz), findsOneWidget);
+      expect(find.widgetWithText(Card, '1541'), findsOneWidget);
+      expect(find.widgetWithIcon(Card, LichessIcons.rapid), findsOneWidget);
+      expect(find.widgetWithText(Card, '1477'), findsOneWidget);
+      expect(find.widgetWithIcon(Card, LichessIcons.classical), findsOneWidget);
+      expect(find.widgetWithText(Card, '1421'), findsOneWidget);
 
-  testWidgets('PlayForm creates a game', (tester) async {
-    SharedPreferences.setMockInitialValues({});
-    final sharedPreferences = await SharedPreferences.getInstance();
+      // change maia opponent
+      await tester.tap(find.widgetWithText(ChoiceChip, 'maia5'));
+      await tester.pump();
+      expect(find.widgetWithIcon(Card, LichessIcons.blitz), findsOneWidget);
+      expect(find.widgetWithText(Card, '1643'), findsOneWidget);
+      expect(find.widgetWithIcon(Card, LichessIcons.rapid), findsOneWidget);
+      expect(find.widgetWithText(Card, '1577'), findsOneWidget);
+      expect(find.widgetWithIcon(Card, LichessIcons.classical), findsOneWidget);
+      expect(find.widgetWithText(Card, '1591'), findsOneWidget);
 
-    const gameIdTest = 'rCRw1AuO';
+      // choose stockfish opponent
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Fairy-Stockfish 14'));
+      await tester.pump();
+      expect(find.widgetWithIcon(Card, LichessIcons.blitz), findsNothing);
+      expect(find.widgetWithIcon(Card, LichessIcons.rapid), findsNothing);
+      expect(find.widgetWithIcon(Card, LichessIcons.classical), findsNothing);
+      expect(find.widgetWithText(Card, 'Level 1'), findsOneWidget);
+    });
 
-    when(() =>
-        mockClient.post(Uri.parse('$kLichessHost/api/challenge/maia1'), body: {
-          'clock.limit': '${5 * 60}',
-          'clock.increment': '3',
-          'color': 'random',
-        })).thenAnswer((_) => mockResponse('ok', 200));
+    testWidgets('changes time control', (tester) async {
+      SharedPreferences.setMockInitialValues({
+        'play.timeControl': '3 + 2',
+      });
+      final sharedPreferences = await SharedPreferences.getInstance();
 
-    when(() => mockClient.send(any(
-            that: sameRequest(http.Request(
-                'GET', Uri.parse('$kLichessHost/api/stream/event'))))))
-        .thenAnswer((_) => mockHttpStreamFromIterable([
-              '''{
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+            apiClientProvider
+                .overrideWithValue(ApiClient(mockLogger, mockClient)),
+          ],
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            home: Consumer(builder: (context, ref, _) {
+              return Scaffold(body: PlayForm(account: fakeUser));
+            }),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('3 + 2'));
+      await tester.pumpAndSettle(); // wait for the animation to finish
+
+      await tester.tap(find.byKey(const ValueKey(TimeControl.rapid1)));
+      await tester.pumpAndSettle(); // wait for the animation to finish
+
+      expect(find.widgetWithText(OutlinedButton, '10 + 0'), findsOneWidget);
+      expect(find.widgetWithIcon(OutlinedButton, LichessIcons.rapid),
+          findsOneWidget);
+    });
+
+    testWidgets('creates a game', (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final sharedPreferences = await SharedPreferences.getInstance();
+
+      const gameIdTest = 'rCRw1AuO';
+
+      when(() => mockClient
+              .post(Uri.parse('$kLichessHost/api/challenge/maia1'), body: {
+            'clock.limit': '${5 * 60}',
+            'clock.increment': '3',
+            'color': 'random',
+          })).thenAnswer((_) => mockResponse('ok', 200));
+
+      when(() => mockClient.send(any(
+              that: sameRequest(http.Request(
+                  'GET', Uri.parse('$kLichessHost/api/stream/event'))))))
+          .thenAnswer((_) => mockHttpStreamFromIterable([
+                '''{
   "type": "gameStart",
   "game": {
     "gameId": "$gameIdTest",
@@ -185,50 +219,51 @@ void main() {
     }
   }
 }'''
-            ]));
+              ]));
 
-    when(() => mockClient.send(any(
-            that: sameRequest(http.Request(
-                'GET',
-                Uri.parse(
-                    '$kLichessHost/api/board/game/stream/$gameIdTest'))))))
-        .thenAnswer((_) => mockHttpStreamFromIterable([
-              '{ "type": "gameFull", "id": "$gameIdTest", "initialFen": "$kInitialFEN", "state": { "type": "gameState", "moves": "", "wtime": 180000, "btime": 180000, "status": "started" }}'
-            ]));
+      when(() => mockClient.send(any(
+              that: sameRequest(http.Request(
+                  'GET',
+                  Uri.parse(
+                      '$kLichessHost/api/board/game/stream/$gameIdTest'))))))
+          .thenAnswer((_) => mockHttpStreamFromIterable([
+                '{ "type": "gameFull", "id": "$gameIdTest", "initialFen": "$kInitialFEN", "state": { "type": "gameState", "moves": "", "wtime": 180000, "btime": 180000, "status": "started" }}'
+              ]));
 
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-          apiClientProvider
-              .overrideWithValue(ApiClient(mockLogger, mockClient)),
-          soundServiceProvider.overrideWithValue(mockSoundService),
-        ],
-        child: MediaQuery(
-          data: const MediaQueryData(size: Size(200, 600)),
-          child: MaterialApp(
-            useInheritedMediaQuery: true,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            home: Consumer(builder: (context, ref, _) {
-              return Scaffold(body: PlayForm(account: fakeUser));
-            }),
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+            apiClientProvider
+                .overrideWithValue(ApiClient(mockLogger, mockClient)),
+            soundServiceProvider.overrideWithValue(mockSoundService),
+          ],
+          child: MediaQuery(
+            data: const MediaQueryData(size: Size(200, 600)),
+            child: MaterialApp(
+              useInheritedMediaQuery: true,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              home: Consumer(builder: (context, ref, _) {
+                return Scaffold(body: PlayForm(account: fakeUser));
+              }),
+            ),
           ),
         ),
-      ),
-    );
+      );
 
-    await tester.pump(const Duration(
-        milliseconds: 100)); // wait for maia bots request to return
+      await tester.pump(const Duration(
+          milliseconds: 100)); // wait for maia bots request to return
 
-    expect(find.byType(CircularProgressIndicator), findsNothing);
-    await tester.tap(find.text('Play'));
-    await tester.pump(); // play action tapped
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    await tester
-        .pump(const Duration(seconds: 3)); // wait for create game service
-    await tester.pumpAndSettle(); // wait for page change animation
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+      await tester.tap(find.text('Play'));
+      await tester.pump(); // play action tapped
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      await tester
+          .pump(const Duration(seconds: 3)); // wait for create game service
+      await tester.pumpAndSettle(); // wait for page change animation
 
-    expect(find.byType(BoardScreen), findsOneWidget);
+      expect(find.byType(BoardScreen), findsOneWidget);
+    });
   });
 }
 

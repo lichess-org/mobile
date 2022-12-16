@@ -6,6 +6,7 @@ import 'package:tuple/tuple.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
 import 'package:lichess_mobile/src/features/auth/ui/auth_widget.dart';
 import 'package:lichess_mobile/src/features/auth/ui/auth_widget_notifier.dart';
@@ -18,11 +19,13 @@ import '../board/board_screen.dart';
 import './time_control_modal.dart';
 import './play_action_notifier.dart';
 
-const maiaChoices = [
+const _maiaChoices = [
   ComputerOpponent.maia1,
   ComputerOpponent.maia5,
   ComputerOpponent.maia9,
 ];
+
+const _stockfishName = 'Fairy-Stockfish 14';
 
 final maiaBotsProvider =
     FutureProvider.autoDispose<List<Tuple2<User, UserStatus>>>((ref) async {
@@ -101,15 +104,15 @@ class PlayForm extends ConsumerWidget {
       padding: const EdgeInsets.all(20.0),
       children: [
         Row(
-          children: const [
+          children: [
             Flexible(
                 child: Text(
-              'Play with the computer',
-              style: TextStyle(fontSize: 20),
+              context.l10n.playWithTheMachine,
+              style: const TextStyle(fontSize: 20),
               overflow: TextOverflow.ellipsis,
             )),
-            SizedBox(width: 5),
-            Tooltip(
+            const SizedBox(width: 5),
+            const Tooltip(
               message:
                   'Maia is a human-like neural network chess engine. It was trained by learning from over 10 million Lichess games.',
               child: Icon(Icons.help_sharp),
@@ -120,7 +123,7 @@ class PlayForm extends ConsumerWidget {
         Wrap(
           spacing: 10.0,
           children: [
-            ...maiaChoices.map((opponent) {
+            ..._maiaChoices.map((opponent) {
               final isSelected = opponentPref == opponent;
               return ChoiceChip(
                 key: ValueKey(opponent.name),
@@ -154,8 +157,7 @@ class PlayForm extends ConsumerWidget {
                     const SizedBox(width: 3),
                   ],
                   const Flexible(
-                      child: Text('Fairy-Stockfish 14',
-                          overflow: TextOverflow.fade)),
+                      child: Text(_stockfishName, overflow: TextOverflow.fade)),
                 ],
               ),
               selected: opponentPref == ComputerOpponent.stockfish,
@@ -178,8 +180,11 @@ class PlayForm extends ConsumerWidget {
               value: value.toDouble(),
               min: 1,
               max: 8,
-              divisions: 8,
-              label: 'Level $value',
+              divisions: 7,
+              label: '${context.l10n.level} $value',
+              semanticFormatterCallback: (double newValue) {
+                return '${context.l10n.level} ${newValue.round()}';
+              },
               onChanged: opponentPref != ComputerOpponent.stockfish
                   ? null
                   : (double newVal) {
@@ -196,65 +201,74 @@ class PlayForm extends ConsumerWidget {
         const SizedBox(height: 20),
         Card(
           margin: EdgeInsets.zero,
-          child: ListTile(
-            title: opponentPref == ComputerOpponent.stockfish
-                ? const Text('Fairy-Stockfish 14')
-                : Text(opponentPref.name, style: _titleStyle),
-            subtitle: opponentPref == ComputerOpponent.stockfish
-                ? Text('Level $stockfishLevel')
-                : maiaBots.when(
-                    data: (bots) {
-                      final bot = bots
-                          .firstWhere((b) => b.item1.id == opponentPref.name)
-                          .item1;
-                      return Row(
-                        children:
-                            [Perf.blitz, Perf.rapid, Perf.classical].map((p) {
-                          return Row(children: [
-                            Icon(p.icon, size: 14.0),
-                            const SizedBox(width: 3.0),
-                            Text(bot.perfs[p]!.rating.toString()),
-                            const SizedBox(width: 12.0),
-                          ]);
-                        }).toList(),
-                      );
-                    },
-                    error: (err, st) {
-                      debugPrint(
-                          'SEVERE [PlayScreen] could not load bot info: ${err.toString()}\n$st');
-                      return const Text('Could not load bot ratings.');
-                    },
-                    loading: () => const ButtonLoadingIndicator()),
+          child: Semantics(
+            label:
+                '${context.l10n.opponent} ${opponentPref == ComputerOpponent.stockfish ? context.l10n.level : context.l10n.rating}',
+            child: ListTile(
+              title: opponentPref == ComputerOpponent.stockfish
+                  ? Text('${context.l10n.level} $stockfishLevel')
+                  : maiaBots.when(
+                      data: (bots) {
+                        final bot = bots
+                            .firstWhere((b) => b.item1.id == opponentPref.name)
+                            .item1;
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children:
+                              [Perf.blitz, Perf.rapid, Perf.classical].map((p) {
+                            return Semantics(
+                              label: p.name,
+                              child: Row(children: [
+                                Icon(p.icon, size: 18.0),
+                                const SizedBox(width: 3.0),
+                                Text(bot.perfs[p]!.rating.toString()),
+                                const SizedBox(width: 12.0),
+                              ]),
+                            );
+                          }).toList(),
+                        );
+                      },
+                      error: (err, st) {
+                        debugPrint(
+                            'SEVERE [PlayScreen] could not load bot info: ${err.toString()}\n$st');
+                        return const Text('Could not load bot ratings.');
+                      },
+                      loading: () => const ButtonLoadingIndicator()),
+            ),
           ),
         ),
         const SizedBox(height: 5),
-        OutlinedButton(
-          onPressed: () {
-            showModalBottomSheet<void>(
-              context: context,
-              builder: (BuildContext context) {
-                return const TimeControlModal();
-              },
-            );
-          },
-          style: _buttonStyle,
-          child: Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 28.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(timeControlPref.perf.icon, size: 20),
-                      const SizedBox(width: 5),
-                      Text(timeControlPref.value.toString())
-                    ],
+        SemanticsButton(
+          label:
+              '${context.l10n.timeControl} ${timeControlPref.perf.name} ${timeControlPref.value.toString()}',
+          child: OutlinedButton(
+            onPressed: () {
+              showModalBottomSheet<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return const TimeControlModal();
+                },
+              );
+            },
+            style: _buttonStyle,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 28.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(timeControlPref.perf.icon, size: 20),
+                        const SizedBox(width: 5),
+                        Text(timeControlPref.value.toString())
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const Icon(Icons.keyboard_arrow_down, size: 28.0),
-            ],
+                const Icon(Icons.keyboard_arrow_down, size: 28.0),
+              ],
+            ),
           ),
         ),
         ElevatedButton(
@@ -271,6 +285,7 @@ class PlayForm extends ConsumerWidget {
           child: authActionsAsync.isLoading || playActionAsync.isLoading
               ? const ButtonLoadingIndicator()
               : Text(account == null
+                  // TODO translate
                   ? 'Sign in to start playing'
                   : context.l10n.play),
         ),
@@ -282,4 +297,3 @@ class PlayForm extends ConsumerWidget {
 final ButtonStyle _buttonStyle = ElevatedButton.styleFrom(
   textStyle: const TextStyle(fontSize: 20),
 );
-const TextStyle _titleStyle = TextStyle(fontSize: 18);

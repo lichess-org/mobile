@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
 
 import '../../../constants.dart';
@@ -55,9 +56,9 @@ class SettingsScreen extends ConsumerWidget {
             orElse: () => const CircularProgressIndicator.adaptive(),
           ),
           const SizedBox(height: 10),
-          ListTile(
-            leading: const Icon(Icons.brightness_medium),
-            title: Text(context.l10n.background),
+          ListNavigateButton(
+            icon: const Icon(Icons.brightness_medium),
+            label: context.l10n.background,
             onTap: () {
               context.go('/settings/themeMode');
             },
