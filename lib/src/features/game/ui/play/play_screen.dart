@@ -206,7 +206,8 @@ class PlayForm extends ConsumerWidget {
                 '${context.l10n.opponent} ${opponentPref == ComputerOpponent.stockfish ? context.l10n.level : context.l10n.rating}',
             child: ListTile(
               title: opponentPref == ComputerOpponent.stockfish
-                  ? Text('${context.l10n.level} $stockfishLevel')
+                  ? Text('${context.l10n.level} $stockfishLevel',
+                      textAlign: TextAlign.center)
                   : maiaBots.when(
                       data: (bots) {
                         final bot = bots
