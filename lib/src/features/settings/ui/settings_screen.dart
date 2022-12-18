@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/features/user/model/user.dart';
 
 import '../../../constants.dart';
 import '../../auth/data/auth_repository.dart';
+import './theme_mode_screen.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -59,9 +60,14 @@ class SettingsScreen extends ConsumerWidget {
           ListNavigateButton(
             icon: const Icon(Icons.brightness_medium),
             label: context.l10n.background,
-            onTap: () {
-              context.go('/settings/themeMode');
-            },
+            onTap: () => Navigator.of(context).push<void>(
+              MaterialPageRoute(
+                builder: (context) => ThemeModeScreen(),
+              ),
+            ),
+            // onTap: () {
+            //   context.go('/settings/themeMode');
+            // },
           ),
         ],
       ),

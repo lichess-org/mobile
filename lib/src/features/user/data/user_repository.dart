@@ -16,9 +16,13 @@ class UserRepository {
   final Logger _log;
 
   TaskEither<IOError, User> getUserTask(String username) {
-    return apiClient.get(Uri.parse('$kLichessHost/api/user/$username')).flatMap(
-        (response) => TaskEither.fromEither(readJsonObject(response.body,
-            mapper: User.fromJson, logger: _log)));
+    return apiClient
+        .get(Uri.parse('$kLichessHost/api/user/$username'))
+        .flatMap((response) {
+      print(response.body);
+      return TaskEither.fromEither(
+          readJsonObject(response.body, mapper: User.fromJson, logger: _log));
+    });
   }
 
   TaskEither<IOError, List<UserStatus>> getUsersStatusTask(List<String> ids) {

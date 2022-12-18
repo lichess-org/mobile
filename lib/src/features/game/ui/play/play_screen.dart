@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart' hide Tuple2;
@@ -5,6 +6,7 @@ import 'package:tuple/tuple.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
@@ -56,19 +58,42 @@ class PlayScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authStateChangesProvider);
-
-    return Scaffold(
-      appBar: AppBar(title: const Text('lichess.org'), actions: const [
-        AuthWidget(),
-      ]),
-      body: Center(
-        child: authState.maybeWhen(
-          data: (account) => PlayForm(account: account),
-          orElse: () => const CircularProgressIndicator.adaptive(),
-        ),
-      ),
+    return PlatformWidget(
+      androidBuilder: _androidBuilder(ref),
+      iosBuilder: _iosBuilder(ref),
     );
+  }
+
+  Widget Function(BuildContext context) _androidBuilder(WidgetRef ref) {
+    return (BuildContext context) {
+      final authState = ref.watch(authStateChangesProvider);
+      return Scaffold(
+        appBar: AppBar(title: const Text('lichess.org'), actions: const [
+          AuthWidget(),
+        ]),
+        body: Center(
+          child: authState.maybeWhen(
+            data: (account) => PlayForm(account: account),
+            orElse: () => const CircularProgressIndicator.adaptive(),
+          ),
+        ),
+      );
+    };
+  }
+
+  Widget Function(BuildContext context) _iosBuilder(WidgetRef ref) {
+    return (BuildContext context) {
+      final authState = ref.watch(authStateChangesProvider);
+      return CupertinoPageScaffold(
+        navigationBar: const CupertinoNavigationBar(trailing: AuthWidget()),
+        child: Center(
+          child: authState.maybeWhen(
+            data: (account) => PlayForm(account: account),
+            orElse: () => const CircularProgressIndicator.adaptive(),
+          ),
+        ),
+      );
+    };
   }
 }
 
