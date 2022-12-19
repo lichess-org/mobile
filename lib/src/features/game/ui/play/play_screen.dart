@@ -21,12 +21,6 @@ import '../board/board_screen.dart';
 import './time_control_modal.dart';
 import './play_action_notifier.dart';
 
-const _maiaChoices = [
-  ComputerOpponent.maia1,
-  ComputerOpponent.maia5,
-  ComputerOpponent.maia9,
-];
-
 const _stockfishName = 'Fairy-Stockfish 14';
 
 final maiaBotsProvider =
@@ -106,6 +100,7 @@ class PlayForm extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final maiaBots = ref.watch(maiaBotsProvider);
     final opponentPref = ref.watch(computerOpponentPrefProvider);
+    final maiaStrength = ref.watch(maiaStrengthProvider);
     final stockfishLevel = ref.watch(stockfishLevelProvider);
     final timeControlPref = ref.watch(timeControlPrefProvider);
     final authActionsAsync = ref.watch(authWidgetProvider);
@@ -124,134 +119,87 @@ class PlayForm extends ConsumerWidget {
       }
     });
 
-    return ListView(
-      shrinkWrap: true,
-      padding: const EdgeInsets.all(20.0),
-      children: [
-        Row(
-          children: [
-            Flexible(
-                child: Text(
-              context.l10n.playWithTheMachine,
-              style: const TextStyle(fontSize: 20),
-              overflow: TextOverflow.ellipsis,
-            )),
-            const SizedBox(width: 5),
-            const Tooltip(
-              message:
-                  'Maia is a human-like neural network chess engine. It was trained by learning from over 10 million Lichess games.',
-              child: Icon(Icons.help_sharp),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Wrap(
-          spacing: 10.0,
-          children: [
-            ..._maiaChoices.map((opponent) {
-              final isSelected = opponentPref == opponent;
-              return ChoiceChip(
-                key: ValueKey(opponent.name),
-                label: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (isSelected) ...[
-                      const Icon(Icons.check, size: 18),
-                      const SizedBox(width: 3),
-                    ],
-                    Text(opponent.name, overflow: TextOverflow.fade),
-                  ],
+    return SafeArea(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: ListView(
+              shrinkWrap: true,
+              padding: const EdgeInsets.all(20.0),
+              children: [
+                Text(
+                  context.l10n.playWithTheMachine,
+                  style: const TextStyle(fontSize: 20),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                selected: isSelected,
-                onSelected: (bool selected) {
-                  if (selected) {
-                    ref
-                        .read(computerOpponentPrefProvider.notifier)
-                        .set(opponent);
-                  }
-                },
-              );
-            }).toList(),
-            ChoiceChip(
-              key: ValueKey(ComputerOpponent.stockfish.name),
-              label: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (opponentPref == ComputerOpponent.stockfish) ...[
-                    const Icon(Icons.check, size: 18),
-                    const SizedBox(width: 3),
-                  ],
-                  const Flexible(
-                      child: Text(_stockfishName, overflow: TextOverflow.fade)),
-                ],
-              ),
-              selected: opponentPref == ComputerOpponent.stockfish,
-              onSelected: (bool selected) {
-                if (selected) {
-                  ref
-                      .read(computerOpponentPrefProvider.notifier)
-                      .set(ComputerOpponent.stockfish);
-                }
-              },
-            ),
-          ],
-        ),
-        const SizedBox(height: 5),
-        Builder(builder: (BuildContext context) {
-          int value = stockfishLevel;
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-            return Slider(
-              value: value.toDouble(),
-              min: 1,
-              max: 8,
-              divisions: 7,
-              label: '${context.l10n.level} $value',
-              semanticFormatterCallback: (double newValue) {
-                return '${context.l10n.level} ${newValue.round()}';
-              },
-              onChanged: opponentPref != ComputerOpponent.stockfish
-                  ? null
-                  : (double newVal) {
-                      setState(() {
-                        value = newVal.round();
-                      });
-                    },
-              onChangeEnd: (double value) {
-                ref.read(stockfishLevelProvider.notifier).set(value.round());
-              },
-            );
-          });
-        }),
-        const SizedBox(height: 20),
-        Card(
-          margin: EdgeInsets.zero,
-          child: Semantics(
-            label:
-                '${context.l10n.opponent} ${opponentPref == ComputerOpponent.stockfish ? context.l10n.level : context.l10n.rating}',
-            child: ListTile(
-              title: opponentPref == ComputerOpponent.stockfish
-                  ? Text('${context.l10n.level} $stockfishLevel',
-                      textAlign: TextAlign.center)
-                  : maiaBots.when(
+                const SizedBox(height: 10),
+                CupertinoSlidingSegmentedControl<ComputerOpponent>(
+                  onValueChanged: (opponent) {
+                    if (opponent != null) {
+                      ref
+                          .read(computerOpponentPrefProvider.notifier)
+                          .set(opponent);
+                    }
+                  },
+                  groupValue: opponentPref,
+                  children: const {
+                    ComputerOpponent.maia: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Text('Maia'),
+                    ),
+                    ComputerOpponent.stockfish: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Text('Stockfish 14'),
+                    ),
+                  },
+                ),
+                const SizedBox(height: 10),
+                Builder(builder: (BuildContext context) {
+                  if (opponentPref == ComputerOpponent.maia) {
+                    return maiaBots.when(
                       data: (bots) {
-                        final bot = bots
-                            .firstWhere((b) => b.item1.id == opponentPref.name)
-                            .item1;
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children:
-                              [Perf.blitz, Perf.rapid, Perf.classical].map((p) {
-                            return Semantics(
-                              label: p.name,
-                              child: Row(children: [
-                                Icon(p.icon, size: 18.0),
-                                const SizedBox(width: 3.0),
-                                Text(bot.perfs[p]!.rating.toString()),
-                                const SizedBox(width: 12.0),
-                              ]),
-                            );
-                          }).toList(),
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                                'Maia is a human-like neural network chess engine. It was trained by learning from over 10 million Lichess games.'),
+                            const SizedBox(height: 10),
+                            Card(
+                              child: Column(
+                                children: ListTile.divideTiles(
+                                    context: context,
+                                    tiles: MaiaStrength.values.map((ms) {
+                                      final bot = bots
+                                          .firstWhere(
+                                              (b) => b.item1.id == ms.name)
+                                          .item1;
+                                      return ListTile(
+                                        trailing: const Icon(Icons.check),
+                                        title: Text(ms.name),
+                                        subtitle: Row(
+                                          children: [
+                                            Perf.blitz,
+                                            Perf.rapid,
+                                            Perf.classical
+                                          ].map((p) {
+                                            return Semantics(
+                                              label: p.name,
+                                              child: Row(children: [
+                                                Icon(p.icon, size: 18.0),
+                                                const SizedBox(width: 3.0),
+                                                Text(bot.perfs[p]!.rating
+                                                    .toString()),
+                                                const SizedBox(width: 12.0),
+                                              ]),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      );
+                                    })).toList(growable: false),
+                              ),
+                            ),
+                          ],
                         );
                       },
                       error: (err, st) {
@@ -259,63 +207,114 @@ class PlayForm extends ConsumerWidget {
                             'SEVERE [PlayScreen] could not load bot info: ${err.toString()}\n$st');
                         return const Text('Could not load bot ratings.');
                       },
-                      loading: () => const ButtonLoadingIndicator()),
-            ),
-          ),
-        ),
-        const SizedBox(height: 5),
-        SemanticsButton(
-          label:
-              '${context.l10n.timeControl} ${timeControlPref.perf.name} ${timeControlPref.value.toString()}',
-          child: OutlinedButton(
-            onPressed: () {
-              showModalBottomSheet<void>(
-                context: context,
-                builder: (BuildContext context) {
-                  return const TimeControlModal();
-                },
-              );
-            },
-            style: _buttonStyle,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 28.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      loading: () => const ButtonLoadingIndicator(),
+                    );
+                  }
+
+                  int value = stockfishLevel;
+                  return StatefulBuilder(
+                      builder: (BuildContext context, StateSetter setState) {
+                    return Row(
                       children: [
-                        Icon(timeControlPref.perf.icon, size: 20),
-                        const SizedBox(width: 5),
-                        Text(timeControlPref.value.toString())
+                        Text(context.l10n.strength),
+                        Expanded(
+                          child: Slider(
+                            value: value.toDouble(),
+                            min: 1,
+                            max: 8,
+                            divisions: 7,
+                            label: '${context.l10n.level} $value',
+                            semanticFormatterCallback: (double newValue) {
+                              return '${context.l10n.level} ${newValue.round()}';
+                            },
+                            onChanged:
+                                opponentPref != ComputerOpponent.stockfish
+                                    ? null
+                                    : (double newVal) {
+                                        setState(() {
+                                          value = newVal.round();
+                                        });
+                                      },
+                            onChangeEnd: (double value) {
+                              ref
+                                  .read(stockfishLevelProvider.notifier)
+                                  .set(value.round());
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  });
+                }),
+                const SizedBox(height: 20),
+                SemanticsButton(
+                  label:
+                      '${context.l10n.timeControl} ${timeControlPref.perf.name} ${timeControlPref.value.toString()}',
+                  child: OutlinedButton(
+                    onPressed: () {
+                      showModalBottomSheet<void>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const TimeControlModal();
+                        },
+                      );
+                    },
+                    style: _buttonStyle,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 28.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(timeControlPref.perf.icon, size: 20),
+                                const SizedBox(width: 5),
+                                Text(timeControlPref.value.toString())
+                              ],
+                            ),
+                          ),
+                        ),
+                        const Icon(Icons.keyboard_arrow_down, size: 28.0),
                       ],
                     ),
                   ),
                 ),
-                const Icon(Icons.keyboard_arrow_down, size: 28.0),
+                ElevatedButton(
+                  onPressed: account == null
+                      ? authActionsAsync.isLoading
+                          ? null
+                          : () => ref.read(authWidgetProvider.notifier).signIn()
+                      : playActionAsync.isLoading
+                          ? null
+                          : () => ref
+                              .read(playActionProvider.notifier)
+                              .createGame(account: account!),
+                  style: _buttonStyle,
+                  child: authActionsAsync.isLoading || playActionAsync.isLoading
+                      ? const ButtonLoadingIndicator()
+                      : Text(account == null
+                          // TODO translate
+                          ? 'Sign in to start playing'
+                          : context.l10n.play),
+                ),
               ],
             ),
           ),
-        ),
-        ElevatedButton(
-          onPressed: account == null
-              ? authActionsAsync.isLoading
-                  ? null
-                  : () => ref.read(authWidgetProvider.notifier).signIn()
-              : playActionAsync.isLoading
-                  ? null
-                  : () => ref
-                      .read(playActionProvider.notifier)
-                      .createGame(account: account!),
-          style: _buttonStyle,
-          child: authActionsAsync.isLoading || playActionAsync.isLoading
-              ? const ButtonLoadingIndicator()
-              : Text(account == null
-                  // TODO translate
-                  ? 'Sign in to start playing'
-                  : context.l10n.play),
-        ),
-      ],
+          SizedBox(
+            height: 70,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+              child: ElevatedButton(
+                style: _buttonStyle,
+                child: Text(context.l10n.createAGame),
+                onPressed: () {},
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

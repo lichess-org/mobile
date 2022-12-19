@@ -2,17 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
 import 'constants.dart';
-
 import 'features/auth/ui/auth_widget.dart';
 import 'features/game/ui/play/play_screen.dart';
-import 'features/settings/ui/settings_screen.dart';
 import 'features/user/ui/profile_screen.dart';
-import 'features/settings/ui/theme_mode_screen.dart';
 import 'features/settings/ui/theme_mode_notifier.dart';
 import 'features/tv/ui/tv_screen.dart';
 import 'common/lichess_icons.dart';
@@ -24,99 +22,24 @@ class App extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
     final brightness = ref.watch(selectedBrigthnessProvider);
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-        return MaterialApp(
-          restorationScopeId: 'app',
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: kSupportedLocales,
-          onGenerateTitle: (BuildContext context) => 'lichess.org',
-          theme: ThemeData(
-            brightness: Brightness.light,
-          ),
-          darkTheme: ThemeData(
-            brightness: Brightness.dark,
-          ),
-          themeMode: themeMode,
-          home: const ScaffoldWithBottomNavBar(),
-        );
-      case TargetPlatform.iOS:
-        return CupertinoApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: kSupportedLocales,
-          onGenerateTitle: (BuildContext context) => 'lichess.org',
-          theme: CupertinoThemeData(
+    return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: kSupportedLocales,
+      onGenerateTitle: (BuildContext context) => 'lichess.org',
+      darkTheme: ThemeData.dark(),
+      builder: (context, child) {
+        return CupertinoTheme(
+          data: CupertinoThemeData(
             brightness: brightness,
           ),
-          home: const ScaffoldWithBottomNavBar(),
+          child: Material(child: child),
         );
-      default:
-        assert(false, 'Unexpected platform $defaultTargetPlatform');
-        return const SizedBox.shrink();
-    }
+      },
+      themeMode: themeMode,
+      home: const ScaffoldWithBottomNavBar(),
+    );
   }
 }
-
-// private navigators
-// final _rootNavigatorKey = GlobalKey<NavigatorState>();
-// final _shellNavigatorKey = GlobalKey<NavigatorState>();
-
-// final goRouter = GoRouter(
-//   initialLocation: '/play',
-//   navigatorKey: _rootNavigatorKey,
-//   debugLogDiagnostics: true,
-//   routes: [
-//     ShellRoute(
-//       navigatorKey: _shellNavigatorKey,
-//       builder: (context, state, child) {
-//         return ScaffoldWithBottomNavBar(child: child);
-//       },
-//       routes: [
-//         GoRoute(
-//           path: '/play',
-//           pageBuilder: (context, state) => NoTransitionPage(
-//             key: state.pageKey,
-//             child: const PlayScreen(),
-//           ),
-//         ),
-//         GoRoute(
-//           path: '/puzzles',
-//           pageBuilder: (context, state) => NoTransitionPage(
-//             key: state.pageKey,
-//             child: const PuzzlesScreen(),
-//           ),
-//         ),
-//         GoRoute(
-//           path: '/watch',
-//           pageBuilder: (context, state) => NoTransitionPage(
-//             key: state.pageKey,
-//             child: const TvScreen(),
-//           ),
-//         ),
-//         GoRoute(
-//           path: '/profile',
-//           pageBuilder: (context, state) => NoTransitionPage(
-//             key: state.pageKey,
-//             child: ProfileScreen(),
-//           ),
-//         ),
-//         GoRoute(
-//           path: '/settings',
-//           pageBuilder: (context, state) => NoTransitionPage(
-//             key: state.pageKey,
-//             child: const SettingsScreen(),
-//           ),
-//           routes: [
-//             GoRoute(
-//               path: 'themeMode',
-//               builder: (context, state) => const ThemeModeScreen(),
-//             ),
-//           ],
-//         ),
-//       ],
-//     ),
-//   ],
-// );
 
 class ScaffoldWithBottomNavBar extends StatefulWidget {
   const ScaffoldWithBottomNavBar({Key? key}) : super(key: key);
@@ -127,28 +50,80 @@ class ScaffoldWithBottomNavBar extends StatefulWidget {
 }
 
 class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
+  int _androidCurrentIndex = 0;
+
+  void _onItemTapped(BuildContext context, int tabIndex) {
+    // Only navigate if the tab index has changed
+    if (tabIndex != _androidCurrentIndex) {
+      setState(() {
+        _androidCurrentIndex = tabIndex;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return CupertinoTabScaffold(
-      tabBar: CupertinoTabBar(
-        items: [
-          BottomNavigationBarItem(
-            label: context.l10n.play,
-            icon: const Icon(LichessIcons.chess_king),
+    final items = [
+      BottomNavigationBarItem(
+        label: context.l10n.play,
+        icon: const Icon(LichessIcons.chess_king),
+      ),
+      BottomNavigationBarItem(
+        label: context.l10n.puzzles,
+        icon: const Icon(LichessIcons.target),
+      ),
+      BottomNavigationBarItem(
+        label: context.l10n.watch,
+        icon: const Icon(Icons.live_tv),
+      ),
+      BottomNavigationBarItem(
+        label: context.l10n.profile,
+        icon: const Icon(CupertinoIcons.profile_circled),
+      ),
+    ];
+    return PlatformWidget(
+      androidBuilder: (BuildContext context) => _buildAndroid(context, items),
+      iosBuilder: (BuildContext context) => _buildIos(context, items),
+    );
+  }
+
+  Widget _buildAndroid(
+      BuildContext context, List<BottomNavigationBarItem> items) {
+    return Scaffold(
+      body: IndexedStack(
+        index: _androidCurrentIndex,
+        children: [
+          CupertinoTabView(
+            defaultTitle: context.l10n.play,
+            builder: (context) => const PlayScreen(),
           ),
-          BottomNavigationBarItem(
-            label: context.l10n.puzzles,
-            icon: const Icon(LichessIcons.target),
+          CupertinoTabView(
+            defaultTitle: context.l10n.puzzles,
+            builder: (context) => const PuzzlesScreen(),
           ),
-          BottomNavigationBarItem(
-            label: context.l10n.watch,
-            icon: const Icon(Icons.live_tv),
+          CupertinoTabView(
+            defaultTitle: context.l10n.watch,
+            builder: (context) => const TvScreen(),
           ),
-          BottomNavigationBarItem(
-            label: context.l10n.profile,
-            icon: const Icon(Icons.person),
+          CupertinoTabView(
+            defaultTitle: context.l10n.profile,
+            builder: (context) => const ProfileScreen(),
           ),
         ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _androidCurrentIndex,
+        items: items,
+        onTap: (index) => _onItemTapped(context, index),
+      ),
+    );
+  }
+
+  Widget _buildIos(BuildContext context, List<BottomNavigationBarItem> items) {
+    return CupertinoTabScaffold(
+      tabBar: CupertinoTabBar(
+        items: items,
       ),
       tabBuilder: (context, index) {
         switch (index) {
