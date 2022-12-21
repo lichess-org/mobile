@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import '../common/lichess_icons.dart';
 import '../features/game/ui/play/play_screen.dart';
 import '../features/user/ui/profile_screen.dart';
@@ -62,6 +63,7 @@ class BottomNavScaffold extends ConsumerWidget {
             tabBuilder: _tabBuilder,
           ),
           bottomNavigationBar: BottomNavigationBar(
+            selectedItemColor: kOrange,
             type: BottomNavigationBarType.fixed,
             currentIndex: currentTab.index,
             items: tabs,
