@@ -5,8 +5,10 @@ import 'package:chessground/chessground.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 
 import '../../settings/ui/is_sound_muted_notifier.dart';
+import '../model/featured_position.dart';
 import './tv_stream.dart';
 import './featured_game_notifier.dart';
 
@@ -16,7 +18,11 @@ class TvScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    final tvStream = ref.watch(tvStreamProvider);
+    final currentTab = ref.watch(currentBottomTabProvider);
+    // ensure the stream is closed when offstage
+    final tvStream = currentTab == BottomTab.watch
+        ? ref.watch(tvStreamProvider)
+        : const AsyncLoading<FeaturedPosition>();
     final featuredGame = ref.watch(featuredGameProvider);
     final isSoundMuted = ref.watch(isSoundMutedProvider);
 
