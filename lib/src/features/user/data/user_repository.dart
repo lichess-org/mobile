@@ -19,7 +19,6 @@ class UserRepository {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/user/$username'))
         .flatMap((response) {
-      print(response.body);
       return TaskEither.fromEither(
           readJsonObject(response.body, mapper: User.fromJson, logger: _log));
     });

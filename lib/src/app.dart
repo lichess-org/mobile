@@ -26,7 +26,10 @@ class App extends ConsumerWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: kSupportedLocales,
       onGenerateTitle: (BuildContext context) => 'lichess.org',
-      darkTheme: ThemeData.dark(),
+      theme: ThemeData(),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+      ),
       builder: (context, child) {
         return CupertinoTheme(
           data: CupertinoThemeData(
@@ -50,15 +53,22 @@ class ScaffoldWithBottomNavBar extends StatefulWidget {
 }
 
 class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
-  int _androidCurrentIndex = 0;
+  final _controller = CupertinoTabController();
+  int _currentIndex = 0;
 
   void _onItemTapped(BuildContext context, int tabIndex) {
     // Only navigate if the tab index has changed
-    if (tabIndex != _androidCurrentIndex) {
+    if (tabIndex != _currentIndex) {
       setState(() {
-        _androidCurrentIndex = tabIndex;
+        _currentIndex = tabIndex;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -91,8 +101,9 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
       BuildContext context, List<BottomNavigationBarItem> items) {
     return Scaffold(
       body: IndexedStack(
-        index: _androidCurrentIndex,
+        index: _currentIndex,
         children: [
+          // using CupertinoTabView here because it holds the navigation state
           CupertinoTabView(
             defaultTitle: context.l10n.play,
             builder: (context) => const PlayScreen(),
@@ -113,7 +124,7 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        currentIndex: _androidCurrentIndex,
+        currentIndex: _currentIndex,
         items: items,
         onTap: (index) => _onItemTapped(context, index),
       ),
@@ -125,6 +136,7 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
       tabBar: CupertinoTabBar(
         items: items,
       ),
+      controller: _controller,
       tabBuilder: (context, index) {
         switch (index) {
           case 0:
