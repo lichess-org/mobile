@@ -43,12 +43,6 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pump(const Duration(seconds: 1)); // wait for sign in future
 
-    expect(find.byIcon(Icons.person), findsOneWidget);
-
-    await tester.tap(find.byIcon(Icons.person));
-    await tester.pump();
-    await tester.pump(const Duration(seconds: 1)); // finish the menu animation
-
     await tester.tap(find.text('Sign out'));
     await tester.pump();
     await tester.pump(const Duration(seconds: 1)); // wait for sign out future

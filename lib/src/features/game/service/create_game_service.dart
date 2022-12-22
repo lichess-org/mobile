@@ -22,6 +22,7 @@ class CreateGameService {
   TaskEither<IOError, Game> aiGameTask(User account, {Side? side}) {
     final challengeRepo = ref.read(challengeRepositoryProvider);
     final opponent = ref.read(computerOpponentPrefProvider);
+    final maiaStrength = ref.read(maiaStrengthProvider);
     final timeControl = ref.read(timeControlPrefProvider).value;
     final level = ref.read(stockfishLevelProvider);
 
@@ -33,7 +34,7 @@ class CreateGameService {
     final createChallengeTask = opponent == ComputerOpponent.stockfish
         ? challengeRepo.challengeAITask(
             AiChallengeRequest(level: level, challenge: challengeRequest))
-        : challengeRepo.challengeTask(opponent.name, challengeRequest);
+        : challengeRepo.challengeTask(maiaStrength.name, challengeRequest);
 
     return createChallengeTask.andThen(() => _waitForGameStart(account));
   }

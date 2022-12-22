@@ -132,14 +132,8 @@ class PlayForm extends ConsumerWidget {
             },
             groupValue: opponentPref,
             children: const {
-              ComputerOpponent.maia: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Text('Maia'),
-              ),
-              ComputerOpponent.stockfish: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Text('Stockfish 14'),
-              ),
+              ComputerOpponent.maia: Text('Maia'),
+              ComputerOpponent.stockfish: Text('Stockfish 14'),
             },
           ),
           const SizedBox(height: 10),
@@ -186,7 +180,7 @@ class PlayForm extends ConsumerWidget {
                       'SEVERE [PlayScreen] could not load bot info: ${err.toString()}\n$st');
                   return const Text('Could not load bot ratings.');
                 },
-                loading: () => const ButtonLoadingIndicator(),
+                loading: () => const CircularProgressIndicator.adaptive(),
               );
             }
 
