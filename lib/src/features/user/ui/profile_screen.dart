@@ -30,10 +30,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         title: Text(context.l10n.profile),
         actions: [
           IconButton(
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
             onPressed: () => Navigator.of(context).push<void>(
               MaterialPageRoute(
-                builder: (context) => SettingsScreen(),
+                builder: (context) => const SettingsScreen(),
               ),
             ),
           ),
@@ -44,8 +44,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         onRefresh: _refreshData,
         child: ListView(
           padding: const EdgeInsets.all(8.0),
-          children: [
-            const Text('Drag me up', textAlign: TextAlign.center),
+          children: const [
+            Text('Drag me up', textAlign: TextAlign.center),
           ],
         ),
       ),
@@ -59,10 +59,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           trailing: CupertinoButton(
             onPressed: () => Navigator.of(context).push<void>(
               MaterialPageRoute(
-                builder: (context) => SettingsScreen(),
+                builder: (context) => const SettingsScreen(),
               ),
             ),
-            child: Icon(CupertinoIcons.settings),
+            child: const Icon(CupertinoIcons.settings),
           ),
           largeTitle: Text(context.l10n.profile),
         ),

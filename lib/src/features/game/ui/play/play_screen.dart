@@ -264,27 +264,25 @@ class PlayForm extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 10),
-          Align(
-            child: FatButton(
-              semanticsLabel: account == null
-                  ? 'Sign in to start playing'
-                  : context.l10n.play,
-              onPressed: account == null
-                  ? authActionsAsync.isLoading
-                      ? null
-                      : () => ref.read(authWidgetProvider.notifier).signIn()
-                  : playActionAsync.isLoading
-                      ? null
-                      : () => ref
-                          .read(playActionProvider.notifier)
-                          .createGame(account: account!),
-              child: authActionsAsync.isLoading || playActionAsync.isLoading
-                  ? const ButtonLoadingIndicator()
-                  : Text(account == null
-                      // TODO translate
-                      ? 'Sign in to start playing'
-                      : context.l10n.play),
-            ),
+          FatButton(
+            semanticsLabel: account == null
+                ? 'Sign in to start playing'
+                : context.l10n.play,
+            onPressed: account == null
+                ? authActionsAsync.isLoading
+                    ? null
+                    : () => ref.read(authWidgetProvider.notifier).signIn()
+                : playActionAsync.isLoading
+                    ? null
+                    : () => ref
+                        .read(playActionProvider.notifier)
+                        .createGame(account: account!),
+            child: authActionsAsync.isLoading || playActionAsync.isLoading
+                ? const ButtonLoadingIndicator()
+                : Text(account == null
+                    // TODO translate
+                    ? 'Sign in to start playing'
+                    : context.l10n.play),
           ),
         ],
       ),

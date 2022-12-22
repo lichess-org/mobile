@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -62,7 +61,7 @@ class SettingsScreen extends ConsumerWidget {
             label: context.l10n.background,
             onTap: () => Navigator.of(context).push<void>(
               MaterialPageRoute(
-                builder: (context) => ThemeModeScreen(),
+                builder: (context) => const ThemeModeScreen(),
               ),
             ),
             // onTap: () {
