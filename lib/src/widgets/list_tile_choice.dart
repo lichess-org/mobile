@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,28 +22,38 @@ class ListTileChoice<T extends Enum> extends StatelessWidget {
 
   @override
   Widget build(context) {
-    return Card(
-      elevation: defaultTargetPlatform == TargetPlatform.iOS ? 0 : null,
-      shape: defaultTargetPlatform == TargetPlatform.iOS
-          ? const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)))
-          : null,
-      color: defaultTargetPlatform == TargetPlatform.iOS
-          ? CupertinoDynamicColor.resolve(
-              CupertinoColors.secondarySystemBackground, context)
-          : null,
-      child: Column(
-        children: ListTile.divideTiles(
-            context: context,
-            tiles: choices.map((value) {
-              return ListTile(
-                trailing:
-                    selectedItem == value ? const Icon(Icons.check) : null,
-                title: titleBuilder(value),
-                subtitle: subtitleBuilder?.call(value),
-                onTap: () => onSelectedItemChanged(value),
-              );
-            })).toList(growable: false),
+    final MediaQueryData mediaQueryData = MediaQuery.of(context);
+    return MediaQuery(
+      data: mediaQueryData.copyWith(
+        textScaleFactor: math.min(
+          mediaQueryData.textScaleFactor,
+          1.64,
+        ),
+      ),
+      child: Card(
+        elevation: defaultTargetPlatform == TargetPlatform.iOS ? 0 : null,
+        margin: EdgeInsets.zero,
+        shape: defaultTargetPlatform == TargetPlatform.iOS
+            ? const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)))
+            : null,
+        color: defaultTargetPlatform == TargetPlatform.iOS
+            ? CupertinoDynamicColor.resolve(
+                CupertinoColors.secondarySystemBackground, context)
+            : null,
+        child: Column(
+          children: ListTile.divideTiles(
+              context: context,
+              tiles: choices.map((value) {
+                return ListTile(
+                  trailing:
+                      selectedItem == value ? const Icon(Icons.check) : null,
+                  title: titleBuilder(value),
+                  subtitle: subtitleBuilder?.call(value),
+                  onTap: () => onSelectedItemChanged(value),
+                );
+              })).toList(growable: false),
+        ),
       ),
     );
   }
