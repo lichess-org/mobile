@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart';
@@ -6,6 +7,7 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
 import '../../settings/ui/is_sound_muted_notifier.dart';
 import '../model/featured_position.dart';
@@ -17,15 +19,14 @@ class TvScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final currentTab = ref.watch(currentBottomTabProvider);
-    // ensure the stream is closed when offstage
-    final tvStream = currentTab == BottomTab.watch
-        ? ref.watch(tvStreamProvider)
-        : const AsyncLoading<FeaturedPosition>();
-    final featuredGame = ref.watch(featuredGameProvider);
-    final isSoundMuted = ref.watch(isSoundMutedProvider);
+    return PlatformWidget(
+      androidBuilder: (context) => _androidBuilder(context, ref),
+      iosBuilder: (context) => _iosBuilder(context, ref),
+    );
+  }
 
+  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
+    final isSoundMuted = ref.watch(isSoundMutedProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lichess TV'),
@@ -38,7 +39,36 @@ class TvScreen extends ConsumerWidget {
                   ref.read(isSoundMutedProvider.notifier).toggleSound())
         ],
       ),
-      body: Center(
+      body: _buildBody(context, ref),
+    );
+  }
+
+  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
+    final isSoundMuted = ref.watch(isSoundMutedProvider);
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+          trailing: CupertinoButton(
+              padding: EdgeInsets.zero,
+              child: isSoundMuted
+                  ? const Icon(CupertinoIcons.volume_off)
+                  : const Icon(CupertinoIcons.volume_up),
+              onPressed: () =>
+                  ref.read(isSoundMutedProvider.notifier).toggleSound())),
+      child: _buildBody(context, ref),
+    );
+  }
+
+  Widget _buildBody(BuildContext context, WidgetRef ref) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final currentTab = ref.watch(currentBottomTabProvider);
+    // ensure the stream is closed when offstage
+    final tvStream = currentTab == BottomTab.watch
+        ? ref.watch(tvStreamProvider)
+        : const AsyncLoading<FeaturedPosition>();
+    final featuredGame = ref.watch(featuredGameProvider);
+
+    return SafeArea(
+      child: Center(
         child: tvStream.when(
           data: (position) {
             final topPlayer = featuredGame != null

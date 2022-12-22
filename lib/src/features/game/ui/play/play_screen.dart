@@ -22,8 +22,6 @@ import '../board/board_screen.dart';
 import './time_control_modal.dart';
 import './play_action_notifier.dart';
 
-const _stockfishName = 'Fairy-Stockfish 14';
-
 final maiaBotsProvider =
     FutureProvider.autoDispose<List<Tuple2<User, UserStatus>>>((ref) async {
   final userRepo = ref.watch(userRepositoryProvider);
@@ -54,41 +52,39 @@ class PlayScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformWidget(
-      androidBuilder: _androidBuilder(ref),
-      iosBuilder: _iosBuilder(ref),
+      androidBuilder: (_) => _androidBuilder(ref),
+      iosBuilder: (_) => _iosBuilder(ref),
     );
   }
 
-  Widget Function(BuildContext context) _androidBuilder(WidgetRef ref) {
-    return (BuildContext context) {
-      final authState = ref.watch(authStateChangesProvider);
-      return Scaffold(
-        appBar: AppBar(title: const Text('lichess.org'), actions: const [
-          AuthWidget(),
-        ]),
-        body: Center(
-          child: authState.maybeWhen(
-            data: (account) => PlayForm(account: account),
-            orElse: () => const CircularProgressIndicator.adaptive(),
-          ),
+  Widget _androidBuilder(WidgetRef ref) {
+    final authState = ref.watch(authStateChangesProvider);
+    return Scaffold(
+      appBar: AppBar(title: const Text('lichess.org'), actions: const [
+        AuthWidget(),
+      ]),
+      body: Center(
+        child: authState.maybeWhen(
+          data: (account) => PlayForm(account: account),
+          orElse: () => const CircularProgressIndicator.adaptive(),
         ),
-      );
-    };
+      ),
+    );
   }
 
-  Widget Function(BuildContext context) _iosBuilder(WidgetRef ref) {
-    return (BuildContext context) {
-      final authState = ref.watch(authStateChangesProvider);
-      return CupertinoPageScaffold(
-        navigationBar: const CupertinoNavigationBar(trailing: AuthWidget()),
+  Widget _iosBuilder(WidgetRef ref) {
+    final authState = ref.watch(authStateChangesProvider);
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(trailing: AuthWidget()),
+      child: SafeArea(
         child: Center(
           child: authState.maybeWhen(
             data: (account) => PlayForm(account: account),
             orElse: () => const CircularProgressIndicator.adaptive(),
           ),
         ),
-      );
-    };
+      ),
+    );
   }
 }
 
@@ -120,177 +116,175 @@ class PlayForm extends ConsumerWidget {
       }
     });
 
-    return SafeArea(
-      child: ListView(
-        padding: const EdgeInsets.all(20.0),
-        children: [
-          Text(
-            context.l10n.playWithTheMachine,
-            style: const TextStyle(fontSize: 20),
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 10),
-          CupertinoSlidingSegmentedControl<ComputerOpponent>(
-            onValueChanged: (opponent) {
-              if (opponent != null) {
-                ref.read(computerOpponentPrefProvider.notifier).set(opponent);
-              }
-            },
-            groupValue: opponentPref,
-            children: const {
-              ComputerOpponent.maia: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Text('Maia'),
-              ),
-              ComputerOpponent.stockfish: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Text('Stockfish 14'),
-              ),
-            },
-          ),
-          const SizedBox(height: 10),
-          Builder(builder: (BuildContext context) {
-            if (opponentPref == ComputerOpponent.maia) {
-              return maiaBots.when(
-                data: (bots) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const Text(
-                          'Maia is a human-like neural network chess engine. It was trained by learning from over 10 million Lichess games. It is an ongoing research project aiming to make a more human-friendly, useful, and fun chess AI. For more information go to maiachess.com. '),
-                      const SizedBox(height: 10),
-                      ListTileChoice(
-                        choices: MaiaStrength.values,
-                        selectedItem: maiaStrength,
-                        titleBuilder: (ms) => Text(ms.name),
-                        subtitleBuilder: (ms) => Row(
-                          children:
-                              [Perf.blitz, Perf.rapid, Perf.classical].map((p) {
-                            final bot = bots
-                                .firstWhere((b) => b.item1.id == ms.name)
-                                .item1;
-                            return Semantics(
-                              label: p.name,
-                              child: Row(children: [
-                                Icon(p.icon, size: 18.0),
-                                const SizedBox(width: 3.0),
-                                Text(bot.perfs[p]!.rating.toString()),
-                                const SizedBox(width: 12.0),
-                              ]),
-                            );
-                          }).toList(),
-                        ),
-                        onSelectedItemChanged: (value) {
-                          ref.read(maiaStrengthProvider.notifier).set(value);
-                        },
-                      ),
-                    ],
-                  );
-                },
-                error: (err, st) {
-                  debugPrint(
-                      'SEVERE [PlayScreen] could not load bot info: ${err.toString()}\n$st');
-                  return const Text('Could not load bot ratings.');
-                },
-                loading: () => const ButtonLoadingIndicator(),
-              );
+    return ListView(
+      padding: const EdgeInsets.all(20.0),
+      children: [
+        Text(
+          context.l10n.playWithTheMachine,
+          style: const TextStyle(fontSize: 20),
+          overflow: TextOverflow.ellipsis,
+        ),
+        const SizedBox(height: 10),
+        CupertinoSlidingSegmentedControl<ComputerOpponent>(
+          onValueChanged: (opponent) {
+            if (opponent != null) {
+              ref.read(computerOpponentPrefProvider.notifier).set(opponent);
             }
-
-            int value = stockfishLevel;
-            return StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
-              return Column(
-                children: [
-                  const Text(
-                      'Stockfish is a strong open source engine, 13-time winner of the Top Chess Engine Championship.'),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Text(context.l10n.strength),
-                      Expanded(
-                        child: Slider(
-                          value: value.toDouble(),
-                          min: 1,
-                          max: 8,
-                          divisions: 7,
-                          label: '${context.l10n.level} $value',
-                          semanticFormatterCallback: (double newValue) {
-                            return '${context.l10n.level} ${newValue.round()}';
-                          },
-                          onChanged: opponentPref != ComputerOpponent.stockfish
-                              ? null
-                              : (double newVal) {
-                                  setState(() {
-                                    value = newVal.round();
-                                  });
-                                },
-                          onChangeEnd: (double value) {
-                            ref
-                                .read(stockfishLevelProvider.notifier)
-                                .set(value.round());
-                          },
-                        ),
+          },
+          groupValue: opponentPref,
+          children: const {
+            ComputerOpponent.maia: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text('Maia'),
+            ),
+            ComputerOpponent.stockfish: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text('Stockfish 14'),
+            ),
+          },
+        ),
+        const SizedBox(height: 10),
+        Builder(builder: (BuildContext context) {
+          if (opponentPref == ComputerOpponent.maia) {
+            return maiaBots.when(
+              data: (bots) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text(
+                        'Maia is a human-like neural network chess engine. It was trained by learning from over 10 million Lichess games. It is an ongoing research project aiming to make a more human-friendly, useful, and fun chess AI. For more information go to maiachess.com. '),
+                    const SizedBox(height: 10),
+                    ListTileChoice(
+                      choices: MaiaStrength.values,
+                      selectedItem: maiaStrength,
+                      titleBuilder: (ms) => Text(ms.name),
+                      subtitleBuilder: (ms) => Row(
+                        children:
+                            [Perf.blitz, Perf.rapid, Perf.classical].map((p) {
+                          final bot = bots
+                              .firstWhere((b) => b.item1.id == ms.name)
+                              .item1;
+                          return Semantics(
+                            label: p.name,
+                            child: Row(children: [
+                              Icon(p.icon, size: 18.0),
+                              const SizedBox(width: 3.0),
+                              Text(bot.perfs[p]!.rating.toString()),
+                              const SizedBox(width: 12.0),
+                            ]),
+                          );
+                        }).toList(),
                       ),
-                    ],
-                  ),
-                ],
-              );
-            });
-          }),
-          const SizedBox(height: 20),
-          SemanticsButton(
-            label:
-                '${context.l10n.timeControl} ${timeControlPref.perf.name} ${timeControlPref.value.toString()}',
-            child: OutlinedButton(
-              onPressed: () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const TimeControlModal();
-                  },
+                      onSelectedItemChanged: (value) {
+                        ref.read(maiaStrengthProvider.notifier).set(value);
+                      },
+                    ),
+                  ],
                 );
               },
-              style: _buttonStyle,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 28.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(timeControlPref.perf.icon, size: 20),
-                          const SizedBox(width: 5),
-                          Text(timeControlPref.value.toString())
-                        ],
+              error: (err, st) {
+                debugPrint(
+                    'SEVERE [PlayScreen] could not load bot info: ${err.toString()}\n$st');
+                return const Text('Could not load bot ratings.');
+              },
+              loading: () => const ButtonLoadingIndicator(),
+            );
+          }
+
+          int value = stockfishLevel;
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Column(
+              children: [
+                const Text(
+                    'Stockfish is a strong open source engine, 13-time winner of the Top Chess Engine Championship.'),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Text(context.l10n.strength),
+                    Expanded(
+                      child: Slider(
+                        value: value.toDouble(),
+                        min: 1,
+                        max: 8,
+                        divisions: 7,
+                        label: '${context.l10n.level} $value',
+                        semanticFormatterCallback: (double newValue) {
+                          return '${context.l10n.level} ${newValue.round()}';
+                        },
+                        onChanged: opponentPref != ComputerOpponent.stockfish
+                            ? null
+                            : (double newVal) {
+                                setState(() {
+                                  value = newVal.round();
+                                });
+                              },
+                        onChangeEnd: (double value) {
+                          ref
+                              .read(stockfishLevelProvider.notifier)
+                              .set(value.round());
+                        },
                       ),
                     ),
+                  ],
+                ),
+              ],
+            );
+          });
+        }),
+        const SizedBox(height: 20),
+        SemanticsButton(
+          label:
+              '${context.l10n.timeControl} ${timeControlPref.perf.name} ${timeControlPref.value.toString()}',
+          child: OutlinedButton(
+            onPressed: () {
+              showModalBottomSheet<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return const TimeControlModal();
+                },
+              );
+            },
+            style: _buttonStyle,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 28.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(timeControlPref.perf.icon, size: 20),
+                        const SizedBox(width: 5),
+                        Text(timeControlPref.value.toString())
+                      ],
+                    ),
                   ),
-                  const Icon(Icons.keyboard_arrow_down, size: 28.0),
-                ],
-              ),
+                ),
+                const Icon(Icons.keyboard_arrow_down, size: 28.0),
+              ],
             ),
           ),
-          ElevatedButton(
-            onPressed: account == null
-                ? authActionsAsync.isLoading
-                    ? null
-                    : () => ref.read(authWidgetProvider.notifier).signIn()
-                : playActionAsync.isLoading
-                    ? null
-                    : () => ref
-                        .read(playActionProvider.notifier)
-                        .createGame(account: account!),
-            style: _buttonStyle,
-            child: authActionsAsync.isLoading || playActionAsync.isLoading
-                ? const ButtonLoadingIndicator()
-                : Text(account == null
-                    // TODO translate
-                    ? 'Sign in to start playing'
-                    : context.l10n.play),
-          ),
-        ],
-      ),
+        ),
+        ElevatedButton(
+          onPressed: account == null
+              ? authActionsAsync.isLoading
+                  ? null
+                  : () => ref.read(authWidgetProvider.notifier).signIn()
+              : playActionAsync.isLoading
+                  ? null
+                  : () => ref
+                      .read(playActionProvider.notifier)
+                      .createGame(account: account!),
+          style: _buttonStyle,
+          child: authActionsAsync.isLoading || playActionAsync.isLoading
+              ? const ButtonLoadingIndicator()
+              : Text(account == null
+                  // TODO translate
+                  ? 'Sign in to start playing'
+                  : context.l10n.play),
+        ),
+      ],
     );
   }
 }

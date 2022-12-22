@@ -99,7 +99,7 @@ class BottomNavScaffold extends ConsumerWidget {
         );
       case 2:
         return CupertinoTabView(
-          defaultTitle: context.l10n.watch,
+          defaultTitle: 'Lichess TV',
           builder: (context) => const TvScreen(),
         );
       case 3:
