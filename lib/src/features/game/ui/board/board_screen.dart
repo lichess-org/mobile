@@ -424,7 +424,7 @@ class _BottomBar extends ConsumerWidget {
           ),
         if (gameState?.gameOver == true)
           BottomSheetAction(
-              leading: const Icon(Icons.swap_vert),
+              leading: const Icon(CupertinoIcons.arrow_2_squarepath),
               label: playActionAsync.isLoading
                   ? const ButtonLoadingIndicator()
                   : Text(context.l10n.rematch),
