@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import '../../../../constants.dart';
 import '../../data/play_preferences.dart';
 import '../../model/time_control.dart';
 
@@ -17,7 +18,7 @@ class TimeControlModal extends ConsumerWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: kBodyPadding,
       child: Column(
         children: [
           _SectionChoices(timeControlPref,

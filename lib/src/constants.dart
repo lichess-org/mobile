@@ -9,6 +9,9 @@ const kLichessDevPassword = String.fromEnvironment('LICHESS_DEV_PASSWORD');
 const kLichessClientId = 'lichess_mobile';
 const kOAuthTokenStorageKey = 'oAuthToken';
 
+// SPACING
+const kBodyPadding = EdgeInsets.all(16.0);
+
 // COLORS
 const kOrange = Color(0xFFD64F00);
 const kGold = Color(0xFFBF811D);

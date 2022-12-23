@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart' hide Tuple2;
 import 'package:tuple/tuple.dart';
 
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -116,7 +117,7 @@ class PlayForm extends ConsumerWidget {
 
     return SafeArea(
       child: ListView(
-        padding: const EdgeInsets.all(20.0),
+        padding: kBodyPadding,
         children: [
           Text(
             context.l10n.playWithTheMachine,
