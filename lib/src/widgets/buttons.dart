@@ -2,36 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-/// A tappable ListTile that will push a new screen
-class ListNavigateButton extends StatelessWidget {
-  const ListNavigateButton({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    super.key,
-  });
-
-  final Icon icon;
-  final String label;
-  final void Function() onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      container: true,
-      button: true,
-      label: label,
-      excludeSemantics: true,
-      child: ListTile(
-        leading: icon,
-        title: Text(label),
-        onTap: onTap,
-        trailing: const Icon(Icons.keyboard_arrow_right),
-      ),
-    );
-  }
-}
-
 /// Platform agnostic button which is used for important actions.
 ///
 /// Will use an [ElevatedButton] on Android and a [CupertinoButton.filled] on iOS.

@@ -58,7 +58,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         CupertinoSliverNavigationBar(
           trailing: CupertinoButton(
             onPressed: () => Navigator.of(context).push<void>(
-              MaterialPageRoute(
+              CupertinoPageRoute(
+                title: context.l10n.settings,
                 builder: (context) => const SettingsScreen(),
               ),
             ),

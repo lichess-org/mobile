@@ -7,19 +7,17 @@ import 'package:lichess_mobile/src/common/shared_preferences.dart';
 const prefix = 'SettingsRepository';
 
 class SettingsRepository {
-  const SettingsRepository({
-    required this.prefs,
-  });
+  const SettingsRepository(this._prefs);
 
-  final SharedPreferences prefs;
+  final SharedPreferences _prefs;
 
   // Theme
   Future<bool> setThemeMode(ThemeMode mode) async {
-    return await prefs.setString(backgroundModeKey, mode.name);
+    return await _prefs.setString(backgroundModeKey, mode.name);
   }
 
   ThemeMode getThemeMode() {
-    final str = prefs.getString(backgroundModeKey) ?? 'system';
+    final str = _prefs.getString(backgroundModeKey) ?? 'system';
     switch (str) {
       case 'dark':
         return ThemeMode.dark;
@@ -34,11 +32,11 @@ class SettingsRepository {
 
   // Sound
   Future<bool> toggleSound() async {
-    return await prefs.setBool(soundMutedKey, !isSoundMuted());
+    return await _prefs.setBool(soundMutedKey, !isSoundMuted());
   }
 
   bool isSoundMuted() {
-    return prefs.getBool(soundMutedKey) ?? false;
+    return _prefs.getBool(soundMutedKey) ?? false;
   }
 
   // --
@@ -49,5 +47,5 @@ class SettingsRepository {
 
 final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
   final sharedPrefs = ref.watch(sharedPreferencesProvider);
-  return SettingsRepository(prefs: sharedPrefs);
+  return SettingsRepository(sharedPrefs);
 });

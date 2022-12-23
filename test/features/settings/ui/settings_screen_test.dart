@@ -3,9 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 
-import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
 import 'package:lichess_mobile/src/features/settings/ui/settings_screen.dart';
-import '../../auth/data/fake_auth_repository.dart';
+import 'package:lichess_mobile/src/features/settings/data/settings_repository.dart';
+import '../data/fake_settings_repository.dart';
 
 void main() {
   group('SettingsScreen', () {
@@ -15,7 +15,8 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            authRepositoryProvider.overrideWithValue(FakeAuthRepository(null)),
+            settingsRepositoryProvider
+                .overrideWithValue(FakeSettingsRepository()),
           ],
           child: MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -27,10 +28,6 @@ void main() {
           ),
         ),
       );
-
-      // first frame is a loading state
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      await tester.pump();
 
       await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
 
