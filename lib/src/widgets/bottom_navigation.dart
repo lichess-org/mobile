@@ -9,6 +9,7 @@ import '../common/lichess_icons.dart';
 import '../features/game/ui/play/play_screen.dart';
 import '../features/user/ui/profile_screen.dart';
 import '../features/tv/ui/tv_screen.dart';
+import '../features/puzzle/ui/puzzle_screen.dart';
 
 enum BottomTab {
   play,
@@ -111,18 +112,6 @@ class BottomNavScaffold extends ConsumerWidget {
         assert(false, 'Unexpected tab');
         return const SizedBox.shrink();
     }
-  }
-}
-
-class PuzzlesScreen extends StatelessWidget {
-  const PuzzlesScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('lichess.org'), actions: const []),
-      body: const Center(child: Text('Todo')),
-    );
   }
 }
 
