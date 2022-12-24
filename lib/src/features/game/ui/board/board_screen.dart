@@ -27,7 +27,7 @@ import './game_controls.dart';
 class BoardScreen extends ConsumerWidget {
   const BoardScreen({required this.game, required this.account, super.key});
 
-  final Game game;
+  final PlayableGame game;
   final User account;
 
   @override
@@ -36,10 +36,10 @@ class BoardScreen extends ConsumerWidget {
       gameActionProvider,
       (_, state) => state.showSnackbarOnError(context),
     );
-    ref.listen<AsyncValue<Game?>>(playActionProvider, (_, state) {
+    ref.listen<AsyncValue<PlayableGame?>>(playActionProvider, (_, state) {
       state.showSnackbarOnError(context);
 
-      if (state.valueOrNull is Game) {
+      if (state.valueOrNull is PlayableGame) {
         ref.invalidate(playActionProvider);
         ref.invalidate(positionCursorProvider);
         ref.invalidate(isBoardTurnedProvider);
@@ -160,7 +160,7 @@ class BoardScreen extends ConsumerWidget {
 class _BoardBody extends ConsumerStatefulWidget {
   const _BoardBody({required this.game, required this.account});
 
-  final Game game;
+  final PlayableGame game;
   final User account;
 
   @override
@@ -310,7 +310,7 @@ class _BoardBodyState extends ConsumerState<_BoardBody> {
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({required this.game, required this.account});
 
-  final Game game;
+  final PlayableGame game;
   final User account;
 
   @override

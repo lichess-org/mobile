@@ -19,7 +19,7 @@ class CreateGameService {
   final Ref ref;
   final Logger _log;
 
-  TaskEither<IOError, Game> aiGameTask(User account, {Side? side}) {
+  TaskEither<IOError, PlayableGame> aiGameTask(User account, {Side? side}) {
     final challengeRepo = ref.read(challengeRepositoryProvider);
     final opponent = ref.read(computerOpponentPrefProvider);
     final maiaStrength = ref.read(maiaStrengthProvider);
@@ -39,8 +39,8 @@ class CreateGameService {
     return createChallengeTask.andThen(() => _waitForGameStart(account));
   }
 
-  TaskEither<IOError, Game> _waitForGameStart(User account) {
-    return TaskEither<IOError, Game>.tryCatch(
+  TaskEither<IOError, PlayableGame> _waitForGameStart(User account) {
+    return TaskEither<IOError, PlayableGame>.tryCatch(
       () async {
         final gameRepo = ref.read(gameRepositoryProvider);
         final stream = gameRepo.events().timeout(const Duration(seconds: 15),
@@ -62,7 +62,7 @@ class CreateGameService {
             id: startEvent.opponent.id,
             name: startEvent.opponent.username,
             rating: startEvent.opponent.rating);
-        return Game(
+        return PlayableGame(
           id: startEvent.gameId,
           initialFen: startEvent.fen,
           speed: startEvent.speed,

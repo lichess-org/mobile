@@ -402,7 +402,7 @@ class FakeGameClient extends Fake implements http.Client {
 
 const gameIdTest = 'rCRw1AuO';
 
-const testGame = game.Game(
+const testGame = game.PlayableGame(
   id: GameId(gameIdTest),
   rated: false,
   speed: game.Speed.blitz,

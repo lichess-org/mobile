@@ -111,7 +111,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           SizedBox(
             height: 106,
             child: ListView.separated(
-              padding: EdgeInsets.symmetric(vertical: 3.0),
+              padding: const EdgeInsets.symmetric(vertical: 3.0),
               scrollDirection: Axis.horizontal,
               itemCount: 10,
               itemBuilder: ((context, index) => SizedBox(
@@ -133,7 +133,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                             .color
                                             ?.withOpacity(0.6)),
                                   )
-                                : Text('Rapid'),
+                                : const Text('Rapid'),
                             Icon(index.isOdd
                                 ? LichessIcons.blitz
                                 : LichessIcons.rapid),
@@ -173,30 +173,30 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   Icon(CupertinoIcons.plus_square_fill, color: Colors.green),
             ),
             ListTile(
-              leading: Icon(LichessIcons.bullet),
-              title: Text('GM kingsCrusherYoutube (2078)',
+              leading: const Icon(LichessIcons.bullet),
+              title: const Text('GM kingsCrusherYoutube (2078)',
                   overflow: TextOverflow.ellipsis),
-              subtitle: Text('1 week ago'),
+              subtitle: const Text('1 week ago'),
               trailing: SizedBox(
                   width: 60,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                    children: const [
                       Icon(CupertinoIcons.chart_bar_square),
                       Icon(CupertinoIcons.minus_square_fill, color: Colors.red),
                     ],
                   )),
             ),
             ListTile(
-              leading: Icon(LichessIcons.rapid),
-              title: Text('GM kingsCrusherYoutube (2078)',
+              leading: const Icon(LichessIcons.rapid),
+              title: const Text('GM kingsCrusherYoutube (2078)',
                   overflow: TextOverflow.ellipsis),
-              subtitle: Text('1 week ago'),
+              subtitle: const Text('1 week ago'),
               trailing: SizedBox(
                   width: 60,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
+                    children: const [
                       Icon(CupertinoIcons.minus_square_fill, color: Colors.red),
                     ],
                   )),

@@ -6,9 +6,10 @@ import 'package:lichess_mobile/src/features/user/model/user.dart';
 import '../../model/game.dart';
 import '../../service/create_game_service.dart';
 
-class PlayActionNotifier extends AutoDisposeNotifier<AsyncValue<Game?>> {
+class PlayActionNotifier
+    extends AutoDisposeNotifier<AsyncValue<PlayableGame?>> {
   @override
-  AsyncValue<Game?> build() {
+  AsyncValue<PlayableGame?> build() {
     return const AsyncData(null);
   }
 
@@ -27,5 +28,5 @@ class PlayActionNotifier extends AutoDisposeNotifier<AsyncValue<Game?>> {
 }
 
 final playActionProvider =
-    AutoDisposeNotifierProvider<PlayActionNotifier, AsyncValue<Game?>>(
+    AutoDisposeNotifierProvider<PlayActionNotifier, AsyncValue<PlayableGame?>>(
         PlayActionNotifier.new);

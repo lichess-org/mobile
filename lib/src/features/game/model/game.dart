@@ -2,14 +2,15 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
+import './game_status.dart';
 
 part 'game.freezed.dart';
 
 @freezed
-class Game with _$Game {
-  const Game._();
+class PlayableGame with _$PlayableGame {
+  const PlayableGame._();
 
-  const factory Game({
+  const factory PlayableGame({
     required GameId id,
     required bool rated,
     required Speed speed,
@@ -17,10 +18,27 @@ class Game with _$Game {
     required Side orientation,
     required Player white,
     required Player black,
-  }) = _Game;
+    Variant? variant,
+  }) = _PlayableGame;
 
   Player get player => orientation == Side.white ? white : black;
   Player get opponent => orientation == Side.white ? black : white;
+}
+
+@freezed
+class ArchivedGame with _$ArchivedGame {
+  // const ArchivedGame._();
+  const factory ArchivedGame({
+    required GameId id,
+    required bool rated,
+    required Speed speed,
+    required DateTime createdAt,
+    required GameStatus status,
+    required String moves,
+    required Player white,
+    required Player black,
+    Variant? variant,
+  }) = _ArchivedGame;
 }
 
 @freezed
@@ -29,8 +47,10 @@ class Player with _$Player {
     String? id,
     required String name,
     int? rating,
+    int? ratingDiff,
     bool? provisional,
     String? title,
+    bool? patron,
   }) = _Player;
 }
 
@@ -42,4 +62,16 @@ enum Speed {
   classical,
   correspondence,
   unlimited,
+}
+
+enum Variant {
+  standard,
+  chess960,
+  antichess,
+  kingOfTheHill,
+  threeCheck,
+  atomic,
+  horde,
+  racingKings,
+  crazyhouse;
 }

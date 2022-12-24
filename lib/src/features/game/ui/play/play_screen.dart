@@ -102,10 +102,10 @@ class PlayForm extends ConsumerWidget {
     final authActionsAsync = ref.watch(authWidgetProvider);
     final playActionAsync = ref.watch(playActionProvider);
 
-    ref.listen<AsyncValue<Game?>>(playActionProvider, (_, state) {
+    ref.listen<AsyncValue<PlayableGame?>>(playActionProvider, (_, state) {
       state.showSnackbarOnError(context);
 
-      if (state.valueOrNull is Game && account != null) {
+      if (state.valueOrNull is PlayableGame && account != null) {
         ref.invalidate(playActionProvider);
         Navigator.of(context, rootNavigator: true).push(
           MaterialPageRoute<void>(
