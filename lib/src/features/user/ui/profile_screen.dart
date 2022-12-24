@@ -140,11 +140,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             Row(
                               children: const [
                                 Text('3079'),
-                                SizedBox(width: 5),
+                                SizedBox(width: 3),
                                 Icon(
                                   LichessIcons.arrow_full_lowerright,
                                   color: Colors.red,
-                                  size: 12,
+                                  size: 10,
                                 ),
                                 Text('48',
                                     style: TextStyle(
@@ -164,73 +164,44 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             'Recent games',
             style: TextStyle(fontSize: 16),
           ),
-          const ListTile(
-            leading: Icon(LichessIcons.blitz),
-            title: Text('BOT maia1 (1478)', overflow: TextOverflow.ellipsis),
-            subtitle: Text('19 hours ago'),
-            trailing:
-                Icon(CupertinoIcons.plus_square_fill, color: Colors.green),
-          ),
-          ListTile(
-            leading: Icon(LichessIcons.bullet),
-            title: Text('GM kingsCrusherYoutube (2078)',
-                overflow: TextOverflow.ellipsis),
-            subtitle: Text('1 week ago'),
-            trailing: SizedBox(
-                width: 50,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(CupertinoIcons.chart_bar_square),
-                    Icon(CupertinoIcons.minus_square_fill, color: Colors.red),
-                  ],
-                )),
-          ),
-          ListTile(
-            leading: Icon(LichessIcons.rapid),
-            title: Text('GM kingsCrusherYoutube (2078)',
-                overflow: TextOverflow.ellipsis),
-            subtitle: Text('1 week ago'),
-            trailing: SizedBox(
-                width: 50,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(CupertinoIcons.chart_bar_square),
-                    Icon(CupertinoIcons.minus_square_fill, color: Colors.red),
-                  ],
-                )),
-          ),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(vertical: 10.0),
-          //   child: Row(
-          //     children: const [
-          //       SizedBox(width: 50, child: Icon(LichessIcons.blitz)),
-          //       Expanded(
-          //           child: Text('BOT maia1 (1478)',
-          //               overflow: TextOverflow.ellipsis)),
-          //       SizedBox(
-          //           width: 50,
-          //           child: Icon(CupertinoIcons.plus_square_fill,
-          //               color: Colors.green)),
-          //     ],
-          //   ),
-          // ),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(vertical: 10.0),
-          //   child: Row(
-          //     children: const [
-          //       SizedBox(width: 50, child: Icon(LichessIcons.blitz)),
-          //       Expanded(
-          //           child: Text('GM kingsCrusherYoutube (2078)',
-          //               overflow: TextOverflow.ellipsis)),
-          //       SizedBox(
-          //           width: 50,
-          //           child: Icon(CupertinoIcons.minus_square_fill,
-          //               color: Colors.red)),
-          //     ],
-          //   ),
-          // ),
+          ...ListTile.divideTiles(context: context, tiles: [
+            const ListTile(
+              leading: Icon(LichessIcons.blitz),
+              title: Text('BOT maia1 (1478)', overflow: TextOverflow.ellipsis),
+              subtitle: Text('19 hours ago'),
+              trailing:
+                  Icon(CupertinoIcons.plus_square_fill, color: Colors.green),
+            ),
+            ListTile(
+              leading: Icon(LichessIcons.bullet),
+              title: Text('GM kingsCrusherYoutube (2078)',
+                  overflow: TextOverflow.ellipsis),
+              subtitle: Text('1 week ago'),
+              trailing: SizedBox(
+                  width: 60,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(CupertinoIcons.chart_bar_square),
+                      Icon(CupertinoIcons.minus_square_fill, color: Colors.red),
+                    ],
+                  )),
+            ),
+            ListTile(
+              leading: Icon(LichessIcons.rapid),
+              title: Text('GM kingsCrusherYoutube (2078)',
+                  overflow: TextOverflow.ellipsis),
+              subtitle: Text('1 week ago'),
+              trailing: SizedBox(
+                  width: 60,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Icon(CupertinoIcons.minus_square_fill, color: Colors.red),
+                    ],
+                  )),
+            ),
+          ]),
         ],
       ),
     );
