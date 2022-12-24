@@ -159,6 +159,34 @@
       "css": "step_backward",
       "code": 61512,
       "src": "fontawesome5"
+    },
+    {
+      "uid": "37d34c54ed5751c94664b8f9f2e22793",
+      "css": "arrow-full-upperright",
+      "code": 59402,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M875 687.5L687.5 500 375 812.5 125 562.5 437.5 250 250 62.5H875V687.5Z",
+        "width": 1020
+      },
+      "search": [
+        "arrow-full-upperright"
+      ]
+    },
+    {
+      "uid": "5853c0f3c4b7acbcf4c2e60df0fe432b",
+      "css": "arrow-full-lowerright",
+      "code": 59403,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M875 187.5L687.5 375 375 62.5 125 312.5 437.5 625 250 812.5H875V187.5Z",
+        "width": 1020
+      },
+      "search": [
+        "arrow-full-lowerright"
+      ]
     }
   ]
 }

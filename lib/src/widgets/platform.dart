@@ -60,13 +60,15 @@ class ConsumerPlatformWidget extends StatelessWidget {
 }
 
 /// A card with limited text scale factor and whose style is adapted to platforms.
-class PlatformCard<T extends Enum> extends StatelessWidget {
+class PlatformCard extends StatelessWidget {
   const PlatformCard({
     super.key,
     required this.child,
+    this.semanticContainer = true,
   });
 
   final Widget child;
+  final bool semanticContainer;
 
   @override
   Widget build(context) {
@@ -78,19 +80,26 @@ class PlatformCard<T extends Enum> extends StatelessWidget {
           1.64,
         ),
       ),
-      child: Card(
-        elevation: defaultTargetPlatform == TargetPlatform.iOS ? 0 : null,
-        margin: EdgeInsets.zero,
-        shape: defaultTargetPlatform == TargetPlatform.iOS
-            ? const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)))
-            : null,
-        color: defaultTargetPlatform == TargetPlatform.iOS
-            ? CupertinoDynamicColor.resolve(
-                CupertinoColors.secondarySystemBackground, context)
-            : null,
-        child: child,
-      ),
+      child: defaultTargetPlatform == TargetPlatform.iOS
+          ? Semantics(
+              container: semanticContainer,
+              child: Container(
+                decoration: ShapeDecoration(
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.secondarySystemBackground, context),
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                ),
+                child: Semantics(
+                  explicitChildNodes: !semanticContainer,
+                  child: child,
+                ),
+              ),
+            )
+          : Card(
+              semanticContainer: semanticContainer,
+              child: child,
+            ),
     );
   }
 }

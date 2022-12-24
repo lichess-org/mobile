@@ -11,7 +11,7 @@
 ///      fonts:
 ///       - asset: fonts/LichessIcons.ttf
 ///
-///
+/// 
 /// * Material Design Icons, Copyright (C) Google, Inc
 ///         Author:    Google
 ///         License:   Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0)
@@ -33,34 +33,21 @@ class LichessIcons {
   static const _kFontFam = 'LichessIcons';
   static const String? _kFontPkg = null;
 
-  static const IconData patron =
-      IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData target =
-      IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData blitz =
-      IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData classical =
-      IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData bullet =
-      IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData rapid =
-      IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData ultrabullet =
-      IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData correspondence =
-      IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData dehaze =
-      IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData cancel =
-      IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData step_backward =
-      IconData(0xf048, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData fast_backward =
-      IconData(0xf049, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData fast_forward =
-      IconData(0xf050, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData step_forward =
-      IconData(0xf051, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData chess_king =
-      IconData(0xf43f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData patron = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData target = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData blitz = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData classical = IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData bullet = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData rapid = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData ultrabullet = IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData correspondence = IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData dehaze = IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData cancel = IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData arrow_full_upperright = IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData arrow_full_lowerright = IconData(0xe80b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData step_backward = IconData(0xf048, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData fast_backward = IconData(0xf049, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData fast_forward = IconData(0xf050, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData step_forward = IconData(0xf051, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData chess_king = IconData(0xf43f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

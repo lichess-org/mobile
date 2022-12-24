@@ -81,132 +81,157 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return SafeArea(
       top: false,
       bottom: false,
-      child: Padding(
+      child: ListView(
         padding: kBodyPadding,
-        child: Column(
-          children: [
-            PlatformCard(
-              child: Column(
-                children: [
-                  const ListTile(
-                    leading: Icon(LichessIcons.patron, size: 40),
-                    title: Text(
-                      'veloce',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                    ),
-                    subtitle: Text('Vincent Velociter'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        bottom: 10, left: 16.0, right: 16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Location(
-                          profile:
-                              Profile(country: 'fr', location: 'Lille, France'),
-                        ),
-                        SizedBox(height: 5),
-                        Text('Member since 18 Sept 2015'),
-                        SizedBox(height: 5),
-                        Text('Active 16 hours ago'),
-                        SizedBox(height: 5),
-                        Text(
-                            'Time spent playing: 31 days, 1 hour and 47 minutes'),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+        children: [
+          const ListTile(
+            leading: Icon(LichessIcons.patron, size: 40),
+            title: Text(
+              'veloce',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 106,
-              child: ListView(
-                padding: EdgeInsets.symmetric(vertical: 3.0),
-                scrollDirection: Axis.horizontal,
-                children: [
-                  SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: PlatformCard(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text('Blitz'),
-                            Icon(LichessIcons.blitz),
-                            Text('3079'),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: PlatformCard(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text('Blitz'),
-                            Icon(LichessIcons.blitz),
-                            Text('3079'),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: PlatformCard(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text('Blitz'),
-                            Icon(LichessIcons.blitz),
-                            Text('3079'),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: PlatformCard(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text('Blitz'),
-                            Icon(LichessIcons.blitz),
-                            Text('3079'),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+            subtitle: Text('Vincent Velociter'),
+            contentPadding: EdgeInsets.symmetric(vertical: 10),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              Location(
+                profile: Profile(country: 'fr', location: 'Lille, France'),
               ),
+              SizedBox(height: 5),
+              Text('Member since 18 Sept 2015'),
+              SizedBox(height: 5),
+              Text('Active 16 hours ago'),
+              SizedBox(height: 5),
+              Text('Time spent playing: 31 days, 1 hour and 47 minutes'),
+            ],
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 106,
+            child: ListView.separated(
+              padding: EdgeInsets.symmetric(vertical: 3.0),
+              scrollDirection: Axis.horizontal,
+              itemCount: 10,
+              itemBuilder: ((context, index) => SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: PlatformCard(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            index.isOdd
+                                ? Text(
+                                    'Blitz',
+                                    style: TextStyle(
+                                        color: DefaultTextStyle.of(context)
+                                            .style
+                                            .color
+                                            ?.withOpacity(0.6)),
+                                  )
+                                : Text('Rapid'),
+                            Icon(index.isOdd
+                                ? LichessIcons.blitz
+                                : LichessIcons.rapid),
+                            Row(
+                              children: const [
+                                Text('3079'),
+                                SizedBox(width: 5),
+                                Icon(
+                                  LichessIcons.arrow_full_lowerright,
+                                  color: Colors.red,
+                                  size: 12,
+                                ),
+                                Text('48',
+                                    style: TextStyle(
+                                        color: Colors.red, fontSize: 12)),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )),
+              separatorBuilder: ((context, index) => const SizedBox(width: 10)),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            'Recent games',
+            style: TextStyle(fontSize: 16),
+          ),
+          const ListTile(
+            leading: Icon(LichessIcons.blitz),
+            title: Text('BOT maia1 (1478)', overflow: TextOverflow.ellipsis),
+            subtitle: Text('19 hours ago'),
+            trailing:
+                Icon(CupertinoIcons.plus_square_fill, color: Colors.green),
+          ),
+          ListTile(
+            leading: Icon(LichessIcons.bullet),
+            title: Text('GM kingsCrusherYoutube (2078)',
+                overflow: TextOverflow.ellipsis),
+            subtitle: Text('1 week ago'),
+            trailing: SizedBox(
+                width: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(CupertinoIcons.chart_bar_square),
+                    Icon(CupertinoIcons.minus_square_fill, color: Colors.red),
+                  ],
+                )),
+          ),
+          ListTile(
+            leading: Icon(LichessIcons.rapid),
+            title: Text('GM kingsCrusherYoutube (2078)',
+                overflow: TextOverflow.ellipsis),
+            subtitle: Text('1 week ago'),
+            trailing: SizedBox(
+                width: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(CupertinoIcons.chart_bar_square),
+                    Icon(CupertinoIcons.minus_square_fill, color: Colors.red),
+                  ],
+                )),
+          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(vertical: 10.0),
+          //   child: Row(
+          //     children: const [
+          //       SizedBox(width: 50, child: Icon(LichessIcons.blitz)),
+          //       Expanded(
+          //           child: Text('BOT maia1 (1478)',
+          //               overflow: TextOverflow.ellipsis)),
+          //       SizedBox(
+          //           width: 50,
+          //           child: Icon(CupertinoIcons.plus_square_fill,
+          //               color: Colors.green)),
+          //     ],
+          //   ),
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(vertical: 10.0),
+          //   child: Row(
+          //     children: const [
+          //       SizedBox(width: 50, child: Icon(LichessIcons.blitz)),
+          //       Expanded(
+          //           child: Text('GM kingsCrusherYoutube (2078)',
+          //               overflow: TextOverflow.ellipsis)),
+          //       SizedBox(
+          //           width: 50,
+          //           child: Icon(CupertinoIcons.minus_square_fill,
+          //               color: Colors.red)),
+          //     ],
+          //   ),
+          // ),
+        ],
       ),
     );
   }
