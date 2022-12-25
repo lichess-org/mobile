@@ -15,3 +15,15 @@ class ButtonLoadingIndicator extends StatelessWidget {
         ));
   }
 }
+
+/// A centered circular progress indicator
+class CenterLoadingIndicator extends StatelessWidget {
+  const CenterLoadingIndicator({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator.adaptive(),
+    );
+  }
+}

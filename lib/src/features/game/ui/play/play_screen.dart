@@ -143,7 +143,6 @@ class PlayForm extends ConsumerWidget {
               return maiaBots.when(
                 data: (bots) {
                   return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const Text(
                           'Maia is a human-like neural network chess engine. It was trained by learning from over 10 million Lichess games. It is an ongoing research project aiming to make a more human-friendly, useful, and fun chess AI. For more information go to maiachess.com. '),
@@ -181,7 +180,7 @@ class PlayForm extends ConsumerWidget {
                       'SEVERE [PlayScreen] could not load bot info: ${err.toString()}\n$st');
                   return const Text('Could not load bot ratings.');
                 },
-                loading: () => const CircularProgressIndicator.adaptive(),
+                loading: () => const CenterLoadingIndicator(),
               );
             }
 
