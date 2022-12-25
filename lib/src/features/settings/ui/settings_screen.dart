@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings_group_tile.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 
 import './theme_mode_screen.dart';
@@ -41,7 +42,7 @@ class SettingsScreen extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
     return SafeArea(
       child: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: kBodyPadding,
         children: [
           const SizedBox(height: 10),
           PlatformCard(

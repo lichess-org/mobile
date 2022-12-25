@@ -10,7 +10,7 @@ const kLichessClientId = 'lichess_mobile';
 const kOAuthTokenStorageKey = 'oAuthToken';
 
 // SPACING
-const kBodyPadding = EdgeInsets.all(16.0);
+const kBodyPadding = EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0);
 
 // COLORS
 const kOrange = Color(0xFFD64F00);

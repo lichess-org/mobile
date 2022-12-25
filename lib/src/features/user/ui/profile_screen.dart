@@ -67,7 +67,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   builder: (context) => const SettingsScreen(),
                 ),
               ),
-              child: const Icon(CupertinoIcons.settings),
+              child: const Icon(Icons.settings),
             ),
           ),
           CupertinoSliverRefreshControl(
