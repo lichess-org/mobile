@@ -46,7 +46,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       body: RefreshIndicator(
         key: _androidRefreshKey,
         onRefresh: _refreshData,
-        child: _buildBody(context),
+        child: ListView(
+          padding: kBodyPadding,
+          children: _buildList(context),
+        ),
       ),
     );
   }
@@ -57,6 +60,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         slivers: [
           CupertinoSliverNavigationBar(
             trailing: CupertinoButton(
+              padding: EdgeInsets.zero,
               onPressed: () => Navigator.of(context).push<void>(
                 CupertinoPageRoute(
                   title: context.l10n.settings,
@@ -69,142 +73,170 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           CupertinoSliverRefreshControl(
             onRefresh: _refreshData,
           ),
-          SliverFillRemaining(
-            child: _buildBody(context),
+          SliverSafeArea(
+            top: false,
+            sliver: SliverPadding(
+              padding: kBodyPadding,
+              sliver: SliverList(
+                delegate: SliverChildListDelegate(
+                  _buildList(context),
+                ),
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildBody(BuildContext context) {
-    return SafeArea(
-      top: false,
-      bottom: false,
-      child: ListView(
-        padding: kBodyPadding,
-        children: [
-          const ListTile(
-            leading: Icon(LichessIcons.patron, size: 40),
-            title: Text(
-              'veloce',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-            ),
-            subtitle: Text('Vincent Velociter'),
-            contentPadding: EdgeInsets.symmetric(vertical: 10),
+  List<Widget> _buildList(BuildContext context) {
+    return [
+      const ListTile(
+        leading: Icon(LichessIcons.patron, size: 40),
+        title: Text(
+          'veloce',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+        ),
+        subtitle: Text('Vincent Velociter'),
+        contentPadding: EdgeInsets.symmetric(vertical: 10),
+      ),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          Location(
+            profile: Profile(country: 'FR', location: 'Lille, France'),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Location(
-                profile: Profile(country: 'fr', location: 'Lille, France'),
-              ),
-              SizedBox(height: 5),
-              Text('Member since 18 Sept 2015'),
-              SizedBox(height: 5),
-              Text('Active 16 hours ago'),
-              SizedBox(height: 5),
-              Text('Time spent playing: 31 days, 1 hour and 47 minutes'),
-            ],
-          ),
-          const SizedBox(height: 20),
-          SizedBox(
-            height: 106,
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(vertical: 3.0),
-              scrollDirection: Axis.horizontal,
-              itemCount: 10,
-              itemBuilder: ((context, index) => SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: PlatformCard(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            index.isOdd
-                                ? Text(
-                                    'Blitz',
-                                    style: TextStyle(
-                                        color: DefaultTextStyle.of(context)
-                                            .style
-                                            .color
-                                            ?.withOpacity(0.6)),
-                                  )
-                                : const Text('Rapid'),
-                            Icon(index.isOdd
-                                ? LichessIcons.blitz
-                                : LichessIcons.rapid),
-                            Row(
-                              children: const [
-                                Text('3079'),
-                                SizedBox(width: 3),
-                                Icon(
-                                  LichessIcons.arrow_full_lowerright,
-                                  color: Colors.red,
-                                  size: 10,
-                                ),
-                                Text('48',
-                                    style: TextStyle(
-                                        color: Colors.red, fontSize: 12)),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )),
-              separatorBuilder: ((context, index) => const SizedBox(width: 10)),
-            ),
-          ),
-          const SizedBox(height: 20),
-          const Text(
-            'Recent games',
-            style: TextStyle(fontSize: 16),
-          ),
-          ...ListTile.divideTiles(context: context, tiles: [
-            const ListTile(
-              leading: Icon(LichessIcons.blitz),
-              title: Text('BOT maia1 (1478)', overflow: TextOverflow.ellipsis),
-              subtitle: Text('19 hours ago'),
-              trailing:
-                  Icon(CupertinoIcons.plus_square_fill, color: Colors.green),
-            ),
-            ListTile(
-              leading: const Icon(LichessIcons.bullet),
-              title: const Text('GM kingsCrusherYoutube (2078)',
-                  overflow: TextOverflow.ellipsis),
-              subtitle: const Text('1 week ago'),
-              trailing: SizedBox(
-                  width: 60,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Icon(CupertinoIcons.chart_bar_square),
-                      Icon(CupertinoIcons.minus_square_fill, color: Colors.red),
-                    ],
-                  )),
-            ),
-            ListTile(
-              leading: const Icon(LichessIcons.rapid),
-              title: const Text('GM kingsCrusherYoutube (2078)',
-                  overflow: TextOverflow.ellipsis),
-              subtitle: const Text('1 week ago'),
-              trailing: SizedBox(
-                  width: 60,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Icon(CupertinoIcons.minus_square_fill, color: Colors.red),
-                    ],
-                  )),
-            ),
-          ]),
+          SizedBox(height: 5),
+          Text('Member since 18 Sept 2015'),
+          SizedBox(height: 5),
+          Text('Active 16 hours ago'),
+          SizedBox(height: 5),
+          Text('Time spent playing: 31 days, 1 hour and 47 minutes'),
         ],
       ),
-    );
+      const SizedBox(height: 20),
+      SizedBox(
+        height: 106,
+        child: ListView.separated(
+          padding: const EdgeInsets.symmetric(vertical: 3.0),
+          scrollDirection: Axis.horizontal,
+          itemCount: 10,
+          itemBuilder: ((context, index) => SizedBox(
+                height: 100,
+                width: 100,
+                child: PlatformCard(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        index.isOdd
+                            ? Text(
+                                'Blitz',
+                                style: TextStyle(
+                                    color: DefaultTextStyle.of(context)
+                                        .style
+                                        .color
+                                        ?.withOpacity(0.6)),
+                              )
+                            : const Text('Rapid'),
+                        Icon(index.isOdd
+                            ? LichessIcons.blitz
+                            : LichessIcons.rapid),
+                        Row(
+                          children: const [
+                            Text('3079'),
+                            SizedBox(width: 3),
+                            Icon(
+                              LichessIcons.arrow_full_lowerright,
+                              color: Colors.red,
+                              size: 10,
+                            ),
+                            Text('48',
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 12)),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )),
+          separatorBuilder: ((context, index) => const SizedBox(width: 10)),
+        ),
+      ),
+      const SizedBox(height: 20),
+      const Text(
+        'Recent games',
+        style: TextStyle(fontSize: 16),
+      ),
+      ...ListTile.divideTiles(context: context, tiles: [
+        const ListTile(
+          leading: Icon(LichessIcons.blitz),
+          title: Text('BOT maia1 (1478)', overflow: TextOverflow.ellipsis),
+          subtitle: Text('19 hours ago'),
+          trailing: Icon(CupertinoIcons.plus_square_fill, color: Colors.green),
+        ),
+        ListTile(
+          leading: const Icon(LichessIcons.bullet),
+          title: const Text('GM kingsCrusherYoutube (2078)',
+              overflow: TextOverflow.ellipsis),
+          subtitle: const Text('1 week ago'),
+          trailing: SizedBox(
+              width: 60,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Icon(CupertinoIcons.chart_bar_square),
+                  Icon(CupertinoIcons.minus_square_fill, color: Colors.red),
+                ],
+              )),
+        ),
+        ListTile(
+          leading: const Icon(LichessIcons.rapid),
+          title: const Text('GM kingsCrusherYoutube (2078)',
+              overflow: TextOverflow.ellipsis),
+          subtitle: const Text('1 week ago'),
+          trailing: SizedBox(
+              width: 60,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: const [
+                  Icon(CupertinoIcons.minus_square_fill, color: Colors.red),
+                ],
+              )),
+        ),
+        ListTile(
+          leading: const Icon(LichessIcons.rapid),
+          title: const Text('GM kingsCrusherYoutube (2078)',
+              overflow: TextOverflow.ellipsis),
+          subtitle: const Text('1 week ago'),
+          trailing: SizedBox(
+              width: 60,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: const [
+                  Icon(CupertinoIcons.minus_square_fill, color: Colors.red),
+                ],
+              )),
+        ),
+        ListTile(
+          leading: const Icon(LichessIcons.rapid),
+          title: const Text('GM kingsCrusherYoutube (2078)',
+              overflow: TextOverflow.ellipsis),
+          subtitle: const Text('1 week ago'),
+          trailing: SizedBox(
+              width: 60,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: const [
+                  Icon(CupertinoIcons.minus_square_fill, color: Colors.red),
+                ],
+              )),
+        ),
+      ]),
+    ];
   }
 
   Future<void> _refreshData() {
