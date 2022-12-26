@@ -53,9 +53,7 @@ class GameEvent with _$GameEvent {
       moves: pick('moves').asStringOrThrow(),
       whiteTime: pick('wtime').asIntOrThrow(),
       blackTime: pick('btime').asIntOrThrow(),
-      status: pick('status').letOrThrow((it) => GameStatus.values.firstWhere(
-          (e) => e.name == it.asStringOrThrow(),
-          orElse: () => GameStatus.unknown)),
+      status: pick('status').asGameStatusOrThrow(),
     );
   }
 }

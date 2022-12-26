@@ -6,6 +6,9 @@ import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/features/game/model/game.dart';
+import 'package:lichess_mobile/src/features/game/model/game_status.dart';
+import 'package:lichess_mobile/src/features/user/model/user.dart';
 
 extension Dartchess on Pick {
   Move asUciMoveOrThrow() {
@@ -50,6 +53,74 @@ extension Dartchess on Pick {
     if (value == null) return null;
     try {
       return asSideOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+}
+
+extension GameExtension on Pick {
+  Speed asSpeedOrThrow() {
+    final value = required().value;
+    if (value is Speed) {
+      return value;
+    }
+    if (value is String) {
+      return Speed.values
+          .firstWhere((v) => v.name == value, orElse: () => Speed.blitz);
+    }
+    throw PickException(
+        "value $value at $debugParsingExit can't be casted to Speed");
+  }
+
+  Speed? asSpeedOrNull() {
+    if (value == null) return null;
+    try {
+      return asSpeedOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Perf asPerfOrThrow() {
+    final value = required().value;
+    if (value is Perf) {
+      return value;
+    }
+    if (value is String) {
+      return Perf.values
+          .firstWhere((v) => v.name == value, orElse: () => Perf.blitz);
+    }
+    throw PickException(
+        "value $value at $debugParsingExit can't be casted to Perf");
+  }
+
+  Perf? asPerfOrNull() {
+    if (value == null) return null;
+    try {
+      return asPerfOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  GameStatus asGameStatusOrThrow() {
+    final value = required().value;
+    if (value is GameStatus) {
+      return value;
+    }
+    if (value is String) {
+      return GameStatus.values
+          .firstWhere((e) => e.name == value, orElse: () => GameStatus.unknown);
+    }
+    throw PickException(
+        "value $value at $debugParsingExit can't be casted to GameStatus");
+  }
+
+  GameStatus? asGameStatusOrNull() {
+    if (value == null) return null;
+    try {
+      return asGameStatusOrThrow();
     } catch (_) {
       return null;
     }

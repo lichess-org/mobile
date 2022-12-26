@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -14,8 +15,16 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/features/settings/ui/settings_screen.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
+import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
+import 'package:lichess_mobile/src/features/game/model/game.dart';
 
 import '../../auth/data/auth_repository.dart';
+
+final recentGamesProvider = FutureProvider.autoDispose
+    .family<List<ArchivedGame>, String>((ref, userName) async {
+  final userRepo = ref.watch(userRepositoryProvider);
+  return await userRepo.getRecentGames(userName);
+});
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -148,77 +157,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 'Recent games',
                 style: TextStyle(fontSize: 16),
               ),
-              ...ListTile.divideTiles(context: context, tiles: [
-                const ListTile(
-                  leading: Icon(LichessIcons.blitz),
-                  title:
-                      Text('BOT maia1 (1478)', overflow: TextOverflow.ellipsis),
-                  subtitle: Text('19 hours ago'),
-                  trailing: Icon(CupertinoIcons.plus_square_fill,
-                      color: Colors.green),
-                ),
-                ListTile(
-                  leading: const Icon(LichessIcons.bullet),
-                  title: const Text('GM kingsCrusherYoutube (2078)',
-                      overflow: TextOverflow.ellipsis),
-                  subtitle: const Text('1 week ago'),
-                  trailing: SizedBox(
-                      width: 60,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Icon(CupertinoIcons.chart_bar_square),
-                          Icon(CupertinoIcons.minus_square_fill,
-                              color: Colors.red),
-                        ],
-                      )),
-                ),
-                ListTile(
-                  leading: const Icon(LichessIcons.rapid),
-                  title: const Text('GM kingsCrusherYoutube (2078)',
-                      overflow: TextOverflow.ellipsis),
-                  subtitle: const Text('1 week ago'),
-                  trailing: SizedBox(
-                      width: 60,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Icon(CupertinoIcons.minus_square_fill,
-                              color: Colors.red),
-                        ],
-                      )),
-                ),
-                ListTile(
-                  leading: const Icon(LichessIcons.rapid),
-                  title: const Text('GM kingsCrusherYoutube (2078)',
-                      overflow: TextOverflow.ellipsis),
-                  subtitle: const Text('1 week ago'),
-                  trailing: SizedBox(
-                      width: 60,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Icon(CupertinoIcons.minus_square_fill,
-                              color: Colors.red),
-                        ],
-                      )),
-                ),
-                ListTile(
-                  leading: const Icon(LichessIcons.rapid),
-                  title: const Text('GM kingsCrusherYoutube (2078)',
-                      overflow: TextOverflow.ellipsis),
-                  subtitle: const Text('1 week ago'),
-                  trailing: SizedBox(
-                      width: 60,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Icon(CupertinoIcons.minus_square_fill,
-                              color: Colors.red),
-                        ],
-                      )),
-                ),
-              ]),
+              RecentGames(account: account),
             ],
       orElse: () => const [CenterLoadingIndicator()],
     );
@@ -304,6 +243,64 @@ class PerfCards extends StatelessWidget {
         }),
         separatorBuilder: ((context, index) => const SizedBox(width: 10)),
       ),
+    );
+  }
+}
+
+class RecentGames extends ConsumerWidget {
+  const RecentGames({required this.account, super.key});
+
+  final User account;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final recentGames = ref.watch(recentGamesProvider(account.id));
+
+    return recentGames.when(
+      data: ((data) {
+        return Column(
+          children: ListTile.divideTiles(
+              context: context,
+              tiles: data.map((e) {
+                final mySide =
+                    e.white.id == account.id ? Side.white : Side.black;
+                final opponent = e.white.id == account.id ? e.black : e.white;
+                final title = opponent.title;
+                final opponentName = opponent.name == 'Stockfish'
+                    ? context.l10n.aiNameLevelAiLevel(
+                        opponent.name, opponent.aiLevel.toString())
+                    : opponent.name;
+
+                return ListTile(
+                  leading: Icon(e.perf.icon),
+                  title: Row(
+                    children: [
+                      if (title != null) ...[
+                        Text(title,
+                            style: TextStyle(
+                                color: title == 'BOT' ? kPink : kGold,
+                                fontWeight: FontWeight.bold)),
+                        const SizedBox(width: 5)
+                      ],
+                      Text(opponentName, overflow: TextOverflow.ellipsis),
+                    ],
+                  ),
+                  subtitle: Text(timeago.format(e.lastMoveAt)),
+                  trailing: e.winner == mySide
+                      ? const Icon(CupertinoIcons.plus_square_fill,
+                          color: Colors.green)
+                      : const Icon(CupertinoIcons.minus_square_fill,
+                          color: Colors.red),
+                );
+              })).toList(growable: false),
+        );
+      }),
+      error: ((error, stackTrace) {
+        debugPrint(
+            'SEVERE: [ProfileScreen] could not load user games; ${error.toString()}\n$stackTrace');
+        return const Text('Could not load games.');
+      }),
+      loading: () => const CenterLoadingIndicator(),
     );
   }
 }

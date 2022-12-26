@@ -70,9 +70,13 @@ class ApiClient {
     ).flatMap((resp) => _validateResponseStatus(url, resp));
   }
 
-  Future<StreamedResponse> stream(Uri url) {
+  Future<StreamedResponse> stream(Uri url, {Map<String, String>? headers}) {
+    final request = Request('GET', url);
+    if (headers != null) {
+      request.headers.addAll(headers);
+    }
     return TaskEither<IOError, StreamedResponse>.tryCatch(
-      () async => _client.send(Request('GET', url)),
+      () async => _client.send(request),
       (error, trace) {
         _log.severe('Request error', error, trace);
         return GenericError(trace);

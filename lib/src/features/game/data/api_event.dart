@@ -58,12 +58,8 @@ class ApiEvent with _$ApiEvent {
               lastMove: gamePick('lastMove').asUciMoveOrNull(),
               opponent: gamePick('opponent').letOrThrow(Opponent.fromPick),
               rated: gamePick('rated').asBoolOrThrow(),
-              perf: gamePick('perf').letOrThrow((it) => Perf.values.firstWhere(
-                  (v) => v.name == it.asStringOrThrow(),
-                  orElse: () => Perf.blitz)),
-              speed: gamePick('speed').letOrThrow((it) => Speed.values
-                  .firstWhere((v) => v.name == it.asStringOrThrow(),
-                      orElse: () => Speed.blitz)),
+              perf: gamePick('perf').asPerfOrThrow(),
+              speed: gamePick('speed').asSpeedOrThrow(),
               botCompat: gamePick('compat', 'bot').asBoolOrThrow(),
               boardCompat: gamePick('compat', 'board').asBoolOrThrow(),
             ));

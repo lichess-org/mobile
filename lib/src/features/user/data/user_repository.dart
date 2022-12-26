@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:logging/logging.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +7,7 @@ import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:lichess_mobile/src/features/game/model/game.dart';
 import '../model/user.dart';
 
 class UserRepository {
@@ -31,6 +33,25 @@ class UserRepository {
             response.body,
             mapper: UserStatus.fromJson,
             logger: _log)));
+  }
+
+  Future<List<ArchivedGame>> getRecentGames(String username) async {
+    final streamedResp = await apiClient.stream(
+      Uri.parse('$kLichessHost/api/games/user/$username?max=10'),
+      headers: {'Accept': 'application/x-ndjson'},
+    );
+
+    return streamedResp.stream
+        .toStringStream()
+        .map((string) {
+          final lines = string.split('\n');
+          return lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
+            final json = jsonDecode(e) as Map<String, dynamic>;
+            return ArchivedGame.fromJson(json);
+          });
+        })
+        .toList()
+        .then((value) => value.expand((i) => i).toList());
   }
 
   void dispose() {
