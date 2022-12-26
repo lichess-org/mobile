@@ -136,63 +136,26 @@ class UserStatus with _$UserStatus {
 }
 
 enum Perf {
-  ultraBullet('UltraBullet', 'Ultra'),
-  bullet('Bullet', 'Bullet'),
-  blitz('Blitz', 'Blitz'),
-  rapid('Rapid', 'Rapid'),
-  classical('Classical', 'Classical'),
-  correspondence('Correspondence', 'Corresp.'),
-  chess960('Chess 960', '960'),
-  antichess('Antichess', 'Antichess'),
-  kingOfTheHill('King Of The Hill', 'KotH'),
-  threeCheck('Three-check', '3check'),
-  atomic('Atomic', 'Atomic'),
-  horde('Horde', 'Horde'),
-  racingKings('Racing Kings', 'Racing'),
-  crazyhouse('Crazyhouse', 'Crazy'),
-  puzzle('Puzzle', 'Puzzle'),
-  storm('Storm', 'Storm');
+  ultraBullet('UltraBullet', 'Ultra', LichessIcons.ultrabullet),
+  bullet('Bullet', 'Bullet', LichessIcons.bullet),
+  blitz('Blitz', 'Blitz', LichessIcons.blitz),
+  rapid('Rapid', 'Rapid', LichessIcons.rapid),
+  classical('Classical', 'Classical', LichessIcons.classical),
+  correspondence('Correspondence', 'Corresp.', LichessIcons.correspondence),
+  chess960('Chess 960', '960', LichessIcons.die_six),
+  antichess('Antichess', 'Antichess', LichessIcons.antichess),
+  kingOfTheHill('King Of The Hill', 'KotH', LichessIcons.flag),
+  threeCheck('Three-check', '3check', LichessIcons.three_check),
+  atomic('Atomic', 'Atomic', LichessIcons.atom),
+  horde('Horde', 'Horde', LichessIcons.horde),
+  racingKings('Racing Kings', 'Racing', LichessIcons.racing_kings),
+  crazyhouse('Crazyhouse', 'Crazy', LichessIcons.h_square),
+  puzzle('Puzzle', 'Puzzle', LichessIcons.target),
+  storm('Storm', 'Storm', LichessIcons.storm);
 
-  const Perf(this.name, this.shortName);
+  const Perf(this.name, this.shortName, this.icon);
 
   final String name;
   final String shortName;
-
-  IconData get icon {
-    switch (this) {
-      case ultraBullet:
-        return LichessIcons.ultrabullet;
-      case bullet:
-        return LichessIcons.bullet;
-      case blitz:
-        return LichessIcons.blitz;
-      case rapid:
-        return LichessIcons.rapid;
-      case classical:
-        return LichessIcons.classical;
-      case correspondence:
-        return LichessIcons.correspondence;
-      case chess960:
-        return LichessIcons.die_six;
-      case antichess:
-        return LichessIcons.antichess;
-      case kingOfTheHill:
-        return LichessIcons.flag;
-      case threeCheck:
-        return LichessIcons.three_check;
-      case atomic:
-        return LichessIcons.atom;
-      case horde:
-        return LichessIcons.horde;
-      case crazyhouse:
-        return LichessIcons.h_square;
-      case puzzle:
-        return LichessIcons.target;
-      case storm:
-        return LichessIcons.storm;
-      default:
-        debugPrint('SEVERE at ${DateTime.now()} perf $this icon not found');
-        return LichessIcons.chess_king;
-    }
-  }
+  final IconData icon;
 }
