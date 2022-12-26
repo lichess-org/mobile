@@ -160,12 +160,36 @@ enum Perf {
 
   IconData get icon {
     switch (this) {
+      case ultraBullet:
+        return LichessIcons.ultrabullet;
+      case bullet:
+        return LichessIcons.bullet;
       case blitz:
         return LichessIcons.blitz;
       case rapid:
         return LichessIcons.rapid;
       case classical:
         return LichessIcons.classical;
+      case correspondence:
+        return LichessIcons.correspondence;
+      case chess960:
+        return LichessIcons.die_six;
+      case antichess:
+        return LichessIcons.antichess;
+      case kingOfTheHill:
+        return LichessIcons.flag;
+      case threeCheck:
+        return LichessIcons.three_check;
+      case atomic:
+        return LichessIcons.atom;
+      case horde:
+        return LichessIcons.horde;
+      case crazyhouse:
+        return LichessIcons.h_square;
+      case puzzle:
+        return LichessIcons.target;
+      case storm:
+        return LichessIcons.storm;
       default:
         debugPrint('SEVERE at ${DateTime.now()} perf $this icon not found');
         return LichessIcons.chess_king;

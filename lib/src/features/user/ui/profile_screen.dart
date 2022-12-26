@@ -269,7 +269,7 @@ class PerfCards extends StatelessWidget {
                       perf.shortName,
                       style: TextStyle(color: textShade(context, 0.7)),
                     ),
-                    Icon(perf.icon, color: textShade(context, 0.7)),
+                    Icon(perf.icon, color: textShade(context, 0.6)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
