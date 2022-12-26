@@ -16,6 +16,14 @@ const kBodyPadding = EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0);
 const kOrange = Color(0xFFD64F00);
 const kGold = Color(0xFFBF811D);
 
+// TEXT
+const kBold = TextStyle(fontWeight: FontWeight.bold);
+
+// lichess
+// https://github.com/lichess-org/lila/blob/4562a83cdb263c3ebf7e148c0f666f0ff92b91c7/modules/rating/src/main/Glicko.scala#L71
+const kProvisionalDeviation = 110;
+const kClueLessDeviation = 230;
+
 // Misc
 const kEmptyWidget = SizedBox.shrink();
 const kEmptyFen = '8/8/8/8/8/8/8/8 w - - 0 1';

@@ -45,6 +45,7 @@ dependencies:
   meta: ^1.8.0
   tuple: ^2.0.1
   deep_pick: ^0.10.0
+  timeago: ^3.3.0
 
 dev_dependencies:
   flutter_test:

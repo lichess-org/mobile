@@ -56,9 +56,9 @@ extension Dartchess on Pick {
   }
 }
 
-extension DateTimeFromIntPick on Pick {
+extension TimeExtension on Pick {
   /// Matches a DateTime from milliseconds since unix epoch.
-  DateTime asDateTimeFromIntOrThrow() {
+  DateTime asDateTimeFromMillisecondsOrThrow() {
     final value = required().value;
     if (value is DateTime) {
       return value;
@@ -71,10 +71,33 @@ extension DateTimeFromIntPick on Pick {
   }
 
   /// Matches a DateTime from milliseconds since unix epoch.
-  DateTime? asDateTimeFromIntOrNull() {
+  DateTime? asDateTimeFromMillisecondsOrNull() {
     if (value == null) return null;
     try {
-      return asDateTimeFromIntOrThrow();
+      return asDateTimeFromMillisecondsOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Matches a Duration from seconds
+  Duration asDurationFromSecondsOrThrow() {
+    final value = required().value;
+    if (value is Duration) {
+      return value;
+    }
+    if (value is int) {
+      return Duration(seconds: value);
+    }
+    throw PickException(
+        "value $value at $debugParsingExit can't be casted to Duration");
+  }
+
+  /// Matches a DateTime from milliseconds since unix epoch.
+  Duration? asDurationFromSecondsOrNull() {
+    if (value == null) return null;
+    try {
+      return asDurationFromSecondsOrThrow();
     } catch (_) {
       return null;
     }

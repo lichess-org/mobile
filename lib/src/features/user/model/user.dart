@@ -17,6 +17,7 @@ class User with _$User {
     required DateTime createdAt,
     required DateTime seenAt,
     required Map<Perf, UserPerf> perfs,
+    PlayTime? playTime,
     Profile? profile,
   }) = _User;
 
@@ -30,8 +31,9 @@ class User with _$User {
       username: pick('username').asStringOrThrow(),
       title: pick('title').asStringOrNull(),
       patron: pick('patron').asBoolOrNull(),
-      createdAt: pick('createdAt').asDateTimeFromIntOrThrow(),
-      seenAt: pick('seenAt').asDateTimeFromIntOrThrow(),
+      createdAt: pick('createdAt').asDateTimeFromMillisecondsOrThrow(),
+      seenAt: pick('seenAt').asDateTimeFromMillisecondsOrThrow(),
+      playTime: pick('playTime').letOrNull(PlayTime.fromPick),
       profile: pick('profile').letOrNull(Profile.fromPick),
       perfs: Map.unmodifiable({
         for (final entry in perfsMap.entries)
@@ -43,7 +45,25 @@ class User with _$User {
 }
 
 @freezed
+class PlayTime with _$PlayTime {
+  const factory PlayTime({
+    required Duration total,
+    required Duration tv,
+  }) = _PlayTime;
+  factory PlayTime.fromJson(Map<String, dynamic> json) =>
+      PlayTime.fromPick(pick(json).required());
+
+  factory PlayTime.fromPick(RequiredPick pick) {
+    return PlayTime(
+        total: pick('total').asDurationFromSecondsOrThrow(),
+        tv: pick('tv').asDurationFromSecondsOrThrow());
+  }
+}
+
+@freezed
 class Profile with _$Profile {
+  const Profile._();
+
   const factory Profile({
     String? country,
     String? location,
@@ -53,6 +73,10 @@ class Profile with _$Profile {
     int? fideRating,
     String? links,
   }) = _Profile;
+
+  String? get fullName => firstName != null && lastName != null
+      ? '$firstName $lastName'
+      : firstName ?? lastName;
 
   factory Profile.fromJson(Map<String, dynamic> json) {
     return Profile.fromPick(pick(json).required());
@@ -87,6 +111,7 @@ class UserPerf with _$UserPerf {
         ratingDeviation: pick('rd').asIntOrThrow(),
         progression: pick('prog').asIntOrThrow(),
         numberOfGames: pick('games').asIntOrThrow(),
+        provisional: pick('prov').asBoolOrNull(),
       );
 }
 
@@ -111,22 +136,27 @@ class UserStatus with _$UserStatus {
 }
 
 enum Perf {
-  ultraBullet,
-  bullet,
-  blitz,
-  rapid,
-  classical,
-  correspondence,
-  chess960,
-  antichess,
-  kingOfTheHill,
-  threeCheck,
-  atomic,
-  horde,
-  racingKings,
-  crazyhouse,
-  puzzle,
-  storm;
+  ultraBullet('UltraBullet', 'Ultra'),
+  bullet('Bullet', 'Bullet'),
+  blitz('Blitz', 'Blitz'),
+  rapid('Rapid', 'Rapid'),
+  classical('Classical', 'Classical'),
+  correspondence('Correspondence', 'Corresp.'),
+  chess960('Chess 960', '960'),
+  antichess('Antichess', 'Antichess'),
+  kingOfTheHill('King Of The Hill', 'KotH'),
+  threeCheck('Three-check', '3check'),
+  atomic('Atomic', 'Atomic'),
+  horde('Horde', 'Horde'),
+  racingKings('Racing Kings', 'Racing'),
+  crazyhouse('Crazyhouse', 'Crazy'),
+  puzzle('Puzzle', 'Puzzle'),
+  storm('Storm', 'Storm');
+
+  const Perf(this.name, this.shortName);
+
+  final String name;
+  final String shortName;
 
   IconData get icon {
     switch (this) {
@@ -137,7 +167,8 @@ enum Perf {
       case classical:
         return LichessIcons.classical;
       default:
-        throw UnimplementedError('Icon is not yet added!');
+        debugPrint('SEVERE at ${DateTime.now()} perf $this icon not found');
+        return LichessIcons.chess_king;
     }
   }
 }
