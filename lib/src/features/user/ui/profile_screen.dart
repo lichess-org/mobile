@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/features/settings/ui/settings_screen.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
@@ -134,16 +135,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         index.isOdd
                             ? Text(
                                 'Blitz',
-                                style: TextStyle(
-                                    color: DefaultTextStyle.of(context)
-                                        .style
-                                        .color
-                                        ?.withOpacity(0.6)),
+                                style:
+                                    TextStyle(color: textShade(context, 0.6)),
                               )
                             : const Text('Rapid'),
-                        Icon(index.isOdd
-                            ? LichessIcons.blitz
-                            : LichessIcons.rapid),
+                        Icon(
+                          index.isOdd ? LichessIcons.blitz : LichessIcons.rapid,
+                        ),
                         Row(
                           children: const [
                             Text('3079'),

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -11,27 +12,48 @@ class App extends ConsumerWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
     final brightness = ref.watch(selectedBrigthnessProvider);
-    return MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: kSupportedLocales,
-      onGenerateTitle: (BuildContext context) => 'lichess.org',
-      theme: ThemeData(),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-      ),
-      builder: (context, child) {
-        return CupertinoTheme(
-          data: CupertinoThemeData(
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: kSupportedLocales,
+          onGenerateTitle: (BuildContext context) => 'lichess.org',
+          theme: ThemeData(),
+          darkTheme: ThemeData.dark(),
+          themeMode: themeMode,
+          home: const BottomNavScaffold(),
+        );
+      case TargetPlatform.iOS:
+        // material theme is also needed on iOS because we're using material widgets
+        return Theme(
+          data: ThemeData(
             brightness: brightness,
           ),
-          child: Material(child: child),
+          child: CupertinoApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: kSupportedLocales,
+            onGenerateTitle: (BuildContext context) => 'lichess.org',
+            theme: CupertinoThemeData(
+              brightness: brightness,
+            ),
+            home: Material(
+              // icon theme is needed here because cupertino theme overrides
+              // default material icon theme on material widgets
+              child: IconTheme(
+                data: CupertinoIconThemeData(
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.label, context)),
+                child: const BottomNavScaffold(),
+              ),
+            ),
+          ),
         );
-      },
-      themeMode: themeMode,
-      home: const BottomNavScaffold(),
-    );
+      default:
+        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        return const SizedBox.shrink();
+    }
   }
 }
