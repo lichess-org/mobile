@@ -35,23 +35,20 @@ class UserRepository {
             logger: _log)));
   }
 
-  Future<List<ArchivedGame>> getRecentGames(String username) async {
-    final streamedResp = await apiClient.stream(
+  TaskEither<IOError, List<ArchivedGame>> getRecentGames(String username) {
+    return apiClient.get(
       Uri.parse('$kLichessHost/api/games/user/$username?max=10'),
       headers: {'Accept': 'application/x-ndjson'},
-    );
-
-    return streamedResp.stream
-        .toStringStream()
-        .map((string) {
-          final lines = string.split('\n');
+    ).flatMap((r) => TaskEither.fromEither(Either.tryCatch(() {
+          final lines = r.body.split('\n');
           return lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
             final json = jsonDecode(e) as Map<String, dynamic>;
             return ArchivedGame.fromJson(json);
-          });
-        })
-        .toList()
-        .then((value) => value.expand((i) => i).toList());
+          }).toList(growable: false);
+        }, (error, stackTrace) {
+          _log.severe('Could not read json object as ArchivedGame: $error');
+          return DataFormatError(stackTrace);
+        })));
   }
 
   void dispose() {

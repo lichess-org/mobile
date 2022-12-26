@@ -23,7 +23,12 @@ import '../../auth/data/auth_repository.dart';
 final recentGamesProvider = FutureProvider.autoDispose
     .family<List<ArchivedGame>, String>((ref, userName) async {
   final userRepo = ref.watch(userRepositoryProvider);
-  return await userRepo.getRecentGames(userName);
+  final either = await userRepo.getRecentGames(userName).run();
+  // retry on error, cache indefinitely on success
+  return either.match((error) => throw error, (data) {
+    ref.keepAlive();
+    return data;
+  });
 });
 
 class ProfileScreen extends ConsumerStatefulWidget {
