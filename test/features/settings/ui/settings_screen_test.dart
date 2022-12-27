@@ -36,6 +36,6 @@ void main() {
 
       await expectLater(tester, meetsGuideline(textContrastGuideline));
       handle.dispose();
-    });
+    }, variant: kPlatformVariant);
   });
 }

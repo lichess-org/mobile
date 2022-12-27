@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -6,6 +8,8 @@ import 'package:http/http.dart' as http;
 
 const double kTestScreenWidth = 200;
 const double kTestScreenHeight = 600;
+const kPlatformVariant =
+    TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
 
 Matcher sameRequest(http.BaseRequest request) => _SameRequest(request);
 
@@ -23,6 +27,14 @@ Future<http.StreamedResponse> mockHttpStreamFromIterable(
 Future<http.StreamedResponse> mockHttpStream(Stream<String> stream) async =>
     Future<void>.delayed(const Duration(milliseconds: 20))
         .then((_) => http.StreamedResponse(stream.map(utf8.encode), 200));
+
+Future<void> tapBackButton(WidgetTester tester) async {
+  if (debugDefaultTargetPlatformOverride == TargetPlatform.iOS) {
+    await tester.tap(find.widgetWithIcon(CupertinoButton, CupertinoIcons.back));
+  } else {
+    await tester.tap(find.widgetWithIcon(IconButton, Icons.arrow_back));
+  }
+}
 
 Widget buildTestApp({required Widget home}) {
   return MediaQuery(

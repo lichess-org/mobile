@@ -47,5 +47,5 @@ void main() {
     await tester.pump(const Duration(seconds: 1)); // wait for sign out future
 
     expect(find.text('Sign in'), findsOneWidget);
-  });
+  }, variant: kPlatformVariant);
 }

@@ -102,7 +102,7 @@ void main() {
       await tester.tap(find.byKey(const Key('e2-whitepawn')));
       await tester.pump();
       expect(find.byKey(const Key('e2-selected')), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('play two moves', (tester) async {
       SharedPreferences.setMockInitialValues({});
@@ -212,7 +212,7 @@ void main() {
       // board is interactable again
       expect(tester.widget<cg.Board>(find.byType(cg.Board)).interactableSide,
           cg.InteractableSide.white);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('reacts to abort event', (tester) async {
       SharedPreferences.setMockInitialValues({});
@@ -254,7 +254,7 @@ void main() {
           cg.InteractableSide.white);
 
       // trying to exit game will show an alert
-      await tester.tap(find.widgetWithIcon(IconButton, Icons.arrow_back));
+      await tapBackButton(tester);
       await tester.pump();
       expect(
           find.text('Are you sure you want to quit the game?'), findsOneWidget);
@@ -274,11 +274,11 @@ void main() {
           cg.InteractableSide.none);
 
       // trying now to exit will not show the alert
-      await tester.tap(find.widgetWithIcon(IconButton, Icons.arrow_back));
+      await tapBackButton(tester);
       await tester.pump();
       expect(
           find.text('Are you sure you want to quit the game?'), findsNothing);
-    });
+    }, variant: kPlatformVariant);
   });
 }
 
