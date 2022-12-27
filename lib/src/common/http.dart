@@ -127,11 +127,6 @@ class AuthClient extends BaseClient {
     if (token != null) {
       request.headers['Authorization'] = 'Bearer $token';
     }
-    if (request.url.host == 'lichess.dev') {
-      const creds = '$kLichessDevUser:$kLichessDevPassword';
-      request.headers['authorization'] =
-          'Basic ${base64.encode(utf8.encode(creds))}';
-    }
 
     return _inner.send(request);
   }
