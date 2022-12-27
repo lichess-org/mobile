@@ -51,6 +51,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Widget _buildAndroid(BuildContext context) {
+    final account = ref.watch(authStateChangesProvider).valueOrNull;
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.profile),
@@ -65,22 +66,30 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         ],
       ),
-      body: RefreshIndicator(
-        key: _androidRefreshKey,
-        onRefresh: _refreshData,
-        child: ListView(
-          padding: kBodyPadding,
-          children: _buildList(context),
-        ),
-      ),
+      body: account != null
+          ? RefreshIndicator(
+              key: _androidRefreshKey,
+              onRefresh: () => _refreshData(account),
+              child: ListView(
+                padding: kBodyPadding,
+                children: _buildList(context),
+              ),
+            )
+          : ListView(
+              padding: kBodyPadding,
+              children: _buildList(context),
+            ),
     );
   }
 
   Widget _buildIos(BuildContext context) {
+    final account = ref.watch(authStateChangesProvider).valueOrNull;
     return CupertinoPageScaffold(
       child: CustomScrollView(
         slivers: [
           CupertinoSliverNavigationBar(
+            backgroundColor: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemBackground, context),
             trailing: CupertinoButton(
               padding: EdgeInsets.zero,
               onPressed: () => Navigator.of(context).push<void>(
@@ -92,9 +101,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               child: const Icon(Icons.settings),
             ),
           ),
-          CupertinoSliverRefreshControl(
-            onRefresh: _refreshData,
-          ),
+          if (account != null)
+            CupertinoSliverRefreshControl(
+              onRefresh: () => _refreshData(account),
+            ),
           SliverSafeArea(
             top: false,
             sliver: SliverPadding(
@@ -173,12 +183,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  Future<void> _refreshData() {
-    return Future.delayed(
-      // This is just an arbitrary delay that simulates some network activity.
-      const Duration(seconds: 2),
-      () => {},
-    );
+  Future<void> _refreshData(User account) {
+    return ref.refresh(recentGamesProvider(account.id).future);
   }
 }
 
