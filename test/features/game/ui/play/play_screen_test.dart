@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/common/sound.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
 import 'package:lichess_mobile/src/features/game/ui/play/play_screen.dart';
-import 'package:lichess_mobile/src/features/game/ui/board/board_screen.dart';
+import 'package:lichess_mobile/src/features/game/ui/board/playable_game_screen.dart';
 import 'package:lichess_mobile/src/features/game/model/time_control.dart';
 import 'package:lichess_mobile/src/features/game/model/computer_opponent.dart';
 import 'package:lichess_mobile/src/widgets/list_tile_choice.dart';
@@ -272,7 +272,7 @@ void main() {
           .pump(const Duration(seconds: 3)); // wait for create game service
       await tester.pumpAndSettle(); // wait for page change animation
 
-      expect(find.byType(BoardScreen), findsOneWidget);
+      expect(find.byType(PlayableGameScreen), findsOneWidget);
       expect(find.byType(cg.PieceWidget), findsNWidgets(32));
     }, variant: kPlatformVariant);
   });

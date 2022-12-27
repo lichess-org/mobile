@@ -19,7 +19,7 @@ import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
 import '../../data/play_preferences.dart';
 import '../../model/game.dart';
 import '../../model/computer_opponent.dart';
-import '../board/board_screen.dart';
+import '../board/playable_game_screen.dart';
 import './time_control_modal.dart';
 import './play_action_notifier.dart';
 
@@ -111,7 +111,8 @@ class PlayForm extends ConsumerWidget {
           MaterialPageRoute<void>(
               // material widget ancestor is needed for iOS since we're using rootNavigator
               builder: (context) => Material(
-                  child: BoardScreen(game: state.value!, account: account!))),
+                  child: PlayableGameScreen(
+                      game: state.value!, account: account!))),
         );
       }
     });

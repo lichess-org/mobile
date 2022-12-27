@@ -8,8 +8,10 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
 import './api_event.dart';
 import './game_event.dart';
+import '../model/game.dart';
 
 class GameRepository {
   const GameRepository(
@@ -19,6 +21,15 @@ class GameRepository {
 
   final ApiClient apiClient;
   final Logger _log;
+
+  TaskEither<IOError, ArchivedGame> getGame(GameId id) {
+    return apiClient
+        .get(Uri.parse('$kLichessHost/game/export/$id'))
+        .flatMap((response) {
+      return TaskEither.fromEither(readJsonObject(response.body,
+          mapper: ArchivedGame.fromJson, logger: _log));
+    });
+  }
 
   /// Stream the events reaching a lichess user in real time as ndjson.
   Stream<ApiEvent> events() async* {

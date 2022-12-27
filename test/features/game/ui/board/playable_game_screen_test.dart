@@ -17,7 +17,7 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/common/sound.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
-import 'package:lichess_mobile/src/features/game/ui/board/board_screen.dart';
+import 'package:lichess_mobile/src/features/game/ui/board/playable_game_screen.dart';
 import 'package:lichess_mobile/src/features/game/model/game.dart' as game;
 import '../../../auth/data/fake_auth_repository.dart';
 import '../../../../utils.dart';
@@ -39,7 +39,7 @@ void main() {
     registerFallbackValue(http.Request('GET', Uri.parse('http://api.test')));
   });
 
-  group('BoardScreen', () {
+  group('PlayableGameScreen', () {
     testWidgets(
         'displays game info during loading state and update state after 1st gameFull event',
         (tester) async {
@@ -65,7 +65,7 @@ void main() {
           ],
           child: buildTestApp(
             home: Consumer(builder: (context, ref, _) {
-              return BoardScreen(game: testGame, account: fakeUser);
+              return PlayableGameScreen(game: testGame, account: fakeUser);
             }),
           ),
         ),
@@ -117,7 +117,7 @@ void main() {
           ],
           child: buildTestApp(
             home: Consumer(builder: (context, ref, _) {
-              return BoardScreen(game: testGame, account: fakeUser);
+              return PlayableGameScreen(game: testGame, account: fakeUser);
             }),
           ),
         ),
@@ -238,7 +238,7 @@ void main() {
           ],
           child: buildTestApp(
             home: Consumer(builder: (context, ref, _) {
-              return BoardScreen(game: testGame, account: fakeUser);
+              return PlayableGameScreen(game: testGame, account: fakeUser);
             }),
           ),
         ),

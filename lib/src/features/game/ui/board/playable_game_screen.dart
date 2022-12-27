@@ -24,8 +24,9 @@ import './game_state_notifier.dart';
 import './game_action_notifier.dart';
 import './game_controls.dart';
 
-class BoardScreen extends ConsumerWidget {
-  const BoardScreen({required this.game, required this.account, super.key});
+class PlayableGameScreen extends ConsumerWidget {
+  const PlayableGameScreen(
+      {required this.game, required this.account, super.key});
 
   final PlayableGame game;
   final User account;
@@ -47,7 +48,7 @@ class BoardScreen extends ConsumerWidget {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute<void>(
               builder: (context) =>
-                  BoardScreen(game: state.value!, account: account)),
+                  PlayableGameScreen(game: state.value!, account: account)),
         );
       }
     });
@@ -300,7 +301,7 @@ class _BoardBodyState extends ConsumerState<_BoardBody> {
       },
       error: (err, stackTrace) {
         debugPrint(
-            'SEVERE: [BoardScreen] could not load game; ${err.toString()}\n$stackTrace');
+            'SEVERE: [PlayableGameScreen] could not load game; ${err.toString()}\n$stackTrace');
         return const Text('Could not load game stream.');
       },
     );
