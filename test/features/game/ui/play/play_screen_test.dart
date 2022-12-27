@@ -4,7 +4,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -63,8 +62,7 @@ void main() {
             apiClientProvider
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
           ],
-          child: MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
+          child: buildTestApp(
             home: Consumer(builder: (context, ref, _) {
               return Scaffold(body: PlayForm(account: fakeUser));
             }),
@@ -95,8 +93,7 @@ void main() {
             apiClientProvider
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
           ],
-          child: MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
+          child: buildTestApp(
             home: Consumer(builder: (context, ref, _) {
               return Scaffold(body: PlayForm(account: fakeUser));
             }),
@@ -148,8 +145,7 @@ void main() {
             apiClientProvider
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
           ],
-          child: MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
+          child: buildTestApp(
             home: Consumer(builder: (context, ref, _) {
               return Scaffold(body: PlayForm(account: fakeUser));
             }),
@@ -233,15 +229,10 @@ void main() {
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
             soundServiceProvider.overrideWithValue(mockSoundService),
           ],
-          child: MediaQuery(
-            data: const MediaQueryData(size: Size(200, 600)),
-            child: MaterialApp(
-              useInheritedMediaQuery: true,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              home: Consumer(builder: (context, ref, _) {
-                return Scaffold(body: PlayForm(account: fakeUser));
-              }),
-            ),
+          child: buildTestApp(
+            home: Consumer(builder: (context, ref, _) {
+              return Scaffold(body: PlayForm(account: fakeUser));
+            }),
           ),
         ),
       );

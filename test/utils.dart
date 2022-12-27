@@ -1,6 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
+const double kTestScreenWidth = 200;
+const double kTestScreenHeight = 600;
 
 Matcher sameRequest(http.BaseRequest request) => _SameRequest(request);
 
@@ -19,6 +24,16 @@ Future<http.StreamedResponse> mockHttpStream(Stream<String> stream) async =>
     Future<void>.delayed(const Duration(milliseconds: 20))
         .then((_) => http.StreamedResponse(stream.map(utf8.encode), 200));
 
+Widget buildTestApp({required Widget home}) {
+  return MediaQuery(
+    data: const MediaQueryData(size: Size(kTestScreenWidth, kTestScreenHeight)),
+    child: MaterialApp(
+      useInheritedMediaQuery: true,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      home: home,
+    ),
+  );
+}
 // --
 
 class _SameRequest extends Matcher {

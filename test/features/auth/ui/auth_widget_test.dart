@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_gen/gen_l10n/l10n.dart';
 
 import 'package:lichess_mobile/src/features/auth/ui/auth_widget.dart';
 import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
 import 'package:lichess_mobile/src/features/settings/ui/theme_mode_notifier.dart';
 import '../data/fake_auth_repository.dart';
+import '../../../utils.dart';
 
 void main() {
   testWidgets('Auth widget sign in and sign out', (WidgetTester tester) async {
@@ -16,8 +16,7 @@ void main() {
           authRepositoryProvider.overrideWithValue(FakeAuthRepository(null)),
           selectedBrigthnessProvider.overrideWithValue(Brightness.dark),
         ],
-        child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
+        child: buildTestApp(
           home: Consumer(builder: (context, ref, _) {
             return Scaffold(
               appBar: AppBar(

@@ -6,7 +6,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:chessground/chessground.dart' as cg;
@@ -28,9 +27,6 @@ class MockClient extends Mock implements http.Client {}
 class MockLogger extends Mock implements Logger {}
 
 class MockSoundService extends Mock implements SoundService {}
-
-const double screenWidth = 200;
-const double screenHeight = 600;
 
 void main() {
   final mockLogger = MockLogger();
@@ -67,16 +63,11 @@ void main() {
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
             soundServiceProvider.overrideWithValue(mockSoundService),
           ],
-          child: MediaQuery(
-            data: const MediaQueryData(size: Size(200, 600)),
-            child: MaterialApp(
-              useInheritedMediaQuery: true,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              home: Consumer(builder: (context, ref, _) {
-                return Scaffold(
-                    body: BoardScreen(game: testGame, account: fakeUser));
-              }),
-            ),
+          child: buildTestApp(
+            home: Consumer(builder: (context, ref, _) {
+              return Scaffold(
+                  body: BoardScreen(game: testGame, account: fakeUser));
+            }),
           ),
         ),
       );
@@ -125,16 +116,11 @@ void main() {
                 ApiClient(mockLogger, FakeGameClient(), retries: [])),
             soundServiceProvider.overrideWithValue(mockSoundService),
           ],
-          child: MediaQuery(
-            data: const MediaQueryData(size: Size(screenWidth, screenHeight)),
-            child: MaterialApp(
-              useInheritedMediaQuery: true,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              home: Consumer(builder: (context, ref, _) {
-                return Scaffold(
-                    body: BoardScreen(game: testGame, account: fakeUser));
-              }),
-            ),
+          child: buildTestApp(
+            home: Consumer(builder: (context, ref, _) {
+              return Scaffold(
+                  body: BoardScreen(game: testGame, account: fakeUser));
+            }),
           ),
         ),
       );
@@ -252,16 +238,11 @@ void main() {
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
             soundServiceProvider.overrideWithValue(mockSoundService),
           ],
-          child: MediaQuery(
-            data: const MediaQueryData(size: Size(200, 600)),
-            child: MaterialApp(
-              useInheritedMediaQuery: true,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              home: Consumer(builder: (context, ref, _) {
-                return Scaffold(
-                    body: BoardScreen(game: testGame, account: fakeUser));
-              }),
-            ),
+          child: buildTestApp(
+            home: Consumer(builder: (context, ref, _) {
+              return Scaffold(
+                  body: BoardScreen(game: testGame, account: fakeUser));
+            }),
           ),
         ),
       );
@@ -331,7 +312,7 @@ Future<void> makeMove(
 
 Offset squareOffset(cg.SquareId id, Rect boardPos,
     {cg.Side orientation = cg.Side.white,
-    double squareSize = screenWidth / 8}) {
+    double squareSize = kTestScreenWidth / 8}) {
   final o = cg.Coord.fromSquareId(id).offset(orientation, squareSize);
   return Offset(o.dx + boardPos.left + squareSize / 2,
       o.dy + boardPos.top + squareSize / 2);

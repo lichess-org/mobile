@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/l10n.dart';
 
 import 'package:lichess_mobile/src/features/settings/ui/settings_screen.dart';
 import 'package:lichess_mobile/src/features/settings/data/settings_repository.dart';
 import '../data/fake_settings_repository.dart';
+import '../../../utils.dart';
 
 void main() {
   group('SettingsScreen', () {
@@ -18,8 +18,7 @@ void main() {
             settingsRepositoryProvider
                 .overrideWithValue(FakeSettingsRepository()),
           ],
-          child: MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
+          child: buildTestApp(
             home: Consumer(builder: (context, ref, _) {
               return const Scaffold(
                 body: SettingsScreen(),
