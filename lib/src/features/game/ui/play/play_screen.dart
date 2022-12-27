@@ -109,8 +109,9 @@ class PlayForm extends ConsumerWidget {
         ref.invalidate(playActionProvider);
         Navigator.of(context, rootNavigator: true).push(
           MaterialPageRoute<void>(
-              builder: (context) =>
-                  BoardScreen(game: state.value!, account: account!)),
+              // material widget ancestor is needed for iOS since we're using rootNavigator
+              builder: (context) => Material(
+                  child: BoardScreen(game: state.value!, account: account!))),
         );
       }
     });
