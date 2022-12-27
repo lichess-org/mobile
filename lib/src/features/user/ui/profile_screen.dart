@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/features/settings/ui/settings_screen.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
 import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
 import 'package:lichess_mobile/src/features/game/model/game.dart';
+import 'package:lichess_mobile/src/features/auth/ui/auth_widget_notifier.dart';
 
 import '../../auth/data/auth_repository.dart';
 
@@ -112,13 +113,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   List<Widget> _buildList(BuildContext context) {
     final authState = ref.watch(authStateChangesProvider);
+    final authActionsAsync = ref.watch(authWidgetProvider);
     return authState.maybeWhen(
       data: (account) => account == null
           ? [
               Center(
                   child: FatButton(
                       semanticsLabel: context.l10n.signIn,
-                      onPressed: () {},
+                      onPressed: authActionsAsync.isLoading
+                          ? null
+                          : () =>
+                              ref.read(authWidgetProvider.notifier).signIn(),
                       child: Text(context.l10n.signIn))),
             ]
           : [
