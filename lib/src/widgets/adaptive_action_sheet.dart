@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +18,7 @@ Future<T?> showAdaptiveActionSheet<T>({
   required List<BottomSheetAction> actions,
   bool isDismissible = true,
 }) async {
-  if (Platform.isIOS) {
+  if (defaultTargetPlatform == TargetPlatform.iOS) {
     return _showCupertinoBottomSheet(
       context,
       title,
