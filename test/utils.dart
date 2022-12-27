@@ -36,14 +36,29 @@ Future<void> tapBackButton(WidgetTester tester) async {
   }
 }
 
+Future<void> meetsTapTargetGuideline(WidgetTester tester) async {
+  if (debugDefaultTargetPlatformOverride == TargetPlatform.iOS) {
+    await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
+  } else {
+    await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+  }
+}
+
+// simplified version of class [App] in lib/src/app.dart
 Widget buildTestApp({required Widget home}) {
   return MediaQuery(
     data: const MediaQueryData(size: Size(kTestScreenWidth, kTestScreenHeight)),
-    child: MaterialApp(
-      useInheritedMediaQuery: true,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      home: home,
-    ),
+    child: defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoApp(
+            useInheritedMediaQuery: true,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            home: Material(child: home),
+          )
+        : MaterialApp(
+            useInheritedMediaQuery: true,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            home: home,
+          ),
   );
 }
 // --

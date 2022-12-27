@@ -65,8 +65,7 @@ void main() {
           ],
           child: buildTestApp(
             home: Consumer(builder: (context, ref, _) {
-              return Scaffold(
-                  body: BoardScreen(game: testGame, account: fakeUser));
+              return BoardScreen(game: testGame, account: fakeUser);
             }),
           ),
         ),
@@ -118,8 +117,7 @@ void main() {
           ],
           child: buildTestApp(
             home: Consumer(builder: (context, ref, _) {
-              return Scaffold(
-                  body: BoardScreen(game: testGame, account: fakeUser));
+              return BoardScreen(game: testGame, account: fakeUser);
             }),
           ),
         ),
@@ -240,8 +238,7 @@ void main() {
           ],
           child: buildTestApp(
             home: Consumer(builder: (context, ref, _) {
-              return Scaffold(
-                  body: BoardScreen(game: testGame, account: fakeUser));
+              return BoardScreen(game: testGame, account: fakeUser);
             }),
           ),
         ),

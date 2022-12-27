@@ -6,12 +6,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/common/sound.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
+import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
 import 'package:lichess_mobile/src/features/game/ui/play/play_screen.dart';
 import 'package:lichess_mobile/src/features/game/ui/board/board_screen.dart';
 import 'package:lichess_mobile/src/features/game/model/time_control.dart';
@@ -60,26 +62,27 @@ void main() {
         ProviderScope(
           overrides: [
             sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+            authRepositoryProvider
+                .overrideWithValue(FakeAuthRepository(fakeUser)),
             apiClientProvider
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
           ],
           child: buildTestApp(
             home: Consumer(builder: (context, ref, _) {
-              return Scaffold(body: PlayForm(account: fakeUser));
+              return const PlayScreen();
             }),
           ),
         ),
       );
 
+      // one loader for AuthWidget and one for PlayScreen
+      expect(find.byType(CircularProgressIndicator), findsNWidgets(2));
+      await tester.pump();
+
       // wait for maia bots request to return
       await tester.pump(const Duration(milliseconds: 100));
 
-      // await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
-      // await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
-
       await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
-
-      // await expectLater(tester, meetsGuideline(textContrastGuideline));
       handle.dispose();
     }, variant: kPlatformVariant);
 
@@ -90,19 +93,25 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
+            authRepositoryProvider
+                .overrideWithValue(FakeAuthRepository(fakeUser)),
             sharedPreferencesProvider.overrideWithValue(sharedPreferences),
             apiClientProvider
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
           ],
           child: buildTestApp(
             home: Consumer(builder: (context, ref, _) {
-              return Scaffold(body: PlayForm(account: fakeUser));
+              return const PlayScreen();
             }),
           ),
         ),
       );
 
-      // first frame is a loading state
+      // one loader for AuthWidget and one for PlayScreen
+      expect(find.byType(CircularProgressIndicator), findsNWidgets(2));
+      await tester.pump();
+
+      // maia bots loading state
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
       await tester.pump(const Duration(
@@ -144,17 +153,23 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
+            authRepositoryProvider
+                .overrideWithValue(FakeAuthRepository(fakeUser)),
             sharedPreferencesProvider.overrideWithValue(sharedPreferences),
             apiClientProvider
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
           ],
           child: buildTestApp(
             home: Consumer(builder: (context, ref, _) {
-              return Scaffold(body: PlayForm(account: fakeUser));
+              return const PlayScreen();
             }),
           ),
         ),
       );
+
+      // one loader for AuthWidget and one for PlayScreen
+      expect(find.byType(CircularProgressIndicator), findsNWidgets(2));
+      await tester.pump();
 
       await tester.tap(find.text('3 + 2'));
       await tester.pumpAndSettle(); // wait for the animation to finish
@@ -221,12 +236,14 @@ void main() {
                   Uri.parse(
                       '$kLichessHost/api/board/game/stream/$gameIdTest'))))))
           .thenAnswer((_) => mockHttpStreamFromIterable([
-                '{ "type": "gameFull", "id": "$gameIdTest", "initialFen": "$kInitialFEN", "state": { "type": "gameState", "moves": "", "wtime": 180000, "btime": 180000, "status": "started" }}'
+                '{ "type": "gameFull", "id": "$gameIdTest", "speed": "blitz", "initialFen": "$kInitialFEN", "white": { "id": "white", "name": "White", "rating": 1405 }, "black": { "id": "black", "name": "Black", "rating": 1789 }, "state": { "type": "gameState", "moves": "", "wtime": 180000, "btime": 180000, "status": "started" }}'
               ]));
 
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
+            authRepositoryProvider
+                .overrideWithValue(FakeAuthRepository(fakeUser)),
             sharedPreferencesProvider.overrideWithValue(sharedPreferences),
             apiClientProvider
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
@@ -234,11 +251,15 @@ void main() {
           ],
           child: buildTestApp(
             home: Consumer(builder: (context, ref, _) {
-              return Scaffold(body: PlayForm(account: fakeUser));
+              return const PlayScreen();
             }),
           ),
         ),
       );
+
+      // one loader for AuthWidget and one for PlayScreen
+      expect(find.byType(CircularProgressIndicator), findsNWidgets(2));
+      await tester.pump();
 
       await tester.pump(const Duration(
           milliseconds: 100)); // wait for maia bots request to return
@@ -252,6 +273,7 @@ void main() {
       await tester.pumpAndSettle(); // wait for page change animation
 
       expect(find.byType(BoardScreen), findsOneWidget);
+      expect(find.byType(cg.PieceWidget), findsNWidgets(32));
     }, variant: kPlatformVariant);
   });
 }
