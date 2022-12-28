@@ -35,7 +35,7 @@ class UserRepository {
             logger: _log)));
   }
 
-  TaskEither<IOError, List<ArchivedGame>> getRecentGames(String username) {
+  TaskEither<IOError, List<ArchivedGame>> getRecentGamesTask(String username) {
     return apiClient.get(
       Uri.parse('$kLichessHost/api/games/user/$username?max=10'),
       headers: {'Accept': 'application/x-ndjson'},

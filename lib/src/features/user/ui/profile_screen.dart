@@ -25,7 +25,7 @@ import '../../auth/data/auth_repository.dart';
 final recentGamesProvider = FutureProvider.autoDispose
     .family<List<ArchivedGame>, String>((ref, userName) async {
   final userRepo = ref.watch(userRepositoryProvider);
-  final either = await userRepo.getRecentGames(userName).run();
+  final either = await userRepo.getRecentGamesTask(userName).run();
   // retry on error, cache indefinitely on success
   return either.match((error) => throw error, (data) {
     ref.keepAlive();
@@ -58,6 +58,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         title: Text(context.l10n.profile),
         actions: [
           IconButton(
+            tooltip: context.l10n.settings,
             icon: const Icon(Icons.settings),
             onPressed: () => Navigator.of(context).push<void>(
               MaterialPageRoute(

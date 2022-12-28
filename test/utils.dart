@@ -52,7 +52,11 @@ Widget buildTestApp({required Widget home}) {
         ? CupertinoApp(
             useInheritedMediaQuery: true,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
-            home: Material(child: home),
+            home: ScaffoldMessenger(
+              child: Scaffold(
+                body: Material(child: home),
+              ),
+            ),
           )
         : MaterialApp(
             useInheritedMediaQuery: true,
