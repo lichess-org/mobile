@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import '../common/lichess_icons.dart';
 import '../features/game/ui/play/play_screen.dart';
 import '../features/user/ui/profile_screen.dart';
@@ -33,19 +32,19 @@ class BottomNavScaffold extends ConsumerWidget {
     final currentTab = ref.watch(currentBottomTabProvider);
 
     final tabs = [
-      BottomNavigationBarItem(
+      _Tab(
         label: context.l10n.play,
         icon: const Icon(LichessIcons.chess_king),
       ),
-      BottomNavigationBarItem(
+      _Tab(
         label: context.l10n.puzzles,
         icon: const Icon(LichessIcons.target),
       ),
-      BottomNavigationBarItem(
+      _Tab(
         label: context.l10n.watch,
         icon: const Icon(Icons.live_tv),
       ),
-      BottomNavigationBarItem(
+      _Tab(
         label: context.l10n.profile,
         icon: const Icon(CupertinoIcons.profile_circled),
       ),
@@ -65,21 +64,29 @@ class BottomNavScaffold extends ConsumerWidget {
           ),
           bottomNavigationBar: NavigationBar(
             selectedIndex: currentTab.index,
-            destinations: tabs
-                .map(
-                    (t) => NavigationDestination(icon: t.icon, label: t.label!))
-                .toList(growable: false),
+            destinations: [
+              for (final tab in tabs)
+                NavigationDestination(icon: tab.icon, label: tab.label)
+            ],
             onDestinationSelected: onItemTapped,
           ),
         );
       case TargetPlatform.iOS:
-        return CupertinoTabScaffold(
-          tabBar: CupertinoTabBar(
+        // we could use [CupertinoTabScaffold] here but we need [Scaffold] for
+        // showing the [SnackBar]
+        return Scaffold(
+          body: _TabSwitchingView(
+            currentTab: currentTab,
+            tabBuilder: _tabBuilder,
+          ),
+          bottomNavigationBar: CupertinoTabBar(
             currentIndex: currentTab.index,
-            items: tabs,
+            items: [
+              for (final tab in tabs)
+                BottomNavigationBarItem(icon: tab.icon, label: tab.label)
+            ],
             onTap: onItemTapped,
           ),
-          tabBuilder: _tabBuilder,
         );
       default:
         assert(false, 'Unexpected platform $defaultTargetPlatform');
@@ -226,4 +233,14 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
       }),
     );
   }
+}
+
+class _Tab {
+  const _Tab({
+    required this.label,
+    required this.icon,
+  });
+
+  final String label;
+  final Icon icon;
 }

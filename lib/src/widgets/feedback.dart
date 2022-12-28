@@ -1,5 +1,5 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 /// A adaptive circular progress indicator which size is constrained so it can fit
 /// in buttons.
@@ -29,87 +29,23 @@ class CenterLoadingIndicator extends StatelessWidget {
   }
 }
 
-// TODO animation
-void showCupertinoErrorSnackBar({
-  required BuildContext context,
-  required String message,
-  Duration duration = const Duration(milliseconds: 4000),
-}) {
-  final overlayEntry = OverlayEntry(
-    builder: (context) => Positioned(
-      // default iOS tab bar height + 10
-      bottom: 60.0,
-      left: 8.0,
-      right: 8.0,
-      child: _CupertinoSnackBar(message: message, duration: duration),
+ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showAdaptiveSnackBar(
+    BuildContext context,
+    {required Widget content}) {
+  return ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: content,
+      behavior: defaultTargetPlatform == TargetPlatform.iOS
+          ? SnackBarBehavior.floating
+          : null,
+      margin: defaultTargetPlatform == TargetPlatform.iOS
+          ? const EdgeInsets.all(8)
+          : null,
+      shape: defaultTargetPlatform == TargetPlatform.iOS
+          ? RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            )
+          : null,
     ),
   );
-  Future.delayed(
-    duration + _snackBarAnimationDuration * 2,
-    overlayEntry.remove,
-  );
-  Overlay.of(Navigator.of(context).context)?.insert(overlayEntry);
-}
-
-const _snackBarAnimationDuration = Duration(milliseconds: 400);
-
-class _CupertinoSnackBar extends StatefulWidget {
-  final String message;
-  final Duration duration;
-
-  const _CupertinoSnackBar({
-    Key? key,
-    required this.message,
-    required this.duration,
-  }) : super(key: key);
-
-  @override
-  State<_CupertinoSnackBar> createState() => _CupertinoSnackBarState();
-}
-
-class _CupertinoSnackBarState extends State<_CupertinoSnackBar> {
-  bool _show = false;
-
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() => setState(() => _show = true));
-    Future.delayed(
-      widget.duration,
-      () {
-        if (mounted) {
-          setState(() => _show = false);
-        }
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedOpacity(
-      opacity: _show ? 1.0 : 0,
-      duration: _snackBarAnimationDuration,
-      child: SafeArea(
-        child: CupertinoPopupSurface(
-          isSurfacePainted: true,
-          child: Container(
-            color: CupertinoColors.systemRed,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 12.0,
-              ),
-              child: Text(
-                widget.message,
-                style: const TextStyle(
-                  color: CupertinoColors.white,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }

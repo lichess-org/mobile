@@ -42,14 +42,17 @@ class App extends ConsumerWidget {
             theme: CupertinoThemeData(
               brightness: brightness,
             ),
-            home: Material(
-              // icon theme is needed here because cupertino theme overrides
-              // default material icon theme on material widgets
-              child: IconTheme(
-                data: CupertinoIconThemeData(
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.label, context)),
-                child: const BottomNavScaffold(),
+            // ScaffoldMessenger is needed for snack bars
+            home: ScaffoldMessenger(
+              child: Material(
+                // icon theme is needed here because cupertino theme overrides
+                // default material icon theme on material widgets
+                child: IconTheme(
+                  data: CupertinoIconThemeData(
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.label, context)),
+                  child: const BottomNavScaffold(),
+                ),
               ),
             ),
           ),
