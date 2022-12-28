@@ -33,7 +33,7 @@ class CenterLoadingIndicator extends StatelessWidget {
 void showCupertinoErrorSnackBar({
   required BuildContext context,
   required String message,
-  Duration duration = const Duration(milliseconds: 5000),
+  Duration duration = const Duration(milliseconds: 4000),
 }) {
   final overlayEntry = OverlayEntry(
     builder: (context) => Positioned(
@@ -41,6 +41,54 @@ void showCupertinoErrorSnackBar({
       bottom: 60.0,
       left: 8.0,
       right: 8.0,
+      child: _CupertinoSnackBar(message: message, duration: duration),
+    ),
+  );
+  Future.delayed(
+    duration + _snackBarAnimationDuration * 2,
+    overlayEntry.remove,
+  );
+  Overlay.of(Navigator.of(context).context)?.insert(overlayEntry);
+}
+
+const _snackBarAnimationDuration = Duration(milliseconds: 400);
+
+class _CupertinoSnackBar extends StatefulWidget {
+  final String message;
+  final Duration duration;
+
+  const _CupertinoSnackBar({
+    Key? key,
+    required this.message,
+    required this.duration,
+  }) : super(key: key);
+
+  @override
+  State<_CupertinoSnackBar> createState() => _CupertinoSnackBarState();
+}
+
+class _CupertinoSnackBarState extends State<_CupertinoSnackBar> {
+  bool _show = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => setState(() => _show = true));
+    Future.delayed(
+      widget.duration,
+      () {
+        if (mounted) {
+          setState(() => _show = false);
+        }
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      opacity: _show ? 1.0 : 0,
+      duration: _snackBarAnimationDuration,
       child: SafeArea(
         child: CupertinoPopupSurface(
           isSurfacePainted: true,
@@ -52,7 +100,7 @@ void showCupertinoErrorSnackBar({
                 vertical: 12.0,
               ),
               child: Text(
-                message,
+                widget.message,
                 style: const TextStyle(
                   color: CupertinoColors.white,
                 ),
@@ -62,11 +110,6 @@ void showCupertinoErrorSnackBar({
           ),
         ),
       ),
-    ),
-  );
-  Future.delayed(
-    duration,
-    overlayEntry.remove,
-  );
-  Overlay.of(Navigator.of(context).context)?.insert(overlayEntry);
+    );
+  }
 }
