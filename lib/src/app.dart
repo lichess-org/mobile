@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'constants.dart';
+import 'common/lichess_colors.dart';
 import 'features/settings/ui/theme_mode_notifier.dart';
 import 'widgets/bottom_navigation.dart';
 
@@ -15,23 +16,25 @@ class App extends ConsumerWidget {
   Widget build(context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
     final brightness = ref.watch(selectedBrigthnessProvider);
+    final themeData = ThemeData(
+      colorSchemeSeed: LichessColors.primary,
+      useMaterial3: true,
+      brightness: brightness,
+    );
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: kSupportedLocales,
           onGenerateTitle: (BuildContext context) => 'lichess.org',
-          theme: ThemeData(),
-          darkTheme: ThemeData.dark(),
+          theme: themeData,
           themeMode: themeMode,
           home: const BottomNavScaffold(),
         );
       case TargetPlatform.iOS:
         // material theme is also needed on iOS because we're using material widgets
         return Theme(
-          data: ThemeData(
-            brightness: brightness,
-          ),
+          data: themeData,
           child: CupertinoApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: kSupportedLocales,

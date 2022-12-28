@@ -9,6 +9,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -238,15 +239,15 @@ class PerfCards extends StatelessWidget {
                                 ? LichessIcons.arrow_full_upperright
                                 : LichessIcons.arrow_full_lowerright,
                             color: userPerf.progression > 0
-                                ? Colors.green
-                                : Colors.red,
+                                ? LichessColors.good
+                                : LichessColors.red,
                             size: 12,
                           ),
                           Text(userPerf.progression.abs().toString(),
                               style: TextStyle(
                                   color: userPerf.progression > 0
-                                      ? Colors.green
-                                      : Colors.red,
+                                      ? LichessColors.good
+                                      : LichessColors.red,
                                   fontSize: 12)),
                         ],
                       ],
@@ -294,7 +295,9 @@ class RecentGames extends ConsumerWidget {
                       if (title != null) ...[
                         Text(title,
                             style: TextStyle(
-                                color: title == 'BOT' ? kPink : kGold,
+                                color: title == 'BOT'
+                                    ? LichessColors.fancy
+                                    : LichessColors.brag,
                                 fontWeight: FontWeight.bold)),
                         const SizedBox(width: 5)
                       ],
@@ -304,9 +307,9 @@ class RecentGames extends ConsumerWidget {
                   subtitle: Text(timeago.format(e.lastMoveAt)),
                   trailing: e.winner == mySide
                       ? const Icon(CupertinoIcons.plus_square_fill,
-                          color: Colors.green)
+                          color: LichessColors.good)
                       : const Icon(CupertinoIcons.minus_square_fill,
-                          color: Colors.red),
+                          color: LichessColors.red),
                 );
               })).toList(growable: false),
         );

@@ -63,12 +63,13 @@ class BottomNavScaffold extends ConsumerWidget {
             currentTab: currentTab,
             tabBuilder: _tabBuilder,
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: kOrange,
-            type: BottomNavigationBarType.fixed,
-            currentIndex: currentTab.index,
-            items: tabs,
-            onTap: onItemTapped,
+          bottomNavigationBar: NavigationBar(
+            selectedIndex: currentTab.index,
+            destinations: tabs
+                .map(
+                    (t) => NavigationDestination(icon: t.icon, label: t.label!))
+                .toList(growable: false),
+            onDestinationSelected: onItemTapped,
           ),
         );
       case TargetPlatform.iOS:

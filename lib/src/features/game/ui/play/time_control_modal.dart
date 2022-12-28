@@ -17,37 +17,39 @@ class TimeControlModal extends ConsumerWidget {
       ref.read(timeControlPrefProvider.notifier).set(choice);
     }
 
-    return Padding(
-      padding: kBodyPadding,
-      child: Column(
-        children: [
-          _SectionChoices(timeControlPref,
-              choices: const [
-                TimeControl.blitz1,
-                TimeControl.blitz2,
-                TimeControl.blitz3,
-                TimeControl.blitz4
-              ],
-              title:
-                  const _SectionTitle(title: 'Blitz', icon: LichessIcons.blitz),
-              onSelected: onSelected),
-          const SizedBox(height: 30.0),
-          _SectionChoices(timeControlPref,
-              choices: const [
-                TimeControl.rapid1,
-                TimeControl.rapid2,
-                TimeControl.rapid3
-              ],
-              title:
-                  const _SectionTitle(title: 'Rapid', icon: LichessIcons.rapid),
-              onSelected: onSelected),
-          const SizedBox(height: 30.0),
-          _SectionChoices(timeControlPref,
-              choices: const [TimeControl.classical1, TimeControl.classical2],
-              title: const _SectionTitle(
-                  title: 'Classical', icon: LichessIcons.classical),
-              onSelected: onSelected),
-        ],
+    return SafeArea(
+      child: Padding(
+        padding: kBodyPadding,
+        child: Column(
+          children: [
+            _SectionChoices(timeControlPref,
+                choices: const [
+                  TimeControl.blitz1,
+                  TimeControl.blitz2,
+                  TimeControl.blitz3,
+                  TimeControl.blitz4
+                ],
+                title: const _SectionTitle(
+                    title: 'Blitz', icon: LichessIcons.blitz),
+                onSelected: onSelected),
+            const SizedBox(height: 30.0),
+            _SectionChoices(timeControlPref,
+                choices: const [
+                  TimeControl.rapid1,
+                  TimeControl.rapid2,
+                  TimeControl.rapid3
+                ],
+                title: const _SectionTitle(
+                    title: 'Rapid', icon: LichessIcons.rapid),
+                onSelected: onSelected),
+            const SizedBox(height: 30.0),
+            _SectionChoices(timeControlPref,
+                choices: const [TimeControl.classical1, TimeControl.classical2],
+                title: const _SectionTitle(
+                    title: 'Classical', icon: LichessIcons.classical),
+                onSelected: onSelected),
+          ],
+        ),
       ),
     );
   }
@@ -81,7 +83,7 @@ class _SectionChoices extends StatelessWidget {
               },
               labelStyle: const TextStyle(fontSize: 16),
               labelPadding:
-                  const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                  const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
             );
           }).toList(),
         ),
