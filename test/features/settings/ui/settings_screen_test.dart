@@ -10,6 +10,12 @@ void main() {
   group('SettingsScreen', () {
     testWidgets('meets accessibility guidelines', (WidgetTester tester) async {
       final SemanticsHandle handle = tester.ensureSemantics();
+      final app = await buildTestApp(
+        tester,
+        home: Consumer(builder: (context, ref, _) {
+          return const SettingsScreen();
+        }),
+      );
 
       await tester.pumpWidget(
         ProviderScope(
@@ -17,11 +23,7 @@ void main() {
             settingsRepositoryProvider
                 .overrideWithValue(FakeSettingsRepository()),
           ],
-          child: buildTestApp(
-            home: Consumer(builder: (context, ref, _) {
-              return const SettingsScreen();
-            }),
-          ),
+          child: app,
         ),
       );
 

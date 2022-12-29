@@ -90,8 +90,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       child: CustomScrollView(
         slivers: [
           CupertinoSliverNavigationBar(
-            backgroundColor: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemBackground, context),
             trailing: CupertinoButton(
               padding: EdgeInsets.zero,
               onPressed: () => Navigator.of(context).push<void>(

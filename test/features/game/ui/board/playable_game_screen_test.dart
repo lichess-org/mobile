@@ -35,7 +35,6 @@ void main() {
 
   setUpAll(() {
     reset(mockClient);
-
     registerFallbackValue(http.Request('GET', Uri.parse('http://api.test')));
   });
 
@@ -55,6 +54,13 @@ void main() {
                 '{ "type": "gameFull", "id": "$gameIdTest", "speed": "blitz", "initialFen": "$kInitialFEN", "white": { "id": "white", "name": "White", "rating": 1405 }, "black": { "id": "black", "name": "Black", "rating": 1789 }, "state": { "type": "gameState", "moves": "", "wtime": 180000, "btime": 180000, "status": "started" }}'
               ]));
 
+      final app = await buildTestApp(
+        tester,
+        home: Consumer(builder: (context, ref, _) {
+          return PlayableGameScreen(game: testGame, account: fakeUser);
+        }),
+      );
+
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -63,11 +69,7 @@ void main() {
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
             soundServiceProvider.overrideWithValue(mockSoundService),
           ],
-          child: buildTestApp(
-            home: Consumer(builder: (context, ref, _) {
-              return PlayableGameScreen(game: testGame, account: fakeUser);
-            }),
-          ),
+          child: app,
         ),
       );
 
@@ -107,6 +109,13 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       final sharedPreferences = await SharedPreferences.getInstance();
 
+      final app = await buildTestApp(
+        tester,
+        home: Consumer(builder: (context, ref, _) {
+          return PlayableGameScreen(game: testGame, account: fakeUser);
+        }),
+      );
+
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -115,11 +124,7 @@ void main() {
                 ApiClient(mockLogger, FakeGameClient(), retries: [])),
             soundServiceProvider.overrideWithValue(mockSoundService),
           ],
-          child: buildTestApp(
-            home: Consumer(builder: (context, ref, _) {
-              return PlayableGameScreen(game: testGame, account: fakeUser);
-            }),
-          ),
+          child: app,
         ),
       );
 
@@ -186,7 +191,8 @@ void main() {
       await tester.tap(find.byKey(const Key('cursor-back')));
       await tester.pump();
       // cannot interact anymore
-      expect(tester.widget<cg.Board>(find.byType(cg.Board)).interactableSide,
+      expect(
+          tester.widget<cg.Board>(find.byType(cg.Board)).data.interactableSide,
           cg.InteractableSide.none);
 
       // can go back 3 more times
@@ -208,7 +214,8 @@ void main() {
       await tester.tap(find.byKey(const Key('cursor-last')));
       await tester.pump();
       // board is interactable again
-      expect(tester.widget<cg.Board>(find.byType(cg.Board)).interactableSide,
+      expect(
+          tester.widget<cg.Board>(find.byType(cg.Board)).data.interactableSide,
           cg.InteractableSide.white);
     }, variant: kPlatformVariant);
 
@@ -228,6 +235,13 @@ void main() {
                       '$kLichessHost/api/board/game/stream/$gameIdTest'))))))
           .thenAnswer((_) => mockHttpStream(streamController.stream));
 
+      final app = await buildTestApp(
+        tester,
+        home: Consumer(builder: (context, ref, _) {
+          return PlayableGameScreen(game: testGame, account: fakeUser);
+        }),
+      );
+
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -236,18 +250,15 @@ void main() {
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
             soundServiceProvider.overrideWithValue(mockSoundService),
           ],
-          child: buildTestApp(
-            home: Consumer(builder: (context, ref, _) {
-              return PlayableGameScreen(game: testGame, account: fakeUser);
-            }),
-          ),
+          child: app,
         ),
       );
 
       // wait for stream loading
       await tester.pump(const Duration(milliseconds: 50));
       // board is interactable
-      expect(tester.widget<cg.Board>(find.byType(cg.Board)).interactableSide,
+      expect(
+          tester.widget<cg.Board>(find.byType(cg.Board)).data.interactableSide,
           cg.InteractableSide.white);
 
       // trying to exit game will show an alert
@@ -267,7 +278,8 @@ void main() {
 
       verify(() => mockSoundService.playDong()).called(1);
       // board is not interactable anymore
-      expect(tester.widget<cg.Board>(find.byType(cg.Board)).interactableSide,
+      expect(
+          tester.widget<cg.Board>(find.byType(cg.Board)).data.interactableSide,
           cg.InteractableSide.none);
 
       // trying now to exit will not show the alert

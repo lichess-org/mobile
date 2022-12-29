@@ -131,8 +131,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "99886129c3304e1df13f20aea739cd22ac2825bc"
-      resolved-ref: "99886129c3304e1df13f20aea739cd22ac2825bc"
+      ref: "5a221ddf69ba8685d67054b71714ee412b80ac08"
+      resolved-ref: "5a221ddf69ba8685d67054b71714ee412b80ac08"
       url: "https://github.com/lichess-org/flutter-chessground.git"
     source: git
     version: "0.0.1"
@@ -151,7 +151,7 @@ packages:
     source: hosted
     version: "4.3.0"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       url: "https://pub.dartlang.org"

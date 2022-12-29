@@ -21,15 +21,6 @@ class LichessColors {
   });
   static const int _primaryPrimaryValue = 0xFF1B78D0;
 
-  static const MaterialColor primaryAccent =
-      MaterialColor(_primaryAccentValue, <int, Color>{
-    100: Color(0xFFDEE9FF),
-    200: Color(_primaryAccentValue),
-    400: Color(0xFF78A4FF),
-    700: Color(0xFF5E92FF),
-  });
-  static const int _primaryAccentValue = 0xFFABC6FF;
-
   // secondary: green
   static const MaterialColor secondary =
       MaterialColor(_secondaryPrimaryValue, <int, Color>{
@@ -45,15 +36,6 @@ class LichessColors {
     900: Color(0xFF346B0D),
   });
   static const int _secondaryPrimaryValue = 0xFF629924;
-
-  static const MaterialColor secondaryAccent =
-      MaterialColor(_secondaryAccentValue, <int, Color>{
-    100: Color(0xFFC2FF9E),
-    200: Color(_secondaryAccentValue),
-    400: Color(0xFF82FF38),
-    700: Color(0xFF72FF1F),
-  });
-  static const int _secondaryAccentValue = 0xFFA2FF6B;
 
   // accent: orange
   static const MaterialColor accent =

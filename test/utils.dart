@@ -6,8 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-const double kTestScreenWidth = 200;
-const double kTestScreenHeight = 600;
+const double kTestScreenWidth = 390.0;
+const double kTestScreenHeight = 844.0;
+const kTestSurfaceSize = Size(kTestScreenWidth, kTestScreenHeight);
 const kPlatformVariant =
     TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
 
@@ -46,24 +47,31 @@ Future<void> meetsTapTargetGuideline(WidgetTester tester) async {
 }
 
 // simplified version of class [App] in lib/src/app.dart
-Widget buildTestApp({required Widget home}) {
+Future<Widget> buildTestApp(WidgetTester tester, {required Widget home}) async {
+  await tester.binding.setSurfaceSize(kTestSurfaceSize);
   return MediaQuery(
     data: const MediaQueryData(size: Size(kTestScreenWidth, kTestScreenHeight)),
-    child: defaultTargetPlatform == TargetPlatform.iOS
-        ? CupertinoApp(
-            useInheritedMediaQuery: true,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            home: ScaffoldMessenger(
-              child: Scaffold(
-                body: Material(child: home),
+    child: Center(
+      child: SizedBox(
+        width: kTestScreenWidth,
+        height: kTestScreenHeight,
+        child: defaultTargetPlatform == TargetPlatform.iOS
+            ? CupertinoApp(
+                useInheritedMediaQuery: true,
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                home: ScaffoldMessenger(
+                  child: Scaffold(
+                    body: Material(child: home),
+                  ),
+                ),
+              )
+            : MaterialApp(
+                useInheritedMediaQuery: true,
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                home: home,
               ),
-            ),
-          )
-        : MaterialApp(
-            useInheritedMediaQuery: true,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            home: home,
-          ),
+      ),
+    ),
   );
 }
 // --

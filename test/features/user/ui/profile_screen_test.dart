@@ -38,6 +38,13 @@ void main() {
     testWidgets('meets accessibility guidelines', (WidgetTester tester) async {
       final SemanticsHandle handle = tester.ensureSemantics();
 
+      final app = await buildTestApp(
+        tester,
+        home: Consumer(builder: (context, ref, _) {
+          return const ProfileScreen();
+        }),
+      );
+
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -46,11 +53,7 @@ void main() {
             apiClientProvider
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
           ],
-          child: buildTestApp(
-            home: Consumer(builder: (context, ref, _) {
-              return const ProfileScreen();
-            }),
-          ),
+          child: app,
         ),
       );
 
@@ -72,6 +75,13 @@ void main() {
     });
 
     testWidgets('should see recent games', (WidgetTester tester) async {
+      final app = await buildTestApp(
+        tester,
+        home: Consumer(builder: (context, ref, _) {
+          return const ProfileScreen();
+        }),
+      );
+
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -80,11 +90,7 @@ void main() {
             apiClientProvider
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
           ],
-          child: buildTestApp(
-            home: Consumer(builder: (context, ref, _) {
-              return const ProfileScreen();
-            }),
-          ),
+          child: app,
         ),
       );
 

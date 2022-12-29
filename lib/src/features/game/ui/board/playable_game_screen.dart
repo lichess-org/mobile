@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
+import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
@@ -16,7 +17,6 @@ import 'package:lichess_mobile/src/features/settings/ui/is_sound_muted_notifier.
 import 'package:lichess_mobile/src/features/user/model/user.dart';
 
 import '../../model/game_status.dart';
-import '../../model/game_state.dart';
 import '../../model/game.dart' hide Player;
 import '../play/play_action_notifier.dart';
 import './game_stream.dart';
@@ -169,29 +169,14 @@ class _BoardBody extends ConsumerStatefulWidget {
 }
 
 class _BoardBodyState extends ConsumerState<_BoardBody> {
-  final ScrollController scrollController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
     final gameState = ref.watch(gameStateProvider);
     final gameClockStream = ref.watch(gameStreamProvider(widget.game.id));
     final positionCursor = ref.watch(positionCursorProvider);
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final isReplaying =
         gameState != null && positionCursor < gameState.positionIndex;
-
-    ref.listen<GameState?>(gameStateProvider, (_, state) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (state != null && scrollController.hasClients) {
-          scrollController.animateTo(
-            scrollController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 100),
-            curve: Curves.easeIn,
-          );
-        }
-      });
-    });
 
     return gameClockStream.when(
       data: (clock) {
@@ -221,52 +206,36 @@ class _BoardBodyState extends ConsumerState<_BoardBody> {
         final bottomPlayer =
             widget.game.orientation == Side.white ? white : black;
 
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (gameState != null)
-              Container(
-                padding: const EdgeInsets.only(left: 5),
-                height: 40,
-                child: ListView.builder(
-                  controller: scrollController,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: gameState.sanMoves.length,
-                  itemBuilder: (_, index) => Container(
-                    margin: const EdgeInsets.only(right: 5),
-                    child: Text(gameState.sanMoves[index]),
-                  ),
-                ),
-              ),
-            topPlayer,
-            cg.Board(
-              size: screenWidth,
-              interactableSide:
-                  gameState == null || !gameState.playing || isReplaying
-                      ? cg.InteractableSide.none
-                      : widget.game.orientation == Side.white
-                          ? cg.InteractableSide.white
-                          : cg.InteractableSide.black,
-              orientation: (isBoardTurned
-                      ? widget.game.orientation.opposite
-                      : widget.game.orientation)
-                  .cg,
-              fen: gameState?.positions[positionCursor].fen ??
-                  widget.game.initialFen,
-              validMoves: gameState?.validMoves,
-              lastMove: gameState != null && gameState.gameOver
-                  ? positionCursor > 0
-                      ? gameState.moveAtPly(positionCursor - 1)?.cg
-                      : null
-                  : gameState?.lastMove?.cg,
-              sideToMove:
-                  gameState?.position.turn.cg ?? widget.game.orientation.cg,
-              onMove: (cg.Move move, {bool? isPremove}) => ref
-                  .read(gameStateProvider.notifier)
-                  .onUserMove(widget.game.id, Move.fromUci(move.uci)),
-            ),
-            bottomPlayer,
-          ],
+        return GameBoardLayout(
+          boardData: cg.BoardData(
+            interactableSide:
+                gameState == null || !gameState.playing || isReplaying
+                    ? cg.InteractableSide.none
+                    : widget.game.orientation == Side.white
+                        ? cg.InteractableSide.white
+                        : cg.InteractableSide.black,
+            orientation: (isBoardTurned
+                    ? widget.game.orientation.opposite
+                    : widget.game.orientation)
+                .cg,
+            fen: gameState?.positions[positionCursor].fen ??
+                widget.game.initialFen,
+            validMoves: gameState?.validMoves,
+            lastMove: gameState != null && gameState.gameOver
+                ? positionCursor > 0
+                    ? gameState.moveAtPly(positionCursor - 1)?.cg
+                    : null
+                : gameState?.lastMove?.cg,
+            sideToMove:
+                gameState?.position.turn.cg ?? widget.game.orientation.cg,
+            onMove: (cg.Move move, {bool? isPremove}) => ref
+                .read(gameStateProvider.notifier)
+                .onUserMove(widget.game.id, Move.fromUci(move.uci)),
+          ),
+          topPlayer: topPlayer,
+          bottomPlayer: bottomPlayer,
+          moves: gameState?.sanMoves,
+          currentMoveIndex: positionCursor,
         );
       },
       loading: () {
@@ -285,18 +254,14 @@ class _BoardBodyState extends ConsumerState<_BoardBody> {
           clock: const Duration(milliseconds: 0),
         );
 
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            opponent,
-            cg.Board(
-              size: screenWidth,
-              interactableSide: cg.InteractableSide.none,
-              orientation: widget.game.orientation.cg,
-              fen: widget.game.initialFen,
-            ),
-            player,
-          ],
+        return GameBoardLayout(
+          topPlayer: opponent,
+          bottomPlayer: player,
+          boardData: cg.BoardData(
+            interactableSide: cg.InteractableSide.none,
+            orientation: widget.game.orientation.cg,
+            fen: widget.game.initialFen,
+          ),
         );
       },
       error: (err, stackTrace) {

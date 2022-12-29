@@ -58,6 +58,13 @@ void main() {
 
       final SemanticsHandle handle = tester.ensureSemantics();
 
+      final app = await buildTestApp(
+        tester,
+        home: Consumer(builder: (context, ref, _) {
+          return const PlayScreen();
+        }),
+      );
+
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -67,11 +74,7 @@ void main() {
             apiClientProvider
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
           ],
-          child: buildTestApp(
-            home: Consumer(builder: (context, ref, _) {
-              return const PlayScreen();
-            }),
-          ),
+          child: app,
         ),
       );
 
@@ -90,6 +93,13 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       final sharedPreferences = await SharedPreferences.getInstance();
 
+      final app = await buildTestApp(
+        tester,
+        home: Consumer(builder: (context, ref, _) {
+          return const PlayScreen();
+        }),
+      );
+
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -99,11 +109,7 @@ void main() {
             apiClientProvider
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
           ],
-          child: buildTestApp(
-            home: Consumer(builder: (context, ref, _) {
-              return const PlayScreen();
-            }),
-          ),
+          child: app,
         ),
       );
 
@@ -150,6 +156,13 @@ void main() {
       });
       final sharedPreferences = await SharedPreferences.getInstance();
 
+      final app = await buildTestApp(
+        tester,
+        home: Consumer(builder: (context, ref, _) {
+          return const PlayScreen();
+        }),
+      );
+
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -159,11 +172,7 @@ void main() {
             apiClientProvider
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
           ],
-          child: buildTestApp(
-            home: Consumer(builder: (context, ref, _) {
-              return const PlayScreen();
-            }),
-          ),
+          child: app,
         ),
       );
 
@@ -239,6 +248,13 @@ void main() {
                 '{ "type": "gameFull", "id": "$gameIdTest", "speed": "blitz", "initialFen": "$kInitialFEN", "white": { "id": "white", "name": "White", "rating": 1405 }, "black": { "id": "black", "name": "Black", "rating": 1789 }, "state": { "type": "gameState", "moves": "", "wtime": 180000, "btime": 180000, "status": "started" }}'
               ]));
 
+      final app = await buildTestApp(
+        tester,
+        home: Consumer(builder: (context, ref, _) {
+          return const PlayScreen();
+        }),
+      );
+
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -249,11 +265,7 @@ void main() {
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),
             soundServiceProvider.overrideWithValue(mockSoundService),
           ],
-          child: buildTestApp(
-            home: Consumer(builder: (context, ref, _) {
-              return const PlayScreen();
-            }),
-          ),
+          child: app,
         ),
       );
 

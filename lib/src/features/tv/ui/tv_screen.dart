@@ -5,6 +5,7 @@ import 'package:chessground/chessground.dart';
 
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -13,6 +14,8 @@ import '../../settings/ui/is_sound_muted_notifier.dart';
 import '../model/featured_position.dart';
 import './tv_stream.dart';
 import './featured_game_notifier.dart';
+
+const _boardSettings = BoardSettings(animationDuration: Duration.zero);
 
 class TvScreen extends ConsumerWidget {
   const TvScreen({super.key});
@@ -59,7 +62,6 @@ class TvScreen extends ConsumerWidget {
   }
 
   Widget _buildBody(BuildContext context, WidgetRef ref) {
-    final double screenWidth = MediaQuery.of(context).size.width;
     final currentTab = ref.watch(currentBottomTabProvider);
     // ensure the stream is closed when offstage
     final tvStream = currentTab == BottomTab.watch
@@ -71,6 +73,12 @@ class TvScreen extends ConsumerWidget {
       child: Center(
         child: tvStream.when(
           data: (position) {
+            final boardData = BoardData(
+              interactableSide: InteractableSide.none,
+              orientation: featuredGame?.orientation.cg ?? Side.white,
+              fen: position.fen,
+              lastMove: position.lastMove?.cg,
+            );
             final topPlayer = featuredGame != null
                 ? featuredGame.orientation == Side.white
                     ? featuredGame.black
@@ -81,41 +89,40 @@ class TvScreen extends ConsumerWidget {
                     ? featuredGame.white
                     : featuredGame.black
                 : null;
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (topPlayer != null)
-                  Player(
-                      name: topPlayer.name,
-                      title: topPlayer.title,
-                      rating: topPlayer.rating,
-                      clock: Duration(seconds: topPlayer.seconds ?? 0),
-                      active: !position.isGameOver &&
-                          position.turn == topPlayer.side),
-                Board(
-                  interactableSide: InteractableSide.none,
-                  settings: const Settings(animationDuration: Duration.zero),
-                  size: screenWidth,
-                  orientation: featuredGame?.orientation.cg ?? Side.white,
-                  fen: position.fen,
-                  lastMove: position.lastMove?.cg,
-                ),
-                if (bottomPlayer != null)
-                  Player(
-                      name: bottomPlayer.name,
-                      title: bottomPlayer.title,
-                      rating: bottomPlayer.rating,
-                      clock: Duration(seconds: bottomPlayer.seconds ?? 0),
-                      active: !position.isGameOver &&
-                          position.turn == bottomPlayer.side),
-              ],
+            final topPlayerWidget = topPlayer != null
+                ? Player(
+                    name: topPlayer.name,
+                    title: topPlayer.title,
+                    rating: topPlayer.rating,
+                    clock: Duration(seconds: topPlayer.seconds ?? 0),
+                    active:
+                        !position.isGameOver && position.turn == topPlayer.side)
+                : kEmptyWidget;
+            final bottomPlayerWidget = bottomPlayer != null
+                ? Player(
+                    name: bottomPlayer.name,
+                    title: bottomPlayer.title,
+                    rating: bottomPlayer.rating,
+                    clock: Duration(seconds: bottomPlayer.seconds ?? 0),
+                    active: !position.isGameOver &&
+                        position.turn == bottomPlayer.side)
+                : kEmptyWidget;
+            return GameBoardLayout(
+              boardData: boardData,
+              boardSettings: _boardSettings,
+              topPlayer: topPlayerWidget,
+              bottomPlayer: bottomPlayerWidget,
             );
           },
-          loading: () => Board(
-            interactableSide: InteractableSide.none,
-            size: screenWidth,
-            orientation: Side.white,
-            fen: kEmptyFen,
+          loading: () => const GameBoardLayout(
+            topPlayer: kEmptyWidget,
+            bottomPlayer: kEmptyWidget,
+            boardData: BoardData(
+              interactableSide: InteractableSide.none,
+              orientation: Side.white,
+              fen: kEmptyFen,
+            ),
+            boardSettings: _boardSettings,
           ),
           error: (err, stackTrace) {
             debugPrint(

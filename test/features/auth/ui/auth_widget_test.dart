@@ -10,23 +10,25 @@ import '../../../utils.dart';
 
 void main() {
   testWidgets('Auth widget sign in and sign out', (WidgetTester tester) async {
+    final app = await buildTestApp(
+      tester,
+      home: Consumer(builder: (context, ref, _) {
+        return Scaffold(
+          appBar: AppBar(
+            actions: const [
+              AuthWidget(),
+            ],
+          ),
+        );
+      }),
+    );
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           authRepositoryProvider.overrideWithValue(FakeAuthRepository(null)),
           selectedBrigthnessProvider.overrideWithValue(Brightness.dark),
         ],
-        child: buildTestApp(
-          home: Consumer(builder: (context, ref, _) {
-            return Scaffold(
-              appBar: AppBar(
-                actions: const [
-                  AuthWidget(),
-                ],
-              ),
-            );
-          }),
-        ),
+        child: app,
       ),
     );
 
