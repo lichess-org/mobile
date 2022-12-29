@@ -12,6 +12,7 @@ const kPlatformVariant =
     TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
 
 Matcher sameRequest(http.BaseRequest request) => _SameRequest(request);
+Matcher sameHeaders(Map<String, String> headers) => _SameHeaders(headers);
 
 Future<http.Response> mockResponse(String body, int code) async =>
     Future<void>.delayed(const Duration(milliseconds: 20))
@@ -80,6 +81,19 @@ class _SameRequest extends Matcher {
   @override
   Description describe(Description description) =>
       description.add('same Request as ').addDescriptionOf(_expected);
+}
+
+class _SameHeaders extends Matcher {
+  const _SameHeaders(this._expected);
+
+  final Map<String, String> _expected;
+
+  @override
+  bool matches(Object? item, Map<dynamic, dynamic> matchState) =>
+      item is Map<String, String> && mapEquals(item, _expected);
+  @override
+  Description describe(Description description) =>
+      description.add('same headers as ').addDescriptionOf(_expected);
 }
 
 Stream<T> _streamFromFutures<T>(Iterable<Future<T>> futures) async* {
