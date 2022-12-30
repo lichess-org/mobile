@@ -158,21 +158,16 @@ class PlayableGameScreen extends ConsumerWidget {
   }
 }
 
-class _BoardBody extends ConsumerStatefulWidget {
+class _BoardBody extends ConsumerWidget {
   const _BoardBody({required this.game, required this.account});
 
   final PlayableGame game;
   final User account;
 
   @override
-  ConsumerState<_BoardBody> createState() => _BoardBodyState();
-}
-
-class _BoardBodyState extends ConsumerState<_BoardBody> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(gameStateProvider);
-    final gameClockStream = ref.watch(gameStreamProvider(widget.game.id));
+    final gameClockStream = ref.watch(gameStreamProvider(game.id));
     final positionCursor = ref.watch(positionCursorProvider);
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final isReplaying =
@@ -182,9 +177,9 @@ class _BoardBodyState extends ConsumerState<_BoardBody> {
       data: (clock) {
         final black = Player(
           key: const ValueKey('black-player'),
-          name: widget.game.black.name,
-          rating: widget.game.black.rating,
-          title: widget.game.black.title,
+          name: game.black.name,
+          rating: game.black.rating,
+          title: game.black.title,
           active: gameState != null &&
               gameState.status == GameStatus.started &&
               gameState.position.fullmoves > 1 &&
@@ -193,44 +188,40 @@ class _BoardBodyState extends ConsumerState<_BoardBody> {
         );
         final white = Player(
           key: const ValueKey('white-player'),
-          name: widget.game.white.name,
-          rating: widget.game.white.rating,
-          title: widget.game.white.title,
+          name: game.white.name,
+          rating: game.white.rating,
+          title: game.white.title,
           active: gameState != null &&
               gameState.status == GameStatus.started &&
               gameState.position.fullmoves > 1 &&
               gameState.position.turn == Side.white,
           clock: clock.whiteTime,
         );
-        final topPlayer = widget.game.orientation == Side.white ? black : white;
-        final bottomPlayer =
-            widget.game.orientation == Side.white ? white : black;
+        final topPlayer = game.orientation == Side.white ? black : white;
+        final bottomPlayer = game.orientation == Side.white ? white : black;
 
         return GameBoardLayout(
           boardData: cg.BoardData(
             interactableSide:
                 gameState == null || !gameState.playing || isReplaying
                     ? cg.InteractableSide.none
-                    : widget.game.orientation == Side.white
+                    : game.orientation == Side.white
                         ? cg.InteractableSide.white
                         : cg.InteractableSide.black,
-            orientation: (isBoardTurned
-                    ? widget.game.orientation.opposite
-                    : widget.game.orientation)
-                .cg,
-            fen: gameState?.positions[positionCursor].fen ??
-                widget.game.initialFen,
+            orientation:
+                (isBoardTurned ? game.orientation.opposite : game.orientation)
+                    .cg,
+            fen: gameState?.positions[positionCursor].fen ?? game.initialFen,
             validMoves: gameState?.validMoves,
             lastMove: gameState != null && gameState.gameOver
                 ? positionCursor > 0
                     ? gameState.moveAtPly(positionCursor - 1)?.cg
                     : null
                 : gameState?.lastMove?.cg,
-            sideToMove:
-                gameState?.position.turn.cg ?? widget.game.orientation.cg,
+            sideToMove: gameState?.position.turn.cg ?? game.orientation.cg,
             onMove: (cg.Move move, {bool? isPremove}) => ref
                 .read(gameStateProvider.notifier)
-                .onUserMove(widget.game.id, Move.fromUci(move.uci)),
+                .onUserMove(game.id, Move.fromUci(move.uci)),
           ),
           topPlayer: topPlayer,
           bottomPlayer: bottomPlayer,
@@ -240,16 +231,16 @@ class _BoardBodyState extends ConsumerState<_BoardBody> {
       },
       loading: () {
         final player = Player(
-          name: widget.game.player.name,
-          rating: widget.game.player.rating,
-          title: widget.game.player.title,
+          name: game.player.name,
+          rating: game.player.rating,
+          title: game.player.title,
           active: false,
           clock: const Duration(milliseconds: 0),
         );
         final opponent = Player(
-          name: widget.game.opponent.name,
-          rating: widget.game.opponent.rating,
-          title: widget.game.opponent.title,
+          name: game.opponent.name,
+          rating: game.opponent.rating,
+          title: game.opponent.title,
           active: false,
           clock: const Duration(milliseconds: 0),
         );
@@ -259,8 +250,8 @@ class _BoardBodyState extends ConsumerState<_BoardBody> {
           bottomPlayer: player,
           boardData: cg.BoardData(
             interactableSide: cg.InteractableSide.none,
-            orientation: widget.game.orientation.cg,
-            fen: widget.game.initialFen,
+            orientation: game.orientation.cg,
+            fen: game.initialFen,
           ),
         );
       },
