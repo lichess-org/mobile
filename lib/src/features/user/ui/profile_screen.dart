@@ -18,7 +18,7 @@ import 'package:lichess_mobile/src/features/settings/ui/settings_screen.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
 import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
 import 'package:lichess_mobile/src/features/game/model/game.dart';
-import 'package:lichess_mobile/src/features/auth/ui/auth_widget_notifier.dart';
+import 'package:lichess_mobile/src/features/auth/ui/auth_actions_notifier.dart';
 
 import '../../auth/data/auth_repository.dart';
 
@@ -53,7 +53,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Widget _buildAndroid(BuildContext context) {
     final authState = ref.watch(authStateChangesProvider);
-    final authActionsAsync = ref.watch(authWidgetProvider);
+    final authActionsAsync = ref.watch(authActionsProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.profile),
@@ -86,7 +86,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         onPressed: authActionsAsync.isLoading
                             ? null
                             : () =>
-                                ref.read(authWidgetProvider.notifier).signIn(),
+                                ref.read(authActionsProvider.notifier).signIn(),
                         child: Text(context.l10n.signIn)));
           },
           orElse: () => const Center(child: CircularProgressIndicator())),
@@ -95,7 +95,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Widget _buildIos(BuildContext context) {
     final authState = ref.watch(authStateChangesProvider);
-    final authActionsAsync = ref.watch(authWidgetProvider);
+    final authActionsAsync = ref.watch(authActionsProvider);
     return CupertinoPageScaffold(
       child: CustomScrollView(
         slivers: [
@@ -137,7 +137,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                 onPressed: authActionsAsync.isLoading
                                     ? null
                                     : () => ref
-                                        .read(authWidgetProvider.notifier)
+                                        .read(authActionsProvider.notifier)
                                         .signIn(),
                                 child: Text(context.l10n.signIn))),
                       ),

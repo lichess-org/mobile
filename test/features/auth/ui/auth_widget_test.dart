@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:lichess_mobile/src/features/auth/ui/auth_widget.dart';
+import 'package:lichess_mobile/src/features/auth/ui/sign_in_widget.dart';
 import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
 import 'package:lichess_mobile/src/features/settings/ui/theme_mode_notifier.dart';
 import '../data/fake_auth_repository.dart';
@@ -16,7 +16,7 @@ void main() {
         return Scaffold(
           appBar: AppBar(
             actions: const [
-              AuthWidget(),
+              SignInWidget(),
             ],
           ),
         );
@@ -44,10 +44,6 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pump(const Duration(seconds: 1)); // wait for sign in future
 
-    await tester.tap(find.text('Sign out'));
-    await tester.pump();
-    await tester.pump(const Duration(seconds: 1)); // wait for sign out future
-
-    expect(find.text('Sign in'), findsOneWidget);
+    expect(find.text('Sign in'), findsNothing);
   }, variant: kPlatformVariant);
 }

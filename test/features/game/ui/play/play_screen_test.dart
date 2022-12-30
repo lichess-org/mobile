@@ -78,7 +78,7 @@ void main() {
         ),
       );
 
-      // one loader for AuthWidget and one for PlayScreen
+      // one loader for SignInWidget and one for PlayScreen
       expect(find.byType(CircularProgressIndicator), findsNWidgets(2));
       await tester.pump();
 
@@ -113,7 +113,7 @@ void main() {
         ),
       );
 
-      // one loader for AuthWidget and one for PlayScreen
+      // one loader for SignInWidget and one for PlayScreen
       expect(find.byType(CircularProgressIndicator), findsNWidgets(2));
       await tester.pump();
 
@@ -176,7 +176,7 @@ void main() {
         ),
       );
 
-      // one loader for AuthWidget and one for PlayScreen
+      // one loader for SignInWidget and one for PlayScreen
       expect(find.byType(CircularProgressIndicator), findsNWidgets(2));
       await tester.pump();
 
@@ -269,7 +269,7 @@ void main() {
         ),
       );
 
-      // one loader for AuthWidget and one for PlayScreen
+      // one loader for SignInWidget and one for PlayScreen
       expect(find.byType(CircularProgressIndicator), findsNWidgets(2));
       await tester.pump();
 

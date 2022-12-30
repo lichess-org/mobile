@@ -12,8 +12,8 @@ import 'package:lichess_mobile/src/widgets/list_tile_choice.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
-import 'package:lichess_mobile/src/features/auth/ui/auth_widget.dart';
-import 'package:lichess_mobile/src/features/auth/ui/auth_widget_notifier.dart';
+import 'package:lichess_mobile/src/features/auth/ui/sign_in_widget.dart';
+import 'package:lichess_mobile/src/features/auth/ui/auth_actions_notifier.dart';
 import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
 import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
 import '../../data/play_preferences.dart';
@@ -62,7 +62,7 @@ class PlayScreen extends ConsumerWidget {
     final authState = ref.watch(authStateChangesProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('lichess.org'), actions: const [
-        AuthWidget(),
+        SignInWidget(),
       ]),
       body: Center(
         child: authState.maybeWhen(
@@ -76,7 +76,7 @@ class PlayScreen extends ConsumerWidget {
   Widget _iosBuilder(WidgetRef ref) {
     final authState = ref.watch(authStateChangesProvider);
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(trailing: AuthWidget()),
+      navigationBar: const CupertinoNavigationBar(trailing: SignInWidget()),
       child: Center(
         child: authState.maybeWhen(
           data: (account) => PlayForm(account: account),
@@ -99,7 +99,7 @@ class PlayForm extends ConsumerWidget {
     final maiaStrength = ref.watch(maiaStrengthProvider);
     final stockfishLevel = ref.watch(stockfishLevelProvider);
     final timeControlPref = ref.watch(timeControlPrefProvider);
-    final authActionsAsync = ref.watch(authWidgetProvider);
+    final authActionsAsync = ref.watch(authActionsProvider);
     final playActionAsync = ref.watch(playActionProvider);
 
     ref.listen<AsyncValue<PlayableGame?>>(playActionProvider, (_, state) {
@@ -267,7 +267,7 @@ class PlayForm extends ConsumerWidget {
             onPressed: account == null
                 ? authActionsAsync.isLoading
                     ? null
-                    : () => ref.read(authWidgetProvider.notifier).signIn()
+                    : () => ref.read(authActionsProvider.notifier).signIn()
                 : playActionAsync.isLoading
                     ? null
                     : () => ref
