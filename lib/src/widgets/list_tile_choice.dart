@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'platform.dart';
 
@@ -30,8 +32,11 @@ class ListTileChoice<T extends Enum> extends StatelessWidget {
             tiles: choices.map((value) {
               return ListTile(
                 selected: selectedItem == value,
-                trailing:
-                    selectedItem == value ? const Icon(Icons.check) : null,
+                trailing: selectedItem == value
+                    ? defaultTargetPlatform == TargetPlatform.iOS
+                        ? const Icon(CupertinoIcons.check_mark_circled_solid)
+                        : const Icon(Icons.check)
+                    : null,
                 title: titleBuilder(value),
                 subtitle: subtitleBuilder?.call(value),
                 onTap: () => onSelectedItemChanged(value),
