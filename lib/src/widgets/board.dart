@@ -55,8 +55,13 @@ class _GameBoardLayoutState extends State<GameBoardLayout> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      final double boardSize = constraints.biggest.shortestSide;
       final aspectRatio = constraints.biggest.aspectRatio;
+      final defaultBoardSize = constraints.biggest.shortestSide;
+      final double boardSize = aspectRatio < 1 && aspectRatio >= 0.84 ||
+              aspectRatio > 1 && aspectRatio <= 1.18
+          ? defaultBoardSize * 0.94
+          : defaultBoardSize;
+
       final board = widget.boardSettings != null
           ? Board(
               size: boardSize,
