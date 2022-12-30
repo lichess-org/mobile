@@ -1,5 +1,9 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'platform.dart';
+
+import '../utils/style.dart';
 
 /// A choice picker component that displays a [Card] with [ListTile] as items.
 class ListTileChoice<T extends Enum> extends StatelessWidget {
@@ -23,6 +27,7 @@ class ListTileChoice<T extends Enum> extends StatelessWidget {
     return PlatformCard(
       child: Column(
         children: ListTile.divideTiles(
+            color: dividerColor(context),
             context: context,
             tiles: choices.map((value) {
               return ListTile(

@@ -291,6 +291,7 @@ class RecentGames extends ConsumerWidget {
       data: ((data) {
         return Column(
           children: ListTile.divideTiles(
+              color: dividerColor(context),
               context: context,
               tiles: data.map((e) {
                 final mySide =
