@@ -47,6 +47,7 @@ dependencies:
   deep_pick: ^0.10.0
   timeago: ^3.3.0
   collection: ^1.16.0
+  loading_overlay: ^0.3.0
 
 dev_dependencies:
   flutter_test:

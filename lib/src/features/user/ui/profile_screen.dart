@@ -52,7 +52,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Widget _buildAndroid(BuildContext context) {
-    final account = ref.watch(authStateChangesProvider).valueOrNull;
+    final authState = ref.watch(authStateChangesProvider);
+    final authActionsAsync = ref.watch(authWidgetProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.profile),
@@ -68,24 +69,33 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         ],
       ),
-      body: account != null
-          ? RefreshIndicator(
-              key: _androidRefreshKey,
-              onRefresh: () => _refreshData(account),
-              child: ListView(
-                padding: kBodyPadding,
-                children: _buildList(context),
-              ),
-            )
-          : ListView(
-              padding: kBodyPadding,
-              children: _buildList(context),
-            ),
+      body: authState.maybeWhen(
+          data: (account) {
+            return account != null
+                ? RefreshIndicator(
+                    key: _androidRefreshKey,
+                    onRefresh: () => _refreshData(account),
+                    child: ListView(
+                      padding: kBodyPadding,
+                      children: _buildList(context, account),
+                    ),
+                  )
+                : Center(
+                    child: FatButton(
+                        semanticsLabel: context.l10n.signIn,
+                        onPressed: authActionsAsync.isLoading
+                            ? null
+                            : () =>
+                                ref.read(authWidgetProvider.notifier).signIn(),
+                        child: Text(context.l10n.signIn)));
+          },
+          orElse: () => const Center(child: CircularProgressIndicator())),
     );
   }
 
   Widget _buildIos(BuildContext context) {
-    final account = ref.watch(authStateChangesProvider).valueOrNull;
+    final authState = ref.watch(authStateChangesProvider);
+    final authActionsAsync = ref.watch(authWidgetProvider);
     return CupertinoPageScaffold(
       child: CustomScrollView(
         slivers: [
@@ -101,86 +111,91 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               child: const Icon(Icons.settings),
             ),
           ),
-          if (account != null)
-            CupertinoSliverRefreshControl(
-              onRefresh: () => _refreshData(account),
-            ),
-          SliverSafeArea(
-            top: false,
-            sliver: SliverPadding(
-              padding: kBodyPadding,
-              sliver: SliverList(
-                delegate: SliverChildListDelegate(
-                  _buildList(context),
-                ),
-              ),
-            ),
+          ...authState.maybeWhen(
+            data: (account) {
+              return [
+                if (account != null)
+                  CupertinoSliverRefreshControl(
+                    onRefresh: () => _refreshData(account),
+                  ),
+                account != null
+                    ? SliverSafeArea(
+                        top: false,
+                        sliver: SliverPadding(
+                          padding: kBodyPadding,
+                          sliver: SliverList(
+                            delegate: SliverChildListDelegate(
+                              _buildList(context, account),
+                            ),
+                          ),
+                        ),
+                      )
+                    : SliverFillRemaining(
+                        child: Center(
+                            child: FatButton(
+                                semanticsLabel: context.l10n.signIn,
+                                onPressed: authActionsAsync.isLoading
+                                    ? null
+                                    : () => ref
+                                        .read(authWidgetProvider.notifier)
+                                        .signIn(),
+                                child: Text(context.l10n.signIn))),
+                      ),
+              ];
+            },
+            orElse: () => const [
+              Center(
+                child: CircularProgressIndicator.adaptive(),
+              )
+            ],
           ),
         ],
       ),
     );
   }
 
-  List<Widget> _buildList(BuildContext context) {
-    final authState = ref.watch(authStateChangesProvider);
-    final authActionsAsync = ref.watch(authWidgetProvider);
-    return authState.maybeWhen(
-      data: (account) => account == null
-          ? [
-              Center(
-                  child: FatButton(
-                      semanticsLabel: context.l10n.signIn,
-                      onPressed: authActionsAsync.isLoading
-                          ? null
-                          : () =>
-                              ref.read(authWidgetProvider.notifier).signIn(),
-                      child: Text(context.l10n.signIn))),
-            ]
-          : [
-              ListTile(
-                leading: account.patron == true
-                    ? const Icon(LichessIcons.patron, size: 40)
-                    : null,
-                title: Text(
-                  account.username,
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.w500),
-                ),
-                subtitle: account.profile?.fullName != null
-                    ? Text(account.profile!.fullName!)
-                    : null,
-                contentPadding: const EdgeInsets.symmetric(vertical: 10),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  account.profile != null
-                      ? Location(profile: account.profile!)
-                      : kEmptyWidget,
-                  const SizedBox(height: 5),
-                  Text(
-                      '${context.l10n.memberSince} ${DateFormat.yMMMMd().format(account.createdAt)}'),
-                  const SizedBox(height: 5),
-                  Text(context.l10n
-                      .lastSeenActive(timeago.format(account.seenAt))),
-                  const SizedBox(height: 5),
-                  account.playTime != null
-                      ? Text(context.l10n.tpTimeSpentPlaying(
-                          _printDuration(account.playTime!.total)))
-                      : kEmptyWidget,
-                ],
-              ),
-              const SizedBox(height: 20),
-              PerfCards(account: account),
-              const SizedBox(height: 20),
-              const Text(
-                'Recent games',
-                style: TextStyle(fontSize: 16),
-              ),
-              RecentGames(account: account),
-            ],
-      orElse: () => const [CenterLoadingIndicator()],
-    );
+  List<Widget> _buildList(BuildContext context, User account) {
+    return [
+      ListTile(
+        leading: account.patron == true
+            ? const Icon(LichessIcons.patron, size: 40)
+            : null,
+        title: Text(
+          account.username,
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+        ),
+        subtitle: account.profile?.fullName != null
+            ? Text(account.profile!.fullName!)
+            : null,
+        contentPadding: const EdgeInsets.symmetric(vertical: 10),
+      ),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          account.profile != null
+              ? Location(profile: account.profile!)
+              : kEmptyWidget,
+          const SizedBox(height: 5),
+          Text(
+              '${context.l10n.memberSince} ${DateFormat.yMMMMd().format(account.createdAt)}'),
+          const SizedBox(height: 5),
+          Text(context.l10n.lastSeenActive(timeago.format(account.seenAt))),
+          const SizedBox(height: 5),
+          account.playTime != null
+              ? Text(context.l10n
+                  .tpTimeSpentPlaying(_printDuration(account.playTime!.total)))
+              : kEmptyWidget,
+        ],
+      ),
+      const SizedBox(height: 20),
+      PerfCards(account: account),
+      const SizedBox(height: 20),
+      const Text(
+        'Recent games',
+        style: TextStyle(fontSize: 16),
+      ),
+      RecentGames(account: account),
+    ];
   }
 
   Future<void> _refreshData(User account) {
