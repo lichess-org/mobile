@@ -25,6 +25,9 @@ jobs:
           channel: stable
       - run: flutter doctor -v
 
+      - name: Checkout mobile code
+        uses: actions/checkout@v3
+
       - name: Install dependencies
         run: flutter pub get
 
