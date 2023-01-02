@@ -1,4 +1,4 @@
-name: Flutter
+name: Tests
 
 on:
   push:
@@ -7,15 +7,19 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+  unit-test:
+    name: Unit tests on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
       - uses: actions/checkout@v3
 
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+      - run: flutter doctor -v
 
       - name: Install dependencies
         run: flutter pub get
@@ -29,6 +33,6 @@ jobs:
       - name: Analyze project source
         run: flutter analyze
 
-      - name: Run tests
+      - name: Run unit tests
         run: flutter test
 
