@@ -1,4 +1,4 @@
-package org.lichess.lichess_mobile
+package org.lichess.mobileV2
 
 import io.flutter.embedding.android.FlutterActivity
 

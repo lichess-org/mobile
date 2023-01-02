@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.lichess.lichess_mobile">
+    package="org.lichess.mobileV2">
    <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="lichess_mobile"
+        android:label="Lichess"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
