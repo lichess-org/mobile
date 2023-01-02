@@ -23,7 +23,7 @@ class ListTileChoice<T extends Enum> extends StatelessWidget {
   final void Function(T choice) onSelectedItemChanged;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     return PlatformCard(
       child: Column(
         children: ListTile.divideTiles(

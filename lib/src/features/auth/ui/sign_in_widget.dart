@@ -10,7 +10,7 @@ import '../data/auth_repository.dart';
 import './auth_actions_notifier.dart';
 
 class SignInWidget extends ConsumerWidget {
-  const SignInWidget({Key? key}) : super(key: key);
+  const SignInWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

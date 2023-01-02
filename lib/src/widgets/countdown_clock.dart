@@ -15,8 +15,8 @@ class CountdownClock extends ConsumerStatefulWidget {
   final Duration duration;
   final bool active;
 
-  const CountdownClock({required this.duration, required this.active, Key? key})
-      : super(key: key);
+  const CountdownClock(
+      {required this.duration, required this.active, super.key});
 
   @override
   ConsumerState<CountdownClock> createState() => _CountdownClockState();

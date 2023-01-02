@@ -28,7 +28,7 @@ final timeControlPrefProvider = createPrefProvider(
   prefKey: 'play.timeControl',
   defaultValue: TimeControl.blitz4,
   mapFrom: (v) => TimeControl.values.firstWhere(
-      (e) => v != null ? e.value == TimeInc.fromString(v) : false,
+      (e) => v != null && e.value == TimeInc.fromString(v),
       orElse: () => TimeControl.blitz4),
   mapTo: (v) => v.value.toString(),
 );

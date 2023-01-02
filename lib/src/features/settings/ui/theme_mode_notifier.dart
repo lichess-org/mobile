@@ -9,7 +9,7 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
 
   final Ref ref;
 
-  void changeTheme(ThemeMode theme) async {
+  Future<void> changeTheme(ThemeMode theme) async {
     final repository = ref.read(settingsRepositoryProvider);
     final ok = await repository.setThemeMode(theme);
     if (ok) {

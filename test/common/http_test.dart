@@ -139,28 +139,28 @@ void main() {
       final apiClient = ApiClient(mockLogger, FakeClient());
 
       expect(
-          () async => await apiClient
-              .stream(Uri.parse('http://api.test/will/return/401')),
+          () async =>
+              apiClient.stream(Uri.parse('http://api.test/will/return/401')),
           throwsA(isA<UnauthorizedError>()));
 
       expect(
-          () async => await apiClient
-              .stream(Uri.parse('http://api.test/will/return/403')),
+          () async =>
+              apiClient.stream(Uri.parse('http://api.test/will/return/403')),
           throwsA(isA<ForbiddenError>()));
 
       expect(
-          () async => await apiClient
-              .stream(Uri.parse('http://api.test/will/return/404')),
+          () async =>
+              apiClient.stream(Uri.parse('http://api.test/will/return/404')),
           throwsA(isA<NotFoundError>()));
 
       expect(
-          () async => await apiClient
-              .stream(Uri.parse('http://api.test/will/return/500')),
+          () async =>
+              apiClient.stream(Uri.parse('http://api.test/will/return/500')),
           throwsA(isA<ApiRequestError>()));
 
       expect(
-          () async => await apiClient
-              .stream(Uri.parse('http://api.test/will/return/503')),
+          () async =>
+              apiClient.stream(Uri.parse('http://api.test/will/return/503')),
           throwsA(isA<ApiRequestError>()));
     });
 
@@ -168,7 +168,7 @@ void main() {
       final apiClient = ApiClient(mockLogger, FakeClient());
 
       expect(
-          () async => await apiClient
+          () async => apiClient
               .stream(Uri.parse('http://api.test/will/throw/socket/exception')),
           throwsA(isA<GenericError>()));
     });

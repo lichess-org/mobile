@@ -20,7 +20,7 @@ class PlayActionNotifier
     final createGameService = ref.read(createGameServiceProvider);
     state = const AsyncLoading();
     state =
-        (await (createGameService.aiGameTask(account, side: side).run())).match(
+        (await createGameService.aiGameTask(account, side: side).run()).match(
       (error) => AsyncValue.error(error.message, error.stackTrace),
       (game) => AsyncValue.data(game),
     );

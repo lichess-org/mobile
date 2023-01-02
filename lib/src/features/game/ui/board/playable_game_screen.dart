@@ -235,14 +235,14 @@ class _BoardBody extends ConsumerWidget {
           rating: game.player.rating,
           title: game.player.title,
           active: false,
-          clock: const Duration(milliseconds: 0),
+          clock: Duration.zero,
         );
         final opponent = Player(
           name: game.opponent.name,
           rating: game.opponent.rating,
           title: game.opponent.title,
           active: false,
-          clock: const Duration(milliseconds: 0),
+          clock: Duration.zero,
         );
 
         return GameBoardLayout(

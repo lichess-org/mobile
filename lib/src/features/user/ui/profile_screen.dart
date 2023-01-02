@@ -118,29 +118,30 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   CupertinoSliverRefreshControl(
                     onRefresh: () => _refreshData(account),
                   ),
-                account != null
-                    ? SliverSafeArea(
-                        top: false,
-                        sliver: SliverPadding(
-                          padding: kBodyPadding,
-                          sliver: SliverList(
-                            delegate: SliverChildListDelegate(
-                              _buildList(context, account),
-                            ),
-                          ),
+                if (account != null)
+                  SliverSafeArea(
+                    top: false,
+                    sliver: SliverPadding(
+                      padding: kBodyPadding,
+                      sliver: SliverList(
+                        delegate: SliverChildListDelegate(
+                          _buildList(context, account),
                         ),
-                      )
-                    : SliverFillRemaining(
-                        child: Center(
-                            child: FatButton(
-                                semanticsLabel: context.l10n.signIn,
-                                onPressed: authActionsAsync.isLoading
-                                    ? null
-                                    : () => ref
-                                        .read(authActionsProvider.notifier)
-                                        .signIn(),
-                                child: Text(context.l10n.signIn))),
                       ),
+                    ),
+                  )
+                else
+                  SliverFillRemaining(
+                    child: Center(
+                        child: FatButton(
+                            semanticsLabel: context.l10n.signIn,
+                            onPressed: authActionsAsync.isLoading
+                                ? null
+                                : () => ref
+                                    .read(authActionsProvider.notifier)
+                                    .signIn(),
+                            child: Text(context.l10n.signIn))),
+                  ),
               ];
             },
             orElse: () => const [
@@ -172,19 +173,21 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          account.profile != null
-              ? Location(profile: account.profile!)
-              : kEmptyWidget,
+          if (account.profile != null)
+            Location(profile: account.profile!)
+          else
+            kEmptyWidget,
           const SizedBox(height: 5),
           Text(
               '${context.l10n.memberSince} ${DateFormat.yMMMMd().format(account.createdAt)}'),
           const SizedBox(height: 5),
           Text(context.l10n.lastSeenActive(timeago.format(account.seenAt))),
           const SizedBox(height: 5),
-          account.playTime != null
-              ? Text(context.l10n
-                  .tpTimeSpentPlaying(_printDuration(account.playTime!.total)))
-              : kEmptyWidget,
+          if (account.playTime != null)
+            Text(context.l10n
+                .tpTimeSpentPlaying(_printDuration(account.playTime!.total)))
+          else
+            kEmptyWidget,
         ],
       ),
       const SizedBox(height: 20),
@@ -223,7 +226,7 @@ class PerfCards extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 3.0),
         scrollDirection: Axis.horizontal,
         itemCount: userPerfs.length,
-        itemBuilder: ((context, index) {
+        itemBuilder: (context, index) {
           final perf = userPerfs[index];
           final userPerf = account.perfs[perf]!;
           return SizedBox(
@@ -271,8 +274,8 @@ class PerfCards extends StatelessWidget {
               ),
             ),
           );
-        }),
-        separatorBuilder: ((context, index) => const SizedBox(width: 10)),
+        },
+        separatorBuilder: (context, index) => const SizedBox(width: 10),
       ),
     );
   }
@@ -288,7 +291,7 @@ class RecentGames extends ConsumerWidget {
     final recentGames = ref.watch(recentGamesProvider(account.id));
 
     return recentGames.when(
-      data: ((data) {
+      data: (data) {
         return Column(
           children: ListTile.divideTiles(
               color: dividerColor(context),
@@ -328,12 +331,12 @@ class RecentGames extends ConsumerWidget {
                 );
               })).toList(growable: false),
         );
-      }),
-      error: ((error, stackTrace) {
+      },
+      error: (error, stackTrace) {
         debugPrint(
             'SEVERE: [ProfileScreen] could not load user games; ${error.toString()}\n$stackTrace');
         return const Text('Could not load games.');
-      }),
+      },
       loading: () => const CenterLoadingIndicator(),
     );
   }
@@ -347,12 +350,13 @@ class Location extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      profile.country != null
-          ? CachedNetworkImage(
-              imageUrl: lichessFlagSrc(profile.country!),
-              errorWidget: (_, __, ___) => kEmptyWidget,
-            )
-          : kEmptyWidget,
+      if (profile.country != null)
+        CachedNetworkImage(
+          imageUrl: lichessFlagSrc(profile.country!),
+          errorWidget: (_, __, ___) => kEmptyWidget,
+        )
+      else
+        kEmptyWidget,
       const SizedBox(width: 10),
       Text(profile.location ?? ''),
     ]);
@@ -364,8 +368,8 @@ String lichessFlagSrc(String country) {
 }
 
 String _printDuration(Duration duration) {
-  String days = duration.inDays.toString();
-  String hours = duration.inHours.remainder(24).toString();
-  String minutes = duration.inMinutes.remainder(60).toString();
+  final days = duration.inDays.toString();
+  final hours = duration.inHours.remainder(24).toString();
+  final minutes = duration.inMinutes.remainder(60).toString();
   return "$days days, $hours hours and $minutes minutes";
 }

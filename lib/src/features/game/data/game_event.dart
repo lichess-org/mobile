@@ -48,6 +48,7 @@ class GameEvent with _$GameEvent {
     }
   }
 
+  // ignore: prefer_constructors_over_static_methods
   static GameStateEvent _gameStateEventfromPick(RequiredPick pick) {
     return GameStateEvent(
       moves: pick('moves').asStringOrThrow(),

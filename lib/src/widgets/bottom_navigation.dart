@@ -25,7 +25,7 @@ final currentBottomTabProvider =
 /// The scaffold lays out the tab bar at the bottom and the content between or
 /// behind the tab bar.
 class BottomNavScaffold extends ConsumerWidget {
-  const BottomNavScaffold({Key? key}) : super(key: key);
+  const BottomNavScaffold({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

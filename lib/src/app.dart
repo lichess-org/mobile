@@ -13,7 +13,7 @@ class App extends ConsumerWidget {
   const App({super.key});
 
   @override
-  Widget build(context, WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
     final brightness = ref.watch(selectedBrigthnessProvider);
     final themeData = ThemeData(

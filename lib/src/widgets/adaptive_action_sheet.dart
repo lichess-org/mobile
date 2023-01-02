@@ -136,7 +136,7 @@ Future<T?> _showMaterialBottomSheet<T>(
                         ),
                       ),
                     );
-                  }).toList(),
+                  }),
                 ],
               ),
             ),

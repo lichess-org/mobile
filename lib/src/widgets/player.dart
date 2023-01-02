@@ -15,8 +15,7 @@ class Player extends StatelessWidget {
       this.rating,
       required this.active,
       required this.clock,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   Widget build(BuildContext context) {

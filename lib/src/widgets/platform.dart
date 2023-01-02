@@ -16,7 +16,7 @@ class PlatformWidget extends StatelessWidget {
   final WidgetBuilder iosBuilder;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return androidBuilder(context);
@@ -46,7 +46,7 @@ class ConsumerPlatformWidget extends StatelessWidget {
   final ConsumerWidgetBuilder iosBuilder;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return androidBuilder(context, ref);
@@ -71,7 +71,7 @@ class PlatformCard extends StatelessWidget {
   final bool semanticContainer;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
     return MediaQuery(
       data: mediaQueryData.copyWith(

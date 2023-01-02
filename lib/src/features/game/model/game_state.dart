@@ -31,8 +31,8 @@ class GameState with _$GameState {
 
   factory GameState.fromEvent(GameStateEvent event) {
     final uciMoves = event.moves.split(' ').where((m) => m.isNotEmpty).toList();
-    List<Position<Chess>> positions = [Chess.initial];
-    List<String> sanMoves = [];
+    final List<Position<Chess>> positions = [Chess.initial];
+    final List<String> sanMoves = [];
     for (final m in uciMoves) {
       final move = Move.fromUci(m);
       final newPos = positions.last.playToSan(move);
@@ -62,6 +62,6 @@ class GameState with _$GameState {
   Map<String, Set<String>> get validMoves => algebraicLegalMoves(position);
   bool get isLastMoveCapture {
     final lm = sanMoves.isNotEmpty ? sanMoves[sanMoves.length - 1] : null;
-    return lm != null ? lm.contains('x') : false;
+    return lm != null && lm.contains('x');
   }
 }

@@ -37,7 +37,7 @@ class GameStateNotifier extends AutoDisposeNotifier<GameState?> {
     state = newState;
   }
 
-  void onUserMove(GameId gameId, Move move) async {
+  Future<void> onUserMove(GameId gameId, Move move) async {
     final gameRepository = ref.read(gameRepositoryProvider);
     final savedState = state;
     if (state != null) {

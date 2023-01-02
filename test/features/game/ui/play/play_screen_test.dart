@@ -208,7 +208,8 @@ void main() {
               that: sameRequest(http.Request(
                   'GET', Uri.parse('$kLichessHost/api/stream/event'))))))
           .thenAnswer((_) => mockHttpStreamFromIterable([
-                '''{
+                '''
+{
   "type": "gameStart",
   "game": {
     "gameId": "$gameIdTest",
@@ -236,7 +237,8 @@ void main() {
       "board": true
     }
   }
-}'''
+}
+'''
               ]));
 
       when(() => mockClient.send(any(
@@ -291,85 +293,91 @@ void main() {
 }
 
 final maiaResponses = {
-  'maia1': '''{
-    "id": "maia1",
-    "username": "maia1",
-    "createdAt": 1290415680000,
-    "seenAt": 1290415680000,
-    "perfs": {
-      "blitz": {
-        "games": 2340,
-        "rating": 1541,
-        "rd": 30,
-        "prog": 10
-      },
-      "rapid": {
-        "games": 2340,
-        "rating": 1477,
-        "rd": 30,
-        "prog": 10
-      },
-      "classical": {
-        "games": 2340,
-        "rating": 1421,
-        "rd": 30,
-        "prog": 10
-      }
+  'maia1': '''
+{
+  "id": "maia1",
+  "username": "maia1",
+  "createdAt": 1290415680000,
+  "seenAt": 1290415680000,
+  "perfs": {
+    "blitz": {
+      "games": 2340,
+      "rating": 1541,
+      "rd": 30,
+      "prog": 10
+    },
+    "rapid": {
+      "games": 2340,
+      "rating": 1477,
+      "rd": 30,
+      "prog": 10
+    },
+    "classical": {
+      "games": 2340,
+      "rating": 1421,
+      "rd": 30,
+      "prog": 10
     }
-  }''',
-  'maia5': '''{
-    "id": "maia5",
-    "username": "maia5",
-    "createdAt": 1290415680000,
-    "seenAt": 1290415680000,
-    "perfs": {
-      "blitz": {
-        "games": 2340,
-        "rating": 1643,
-        "rd": 30,
-        "prog": 10,
-        "prov": false
-      },
-      "rapid": {
-        "games": 2340,
-        "rating": 1577,
-        "rd": 30,
-        "prog": 10
-      },
-      "classical": {
-        "games": 2340,
-        "rating": 1591,
-        "rd": 30,
-        "prog": 10
-      }
+  }
+}
+''',
+  'maia5': '''
+{
+  "id": "maia5",
+  "username": "maia5",
+  "createdAt": 1290415680000,
+  "seenAt": 1290415680000,
+  "perfs": {
+    "blitz": {
+      "games": 2340,
+      "rating": 1643,
+      "rd": 30,
+      "prog": 10,
+      "prov": false
+    },
+    "rapid": {
+      "games": 2340,
+      "rating": 1577,
+      "rd": 30,
+      "prog": 10
+    },
+    "classical": {
+      "games": 2340,
+      "rating": 1591,
+      "rd": 30,
+      "prog": 10
     }
-  }''',
-  'maia9': '''{
-    "id": "maia9",
-    "username": "maia9",
-    "createdAt": 1290415680000,
-    "seenAt": 1290415680000,
-    "perfs": {
-      "blitz": {
-        "games": 2340,
-        "rating": 1681,
-        "rd": 30,
-        "prog": 10
-      },
-      "rapid": {
-        "games": 2340,
-        "rating": 1677,
-        "rd": 30,
-        "prog": 10
-      },
-      "classical": {
-        "games": 2340,
-        "rating": 1618,
-        "rd": 30,
-        "prog": 10
-      }
+  }
+  }
+''',
+  'maia9': '''
+{
+  "id": "maia9",
+  "username": "maia9",
+  "createdAt": 1290415680000,
+  "seenAt": 1290415680000,
+  "perfs": {
+    "blitz": {
+      "games": 2340,
+      "rating": 1681,
+      "rd": 30,
+      "prog": 10
+    },
+    "rapid": {
+      "games": 2340,
+      "rating": 1677,
+      "rd": 30,
+      "prog": 10
+    },
+    "classical": {
+      "games": 2340,
+      "rating": 1618,
+      "rd": 30,
+      "prog": 10
     }
-  }''',
+  }
+  }
+''',
 };
 
 const maiaStatusResponses = '''

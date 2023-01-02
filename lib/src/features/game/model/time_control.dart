@@ -33,7 +33,7 @@ class TimeInc {
   int get hashCode => Object.hash(time, increment);
 
   @override
-  toString() => '$time + $increment';
+  String toString() => '$time + $increment';
 }
 
 enum TimeControl {

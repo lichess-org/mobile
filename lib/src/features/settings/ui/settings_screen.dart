@@ -69,7 +69,7 @@ class SettingsScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 30),
             authState.maybeWhen(
-                data: ((data) {
+                data: (data) {
                   return data != null
                       ? PlatformCard(
                           child: ListTile(
@@ -88,7 +88,7 @@ class SettingsScreen extends ConsumerWidget {
                           ),
                         )
                       : const SizedBox.shrink();
-                }),
+                },
                 orElse: () => const SizedBox.shrink()),
           ],
         ),

@@ -13,7 +13,7 @@ class SettingsRepository {
 
   // Theme
   Future<bool> setThemeMode(ThemeMode mode) async {
-    return await _prefs.setString(backgroundModeKey, mode.name);
+    return _prefs.setString(backgroundModeKey, mode.name);
   }
 
   ThemeMode getThemeMode() {
@@ -32,7 +32,7 @@ class SettingsRepository {
 
   // Sound
   Future<bool> toggleSound() async {
-    return await _prefs.setBool(soundMutedKey, !isSoundMuted());
+    return _prefs.setBool(soundMutedKey, !isSoundMuted());
   }
 
   bool isSoundMuted() {

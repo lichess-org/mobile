@@ -30,7 +30,8 @@ void main() {
       when(() =>
               mockApiClient.stream(Uri.parse('$kLichessHost/api/stream/event')))
           .thenAnswer((_) => mockHttpStreamFromIterable([
-                '''{
+                '''
+{
   "type": "gameStart",
   "game": {
     "gameId": "rCRw1AuO",
@@ -59,7 +60,8 @@ void main() {
       "board": true
     }
   }
-}'''
+}
+'''
               ]));
 
       expect(

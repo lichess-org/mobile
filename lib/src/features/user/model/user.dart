@@ -50,6 +50,7 @@ class PlayTime with _$PlayTime {
     required Duration total,
     required Duration tv,
   }) = _PlayTime;
+
   factory PlayTime.fromJson(Map<String, dynamic> json) =>
       PlayTime.fromPick(pick(json).required());
 
@@ -62,8 +63,6 @@ class PlayTime with _$PlayTime {
 
 @freezed
 class Profile with _$Profile {
-  const Profile._();
-
   const factory Profile({
     String? country,
     String? location,
@@ -73,6 +72,8 @@ class Profile with _$Profile {
     int? fideRating,
     String? links,
   }) = _Profile;
+
+  const Profile._();
 
   String? get fullName => firstName != null && lastName != null
       ? '$firstName $lastName'
