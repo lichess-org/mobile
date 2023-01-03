@@ -18,7 +18,14 @@ default_platform(:ios)
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
-    build_app(workspace: "Runner.xcworkspace", scheme: "Runner")
-    upload_to_testflight
+    # increment_build_number(
+    #   build_number: latest_testflight_build_number + 1,
+    #   xcodeproj: "Runner.xcodeproj"
+    # )
+    build_app(
+      skip_build_archive: true,
+      archive_path: "../build/ios/archive/Runner.xcarchive",
+    )
+    upload_to_testflight(api_key_path: "fastlane/B2496UR29L.json", skip_waiting_for_build_processing: true)
   end
 end
