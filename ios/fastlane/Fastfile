@@ -18,11 +18,12 @@ default_platform(:ios)
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
-    # increment_build_number(
-    #   build_number: latest_testflight_build_number + 1,
-    #   xcodeproj: "Runner.xcodeproj"
-    # )
+    increment_build_number(
+      build_number: latest_testflight_build_number + 1,
+      xcodeproj: "Runner.xcodeproj"
+    )
     build_app(
+      scheme: "Runner",
       skip_build_archive: true,
       archive_path: "../build/ios/archive/Runner.xcarchive",
     )
