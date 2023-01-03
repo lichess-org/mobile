@@ -40,7 +40,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>org.lichess.mobile://login-callback</string>
+				<string>org.lichess.mobile</string>
 			</array>
 		</dict>
 	</array>
