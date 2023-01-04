@@ -27,6 +27,6 @@ platform :ios do
       skip_build_archive: true,
       archive_path: "../build/ios/archive/Runner.xcarchive",
     )
-    upload_to_testflight(api_key_path: "fastlane/B2496UR29L.json", skip_waiting_for_build_processing: true)
+    upload_to_testflight(api_key_path: "fastlane/app-store-key.json", skip_waiting_for_build_processing: true)
   end
 end
