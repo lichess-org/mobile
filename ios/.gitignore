@@ -26,6 +26,8 @@ Flutter/flutter_assets/
 Flutter/flutter_export_environment.sh
 ServiceDefinitions.json
 Runner/GeneratedPluginRegistrant.*
+Runner.ipa
+Runner.app.dSYM.zip
 
 # Exceptions to above rules.
 !default.mode1v3
