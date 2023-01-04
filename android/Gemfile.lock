@@ -8,7 +8,7 @@ GEM
     artifactory (3.0.15)
     atomos (0.1.3)
     aws-eventstream (1.2.0)
-    aws-partitions (1.686.0)
+    aws-partitions (1.687.0)
     aws-sdk-core (3.168.4)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
@@ -36,7 +36,7 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.8.1)
     emoji_regex (3.2.3)
-    excon (0.95.0)
+    excon (0.96.0)
     faraday (1.10.2)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
@@ -215,4 +215,4 @@ DEPENDENCIES
   fastlane
 
 BUNDLED WITH
-   2.3.26
+   2.4.2
