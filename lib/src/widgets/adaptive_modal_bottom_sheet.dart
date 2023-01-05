@@ -15,6 +15,7 @@ Future<T?> showAdaptiveModalBottomSheet<T>({
       context: context,
       builder: builder,
       expand: expand,
+      duration: const Duration(milliseconds: 300),
     );
   } else {
     return showMaterialModalBottomSheet(
@@ -22,6 +23,7 @@ Future<T?> showAdaptiveModalBottomSheet<T>({
       context: context,
       builder: builder,
       expand: expand,
+      duration: const Duration(milliseconds: 300),
     );
   }
 }
