@@ -81,20 +81,15 @@ class PlatformCard extends StatelessWidget {
         ),
       ),
       child: defaultTargetPlatform == TargetPlatform.iOS
-          ? Semantics(
-              container: semanticContainer,
-              child: Container(
-                decoration: ShapeDecoration(
-                  color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.secondarySystemBackground, context),
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                ),
-                child: Semantics(
-                  explicitChildNodes: !semanticContainer,
-                  child: child,
-                ),
-              ),
+          ? Card(
+              margin: EdgeInsets.zero,
+              elevation: 0,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondarySystemBackground, context),
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              semanticContainer: semanticContainer,
+              child: child,
             )
           : Card(
               semanticContainer: semanticContainer,
