@@ -76,3 +76,33 @@ class SecondaryButton extends StatelessWidget {
     );
   }
 }
+
+/// Cupertino icon button with mandatory semantics label
+class CupertinoIconButton extends StatelessWidget {
+  const CupertinoIconButton({
+    required this.onPressed,
+    required this.semanticsLabel,
+    required this.icon,
+    super.key,
+  });
+  final VoidCallback? onPressed;
+  final Widget icon;
+  final String semanticsLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      container: true,
+      enabled: true,
+      button: true,
+      label: semanticsLabel,
+      excludeSemantics: true,
+      child: CupertinoButton(
+        // tooltip: context.l10n.settings,
+        padding: EdgeInsets.zero,
+        onPressed: onPressed,
+        child: icon,
+      ),
+    );
+  }
+}

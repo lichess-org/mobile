@@ -100,15 +100,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       child: CustomScrollView(
         slivers: [
           CupertinoSliverNavigationBar(
-            trailing: CupertinoButton(
-              padding: EdgeInsets.zero,
+            largeTitle: Text(context.l10n.profile),
+            trailing: CupertinoIconButton(
+              semanticsLabel: context.l10n.settings,
               onPressed: () => Navigator.of(context).push<void>(
                 CupertinoPageRoute(
                   title: context.l10n.settings,
                   builder: (context) => const SettingsScreen(),
                 ),
               ),
-              child: const Icon(Icons.settings),
+              icon: const Icon(Icons.settings),
             ),
           ),
           ...authState.maybeWhen(
@@ -145,8 +146,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ];
             },
             orElse: () => const [
-              Center(
-                child: CircularProgressIndicator.adaptive(),
+              SliverFillRemaining(
+                child: Center(child: CircularProgressIndicator.adaptive()),
               )
             ],
           ),

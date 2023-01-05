@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -70,9 +71,11 @@ void main() {
 
       await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
-      await expectLater(tester, meetsGuideline(textContrastGuideline));
+      if (debugDefaultTargetPlatformOverride == TargetPlatform.android) {
+        await expectLater(tester, meetsGuideline(textContrastGuideline));
+      }
       handle.dispose();
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('should see recent games', (WidgetTester tester) async {
       final app = await buildTestApp(
@@ -105,7 +108,7 @@ void main() {
 
       // opponent in recent games
       expect(find.widgetWithText(ListTile, 'maia1'), findsNWidgets(3));
-    });
+    }, variant: kPlatformVariant);
   });
 }
 
