@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import '../../../../constants.dart';
 import '../../data/play_preferences.dart';
@@ -11,6 +14,47 @@ class TimeControlModal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    return ConsumerPlatformWidget(
+      ref: ref,
+      androidBuilder: _androidBuilder,
+      iosBuilder: _iosBuilder,
+    );
+  }
+
+  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(context.l10n.timeControl),
+        actions: [
+          IconButton(
+            tooltip: context.l10n.close,
+            icon: const Icon(Icons.close),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+      body: _buildContent(context, ref),
+    );
+  }
+
+  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        padding: EdgeInsetsDirectional.zero,
+        automaticallyImplyLeading: false,
+        middle: Text(context.l10n.timeControl),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Icon(CupertinoIcons.clear),
+        ),
+      ),
+      child: Material(child: _buildContent(context, ref)),
+    );
+  }
+
+  Widget _buildContent(BuildContext context, WidgetRef ref) {
     final timeControlPref = ref.watch(timeControlPrefProvider);
     void onSelected(TimeControl choice) {
       Navigator.pop(context);
@@ -73,6 +117,7 @@ class _SectionChoices extends StatelessWidget {
         const SizedBox(height: 10),
         Wrap(
           spacing: 10.0,
+          runSpacing: 10.0,
           children: choices.map((choice) {
             return ChoiceChip(
               key: ValueKey(choice),

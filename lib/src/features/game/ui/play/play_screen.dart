@@ -7,6 +7,7 @@ import 'package:tuple/tuple.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_modal_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/list_tile_choice.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -232,7 +233,7 @@ class PlayForm extends ConsumerWidget {
             semanticsLabel:
                 '${context.l10n.timeControl} ${timeControlPref.perf.name} ${timeControlPref.value.toString()}',
             onPressed: () {
-              showModalBottomSheet<void>(
+              showAdaptiveModalBottomSheet<void>(
                 context: context,
                 builder: (BuildContext context) {
                   return const TimeControlModal();

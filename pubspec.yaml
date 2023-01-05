@@ -48,6 +48,7 @@ dependencies:
   timeago: ^3.3.0
   collection: ^1.16.0
   loading_overlay: ^0.3.0
+  modal_bottom_sheet: ^2.1.2
 
 dev_dependencies:
   build_runner: ^2.3.2
