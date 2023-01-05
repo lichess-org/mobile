@@ -50,7 +50,7 @@ class TimeControlModal extends ConsumerWidget {
           child: const Icon(CupertinoIcons.clear),
         ),
       ),
-      child: Material(child: _buildContent(context, ref)),
+      child: _buildContent(context, ref),
     );
   }
 

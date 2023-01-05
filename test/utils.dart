@@ -55,21 +55,17 @@ Future<Widget> buildTestApp(WidgetTester tester, {required Widget home}) async {
       child: SizedBox(
         width: kTestScreenWidth,
         height: kTestScreenHeight,
-        child: defaultTargetPlatform == TargetPlatform.iOS
-            ? CupertinoApp(
-                useInheritedMediaQuery: true,
-                localizationsDelegates: AppLocalizations.localizationsDelegates,
-                home: ScaffoldMessenger(
-                  child: Scaffold(
-                    body: Material(child: home),
-                  ),
-                ),
-              )
-            : MaterialApp(
-                useInheritedMediaQuery: true,
-                localizationsDelegates: AppLocalizations.localizationsDelegates,
-                home: home,
-              ),
+        child: MaterialApp(
+          useInheritedMediaQuery: true,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          home: home,
+          builder: (context, child) {
+            return CupertinoTheme(
+              data: const CupertinoThemeData(),
+              child: Material(child: child),
+            );
+          },
+        ),
       ),
     ),
   );

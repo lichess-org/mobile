@@ -110,10 +110,8 @@ class PlayForm extends ConsumerWidget {
         ref.invalidate(playActionProvider);
         Navigator.of(context, rootNavigator: true).push(
           MaterialPageRoute<void>(
-              // material widget ancestor is needed for iOS since we're using rootNavigator
-              builder: (context) => Material(
-                  child: PlayableGameScreen(
-                      game: state.value!, account: account!))),
+              builder: (context) =>
+                  PlayableGameScreen(game: state.value!, account: account!)),
         );
       }
     });
@@ -234,6 +232,7 @@ class PlayForm extends ConsumerWidget {
                 '${context.l10n.timeControl} ${timeControlPref.perf.name} ${timeControlPref.value.toString()}',
             onPressed: () {
               showAdaptiveModalBottomSheet<void>(
+                useRootNavigator: true,
                 context: context,
                 builder: (BuildContext context) {
                   return const TimeControlModal();
