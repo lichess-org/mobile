@@ -30,7 +30,6 @@ dependencies:
   rxdart: ^0.27.6
   fpdart: ^0.3.0
   logging: ^1.1.0
-  go_router: ^5.1.9
   shared_preferences: ^2.0.15
   cached_network_image: ^3.2.2
   dartchess:
