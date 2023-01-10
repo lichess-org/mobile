@@ -19,10 +19,7 @@ import 'package:lichess_mobile/src/features/user/model/user.dart';
 import '../../model/game_status.dart';
 import '../../model/game.dart' hide Player;
 import '../play/play_action_notifier.dart';
-import './game_stream.dart';
-import './game_state_notifier.dart';
-import './game_action_notifier.dart';
-import './game_controls.dart';
+import './playable_game_screen_providers.dart';
 
 class PlayableGameScreen extends ConsumerWidget {
   const PlayableGameScreen(

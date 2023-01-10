@@ -6,7 +6,60 @@ import 'package:lichess_mobile/src/common/sound.dart';
 import '../../data/game_repository.dart';
 import '../../data/game_event.dart';
 import '../../model/game_state.dart';
-import './game_controls.dart';
+
+final positionCursorProvider = StateProvider.autoDispose<int>((ref) => 0);
+
+final isBoardTurnedProvider = StateProvider.autoDispose<bool>((ref) => false);
+
+final gameStateProvider =
+    AutoDisposeNotifierProvider<GameStateNotifier, GameState?>(
+        GameStateNotifier.new);
+
+final gameActionProvider =
+    AutoDisposeNotifierProvider<GameActionNotifier, AsyncValue<void>>(
+        GameActionNotifier.new);
+
+final gameStreamProvider =
+    StreamProvider.autoDispose.family<GameClock, GameId>((ref, gameId) {
+  final gameRepository = ref.watch(gameRepositoryProvider);
+  final gameStateNotifier = ref.read(gameStateProvider.notifier);
+  ref.onDispose(() {
+    gameRepository.dispose();
+  });
+  return gameRepository.gameStateEvents(gameId).map((event) {
+    return event.map(
+      gameFull: (gameFull) {
+        gameStateNotifier.onGameStateEvent(gameFull.state);
+        return GameClock.fromEvent(gameFull.state);
+      },
+      gameState: (gameState) {
+        gameStateNotifier.onGameStateEvent(gameState);
+        return GameClock.fromEvent(gameState);
+      },
+    );
+  });
+});
+
+class GameActionNotifier extends AutoDisposeNotifier<AsyncValue<void>> {
+  @override
+  AsyncValue<void> build() {
+    return const AsyncData(null);
+  }
+
+  Future<void> abort(GameId id) async {
+    state = const AsyncLoading();
+    state = (await ref.read(gameRepositoryProvider).abortTask(id).run()).match(
+        (error) => AsyncValue.error(error.message, error.stackTrace),
+        AsyncValue.data);
+  }
+
+  Future<void> resign(GameId id) async {
+    state = const AsyncLoading();
+    state = (await ref.read(gameRepositoryProvider).resignTask(id).run()).match(
+        (error) => AsyncValue.error(error.message, error.stackTrace),
+        AsyncValue.data);
+  }
+}
 
 class GameStateNotifier extends AutoDisposeNotifier<GameState?> {
   @override
@@ -75,7 +128,3 @@ class GameStateNotifier extends AutoDisposeNotifier<GameState?> {
     }
   }
 }
-
-final gameStateProvider =
-    AutoDisposeNotifierProvider<GameStateNotifier, GameState?>(
-        GameStateNotifier.new);
