@@ -23,7 +23,7 @@ import 'package:lichess_mobile/src/features/auth/ui/auth_actions_notifier.dart';
 import '../../auth/data/auth_repository.dart';
 
 final recentGamesProvider = FutureProvider.autoDispose
-    .family<List<ArchivedGame>, String>((ref, userName) async {
+    .family<List<ArchivedGameData>, String>((ref, userName) async {
   final userRepo = ref.watch(userRepositoryProvider);
   final either = await userRepo.getRecentGamesTask(userName).run();
   // retry on error, cache indefinitely on success

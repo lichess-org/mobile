@@ -29,9 +29,8 @@ class PlayableGame with _$PlayableGame {
 }
 
 @freezed
-class ArchivedGame with _$ArchivedGame {
-  // const ArchivedGame._();
-  const factory ArchivedGame({
+class ArchivedGameData with _$ArchivedGameData {
+  const factory ArchivedGameData({
     required GameId id,
     required bool rated,
     required Speed speed,
@@ -43,13 +42,13 @@ class ArchivedGame with _$ArchivedGame {
     required Player black,
     Side? winner,
     Variant? variant,
-  }) = _ArchivedGame;
+  }) = _ArchivedGameData;
 
-  factory ArchivedGame.fromJson(Map<String, dynamic> json) =>
-      ArchivedGame.fromPick(pick(json).required());
+  factory ArchivedGameData.fromJson(Map<String, dynamic> json) =>
+      ArchivedGameData.fromPick(pick(json).required());
 
-  factory ArchivedGame.fromPick(RequiredPick pick) {
-    return ArchivedGame(
+  factory ArchivedGameData.fromPick(RequiredPick pick) {
+    return ArchivedGameData(
       id: pick('id').asGameIdOrThrow(),
       rated: pick('rated').asBoolOrThrow(),
       speed: pick('speed').asSpeedOrThrow(),
@@ -62,6 +61,37 @@ class ArchivedGame with _$ArchivedGame {
       winner: pick('winner').asSideOrNull(),
     );
   }
+}
+
+@freezed
+class ArchivedGame with _$ArchivedGame {
+  const factory ArchivedGame({
+    required ArchivedGameData data,
+    required List<GameStep> steps,
+  }) = _ArchivedGame;
+
+  factory ArchivedGame.fromJson(Map<String, dynamic> json) =>
+      ArchivedGame.fromPick(pick(json).required());
+
+  factory ArchivedGame.fromPick(RequiredPick pick) {
+    return ArchivedGame(
+      data: ArchivedGameData.fromPick(pick),
+      steps: pick('moves').letOrThrow((it) {
+        // TODO wait for pgn or san parser
+        return List<GameStep>.empty();
+      }),
+    );
+  }
+}
+
+@freezed
+class GameStep with _$GameStep {
+  const factory GameStep({
+    required int ply,
+    required String san,
+    required String uci,
+    required Position<Chess> position,
+  }) = _GameStep;
 }
 
 @freezed
