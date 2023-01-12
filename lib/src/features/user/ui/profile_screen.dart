@@ -17,7 +17,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/features/settings/ui/settings_screen.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
-import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
+import 'package:lichess_mobile/src/features/game/data/game_repository.dart';
 import 'package:lichess_mobile/src/features/game/model/game.dart';
 import 'package:lichess_mobile/src/features/auth/ui/auth_actions_notifier.dart';
 
@@ -25,8 +25,8 @@ import '../../auth/data/auth_repository.dart';
 
 final recentGamesProvider = FutureProvider.autoDispose
     .family<List<ArchivedGame>, String>((ref, userName) async {
-  final userRepo = ref.watch(userRepositoryProvider);
-  final either = await userRepo.getRecentGamesTask(userName).run();
+  final repo = ref.watch(gameRepositoryProvider);
+  final either = await repo.getUserGamesTask(userName).run();
   // retry on error, cache indefinitely on success
   return either.match((error) => throw error, (data) {
     ref.keepAlive();
