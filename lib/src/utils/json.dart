@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/features/game/model/game.dart';
 import 'package:lichess_mobile/src/features/game/model/game_status.dart';
-import 'package:lichess_mobile/src/features/user/model/user.dart';
 
 extension Dartchess on Pick {
   Move asUciMoveOrThrow() {
@@ -175,7 +174,7 @@ extension TimeExtension on Pick {
   }
 }
 
-extension GameIdModelsPick on Pick {
+extension ModelsPick on Pick {
   GameId asGameIdOrThrow() {
     final value = required().value;
     if (value is GameId) {
@@ -217,6 +216,27 @@ extension GameIdModelsPick on Pick {
       return null;
     }
   }
+
+  PuzzleId asPuzzleIdOrThrow() {
+    final value = required().value;
+    if (value is PuzzleId) {
+      return value;
+    }
+    if (value is String) {
+      return PuzzleId(value);
+    }
+    throw PickException(
+        "value $value at $debugParsingExit can't be casted to PuzzleId");
+  }
+
+  PuzzleId? asPuzzleIdOrNull() {
+    if (value == null) return null;
+    try {
+      return asPuzzleIdOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
 }
 
 typedef Mapper<T> = T Function(Map<String, dynamic>);
@@ -225,7 +245,9 @@ Either<IOError, T> readJsonObject<T>(String json,
         {required Mapper<T> mapper, Logger? logger}) =>
     Either.tryCatch(() {
       final dynamic obj = jsonDecode(json);
-      if (obj is! Map<String, dynamic>) throw const FormatException();
+      if (obj is! Map<String, dynamic>) {
+        throw const FormatException('Expected an object');
+      }
       return mapper(obj);
     }, (error, stackTrace) {
       logger?.severe('Could not read json object as ${T.toString()}: $error');
@@ -236,12 +258,19 @@ Either<IOError, List<T>> readJsonListOfObjects<T>(String json,
         {required Mapper<T> mapper, Logger? logger}) =>
     Either.tryCatch(() {
       final dynamic list = jsonDecode(json);
-      if (list is! List<dynamic>) throw const FormatException();
+      if (list is! List<dynamic>) {
+        throw const FormatException('Expected a list');
+      }
       return list.map((e) {
-        if (e is! Map<String, dynamic>) throw const FormatException();
+        if (e is! Map<String, dynamic>) {
+          throw const FormatException('Expected an object');
+        }
         return mapper(e);
       }).toList();
     }, (error, stackTrace) {
+      if (error is FormatException) {
+        logger?.severe('Received json is not a list');
+      }
       logger?.severe('Could not read json object as ${T.toString()}: $error');
       return DataFormatError(stackTrace);
     });

@@ -10,8 +10,6 @@ import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
 
 class MockApiClient extends Mock implements ApiClient {}
 
-class MockClient extends Mock implements http.Client {}
-
 class MockLogger extends Mock implements Logger {}
 
 const testUserId = 'test';

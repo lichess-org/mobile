@@ -5,6 +5,7 @@ import 'package:fpdart/fpdart.dart' hide Tuple2;
 import 'package:tuple/tuple.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_modal_bottom_sheet.dart';
@@ -227,7 +228,7 @@ class PlayForm extends ConsumerWidget {
           const SizedBox(height: 10),
           SecondaryButton(
             semanticsLabel:
-                '${context.l10n.timeControl} ${timeControlPref.perf.name} ${timeControlPref.value.toString()}',
+                '${context.l10n.timeControl} ${timeControlPref.perf.name} ${timeControlPref.value.display}',
             onPressed: () {
               showAdaptiveModalBottomSheet<void>(
                 useRootNavigator: true,
@@ -248,7 +249,7 @@ class PlayForm extends ConsumerWidget {
                       children: [
                         Icon(timeControlPref.perf.icon, size: 20),
                         const SizedBox(width: 5),
-                        Text(timeControlPref.value.toString())
+                        Text(timeControlPref.value.display)
                       ],
                     ),
                   ),

@@ -4,7 +4,6 @@ import 'package:deep_pick/deep_pick.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-import 'package:lichess_mobile/src/features/user/model/user.dart';
 import './game_status.dart';
 
 part 'game.freezed.dart';

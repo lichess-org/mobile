@@ -1,6 +1,40 @@
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/common/lichess_icons.dart';
 
 part 'models.freezed.dart';
+
+/// Move represented with Standard Algebraic Notation
+typedef SANMove = String;
+
+/// Move represented with UCI notation
+typedef UCIMove = String;
+
+/// Represents a lichess rating perf item
+enum Perf {
+  ultraBullet('UltraBullet', 'Ultra', LichessIcons.ultrabullet),
+  bullet('Bullet', 'Bullet', LichessIcons.bullet),
+  blitz('Blitz', 'Blitz', LichessIcons.blitz),
+  rapid('Rapid', 'Rapid', LichessIcons.rapid),
+  classical('Classical', 'Classical', LichessIcons.classical),
+  correspondence('Correspondence', 'Corresp.', LichessIcons.correspondence),
+  chess960('Chess 960', '960', LichessIcons.die_six),
+  antichess('Antichess', 'Antichess', LichessIcons.antichess),
+  kingOfTheHill('King Of The Hill', 'KotH', LichessIcons.flag),
+  threeCheck('Three-check', '3check', LichessIcons.three_check),
+  atomic('Atomic', 'Atomic', LichessIcons.atom),
+  horde('Horde', 'Horde', LichessIcons.horde),
+  racingKings('Racing Kings', 'Racing', LichessIcons.racing_kings),
+  crazyhouse('Crazyhouse', 'Crazy', LichessIcons.h_square),
+  puzzle('Puzzle', 'Puzzle', LichessIcons.target),
+  storm('Storm', 'Storm', LichessIcons.storm);
+
+  const Perf(this.name, this.shortName, this.icon);
+
+  final String name;
+  final String shortName;
+  final IconData icon;
+}
 
 @Freezed(toStringOverride: false)
 class GameAnyId with _$GameAnyId {
@@ -44,6 +78,14 @@ class GamePlayerId with _$GamePlayerId {
 
   @Assert('value.length == 4')
   const factory GamePlayerId(String value) = _GamePlayerId;
+
+  @override
+  String toString() => value;
+}
+
+@Freezed(toStringOverride: false)
+class PuzzleId with _$PuzzleId {
+  const factory PuzzleId(String value) = _PuzzleId;
 
   @override
   String toString() => value;

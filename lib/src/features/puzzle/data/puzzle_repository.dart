@@ -1,0 +1,90 @@
+import 'package:fpdart/fpdart.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:deep_pick/deep_pick.dart';
+import 'package:logging/logging.dart';
+import 'package:dartchess/dartchess.dart';
+
+import 'package:lichess_mobile/src/common/model/player.dart';
+import 'package:lichess_mobile/src/features/game/model/time_control.dart';
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/common/errors.dart';
+import 'package:lichess_mobile/src/common/http.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
+import '../model/puzzle.dart';
+
+final puzzleRepositoryProvider = Provider<PuzzleRepository>((ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  final repo =
+      PuzzleRepository(Logger('PuzzleRepository'), apiClient: apiClient);
+  return repo;
+});
+
+class PuzzleRepository {
+  const PuzzleRepository(
+    Logger log, {
+    required this.apiClient,
+  }) : _log = log;
+
+  final ApiClient apiClient;
+  final Logger _log;
+
+  TaskEither<IOError, List<Puzzle>> selectBatchTask({String angle = 'mix'}) {
+    return apiClient
+        .get(Uri.parse('$kLichessHost/api/puzzle/batch/$angle'))
+        .flatMap((response) {
+      return TaskEither.fromEither(
+          readJsonObject(response.body, mapper: (Map<String, dynamic> json) {
+        final puzzles = json['puzzles'];
+        if (puzzles is! List<dynamic>) {
+          throw const FormatException('puzzles: expected a list');
+        }
+        return puzzles.map((e) {
+          if (e is! Map<String, dynamic>) {
+            throw const FormatException('Expected an object');
+          }
+          return _puzzleFromJson(e);
+        }).toList();
+      }, logger: _log));
+    });
+  }
+}
+
+// --
+
+Puzzle _puzzleFromJson(Map<String, dynamic> json) =>
+    _puzzleFromPick(pick(json).required());
+
+Puzzle _puzzleFromPick(RequiredPick pick) {
+  return Puzzle(
+    puzzle: pick('puzzle').letOrThrow(_puzzleDatafromPick),
+    game: pick('game').letOrThrow(_puzzleGameFromPick),
+  );
+}
+
+PuzzleData _puzzleDatafromPick(RequiredPick pick) {
+  return PuzzleData(
+    id: pick('id').asPuzzleIdOrThrow(),
+    rating: pick('rating').asIntOrThrow(),
+    plays: pick('plays').asIntOrThrow(),
+    initialPly: pick('initialPly').asIntOrThrow(),
+    solution: pick('solution').asListOrThrow((p0) => p0.asStringOrThrow()),
+    themes: pick('themes').asListOrThrow((p0) => p0.asStringOrThrow()).toSet(),
+  );
+}
+
+PuzzleGame _puzzleGameFromPick(RequiredPick pick) {
+  return PuzzleGame(
+    id: pick('id').asGameIdOrThrow(),
+    perf: pick('perf', 'key').asPerfOrThrow(),
+    rated: pick('rated').asBoolOrThrow(),
+    white: pick('players').letOrThrow((it) => it
+        .asListOrThrow(LightPlayer.fromPick)
+        .firstWhere((p) => p.side == Side.white)),
+    black: pick('players').letOrThrow((it) => it
+        .asListOrThrow(LightPlayer.fromPick)
+        .firstWhere((p) => p.side == Side.black)),
+    pgn: pick('pgn').asStringOrThrow(),
+    clock: pick('clock').letOrNull(
+        (p) => TimeInc.fromString(p.asStringOrThrow()) ?? const TimeInc(0, 0)),
+  );
+}
