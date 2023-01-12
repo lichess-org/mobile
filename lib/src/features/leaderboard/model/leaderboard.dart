@@ -29,7 +29,7 @@ class Leaderboard with _$Leaderboard {
         blitz: pick('blitz').asListOrEmpty(LightUser.fromPick),
         rapid: pick('rapid').asListOrEmpty(LightUser.fromPick),
         classical: pick('classical').asListOrEmpty(LightUser.fromPick),
-        ultrabullet: pick('ultrabullet').asListOrEmpty(LightUser.fromPick),
+        ultrabullet: pick('ultraBullet').asListOrEmpty(LightUser.fromPick),
         crazyhouse: pick('crazyhouse').asListOrEmpty(LightUser.fromPick),
         chess960: pick('chess960').asListOrEmpty(LightUser.fromPick),
         kingOfThehill: pick('kingOfTheHill').asListOrEmpty(LightUser.fromPick),
@@ -37,7 +37,7 @@ class Leaderboard with _$Leaderboard {
         antichess: pick('antichess').asListOrEmpty(LightUser.fromPick),
         atomic: pick('atomic').asListOrEmpty(LightUser.fromPick),
         horde: pick('horde').asListOrEmpty(LightUser.fromPick),
-        racingKings: pick('rackingKings').asListOrEmpty(LightUser.fromPick));
+        racingKings: pick('racingKings').asListOrEmpty(LightUser.fromPick));
   }
 }
 
@@ -48,6 +48,7 @@ class LightUser with _$LightUser {
       required String username,
       bool? patron,
       String? title,
+      bool? online,
       required int rating,
       required int progress}) = _LightUser;
 
@@ -62,6 +63,7 @@ class LightUser with _$LightUser {
       username: pick('username').asStringOrThrow(),
       title: pick('title').asStringOrNull(),
       patron: pick('patron').asBoolOrNull(),
+      online: pick('online').asBoolOrNull(),
       rating: prefMap[prefMap.keys.first]!['rating'] as int,
       progress: prefMap[prefMap.keys.first]!['progress'] as int,
     );

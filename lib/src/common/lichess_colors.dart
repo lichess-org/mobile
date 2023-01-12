@@ -63,6 +63,9 @@ class LichessColors {
   static const red = Color(0xFFCC3333);
   static const error = Color(0xFFCC3333);
 
+  // offline: grey
+  static const grey = Color(0xCCCCCCCC);
+
   // good: green
   static const good = secondary;
 }
