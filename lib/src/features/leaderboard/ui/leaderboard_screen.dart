@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
 import '../model/leaderboard.dart';
 
@@ -15,6 +16,7 @@ final leaderListProvider = FutureProvider.autoDispose((ref) async {
   final leaderRepo = ref.watch(leaderboardRepositoryProvider);
   final either = await leaderRepo.getLeaderboard().run();
   return either.match((error) => throw error, (data) {
+    ref.keepAlive();
     return data;
   });
 });
@@ -29,7 +31,38 @@ class LeaderboardScreen extends ConsumerStatefulWidget {
 class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   @override
   Widget build(BuildContext context) {
-    return _buildAndroid(context);
+    return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
+  }
+
+  Widget _buildIos(BuildContext context) {
+    final leaderboardState = ref.watch(leaderListProvider);
+
+    return CupertinoPageScaffold(
+        child: CustomScrollView(slivers: [
+      CupertinoSliverNavigationBar(
+        largeTitle: Text(context.l10n.leaderboard),
+      ),
+      ...leaderboardState.when(
+        data: (data) {
+          return [
+            SliverSafeArea(
+              top: false,
+              sliver: SliverList(
+                  delegate: SliverChildListDelegate(_buildList(context, data))),
+            )
+          ];
+        },
+        error: (error, stackTrack) {
+          debugPrint(
+              'SEVERE: [LeaderboardScreen] could not lead leaderboard data; ${error.toString()}\n $stackTrack');
+          return [
+            const SliverFillRemaining(
+                child: Center(child: Text('Could not load leaderboard')))
+          ];
+        },
+        loading: () => [const CircularProgressIndicator.adaptive()],
+      )
+    ]));
   }
 
   Widget _buildAndroid(BuildContext context) {
