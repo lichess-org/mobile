@@ -55,15 +55,15 @@ class LightUser with _$LightUser {
       LightUser.fromPick(pick(json).required());
 
   factory LightUser.fromPick(RequiredPick pick) {
-    final prefMap = pick('perfs').asMapOrThrow<String, Map<String, int>>()[
-        0]; // find a better way for this
+    final prefMap = pick('perfs').asMapOrThrow<String, Map<String, dynamic>>();
+
     return LightUser(
       id: pick('id').asStringOrThrow(),
       username: pick('username').asStringOrThrow(),
       title: pick('title').asStringOrNull(),
       patron: pick('patron').asBoolOrNull(),
-      rating: prefMap!['rating']!,
-      progress: prefMap['progress']!,
+      rating: prefMap[prefMap.keys.first]!['rating'] as int,
+      progress: prefMap[prefMap.keys.first]!['progress'] as int,
     );
   }
 }
