@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/features/auth/ui/sign_in_widget.dart';
 import 'package:lichess_mobile/src/features/game/ui/play/play_screen.dart';
+import 'package:lichess_mobile/src/features/leaderboard/ui/leaderboard_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -49,6 +50,7 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
+          const LeaderboardWidget(),
           SizedBox(
             height: 80,
             child: Padding(
