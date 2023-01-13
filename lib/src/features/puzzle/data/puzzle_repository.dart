@@ -19,6 +19,7 @@ final puzzleRepositoryProvider = Provider<PuzzleRepository>((ref) {
   return repo;
 });
 
+/// Repository that interacts with lichess.org puzzle API
 class PuzzleRepository {
   const PuzzleRepository(
     Logger log, {

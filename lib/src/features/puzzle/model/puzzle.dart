@@ -5,16 +5,19 @@ import 'package:lichess_mobile/src/common/model/player.dart';
 import 'package:lichess_mobile/src/features/game/model/time_control.dart';
 
 part 'puzzle.freezed.dart';
+part 'puzzle.g.dart';
 
-@freezed
+@Freezed(fromJson: true, toJson: true)
 class Puzzle with _$Puzzle {
   const factory Puzzle({
     required PuzzleData puzzle,
     required PuzzleGame game,
   }) = _Puzzle;
+
+  factory Puzzle.fromJson(Map<String, dynamic> json) => _$PuzzleFromJson(json);
 }
 
-@freezed
+@Freezed(fromJson: true, toJson: true)
 class PuzzleData with _$PuzzleData {
   const factory PuzzleData({
     required PuzzleId id,
@@ -24,9 +27,12 @@ class PuzzleData with _$PuzzleData {
     required List<UCIMove> solution,
     required Set<String> themes,
   }) = _PuzzleData;
+
+  factory PuzzleData.fromJson(Map<String, dynamic> json) =>
+      _$PuzzleDataFromJson(json);
 }
 
-@freezed
+@Freezed(fromJson: true, toJson: true)
 class PuzzleGame with _$PuzzleGame {
   const factory PuzzleGame({
     required GameId id,
@@ -37,4 +43,19 @@ class PuzzleGame with _$PuzzleGame {
     required String pgn,
     TimeInc? clock,
   }) = _PuzzleGame;
+
+  factory PuzzleGame.fromJson(Map<String, dynamic> json) =>
+      _$PuzzleGameFromJson(json);
+}
+
+@Freezed(fromJson: true, toJson: true)
+class PuzzleSolution with _$PuzzleSolution {
+  const factory PuzzleSolution({
+    required PuzzleId id,
+    required bool win,
+    required bool rated,
+  }) = _PuzzleSolution;
+
+  factory PuzzleSolution.fromJson(Map<String, dynamic> json) =>
+      _$PuzzleSolutionFromJson(json);
 }

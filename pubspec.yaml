@@ -48,12 +48,14 @@ dependencies:
   collection: ^1.16.0 # can't upgrade because of flutter_test
   loading_overlay: ^0.3.0
   modal_bottom_sheet: ^2.1.2
+  fast_immutable_collections: ^8.1.1
 
 dev_dependencies:
   build_runner: ^2.3.2
   flutter_test:
     sdk: flutter
   freezed: ^2.2.1
+  json_serializable: ^6.5.4
   lint: ^2.0.1
   mocktail: ^0.3.0
 

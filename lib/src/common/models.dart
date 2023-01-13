@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 
 part 'models.freezed.dart';
+part 'models.g.dart';
 
 /// Move represented with Standard Algebraic Notation
 typedef SANMove = String;
@@ -36,7 +37,7 @@ enum Perf {
   final IconData icon;
 }
 
-@Freezed(toStringOverride: false)
+@Freezed(fromJson: true, toJson: true, toStringOverride: false)
 class GameAnyId with _$GameAnyId {
   const GameAnyId._();
 
@@ -46,46 +47,60 @@ class GameAnyId with _$GameAnyId {
   bool get isFullId => value.length == 12;
   GameFullId? get gameFullId => isFullId ? GameFullId(value) : null;
 
+  factory GameAnyId.fromJson(Map<String, dynamic> json) =>
+      _$GameAnyIdFromJson(json);
+
   @override
   String toString() => value;
 }
 
-@Freezed(toStringOverride: false)
+@Freezed(fromJson: true, toJson: true, toStringOverride: false)
 class GameId with _$GameId {
   const GameId._();
 
   @Assert('value.length == 8')
   const factory GameId(String value) = _GameId;
 
+  factory GameId.fromJson(Map<String, dynamic> json) => _$GameIdFromJson(json);
+
   @override
   String toString() => value;
 }
 
-@Freezed(toStringOverride: false)
+@Freezed(fromJson: true, toJson: true, toStringOverride: false)
 class GameFullId with _$GameFullId {
   const GameFullId._();
 
   @Assert('value.length == 12')
   const factory GameFullId(String value) = _GameFullId;
 
+  factory GameFullId.fromJson(Map<String, dynamic> json) =>
+      _$GameFullIdFromJson(json);
+
   @override
   String toString() => value;
 }
 
-@Freezed(toStringOverride: false)
+@Freezed(fromJson: true, toJson: true, toStringOverride: false)
 class GamePlayerId with _$GamePlayerId {
   const GamePlayerId._();
 
   @Assert('value.length == 4')
   const factory GamePlayerId(String value) = _GamePlayerId;
 
+  factory GamePlayerId.fromJson(Map<String, dynamic> json) =>
+      _$GamePlayerIdFromJson(json);
+
   @override
   String toString() => value;
 }
 
-@Freezed(toStringOverride: false)
+@Freezed(fromJson: true, toJson: true, toStringOverride: false)
 class PuzzleId with _$PuzzleId {
   const factory PuzzleId(String value) = _PuzzleId;
+
+  factory PuzzleId.fromJson(Map<String, dynamic> json) =>
+      _$PuzzleIdFromJson(json);
 
   @override
   String toString() => value;
