@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/model/player.dart';
 import 'package:lichess_mobile/src/features/game/model/time_control.dart';
@@ -68,8 +69,9 @@ PuzzleData _puzzleDatafromPick(RequiredPick pick) {
     rating: pick('rating').asIntOrThrow(),
     plays: pick('plays').asIntOrThrow(),
     initialPly: pick('initialPly').asIntOrThrow(),
-    solution: pick('solution').asListOrThrow((p0) => p0.asStringOrThrow()),
-    themes: pick('themes').asListOrThrow((p0) => p0.asStringOrThrow()).toSet(),
+    solution: pick('solution').asListOrThrow((p0) => p0.asStringOrThrow()).lock,
+    themes:
+        pick('themes').asListOrThrow((p0) => p0.asStringOrThrow()).toSet().lock,
   );
 }
 

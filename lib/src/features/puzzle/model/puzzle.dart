@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/model/player.dart';
@@ -24,8 +25,8 @@ class PuzzleData with _$PuzzleData {
     required int rating,
     required int plays,
     required int initialPly,
-    required List<UCIMove> solution,
-    required Set<String> themes,
+    required IList<UCIMove> solution,
+    required ISet<String> themes,
   }) = _PuzzleData;
 
   factory PuzzleData.fromJson(Map<String, dynamic> json) =>
