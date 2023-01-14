@@ -23,8 +23,24 @@ class PuzzleLocalDB {
 
   final SharedPreferences _prefs;
 
-  PuzzleLocalData? fetch(String userId, String angle) {
+  PuzzleLocalData? fetch({required String userId, required String angle}) {
     final raw = _prefs.getString('$prefix.$userId.$angle');
+    if (raw != null) {
+      final json = jsonDecode(raw);
+      if (json is! Map<String, dynamic>) {
+        throw const FormatException('Expected an object');
+      }
+      return PuzzleLocalData.fromJson(json);
+    }
+    return null;
+  }
+
+  Future<bool> save(
+      {required String userId,
+      required String angle,
+      required PuzzleLocalData data}) {
+    return _prefs.setString(
+        '$prefix.$userId.$angle', jsonEncode(data.toJson()));
   }
 }
 
