@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:fpdart/fpdart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -20,6 +22,8 @@ final puzzleRepositoryProvider = Provider<PuzzleRepository>((ref) {
   return repo;
 });
 
+const kPuzzleBufferLength = 30;
+
 /// Repository that interacts with lichess.org puzzle API
 class PuzzleRepository {
   const PuzzleRepository(
@@ -30,24 +34,43 @@ class PuzzleRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  TaskEither<IOError, List<Puzzle>> selectBatchTask({String angle = 'mix'}) {
+  TaskEither<IOError, List<Puzzle>> selectBatchTask(
+      {String angle = 'mix', int nb = kPuzzleBufferLength}) {
     return apiClient
-        .get(Uri.parse('$kLichessHost/api/puzzle/batch/$angle'))
-        .flatMap((response) {
-      return TaskEither.fromEither(
-          readJsonObject(response.body, mapper: (Map<String, dynamic> json) {
-        final puzzles = json['puzzles'];
-        if (puzzles is! List<dynamic>) {
-          throw const FormatException('puzzles: expected a list');
+        .get(Uri.parse('$kLichessHost/api/puzzle/batch/$angle?nb=$nb'))
+        .flatMap(_decodeJson);
+  }
+
+  TaskEither<IOError, List<Puzzle>> solveBatchTask({
+    required int nb,
+    required IList<PuzzleSolution> solved,
+    String angle = 'mix',
+  }) {
+    return apiClient
+        .post(
+          Uri.parse('$kLichessHost/api/puzzle/batch/$angle?nb=$nb'),
+          headers: {'Content-type': 'application/json'},
+          body: jsonEncode({
+            'solutions': solved.map((e) => e.toJson()).toList(),
+          }),
+        )
+        .flatMap(_decodeJson);
+  }
+
+  TaskEither<IOError, List<Puzzle>> _decodeJson(http.Response response) {
+    return TaskEither.fromEither(
+        readJsonObject(response.body, mapper: (Map<String, dynamic> json) {
+      final puzzles = json['puzzles'];
+      if (puzzles is! List<dynamic>) {
+        throw const FormatException('puzzles: expected a list');
+      }
+      return puzzles.map((e) {
+        if (e is! Map<String, dynamic>) {
+          throw const FormatException('Expected an object');
         }
-        return puzzles.map((e) {
-          if (e is! Map<String, dynamic>) {
-            throw const FormatException('Expected an object');
-          }
-          return _puzzleFromJson(e);
-        }).toList();
-      }, logger: _log));
-    });
+        return _puzzleFromJson(e);
+      }).toList();
+    }, logger: _log));
   }
 }
 

@@ -23,7 +23,8 @@ class PuzzleLocalDB {
 
   final SharedPreferences _prefs;
 
-  PuzzleLocalData? fetch({required String userId, required String angle}) {
+  // TODO enum for angle
+  PuzzleLocalData? fetch({String? userId, String angle = 'mix'}) {
     final raw = _prefs.getString('$prefix.$userId.$angle');
     if (raw != null) {
       final json = jsonDecode(raw);
@@ -36,9 +37,7 @@ class PuzzleLocalDB {
   }
 
   Future<bool> save(
-      {required String userId,
-      required String angle,
-      required PuzzleLocalData data}) {
+      {String? userId, String angle = 'mix', required PuzzleLocalData data}) {
     return _prefs.setString(
         '$prefix.$userId.$angle', jsonEncode(data.toJson()));
   }

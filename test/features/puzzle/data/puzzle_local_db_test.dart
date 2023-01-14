@@ -43,9 +43,9 @@ void main() {
             ),
           ]));
 
-      await db.save(userId: 'test', angle: 'mix', data: data);
+      await db.save(angle: 'mix', data: data);
 
-      expect(db.fetch(userId: 'test', angle: 'mix'), data);
+      expect(db.fetch(angle: 'mix'), data);
     });
   });
 }
