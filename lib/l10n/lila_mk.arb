@@ -835,6 +835,7 @@
   "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Еден поен над вашиот рејтинг} other{{count} поени над вашиот рејтинг}",
   "nbPlayed": "{count, plural, =1{{count} одиграна} other{{count} одиграни}",
   "nbToReplay": "{count, plural, =1{{count} прегледај} other{{count} прегледај}",
+  "advantageDescription": "Искористете ја шансата да добиете одлучувачка предност. (200cp ≤ eval ≤ 600cp)",
   "settings": "Поставки",
   "closeAccount": "Затвори го профилот",
   "closingIsDefinitive": "Затворањето на сметката е трајно. Неповратно. Сигурни сте?",
