@@ -28,13 +28,13 @@ class PuzzleService {
   final PuzzleRepository repository;
   final Logger _log;
 
-  /// Loads the next puzzle from database. Will also sync with server.
+  /// Loads the next puzzle from database. Will sync with server if necessary.
   Future<Puzzle?> nextPuzzle({String? userId, String angle = 'mix'}) async {
-    final data = await _syncAndLoadData(userId: userId, angle: angle).run();
+    final data = await _syncAndLoadData(userId, angle).run();
     return data?.unsolved[0];
   }
 
-  /// Update puzzle queue with the solved puzzle
+  /// Update puzzle queue with the solved puzzle and sync with server
   Future<void> solve({
     String? userId,
     String angle = 'mix',
@@ -51,6 +51,7 @@ class PuzzleService {
               data.unsolved.removeWhere((e) => e.puzzle.id == solution.id),
         ),
       );
+      await _syncAndLoadData(userId, angle).run();
     }
   }
 
@@ -59,8 +60,7 @@ class PuzzleService {
   /// This task will fetch missing puzzles so the queue length is always equal to
   /// `localQueueLength`.
   /// It will also call the `solveBatchTask` with solved puzzles.
-  Task<PuzzleLocalData?> _syncAndLoadData(
-      {String? userId, String angle = 'mix'}) {
+  Task<PuzzleLocalData?> _syncAndLoadData(String? userId, String angle) {
     final data = db.fetch(userId: userId, angle: angle);
 
     final unsolved = data?.unsolved ?? IList(const []);

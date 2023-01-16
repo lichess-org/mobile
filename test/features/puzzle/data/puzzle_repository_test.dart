@@ -20,7 +20,7 @@ void main() {
   final repo = PuzzleRepository(mockLogger,
       apiClient: ApiClient(mockLogger, mockClient));
 
-  setUpAll(() {
+  setUp(() {
     reset(mockClient);
   });
 

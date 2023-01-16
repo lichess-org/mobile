@@ -34,8 +34,11 @@ void main() {
   final mockSoundService = MockSoundService();
 
   setUpAll(() {
-    reset(mockClient);
     registerFallbackValue(http.Request('GET', Uri.parse('http://api.test')));
+  });
+
+  setUp(() {
+    reset(mockClient);
   });
 
   group('PlayableGameScreen', () {
