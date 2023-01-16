@@ -588,6 +588,7 @@
   "light": "浅色",
   "dark": "深色",
   "transparent": "透明",
+  "deviceTheme": "设备主题",
   "backgroundImageUrl": "背景图片网址：",
   "boardGeometry": "棋盘风格",
   "boardTheme": "棋盘主题",

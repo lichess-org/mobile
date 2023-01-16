@@ -167,8 +167,17 @@ function unescape(str) {
   return str.replace(/\\"/g, '"').replace(/\\'/g, '\'')
 }
 
-function fixKey(str) {
-  return str.replace(/\./g, '_')
+function fixKey(str, module) {
+  const fixed = str.replace(/\./g, '_')
+  // TODO consider prefixing modules later
+  // if (module !== 'site') {
+  //   return module + capitalize(fixed)
+  // }
+  return fixed
+}
+
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function transformTranslations(data, locale, module, makeTemplate = false) {
@@ -180,7 +189,7 @@ function transformTranslations(data, locale, module, makeTemplate = false) {
 
   for (const stringElement of data.resources.string) {
     const string = unescape(stringElement._)
-    const transKey = fixKey(stringElement.$.name)
+    const transKey = fixKey(stringElement.$.name, module)
     if (RegExp('%s', 'g').test(string)) {
       transformed[transKey] = string.replace(/%s/g, '{param}')
       if (makeTemplate) {
