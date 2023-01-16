@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:lichess_mobile/src/features/user/ui/perf_stats_screen.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:dartchess/dartchess.dart';
 
@@ -235,43 +237,55 @@ class PerfCards extends StatelessWidget {
             height: 100,
             width: 100,
             child: PlatformCard(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      perf.shortName,
-                      style: TextStyle(color: textShade(context, 0.7)),
-                    ),
-                    Icon(perf.icon, color: textShade(context, 0.6)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                            '${userPerf.rating}${userPerf.provisional == true || userPerf.ratingDeviation > kProvisionalDeviation ? '?' : ''}',
-                            style: kBold),
-                        const SizedBox(width: 3),
-                        if (userPerf.progression != 0) ...[
-                          Icon(
-                            userPerf.progression > 0
-                                ? LichessIcons.arrow_full_upperright
-                                : LichessIcons.arrow_full_lowerright,
-                            color: userPerf.progression > 0
-                                ? LichessColors.good
-                                : LichessColors.red,
-                            size: 12,
-                          ),
-                          Text(userPerf.progression.abs().toString(),
-                              style: TextStyle(
-                                  color: userPerf.progression > 0
-                                      ? LichessColors.good
-                                      : LichessColors.red,
-                                  fontSize: 12)),
+              child: InkWell(
+                customBorder: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  // Border is the same as PlatformCard
+                  // Consider turning this into a constant or a style?
+                onTap: () => pushPlatformRoute(
+                  context: context,
+                  title: perf.name,
+                  builder: (context) => PerfStatsScreen(
+                    username: account.username,
+                    perf: perf)),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        perf.shortName,
+                        style: TextStyle(color: textShade(context, 0.7)),
+                      ),
+                      Icon(perf.icon, color: textShade(context, 0.6)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                              '${userPerf.rating}${userPerf.provisional == true || userPerf.ratingDeviation > kProvisionalDeviation ? '?' : ''}',
+                              style: kBold),
+                          const SizedBox(width: 3),
+                          if (userPerf.progression != 0) ...[
+                            Icon(
+                              userPerf.progression > 0
+                                  ? LichessIcons.arrow_full_upperright
+                                  : LichessIcons.arrow_full_lowerright,
+                              color: userPerf.progression > 0
+                                  ? LichessColors.good
+                                  : LichessColors.red,
+                              size: 12,
+                            ),
+                            Text(userPerf.progression.abs().toString(),
+                                style: TextStyle(
+                                    color: userPerf.progression > 0
+                                        ? LichessColors.good
+                                        : LichessColors.red,
+                                    fontSize: 12)),
+                          ],
                         ],
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

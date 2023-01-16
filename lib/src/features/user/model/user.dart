@@ -134,3 +134,39 @@ class UserStatus with _$UserStatus {
         playing: pick('playing').asBoolOrNull(),
       );
 }
+
+@freezed
+abstract class UserPerfStatsParameters with _$UserPerfStatsParameters {
+  factory UserPerfStatsParameters({
+    required String username,
+    required Perf perf,
+  }) = _UserPerfStatsParameters;
+}
+
+@freezed
+class UserPerfStats with _$UserPerfStats {
+  
+  const factory UserPerfStats({
+    required int rating,          // <- These five parameters could be represented as a
+    required double deviation,       // <- UserPerf, but doing so would require either to
+    bool? provisional,            // <- create a subclass and overriding a method, or adding
+    required int numberOfGames,   // <- a new fromJson() method to UserPerf, because the JSON value
+    required int progress,        // <- the API returns are different for each case, as seen below.
+
+    required int rank,
+    required double percentile,
+  }) = _UserPerfStats;
+
+  factory UserPerfStats.fromJson(Map<String, dynamic> json) =>
+    UserPerfStats.fromPick(pick(json).required());
+
+  factory UserPerfStats.fromPick(RequiredPick pick) => UserPerfStats(
+        rating: pick('perf', 'glicko', 'rating').asIntOrThrow(),
+        deviation: pick('perf', 'glicko', 'deviation').asDoubleOrThrow(),
+        provisional: pick('perf', 'glicko', 'provisional').asBoolOrNull(),
+        numberOfGames: pick('perf', 'nb').asIntOrThrow(),
+        progress: pick('perf', 'progress').asIntOrThrow(),
+        rank: pick('rank').asIntOrThrow(),
+        percentile: pick('percentile').asDoubleOrThrow(),
+      );
+}
