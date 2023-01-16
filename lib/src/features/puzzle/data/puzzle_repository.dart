@@ -22,7 +22,8 @@ final puzzleRepositoryProvider = Provider<PuzzleRepository>((ref) {
   return repo;
 });
 
-const kPuzzleBufferLength = 30;
+/// Size of puzzle local cache
+const kPuzzleLocalQueueLength = 30;
 
 /// Repository that interacts with lichess.org puzzle API
 class PuzzleRepository {
@@ -35,7 +36,7 @@ class PuzzleRepository {
   final Logger _log;
 
   TaskEither<IOError, List<Puzzle>> selectBatchTask(
-      {String angle = 'mix', int nb = kPuzzleBufferLength}) {
+      {String angle = 'mix', int nb = kPuzzleLocalQueueLength}) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/puzzle/batch/$angle?nb=$nb'))
         .flatMap(_decodeJson);

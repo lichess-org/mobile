@@ -25,11 +25,12 @@ class PuzzleLocalDB {
 
   // TODO enum for angle
   PuzzleLocalData? fetch({String? userId, String angle = 'mix'}) {
-    final raw = _prefs.getString('$prefix.$userId.$angle');
+    final raw = _prefs.getString(_makeKey(userId, angle));
     if (raw != null) {
       final json = jsonDecode(raw);
       if (json is! Map<String, dynamic>) {
-        throw const FormatException('Expected an object');
+        throw const FormatException(
+            '[PuzzleLocalDB] cannot fetch puzzles: expected an object');
       }
       return PuzzleLocalData.fromJson(json);
     }
@@ -38,8 +39,17 @@ class PuzzleLocalDB {
 
   Future<bool> save(
       {String? userId, String angle = 'mix', required PuzzleLocalData data}) {
-    return _prefs.setString(
-        '$prefix.$userId.$angle', jsonEncode(data.toJson()));
+    return _prefs.setString(_makeKey(userId, angle), jsonEncode(data.toJson()));
+  }
+
+  String _makeKey(String? userId, String angle) {
+    final buffer = StringBuffer();
+    buffer.write(prefix);
+    if (userId != null) {
+      buffer.write('.userId:$userId');
+    }
+    buffer.write('.angle:$angle');
+    return buffer.toString();
   }
 }
 
