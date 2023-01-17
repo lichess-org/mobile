@@ -67,129 +67,251 @@ enum PuzzleTheme {
   // checkFirst,
 }
 
-String puzzleThemeL10n(BuildContext context, PuzzleTheme theme) {
+class PuzzleThemeL10n {
+  const PuzzleThemeL10n({required this.name, required this.description});
+  final String name;
+  final String description;
+}
+
+PuzzleThemeL10n puzzleThemeL10n(BuildContext context, PuzzleTheme theme) {
   switch (theme) {
     case PuzzleTheme.mix:
-      return context.l10n.healthyMix;
+      return PuzzleThemeL10n(
+          name: context.l10n.healthyMix,
+          description: context.l10n.healthyMixDescription);
     case PuzzleTheme.advancedPawn:
-      return context.l10n.advancedPawn;
+      return PuzzleThemeL10n(
+          name: context.l10n.advancedPawn,
+          description: context.l10n.advancedPawnDescription);
     case PuzzleTheme.advantage:
-      return context.l10n.advantage;
+      return PuzzleThemeL10n(
+          name: context.l10n.advantage,
+          description: context.l10n.advantageDescription);
     case PuzzleTheme.anastasiaMate:
-      return context.l10n.anastasiaMate;
+      return PuzzleThemeL10n(
+          name: context.l10n.anastasiaMate,
+          description: context.l10n.anastasiaMateDescription);
     case PuzzleTheme.arabianMate:
-      return context.l10n.arabianMate;
+      return PuzzleThemeL10n(
+          name: context.l10n.arabianMate,
+          description: context.l10n.arabianMateDescription);
     case PuzzleTheme.attackingF2F7:
-      return context.l10n.attackingF2F7;
+      return PuzzleThemeL10n(
+          name: context.l10n.attackingF2F7,
+          description: context.l10n.attackingF2F7Description);
     case PuzzleTheme.attraction:
-      return context.l10n.attraction;
+      return PuzzleThemeL10n(
+          name: context.l10n.attraction,
+          description: context.l10n.attractionDescription);
     case PuzzleTheme.backRankMate:
-      return context.l10n.backRankMate;
+      return PuzzleThemeL10n(
+          name: context.l10n.backRankMate,
+          description: context.l10n.backRankMateDescription);
     case PuzzleTheme.bishopEndgame:
-      return context.l10n.bishopEndgame;
+      return PuzzleThemeL10n(
+          name: context.l10n.bishopEndgame,
+          description: context.l10n.bishopEndgameDescription);
     case PuzzleTheme.bodenMate:
-      return context.l10n.bodenMate;
+      return PuzzleThemeL10n(
+          name: context.l10n.bodenMate,
+          description: context.l10n.bodenMateDescription);
     case PuzzleTheme.capturingDefender:
-      return context.l10n.capturingDefender;
+      return PuzzleThemeL10n(
+          name: context.l10n.capturingDefender,
+          description: context.l10n.capturingDefenderDescription);
     case PuzzleTheme.castling:
-      return context.l10n.castling;
+      return PuzzleThemeL10n(
+          name: context.l10n.castling,
+          description: context.l10n.castlingDescription);
     case PuzzleTheme.clearance:
-      return context.l10n.clearance;
+      return PuzzleThemeL10n(
+          name: context.l10n.clearance,
+          description: context.l10n.clearanceDescription);
     case PuzzleTheme.crushing:
-      return context.l10n.crushing;
+      return PuzzleThemeL10n(
+          name: context.l10n.crushing,
+          description: context.l10n.crushingDescription);
     case PuzzleTheme.defensiveMove:
-      return context.l10n.defensiveMove;
+      return PuzzleThemeL10n(
+          name: context.l10n.defensiveMove,
+          description: context.l10n.defensiveMoveDescription);
     case PuzzleTheme.deflection:
-      return context.l10n.deflection;
+      return PuzzleThemeL10n(
+          name: context.l10n.deflection,
+          description: context.l10n.deflectionDescription);
     case PuzzleTheme.discoveredAttack:
-      return context.l10n.discoveredAttack;
+      return PuzzleThemeL10n(
+          name: context.l10n.discoveredAttack,
+          description: context.l10n.discoveredAttackDescription);
     case PuzzleTheme.doubleBishopMate:
-      return context.l10n.doubleBishopMate;
+      return PuzzleThemeL10n(
+          name: context.l10n.doubleBishopMate,
+          description: context.l10n.doubleBishopMateDescription);
     case PuzzleTheme.doubleCheck:
-      return context.l10n.doubleCheck;
+      return PuzzleThemeL10n(
+          name: context.l10n.doubleCheck,
+          description: context.l10n.doubleCheckDescription);
     case PuzzleTheme.dovetailMate:
-      return context.l10n.dovetailMate;
+      return PuzzleThemeL10n(
+          name: context.l10n.dovetailMate,
+          description: context.l10n.dovetailMateDescription);
     case PuzzleTheme.equality:
-      return context.l10n.equality;
+      return PuzzleThemeL10n(
+          name: context.l10n.equality,
+          description: context.l10n.equalityDescription);
     case PuzzleTheme.endgame:
-      return context.l10n.endgame;
+      return PuzzleThemeL10n(
+          name: context.l10n.endgame,
+          description: context.l10n.endgameDescription);
     case PuzzleTheme.enPassant:
-      return 'En passant';
+      return PuzzleThemeL10n(
+          name: 'En passant', description: context.l10n.enPassantDescription);
     case PuzzleTheme.exposedKing:
-      return context.l10n.exposedKing;
+      return PuzzleThemeL10n(
+          name: context.l10n.exposedKing,
+          description: context.l10n.exposedKingDescription);
     case PuzzleTheme.fork:
-      return context.l10n.fork;
+      return PuzzleThemeL10n(
+          name: context.l10n.fork, description: context.l10n.forkDescription);
     case PuzzleTheme.hangingPiece:
-      return context.l10n.hangingPiece;
+      return PuzzleThemeL10n(
+          name: context.l10n.hangingPiece,
+          description: context.l10n.hangingPieceDescription);
     case PuzzleTheme.hookMate:
-      return context.l10n.hookMate;
+      return PuzzleThemeL10n(
+          name: context.l10n.hookMate,
+          description: context.l10n.hookMateDescription);
     case PuzzleTheme.interference:
-      return context.l10n.interference;
+      return PuzzleThemeL10n(
+          name: context.l10n.interference,
+          description: context.l10n.interferenceDescription);
     case PuzzleTheme.intermezzo:
-      return context.l10n.intermezzo;
+      return PuzzleThemeL10n(
+          name: context.l10n.intermezzo,
+          description: context.l10n.intermezzoDescription);
     case PuzzleTheme.kingsideAttack:
-      return context.l10n.kingsideAttack;
+      return PuzzleThemeL10n(
+          name: context.l10n.kingsideAttack,
+          description: context.l10n.kingsideAttackDescription);
     case PuzzleTheme.knightEndgame:
-      return context.l10n.knightEndgame;
+      return PuzzleThemeL10n(
+          name: context.l10n.knightEndgame,
+          description: context.l10n.knightEndgameDescription);
     case PuzzleTheme.long:
-      return context.l10n.long;
+      return PuzzleThemeL10n(
+          name: context.l10n.long, description: context.l10n.longDescription);
     case PuzzleTheme.master:
-      return context.l10n.master;
+      return PuzzleThemeL10n(
+          name: context.l10n.master,
+          description: context.l10n.masterDescription);
     case PuzzleTheme.masterVsMaster:
-      return context.l10n.masterVsMaster;
+      return PuzzleThemeL10n(
+          name: context.l10n.masterVsMaster,
+          description: context.l10n.masterVsMasterDescription);
     case PuzzleTheme.mate:
-      return context.l10n.mate;
+      return PuzzleThemeL10n(
+          name: context.l10n.mate, description: context.l10n.mateDescription);
     case PuzzleTheme.mateIn1:
-      return context.l10n.mateIn1;
+      return PuzzleThemeL10n(
+          name: context.l10n.mateIn1,
+          description: context.l10n.mateIn1Description);
     case PuzzleTheme.mateIn2:
-      return context.l10n.mateIn2;
+      return PuzzleThemeL10n(
+          name: context.l10n.mateIn2,
+          description: context.l10n.mateIn2Description);
     case PuzzleTheme.mateIn3:
-      return context.l10n.mateIn3;
+      return PuzzleThemeL10n(
+          name: context.l10n.mateIn3,
+          description: context.l10n.mateIn3Description);
     case PuzzleTheme.mateIn4:
-      return context.l10n.mateIn4;
+      return PuzzleThemeL10n(
+          name: context.l10n.mateIn4,
+          description: context.l10n.mateIn4Description);
     case PuzzleTheme.mateIn5:
-      return context.l10n.mateIn5;
+      return PuzzleThemeL10n(
+          name: context.l10n.mateIn5,
+          description: context.l10n.mateIn5Description);
     case PuzzleTheme.smotheredMate:
-      return context.l10n.smotheredMate;
+      return PuzzleThemeL10n(
+          name: context.l10n.smotheredMate,
+          description: context.l10n.smotheredMateDescription);
     case PuzzleTheme.middlegame:
-      return context.l10n.middlegame;
+      return PuzzleThemeL10n(
+          name: context.l10n.middlegame,
+          description: context.l10n.middlegameDescription);
     case PuzzleTheme.oneMove:
-      return context.l10n.oneMove;
+      return PuzzleThemeL10n(
+          name: context.l10n.oneMove,
+          description: context.l10n.oneMoveDescription);
     case PuzzleTheme.opening:
-      return context.l10n.opening;
+      return PuzzleThemeL10n(
+          name: context.l10n.opening,
+          description: context.l10n.openingDescription);
     case PuzzleTheme.pawnEndgame:
-      return context.l10n.pawnEndgame;
+      return PuzzleThemeL10n(
+          name: context.l10n.pawnEndgame,
+          description: context.l10n.pawnEndgameDescription);
     case PuzzleTheme.pin:
-      return context.l10n.pin;
+      return PuzzleThemeL10n(
+          name: context.l10n.pin, description: context.l10n.pinDescription);
     case PuzzleTheme.promotion:
-      return context.l10n.promotion;
+      return PuzzleThemeL10n(
+          name: context.l10n.promotion,
+          description: context.l10n.promotionDescription);
     case PuzzleTheme.queenEndgame:
-      return context.l10n.queenEndgame;
+      return PuzzleThemeL10n(
+          name: context.l10n.queenEndgame,
+          description: context.l10n.queenEndgameDescription);
     case PuzzleTheme.queenRookEndgame:
-      return context.l10n.queenRookEndgame;
+      return PuzzleThemeL10n(
+          name: context.l10n.queenRookEndgame,
+          description: context.l10n.queenRookEndgameDescription);
     case PuzzleTheme.queensideAttack:
-      return context.l10n.queensideAttack;
+      return PuzzleThemeL10n(
+          name: context.l10n.queensideAttack,
+          description: context.l10n.queensideAttackDescription);
     case PuzzleTheme.quietMove:
-      return context.l10n.quietMove;
+      return PuzzleThemeL10n(
+          name: context.l10n.quietMove,
+          description: context.l10n.quietMoveDescription);
     case PuzzleTheme.rookEndgame:
-      return context.l10n.rookEndgame;
+      return PuzzleThemeL10n(
+          name: context.l10n.rookEndgame,
+          description: context.l10n.rookEndgameDescription);
     case PuzzleTheme.sacrifice:
-      return context.l10n.sacrifice;
+      return PuzzleThemeL10n(
+          name: context.l10n.sacrifice,
+          description: context.l10n.sacrificeDescription);
     case PuzzleTheme.short:
-      return context.l10n.short;
+      return PuzzleThemeL10n(
+          name: context.l10n.short, description: context.l10n.shortDescription);
     case PuzzleTheme.skewer:
-      return context.l10n.skewer;
+      return PuzzleThemeL10n(
+          name: context.l10n.skewer,
+          description: context.l10n.skewerDescription);
     case PuzzleTheme.superGM:
-      return context.l10n.superGM;
+      return PuzzleThemeL10n(
+          name: context.l10n.superGM,
+          description: context.l10n.superGMDescription);
     case PuzzleTheme.trappedPiece:
-      return context.l10n.trappedPiece;
+      return PuzzleThemeL10n(
+          name: context.l10n.trappedPiece,
+          description: context.l10n.trappedPieceDescription);
     case PuzzleTheme.underPromotion:
-      return context.l10n.underPromotion;
+      return PuzzleThemeL10n(
+          name: context.l10n.underPromotion,
+          description: context.l10n.underPromotionDescription);
     case PuzzleTheme.veryLong:
-      return context.l10n.veryLong;
+      return PuzzleThemeL10n(
+          name: context.l10n.veryLong,
+          description: context.l10n.veryLongDescription);
     case PuzzleTheme.xRayAttack:
-      return context.l10n.xRayAttack;
+      return PuzzleThemeL10n(
+          name: context.l10n.xRayAttack,
+          description: context.l10n.xRayAttackDescription);
     case PuzzleTheme.zugzwang:
-      return context.l10n.zugzwang;
+      return PuzzleThemeL10n(
+          name: context.l10n.zugzwang,
+          description: context.l10n.zugzwangDescription);
   }
 }
