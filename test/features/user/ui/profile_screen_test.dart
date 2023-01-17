@@ -26,7 +26,6 @@ void main() {
   final mockLogger = MockLogger();
 
   setUpAll(() {
-    reset(mockClient);
     when(
       () => mockClient.get(
           Uri.parse('$kLichessHost/api/games/user/$testUserId?max=10'),

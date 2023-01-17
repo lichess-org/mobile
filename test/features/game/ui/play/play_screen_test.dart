@@ -36,7 +36,6 @@ void main() {
   final mockSoundService = MockSoundService();
 
   setUpAll(() {
-    reset(mockClient);
     when(() => mockClient.get(Uri.parse('$kLichessHost/api/user/maia1')))
         .thenAnswer((_) => mockResponse(maiaResponses['maia1']!, 200));
 

@@ -21,6 +21,15 @@ class TimeInc {
     }
   }
 
+  TimeInc.fromJson(Map<String, dynamic> json)
+      : time = json['time'] as int,
+        increment = json['increment'] as int;
+
+  Map<String, dynamic> toJson() => {
+        'time': time,
+        'increment': increment,
+      };
+
   String get display => '$time + $increment';
 
   @override
