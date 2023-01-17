@@ -7,6 +7,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
 
 import '../model/puzzle.dart';
+import '../model/puzzle_theme.dart';
 
 part 'puzzle_local_db.freezed.dart';
 part 'puzzle_local_db.g.dart';
@@ -24,7 +25,8 @@ class PuzzleLocalDB {
   final SharedPreferences _prefs;
 
   // TODO enum for angle
-  PuzzleLocalData? fetch({String? userId, String angle = 'mix'}) {
+  PuzzleLocalData? fetch(
+      {String? userId, PuzzleTheme angle = PuzzleTheme.mix}) {
     final raw = _prefs.getString(_makeKey(userId, angle));
     if (raw != null) {
       final json = jsonDecode(raw);
@@ -38,17 +40,19 @@ class PuzzleLocalDB {
   }
 
   Future<bool> save(
-      {String? userId, String angle = 'mix', required PuzzleLocalData data}) {
+      {String? userId,
+      PuzzleTheme angle = PuzzleTheme.mix,
+      required PuzzleLocalData data}) {
     return _prefs.setString(_makeKey(userId, angle), jsonEncode(data.toJson()));
   }
 
-  String _makeKey(String? userId, String angle) {
+  String _makeKey(String? userId, PuzzleTheme angle) {
     final buffer = StringBuffer();
     buffer.write(prefix);
     if (userId != null) {
       buffer.write('.userId:$userId');
     }
-    buffer.write('.angle:$angle');
+    buffer.write('.angle:${angle.name}');
     return buffer.toString();
   }
 }

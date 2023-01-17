@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/model/player.dart';
 import 'package:lichess_mobile/src/features/puzzle/data/puzzle_local_db.dart';
 import 'package:lichess_mobile/src/features/puzzle/model/puzzle.dart';
+import 'package:lichess_mobile/src/features/puzzle/model/puzzle_theme.dart';
 
 void main() {
   group('PuzzleLocalDB', () {
@@ -43,9 +44,9 @@ void main() {
             ),
           ]));
 
-      await db.save(angle: 'mix', data: data);
+      await db.save(angle: PuzzleTheme.mix, data: data);
 
-      expect(db.fetch(angle: 'mix'), data);
+      expect(db.fetch(angle: PuzzleTheme.mix), data);
     });
   });
 }

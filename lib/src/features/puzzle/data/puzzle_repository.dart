@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import '../model/puzzle.dart';
+import '../model/puzzle_theme.dart';
 
 final puzzleRepositoryProvider = Provider<PuzzleRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
@@ -36,20 +37,20 @@ class PuzzleRepository {
   final Logger _log;
 
   TaskEither<IOError, List<Puzzle>> selectBatchTask(
-      {String angle = 'mix', int nb = kPuzzleLocalQueueLength}) {
+      {PuzzleTheme angle = PuzzleTheme.mix, int nb = kPuzzleLocalQueueLength}) {
     return apiClient
-        .get(Uri.parse('$kLichessHost/api/puzzle/batch/$angle?nb=$nb'))
+        .get(Uri.parse('$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb'))
         .flatMap(_decodeJson);
   }
 
   TaskEither<IOError, List<Puzzle>> solveBatchTask({
     required int nb,
     required IList<PuzzleSolution> solved,
-    String angle = 'mix',
+    PuzzleTheme angle = PuzzleTheme.mix,
   }) {
     return apiClient
         .post(
-          Uri.parse('$kLichessHost/api/puzzle/batch/$angle?nb=$nb'),
+          Uri.parse('$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb'),
           headers: {'Content-type': 'application/json'},
           body: jsonEncode({
             'solutions': solved.map((e) => e.toJson()).toList(),

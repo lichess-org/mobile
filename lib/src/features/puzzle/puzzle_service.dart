@@ -8,6 +8,7 @@ import 'package:fpdart/fpdart.dart';
 import './data/puzzle_local_db.dart';
 import './data/puzzle_repository.dart';
 import './model/puzzle.dart';
+import './model/puzzle_theme.dart';
 
 final puzzleOfflineServiceProvider = Provider<PuzzleService>((ref) {
   final db = ref.watch(puzzleLocalDbProvider);
@@ -29,7 +30,8 @@ class PuzzleService {
   final Logger _log;
 
   /// Loads the next puzzle from database. Will sync with server if necessary.
-  Future<Puzzle?> nextPuzzle({String? userId, String angle = 'mix'}) async {
+  Future<Puzzle?> nextPuzzle(
+      {String? userId, PuzzleTheme angle = PuzzleTheme.mix}) async {
     final data = await _syncAndLoadData(userId, angle).run();
     return data?.unsolved[0];
   }
@@ -37,7 +39,7 @@ class PuzzleService {
   /// Update puzzle queue with the solved puzzle and sync with server
   Future<void> solve({
     String? userId,
-    String angle = 'mix',
+    PuzzleTheme angle = PuzzleTheme.mix,
     required PuzzleSolution solution,
   }) async {
     final data = db.fetch(userId: userId, angle: angle);
@@ -60,7 +62,7 @@ class PuzzleService {
   /// This task will fetch missing puzzles so the queue length is always equal to
   /// `localQueueLength`.
   /// It will also call the `solveBatchTask` with solved puzzles.
-  Task<PuzzleLocalData?> _syncAndLoadData(String? userId, String angle) {
+  Task<PuzzleLocalData?> _syncAndLoadData(String? userId, PuzzleTheme angle) {
     final data = db.fetch(userId: userId, angle: angle);
 
     final unsolved = data?.unsolved ?? IList(const []);

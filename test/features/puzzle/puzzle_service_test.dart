@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/common/model/player.dart';
 import 'package:lichess_mobile/src/features/puzzle/data/puzzle_local_db.dart';
 import 'package:lichess_mobile/src/features/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/features/puzzle/model/puzzle.dart';
+import 'package:lichess_mobile/src/features/puzzle/model/puzzle_theme.dart';
 import 'package:lichess_mobile/src/features/puzzle/data/puzzle_repository.dart';
 import '../../utils.dart';
 
@@ -153,12 +154,12 @@ void main() {
             Uri.parse('$kLichessHost/api/puzzle/batch/opening?nb=1'),
           )).thenAnswer((_) => mockResponse(batchOf1, 200));
 
-      final puzzle = await service.nextPuzzle(angle: 'opening');
+      final puzzle = await service.nextPuzzle(angle: PuzzleTheme.opening);
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
       verify(() => mockClient.get(
           Uri.parse('$kLichessHost/api/puzzle/batch/opening?nb=1'))).called(1);
 
-      expect(db.fetch(angle: 'opening')?.unsolved.length, equals(1));
+      expect(db.fetch(angle: PuzzleTheme.opening)?.unsolved.length, equals(1));
     });
 
     test('solve puzzle when online', () async {
