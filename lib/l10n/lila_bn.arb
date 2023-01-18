@@ -947,6 +947,7 @@
   "playerGames": "খেলোয়ারদের খেলা হতে",
   "playerGamesDescription": "খেলোয়ারদের খেলা থেকে বাছাই করে তৈরি করা ধাঁধা।",
   "puzzleDownloadInformation": "এই ধাঁধা গুলো সবার জন্য উন্মুক্ত এবং {param} থেকে নামিয়ে নেয়া যাবে।",
+  "totalGames": "মোট গেম",
   "settings": "সেটিংস",
   "closeAccount": "একাউন্ট বন্ধ করুন",
   "closingIsDefinitive": "একাউন্ট বন্ধ সুনিশ্চিত। আর ফেরত যাওয়ার উপায় নেই। আপনি কি নিশ্চিত?",

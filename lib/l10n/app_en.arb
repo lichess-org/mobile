@@ -2095,6 +2095,107 @@
       }
     }
   },
+  "perfStats": "{param} stats",
+  "@perfStats": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "viewTheGames": "View the games",
+  "provisional": "provisional",
+  "notEnoughRatedGames": "Not enough rated games have been played to establish a reliable rating.",
+  "progressOverLastXGames": "Progression over the last {param} games:",
+  "@progressOverLastXGames": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "ratingDeviation": "Rating deviation: {param}.",
+  "@ratingDeviation": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "ratingDeviationTooltip": "Lower value means the rating is more stable. Above {param1}, the rating is considered provisional. To be included in the rankings, this value should be below {param2} (standard chess) or {param3} (variants).",
+  "@ratingDeviationTooltip": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      },
+      "param3": {
+        "type": "String"
+      }
+    }
+  },
+  "totalGames": "Total games",
+  "ratedGames": "Rated games",
+  "tournamentGames": "Tournament games",
+  "berserkedGames": "Berserked games",
+  "timeSpentPlaying": "Time spent playing",
+  "victories": "Victories",
+  "defeats": "Defeats",
+  "disconnections": "Disconnections",
+  "notEnoughGames": "Not enough games played",
+  "highestRating": "Highest rating: {param}",
+  "@highestRating": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "lowestRating": "Lowest rating: {param}",
+  "@lowestRating": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "fromXToY": "from {param1} to {param2}",
+  "@fromXToY": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "winningStreak": "Winning streak",
+  "losingStreak": "Losing streak",
+  "longestStreak": "Longest streak: {param}",
+  "@longestStreak": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "currentStreak": "Current streak: {param}",
+  "@currentStreak": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "bestRated": "Best rated victories",
+  "worstRated": "Worst rated defeats",
+  "gamesInARow": "Games played in a row",
+  "lessThanOneHour": "Less than one hour between games",
+  "maxTimePlaying": "Max time spent playing",
+  "now": "now",
   "settings": "Settings",
   "closeAccount": "Close account",
   "managedAccountCannotBeClosed": "Your account is managed, and cannot be closed.",
