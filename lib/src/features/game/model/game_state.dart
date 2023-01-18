@@ -34,7 +34,7 @@ class GameState with _$GameState {
     final List<Position<Chess>> positions = [Chess.initial];
     final List<String> sanMoves = [];
     for (final m in uciMoves) {
-      final move = Move.fromUci(m);
+      final move = Move.fromUci(m)!;
       final newPos = positions.last.playToSan(move);
       positions.add(newPos.item1);
       sanMoves.add(newPos.item2);
