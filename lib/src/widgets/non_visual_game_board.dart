@@ -10,37 +10,50 @@ class NonVisualGameBoard extends StatelessWidget {
   const NonVisualGameBoard({
     required this.gameState,
     required this.onMove,
+    this.isLoading = false,
     super.key,
   });
 
-  final GameState gameState;
+  final GameState? gameState;
 
   final void Function(Move) onMove;
 
+  final bool isLoading;
+
   @override
   Widget build(BuildContext context) {
-    final board = gameState.position.board;
-    final lastSanMove =
-        gameState.sanMoves.isEmpty ? null : gameState.sanMoves.last;
+    final position = gameState?.position ?? Chess.initial;
+    final lastSanMove = gameState?.sanMoves.isNotEmpty == true
+        ? gameState!.sanMoves.last
+        : null;
     return NonVisualBoard(
-      position: gameState.position,
-      lastSanMove: gameState.sanMoves.last,
+      position: position,
+      lastSanMove: lastSanMove,
+      isLoading: isLoading,
+      loadCompleteMsg: 'Game loaded',
       handleCommand: (command) {
         final lowered = command.toLowerCase();
         if (lowered == 'c' || lowered == 'clock') {
           return 'todo: read clocks';
         } else if (lowered == 'l' || lowered == 'last') {
-          return renderCurrentPos(lastSanMove, gameState.position);
+          return renderCurrentPos(lastSanMove, position);
         } else if (lowered == 'o' || lowered == 'opponent') {
           return 'todo: read player';
         }
-        final pieceResult = handlePieceCommand(command, board);
+        final pieceResult = handlePieceCommand(command, position.board);
         if (pieceResult != null) {
           return pieceResult;
         }
-        final scanResult = handleScanCommand(lowered, board);
+        final scanResult = handleScanCommand(lowered, position.board);
         if (scanResult != null) {
           return scanResult;
+        }
+        // TODO: uncomment when parseSan is available
+        final move =
+            Move.fromUci(command) /*?? gameState.position.parseSan(command)*/;
+        if (move != null) {
+          onMove(move);
+          return null;
         }
         return 'Invalid command: $command';
       },

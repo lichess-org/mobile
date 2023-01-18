@@ -7,12 +7,18 @@ class NonVisualBoard extends StatefulWidget {
     required this.position,
     required this.lastSanMove,
     required this.handleCommand,
+    this.isLoading = false,
+    this.loadCompleteMsg = 'Loading complete',
     super.key,
   });
 
   final Position position;
 
-  final String lastSanMove;
+  final String? lastSanMove;
+
+  final bool isLoading;
+
+  final String loadCompleteMsg;
 
   /// Callback called when a command is submitted.
   ///
@@ -42,29 +48,45 @@ class _NonVisualBoardState extends State<NonVisualBoard> {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
 
-    return ListView(
-      children: <Widget>[
-        const Text('Current position'),
-        Semantics(
-          liveRegion: true,
-          // TODO: decide on a set of parameters
-          child: Text(renderCurrentPos(widget.lastSanMove, widget.position)),
-        ),
-        TextField(
-          decoration: const InputDecoration(
-            labelText: 'move input',
+    if (widget.isLoading) {
+      return ListView(
+        children: <Widget>[
+          Semantics(
+            key: const ValueKey('loading-status'),
+            liveRegion: true,
+            child: const Text('Loading'),
           ),
-          controller: textController,
-          onSubmitted: (input) {
-            final message = widget.handleCommand(input);
-            if (message != null) {
-              announce(message);
-            }
-            textController.clear();
-          },
-        ),
-      ],
-    );
+        ],
+      );
+    } else {
+      return ListView(
+        children: <Widget>[
+          Semantics(
+            key: const ValueKey('loading-status'),
+            liveRegion: true,
+            child: Text(widget.loadCompleteMsg),
+          ),
+          const Text('Current position'),
+          Semantics(
+            liveRegion: true,
+            child: Text(renderCurrentPos(widget.lastSanMove, widget.position)),
+          ),
+          TextField(
+            decoration: const InputDecoration(
+              labelText: 'move input',
+            ),
+            controller: textController,
+            onSubmitted: (input) {
+              final message = widget.handleCommand(input);
+              if (message != null) {
+                announce(message);
+              }
+              textController.clear();
+            },
+          ),
+        ],
+      );
+    }
   }
 }
 
