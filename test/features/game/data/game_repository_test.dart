@@ -139,7 +139,7 @@ void main() {
   });
 
   group('GameRepository.getGame', () {
-    test('can construct a game from json', () async {
+    test('minimal example game', () async {
       const testResponse = '''
 {
   "id": "5IrD6Gzz",
@@ -189,6 +189,22 @@ void main() {
           .thenReturn(TaskEither.right(http.Response(testResponse, 200)));
 
       final result = await repo.getGameTask(gameIdTest).run();
+
+      expect(result.isRight(), true);
+    });
+
+    test('game with analysis', () async {
+      const testResponse = '''
+{"id":"NchH5KBj","rated":true,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1647115605598,"lastMoveAt":1647116025236,"status":"resign","players":{"white":{"user":{"name":"matyizom","id":"matyizom"},"rating":1224,"ratingDiff":10,"analysis":{"inaccuracy":3,"mistake":2,"blunder":0,"acpl":60}},"black":{"user":{"name":"veloce","patron":true,"id":"veloce"},"rating":1147,"ratingDiff":-8,"analysis":{"inaccuracy":3,"mistake":1,"blunder":1,"acpl":105}}},"winner":"white","opening":{"eco":"B01","name":"Scandinavian Defense: Main Line, Mieses Variation","ply":8},"moves":"e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 c5 a3 e6 Bg5 Be7 Bb5+ Bd7 Bxd7+ Nbxd7 O-O O-O Ne5 cxd4 Nxd7 Nxd7 Bxe7 Rfe8 Bb4 Qf5 Qxd4 e5 Qe3 Qxc2 Ne4 Qxb2 Ng5 f6 Qh3 h6 Nf3 a5 Qxd7 Red8 Qxb7 axb4 Qxb4 Qxa3 Rxa3","analysis":[{"eval":28},{"eval":82,"best":"e7e5","variation":"e5 Nf3 Nc6 Bb5 Nf6 d3 Bc5 c3 O-O O-O"},{"eval":66},{"eval":80},{"eval":71},{"eval":63},{"eval":75},{"eval":60},{"eval":80},{"eval":136,"best":"g7g6","variation":"g6 Bc4 Bg7 O-O O-O Bd2 c5 Nd5 Qd8 Nxf6+"},{"eval":53,"best":"d4d5","variation":"d5 g6 Bc4 Bg7 O-O a6 Bd2 Qd8 a4 Nbd7","judgment":{"name":"Inaccuracy","comment":"Inaccuracy. d5 was best."}},{"eval":63},{"eval":-16,"best":"c1f4","variation":"Bf4 Nc6 Bb5 cxd4 Nxd4 Bd7 Nxc6 Bxc6 Bxc6+ bxc6","judgment":{"name":"Inaccuracy","comment":"Inaccuracy. Bf4 was best."}},{"eval":131,"best":"f6e4","variation":"Ne4","judgment":{"name":"Mistake","comment":"Mistake. Ne4 was best."}},{"eval":-10,"best":"d4c5","variation":"dxc5","judgment":{"name":"Mistake","comment":"Mistake. dxc5 was best."}},{"eval":-27},{"eval":-20},{"eval":-31},{"eval":-57},{"eval":20,"best":"c5d4","variation":"cxd4 Qxd4","judgment":{"name":"Inaccuracy","comment":"Inaccuracy. cxd4 was best."}},{"eval":-138,"best":"d4d5","variation":"d5 exd5 Nxd5 Bd8 Ne3 Qa6 Re1 Re8 Qd2 Ne5 Nxe5 Rxe5 Bxf6 Bxf6","judgment":{"name":"Mistake","comment":"Mistake. d5 was best."}},{"eval":-91},{"eval":-107},{"eval":538,"best":"a5g5","variation":"Qxg5 Qxd4","judgment":{"name":"Blunder","comment":"Blunder. Qxg5 was best."}},{"eval":506},{"eval":515},{"eval":515},{"eval":745,"best":"a5b6","variation":"Qb6 Ne4","judgment":{"name":"Inaccuracy","comment":"Inaccuracy. Qb6 was best."}},{"eval":739},{"eval":792},{"eval":753},{"eval":800},{"eval":745},{"eval":858},{"eval":575,"best":"a1d1","variation":"Rad1 Qd4","judgment":{"name":"Inaccuracy","comment":"Inaccuracy. Rad1 was best."}},{"eval":730},{"eval":685},{"eval":737},{"eval":621},{"eval":645},{"eval":578},{"eval":977,"best":"a5b4","variation":"axb4 axb4 Qxa1 Qxe8+ Rxe8 Rxa1 Rc8 Kf1 Rc4 Rb1 Kf7 Nd2 Rd4 Ke2","judgment":{"name":"Inaccuracy","comment":"Inaccuracy. axb4 was best."}},{"eval":700},{"eval":716},{"eval":730},{"eval":1054},{"eval":1014}],"clock":{"initial":180,"increment":2,"totalTime":260}}
+''';
+
+      const gameId = GameId('NchH5KBj');
+
+      when(() =>
+              mockApiClient.get(Uri.parse('$kLichessHost/game/export/$gameId')))
+          .thenReturn(TaskEither.right(http.Response(testResponse, 200)));
+
+      final result = await repo.getGameTask(gameId).run();
 
       expect(result.isRight(), true);
     });

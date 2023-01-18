@@ -403,4 +403,5 @@ const testGame = game.PlayableGame(
   orientation: Side.white,
   white: game.Player(name: 'White', id: 'white', rating: 1405),
   black: game.Player(name: 'Black', id: 'black', rating: 1789),
+  variant: game.Variant.standard,
 );

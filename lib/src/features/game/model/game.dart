@@ -18,7 +18,7 @@ class PlayableGame with _$PlayableGame {
     required Side orientation,
     required Player white,
     required Player black,
-    Variant? variant,
+    required Variant variant,
   }) = _PlayableGame;
 
   Player get player => orientation == Side.white ? white : black;
@@ -27,8 +27,6 @@ class PlayableGame with _$PlayableGame {
 
 @freezed
 class ArchivedGameData with _$ArchivedGameData {
-  const ArchivedGameData._();
-
   const factory ArchivedGameData({
     required GameId id,
     required bool rated,
@@ -39,8 +37,10 @@ class ArchivedGameData with _$ArchivedGameData {
     required GameStatus status,
     required Player white,
     required Player black,
+    required Variant variant,
+    String? initialFen,
     Side? winner,
-    Variant? variant,
+    List<MoveAnalysis>? analysis,
   }) = _ArchivedGameData;
 }
 
@@ -58,7 +58,7 @@ class GameStep with _$GameStep {
     required int ply,
     required String san,
     required String uci,
-    required Position<Chess> position,
+    required Position position,
   }) = _GameStep;
 }
 
@@ -73,7 +73,36 @@ class Player with _$Player {
     String? title,
     bool? patron,
     int? aiLevel,
+    PlayerAnalysis? analysis,
   }) = _Player;
+}
+
+@freezed
+class PlayerAnalysis with _$PlayerAnalysis {
+  const factory PlayerAnalysis({
+    required int inaccuracy,
+    required int mistake,
+    required int blunder,
+    int? acpl,
+  }) = _PlayerAnalysis;
+}
+
+@freezed
+class MoveAnalysis with _$MoveAnalysis {
+  const factory MoveAnalysis({
+    int? eval,
+    UCIMove? best,
+    String? variation,
+    AnalysisJudgment? judgment,
+  }) = _MoveAnalysis;
+}
+
+@freezed
+class AnalysisJudgment with _$AnalysisJudgment {
+  const factory AnalysisJudgment({
+    required String name,
+    required String comment,
+  }) = _AnalysisJugdment;
 }
 
 enum Speed {
@@ -96,4 +125,25 @@ enum Variant {
   horde,
   racingKings,
   crazyhouse;
+
+  // TODO implement missing variants
+  Position get initialPosition {
+    switch (this) {
+      case Variant.standard:
+      case Variant.chess960:
+        return Chess.initial;
+      case Variant.antichess:
+        return Antichess.initial;
+      case Variant.kingOfTheHill:
+        return KingOfTheHill.initial;
+      case Variant.threeCheck:
+        return ThreeCheck.initial;
+      case Variant.atomic:
+        return Atomic.initial;
+      case Variant.crazyhouse:
+        return Crazyhouse.initial;
+      default:
+        throw UnimplementedError();
+    }
+  }
 }

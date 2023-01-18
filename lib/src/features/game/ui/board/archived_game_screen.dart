@@ -17,11 +17,14 @@ import 'package:lichess_mobile/src/features/settings/ui/is_sound_muted_notifier.
 import 'package:lichess_mobile/src/features/user/model/user.dart';
 
 import '../../data/game_repository.dart';
-import '../../model/game_status.dart';
 import '../../model/game.dart' hide Player;
 
-final archivedGameProvider = FutureProvider.autoDispose
-    .family<ArchivedGameData, GameId>((ref, id) async {
+final positionCursorProvider = StateProvider.autoDispose<int>((ref) => 0);
+
+final isBoardTurnedProvider = StateProvider.autoDispose<bool>((ref) => false);
+
+final archivedGameProvider =
+    FutureProvider.autoDispose.family<ArchivedGame, GameId>((ref, id) async {
   final gameRepo = ref.watch(gameRepositoryProvider);
   final either = await gameRepo.getGameTask(id).run();
   // retry on error, cache indefinitely on success
@@ -109,5 +112,98 @@ class _BoardBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     throw UnimplementedError();
+  }
+}
+
+class _BottomBar extends ConsumerWidget {
+  const _BottomBar({required this.game, required this.account});
+
+  final ArchivedGame game;
+  final User account;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final positionCursor = ref.watch(positionCursorProvider);
+
+    return SizedBox(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            onPressed: () {
+              _showGameMenu(context, ref);
+            },
+            icon: const Icon(Icons.menu),
+          ),
+          Row(children: [
+            IconButton(
+              key: const ValueKey('cursor-first'),
+              // TODO add translation
+              tooltip: 'First position',
+              onPressed: positionCursor > 0
+                  ? () {
+                      ref.read(positionCursorProvider.notifier).state = 0;
+                    }
+                  : null,
+              icon: const Icon(LichessIcons.fast_backward),
+              iconSize: 20,
+            ),
+            IconButton(
+              key: const ValueKey('cursor-back'),
+              // TODO add translation
+              tooltip: 'Backward',
+              onPressed: positionCursor > 0
+                  ? () {
+                      ref.read(positionCursorProvider.notifier).state--;
+                    }
+                  : null,
+              icon: const Icon(LichessIcons.step_backward),
+              iconSize: 20,
+            ),
+            IconButton(
+              key: const ValueKey('cursor-forward'),
+              // TODO add translation
+              tooltip: 'Forward',
+              onPressed: positionCursor < game.steps.length
+                  ? () {
+                      ref.read(positionCursorProvider.notifier).state++;
+                    }
+                  : null,
+              icon: const Icon(LichessIcons.step_forward),
+              iconSize: 20,
+            ),
+            IconButton(
+              key: const ValueKey('cursor-last'),
+              // TODO add translation
+              tooltip: 'Last position',
+              onPressed: positionCursor < game.steps.length
+                  ? () {
+                      ref.read(positionCursorProvider.notifier).state =
+                          game.steps.length;
+                    }
+                  : null,
+              icon: const Icon(LichessIcons.fast_forward),
+              iconSize: 20,
+            ),
+          ]),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showGameMenu(BuildContext context, WidgetRef ref) {
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        BottomSheetAction(
+          leading: const Icon(Icons.swap_vert),
+          label: Text(context.l10n.flipBoard),
+          onPressed: (context) {
+            ref.read(isBoardTurnedProvider.notifier).state =
+                !ref.read(isBoardTurnedProvider);
+          },
+        ),
+      ],
+    );
   }
 }
