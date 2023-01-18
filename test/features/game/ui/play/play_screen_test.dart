@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/features/game/ui/play/play_screen.dart';
 import 'package:lichess_mobile/src/features/game/ui/board/playable_game_screen.dart';
 import 'package:lichess_mobile/src/features/game/model/time_control.dart';
 import 'package:lichess_mobile/src/features/game/model/computer_opponent.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list_tile_choice.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../../auth/data/fake_auth_repository.dart';
@@ -35,7 +36,6 @@ void main() {
   final mockSoundService = MockSoundService();
 
   setUpAll(() {
-    reset(mockClient);
     when(() => mockClient.get(Uri.parse('$kLichessHost/api/user/maia1')))
         .thenAnswer((_) => mockResponse(maiaResponses['maia1']!, 200));
 
@@ -78,8 +78,7 @@ void main() {
         ),
       );
 
-      // one loader for SignInWidget and one for PlayScreen
-      expect(find.byType(CircularProgressIndicator), findsNWidgets(2));
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
       await tester.pump();
 
       // wait for maia bots request to return
@@ -113,8 +112,7 @@ void main() {
         ),
       );
 
-      // one loader for SignInWidget and one for PlayScreen
-      expect(find.byType(CircularProgressIndicator), findsNWidgets(2));
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
       await tester.pump();
 
       // maia bots loading state
@@ -176,8 +174,7 @@ void main() {
         ),
       );
 
-      // one loader for SignInWidget and one for PlayScreen
-      expect(find.byType(CircularProgressIndicator), findsNWidgets(2));
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
       await tester.pump();
 
       await tester.tap(find.text('3 + 2'));
@@ -271,15 +268,14 @@ void main() {
         ),
       );
 
-      // one loader for SignInWidget and one for PlayScreen
-      expect(find.byType(CircularProgressIndicator), findsNWidgets(2));
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
       await tester.pump();
 
       await tester.pump(const Duration(
           milliseconds: 100)); // wait for maia bots request to return
 
       expect(find.byType(CircularProgressIndicator), findsNothing);
-      await tester.tap(find.text('Play'));
+      await tester.tap(find.widgetWithText(FatButton, 'Play'));
       await tester.pump(); // play action tapped
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
       await tester

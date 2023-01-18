@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import '../common/lichess_icons.dart';
-import '../features/game/ui/play/play_screen.dart';
+import '../features/home/ui/home_screen.dart';
 import '../features/user/ui/profile_screen.dart';
 import '../features/tv/ui/tv_screen.dart';
 import '../features/puzzle/ui/puzzle_screen.dart';
@@ -32,9 +32,9 @@ class BottomNavScaffold extends ConsumerWidget {
     final currentTab = ref.watch(currentBottomTabProvider);
 
     final tabs = [
-      _Tab(
-        label: context.l10n.play,
-        icon: const Icon(LichessIcons.chess_king),
+      const _Tab(
+        label: 'Home',
+        icon: Icon(Icons.home),
       ),
       _Tab(
         label: context.l10n.puzzles,
@@ -98,8 +98,8 @@ class BottomNavScaffold extends ConsumerWidget {
     switch (index) {
       case 0:
         return CupertinoTabView(
-          defaultTitle: context.l10n.play,
-          builder: (context) => const PlayScreen(),
+          defaultTitle: 'Home',
+          builder: (context) => const HomeScreen(),
         );
       case 1:
         return CupertinoTabView(

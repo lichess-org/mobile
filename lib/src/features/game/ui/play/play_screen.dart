@@ -5,6 +5,7 @@ import 'package:fpdart/fpdart.dart' hide Tuple2;
 import 'package:tuple/tuple.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_modal_bottom_sheet.dart';
@@ -13,7 +14,6 @@ import 'package:lichess_mobile/src/widgets/list_tile_choice.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
-import 'package:lichess_mobile/src/features/auth/ui/sign_in_widget.dart';
 import 'package:lichess_mobile/src/features/auth/ui/auth_actions_notifier.dart';
 import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
 import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
@@ -53,18 +53,17 @@ class PlayScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return PlatformWidget(
-      androidBuilder: (_) => _androidBuilder(ref),
-      iosBuilder: (_) => _iosBuilder(ref),
+    return ConsumerPlatformWidget(
+      ref: ref,
+      androidBuilder: _androidBuilder,
+      iosBuilder: _iosBuilder,
     );
   }
 
-  Widget _androidBuilder(WidgetRef ref) {
+  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateChangesProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('lichess.org'), actions: const [
-        SignInWidget(),
-      ]),
+      appBar: AppBar(title: Text(context.l10n.play)),
       body: Center(
         child: authState.maybeWhen(
           data: (account) => PlayForm(account: account),
@@ -74,10 +73,10 @@ class PlayScreen extends ConsumerWidget {
     );
   }
 
-  Widget _iosBuilder(WidgetRef ref) {
+  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateChangesProvider);
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(trailing: SignInWidget()),
+      navigationBar: CupertinoNavigationBar(middle: Text(context.l10n.play)),
       child: Center(
         child: authState.maybeWhen(
           data: (account) => PlayForm(account: account),
@@ -229,7 +228,7 @@ class PlayForm extends ConsumerWidget {
           const SizedBox(height: 10),
           SecondaryButton(
             semanticsLabel:
-                '${context.l10n.timeControl} ${timeControlPref.perf.name} ${timeControlPref.value.toString()}',
+                '${context.l10n.timeControl} ${timeControlPref.perf.name} ${timeControlPref.value.display}',
             onPressed: () {
               showAdaptiveModalBottomSheet<void>(
                 useRootNavigator: true,
@@ -250,7 +249,7 @@ class PlayForm extends ConsumerWidget {
                       children: [
                         Icon(timeControlPref.perf.icon, size: 20),
                         const SizedBox(width: 5),
-                        Text(timeControlPref.value.toString())
+                        Text(timeControlPref.value.display)
                       ],
                     ),
                   ),

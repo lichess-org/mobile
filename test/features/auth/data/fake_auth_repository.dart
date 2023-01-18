@@ -1,6 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
+import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/in_memory_store.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
 import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';

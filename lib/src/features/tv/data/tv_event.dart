@@ -52,7 +52,7 @@ class TvEvent with _$TvEvent {
         return pick('d').letOrThrow((dataPick) => TvEvent.fen(
               fen: dataPick('fen').asStringOrThrow(),
               lastMove: dataPick('lm')
-                  .letOrThrow((it) => Move.fromUci(it.asStringOrThrow())),
+                  .letOrThrow((it) => Move.fromUci(it.asStringOrThrow())!),
               whiteSeconds: dataPick('wc').asIntOrThrow(),
               blackSeconds: dataPick('bc').asIntOrThrow(),
             ));

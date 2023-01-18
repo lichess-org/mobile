@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
-import 'package:lichess_mobile/src/widgets/board.dart';
+import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
@@ -19,10 +19,7 @@ import 'package:lichess_mobile/src/features/user/model/user.dart';
 import '../../model/game_status.dart';
 import '../../model/game.dart' hide Player;
 import '../play/play_action_notifier.dart';
-import './game_stream.dart';
-import './game_state_notifier.dart';
-import './game_action_notifier.dart';
-import './game_controls.dart';
+import './playable_game_screen_providers.dart';
 
 class PlayableGameScreen extends ConsumerWidget {
   const PlayableGameScreen(
@@ -221,7 +218,7 @@ class _BoardBody extends ConsumerWidget {
             sideToMove: gameState?.position.turn.cg ?? game.orientation.cg,
             onMove: (cg.Move move, {bool? isPremove}) => ref
                 .read(gameStateProvider.notifier)
-                .onUserMove(game.id, Move.fromUci(move.uci)),
+                .onUserMove(game.id, Move.fromUci(move.uci)!),
           ),
           topPlayer: topPlayer,
           bottomPlayer: bottomPlayer,

@@ -121,7 +121,7 @@ class _SectionChoices extends StatelessWidget {
           children: choices.map((choice) {
             return ChoiceChip(
               key: ValueKey(choice),
-              label: Text(choice.value.toString()),
+              label: Text(choice.value.display),
               selected: selected == choice,
               onSelected: (bool selected) {
                 if (selected) onSelected(choice);

@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
-import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
@@ -20,12 +19,11 @@ import 'package:lichess_mobile/src/features/user/model/user.dart';
 import '../../data/game_repository.dart';
 import '../../model/game_status.dart';
 import '../../model/game.dart' hide Player;
-import './game_controls.dart';
 
-final archivedGameProvider =
-    FutureProvider.autoDispose.family<ArchivedGame, GameId>((ref, id) async {
+final archivedGameProvider = FutureProvider.autoDispose
+    .family<ArchivedGameData, GameId>((ref, id) async {
   final gameRepo = ref.watch(gameRepositoryProvider);
-  final either = await gameRepo.getGame(id).run();
+  final either = await gameRepo.getGameTask(id).run();
   // retry on error, cache indefinitely on success
   return either.match((error) => throw error, (data) {
     ref.keepAlive();

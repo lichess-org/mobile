@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:logging/logging.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +6,6 @@ import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-import 'package:lichess_mobile/src/features/game/model/game.dart';
 import '../model/user.dart';
 
 class UserRepository {
@@ -33,23 +31,6 @@ class UserRepository {
             response.body,
             mapper: UserStatus.fromJson,
             logger: _log)));
-  }
-
-  TaskEither<IOError, List<ArchivedGameData>> getRecentGamesTask(
-      String username) {
-    return apiClient.get(
-      Uri.parse('$kLichessHost/api/games/user/$username?max=10'),
-      headers: {'Accept': 'application/x-ndjson'},
-    ).flatMap((r) => TaskEither.fromEither(Either.tryCatch(() {
-          final lines = r.body.split('\n');
-          return lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
-            final json = jsonDecode(e) as Map<String, dynamic>;
-            return ArchivedGameData.fromJson(json);
-          }).toList(growable: false);
-        }, (error, stackTrace) {
-          _log.severe('Could not read json object as ArchivedGameData: $error');
-          return DataFormatError(stackTrace);
-        })));
   }
 
   void dispose() {

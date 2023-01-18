@@ -34,8 +34,11 @@ void main() {
   final mockSoundService = MockSoundService();
 
   setUpAll(() {
-    reset(mockClient);
     registerFallbackValue(http.Request('GET', Uri.parse('http://api.test')));
+  });
+
+  setUp(() {
+    reset(mockClient);
   });
 
   group('PlayableGameScreen', () {
@@ -349,7 +352,7 @@ class FakeGameClient extends Fake implements http.Client {
       final move = request.url.path.substring(request.url.path.length - 4);
       moves.add(move);
       whiteTime -= 5000;
-      position = position.play(Move.fromUci(move));
+      position = position.play(Move.fromUci(move)!);
       _sendGameEvent(
           '{ "type": "gameState", "moves": "${moves.join(' ')}", "wtime": $whiteTime, "btime": $blackTime, "status": "started" }');
 
@@ -359,14 +362,14 @@ class FakeGameClient extends Fake implements http.Client {
         case 1:
           moves.add('e7e5');
           blackTime -= 3000;
-          position = position.play(Move.fromUci('e7e5'));
+          position = position.play(Move.fromUci('e7e5')!);
           _sendGameEvent(
               '{ "type": "gameState", "moves": "${moves.join(' ')}", "wtime": $whiteTime, "btime": $blackTime, "status": "started" }');
           break;
         case 3:
           moves.add('b8c6');
           blackTime -= 6000;
-          position = position.play(Move.fromUci('b8c6'));
+          position = position.play(Move.fromUci('b8c6')!);
           _sendGameEvent(
               '{ "type": "gameState", "moves": "${moves.join(' ')}", "wtime": $whiteTime, "btime": $blackTime, "status": "started" }');
           break;
