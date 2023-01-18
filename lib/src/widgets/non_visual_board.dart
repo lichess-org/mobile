@@ -133,7 +133,7 @@ String _renderPiecesByLocation(Board board, String rankOrFile) {
   return pieces.isNotEmpty ? pieces : 'blank';
 }
 
-final _rowOrFileRegExp = RegExp('^[a-h1-8]\$');
+final _rowOrFileRegExp = RegExp(r'^[a-h1-8]$');
 
 String _colorName(Side side) {
   switch (side) {
