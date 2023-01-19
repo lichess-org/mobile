@@ -130,7 +130,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
         steps.add(
             GameStep(ply: ply, san: san, uci: move.uci, position: position));
       }
-      return List<GameStep>.empty();
+      return steps;
     }),
   );
 }
