@@ -43,7 +43,8 @@ class GameRepository {
   TaskEither<IOError, List<ArchivedGameData>> getUserGamesTask(
       String username) {
     return apiClient.get(
-      Uri.parse('$kLichessHost/api/games/user/$username?max=10'),
+      Uri.parse(
+          '$kLichessHost/api/games/user/$username?max=10&moves=false&lastFen=true'),
       headers: {'Accept': 'application/x-ndjson'},
     ).flatMap((r) => TaskEither.fromEither(Either.tryCatch(() {
           final lines = r.body.split('\n');
@@ -126,7 +127,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
       for (final san in moves) {
         ply++;
         final move = position.parseSan(san);
-        position = position.play(move!);
+        position = position.playUnchecked(move!);
         steps.add(
             GameStep(ply: ply, san: san, uci: move.uci, position: position));
       }
@@ -152,6 +153,7 @@ ArchivedGameData _archivedGameDatafromPick(RequiredPick pick) {
     winner: pick('winner').asSideOrNull(),
     variant: pick('variant').asVariantOrThrow(),
     initialFen: pick('initialFen').asStringOrNull(),
+    lastFen: pick('lastFen').asStringOrNull(),
     analysis: pick('analysis').asListOrNull(_moveAnalysisFromPick),
   );
 }

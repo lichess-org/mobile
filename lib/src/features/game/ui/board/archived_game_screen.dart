@@ -36,9 +36,9 @@ final archivedGameProvider =
 
 class ArchivedGameScreen extends ConsumerWidget {
   const ArchivedGameScreen(
-      {required this.gameId, required this.account, super.key});
+      {required this.gameData, required this.account, super.key});
 
-  final GameId gameId;
+  final ArchivedGameData gameData;
   final User account;
 
   @override

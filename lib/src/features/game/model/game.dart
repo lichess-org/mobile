@@ -39,6 +39,7 @@ class ArchivedGameData with _$ArchivedGameData {
     required Player black,
     required Variant variant,
     String? initialFen,
+    String? lastFen,
     Side? winner,
     List<MoveAnalysis>? analysis,
   }) = _ArchivedGameData;
