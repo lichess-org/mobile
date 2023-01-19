@@ -47,10 +47,17 @@ class ArchivedGameData with _$ArchivedGameData {
 
 @freezed
 class ArchivedGame with _$ArchivedGame {
+  const ArchivedGame._();
+
   const factory ArchivedGame({
     required ArchivedGameData data,
     required List<GameStep> steps,
   }) = _ArchivedGame;
+
+  Move? moveAtPly(int ply) =>
+      steps.isNotEmpty ? Move.fromUci(steps[ply].uci) : null;
+
+  Move? get lastMove => steps.isNotEmpty ? Move.fromUci(steps.last.uci) : null;
 }
 
 @freezed

@@ -8,9 +8,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
-import 'package:lichess_mobile/src/utils/async_value.dart';
+import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/features/settings/ui/is_sound_muted_notifier.dart';
@@ -19,7 +18,7 @@ import 'package:lichess_mobile/src/features/user/model/user.dart';
 import '../../data/game_repository.dart';
 import '../../model/game.dart' hide Player;
 
-final positionCursorProvider = StateProvider.autoDispose<int>((ref) => 0);
+final positionCursorProvider = StateProvider.autoDispose<int?>((ref) => null);
 
 final isBoardTurnedProvider = StateProvider.autoDispose<bool>((ref) => false);
 
@@ -30,6 +29,9 @@ final archivedGameProvider =
   // retry on error, cache indefinitely on success
   return either.match((error) => throw error, (data) {
     ref.keepAlive();
+    ref
+        .read(positionCursorProvider.notifier)
+        .update((_) => data.steps.length - 1);
     return data;
   });
 });
@@ -43,14 +45,17 @@ class ArchivedGameScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return PlatformWidget(
-      androidBuilder: (context) => _androidBuilder(context, ref),
-      iosBuilder: (context) => _iosBuilder(context, ref),
+    return ConsumerPlatformWidget(
+      ref: ref,
+      androidBuilder: _androidBuilder,
+      iosBuilder: _iosBuilder,
     );
   }
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
     final isSoundMuted = ref.watch(isSoundMutedProvider);
+    final ArchivedGame? archivedGame =
+        ref.watch(archivedGameProvider(gameData.id)).asData?.value;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -67,13 +72,17 @@ class ArchivedGameScreen extends ConsumerWidget {
                   ref.read(isSoundMutedProvider.notifier).toggleSound())
         ],
       ),
-      // body: _BoardBody(game: game, account: account),
-      // bottomNavigationBar: _BottomBar(game: game, account: account),
+      body:
+          _BoardBody(gameData: gameData, game: archivedGame, account: account),
+      bottomNavigationBar: _BottomBar(
+          gameData: gameData, steps: archivedGame?.steps, account: account),
     );
   }
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
     final isSoundMuted = ref.watch(isSoundMutedProvider);
+    final ArchivedGame? archivedGame =
+        ref.watch(archivedGameProvider(gameData.id)).asData?.value;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
           padding: const EdgeInsetsDirectional.only(start: 0, end: 16.0),
@@ -94,8 +103,13 @@ class ArchivedGameScreen extends ConsumerWidget {
       child: SafeArea(
         child: Column(
           children: [
-            // Expanded(child: _BoardBody(game: game, account: account)),
-            // _BottomBar(game: game, account: account),
+            Expanded(
+                child: _BoardBody(
+                    gameData: gameData, game: archivedGame, account: account)),
+            _BottomBar(
+                gameData: gameData,
+                steps: archivedGame?.steps,
+                account: account),
           ],
         ),
       ),
@@ -104,21 +118,60 @@ class ArchivedGameScreen extends ConsumerWidget {
 }
 
 class _BoardBody extends ConsumerWidget {
-  const _BoardBody({required this.game, required this.account});
+  const _BoardBody({required this.gameData, this.game, required this.account});
 
-  final ArchivedGame game;
+  final ArchivedGameData gameData;
+  final ArchivedGame? game;
   final User account;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    throw UnimplementedError();
+    final isBoardTurned = ref.watch(isBoardTurnedProvider);
+    final positionCursor = ref.watch(positionCursorProvider);
+    final black = Player(
+      key: const ValueKey('black-player'),
+      name: gameData.black.name,
+      rating: gameData.black.rating,
+      title: gameData.black.title,
+      active: false,
+      clock: Duration.zero,
+    );
+    final white = Player(
+      key: const ValueKey('white-player'),
+      name: gameData.white.name,
+      rating: gameData.white.rating,
+      title: gameData.white.title,
+      active: false,
+      clock: Duration.zero,
+    );
+    final orientation =
+        account.id == gameData.white.id ? Side.white : Side.black;
+    final topPlayer = orientation == Side.white ? black : white;
+    final bottomPlayer = orientation == Side.white ? white : black;
+
+    return GameBoardLayout(
+      boardData: cg.BoardData(
+        interactableSide: cg.InteractableSide.none,
+        orientation: (isBoardTurned ? orientation.opposite : orientation).cg,
+        fen: gameData.lastFen ?? kInitialBoardFEN,
+        lastMove: (positionCursor != null
+                ? game?.moveAtPly(positionCursor - 1)
+                : game?.lastMove)
+            ?.cg,
+      ),
+      topPlayer: topPlayer,
+      bottomPlayer: bottomPlayer,
+      moves: game?.steps.map((e) => e.san).toList(growable: false),
+      currentMoveIndex: positionCursor,
+    );
   }
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.game, required this.account});
+  const _BottomBar({required this.gameData, this.steps, required this.account});
 
-  final ArchivedGame game;
+  final ArchivedGameData gameData;
+  final List<GameStep>? steps;
   final User account;
 
   @override
@@ -140,7 +193,7 @@ class _BottomBar extends ConsumerWidget {
               key: const ValueKey('cursor-first'),
               // TODO add translation
               tooltip: 'First position',
-              onPressed: positionCursor > 0
+              onPressed: positionCursor != null && positionCursor > 0
                   ? () {
                       ref.read(positionCursorProvider.notifier).state = 0;
                     }
@@ -152,9 +205,11 @@ class _BottomBar extends ConsumerWidget {
               key: const ValueKey('cursor-back'),
               // TODO add translation
               tooltip: 'Backward',
-              onPressed: positionCursor > 0
+              onPressed: positionCursor != null && positionCursor > 0
                   ? () {
-                      ref.read(positionCursorProvider.notifier).state--;
+                      ref
+                          .read(positionCursorProvider.notifier)
+                          .update((state) => state != null ? state-- : state);
                     }
                   : null,
               icon: const Icon(LichessIcons.step_backward),
@@ -164,9 +219,13 @@ class _BottomBar extends ConsumerWidget {
               key: const ValueKey('cursor-forward'),
               // TODO add translation
               tooltip: 'Forward',
-              onPressed: positionCursor < game.steps.length
+              onPressed: steps != null &&
+                      positionCursor != null &&
+                      positionCursor < steps!.length
                   ? () {
-                      ref.read(positionCursorProvider.notifier).state++;
+                      ref
+                          .read(positionCursorProvider.notifier)
+                          .update((state) => state != null ? state++ : state);
                     }
                   : null,
               icon: const Icon(LichessIcons.step_forward),
@@ -176,10 +235,12 @@ class _BottomBar extends ConsumerWidget {
               key: const ValueKey('cursor-last'),
               // TODO add translation
               tooltip: 'Last position',
-              onPressed: positionCursor < game.steps.length
+              onPressed: steps != null &&
+                      positionCursor != null &&
+                      positionCursor < steps!.length
                   ? () {
                       ref.read(positionCursorProvider.notifier).state =
-                          game.steps.length;
+                          steps!.length;
                     }
                   : null,
               icon: const Icon(LichessIcons.fast_forward),
