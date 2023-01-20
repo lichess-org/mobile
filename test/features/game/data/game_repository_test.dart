@@ -186,9 +186,10 @@ void main() {
 }
 ''';
 
-      when(() => mockApiClient
-              .get(Uri.parse('$kLichessHost/game/export/$gameIdTest')))
-          .thenReturn(TaskEither.right(http.Response(testResponse, 200)));
+      when(() => mockApiClient.get(
+            Uri.parse('$kLichessHost/game/export/$gameIdTest'),
+            headers: {'Accept': 'application/json'},
+          )).thenReturn(TaskEither.right(http.Response(testResponse, 200)));
 
       final result = await repo.getGameTask(gameIdTest).run();
 
@@ -202,9 +203,10 @@ void main() {
 
       const gameId = GameId('NchH5KBj');
 
-      when(() =>
-              mockApiClient.get(Uri.parse('$kLichessHost/game/export/$gameId')))
-          .thenReturn(TaskEither.right(http.Response(testResponse, 200)));
+      when(() => mockApiClient.get(
+            Uri.parse('$kLichessHost/game/export/$gameId'),
+            headers: {'Accept': 'application/json'},
+          )).thenReturn(TaskEither.right(http.Response(testResponse, 200)));
 
       final result = await repo.getGameTask(gameId).run();
 
@@ -218,9 +220,10 @@ void main() {
 
       const gameId = GameId('1vdsvmxp');
 
-      when(() =>
-              mockApiClient.get(Uri.parse('$kLichessHost/game/export/$gameId')))
-          .thenReturn(TaskEither.right(http.Response(testResponse, 200)));
+      when(() => mockApiClient.get(
+            Uri.parse('$kLichessHost/game/export/$gameId'),
+            headers: {'Accept': 'application/json'},
+          )).thenReturn(TaskEither.right(http.Response(testResponse, 200)));
 
       final result = await repo.getGameTask(gameId).run();
 

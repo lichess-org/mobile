@@ -31,9 +31,10 @@ class GameRepository {
   final Logger _log;
 
   TaskEither<IOError, ArchivedGame> getGameTask(GameId id) {
-    return apiClient
-        .get(Uri.parse('$kLichessHost/game/export/$id'))
-        .flatMap((response) {
+    return apiClient.get(
+      Uri.parse('$kLichessHost/game/export/$id'),
+      headers: {'Accept': 'application/json'},
+    ).flatMap((response) {
       return TaskEither.fromEither(readJsonObject(response.body,
           mapper: _makeArchivedGameFromJson, logger: _log));
     });
