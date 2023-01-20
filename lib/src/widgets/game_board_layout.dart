@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:chessground/chessground.dart';
 
+import 'package:lichess_mobile/src/utils/style.dart';
 import 'platform.dart';
 
 /// Widget that provides a board layout for games according to screen constraints
@@ -16,6 +17,7 @@ class GameBoardLayout extends StatefulWidget {
     required this.bottomPlayer,
     this.moves,
     this.currentMoveIndex,
+    this.onSelectMove,
     super.key,
   });
 
@@ -33,6 +35,8 @@ class GameBoardLayout extends StatefulWidget {
 
   final int? currentMoveIndex;
 
+  final void Function(int moveIndex)? onSelectMove;
+
   @override
   State<GameBoardLayout> createState() => _GameBoardLayoutState();
 }
@@ -42,6 +46,7 @@ class _GameBoardLayoutState extends State<GameBoardLayout> {
 
   @override
   void didUpdateWidget(covariant GameBoardLayout oldWidget) {
+    // TODO should follow current move index instead
     if (scrollController.hasClients) {
       scrollController.animateTo(
         scrollController.position.maxScrollExtent,
@@ -68,8 +73,8 @@ class _GameBoardLayoutState extends State<GameBoardLayout> {
               data: widget.boardData,
               settings: widget.boardSettings!)
           : Board(size: boardSize, data: widget.boardData);
-      final List<List<String>>? slicedMoves =
-          widget.moves?.slices(2).toList(growable: false);
+      final List<List<MapEntry<int, String>>>? slicedMoves =
+          widget.moves?.asMap().entries.slices(2).toList(growable: false);
       return aspectRatio > 1
           ? Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -104,7 +109,7 @@ class _GameBoardLayoutState extends State<GameBoardLayout> {
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.all(8),
-                                                child: Text(move),
+                                                child: Text(move.value),
                                               ),
                                             ),
                                           )
@@ -125,17 +130,28 @@ class _GameBoardLayoutState extends State<GameBoardLayout> {
           : Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (widget.moves != null)
+                if (slicedMoves != null)
                   Container(
                     padding: const EdgeInsets.only(left: 5),
                     height: 40,
                     child: ListView.builder(
                       controller: scrollController,
                       scrollDirection: Axis.horizontal,
-                      itemCount: widget.moves!.length,
+                      itemCount: slicedMoves.length,
                       itemBuilder: (_, index) => Container(
-                        margin: const EdgeInsets.only(right: 5),
-                        child: Text(widget.moves![index]),
+                        margin: const EdgeInsets.only(right: 8),
+                        child: Row(
+                          children: [
+                            MoveCount(count: index + 1),
+                            ...slicedMoves[index].map(
+                              (move) => MoveItem(
+                                move: move,
+                                current: widget.currentMoveIndex == move.key,
+                                onSelectMove: widget.onSelectMove,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -145,5 +161,51 @@ class _GameBoardLayoutState extends State<GameBoardLayout> {
               ],
             );
     });
+  }
+}
+
+class MoveCount extends StatelessWidget {
+  const MoveCount({required this.count});
+
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(right: 6),
+      child: Text(
+        '$count.',
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          color: textShade(context, 0.7),
+        ),
+      ),
+    );
+  }
+}
+
+class MoveItem extends StatelessWidget {
+  const MoveItem({required this.move, this.current, this.onSelectMove});
+
+  final MapEntry<int, String> move;
+  final bool? current;
+  final void Function(int moveIndex)? onSelectMove;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onSelectMove != null ? () => onSelectMove!(move.key) : null,
+      child: Container(
+        margin: const EdgeInsets.only(right: 6),
+        // color: current == true ? Colors.red : Colors.transparent,
+        child: Text(
+          move.value,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: current != true ? textShade(context, 0.7) : null,
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -163,6 +163,9 @@ class _BoardBody extends ConsumerWidget {
       bottomPlayer: bottomPlayer,
       moves: game?.steps.map((e) => e.san).toList(growable: false),
       currentMoveIndex: positionCursor,
+      onSelectMove: (moveIndex) {
+        ref.read(positionCursorProvider.notifier).state = moveIndex;
+      },
     );
   }
 }
