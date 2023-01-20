@@ -141,7 +141,7 @@ class ListCard extends StatelessWidget {
         ])
       else if (user.progress > 0)
         Row(mainAxisSize: MainAxisSize.min, children: [
-          const Icon(LichessIcons.arrow_full_lowerright,
+          const Icon(LichessIcons.arrow_full_upperright,
               color: LichessColors.good),
           Text('${user.progress} ',
               style: const TextStyle(color: LichessColors.good))
