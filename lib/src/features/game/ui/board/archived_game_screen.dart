@@ -26,9 +26,7 @@ final archivedGameProvider =
     FutureProvider.autoDispose.family<ArchivedGame, GameId>((ref, id) async {
   final gameRepo = ref.watch(gameRepositoryProvider);
   final either = await gameRepo.getGameTask(id).run();
-  // retry on error, cache indefinitely on success
   return either.match((error) => throw error, (data) {
-    ref.keepAlive();
     ref
         .read(positionCursorProvider.notifier)
         .update((_) => data.steps.length - 1);
@@ -153,9 +151,11 @@ class _BoardBody extends ConsumerWidget {
       boardData: cg.BoardData(
         interactableSide: cg.InteractableSide.none,
         orientation: (isBoardTurned ? orientation.opposite : orientation).cg,
-        fen: gameData.lastFen ?? kInitialBoardFEN,
+        fen: game?.fenAt(positionCursor ?? 0) ??
+            gameData.lastFen ??
+            kInitialBoardFEN,
         lastMove: (positionCursor != null
-                ? game?.moveAtPly(positionCursor - 1)
+                ? game?.moveAt(positionCursor)
                 : game?.lastMove)
             ?.cg,
       ),
@@ -207,9 +207,12 @@ class _BottomBar extends ConsumerWidget {
               tooltip: 'Backward',
               onPressed: positionCursor != null && positionCursor > 0
                   ? () {
-                      ref
-                          .read(positionCursorProvider.notifier)
-                          .update((state) => state != null ? state-- : state);
+                      ref.read(positionCursorProvider.notifier).update((state) {
+                        if (state != null) {
+                          state--;
+                        }
+                        return state;
+                      });
                     }
                   : null,
               icon: const Icon(LichessIcons.step_backward),
@@ -221,11 +224,14 @@ class _BottomBar extends ConsumerWidget {
               tooltip: 'Forward',
               onPressed: steps != null &&
                       positionCursor != null &&
-                      positionCursor < steps!.length
+                      positionCursor < steps!.length - 1
                   ? () {
-                      ref
-                          .read(positionCursorProvider.notifier)
-                          .update((state) => state != null ? state++ : state);
+                      ref.read(positionCursorProvider.notifier).update((state) {
+                        if (state != null) {
+                          state++;
+                        }
+                        return state;
+                      });
                     }
                   : null,
               icon: const Icon(LichessIcons.step_forward),
@@ -237,10 +243,10 @@ class _BottomBar extends ConsumerWidget {
               tooltip: 'Last position',
               onPressed: steps != null &&
                       positionCursor != null &&
-                      positionCursor < steps!.length
+                      positionCursor < steps!.length - 1
                   ? () {
                       ref.read(positionCursorProvider.notifier).state =
-                          steps!.length;
+                          steps!.length - 1;
                     }
                   : null,
               icon: const Icon(LichessIcons.fast_forward),

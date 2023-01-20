@@ -54,10 +54,14 @@ class ArchivedGame with _$ArchivedGame {
     required List<GameStep> steps,
   }) = _ArchivedGame;
 
-  Move? moveAtPly(int ply) =>
-      steps.isNotEmpty ? Move.fromUci(steps[ply].uci) : null;
+  String? fenAt(int cursor) =>
+      steps.isNotEmpty ? steps[cursor].position.fen : null;
+
+  Move? moveAt(int cursor) =>
+      steps.isNotEmpty ? Move.fromUci(steps[cursor].uci) : null;
 
   Move? get lastMove => steps.isNotEmpty ? Move.fromUci(steps.last.uci) : null;
+  Position? get lastPosition => steps.isNotEmpty ? steps.last.position : null;
 }
 
 @freezed
