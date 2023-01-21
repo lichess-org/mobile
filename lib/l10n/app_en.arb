@@ -1971,5 +1971,42 @@
   "cantOpenSimilarAccount": "You will not be allowed to open a new account with the same name, even if the case is different.",
   "changedMindDoNotCloseAccount": "I changed my mind, don't close my account",
   "closeAccountExplanation": "Are you sure you want to close your account? Closing your account is a permanent decision. You will NEVER be able to log in EVER AGAIN.",
-  "thisAccountIsClosed": "This account is closed."
+  "thisAccountIsClosed": "This account is closed.",
+  "perfStatsTitle": "{userName} {perfType} stats",
+  "@perfStatsTitle": {
+    "placeholders": {
+      "userName": {
+        "type": "String",
+        "example": "Bob"
+      },
+      "perfType": {
+        "type": "String",
+        "example": "Rapid"
+      }
+    }
+  },
+  "userRating": "User's rating",
+  "progression": "Progression over last 12 games",
+  "percentile": "Percentile",
+  "highestRating": "Highest rating",
+  "lowestRating": "Lowest rating",
+  "ratingDeviation": "Rating deviation",
+  "total": "Total",
+  "disconnections": "Disconnections",
+  "berserked": "Berserked",
+  "timeSpentPlaying": "Time spent playing",
+  "streaks": "Streaks",
+  "notEnoughGamesPlayed": "Not enough games played",
+  "curWinningStreak": "Current winning streak",
+  "maxWinningStreak": "Longest winning streak",
+  "curLosingStreak": "Current losing streak",
+  "maxLosingStreak": "Longest losing streak",
+  "curPlayStreak": "Current games played in a row",
+  "maxPlayStreak": "Maximum games played in a row",
+  "curTimeStreak": "Current time playing streak",
+  "maxTimeStreak": "Longest time playing streak",
+  "gameNotFound": "Game not found",
+  "totalGames": "Total games",
+  "bestRatedVictories": "Best rated victories",
+  "worstRatedDefeats": "Worst rated defeats"
 }
