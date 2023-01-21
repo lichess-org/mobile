@@ -145,28 +145,149 @@ abstract class UserPerfStatsParameters with _$UserPerfStatsParameters {
 
 @freezed
 class UserPerfStats with _$UserPerfStats {
-  
   const factory UserPerfStats({
-    required int rating,          // <- These five parameters could be represented as a
+    required double rating,          // <- These five parameters could be represented as a
     required double deviation,       // <- UserPerf, but doing so would require either to
     bool? provisional,            // <- create a subclass and overriding a method, or adding
     required int numberOfGames,   // <- a new fromJson() method to UserPerf, because the JSON value
     required int progress,        // <- the API returns are different for each case, as seen below.
 
-    required int rank,
-    required double percentile,
+    int? rank,
+    double? percentile,
+
+    required int berserkGames,
+    required int tournamentGames,
+    required int ratedGames,
+    required int wonGames,
+    required int lostGames,
+    required int drawnGames,
+    required int disconnections,
+
+    double? avgOpponent,
+    required Duration timePlayed,
+
+    int? lowestRating,
+    UserGame? lowestRatingGame,
+    int? highestRating,
+    UserGame? highestRatingGame,
+
+    UserStreak? curWinStreak, 
+    UserStreak? maxWinStreak,
+    UserStreak? curLossStreak,
+    UserStreak? maxLossStreak,
+    UserStreak? curPlayStreak,
+    UserStreak? maxPlayStreak,
+    UserStreak? curTimeStreak,
+    UserStreak? maxTimeStreak,
+
+    List<UserGame>? worstLosses,
+    List<UserGame>? bestWins
   }) = _UserPerfStats;
 
   factory UserPerfStats.fromJson(Map<String, dynamic> json) =>
     UserPerfStats.fromPick(pick(json).required());
 
-  factory UserPerfStats.fromPick(RequiredPick pick) => UserPerfStats(
-        rating: pick('perf', 'glicko', 'rating').asIntOrThrow(),
-        deviation: pick('perf', 'glicko', 'deviation').asDoubleOrThrow(),
-        provisional: pick('perf', 'glicko', 'provisional').asBoolOrNull(),
-        numberOfGames: pick('perf', 'nb').asIntOrThrow(),
-        progress: pick('perf', 'progress').asIntOrThrow(),
-        rank: pick('rank').asIntOrThrow(),
-        percentile: pick('percentile').asDoubleOrThrow(),
+  factory UserPerfStats.fromPick(RequiredPick pick) {
+      final perf = pick('perf');
+      final stat = pick('stat');
+
+      final lowest = stat('lowest');
+      final highest = stat('highest');
+      final count = stat('count');
+      final resultStreak = stat('resultStreak');
+      final playStreak = stat('playStreak');
+
+      return UserPerfStats(
+        rating: perf('glicko', 'rating').asDoubleOrThrow(),
+        deviation: perf('glicko', 'deviation').asDoubleOrThrow(),
+        provisional: perf('glicko', 'provisional').asBoolOrNull(),
+        numberOfGames: perf('nb').asIntOrThrow(),
+        progress: perf('progress').asIntOrThrow(),
+
+        rank: pick('rank').asIntOrNull(),
+        percentile: pick('percentile').asDoubleOrNull(),
+
+        berserkGames: count('berserk').asIntOrThrow(),
+        tournamentGames: count('tour').asIntOrThrow(),
+        ratedGames: count('rated').asIntOrThrow(),
+        wonGames: count('win').asIntOrThrow(),
+        lostGames: count('loss').asIntOrThrow(),
+        drawnGames: count('draw').asIntOrThrow(),
+        disconnections: count('disconnects').asIntOrThrow(),
+
+        avgOpponent: count('opAvg').asDoubleOrNull(),
+        timePlayed: count('seconds').asDurationFromSecondsOrThrow(),
+
+        lowestRating: lowest('int').asIntOrNull(),
+        lowestRatingGame: lowest.letOrNull(UserGame.fromPick),
+
+        highestRating: highest('int').asIntOrNull(),
+        highestRatingGame: highest.letOrNull(UserGame.fromPick),
+
+        curWinStreak: resultStreak('win', 'cur').letOrNull(UserStreak.fromPick),
+        maxWinStreak: resultStreak('win', 'max').letOrNull(UserStreak.fromPick),
+        curLossStreak: resultStreak('loss', 'cur').letOrNull(UserStreak.fromPick),
+        maxLossStreak: resultStreak('loss', 'max').letOrNull(UserStreak.fromPick),
+        curPlayStreak: playStreak('nb', 'cur').letOrNull(UserStreak.fromPick),
+        maxPlayStreak: playStreak('nb', 'max').letOrNull(UserStreak.fromPick),
+        curTimeStreak: playStreak('time', 'cur').letOrNull(UserStreak.fromPick),
+        maxTimeStreak: playStreak('time', 'max').letOrNull(UserStreak.fromPick),
+
+        worstLosses: stat('worstLosses', 'results')
+          .asListOrNull((pick) => UserGame.fromPick(pick)),
+        bestWins: stat('bestWins', 'results')
+          .asListOrNull((pick) => UserGame.fromPick(pick))
       );
+  }
+}
+
+@freezed
+class UserStreak with _$UserStreak {
+  const factory UserStreak({
+    // This value often represents number of games, but when dealing with
+    // time streaks, it represents numberf of seconds playing (consider creating a subclass
+    // or something similar?)
+    required int value,
+    UserGame? startGame,
+    UserGame? endGame,
+  }) = _UserStreak;
+
+  factory UserStreak.fromJson(Map<String, dynamic> json) =>
+    UserStreak.fromPick(pick(json).required());
+
+  factory UserStreak.fromPick(RequiredPick pick) {
+      return UserStreak(
+        value: pick('v').asIntOrThrow(),
+        startGame: pick('from').letOrNull(UserGame.fromPick),
+        endGame: pick('to').letOrNull(UserGame.fromPick),
+      );
+  }
+}
+
+@freezed
+class UserGame with _$UserGame {
+  const factory UserGame({
+    required DateTime finishedAt,
+    required GameId gameId,
+    int? opponentRating,
+    String? opponentId,
+    String? opponentName,
+    String? opponentTitle
+  }) = _UserGame;
+
+  factory UserGame.fromJson(Map<String, Object?> json) =>
+    UserGame.fromPick(pick(json).required());
+
+  factory UserGame.fromPick(RequiredPick pick) {
+    final opId = pick('opId');
+
+    return UserGame(
+      finishedAt: pick('at').asDateTimeOrThrow(),
+      gameId: pick('gameId').asGameIdOrThrow(),
+      opponentRating: pick('opRating').asIntOrNull(),
+      opponentId: opId('id').asStringOrNull(),
+      opponentName: opId('name').asStringOrNull(),
+      opponentTitle: opId('title').asStringOrNull(),
+    );
+  }
 }
