@@ -83,13 +83,6 @@ class LeaderboardScreen extends StatelessWidget {
         ListTile(
             leading: Icon(iconData, color: LichessColors.brag),
             title: Text(title)),
-        const Divider(
-          height: 1,
-          thickness: 1,
-          indent: 1,
-          endIndent: 0,
-          color: LichessColors.brag,
-        ),
         ..._leaderboardList(context, userList),
         const SizedBox(height: 12),
       ],
