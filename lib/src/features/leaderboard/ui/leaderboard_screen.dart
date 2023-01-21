@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:lichess_mobile/src/constants.dart';
 
 import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -20,16 +21,17 @@ class LeaderboardScreen extends StatelessWidget {
 
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          middle: Text(context.l10n.leaderboard),
+        ),
         child: CustomScrollView(slivers: [
-      CupertinoSliverNavigationBar(
-        largeTitle: Text(context.l10n.leaderboard),
-      ),
-      SliverSafeArea(
-        top: false,
-        sliver:
-            SliverList(delegate: SliverChildListDelegate(_buildList(context))),
-      ),
-    ]));
+          SliverSafeArea(
+              sliver: SliverPadding(
+                  padding: kBodyPadding,
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate(_buildList(context)),
+                  )))
+        ]));
   }
 
   Widget _buildAndroid(BuildContext context) {
@@ -81,6 +83,13 @@ class LeaderboardScreen extends StatelessWidget {
         ListTile(
             leading: Icon(iconData, color: LichessColors.brag),
             title: Text(title)),
+        const Divider(
+          height: 1,
+          thickness: 1,
+          indent: 1,
+          endIndent: 0,
+          color: LichessColors.brag,
+        ),
         ..._leaderboardList(context, userList),
         const SizedBox(height: 12),
       ],
@@ -116,36 +125,42 @@ class ListCard extends StatelessWidget {
           ],
           Text(user.username, overflow: TextOverflow.ellipsis),
           const Spacer(),
-          if (prefIcon != null) ...[
-            Icon(prefIcon, color: LichessColors.brag),
-            const SizedBox(width: 5)
-          ],
-          Text(user.rating.toString()),
         ],
       ),
-      trailing: _progress(user),
+      trailing: _ratingAndProgress(user),
     );
   }
 
-  Widget? _progress(LightUser user) {
-    if (user.progress == 0) return null;
+  Widget _ratingAndProgress(LightUser user) {
     return Row(mainAxisSize: MainAxisSize.min, children: [
+      if (prefIcon != null) ...[
+        Icon(prefIcon, color: LichessColors.brag),
+        const SizedBox(width: 5)
+      ],
+      Text(user.rating.toString()),
+      const SizedBox(width: 5),
       if (user.progress < 0)
-        Row(mainAxisSize: MainAxisSize.min, children: [
-          const Icon(LichessIcons.arrow_full_lowerright,
-              color: LichessColors.red),
-          Text(
-            '${user.progress.abs()} ',
-            style: const TextStyle(color: LichessColors.red),
-          )
-        ])
+        IntrinsicWidth(
+            stepWidth: 50,
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              const Icon(LichessIcons.arrow_full_lowerright,
+                  color: LichessColors.red),
+              Text(
+                '${user.progress.abs()} ',
+                style: const TextStyle(color: LichessColors.red),
+              )
+            ]))
       else if (user.progress > 0)
-        Row(mainAxisSize: MainAxisSize.min, children: [
-          const Icon(LichessIcons.arrow_full_upperright,
-              color: LichessColors.good),
-          Text('${user.progress} ',
-              style: const TextStyle(color: LichessColors.good))
-        ]),
+        IntrinsicWidth(
+            stepWidth: 50,
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              const Icon(LichessIcons.arrow_full_upperright,
+                  color: LichessColors.good),
+              Text('${user.progress} ',
+                  style: const TextStyle(color: LichessColors.good))
+            ]))
+      else
+        const SizedBox(width: 50),
     ]);
   }
 

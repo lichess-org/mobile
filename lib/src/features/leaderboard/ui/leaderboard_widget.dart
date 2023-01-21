@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:lichess_mobile/src/features/leaderboard/data/leaderboard_repository.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -33,20 +33,27 @@ class _LeaderboardWidgetState extends ConsumerState<LeaderboardWidget> {
     return leaderboardState.when(
         data: (data) {
           return Expanded(
-              child: ListView(
-            shrinkWrap: true,
-            children: [
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
               ListTile(
-                  title: Text(context.l10n.leaderboard),
-                  onTap: () {
-                    Navigator.of(context).push<void>(MaterialPageRoute(
-                        builder: (context) => LeaderboardScreen(
-                              leaderboard: data,
-                            )));
-                  }),
-              ..._buildList(context, data)
-            ],
-          ));
+                title: Text(
+                  context.l10n.leaderboard,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                onTap: () {
+                  Navigator.of(context).push<void>(MaterialPageRoute(
+                      builder: (context) => LeaderboardScreen(
+                            leaderboard: data,
+                          )));
+                },
+                trailing: const Icon(CupertinoIcons.forward),
+              ),
+              Expanded(
+                  child: ListView(
+                shrinkWrap: true,
+                children: _buildList(context, data),
+              )),
+            ]),
+          );
         },
         error: (error, stackTrace) {
           debugPrint(
