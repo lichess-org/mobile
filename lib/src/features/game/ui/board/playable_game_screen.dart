@@ -218,7 +218,7 @@ class _BoardBody extends ConsumerWidget {
             sideToMove: gameState?.position.turn.cg ?? game.orientation.cg,
             onMove: (cg.Move move, {bool? isPremove}) => ref
                 .read(gameStateProvider.notifier)
-                .onUserMove(game.id, Move.fromUci(move.uci)),
+                .onUserMove(game.id, Move.fromUci(move.uci)!),
           ),
           topPlayer: topPlayer,
           bottomPlayer: bottomPlayer,
