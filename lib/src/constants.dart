@@ -21,6 +21,9 @@ const kProvisionalDeviation = 110;
 const kClueLessDeviation = 230;
 
 // Misc
+const kPlatformCardBorder = RoundedRectangleBorder(
+  borderRadius: BorderRadius.all(Radius.circular(10.0)));
+
 const kEmptyWidget = SizedBox.shrink();
 const kEmptyFen = '8/8/8/8/8/8/8/8 w - - 0 1';
 
