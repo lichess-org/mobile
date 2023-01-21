@@ -297,7 +297,7 @@ class PerfStatsScreen extends ConsumerWidget {
     return (rating == null)
       ? [const Text('?', style: TextStyle(fontSize: _defaultValueFontSize))]
       : [
-        Text(rating.toStringAsFixed(2),
+        Text(rating.toString(),
           style: TextStyle(
             fontSize: _defaultValueFontSize,
             color: color
