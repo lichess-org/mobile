@@ -1,27 +1,28 @@
-import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dartchess/dartchess.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:lichess_mobile/src/features/user/ui/perf_stats_screen.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:dartchess/dartchess.dart';
 
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
+import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/features/auth/ui/auth_actions_notifier.dart';
+import 'package:lichess_mobile/src/features/game/data/game_repository.dart';
+import 'package:lichess_mobile/src/features/game/model/game.dart';
+import 'package:lichess_mobile/src/features/settings/ui/settings_screen.dart';
+import 'package:lichess_mobile/src/features/user/model/user.dart';
+import 'package:lichess_mobile/src/features/user/ui/perf_stats_screen.dart';
+import 'package:lichess_mobile/src/utils/duration.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/features/settings/ui/settings_screen.dart';
-import 'package:lichess_mobile/src/features/user/model/user.dart';
-import 'package:lichess_mobile/src/features/game/data/game_repository.dart';
-import 'package:lichess_mobile/src/features/game/model/game.dart';
-import 'package:lichess_mobile/src/features/auth/ui/auth_actions_notifier.dart';
 
 import '../../auth/data/auth_repository.dart';
 
@@ -189,7 +190,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           const SizedBox(height: 5),
           if (account.playTime != null)
             Text(context.l10n
-                .tpTimeSpentPlaying(_printDuration(account.playTime!.total)))
+                .tpTimeSpentPlaying(account.playTime!.total.toDaysHoursMinutes(context)))
           else
             kEmptyWidget,
         ],
@@ -238,13 +239,12 @@ class PerfCards extends StatelessWidget {
             width: 100,
             child: PlatformCard(
               child: InkWell(
-                customBorder: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                customBorder: kPlatformCardBorder,
                   // Border is the same as PlatformCard
                   // Consider turning this into a constant or a style?
                 onTap: () => pushPlatformRoute(
                   context: context,
-                  title: perf.name,
+                  title: context.l10n.perfStatsTitle(account.username, perf.name),
                   builder: (context) => PerfStatsScreen(
                     username: account.username,
                     perf: perf)),
@@ -381,11 +381,4 @@ class Location extends StatelessWidget {
 
 String lichessFlagSrc(String country) {
   return '$kLichessHost/assets/images/flags/$country.png';
-}
-
-String _printDuration(Duration duration) {
-  final days = duration.inDays.toString();
-  final hours = duration.inHours.remainder(24).toString();
-  final minutes = duration.inMinutes.remainder(60).toString();
-  return "$days days, $hours hours and $minutes minutes";
 }
