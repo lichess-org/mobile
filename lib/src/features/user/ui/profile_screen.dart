@@ -244,7 +244,7 @@ class PerfCards extends StatelessWidget {
                   // Consider turning this into a constant or a style?
                 onTap: () => pushPlatformRoute(
                   context: context,
-                  title: context.l10n.perfStatsTitle(account.username, perf.name),
+                  title: context.l10n.perfStats('${account.username} ${perf.name}'),
                   builder: (context) => PerfStatsScreen(
                     username: account.username,
                     perf: perf)),
