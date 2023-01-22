@@ -48,31 +48,31 @@ class LeaderboardScreen extends StatelessWidget {
   List<Widget> _buildList(BuildContext context) {
     return [
       _buildLeaderboard(
-          context, leaderboard.bullet, LichessIcons.bullet, 'Bullet'),
+          context, leaderboard.bullet, LichessIcons.bullet, 'BULLET'),
       _buildLeaderboard(
-          context, leaderboard.blitz, LichessIcons.blitz, 'Blitz'),
+          context, leaderboard.blitz, LichessIcons.blitz, 'BLITZ'),
       _buildLeaderboard(
-          context, leaderboard.rapid, LichessIcons.rapid, 'Rapid'),
+          context, leaderboard.rapid, LichessIcons.rapid, 'RAPID'),
       _buildLeaderboard(
-          context, leaderboard.classical, LichessIcons.classical, 'Classical'),
+          context, leaderboard.classical, LichessIcons.classical, 'CLASSICAL'),
       _buildLeaderboard(context, leaderboard.ultrabullet,
-          LichessIcons.ultrabullet, 'Ultra Bullet'),
+          LichessIcons.ultrabullet, 'ULTRA BULLET'),
       _buildLeaderboard(
-          context, leaderboard.crazyhouse, LichessIcons.h_square, 'Crazyhouse'),
+          context, leaderboard.crazyhouse, LichessIcons.h_square, 'CRAZYHOUSE'),
       _buildLeaderboard(
-          context, leaderboard.chess960, LichessIcons.die_six, 'Chess 960'),
+          context, leaderboard.chess960, LichessIcons.die_six, 'CHESS 960'),
       _buildLeaderboard(context, leaderboard.kingOfThehill, LichessIcons.bullet,
-          'King of The Hill'),
+          'KING OF THE HILL'),
       _buildLeaderboard(context, leaderboard.threeCheck,
-          LichessIcons.three_check, 'Three Check'),
+          LichessIcons.three_check, 'THREE CHECK'),
       _buildLeaderboard(
-          context, leaderboard.atomic, LichessIcons.atom, 'Atomic'),
+          context, leaderboard.atomic, LichessIcons.atom, 'ATOMIC'),
       _buildLeaderboard(
-          context, leaderboard.horde, LichessIcons.horde, 'Horde'),
+          context, leaderboard.horde, LichessIcons.horde, 'HORDE'),
       _buildLeaderboard(
-          context, leaderboard.antichess, LichessIcons.antichess, 'Antichess'),
+          context, leaderboard.antichess, LichessIcons.antichess, 'ANTICHESS'),
       _buildLeaderboard(context, leaderboard.racingKings,
-          LichessIcons.racing_kings, 'Racing Kings'),
+          LichessIcons.racing_kings, 'RACING KINGS'),
     ];
   }
 
@@ -80,9 +80,13 @@ class LeaderboardScreen extends StatelessWidget {
       IconData iconData, String title) {
     return Column(
       children: [
-        ListTile(
-            leading: Icon(iconData, color: LichessColors.brag),
-            title: Text(title)),
+        Material(
+          color: LichessColors.brag,
+          child: ListTile(
+            leading: Icon(iconData, color: const Color(0xFFFFFFFF)),
+            title: Text(title),
+          ),
+        ),
         ..._leaderboardList(context, userList),
         const SizedBox(height: 12),
       ],
@@ -116,8 +120,9 @@ class ListCard extends StatelessWidget {
                     color: LichessColors.brag, fontWeight: FontWeight.bold)),
             const SizedBox(width: 5)
           ],
-          Text(user.username, overflow: TextOverflow.ellipsis),
-          const Spacer(),
+          Flexible(
+            child: Text(user.username, overflow: TextOverflow.ellipsis),
+          ),
         ],
       ),
       trailing: _ratingAndProgress(user),
@@ -130,30 +135,26 @@ class ListCard extends StatelessWidget {
         Icon(prefIcon, color: LichessColors.brag),
         const SizedBox(width: 5)
       ],
-      Text(user.rating.toString()),
       const SizedBox(width: 5),
       if (user.progress < 0)
-        IntrinsicWidth(
-            stepWidth: 50,
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
-              const Icon(LichessIcons.arrow_full_lowerright,
-                  color: LichessColors.red),
-              Text(
-                '${user.progress.abs()} ',
-                style: const TextStyle(color: LichessColors.red),
-              )
-            ]))
+        Row(mainAxisSize: MainAxisSize.max, children: [
+          const Icon(LichessIcons.arrow_full_lowerright,
+              size: 20, color: LichessColors.red),
+          Text(
+            '${user.progress.abs()} ',
+            textWidthBasis: TextWidthBasis.parent,
+            style: const TextStyle(color: LichessColors.red),
+          )
+        ])
       else if (user.progress > 0)
-        IntrinsicWidth(
-            stepWidth: 50,
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
-              const Icon(LichessIcons.arrow_full_upperright,
-                  color: LichessColors.good),
-              Text('${user.progress} ',
-                  style: const TextStyle(color: LichessColors.good))
-            ]))
-      else
-        const SizedBox(width: 50),
+        Row(mainAxisSize: MainAxisSize.max, children: [
+          const Icon(LichessIcons.arrow_full_upperright,
+              size: 20, color: LichessColors.good),
+          Text('${user.progress} ',
+              style: const TextStyle(color: LichessColors.good))
+        ]),
+      const SizedBox(width: 5),
+      Flexible(child: Text(user.rating.toString()))
     ]);
   }
 
