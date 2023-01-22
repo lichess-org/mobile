@@ -136,7 +136,7 @@ class UserStatus with _$UserStatus {
 }
 
 @freezed
-abstract class UserPerfStatsParameters with _$UserPerfStatsParameters {
+class UserPerfStatsParameters with _$UserPerfStatsParameters {
   factory UserPerfStatsParameters({
     required String username,
     required Perf perf,
@@ -149,7 +149,7 @@ class UserPerfStats with _$UserPerfStats {
     required double rating,          // <- These five parameters could be represented as a
     required double deviation,       // <- UserPerf, but doing so would require either to
     bool? provisional,            // <- create a subclass and overriding a method, or adding
-    required int numberOfGames,   // <- a new fromJson() method to UserPerf, because the JSON value
+    required int totalGames,   // <- a new fromJson() method to UserPerf, because the JSON value
     required int progress,        // <- the API returns are different for each case, as seen below.
 
     int? rank,
@@ -201,12 +201,12 @@ class UserPerfStats with _$UserPerfStats {
         rating: perf('glicko', 'rating').asDoubleOrThrow(),
         deviation: perf('glicko', 'deviation').asDoubleOrThrow(),
         provisional: perf('glicko', 'provisional').asBoolOrNull(),
-        numberOfGames: perf('nb').asIntOrThrow(),
         progress: perf('progress').asIntOrThrow(),
 
         rank: pick('rank').asIntOrNull(),
         percentile: pick('percentile').asDoubleOrNull(),
 
+        totalGames: count('all').asIntOrThrow(),
         berserkGames: count('berserk').asIntOrThrow(),
         tournamentGames: count('tour').asIntOrThrow(),
         ratedGames: count('rated').asIntOrThrow(),
