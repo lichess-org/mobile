@@ -3,7 +3,6 @@ import 'package:logging/logging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
-import 'package:fpdart/fpdart.dart';
 
 import './data/puzzle_local_db.dart';
 import './data/puzzle_repository.dart';
@@ -32,7 +31,7 @@ class PuzzleService {
   /// Loads the next puzzle from database. Will sync with server if necessary.
   Future<Puzzle?> nextPuzzle(
       {String? userId, PuzzleTheme angle = PuzzleTheme.mix}) async {
-    final data = await _syncAndLoadData(userId, angle).run();
+    final data = await _syncAndLoadData(userId, angle);
     return data?.unsolved[0];
   }
 
@@ -53,7 +52,7 @@ class PuzzleService {
               data.unsolved.removeWhere((e) => e.puzzle.id == solution.id),
         ),
       );
-      await _syncAndLoadData(userId, angle).run();
+      await _syncAndLoadData(userId, angle);
     }
   }
 
@@ -62,7 +61,8 @@ class PuzzleService {
   /// This task will fetch missing puzzles so the queue length is always equal to
   /// `localQueueLength`.
   /// It will also call the `solveBatchTask` with solved puzzles.
-  Task<PuzzleLocalData?> _syncAndLoadData(String? userId, PuzzleTheme angle) {
+  Future<PuzzleLocalData?> _syncAndLoadData(
+      String? userId, PuzzleTheme angle) async {
     final data = db.fetch(userId: userId, angle: angle);
 
     final unsolved = data?.unsolved ?? IList(const []);
@@ -73,33 +73,26 @@ class PuzzleService {
     if (deficit > 0) {
       _log.fine('Have a puzzle deficit of $deficit, will sync with lichess');
 
-      final repoTask = solved.isNotEmpty
-          ? repository.solveBatchTask(nb: deficit, solved: solved, angle: angle)
-          : repository.selectBatchTask(nb: deficit, angle: angle);
+      final result = await (solved.isNotEmpty
+          ? repository.solveBatch(nb: deficit, solved: solved, angle: angle)
+          : repository.selectBatch(nb: deficit, angle: angle));
 
-      return repoTask
-          .match(
-            (_) => Tuple2(data, false),
-            (data) => Tuple2(
-                PuzzleLocalData(
-                    solved: IList(const []),
-                    unsolved: IList([...unsolved, ...data])),
-                true),
-          )
-          .flatMap((tuple) => Task(() async {
-                final newData = tuple.first;
-                final shouldSave = tuple.second;
-                if (newData != null && shouldSave) {
-                  await db.save(
-                    userId: userId,
-                    angle: angle,
-                    data: newData,
-                  );
-                }
-                return newData;
-              }));
+      if (result.isFailure) {
+        return data;
+      } else {
+        final list = result.getOrThrow();
+        final newData = PuzzleLocalData(
+          solved: IList(const []),
+          unsolved: IList([...unsolved, ...list]),
+        );
+        await db.save(
+          userId: userId,
+          angle: angle,
+          data: newData,
+        );
+      }
     }
 
-    return Task.of(data);
+    return data;
   }
 }

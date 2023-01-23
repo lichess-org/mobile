@@ -2,8 +2,8 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:logging/logging.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:dart_result/dart_result.dart';
 import 'package:http/http.dart' as http;
-import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
@@ -25,23 +25,14 @@ void main() {
       final apiClient = ApiClient(mockLogger, FakeClient());
 
       for (final method in [apiClient.get, apiClient.post, apiClient.delete]) {
-        expect(
-            await method
-                .call(Uri.parse('http://api.test/will/return/200'))
-                .run(),
-            isA<Right<IOError, http.Response>>());
+        expect(await method.call(Uri.parse('http://api.test/will/return/200')),
+            isA<Success<http.Response, IOError>>());
 
-        expect(
-            await method
-                .call(Uri.parse('http://api.test/will/return/301'))
-                .run(),
-            isA<Right<IOError, http.Response>>());
+        expect(await method.call(Uri.parse('http://api.test/will/return/301')),
+            isA<Success<http.Response, IOError>>());
 
-        expect(
-            await method
-                .call(Uri.parse('http://api.test/will/return/204'))
-                .run(),
-            isA<Right<IOError, http.Response>>());
+        expect(await method.call(Uri.parse('http://api.test/will/return/204')),
+            isA<Success<http.Response, IOError>>());
       }
     });
 
@@ -52,36 +43,31 @@ void main() {
         expect(
             await method
                 .call(Uri.parse('http://api.test/will/return/401'))
-                .run()
-                .then((r) => r.getLeft().toNullable()),
+                .then((r) => r.failure),
             isA<UnauthorizedError>());
 
         expect(
             await method
                 .call(Uri.parse('http://api.test/will/return/403'))
-                .run()
-                .then((r) => r.getLeft().toNullable()),
+                .then((r) => r.failure),
             isA<ForbiddenError>());
 
         expect(
             await method
                 .call(Uri.parse('http://api.test/will/return/404'))
-                .run()
-                .then((r) => r.getLeft().toNullable()),
+                .then((r) => r.failure),
             isA<NotFoundError>());
 
         expect(
             await method
                 .call(Uri.parse('http://api.test/will/return/500'))
-                .run()
-                .then((r) => r.getLeft().toNullable()),
+                .then((r) => r.failure),
             isA<ApiRequestError>());
 
         expect(
             await method
                 .call(Uri.parse('http://api.test/will/return/503'))
-                .run()
-                .then((r) => r.getLeft().toNullable()),
+                .then((r) => r.failure),
             isA<ApiRequestError>());
       }
     });
@@ -90,9 +76,8 @@ void main() {
       final apiClient = ApiClient(mockLogger, FakeClient());
       for (final method in [apiClient.get, apiClient.post, apiClient.delete]) {
         final resp = await method
-            .call(Uri.parse('http://api.test/will/throw/socket/exception'))
-            .run();
-        expect(resp.getLeft().toNullable(), isA<GenericError>());
+            .call(Uri.parse('http://api.test/will/throw/socket/exception'));
+        expect(resp.failure, isA<GenericError>());
       }
     });
 
@@ -109,12 +94,11 @@ void main() {
             : http.StreamedResponse(_streamBody('ok'), 200);
       });
 
-      final resp = await apiClient
-          .get(Uri.parse('http://api.test/retry'), retry: true)
-          .run();
+      final resp =
+          await apiClient.get(Uri.parse('http://api.test/retry'), retry: true);
 
       verify(() => mockClient.send(any())).called(3);
-      expect(resp, isA<Right<IOError, http.Response>>());
+      expect(resp, isA<Success<http.Response, IOError>>());
     });
   });
 

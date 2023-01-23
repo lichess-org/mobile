@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:fpdart/fpdart.dart';
+import 'package:dart_result/dart_result.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
@@ -30,30 +30,34 @@ class GameRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  TaskEither<IOError, ArchivedGame> getGameTask(GameId id) {
+  Future<Result<ArchivedGame, IOError>> getGameTask(GameId id) {
     return apiClient
         .get(Uri.parse('$kLichessHost/game/export/$id'))
-        .flatMap((response) {
-      return TaskEither.fromEither(readJsonObject(response.body,
-          mapper: _makeArchivedGamefromJson, logger: _log));
-    });
+        .then((result) => result.flatMap((response) {
+              return readJsonObject(response.body,
+                  mapper: _makeArchivedGamefromJson, logger: _log);
+            }));
   }
 
   // TODO parameters
-  TaskEither<IOError, List<ArchivedGame>> getUserGamesTask(String username) {
+  Future<Result<List<ArchivedGame>, IOError>> getUserGamesTask(
+      String username) {
     return apiClient.get(
       Uri.parse('$kLichessHost/api/games/user/$username?max=10'),
       headers: {'Accept': 'application/x-ndjson'},
-    ).flatMap((r) => TaskEither.fromEither(Either.tryCatch(() {
-          final lines = r.body.split('\n');
-          return lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
-            final json = jsonDecode(e) as Map<String, dynamic>;
-            return _makeArchivedGamefromJson(json);
-          }).toList(growable: false);
-        }, (error, stackTrace) {
-          _log.severe('Could not read json object as ArchivedGame: $error');
-          return DataFormatError(stackTrace);
-        })));
+    ).then((result) => result.flatMap((r) {
+          try {
+            final lines = r.body.split('\n');
+            return Success(
+                lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
+              final json = jsonDecode(e) as Map<String, dynamic>;
+              return _makeArchivedGamefromJson(json);
+            }).toList(growable: false));
+          } catch (error, stackTrace) {
+            _log.severe('Could not read json object as ArchivedGame: $error');
+            return Failure(DataFormatError(stackTrace));
+          }
+        }));
   }
 
   /// Stream the events reaching a lichess user in real time as ndjson.
@@ -85,19 +89,19 @@ class GameRepository {
         .handleError((Object error) => _log.warning(error));
   }
 
-  TaskEither<IOError, void> playMoveTask(GameId gameId, Move move) {
+  Future<Result<void, IOError>> playMoveTask(GameId gameId, Move move) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/move/${move.uci}'),
         retry: true);
   }
 
-  TaskEither<IOError, void> abortTask(GameId gameId) {
+  Future<Result<void, IOError>> abortTask(GameId gameId) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/abort'),
         retry: true);
   }
 
-  TaskEither<IOError, void> resignTask(GameId gameId) {
+  Future<Result<void, IOError>> resignTask(GameId gameId) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/resign'),
         retry: true);

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fpdart/fpdart.dart';
+import 'package:dart_result/dart_result.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:logging/logging.dart';
@@ -38,11 +38,11 @@ void main() {
       when(() => mockApiClient.get(
             Uri.parse('$kLichessHost/api/games/user/testUser?max=10'),
             headers: {'Accept': 'application/x-ndjson'},
-          )).thenReturn(TaskEither.right(http.Response(response, 200)));
+          )).thenAnswer((_) async => Success(http.Response(response, 200)));
 
-      final result = await repo.getUserGamesTask('testUser').run();
+      final result = await repo.getUserGamesTask('testUser');
 
-      expect(result.isRight(), true);
+      expect(result.isSuccess, true);
     });
   });
 

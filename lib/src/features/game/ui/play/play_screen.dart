@@ -28,9 +28,9 @@ final maiaBotsProvider =
     FutureProvider.autoDispose<List<Tuple2<User, UserStatus>>>((ref) async {
   final userRepo = ref.watch(userRepositoryProvider);
   final maiaBotsTask = TaskEither.sequenceList([
-    userRepo.getUserTask('maia1'),
-    userRepo.getUserTask('maia5'),
-    userRepo.getUserTask('maia9'),
+    userRepo.getUser('maia1'),
+    userRepo.getUser('maia5'),
+    userRepo.getUser('maia9'),
   ]);
   final maiaStatusesTask =
       userRepo.getUsersStatusTask(['maia1', 'maia5', 'maia9']);

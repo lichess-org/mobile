@@ -185,6 +185,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  dart_result:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "5461cc565141ea6b44b6d23c686b721fb50f32f3"
+      resolved-ref: "5461cc565141ea6b44b6d23c686b721fb50f32f3"
+      url: "https://github.com/veloce/dart_result.git"
+    source: git
+    version: "0.1.0"
   dart_style:
     dependency: transitive
     description:

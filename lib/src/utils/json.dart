@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:fpdart/fpdart.dart';
+import 'package:dart_result/dart_result.dart';
 import 'package:logging/logging.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dartchess/dartchess.dart';
@@ -242,36 +242,44 @@ extension ModelsPick on Pick {
 
 typedef Mapper<T> = T Function(Map<String, dynamic>);
 
-Either<IOError, T> readJsonObject<T>(String json,
-        {required Mapper<T> mapper, Logger? logger}) =>
-    Either.tryCatch(() {
-      final dynamic obj = jsonDecode(json);
-      if (obj is! Map<String, dynamic>) {
+Result<T, IOError> readJsonObject<T>(
+  String json, {
+  required Mapper<T> mapper,
+  Logger? logger,
+}) {
+  try {
+    final dynamic obj = jsonDecode(json);
+    if (obj is! Map<String, dynamic>) {
+      throw const FormatException('Expected an object');
+    }
+    return Success(mapper(obj));
+  } catch (error, trace) {
+    logger?.severe('Could not read json object as ${T.toString()}: $error');
+    return Failure(DataFormatError(trace));
+  }
+}
+
+Result<List<T>, IOError> readJsonListOfObjects<T>(
+  String json, {
+  required Mapper<T> mapper,
+  Logger? logger,
+}) {
+  try {
+    final dynamic list = jsonDecode(json);
+    if (list is! List<dynamic>) {
+      throw const FormatException('Expected a list');
+    }
+    return Success(list.map((e) {
+      if (e is! Map<String, dynamic>) {
         throw const FormatException('Expected an object');
       }
-      return mapper(obj);
-    }, (error, stackTrace) {
-      logger?.severe('Could not read json object as ${T.toString()}: $error');
-      return DataFormatError(stackTrace);
-    });
-
-Either<IOError, List<T>> readJsonListOfObjects<T>(String json,
-        {required Mapper<T> mapper, Logger? logger}) =>
-    Either.tryCatch(() {
-      final dynamic list = jsonDecode(json);
-      if (list is! List<dynamic>) {
-        throw const FormatException('Expected a list');
-      }
-      return list.map((e) {
-        if (e is! Map<String, dynamic>) {
-          throw const FormatException('Expected an object');
-        }
-        return mapper(e);
-      }).toList();
-    }, (error, stackTrace) {
-      if (error is FormatException) {
-        logger?.severe('Received json is not a list');
-      }
-      logger?.severe('Could not read json object as ${T.toString()}: $error');
-      return DataFormatError(stackTrace);
-    });
+      return mapper(e);
+    }).toList());
+  } catch (error, stackTrace) {
+    if (error is FormatException) {
+      logger?.severe('Received json is not a list');
+    }
+    logger?.severe('Could not read json object as ${T.toString()}: $error');
+    return Failure(DataFormatError(stackTrace));
+  }
+}

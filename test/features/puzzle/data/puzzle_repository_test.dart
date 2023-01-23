@@ -32,8 +32,8 @@ void main() {
           Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=30'),
         )).thenAnswer((_) => mockResponse(batchResponse, 200));
 
-    final result = await repo.selectBatchTask().run();
+    final result = await repo.selectBatch();
 
-    expect(result.isRight(), true);
+    expect(result.isSuccess, true);
   });
 }
