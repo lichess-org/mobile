@@ -1,148 +1,118 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fpdart/fpdart.dart';
-import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:logging/logging.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:http/http.dart' as http;
 
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/http.dart';
-import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
+import 'package:lichess_mobile/src/features/user/ui/perf_stats_screen.dart';
+import '../../auth/data/fake_auth_repository.dart';
+import '../../../utils.dart';
+
+class MockClient extends Mock implements http.Client {}
 
 class MockApiClient extends Mock implements ApiClient {}
 
 class MockLogger extends Mock implements Logger {}
 
-const testUserId = 'test';
-
 void main() {
+  final mockClient = MockClient();
   final mockLogger = MockLogger();
-  final mockApiClient = MockApiClient();
-  final repo = UserRepository(apiClient: mockApiClient, logger: mockLogger);
+  
+  final String perfApiString = testPerf.toString().split('.').last;
+  final uriString = '$kLichessHost/api/user/$testUserId/perf/$perfApiString';
 
   setUpAll(() {
-    reset(mockApiClient);
+    when(() => mockClient.get(Uri.parse(uriString)))
+      .thenAnswer((_) => mockResponse(userPerfStatsResponse, 200));
   });
 
-  group('UserRepository.getUserTask', () {
-    test('json read, minimal example', () async {
-      const testUserResponseMinimal = '''
-{
-  "id": "$testUserId",
-  "username": "$testUserId",
-  "createdAt": 1290415680000,
-  "seenAt": 1290415680000,
-  "perfs": {
-  }
-}
-''';
-      when(() => mockApiClient
-              .get(Uri.parse('$kLichessHost/api/user/$testUserId')))
-          .thenReturn(
-              TaskEither.right(http.Response(testUserResponseMinimal, 200)));
+  group('PerfStatsScreen', () {
+    testWidgets('meets accessibility guidelines', (WidgetTester tester) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
+      
+      final app = await buildTestApp(
+        tester,
+        home: Consumer(builder: (context, ref, _) {
+          return const PerfStatsScreen(username: testUserId, perf: testPerf);
+        }));
 
-      final result = await repo.getUserTask(testUserId).run();
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            // Don't need a logged in user to test this screen.
+            authRepositoryProvider
+              .overrideWithValue(FakeAuthRepository(null)),
+            apiClientProvider
+              .overrideWithValue(ApiClient(mockLogger, mockClient)),
+          ],
+          child: app)
+      );
 
-      expect(result.isRight(), true);
-    });
+      // wait for auth state and perf stats
+      await tester.pump(const Duration(milliseconds: 50));
 
-    test('json read, full example', () async {
-      const testUserResponse = '''
-{
-  "id": "$testUserId",
-  "username": "$testUserId",
-  "createdAt": 1290415680000,
-  "seenAt": 1290415680000,
-  "title": "GM",
-  "patron": true,
-  "perfs": {
-    "blitz": {
-      "games": 2340,
-      "rating": 1681,
-      "rd": 30,
-      "prog": 10
-    },
-    "rapid": {
-      "games": 2340,
-      "rating": 1677,
-      "rd": 30,
-      "prog": 10
-    },
-    "classical": {
-      "games": 2340,
-      "rating": 1618,
-      "rd": 30,
-      "prog": 10
-    }
-  },
-  "profile": {
-    "country": "France",
-    "location": "Lille",
-    "bio": "test bio",
-    "firstName": "John",
-    "lastName": "Doe",
-    "fideRating": 1800,
-    "links": "http://test.com"
-  }
-}
-''';
-      when(() => mockApiClient
-              .get(Uri.parse('$kLichessHost/api/user/$testUserId')))
-          .thenReturn(TaskEither.right(http.Response(testUserResponse, 200)));
+      await meetsTapTargetGuideline(tester);
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
-      final result = await repo.getUserTask(testUserId).run();
+      if (debugDefaultTargetPlatformOverride == TargetPlatform.android) {
+        await expectLater(tester, meetsGuideline(textContrastGuideline));
+      }
+      handle.dispose();
+    }, variant: kPlatformVariant);
 
-      expect(result.isRight(), true);
-    });
+    testWidgets('screen loads, required stats are shown', (WidgetTester tester) async {
+      final app = await buildTestApp(
+        tester,
+        home: Consumer(builder: (context, ref, _) {
+          return const PerfStatsScreen(username: testUserId, perf: testPerf);
+        }));
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            // Don't need a logged in user to test this screen.
+            authRepositoryProvider
+              .overrideWithValue(FakeAuthRepository(null)),
+            apiClientProvider
+              .overrideWithValue(ApiClient(mockLogger, mockClient)),
+          ],
+          child: app)
+      );
+
+      // wait for auth state and perf stats
+      await tester.pump(const Duration(milliseconds: 50));
+
+      final requiredStatsValues = [
+        '1500.42', // Rating
+        '50.24', // Deviation
+        '5', // Total games
+        '20', // Progression in last 12 games
+        '0', // Berserked games
+        '0', // Tournament games
+        '3', // Rated games
+        '2', // Won games
+        '2', // Lost games
+        '1', // Drawn games
+        '1' // Disconnections
+      ];
+
+      for (final val in requiredStatsValues) {
+        expect(find.widgetWithText(PlatformCard, val), findsAtLeastNWidgets(1));
+      }
+    }, variant: kPlatformVariant);
+
   });
-
-  group('UserRepository.getUserPerfStatsTask', () {
-    const testPerf = Perf.rapid;
-    final String perfApiString = testPerf.toString().split('.').last;
-    final uriString = '$kLichessHost/api/user/$testUserId/perf/$perfApiString';
-    test('json read, minimal example', () async {
-      const responseMinimal = '''
-      {
-  "user": {
-    "name": "$testUserId"
-  },
-  "perf": {
-    "glicko": {
-      "rating": 1500,
-      "deviation": 50,
-      "provisional": false
-    },
-    "nb": 5,
-    "progress": 20
-  },
-  "stat": {
-    "count": {
-      "berserk": 0,
-      "win": 2,
-      "all": 5,
-      "seconds": 10000,
-      "opAvg": 1500,
-      "draw": 1,
-      "tour": 0,
-      "disconnects": 1,
-      "rated": 3,
-      "loss": 2
-    }
-  }
 }
-''';
-      when(() => mockApiClient
-        .get(Uri.parse(uriString)))
-      .thenReturn(
-        TaskEither.right(http.Response(responseMinimal, 200)));
 
-      final result = await repo.getUserPerfStatsTask(testUserId, testPerf).run();
-
-      expect(result.isRight(), true);
-    });
-
-    test('json read, full example', () async {
-        const responseFull = '''
+const testUserId = 'fakeUsername';
+const testPerf = Perf.rapid;
+const userPerfStatsResponse = '''
 {
   "user": {
     "name": "testOpponentName"
@@ -379,58 +349,3 @@ void main() {
   }
 }
 ''';
-      when(() => mockApiClient
-        .get(Uri.parse(uriString)))
-      .thenReturn(TaskEither.right(http.Response(responseFull, 200)));
-
-      final result = await repo.getUserPerfStatsTask(testUserId, testPerf).run();
-
-      expect(result.isRight(), true);
-    });
-  });
-
-  group('UserRepository.getUsersStatusTask', () {
-    test('json read, minimal example', () async {
-      final ids = ['maia1', 'maia5', 'maia9'];
-      when(() => mockApiClient.get(
-              Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}')))
-          .thenReturn(TaskEither.right(http.Response('[]', 200)));
-
-      final result = await repo.getUsersStatusTask(ids).run();
-
-      expect(result.isRight(), true);
-    });
-
-    test('json read, full example', () async {
-      const response = '''
-[
-  {
-    "id": "maia1",
-    "name": "maia1",
-    "online": true,
-    "playing": true
-  },
-  {
-    "id": "maia5",
-    "name": "maia5",
-    "online": false
-  },
-  {
-    "id": "maia9",
-    "name": "maia9",
-    "online": true
-  }
-]
-''';
-      final ids = ['maia1', 'maia5', 'maia9'];
-      when(() => mockApiClient.get(
-              Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}')))
-          .thenReturn(TaskEither.right(http.Response(response, 200)));
-
-      final result =
-          await repo.getUsersStatusTask(['maia1', 'maia5', 'maia9']).run();
-
-      expect(result.isRight(), true);
-    });
-  });
-}
