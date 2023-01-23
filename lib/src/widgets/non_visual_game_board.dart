@@ -40,20 +40,15 @@ class NonVisualGameBoard extends StatelessWidget {
         } else if (lowered == 'o' || lowered == 'opponent') {
           return 'todo: read player';
         }
-        final pieceResult = handlePieceCommand(command, position.board);
-        if (pieceResult != null) {
-          return pieceResult;
-        }
-        final scanResult = handleScanCommand(lowered, position.board);
-        if (scanResult != null) {
-          return scanResult;
-        }
         final move = Move.fromUci(command) ?? position.parseSan(command);
         if (move != null) {
           onMove(move);
           return null;
         }
-        return 'Invalid command: $command';
+        return handlePieceCommand(command, position.board) ??
+            handleScanCommand(lowered, position.board) ??
+            handlePossibleMovesCommand(lowered, position) ??
+            'Invalid command: $command';
       },
     );
   }
