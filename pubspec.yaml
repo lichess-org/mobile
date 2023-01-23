@@ -52,7 +52,7 @@ dependencies:
   dart_result:
     git:
       url: https://github.com/veloce/dart_result.git
-      ref: 5461cc565141ea6b44b6d23c686b721fb50f32f3
+      ref: 8634d8f042d5f863d6a8557d10845b94d584ad3c
 
 dev_dependencies:
   build_runner: ^2.3.2

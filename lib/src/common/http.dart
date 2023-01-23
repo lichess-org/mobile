@@ -29,7 +29,7 @@ class ApiClient {
   final Client _client;
   final RetryClient _retryClient;
 
-  Future<Result<Response, IOError>> get(Uri url,
+  AsyncResult<Response, IOError> get(Uri url,
       {Map<String, String>? headers, bool retry = false}) async {
     try {
       final resp =
@@ -41,7 +41,7 @@ class ApiClient {
     }
   }
 
-  Future<Result<Response, IOError>> post(Uri url,
+  AsyncResult<Response, IOError> post(Uri url,
       {Map<String, String>? headers,
       Object? body,
       Encoding? encoding,
@@ -56,7 +56,7 @@ class ApiClient {
     }
   }
 
-  Future<Result<Response, IOError>> delete(Uri url,
+  AsyncResult<Response, IOError> delete(Uri url,
       {Map<String, String>? headers,
       Object? body,
       Encoding? encoding,

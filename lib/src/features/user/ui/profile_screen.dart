@@ -28,12 +28,12 @@ final recentGamesProvider = FutureProvider.autoDispose
   final repo = ref.watch(gameRepositoryProvider);
   final result = await repo.getUserGamesTask(userName);
   // retry on error, cache indefinitely on success
-  return result.match(
-    onSuccess: (value) {
+  return result.fold(
+    (value) {
       ref.keepAlive();
       return value;
     },
-    onFailure: (error) => throw error,
+    (error) => throw error,
   );
 });
 

@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart' hide Tuple2;
+import 'package:dart_result/dart_result.dart';
 import 'package:tuple/tuple.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
@@ -27,13 +28,12 @@ import './play_action_notifier.dart';
 final maiaBotsProvider =
     FutureProvider.autoDispose<List<Tuple2<User, UserStatus>>>((ref) async {
   final userRepo = ref.watch(userRepositoryProvider);
-  final maiaBotsTask = TaskEither.sequenceList([
+  final Future<List<Result<User, IOError>>> maiaBots = Future.wait([
     userRepo.getUser('maia1'),
     userRepo.getUser('maia5'),
     userRepo.getUser('maia9'),
   ]);
-  final maiaStatusesTask =
-      userRepo.getUsersStatusTask(['maia1', 'maia5', 'maia9']);
+  final maiaStatuses = userRepo.getUsersStatus(['maia1', 'maia5', 'maia9']);
   final task = maiaBotsTask.flatMap((bots) => maiaStatusesTask.map(
         (statuses) => bots
             .map((bot) => Tuple2<User, UserStatus>(

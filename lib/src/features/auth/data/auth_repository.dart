@@ -1,5 +1,5 @@
 import 'package:logging/logging.dart';
-import 'package:fpdart/fpdart.dart';
+import 'package:dart_result/dart_result.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,17 +41,13 @@ class AuthRepository {
   bool get isAuthenticated => _authState.value != null;
 
   Future<void> init() {
-    return TaskEither<IOError, void>.tryCatch(
-            () => _storage.read(key: kOAuthTokenStorageKey),
-            (error, trace) => GenericError(trace))
-        .andThen(getAccountTask)
-        .map((account) {
+    return getAccountTask().match(onSuccess: (account) {
       _authState.value = account;
-    }).run();
+    });
   }
 
-  TaskEither<IOError, void> signInTask() {
-    return TaskEither<IOError, void>.tryCatch(() async {
+  AsyncResult<void, IOError> signInTask() async {
+    return Result.tryCatchAsync<void, IOError>(() async {
       final result =
           await _appAuth.authorizeAndExchangeCode(AuthorizationTokenRequest(
         kLichessClientId,
@@ -71,23 +67,24 @@ class AuthRepository {
     }, (error, trace) {
       _log.severe('signIn error', error, trace);
       return GenericError(trace);
-    }).andThen(getAccountTask).map((account) {
+    }).flatMap((_) => getAccountTask()).map((account) {
       _authState.value = account;
+      return account;
     });
   }
 
-  TaskEither<IOError, void> signOutTask() {
+  Future<Result<void, IOError>> signOutTask() {
     return _apiClient
         .delete(Uri.parse('$kLichessHost/api/token'))
-        .map((_) async {
-      await _storage.delete(key: kOAuthTokenStorageKey);
-      _authState.value = null;
-    });
+        .then((result) => result.map((_) async {
+              await _storage.delete(key: kOAuthTokenStorageKey);
+              _authState.value = null;
+            }));
   }
 
-  TaskEither<IOError, User> getAccountTask() {
-    return _apiClient.get(Uri.parse('$kLichessHost/api/account')).flatMap(
-        (response) => TaskEither.fromEither(readJsonObject(response.body,
+  Future<Result<User, IOError>> getAccountTask() {
+    return _apiClient.get(Uri.parse('$kLichessHost/api/account')).then(
+        (result) => result.flatMap((response) => readJsonObject(response.body,
             mapper: User.fromJson, logger: _log)));
   }
 

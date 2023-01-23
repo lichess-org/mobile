@@ -48,16 +48,22 @@ class GameActionNotifier extends AutoDisposeNotifier<AsyncValue<void>> {
 
   Future<void> abort(GameId id) async {
     state = const AsyncLoading();
-    state = (await ref.read(gameRepositoryProvider).abortTask(id).run()).match(
-        (error) => AsyncValue.error(error.message, error.stackTrace),
-        AsyncValue.data);
+    state =
+        await ref.read(gameRepositoryProvider).abortTask(id).then((r) => r.fold(
+              AsyncValue.data,
+              (error) => AsyncValue.error(error.message, error.stackTrace),
+            ));
   }
 
   Future<void> resign(GameId id) async {
     state = const AsyncLoading();
-    state = (await ref.read(gameRepositoryProvider).resignTask(id).run()).match(
-        (error) => AsyncValue.error(error.message, error.stackTrace),
-        AsyncValue.data);
+    state = await ref
+        .read(gameRepositoryProvider)
+        .resignTask(id)
+        .then((r) => r.fold(
+              AsyncValue.data,
+              (error) => AsyncValue.error(error.message, error.stackTrace),
+            ));
   }
 }
 
@@ -113,8 +119,8 @@ class GameStateNotifier extends AutoDisposeNotifier<GameState?> {
       state = newState;
 
       // TODO show error
-      final resp = await gameRepository.playMoveTask(gameId, move).run();
-      if (resp.isLeft()) {
+      final resp = await gameRepository.playMoveTask(gameId, move);
+      if (resp.isFailure) {
         state = savedState;
       }
     }
