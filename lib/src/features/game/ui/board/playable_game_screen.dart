@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
 import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
+import 'package:lichess_mobile/src/widgets/non_visual_game_board.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
@@ -169,88 +170,105 @@ class _BoardBody extends ConsumerWidget {
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final isReplaying =
         gameState != null && positionCursor < gameState.positionIndex;
+    final mediaQuery = MediaQuery.of(context);
 
     return gameClockStream.when(
       data: (clock) {
-        final black = Player(
-          key: const ValueKey('black-player'),
-          name: game.black.name,
-          rating: game.black.rating,
-          title: game.black.title,
-          active: gameState != null &&
-              gameState.status == GameStatus.started &&
-              gameState.position.fullmoves > 1 &&
-              gameState.position.turn == Side.black,
-          clock: clock.blackTime,
-        );
-        final white = Player(
-          key: const ValueKey('white-player'),
-          name: game.white.name,
-          rating: game.white.rating,
-          title: game.white.title,
-          active: gameState != null &&
-              gameState.status == GameStatus.started &&
-              gameState.position.fullmoves > 1 &&
-              gameState.position.turn == Side.white,
-          clock: clock.whiteTime,
-        );
-        final topPlayer = game.orientation == Side.white ? black : white;
-        final bottomPlayer = game.orientation == Side.white ? white : black;
+        if (mediaQuery.accessibleNavigation) {
+          return NonVisualGameBoard(
+            gameState: gameState,
+            onMove: (Move move) =>
+                ref.read(gameStateProvider.notifier).onUserMove(game.id, move),
+          );
+        } else {
+          final black = Player(
+            key: const ValueKey('black-player'),
+            name: game.black.name,
+            rating: game.black.rating,
+            title: game.black.title,
+            active: gameState != null &&
+                gameState.status == GameStatus.started &&
+                gameState.position.fullmoves > 1 &&
+                gameState.position.turn == Side.black,
+            clock: clock.blackTime,
+          );
+          final white = Player(
+            key: const ValueKey('white-player'),
+            name: game.white.name,
+            rating: game.white.rating,
+            title: game.white.title,
+            active: gameState != null &&
+                gameState.status == GameStatus.started &&
+                gameState.position.fullmoves > 1 &&
+                gameState.position.turn == Side.white,
+            clock: clock.whiteTime,
+          );
+          final topPlayer = game.orientation == Side.white ? black : white;
+          final bottomPlayer = game.orientation == Side.white ? white : black;
 
-        return GameBoardLayout(
-          boardData: cg.BoardData(
-            interactableSide:
-                gameState == null || !gameState.playing || isReplaying
-                    ? cg.InteractableSide.none
-                    : game.orientation == Side.white
-                        ? cg.InteractableSide.white
-                        : cg.InteractableSide.black,
-            orientation:
-                (isBoardTurned ? game.orientation.opposite : game.orientation)
-                    .cg,
-            fen: gameState?.positions[positionCursor].fen ?? game.initialFen,
-            validMoves: gameState?.validMoves,
-            lastMove: gameState != null && gameState.gameOver
-                ? positionCursor > 0
-                    ? gameState.moveAtPly(positionCursor - 1)?.cg
-                    : null
-                : gameState?.lastMove?.cg,
-            sideToMove: gameState?.position.turn.cg ?? game.orientation.cg,
-            onMove: (cg.Move move, {bool? isPremove}) => ref
-                .read(gameStateProvider.notifier)
-                .onUserMove(game.id, Move.fromUci(move.uci)!),
-          ),
-          topPlayer: topPlayer,
-          bottomPlayer: bottomPlayer,
-          moves: gameState?.sanMoves,
-          currentMoveIndex: positionCursor,
-        );
+          return GameBoardLayout(
+            boardData: cg.BoardData(
+              interactableSide:
+                  gameState == null || !gameState.playing || isReplaying
+                      ? cg.InteractableSide.none
+                      : game.orientation == Side.white
+                          ? cg.InteractableSide.white
+                          : cg.InteractableSide.black,
+              orientation:
+                  (isBoardTurned ? game.orientation.opposite : game.orientation)
+                      .cg,
+              fen: gameState?.positions[positionCursor].fen ?? game.initialFen,
+              validMoves: gameState?.validMoves,
+              lastMove: gameState != null && gameState.gameOver
+                  ? positionCursor > 0
+                      ? gameState.moveAtPly(positionCursor - 1)?.cg
+                      : null
+                  : gameState?.lastMove?.cg,
+              sideToMove: gameState?.position.turn.cg ?? game.orientation.cg,
+              onMove: (cg.Move move, {bool? isPremove}) => ref
+                  .read(gameStateProvider.notifier)
+                  .onUserMove(game.id, Move.fromUci(move.uci)!),
+            ),
+            topPlayer: topPlayer,
+            bottomPlayer: bottomPlayer,
+            moves: gameState?.sanMoves,
+            currentMoveIndex: positionCursor,
+          );
+        }
       },
       loading: () {
-        final player = Player(
-          name: game.player.name,
-          rating: game.player.rating,
-          title: game.player.title,
-          active: false,
-          clock: Duration.zero,
-        );
-        final opponent = Player(
-          name: game.opponent.name,
-          rating: game.opponent.rating,
-          title: game.opponent.title,
-          active: false,
-          clock: Duration.zero,
-        );
+        if (mediaQuery.accessibleNavigation) {
+          return NonVisualGameBoard(
+            gameState: null,
+            onMove: (move) {},
+            isLoading: true,
+          );
+        } else {
+          final player = Player(
+            name: game.player.name,
+            rating: game.player.rating,
+            title: game.player.title,
+            active: false,
+            clock: Duration.zero,
+          );
+          final opponent = Player(
+            name: game.opponent.name,
+            rating: game.opponent.rating,
+            title: game.opponent.title,
+            active: false,
+            clock: Duration.zero,
+          );
 
-        return GameBoardLayout(
-          topPlayer: opponent,
-          bottomPlayer: player,
-          boardData: cg.BoardData(
-            interactableSide: cg.InteractableSide.none,
-            orientation: game.orientation.cg,
-            fen: game.initialFen,
-          ),
-        );
+          return GameBoardLayout(
+            topPlayer: opponent,
+            bottomPlayer: player,
+            boardData: cg.BoardData(
+              interactableSide: cg.InteractableSide.none,
+              orientation: game.orientation.cg,
+              fen: game.initialFen,
+            ),
+          );
+        }
       },
       error: (err, stackTrace) {
         debugPrint(
