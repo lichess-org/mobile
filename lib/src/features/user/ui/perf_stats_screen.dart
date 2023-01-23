@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
@@ -33,6 +34,7 @@ final perfStatsProvider = FutureProvider.autoDispose
 const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;
 const _defaultValueFontSize = 18.0;
+const _titleFontSize = 18.0;
 
 class PerfStatsScreen extends ConsumerWidget {
   const PerfStatsScreen({
@@ -54,11 +56,22 @@ class PerfStatsScreen extends ConsumerWidget {
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        titleSpacing: 0,
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Icon(perf.icon),
-            const SizedBox(width: 10),
-            Text(context.l10n.perfStats('$username ${perf.name}')),
+            const SizedBox(width: 5),
+            Expanded(
+              child: FittedBox(
+                alignment: Alignment.centerLeft,
+                fit: BoxFit.scaleDown,
+                child: Text(context.l10n.perfStats('$username ${perf.name}'), 
+                  style: const TextStyle(fontSize: _titleFontSize),
+                ),
+              ),
+            ),
+            const SizedBox(width: 5)
           ],
         ),
       ),
@@ -79,6 +92,8 @@ class PerfStatsScreen extends ConsumerWidget {
       UserPerfStatsParameters(username: username, perf: perf)
     ));
 
+    final authRepository = ref.watch(authRepositoryProvider);
+
     const mainValueStyle = TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 30
@@ -98,8 +113,11 @@ class PerfStatsScreen extends ConsumerWidget {
                   Text('${data.rating.toStringAsFixed(2)}${data.provisional == true || data.deviation > kProvisionalDeviation ? '?' : ''}',
                     style: mainValueStyle),
                     if (data.percentile != null)
-                      Text(context.l10n.youAreBetterThanPercentOfPerfTypePlayers('${data.percentile!.toStringAsFixed(2)}%', perf.name),
-                        style: TextStyle(fontSize: _defaultStatFontSize, color: textShade(context, _customOpacity)))
+                      Text( (authRepository.isAuthenticated && authRepository.currentAccount!.username == username)
+                        ? context.l10n.youAreBetterThanPercentOfPerfTypePlayers('${data.percentile!.toStringAsFixed(2)}%', perf.name)
+                        : context.l10n.userIsBetterThanPercentOfPerfTypePlayers(username, '${data.percentile!.toStringAsFixed(2)}%', perf.name),
+                        style: TextStyle(fontSize: _defaultStatFontSize, color: textShade(context, _customOpacity)),
+                        textAlign: TextAlign.center)
                 ]
                 ),
                 // The number '12' here is not arbitrary, since the API returns the progression for the last 12 games (as far as I know).
@@ -109,7 +127,9 @@ class PerfStatsScreen extends ConsumerWidget {
                   ]
                 ),
                 _rowFromCards([
-                  _customPlatformCard(context, context.l10n.rank, value: data.rank == null ? '?' : data.rank.toString()),
+                  _customPlatformCard(context, context.l10n.rank, value: data.rank == null 
+                  ? '?' 
+                  : NumberFormat.decimalPattern(Intl.getCurrentLocale()).format(data.rank)),
                   _customPlatformCard(context, context.l10n.ratingDeviation('').replaceAll(': .', ''), value: data.deviation.toStringAsFixed(2))
                 ]),
                 _rowFromCards([
@@ -122,26 +142,28 @@ class PerfStatsScreen extends ConsumerWidget {
                 ]),
                 statGroupSpace,
                 _customPlatformCard(context, context.l10n.totalGames, 
-                  value: data.numberOfGames.toString(),
+                  value: data.totalGames.toString(),
                   styleValue: mainValueStyle),
                 _rowFromCards([
                   _customPlatformCard(context, context.l10n.wins,
-                    widgets: [_percentageValueWidget(context, data.wonGames, data.numberOfGames, color: LichessColors.good)]),
+                    widgets: [_percentageValueWidget(context, data.wonGames, data.totalGames, color: LichessColors.good)]),
                   _customPlatformCard(context, context.l10n.draws,
-                    widgets: [_percentageValueWidget(context, data.drawnGames, data.numberOfGames, color: textShade(context, _customOpacity), isShaded: true)]),
+                    widgets: [_percentageValueWidget(context, data.drawnGames, data.totalGames, color: textShade(context, _customOpacity), isShaded: true)]),
                   _customPlatformCard(context, context.l10n.losses,
-                    widgets: [_percentageValueWidget(context, data.lostGames, data.numberOfGames, color: LichessColors.red)]),
+                    widgets: [_percentageValueWidget(context, data.lostGames, data.totalGames, color: LichessColors.red)]),
                 ]),
                 _rowFromCards([
                   _customPlatformCard(context, context.l10n.rated,
-                    widgets: [_percentageValueWidget(context, data.ratedGames, data.numberOfGames)]),
+                    widgets: [_percentageValueWidget(context, data.ratedGames, data.totalGames)]),
                   _customPlatformCard(context, context.l10n.tournament,
-                    widgets: [_percentageValueWidget(context, data.tournamentGames, data.numberOfGames)]),
+                    widgets: [_percentageValueWidget(context, data.tournamentGames, data.totalGames)]),
                   _customPlatformCard(context, context.l10n.berserkedGames.replaceAll(' ${context.l10n.games.toLowerCase()}', ''),
-                    widgets: [_percentageValueWidget(context, data.berserkGames, data.numberOfGames)]),
+                    widgets: [_percentageValueWidget(context, data.berserkGames, data.totalGames)]),
+                  _customPlatformCard(context, context.l10n.disconnections,
+                    widgets: [_percentageValueWidget(context, data.disconnections, data.totalGames)]),
                 ]),
                 _rowFromCards([
-                  _customPlatformCard(context, context.l10n.averageOpponent, value: data.avgOpponent.toString()),
+                  _customPlatformCard(context, context.l10n.averageOpponent, value: data.avgOpponent == null ? '?' : data.avgOpponent.toString()),
                   _customPlatformCard(context, context.l10n.timeSpentPlaying, value: data.timePlayed.toDaysHoursMinutes(context)),
                 ]),
                 statGroupSpace,
@@ -205,13 +227,16 @@ class PerfStatsScreen extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Text(stat, style: trueStatStyle, textAlign: TextAlign.center),
+          FittedBox(
+            alignment: Alignment.center,
+            fit: BoxFit.scaleDown,
+            child: Text(stat, style: trueStatStyle, textAlign: TextAlign.center)),
           if (value != null)
             Text(value, style: trueValueStyle, textAlign: TextAlign.center)
           else if (widgets != null)
             ...widgets
           else
-            const Text('sample text')
+            Text('?', style: trueValueStyle)
         ],
       ),
     ));
@@ -263,17 +288,14 @@ class PerfStatsScreen extends ConsumerWidget {
     }) {
     // TODO: Implement functionality to view game on tap.
     // (Return a button? Wrap with InkWell?)
-    const defaultDateFontSize = 16.0;
-    
-
+    const defaultDateFontSize = 16.0;    
     const defaultDateStyle = TextStyle(
       color: LichessColors.primary,
       fontSize: defaultDateFontSize
     );
 
     final TextStyle trueDateStyle = styleDate ?? defaultDateStyle;
-
-    final dateFormatter = DateFormat('d MMM y');
+    final dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
 
     return game == null 
       ? const Text('?', style: defaultDateStyle)
@@ -334,47 +356,56 @@ class PerfStatsScreen extends ConsumerWidget {
         color: textShade(context, _customOpacity)
       );
 
-      List<Widget> streakWidgets = List.empty(growable: true);
+      final List<Widget> streakWidgets = List.empty(growable: true);
       final longestStreakStr = context.l10n.longestStreak('').replaceAll(':', '');
       final currentStreakStr = context.l10n.currentStreak('').replaceAll(':', '');
+      // This variable may seem useless, why not check (streak == maxStreak)?
+      // Because this avoids the rare case where maxStreak == curStreak and the same title is shown twice.
+      bool inFirstLoop = true;
 
       for (final streak in [maxStreak, curStreak]) {
+        final streakTitle = Text(inFirstLoop
+          ? longestStreakStr
+          : currentStreakStr,
+          style: streakTitleStyle);
+
         if (streak == null || streak.value == 0) {
           streakWidgets.add(
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(streak == maxStreak 
-                ? longestStreakStr
-                : currentStreakStr, style: streakTitleStyle),
-                const Text('-', style: TextStyle(fontSize: _defaultValueFontSize))
-              ],
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  streakTitle,
+                  const Text('-', style: TextStyle(fontSize: _defaultValueFontSize))
+                ],
+              ),
             )
           );
         } else {
-          streakWidgets.add(Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(streak == maxStreak 
-                ? longestStreakStr
-                : currentStreakStr, style: streakTitleStyle,),
-              if (isTimeStreak)
-                Text(Duration(seconds: streak.value).toDaysHoursMinutes(context), style: valueStyle, textAlign: TextAlign.center)
-              else 
-                Text(context.l10n.nbGames(streak.value), style: valueStyle, textAlign: TextAlign.center),
-              if (!(streak.startGame == null && streak.endGame == null))
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 5.0),
-                    _userGameWidget(context, streak.startGame),
-                    Icon(Icons.arrow_downward_rounded, color: textShade(context, _customOpacity)),
-                    _userGameWidget(context, streak.endGame)
-                  ],
-                )
-            ])
+          streakWidgets.add(Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                streakTitle,
+                if (isTimeStreak)
+                  Text(Duration(seconds: streak.value).toDaysHoursMinutes(context), style: valueStyle, textAlign: TextAlign.center)
+                else 
+                  Text(context.l10n.nbGames(streak.value), style: valueStyle, textAlign: TextAlign.center),
+                if (!(streak.startGame == null && streak.endGame == null))
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 5.0),
+                      _userGameWidget(context, streak.startGame),
+                      Icon(Icons.arrow_downward_rounded, color: textShade(context, _customOpacity)),
+                      _userGameWidget(context, streak.endGame)
+                    ],
+                  )
+              ]),
+          )
           );
         }
+        inFirstLoop = false; 
       }
 
       return [
@@ -387,6 +418,7 @@ class PerfStatsScreen extends ConsumerWidget {
     final List<Widget> gameWidgets = List.empty(growable: true);
 
     const gameWidgetSeparation = 5.0;
+    const opRatingFontSize = 16.0;
 
     if (games == null || games.isEmpty) {
       gameWidgets.add(const Text('?'));
@@ -404,7 +436,9 @@ class PerfStatsScreen extends ConsumerWidget {
             Expanded(
               child: Align(
                 alignment: Alignment.center,
-                child: Text(game.opponentRating == null ? '?' : game.opponentRating.toString(), textAlign: TextAlign.center)
+                child: Text(game.opponentRating == null ? '?' : game.opponentRating.toString(),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: opRatingFontSize))
               ),
             ),
             Expanded(
