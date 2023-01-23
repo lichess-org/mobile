@@ -20,6 +20,7 @@ class LeaderboardScreen extends StatelessWidget {
   }
 
   Widget _buildIos(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text(context.l10n.leaderboard),
@@ -28,20 +29,36 @@ class LeaderboardScreen extends StatelessWidget {
           SliverSafeArea(
               sliver: SliverPadding(
                   padding: kBodyPadding,
-                  sliver: SliverList(
-                    delegate: SliverChildListDelegate(_buildList(context)),
-                  )))
+                  sliver: width > 600
+                      ? SliverGrid(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  childAspectRatio: 0.6,
+                                  crossAxisCount: (width / 300).floor()),
+                          delegate:
+                              SliverChildListDelegate(_buildList(context)))
+                      : SliverList(
+                          delegate:
+                              SliverChildListDelegate(_buildList(context)),
+                        )))
         ]));
   }
 
   Widget _buildAndroid(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.leaderboard),
       ),
-      body: ListView(
-        children: _buildList(context),
-      ),
+      body: width > 600
+          ? GridView.count(
+              childAspectRatio: 0.6,
+              crossAxisCount: (width / 300).floor(),
+              children: _buildList(context),
+            )
+          : ListView(
+              children: _buildList(context),
+            ),
     );
   }
 
