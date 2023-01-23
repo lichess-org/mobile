@@ -130,32 +130,52 @@ class ListCard extends StatelessWidget {
   }
 
   Widget _ratingAndProgress(LightUser user) {
-    return Row(mainAxisSize: MainAxisSize.min, children: [
-      if (prefIcon != null) ...[
-        Icon(prefIcon, color: LichessColors.brag),
-        const SizedBox(width: 5)
-      ],
-      const SizedBox(width: 5),
-      if (user.progress < 0)
-        Row(mainAxisSize: MainAxisSize.max, children: [
-          const Icon(LichessIcons.arrow_full_lowerright,
-              size: 20, color: LichessColors.red),
-          Text(
-            '${user.progress.abs()} ',
-            textWidthBasis: TextWidthBasis.parent,
-            style: const TextStyle(color: LichessColors.red),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (prefIcon != null) ...[
+          Flexible(child: Icon(prefIcon, color: LichessColors.brag)),
+          const SizedBox(width: 10)
+        ],
+        const SizedBox(width: 5),
+        if (user.progress < 0)
+          Flexible(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const Icon(LichessIcons.arrow_full_lowerright,
+                    size: 20, color: LichessColors.red),
+                SizedBox(
+                    width: 30,
+                    child: Text(
+                      '${user.progress.abs()} ',
+                      style: const TextStyle(color: LichessColors.red),
+                    ))
+              ],
+            ),
           )
-        ])
-      else if (user.progress > 0)
-        Row(mainAxisSize: MainAxisSize.max, children: [
-          const Icon(LichessIcons.arrow_full_upperright,
-              size: 20, color: LichessColors.good),
-          Text('${user.progress} ',
-              style: const TextStyle(color: LichessColors.good))
-        ]),
-      const SizedBox(width: 5),
-      Flexible(child: Text(user.rating.toString()))
-    ]);
+        else if (user.progress > 0)
+          Flexible(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(LichessIcons.arrow_full_upperright,
+                    size: 20, color: LichessColors.good),
+                SizedBox(
+                    width: 30,
+                    child: Text(
+                      '${user.progress} ',
+                      style: const TextStyle(color: LichessColors.good),
+                    ))
+              ],
+            ),
+          ),
+        const SizedBox(width: 5),
+        Flexible(fit: FlexFit.loose, child: Text(user.rating.toString()))
+      ],
+    );
   }
 
   Widget _onlineOrPatron(LightUser user) {
