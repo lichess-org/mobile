@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:http/http.dart' as http;
-import 'package:lichess_mobile/src/common/models.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:logging/logging.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:http/http.dart' as http;
 
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/http.dart';
+import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
 
 class MockApiClient extends Mock implements ApiClient {}

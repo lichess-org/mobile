@@ -240,8 +240,6 @@ class PerfCards extends StatelessWidget {
             child: PlatformCard(
               child: InkWell(
                 customBorder: kPlatformCardBorder,
-                  // Border is the same as PlatformCard
-                  // Consider turning this into a constant or a style?
                 onTap: () => pushPlatformRoute(
                   context: context,
                   title: context.l10n.perfStats('${account.username} ${perf.name}'),
