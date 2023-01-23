@@ -128,6 +128,20 @@ String? handleScanCommand(String lowercaseCommand, Board board) {
   }
 }
 
+String? handlePossibleMovesCommand(String lowercaseCommand, Position position) {
+  if (lowercaseCommand.startsWith('m ')) {
+    final rawSquare = lowercaseCommand.substring(2);
+    final square = parseSquare(rawSquare);
+    if (square != null) {
+      return _renderPossibleMoves(square, position);
+    } else {
+      return 'Invalid moves command: $rawSquare is not a square';
+    }
+  } else {
+    return null;
+  }
+}
+
 String _renderLocationOfPieces(Board board, Piece piece) {
   bool isCorrectPiece(Piece other) {
     return piece.role == other.role && piece.color == other.color;
@@ -153,6 +167,43 @@ String _renderPiecesByLocation(Board board, String rankOrFile) {
       .map(renderPiece)
       .join(', ');
   return pieces.isNotEmpty ? pieces : 'blank';
+}
+
+String _renderPossibleMoves(Square square, Position position,
+    {bool capturesOnly = false, Side? perspective}) {
+  String renderPossibleMove(Square square) {
+    final captureTarget = position.board.pieceAt(square);
+    var dest = toAlgebraic(square);
+    if (captureTarget != null && captureTarget.color != perspective) {
+      dest += ' captures ${_roleName(captureTarget.role)}';
+    }
+    return dest;
+  }
+
+  bool didFilterOut = false;
+
+  bool isCapture(String renderedMove) {
+    final isCapture = renderedMove.contains('captures');
+    if (!isCapture) {
+      didFilterOut = true;
+    }
+    return isCapture;
+  }
+
+  // TODO: uncomment once dartchess has a way to switch the turn color of a position
+  final povPosition = perspective == position.turn.opposite
+      ? position /*.nullMove()*/ : position;
+  final possibleDests = povPosition
+      .legalMovesOf(square)
+      .squares
+      .map(renderPossibleMove)
+      .where((renderedMove) => !capturesOnly && isCapture(renderedMove))
+      .join(', ');
+  if (possibleDests == '') {
+    return didFilterOut ? 'No captures' : 'None';
+  } else {
+    return possibleDests;
+  }
 }
 
 final _rowOrFileRegExp = RegExp(r'^[a-h1-8]$');

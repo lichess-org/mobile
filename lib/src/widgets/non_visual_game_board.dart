@@ -48,9 +48,7 @@ class NonVisualGameBoard extends StatelessWidget {
         if (scanResult != null) {
           return scanResult;
         }
-        // TODO: uncomment when parseSan is available
-        final move =
-            Move.fromUci(command) /*?? gameState.position.parseSan(command)*/;
+        final move = Move.fromUci(command) ?? position.parseSan(command);
         if (move != null) {
           onMove(move);
           return null;
