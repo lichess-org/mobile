@@ -131,18 +131,17 @@ void main() {
   }
 }
 ''';
-      when(() => mockApiClient
-        .get(Uri.parse(uriString)))
-      .thenReturn(
-        TaskEither.right(http.Response(responseMinimal, 200)));
+      when(() => mockApiClient.get(Uri.parse(uriString)))
+          .thenReturn(TaskEither.right(http.Response(responseMinimal, 200)));
 
-      final result = await repo.getUserPerfStatsTask(testUserId, testPerf).run();
+      final result =
+          await repo.getUserPerfStatsTask(testUserId, testPerf).run();
 
       expect(result.isRight(), true);
     });
 
     test('json read, full example', () async {
-        const responseFull = '''
+      const responseFull = '''
 {
   "user": {
     "name": "testOpponentName"
@@ -379,11 +378,11 @@ void main() {
   }
 }
 ''';
-      when(() => mockApiClient
-        .get(Uri.parse(uriString)))
-      .thenReturn(TaskEither.right(http.Response(responseFull, 200)));
+      when(() => mockApiClient.get(Uri.parse(uriString)))
+          .thenReturn(TaskEither.right(http.Response(responseFull, 200)));
 
-      final result = await repo.getUserPerfStatsTask(testUserId, testPerf).run();
+      final result =
+          await repo.getUserPerfStatsTask(testUserId, testPerf).run();
 
       expect(result.isRight(), true);
     });

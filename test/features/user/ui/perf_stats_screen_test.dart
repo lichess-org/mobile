@@ -23,36 +23,29 @@ class MockLogger extends Mock implements Logger {}
 void main() {
   final mockClient = MockClient();
   final mockLogger = MockLogger();
-  
+
   final String perfApiString = testPerf.toString().split('.').last;
   final uriString = '$kLichessHost/api/user/$testUserId/perf/$perfApiString';
 
   setUpAll(() {
     when(() => mockClient.get(Uri.parse(uriString)))
-      .thenAnswer((_) => mockResponse(userPerfStatsResponse, 200));
+        .thenAnswer((_) => mockResponse(userPerfStatsResponse, 200));
   });
 
   group('PerfStatsScreen', () {
     testWidgets('meets accessibility guidelines', (WidgetTester tester) async {
       final SemanticsHandle handle = tester.ensureSemantics();
-      
-      final app = await buildTestApp(
-        tester,
-        home: Consumer(builder: (context, ref, _) {
-          return const PerfStatsScreen(username: testUserId, perf: testPerf);
-        }));
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            // Don't need a logged in user to test this screen.
-            authRepositoryProvider
-              .overrideWithValue(FakeAuthRepository(null)),
-            apiClientProvider
-              .overrideWithValue(ApiClient(mockLogger, mockClient)),
-          ],
-          child: app)
-      );
+      final app =
+          await buildTestApp(tester, home: Consumer(builder: (context, ref, _) {
+        return const PerfStatsScreen(username: testUserId, perf: testPerf);
+      }));
+
+      await tester.pumpWidget(ProviderScope(overrides: [
+        // Don't need a logged in user to test this screen.
+        authRepositoryProvider.overrideWithValue(FakeAuthRepository(null)),
+        apiClientProvider.overrideWithValue(ApiClient(mockLogger, mockClient)),
+      ], child: app));
 
       // wait for auth state and perf stats
       await tester.pump(const Duration(milliseconds: 50));
@@ -66,24 +59,18 @@ void main() {
       handle.dispose();
     }, variant: kPlatformVariant);
 
-    testWidgets('screen loads, required stats are shown', (WidgetTester tester) async {
-      final app = await buildTestApp(
-        tester,
-        home: Consumer(builder: (context, ref, _) {
-          return const PerfStatsScreen(username: testUserId, perf: testPerf);
-        }));
+    testWidgets('screen loads, required stats are shown',
+        (WidgetTester tester) async {
+      final app =
+          await buildTestApp(tester, home: Consumer(builder: (context, ref, _) {
+        return const PerfStatsScreen(username: testUserId, perf: testPerf);
+      }));
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            // Don't need a logged in user to test this screen.
-            authRepositoryProvider
-              .overrideWithValue(FakeAuthRepository(null)),
-            apiClientProvider
-              .overrideWithValue(ApiClient(mockLogger, mockClient)),
-          ],
-          child: app)
-      );
+      await tester.pumpWidget(ProviderScope(overrides: [
+        // Don't need a logged in user to test this screen.
+        authRepositoryProvider.overrideWithValue(FakeAuthRepository(null)),
+        apiClientProvider.overrideWithValue(ApiClient(mockLogger, mockClient)),
+      ], child: app));
 
       // wait for auth state and perf stats
       await tester.pump(const Duration(milliseconds: 50));
@@ -106,7 +93,6 @@ void main() {
         expect(find.widgetWithText(PlatformCard, val), findsAtLeastNWidgets(1));
       }
     }, variant: kPlatformVariant);
-
   });
 }
 

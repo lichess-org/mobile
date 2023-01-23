@@ -12,10 +12,12 @@ extension DurationExtensions on Duration {
     final days = inDays;
     final hours = inHours.remainder(24);
     final minutes = inMinutes.remainder(60);
-    
+
     String daysString = days == 0 ? '' : context.l10n.nbDays(days);
-    final String hoursString = hours == 0 ? '' : '${context.l10n.nbHours(hours)} ';
-    final String minutesString = minutes == 0 ? '' : context.l10n.nbMinutes(minutes);
+    final String hoursString =
+        hours == 0 ? '' : '${context.l10n.nbHours(hours)} ';
+    final String minutesString =
+        minutes == 0 ? '' : context.l10n.nbMinutes(minutes);
 
     // Add comma if all values are nonzero
     if (days != 0 && hours != 0 && minutes != 0) {

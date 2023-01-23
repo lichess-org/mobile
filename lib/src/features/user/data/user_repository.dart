@@ -25,7 +25,8 @@ class UserRepository {
     });
   }
 
-  TaskEither<IOError, UserPerfStats> getUserPerfStatsTask(String username, Perf perf) {
+  TaskEither<IOError, UserPerfStats> getUserPerfStatsTask(
+      String username, Perf perf) {
     final String perfApiString = perf.toString().split('.').last;
     // The above line gets the enum's (perf) name as a string, because the way they are named
     // corresponds to how the api expects them to be received. This line could be removed by, for example,
@@ -33,9 +34,10 @@ class UserRepository {
 
     return apiClient
         .get(Uri.parse('$kLichessHost/api/user/$username/perf/$perfApiString'))
-        .flatMap((response) => TaskEither.fromEither(
-          readJsonObject(response.body, mapper: UserPerfStats.fromJson, logger: _log)
-        ));
+        .flatMap((response) => TaskEither.fromEither(readJsonObject(
+            response.body,
+            mapper: UserPerfStats.fromJson,
+            logger: _log)));
   }
 
   TaskEither<IOError, List<UserStatus>> getUsersStatusTask(List<String> ids) {

@@ -145,67 +145,64 @@ class UserPerfStatsParameters with _$UserPerfStatsParameters {
 
 @freezed
 class UserPerfStats with _$UserPerfStats {
-  const factory UserPerfStats({
-    required double rating,          // <- These five parameters could be represented as a
-    required double deviation,       // <- UserPerf, but doing so would require either to
-    bool? provisional,            // <- create a subclass and overriding a method, or adding
-    required int totalGames,   // <- a new fromJson() method to UserPerf, because the JSON value
-    required int progress,        // <- the API returns are different for each case, as seen below.
+  const factory UserPerfStats(
+      {required double
+          rating, // <- These five parameters could be represented as a
+      required double
+          deviation, // <- UserPerf, but doing so would require either to
+      bool?
+          provisional, // <- create a subclass and overriding a method, or adding
+      required int
+          totalGames, // <- a new fromJson() method to UserPerf, because the JSON value
+      required int
+          progress, // <- the API returns are different for each case, as seen below.
 
-    int? rank,
-    double? percentile,
-
-    required int berserkGames,
-    required int tournamentGames,
-    required int ratedGames,
-    required int wonGames,
-    required int lostGames,
-    required int drawnGames,
-    required int disconnections,
-
-    double? avgOpponent,
-    required Duration timePlayed,
-
-    int? lowestRating,
-    UserGame? lowestRatingGame,
-    int? highestRating,
-    UserGame? highestRatingGame,
-
-    UserStreak? curWinStreak, 
-    UserStreak? maxWinStreak,
-    UserStreak? curLossStreak,
-    UserStreak? maxLossStreak,
-    UserStreak? curPlayStreak,
-    UserStreak? maxPlayStreak,
-    UserStreak? curTimeStreak,
-    UserStreak? maxTimeStreak,
-
-    List<UserGame>? worstLosses,
-    List<UserGame>? bestWins
-  }) = _UserPerfStats;
+      int? rank,
+      double? percentile,
+      required int berserkGames,
+      required int tournamentGames,
+      required int ratedGames,
+      required int wonGames,
+      required int lostGames,
+      required int drawnGames,
+      required int disconnections,
+      double? avgOpponent,
+      required Duration timePlayed,
+      int? lowestRating,
+      UserGame? lowestRatingGame,
+      int? highestRating,
+      UserGame? highestRatingGame,
+      UserStreak? curWinStreak,
+      UserStreak? maxWinStreak,
+      UserStreak? curLossStreak,
+      UserStreak? maxLossStreak,
+      UserStreak? curPlayStreak,
+      UserStreak? maxPlayStreak,
+      UserStreak? curTimeStreak,
+      UserStreak? maxTimeStreak,
+      List<UserGame>? worstLosses,
+      List<UserGame>? bestWins}) = _UserPerfStats;
 
   factory UserPerfStats.fromJson(Map<String, dynamic> json) =>
-    UserPerfStats.fromPick(pick(json).required());
+      UserPerfStats.fromPick(pick(json).required());
 
   factory UserPerfStats.fromPick(RequiredPick pick) {
-      final perf = pick('perf');
-      final stat = pick('stat');
+    final perf = pick('perf');
+    final stat = pick('stat');
 
-      final lowest = stat('lowest');
-      final highest = stat('highest');
-      final count = stat('count');
-      final resultStreak = stat('resultStreak');
-      final playStreak = stat('playStreak');
+    final lowest = stat('lowest');
+    final highest = stat('highest');
+    final count = stat('count');
+    final resultStreak = stat('resultStreak');
+    final playStreak = stat('playStreak');
 
-      return UserPerfStats(
+    return UserPerfStats(
         rating: perf('glicko', 'rating').asDoubleOrThrow(),
         deviation: perf('glicko', 'deviation').asDoubleOrThrow(),
         provisional: perf('glicko', 'provisional').asBoolOrNull(),
         progress: perf('progress').asIntOrThrow(),
-
         rank: pick('rank').asIntOrNull(),
         percentile: pick('percentile').asDoubleOrNull(),
-
         totalGames: count('all').asIntOrThrow(),
         berserkGames: count('berserk').asIntOrThrow(),
         tournamentGames: count('tour').asIntOrThrow(),
@@ -214,30 +211,26 @@ class UserPerfStats with _$UserPerfStats {
         lostGames: count('loss').asIntOrThrow(),
         drawnGames: count('draw').asIntOrThrow(),
         disconnections: count('disconnects').asIntOrThrow(),
-
         avgOpponent: count('opAvg').asDoubleOrNull(),
         timePlayed: count('seconds').asDurationFromSecondsOrThrow(),
-
         lowestRating: lowest('int').asIntOrNull(),
         lowestRatingGame: lowest.letOrNull(UserGame.fromPick),
-
         highestRating: highest('int').asIntOrNull(),
         highestRatingGame: highest.letOrNull(UserGame.fromPick),
-
         curWinStreak: resultStreak('win', 'cur').letOrNull(UserStreak.fromPick),
         maxWinStreak: resultStreak('win', 'max').letOrNull(UserStreak.fromPick),
-        curLossStreak: resultStreak('loss', 'cur').letOrNull(UserStreak.fromPick),
-        maxLossStreak: resultStreak('loss', 'max').letOrNull(UserStreak.fromPick),
+        curLossStreak:
+            resultStreak('loss', 'cur').letOrNull(UserStreak.fromPick),
+        maxLossStreak:
+            resultStreak('loss', 'max').letOrNull(UserStreak.fromPick),
         curPlayStreak: playStreak('nb', 'cur').letOrNull(UserStreak.fromPick),
         maxPlayStreak: playStreak('nb', 'max').letOrNull(UserStreak.fromPick),
         curTimeStreak: playStreak('time', 'cur').letOrNull(UserStreak.fromPick),
         maxTimeStreak: playStreak('time', 'max').letOrNull(UserStreak.fromPick),
-
         worstLosses: stat('worstLosses', 'results')
-          .asListOrNull((pick) => UserGame.fromPick(pick)),
+            .asListOrNull((pick) => UserGame.fromPick(pick)),
         bestWins: stat('bestWins', 'results')
-          .asListOrNull((pick) => UserGame.fromPick(pick))
-      );
+            .asListOrNull((pick) => UserGame.fromPick(pick)));
   }
 }
 
@@ -253,30 +246,29 @@ class UserStreak with _$UserStreak {
   }) = _UserStreak;
 
   factory UserStreak.fromJson(Map<String, dynamic> json) =>
-    UserStreak.fromPick(pick(json).required());
+      UserStreak.fromPick(pick(json).required());
 
   factory UserStreak.fromPick(RequiredPick pick) {
-      return UserStreak(
-        value: pick('v').asIntOrThrow(),
-        startGame: pick('from').letOrNull(UserGame.fromPick),
-        endGame: pick('to').letOrNull(UserGame.fromPick),
-      );
+    return UserStreak(
+      value: pick('v').asIntOrThrow(),
+      startGame: pick('from').letOrNull(UserGame.fromPick),
+      endGame: pick('to').letOrNull(UserGame.fromPick),
+    );
   }
 }
 
 @freezed
 class UserGame with _$UserGame {
-  const factory UserGame({
-    required DateTime finishedAt,
-    required GameId gameId,
-    int? opponentRating,
-    String? opponentId,
-    String? opponentName,
-    String? opponentTitle
-  }) = _UserGame;
+  const factory UserGame(
+      {required DateTime finishedAt,
+      required GameId gameId,
+      int? opponentRating,
+      String? opponentId,
+      String? opponentName,
+      String? opponentTitle}) = _UserGame;
 
   factory UserGame.fromJson(Map<String, Object?> json) =>
-    UserGame.fromPick(pick(json).required());
+      UserGame.fromPick(pick(json).required());
 
   factory UserGame.fromPick(RequiredPick pick) {
     final opId = pick('opId');

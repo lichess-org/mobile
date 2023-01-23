@@ -189,8 +189,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           Text(context.l10n.lastSeenActive(timeago.format(account.seenAt))),
           const SizedBox(height: 5),
           if (account.playTime != null)
-            Text(context.l10n
-                .tpTimeSpentPlaying(account.playTime!.total.toDaysHoursMinutes(context)))
+            Text(context.l10n.tpTimeSpentPlaying(
+                account.playTime!.total.toDaysHoursMinutes(context)))
           else
             kEmptyWidget,
         ],
@@ -241,11 +241,11 @@ class PerfCards extends StatelessWidget {
               child: InkWell(
                 customBorder: kPlatformCardBorder,
                 onTap: () => pushPlatformRoute(
-                  context: context,
-                  title: context.l10n.perfStats('${account.username} ${perf.name}'),
-                  builder: (context) => PerfStatsScreen(
-                    username: account.username,
-                    perf: perf)),
+                    context: context,
+                    title: context.l10n
+                        .perfStats('${account.username} ${perf.name}'),
+                    builder: (context) => PerfStatsScreen(
+                        username: account.username, perf: perf)),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
