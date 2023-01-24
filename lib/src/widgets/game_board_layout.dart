@@ -5,11 +5,13 @@ import 'package:chessground/chessground.dart';
 import 'package:lichess_mobile/src/utils/style.dart';
 import 'platform.dart';
 
+const scrollAnimationDuration = Duration(milliseconds: 200);
+
 /// Widget that provides a board layout for games according to screen constraints
 ///
 /// This widget will try to adapt the board and players display according to screen
 /// size constraints and aspect ratio.
-class GameBoardLayout extends StatefulWidget {
+class GameBoardLayout extends StatelessWidget {
   const GameBoardLayout({
     required this.boardData,
     this.boardSettings,
@@ -19,7 +21,8 @@ class GameBoardLayout extends StatefulWidget {
     this.currentMoveIndex,
     this.onSelectMove,
     super.key,
-  });
+  }) : assert(moves == null || currentMoveIndex != null,
+            'You must provide `currentMoveIndex` along with `moves`');
 
   final BoardData boardData;
 
@@ -38,26 +41,6 @@ class GameBoardLayout extends StatefulWidget {
   final void Function(int moveIndex)? onSelectMove;
 
   @override
-  State<GameBoardLayout> createState() => _GameBoardLayoutState();
-}
-
-class _GameBoardLayoutState extends State<GameBoardLayout> {
-  final ScrollController scrollController = ScrollController();
-
-  @override
-  void didUpdateWidget(covariant GameBoardLayout oldWidget) {
-    // TODO should follow current move index instead
-    if (scrollController.hasClients) {
-      scrollController.animateTo(
-        scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeIn,
-      );
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       final aspectRatio = constraints.biggest.aspectRatio;
@@ -67,14 +50,11 @@ class _GameBoardLayoutState extends State<GameBoardLayout> {
           ? defaultBoardSize * 0.94
           : defaultBoardSize;
 
-      final board = widget.boardSettings != null
-          ? Board(
-              size: boardSize,
-              data: widget.boardData,
-              settings: widget.boardSettings!)
-          : Board(size: boardSize, data: widget.boardData);
+      final board = boardSettings != null
+          ? Board(size: boardSize, data: boardData, settings: boardSettings!)
+          : Board(size: boardSize, data: boardData);
       final List<List<MapEntry<int, String>>>? slicedMoves =
-          widget.moves?.asMap().entries.slices(2).toList(growable: false);
+          moves?.asMap().entries.slices(2).toList(growable: false);
       return aspectRatio > 1
           ? Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -88,39 +68,19 @@ class _GameBoardLayoutState extends State<GameBoardLayout> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        widget.topPlayer,
+                        topPlayer,
                         if (slicedMoves != null)
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
-                              child: PlatformCard(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: ListView.builder(
-                                    controller: scrollController,
-                                    itemCount: slicedMoves.length,
-                                    itemBuilder: (_, index) => Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: slicedMoves[index]
-                                          .map(
-                                            (move) => Expanded(
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8),
-                                                child: Text(move.value),
-                                              ),
-                                            ),
-                                          )
-                                          .toList(growable: false),
-                                    ),
-                                  ),
-                                ),
+                              child: StackedMoveList(
+                                slicedMoves: slicedMoves,
+                                currentMoveIndex: currentMoveIndex ?? 0,
+                                onSelectMove: onSelectMove,
                               ),
                             ),
                           ),
-                        widget.bottomPlayer,
+                        bottomPlayer,
                       ],
                     ),
                   ),
@@ -131,41 +91,104 @@ class _GameBoardLayoutState extends State<GameBoardLayout> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (slicedMoves != null)
-                  Container(
-                    padding: const EdgeInsets.only(left: 5),
-                    height: 40,
-                    child: ListView.builder(
-                      controller: scrollController,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: slicedMoves.length,
-                      itemBuilder: (_, index) => Container(
-                        margin: const EdgeInsets.only(right: 8),
-                        child: Row(
-                          children: [
-                            MoveCount(count: index + 1),
-                            ...slicedMoves[index].map(
-                              (move) => MoveItem(
-                                move: move,
-                                current: widget.currentMoveIndex == move.key,
-                                onSelectMove: widget.onSelectMove,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  InlineMoveList(
+                    slicedMoves: slicedMoves,
+                    currentMoveIndex: currentMoveIndex ?? 0,
+                    onSelectMove: onSelectMove,
                   ),
-                widget.topPlayer,
+                topPlayer,
                 board,
-                widget.bottomPlayer,
+                bottomPlayer,
               ],
             );
     });
   }
 }
 
-class MoveCount extends StatelessWidget {
-  const MoveCount({required this.count});
+class InlineMoveList extends StatefulWidget {
+  const InlineMoveList(
+      {required this.slicedMoves,
+      required this.currentMoveIndex,
+      this.onSelectMove});
+
+  final List<List<MapEntry<int, String>>> slicedMoves;
+
+  final int currentMoveIndex;
+  final void Function(int moveIndex)? onSelectMove;
+
+  @override
+  State<InlineMoveList> createState() => _InlineMoveListState();
+}
+
+class _InlineMoveListState extends State<InlineMoveList> {
+  final ScrollController scrollController = ScrollController();
+  final currentMoveKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (currentMoveKey.currentContext != null) {
+        Scrollable.ensureVisible(
+          currentMoveKey.currentContext!,
+          alignment: 0.5,
+        );
+      }
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant InlineMoveList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (scrollController.hasClients) {
+      Future<void>.delayed(const Duration(milliseconds: 300)).then((_) {
+        Scrollable.ensureVisible(
+          currentMoveKey.currentContext!,
+          alignment: 0.5,
+          duration: scrollAnimationDuration,
+          curve: Curves.easeIn,
+        );
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(left: 5),
+      height: 40,
+      child: ListView.builder(
+        // hack to allow ensureVisible working
+        // TODO work on a different solution
+        cacheExtent: 5000,
+        controller: scrollController,
+        scrollDirection: Axis.horizontal,
+        itemCount: widget.slicedMoves.length,
+        itemBuilder: (_, index) => Container(
+          margin: const EdgeInsets.only(right: 8),
+          child: Row(
+            children: [
+              InlineMoveCount(count: index + 1),
+              ...widget.slicedMoves[index].map(
+                (move) => InlineMoveItem(
+                  key: widget.currentMoveIndex == move.key
+                      ? currentMoveKey
+                      : null,
+                  move: move,
+                  current: widget.currentMoveIndex == move.key,
+                  onSelectMove: widget.onSelectMove,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class InlineMoveCount extends StatelessWidget {
+  const InlineMoveCount({required this.count});
 
   final int count;
 
@@ -184,8 +207,13 @@ class MoveCount extends StatelessWidget {
   }
 }
 
-class MoveItem extends StatelessWidget {
-  const MoveItem({required this.move, this.current, this.onSelectMove});
+class InlineMoveItem extends StatelessWidget {
+  const InlineMoveItem({
+    required this.move,
+    this.current,
+    this.onSelectMove,
+    super.key,
+  });
 
   final MapEntry<int, String> move;
   final bool? current;
@@ -203,6 +231,146 @@ class MoveItem extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.w600,
             color: current != true ? textShade(context, 0.7) : null,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class StackedMoveList extends StatefulWidget {
+  const StackedMoveList(
+      {required this.slicedMoves,
+      required this.currentMoveIndex,
+      this.onSelectMove});
+
+  final List<List<MapEntry<int, String>>> slicedMoves;
+
+  final int currentMoveIndex;
+  final void Function(int moveIndex)? onSelectMove;
+
+  @override
+  State<StackedMoveList> createState() => _StackedMoveListState();
+}
+
+class _StackedMoveListState extends State<StackedMoveList> {
+  final ScrollController scrollController = ScrollController();
+  final currentMoveKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (currentMoveKey.currentContext != null) {
+        Scrollable.ensureVisible(
+          currentMoveKey.currentContext!,
+          alignment: 0.5,
+        );
+      }
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant StackedMoveList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (scrollController.hasClients) {
+      Future<void>.delayed(const Duration(milliseconds: 300)).then((_) {
+        Scrollable.ensureVisible(
+          currentMoveKey.currentContext!,
+          alignment: 0.5,
+          duration: scrollAnimationDuration,
+          curve: Curves.easeIn,
+        );
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformCard(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView.builder(
+          // hack to allow ensureVisible working
+          // TODO work on a different solution
+          cacheExtent: 5000,
+          controller: scrollController,
+          itemCount: widget.slicedMoves.length,
+          itemBuilder: (_, index) => Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              StackedMoveCount(count: index + 1),
+              Expanded(
+                child: Row(
+                  children: [
+                    ...widget.slicedMoves[index].map(
+                      (move) => Expanded(
+                        child: StackedMoveItem(
+                          key: widget.currentMoveIndex == move.key
+                              ? currentMoveKey
+                              : null,
+                          move: move,
+                          current: widget.currentMoveIndex == move.key,
+                          onSelectMove: widget.onSelectMove,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class StackedMoveCount extends StatelessWidget {
+  const StackedMoveCount({required this.count});
+
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 40,
+      // margin: const EdgeInsets.only(right: 16),
+      child: Text(
+        '$count.',
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          color: textShade(context, 0.7),
+        ),
+      ),
+    );
+  }
+}
+
+class StackedMoveItem extends StatelessWidget {
+  const StackedMoveItem({
+    required this.move,
+    this.current,
+    this.onSelectMove,
+    super.key,
+  });
+
+  final MapEntry<int, String> move;
+  final bool? current;
+  final void Function(int moveIndex)? onSelectMove;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onSelectMove != null ? () => onSelectMove!(move.key) : null,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        child: Text(
+          move.value,
+          style: TextStyle(
+            fontWeight: current == true ? FontWeight.bold : null,
+            color: current != true ? textShade(context, 0.8) : null,
           ),
         ),
       ),
