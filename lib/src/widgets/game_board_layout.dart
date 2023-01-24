@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:chessground/chessground.dart';
 
 import 'package:lichess_mobile/src/utils/style.dart';
@@ -145,12 +144,14 @@ class _InlineMoveListState extends State<InlineMoveList> {
     super.didUpdateWidget(oldWidget);
     if (scrollController.hasClients) {
       Future<void>.delayed(const Duration(milliseconds: 300)).then((_) {
-        Scrollable.ensureVisible(
-          currentMoveKey.currentContext!,
-          alignment: 0.5,
-          duration: _scrollAnimationDuration,
-          curve: Curves.easeIn,
-        );
+        if (currentMoveKey.currentContext != null) {
+          Scrollable.ensureVisible(
+            currentMoveKey.currentContext!,
+            alignment: 0.5,
+            duration: _scrollAnimationDuration,
+            curve: Curves.easeIn,
+          );
+        }
       });
     }
   }
@@ -290,12 +291,14 @@ class _StackedMoveListState extends State<StackedMoveList> {
     super.didUpdateWidget(oldWidget);
     if (scrollController.hasClients) {
       Future<void>.delayed(const Duration(milliseconds: 300)).then((_) {
-        Scrollable.ensureVisible(
-          currentMoveKey.currentContext!,
-          alignment: 0.5,
-          duration: _scrollAnimationDuration,
-          curve: Curves.easeIn,
-        );
+        if (currentMoveKey.currentContext != null) {
+          Scrollable.ensureVisible(
+            currentMoveKey.currentContext!,
+            alignment: 0.5,
+            duration: _scrollAnimationDuration,
+            curve: Curves.easeIn,
+          );
+        }
       });
     }
   }
