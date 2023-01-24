@@ -223,7 +223,7 @@ class _BoardBody extends ConsumerWidget {
           topPlayer: topPlayer,
           bottomPlayer: bottomPlayer,
           moves: gameState?.sanMoves,
-          currentMoveIndex: positionCursor,
+          currentMoveIndex: positionCursor - 1,
         );
       },
       loading: () {

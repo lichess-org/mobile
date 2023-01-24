@@ -215,7 +215,8 @@ void main() {
           isNull);
       // go back to last position
       await tester.tap(find.byKey(const Key('cursor-last')));
-      await tester.pump();
+      // need to wait for move list animation
+      await tester.pumpAndSettle();
       // board is interactable again
       expect(
           tester.widget<cg.Board>(find.byType(cg.Board)).data.interactableSide,
@@ -287,7 +288,8 @@ void main() {
 
       // trying now to exit will not show the alert
       await tapBackButton(tester);
-      await tester.pump();
+      // needs this to avoid timer pending
+      await tester.pumpAndSettle();
       expect(
           find.text('Are you sure you want to quit the game?'), findsNothing);
     }, variant: kPlatformVariant);

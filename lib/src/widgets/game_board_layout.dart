@@ -169,7 +169,7 @@ class _InlineMoveListState extends State<InlineMoveList> {
         scrollDirection: Axis.horizontal,
         itemCount: widget.slicedMoves.length,
         itemBuilder: (_, index) => Container(
-          margin: const EdgeInsets.only(right: 8),
+          margin: const EdgeInsets.only(right: 10),
           child: Row(
             children: [
               InlineMoveCount(count: index + 1),
@@ -199,7 +199,7 @@ class InlineMoveCount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(right: 6),
+      margin: const EdgeInsets.only(right: 3),
       child: Text(
         '$count.',
         style: TextStyle(
@@ -228,8 +228,7 @@ class InlineMoveItem extends StatelessWidget {
     return GestureDetector(
       onTap: onSelectMove != null ? () => onSelectMove!(move.key) : null,
       child: Container(
-        margin: const EdgeInsets.only(right: 6),
-        padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+        padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 4),
         decoration: ShapeDecoration(
           color: current == true
               ? defaultTargetPlatform == TargetPlatform.iOS
