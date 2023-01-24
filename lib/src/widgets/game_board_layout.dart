@@ -1,11 +1,14 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:chessground/chessground.dart';
 
 import 'package:lichess_mobile/src/utils/style.dart';
 import 'platform.dart';
 
-const scrollAnimationDuration = Duration(milliseconds: 200);
+const _scrollAnimationDuration = Duration(milliseconds: 200);
+const _moveListOpacity = 0.6;
 
 /// Widget that provides a board layout for games according to screen constraints
 ///
@@ -145,7 +148,7 @@ class _InlineMoveListState extends State<InlineMoveList> {
         Scrollable.ensureVisible(
           currentMoveKey.currentContext!,
           alignment: 0.5,
-          duration: scrollAnimationDuration,
+          duration: _scrollAnimationDuration,
           curve: Curves.easeIn,
         );
       });
@@ -200,7 +203,7 @@ class InlineMoveCount extends StatelessWidget {
         '$count.',
         style: TextStyle(
           fontWeight: FontWeight.w600,
-          color: textShade(context, 0.7),
+          color: textShade(context, _moveListOpacity),
         ),
       ),
     );
@@ -225,12 +228,24 @@ class InlineMoveItem extends StatelessWidget {
       onTap: onSelectMove != null ? () => onSelectMove!(move.key) : null,
       child: Container(
         margin: const EdgeInsets.only(right: 6),
-        // color: current == true ? Colors.red : Colors.transparent,
+        padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+        decoration: ShapeDecoration(
+          color: current == true
+              ? defaultTargetPlatform == TargetPlatform.iOS
+                  ? CupertinoDynamicColor.resolve(
+                      CupertinoColors.secondarySystemBackground, context)
+                  : null
+              // TODO add bg color on android
+              : null,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(4.0))),
+        ),
         child: Text(
           move.value,
           style: TextStyle(
             fontWeight: FontWeight.w600,
-            color: current != true ? textShade(context, 0.7) : null,
+            color:
+                current != true ? textShade(context, _moveListOpacity) : null,
           ),
         ),
       ),
@@ -278,7 +293,7 @@ class _StackedMoveListState extends State<StackedMoveList> {
         Scrollable.ensureVisible(
           currentMoveKey.currentContext!,
           alignment: 0.5,
-          duration: scrollAnimationDuration,
+          duration: _scrollAnimationDuration,
           curve: Curves.easeIn,
         );
       });
@@ -341,7 +356,7 @@ class StackedMoveCount extends StatelessWidget {
         '$count.',
         style: TextStyle(
           fontWeight: FontWeight.w600,
-          color: textShade(context, 0.7),
+          color: textShade(context, _moveListOpacity),
         ),
       ),
     );
