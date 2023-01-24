@@ -143,89 +143,45 @@ void main() {
   group('GameRepository.getGame', () {
     test('minimal example game', () async {
       const testResponse = '''
-{
-  "id": "5IrD6Gzz",
-  "rated": true,
-  "variant": "standard",
-  "speed": "blitz",
-  "perf": "blitz",
-  "createdAt": 1514505150384,
-  "lastMoveAt": 1514505592843,
-  "status": "draw",
-  "players": {
-    "white": {
-      "user": {
-        "name": "Lance5500",
-        "title": "LM",
-        "patron": true,
-        "id": "lance5500"
-      },
-      "rating": 2389,
-      "ratingDiff": 4
-    },
-    "black": {
-      "user": {
-        "name": "TryingHard87",
-        "id": "tryinghard87"
-      },
-      "rating": 2498,
-      "ratingDiff": -4
-    }
-  },
-  "opening": {
-    "eco": "D31",
-    "name": "Semi-Slav Defense: Marshall Gambit",
-    "ply": 7
-  },
-  "moves": "d4 d5 c4 c6 Nc3 e6 e4 Nd7 exd5 cxd5 cxd5 exd5 Nxd5 Nb6 Bb5+ Bd7 Qe2+ Ne7 Nxb6 Qxb6 Bxd7+ Kxd7 Nf3 Qa6 Ne5+ Ke8 Qf3 f6 Nd3 Qc6 Qe2 Kf7 O-O Kg8 Bd2 Re8 Rac1 Nf5 Be3 Qe6 Rfe1 g6 b3 Bd6 Qd2 Kf7 Bf4 Qd7 Bxd6 Nxd6 Nc5 Rxe1+ Rxe1 Qc6 f3 Re8 Rxe8 Nxe8 Kf2 Nc7 Qb4 b6 Qc4+ Nd5 Nd3 Qe6 Nb4 Ne7 Qxe6+ Kxe6 Ke3 Kd6 g3 h6 Kd3 h5 Nc2 Kd5 a3 Nc6 Ne3+ Kd6 h4 Nd8 g4 Ne6 Ke4 Ng7 Nc4+ Ke6 d5+ Kd7 a4 g5 gxh5 Nxh5 hxg5 fxg5 Kf5 Nf4 Ne3 Nh3 Kg4 Ng1 Nc4 Kc7 Nd2 Kd6 Kxg5 Kxd5 f4 Nh3+ Kg4 Nf2+ Kf3 Nd3 Ke3 Nc5 Kf3 Ke6 Ke3 Kf5 Kd4 Ne6+ Kc4",
-  "clock": {
-    "initial": 300,
-    "increment": 3,
-    "totalTime": 420
-  }
-}
+{"id":"pew0Im0U","rated":false,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1673361618840,"lastMoveAt":1673361714573,"status":"mate","players":{"white":{"user":{"name":"maia1","title":"BOT","id":"maia1"},"rating":1429},"black":{"user":{"name":"veloce","patron":true,"id":"veloce"},"rating":1178}},"winner":"black","opening":{"eco":"C65","name":"Ruy Lopez: Berlin Defense","ply":6},"pgn":"[Event \\"Casual Blitz game\\"]\\n[Site \\"https://lichess.org/pew0Im0U\\"]\\n[Date \\"2023.01.10\\"]\\n[White \\"maia1\\"]\\n[Black \\"veloce\\"]\\n[Result \\"0-1\\"]\\n[UTCDate \\"2023.01.10\\"]\\n[UTCTime \\"14:40:18\\"]\\n[WhiteElo \\"1429\\"]\\n[BlackElo \\"1178\\"]\\n[WhiteTitle \\"BOT\\"]\\n[Variant \\"Standard\\"]\\n[TimeControl \\"180+2\\"]\\n[ECO \\"C65\\"]\\n[Opening \\"Ruy Lopez: Berlin Defense\\"]\\n[Termination \\"Normal\\"]\\n\\n1. e4 { [%clk 0:03:00] } 1... e5 { [%clk 0:03:00] } 2. Nf3 { [%clk 0:03:02] } 2... Nc6 { [%clk 0:03:00] } 3. Bb5 { [%clk 0:03:01] } 3... Nf6 { [%clk 0:02:58] } 4. Bxc6 { [%clk 0:03:03] } 4... dxc6 { [%clk 0:02:58] } 5. Nxe5 { [%clk 0:03:03] } 5... Bd6 { [%clk 0:02:55] } 6. Nf3 { [%clk 0:03:05] } 6... Bg4 { [%clk 0:02:55] } 7. O-O { [%clk 0:03:05] } 7... Nxe4 { [%clk 0:02:56] } 8. Re1 { [%clk 0:03:04] } 8... Bxf3 { [%clk 0:02:45] } 9. Qxf3 { [%clk 0:03:00] } 9... Qh4 { [%clk 0:02:35] } 10. Rxe4+ { [%clk 0:02:56] } 10... Qxe4 { [%clk 0:02:29] } 11. Qxe4+ { [%clk 0:02:58] } 11... Be7 { [%clk 0:02:28] } 12. d3 { [%clk 0:02:55] } 12... O-O-O { [%clk 0:02:28] } 13. Qxe7 { [%clk 0:02:55] } 13... Rhe8 { [%clk 0:02:28] } 14. Qxf7 { [%clk 0:02:54] } 14... Re1# { [%clk 0:02:26] } 0-1\\n\\n\\n","clock":{"initial":180,"increment":2,"totalTime":260}}
 ''';
 
       when(() => mockApiClient.get(
-            Uri.parse('$kLichessHost/game/export/$gameIdTest'),
+            Uri.parse('$kLichessHost/game/export/pew0Im0U?pgnInJson=true'),
             headers: {'Accept': 'application/json'},
           )).thenReturn(TaskEither.right(http.Response(testResponse, 200)));
 
-      final result = await repo.getGameTask(gameIdTest).run();
+      final result = await repo.getGameTask(const GameId('pew0Im0U')).run();
 
       expect(result.isRight(), true);
     });
 
     test('game with analysis', () async {
       const testResponse = '''
-{"id":"NchH5KBj","rated":true,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1647115605598,"lastMoveAt":1647116025236,"status":"resign","players":{"white":{"user":{"name":"matyizom","id":"matyizom"},"rating":1224,"ratingDiff":10,"analysis":{"inaccuracy":3,"mistake":2,"blunder":0,"acpl":60}},"black":{"user":{"name":"veloce","patron":true,"id":"veloce"},"rating":1147,"ratingDiff":-8,"analysis":{"inaccuracy":3,"mistake":1,"blunder":1,"acpl":105}}},"winner":"white","opening":{"eco":"B01","name":"Scandinavian Defense: Main Line, Mieses Variation","ply":8},"moves":"e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 c5 a3 e6 Bg5 Be7 Bb5+ Bd7 Bxd7+ Nbxd7 O-O O-O Ne5 cxd4 Nxd7 Nxd7 Bxe7 Rfe8 Bb4 Qf5 Qxd4 e5 Qe3 Qxc2 Ne4 Qxb2 Ng5 f6 Qh3 h6 Nf3 a5 Qxd7 Red8 Qxb7 axb4 Qxb4 Qxa3 Rxa3","analysis":[{"eval":28},{"eval":82,"best":"e7e5","variation":"e5 Nf3 Nc6 Bb5 Nf6 d3 Bc5 c3 O-O O-O"},{"eval":66},{"eval":80},{"eval":71},{"eval":63},{"eval":75},{"eval":60},{"eval":80},{"eval":136,"best":"g7g6","variation":"g6 Bc4 Bg7 O-O O-O Bd2 c5 Nd5 Qd8 Nxf6+"},{"eval":53,"best":"d4d5","variation":"d5 g6 Bc4 Bg7 O-O a6 Bd2 Qd8 a4 Nbd7","judgment":{"name":"Inaccuracy","comment":"Inaccuracy. d5 was best."}},{"eval":63},{"eval":-16,"best":"c1f4","variation":"Bf4 Nc6 Bb5 cxd4 Nxd4 Bd7 Nxc6 Bxc6 Bxc6+ bxc6","judgment":{"name":"Inaccuracy","comment":"Inaccuracy. Bf4 was best."}},{"eval":131,"best":"f6e4","variation":"Ne4","judgment":{"name":"Mistake","comment":"Mistake. Ne4 was best."}},{"eval":-10,"best":"d4c5","variation":"dxc5","judgment":{"name":"Mistake","comment":"Mistake. dxc5 was best."}},{"eval":-27},{"eval":-20},{"eval":-31},{"eval":-57},{"eval":20,"best":"c5d4","variation":"cxd4 Qxd4","judgment":{"name":"Inaccuracy","comment":"Inaccuracy. cxd4 was best."}},{"eval":-138,"best":"d4d5","variation":"d5 exd5 Nxd5 Bd8 Ne3 Qa6 Re1 Re8 Qd2 Ne5 Nxe5 Rxe5 Bxf6 Bxf6","judgment":{"name":"Mistake","comment":"Mistake. d5 was best."}},{"eval":-91},{"eval":-107},{"eval":538,"best":"a5g5","variation":"Qxg5 Qxd4","judgment":{"name":"Blunder","comment":"Blunder. Qxg5 was best."}},{"eval":506},{"eval":515},{"eval":515},{"eval":745,"best":"a5b6","variation":"Qb6 Ne4","judgment":{"name":"Inaccuracy","comment":"Inaccuracy. Qb6 was best."}},{"eval":739},{"eval":792},{"eval":753},{"eval":800},{"eval":745},{"eval":858},{"eval":575,"best":"a1d1","variation":"Rad1 Qd4","judgment":{"name":"Inaccuracy","comment":"Inaccuracy. Rad1 was best."}},{"eval":730},{"eval":685},{"eval":737},{"eval":621},{"eval":645},{"eval":578},{"eval":977,"best":"a5b4","variation":"axb4 axb4 Qxa1 Qxe8+ Rxe8 Rxa1 Rc8 Kf1 Rc4 Rb1 Kf7 Nd2 Rd4 Ke2","judgment":{"name":"Inaccuracy","comment":"Inaccuracy. axb4 was best."}},{"eval":700},{"eval":716},{"eval":730},{"eval":1054},{"eval":1014}],"clock":{"initial":180,"increment":2,"totalTime":260}}
+{"id":"3zfAoBZs","rated":false,"variant":"standard","speed":"bullet","perf":"bullet","createdAt":1674191740792,"lastMoveAt":1674191772185,"status":"outoftime","players":{"white":{"user":{"name":"penguingim1","title":"GM","patron":true,"id":"penguingim1"},"rating":3302,"analysis":{"inaccuracy":1,"mistake":1,"blunder":0,"acpl":30}},"black":{"user":{"name":"TackoFall","title":"FM","id":"tackofall"},"rating":2817,"analysis":{"inaccuracy":0,"mistake":0,"blunder":2,"acpl":95}}},"winner":"white","opening":{"eco":"A01","name":"Nimzo-Larsen Attack: Classical Variation","ply":2},"moves":"b3 d5 Bb2 Nc6 Nf3 Nf6 e3 g6 c4 Bg7 cxd5 Qxd5 Nc3 Qd8 h4 O-O h5 Nxh5 Rxh5 gxh5 Ng5 Bg4 Qc2 Re8 Qxh7+ Kf8 Nd5 e5 Ba3+ Ne7 Nf6","pgn":"[Event \\"Casual Bullet game\\"]\\n[Site \\"https://lichess.org/3zfAoBZs\\"]\\n[Date \\"2023.01.20\\"]\\n[White \\"penguingim1\\"]\\n[Black \\"TackoFall\\"]\\n[Result \\"1-0\\"]\\n[UTCDate \\"2023.01.20\\"]\\n[UTCTime \\"05:15:40\\"]\\n[WhiteElo \\"3302\\"]\\n[BlackElo \\"2817\\"]\\n[WhiteTitle \\"GM\\"]\\n[BlackTitle \\"FM\\"]\\n[Variant \\"Standard\\"]\\n[TimeControl \\"30+0\\"]\\n[ECO \\"A01\\"]\\n[Opening \\"Nimzo-Larsen Attack: Classical Variation\\"]\\n[Termination \\"Time forfeit\\"]\\n\\n1. b3 { [%eval 0.0] [%clk 0:00:30] } 1... d5 { [%eval 0.0] [%clk 0:00:30] } 2. Bb2 { [%eval 0.0] [%clk 0:00:30] } 2... Nc6 { [%eval 0.51] [%clk 0:00:30] } 3. Nf3 { [%eval 0.56] [%clk 0:00:30] } 3... Nf6 { [%eval 0.53] [%clk 0:00:30] } 4. e3 { [%eval 0.51] [%clk 0:00:30] } 4... g6 { [%eval 0.87] [%clk 0:00:30] } 5. c4 { [%eval 0.79] [%clk 0:00:29] } 5... Bg7 { [%eval 0.79] [%clk 0:00:30] } 6. cxd5 { [%eval 0.79] [%clk 0:00:29] } 6... Qxd5 { [%eval 0.85] [%clk 0:00:29] } 7. Nc3 { [%eval 0.69] [%clk 0:00:29] } 7... Qd8 { [%eval 0.74] [%clk 0:00:29] } 8. h4 { [%eval 0.2] [%clk 0:00:28] } 8... O-O { [%eval 0.27] [%clk 0:00:29] } 9. h5 { [%eval -0.57] [%clk 0:00:28] } 9... Nxh5 { [%eval -0.71] [%clk 0:00:29] } 10. Rxh5 { [%eval -2.16] [%clk 0:00:27] } 10... gxh5 { [%eval -1.99] [%clk 0:00:28] } 11. Ng5 { [%eval -2.59] [%clk 0:00:27] } 11... Bg4 { [%eval 2.23] [%clk 0:00:28] } 12. Qc2 { [%eval 2.08] [%clk 0:00:25] } 12... Re8 { [%eval 7.45] [%clk 0:00:24] } 13. Qxh7+ { [%eval 7.37] [%clk 0:00:24] } 13... Kf8 { [%eval 7.73] [%clk 0:00:23] } 14. Nd5 { [%eval 7.57] [%clk 0:00:16] } 14... e5 { [%eval 8.06] [%clk 0:00:23] } 15. Ba3+ { [%eval 8.02] [%clk 0:00:14] } 15... Ne7 { [%eval 10.02] [%clk 0:00:21] } 16. Nf6 { [%eval 9.45] [%clk 0:00:14] } 1-0\\n\\n\\n","analysis":[{"eval":0},{"eval":0},{"eval":0},{"eval":51},{"eval":56},{"eval":53},{"eval":51},{"eval":87},{"eval":79},{"eval":79},{"eval":79},{"eval":85},{"eval":69},{"eval":74},{"eval":20},{"eval":27},{"eval":-57,"best":"d2d4","variation":"d4","judgment":{"name":"Inaccuracy","comment":"Inaccuracy. d4 was best."}},{"eval":-71},{"eval":-216,"best":"d2d4","variation":"d4 e5 d5 Ne7 Qd2 Bd7 Rg1 e4 Ng5 Bg4 Ngxe4 Nxd5 Nxd5 Bxb2","judgment":{"name":"Mistake","comment":"Mistake. d4 was best."}},{"eval":-199},{"eval":-259},{"eval":223,"best":"c8f5","variation":"Bf5","judgment":{"name":"Blunder","comment":"Blunder. Bf5 was best."}},{"eval":208},{"eval":745,"best":"f7f5","variation":"f5 Bc4+ Kh8 Ne6 Qd7 Nxg7 Kxg7 f3 e5 d4 f4 O-O-O Bf5 e4","judgment":{"name":"Blunder","comment":"Blunder. f5 was best."}},{"eval":737},{"eval":773},{"eval":757},{"eval":806},{"eval":802},{"eval":1002},{"eval":945}],"clock":{"initial":30,"increment":0,"totalTime":30}}
 ''';
 
-      const gameId = GameId('NchH5KBj');
-
       when(() => mockApiClient.get(
-            Uri.parse('$kLichessHost/game/export/$gameId'),
+            Uri.parse('$kLichessHost/game/export/3zfAoBZs?pgnInJson=true'),
             headers: {'Accept': 'application/json'},
           )).thenReturn(TaskEither.right(http.Response(testResponse, 200)));
 
-      final result = await repo.getGameTask(gameId).run();
+      final result = await repo.getGameTask(const GameId('3zfAoBZs')).run();
 
       expect(result.isRight(), true);
     });
 
     test('threeCheck game', () async {
       const testResponse = '''
-{"id":"1vdsvmxp","rated":true,"variant":"threeCheck","speed":"bullet","perf":"threeCheck","createdAt":1604194310939,"lastMoveAt":1604194361831,"status":"variantEnd","players":{"white":{"user":{"name":"Zhigalko_Sergei","title":"GM","patron":true,"id":"zhigalko_sergei"},"rating":2448,"ratingDiff":6,"analysis":{"inaccuracy":1,"mistake":1,"blunder":1,"acpl":75}},"black":{"user":{"name":"catask","id":"catask"},"rating":2485,"ratingDiff":-6,"analysis":{"inaccuracy":1,"mistake":0,"blunder":2,"acpl":115}}},"winner":"white","opening":{"eco":"B02","name":"Alekhine Defense: Scandinavian Variation, Geschev Gambit","ply":6},"moves":"e4 c6 Nc3 d5 exd5 Nf6 Nf3 e5 Bc4 Bd6 O-O O-O h3 e4 Kh1 exf3 Qxf3 cxd5 Nxd5 Nxd5 Bxd5 Nc6 Re1 Be6 Rxe6 fxe6 Bxe6+ Kh8 Qh5 h6 Qg6 Qf6 Qh7+ Kxh7 Bf5+","analysis":[{"eval":340},{"eval":359},{"eval":231},{"eval":300,"best":"g8f6","variation":"Nf6 e5 d5 d4 Ne4 Bd3 Bf5 Nf3 e6 O-O","judgment":{"name":"Inaccuracy","comment":"Inaccuracy. Nf6 was best."}},{"eval":262},{"eval":286},{"eval":184,"best":"f1c4","variation":"Bc4 e6 dxe6 Bxe6 Bxe6 fxe6 Qe2 Qd7 Nf3 Bd6","judgment":{"name":"Inaccuracy","comment":"Inaccuracy. Bc4 was best."}},{"eval":235},{"eval":193},{"eval":243},{"eval":269},{"eval":219},{"eval":-358,"best":"d2d3","variation":"d3 Bg4 h3 e4 Nxe4 Bh2+ Kh1 Nxe4 dxe4 Qf6","judgment":{"name":"Blunder","comment":"Blunder. d3 was best."}},{"eval":-376},{"eval":-386},{"eval":-383},{"eval":-405},{"eval":-363},{"eval":-372},{"eval":-369},{"eval":-345},{"eval":-276},{"eval":-507,"best":"b2b3","variation":"b3 Be6","judgment":{"name":"Mistake","comment":"Mistake. b3 was best."}},{"eval":-49,"best":"c6e5","variation":"Ne5 Qh5","judgment":{"name":"Blunder","comment":"Blunder. Ne5 was best."}},{"eval":-170},{"mate":7,"best":"g8h8","variation":"Kh8 Rh6","judgment":{"name":"Blunder","comment":"Checkmate is now unavoidable. Kh8 was best."}},{"mate":6},{"mate":6},{"mate":5},{"mate":3},{"mate":2},{"mate":2},{"mate":1},{"mate":1}],"clock":{"initial":60,"increment":0,"totalTime":60}}
+{"id":"1vdsvmxp","rated":true,"variant":"threeCheck","speed":"bullet","perf":"threeCheck","createdAt":1604194310939,"lastMoveAt":1604194361831,"status":"variantEnd","players":{"white":{"user":{"name":"Zhigalko_Sergei","title":"GM","patron":true,"id":"zhigalko_sergei"},"rating":2448,"ratingDiff":6,"analysis":{"inaccuracy":1,"mistake":1,"blunder":1,"acpl":75}},"black":{"user":{"name":"catask","id":"catask"},"rating":2485,"ratingDiff":-6,"analysis":{"inaccuracy":1,"mistake":0,"blunder":2,"acpl":115}}},"winner":"white","opening":{"eco":"B02","name":"Alekhine Defense: Scandinavian Variation, Geschev Gambit","ply":6},"moves":"e4 c6 Nc3 d5 exd5 Nf6 Nf3 e5 Bc4 Bd6 O-O O-O h3 e4 Kh1 exf3 Qxf3 cxd5 Nxd5 Nxd5 Bxd5 Nc6 Re1 Be6 Rxe6 fxe6 Bxe6+ Kh8 Qh5 h6 Qg6 Qf6 Qh7+ Kxh7 Bf5+","pgn":"[Event \\"Rated Three-check game\\"]\\n[Site \\"https://lichess.org/1vdsvmxp\\"]\\n[Date \\"2020.11.01\\"]\\n[White \\"Zhigalko_Sergei\\"]\\n[Black \\"catask\\"]\\n[Result \\"1-0\\"]\\n[UTCDate \\"2020.11.01\\"]\\n[UTCTime \\"01:31:50\\"]\\n[WhiteElo \\"2448\\"]\\n[BlackElo \\"2485\\"]\\n[WhiteRatingDiff \\"+6\\"]\\n[BlackRatingDiff \\"-6\\"]\\n[WhiteTitle \\"GM\\"]\\n[Variant \\"Three-check\\"]\\n[TimeControl \\"60+0\\"]\\n[ECO \\"B02\\"]\\n[Opening \\"Alekhine Defense: Scandinavian Variation, Geschev Gambit\\"]\\n[Termination \\"Normal\\"]\\n\\n1. e4 { [%eval 3.4] [%clk 0:01:00] } 1... c6 { [%eval 3.59] [%clk 0:01:00] } 2. Nc3 { [%eval 2.31] [%clk 0:01:00] } 2... d5 { [%eval 3.0] [%clk 0:00:59] } 3. exd5 { [%eval 2.62] [%clk 0:00:59] } 3... Nf6 { [%eval 2.86] [%clk 0:00:59] } 4. Nf3 { [%eval 1.84] [%clk 0:00:58] } 4... e5 { [%eval 2.35] [%clk 0:00:59] } 5. Bc4 { [%eval 1.93] [%clk 0:00:57] } 5... Bd6 { [%eval 2.43] [%clk 0:00:58] } 6. O-O { [%eval 2.69] [%clk 0:00:56] } 6... O-O { [%eval 2.19] [%clk 0:00:57] } 7. h3 { [%eval -3.58] [%clk 0:00:56] } 7... e4 { [%eval -3.76] [%clk 0:00:56] } 8. Kh1 { [%eval -3.86] [%clk 0:00:51] } 8... exf3 { [%eval -3.83] [%clk 0:00:53] } 9. Qxf3 { [%eval -4.05] [%clk 0:00:51] } 9... cxd5 { [%eval -3.63] [%clk 0:00:50] } 10. Nxd5 { [%eval -3.72] [%clk 0:00:51] } 10... Nxd5 { [%eval -3.69] [%clk 0:00:50] } 11. Bxd5 { [%eval -3.45] [%clk 0:00:51] } 11... Nc6 { [%eval -2.76] [%clk 0:00:49] } 12. Re1 { [%eval -5.07] [%clk 0:00:48] } 12... Be6 { [%eval -0.49] [%clk 0:00:48] } 13. Rxe6 { [%eval -1.7] [%clk 0:00:44] } 13... fxe6 { [%eval #7] [%clk 0:00:48] } 14. Bxe6+ { [%eval #6] [%clk 0:00:44] } 14... Kh8 { [%eval #6] [%clk 0:00:47] } 15. Qh5 { [%eval #5] [%clk 0:00:44] } 15... h6 { [%eval #3] [%clk 0:00:38] } 16. Qg6 { [%eval #2] [%clk 0:00:43] } 16... Qf6 { [%eval #2] [%clk 0:00:32] } 17. Qh7+ { [%eval #1] [%clk 0:00:42] } 17... Kxh7 { [%eval #1] [%clk 0:00:32] } 18. Bf5+ { [%clk 0:00:42] } 1-0\\n\\n\\n","analysis":[{"eval":340},{"eval":359},{"eval":231},{"eval":300,"best":"g8f6","variation":"Nf6 e5 d5 d4 Ne4 Bd3 Bf5 Nf3 e6 O-O","judgment":{"name":"Inaccuracy","comment":"Inaccuracy. Nf6 was best."}},{"eval":262},{"eval":286},{"eval":184,"best":"f1c4","variation":"Bc4 e6 dxe6 Bxe6 Bxe6 fxe6 Qe2 Qd7 Nf3 Bd6","judgment":{"name":"Inaccuracy","comment":"Inaccuracy. Bc4 was best."}},{"eval":235},{"eval":193},{"eval":243},{"eval":269},{"eval":219},{"eval":-358,"best":"d2d3","variation":"d3 Bg4 h3 e4 Nxe4 Bh2+ Kh1 Nxe4 dxe4 Qf6","judgment":{"name":"Blunder","comment":"Blunder. d3 was best."}},{"eval":-376},{"eval":-386},{"eval":-383},{"eval":-405},{"eval":-363},{"eval":-372},{"eval":-369},{"eval":-345},{"eval":-276},{"eval":-507,"best":"b2b3","variation":"b3 Be6","judgment":{"name":"Mistake","comment":"Mistake. b3 was best."}},{"eval":-49,"best":"c6e5","variation":"Ne5 Qh5","judgment":{"name":"Blunder","comment":"Blunder. Ne5 was best."}},{"eval":-170},{"mate":7,"best":"g8h8","variation":"Kh8 Rh6","judgment":{"name":"Blunder","comment":"Checkmate is now unavoidable. Kh8 was best."}},{"mate":6},{"mate":6},{"mate":5},{"mate":3},{"mate":2},{"mate":2},{"mate":1},{"mate":1}],"clock":{"initial":60,"increment":0,"totalTime":60}}
 ''';
 
-      const gameId = GameId('1vdsvmxp');
-
       when(() => mockApiClient.get(
-            Uri.parse('$kLichessHost/game/export/$gameId'),
+            Uri.parse('$kLichessHost/game/export/1vdsvmxp?pgnInJson=true'),
             headers: {'Accept': 'application/json'},
           )).thenReturn(TaskEither.right(http.Response(testResponse, 200)));
 
-      final result = await repo.getGameTask(gameId).run();
+      final result = await repo.getGameTask(const GameId('1vdsvmxp')).run();
 
       expect(result.isRight(), true);
 

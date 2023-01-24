@@ -3,19 +3,20 @@ import 'package:flutter/material.dart';
 import './countdown_clock.dart';
 
 class Player extends StatelessWidget {
+  const Player({
+    required this.name,
+    this.title,
+    this.rating,
+    this.active,
+    this.clock,
+    super.key,
+  });
+
   final String name;
   final int? rating;
   final String? title;
-  final Duration clock;
-  final bool active;
-
-  const Player(
-      {required this.name,
-      this.title,
-      this.rating,
-      required this.active,
-      required this.clock,
-      super.key});
+  final Duration? clock;
+  final bool? active;
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +52,11 @@ class Player extends StatelessWidget {
                 ),
             ]),
           )),
-          CountdownClock(
-            duration: clock,
-            active: active,
-          ),
+          if (clock != null)
+            CountdownClock(
+              duration: clock!,
+              active: active == true,
+            ),
         ],
       ),
     );

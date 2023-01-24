@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:collection/collection.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/errors.dart';
@@ -32,7 +33,7 @@ class GameRepository {
 
   TaskEither<IOError, ArchivedGame> getGameTask(GameId id) {
     return apiClient.get(
-      Uri.parse('$kLichessHost/game/export/$id'),
+      Uri.parse('$kLichessHost/game/export/$id?pgnInJson=true'),
       headers: {'Accept': 'application/json'},
     ).flatMap((response) {
       return TaskEither.fromEither(readJsonObject(response.body,
@@ -118,22 +119,33 @@ ArchivedGame _makeArchivedGameFromJson(Map<String, dynamic> json) =>
 
 ArchivedGame _archivedGameFromPick(RequiredPick pick) {
   final data = _archivedGameDatafromPick(pick);
+  final pgn = pick('pgn').asStringOrThrow();
+  final pgnGame = PgnGame.parsePgn(pgn);
+  Position position = PgnGame.startingPosition(pgnGame.headers);
+  final List<GameStep> steps = [];
+  int ply = 0;
+  Duration? clock = data.clock?.initial;
+  for (final node in pgnGame.moves.mainline()) {
+    ply++;
+    final move = position.parseSan(node.san);
+    if (move == null) break; // Illegal move
+    position = position.playUnchecked(move);
+    final comments = node.comments?.map(PgnComment.fromPgn);
+    final nodeClock = comments?.firstWhereOrNull((e) => e.clock != null)?.clock;
+    steps.add(GameStep(
+      ply: ply,
+      san: node.san,
+      uci: move.uci,
+      position: position,
+      whiteClock: ply.isOdd ? nodeClock : clock,
+      blackClock: ply.isEven ? nodeClock : clock,
+    ));
+    clock = nodeClock;
+  }
   return ArchivedGame(
     data: data,
-    steps: pick('moves').letOrThrow((it) {
-      final moves = it.asStringOrThrow().split(' ');
-      final List<GameStep> steps = [];
-      Position position = data.variant.initialPosition;
-      int ply = 0;
-      for (final san in moves) {
-        ply++;
-        final move = position.parseSan(san);
-        position = position.playUnchecked(move!);
-        steps.add(
-            GameStep(ply: ply, san: san, uci: move.uci, position: position));
-      }
-      return steps;
-    }),
+    pgn: pgn,
+    steps: steps,
   );
 }
 
@@ -156,6 +168,14 @@ ArchivedGameData _archivedGameDatafromPick(RequiredPick pick) {
     initialFen: pick('initialFen').asStringOrNull(),
     lastFen: pick('lastFen').asStringOrNull(),
     analysis: pick('analysis').asListOrNull(_moveAnalysisFromPick),
+    clock: pick('clock').letOrNull(_clockDataFromPick),
+  );
+}
+
+ClockData _clockDataFromPick(RequiredPick pick) {
+  return ClockData(
+    initial: pick('initial').asDurationFromSecondsOrThrow(),
+    increment: pick('increment').asDurationFromSecondsOrThrow(),
   );
 }
 

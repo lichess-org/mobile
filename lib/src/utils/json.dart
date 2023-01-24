@@ -274,6 +274,7 @@ Either<IOError, T> readJsonObject<T>(String json,
       return mapper(obj);
     }, (error, stackTrace) {
       logger?.severe('Could not read json object as ${T.toString()}: $error');
+      print('Could not read json object as ${T.toString()}: $error');
       return DataFormatError(stackTrace);
     });
 

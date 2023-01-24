@@ -42,6 +42,7 @@ class ArchivedGameData with _$ArchivedGameData {
     String? lastFen,
     Side? winner,
     List<MoveAnalysis>? analysis,
+    ClockData? clock,
   }) = _ArchivedGameData;
 }
 
@@ -51,6 +52,7 @@ class ArchivedGame with _$ArchivedGame {
 
   const factory ArchivedGame({
     required ArchivedGameData data,
+    required String pgn,
     required List<GameStep> steps,
   }) = _ArchivedGame;
 
@@ -60,8 +62,22 @@ class ArchivedGame with _$ArchivedGame {
   Move? moveAt(int cursor) =>
       steps.isNotEmpty ? Move.fromUci(steps[cursor].uci) : null;
 
+  Duration? whiteClockAt(int cursor) =>
+      steps.isNotEmpty ? steps[cursor].whiteClock : null;
+
+  Duration? blackClockAt(int cursor) =>
+      steps.isNotEmpty ? steps[cursor].blackClock : null;
+
   Move? get lastMove => steps.isNotEmpty ? Move.fromUci(steps.last.uci) : null;
   Position? get lastPosition => steps.isNotEmpty ? steps.last.position : null;
+}
+
+@freezed
+class ClockData with _$ClockData {
+  const factory ClockData({
+    required Duration initial,
+    required Duration increment,
+  }) = _ClockData;
 }
 
 @freezed
@@ -71,6 +87,8 @@ class GameStep with _$GameStep {
     required String san,
     required String uci,
     required Position position,
+    Duration? whiteClock,
+    Duration? blackClock,
   }) = _GameStep;
 }
 
