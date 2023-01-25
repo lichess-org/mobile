@@ -18,9 +18,9 @@ import 'package:lichess_mobile/src/features/user/model/user.dart';
 import '../../data/game_repository.dart';
 import '../../model/game.dart' hide Player;
 
-final positionCursorProvider = StateProvider.autoDispose<int?>((ref) => null);
+final _positionCursorProvider = StateProvider.autoDispose<int?>((ref) => null);
 
-final isBoardTurnedProvider = StateProvider.autoDispose<bool>((ref) => false);
+final _isBoardTurnedProvider = StateProvider.autoDispose<bool>((ref) => false);
 
 final archivedGameProvider =
     FutureProvider.autoDispose.family<ArchivedGame, GameId>((ref, id) async {
@@ -28,7 +28,7 @@ final archivedGameProvider =
   final either = await gameRepo.getGameTask(id).run();
   return either.match((error) => throw error, (data) {
     ref
-        .read(positionCursorProvider.notifier)
+        .read(_positionCursorProvider.notifier)
         .update((_) => data.steps.length - 1);
     return data;
   });
@@ -124,8 +124,8 @@ class _BoardBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isBoardTurned = ref.watch(isBoardTurnedProvider);
-    final positionCursor = ref.watch(positionCursorProvider);
+    final isBoardTurned = ref.watch(_isBoardTurnedProvider);
+    final positionCursor = ref.watch(_positionCursorProvider);
     final black = Player(
       key: const ValueKey('black-player'),
       name: gameData.black.name,
@@ -168,7 +168,7 @@ class _BoardBody extends ConsumerWidget {
       moves: game?.steps.map((e) => e.san).toList(growable: false),
       currentMoveIndex: positionCursor,
       onSelectMove: (moveIndex) {
-        ref.read(positionCursorProvider.notifier).state = moveIndex;
+        ref.read(_positionCursorProvider.notifier).state = moveIndex;
       },
     );
   }
@@ -183,7 +183,7 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final positionCursor = ref.watch(positionCursorProvider);
+    final positionCursor = ref.watch(_positionCursorProvider);
 
     return SizedBox(
       child: Row(
@@ -202,7 +202,7 @@ class _BottomBar extends ConsumerWidget {
               tooltip: 'First position',
               onPressed: positionCursor != null && positionCursor > 0
                   ? () {
-                      ref.read(positionCursorProvider.notifier).state = 0;
+                      ref.read(_positionCursorProvider.notifier).state = 0;
                     }
                   : null,
               icon: const Icon(LichessIcons.fast_backward),
@@ -214,7 +214,9 @@ class _BottomBar extends ConsumerWidget {
               tooltip: 'Backward',
               onPressed: positionCursor != null && positionCursor > 0
                   ? () {
-                      ref.read(positionCursorProvider.notifier).update((state) {
+                      ref
+                          .read(_positionCursorProvider.notifier)
+                          .update((state) {
                         if (state != null) {
                           state--;
                         }
@@ -233,7 +235,9 @@ class _BottomBar extends ConsumerWidget {
                       positionCursor != null &&
                       positionCursor < steps!.length - 1
                   ? () {
-                      ref.read(positionCursorProvider.notifier).update((state) {
+                      ref
+                          .read(_positionCursorProvider.notifier)
+                          .update((state) {
                         if (state != null) {
                           state++;
                         }
@@ -252,7 +256,7 @@ class _BottomBar extends ConsumerWidget {
                       positionCursor != null &&
                       positionCursor < steps!.length - 1
                   ? () {
-                      ref.read(positionCursorProvider.notifier).state =
+                      ref.read(_positionCursorProvider.notifier).state =
                           steps!.length - 1;
                     }
                   : null,
@@ -273,8 +277,8 @@ class _BottomBar extends ConsumerWidget {
           leading: const Icon(Icons.swap_vert),
           label: Text(context.l10n.flipBoard),
           onPressed: (context) {
-            ref.read(isBoardTurnedProvider.notifier).state =
-                !ref.read(isBoardTurnedProvider);
+            ref.read(_isBoardTurnedProvider.notifier).state =
+                !ref.read(_isBoardTurnedProvider);
           },
         ),
       ],

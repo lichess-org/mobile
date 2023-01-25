@@ -353,7 +353,6 @@ class StackedMoveCount extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 40,
-      // margin: const EdgeInsets.only(right: 16),
       child: Text(
         '$count.',
         style: TextStyle(
