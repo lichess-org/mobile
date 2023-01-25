@@ -75,7 +75,8 @@ class GameBoardLayout extends StatelessWidget {
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
-                              child: StackedMoveList(
+                              child: MoveList(
+                                type: MoveListType.stacked,
                                 slicedMoves: slicedMoves,
                                 currentMoveIndex: currentMoveIndex ?? 0,
                                 onSelectMove: onSelectMove,
@@ -93,7 +94,8 @@ class GameBoardLayout extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (slicedMoves != null)
-                  InlineMoveList(
+                  MoveList(
+                    type: MoveListType.inline,
                     slicedMoves: slicedMoves,
                     currentMoveIndex: currentMoveIndex ?? 0,
                     onSelectMove: onSelectMove,
@@ -107,11 +109,17 @@ class GameBoardLayout extends StatelessWidget {
   }
 }
 
-class InlineMoveList extends StatefulWidget {
-  const InlineMoveList(
-      {required this.slicedMoves,
-      required this.currentMoveIndex,
-      this.onSelectMove});
+enum MoveListType { inline, stacked }
+
+class MoveList extends StatefulWidget {
+  const MoveList({
+    required this.type,
+    required this.slicedMoves,
+    required this.currentMoveIndex,
+    this.onSelectMove,
+  });
+
+  final MoveListType type;
 
   final List<List<MapEntry<int, String>>> slicedMoves;
 
@@ -119,10 +127,10 @@ class InlineMoveList extends StatefulWidget {
   final void Function(int moveIndex)? onSelectMove;
 
   @override
-  State<InlineMoveList> createState() => _InlineMoveListState();
+  State<MoveList> createState() => _MoveListState();
 }
 
-class _InlineMoveListState extends State<InlineMoveList> {
+class _MoveListState extends State<MoveList> {
   final ScrollController scrollController = ScrollController();
   final currentMoveKey = GlobalKey();
 
@@ -140,24 +148,28 @@ class _InlineMoveListState extends State<InlineMoveList> {
   }
 
   @override
-  void didUpdateWidget(covariant InlineMoveList oldWidget) {
+  void didUpdateWidget(covariant MoveList oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (scrollController.hasClients) {
-      Future<void>.delayed(const Duration(milliseconds: 300)).then((_) {
-        if (currentMoveKey.currentContext != null) {
-          Scrollable.ensureVisible(
-            currentMoveKey.currentContext!,
-            alignment: 0.5,
-            duration: _scrollAnimationDuration,
-            curve: Curves.easeIn,
-          );
-        }
-      });
-    }
+    Future<void>.delayed(const Duration(milliseconds: 300)).then((_) {
+      if (currentMoveKey.currentContext != null) {
+        Scrollable.ensureVisible(
+          currentMoveKey.currentContext!,
+          alignment: 0.5,
+          duration: _scrollAnimationDuration,
+          curve: Curves.easeIn,
+        );
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    return widget.type == MoveListType.inline
+        ? _buildInline(context)
+        : _buildStacked(context);
+  }
+
+  Widget _buildInline(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(left: 5),
       height: 40,
@@ -181,6 +193,46 @@ class _InlineMoveListState extends State<InlineMoveList> {
                   move: move,
                   current: widget.currentMoveIndex == move.key,
                   onSelectMove: widget.onSelectMove,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStacked(BuildContext context) {
+    return PlatformCard(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView.builder(
+          // hack to allow ensureVisible working
+          // TODO work on a different solution
+          cacheExtent: 5000,
+          controller: scrollController,
+          itemCount: widget.slicedMoves.length,
+          itemBuilder: (_, index) => Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              StackedMoveCount(count: index + 1),
+              Expanded(
+                child: Row(
+                  children: [
+                    ...widget.slicedMoves[index].map(
+                      (move) => Expanded(
+                        child: StackedMoveItem(
+                          key: widget.currentMoveIndex == move.key
+                              ? currentMoveKey
+                              : null,
+                          move: move,
+                          current: widget.currentMoveIndex == move.key,
+                          onSelectMove: widget.onSelectMove,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -246,97 +298,6 @@ class InlineMoveItem extends StatelessWidget {
             fontWeight: FontWeight.w600,
             color:
                 current != true ? textShade(context, _moveListOpacity) : null,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class StackedMoveList extends StatefulWidget {
-  const StackedMoveList(
-      {required this.slicedMoves,
-      required this.currentMoveIndex,
-      this.onSelectMove});
-
-  final List<List<MapEntry<int, String>>> slicedMoves;
-
-  final int currentMoveIndex;
-  final void Function(int moveIndex)? onSelectMove;
-
-  @override
-  State<StackedMoveList> createState() => _StackedMoveListState();
-}
-
-class _StackedMoveListState extends State<StackedMoveList> {
-  final ScrollController scrollController = ScrollController();
-  final currentMoveKey = GlobalKey();
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (currentMoveKey.currentContext != null) {
-        Scrollable.ensureVisible(
-          currentMoveKey.currentContext!,
-          alignment: 0.5,
-        );
-      }
-    });
-  }
-
-  @override
-  void didUpdateWidget(covariant StackedMoveList oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (scrollController.hasClients) {
-      Future<void>.delayed(const Duration(milliseconds: 300)).then((_) {
-        if (currentMoveKey.currentContext != null) {
-          Scrollable.ensureVisible(
-            currentMoveKey.currentContext!,
-            alignment: 0.5,
-            duration: _scrollAnimationDuration,
-            curve: Curves.easeIn,
-          );
-        }
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return PlatformCard(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          // hack to allow ensureVisible working
-          // TODO work on a different solution
-          cacheExtent: 5000,
-          controller: scrollController,
-          itemCount: widget.slicedMoves.length,
-          itemBuilder: (_, index) => Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              StackedMoveCount(count: index + 1),
-              Expanded(
-                child: Row(
-                  children: [
-                    ...widget.slicedMoves[index].map(
-                      (move) => Expanded(
-                        child: StackedMoveItem(
-                          key: widget.currentMoveIndex == move.key
-                              ? currentMoveKey
-                              : null,
-                          move: move,
-                          current: widget.currentMoveIndex == move.key,
-                          onSelectMove: widget.onSelectMove,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
           ),
         ),
       ),
