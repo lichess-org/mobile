@@ -1,18 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:lichess_mobile/src/common/http.dart';
+import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
 import 'package:lichess_mobile/src/features/user/ui/perf_stats_screen.dart';
-import '../../auth/data/fake_auth_repository.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../../utils.dart';
+import '../../auth/data/fake_auth_repository.dart';
 
 class MockClient extends Mock implements http.Client {}
 
@@ -24,8 +24,7 @@ void main() {
   final mockClient = MockClient();
   final mockLogger = MockLogger();
 
-  final String perfApiString = testPerf.toString().split('.').last;
-  final uriString = '$kLichessHost/api/user/$testUserId/perf/$perfApiString';
+  final uriString = '$kLichessHost/api/user/$testUserId/perf/${testPerf.name}';
 
   setUpAll(() {
     when(() => mockClient.get(Uri.parse(uriString)))
@@ -38,7 +37,8 @@ void main() {
 
       final app =
           await buildTestApp(tester, home: Consumer(builder: (context, ref, _) {
-        return const PerfStatsScreen(username: testUserId, perf: testPerf);
+        return const PerfStatsScreen(
+            username: testUserId, perf: testPerf, loggedInUser: null);
       }));
 
       await tester.pumpWidget(ProviderScope(overrides: [
@@ -63,7 +63,8 @@ void main() {
         (WidgetTester tester) async {
       final app =
           await buildTestApp(tester, home: Consumer(builder: (context, ref, _) {
-        return const PerfStatsScreen(username: testUserId, perf: testPerf);
+        return const PerfStatsScreen(
+            username: testUserId, perf: testPerf, loggedInUser: null);
       }));
 
       await tester.pumpWidget(ProviderScope(overrides: [

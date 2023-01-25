@@ -1,6 +1,6 @@
-import 'package:logging/logging.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/http.dart';
@@ -27,13 +27,8 @@ class UserRepository {
 
   TaskEither<IOError, UserPerfStats> getUserPerfStatsTask(
       String username, Perf perf) {
-    final String perfApiString = perf.toString().split('.').last;
-    // The above line gets the enum's (perf) name as a string, because the way they are named
-    // corresponds to how the api expects them to be received. This line could be removed by, for example,
-    // adding another field to the Perf enum, like 'apiName'.
-
     return apiClient
-        .get(Uri.parse('$kLichessHost/api/user/$username/perf/$perfApiString'))
+        .get(Uri.parse('$kLichessHost/api/user/$username/perf/${perf.name}'))
         .flatMap((response) => TaskEither.fromEither(readJsonObject(
             response.body,
             mapper: UserPerfStats.fromJson,

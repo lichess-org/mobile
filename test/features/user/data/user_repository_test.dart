@@ -98,8 +98,8 @@ void main() {
 
   group('UserRepository.getUserPerfStatsTask', () {
     const testPerf = Perf.rapid;
-    final String perfApiString = testPerf.toString().split('.').last;
-    final uriString = '$kLichessHost/api/user/$testUserId/perf/$perfApiString';
+    final uriString =
+        '$kLichessHost/api/user/$testUserId/perf/${testPerf.name}';
     test('json read, minimal example', () async {
       const responseMinimal = '''
       {

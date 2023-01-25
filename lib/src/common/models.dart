@@ -30,10 +30,10 @@ enum Perf {
   puzzle('Puzzle', 'Puzzle', LichessIcons.target),
   storm('Storm', 'Storm', LichessIcons.storm);
 
-  const Perf(this.name, this.shortName, this.icon);
+  const Perf(this.title, this.shortTitle, this.icon);
 
-  final String name;
-  final String shortName;
+  final String title;
+  final String shortTitle;
   final IconData icon;
 }
 

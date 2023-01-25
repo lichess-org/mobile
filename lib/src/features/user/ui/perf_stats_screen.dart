@@ -1,18 +1,17 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
-import 'package:lichess_mobile/src/utils/duration.dart';
-import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
+import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -36,13 +35,18 @@ const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;
 const _defaultValueFontSize = 18.0;
 const _titleFontSize = 18.0;
+const _mainValueStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 30);
 
 class PerfStatsScreen extends ConsumerWidget {
   const PerfStatsScreen(
-      {required this.username, required this.perf, super.key});
+      {required this.username,
+      required this.perf,
+      required this.loggedInUser,
+      super.key});
 
   final String username;
   final Perf perf;
+  final User? loggedInUser;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -64,7 +68,7 @@ class PerfStatsScreen extends ConsumerWidget {
                   alignment: Alignment.centerLeft,
                   fit: BoxFit.scaleDown,
                   child: Text(
-                    context.l10n.perfStats('$username ${perf.name}'),
+                    context.l10n.perfStats('$username ${perf.title}'),
                     style: const TextStyle(fontSize: _titleFontSize),
                   ),
                 ),
@@ -87,10 +91,6 @@ class PerfStatsScreen extends ConsumerWidget {
     final perfStats = ref.watch(perfStatsProvider(
         UserPerfStatsParameters(username: username, perf: perf)));
 
-    final authRepository = ref.watch(authRepositoryProvider);
-
-    const mainValueStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 30);
-
     const statGroupSpace = SizedBox(height: 15.0);
 
     return perfStats.when(
@@ -99,120 +99,104 @@ class PerfStatsScreen extends ConsumerWidget {
             child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5.0),
           child: ListView(scrollDirection: Axis.vertical, children: [
-            _customPlatformCard(context, context.l10n.rating, widgets: [
-              Text(
-                  '${data.rating.toStringAsFixed(2)}${data.provisional == true || data.deviation > kProvisionalDeviation ? '?' : ''}',
-                  style: mainValueStyle),
-              if (data.percentile != null)
-                Text(
-                    (authRepository.isAuthenticated &&
-                            authRepository.currentAccount!.username == username)
-                        ? context.l10n.youAreBetterThanPercentOfPerfTypePlayers(
-                            '${data.percentile!.toStringAsFixed(2)}%',
-                            perf.name)
-                        : context.l10n.userIsBetterThanPercentOfPerfTypePlayers(
-                            username,
-                            '${data.percentile!.toStringAsFixed(2)}%',
-                            perf.name),
-                    style: TextStyle(
-                        fontSize: _defaultStatFontSize,
-                        color: textShade(context, _customOpacity)),
-                    textAlign: TextAlign.center)
-            ]),
+            _CustomPlatformCard(context.l10n.rating,
+                child: _MainRatingWidget(
+                  data.rating,
+                  data.deviation,
+                  data.percentile,
+                  username,
+                  perf.title,
+                  loggedInUser,
+                  provisional: data.provisional,
+                )),
             // The number '12' here is not arbitrary, since the API returns the progression for the last 12 games (as far as I know).
-            _customPlatformCard(context,
+            _CustomPlatformCard(
                 context.l10n.progressOverLastXGames('12').replaceAll(':', ''),
-                widgets: [_progressionWidget(context, data.progress)]),
-            _rowFromCards([
-              _customPlatformCard(context, context.l10n.rank,
+                child: _ProgressionWidget(data.progress)),
+            _CustomPlatformCardRow([
+              _CustomPlatformCard(context.l10n.rank,
                   value: data.rank == null
                       ? '?'
                       : NumberFormat.decimalPattern(Intl.getCurrentLocale())
                           .format(data.rank)),
-              _customPlatformCard(context,
+              _CustomPlatformCard(
                   context.l10n.ratingDeviation('').replaceAll(': .', ''),
                   value: data.deviation.toStringAsFixed(2))
             ]),
-            _rowFromCards([
-              _customPlatformCard(
-                  context, context.l10n.highestRating('').replaceAll(':', ''),
-                  widgets: _ratingWidget(context, data.highestRating,
+            _CustomPlatformCardRow([
+              _CustomPlatformCard(
+                  context.l10n.highestRating('').replaceAll(':', ''),
+                  child: _RatingWidget(data.highestRating,
                       data.highestRatingGame, LichessColors.good)),
-              _customPlatformCard(
-                  context, context.l10n.lowestRating('').replaceAll(':', ''),
-                  widgets: _ratingWidget(context, data.lowestRating,
-                      data.lowestRatingGame, LichessColors.red)),
+              _CustomPlatformCard(
+                  context.l10n.lowestRating('').replaceAll(':', ''),
+                  child: _RatingWidget(data.lowestRating, data.lowestRatingGame,
+                      LichessColors.red)),
             ]),
             statGroupSpace,
-            _customPlatformCard(context, context.l10n.totalGames,
-                value: data.totalGames.toString(), styleValue: mainValueStyle),
-            _rowFromCards([
-              _customPlatformCard(context, context.l10n.wins, widgets: [
-                _percentageValueWidget(context, data.wonGames, data.totalGames,
-                    color: LichessColors.good)
-              ]),
-              _customPlatformCard(context, context.l10n.draws, widgets: [
-                _percentageValueWidget(
-                    context, data.drawnGames, data.totalGames,
-                    color: textShade(context, _customOpacity), isShaded: true)
-              ]),
-              _customPlatformCard(context, context.l10n.losses, widgets: [
-                _percentageValueWidget(context, data.lostGames, data.totalGames,
-                    color: LichessColors.red)
-              ]),
+            _CustomPlatformCard(context.l10n.totalGames,
+                value: data.totalGames.toString(), styleValue: _mainValueStyle),
+            _CustomPlatformCardRow([
+              _CustomPlatformCard(context.l10n.wins,
+                  child: _PercentageValueWidget(data.wonGames, data.totalGames,
+                      color: LichessColors.good)),
+              _CustomPlatformCard(context.l10n.draws,
+                  child: _PercentageValueWidget(
+                      data.drawnGames, data.totalGames,
+                      color: textShade(context, _customOpacity),
+                      isShaded: true)),
+              _CustomPlatformCard(context.l10n.losses,
+                  child: _PercentageValueWidget(data.lostGames, data.totalGames,
+                      color: LichessColors.red)),
             ]),
-            _rowFromCards([
-              _customPlatformCard(context, context.l10n.rated, widgets: [
-                _percentageValueWidget(
-                    context, data.ratedGames, data.totalGames)
-              ]),
-              _customPlatformCard(context, context.l10n.tournament, widgets: [
-                _percentageValueWidget(
-                    context, data.tournamentGames, data.totalGames)
-              ]),
-              _customPlatformCard(
-                  context,
+            _CustomPlatformCardRow([
+              _CustomPlatformCard(context.l10n.rated,
+                  child:
+                      _PercentageValueWidget(data.ratedGames, data.totalGames)),
+              _CustomPlatformCard(context.l10n.tournament,
+                  child: _PercentageValueWidget(
+                      data.tournamentGames, data.totalGames)),
+              _CustomPlatformCard(
                   context.l10n.berserkedGames
                       .replaceAll(' ${context.l10n.games.toLowerCase()}', ''),
-                  widgets: [
-                    _percentageValueWidget(
-                        context, data.berserkGames, data.totalGames)
-                  ]),
-              _customPlatformCard(context, context.l10n.disconnections,
-                  widgets: [
-                    _percentageValueWidget(
-                        context, data.disconnections, data.totalGames)
-                  ]),
+                  child: _PercentageValueWidget(
+                      data.berserkGames, data.totalGames)),
+              _CustomPlatformCard(context.l10n.disconnections,
+                  child: _PercentageValueWidget(
+                      data.disconnections, data.totalGames)),
             ]),
-            _rowFromCards([
-              _customPlatformCard(context, context.l10n.averageOpponent,
+            _CustomPlatformCardRow([
+              _CustomPlatformCard(context.l10n.averageOpponent,
                   value: data.avgOpponent == null
                       ? '?'
                       : data.avgOpponent.toString()),
-              _customPlatformCard(context, context.l10n.timeSpentPlaying,
+              _CustomPlatformCard(context.l10n.timeSpentPlaying,
                   value: data.timePlayed.toDaysHoursMinutes(context)),
             ]),
             statGroupSpace,
-            _customPlatformCard(context, context.l10n.winningStreak, widgets: [
-              ..._streakWidget(context, data.maxWinStreak, data.curWinStreak,
+            _CustomPlatformCard(
+              context.l10n.winningStreak,
+              child: _StreakWidget(data.maxWinStreak, data.curWinStreak,
                   color: LichessColors.good),
-            ]),
-            _customPlatformCard(context, context.l10n.losingStreak, widgets: [
-              ..._streakWidget(context, data.maxLossStreak, data.curLossStreak,
+            ),
+            _CustomPlatformCard(
+              context.l10n.losingStreak,
+              child: _StreakWidget(data.maxLossStreak, data.curLossStreak,
                   color: LichessColors.red),
-            ]),
-            _customPlatformCard(context, context.l10n.gamesInARow, widgets: [
-              ..._streakWidget(context, data.maxPlayStreak, data.curPlayStreak),
-            ]),
-            _customPlatformCard(context, context.l10n.maxTimePlaying, widgets: [
-              ..._streakWidget(context, data.maxTimeStreak, data.curTimeStreak,
-                  isTimeStreak: true),
-            ]),
+            ),
+            _CustomPlatformCard(
+              context.l10n.gamesInARow,
+              child: _StreakWidget(data.maxPlayStreak, data.curPlayStreak),
+            ),
+            _CustomPlatformCard(
+              context.l10n.maxTimePlaying,
+              child: _StreakWidget(data.maxTimeStreak, data.curTimeStreak),
+            ),
             statGroupSpace,
-            _customPlatformCard(context, context.l10n.bestRated,
-                widgets: _gameListWidget(context, data.bestWins)),
-            _customPlatformCard(context, context.l10n.worstRated,
-                widgets: _gameListWidget(context, data.worstLosses))
+            _CustomPlatformCard(context.l10n.bestRated,
+                child: _GameListWidget(data.bestWins)),
+            _CustomPlatformCard(context.l10n.worstRated,
+                child: _GameListWidget(data.worstLosses))
           ]),
         ));
       },
@@ -224,19 +208,19 @@ class PerfStatsScreen extends ConsumerWidget {
       loading: () => const CenterLoadingIndicator(),
     );
   }
+}
 
-  String _getPercentageString(num numerator, num denominator) {
-    return '${((numerator / denominator) * 100).round().toString()}%';
-  }
+class _CustomPlatformCard extends StatelessWidget {
+  final String stat;
+  final Widget? child;
+  final String? value;
+  final TextStyle? styleValue;
 
-  PlatformCard _customPlatformCard(
-    BuildContext context,
-    String stat, {
-    List<Widget>? widgets,
-    String? value,
-    TextStyle? styleStat,
-    TextStyle? styleValue,
-  }) {
+  const _CustomPlatformCard(this.stat,
+      {this.child, this.value, this.styleValue});
+
+  @override
+  Widget build(BuildContext context) {
     final defaultStatStyle = TextStyle(
       color: textShade(context, _customOpacity),
       fontSize: _defaultStatFontSize,
@@ -244,7 +228,6 @@ class PerfStatsScreen extends ConsumerWidget {
 
     const defaultValueStyle = TextStyle(fontSize: _defaultValueFontSize);
 
-    final TextStyle trueStatStyle = styleStat ?? defaultStatStyle;
     final TextStyle trueValueStyle = styleValue ?? defaultValueStyle;
 
     return PlatformCard(
@@ -257,19 +240,26 @@ class PerfStatsScreen extends ConsumerWidget {
               alignment: Alignment.center,
               fit: BoxFit.scaleDown,
               child: Text(stat,
-                  style: trueStatStyle, textAlign: TextAlign.center)),
+                  style: defaultStatStyle, textAlign: TextAlign.center)),
           if (value != null)
-            Text(value, style: trueValueStyle, textAlign: TextAlign.center)
-          else if (widgets != null)
-            ...widgets
+            Text(value!, style: trueValueStyle, textAlign: TextAlign.center)
+          else if (child != null)
+            child!
           else
             Text('?', style: trueValueStyle)
         ],
       ),
     ));
   }
+}
 
-  IntrinsicHeight _rowFromCards(List<PlatformCard> cards) {
+class _CustomPlatformCardRow extends StatelessWidget {
+  final List<_CustomPlatformCard> cards;
+
+  const _CustomPlatformCardRow(this.cards);
+
+  @override
+  Widget build(BuildContext context) {
     return IntrinsicHeight(
       child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -277,8 +267,49 @@ class PerfStatsScreen extends ConsumerWidget {
           children: [for (final card in cards) Expanded(child: card)]),
     );
   }
+}
 
-  Row _progressionWidget(BuildContext context, int progress) {
+class _MainRatingWidget extends StatelessWidget {
+  final double rating;
+  final double deviation;
+  final double? percentile;
+  final String username;
+  final String perfTitle;
+  final bool? provisional;
+  final User? loggedInUser;
+
+  const _MainRatingWidget(this.rating, this.deviation, this.percentile,
+      this.username, this.perfTitle, this.loggedInUser,
+      {this.provisional});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Text(
+          '${rating.toStringAsFixed(2)}${provisional == true || deviation > kProvisionalDeviation ? '?' : ''}',
+          style: _mainValueStyle),
+      if (percentile != null)
+        Text(
+            (loggedInUser != null && loggedInUser!.username == username)
+                ? context.l10n.youAreBetterThanPercentOfPerfTypePlayers(
+                    '${percentile!.toStringAsFixed(2)}%', perfTitle)
+                : context.l10n.userIsBetterThanPercentOfPerfTypePlayers(
+                    username, '${percentile!.toStringAsFixed(2)}%', perfTitle),
+            style: TextStyle(
+                fontSize: _defaultStatFontSize,
+                color: textShade(context, _customOpacity)),
+            textAlign: TextAlign.center)
+    ]);
+  }
+}
+
+class _ProgressionWidget extends StatelessWidget {
+  final int progress;
+
+  const _ProgressionWidget(this.progress);
+
+  @override
+  Widget build(BuildContext context) {
     const progressionFontSize = 20.0;
 
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -300,38 +331,67 @@ class PerfStatsScreen extends ConsumerWidget {
                 fontSize: progressionFontSize))
     ]);
   }
+}
 
-  Text _userGameWidget(BuildContext context, UserGame? game,
-      {TextStyle? styleDate}) {
+class _UserGameWidget extends StatelessWidget {
+  final UserPerfGame? game;
+
+  const _UserGameWidget(this.game);
+
+  @override
+  Widget build(BuildContext context) {
     // TODO: Implement functionality to view game on tap.
     // (Return a button? Wrap with InkWell?)
     const defaultDateFontSize = 16.0;
     const defaultDateStyle =
         TextStyle(color: LichessColors.primary, fontSize: defaultDateFontSize);
 
-    final TextStyle trueDateStyle = styleDate ?? defaultDateStyle;
     final dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
 
     return game == null
         ? const Text('?', style: defaultDateStyle)
-        : Text(dateFormatter.format(game.finishedAt), style: trueDateStyle);
+        : Text(dateFormatter.format(game!.finishedAt), style: defaultDateStyle);
   }
+}
 
-  List<Widget> _ratingWidget(
-      BuildContext context, int? rating, UserGame? game, Color color) {
+class _RatingWidget extends StatelessWidget {
+  final int? rating;
+  final UserPerfGame? game;
+  final Color color;
+
+  const _RatingWidget(this.rating, this.game, this.color);
+
+  @override
+  Widget build(BuildContext context) {
     return (rating == null)
-        ? [const Text('?', style: TextStyle(fontSize: _defaultValueFontSize))]
-        : [
-            Text(rating.toString(),
-                style:
-                    TextStyle(fontSize: _defaultValueFontSize, color: color)),
-            _userGameWidget(context, game)
-          ];
+        ? const Text('?', style: TextStyle(fontSize: _defaultValueFontSize))
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(rating.toString(),
+                  style:
+                      TextStyle(fontSize: _defaultValueFontSize, color: color)),
+              _UserGameWidget(game)
+            ],
+          );
+  }
+}
+
+class _PercentageValueWidget extends StatelessWidget {
+  final int value;
+  final int denominator;
+  final Color? color;
+  final bool isShaded;
+
+  const _PercentageValueWidget(this.value, this.denominator,
+      {this.color, this.isShaded = false});
+
+  String _getPercentageString(num numerator, num denominator) {
+    return '${((numerator / denominator) * 100).round().toString()}%';
   }
 
-  Column _percentageValueWidget(
-      BuildContext context, int value, int denominator,
-      {Color? color, bool isShaded = false}) {
+  @override
+  Widget build(BuildContext context) {
     final trueColor = color ?? DefaultTextStyle.of(context).style.color;
 
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -345,10 +405,17 @@ class PerfStatsScreen extends ConsumerWidget {
                   : trueColor!.withOpacity(_customOpacity)))
     ]);
   }
+}
 
-  List<Widget> _streakWidget(
-      BuildContext context, UserStreak? maxStreak, UserStreak? curStreak,
-      {bool isTimeStreak = false, Color? color}) {
+class _StreakWidget extends StatelessWidget {
+  final UserStreak? maxStreak;
+  final UserStreak? curStreak;
+  final Color? color;
+
+  const _StreakWidget(this.maxStreak, this.curStreak, {this.color});
+
+  @override
+  Widget build(BuildContext context) {
     final trueColor = color ?? DefaultTextStyle.of(context).style.color;
     final valueStyle =
         TextStyle(color: trueColor, fontSize: _defaultValueFontSize);
@@ -369,7 +436,7 @@ class PerfStatsScreen extends ConsumerWidget {
           inFirstLoop ? longestStreakStr : currentStreakStr,
           style: streakTitleStyle);
 
-      if (streak == null || streak.value == 0) {
+      if (streak == null || streak.isValueZero()) {
         streakWidgets.add(Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -383,21 +450,21 @@ class PerfStatsScreen extends ConsumerWidget {
         streakWidgets.add(Expanded(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             streakTitle,
-            if (isTimeStreak)
-              Text(Duration(seconds: streak.value).toDaysHoursMinutes(context),
+            if (streak is UserTimeStreak)
+              Text(streak.timePlayed.toDaysHoursMinutes(context),
                   style: valueStyle, textAlign: TextAlign.center)
-            else
-              Text(context.l10n.nbGames(streak.value),
+            else if (streak is UserGameStreak)
+              Text(context.l10n.nbGames(streak.gamesPlayed),
                   style: valueStyle, textAlign: TextAlign.center),
             if (!(streak.startGame == null && streak.endGame == null))
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: 5.0),
-                  _userGameWidget(context, streak.startGame),
+                  _UserGameWidget(streak.startGame),
                   Icon(Icons.arrow_downward_rounded,
                       color: textShade(context, _customOpacity)),
-                  _userGameWidget(context, streak.endGame)
+                  _UserGameWidget(streak.endGame)
                 ],
               )
           ]),
@@ -406,24 +473,34 @@ class PerfStatsScreen extends ConsumerWidget {
       inFirstLoop = false;
     }
 
-    return [
-      const SizedBox(height: 5.0), // Separate from stat title
-      Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: streakWidgets)
-    ];
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const SizedBox(height: 5.0),
+        Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: streakWidgets)
+      ],
+    );
   }
+}
 
-  List<Widget> _gameListWidget(BuildContext context, List<UserGame>? games) {
+class _GameListWidget extends StatelessWidget {
+  final List<UserPerfGame>? games;
+
+  const _GameListWidget(this.games);
+
+  @override
+  Widget build(BuildContext context) {
     final List<Widget> gameWidgets = List.empty(growable: true);
 
     const gameWidgetSeparation = 5.0;
     const opRatingFontSize = 16.0;
 
-    if (games == null || games.isEmpty) {
+    if (games == null || games!.isEmpty) {
       gameWidgets.add(const Text('?'));
     } else {
-      for (final game in games) {
+      for (final game in games!) {
         gameWidgets.add(
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           Expanded(
@@ -444,14 +521,16 @@ class PerfStatsScreen extends ConsumerWidget {
           ),
           Expanded(
             child: Align(
-                alignment: Alignment.centerRight,
-                child: _userGameWidget(context, game)),
+                alignment: Alignment.centerRight, child: _UserGameWidget(game)),
           )
         ]));
         gameWidgets.add(const SizedBox(height: gameWidgetSeparation));
       }
     }
 
-    return gameWidgets;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: gameWidgets,
+    );
   }
 }

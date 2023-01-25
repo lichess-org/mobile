@@ -234,25 +234,34 @@ class PerfCards extends StatelessWidget {
         itemBuilder: (context, index) {
           final perf = userPerfs[index];
           final userPerf = account.perfs[perf]!;
+          final bool isPerfWithoutStats =
+              [Perf.puzzle, Perf.storm].contains(perf);
           return SizedBox(
             height: 100,
             width: 100,
-            child: PlatformCard(
-              child: InkWell(
-                customBorder: kPlatformCardBorder,
-                onTap: () => pushPlatformRoute(
-                    context: context,
-                    title: context.l10n
-                        .perfStats('${account.username} ${perf.name}'),
-                    builder: (context) => PerfStatsScreen(
-                        username: account.username, perf: perf)),
+            child: InkWell(
+              splashFactory: isPerfWithoutStats
+                  ? NoSplash.splashFactory
+                  : InkSplash.splashFactory,
+              customBorder: kPlatformCardBorder,
+              onTap: isPerfWithoutStats
+                  ? () {}
+                  : () => pushPlatformRoute(
+                      context: context,
+                      title: context.l10n
+                          .perfStats('${account.username} ${perf.title}'),
+                      builder: (context) => PerfStatsScreen(
+                          username: account.username,
+                          perf: perf,
+                          loggedInUser: account)),
+              child: PlatformCard(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Text(
-                        perf.shortName,
+                        perf.shortTitle,
                         style: TextStyle(color: textShade(context, 0.7)),
                       ),
                       Icon(perf.icon, color: textShade(context, 0.6)),
