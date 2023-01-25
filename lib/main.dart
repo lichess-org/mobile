@@ -15,7 +15,7 @@ void main() async {
     Logger.root.onRecord.listen((record) {
       final time = DateFormat.Hms().format(record.time);
       debugPrint(
-          '${record.level.name} at $time [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error.toString()}' : ''}');
+          '${record.level.name} at $time [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error}' : ''}');
     });
   }
 

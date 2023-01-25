@@ -346,7 +346,7 @@ class RecentGames extends ConsumerWidget {
       },
       error: (error, stackTrace) {
         debugPrint(
-            'SEVERE: [ProfileScreen] could not load user games; ${error.toString()}\n$stackTrace');
+            'SEVERE: [ProfileScreen] could not load user games; $error\n$stackTrace');
         return const Text('Could not load games.');
       },
       loading: () => const CenterLoadingIndicator(),

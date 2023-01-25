@@ -254,7 +254,7 @@ class _BoardBody extends ConsumerWidget {
       },
       error: (err, stackTrace) {
         debugPrint(
-            'SEVERE: [PlayableGameScreen] could not load game; ${err.toString()}\n$stackTrace');
+            'SEVERE: [PlayableGameScreen] could not load game; $err\n$stackTrace');
         return const Text('Could not load game stream.');
       },
     );
