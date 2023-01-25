@@ -562,10 +562,11 @@ packages:
   modal_bottom_sheet:
     dependency: "direct main"
     description:
-      name: modal_bottom_sheet
-      sha256: ef533916a2c3089571c32bd34e410faca77a6849a3f28f748e0794525c5658a0
-      url: "https://pub.dev"
-    source: hosted
+      path: modal_bottom_sheet
+      ref: e7e630e10b27ccab12da27acada9d47a13d79e9a
+      resolved-ref: e7e630e10b27ccab12da27acada9d47a13d79e9a
+      url: "https://github.com/saltedpotatos/modal_bottom_sheet.git"
+    source: git
     version: "2.1.2"
   node_preamble:
     dependency: transitive
@@ -960,12 +961,12 @@ packages:
     dependency: transitive
     description:
       name: test
-      sha256: b54d427664c00f2013ffb87797a698883c46aee9288e027a50b46eaee7486fa2
+      sha256: a5fcd2d25eeadbb6589e80198a47d6a464ba3e2049da473943b8af9797900c2d
       url: "https://pub.dev"
     source: hosted
-    version: "1.22.2"
+    version: "1.22.0"
   test_api:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: test_api
       sha256: ad540f65f92caa91bf21dfc8ffb8c589d6e4dc0c2267818b4cc2792857706206
@@ -976,10 +977,10 @@ packages:
     dependency: transitive
     description:
       name: test_core
-      sha256: "95ecc12692d0dd59080ab2d38d9cf32c7e9844caba23ff6cd285690398ee8ef4"
+      sha256: "0ef9755ec6d746951ba0aabe62f874b707690b5ede0fecc818b138fcc9b14888"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.22"
+    version: "0.4.20"
   timeago:
     dependency: "direct main"
     description:
@@ -1032,10 +1033,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: d069ad658b700fc5fb774771ac8997f226ca29a45e0a450776fff3d969c8ba8f
+      sha256: e7fb6c2282f7631712b69c19d1bff82f3767eea33a2321c14fa59ad67ea391c7
       url: "https://pub.dev"
     source: hosted
-    version: "10.1.0"
+    version: "9.4.0"
   watcher:
     dependency: transitive
     description:
