@@ -177,7 +177,7 @@ class PlayForm extends ConsumerWidget {
                 },
                 error: (err, st) {
                   debugPrint(
-                      'SEVERE [PlayScreen] could not load bot info: ${err.toString()}\n$st');
+                      'SEVERE [PlayScreen] could not load bot info: $err\n$st');
                   return const Text('Could not load bot ratings.');
                 },
                 loading: () => const CenterLoadingIndicator(),
