@@ -251,7 +251,7 @@ Either<IOError, T> readJsonObject<T>(String json,
       }
       return mapper(obj);
     }, (error, stackTrace) {
-      logger?.severe('Could not read json object as ${T.toString()}: $error');
+      logger?.severe('Could not read json object as $T: $error');
       return DataFormatError(stackTrace);
     });
 
@@ -272,6 +272,6 @@ Either<IOError, List<T>> readJsonListOfObjects<T>(String json,
       if (error is FormatException) {
         logger?.severe('Received json is not a list');
       }
-      logger?.severe('Could not read json object as ${T.toString()}: $error');
+      logger?.severe('Could not read json object as $T: $error');
       return DataFormatError(stackTrace);
     });
