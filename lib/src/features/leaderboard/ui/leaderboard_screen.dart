@@ -22,6 +22,7 @@ class LeaderboardScreen extends StatelessWidget {
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
+          previousPageTitle: 'Home',
           middle: Text(context.l10n.leaderboard),
         ),
         child: LayoutBuilder(builder: (context, constraints) {
@@ -107,13 +108,11 @@ class LeaderboardScreen extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Material(
-          color: LichessColors.brag,
-          child: ListTile(
-            leading: Icon(iconData, color: const Color(0xFFFFFFFF)),
-            title: Text(title),
-          ),
+        ListTile(
+          leading: Icon(iconData),
+          title: Text(title),
         ),
+        const Divider(),
         ..._leaderboardList(context, userList),
         const SizedBox(height: 12),
       ],
@@ -166,41 +165,39 @@ class ListCard extends StatelessWidget {
         ],
         const SizedBox(width: 5),
         if (user.progress < 0)
-          Flexible(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                const Icon(LichessIcons.arrow_full_lowerright,
-                    size: 20, color: LichessColors.red),
-                SizedBox(
-                    width: 30,
-                    child: Text(
-                      '${user.progress.abs()} ',
-                      style: const TextStyle(color: LichessColors.red),
-                    ))
-              ],
-            ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              const Icon(LichessIcons.arrow_full_lowerright,
+                  size: 20, color: LichessColors.red),
+              SizedBox(
+                  width: 30,
+                  child: Text(
+                    '${user.progress.abs()} ',
+                    style: const TextStyle(color: LichessColors.red),
+                  ))
+            ],
           )
         else if (user.progress > 0)
-          Flexible(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(LichessIcons.arrow_full_upperright,
-                    size: 20, color: LichessColors.good),
-                SizedBox(
-                    width: 30,
-                    child: Text(
-                      '${user.progress} ',
-                      style: const TextStyle(color: LichessColors.good),
-                    ))
-              ],
-            ),
-          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(LichessIcons.arrow_full_upperright,
+                  size: 20, color: LichessColors.good),
+              SizedBox(
+                  width: 30,
+                  child: Text(
+                    '${user.progress} ',
+                    style: const TextStyle(color: LichessColors.good),
+                  ))
+            ],
+          )
+        else
+          const SizedBox(width: 50),
         const SizedBox(width: 5),
-        Flexible(fit: FlexFit.loose, child: Text(user.rating.toString()))
+        SizedBox(width: 50, child: Text(user.rating.toString()))
       ],
     );
   }
