@@ -134,12 +134,12 @@ void main() {
       await tester
           .pump(const Duration(milliseconds: 100)); // wait for stream loading
 
-      final boardPos = tester.getRect(find.byType(cg.Board));
+      final boardRect = tester.getRect(find.byType(cg.Board));
 
       // both clocks are not active first
       _checkActiveClocks(tester, whiteActive: false, blackActive: false);
 
-      await makeMove(tester, boardPos, 'e2', 'e4');
+      await makeMove(tester, boardRect, 'e2', 'e4');
 
       // move made
       verify(() => mockSoundService.playMove()).called(1);
@@ -147,7 +147,7 @@ void main() {
       expect(find.byKey(const Key('e2-whitepawn')), findsNothing);
 
       // can interact to make premoves
-      await tester.tapAt(squareOffset('f1', boardPos));
+      await tester.tapAt(squareOffset('f1', boardRect));
       await tester.pump();
       expect(find.byKey(const Key('f1-selected')), findsOneWidget);
       // move cursor updated, can go backward
@@ -173,7 +173,7 @@ void main() {
       _checkActiveClocks(tester, whiteActive: true, blackActive: false);
 
       // white plays a second move
-      await makeMove(tester, boardPos, 'd2', 'd4');
+      await makeMove(tester, boardRect, 'd2', 'd4');
       verify(() => mockSoundService.playMove()).called(1);
       expect(find.byKey(const Key('d4-whitepawn')), findsOneWidget);
       expect(find.byKey(const Key('d2-whitepawn')), findsNothing);
@@ -317,19 +317,11 @@ void _checkActiveClocks(WidgetTester tester,
 }
 
 Future<void> makeMove(
-    WidgetTester tester, Rect boardPos, String from, String to) async {
-  await tester.tapAt(squareOffset(from, boardPos));
+    WidgetTester tester, Rect boardRect, String from, String to) async {
+  await tester.tapAt(squareOffset(from, boardRect));
   await tester.pump();
-  await tester.tapAt(squareOffset(to, boardPos));
+  await tester.tapAt(squareOffset(to, boardRect));
   await tester.pump();
-}
-
-Offset squareOffset(cg.SquareId id, Rect boardPos,
-    {cg.Side orientation = cg.Side.white,
-    double squareSize = kTestScreenWidth / 8}) {
-  final o = cg.Coord.fromSquareId(id).offset(orientation, squareSize);
-  return Offset(o.dx + boardPos.left + squareSize / 2,
-      o.dy + boardPos.top + squareSize / 2);
 }
 
 class FakeGameClient extends Fake implements http.Client {
