@@ -52,7 +52,6 @@ class ArchivedGame with _$ArchivedGame {
 
   const factory ArchivedGame({
     required ArchivedGameData data,
-    required String pgn,
     required List<GameStep> steps,
   }) = _ArchivedGame;
 
