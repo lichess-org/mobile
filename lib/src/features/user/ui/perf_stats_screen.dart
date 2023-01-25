@@ -202,7 +202,7 @@ class PerfStatsScreen extends ConsumerWidget {
       },
       error: (error, stackTrace) {
         debugPrint(
-            'SEVERE: [PerfStatsScreen] could not load user games; ${error.toString()}\n$stackTrace');
+            'SEVERE: [PerfStatsScreen] could not load user games; $error\n$stackTrace');
         return const Center(child: Text('Could not load user stats.'));
       },
       loading: () => const CenterLoadingIndicator(),
@@ -387,7 +387,7 @@ class _PercentageValueWidget extends StatelessWidget {
       {this.color, this.isShaded = false});
 
   String _getPercentageString(num numerator, num denominator) {
-    return '${((numerator / denominator) * 100).round().toString()}%';
+    return '${((numerator / denominator) * 100).round()}%';
   }
 
   @override
