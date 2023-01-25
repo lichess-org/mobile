@@ -233,6 +233,7 @@ function transformTranslations(data, locale, module, makeTemplate = false) {
             child.$.quantity
       pluralString += ` ${quantity}{${childString}}`
     })
+    pluralString += '}'
     transformed[plural.$.name] = pluralString
     if (makeTemplate) {
       transformed[`@${plural.$.name}`] = {
