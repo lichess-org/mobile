@@ -16,6 +16,9 @@ final leaderListProvider = FutureProvider.autoDispose((ref) async {
   });
 });
 
+/// Create a leaderboard list of the highest rated player for each Variant
+///
+/// The title routes to a Leaderboard Screen with the top 10 players for each Variant
 class LeaderboardWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {

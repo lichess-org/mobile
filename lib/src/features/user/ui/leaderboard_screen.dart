@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/features/user/model/leaderboard.dart';
 
+/// Create a Screen with Top 10 players for each Lichess Variant
 class LeaderboardScreen extends StatelessWidget {
   const LeaderboardScreen({required this.leaderboard, super.key});
   final Leaderboard leaderboard;
@@ -122,6 +123,9 @@ class _BuildLeaderboard extends StatelessWidget {
   }
 }
 
+/// A List Tile for the Leaderboard
+///
+/// Optionaly Provide the [prefIcon] for the Variant of the List
 class LeaderboardListTile extends StatelessWidget {
   const LeaderboardListTile({required this.user, this.prefIcon});
   final LeaderboardUser user;
@@ -176,7 +180,7 @@ class _RatingAndProgress extends StatelessWidget {
               SizedBox(
                   width: 30,
                   child: Text(
-                    '${progress.abs()} ',
+                    '${progress.abs()}',
                     style: const TextStyle(color: LichessColors.red),
                   ))
             ],
