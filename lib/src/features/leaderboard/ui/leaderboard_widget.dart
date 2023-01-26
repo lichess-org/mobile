@@ -57,7 +57,7 @@ class _LeaderboardWidgetState extends ConsumerState<LeaderboardWidget> {
         },
         error: (error, stackTrace) {
           debugPrint(
-              'SEVERE: [LeaderboardWidget] could not lead leaderboard data; ${error.toString()}\n $stackTrace');
+              'SEVERE: [LeaderboardWidget] could not lead leaderboard data; $error\n $stackTrace');
           return const Text('could not lead leaderboard');
         },
         loading: () => const CenterLoadingIndicator());

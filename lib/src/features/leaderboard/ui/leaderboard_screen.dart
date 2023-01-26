@@ -110,7 +110,7 @@ class LeaderboardScreen extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         ListTile(
-          leading: Icon(iconData),
+          leading: Icon(iconData, color: LichessColors.brag),
           title: Text(title),
         ),
         const Divider(),
