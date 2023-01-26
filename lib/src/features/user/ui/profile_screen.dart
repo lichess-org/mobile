@@ -202,6 +202,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     ];
   }
 
+  // TODO also refresh user account data for perfs
   Future<void> _refreshData(User account) {
     return ref.refresh(recentGamesProvider(account.id).future);
   }
