@@ -34,8 +34,7 @@ class LeaderboardScreen extends StatelessWidget {
                         ? SliverGrid(
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
-                                    childAspectRatio:
-                                        constraints.maxWidth / 300 / 9,
+                                    mainAxisExtent: 644,
                                     crossAxisCount:
                                         (constraints.maxWidth / 300).floor()),
                             delegate:
@@ -56,10 +55,12 @@ class LeaderboardScreen extends StatelessWidget {
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           if (constraints.maxWidth > 600) {
-            return GridView.count(
+            return GridView(
               shrinkWrap: true,
-              childAspectRatio: (constraints.maxWidth / 300) / 9,
-              crossAxisCount: (constraints.maxWidth / 300).floor(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                mainAxisExtent: 644,
+                crossAxisCount: (constraints.maxWidth / 300).floor(),
+              ),
               children: _buildList(context),
             );
           } else {
