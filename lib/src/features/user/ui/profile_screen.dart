@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/features/auth/ui/auth_actions_notifier.dart';
 import 'package:lichess_mobile/src/features/game/data/game_repository.dart';
 import 'package:lichess_mobile/src/features/game/model/game.dart';
+import 'package:lichess_mobile/src/features/game/ui/board/archived_game_screen.dart';
 import 'package:lichess_mobile/src/features/settings/ui/settings_screen.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
 import 'package:lichess_mobile/src/features/user/ui/perf_stats_screen.dart';
@@ -28,12 +29,10 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../auth/data/auth_repository.dart';
 
 final recentGamesProvider = FutureProvider.autoDispose
-    .family<List<ArchivedGame>, String>((ref, userName) async {
+    .family<List<ArchivedGameData>, String>((ref, userName) async {
   final repo = ref.watch(gameRepositoryProvider);
   final either = await repo.getUserGamesTask(userName).run();
-  // retry on error, cache indefinitely on success
   return either.match((error) => throw error, (data) {
-    ref.keepAlive();
     return data;
   });
 });
@@ -207,6 +206,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     ];
   }
 
+  // TODO also refresh user account data for perfs
   Future<void> _refreshData(User account) {
     return ref.refresh(recentGamesProvider(account.id).future);
   }
@@ -320,10 +320,11 @@ class RecentGames extends ConsumerWidget {
           children: ListTile.divideTiles(
               color: dividerColor(context),
               context: context,
-              tiles: data.map((e) {
+              tiles: data.map((game) {
                 final mySide =
-                    e.white.id == account.id ? Side.white : Side.black;
-                final opponent = e.white.id == account.id ? e.black : e.white;
+                    game.white.id == account.id ? Side.white : Side.black;
+                final opponent =
+                    game.white.id == account.id ? game.black : game.white;
                 final title = opponent.title;
                 final opponentName = opponent.name == 'Stockfish'
                     ? context.l10n.aiNameLevelAiLevel(
@@ -331,7 +332,15 @@ class RecentGames extends ConsumerWidget {
                     : opponent.name;
 
                 return ListTile(
-                  leading: Icon(e.perf.icon),
+                  onTap: () {
+                    Navigator.of(context, rootNavigator: true).push<void>(
+                      MaterialPageRoute(
+                        builder: (context) => ArchivedGameScreen(
+                            gameData: game, account: account),
+                      ),
+                    );
+                  },
+                  leading: Icon(game.perf.icon),
                   title: Row(
                     children: [
                       if (title != null) ...[
@@ -346,8 +355,8 @@ class RecentGames extends ConsumerWidget {
                       Text(opponentName, overflow: TextOverflow.ellipsis),
                     ],
                   ),
-                  subtitle: Text(timeago.format(e.lastMoveAt)),
-                  trailing: e.winner == mySide
+                  subtitle: Text(timeago.format(game.lastMoveAt)),
+                  trailing: game.winner == mySide
                       ? const Icon(CupertinoIcons.plus_square_fill,
                           color: LichessColors.good)
                       : const Icon(CupertinoIcons.minus_square_fill,
