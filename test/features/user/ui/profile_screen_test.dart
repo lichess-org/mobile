@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
 import 'package:lichess_mobile/src/features/user/ui/profile_screen.dart';
 import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
@@ -25,7 +26,6 @@ void main() {
   final mockLogger = MockLogger();
 
   setUpAll(() {
-    reset(mockClient);
     when(
       () => mockClient.get(
           Uri.parse('$kLichessHost/api/games/user/$testUserId?max=10'),

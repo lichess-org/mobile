@@ -4,7 +4,6 @@ import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-import '../../user/model/user.dart';
 import '../model/game.dart';
 
 part 'api_event.freezed.dart';

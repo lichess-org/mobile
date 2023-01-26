@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import 'package:lichess_mobile/src/features/user/model/user.dart';
+import 'package:lichess_mobile/src/common/models.dart';
 
 @immutable
 class TimeInc {
@@ -14,12 +14,23 @@ class TimeInc {
 
   static TimeInc? fromString(String str) {
     try {
-      final nums = str.split(' + ').map(int.parse).toList();
+      final nums = str.split('+').map(int.parse).toList();
       return TimeInc(nums[0], nums[1]);
     } catch (_) {
       return null;
     }
   }
+
+  TimeInc.fromJson(Map<String, dynamic> json)
+      : time = json['time'] as int,
+        increment = json['increment'] as int;
+
+  Map<String, dynamic> toJson() => {
+        'time': time,
+        'increment': increment,
+      };
+
+  String get display => '$time + $increment';
 
   @override
   bool operator ==(Object other) =>
@@ -33,7 +44,7 @@ class TimeInc {
   int get hashCode => Object.hash(time, increment);
 
   @override
-  String toString() => '$time + $increment';
+  String toString() => '$time+$increment';
 }
 
 enum TimeControl {

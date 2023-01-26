@@ -21,7 +21,7 @@ const lilaTranslationsPath = `${tmpDir}/[lichess-org.lila] master/translation/de
 const unzipMaxBufferSize = 1024 * 1024 * 10 // Set maxbuffer to 10MB to avoid errors when default 1MB used
 
 // selection of lila translation modules to include
-const modules = ['site', 'puzzle', 'settings']
+const modules = ['site', 'puzzle', 'puzzleTheme', 'perfStat', 'settings']
 
 // Order of locales with variants matters: the fallback must always be first
 // eg: 'de-DE' is before 'de-CH'
@@ -167,8 +167,17 @@ function unescape(str) {
   return str.replace(/\\"/g, '"').replace(/\\'/g, '\'')
 }
 
-function fixKey(str) {
-  return str.replace(/\./g, '_')
+function fixKey(str, module) {
+  const fixed = str.replace(/\./g, '_')
+  // TODO consider prefixing modules later
+  // if (module !== 'site') {
+  //   return module + capitalize(fixed)
+  // }
+  return fixed
+}
+
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function transformTranslations(data, locale, module, makeTemplate = false) {
@@ -180,7 +189,7 @@ function transformTranslations(data, locale, module, makeTemplate = false) {
 
   for (const stringElement of data.resources.string) {
     const string = unescape(stringElement._)
-    const transKey = fixKey(stringElement.$.name)
+    const transKey = fixKey(stringElement.$.name, module)
     if (RegExp('%s', 'g').test(string)) {
       transformed[transKey] = string.replace(/%s/g, '{param}')
       if (makeTemplate) {
@@ -224,6 +233,7 @@ function transformTranslations(data, locale, module, makeTemplate = false) {
             child.$.quantity
       pluralString += ` ${quantity}{${childString}}`
     })
+    pluralString += '}'
     transformed[plural.$.name] = pluralString
     if (makeTemplate) {
       transformed[`@${plural.$.name}`] = {

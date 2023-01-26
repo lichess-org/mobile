@@ -1,8 +1,7 @@
-import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:deep_pick/deep_pick.dart';
 
-import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
 part 'user.freezed.dart';
@@ -134,29 +133,4 @@ class UserStatus with _$UserStatus {
         online: pick('online').asBoolOrNull(),
         playing: pick('playing').asBoolOrNull(),
       );
-}
-
-enum Perf {
-  ultraBullet('UltraBullet', 'Ultra', LichessIcons.ultrabullet),
-  bullet('Bullet', 'Bullet', LichessIcons.bullet),
-  blitz('Blitz', 'Blitz', LichessIcons.blitz),
-  rapid('Rapid', 'Rapid', LichessIcons.rapid),
-  classical('Classical', 'Classical', LichessIcons.classical),
-  correspondence('Correspondence', 'Corresp.', LichessIcons.correspondence),
-  chess960('Chess 960', '960', LichessIcons.die_six),
-  antichess('Antichess', 'Antichess', LichessIcons.antichess),
-  kingOfTheHill('King Of The Hill', 'KotH', LichessIcons.flag),
-  threeCheck('Three-check', '3check', LichessIcons.three_check),
-  atomic('Atomic', 'Atomic', LichessIcons.atom),
-  horde('Horde', 'Horde', LichessIcons.horde),
-  racingKings('Racing Kings', 'Racing', LichessIcons.racing_kings),
-  crazyhouse('Crazyhouse', 'Crazy', LichessIcons.h_square),
-  puzzle('Puzzle', 'Puzzle', LichessIcons.target),
-  storm('Storm', 'Storm', LichessIcons.storm);
-
-  const Perf(this.name, this.shortName, this.icon);
-
-  final String name;
-  final String shortName;
-  final IconData icon;
 }
