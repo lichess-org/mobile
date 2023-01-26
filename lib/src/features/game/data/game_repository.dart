@@ -31,19 +31,21 @@ class GameRepository {
   final Logger _log;
 
   Future<Result<ArchivedGame, IOError>> getGameTask(GameId id) {
-    return apiClient
-        .get(Uri.parse('$kLichessHost/game/export/$id'))
-        .then((result) => result.flatMap((response) {
-              return readJsonObject(response.body,
-                  mapper: _makeArchivedGamefromJson, logger: _log);
-            }));
+    return apiClient.get(
+      Uri.parse('$kLichessHost/game/export/$id'),
+      headers: {'Accept': 'application/json'},
+    ).then((result) => result.flatMap((response) {
+          return readJsonObject(response.body,
+              mapper: _makeArchivedGamefromJson, logger: _log);
+        }));
   }
 
   // TODO parameters
   Future<Result<List<ArchivedGame>, IOError>> getUserGamesTask(
       String username) {
     return apiClient.get(
-      Uri.parse('$kLichessHost/api/games/user/$username?max=10'),
+      Uri.parse(
+          '$kLichessHost/api/games/user/$username?max=10&moves=false&lastFen=true'),
       headers: {'Accept': 'application/x-ndjson'},
     ).then((result) => result.flatMap((r) {
           try {
@@ -51,7 +53,7 @@ class GameRepository {
             return Success(
                 lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
               final json = jsonDecode(e) as Map<String, dynamic>;
-              return _makeArchivedGamefromJson(json);
+              return _makeArchivedGameDatafromJson(json);
             }).toList(growable: false));
           } catch (error, stackTrace) {
             _log.severe('Could not read json object as ArchivedGame: $error');
@@ -114,11 +116,47 @@ class GameRepository {
 
 // --
 
-ArchivedGame _makeArchivedGamefromJson(Map<String, dynamic> json) =>
-    _archivedGamefromPick(pick(json).required());
+ArchivedGame _makeArchivedGameFromJson(Map<String, dynamic> json) =>
+    _archivedGameFromPick(pick(json).required());
 
-ArchivedGame _archivedGamefromPick(RequiredPick pick) {
+ArchivedGame _archivedGameFromPick(RequiredPick pick) {
+  final data = _archivedGameDatafromPick(pick);
+  final clocks = pick('clocks').asListOrNull<Duration>(
+      (p0) => Duration(milliseconds: p0.asIntOrThrow() * 10));
   return ArchivedGame(
+    data: data,
+    steps: pick('moves').letOrThrow((it) {
+      final moves = it.asStringOrThrow().split(' ');
+      final List<GameStep> steps = [];
+      Position position = data.variant.initialPosition;
+      int ply = 0;
+      Duration? clock = data.clock?.initial;
+      for (final san in moves) {
+        final stepClock = clocks?[ply];
+        ply++;
+        final move = position.parseSan(san);
+        // assume lichess only sends correct moves
+        position = position.playUnchecked(move!);
+        steps.add(GameStep(
+          ply: ply,
+          san: san,
+          uci: move.uci,
+          position: position,
+          whiteClock: ply.isOdd ? stepClock : clock,
+          blackClock: ply.isEven ? stepClock : clock,
+        ));
+        clock = stepClock;
+      }
+      return steps;
+    }),
+  );
+}
+
+ArchivedGameData _makeArchivedGameDataFromJson(Map<String, dynamic> json) =>
+    _archivedGameDatafromPick(pick(json).required());
+
+ArchivedGameData _archivedGameDatafromPick(RequiredPick pick) {
+  return ArchivedGameData(
     id: pick('id').asGameIdOrThrow(),
     rated: pick('rated').asBoolOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),
@@ -129,6 +167,18 @@ ArchivedGame _archivedGamefromPick(RequiredPick pick) {
     white: pick('players', 'white').letOrThrow(_playerFromUserGamePick),
     black: pick('players', 'black').letOrThrow(_playerFromUserGamePick),
     winner: pick('winner').asSideOrNull(),
+    variant: pick('variant').asVariantOrThrow(),
+    initialFen: pick('initialFen').asStringOrNull(),
+    lastFen: pick('lastFen').asStringOrNull(),
+    analysis: pick('analysis').asListOrNull(_moveAnalysisFromPick),
+    clock: pick('clock').letOrNull(_clockDataFromPick),
+  );
+}
+
+ClockData _clockDataFromPick(RequiredPick pick) {
+  return ClockData(
+    initial: pick('initial').asDurationFromSecondsOrThrow(),
+    increment: pick('increment').asDurationFromSecondsOrThrow(),
   );
 }
 
@@ -141,5 +191,31 @@ Player _playerFromUserGamePick(RequiredPick pick) {
     rating: pick('rating').asIntOrNull(),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     aiLevel: pick('aiLevel').asIntOrNull(),
+    analysis: pick('analysis').letOrNull(_playerAnalysisFromPick),
+  );
+}
+
+PlayerAnalysis _playerAnalysisFromPick(RequiredPick pick) {
+  return PlayerAnalysis(
+    inaccuracy: pick('inaccuracy').asIntOrThrow(),
+    mistake: pick('mistake').asIntOrThrow(),
+    blunder: pick('blunder').asIntOrThrow(),
+    acpl: pick('acpl').asIntOrNull(),
+  );
+}
+
+MoveAnalysis _moveAnalysisFromPick(RequiredPick pick) {
+  return MoveAnalysis(
+    eval: pick('eval').asIntOrNull(),
+    best: pick('best').asStringOrNull(),
+    variation: pick('variant').asStringOrNull(),
+    judgment: pick('judgment').letOrNull(_analysisJudgmentFromPick),
+  );
+}
+
+AnalysisJudgment _analysisJudgmentFromPick(RequiredPick pick) {
+  return AnalysisJudgment(
+    name: pick('name').asStringOrThrow(),
+    comment: pick('comment').asStringOrThrow(),
   );
 }

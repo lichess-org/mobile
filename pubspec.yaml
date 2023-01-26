@@ -35,7 +35,7 @@ dependencies:
   dartchess:
     git:
       url: https://github.com/lichess-org/dartchess.git
-      ref: 90ed79af3db095fb40e1a14c7ee85aaccf83b1f3
+      ref: 038cae53f4609c4d5aa2eb34aa495cb7ec4510e9
   chessground:
     git:
       url: https://github.com/lichess-org/flutter-chessground.git
@@ -47,7 +47,12 @@ dependencies:
   timeago: ^3.3.0
   collection: ^1.16.0 # can't upgrade because of flutter_test
   loading_overlay: ^0.3.0
-  modal_bottom_sheet: ^2.1.2
+  # TODO remove that package
+  modal_bottom_sheet:
+    git:
+      url: https://github.com/saltedpotatos/modal_bottom_sheet.git
+      path: modal_bottom_sheet
+      ref: e7e630e10b27ccab12da27acada9d47a13d79e9a
   fast_immutable_collections: ^8.1.1
   dart_result:
     git:
@@ -62,10 +67,6 @@ dev_dependencies:
   json_serializable: ^6.5.4
   lint: ^2.0.1
   mocktail: ^0.3.0
-
-# TODO Remove this after next flutter update
-dependency_overrides:
-  test_api: 0.4.16
 
 flutter:
 

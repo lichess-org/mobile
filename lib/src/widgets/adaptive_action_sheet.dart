@@ -77,7 +77,7 @@ Future<T?> _showMaterialBottomSheet<T>(
   bool isDismissible = true,
 }) {
   final defaultTextStyle =
-      Theme.of(context).textTheme.headline6 ?? const TextStyle(fontSize: 20);
+      Theme.of(context).textTheme.titleLarge ?? const TextStyle(fontSize: 20);
   return showModalBottomSheet<T>(
     context: context,
     isDismissible: isDismissible,

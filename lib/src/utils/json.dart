@@ -125,6 +125,28 @@ extension GameExtension on Pick {
       return null;
     }
   }
+
+  Variant asVariantOrThrow() {
+    final value = required().value;
+    if (value is Variant) {
+      return value;
+    }
+    if (value is String) {
+      return Variant.values
+          .firstWhere((e) => e.name == value, orElse: () => Variant.standard);
+    }
+    throw PickException(
+        "value $value at $debugParsingExit can't be casted to GameStatus");
+  }
+
+  Variant? asVariantOrNull() {
+    if (value == null) return null;
+    try {
+      return asVariantOrNull();
+    } catch (_) {
+      return null;
+    }
+  }
 }
 
 extension TimeExtension on Pick {
@@ -254,7 +276,7 @@ Result<T, IOError> readJsonObject<T>(
     }
     return Success(mapper(obj));
   } catch (error, trace) {
-    logger?.severe('Could not read json object as ${T.toString()}: $error');
+    logger?.severe('Could not read json object as $T: $error');
     return Failure(DataFormatError(trace));
   }
 }
@@ -279,7 +301,7 @@ Result<List<T>, IOError> readJsonListOfObjects<T>(
     if (error is FormatException) {
       logger?.severe('Received json is not a list');
     }
-    logger?.severe('Could not read json object as ${T.toString()}: $error');
+    logger?.severe('Could not read json object as $T: $error');
     return Failure(DataFormatError(stackTrace));
   }
 }

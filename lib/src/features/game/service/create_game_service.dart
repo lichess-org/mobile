@@ -70,6 +70,7 @@ class CreateGameService {
           rated: startEvent.rated,
           white: startEvent.side == Side.white ? player : opponent,
           black: startEvent.side == Side.white ? opponent : player,
+          variant: Variant.standard,
         );
       },
       (error, trace) {
