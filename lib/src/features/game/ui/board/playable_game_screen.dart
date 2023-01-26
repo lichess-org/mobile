@@ -223,7 +223,7 @@ class _BoardBody extends ConsumerWidget {
           topPlayer: topPlayer,
           bottomPlayer: bottomPlayer,
           moves: gameState?.sanMoves,
-          currentMoveIndex: positionCursor,
+          currentMoveIndex: positionCursor - 1,
         );
       },
       loading: () {
@@ -350,10 +350,8 @@ class _BottomBar extends ConsumerWidget {
           leading: const Icon(Icons.swap_vert),
           label: Text(context.l10n.flipBoard),
           onPressed: (context) {
-            if (!gameActionAsync.isLoading) {
-              ref.read(isBoardTurnedProvider.notifier).state =
-                  !ref.read(isBoardTurnedProvider);
-            }
+            ref.read(isBoardTurnedProvider.notifier).state =
+                !ref.read(isBoardTurnedProvider);
           },
         ),
         if (gameState?.abortable == true)

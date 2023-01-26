@@ -5,10 +5,11 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:chessground/chessground.dart' as cg;
 
-const double kTestScreenWidth = 390.0;
-const double kTestScreenHeight = 844.0;
-const kTestSurfaceSize = Size(kTestScreenWidth, kTestScreenHeight);
+const double _kTestScreenWidth = 390.0;
+const double _kTestScreenHeight = 844.0;
+const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
 const kPlatformVariant =
     TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
 
@@ -46,15 +47,26 @@ Future<void> meetsTapTargetGuideline(WidgetTester tester) async {
   }
 }
 
+Offset squareOffset(
+  cg.SquareId id,
+  Rect boardRect, {
+  cg.Side orientation = cg.Side.white,
+}) {
+  final squareSize = boardRect.width / 8;
+  final o = cg.Coord.fromSquareId(id).offset(orientation, squareSize);
+  return Offset(o.dx + boardRect.left + squareSize / 2,
+      o.dy + boardRect.top + squareSize / 2);
+}
+
 // simplified version of class [App] in lib/src/app.dart
 Future<Widget> buildTestApp(WidgetTester tester, {required Widget home}) async {
   await tester.binding.setSurfaceSize(kTestSurfaceSize);
   return MediaQuery(
-    data: const MediaQueryData(size: Size(kTestScreenWidth, kTestScreenHeight)),
+    data: const MediaQueryData(size: kTestSurfaceSize),
     child: Center(
       child: SizedBox(
-        width: kTestScreenWidth,
-        height: kTestScreenHeight,
+        width: _kTestScreenWidth,
+        height: _kTestScreenHeight,
         child: MaterialApp(
           useInheritedMediaQuery: true,
           localizationsDelegates: AppLocalizations.localizationsDelegates,

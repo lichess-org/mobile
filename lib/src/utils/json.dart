@@ -125,6 +125,28 @@ extension GameExtension on Pick {
       return null;
     }
   }
+
+  Variant asVariantOrThrow() {
+    final value = required().value;
+    if (value is Variant) {
+      return value;
+    }
+    if (value is String) {
+      return Variant.values
+          .firstWhere((e) => e.name == value, orElse: () => Variant.standard);
+    }
+    throw PickException(
+        "value $value at $debugParsingExit can't be casted to GameStatus");
+  }
+
+  Variant? asVariantOrNull() {
+    if (value == null) return null;
+    try {
+      return asVariantOrNull();
+    } catch (_) {
+      return null;
+    }
+  }
 }
 
 extension TimeExtension on Pick {
