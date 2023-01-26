@@ -28,9 +28,7 @@ final recentGamesProvider = FutureProvider.autoDispose
     .family<List<ArchivedGameData>, String>((ref, userName) async {
   final repo = ref.watch(gameRepositoryProvider);
   final either = await repo.getUserGamesTask(userName).run();
-  // retry on error, cache indefinitely on success
   return either.match((error) => throw error, (data) {
-    ref.keepAlive();
     return data;
   });
 });

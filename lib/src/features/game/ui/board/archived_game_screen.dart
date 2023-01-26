@@ -26,7 +26,9 @@ final archivedGameProvider =
     FutureProvider.autoDispose.family<ArchivedGame, GameId>((ref, id) async {
   final gameRepo = ref.watch(gameRepositoryProvider);
   final either = await gameRepo.getGameTask(id).run();
-  return either.match((error) => throw error, (data) {
+  return either.match((error) {
+    throw error;
+  }, (data) {
     ref
         .read(_positionCursorProvider.notifier)
         .update((_) => data.steps.length - 1);
@@ -72,8 +74,8 @@ class ArchivedGameScreen extends ConsumerWidget {
       ),
       body:
           _BoardBody(gameData: gameData, game: archivedGame, account: account),
-      bottomNavigationBar: _BottomBar(
-          gameData: gameData, steps: archivedGame?.steps, account: account),
+      bottomNavigationBar:
+          _BottomBar(gameData: gameData, steps: archivedGame?.steps),
     );
   }
 
@@ -104,10 +106,7 @@ class ArchivedGameScreen extends ConsumerWidget {
             Expanded(
                 child: _BoardBody(
                     gameData: gameData, game: archivedGame, account: account)),
-            _BottomBar(
-                gameData: gameData,
-                steps: archivedGame?.steps,
-                account: account),
+            _BottomBar(gameData: gameData, steps: archivedGame?.steps),
           ],
         ),
       ),
@@ -175,11 +174,10 @@ class _BoardBody extends ConsumerWidget {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.gameData, this.steps, required this.account});
+  const _BottomBar({required this.gameData, this.steps});
 
   final ArchivedGameData gameData;
   final List<GameStep>? steps;
-  final User account;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
