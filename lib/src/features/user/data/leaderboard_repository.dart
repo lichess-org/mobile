@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 
 import 'package:lichess_mobile/src/common/http.dart';
-import 'package:lichess_mobile/src/features/leaderboard/model/leaderboard.dart';
+import 'package:lichess_mobile/src/features/user/model/leaderboard.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/errors.dart';

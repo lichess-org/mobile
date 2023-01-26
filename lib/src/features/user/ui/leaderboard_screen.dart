@@ -30,7 +30,7 @@ class LeaderboardScreen extends StatelessWidget {
             SliverSafeArea(
                 sliver: SliverPadding(
                     padding: kBodyPadding,
-                    sliver: constraints.maxWidth > 600
+                    sliver: constraints.maxWidth > kLargeScreenWidth
                         ? SliverGrid(
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
@@ -54,7 +54,7 @@ class LeaderboardScreen extends StatelessWidget {
       ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          if (constraints.maxWidth > 600) {
+          if (constraints.maxWidth > kLargeScreenWidth) {
             return GridView(
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -75,37 +75,38 @@ class LeaderboardScreen extends StatelessWidget {
 
   List<Widget> _buildList(BuildContext context) {
     return [
-      _buildLeaderboard(
-          context, leaderboard.bullet, LichessIcons.bullet, 'BULLET'),
-      _buildLeaderboard(
-          context, leaderboard.blitz, LichessIcons.blitz, 'BLITZ'),
-      _buildLeaderboard(
-          context, leaderboard.rapid, LichessIcons.rapid, 'RAPID'),
-      _buildLeaderboard(
-          context, leaderboard.classical, LichessIcons.classical, 'CLASSICAL'),
-      _buildLeaderboard(context, leaderboard.ultrabullet,
-          LichessIcons.ultrabullet, 'ULTRA BULLET'),
-      _buildLeaderboard(
-          context, leaderboard.crazyhouse, LichessIcons.h_square, 'CRAZYHOUSE'),
-      _buildLeaderboard(
-          context, leaderboard.chess960, LichessIcons.die_six, 'CHESS 960'),
-      _buildLeaderboard(context, leaderboard.kingOfThehill, LichessIcons.bullet,
-          'KING OF THE HILL'),
-      _buildLeaderboard(context, leaderboard.threeCheck,
-          LichessIcons.three_check, 'THREE CHECK'),
-      _buildLeaderboard(
-          context, leaderboard.atomic, LichessIcons.atom, 'ATOMIC'),
-      _buildLeaderboard(
-          context, leaderboard.horde, LichessIcons.horde, 'HORDE'),
-      _buildLeaderboard(
-          context, leaderboard.antichess, LichessIcons.antichess, 'ANTICHESS'),
-      _buildLeaderboard(context, leaderboard.racingKings,
-          LichessIcons.racing_kings, 'RACING KINGS'),
+      BuildLeaderboard(leaderboard.bullet, LichessIcons.bullet, 'BULLET'),
+      BuildLeaderboard(leaderboard.blitz, LichessIcons.blitz, 'BLITZ'),
+      BuildLeaderboard(leaderboard.rapid, LichessIcons.rapid, 'RAPID'),
+      BuildLeaderboard(
+          leaderboard.classical, LichessIcons.classical, 'CLASSICAL'),
+      BuildLeaderboard(
+          leaderboard.ultrabullet, LichessIcons.ultrabullet, 'ULTRA BULLET'),
+      BuildLeaderboard(
+          leaderboard.crazyhouse, LichessIcons.h_square, 'CRAZYHOUSE'),
+      BuildLeaderboard(leaderboard.chess960, LichessIcons.die_six, 'CHESS 960'),
+      BuildLeaderboard(
+          leaderboard.kingOfThehill, LichessIcons.bullet, 'KING OF THE HILL'),
+      BuildLeaderboard(
+          leaderboard.threeCheck, LichessIcons.three_check, 'THREE CHECK'),
+      BuildLeaderboard(leaderboard.atomic, LichessIcons.atom, 'ATOMIC'),
+      BuildLeaderboard(leaderboard.horde, LichessIcons.horde, 'HORDE'),
+      BuildLeaderboard(
+          leaderboard.antichess, LichessIcons.antichess, 'ANTICHESS'),
+      BuildLeaderboard(
+          leaderboard.racingKings, LichessIcons.racing_kings, 'RACING KINGS'),
     ];
   }
+}
 
-  Widget _buildLeaderboard(BuildContext context, List<LightUser> userList,
-      IconData iconData, String title) {
+class BuildLeaderboard extends StatelessWidget {
+  const BuildLeaderboard(this.userList, this.iconData, this.title);
+  final List<LeaderboardUser> userList;
+  final IconData iconData;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -114,31 +115,25 @@ class LeaderboardScreen extends StatelessWidget {
           title: Text(title),
         ),
         const Divider(),
-        ..._leaderboardList(context, userList),
+        ...ListTile.divideTiles(
+            color: dividerColor(context),
+            context: context,
+            tiles: userList.map((user) => ListCard(user: user))),
         const SizedBox(height: 12),
       ],
     );
-  }
-
-  List<Widget> _leaderboardList(
-      BuildContext context, List<LightUser> userList) {
-    return ListTile.divideTiles(
-            color: dividerColor(context),
-            context: context,
-            tiles: userList.map((user) => ListCard(user: user)))
-        .toList(growable: false);
   }
 }
 
 class ListCard extends StatelessWidget {
   const ListCard({required this.user, this.prefIcon, super.key});
-  final LightUser user;
+  final LeaderboardUser user;
   final IconData? prefIcon;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: _onlineOrPatron(user),
+      leading: OnlineOrPatron(patron: user.patron, online: user.online),
       title: Row(
         children: [
           if (user.title != null) ...[
@@ -152,11 +147,20 @@ class ListCard extends StatelessWidget {
           ),
         ],
       ),
-      trailing: _ratingAndProgress(user),
+      trailing:
+          RatingAndProgress(user.rating, user.progress, prefIcon: prefIcon),
     );
   }
+}
 
-  Widget _ratingAndProgress(LightUser user) {
+class RatingAndProgress extends StatelessWidget {
+  const RatingAndProgress(this.rating, this.progress, {this.prefIcon});
+  final int rating;
+  final int progress;
+  final IconData? prefIcon;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -165,7 +169,7 @@ class ListCard extends StatelessWidget {
           const SizedBox(width: 10)
         ],
         const SizedBox(width: 5),
-        if (user.progress < 0)
+        if (progress < 0)
           Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -175,12 +179,12 @@ class ListCard extends StatelessWidget {
               SizedBox(
                   width: 30,
                   child: Text(
-                    '${user.progress.abs()} ',
+                    '${progress.abs()} ',
                     style: const TextStyle(color: LichessColors.red),
                   ))
             ],
           )
-        else if (user.progress > 0)
+        else if (progress > 0)
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
@@ -190,7 +194,7 @@ class ListCard extends StatelessWidget {
               SizedBox(
                   width: 30,
                   child: Text(
-                    '${user.progress} ',
+                    '$progress',
                     style: const TextStyle(color: LichessColors.good),
                   ))
             ],
@@ -198,19 +202,26 @@ class ListCard extends StatelessWidget {
         else
           const SizedBox(width: 50),
         const SizedBox(width: 5),
-        SizedBox(width: 50, child: Text(user.rating.toString()))
+        SizedBox(width: 50, child: Text(rating.toString()))
       ],
     );
   }
+}
 
-  Widget _onlineOrPatron(LightUser user) {
-    if (user.patron != null) {
+class OnlineOrPatron extends StatelessWidget {
+  const OnlineOrPatron({this.patron, this.online});
+  final bool? patron;
+  final bool? online;
+
+  @override
+  Widget build(BuildContext context) {
+    if (patron != null) {
       return Icon(LichessIcons.patron,
-          color: user.online != null ? LichessColors.good : LichessColors.grey);
+          color: online != null ? LichessColors.good : LichessColors.grey);
     } else {
       return Icon(CupertinoIcons.circle_fill,
           size: 20,
-          color: user.online != null ? LichessColors.good : LichessColors.grey);
+          color: online != null ? LichessColors.good : LichessColors.grey);
     }
   }
 }

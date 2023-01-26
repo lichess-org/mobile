@@ -2,15 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/features/leaderboard/ui/leaderboard_screen.dart';
-import 'package:lichess_mobile/src/features/leaderboard/ui/leaderboard_widget.dart';
+import 'package:lichess_mobile/src/features/user/ui/leaderboard_screen.dart';
+import 'package:lichess_mobile/src/features/user/ui/leaderboard_widget.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:logging/logging.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/features/leaderboard/model/leaderboard.dart';
+import 'package:lichess_mobile/src/features/user/model/leaderboard.dart';
 import '../../../utils.dart';
 
 class MockClient extends Mock implements http.Client {}
@@ -57,7 +57,7 @@ void main() {
     final app = await buildTestApp(tester,
         home: Consumer(
             builder: (context, ref, _) =>
-                Column(children: const [LeaderboardWidget()])));
+                Column(children: [LeaderboardWidget()])));
 
     await tester.pumpWidget(ProviderScope(overrides: [
       apiClientProvider.overrideWithValue(ApiClient(mockLogger, mockClient))
@@ -95,7 +95,8 @@ final testLeaderboard = Leaderboard(
     racingKings: _fakeList);
 
 final _fakeList = [
-  const LightUser(id: 'test', username: 'test', rating: 1000, progress: 10)
+  const LeaderboardUser(
+      id: 'test', username: 'test', rating: 1000, progress: 10)
 ];
 
 const testRes = '''
