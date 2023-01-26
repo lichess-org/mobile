@@ -30,14 +30,14 @@ class FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  AsyncResult<void, IOError> signInTask() async {
+  AsyncResult<void, IOError> signIn() async {
     await Future<void>.delayed(const Duration(milliseconds: 5));
     _authState.value = fakeUser;
     return const Result.success(null);
   }
 
   @override
-  AsyncResult<void, IOError> signOutTask() async {
+  AsyncResult<void, IOError> signOut() async {
     await Future<void>.delayed(const Duration(milliseconds: 5));
     _authState.value = null;
     return const Result.success(null);

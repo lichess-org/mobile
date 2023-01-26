@@ -147,13 +147,15 @@ void main() {
 ''';
 
       when(() => mockApiClient.get(
-            Uri.parse('$kLichessHost/game/export/qVChCOTc'),
-            headers: {'Accept': 'application/json'},
-          )).thenReturn(TaskEither.right(http.Response(testResponse, 200)));
+                Uri.parse('$kLichessHost/game/export/qVChCOTc'),
+                headers: {'Accept': 'application/json'},
+              ))
+          .thenAnswer(
+              (_) async => Result.success(http.Response(testResponse, 200)));
 
-      final result = await repo.getGameTask(const GameId('qVChCOTc')).run();
+      final result = await repo.getGameTask(const GameId('qVChCOTc'));
 
-      expect(result.isRight(), true);
+      expect(result.isSuccess, true);
     });
 
     test('game with analysis', () async {
@@ -162,13 +164,15 @@ void main() {
 ''';
 
       when(() => mockApiClient.get(
-            Uri.parse('$kLichessHost/game/export/3zfAoBZs'),
-            headers: {'Accept': 'application/json'},
-          )).thenReturn(TaskEither.right(http.Response(testResponse, 200)));
+                Uri.parse('$kLichessHost/game/export/3zfAoBZs'),
+                headers: {'Accept': 'application/json'},
+              ))
+          .thenAnswer(
+              (_) async => Result.success(http.Response(testResponse, 200)));
 
-      final result = await repo.getGameTask(const GameId('3zfAoBZs')).run();
+      final result = await repo.getGameTask(const GameId('3zfAoBZs'));
 
-      expect(result.isRight(), true);
+      expect(result.isSuccess, true);
     });
 
     test('threeCheck game', () async {
@@ -177,15 +181,17 @@ void main() {
 ''';
 
       when(() => mockApiClient.get(
-            Uri.parse('$kLichessHost/game/export/1vdsvmxp'),
-            headers: {'Accept': 'application/json'},
-          )).thenReturn(TaskEither.right(http.Response(testResponse, 200)));
+                Uri.parse('$kLichessHost/game/export/1vdsvmxp'),
+                headers: {'Accept': 'application/json'},
+              ))
+          .thenAnswer(
+              (_) async => Result.success(http.Response(testResponse, 200)));
 
-      final result = await repo.getGameTask(const GameId('1vdsvmxp')).run();
+      final result = await repo.getGameTask(const GameId('1vdsvmxp'));
 
-      expect(result.isRight(), true);
+      expect(result.isSuccess, true);
 
-      result.match((_) => null, (game) {
+      result.forEach((game) {
         expect(game.steps[0].position is ThreeCheck, true);
       });
     });

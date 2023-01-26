@@ -25,15 +25,18 @@ final _isBoardTurnedProvider = StateProvider.autoDispose<bool>((ref) => false);
 final archivedGameProvider =
     FutureProvider.autoDispose.family<ArchivedGame, GameId>((ref, id) async {
   final gameRepo = ref.watch(gameRepositoryProvider);
-  final either = await gameRepo.getGameTask(id).run();
-  return either.match((error) {
-    throw error;
-  }, (data) {
-    ref
-        .read(_positionCursorProvider.notifier)
-        .update((_) => data.steps.length - 1);
-    return data;
-  });
+  final result = await gameRepo.getGameTask(id);
+  return result.fold(
+    (data) {
+      ref
+          .read(_positionCursorProvider.notifier)
+          .update((_) => data.steps.length - 1);
+      return data;
+    },
+    (error) {
+      throw error;
+    },
+  );
 });
 
 class ArchivedGameScreen extends ConsumerWidget {

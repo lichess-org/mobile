@@ -214,8 +214,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "8634d8f042d5f863d6a8557d10845b94d584ad3c"
-      resolved-ref: "8634d8f042d5f863d6a8557d10845b94d584ad3c"
+      ref: fff48e1d9b7b33a3cff54ef60d9d6ee669224ebf
+      resolved-ref: fff48e1d9b7b33a3cff54ef60d9d6ee669224ebf
       url: "https://github.com/veloce/dart_result.git"
     source: git
     version: "0.1.0"

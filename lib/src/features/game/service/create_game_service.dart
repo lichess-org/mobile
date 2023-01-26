@@ -1,7 +1,7 @@
 import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart' hide Tuple2;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
+import 'package:dart_result/dart_result.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
@@ -19,7 +19,7 @@ class CreateGameService {
   final Ref ref;
   final Logger _log;
 
-  TaskEither<IOError, PlayableGame> aiGameTask(User account, {Side? side}) {
+  AsyncResult<PlayableGame, IOError> aiGame(User account, {Side? side}) {
     final challengeRepo = ref.read(challengeRepositoryProvider);
     final opponent = ref.read(computerOpponentPrefProvider);
     final maiaStrength = ref.read(maiaStrengthProvider);
@@ -36,11 +36,11 @@ class CreateGameService {
             AiChallengeRequest(level: level, challenge: challengeRequest))
         : challengeRepo.challengeTask(maiaStrength.name, challengeRequest);
 
-    return createChallengeTask.andThen(() => _waitForGameStart(account));
+    return createChallengeTask.flatMap((_) => _waitForGameStart(account));
   }
 
-  TaskEither<IOError, PlayableGame> _waitForGameStart(User account) {
-    return TaskEither<IOError, PlayableGame>.tryCatch(
+  AsyncResult<PlayableGame, IOError> _waitForGameStart(User account) {
+    return Result.tryCatchAsync<PlayableGame, IOError>(
       () async {
         final gameRepo = ref.read(gameRepositoryProvider);
         final stream = gameRepo.events().timeout(const Duration(seconds: 15),

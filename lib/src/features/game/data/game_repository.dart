@@ -30,36 +30,35 @@ class GameRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  Future<Result<ArchivedGame, IOError>> getGameTask(GameId id) {
+  AsyncResult<ArchivedGame, IOError> getGameTask(GameId id) {
     return apiClient.get(
       Uri.parse('$kLichessHost/game/export/$id'),
       headers: {'Accept': 'application/json'},
-    ).then((result) => result.flatMap((response) {
-          return readJsonObject(response.body,
-              mapper: _makeArchivedGamefromJson, logger: _log);
-        }));
+    ).flatMap((response) {
+      return readJsonObject(response.body,
+          mapper: _makeArchivedGameFromJson, logger: _log);
+    });
   }
 
   // TODO parameters
-  Future<Result<List<ArchivedGame>, IOError>> getUserGamesTask(
+  AsyncResult<List<ArchivedGameData>, IOError> getUserGamesTask(
       String username) {
     return apiClient.get(
       Uri.parse(
           '$kLichessHost/api/games/user/$username?max=10&moves=false&lastFen=true'),
       headers: {'Accept': 'application/x-ndjson'},
-    ).then((result) => result.flatMap((r) {
-          try {
-            final lines = r.body.split('\n');
-            return Success(
-                lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
-              final json = jsonDecode(e) as Map<String, dynamic>;
-              return _makeArchivedGameDatafromJson(json);
-            }).toList(growable: false));
-          } catch (error, stackTrace) {
-            _log.severe('Could not read json object as ArchivedGame: $error');
-            return Failure(DataFormatError(stackTrace));
-          }
-        }));
+    ).flatMap((r) {
+      try {
+        final lines = r.body.split('\n');
+        return Success(lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
+          final json = jsonDecode(e) as Map<String, dynamic>;
+          return _makeArchivedGameDataFromJson(json);
+        }).toList(growable: false));
+      } catch (error, stackTrace) {
+        _log.severe('Could not read json object as ArchivedGame: $error');
+        return Failure(DataFormatError(stackTrace));
+      }
+    });
   }
 
   /// Stream the events reaching a lichess user in real time as ndjson.
@@ -91,19 +90,19 @@ class GameRepository {
         .handleError((Object error) => _log.warning(error));
   }
 
-  Future<Result<void, IOError>> playMoveTask(GameId gameId, Move move) {
+  AsyncResult<void, IOError> playMoveTask(GameId gameId, Move move) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/move/${move.uci}'),
         retry: true);
   }
 
-  Future<Result<void, IOError>> abortTask(GameId gameId) {
+  AsyncResult<void, IOError> abortTask(GameId gameId) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/abort'),
         retry: true);
   }
 
-  Future<Result<void, IOError>> resignTask(GameId gameId) {
+  AsyncResult<void, IOError> resignTask(GameId gameId) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/resign'),
         retry: true);
@@ -120,7 +119,7 @@ ArchivedGame _makeArchivedGameFromJson(Map<String, dynamic> json) =>
     _archivedGameFromPick(pick(json).required());
 
 ArchivedGame _archivedGameFromPick(RequiredPick pick) {
-  final data = _archivedGameDatafromPick(pick);
+  final data = _archivedGameDataFromPick(pick);
   final clocks = pick('clocks').asListOrNull<Duration>(
       (p0) => Duration(milliseconds: p0.asIntOrThrow() * 10));
   return ArchivedGame(
@@ -153,9 +152,9 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
 }
 
 ArchivedGameData _makeArchivedGameDataFromJson(Map<String, dynamic> json) =>
-    _archivedGameDatafromPick(pick(json).required());
+    _archivedGameDataFromPick(pick(json).required());
 
-ArchivedGameData _archivedGameDatafromPick(RequiredPick pick) {
+ArchivedGameData _archivedGameDataFromPick(RequiredPick pick) {
   return ArchivedGameData(
     id: pick('id').asGameIdOrThrow(),
     rated: pick('rated').asBoolOrThrow(),

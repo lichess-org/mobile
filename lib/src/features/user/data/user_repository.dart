@@ -15,13 +15,13 @@ class UserRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  Future<Result<User, IOError>> getUser(String username) {
+  AsyncResult<User, IOError> getUser(String username) {
     return apiClient.get(Uri.parse('$kLichessHost/api/user/$username')).then(
         (result) => result.flatMap((response) => readJsonObject(response.body,
             mapper: User.fromJson, logger: _log)));
   }
 
-  Future<Result<List<UserStatus>, IOError>> getUsersStatus(List<String> ids) {
+  AsyncResult<List<UserStatus>, IOError> getUsersStatus(List<String> ids) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'))
         .then((result) => result.flatMap((response) => readJsonListOfObjects(
