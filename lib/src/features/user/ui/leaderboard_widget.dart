@@ -40,24 +40,29 @@ class LeaderboardWidget extends ConsumerWidget {
               ),
               Expanded(
                   child: ListView(shrinkWrap: true, children: [
-                ListCard(user: data.bullet[0], prefIcon: LichessIcons.bullet),
-                ListCard(user: data.blitz[0], prefIcon: LichessIcons.blitz),
-                ListCard(user: data.rapid[0], prefIcon: LichessIcons.rapid),
-                ListCard(
+                LeaderboardListTile(
+                    user: data.bullet[0], prefIcon: LichessIcons.bullet),
+                LeaderboardListTile(
+                    user: data.blitz[0], prefIcon: LichessIcons.blitz),
+                LeaderboardListTile(
+                    user: data.rapid[0], prefIcon: LichessIcons.rapid),
+                LeaderboardListTile(
                     user: data.classical[0], prefIcon: LichessIcons.classical),
-                ListCard(
+                LeaderboardListTile(
                     user: data.ultrabullet[0],
                     prefIcon: LichessIcons.ultrabullet),
-                ListCard(
+                LeaderboardListTile(
                     user: data.crazyhouse[0], prefIcon: LichessIcons.h_square),
-                ListCard(
+                LeaderboardListTile(
                     user: data.chess960[0], prefIcon: LichessIcons.die_six),
-                ListCard(
+                LeaderboardListTile(
                     user: data.threeCheck[0],
                     prefIcon: LichessIcons.three_check),
-                ListCard(user: data.atomic[0], prefIcon: LichessIcons.atom),
-                ListCard(user: data.horde[0], prefIcon: LichessIcons.horde),
-                ListCard(
+                LeaderboardListTile(
+                    user: data.atomic[0], prefIcon: LichessIcons.atom),
+                LeaderboardListTile(
+                    user: data.horde[0], prefIcon: LichessIcons.horde),
+                LeaderboardListTile(
                     user: data.antichess[0], prefIcon: LichessIcons.antichess),
               ])),
             ]),

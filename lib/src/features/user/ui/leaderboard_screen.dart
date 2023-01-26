@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:lichess_mobile/src/constants.dart';
-
 import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-
-import '../model/leaderboard.dart';
+import 'package:lichess_mobile/src/features/user/model/leaderboard.dart';
 
 class LeaderboardScreen extends StatelessWidget {
   const LeaderboardScreen({required this.leaderboard, super.key});
@@ -37,11 +35,9 @@ class LeaderboardScreen extends StatelessWidget {
                                     mainAxisExtent: 644,
                                     crossAxisCount:
                                         (constraints.maxWidth / 300).floor()),
-                            delegate:
-                                SliverChildListDelegate(_buildList(context)))
+                            delegate: SliverChildListDelegate(_buildList()))
                         : SliverList(
-                            delegate:
-                                SliverChildListDelegate(_buildList(context)),
+                            delegate: SliverChildListDelegate(_buildList()),
                           )))
           ]);
         }));
@@ -61,11 +57,11 @@ class LeaderboardScreen extends StatelessWidget {
                 mainAxisExtent: 644,
                 crossAxisCount: (constraints.maxWidth / 300).floor(),
               ),
-              children: _buildList(context),
+              children: _buildList(),
             );
           } else {
             return ListView(
-              children: _buildList(context),
+              children: _buildList(),
             );
           }
         },
@@ -73,34 +69,35 @@ class LeaderboardScreen extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildList(BuildContext context) {
+  List<Widget> _buildList() {
     return [
-      BuildLeaderboard(leaderboard.bullet, LichessIcons.bullet, 'BULLET'),
-      BuildLeaderboard(leaderboard.blitz, LichessIcons.blitz, 'BLITZ'),
-      BuildLeaderboard(leaderboard.rapid, LichessIcons.rapid, 'RAPID'),
-      BuildLeaderboard(
+      _BuildLeaderboard(leaderboard.bullet, LichessIcons.bullet, 'BULLET'),
+      _BuildLeaderboard(leaderboard.blitz, LichessIcons.blitz, 'BLITZ'),
+      _BuildLeaderboard(leaderboard.rapid, LichessIcons.rapid, 'RAPID'),
+      _BuildLeaderboard(
           leaderboard.classical, LichessIcons.classical, 'CLASSICAL'),
-      BuildLeaderboard(
+      _BuildLeaderboard(
           leaderboard.ultrabullet, LichessIcons.ultrabullet, 'ULTRA BULLET'),
-      BuildLeaderboard(
+      _BuildLeaderboard(
           leaderboard.crazyhouse, LichessIcons.h_square, 'CRAZYHOUSE'),
-      BuildLeaderboard(leaderboard.chess960, LichessIcons.die_six, 'CHESS 960'),
-      BuildLeaderboard(
+      _BuildLeaderboard(
+          leaderboard.chess960, LichessIcons.die_six, 'CHESS 960'),
+      _BuildLeaderboard(
           leaderboard.kingOfThehill, LichessIcons.bullet, 'KING OF THE HILL'),
-      BuildLeaderboard(
+      _BuildLeaderboard(
           leaderboard.threeCheck, LichessIcons.three_check, 'THREE CHECK'),
-      BuildLeaderboard(leaderboard.atomic, LichessIcons.atom, 'ATOMIC'),
-      BuildLeaderboard(leaderboard.horde, LichessIcons.horde, 'HORDE'),
-      BuildLeaderboard(
+      _BuildLeaderboard(leaderboard.atomic, LichessIcons.atom, 'ATOMIC'),
+      _BuildLeaderboard(leaderboard.horde, LichessIcons.horde, 'HORDE'),
+      _BuildLeaderboard(
           leaderboard.antichess, LichessIcons.antichess, 'ANTICHESS'),
-      BuildLeaderboard(
+      _BuildLeaderboard(
           leaderboard.racingKings, LichessIcons.racing_kings, 'RACING KINGS'),
     ];
   }
 }
 
-class BuildLeaderboard extends StatelessWidget {
-  const BuildLeaderboard(this.userList, this.iconData, this.title);
+class _BuildLeaderboard extends StatelessWidget {
+  const _BuildLeaderboard(this.userList, this.iconData, this.title);
   final List<LeaderboardUser> userList;
   final IconData iconData;
   final String title;
@@ -118,22 +115,22 @@ class BuildLeaderboard extends StatelessWidget {
         ...ListTile.divideTiles(
             color: dividerColor(context),
             context: context,
-            tiles: userList.map((user) => ListCard(user: user))),
+            tiles: userList.map((user) => LeaderboardListTile(user: user))),
         const SizedBox(height: 12),
       ],
     );
   }
 }
 
-class ListCard extends StatelessWidget {
-  const ListCard({required this.user, this.prefIcon, super.key});
+class LeaderboardListTile extends StatelessWidget {
+  const LeaderboardListTile({required this.user, this.prefIcon});
   final LeaderboardUser user;
   final IconData? prefIcon;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: OnlineOrPatron(patron: user.patron, online: user.online),
+      leading: _OnlineOrPatron(patron: user.patron, online: user.online),
       title: Row(
         children: [
           if (user.title != null) ...[
@@ -148,13 +145,13 @@ class ListCard extends StatelessWidget {
         ],
       ),
       trailing:
-          RatingAndProgress(user.rating, user.progress, prefIcon: prefIcon),
+          _RatingAndProgress(user.rating, user.progress, prefIcon: prefIcon),
     );
   }
 }
 
-class RatingAndProgress extends StatelessWidget {
-  const RatingAndProgress(this.rating, this.progress, {this.prefIcon});
+class _RatingAndProgress extends StatelessWidget {
+  const _RatingAndProgress(this.rating, this.progress, {this.prefIcon});
   final int rating;
   final int progress;
   final IconData? prefIcon;
@@ -208,8 +205,8 @@ class RatingAndProgress extends StatelessWidget {
   }
 }
 
-class OnlineOrPatron extends StatelessWidget {
-  const OnlineOrPatron({this.patron, this.online});
+class _OnlineOrPatron extends StatelessWidget {
+  const _OnlineOrPatron({this.patron, this.online});
   final bool? patron;
   final bool? online;
 
