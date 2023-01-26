@@ -166,14 +166,14 @@ class UserPerfStats with _$UserPerfStats {
       UserPerfGame? lowestRatingGame,
       int? highestRating,
       UserPerfGame? highestRatingGame,
-      UserGameStreak? curWinStreak,
-      UserGameStreak? maxWinStreak,
-      UserGameStreak? curLossStreak,
-      UserGameStreak? maxLossStreak,
-      UserGameStreak? curPlayStreak,
-      UserGameStreak? maxPlayStreak,
-      UserTimeStreak? curTimeStreak,
-      UserTimeStreak? maxTimeStreak,
+      UserStreak? curWinStreak,
+      UserStreak? maxWinStreak,
+      UserStreak? curLossStreak,
+      UserStreak? maxLossStreak,
+      UserStreak? curPlayStreak,
+      UserStreak? maxPlayStreak,
+      UserStreak? curTimeStreak,
+      UserStreak? maxTimeStreak,
       List<UserPerfGame>? worstLosses,
       List<UserPerfGame>? bestWins}) = _UserPerfStats;
 
@@ -211,22 +211,16 @@ class UserPerfStats with _$UserPerfStats {
         lowestRatingGame: lowest.letOrNull(UserPerfGame.fromPick),
         highestRating: highest('int').asIntOrNull(),
         highestRatingGame: highest.letOrNull(UserPerfGame.fromPick),
-        curWinStreak:
-            resultStreak('win', 'cur').letOrNull(UserGameStreak.fromPick),
-        maxWinStreak:
-            resultStreak('win', 'max').letOrNull(UserGameStreak.fromPick),
+        curWinStreak: resultStreak('win', 'cur').letOrNull(UserStreak.fromPick),
+        maxWinStreak: resultStreak('win', 'max').letOrNull(UserStreak.fromPick),
         curLossStreak:
-            resultStreak('loss', 'cur').letOrNull(UserGameStreak.fromPick),
+            resultStreak('loss', 'cur').letOrNull(UserStreak.fromPick),
         maxLossStreak:
-            resultStreak('loss', 'max').letOrNull(UserGameStreak.fromPick),
-        curPlayStreak:
-            playStreak('nb', 'cur').letOrNull(UserGameStreak.fromPick),
-        maxPlayStreak:
-            playStreak('nb', 'max').letOrNull(UserGameStreak.fromPick),
-        curTimeStreak:
-            playStreak('time', 'cur').letOrNull(UserTimeStreak.fromPick),
-        maxTimeStreak:
-            playStreak('time', 'max').letOrNull(UserTimeStreak.fromPick),
+            resultStreak('loss', 'max').letOrNull(UserStreak.fromPick),
+        curPlayStreak: playStreak('nb', 'cur').letOrNull(UserStreak.fromPick),
+        maxPlayStreak: playStreak('nb', 'max').letOrNull(UserStreak.fromPick),
+        curTimeStreak: playStreak('time', 'cur').letOrNull(UserStreak.fromPick),
+        maxTimeStreak: playStreak('time', 'max').letOrNull(UserStreak.fromPick),
         worstLosses: stat('worstLosses', 'results')
             .asListOrNull((pick) => UserPerfGame.fromPick(pick)),
         bestWins: stat('bestWins', 'results')
@@ -234,63 +228,60 @@ class UserPerfStats with _$UserPerfStats {
   }
 }
 
-abstract class UserStreak {
-  late final UserPerfGame? startGame;
-  late final UserPerfGame? endGame;
+@freezed
+class UserStreak with _$UserStreak {
+  const factory UserStreak.gameStreak({
+    required int gamesPlayed,
+    required bool isValueEmpty,
+    required UserPerfGame? startGame,
+    required UserPerfGame? endGame,
+  }) = UserGameStreak;
 
-  UserStreak(this.startGame, this.endGame);
+  const factory UserStreak.timeStreak({
+    required Duration timePlayed,
+    required bool isValueEmpty,
+    required UserPerfGame? startGame,
+    required UserPerfGame? endGame,
+  }) = UserTimeStreak;
 
-  UserStreak.fromPick(RequiredPick pick) {
-    startGame = pick('from').letOrNull(UserPerfGame.fromPick);
-    endGame = pick('to').letOrNull(UserPerfGame.fromPick);
+  factory UserStreak.fromJson(Map<String, dynamic> json) {
+    return UserStreak.fromPick(pick(json).required());
   }
 
-  bool isValueZero();
-}
+  factory UserStreak.fromPick(RequiredPick pick) {
+    final path = pick.path;
+    if (path.length <= 1) {
+      throw ArgumentError('pick must have a path longer than one');
+    }
 
-class UserGameStreak extends UserStreak {
-  final int gamesPlayed;
+    // Since we are passing 'cur' or 'max' as the last pick,
+    // we check the previous value in the path (the parent).
+    final type = path.reversed.elementAt(1);
 
-  UserGameStreak(
-      {required this.gamesPlayed,
-      UserPerfGame? startGame,
-      UserPerfGame? endGame})
-      : super(startGame, endGame);
+    final value = pick('v');
+    final isValueEmpty = value.asIntOrThrow() == 0;
+    final startGame = pick('from').letOrNull(UserPerfGame.fromPick);
+    final endGame = pick('to').letOrNull(UserPerfGame.fromPick);
 
-  UserGameStreak.withPick(super.pick, {required this.gamesPlayed})
-      : super.fromPick();
-
-  @override
-  bool isValueZero() => gamesPlayed == 0;
-
-  factory UserGameStreak.fromJson(Map<String, dynamic> json) =>
-      UserGameStreak.fromPick(pick(json).required());
-
-  factory UserGameStreak.fromPick(RequiredPick pick) =>
-      UserGameStreak.withPick(pick, gamesPlayed: pick('v').asIntOrThrow());
-}
-
-class UserTimeStreak extends UserStreak {
-  final Duration timePlayed;
-
-  UserTimeStreak(
-      {required this.timePlayed,
-      UserPerfGame? startGame,
-      UserPerfGame? endGame})
-      : super(startGame, endGame);
-
-  UserTimeStreak.withPick(super.pick, {required this.timePlayed})
-      : super.fromPick();
-
-  @override
-  bool isValueZero() => timePlayed.inSeconds == 0;
-
-  factory UserTimeStreak.fromJson(Map<String, dynamic> json) =>
-      UserTimeStreak.fromPick(pick(json).required());
-
-  factory UserTimeStreak.fromPick(RequiredPick pick) =>
-      UserTimeStreak.withPick(pick,
-          timePlayed: pick('v').asDurationFromSecondsOrThrow());
+    switch (type) {
+      case 'time':
+        return UserStreak.timeStreak(
+            timePlayed: value.asDurationFromSecondsOrThrow(),
+            isValueEmpty: isValueEmpty,
+            startGame: startGame,
+            endGame: endGame);
+      case 'win':
+      case 'loss':
+      case 'nb':
+        return UserStreak.gameStreak(
+            gamesPlayed: value.asIntOrThrow(),
+            isValueEmpty: isValueEmpty,
+            startGame: startGame,
+            endGame: endGame);
+      default:
+        throw UnsupportedError('Unsupported streak type $type');
+    }
+  }
 }
 
 @freezed

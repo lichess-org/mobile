@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +28,6 @@ final perfStatsProvider = FutureProvider.autoDispose
       .run();
 
   return either.match((error) => throw error, (data) {
-    ref.keepAlive();
     return data;
   });
 });
@@ -171,7 +172,8 @@ class PerfStatsScreen extends ConsumerWidget {
                       ? '?'
                       : data.avgOpponent.toString()),
               _CustomPlatformCard(context.l10n.timeSpentPlaying,
-                  value: data.timePlayed.toDaysHoursMinutes(context)),
+                  value: data.timePlayed
+                      .toDaysHoursMinutes(AppLocalizations.of(context))),
             ]),
             statGroupSpace,
             _CustomPlatformCard(
@@ -424,54 +426,56 @@ class _StreakWidget extends StatelessWidget {
         fontSize: _defaultStatFontSize,
         color: textShade(context, _customOpacity));
 
-    final List<Widget> streakWidgets = List.empty(growable: true);
     final longestStreakStr = context.l10n.longestStreak('').replaceAll(':', '');
     final currentStreakStr = context.l10n.currentStreak('').replaceAll(':', '');
-    // This variable may seem useless, why not check (streak == maxStreak)?
-    // Because this avoids the rare case where maxStreak == curStreak and the same title is shown twice.
-    bool inFirstLoop = true;
 
-    for (final streak in [maxStreak, curStreak]) {
-      final streakTitle = Text(
-          inFirstLoop ? longestStreakStr : currentStreakStr,
+    final List<Widget> streakWidgets =
+        [maxStreak, curStreak].mapIndexed((index, streak) {
+      final streakTitle = Text(index == 0 ? longestStreakStr : currentStreakStr,
           style: streakTitleStyle);
 
-      if (streak == null || streak.isValueZero()) {
-        streakWidgets.add(Expanded(
+      if (streak == null || streak.isValueEmpty) {
+        return Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               streakTitle,
-              const Text('-', style: TextStyle(fontSize: _defaultValueFontSize))
+              Text('-',
+                  style: const TextStyle(fontSize: _defaultValueFontSize),
+                  semanticsLabel: context.l10n.none)
             ],
           ),
-        ));
-      } else {
-        streakWidgets.add(Expanded(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            streakTitle,
-            if (streak is UserTimeStreak)
-              Text(streak.timePlayed.toDaysHoursMinutes(context),
-                  style: valueStyle, textAlign: TextAlign.center)
-            else if (streak is UserGameStreak)
-              Text(context.l10n.nbGames(streak.gamesPlayed),
-                  style: valueStyle, textAlign: TextAlign.center),
-            if (!(streak.startGame == null && streak.endGame == null))
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 5.0),
-                  _UserGameWidget(streak.startGame),
-                  Icon(Icons.arrow_downward_rounded,
-                      color: textShade(context, _customOpacity)),
-                  _UserGameWidget(streak.endGame)
-                ],
-              )
-          ]),
-        ));
+        );
       }
-      inFirstLoop = false;
-    }
+
+      final Text valueText = streak.map(timeStreak: (UserTimeStreak streak) {
+        return Text(
+            streak.timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
+            style: valueStyle,
+            textAlign: TextAlign.center);
+      }, gameStreak: (UserGameStreak streak) {
+        return Text(context.l10n.nbGames(streak.gamesPlayed),
+            style: valueStyle, textAlign: TextAlign.center);
+      });
+
+      return Expanded(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          streakTitle,
+          valueText,
+          if (streak.startGame != null && streak.endGame != null)
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 5.0),
+                _UserGameWidget(streak.startGame),
+                Icon(Icons.arrow_downward_rounded,
+                    color: textShade(context, _customOpacity)),
+                _UserGameWidget(streak.endGame)
+              ],
+            )
+        ]),
+      );
+    }).toList(growable: false);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

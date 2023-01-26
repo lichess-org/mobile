@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/l10n.dart';
 
+// ignore: unused_import
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 extension DurationExtensions on Duration {
-  String toDaysHoursMinutes(BuildContext context) {
+  String toDaysHoursMinutes(AppLocalizations l10n) {
     final days = inDays;
     final hours = inHours.remainder(24);
     final minutes = inMinutes.remainder(60);
 
-    String daysString = days == 0 ? '' : context.l10n.nbDays(days);
-    String hoursString = hours == 0 ? '' : context.l10n.nbHours(hours);
-    final String minutesString =
-        minutes == 0 ? '' : context.l10n.nbMinutes(minutes);
+    String daysString = days == 0 ? '' : l10n.nbDays(days);
+    String hoursString = hours == 0 ? '' : l10n.nbHours(hours);
+    final String minutesString = minutes == 0 ? '' : l10n.nbMinutes(minutes);
 
     int valueCount = 0;
     for (final value in [days, hours, minutes]) {
@@ -21,7 +21,7 @@ extension DurationExtensions on Duration {
     }
 
     if (valueCount == 0) {
-      return context.l10n.nbMinutes(0);
+      return l10n.nbMinutes(0);
     }
 
     // Add comma and space if all values are nonzero,

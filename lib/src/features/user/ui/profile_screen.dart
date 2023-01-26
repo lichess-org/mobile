@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -189,8 +190,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           Text(context.l10n.lastSeenActive(timeago.format(account.seenAt))),
           const SizedBox(height: 5),
           if (account.playTime != null)
-            Text(context.l10n.tpTimeSpentPlaying(
-                account.playTime!.total.toDaysHoursMinutes(context)))
+            Text(context.l10n.tpTimeSpentPlaying(account.playTime!.total
+                .toDaysHoursMinutes(AppLocalizations.of(context))))
           else
             kEmptyWidget,
         ],
@@ -245,7 +246,7 @@ class PerfCards extends StatelessWidget {
                   : InkSplash.splashFactory,
               customBorder: kPlatformCardBorder,
               onTap: isPerfWithoutStats
-                  ? () {}
+                  ? null
                   : () => pushPlatformRoute(
                       context: context,
                       title: context.l10n
