@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -53,7 +54,7 @@ class AuthRepository {
           await _appAuth.authorizeAndExchangeCode(AuthorizationTokenRequest(
         kLichessClientId,
         redirectUri,
-        allowInsecureConnections: true,
+        allowInsecureConnections: kDebugMode,
         serviceConfiguration: const AuthorizationServiceConfiguration(
             authorizationEndpoint: '$kLichessHost/oauth',
             tokenEndpoint: '$kLichessHost/api/token'),
