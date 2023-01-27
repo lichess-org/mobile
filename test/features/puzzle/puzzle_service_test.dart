@@ -206,7 +206,7 @@ void main() {
                 that: sameHeaders({'Content-type': 'application/json'})),
             body:
                 '{"solutions":[{"id":{"value":"pId3"},"win":true,"rated":true}]}',
-          )).thenThrow(const SocketException('offline'));
+          )).thenAnswer((_) => Future.error(const SocketException('offline')));
 
       const solution =
           PuzzleSolution(id: PuzzleId('pId3'), win: true, rated: true);

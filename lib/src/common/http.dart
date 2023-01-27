@@ -77,8 +77,12 @@ class ApiClient {
       request.headers.addAll(headers);
     }
     return Result.capture(_client.send(request))
+        .mapError((error, stackTrace) {
+          _log.severe('Request error', error, stackTrace);
+          return GenericIOException();
+        })
         .flatMap((r) => _validateResponseStatusResult(url, r))
-        .fold((resp) => resp, (err, _) => throw err);
+        .then((r) => r.getOrThrow());
   }
 
   Result<T> _validateResponseStatusResult<T extends BaseResponse>(
