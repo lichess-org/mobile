@@ -2,8 +2,8 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:logging/logging.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
-import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
@@ -21,27 +21,18 @@ void main() {
   });
 
   group('ApiClient non stream', () {
-    test('success responses are returned as success', () async {
+    test('ValueResult responses are returned as success', () async {
       final apiClient = ApiClient(mockLogger, FakeClient());
 
       for (final method in [apiClient.get, apiClient.post, apiClient.delete]) {
-        expect(
-            await method
-                .call(Uri.parse('http://api.test/will/return/200'))
-                .run(),
-            isA<Right<IOError, http.Response>>());
+        expect(await method.call(Uri.parse('http://api.test/will/return/200')),
+            isA<ValueResult<http.Response>>());
 
-        expect(
-            await method
-                .call(Uri.parse('http://api.test/will/return/301'))
-                .run(),
-            isA<Right<IOError, http.Response>>());
+        expect(await method.call(Uri.parse('http://api.test/will/return/301')),
+            isA<ValueResult<http.Response>>());
 
-        expect(
-            await method
-                .call(Uri.parse('http://api.test/will/return/204'))
-                .run(),
-            isA<Right<IOError, http.Response>>());
+        expect(await method.call(Uri.parse('http://api.test/will/return/204')),
+            isA<ValueResult<http.Response>>());
       }
     });
 
@@ -52,37 +43,32 @@ void main() {
         expect(
             await method
                 .call(Uri.parse('http://api.test/will/return/401'))
-                .run()
-                .then((r) => r.getLeft().toNullable()),
-            isA<UnauthorizedError>());
+                .then((r) => r.asError?.error),
+            isA<UnauthorizedException>());
 
         expect(
             await method
                 .call(Uri.parse('http://api.test/will/return/403'))
-                .run()
-                .then((r) => r.getLeft().toNullable()),
-            isA<ForbiddenError>());
+                .then((r) => r.asError?.error),
+            isA<ForbiddenException>());
 
         expect(
             await method
                 .call(Uri.parse('http://api.test/will/return/404'))
-                .run()
-                .then((r) => r.getLeft().toNullable()),
-            isA<NotFoundError>());
+                .then((r) => r.asError?.error),
+            isA<NotFoundException>());
 
         expect(
             await method
                 .call(Uri.parse('http://api.test/will/return/500'))
-                .run()
-                .then((r) => r.getLeft().toNullable()),
-            isA<ApiRequestError>());
+                .then((r) => r.asError?.error),
+            isA<ApiRequestException>());
 
         expect(
             await method
                 .call(Uri.parse('http://api.test/will/return/503'))
-                .run()
-                .then((r) => r.getLeft().toNullable()),
-            isA<ApiRequestError>());
+                .then((r) => r.asError?.error),
+            isA<ApiRequestException>());
       }
     });
 
@@ -90,9 +76,8 @@ void main() {
       final apiClient = ApiClient(mockLogger, FakeClient());
       for (final method in [apiClient.get, apiClient.post, apiClient.delete]) {
         final resp = await method
-            .call(Uri.parse('http://api.test/will/throw/socket/exception'))
-            .run();
-        expect(resp.getLeft().toNullable(), isA<GenericError>());
+            .call(Uri.parse('http://api.test/will/throw/socket/exception'));
+        expect(resp.asError?.error, isA<GenericIOException>());
       }
     });
 
@@ -109,17 +94,16 @@ void main() {
             : http.StreamedResponse(_streamBody('ok'), 200);
       });
 
-      final resp = await apiClient
-          .get(Uri.parse('http://api.test/retry'), retry: true)
-          .run();
+      final resp =
+          await apiClient.get(Uri.parse('http://api.test/retry'), retry: true);
 
       verify(() => mockClient.send(any())).called(3);
-      expect(resp, isA<Right<IOError, http.Response>>());
+      expect(resp, isA<ValueResult<http.Response>>());
     });
   });
 
   group('ApiClient stream', () {
-    test('response is returned when success', () async {
+    test('response is returned when ValueResult', () async {
       final apiClient = ApiClient(mockLogger, FakeClient());
 
       expect(
@@ -135,42 +119,37 @@ void main() {
           isA<http.StreamedResponse>());
     });
 
-    test('throws on error', () async {
+    test('throws on error', () {
       final apiClient = ApiClient(mockLogger, FakeClient());
 
       expect(
-          () async =>
-              apiClient.stream(Uri.parse('http://api.test/will/return/401')),
-          throwsA(isA<UnauthorizedError>()));
+          () => apiClient.stream(Uri.parse('http://api.test/will/return/401')),
+          throwsA(isA<UnauthorizedException>()));
 
       expect(
-          () async =>
-              apiClient.stream(Uri.parse('http://api.test/will/return/403')),
-          throwsA(isA<ForbiddenError>()));
+          () => apiClient.stream(Uri.parse('http://api.test/will/return/403')),
+          throwsA(isA<ForbiddenException>()));
 
       expect(
-          () async =>
-              apiClient.stream(Uri.parse('http://api.test/will/return/404')),
-          throwsA(isA<NotFoundError>()));
+          () => apiClient.stream(Uri.parse('http://api.test/will/return/404')),
+          throwsA(isA<NotFoundException>()));
 
       expect(
-          () async =>
-              apiClient.stream(Uri.parse('http://api.test/will/return/500')),
-          throwsA(isA<ApiRequestError>()));
+          () => apiClient.stream(Uri.parse('http://api.test/will/return/500')),
+          throwsA(isA<ApiRequestException>()));
 
       expect(
-          () async =>
-              apiClient.stream(Uri.parse('http://api.test/will/return/503')),
-          throwsA(isA<ApiRequestError>()));
+          () => apiClient.stream(Uri.parse('http://api.test/will/return/503')),
+          throwsA(isA<ApiRequestException>()));
     });
 
-    test('socket error is a GenericError', () async {
+    test('socket error is a GenericIOException', () {
       final apiClient = ApiClient(mockLogger, FakeClient());
 
       expect(
-          () async => apiClient
+          () => apiClient
               .stream(Uri.parse('http://api.test/will/throw/socket/exception')),
-          throwsA(isA<GenericError>()));
+          throwsA(isA<GenericIOException>()));
     });
   });
 }

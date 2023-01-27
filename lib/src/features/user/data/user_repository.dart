@@ -1,8 +1,7 @@
 import 'package:logging/logging.dart';
-import 'package:fpdart/fpdart.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
@@ -15,19 +14,16 @@ class UserRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  TaskEither<IOError, User> getUserTask(String username) {
-    return apiClient
-        .get(Uri.parse('$kLichessHost/api/user/$username'))
-        .flatMap((response) {
-      return TaskEither.fromEither(
-          readJsonObject(response.body, mapper: User.fromJson, logger: _log));
-    });
+  FutureResult<User> getUser(String username) {
+    return apiClient.get(Uri.parse('$kLichessHost/api/user/$username')).then(
+        (result) => result.flatMap((response) => readJsonObject(response.body,
+            mapper: User.fromJson, logger: _log)));
   }
 
-  TaskEither<IOError, List<UserStatus>> getUsersStatusTask(List<String> ids) {
+  FutureResult<List<UserStatus>> getUsersStatus(List<String> ids) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'))
-        .flatMap((response) => TaskEither.fromEither(readJsonListOfObjects(
+        .then((result) => result.flatMap((response) => readJsonListOfObjects(
             response.body,
             mapper: UserStatus.fromJson,
             logger: _log)));

@@ -1,68 +1,40 @@
-abstract class IOError {
+abstract class IOException implements Exception {
   String get message;
-  StackTrace get stackTrace;
+
+  @override
+  String toString() => message;
 }
 
-class GenericError implements IOError {
-  @override
-  final StackTrace stackTrace;
-
-  GenericError(this.stackTrace);
-
+class GenericIOException implements IOException {
   @override
   String get message =>
       'The operation could not be completed. Please try again later.';
 }
 
-/// Error when json returned by server is not valid.
-class DataFormatError implements IOError {
-  @override
-  final StackTrace stackTrace;
-
-  DataFormatError(this.stackTrace);
-
+/// Exception when json returned by server is not valid.
+class DataFormatException implements IOException {
   @override
   String get message => 'Could not read data from server.';
 }
 
 /// Generic error for API requests.
-class ApiRequestError implements IOError {
-  @override
-  final StackTrace stackTrace;
-
-  ApiRequestError(this.stackTrace);
-
+class ApiRequestException implements IOException {
   @override
   String get message =>
       'Something went wrong with the request. Please try again later.';
 }
 
-class NotFoundError implements IOError {
-  @override
-  final StackTrace stackTrace;
-
-  NotFoundError(this.stackTrace);
-
+class NotFoundException implements IOException {
   @override
   String get message => 'Requested resource could not be found.';
 }
 
-class UnauthorizedError implements IOError {
-  @override
-  final StackTrace stackTrace;
-
-  UnauthorizedError(this.stackTrace);
-
+class UnauthorizedException implements IOException {
   @override
   String get message => 'You must sign in to access this resource.';
 }
 
-class ForbiddenError implements IOError {
-  @override
-  final StackTrace stackTrace;
-
-  ForbiddenError(this.stackTrace);
-
+class ForbiddenException implements IOException {
   @override
   String get message => 'Requested resource access is forbidden.';
 }

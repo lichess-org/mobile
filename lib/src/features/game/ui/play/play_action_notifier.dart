@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:dartchess/dartchess.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/features/user/model/user.dart';
@@ -19,11 +20,7 @@ class PlayActionNotifier
   }) async {
     final createGameService = ref.read(createGameServiceProvider);
     state = const AsyncLoading();
-    state =
-        (await createGameService.aiGameTask(account, side: side).run()).match(
-      (error) => AsyncValue.error(error.message, error.stackTrace),
-      (game) => AsyncValue.data(game),
-    );
+    state = (await createGameService.aiGame(account, side: side)).asAsyncValue;
   }
 }
 

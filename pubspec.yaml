@@ -54,6 +54,15 @@ dependencies:
       path: modal_bottom_sheet
       ref: e7e630e10b27ccab12da27acada9d47a13d79e9a
   fast_immutable_collections: ^8.1.1
+  dart_result:
+    git:
+      url: https://github.com/veloce/dart_result.git
+      ref: fff48e1d9b7b33a3cff54ef60d9d6ee669224ebf
+  result_extensions:
+    git:
+      url: https://github.com/veloce/result_extensions.git
+      ref: ba696e9aeb7fc85b5b5c1d022799ce933399e66b
+  async: ^2.10.0
 
 dev_dependencies:
   build_runner: ^2.3.2

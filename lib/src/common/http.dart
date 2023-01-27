@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'package:async/async.dart';
 import 'package:logging/logging.dart';
 import 'package:http/http.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:http/retry.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,67 +30,62 @@ class ApiClient {
   final Client _client;
   final RetryClient _retryClient;
 
-  TaskEither<IOError, Response> get(Uri url,
-      {Map<String, String>? headers, bool retry = false}) {
-    return TaskEither<IOError, Response>.tryCatch(
-      () async => (retry ? _retryClient : _client).get(url, headers: headers),
-      (error, trace) {
-        _log.severe('Request error', error, trace);
-        return GenericError(trace);
-      },
-    ).flatMap((resp) => _validateResponseStatus(url, resp));
-  }
+  FutureResult<Response> get(
+    Uri url, {
+    Map<String, String>? headers,
+    bool retry = false,
+  }) =>
+      Result.capture(
+              (retry ? _retryClient : _client).get(url, headers: headers))
+          .mapError((error, stackTrace) {
+        _log.severe('Request error', error, stackTrace);
+        return GenericIOException();
+      }).flatMap((response) => _validateResponseStatusResult(url, response));
 
-  TaskEither<IOError, Response> post(Uri url,
-      {Map<String, String>? headers,
-      Object? body,
-      Encoding? encoding,
-      bool retry = false}) {
-    return TaskEither<IOError, Response>.tryCatch(
-      () async => (retry ? _retryClient : _client)
-          .post(url, headers: headers, body: body, encoding: encoding),
-      (error, trace) {
-        _log.severe('Request error', error, trace);
-        return GenericError(trace);
-      },
-    ).flatMap((resp) => _validateResponseStatus(url, resp));
-  }
+  FutureResult<Response> post(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+    bool retry = false,
+  }) =>
+      Result.capture((retry ? _retryClient : _client)
+              .post(url, headers: headers, body: body, encoding: encoding))
+          .mapError((error, stackTrace) {
+        _log.severe('Request error', error, stackTrace);
+        return GenericIOException();
+      }).flatMap((response) => _validateResponseStatusResult(url, response));
 
-  TaskEither<IOError, Response> delete(Uri url,
-      {Map<String, String>? headers,
-      Object? body,
-      Encoding? encoding,
-      bool retry = false}) {
-    return TaskEither<IOError, Response>.tryCatch(
-      () async => (retry ? _retryClient : _client)
-          .delete(url, headers: headers, body: body, encoding: encoding),
-      (error, trace) {
-        _log.severe('Request error', error, trace);
-        return GenericError(trace);
-      },
-    ).flatMap((resp) => _validateResponseStatus(url, resp));
-  }
+  FutureResult<Response> delete(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+    bool retry = false,
+  }) =>
+      Result.capture((retry ? _retryClient : _client)
+              .delete(url, headers: headers, body: body, encoding: encoding))
+          .mapError((error, stackTrace) {
+        _log.severe('Request error', error, stackTrace);
+        return GenericIOException();
+      }).flatMap((response) => _validateResponseStatusResult(url, response));
 
-  Future<StreamedResponse> stream(Uri url, {Map<String, String>? headers}) {
+  Future<StreamedResponse> stream(Uri url,
+      {Map<String, String>? headers}) async {
     final request = Request('GET', url);
     if (headers != null) {
       request.headers.addAll(headers);
     }
-    return TaskEither<IOError, StreamedResponse>.tryCatch(
-      () async => _client.send(request),
-      (error, trace) {
-        _log.severe('Request error', error, trace);
-        return GenericError(trace);
-      },
-    )
-        .flatMap((resp) => _validateResponseStatus(url, resp))
-        .run()
-        .then((either) {
-      return either.match((err) => throw err, (resp) => resp);
-    });
+    return Result.capture(_client.send(request))
+        .mapError((error, stackTrace) {
+          _log.severe('Request error', error, stackTrace);
+          return GenericIOException();
+        })
+        .flatMap((r) => _validateResponseStatusResult(url, r))
+        .then((r) => r.getOrThrow());
   }
 
-  TaskEither<IOError, T> _validateResponseStatus<T extends BaseResponse>(
+  Result<T> _validateResponseStatusResult<T extends BaseResponse>(
       Uri url, T response) {
     if (response.statusCode >= 500) {
       _log.severe('$url responded with status ${response.statusCode}');
@@ -97,14 +93,14 @@ class ApiClient {
       _log.warning('$url responded with status ${response.statusCode}');
     }
     return response.statusCode < 400
-        ? TaskEither.right(response)
+        ? Result.value(response)
         : response.statusCode == 404
-            ? TaskEither.left(NotFoundError(StackTrace.current))
+            ? Result.error(NotFoundException())
             : response.statusCode == 401
-                ? TaskEither.left(UnauthorizedError(StackTrace.current))
+                ? Result.error(UnauthorizedException())
                 : response.statusCode == 403
-                    ? TaskEither.left(ForbiddenError(StackTrace.current))
-                    : TaskEither.left(ApiRequestError(StackTrace.current));
+                    ? Result.error(ForbiddenException())
+                    : Result.error(ApiRequestException());
   }
 
   void close() {

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:fpdart/fpdart.dart';
+import 'package:async/async.dart';
 import 'package:logging/logging.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dartchess/dartchess.dart';
@@ -264,36 +264,36 @@ extension ModelsPick on Pick {
 
 typedef Mapper<T> = T Function(Map<String, dynamic>);
 
-Either<IOError, T> readJsonObject<T>(String json,
-        {required Mapper<T> mapper, Logger? logger}) =>
-    Either.tryCatch(() {
+Result<T> readJsonObject<T>(
+  String json, {
+  required Mapper<T> mapper,
+  Logger? logger,
+}) =>
+    Result(() {
       final dynamic obj = jsonDecode(json);
       if (obj is! Map<String, dynamic>) {
-        throw const FormatException('Expected an object');
+        logger?.severe('Could not read json object as $T: expected an object.');
+        throw DataFormatException();
       }
       return mapper(obj);
-    }, (error, stackTrace) {
-      logger?.severe('Could not read json object as $T: $error');
-      return DataFormatError(stackTrace);
     });
 
-Either<IOError, List<T>> readJsonListOfObjects<T>(String json,
-        {required Mapper<T> mapper, Logger? logger}) =>
-    Either.tryCatch(() {
+Result<List<T>> readJsonListOfObjects<T>(
+  String json, {
+  required Mapper<T> mapper,
+  Logger? logger,
+}) =>
+    Result(() {
       final dynamic list = jsonDecode(json);
       if (list is! List<dynamic>) {
-        throw const FormatException('Expected a list');
+        logger?.severe('Received json is not a list');
+        throw DataFormatException();
       }
       return list.map((e) {
         if (e is! Map<String, dynamic>) {
-          throw const FormatException('Expected an object');
+          logger?.severe('Could not read json object as $T');
+          throw DataFormatException();
         }
         return mapper(e);
       }).toList();
-    }, (error, stackTrace) {
-      if (error is FormatException) {
-        logger?.severe('Received json is not a list');
-      }
-      logger?.severe('Could not read json object as $T: $error');
-      return DataFormatError(stackTrace);
     });

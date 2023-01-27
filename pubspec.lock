@@ -26,7 +26,7 @@ packages:
     source: hosted
     version: "2.3.2"
   async:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: async
       sha256: bfe67ef28df125b7dddcea62755991f807aa39a2492a23e1550161692950bbe0
@@ -210,6 +210,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  dart_result:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: fff48e1d9b7b33a3cff54ef60d9d6ee669224ebf
+      resolved-ref: fff48e1d9b7b33a3cff54ef60d9d6ee669224ebf
+      url: "https://github.com/veloce/dart_result.git"
+    source: git
+    version: "0.1.0"
   dart_style:
     dependency: transitive
     description:
@@ -704,6 +713,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
+  result_extensions:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: ba696e9aeb7fc85b5b5c1d022799ce933399e66b
+      resolved-ref: ba696e9aeb7fc85b5b5c1d022799ce933399e66b
+      url: "https://github.com/veloce/result_extensions.git"
+    source: git
+    version: "0.1.0"
   riverpod:
     dependency: transitive
     description:
@@ -1086,5 +1104,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.18.2 <4.0.0"
+  dart: ">=2.19.0 <4.0.0"
   flutter: ">=3.3.0"

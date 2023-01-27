@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -25,15 +26,18 @@ final _isBoardTurnedProvider = StateProvider.autoDispose<bool>((ref) => false);
 final archivedGameProvider =
     FutureProvider.autoDispose.family<ArchivedGame, GameId>((ref, id) async {
   final gameRepo = ref.watch(gameRepositoryProvider);
-  final either = await gameRepo.getGameTask(id).run();
-  return either.match((error) {
-    throw error;
-  }, (data) {
-    ref
-        .read(_positionCursorProvider.notifier)
-        .update((_) => data.steps.length - 1);
-    return data;
-  });
+  final result = await gameRepo.getGame(id);
+  return result.fold(
+    (data) {
+      ref
+          .read(_positionCursorProvider.notifier)
+          .update((_) => data.steps.length - 1);
+      return data;
+    },
+    (error, _) {
+      throw error;
+    },
+  );
 });
 
 class ArchivedGameScreen extends ConsumerWidget {

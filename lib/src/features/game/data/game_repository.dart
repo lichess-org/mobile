@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:fpdart/fpdart.dart';
+import 'package:async/async.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
@@ -30,33 +31,34 @@ class GameRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  TaskEither<IOError, ArchivedGame> getGameTask(GameId id) {
+  FutureResult<ArchivedGame> getGame(GameId id) {
     return apiClient.get(
       Uri.parse('$kLichessHost/game/export/$id'),
       headers: {'Accept': 'application/json'},
     ).flatMap((response) {
-      return TaskEither.fromEither(readJsonObject(response.body,
-          mapper: _makeArchivedGameFromJson, logger: _log));
+      return readJsonObject(response.body,
+          mapper: _makeArchivedGameFromJson, logger: _log);
     });
   }
 
   // TODO parameters
-  TaskEither<IOError, List<ArchivedGameData>> getUserGamesTask(
-      String username) {
+  FutureResult<List<ArchivedGameData>> getUserGames(String username) {
     return apiClient.get(
       Uri.parse(
           '$kLichessHost/api/games/user/$username?max=10&moves=false&lastFen=true'),
       headers: {'Accept': 'application/x-ndjson'},
-    ).flatMap((r) => TaskEither.fromEither(Either.tryCatch(() {
-          final lines = r.body.split('\n');
-          return lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
-            final json = jsonDecode(e) as Map<String, dynamic>;
-            return _makeArchivedGameDataFromJson(json);
-          }).toList(growable: false);
-        }, (error, stackTrace) {
-          _log.severe('Could not read json object as ArchivedGame: $error');
-          return DataFormatError(stackTrace);
-        })));
+    ).flatMap(
+      (r) => Result(() {
+        final lines = r.body.split('\n');
+        return lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
+          final json = jsonDecode(e) as Map<String, dynamic>;
+          return _makeArchivedGameDataFromJson(json);
+        }).toList(growable: false);
+      }).mapError((error, _) {
+        _log.severe('Could not read json object as ArchivedGame: $error');
+        return DataFormatException();
+      }),
+    );
   }
 
   /// Stream the events reaching a lichess user in real time as ndjson.
@@ -88,19 +90,19 @@ class GameRepository {
         .handleError((Object error) => _log.warning(error));
   }
 
-  TaskEither<IOError, void> playMoveTask(GameId gameId, Move move) {
+  FutureResult<void> playMove(GameId gameId, Move move) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/move/${move.uci}'),
         retry: true);
   }
 
-  TaskEither<IOError, void> abortTask(GameId gameId) {
+  FutureResult<void> abort(GameId gameId) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/abort'),
         retry: true);
   }
 
-  TaskEither<IOError, void> resignTask(GameId gameId) {
+  FutureResult<void> resign(GameId gameId) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/resign'),
         retry: true);
@@ -117,7 +119,7 @@ ArchivedGame _makeArchivedGameFromJson(Map<String, dynamic> json) =>
     _archivedGameFromPick(pick(json).required());
 
 ArchivedGame _archivedGameFromPick(RequiredPick pick) {
-  final data = _archivedGameDatafromPick(pick);
+  final data = _archivedGameDataFromPick(pick);
   final clocks = pick('clocks').asListOrNull<Duration>(
       (p0) => Duration(milliseconds: p0.asIntOrThrow() * 10));
   return ArchivedGame(
@@ -150,9 +152,9 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
 }
 
 ArchivedGameData _makeArchivedGameDataFromJson(Map<String, dynamic> json) =>
-    _archivedGameDatafromPick(pick(json).required());
+    _archivedGameDataFromPick(pick(json).required());
 
-ArchivedGameData _archivedGameDatafromPick(RequiredPick pick) {
+ArchivedGameData _archivedGameDataFromPick(RequiredPick pick) {
   return ArchivedGameData(
     id: pick('id').asGameIdOrThrow(),
     rated: pick('rated').asBoolOrThrow(),
