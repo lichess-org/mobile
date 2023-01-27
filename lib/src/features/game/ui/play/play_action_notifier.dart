@@ -20,10 +20,7 @@ class PlayActionNotifier
   }) async {
     final createGameService = ref.read(createGameServiceProvider);
     state = const AsyncLoading();
-    state = (await createGameService.aiGame(account, side: side)).fold(
-      AsyncValue.data,
-      (error, trace) => AsyncValue.error(error, trace ?? StackTrace.current),
-    );
+    state = (await createGameService.aiGame(account, side: side)).asAsyncValue;
   }
 }
 

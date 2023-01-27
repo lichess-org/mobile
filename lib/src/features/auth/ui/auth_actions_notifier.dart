@@ -11,18 +11,12 @@ class AuthActionsNotifier extends StateNotifier<AsyncValue<void>> {
 
   Future<void> signIn() async {
     state = const AsyncLoading();
-    state = (await authRepository.signIn()).fold(
-      AsyncValue.data,
-      (error, trace) => AsyncValue.error(error, trace ?? StackTrace.current),
-    );
+    state = (await authRepository.signIn()).asAsyncValue;
   }
 
   Future<void> signOut() async {
     state = const AsyncLoading();
-    state = (await authRepository.signOut()).fold(
-      AsyncValue.data,
-      (error, trace) => AsyncValue.error(error, trace ?? StackTrace.current),
-    );
+    state = (await authRepository.signOut()).asAsyncValue;
   }
 }
 
