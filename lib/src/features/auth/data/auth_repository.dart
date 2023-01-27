@@ -53,6 +53,7 @@ class AuthRepository {
           await _appAuth.authorizeAndExchangeCode(AuthorizationTokenRequest(
         kLichessClientId,
         redirectUri,
+        allowInsecureConnections: true,
         serviceConfiguration: const AuthorizationServiceConfiguration(
             authorizationEndpoint: '$kLichessHost/oauth',
             tokenEndpoint: '$kLichessHost/api/token'),
