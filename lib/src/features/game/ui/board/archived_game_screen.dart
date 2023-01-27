@@ -26,7 +26,7 @@ final _isBoardTurnedProvider = StateProvider.autoDispose<bool>((ref) => false);
 final archivedGameProvider =
     FutureProvider.autoDispose.family<ArchivedGame, GameId>((ref, id) async {
   final gameRepo = ref.watch(gameRepositoryProvider);
-  final result = await gameRepo.getGameTask(id);
+  final result = await gameRepo.getGame(id);
   return result.fold(
     (data) {
       ref

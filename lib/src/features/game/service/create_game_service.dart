@@ -33,9 +33,9 @@ class CreateGameService {
       increment: Duration(seconds: timeControl.increment),
     );
     final createChallengeTask = opponent == ComputerOpponent.stockfish
-        ? challengeRepo.challengeAITask(
+        ? challengeRepo.challengeAI(
             AiChallengeRequest(level: level, challenge: challengeRequest))
-        : challengeRepo.challengeTask(maiaStrength.name, challengeRequest);
+        : challengeRepo.challenge(maiaStrength.name, challengeRequest);
 
     return createChallengeTask.flatMap((_) => _waitForGameStart(account));
   }

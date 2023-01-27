@@ -44,7 +44,7 @@ class FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  AsyncResult<User> getAccountTask() async {
+  AsyncResult<User> getAccount() async {
     await Future<void>.delayed(const Duration(milliseconds: 5));
     return Result.value(fakeUser);
   }

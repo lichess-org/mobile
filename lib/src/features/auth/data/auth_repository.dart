@@ -42,7 +42,7 @@ class AuthRepository {
   bool get isAuthenticated => _authState.value != null;
 
   Future<void> init() {
-    return getAccountTask().forEach((account) {
+    return getAccount().forEach((account) {
       _authState.value = account;
     });
   }
@@ -72,7 +72,7 @@ class AuthRepository {
           _log.severe('signIn error', error, trace);
           return GenericIOException();
         })
-        .flatMap((_) => getAccountTask())
+        .flatMap((_) => getAccount())
         .map((account) {
           _authState.value = account;
         });
@@ -87,7 +87,7 @@ class AuthRepository {
             }));
   }
 
-  AsyncResult<User> getAccountTask() {
+  AsyncResult<User> getAccount() {
     return _apiClient.get(Uri.parse('$kLichessHost/api/account')).then(
         (result) => result.flatMap((response) => readJsonObject(response.body,
             mapper: User.fromJson, logger: _log)));

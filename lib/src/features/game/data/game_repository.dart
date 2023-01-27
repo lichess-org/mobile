@@ -31,7 +31,7 @@ class GameRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  AsyncResult<ArchivedGame> getGameTask(GameId id) {
+  AsyncResult<ArchivedGame> getGame(GameId id) {
     return apiClient.get(
       Uri.parse('$kLichessHost/game/export/$id'),
       headers: {'Accept': 'application/json'},
@@ -90,19 +90,19 @@ class GameRepository {
         .handleError((Object error) => _log.warning(error));
   }
 
-  AsyncResult<void> playMoveTask(GameId gameId, Move move) {
+  AsyncResult<void> playMove(GameId gameId, Move move) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/move/${move.uci}'),
         retry: true);
   }
 
-  AsyncResult<void> abortTask(GameId gameId) {
+  AsyncResult<void> abort(GameId gameId) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/abort'),
         retry: true);
   }
 
-  AsyncResult<void> resignTask(GameId gameId) {
+  AsyncResult<void> resign(GameId gameId) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/resign'),
         retry: true);

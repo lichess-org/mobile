@@ -155,7 +155,7 @@ void main() {
           .thenAnswer(
               (_) async => Result.value(http.Response(testResponse, 200)));
 
-      final result = await repo.getGameTask(const GameId('qVChCOTc'));
+      final result = await repo.getGame(const GameId('qVChCOTc'));
 
       expect(result.isValue, true);
     });
@@ -172,7 +172,7 @@ void main() {
           .thenAnswer(
               (_) async => Result.value(http.Response(testResponse, 200)));
 
-      final result = await repo.getGameTask(const GameId('3zfAoBZs'));
+      final result = await repo.getGame(const GameId('3zfAoBZs'));
 
       expect(result.isValue, true);
     });
@@ -189,7 +189,7 @@ void main() {
           .thenAnswer(
               (_) async => Result.value(http.Response(testResponse, 200)));
 
-      final result = await repo.getGameTask(const GameId('1vdsvmxp'));
+      final result = await repo.getGame(const GameId('1vdsvmxp'));
 
       expect(result.isValue, true);
 

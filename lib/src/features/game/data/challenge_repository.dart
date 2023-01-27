@@ -13,12 +13,12 @@ class ChallengeRepository {
 
   final ApiClient apiClient;
 
-  AsyncResult<void> challengeTask(String username, ChallengeRequest req) {
+  AsyncResult<void> challenge(String username, ChallengeRequest req) {
     return apiClient.post(Uri.parse('$kLichessHost/api/challenge/$username'),
         body: req.toRequestBody);
   }
 
-  AsyncResult<void> challengeAITask(AiChallengeRequest req) {
+  AsyncResult<void> challengeAI(AiChallengeRequest req) {
     return apiClient.post(Uri.parse('$kLichessHost/api/challenge/ai'),
         body: req.toRequestBody);
   }
