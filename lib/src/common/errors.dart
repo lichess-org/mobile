@@ -5,7 +5,7 @@ abstract class IOException implements Exception {
   String toString() => message;
 }
 
-class GenericException implements IOException {
+class GenericIOException implements IOException {
   @override
   String get message =>
       'The operation could not be completed. Please try again later.';

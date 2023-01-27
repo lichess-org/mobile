@@ -39,7 +39,7 @@ class ApiClient {
               (retry ? _retryClient : _client).get(url, headers: headers))
           .mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
-        return GenericException();
+        return GenericIOException();
       }).flatMap((response) => _validateResponseStatusResult(url, response));
 
   AsyncResult<Response> post(
@@ -53,7 +53,7 @@ class ApiClient {
               .post(url, headers: headers, body: body, encoding: encoding))
           .mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
-        return GenericException();
+        return GenericIOException();
       }).flatMap((response) => _validateResponseStatusResult(url, response));
 
   AsyncResult<Response> delete(
@@ -67,7 +67,7 @@ class ApiClient {
               .delete(url, headers: headers, body: body, encoding: encoding))
           .mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
-        return GenericException();
+        return GenericIOException();
       }).flatMap((response) => _validateResponseStatusResult(url, response));
 
   Future<StreamedResponse> stream(Uri url,

@@ -77,7 +77,7 @@ void main() {
       for (final method in [apiClient.get, apiClient.post, apiClient.delete]) {
         final resp = await method
             .call(Uri.parse('http://api.test/will/throw/socket/exception'));
-        expect(resp.asError, isA<GenericException>());
+        expect(resp.asError, isA<GenericIOException>());
       }
     });
 
@@ -148,13 +148,13 @@ void main() {
           throwsA(isA<ApiRequestException>()));
     });
 
-    test('socket error is a GenericException', () async {
+    test('socket error is a GenericIOException', () async {
       final apiClient = ApiClient(mockLogger, FakeClient());
 
       expect(
           () async => apiClient
               .stream(Uri.parse('http://api.test/will/throw/socket/exception')),
-          throwsA(isA<GenericException>()));
+          throwsA(isA<GenericIOException>()));
     });
   });
 }

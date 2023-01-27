@@ -76,7 +76,7 @@ class CreateGameService {
         .mapError(
       (error, trace) {
         _log.severe('Request error', error, trace);
-        return GenericException();
+        return GenericIOException();
       },
     );
   }

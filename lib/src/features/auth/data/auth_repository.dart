@@ -70,7 +70,7 @@ class AuthRepository {
     return Result.capture(future)
         .mapError((error, trace) {
           _log.severe('signIn error', error, trace);
-          return GenericException();
+          return GenericIOException();
         })
         .flatMap((_) => getAccountTask())
         .map((account) {
