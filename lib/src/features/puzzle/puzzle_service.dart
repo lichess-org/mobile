@@ -71,7 +71,7 @@ class PuzzleService {
   ///
   /// This method should never fail, as if the network is down it will fallback
   /// to the local database.
-  AsyncResult<PuzzleLocalData?> _syncAndLoadData(
+  FutureResult<PuzzleLocalData?> _syncAndLoadData(
       String? userId, PuzzleTheme angle) {
     final data = db.fetch(userId: userId, angle: angle);
 

@@ -36,14 +36,14 @@ class PuzzleRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  AsyncResult<List<Puzzle>> selectBatch(
+  FutureResult<List<Puzzle>> selectBatch(
       {PuzzleTheme angle = PuzzleTheme.mix, int nb = kPuzzleLocalQueueLength}) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb'))
         .flatMap(_decodeJson);
   }
 
-  AsyncResult<List<Puzzle>> solveBatch({
+  FutureResult<List<Puzzle>> solveBatch({
     required int nb,
     required IList<PuzzleSolution> solved,
     PuzzleTheme angle = PuzzleTheme.mix,

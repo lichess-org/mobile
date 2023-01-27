@@ -31,7 +31,7 @@ class GameRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  AsyncResult<ArchivedGame> getGame(GameId id) {
+  FutureResult<ArchivedGame> getGame(GameId id) {
     return apiClient.get(
       Uri.parse('$kLichessHost/game/export/$id'),
       headers: {'Accept': 'application/json'},
@@ -42,7 +42,7 @@ class GameRepository {
   }
 
   // TODO parameters
-  AsyncResult<List<ArchivedGameData>> getUserGames(String username) {
+  FutureResult<List<ArchivedGameData>> getUserGames(String username) {
     return apiClient.get(
       Uri.parse(
           '$kLichessHost/api/games/user/$username?max=10&moves=false&lastFen=true'),
@@ -90,19 +90,19 @@ class GameRepository {
         .handleError((Object error) => _log.warning(error));
   }
 
-  AsyncResult<void> playMove(GameId gameId, Move move) {
+  FutureResult<void> playMove(GameId gameId, Move move) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/move/${move.uci}'),
         retry: true);
   }
 
-  AsyncResult<void> abort(GameId gameId) {
+  FutureResult<void> abort(GameId gameId) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/abort'),
         retry: true);
   }
 
-  AsyncResult<void> resign(GameId gameId) {
+  FutureResult<void> resign(GameId gameId) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/resign'),
         retry: true);

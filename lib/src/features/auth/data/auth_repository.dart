@@ -47,7 +47,7 @@ class AuthRepository {
     });
   }
 
-  AsyncResult<void> signIn() {
+  FutureResult<void> signIn() {
     final future = (() async {
       final result =
           await _appAuth.authorizeAndExchangeCode(AuthorizationTokenRequest(
@@ -78,7 +78,7 @@ class AuthRepository {
         });
   }
 
-  AsyncResult<void> signOut() {
+  FutureResult<void> signOut() {
     return _apiClient
         .delete(Uri.parse('$kLichessHost/api/token'))
         .then((result) => result.map((_) async {
@@ -87,7 +87,7 @@ class AuthRepository {
             }));
   }
 
-  AsyncResult<User> getAccount() {
+  FutureResult<User> getAccount() {
     return _apiClient.get(Uri.parse('$kLichessHost/api/account')).then(
         (result) => result.flatMap((response) => readJsonObject(response.body,
             mapper: User.fromJson, logger: _log)));

@@ -30,7 +30,7 @@ class ApiClient {
   final Client _client;
   final RetryClient _retryClient;
 
-  AsyncResult<Response> get(
+  FutureResult<Response> get(
     Uri url, {
     Map<String, String>? headers,
     bool retry = false,
@@ -42,7 +42,7 @@ class ApiClient {
         return GenericIOException();
       }).flatMap((response) => _validateResponseStatusResult(url, response));
 
-  AsyncResult<Response> post(
+  FutureResult<Response> post(
     Uri url, {
     Map<String, String>? headers,
     Object? body,
@@ -56,7 +56,7 @@ class ApiClient {
         return GenericIOException();
       }).flatMap((response) => _validateResponseStatusResult(url, response));
 
-  AsyncResult<Response> delete(
+  FutureResult<Response> delete(
     Uri url, {
     Map<String, String>? headers,
     Object? body,

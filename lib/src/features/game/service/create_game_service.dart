@@ -20,7 +20,7 @@ class CreateGameService {
   final Ref ref;
   final Logger _log;
 
-  AsyncResult<PlayableGame> aiGame(User account, {Side? side}) {
+  FutureResult<PlayableGame> aiGame(User account, {Side? side}) {
     final challengeRepo = ref.read(challengeRepositoryProvider);
     final opponent = ref.read(computerOpponentPrefProvider);
     final maiaStrength = ref.read(maiaStrengthProvider);
@@ -40,7 +40,7 @@ class CreateGameService {
     return createChallengeTask.flatMap((_) => _waitForGameStart(account));
   }
 
-  AsyncResult<PlayableGame> _waitForGameStart(User account) {
+  FutureResult<PlayableGame> _waitForGameStart(User account) {
     return Result.capture((() async {
       final gameRepo = ref.read(gameRepositoryProvider);
       final stream = gameRepo.events().timeout(const Duration(seconds: 15),

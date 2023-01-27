@@ -28,7 +28,7 @@ import './play_action_notifier.dart';
 final maiaBotsProvider =
     FutureProvider.autoDispose<List<Tuple2<User, UserStatus>>>((ref) async {
   final userRepo = ref.watch(userRepositoryProvider);
-  final AsyncResult<List<User>> maiaBots = Future.wait([
+  final FutureResult<List<User>> maiaBots = Future.wait([
     userRepo.getUser('maia1'),
     userRepo.getUser('maia5'),
     userRepo.getUser('maia9'),
