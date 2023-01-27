@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -33,7 +34,7 @@ final archivedGameProvider =
           .update((_) => data.steps.length - 1);
       return data;
     },
-    (error) {
+    (error, _) {
       throw error;
     },
   );

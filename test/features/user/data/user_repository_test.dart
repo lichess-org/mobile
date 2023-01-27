@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
-import 'package:dart_result/dart_result.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:logging/logging.dart';
 
@@ -35,14 +35,14 @@ void main() {
   }
 }
 ''';
-      when(() =>
-          mockApiClient
-              .get(Uri.parse('$kLichessHost/api/user/$testUserId'))).thenAnswer(
-          (_) async => Success(http.Response(testUserResponseMinimal, 200)));
+      when(() => mockApiClient
+              .get(Uri.parse('$kLichessHost/api/user/$testUserId')))
+          .thenAnswer((_) async =>
+              Result.value(http.Response(testUserResponseMinimal, 200)));
 
       final result = await repo.getUser(testUserId);
 
-      expect(result.isSuccess, true);
+      expect(result.isValue, true);
     });
 
     test('json read, full example', () async {
@@ -88,11 +88,11 @@ void main() {
       when(() => mockApiClient
               .get(Uri.parse('$kLichessHost/api/user/$testUserId')))
           .thenAnswer(
-              (_) async => Success(http.Response(testUserResponse, 200)));
+              (_) async => Result.value(http.Response(testUserResponse, 200)));
 
       final result = await repo.getUser(testUserId);
 
-      expect(result.isSuccess, true);
+      expect(result.isValue, true);
     });
   });
 
@@ -101,11 +101,11 @@ void main() {
       final ids = ['maia1', 'maia5', 'maia9'];
       when(() => mockApiClient.get(
               Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}')))
-          .thenAnswer((_) async => Success(http.Response('[]', 200)));
+          .thenAnswer((_) async => Result.value(http.Response('[]', 200)));
 
       final result = await repo.getUsersStatus(ids);
 
-      expect(result.isSuccess, true);
+      expect(result.isValue, true);
     });
 
     test('json read, full example', () async {
@@ -132,11 +132,11 @@ void main() {
       final ids = ['maia1', 'maia5', 'maia9'];
       when(() => mockApiClient.get(
               Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}')))
-          .thenAnswer((_) async => Success(http.Response(response, 200)));
+          .thenAnswer((_) async => Result.value(http.Response(response, 200)));
 
       final result = await repo.getUsersStatus(['maia1', 'maia5', 'maia9']);
 
-      expect(result.isSuccess, true);
+      expect(result.isValue, true);
     });
   });
 }

@@ -1,7 +1,6 @@
-import 'package:dart_result/dart_result.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
@@ -14,13 +13,12 @@ class ChallengeRepository {
 
   final ApiClient apiClient;
 
-  AsyncResult<void, IOError> challengeTask(
-      String username, ChallengeRequest req) {
+  AsyncResult<void> challengeTask(String username, ChallengeRequest req) {
     return apiClient.post(Uri.parse('$kLichessHost/api/challenge/$username'),
         body: req.toRequestBody);
   }
 
-  AsyncResult<void, IOError> challengeAITask(AiChallengeRequest req) {
+  AsyncResult<void> challengeAITask(AiChallengeRequest req) {
     return apiClient.post(Uri.parse('$kLichessHost/api/challenge/ai'),
         body: req.toRequestBody);
   }

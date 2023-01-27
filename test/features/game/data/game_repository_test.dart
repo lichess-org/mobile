@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:dart_result/dart_result.dart';
+import 'package:async/async.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:logging/logging.dart';
@@ -37,14 +38,15 @@ void main() {
 ''';
 
       when(() => mockApiClient.get(
-            Uri.parse(
-                '$kLichessHost/api/games/user/testUser?max=10&moves=false&lastFen=true'),
-            headers: {'Accept': 'application/x-ndjson'},
-          )).thenAnswer((_) async => Success(http.Response(response, 200)));
+                Uri.parse(
+                    '$kLichessHost/api/games/user/testUser?max=10&moves=false&lastFen=true'),
+                headers: {'Accept': 'application/x-ndjson'},
+              ))
+          .thenAnswer((_) async => Result.value(http.Response(response, 200)));
 
-      final result = await repo.getUserGamesTask('testUser');
+      final result = await repo.getUserGames('testUser');
 
-      expect(result.isSuccess, true);
+      expect(result.isValue, true);
     });
   });
 
@@ -151,11 +153,11 @@ void main() {
                 headers: {'Accept': 'application/json'},
               ))
           .thenAnswer(
-              (_) async => Result.success(http.Response(testResponse, 200)));
+              (_) async => Result.value(http.Response(testResponse, 200)));
 
       final result = await repo.getGameTask(const GameId('qVChCOTc'));
 
-      expect(result.isSuccess, true);
+      expect(result.isValue, true);
     });
 
     test('game with analysis', () async {
@@ -168,11 +170,11 @@ void main() {
                 headers: {'Accept': 'application/json'},
               ))
           .thenAnswer(
-              (_) async => Result.success(http.Response(testResponse, 200)));
+              (_) async => Result.value(http.Response(testResponse, 200)));
 
       final result = await repo.getGameTask(const GameId('3zfAoBZs'));
 
-      expect(result.isSuccess, true);
+      expect(result.isValue, true);
     });
 
     test('threeCheck game', () async {
@@ -185,11 +187,11 @@ void main() {
                 headers: {'Accept': 'application/json'},
               ))
           .thenAnswer(
-              (_) async => Result.success(http.Response(testResponse, 200)));
+              (_) async => Result.value(http.Response(testResponse, 200)));
 
       final result = await repo.getGameTask(const GameId('1vdsvmxp'));
 
-      expect(result.isSuccess, true);
+      expect(result.isValue, true);
 
       result.forEach((game) {
         expect(game.steps[0].position is ThreeCheck, true);

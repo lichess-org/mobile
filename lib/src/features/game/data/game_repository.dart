@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:dart_result/dart_result.dart';
+import 'package:async/async.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
@@ -30,7 +31,7 @@ class GameRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  AsyncResult<ArchivedGame, IOError> getGameTask(GameId id) {
+  AsyncResult<ArchivedGame> getGameTask(GameId id) {
     return apiClient.get(
       Uri.parse('$kLichessHost/game/export/$id'),
       headers: {'Accept': 'application/json'},
@@ -41,24 +42,23 @@ class GameRepository {
   }
 
   // TODO parameters
-  AsyncResult<List<ArchivedGameData>, IOError> getUserGamesTask(
-      String username) {
+  AsyncResult<List<ArchivedGameData>> getUserGames(String username) {
     return apiClient.get(
       Uri.parse(
           '$kLichessHost/api/games/user/$username?max=10&moves=false&lastFen=true'),
       headers: {'Accept': 'application/x-ndjson'},
-    ).flatMap((r) {
-      try {
+    ).flatMap(
+      (r) => Result(() {
         final lines = r.body.split('\n');
-        return Success(lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
+        return lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
           final json = jsonDecode(e) as Map<String, dynamic>;
           return _makeArchivedGameDataFromJson(json);
-        }).toList(growable: false));
-      } catch (error, stackTrace) {
+        }).toList(growable: false);
+      }).mapError((error, _) {
         _log.severe('Could not read json object as ArchivedGame: $error');
-        return Failure(DataFormatError(stackTrace));
-      }
-    });
+        return DataFormatException();
+      }),
+    );
   }
 
   /// Stream the events reaching a lichess user in real time as ndjson.
@@ -90,19 +90,19 @@ class GameRepository {
         .handleError((Object error) => _log.warning(error));
   }
 
-  AsyncResult<void, IOError> playMoveTask(GameId gameId, Move move) {
+  AsyncResult<void> playMoveTask(GameId gameId, Move move) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/move/${move.uci}'),
         retry: true);
   }
 
-  AsyncResult<void, IOError> abortTask(GameId gameId) {
+  AsyncResult<void> abortTask(GameId gameId) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/abort'),
         retry: true);
   }
 
-  AsyncResult<void, IOError> resignTask(GameId gameId) {
+  AsyncResult<void> resignTask(GameId gameId) {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/resign'),
         retry: true);

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:logging/logging.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:dart_result/dart_result.dart';
+import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 
@@ -21,18 +21,18 @@ void main() {
   });
 
   group('ApiClient non stream', () {
-    test('success responses are returned as success', () async {
+    test('ValueResult responses are returned as success', () async {
       final apiClient = ApiClient(mockLogger, FakeClient());
 
       for (final method in [apiClient.get, apiClient.post, apiClient.delete]) {
         expect(await method.call(Uri.parse('http://api.test/will/return/200')),
-            isA<Success<http.Response, IOError>>());
+            isA<ValueResult<http.Response>>());
 
         expect(await method.call(Uri.parse('http://api.test/will/return/301')),
-            isA<Success<http.Response, IOError>>());
+            isA<ValueResult<http.Response>>());
 
         expect(await method.call(Uri.parse('http://api.test/will/return/204')),
-            isA<Success<http.Response, IOError>>());
+            isA<ValueResult<http.Response>>());
       }
     });
 
@@ -43,32 +43,32 @@ void main() {
         expect(
             await method
                 .call(Uri.parse('http://api.test/will/return/401'))
-                .then((r) => r.failure),
-            isA<UnauthorizedError>());
+                .then((r) => r.asError),
+            isA<UnauthorizedException>());
 
         expect(
             await method
                 .call(Uri.parse('http://api.test/will/return/403'))
-                .then((r) => r.failure),
-            isA<ForbiddenError>());
+                .then((r) => r.asError),
+            isA<ForbiddenException>());
 
         expect(
             await method
                 .call(Uri.parse('http://api.test/will/return/404'))
-                .then((r) => r.failure),
-            isA<NotFoundError>());
+                .then((r) => r.asError),
+            isA<NotFoundException>());
 
         expect(
             await method
                 .call(Uri.parse('http://api.test/will/return/500'))
-                .then((r) => r.failure),
-            isA<ApiRequestError>());
+                .then((r) => r.asError),
+            isA<ApiRequestException>());
 
         expect(
             await method
                 .call(Uri.parse('http://api.test/will/return/503'))
-                .then((r) => r.failure),
-            isA<ApiRequestError>());
+                .then((r) => r.asError),
+            isA<ApiRequestException>());
       }
     });
 
@@ -77,7 +77,7 @@ void main() {
       for (final method in [apiClient.get, apiClient.post, apiClient.delete]) {
         final resp = await method
             .call(Uri.parse('http://api.test/will/throw/socket/exception'));
-        expect(resp.failure, isA<GenericError>());
+        expect(resp.asError, isA<GenericException>());
       }
     });
 
@@ -98,12 +98,12 @@ void main() {
           await apiClient.get(Uri.parse('http://api.test/retry'), retry: true);
 
       verify(() => mockClient.send(any())).called(3);
-      expect(resp, isA<Success<http.Response, IOError>>());
+      expect(resp, isA<ValueResult<http.Response>>());
     });
   });
 
   group('ApiClient stream', () {
-    test('response is returned when success', () async {
+    test('response is returned when ValueResult', () async {
       final apiClient = ApiClient(mockLogger, FakeClient());
 
       expect(
@@ -125,36 +125,36 @@ void main() {
       expect(
           () async =>
               apiClient.stream(Uri.parse('http://api.test/will/return/401')),
-          throwsA(isA<UnauthorizedError>()));
+          throwsA(isA<UnauthorizedException>()));
 
       expect(
           () async =>
               apiClient.stream(Uri.parse('http://api.test/will/return/403')),
-          throwsA(isA<ForbiddenError>()));
+          throwsA(isA<ForbiddenException>()));
 
       expect(
           () async =>
               apiClient.stream(Uri.parse('http://api.test/will/return/404')),
-          throwsA(isA<NotFoundError>()));
+          throwsA(isA<NotFoundException>()));
 
       expect(
           () async =>
               apiClient.stream(Uri.parse('http://api.test/will/return/500')),
-          throwsA(isA<ApiRequestError>()));
+          throwsA(isA<ApiRequestException>()));
 
       expect(
           () async =>
               apiClient.stream(Uri.parse('http://api.test/will/return/503')),
-          throwsA(isA<ApiRequestError>()));
+          throwsA(isA<ApiRequestException>()));
     });
 
-    test('socket error is a GenericError', () async {
+    test('socket error is a GenericException', () async {
       final apiClient = ApiClient(mockLogger, FakeClient());
 
       expect(
           () async => apiClient
               .stream(Uri.parse('http://api.test/will/throw/socket/exception')),
-          throwsA(isA<GenericError>()));
+          throwsA(isA<GenericException>()));
     });
   });
 }

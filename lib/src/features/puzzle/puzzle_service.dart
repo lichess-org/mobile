@@ -1,5 +1,6 @@
 import 'dart:math' show max;
 import 'package:logging/logging.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
@@ -77,7 +78,7 @@ class PuzzleService {
           ? repository.solveBatch(nb: deficit, solved: solved, angle: angle)
           : repository.selectBatch(nb: deficit, angle: angle));
 
-      if (result.isFailure) {
+      if (result.isError) {
         return data;
       } else {
         final list = result.getOrThrow();

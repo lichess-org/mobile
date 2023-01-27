@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,13 +26,9 @@ import 'package:lichess_mobile/src/features/auth/ui/auth_actions_notifier.dart';
 import '../../auth/data/auth_repository.dart';
 
 final recentGamesProvider = FutureProvider.autoDispose
-    .family<List<ArchivedGameData>, String>((ref, userName) async {
+    .family<List<ArchivedGameData>, String>((ref, userName) {
   final repo = ref.watch(gameRepositoryProvider);
-  final result = await repo.getUserGamesTask(userName);
-  return result.fold(
-    (value) => value,
-    (error) => throw error,
-  );
+  return Result.release(repo.getUserGames(userName));
 });
 
 class ProfileScreen extends ConsumerStatefulWidget {

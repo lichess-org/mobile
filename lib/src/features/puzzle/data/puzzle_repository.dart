@@ -1,6 +1,7 @@
 import 'dart:convert';
+import 'package:async/async.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dart_result/dart_result.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
@@ -10,7 +11,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/common/model/player.dart';
 import 'package:lichess_mobile/src/features/game/model/time_control.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import '../model/puzzle.dart';
@@ -36,14 +36,14 @@ class PuzzleRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  Future<Result<List<Puzzle>, IOError>> selectBatch(
+  AsyncResult<List<Puzzle>> selectBatch(
       {PuzzleTheme angle = PuzzleTheme.mix, int nb = kPuzzleLocalQueueLength}) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb'))
-        .then((result) => result.flatMap(_decodeJson));
+        .flatMap(_decodeJson);
   }
 
-  Future<Result<List<Puzzle>, IOError>> solveBatch({
+  AsyncResult<List<Puzzle>> solveBatch({
     required int nb,
     required IList<PuzzleSolution> solved,
     PuzzleTheme angle = PuzzleTheme.mix,
@@ -56,10 +56,10 @@ class PuzzleRepository {
             'solutions': solved.map((e) => e.toJson()).toList(),
           }),
         )
-        .then((result) => result.flatMap(_decodeJson));
+        .flatMap(_decodeJson);
   }
 
-  Result<List<Puzzle>, IOError> _decodeJson(http.Response response) {
+  Result<List<Puzzle>> _decodeJson(http.Response response) {
     return readJsonObject(response.body, mapper: (Map<String, dynamic> json) {
       final puzzles = json['puzzles'];
       if (puzzles is! List<dynamic>) {

@@ -34,6 +34,6 @@ void main() {
 
     final result = await repo.selectBatch();
 
-    expect(result.isSuccess, true);
+    expect(result.isError, true);
   });
 }

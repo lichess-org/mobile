@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:result_extensions/result_extensions.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/sound.dart';
@@ -48,22 +49,20 @@ class GameActionNotifier extends AutoDisposeNotifier<AsyncValue<void>> {
 
   Future<void> abort(GameId id) async {
     state = const AsyncLoading();
-    state =
-        await ref.read(gameRepositoryProvider).abortTask(id).then((r) => r.fold(
-              AsyncValue.data,
-              (error) => AsyncValue.error(error.message, error.stackTrace),
-            ));
+    state = await ref.read(gameRepositoryProvider).abortTask(id).fold(
+          AsyncValue.data,
+          (error, trace) =>
+              AsyncValue.error(error, trace ?? StackTrace.current),
+        );
   }
 
   Future<void> resign(GameId id) async {
     state = const AsyncLoading();
-    state = await ref
-        .read(gameRepositoryProvider)
-        .resignTask(id)
-        .then((r) => r.fold(
-              AsyncValue.data,
-              (error) => AsyncValue.error(error.message, error.stackTrace),
-            ));
+    state = await ref.read(gameRepositoryProvider).resignTask(id).fold(
+          AsyncValue.data,
+          (error, trace) =>
+              AsyncValue.error(error, trace ?? StackTrace.current),
+        );
   }
 }
 
@@ -120,7 +119,7 @@ class GameStateNotifier extends AutoDisposeNotifier<GameState?> {
 
       // TODO show error
       final resp = await gameRepository.playMoveTask(gameId, move);
-      if (resp.isFailure) {
+      if (resp.isError) {
         state = savedState;
       }
     }

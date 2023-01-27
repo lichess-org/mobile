@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:dart_result/dart_result.dart';
+import 'package:async/async.dart';
 import 'package:logging/logging.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dartchess/dartchess.dart';
@@ -264,44 +264,36 @@ extension ModelsPick on Pick {
 
 typedef Mapper<T> = T Function(Map<String, dynamic>);
 
-Result<T, IOError> readJsonObject<T>(
+Result<T> readJsonObject<T>(
   String json, {
   required Mapper<T> mapper,
   Logger? logger,
-}) {
-  try {
-    final dynamic obj = jsonDecode(json);
-    if (obj is! Map<String, dynamic>) {
-      throw const FormatException('Expected an object');
-    }
-    return Success(mapper(obj));
-  } catch (error, trace) {
-    logger?.severe('Could not read json object as $T: $error');
-    return Failure(DataFormatError(trace));
-  }
-}
-
-Result<List<T>, IOError> readJsonListOfObjects<T>(
-  String json, {
-  required Mapper<T> mapper,
-  Logger? logger,
-}) {
-  try {
-    final dynamic list = jsonDecode(json);
-    if (list is! List<dynamic>) {
-      throw const FormatException('Expected a list');
-    }
-    return Success(list.map((e) {
-      if (e is! Map<String, dynamic>) {
-        throw const FormatException('Expected an object');
+}) =>
+    Result(() {
+      final dynamic obj = jsonDecode(json);
+      if (obj is! Map<String, dynamic>) {
+        logger?.severe('Could not read json object as $T: expected an object.');
+        throw DataFormatException();
       }
-      return mapper(e);
-    }).toList());
-  } catch (error, stackTrace) {
-    if (error is FormatException) {
-      logger?.severe('Received json is not a list');
-    }
-    logger?.severe('Could not read json object as $T: $error');
-    return Failure(DataFormatError(stackTrace));
-  }
-}
+      return mapper(obj);
+    });
+
+Result<List<T>> readJsonListOfObjects<T>(
+  String json, {
+  required Mapper<T> mapper,
+  Logger? logger,
+}) =>
+    Result(() {
+      final dynamic list = jsonDecode(json);
+      if (list is! List<dynamic>) {
+        logger?.severe('Received json is not a list');
+        throw DataFormatException();
+      }
+      return list.map((e) {
+        if (e is! Map<String, dynamic>) {
+          logger?.severe('Could not read json object as $T');
+          throw DataFormatException();
+        }
+        return mapper(e);
+      }).toList();
+    });

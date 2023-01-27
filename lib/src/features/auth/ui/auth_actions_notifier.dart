@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:result_extensions/result_extensions.dart';
 
 import '../data/auth_repository.dart';
 
@@ -12,7 +13,7 @@ class AuthActionsNotifier extends StateNotifier<AsyncValue<void>> {
     state = const AsyncLoading();
     state = (await authRepository.signIn()).fold(
       AsyncValue.data,
-      (error) => AsyncValue.error(error.message, error.stackTrace),
+      (error, trace) => AsyncValue.error(error, trace ?? StackTrace.current),
     );
   }
 
@@ -20,7 +21,7 @@ class AuthActionsNotifier extends StateNotifier<AsyncValue<void>> {
     state = const AsyncLoading();
     state = (await authRepository.signOut()).fold(
       AsyncValue.data,
-      (error) => AsyncValue.error(error.message, error.stackTrace),
+      (error, trace) => AsyncValue.error(error, trace ?? StackTrace.current),
     );
   }
 }
