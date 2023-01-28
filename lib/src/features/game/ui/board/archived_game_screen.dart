@@ -137,7 +137,7 @@ class _BoardBody extends ConsumerWidget {
       active: false,
       clock: positionCursor != null
           ? game?.blackClockAt(positionCursor)
-          : gameData.clock?.initial,
+          : game?.clock?.initial,
     );
     final white = Player(
       key: const ValueKey('white-player'),
@@ -147,7 +147,7 @@ class _BoardBody extends ConsumerWidget {
       active: false,
       clock: positionCursor != null
           ? game?.whiteClockAt(positionCursor)
-          : gameData.clock?.initial,
+          : game?.clock?.initial,
     );
     final orientation =
         account.id == gameData.white.id ? Side.white : Side.black;

@@ -73,7 +73,6 @@ void main() {
       expect(find.byType(cg.PieceWidget), findsNWidgets(25));
       expect(find.widgetWithText(Player, 'veloce'), findsOneWidget);
       expect(find.widgetWithText(Player, 'Stockfish'), findsOneWidget);
-      expect(find.widgetWithText(CountdownClock, '3:00'), findsNWidgets(2));
 
       // cannot interact with board
       expect(
@@ -99,7 +98,7 @@ void main() {
       expect(find.widgetWithText(Player, 'veloce'), findsOneWidget);
       expect(find.widgetWithText(Player, 'Stockfish'), findsOneWidget);
 
-      // except for the clocks
+      // now with the clocks
       expect(find.widgetWithText(CountdownClock, '1:46'), findsNWidgets(1));
       expect(find.widgetWithText(CountdownClock, '0:46'), findsNWidgets(1));
 
@@ -138,8 +137,4 @@ final gameData = game.ArchivedGameData(
   variant: game.Variant.standard,
   lastFen: '1r3rk1/p1pb1ppp/3p4/8/1nBN1P2/1P6/PBPP1nPP/R1K1q3 w - - 4 1',
   winner: Side.black,
-  clock: const game.ClockData(
-    initial: Duration(minutes: 3),
-    increment: Duration.zero,
-  ),
 );

@@ -120,8 +120,10 @@ ArchivedGame _makeArchivedGameFromJson(Map<String, dynamic> json) =>
 
 ArchivedGame _archivedGameFromPick(RequiredPick pick) {
   final data = _archivedGameDataFromPick(pick);
+  final clockData = pick('clock').letOrNull(_clockDataFromPick);
   final clocks = pick('clocks').asListOrNull<Duration>(
       (p0) => Duration(milliseconds: p0.asIntOrThrow() * 10));
+
   return ArchivedGame(
     data: data,
     steps: pick('moves').letOrThrow((it) {
@@ -129,7 +131,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
       final List<GameStep> steps = [];
       Position position = data.variant.initialPosition;
       int ply = 0;
-      Duration? clock = data.clock?.initial;
+      Duration? clock = clockData?.initial;
       for (final san in moves) {
         final stepClock = clocks?[ply];
         ply++;
@@ -148,6 +150,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
       }
       return steps;
     }),
+    clock: clockData,
   );
 }
 
@@ -169,8 +172,6 @@ ArchivedGameData _archivedGameDataFromPick(RequiredPick pick) {
     variant: pick('variant').asVariantOrThrow(),
     initialFen: pick('initialFen').asStringOrNull(),
     lastFen: pick('lastFen').asStringOrNull(),
-    analysis: pick('analysis').asListOrNull(_moveAnalysisFromPick),
-    clock: pick('clock').letOrNull(_clockDataFromPick),
   );
 }
 
@@ -190,31 +191,32 @@ Player _playerFromUserGamePick(RequiredPick pick) {
     rating: pick('rating').asIntOrNull(),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     aiLevel: pick('aiLevel').asIntOrNull(),
-    analysis: pick('analysis').letOrNull(_playerAnalysisFromPick),
   );
 }
 
-PlayerAnalysis _playerAnalysisFromPick(RequiredPick pick) {
-  return PlayerAnalysis(
-    inaccuracy: pick('inaccuracy').asIntOrThrow(),
-    mistake: pick('mistake').asIntOrThrow(),
-    blunder: pick('blunder').asIntOrThrow(),
-    acpl: pick('acpl').asIntOrNull(),
-  );
-}
+// Will be needed later
 
-MoveAnalysis _moveAnalysisFromPick(RequiredPick pick) {
-  return MoveAnalysis(
-    eval: pick('eval').asIntOrNull(),
-    best: pick('best').asStringOrNull(),
-    variation: pick('variant').asStringOrNull(),
-    judgment: pick('judgment').letOrNull(_analysisJudgmentFromPick),
-  );
-}
+// PlayerAnalysis _playerAnalysisFromPick(RequiredPick pick) {
+//   return PlayerAnalysis(
+//     inaccuracy: pick('inaccuracy').asIntOrThrow(),
+//     mistake: pick('mistake').asIntOrThrow(),
+//     blunder: pick('blunder').asIntOrThrow(),
+//     acpl: pick('acpl').asIntOrNull(),
+//   );
+// }
 
-AnalysisJudgment _analysisJudgmentFromPick(RequiredPick pick) {
-  return AnalysisJudgment(
-    name: pick('name').asStringOrThrow(),
-    comment: pick('comment').asStringOrThrow(),
-  );
-}
+// MoveAnalysis _moveAnalysisFromPick(RequiredPick pick) {
+//   return MoveAnalysis(
+//     eval: pick('eval').asIntOrNull(),
+//     best: pick('best').asStringOrNull(),
+//     variation: pick('variant').asStringOrNull(),
+//     judgment: pick('judgment').letOrNull(_analysisJudgmentFromPick),
+//   );
+// }
+
+// AnalysisJudgment _analysisJudgmentFromPick(RequiredPick pick) {
+//   return AnalysisJudgment(
+//     name: pick('name').asStringOrThrow(),
+//     comment: pick('comment').asStringOrThrow(),
+//   );
+// }
