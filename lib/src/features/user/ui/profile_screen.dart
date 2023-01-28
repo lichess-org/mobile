@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -29,12 +30,9 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../auth/data/auth_repository.dart';
 
 final recentGamesProvider = FutureProvider.autoDispose
-    .family<List<ArchivedGameData>, String>((ref, userName) async {
+    .family<List<ArchivedGameData>, String>((ref, userName) {
   final repo = ref.watch(gameRepositoryProvider);
-  final either = await repo.getUserGamesTask(userName).run();
-  return either.match((error) => throw error, (data) {
-    return data;
-  });
+  return Result.release(repo.getUserGames(userName));
 });
 
 class ProfileScreen extends ConsumerStatefulWidget {

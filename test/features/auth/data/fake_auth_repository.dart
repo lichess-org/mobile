@@ -1,6 +1,6 @@
-import 'package:fpdart/fpdart.dart';
+import 'package:async/async.dart';
+import 'package:result_extensions/result_extensions.dart';
 
-import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/in_memory_store.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
@@ -30,26 +30,23 @@ class FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  TaskEither<IOError, void> signInTask() {
-    return TaskEither(() async {
-      await Future<void>.delayed(const Duration(milliseconds: 5));
-      _authState.value = fakeUser;
-      return Either.right(null);
-    });
+  FutureResult<void> signIn() async {
+    await Future<void>.delayed(const Duration(milliseconds: 5));
+    _authState.value = fakeUser;
+    return Result.value(null);
   }
 
   @override
-  TaskEither<IOError, void> signOutTask() {
-    return TaskEither(() async {
-      await Future<void>.delayed(const Duration(milliseconds: 5));
-      _authState.value = null;
-      return Either.right(null);
-    });
+  FutureResult<void> signOut() async {
+    await Future<void>.delayed(const Duration(milliseconds: 5));
+    _authState.value = null;
+    return Result.value(null);
   }
 
   @override
-  TaskEither<IOError, User> getAccountTask() {
-    return TaskEither.right(fakeUser);
+  FutureResult<User> getAccount() async {
+    await Future<void>.delayed(const Duration(milliseconds: 5));
+    return Result.value(fakeUser);
   }
 
   @override

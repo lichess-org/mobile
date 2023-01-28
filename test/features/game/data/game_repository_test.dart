@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fpdart/fpdart.dart';
+import 'package:async/async.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:logging/logging.dart';
@@ -37,14 +38,15 @@ void main() {
 ''';
 
       when(() => mockApiClient.get(
-            Uri.parse(
-                '$kLichessHost/api/games/user/testUser?max=10&moves=false&lastFen=true'),
-            headers: {'Accept': 'application/x-ndjson'},
-          )).thenReturn(TaskEither.right(http.Response(response, 200)));
+                Uri.parse(
+                    '$kLichessHost/api/games/user/testUser?max=10&moves=false&lastFen=true'),
+                headers: {'Accept': 'application/x-ndjson'},
+              ))
+          .thenAnswer((_) async => Result.value(http.Response(response, 200)));
 
-      final result = await repo.getUserGamesTask('testUser').run();
+      final result = await repo.getUserGames('testUser');
 
-      expect(result.isRight(), true);
+      expect(result.isValue, true);
     });
   });
 
@@ -147,13 +149,15 @@ void main() {
 ''';
 
       when(() => mockApiClient.get(
-            Uri.parse('$kLichessHost/game/export/qVChCOTc'),
-            headers: {'Accept': 'application/json'},
-          )).thenReturn(TaskEither.right(http.Response(testResponse, 200)));
+                Uri.parse('$kLichessHost/game/export/qVChCOTc'),
+                headers: {'Accept': 'application/json'},
+              ))
+          .thenAnswer(
+              (_) async => Result.value(http.Response(testResponse, 200)));
 
-      final result = await repo.getGameTask(const GameId('qVChCOTc')).run();
+      final result = await repo.getGame(const GameId('qVChCOTc'));
 
-      expect(result.isRight(), true);
+      expect(result.isValue, true);
     });
 
     test('game with analysis', () async {
@@ -162,13 +166,15 @@ void main() {
 ''';
 
       when(() => mockApiClient.get(
-            Uri.parse('$kLichessHost/game/export/3zfAoBZs'),
-            headers: {'Accept': 'application/json'},
-          )).thenReturn(TaskEither.right(http.Response(testResponse, 200)));
+                Uri.parse('$kLichessHost/game/export/3zfAoBZs'),
+                headers: {'Accept': 'application/json'},
+              ))
+          .thenAnswer(
+              (_) async => Result.value(http.Response(testResponse, 200)));
 
-      final result = await repo.getGameTask(const GameId('3zfAoBZs')).run();
+      final result = await repo.getGame(const GameId('3zfAoBZs'));
 
-      expect(result.isRight(), true);
+      expect(result.isValue, true);
     });
 
     test('threeCheck game', () async {
@@ -177,15 +183,17 @@ void main() {
 ''';
 
       when(() => mockApiClient.get(
-            Uri.parse('$kLichessHost/game/export/1vdsvmxp'),
-            headers: {'Accept': 'application/json'},
-          )).thenReturn(TaskEither.right(http.Response(testResponse, 200)));
+                Uri.parse('$kLichessHost/game/export/1vdsvmxp'),
+                headers: {'Accept': 'application/json'},
+              ))
+          .thenAnswer(
+              (_) async => Result.value(http.Response(testResponse, 200)));
 
-      final result = await repo.getGameTask(const GameId('1vdsvmxp')).run();
+      final result = await repo.getGame(const GameId('1vdsvmxp'));
 
-      expect(result.isRight(), true);
+      expect(result.isValue, true);
 
-      result.match((_) => null, (game) {
+      result.forEach((game) {
         expect(game.steps[0].position is ThreeCheck, true);
       });
     });

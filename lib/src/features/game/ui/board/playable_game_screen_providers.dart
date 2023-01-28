@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:result_extensions/result_extensions.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/sound.dart';
@@ -48,16 +49,12 @@ class GameActionNotifier extends AutoDisposeNotifier<AsyncValue<void>> {
 
   Future<void> abort(GameId id) async {
     state = const AsyncLoading();
-    state = (await ref.read(gameRepositoryProvider).abortTask(id).run()).match(
-        (error) => AsyncValue.error(error.message, error.stackTrace),
-        AsyncValue.data);
+    state = (await ref.read(gameRepositoryProvider).abort(id)).asAsyncValue;
   }
 
   Future<void> resign(GameId id) async {
     state = const AsyncLoading();
-    state = (await ref.read(gameRepositoryProvider).resignTask(id).run()).match(
-        (error) => AsyncValue.error(error.message, error.stackTrace),
-        AsyncValue.data);
+    state = (await ref.read(gameRepositoryProvider).resign(id)).asAsyncValue;
   }
 }
 
@@ -113,8 +110,8 @@ class GameStateNotifier extends AutoDisposeNotifier<GameState?> {
       state = newState;
 
       // TODO show error
-      final resp = await gameRepository.playMoveTask(gameId, move).run();
-      if (resp.isLeft()) {
+      final resp = await gameRepository.playMove(gameId, move);
+      if (resp.isError) {
         state = savedState;
       }
     }

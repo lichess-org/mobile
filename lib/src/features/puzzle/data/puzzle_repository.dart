@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'package:fpdart/fpdart.dart';
+import 'package:async/async.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
@@ -10,7 +11,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/common/model/player.dart';
 import 'package:lichess_mobile/src/features/game/model/time_control.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import '../model/puzzle.dart';
@@ -36,14 +36,14 @@ class PuzzleRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  TaskEither<IOError, List<Puzzle>> selectBatchTask(
+  FutureResult<List<Puzzle>> selectBatch(
       {PuzzleTheme angle = PuzzleTheme.mix, int nb = kPuzzleLocalQueueLength}) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb'))
         .flatMap(_decodeJson);
   }
 
-  TaskEither<IOError, List<Puzzle>> solveBatchTask({
+  FutureResult<List<Puzzle>> solveBatch({
     required int nb,
     required IList<PuzzleSolution> solved,
     PuzzleTheme angle = PuzzleTheme.mix,
@@ -59,9 +59,8 @@ class PuzzleRepository {
         .flatMap(_decodeJson);
   }
 
-  TaskEither<IOError, List<Puzzle>> _decodeJson(http.Response response) {
-    return TaskEither.fromEither(
-        readJsonObject(response.body, mapper: (Map<String, dynamic> json) {
+  Result<List<Puzzle>> _decodeJson(http.Response response) {
+    return readJsonObject(response.body, mapper: (Map<String, dynamic> json) {
       final puzzles = json['puzzles'];
       if (puzzles is! List<dynamic>) {
         throw const FormatException('puzzles: expected a list');
@@ -72,7 +71,7 @@ class PuzzleRepository {
         }
         return _puzzleFromJson(e);
       }).toList();
-    }, logger: _log));
+    }, logger: _log);
   }
 }
 

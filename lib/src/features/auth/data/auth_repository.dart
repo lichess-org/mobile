@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
-import 'package:fpdart/fpdart.dart';
+import 'package:async/async.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,21 +43,18 @@ class AuthRepository {
   bool get isAuthenticated => _authState.value != null;
 
   Future<void> init() {
-    return TaskEither<IOError, void>.tryCatch(
-            () => _storage.read(key: kOAuthTokenStorageKey),
-            (error, trace) => GenericError(trace))
-        .andThen(getAccountTask)
-        .map((account) {
+    return getAccount().forEach((account) {
       _authState.value = account;
-    }).run();
+    });
   }
 
-  TaskEither<IOError, void> signInTask() {
-    return TaskEither<IOError, void>.tryCatch(() async {
+  FutureResult<void> signIn() {
+    final future = (() async {
       final result =
           await _appAuth.authorizeAndExchangeCode(AuthorizationTokenRequest(
         kLichessClientId,
         redirectUri,
+        allowInsecureConnections: kDebugMode,
         serviceConfiguration: const AuthorizationServiceConfiguration(
             authorizationEndpoint: '$kLichessHost/oauth',
             tokenEndpoint: '$kLichessHost/api/token'),
@@ -68,26 +67,31 @@ class AuthRepository {
       } else {
         throw Exception('FlutterAppAuth.authorizeAndExchangeCode null result');
       }
-    }, (error, trace) {
-      _log.severe('signIn error', error, trace);
-      return GenericError(trace);
-    }).andThen(getAccountTask).map((account) {
-      _authState.value = account;
-    });
+    })();
+
+    return Result.capture(future)
+        .mapError((error, trace) {
+          _log.severe('signIn error', error, trace);
+          return GenericIOException();
+        })
+        .flatMap((_) => getAccount())
+        .map((account) {
+          _authState.value = account;
+        });
   }
 
-  TaskEither<IOError, void> signOutTask() {
+  FutureResult<void> signOut() {
     return _apiClient
         .delete(Uri.parse('$kLichessHost/api/token'))
-        .map((_) async {
-      await _storage.delete(key: kOAuthTokenStorageKey);
-      _authState.value = null;
-    });
+        .then((result) => result.map((_) async {
+              await _storage.delete(key: kOAuthTokenStorageKey);
+              _authState.value = null;
+            }));
   }
 
-  TaskEither<IOError, User> getAccountTask() {
-    return _apiClient.get(Uri.parse('$kLichessHost/api/account')).flatMap(
-        (response) => TaskEither.fromEither(readJsonObject(response.body,
+  FutureResult<User> getAccount() {
+    return _apiClient.get(Uri.parse('$kLichessHost/api/account')).then(
+        (result) => result.flatMap((response) => readJsonObject(response.body,
             mapper: User.fromJson, logger: _log)));
   }
 
