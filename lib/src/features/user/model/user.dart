@@ -251,7 +251,7 @@ class UserStreak with _$UserStreak {
   factory UserStreak.fromPick(RequiredPick pick) {
     final path = pick.path;
     if (path.length <= 1) {
-      throw ArgumentError('pick must have a path longer than one');
+      throw PickException("cannot decode $pick as 'UserStreak'");
     }
 
     // Since we are passing 'cur' or 'max' as the last pick,
@@ -279,7 +279,7 @@ class UserStreak with _$UserStreak {
             startGame: startGame,
             endGame: endGame);
       default:
-        throw UnsupportedError('Unsupported streak type $type');
+        throw UnsupportedError("cannot decode $pick as 'UserStreak'");
     }
   }
 }
