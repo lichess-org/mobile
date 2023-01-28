@@ -1,8 +1,6 @@
 import 'package:logging/logging.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
-import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/common/models.dart';
@@ -23,15 +21,15 @@ class UserRepository {
             mapper: User.fromJson, logger: _log)));
   }
 
-  TaskEither<IOError, UserPerfStats> getUserPerfStatsTask(
+  FutureResult<UserPerfStats> getUserPerfStats(
       String username, Perf perf) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/user/$username/perf/${perf.name}'))
-        .flatMap((response) => TaskEither.fromEither(readJsonObject(
-            response.body,
+        .then((result) => result.flatMap((response) => readJsonObject(response.body,
             mapper: UserPerfStats.fromJson,
             logger: _log)));
   }
+
   FutureResult<List<UserStatus>> getUsersStatus(List<String> ids) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'))

@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,16 +21,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 final perfStatsProvider = FutureProvider.autoDispose
     .family<UserPerfStats, UserPerfStatsParameters>((ref, perfParams) async {
   final userRepo = ref.watch(userRepositoryProvider);
-  final either = await userRepo
-      .getUserPerfStatsTask(
-        perfParams.username,
-        perfParams.perf,
-      )
-      .run();
-
-  return either.match((error) => throw error, (data) {
-    return data;
-  });
+  return Result.release(userRepo.getUserPerfStats(perfParams.username,
+        perfParams.perf));
 });
 
 const _customOpacity = 0.6;

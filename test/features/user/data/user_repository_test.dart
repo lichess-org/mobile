@@ -134,12 +134,13 @@ void main() {
 }
 ''';
       when(() => mockApiClient.get(Uri.parse(uriString)))
-          .thenReturn(TaskEither.right(http.Response(responseMinimal, 200)));
+          .thenAnswer((_) async => 
+            Result.value(http.Response(responseMinimal, 200)));
 
       final result =
-          await repo.getUserPerfStatsTask(testUserId, testPerf).run();
+          await repo.getUserPerfStats(testUserId, testPerf);
 
-      expect(result.isRight(), true);
+      expect(result.isValue, true);
     });
 
     test('json read, full example', () async {
@@ -381,12 +382,13 @@ void main() {
 }
 ''';
       when(() => mockApiClient.get(Uri.parse(uriString)))
-          .thenReturn(TaskEither.right(http.Response(responseFull, 200)));
+          .thenAnswer((_) async => 
+            Result.value(http.Response(responseFull, 200)));
 
       final result =
-          await repo.getUserPerfStatsTask(testUserId, testPerf).run();
+          await repo.getUserPerfStats(testUserId, testPerf);
 
-      expect(result.isRight(), true);
+      expect(result.isValue, true);
     });
   });
 
