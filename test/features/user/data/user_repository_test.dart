@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:async/async.dart';
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
