@@ -41,8 +41,6 @@ class ArchivedGameData with _$ArchivedGameData {
     String? initialFen,
     String? lastFen,
     Side? winner,
-    List<MoveAnalysis>? analysis,
-    ClockData? clock,
   }) = _ArchivedGameData;
 }
 
@@ -53,6 +51,8 @@ class ArchivedGame with _$ArchivedGame {
   const factory ArchivedGame({
     required ArchivedGameData data,
     required List<GameStep> steps,
+    List<MoveAnalysis>? analysis,
+    ClockData? clock,
   }) = _ArchivedGame;
 
   String? fenAt(int cursor) =>
