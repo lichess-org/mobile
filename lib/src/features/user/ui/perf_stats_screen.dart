@@ -21,8 +21,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 final perfStatsProvider = FutureProvider.autoDispose
     .family<UserPerfStats, UserPerfStatsParameters>((ref, perfParams) async {
   final userRepo = ref.watch(userRepositoryProvider);
-  return Result.release(userRepo.getUserPerfStats(perfParams.username,
-        perfParams.perf));
+  return Result.release(
+      userRepo.getUserPerfStats(perfParams.username, perfParams.perf));
 });
 
 const _customOpacity = 0.6;

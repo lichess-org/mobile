@@ -133,12 +133,10 @@ void main() {
   }
 }
 ''';
-      when(() => mockApiClient.get(Uri.parse(uriString)))
-          .thenAnswer((_) async => 
-            Result.value(http.Response(responseMinimal, 200)));
+      when(() => mockApiClient.get(Uri.parse(uriString))).thenAnswer(
+          (_) async => Result.value(http.Response(responseMinimal, 200)));
 
-      final result =
-          await repo.getUserPerfStats(testUserId, testPerf);
+      final result = await repo.getUserPerfStats(testUserId, testPerf);
 
       expect(result.isValue, true);
     });
@@ -381,12 +379,10 @@ void main() {
   }
 }
 ''';
-      when(() => mockApiClient.get(Uri.parse(uriString)))
-          .thenAnswer((_) async => 
-            Result.value(http.Response(responseFull, 200)));
+      when(() => mockApiClient.get(Uri.parse(uriString))).thenAnswer(
+          (_) async => Result.value(http.Response(responseFull, 200)));
 
-      final result =
-          await repo.getUserPerfStats(testUserId, testPerf);
+      final result = await repo.getUserPerfStats(testUserId, testPerf);
 
       expect(result.isValue, true);
     });

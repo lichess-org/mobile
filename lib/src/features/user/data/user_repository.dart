@@ -21,11 +21,11 @@ class UserRepository {
             mapper: User.fromJson, logger: _log)));
   }
 
-  FutureResult<UserPerfStats> getUserPerfStats(
-      String username, Perf perf) {
+  FutureResult<UserPerfStats> getUserPerfStats(String username, Perf perf) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/user/$username/perf/${perf.name}'))
-        .then((result) => result.flatMap((response) => readJsonObject(response.body,
+        .then((result) => result.flatMap((response) => readJsonObject(
+            response.body,
             mapper: UserPerfStats.fromJson,
             logger: _log)));
   }
