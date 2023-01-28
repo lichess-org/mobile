@@ -51,7 +51,7 @@ class ArchivedGame with _$ArchivedGame {
   const factory ArchivedGame({
     required ArchivedGameData data,
     required List<GameStep> steps,
-    List<MoveAnalysis>? analysis,
+    // List<MoveAnalysis>? analysis,
     ClockData? clock,
   }) = _ArchivedGame;
 
@@ -102,7 +102,6 @@ class Player with _$Player {
     String? title,
     bool? patron,
     int? aiLevel,
-    PlayerAnalysis? analysis,
   }) = _Player;
 }
 

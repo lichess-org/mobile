@@ -150,7 +150,6 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
       }
       return steps;
     }),
-    analysis: pick('analysis').asListOrNull(_moveAnalysisFromPick),
     clock: clockData,
   );
 }
@@ -192,31 +191,32 @@ Player _playerFromUserGamePick(RequiredPick pick) {
     rating: pick('rating').asIntOrNull(),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     aiLevel: pick('aiLevel').asIntOrNull(),
-    analysis: pick('analysis').letOrNull(_playerAnalysisFromPick),
   );
 }
 
-PlayerAnalysis _playerAnalysisFromPick(RequiredPick pick) {
-  return PlayerAnalysis(
-    inaccuracy: pick('inaccuracy').asIntOrThrow(),
-    mistake: pick('mistake').asIntOrThrow(),
-    blunder: pick('blunder').asIntOrThrow(),
-    acpl: pick('acpl').asIntOrNull(),
-  );
-}
+// Will be needed later
 
-MoveAnalysis _moveAnalysisFromPick(RequiredPick pick) {
-  return MoveAnalysis(
-    eval: pick('eval').asIntOrNull(),
-    best: pick('best').asStringOrNull(),
-    variation: pick('variant').asStringOrNull(),
-    judgment: pick('judgment').letOrNull(_analysisJudgmentFromPick),
-  );
-}
+// PlayerAnalysis _playerAnalysisFromPick(RequiredPick pick) {
+//   return PlayerAnalysis(
+//     inaccuracy: pick('inaccuracy').asIntOrThrow(),
+//     mistake: pick('mistake').asIntOrThrow(),
+//     blunder: pick('blunder').asIntOrThrow(),
+//     acpl: pick('acpl').asIntOrNull(),
+//   );
+// }
 
-AnalysisJudgment _analysisJudgmentFromPick(RequiredPick pick) {
-  return AnalysisJudgment(
-    name: pick('name').asStringOrThrow(),
-    comment: pick('comment').asStringOrThrow(),
-  );
-}
+// MoveAnalysis _moveAnalysisFromPick(RequiredPick pick) {
+//   return MoveAnalysis(
+//     eval: pick('eval').asIntOrNull(),
+//     best: pick('best').asStringOrNull(),
+//     variation: pick('variant').asStringOrNull(),
+//     judgment: pick('judgment').letOrNull(_analysisJudgmentFromPick),
+//   );
+// }
+
+// AnalysisJudgment _analysisJudgmentFromPick(RequiredPick pick) {
+//   return AnalysisJudgment(
+//     name: pick('name').asStringOrThrow(),
+//     comment: pick('comment').asStringOrThrow(),
+//   );
+// }
