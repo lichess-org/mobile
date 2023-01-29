@@ -78,10 +78,10 @@ void main() {
 
       expect(find.byType(cg.Board), findsOneWidget);
       expect(find.byType(cg.PieceWidget), findsNWidgets(32));
-      expect(find.widgetWithText(Player, 'White'), findsOneWidget);
-      expect(find.widgetWithText(Player, 'Black'), findsOneWidget);
-      expect(find.widgetWithText(Player, '1405'), findsOneWidget);
-      expect(find.widgetWithText(Player, '1789'), findsOneWidget);
+      expect(find.widgetWithText(BoardPlayer, 'White'), findsOneWidget);
+      expect(find.widgetWithText(BoardPlayer, 'Black'), findsOneWidget);
+      expect(find.widgetWithText(BoardPlayer, '1405'), findsOneWidget);
+      expect(find.widgetWithText(BoardPlayer, '1789'), findsOneWidget);
       expect(find.widgetWithText(CountdownClock, '0:00'), findsNWidgets(2));
 
       // cannot interact with board during loading state
@@ -95,10 +95,10 @@ void main() {
       // same info displayed
       expect(find.byType(cg.Board), findsOneWidget);
       expect(find.byType(cg.PieceWidget), findsNWidgets(32));
-      expect(find.widgetWithText(Player, 'White'), findsOneWidget);
-      expect(find.widgetWithText(Player, 'Black'), findsOneWidget);
-      expect(find.widgetWithText(Player, '1405'), findsOneWidget);
-      expect(find.widgetWithText(Player, '1789'), findsOneWidget);
+      expect(find.widgetWithText(BoardPlayer, 'White'), findsOneWidget);
+      expect(find.widgetWithText(BoardPlayer, 'Black'), findsOneWidget);
+      expect(find.widgetWithText(BoardPlayer, '1405'), findsOneWidget);
+      expect(find.widgetWithText(BoardPlayer, '1789'), findsOneWidget);
       // clock is updated
       expect(find.widgetWithText(CountdownClock, '3:00'), findsNWidgets(2));
 

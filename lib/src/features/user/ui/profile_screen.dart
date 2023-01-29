@@ -1,27 +1,32 @@
-import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dartchess/dartchess.dart';
+import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:dartchess/dartchess.dart';
 
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
+import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/features/auth/ui/auth_actions_notifier.dart';
+import 'package:lichess_mobile/src/features/game/data/game_repository.dart';
+import 'package:lichess_mobile/src/features/game/model/game.dart';
+import 'package:lichess_mobile/src/features/game/ui/board/archived_game_screen.dart';
+import 'package:lichess_mobile/src/features/settings/ui/settings_screen.dart';
+import 'package:lichess_mobile/src/features/user/model/user.dart';
+import 'package:lichess_mobile/src/features/user/ui/perf_stats_screen.dart';
+import 'package:lichess_mobile/src/utils/duration.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/features/settings/ui/settings_screen.dart';
-import 'package:lichess_mobile/src/features/user/model/user.dart';
-import 'package:lichess_mobile/src/features/game/data/game_repository.dart';
-import 'package:lichess_mobile/src/features/game/model/game.dart';
-import 'package:lichess_mobile/src/features/game/ui/board/archived_game_screen.dart';
-import 'package:lichess_mobile/src/features/auth/ui/auth_actions_notifier.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 
 import '../../auth/data/auth_repository.dart';
 
@@ -183,8 +188,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           Text(context.l10n.lastSeenActive(timeago.format(account.seenAt))),
           const SizedBox(height: 5),
           if (account.playTime != null)
-            Text(context.l10n
-                .tpTimeSpentPlaying(_printDuration(account.playTime!.total)))
+            Text(context.l10n.tpTimeSpentPlaying(account.playTime!.total
+                .toDaysHoursMinutes(AppLocalizations.of(context))))
           else
             kEmptyWidget,
         ],
@@ -192,10 +197,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       const SizedBox(height: 20),
       PerfCards(account: account),
       const SizedBox(height: 20),
-      const Text(
-        'Recent games',
-        style: TextStyle(fontSize: 16),
-      ),
+      // TODO translate
+      const Text('Recent games', style: kSectionTitle),
       RecentGames(account: account),
     ];
   }
@@ -229,47 +232,65 @@ class PerfCards extends StatelessWidget {
         itemBuilder: (context, index) {
           final perf = userPerfs[index];
           final userPerf = account.perfs[perf]!;
+          final bool isPerfWithoutStats =
+              [Perf.puzzle, Perf.storm].contains(perf);
           return SizedBox(
             height: 100,
             width: 100,
             child: PlatformCard(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      perf.shortName,
-                      style: TextStyle(color: textShade(context, 0.7)),
-                    ),
-                    Icon(perf.icon, color: textShade(context, 0.6)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                            '${userPerf.rating}${userPerf.provisional == true || userPerf.ratingDeviation > kProvisionalDeviation ? '?' : ''}',
-                            style: kBold),
-                        const SizedBox(width: 3),
-                        if (userPerf.progression != 0) ...[
-                          Icon(
-                            userPerf.progression > 0
-                                ? LichessIcons.arrow_full_upperright
-                                : LichessIcons.arrow_full_lowerright,
-                            color: userPerf.progression > 0
-                                ? LichessColors.good
-                                : LichessColors.red,
-                            size: 12,
-                          ),
-                          Text(userPerf.progression.abs().toString(),
-                              style: TextStyle(
-                                  color: userPerf.progression > 0
-                                      ? LichessColors.good
-                                      : LichessColors.red,
-                                  fontSize: 12)),
+              child: InkWell(
+                splashFactory: isPerfWithoutStats
+                    ? NoSplash.splashFactory
+                    : InkSplash.splashFactory,
+                customBorder: kPlatformCardBorder,
+                onTap: isPerfWithoutStats
+                    ? null
+                    : () => pushPlatformRoute(
+                        context: context,
+                        title: context.l10n
+                            .perfStats('${account.username} ${perf.title}'),
+                        builder: (context) => PerfStatsScreen(
+                            username: account.username,
+                            perf: perf,
+                            loggedInUser: account)),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        perf.shortTitle,
+                        style: TextStyle(color: textShade(context, 0.7)),
+                      ),
+                      Icon(perf.icon, color: textShade(context, 0.6)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                              '${userPerf.rating}${userPerf.provisional == true || userPerf.ratingDeviation > kProvisionalDeviation ? '?' : ''}',
+                              style: kBold),
+                          const SizedBox(width: 3),
+                          if (userPerf.progression != 0) ...[
+                            Icon(
+                              userPerf.progression > 0
+                                  ? LichessIcons.arrow_full_upperright
+                                  : LichessIcons.arrow_full_lowerright,
+                              color: userPerf.progression > 0
+                                  ? LichessColors.good
+                                  : LichessColors.red,
+                              size: 12,
+                            ),
+                            Text(userPerf.progression.abs().toString(),
+                                style: TextStyle(
+                                    color: userPerf.progression > 0
+                                        ? LichessColors.good
+                                        : LichessColors.red,
+                                    fontSize: 12)),
+                          ],
                         ],
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -301,7 +322,6 @@ class RecentGames extends ConsumerWidget {
                     game.white.id == account.id ? Side.white : Side.black;
                 final opponent =
                     game.white.id == account.id ? game.black : game.white;
-                final title = opponent.title;
                 final opponentName = opponent.name == 'Stockfish'
                     ? context.l10n.aiNameLevelAiLevel(
                         opponent.name, opponent.aiLevel.toString())
@@ -317,20 +337,9 @@ class RecentGames extends ConsumerWidget {
                     );
                   },
                   leading: Icon(game.perf.icon),
-                  title: Row(
-                    children: [
-                      if (title != null) ...[
-                        Text(title,
-                            style: TextStyle(
-                                color: title == 'BOT'
-                                    ? LichessColors.fancy
-                                    : LichessColors.brag,
-                                fontWeight: FontWeight.bold)),
-                        const SizedBox(width: 5)
-                      ],
-                      Text(opponentName, overflow: TextOverflow.ellipsis),
-                    ],
-                  ),
+                  title: ListTileUser(
+                      user:
+                          LightUser(name: opponentName, title: opponent.title)),
                   subtitle: Text(timeago.format(game.lastMoveAt)),
                   trailing: game.winner == mySide
                       ? const Icon(CupertinoIcons.plus_square_fill,
@@ -374,11 +383,4 @@ class Location extends StatelessWidget {
 
 String lichessFlagSrc(String country) {
   return '$kLichessHost/assets/images/flags/$country.png';
-}
-
-String _printDuration(Duration duration) {
-  final days = duration.inDays.toString();
-  final hours = duration.inHours.remainder(24).toString();
-  final minutes = duration.inMinutes.remainder(60).toString();
-  return "$days days, $hours hours and $minutes minutes";
 }

@@ -17,7 +17,7 @@ import 'package:lichess_mobile/src/features/settings/ui/is_sound_muted_notifier.
 import 'package:lichess_mobile/src/features/user/model/user.dart';
 
 import '../../data/game_repository.dart';
-import '../../model/game.dart' hide Player;
+import '../../model/game.dart';
 
 final _positionCursorProvider = StateProvider.autoDispose<int?>((ref) => null);
 
@@ -129,7 +129,7 @@ class _BoardBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isBoardTurned = ref.watch(_isBoardTurnedProvider);
     final positionCursor = ref.watch(_positionCursorProvider);
-    final black = Player(
+    final black = BoardPlayer(
       key: const ValueKey('black-player'),
       name: gameData.black.name,
       rating: gameData.black.rating,
@@ -139,7 +139,7 @@ class _BoardBody extends ConsumerWidget {
           ? game?.blackClockAt(positionCursor)
           : game?.clock?.initial,
     );
-    final white = Player(
+    final white = BoardPlayer(
       key: const ValueKey('white-player'),
       name: gameData.white.name,
       rating: gameData.white.rating,

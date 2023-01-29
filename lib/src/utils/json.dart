@@ -89,7 +89,7 @@ extension GameExtension on Pick {
     }
     if (value is String) {
       return Perf.values
-          .firstWhere((v) => v.name == value, orElse: () => Perf.blitz);
+          .firstWhere((v) => v.title == value, orElse: () => Perf.blitz);
     }
     throw PickException(
         "value $value at $debugParsingExit can't be casted to Perf");

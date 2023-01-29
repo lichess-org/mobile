@@ -172,7 +172,7 @@ class _BoardBody extends ConsumerWidget {
 
     return gameClockStream.when(
       data: (clock) {
-        final black = Player(
+        final black = BoardPlayer(
           key: const ValueKey('black-player'),
           name: game.black.name,
           rating: game.black.rating,
@@ -183,7 +183,7 @@ class _BoardBody extends ConsumerWidget {
               gameState.position.turn == Side.black,
           clock: clock.blackTime,
         );
-        final white = Player(
+        final white = BoardPlayer(
           key: const ValueKey('white-player'),
           name: game.white.name,
           rating: game.white.rating,
@@ -227,14 +227,14 @@ class _BoardBody extends ConsumerWidget {
         );
       },
       loading: () {
-        final player = Player(
+        final player = BoardPlayer(
           name: game.player.name,
           rating: game.player.rating,
           title: game.player.title,
           active: false,
           clock: Duration.zero,
         );
-        final opponent = Player(
+        final opponent = BoardPlayer(
           name: game.opponent.name,
           rating: game.opponent.rating,
           title: game.opponent.title,

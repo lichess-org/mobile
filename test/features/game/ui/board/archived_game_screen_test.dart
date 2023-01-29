@@ -71,8 +71,8 @@ void main() {
       // data shown immediately
       expect(find.byType(cg.Board), findsOneWidget);
       expect(find.byType(cg.PieceWidget), findsNWidgets(25));
-      expect(find.widgetWithText(Player, 'veloce'), findsOneWidget);
-      expect(find.widgetWithText(Player, 'Stockfish'), findsOneWidget);
+      expect(find.widgetWithText(BoardPlayer, 'veloce'), findsOneWidget);
+      expect(find.widgetWithText(BoardPlayer, 'Stockfish'), findsOneWidget);
 
       // cannot interact with board
       expect(
@@ -95,8 +95,8 @@ void main() {
       // same info still displayed
       expect(find.byType(cg.Board), findsOneWidget);
       expect(find.byType(cg.PieceWidget), findsNWidgets(25));
-      expect(find.widgetWithText(Player, 'veloce'), findsOneWidget);
-      expect(find.widgetWithText(Player, 'Stockfish'), findsOneWidget);
+      expect(find.widgetWithText(BoardPlayer, 'veloce'), findsOneWidget);
+      expect(find.widgetWithText(BoardPlayer, 'Stockfish'), findsOneWidget);
 
       // now with the clocks
       expect(find.widgetWithText(CountdownClock, '1:46'), findsNWidgets(1));

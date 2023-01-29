@@ -160,7 +160,7 @@ class PlayForm extends ConsumerWidget {
                                 .firstWhere((b) => b.item1.id == ms.name)
                                 .item1;
                             return Semantics(
-                              label: p.name,
+                              label: p.title,
                               child: Row(children: [
                                 Icon(p.icon, size: 18.0),
                                 const SizedBox(width: 3.0),
@@ -230,7 +230,7 @@ class PlayForm extends ConsumerWidget {
           const SizedBox(height: 10),
           SecondaryButton(
             semanticsLabel:
-                '${context.l10n.timeControl} ${timeControlPref.perf.name} ${timeControlPref.value.display}',
+                '${context.l10n.timeControl} ${timeControlPref.perf.title} ${timeControlPref.value.display}',
             onPressed: () {
               showAdaptiveModalBottomSheet<void>(
                 useRootNavigator: true,

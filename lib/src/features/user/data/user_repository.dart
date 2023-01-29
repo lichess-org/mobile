@@ -3,6 +3,7 @@ import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/http.dart';
+import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import '../model/user.dart';
@@ -18,6 +19,15 @@ class UserRepository {
     return apiClient.get(Uri.parse('$kLichessHost/api/user/$username')).then(
         (result) => result.flatMap((response) => readJsonObject(response.body,
             mapper: User.fromJson, logger: _log)));
+  }
+
+  FutureResult<UserPerfStats> getUserPerfStats(String username, Perf perf) {
+    return apiClient
+        .get(Uri.parse('$kLichessHost/api/user/$username/perf/${perf.name}'))
+        .then((result) => result.flatMap((response) => readJsonObject(
+            response.body,
+            mapper: UserPerfStats.fromJson,
+            logger: _log)));
   }
 
   FutureResult<List<UserStatus>> getUsersStatus(List<String> ids) {

@@ -90,7 +90,7 @@ class TvScreen extends ConsumerWidget {
                     : featuredGame.black
                 : null;
             final topPlayerWidget = topPlayer != null
-                ? Player(
+                ? BoardPlayer(
                     name: topPlayer.name,
                     title: topPlayer.title,
                     rating: topPlayer.rating,
@@ -99,7 +99,7 @@ class TvScreen extends ConsumerWidget {
                         !position.isGameOver && position.turn == topPlayer.side)
                 : kEmptyWidget;
             final bottomPlayerWidget = bottomPlayer != null
-                ? Player(
+                ? BoardPlayer(
                     name: bottomPlayer.name,
                     title: bottomPlayer.title,
                     rating: bottomPlayer.rating,
