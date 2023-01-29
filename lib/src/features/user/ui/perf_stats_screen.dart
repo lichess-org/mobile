@@ -9,14 +9,17 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/common/model/user.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
+// import 'package:lichess_mobile/src/features/game/ui/board/archived_game_screen.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 
 final perfStatsProvider = FutureProvider.autoDispose
     .family<UserPerfStats, UserPerfStatsParameters>((ref, perfParams) async {
@@ -24,6 +27,8 @@ final perfStatsProvider = FutureProvider.autoDispose
   return Result.release(
       userRepo.getUserPerfStats(perfParams.username, perfParams.perf));
 });
+
+final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
 
 const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;
@@ -191,11 +196,16 @@ class PerfStatsScreen extends ConsumerWidget {
                 context.l10n.maxTimePlaying,
                 child: _StreakWidget(data.maxTimeStreak, data.curTimeStreak),
               ),
-              statGroupSpace,
-              _CustomPlatformCard(context.l10n.bestRated,
-                  child: _GameListWidget(data.bestWins)),
-              _CustomPlatformCard(context.l10n.worstRated,
-                  child: _GameListWidget(data.worstLosses))
+              if (data.bestWins != null && data.bestWins!.isNotEmpty) ...[
+                statGroupSpace,
+                Text(context.l10n.bestRated, style: kSectionTitle),
+                _GameListWidget(games: data.bestWins!, perf: perf),
+              ],
+              if (data.worstLosses != null && data.worstLosses!.isNotEmpty) ...[
+                statGroupSpace,
+                Text(context.l10n.worstRated, style: kSectionTitle),
+                _GameListWidget(games: data.worstLosses!, perf: perf),
+              ],
             ],
           ),
         );
@@ -231,7 +241,7 @@ class _CustomPlatformCard extends StatelessWidget {
     final TextStyle trueValueStyle = styleValue ?? defaultValueStyle;
 
     return PlatformCard(
-      margin: const EdgeInsets.all(6.0),
+      margin: const EdgeInsets.symmetric(vertical: 6.0),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -348,11 +358,10 @@ class _UserGameWidget extends StatelessWidget {
     const defaultDateStyle =
         TextStyle(color: LichessColors.primary, fontSize: defaultDateFontSize);
 
-    final dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
-
     return game == null
         ? const Text('?', style: defaultDateStyle)
-        : Text(dateFormatter.format(game!.finishedAt), style: defaultDateStyle);
+        : Text(_dateFormatter.format(game!.finishedAt),
+            style: defaultDateStyle);
   }
 }
 
@@ -488,51 +497,41 @@ class _StreakWidget extends StatelessWidget {
 }
 
 class _GameListWidget extends StatelessWidget {
-  final List<UserPerfGame>? games;
+  final List<UserPerfGame> games;
+  final Perf perf;
 
-  const _GameListWidget(this.games);
+  const _GameListWidget({required this.games, required this.perf});
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> gameWidgets = List.empty(growable: true);
-
-    const gameWidgetSeparation = 5.0;
-    const opRatingFontSize = 16.0;
-
-    if (games == null || games!.isEmpty) {
-      gameWidgets.add(const Text('?'));
-    } else {
-      for (final game in games!) {
-        gameWidgets.add(
-            Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          Expanded(
-            child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(game.opponentName ?? '?',
-                    maxLines: 1, overflow: TextOverflow.ellipsis)),
-          ),
-          Expanded(
-            child: Align(
-                alignment: Alignment.center,
-                child: Text(
-                    game.opponentRating == null
-                        ? '?'
-                        : game.opponentRating.toString(),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: opRatingFontSize))),
-          ),
-          Expanded(
-            child: Align(
-                alignment: Alignment.centerRight, child: _UserGameWidget(game)),
-          )
-        ]));
-        gameWidgets.add(const SizedBox(height: gameWidgetSeparation));
-      }
-    }
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: gameWidgets,
+      children: ListTile.divideTiles(
+        color: dividerColor(context),
+        context: context,
+        tiles: [
+          for (final game in games)
+            ListTile(
+              // onTap: () {
+              //   Navigator.of(context, rootNavigator: true).push<void>(
+              //     MaterialPageRoute(
+              //       builder: (context) =>
+              //           ArchivedGameScreen(gameData: game, account: account),
+              //     ),
+              //   );
+              // },
+              leading: Icon(perf.icon),
+              title: ListTileUser(
+                user: LightUser(
+                    name: game.opponentName ?? '?', title: game.opponentTitle),
+                rating: game.opponentRating,
+              ),
+              subtitle: Text(
+                _dateFormatter.format(game.finishedAt),
+              ),
+            ),
+        ],
+      ).toList(growable: false),
     );
   }
 }

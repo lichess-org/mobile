@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 import './countdown_clock.dart';
 
-class Player extends StatelessWidget {
-  const Player({
+/// A widget to display player information above/below the chess board.
+///
+/// It shows the full player name with title and rating and the clock if relevant.
+class BoardPlayer extends StatelessWidget {
+  const BoardPlayer({
     required this.name,
     this.title,
     this.rating,

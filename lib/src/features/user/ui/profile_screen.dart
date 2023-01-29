@@ -11,6 +11,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/common/model/user.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/features/auth/ui/auth_actions_notifier.dart';
 import 'package:lichess_mobile/src/features/game/data/game_repository.dart';
@@ -26,6 +27,7 @@ import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 
 import '../../auth/data/auth_repository.dart';
 
@@ -196,10 +198,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       const SizedBox(height: 20),
       PerfCards(account: account),
       const SizedBox(height: 20),
-      const Text(
-        'Recent games',
-        style: TextStyle(fontSize: 16),
-      ),
+      // TODO translate
+      const Text('Recent games', style: kSectionTitle),
       RecentGames(account: account),
     ];
   }
@@ -323,7 +323,6 @@ class RecentGames extends ConsumerWidget {
                     game.white.id == account.id ? Side.white : Side.black;
                 final opponent =
                     game.white.id == account.id ? game.black : game.white;
-                final title = opponent.title;
                 final opponentName = opponent.name == 'Stockfish'
                     ? context.l10n.aiNameLevelAiLevel(
                         opponent.name, opponent.aiLevel.toString())
@@ -339,20 +338,9 @@ class RecentGames extends ConsumerWidget {
                     );
                   },
                   leading: Icon(game.perf.icon),
-                  title: Row(
-                    children: [
-                      if (title != null) ...[
-                        Text(title,
-                            style: TextStyle(
-                                color: title == 'BOT'
-                                    ? LichessColors.fancy
-                                    : LichessColors.brag,
-                                fontWeight: FontWeight.bold)),
-                        const SizedBox(width: 5)
-                      ],
-                      Text(opponentName, overflow: TextOverflow.ellipsis),
-                    ],
-                  ),
+                  title: ListTileUser(
+                      user:
+                          LightUser(name: opponentName, title: opponent.title)),
                   subtitle: Text(timeago.format(game.lastMoveAt)),
                   trailing: game.winner == mySide
                       ? const Icon(CupertinoIcons.plus_square_fill,

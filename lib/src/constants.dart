@@ -12,8 +12,9 @@ const kOAuthTokenStorageKey = 'oAuthToken';
 // SPACING
 const kBodyPadding = EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0);
 
-// TEXT
+// TEXT STYLE
 const kBold = TextStyle(fontWeight: FontWeight.bold);
+const kSectionTitle = TextStyle(fontSize: 16);
 
 // lichess
 // https://github.com/lichess-org/lila/blob/4562a83cdb263c3ebf7e148c0f666f0ff92b91c7/modules/rating/src/main/Glicko.scala#L71
