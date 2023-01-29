@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/common/model/user.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
-// import 'package:lichess_mobile/src/features/game/ui/board/archived_game_screen.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/style.dart';
@@ -274,11 +273,34 @@ class _CustomPlatformCardRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return IntrinsicHeight(
       child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [for (final card in cards) Expanded(child: card)]),
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: _divideRow(cards)
+            .map((e) => Expanded(child: e))
+            .toList(growable: false),
+      ),
     );
   }
+}
+
+Iterable<Widget> _divideRow(Iterable<Widget> elements) {
+  final list = elements.toList();
+
+  if (list.isEmpty || list.length == 1) {
+    return list;
+  }
+
+  Widget wrapElement(Widget el) {
+    return Container(
+      margin: const EdgeInsets.only(right: 8),
+      child: el,
+    );
+  }
+
+  return <Widget>[
+    ...list.take(list.length - 1).map(wrapElement),
+    list.last,
+  ];
 }
 
 class _MainRatingWidget extends StatelessWidget {
@@ -512,14 +534,6 @@ class _GameListWidget extends StatelessWidget {
         tiles: [
           for (final game in games)
             ListTile(
-              // onTap: () {
-              //   Navigator.of(context, rootNavigator: true).push<void>(
-              //     MaterialPageRoute(
-              //       builder: (context) =>
-              //           ArchivedGameScreen(gameData: game, account: account),
-              //     ),
-              //   );
-              // },
               leading: Icon(perf.icon),
               title: ListTileUser(
                 user: LightUser(
