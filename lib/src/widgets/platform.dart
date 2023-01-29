@@ -66,11 +66,20 @@ class PlatformCard extends StatelessWidget {
   const PlatformCard({
     super.key,
     required this.child,
+    this.margin,
     this.semanticContainer = true,
   });
 
   final Widget child;
   final bool semanticContainer;
+
+  /// The empty space that surrounds the card.
+  ///
+  /// Defines the card's outer [Container.margin].
+  ///
+  /// If this property is null then default [Card.margin] is used on android and
+  /// [EdgeInsets.zero] on iOS.
+  final EdgeInsetsGeometry? margin;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +93,7 @@ class PlatformCard extends StatelessWidget {
       ),
       child: defaultTargetPlatform == TargetPlatform.iOS
           ? Card(
-              margin: EdgeInsets.zero,
+              margin: margin ?? EdgeInsets.zero,
               elevation: 0,
               color: CupertinoDynamicColor.resolve(
                   CupertinoColors.secondarySystemBackground, context),
@@ -94,6 +103,7 @@ class PlatformCard extends StatelessWidget {
             )
           : Card(
               semanticContainer: semanticContainer,
+              margin: margin,
               child: child,
             ),
     );

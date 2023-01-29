@@ -197,7 +197,7 @@ class PerfStatsScreen extends ConsumerWidget {
       },
       error: (error, stackTrace) {
         debugPrint(
-            'SEVERE: [PerfStatsScreen] could not load user games; $error\n$stackTrace');
+            'SEVERE: [PerfStatsScreen] could not load data; $error\n$stackTrace');
         return const Center(child: Text('Could not load user stats.'));
       },
       loading: () => const CenterLoadingIndicator(),
@@ -226,25 +226,27 @@ class _CustomPlatformCard extends StatelessWidget {
     final TextStyle trueValueStyle = styleValue ?? defaultValueStyle;
 
     return PlatformCard(
-        child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          FittedBox(
-              alignment: Alignment.center,
-              fit: BoxFit.scaleDown,
-              child: Text(stat,
-                  style: defaultStatStyle, textAlign: TextAlign.center)),
-          if (value != null)
-            Text(value!, style: trueValueStyle, textAlign: TextAlign.center)
-          else if (child != null)
-            child!
-          else
-            Text('?', style: trueValueStyle)
-        ],
+      margin: const EdgeInsets.all(6.0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            FittedBox(
+                alignment: Alignment.center,
+                fit: BoxFit.scaleDown,
+                child: Text(stat,
+                    style: defaultStatStyle, textAlign: TextAlign.center)),
+            if (value != null)
+              Text(value!, style: trueValueStyle, textAlign: TextAlign.center)
+            else if (child != null)
+              child!
+            else
+              Text('?', style: trueValueStyle)
+          ],
+        ),
       ),
-    ));
+    );
   }
 }
 
@@ -387,17 +389,17 @@ class _PercentageValueWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final trueColor = color ?? DefaultTextStyle.of(context).style.color;
-
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Text(value.toString(),
-          style: TextStyle(fontSize: _defaultValueFontSize, color: trueColor)),
+      Text(
+        value.toString(),
+        style: const TextStyle(fontSize: _defaultValueFontSize),
+      ),
       Text(_getPercentageString(value, denominator),
           style: TextStyle(
               fontSize: _defaultValueFontSize,
               color: isShaded
-                  ? trueColor!.withOpacity(_customOpacity / 2)
-                  : trueColor!.withOpacity(_customOpacity)))
+                  ? textShade(context, _customOpacity / 2)
+                  : textShade(context, _customOpacity)))
     ]);
   }
 }
@@ -411,9 +413,7 @@ class _StreakWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final trueColor = color ?? DefaultTextStyle.of(context).style.color;
-    final valueStyle =
-        TextStyle(color: trueColor, fontSize: _defaultValueFontSize);
+    const valueStyle = TextStyle(fontSize: _defaultValueFontSize);
 
     final streakTitleStyle = TextStyle(
         fontSize: _defaultStatFontSize,
