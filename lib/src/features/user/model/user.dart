@@ -288,7 +288,7 @@ class UserStreak with _$UserStreak {
             startGame: startGame,
             endGame: endGame);
       default:
-        throw UnsupportedError("cannot decode $pick as 'UserStreak'");
+        throw PickException("cannot decode $pick as 'UserStreak'");
     }
   }
 }
