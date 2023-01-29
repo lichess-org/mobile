@@ -90,110 +90,115 @@ class PerfStatsScreen extends ConsumerWidget {
     return perfStats.when(
       data: (data) {
         return SafeArea(
-            child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5.0),
-          child: ListView(scrollDirection: Axis.vertical, children: [
-            _CustomPlatformCard(context.l10n.rating,
-                child: _MainRatingWidget(
-                  data.rating,
-                  data.deviation,
-                  data.percentile,
-                  username,
-                  perf.title,
-                  loggedInUser,
-                  provisional: data.provisional,
-                )),
-            // The number '12' here is not arbitrary, since the API returns the progression for the last 12 games (as far as I know).
-            _CustomPlatformCard(
-                context.l10n.progressOverLastXGames('12').replaceAll(':', ''),
-                child: _ProgressionWidget(data.progress)),
-            _CustomPlatformCardRow([
-              _CustomPlatformCard(context.l10n.rank,
-                  value: data.rank == null
-                      ? '?'
-                      : NumberFormat.decimalPattern(Intl.getCurrentLocale())
-                          .format(data.rank)),
+          child: ListView(
+            padding: kBodyPadding,
+            scrollDirection: Axis.vertical,
+            children: [
+              _CustomPlatformCard(context.l10n.rating,
+                  child: _MainRatingWidget(
+                    data.rating,
+                    data.deviation,
+                    data.percentile,
+                    username,
+                    perf.title,
+                    loggedInUser,
+                    provisional: data.provisional,
+                  )),
+              // The number '12' here is not arbitrary, since the API returns the progression for the last 12 games (as far as I know).
               _CustomPlatformCard(
-                  context.l10n.ratingDeviation('').replaceAll(': .', ''),
-                  value: data.deviation.toStringAsFixed(2))
-            ]),
-            _CustomPlatformCardRow([
+                  context.l10n.progressOverLastXGames('12').replaceAll(':', ''),
+                  child: _ProgressionWidget(data.progress)),
+              _CustomPlatformCardRow([
+                _CustomPlatformCard(context.l10n.rank,
+                    value: data.rank == null
+                        ? '?'
+                        : NumberFormat.decimalPattern(Intl.getCurrentLocale())
+                            .format(data.rank)),
+                _CustomPlatformCard(
+                    context.l10n.ratingDeviation('').replaceAll(': .', ''),
+                    value: data.deviation.toStringAsFixed(2))
+              ]),
+              _CustomPlatformCardRow([
+                _CustomPlatformCard(
+                    context.l10n.highestRating('').replaceAll(':', ''),
+                    child: _RatingWidget(data.highestRating,
+                        data.highestRatingGame, LichessColors.good)),
+                _CustomPlatformCard(
+                    context.l10n.lowestRating('').replaceAll(':', ''),
+                    child: _RatingWidget(data.lowestRating,
+                        data.lowestRatingGame, LichessColors.red)),
+              ]),
+              statGroupSpace,
+              _CustomPlatformCard(context.l10n.totalGames,
+                  value: data.totalGames.toString(),
+                  styleValue: _mainValueStyle),
+              _CustomPlatformCardRow([
+                _CustomPlatformCard(context.l10n.wins,
+                    child: _PercentageValueWidget(
+                        data.wonGames, data.totalGames,
+                        color: LichessColors.good)),
+                _CustomPlatformCard(context.l10n.draws,
+                    child: _PercentageValueWidget(
+                        data.drawnGames, data.totalGames,
+                        color: textShade(context, _customOpacity),
+                        isShaded: true)),
+                _CustomPlatformCard(context.l10n.losses,
+                    child: _PercentageValueWidget(
+                        data.lostGames, data.totalGames,
+                        color: LichessColors.red)),
+              ]),
+              _CustomPlatformCardRow([
+                _CustomPlatformCard(context.l10n.rated,
+                    child: _PercentageValueWidget(
+                        data.ratedGames, data.totalGames)),
+                _CustomPlatformCard(context.l10n.tournament,
+                    child: _PercentageValueWidget(
+                        data.tournamentGames, data.totalGames)),
+                _CustomPlatformCard(
+                    context.l10n.berserkedGames
+                        .replaceAll(' ${context.l10n.games.toLowerCase()}', ''),
+                    child: _PercentageValueWidget(
+                        data.berserkGames, data.totalGames)),
+                _CustomPlatformCard(context.l10n.disconnections,
+                    child: _PercentageValueWidget(
+                        data.disconnections, data.totalGames)),
+              ]),
+              _CustomPlatformCardRow([
+                _CustomPlatformCard(context.l10n.averageOpponent,
+                    value: data.avgOpponent == null
+                        ? '?'
+                        : data.avgOpponent.toString()),
+                _CustomPlatformCard(context.l10n.timeSpentPlaying,
+                    value: data.timePlayed
+                        .toDaysHoursMinutes(AppLocalizations.of(context))),
+              ]),
+              statGroupSpace,
               _CustomPlatformCard(
-                  context.l10n.highestRating('').replaceAll(':', ''),
-                  child: _RatingWidget(data.highestRating,
-                      data.highestRatingGame, LichessColors.good)),
+                context.l10n.winningStreak,
+                child: _StreakWidget(data.maxWinStreak, data.curWinStreak,
+                    color: LichessColors.good),
+              ),
               _CustomPlatformCard(
-                  context.l10n.lowestRating('').replaceAll(':', ''),
-                  child: _RatingWidget(data.lowestRating, data.lowestRatingGame,
-                      LichessColors.red)),
-            ]),
-            statGroupSpace,
-            _CustomPlatformCard(context.l10n.totalGames,
-                value: data.totalGames.toString(), styleValue: _mainValueStyle),
-            _CustomPlatformCardRow([
-              _CustomPlatformCard(context.l10n.wins,
-                  child: _PercentageValueWidget(data.wonGames, data.totalGames,
-                      color: LichessColors.good)),
-              _CustomPlatformCard(context.l10n.draws,
-                  child: _PercentageValueWidget(
-                      data.drawnGames, data.totalGames,
-                      color: textShade(context, _customOpacity),
-                      isShaded: true)),
-              _CustomPlatformCard(context.l10n.losses,
-                  child: _PercentageValueWidget(data.lostGames, data.totalGames,
-                      color: LichessColors.red)),
-            ]),
-            _CustomPlatformCardRow([
-              _CustomPlatformCard(context.l10n.rated,
-                  child:
-                      _PercentageValueWidget(data.ratedGames, data.totalGames)),
-              _CustomPlatformCard(context.l10n.tournament,
-                  child: _PercentageValueWidget(
-                      data.tournamentGames, data.totalGames)),
+                context.l10n.losingStreak,
+                child: _StreakWidget(data.maxLossStreak, data.curLossStreak,
+                    color: LichessColors.red),
+              ),
               _CustomPlatformCard(
-                  context.l10n.berserkedGames
-                      .replaceAll(' ${context.l10n.games.toLowerCase()}', ''),
-                  child: _PercentageValueWidget(
-                      data.berserkGames, data.totalGames)),
-              _CustomPlatformCard(context.l10n.disconnections,
-                  child: _PercentageValueWidget(
-                      data.disconnections, data.totalGames)),
-            ]),
-            _CustomPlatformCardRow([
-              _CustomPlatformCard(context.l10n.averageOpponent,
-                  value: data.avgOpponent == null
-                      ? '?'
-                      : data.avgOpponent.toString()),
-              _CustomPlatformCard(context.l10n.timeSpentPlaying,
-                  value: data.timePlayed
-                      .toDaysHoursMinutes(AppLocalizations.of(context))),
-            ]),
-            statGroupSpace,
-            _CustomPlatformCard(
-              context.l10n.winningStreak,
-              child: _StreakWidget(data.maxWinStreak, data.curWinStreak,
-                  color: LichessColors.good),
-            ),
-            _CustomPlatformCard(
-              context.l10n.losingStreak,
-              child: _StreakWidget(data.maxLossStreak, data.curLossStreak,
-                  color: LichessColors.red),
-            ),
-            _CustomPlatformCard(
-              context.l10n.gamesInARow,
-              child: _StreakWidget(data.maxPlayStreak, data.curPlayStreak),
-            ),
-            _CustomPlatformCard(
-              context.l10n.maxTimePlaying,
-              child: _StreakWidget(data.maxTimeStreak, data.curTimeStreak),
-            ),
-            statGroupSpace,
-            _CustomPlatformCard(context.l10n.bestRated,
-                child: _GameListWidget(data.bestWins)),
-            _CustomPlatformCard(context.l10n.worstRated,
-                child: _GameListWidget(data.worstLosses))
-          ]),
-        ));
+                context.l10n.gamesInARow,
+                child: _StreakWidget(data.maxPlayStreak, data.curPlayStreak),
+              ),
+              _CustomPlatformCard(
+                context.l10n.maxTimePlaying,
+                child: _StreakWidget(data.maxTimeStreak, data.curTimeStreak),
+              ),
+              statGroupSpace,
+              _CustomPlatformCard(context.l10n.bestRated,
+                  child: _GameListWidget(data.bestWins)),
+              _CustomPlatformCard(context.l10n.worstRated,
+                  child: _GameListWidget(data.worstLosses))
+            ],
+          ),
+        );
       },
       error: (error, stackTrace) {
         debugPrint(
