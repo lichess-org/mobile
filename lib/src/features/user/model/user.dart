@@ -7,6 +7,15 @@ import 'package:lichess_mobile/src/utils/json.dart';
 part 'user.freezed.dart';
 
 @freezed
+class LightUser with _$LightUser {
+  const factory LightUser({
+    required String name,
+    String? title,
+    bool? isPatron,
+  }) = _LightUser;
+}
+
+@freezed
 class User with _$User {
   const factory User({
     required String id,

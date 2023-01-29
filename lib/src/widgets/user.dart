@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
-import 'package:lichess_mobile/src/common/model/user.dart';
+import 'package:lichess_mobile/src/features/user/model/user.dart';
 
 /// This widget is meant to display the user basic informations in a [ListTile.title].
 class ListTileUser extends StatelessWidget {
