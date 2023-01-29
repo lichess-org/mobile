@@ -238,22 +238,22 @@ class PerfCards extends StatelessWidget {
           return SizedBox(
             height: 100,
             width: 100,
-            child: InkWell(
-              splashFactory: isPerfWithoutStats
-                  ? NoSplash.splashFactory
-                  : InkSplash.splashFactory,
-              customBorder: kPlatformCardBorder,
-              onTap: isPerfWithoutStats
-                  ? null
-                  : () => pushPlatformRoute(
-                      context: context,
-                      title: context.l10n
-                          .perfStats('${account.username} ${perf.title}'),
-                      builder: (context) => PerfStatsScreen(
-                          username: account.username,
-                          perf: perf,
-                          loggedInUser: account)),
-              child: PlatformCard(
+            child: PlatformCard(
+              child: InkWell(
+                splashFactory: isPerfWithoutStats
+                    ? NoSplash.splashFactory
+                    : InkSplash.splashFactory,
+                customBorder: kPlatformCardBorder,
+                onTap: isPerfWithoutStats
+                    ? null
+                    : () => pushPlatformRoute(
+                        context: context,
+                        title: context.l10n
+                            .perfStats('${account.username} ${perf.title}'),
+                        builder: (context) => PerfStatsScreen(
+                            username: account.username,
+                            perf: perf,
+                            loggedInUser: account)),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
