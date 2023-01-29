@@ -18,7 +18,7 @@ import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/common/sound.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/features/game/ui/board/playable_game_screen.dart';
-import 'package:lichess_mobile/src/features/game/model/game.dart' as game;
+import 'package:lichess_mobile/src/features/game/model/game.dart';
 import '../../../auth/data/fake_auth_repository.dart';
 import '../../../../utils.dart';
 
@@ -389,13 +389,13 @@ class FakeGameClient extends Fake implements http.Client {
 
 const gameIdTest = 'rCRw1AuO';
 
-const testGame = game.PlayableGame(
+const testGame = PlayableGame(
   id: GameId(gameIdTest),
   rated: false,
-  speed: game.Speed.blitz,
+  speed: Speed.blitz,
   initialFen: kInitialFEN,
   orientation: Side.white,
-  white: game.Player(name: 'White', id: 'white', rating: 1405),
-  black: game.Player(name: 'Black', id: 'black', rating: 1789),
-  variant: game.Variant.standard,
+  white: Player(name: 'White', id: 'white', rating: 1405),
+  black: Player(name: 'Black', id: 'black', rating: 1789),
+  variant: Variant.standard,
 );

@@ -17,7 +17,7 @@ import 'package:lichess_mobile/src/features/settings/ui/is_sound_muted_notifier.
 import 'package:lichess_mobile/src/features/user/model/user.dart';
 
 import '../../model/game_status.dart';
-import '../../model/game.dart' hide Player;
+import '../../model/game.dart';
 import '../play/play_action_notifier.dart';
 import './playable_game_screen_providers.dart';
 
