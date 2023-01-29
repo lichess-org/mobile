@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/model/player.dart';
 import 'package:lichess_mobile/src/features/game/model/time_control.dart';
 
 part 'puzzle.freezed.dart';
@@ -39,14 +39,27 @@ class PuzzleGame with _$PuzzleGame {
     required GameId id,
     required Perf perf,
     required bool rated,
-    required LightPlayer white,
-    required LightPlayer black,
+    required PuzzlePlayer white,
+    required PuzzlePlayer black,
     required String pgn,
     TimeInc? clock,
   }) = _PuzzleGame;
 
   factory PuzzleGame.fromJson(Map<String, dynamic> json) =>
       _$PuzzleGameFromJson(json);
+}
+
+@Freezed(fromJson: true, toJson: true)
+class PuzzlePlayer with _$PuzzlePlayer {
+  const factory PuzzlePlayer({
+    required Side side,
+    required String userId,
+    required String name,
+    String? title,
+  }) = _PuzzlePlayer;
+
+  factory PuzzlePlayer.fromJson(Map<String, dynamic> json) =>
+      _$PuzzlePlayerFromJson(json);
 }
 
 @Freezed(fromJson: true, toJson: true)

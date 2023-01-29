@@ -8,7 +8,6 @@ import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-import 'package:lichess_mobile/src/common/model/player.dart';
 import 'package:lichess_mobile/src/features/game/model/time_control.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/http.dart';
@@ -105,13 +104,22 @@ PuzzleGame _puzzleGameFromPick(RequiredPick pick) {
     perf: pick('perf', 'key').asPerfOrThrow(),
     rated: pick('rated').asBoolOrThrow(),
     white: pick('players').letOrThrow((it) => it
-        .asListOrThrow(LightPlayer.fromPick)
+        .asListOrThrow(_puzzlePlayerFromPick)
         .firstWhere((p) => p.side == Side.white)),
     black: pick('players').letOrThrow((it) => it
-        .asListOrThrow(LightPlayer.fromPick)
+        .asListOrThrow(_puzzlePlayerFromPick)
         .firstWhere((p) => p.side == Side.black)),
     pgn: pick('pgn').asStringOrThrow(),
     clock: pick('clock').letOrNull(
         (p) => TimeInc.fromString(p.asStringOrThrow()) ?? const TimeInc(0, 0)),
+  );
+}
+
+PuzzlePlayer _puzzlePlayerFromPick(RequiredPick pick) {
+  return PuzzlePlayer(
+    name: pick('name').asStringOrThrow(),
+    userId: pick('userId').asStringOrThrow(),
+    side: pick('color').asSideOrThrow(),
+    title: pick('title').asStringOrNull(),
   );
 }

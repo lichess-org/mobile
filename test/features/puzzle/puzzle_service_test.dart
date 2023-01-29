@@ -11,7 +11,6 @@ import 'package:logging/logging.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/model/player.dart';
 import 'package:lichess_mobile/src/features/puzzle/data/puzzle_local_db.dart';
 import 'package:lichess_mobile/src/features/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/features/puzzle/model/puzzle.dart';
@@ -252,9 +251,9 @@ final String oneSavedPuzzle = jsonEncode(PuzzleLocalData(
             perf: Perf.blitz,
             rated: true,
             white:
-                LightPlayer(side: Side.white, userId: 'user1', name: 'user1'),
+                PuzzlePlayer(side: Side.white, userId: 'user1', name: 'user1'),
             black:
-                LightPlayer(side: Side.black, userId: 'user2', name: 'user2'),
+                PuzzlePlayer(side: Side.black, userId: 'user2', name: 'user2'),
             pgn:
                 'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2'),
       ),
