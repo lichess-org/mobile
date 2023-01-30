@@ -611,6 +611,7 @@ class _GameListWidget extends ConsumerWidget {
               ),
               subtitle: Text(
                 _dateFormatter.format(game.finishedAt),
+                style: TextStyle(color: textShade(context, 0.7)),
               ),
             ),
         ],

@@ -343,9 +343,13 @@ class RecentGames extends ConsumerWidget {
                   },
                   leading: Icon(game.perf.icon),
                   title: ListTileUser(
-                      user:
-                          LightUser(name: opponentName, title: opponent.title)),
-                  subtitle: Text(timeago.format(game.lastMoveAt)),
+                    user: LightUser(name: opponentName, title: opponent.title),
+                    rating: opponent.rating,
+                  ),
+                  subtitle: Text(
+                    timeago.format(game.lastMoveAt),
+                    style: TextStyle(color: textShade(context, 0.7)),
+                  ),
                   trailing: game.winner == mySide
                       ? const Icon(CupertinoIcons.plus_square_fill,
                           color: LichessColors.good)
