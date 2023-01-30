@@ -265,10 +265,8 @@ class _CustomPlatformCard extends StatelessWidget {
   final String stat;
   final Widget? child;
   final String? value;
-  final TextStyle? styleValue;
 
-  const _CustomPlatformCard(this.stat,
-      {this.child, this.value, this.styleValue});
+  const _CustomPlatformCard(this.stat, {this.child, this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -278,8 +276,6 @@ class _CustomPlatformCard extends StatelessWidget {
     );
 
     const defaultValueStyle = TextStyle(fontSize: _defaultValueFontSize);
-
-    final TextStyle trueValueStyle = styleValue ?? defaultValueStyle;
 
     return PlatformCard(
       margin: const EdgeInsets.symmetric(vertical: 6.0),
@@ -294,11 +290,12 @@ class _CustomPlatformCard extends StatelessWidget {
                 child: Text(stat,
                     style: defaultStatStyle, textAlign: TextAlign.center)),
             if (value != null)
-              Text(value!, style: trueValueStyle, textAlign: TextAlign.center)
+              Text(value!,
+                  style: defaultValueStyle, textAlign: TextAlign.center)
             else if (child != null)
               child!
             else
-              Text('?', style: trueValueStyle)
+              const Text('?', style: defaultValueStyle)
           ],
         ),
       ),
@@ -343,40 +340,6 @@ Iterable<Widget> _divideRow(Iterable<Widget> elements) {
     ...list.take(list.length - 1).map(wrapElement),
     list.last,
   ];
-}
-
-class _MainRatingWidget extends StatelessWidget {
-  final double rating;
-  final double deviation;
-  final double? percentile;
-  final String username;
-  final String perfTitle;
-  final bool? provisional;
-  final User? loggedInUser;
-
-  const _MainRatingWidget(this.rating, this.deviation, this.percentile,
-      this.username, this.perfTitle, this.loggedInUser,
-      {this.provisional});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Text(
-          '${rating.toStringAsFixed(2)}${provisional == true || deviation > kProvisionalDeviation ? '?' : ''}',
-          style: _mainValueStyle),
-      if (percentile != null)
-        Text(
-            (loggedInUser != null && loggedInUser!.username == username)
-                ? context.l10n.youAreBetterThanPercentOfPerfTypePlayers(
-                    '${percentile!.toStringAsFixed(2)}%', perfTitle)
-                : context.l10n.userIsBetterThanPercentOfPerfTypePlayers(
-                    username, '${percentile!.toStringAsFixed(2)}%', perfTitle),
-            style: TextStyle(
-                fontSize: _defaultStatFontSize,
-                color: textShade(context, _customOpacity)),
-            textAlign: TextAlign.center)
-    ]);
-  }
 }
 
 class _ProgressionWidget extends StatelessWidget {
