@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
@@ -110,6 +111,92 @@ void main() {
               .onPressed,
           isNotNull);
     }, variant: kPlatformVariant);
+
+    testWidgets('navigate game positions', (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final sharedPreferences = await SharedPreferences.getInstance();
+
+      final app = await buildTestApp(
+        tester,
+        home: Consumer(builder: (context, ref, _) {
+          return ArchivedGameScreen(
+              gameData: gameData, orientation: Side.white);
+        }),
+      );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+            apiClientProvider
+                .overrideWithValue(ApiClient(mockLogger, mockClient)),
+            soundServiceProvider.overrideWithValue(mockSoundService),
+          ],
+          child: app,
+        ),
+      );
+
+      // wait for game steps loading
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.byType(MoveList), findsOneWidget);
+
+      // wait for move list ensureVisible animation to finish
+      await tester.pumpAndSettle();
+
+      final movesAfterE4 =
+          'e5 Qh5 Nf6 Qxe5+ Be7 b3 d6 Qb5+ Bd7 Qxb7 Nc6 Ba3 Rb8 Qa6 Nxe4 Bb2 O-O Nc3 Nb4 Nf3 Nxa6 Nd5 Nb4 Nxe7+ Qxe7 Nd4 Qf6 f4 Qe7 Ke2 Ng3+ Kd1 Nxh1 Bc4 Nf2+ Kc1 Qe1#'
+              .split(' ')
+              .reversed
+              .toList();
+
+      expect(
+          tester
+              .widget<InlineMoveItem>(
+                  find.widgetWithText(InlineMoveItem, 'Qe1#'))
+              .current,
+          isTrue);
+
+      for (var i = 0; i < movesAfterE4.length; i++) {
+        // go back in history
+        await tester.tap(find.byKey(const Key('cursor-back')));
+        // wait for animation to finish
+        await tester.pumpAndSettle();
+
+        // move list is updated
+        if (i + 1 < movesAfterE4.length) {
+          final prevMove =
+              find.widgetWithText(InlineMoveItem, movesAfterE4[i + 1]);
+          expect(prevMove, findsAtLeastNWidgets(1));
+          expect(tester.widget<InlineMoveItem>(prevMove).current, isTrue);
+        }
+      }
+
+      // cannot go backward anymore
+      expect(
+          tester
+              .widget<IconButton>(find.byKey(const Key('cursor-back')))
+              .onPressed,
+          isNull);
+
+      // go to last
+      await tester.tap(find.byKey(const Key('cursor-last')));
+      // wait for animation to finish
+      await tester.pumpAndSettle();
+
+      // cannot go forward anymore
+      expect(
+          tester
+              .widget<IconButton>(find.byKey(const Key('cursor-forward')))
+              .onPressed,
+          isNull);
+      expect(
+          tester
+              .widget<InlineMoveItem>(
+                  find.widgetWithText(InlineMoveItem, 'Qe1#'))
+              .current,
+          isTrue);
+    });
   });
 }
 

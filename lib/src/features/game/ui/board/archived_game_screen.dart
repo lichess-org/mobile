@@ -177,6 +177,19 @@ class _BoardBody extends ConsumerWidget {
   }
 }
 
+final _canGoForwardProvider =
+    Provider.autoDispose.family<bool, List<GameStep>?>((ref, steps) {
+  final positionCursor = ref.watch(_positionCursorProvider);
+  return steps != null &&
+      positionCursor != null &&
+      positionCursor < steps.length - 1;
+});
+
+final _canGoBackwardProvider = Provider.autoDispose<bool>((ref) {
+  final positionCursor = ref.watch(_positionCursorProvider);
+  return positionCursor != null && positionCursor > 0;
+});
+
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({required this.gameData, this.steps});
 
@@ -185,7 +198,8 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final positionCursor = ref.watch(_positionCursorProvider);
+    final canGoForward = ref.watch(_canGoForwardProvider(steps));
+    final canGoBackward = ref.watch(_canGoBackwardProvider);
 
     return SizedBox(
       child: Row(
@@ -202,7 +216,7 @@ class _BottomBar extends ConsumerWidget {
               key: const ValueKey('cursor-first'),
               // TODO add translation
               tooltip: 'First position',
-              onPressed: positionCursor != null && positionCursor > 0
+              onPressed: canGoBackward
                   ? () {
                       ref.read(_positionCursorProvider.notifier).state = 0;
                     }
@@ -214,7 +228,7 @@ class _BottomBar extends ConsumerWidget {
               key: const ValueKey('cursor-back'),
               // TODO add translation
               tooltip: 'Backward',
-              onPressed: positionCursor != null && positionCursor > 0
+              onPressed: canGoBackward
                   ? () {
                       ref
                           .read(_positionCursorProvider.notifier)
@@ -233,9 +247,7 @@ class _BottomBar extends ConsumerWidget {
               key: const ValueKey('cursor-forward'),
               // TODO add translation
               tooltip: 'Forward',
-              onPressed: steps != null &&
-                      positionCursor != null &&
-                      positionCursor < steps!.length - 1
+              onPressed: canGoForward
                   ? () {
                       ref
                           .read(_positionCursorProvider.notifier)
@@ -254,9 +266,7 @@ class _BottomBar extends ConsumerWidget {
               key: const ValueKey('cursor-last'),
               // TODO add translation
               tooltip: 'Last position',
-              onPressed: steps != null &&
-                      positionCursor != null &&
-                      positionCursor < steps!.length - 1
+              onPressed: canGoForward
                   ? () {
                       ref.read(_positionCursorProvider.notifier).state =
                           steps!.length - 1;
