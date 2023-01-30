@@ -31,18 +31,7 @@ class App extends ConsumerWidget {
           data: CupertinoThemeData(
             brightness: brightness,
           ),
-          child: Material(
-            // icon theme is needed here because cupertino theme overrides
-            // default material icon theme on material widgets
-            child: child != null
-                ? IconTheme(
-                    data: CupertinoIconThemeData(
-                        color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.label, context)),
-                    child: child,
-                  )
-                : child,
-          ),
+          child: Material(child: child),
         );
       },
       onGenerateRoute: (RouteSettings settings) {

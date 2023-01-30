@@ -112,7 +112,6 @@ class _BuildLeaderboard extends StatelessWidget {
           leading: Icon(iconData, color: LichessColors.brag),
           title: Text(title),
         ),
-        const Divider(),
         ...ListTile.divideTiles(
             color: dividerColor(context),
             context: context,
@@ -125,16 +124,18 @@ class _BuildLeaderboard extends StatelessWidget {
 
 /// A List Tile for the Leaderboard
 ///
-/// Optionaly Provide the [prefIcon] for the Variant of the List
+/// Optionaly Provide the [perfIcon] for the Variant of the List
 class LeaderboardListTile extends StatelessWidget {
-  const LeaderboardListTile({required this.user, this.prefIcon});
+  const LeaderboardListTile({required this.user, this.perfIcon});
   final LeaderboardUser user;
-  final IconData? prefIcon;
+  final IconData? perfIcon;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: _OnlineOrPatron(patron: user.patron, online: user.online),
+      leading: perfIcon != null
+          ? Icon(perfIcon)
+          : _OnlineOrPatron(patron: user.patron, online: user.online),
       title: Row(
         children: [
           if (user.title != null) ...[
@@ -148,27 +149,22 @@ class LeaderboardListTile extends StatelessWidget {
           ),
         ],
       ),
-      trailing:
-          _RatingAndProgress(user.rating, user.progress, prefIcon: prefIcon),
+      trailing: _RatingAndProgress(user.rating, user.progress),
     );
   }
 }
 
 class _RatingAndProgress extends StatelessWidget {
-  const _RatingAndProgress(this.rating, this.progress, {this.prefIcon});
+  const _RatingAndProgress(this.rating, this.progress);
   final int rating;
   final int progress;
-  final IconData? prefIcon;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (prefIcon != null) ...[
-          Flexible(child: Icon(prefIcon, color: LichessColors.brag)),
-          const SizedBox(width: 10)
-        ],
+        SizedBox(width: 50, child: Text(rating.toString())),
         const SizedBox(width: 5),
         if (progress < 0)
           Row(
@@ -201,9 +197,7 @@ class _RatingAndProgress extends StatelessWidget {
             ],
           )
         else
-          const SizedBox(width: 50),
-        const SizedBox(width: 5),
-        SizedBox(width: 50, child: Text(rating.toString()))
+          const SizedBox.shrink(),
       ],
     );
   }

@@ -1,5 +1,5 @@
+import 'package:async/async.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:mocktail/mocktail.dart';
@@ -26,11 +26,11 @@ void main() {
   group('LeaderboardRepository.getLeaderboard', () {
     test('get leaderboard', () async {
       when(() => mockApiClient.get(Uri.parse('$kLichessHost/api/player')))
-          .thenReturn(TaskEither.right(http.Response(testRes, 200)));
+          .thenAnswer((_) async => Result.value(http.Response(testRes, 200)));
 
-      final result = await repo.getLeaderboard().run();
+      final result = await repo.getLeaderboard();
 
-      expect(result.isRight(), true);
+      expect(result.isValue, true);
     });
   });
 }

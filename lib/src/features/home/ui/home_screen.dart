@@ -43,14 +43,12 @@ class HomeScreen extends StatelessWidget {
         children: [
           Expanded(
             child: ListView(
-              shrinkWrap: true,
               padding: kBodyPadding,
-              children: const [
-                Center(child: Text('TODO')),
+              children: [
+                LeaderboardWidget(),
               ],
             ),
           ),
-          LeaderboardWidget(),
           SizedBox(
             height: 80,
             child: Padding(
