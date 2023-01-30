@@ -185,56 +185,6 @@ class UserPerfStats with _$UserPerfStats {
       UserStreak? maxTimeStreak,
       List<UserPerfGame>? worstLosses,
       List<UserPerfGame>? bestWins}) = _UserPerfStats;
-
-  factory UserPerfStats.fromJson(Map<String, dynamic> json) =>
-      UserPerfStats.fromPick(pick(json).required());
-
-  factory UserPerfStats.fromPick(RequiredPick pick) {
-    final perf = pick('perf');
-    final stat = pick('stat');
-
-    final lowest = stat('lowest');
-    final highest = stat('highest');
-    final count = stat('count');
-    final resultStreak = stat('resultStreak');
-    final playStreak = stat('playStreak');
-
-    return UserPerfStats(
-        rating: perf('glicko', 'rating').asDoubleOrThrow(),
-        deviation: perf('glicko', 'deviation').asDoubleOrThrow(),
-        provisional: perf('glicko', 'provisional').asBoolOrNull(),
-        progress: perf('progress').asIntOrThrow(),
-        rank: pick('rank').asIntOrNull(),
-        percentile: pick('percentile').asDoubleOrNull(),
-        totalGames: count('all').asIntOrThrow(),
-        berserkGames: count('berserk').asIntOrThrow(),
-        tournamentGames: count('tour').asIntOrThrow(),
-        ratedGames: count('rated').asIntOrThrow(),
-        wonGames: count('win').asIntOrThrow(),
-        lostGames: count('loss').asIntOrThrow(),
-        drawnGames: count('draw').asIntOrThrow(),
-        disconnections: count('disconnects').asIntOrThrow(),
-        avgOpponent: count('opAvg').asDoubleOrNull(),
-        timePlayed: count('seconds').asDurationFromSecondsOrThrow(),
-        lowestRating: lowest('int').asIntOrNull(),
-        lowestRatingGame: lowest.letOrNull(UserPerfGame.fromPick),
-        highestRating: highest('int').asIntOrNull(),
-        highestRatingGame: highest.letOrNull(UserPerfGame.fromPick),
-        curWinStreak: resultStreak('win', 'cur').letOrNull(UserStreak.fromPick),
-        maxWinStreak: resultStreak('win', 'max').letOrNull(UserStreak.fromPick),
-        curLossStreak:
-            resultStreak('loss', 'cur').letOrNull(UserStreak.fromPick),
-        maxLossStreak:
-            resultStreak('loss', 'max').letOrNull(UserStreak.fromPick),
-        curPlayStreak: playStreak('nb', 'cur').letOrNull(UserStreak.fromPick),
-        maxPlayStreak: playStreak('nb', 'max').letOrNull(UserStreak.fromPick),
-        curTimeStreak: playStreak('time', 'cur').letOrNull(UserStreak.fromPick),
-        maxTimeStreak: playStreak('time', 'max').letOrNull(UserStreak.fromPick),
-        worstLosses: stat('worstLosses', 'results')
-            .asListOrNull((pick) => UserPerfGame.fromPick(pick)),
-        bestWins: stat('bestWins', 'results')
-            .asListOrNull((pick) => UserPerfGame.fromPick(pick)));
-  }
 }
 
 @freezed
@@ -252,45 +202,6 @@ class UserStreak with _$UserStreak {
     required UserPerfGame? startGame,
     required UserPerfGame? endGame,
   }) = UserTimeStreak;
-
-  factory UserStreak.fromJson(Map<String, dynamic> json) {
-    return UserStreak.fromPick(pick(json).required());
-  }
-
-  factory UserStreak.fromPick(RequiredPick pick) {
-    final path = pick.path;
-    if (path.length <= 1) {
-      throw PickException("cannot decode $pick as 'UserStreak'");
-    }
-
-    // Since we are passing 'cur' or 'max' as the last pick,
-    // we check the previous value in the path (the parent).
-    final type = path.reversed.elementAt(1);
-
-    final value = pick('v');
-    final isValueEmpty = value.asIntOrThrow() == 0;
-    final startGame = pick('from').letOrNull(UserPerfGame.fromPick);
-    final endGame = pick('to').letOrNull(UserPerfGame.fromPick);
-
-    switch (type) {
-      case 'time':
-        return UserStreak.timeStreak(
-            timePlayed: value.asDurationFromSecondsOrThrow(),
-            isValueEmpty: isValueEmpty,
-            startGame: startGame,
-            endGame: endGame);
-      case 'win':
-      case 'loss':
-      case 'nb':
-        return UserStreak.gameStreak(
-            gamesPlayed: value.asIntOrThrow(),
-            isValueEmpty: isValueEmpty,
-            startGame: startGame,
-            endGame: endGame);
-      default:
-        throw PickException("cannot decode $pick as 'UserStreak'");
-    }
-  }
 }
 
 @freezed
@@ -302,20 +213,4 @@ class UserPerfGame with _$UserPerfGame {
       String? opponentId,
       String? opponentName,
       String? opponentTitle}) = _UserPerfGame;
-
-  factory UserPerfGame.fromJson(Map<String, Object?> json) =>
-      UserPerfGame.fromPick(pick(json).required());
-
-  factory UserPerfGame.fromPick(RequiredPick pick) {
-    final opId = pick('opId');
-
-    return UserPerfGame(
-      finishedAt: pick('at').asDateTimeOrThrow(),
-      gameId: pick('gameId').asGameIdOrThrow(),
-      opponentRating: pick('opRating').asIntOrNull(),
-      opponentId: opId('id').asStringOrNull(),
-      opponentName: opId('name').asStringOrNull(),
-      opponentTitle: opId('title').asStringOrNull(),
-    );
-  }
 }
