@@ -264,9 +264,12 @@ class PerfCards extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                              '${userPerf.rating}${userPerf.provisional == true || userPerf.ratingDeviation > kProvisionalDeviation ? '?' : ''}',
-                              style: kBold),
+                          UserRating(
+                            rating: userPerf.rating,
+                            deviation: userPerf.ratingDeviation,
+                            provisional: userPerf.provisional,
+                            style: kBold,
+                          ),
                           const SizedBox(width: 3),
                           if (userPerf.progression != 0) ...[
                             Icon(

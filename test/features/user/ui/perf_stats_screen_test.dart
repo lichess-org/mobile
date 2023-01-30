@@ -78,9 +78,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 50));
 
       final requiredStatsValues = [
-        '1500.42', // Rating
         '50.24', // Deviation
-        '5', // Total games
         '20', // Progression in last 12 games
         '0', // Berserked games
         '0', // Tournament games
@@ -90,6 +88,9 @@ void main() {
         '1', // Drawn games
         '1' // Disconnections
       ];
+
+      // rating
+      expect(find.text('1500.42'), findsOneWidget);
 
       for (final val in requiredStatsValues) {
         expect(find.widgetWithText(PlatformCard, val), findsAtLeastNWidgets(1));

@@ -31,6 +31,7 @@ final perfStatsProvider = FutureProvider.autoDispose
       userRepo.getUserPerfStats(perfParams.username, perfParams.perf));
 });
 
+// that one can be cached forever
 final perfGamesProvider =
     FutureProvider.family<List<ArchivedGameData>, List<GameId>>(
         (ref, ids) async {
@@ -101,6 +102,7 @@ class PerfStatsScreen extends ConsumerWidget {
         UserPerfStatsParameters(username: user.username, perf: perf)));
 
     const statGroupSpace = SizedBox(height: 15.0);
+    const subStatSpace = SizedBox(height: 10);
 
     return perfStats.when(
       data: (data) {
@@ -109,16 +111,32 @@ class PerfStatsScreen extends ConsumerWidget {
             padding: kBodyPadding,
             scrollDirection: Axis.vertical,
             children: [
-              _CustomPlatformCard(context.l10n.rating,
-                  child: _MainRatingWidget(
-                    data.rating,
-                    data.deviation,
-                    data.percentile,
-                    user.username,
-                    perf.title,
-                    loggedInUser,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text('${context.l10n.rating} ', style: kSectionTitle),
+                  UserRating(
+                    rating: data.rating,
+                    deviation: data.deviation,
                     provisional: data.provisional,
-                  )),
+                    style: _mainValueStyle,
+                  ),
+                ],
+              ),
+              if (data.percentile != null)
+                Text(
+                  (loggedInUser != null &&
+                          loggedInUser!.username == user.username)
+                      ? context.l10n.youAreBetterThanPercentOfPerfTypePlayers(
+                          '${data.percentile!.toStringAsFixed(2)}%', perf.title)
+                      : context.l10n.userIsBetterThanPercentOfPerfTypePlayers(
+                          user.username,
+                          '${data.percentile!.toStringAsFixed(2)}%',
+                          perf.title),
+                  style: TextStyle(color: textShade(context, 0.7)),
+                ),
+              subStatSpace,
               // The number '12' here is not arbitrary, since the API returns the progression for the last 12 games (as far as I know).
               _CustomPlatformCard(
                   context.l10n.progressOverLastXGames('12').replaceAll(':', ''),
@@ -144,9 +162,15 @@ class PerfStatsScreen extends ConsumerWidget {
                         data.lowestRatingGame, LichessColors.red)),
               ]),
               statGroupSpace,
-              _CustomPlatformCard(context.l10n.totalGames,
-                  value: data.totalGames.toString(),
-                  styleValue: _mainValueStyle),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text('${context.l10n.totalGames} ', style: kSectionTitle),
+                  Text(data.totalGames.toString(), style: _mainValueStyle),
+                ],
+              ),
+              subStatSpace,
               _CustomPlatformCardRow([
                 _CustomPlatformCard(context.l10n.wins,
                     child: _PercentageValueWidget(
@@ -187,7 +211,6 @@ class PerfStatsScreen extends ConsumerWidget {
                     value: data.timePlayed
                         .toDaysHoursMinutes(AppLocalizations.of(context))),
               ]),
-              statGroupSpace,
               _CustomPlatformCard(
                 context.l10n.winningStreak,
                 child: _StreakWidget(data.maxWinStreak, data.curWinStreak,
