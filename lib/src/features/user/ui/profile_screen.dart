@@ -250,9 +250,7 @@ class PerfCards extends StatelessWidget {
                         title: context.l10n
                             .perfStats('${account.username} ${perf.title}'),
                         builder: (context) => PerfStatsScreen(
-                            username: account.username,
-                            perf: perf,
-                            loggedInUser: account)),
+                            user: account, perf: perf, loggedInUser: account)),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -332,7 +330,11 @@ class RecentGames extends ConsumerWidget {
                     Navigator.of(context, rootNavigator: true).push<void>(
                       MaterialPageRoute(
                         builder: (context) => ArchivedGameScreen(
-                            gameData: game, account: account),
+                          gameData: game,
+                          orientation: account.id == game.white.id
+                              ? Side.white
+                              : Side.black,
+                        ),
                       ),
                     );
                   },

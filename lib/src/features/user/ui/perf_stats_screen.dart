@@ -5,11 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/features/game/data/game_repository.dart';
+import 'package:lichess_mobile/src/features/game/model/game.dart';
+import 'package:lichess_mobile/src/features/game/ui/board/archived_game_screen.dart';
 import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
@@ -26,6 +30,12 @@ final perfStatsProvider = FutureProvider.autoDispose
       userRepo.getUserPerfStats(perfParams.username, perfParams.perf));
 });
 
+final perfGamesProvider = FutureProvider.autoDispose
+    .family<List<ArchivedGameData>, List<GameId>>((ref, ids) async {
+  final gameRepo = ref.watch(gameRepositoryProvider);
+  return Result.release(gameRepo.getGamesByIds(ids));
+});
+
 final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
 
 const _customOpacity = 0.6;
@@ -36,12 +46,12 @@ const _mainValueStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 30);
 
 class PerfStatsScreen extends ConsumerWidget {
   const PerfStatsScreen(
-      {required this.username,
+      {required this.user,
       required this.perf,
       required this.loggedInUser,
       super.key});
 
-  final String username;
+  final User user;
   final Perf perf;
   final User? loggedInUser;
 
@@ -65,7 +75,7 @@ class PerfStatsScreen extends ConsumerWidget {
                   alignment: Alignment.centerLeft,
                   fit: BoxFit.scaleDown,
                   child: Text(
-                    context.l10n.perfStats('$username ${perf.title}'),
+                    context.l10n.perfStats('${user.username} ${perf.title}'),
                     style: const TextStyle(fontSize: _titleFontSize),
                   ),
                 ),
@@ -86,7 +96,7 @@ class PerfStatsScreen extends ConsumerWidget {
 
   Widget _buildBody(BuildContext context, WidgetRef ref) {
     final perfStats = ref.watch(perfStatsProvider(
-        UserPerfStatsParameters(username: username, perf: perf)));
+        UserPerfStatsParameters(username: user.username, perf: perf)));
 
     const statGroupSpace = SizedBox(height: 15.0);
 
@@ -102,7 +112,7 @@ class PerfStatsScreen extends ConsumerWidget {
                     data.rating,
                     data.deviation,
                     data.percentile,
-                    username,
+                    user.username,
                     perf.title,
                     loggedInUser,
                     provisional: data.provisional,
@@ -197,12 +207,20 @@ class PerfStatsScreen extends ConsumerWidget {
               if (data.bestWins != null && data.bestWins!.isNotEmpty) ...[
                 statGroupSpace,
                 Text(context.l10n.bestRated, style: kSectionTitle),
-                _GameListWidget(games: data.bestWins!, perf: perf),
+                _GameListWidget(
+                  games: data.bestWins!,
+                  perf: perf,
+                  user: user,
+                ),
               ],
               if (data.worstLosses != null && data.worstLosses!.isNotEmpty) ...[
                 statGroupSpace,
                 Text(context.l10n.worstRated, style: kSectionTitle),
-                _GameListWidget(games: data.worstLosses!, perf: perf),
+                _GameListWidget(
+                  games: data.worstLosses!,
+                  perf: perf,
+                  user: user,
+                ),
               ],
             ],
           ),
@@ -517,14 +535,16 @@ class _StreakWidget extends StatelessWidget {
   }
 }
 
-class _GameListWidget extends StatelessWidget {
+class _GameListWidget extends ConsumerWidget {
   final List<UserPerfGame> games;
   final Perf perf;
+  final User user;
 
-  const _GameListWidget({required this.games, required this.perf});
+  const _GameListWidget(
+      {required this.games, required this.perf, required this.user});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: ListTile.divideTiles(
@@ -533,6 +553,27 @@ class _GameListWidget extends StatelessWidget {
         tiles: [
           for (final game in games)
             ListTile(
+              onTap: () {
+                ref
+                    .read(perfGamesProvider(games.map((g) => g.gameId).toList())
+                        .future)
+                    .then((list) {
+                  final gameData =
+                      list.firstWhereOrNull((g) => g.id == game.gameId);
+                  if (gameData != null) {
+                    Navigator.of(context, rootNavigator: true).push<void>(
+                      MaterialPageRoute(
+                        builder: (context) => ArchivedGameScreen(
+                          gameData: gameData,
+                          orientation: user.id == gameData.white.id
+                              ? Side.white
+                              : Side.black,
+                        ),
+                      ),
+                    );
+                  }
+                });
+              },
               leading: Icon(perf.icon),
               title: ListTileUser(
                 user: LightUser(

@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/features/settings/ui/is_sound_muted_notifier.dart';
-import 'package:lichess_mobile/src/features/user/model/user.dart';
 
 import '../../data/game_repository.dart';
 import '../../model/game.dart';
@@ -42,10 +41,10 @@ final archivedGameProvider =
 
 class ArchivedGameScreen extends ConsumerWidget {
   const ArchivedGameScreen(
-      {required this.gameData, required this.account, super.key});
+      {required this.gameData, required this.orientation, super.key});
 
   final ArchivedGameData gameData;
-  final User account;
+  final Side orientation;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -76,8 +75,8 @@ class ArchivedGameScreen extends ConsumerWidget {
                   ref.read(isSoundMutedProvider.notifier).toggleSound())
         ],
       ),
-      body:
-          _BoardBody(gameData: gameData, game: archivedGame, account: account),
+      body: _BoardBody(
+          gameData: gameData, game: archivedGame, orientation: orientation),
       bottomNavigationBar:
           _BottomBar(gameData: gameData, steps: archivedGame?.steps),
     );
@@ -109,7 +108,9 @@ class ArchivedGameScreen extends ConsumerWidget {
           children: [
             Expanded(
                 child: _BoardBody(
-                    gameData: gameData, game: archivedGame, account: account)),
+                    gameData: gameData,
+                    game: archivedGame,
+                    orientation: orientation)),
             _BottomBar(gameData: gameData, steps: archivedGame?.steps),
           ],
         ),
@@ -119,11 +120,12 @@ class ArchivedGameScreen extends ConsumerWidget {
 }
 
 class _BoardBody extends ConsumerWidget {
-  const _BoardBody({required this.gameData, this.game, required this.account});
+  const _BoardBody(
+      {required this.gameData, this.game, required this.orientation});
 
   final ArchivedGameData gameData;
   final ArchivedGame? game;
-  final User account;
+  final Side orientation;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -149,8 +151,6 @@ class _BoardBody extends ConsumerWidget {
           ? game?.whiteClockAt(positionCursor)
           : game?.clock?.initial,
     );
-    final orientation =
-        account.id == gameData.white.id ? Side.white : Side.black;
     final topPlayer = orientation == Side.white ? black : white;
     final bottomPlayer = orientation == Side.white ? white : black;
 

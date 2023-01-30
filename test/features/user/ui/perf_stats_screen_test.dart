@@ -24,7 +24,8 @@ void main() {
   final mockClient = MockClient();
   final mockLogger = MockLogger();
 
-  final uriString = '$kLichessHost/api/user/$testUserId/perf/${testPerf.name}';
+  final uriString =
+      '$kLichessHost/api/user/${fakeUser.id}/perf/${testPerf.name}';
 
   setUpAll(() {
     when(() => mockClient.get(Uri.parse(uriString)))
@@ -37,8 +38,8 @@ void main() {
 
       final app =
           await buildTestApp(tester, home: Consumer(builder: (context, ref, _) {
-        return const PerfStatsScreen(
-            username: testUserId, perf: testPerf, loggedInUser: null);
+        return PerfStatsScreen(
+            user: fakeUser, perf: testPerf, loggedInUser: null);
       }));
 
       await tester.pumpWidget(ProviderScope(overrides: [
@@ -63,8 +64,8 @@ void main() {
         (WidgetTester tester) async {
       final app =
           await buildTestApp(tester, home: Consumer(builder: (context, ref, _) {
-        return const PerfStatsScreen(
-            username: testUserId, perf: testPerf, loggedInUser: null);
+        return PerfStatsScreen(
+            user: fakeUser, perf: testPerf, loggedInUser: null);
       }));
 
       await tester.pumpWidget(ProviderScope(overrides: [
@@ -97,9 +98,8 @@ void main() {
   });
 }
 
-const testUserId = 'fakeUsername';
 const testPerf = Perf.rapid;
-const userPerfStatsResponse = '''
+final userPerfStatsResponse = '''
 {
   "user": {
     "name": "testOpponentName"
@@ -289,8 +289,8 @@ const userPerfStatsResponse = '''
       ]
     },
     "userId": {
-      "id": "$testUserId",
-      "name": "$testUserId",
+      "id": "${fakeUser.id}",
+      "name": "${fakeUser.username}",
       "title": null
     },
     "playStreak": {

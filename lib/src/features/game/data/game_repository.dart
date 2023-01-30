@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:async/async.dart';
+import 'package:http/http.dart' as http;
 import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
@@ -47,18 +48,18 @@ class GameRepository {
       Uri.parse(
           '$kLichessHost/api/games/user/$username?max=10&moves=false&lastFen=true'),
       headers: {'Accept': 'application/x-ndjson'},
-    ).flatMap(
-      (r) => Result(() {
-        final lines = r.body.split('\n');
-        return lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
-          final json = jsonDecode(e) as Map<String, dynamic>;
-          return _makeArchivedGameDataFromJson(json);
-        }).toList(growable: false);
-      }).mapError((error, _) {
-        _log.severe('Could not read json object as ArchivedGame: $error');
-        return DataFormatException();
-      }),
-    );
+    ).flatMap(_decodeNdJsonGames);
+  }
+
+  FutureResult<List<ArchivedGameData>> getGamesByIds(List<GameId> ids) {
+    return apiClient
+        .post(
+          Uri.parse(
+              '$kLichessHost/api/games/export/_ids?moves=false&lastFen=true'),
+          headers: {'Accept': 'application/x-ndjson'},
+          body: ids.join(','),
+        )
+        .flatMap(_decodeNdJsonGames);
   }
 
   /// Stream the events reaching a lichess user in real time as ndjson.
@@ -106,6 +107,19 @@ class GameRepository {
     return apiClient.post(
         Uri.parse('$kLichessHost/api/board/game/$gameId/resign'),
         retry: true);
+  }
+
+  Result<List<ArchivedGameData>> _decodeNdJsonGames(http.Response response) {
+    return Result(() {
+      final lines = response.body.split('\n');
+      return lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
+        final json = jsonDecode(e) as Map<String, dynamic>;
+        return _makeArchivedGameDataFromJson(json);
+      }).toList(growable: false);
+    }).mapError((error, _) {
+      _log.severe('Could not read json object as ArchivedGame: $error');
+      return DataFormatException();
+    });
   }
 
   void dispose() {

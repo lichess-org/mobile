@@ -19,7 +19,6 @@ import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/features/game/ui/board/archived_game_screen.dart';
 import 'package:lichess_mobile/src/features/game/model/game.dart';
 import 'package:lichess_mobile/src/features/game/model/game_status.dart';
-import '../../../auth/data/fake_auth_repository.dart';
 import '../../../../utils.dart';
 
 class MockClient extends Mock implements http.Client {}
@@ -52,7 +51,8 @@ void main() {
       final app = await buildTestApp(
         tester,
         home: Consumer(builder: (context, ref, _) {
-          return ArchivedGameScreen(gameData: gameData, account: fakeUser);
+          return ArchivedGameScreen(
+              gameData: gameData, orientation: Side.white);
         }),
       );
 
