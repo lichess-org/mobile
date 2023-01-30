@@ -21,6 +21,8 @@ const kSectionTitle = TextStyle(fontSize: 16);
 const kProvisionalDeviation = 110;
 const kClueLessDeviation = 230;
 
+const kLargeScreenWidth = 600;
+
 // Misc
 const kPlatformCardBorder = RoundedRectangleBorder(
     borderRadius: BorderRadius.all(Radius.circular(10.0)));

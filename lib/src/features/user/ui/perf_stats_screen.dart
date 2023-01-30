@@ -25,7 +25,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
 final perfStatsProvider = FutureProvider.autoDispose
-    .family<UserPerfStats, UserPerfStatsParameters>((ref, perfParams) async {
+    .family<UserPerfStats, UserPerfStatsParameters>((ref, perfParams) {
   final userRepo = ref.watch(userRepositoryProvider);
   return Result.release(
       userRepo.getUserPerfStats(perfParams.username, perfParams.perf));
