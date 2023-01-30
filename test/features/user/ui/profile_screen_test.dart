@@ -108,7 +108,9 @@ void main() {
       await tester.pump(const Duration(milliseconds: 50));
 
       // opponent in recent games
-      expect(find.widgetWithText(ListTile, 'maia1'), findsNWidgets(3));
+      expect(find.widgetWithText(ListTile, 'maia1 (1397)'), findsOneWidget);
+      expect(find.widgetWithText(ListTile, 'maia1 (1399)'), findsOneWidget);
+      expect(find.widgetWithText(ListTile, 'maia1 (1410)'), findsOneWidget);
     }, variant: kPlatformVariant);
   });
 }

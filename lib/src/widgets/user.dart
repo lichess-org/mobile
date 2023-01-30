@@ -55,7 +55,10 @@ class ListTileUser extends StatelessWidget {
                   fontWeight: FontWeight.bold)),
           const SizedBox(width: 5)
         ],
-        Text(nameAndRating, maxLines: 1, overflow: TextOverflow.ellipsis),
+        Flexible(
+          child:
+              Text(nameAndRating, maxLines: 1, overflow: TextOverflow.ellipsis),
+        ),
       ],
     );
   }
