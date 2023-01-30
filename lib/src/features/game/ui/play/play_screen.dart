@@ -157,7 +157,7 @@ class PlayForm extends ConsumerWidget {
                           children:
                               [Perf.blitz, Perf.rapid, Perf.classical].map((p) {
                             final bot = bots
-                                .firstWhere((b) => b.item1.id == ms.name)
+                                .firstWhere((b) => b.item1.id.value == ms.name)
                                 .item1;
                             return Semantics(
                               label: p.title,

@@ -43,10 +43,10 @@ class GameRepository {
   }
 
   // TODO parameters
-  FutureResult<List<ArchivedGameData>> getUserGames(String username) {
+  FutureResult<List<ArchivedGameData>> getUserGames(UserId userId) {
     return apiClient.get(
       Uri.parse(
-          '$kLichessHost/api/games/user/$username?max=10&moves=false&lastFen=true'),
+          '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true'),
       headers: {'Accept': 'application/x-ndjson'},
     ).flatMap(_decodeNdJsonGames);
   }
@@ -198,7 +198,7 @@ ClockData _clockDataFromPick(RequiredPick pick) {
 
 Player _playerFromUserGamePick(RequiredPick pick) {
   return Player(
-    id: pick('user', 'id').asStringOrNull(),
+    id: pick('user', 'id').asUserIdOrNull(),
     name: pick('user', 'name').asStringOrNull() ?? 'Stockfish',
     patron: pick('user', 'patron').asBoolOrNull(),
     title: pick('user', 'title').asStringOrNull(),

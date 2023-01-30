@@ -54,7 +54,7 @@ class FakeAuthRepository implements AuthRepository {
 }
 
 final fakeUser = User(
-  id: 'test',
+  id: const UserId('test'),
   username: 'test',
   createdAt: DateTime.now(),
   seenAt: DateTime.now(),

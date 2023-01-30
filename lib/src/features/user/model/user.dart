@@ -18,7 +18,7 @@ class LightUser with _$LightUser {
 @freezed
 class User with _$User {
   const factory User({
-    required String id,
+    required UserId id,
     required String username,
     String? title,
     bool? patron,
@@ -35,7 +35,7 @@ class User with _$User {
   factory User.fromPick(RequiredPick pick) {
     final perfsMap = pick('perfs').asMapOrThrow<String, Map<String, dynamic>>();
     return User(
-      id: pick('id').asStringOrThrow(),
+      id: pick('id').asUserIdOrThrow(),
       username: pick('username').asStringOrThrow(),
       title: pick('title').asStringOrNull(),
       patron: pick('patron').asBoolOrNull(),
@@ -127,7 +127,7 @@ class UserPerf with _$UserPerf {
 @freezed
 class UserStatus with _$UserStatus {
   const factory UserStatus({
-    required String id,
+    required UserId id,
     required String name,
     bool? online,
     bool? playing,
@@ -137,7 +137,7 @@ class UserStatus with _$UserStatus {
       UserStatus.fromPick(pick(json).required());
 
   factory UserStatus.fromPick(RequiredPick pick) => UserStatus(
-        id: pick('id').asStringOrThrow(),
+        id: pick('id').asUserIdOrThrow(),
         name: pick('name').asStringOrThrow(),
         online: pick('online').asBoolOrNull(),
         playing: pick('playing').asBoolOrNull(),

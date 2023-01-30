@@ -395,7 +395,7 @@ const testGame = PlayableGame(
   speed: Speed.blitz,
   initialFen: kInitialFEN,
   orientation: Side.white,
-  white: Player(name: 'White', id: 'white', rating: 1405),
-  black: Player(name: 'Black', id: 'black', rating: 1789),
+  white: Player(name: 'White', id: UserId('white'), rating: 1405),
+  black: Player(name: 'Black', id: UserId('black'), rating: 1789),
   variant: Variant.standard,
 );

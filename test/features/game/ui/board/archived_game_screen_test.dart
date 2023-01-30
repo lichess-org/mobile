@@ -129,7 +129,7 @@ final gameData = ArchivedGameData(
   status: GameStatus.mate,
   white: const Player(name: 'Stockfish', aiLevel: 1),
   black: const Player(
-    id: 'veloce',
+    id: UserId('veloce'),
     name: 'veloce',
     rating: 1435,
     patron: true,

@@ -44,7 +44,7 @@ void main() {
               ))
           .thenAnswer((_) async => Result.value(http.Response(response, 200)));
 
-      final result = await repo.getUserGames('testUser');
+      final result = await repo.getUserGames(const UserId('testUser'));
 
       expect(result.isValue, true);
     });

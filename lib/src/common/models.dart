@@ -97,10 +97,27 @@ class GamePlayerId with _$GamePlayerId {
 
 @Freezed(fromJson: true, toJson: true, toStringOverride: false)
 class PuzzleId with _$PuzzleId {
+  const PuzzleId._();
+
   const factory PuzzleId(String value) = _PuzzleId;
 
   factory PuzzleId.fromJson(Map<String, dynamic> json) =>
       _$PuzzleIdFromJson(json);
+
+  @override
+  String toString() => value;
+}
+
+@Freezed(fromJson: true, toJson: true, toStringOverride: false)
+class UserId with _$UserId {
+  const UserId._();
+
+  const factory UserId(String value) = _UserId;
+
+  factory UserId.fromJson(Map<String, dynamic> json) => _$UserIdFromJson(json);
+
+  factory UserId.fromUserName(String userName) =>
+      UserId(userName.toLowerCase());
 
   @override
   String toString() => value;

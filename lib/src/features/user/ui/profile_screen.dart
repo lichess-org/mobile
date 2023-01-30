@@ -31,9 +31,9 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import '../../auth/data/auth_repository.dart';
 
 final recentGamesProvider = FutureProvider.autoDispose
-    .family<List<ArchivedGameData>, String>((ref, userName) {
+    .family<List<ArchivedGameData>, UserId>((ref, userId) {
   final repo = ref.watch(gameRepositoryProvider);
-  return Result.release(repo.getUserGames(userName));
+  return Result.release(repo.getUserGames(userId));
 });
 
 class ProfileScreen extends ConsumerStatefulWidget {

@@ -198,6 +198,27 @@ extension TimeExtension on Pick {
 }
 
 extension ModelsPick on Pick {
+  UserId asUserIdOrThrow() {
+    final value = required().value;
+    if (value is UserId) {
+      return value;
+    }
+    if (value is String) {
+      return UserId(value);
+    }
+    throw PickException(
+        "value $value at $debugParsingExit can't be casted to UserId");
+  }
+
+  UserId? asUserIdOrNull() {
+    if (value == null) return null;
+    try {
+      return asUserIdOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
   GameId asGameIdOrThrow() {
     final value = required().value;
     if (value is GameId) {

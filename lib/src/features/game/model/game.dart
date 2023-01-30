@@ -94,7 +94,7 @@ class GameStep with _$GameStep {
 @freezed
 class Player with _$Player {
   const factory Player({
-    String? id,
+    UserId? id,
     required String name,
     int? rating,
     int? ratingDiff,

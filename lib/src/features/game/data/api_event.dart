@@ -71,7 +71,7 @@ class ApiEvent with _$ApiEvent {
 @freezed
 class Opponent with _$Opponent {
   const factory Opponent({
-    String? id,
+    UserId? id,
     required String username,
     int? rating,
     int? aiLevel,
@@ -79,7 +79,7 @@ class Opponent with _$Opponent {
 
   factory Opponent.fromPick(RequiredPick pick) {
     return Opponent(
-      id: pick('id').asStringOrNull(),
+      id: pick('id').asUserIdOrNull(),
       username: pick('username').asStringOrThrow(),
       rating: pick('rating').asIntOrNull(),
       aiLevel: pick('ai').asIntOrNull(),
