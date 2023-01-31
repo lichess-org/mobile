@@ -15,7 +15,7 @@ class TimeInc {
   static TimeInc? fromString(String str) {
     try {
       final nums = str.split('+').map(int.parse).toList();
-      return TimeInc(nums[0], nums[1]);
+      return TimeInc(nums.first, nums[1]);
     } catch (_) {
       return null;
     }

@@ -35,7 +35,17 @@ dart_code_metrics:
     - avoid-collection-methods-with-unrelated-types
     - avoid-double-slash-imports
     - avoid-redundant-async
+    - avoid-global-state
+    - avoid-late-keyword
+    - avoid-unnecessary-type-assertions
+    - avoid-unnecessary-type-casts
+    - avoid-unrelated-type-assertions
     - prefer-iterable-of
+    - prefer-first
+    - prefer-immediate-return
+    - prefer-iterable-of
+    - prefer-last
+
     # flutter
     - always-remove-listener
     - avoid-border-all

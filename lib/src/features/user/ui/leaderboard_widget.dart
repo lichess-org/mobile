@@ -43,47 +43,47 @@ class LeaderboardWidget extends ConsumerWidget {
               trailing: const Icon(CupertinoIcons.forward),
             ),
             LeaderboardListTile(
-              user: data.bullet[0],
+              user: data.bullet.first,
               perfIcon: LichessIcons.bullet,
             ),
             LeaderboardListTile(
-              user: data.blitz[0],
+              user: data.blitz.first,
               perfIcon: LichessIcons.blitz,
             ),
             LeaderboardListTile(
-              user: data.rapid[0],
+              user: data.rapid.first,
               perfIcon: LichessIcons.rapid,
             ),
             LeaderboardListTile(
-              user: data.classical[0],
+              user: data.classical.first,
               perfIcon: LichessIcons.classical,
             ),
             LeaderboardListTile(
-              user: data.ultrabullet[0],
+              user: data.ultrabullet.first,
               perfIcon: LichessIcons.ultrabullet,
             ),
             LeaderboardListTile(
-              user: data.crazyhouse[0],
+              user: data.crazyhouse.first,
               perfIcon: LichessIcons.h_square,
             ),
             LeaderboardListTile(
-              user: data.chess960[0],
+              user: data.chess960.first,
               perfIcon: LichessIcons.die_six,
             ),
             LeaderboardListTile(
-              user: data.threeCheck[0],
+              user: data.threeCheck.first,
               perfIcon: LichessIcons.three_check,
             ),
             LeaderboardListTile(
-              user: data.atomic[0],
+              user: data.atomic.first,
               perfIcon: LichessIcons.atom,
             ),
             LeaderboardListTile(
-              user: data.horde[0],
+              user: data.horde.first,
               perfIcon: LichessIcons.horde,
             ),
             LeaderboardListTile(
-              user: data.antichess[0],
+              user: data.antichess.first,
               perfIcon: LichessIcons.antichess,
             ),
           ],

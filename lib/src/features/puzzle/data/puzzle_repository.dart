@@ -17,9 +17,7 @@ import '../model/puzzle_theme.dart';
 
 final puzzleRepositoryProvider = Provider<PuzzleRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
-  final repo =
-      PuzzleRepository(Logger('PuzzleRepository'), apiClient: apiClient);
-  return repo;
+  return PuzzleRepository(Logger('PuzzleRepository'), apiClient: apiClient);
 });
 
 /// Size of puzzle local cache

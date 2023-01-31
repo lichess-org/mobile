@@ -10,9 +10,9 @@ class SoundService {
   final Soundpool _pool;
   final SettingsRepository _settings;
 
-  late int _moveId;
-  late int _captureId;
-  late int _dongId;
+  int? _moveId;
+  int? _captureId;
+  int? _dongId;
 
   Future<void> init() async {
     _moveId = await rootBundle.load('assets/sounds/move.mp3').then((soundData) {
@@ -30,15 +30,17 @@ class SoundService {
   }
 
   void playMove() {
-    if (!_settings.isSoundMuted()) _pool.play(_moveId);
+    if (_moveId != null && !_settings.isSoundMuted()) _pool.play(_moveId!);
   }
 
   void playCapture() {
-    if (!_settings.isSoundMuted()) _pool.play(_captureId);
+    if (_captureId != null && !_settings.isSoundMuted()) {
+      _pool.play(_captureId!);
+    }
   }
 
   void playDong() {
-    if (!_settings.isSoundMuted()) _pool.play(_dongId);
+    if (_dongId != null && !_settings.isSoundMuted()) _pool.play(_dongId!);
   }
 
   void dispose() {

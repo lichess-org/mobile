@@ -62,7 +62,7 @@ class GameState with _$GameState {
   bool get gameOver => status.value > GameStatus.started.value;
   Map<String, Set<String>> get validMoves => algebraicLegalMoves(position);
   bool get isLastMoveCapture {
-    final lm = sanMoves.isNotEmpty ? sanMoves[sanMoves.length - 1] : null;
+    final lm = sanMoves.isNotEmpty ? sanMoves.last : null;
     return lm != null && lm.contains('x');
   }
 }
