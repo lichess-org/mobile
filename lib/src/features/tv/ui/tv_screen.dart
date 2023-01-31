@@ -22,19 +22,17 @@ class TvScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return PlatformWidget(
-      androidBuilder: (context) =>
-          _androidBuilder(context, ref, contentBuilder: _buildBody),
-      iosBuilder: (context) =>
-          _iosBuilder(context, ref, contentBuilder: _buildBody),
+    return ConsumerPlatformWidget(
+      ref: ref,
+      androidBuilder: _androidBuilder,
+      iosBuilder: _iosBuilder,
     );
   }
 
   Widget _androidBuilder(
     BuildContext context,
-    WidgetRef ref, {
-    required ConsumerWidgetBuilder contentBuilder,
-  }) {
+    WidgetRef ref,
+  ) {
     final isSoundMuted = ref.watch(isSoundMutedProvider);
     return Scaffold(
       appBar: AppBar(
@@ -49,15 +47,14 @@ class TvScreen extends ConsumerWidget {
           )
         ],
       ),
-      body: contentBuilder(context, ref),
+      body: const _Body(),
     );
   }
 
   Widget _iosBuilder(
     BuildContext context,
-    WidgetRef ref, {
-    required ConsumerWidgetBuilder contentBuilder,
-  }) {
+    WidgetRef ref,
+  ) {
     final isSoundMuted = ref.watch(isSoundMutedProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -70,11 +67,16 @@ class TvScreen extends ConsumerWidget {
               ref.read(isSoundMutedProvider.notifier).toggleSound(),
         ),
       ),
-      child: contentBuilder(context, ref),
+      child: const _Body(),
     );
   }
+}
 
-  Widget _buildBody(BuildContext context, WidgetRef ref) {
+class _Body extends ConsumerWidget {
+  const _Body();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
     // ensure the stream is closed when offstage
     final tvStream = currentTab == BottomTab.watch
