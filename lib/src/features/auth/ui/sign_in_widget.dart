@@ -22,21 +22,23 @@ class SignInWidget extends ConsumerWidget {
       (_, state) => state.showSnackbarOnError(context),
     );
     return authState.maybeWhen(
-        data: (account) => account == null
-            ? TextButton(
-                onPressed: authActionsAsync.isLoading
-                    ? null
-                    : () => ref.read(authActionsProvider.notifier).signIn(),
-                child: authActionsAsync.isLoading
-                    ? const ButtonLoadingIndicator()
-                    : Text(context.l10n.signIn,
-                        style:
-                            defaultTargetPlatform == TargetPlatform.android &&
-                                    brightness == Brightness.light
-                                ? const TextStyle(color: Colors.white)
-                                : null),
-              )
-            : const SizedBox.shrink(),
-        orElse: () => const ButtonLoadingIndicator());
+      data: (account) => account == null
+          ? TextButton(
+              onPressed: authActionsAsync.isLoading
+                  ? null
+                  : () => ref.read(authActionsProvider.notifier).signIn(),
+              child: authActionsAsync.isLoading
+                  ? const ButtonLoadingIndicator()
+                  : Text(
+                      context.l10n.signIn,
+                      style: defaultTargetPlatform == TargetPlatform.android &&
+                              brightness == Brightness.light
+                          ? const TextStyle(color: Colors.white)
+                          : null,
+                    ),
+            )
+          : const SizedBox.shrink(),
+      orElse: () => const ButtonLoadingIndicator(),
+    );
   }
 }

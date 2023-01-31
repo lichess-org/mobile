@@ -25,7 +25,8 @@ const kLargeScreenWidth = 600;
 
 // Misc
 const kPlatformCardBorder = RoundedRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(10.0)));
+  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+);
 
 const kEmptyWidget = SizedBox.shrink();
 const kEmptyFen = '8/8/8/8/8/8/8/8 w - - 0 1';

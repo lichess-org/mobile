@@ -18,8 +18,11 @@ class LeaderboardRepository {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/player'))
         .flatMap((response) {
-      return readJsonObject(response.body,
-          mapper: Leaderboard.fromJson, logger: _log);
+      return readJsonObject(
+        response.body,
+        mapper: Leaderboard.fromJson,
+        logger: _log,
+      );
     });
   }
 
@@ -29,7 +32,9 @@ class LeaderboardRepository {
 final leaderboardRepositoryProvider = Provider<LeaderboardRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
   final repo = LeaderboardRepository(
-      apiClient: apiClient, logger: Logger('LeaderboardRepository'));
+    apiClient: apiClient,
+    logger: Logger('LeaderboardRepository'),
+  );
   ref.onDispose(() => repo.dispose());
   return repo;
 });

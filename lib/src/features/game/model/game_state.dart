@@ -23,11 +23,12 @@ class GameClock with _$GameClock {
 class GameState with _$GameState {
   const GameState._();
 
-  const factory GameState(
-      {required GameStatus status,
-      required List<String> uciMoves,
-      required List<String> sanMoves,
-      required List<Position<Chess>> positions}) = _GameState;
+  const factory GameState({
+    required GameStatus status,
+    required List<String> uciMoves,
+    required List<String> sanMoves,
+    required List<Position<Chess>> positions,
+  }) = _GameState;
 
   factory GameState.fromEvent(GameStateEvent event) {
     final uciMoves = event.moves.split(' ').where((m) => m.isNotEmpty).toList();

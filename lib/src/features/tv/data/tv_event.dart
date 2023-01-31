@@ -37,25 +37,33 @@ class TvEvent with _$TvEvent {
     final type = pick('t').asStringOrThrow();
     switch (type) {
       case 'featured':
-        return pick('d').letOrThrow((dataPick) => TvEvent.featured(
-              id: dataPick('id').asGameIdOrThrow(),
-              orientation: dataPick('orientation').asSideOrThrow(),
-              fen: dataPick('fen').asStringOrThrow(),
-              white: dataPick('players').letOrThrow((it) => it
+        return pick('d').letOrThrow(
+          (dataPick) => TvEvent.featured(
+            id: dataPick('id').asGameIdOrThrow(),
+            orientation: dataPick('orientation').asSideOrThrow(),
+            fen: dataPick('fen').asStringOrThrow(),
+            white: dataPick('players').letOrThrow(
+              (it) => it
                   .asListOrThrow(_featuredPlayerFromPick)
-                  .firstWhere((p) => p.side == Side.white)),
-              black: dataPick('players').letOrThrow((it) => it
+                  .firstWhere((p) => p.side == Side.white),
+            ),
+            black: dataPick('players').letOrThrow(
+              (it) => it
                   .asListOrThrow(_featuredPlayerFromPick)
-                  .firstWhere((p) => p.side == Side.black)),
-            ));
+                  .firstWhere((p) => p.side == Side.black),
+            ),
+          ),
+        );
       case 'fen':
-        return pick('d').letOrThrow((dataPick) => TvEvent.fen(
-              fen: dataPick('fen').asStringOrThrow(),
-              lastMove: dataPick('lm')
-                  .letOrThrow((it) => Move.fromUci(it.asStringOrThrow())!),
-              whiteSeconds: dataPick('wc').asIntOrThrow(),
-              blackSeconds: dataPick('bc').asIntOrThrow(),
-            ));
+        return pick('d').letOrThrow(
+          (dataPick) => TvEvent.fen(
+            fen: dataPick('fen').asStringOrThrow(),
+            lastMove: dataPick('lm')
+                .letOrThrow((it) => Move.fromUci(it.asStringOrThrow())!),
+            whiteSeconds: dataPick('wc').asIntOrThrow(),
+            blackSeconds: dataPick('bc').asIntOrThrow(),
+          ),
+        );
       default:
         throw UnsupportedError('Unsupported event type $type');
     }

@@ -22,9 +22,12 @@ class HomeScreen extends StatelessWidget {
 
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('lichess.org'), actions: const [
-        SignInWidget(),
-      ]),
+      appBar: AppBar(
+        title: const Text('lichess.org'),
+        actions: const [
+          SignInWidget(),
+        ],
+      ),
       body: _buildBody(context),
     );
   }
@@ -58,8 +61,11 @@ class HomeScreen extends StatelessWidget {
                 semanticsLabel: context.l10n.createAGame,
                 child: Text(context.l10n.createAGame),
                 onPressed: () {
-                  Navigator.of(context).push<void>(MaterialPageRoute(
-                      builder: (context) => const PlayScreen()));
+                  Navigator.of(context).push<void>(
+                    MaterialPageRoute(
+                      builder: (context) => const PlayScreen(),
+                    ),
+                  );
                 },
               ),
             ),

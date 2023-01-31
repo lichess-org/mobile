@@ -23,50 +23,79 @@ class LeaderboardWidget extends ConsumerWidget {
     final leaderboardState = ref.watch(leaderListProvider);
 
     return leaderboardState.when(
-        data: (data) {
-          return Column(children: [
+      data: (data) {
+        return Column(
+          children: [
             ListTile(
               title: Text(
                 context.l10n.leaderboard,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               onTap: () {
-                Navigator.of(context).push<void>(MaterialPageRoute(
+                Navigator.of(context).push<void>(
+                  MaterialPageRoute(
                     builder: (context) => LeaderboardScreen(
-                          leaderboard: data,
-                        )));
+                      leaderboard: data,
+                    ),
+                  ),
+                );
               },
               trailing: const Icon(CupertinoIcons.forward),
             ),
             LeaderboardListTile(
-                user: data.bullet[0], perfIcon: LichessIcons.bullet),
+              user: data.bullet[0],
+              perfIcon: LichessIcons.bullet,
+            ),
             LeaderboardListTile(
-                user: data.blitz[0], perfIcon: LichessIcons.blitz),
+              user: data.blitz[0],
+              perfIcon: LichessIcons.blitz,
+            ),
             LeaderboardListTile(
-                user: data.rapid[0], perfIcon: LichessIcons.rapid),
+              user: data.rapid[0],
+              perfIcon: LichessIcons.rapid,
+            ),
             LeaderboardListTile(
-                user: data.classical[0], perfIcon: LichessIcons.classical),
+              user: data.classical[0],
+              perfIcon: LichessIcons.classical,
+            ),
             LeaderboardListTile(
-                user: data.ultrabullet[0], perfIcon: LichessIcons.ultrabullet),
+              user: data.ultrabullet[0],
+              perfIcon: LichessIcons.ultrabullet,
+            ),
             LeaderboardListTile(
-                user: data.crazyhouse[0], perfIcon: LichessIcons.h_square),
+              user: data.crazyhouse[0],
+              perfIcon: LichessIcons.h_square,
+            ),
             LeaderboardListTile(
-                user: data.chess960[0], perfIcon: LichessIcons.die_six),
+              user: data.chess960[0],
+              perfIcon: LichessIcons.die_six,
+            ),
             LeaderboardListTile(
-                user: data.threeCheck[0], perfIcon: LichessIcons.three_check),
+              user: data.threeCheck[0],
+              perfIcon: LichessIcons.three_check,
+            ),
             LeaderboardListTile(
-                user: data.atomic[0], perfIcon: LichessIcons.atom),
+              user: data.atomic[0],
+              perfIcon: LichessIcons.atom,
+            ),
             LeaderboardListTile(
-                user: data.horde[0], perfIcon: LichessIcons.horde),
+              user: data.horde[0],
+              perfIcon: LichessIcons.horde,
+            ),
             LeaderboardListTile(
-                user: data.antichess[0], perfIcon: LichessIcons.antichess),
-          ]);
-        },
-        error: (error, stackTrace) {
-          debugPrint(
-              'SEVERE: [LeaderboardWidget] could not lead leaderboard data; $error\n $stackTrace');
-          return const Text('could not lead leaderboard');
-        },
-        loading: () => const CenterLoadingIndicator());
+              user: data.antichess[0],
+              perfIcon: LichessIcons.antichess,
+            ),
+          ],
+        );
+      },
+      error: (error, stackTrace) {
+        debugPrint(
+          'SEVERE: [LeaderboardWidget] could not lead leaderboard data; $error\n $stackTrace',
+        );
+        return const Text('could not lead leaderboard');
+      },
+      loading: () => const CenterLoadingIndicator(),
+    );
   }
 }

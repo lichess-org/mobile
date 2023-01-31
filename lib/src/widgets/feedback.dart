@@ -9,11 +9,12 @@ class ButtonLoadingIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SizedBox(
-        height: 20,
-        width: 20,
-        child: CircularProgressIndicator.adaptive(
-          strokeWidth: 2,
-        ));
+      height: 20,
+      width: 20,
+      child: CircularProgressIndicator.adaptive(
+        strokeWidth: 2,
+      ),
+    );
   }
 }
 
@@ -30,8 +31,9 @@ class CenterLoadingIndicator extends StatelessWidget {
 }
 
 ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showAdaptiveSnackBar(
-    BuildContext context,
-    {required Widget content}) {
+  BuildContext context, {
+  required Widget content,
+}) {
   return ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: content,

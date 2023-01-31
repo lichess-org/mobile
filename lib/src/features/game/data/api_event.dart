@@ -44,24 +44,26 @@ class ApiEvent with _$ApiEvent {
     switch (type) {
       case 'gameStart':
       case 'gameFinish':
-        return pick('game').letOrThrow((gamePick) => ApiEvent.gameStartOrFinish(
-              type: type == 'gameStart'
-                  ? GameEventLifecycle.start
-                  : GameEventLifecycle.finish,
-              gameId: gamePick('gameId').asGameIdOrThrow(),
-              fullId: gamePick('fullId').asGameFullIdOrThrow(),
-              side: gamePick('color').asSideOrThrow(),
-              fen: gamePick('fen').asStringOrThrow(),
-              hasMoved: gamePick('hasMoved').asBoolOrThrow(),
-              isMyTurn: gamePick('isMyTurn').asBoolOrThrow(),
-              lastMove: gamePick('lastMove').asUciMoveOrNull(),
-              opponent: gamePick('opponent').letOrThrow(Opponent.fromPick),
-              rated: gamePick('rated').asBoolOrThrow(),
-              perf: gamePick('perf').asPerfOrThrow(),
-              speed: gamePick('speed').asSpeedOrThrow(),
-              botCompat: gamePick('compat', 'bot').asBoolOrThrow(),
-              boardCompat: gamePick('compat', 'board').asBoolOrThrow(),
-            ));
+        return pick('game').letOrThrow(
+          (gamePick) => ApiEvent.gameStartOrFinish(
+            type: type == 'gameStart'
+                ? GameEventLifecycle.start
+                : GameEventLifecycle.finish,
+            gameId: gamePick('gameId').asGameIdOrThrow(),
+            fullId: gamePick('fullId').asGameFullIdOrThrow(),
+            side: gamePick('color').asSideOrThrow(),
+            fen: gamePick('fen').asStringOrThrow(),
+            hasMoved: gamePick('hasMoved').asBoolOrThrow(),
+            isMyTurn: gamePick('isMyTurn').asBoolOrThrow(),
+            lastMove: gamePick('lastMove').asUciMoveOrNull(),
+            opponent: gamePick('opponent').letOrThrow(Opponent.fromPick),
+            rated: gamePick('rated').asBoolOrThrow(),
+            perf: gamePick('perf').asPerfOrThrow(),
+            speed: gamePick('speed').asSpeedOrThrow(),
+            botCompat: gamePick('compat', 'bot').asBoolOrThrow(),
+            boardCompat: gamePick('compat', 'board').asBoolOrThrow(),
+          ),
+        );
       default:
         throw UnsupportedError('Unsupported event type $type');
     }

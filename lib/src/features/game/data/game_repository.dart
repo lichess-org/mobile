@@ -37,8 +37,11 @@ class GameRepository {
       Uri.parse('$kLichessHost/game/export/$id'),
       headers: {'Accept': 'application/json'},
     ).flatMap((response) {
-      return readJsonObject(response.body,
-          mapper: _makeArchivedGameFromJson, logger: _log);
+      return readJsonObject(
+        response.body,
+        mapper: _makeArchivedGameFromJson,
+        logger: _log,
+      );
     });
   }
 
@@ -46,7 +49,8 @@ class GameRepository {
   FutureResult<List<ArchivedGameData>> getUserGames(UserId userId) {
     return apiClient.get(
       Uri.parse(
-          '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true'),
+        '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true',
+      ),
       headers: {'Accept': 'application/x-ndjson'},
     ).flatMap(_decodeNdJsonGames);
   }
@@ -55,7 +59,8 @@ class GameRepository {
     return apiClient
         .post(
           Uri.parse(
-              '$kLichessHost/api/games/export/_ids?moves=false&lastFen=true'),
+            '$kLichessHost/api/games/export/_ids?moves=false&lastFen=true',
+          ),
           headers: {'Accept': 'application/x-ndjson'},
           body: ids.join(','),
         )
@@ -71,8 +76,9 @@ class GameRepository {
         .toStringStream()
         .where((event) => event.isNotEmpty && event != '\n')
         .map((event) => jsonDecode(event) as Map<String, dynamic>)
-        .where((json) =>
-            json['type'] == 'gameStart' || json['type'] == 'gameFinish')
+        .where(
+          (json) => json['type'] == 'gameStart' || json['type'] == 'gameFinish',
+        )
         .map((json) => ApiEvent.fromJson(json))
         .handleError((Object error) => _log.warning(error));
   }
@@ -85,28 +91,33 @@ class GameRepository {
         .toStringStream()
         .where((event) => event.isNotEmpty && event != '\n')
         .map((event) => jsonDecode(event) as Map<String, dynamic>)
-        .where((event) =>
-            event['type'] == 'gameFull' || event['type'] == 'gameState')
+        .where(
+          (event) =>
+              event['type'] == 'gameFull' || event['type'] == 'gameState',
+        )
         .map((json) => GameEvent.fromJson(json))
         .handleError((Object error) => _log.warning(error));
   }
 
   FutureResult<void> playMove(GameId gameId, Move move) {
     return apiClient.post(
-        Uri.parse('$kLichessHost/api/board/game/$gameId/move/${move.uci}'),
-        retry: true);
+      Uri.parse('$kLichessHost/api/board/game/$gameId/move/${move.uci}'),
+      retry: true,
+    );
   }
 
   FutureResult<void> abort(GameId gameId) {
     return apiClient.post(
-        Uri.parse('$kLichessHost/api/board/game/$gameId/abort'),
-        retry: true);
+      Uri.parse('$kLichessHost/api/board/game/$gameId/abort'),
+      retry: true,
+    );
   }
 
   FutureResult<void> resign(GameId gameId) {
     return apiClient.post(
-        Uri.parse('$kLichessHost/api/board/game/$gameId/resign'),
-        retry: true);
+      Uri.parse('$kLichessHost/api/board/game/$gameId/resign'),
+      retry: true,
+    );
   }
 
   Result<List<ArchivedGameData>> _decodeNdJsonGames(http.Response response) {
@@ -136,7 +147,8 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
   final data = _archivedGameDataFromPick(pick);
   final clockData = pick('clock').letOrNull(_clockDataFromPick);
   final clocks = pick('clocks').asListOrNull<Duration>(
-      (p0) => Duration(milliseconds: p0.asIntOrThrow() * 10));
+    (p0) => Duration(milliseconds: p0.asIntOrThrow() * 10),
+  );
 
   return ArchivedGame(
     data: data,
@@ -152,14 +164,16 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
         final move = position.parseSan(san);
         // assume lichess only sends correct moves
         position = position.playUnchecked(move!);
-        steps.add(GameStep(
-          ply: ply,
-          san: san,
-          uci: move.uci,
-          position: position,
-          whiteClock: ply.isOdd ? stepClock : clock,
-          blackClock: ply.isEven ? stepClock : clock,
-        ));
+        steps.add(
+          GameStep(
+            ply: ply,
+            san: san,
+            uci: move.uci,
+            position: position,
+            whiteClock: ply.isOdd ? stepClock : clock,
+            blackClock: ply.isEven ? stepClock : clock,
+          ),
+        );
         clock = stepClock;
       }
       return steps;

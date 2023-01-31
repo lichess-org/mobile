@@ -47,12 +47,15 @@ class ListTileUser extends StatelessWidget {
     return Row(
       children: [
         if (user.title != null) ...[
-          Text(user.title!,
-              style: TextStyle(
-                  color: user.title == 'BOT'
-                      ? LichessColors.fancy
-                      : LichessColors.brag,
-                  fontWeight: FontWeight.bold)),
+          Text(
+            user.title!,
+            style: TextStyle(
+              color: user.title == 'BOT'
+                  ? LichessColors.fancy
+                  : LichessColors.brag,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           const SizedBox(width: 5)
         ],
         Flexible(

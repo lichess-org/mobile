@@ -26,12 +26,15 @@ void main() {
   final mockLogger = MockLogger();
   final mockClient = MockClient();
 
-  final puzzleRepo = PuzzleRepository(mockLogger,
-      apiClient: ApiClient(mockLogger, mockClient));
+  final puzzleRepo = PuzzleRepository(
+    mockLogger,
+    apiClient: ApiClient(mockLogger, mockClient),
+  );
 
   setUpAll(() {
     registerFallbackValue(
-        Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=30'));
+      Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=30'),
+    );
   });
 
   setUp(() {
@@ -46,14 +49,19 @@ void main() {
       final db = PuzzleLocalDB(sharedPreferences);
       final service = PuzzleService(mockLogger, db: db, repository: puzzleRepo);
 
-      when(() => mockClient.get(
-            Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=30'),
-          )).thenAnswer((_) => mockResponse(batchOf3, 200));
+      when(
+        () => mockClient.get(
+          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=30'),
+        ),
+      ).thenAnswer((_) => mockResponse(batchOf3, 200));
 
       final puzzle = await service.nextPuzzle();
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
-      verify(() => mockClient.get(
-          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=30'))).called(1);
+      verify(
+        () => mockClient.get(
+          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=30'),
+        ),
+      ).called(1);
       expect(db.fetch()?.solved, equals(IList(const [])));
       expect(db.fetch()?.unsolved.length, equals(3));
     });
@@ -65,8 +73,12 @@ void main() {
       final sharedPreferences = await SharedPreferences.getInstance();
 
       final db = PuzzleLocalDB(sharedPreferences);
-      final service = PuzzleService(mockLogger,
-          db: db, repository: puzzleRepo, localQueueLength: 1);
+      final service = PuzzleService(
+        mockLogger,
+        db: db,
+        repository: puzzleRepo,
+        localQueueLength: 1,
+      );
 
       final puzzle = await service.nextPuzzle();
       expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
@@ -81,18 +93,26 @@ void main() {
       final sharedPreferences = await SharedPreferences.getInstance();
 
       final db = PuzzleLocalDB(sharedPreferences);
-      final service = PuzzleService(mockLogger,
-          db: db, repository: puzzleRepo, localQueueLength: 2);
+      final service = PuzzleService(
+        mockLogger,
+        db: db,
+        repository: puzzleRepo,
+        localQueueLength: 2,
+      );
 
       // will fetch only 1 since localQueueLength is 2
-      when(() => mockClient.get(
-            Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
-          )).thenAnswer((_) => mockResponse(batchOf1, 200));
+      when(
+        () => mockClient.get(
+          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
+        ),
+      ).thenAnswer((_) => mockResponse(batchOf1, 200));
 
       final puzzle = await service.nextPuzzle();
       expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
-      verify(() => mockClient
-          .get(Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'))).called(1);
+      verify(
+        () => mockClient
+            .get(Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1')),
+      ).called(1);
       expect(db.fetch()?.unsolved.length, equals(2));
     });
 
@@ -105,8 +125,12 @@ void main() {
       final sharedPreferences = await SharedPreferences.getInstance();
 
       final db = PuzzleLocalDB(sharedPreferences);
-      final service = PuzzleService(mockLogger,
-          db: db, repository: puzzleRepo, localQueueLength: 1);
+      final service = PuzzleService(
+        mockLogger,
+        db: db,
+        repository: puzzleRepo,
+        localQueueLength: 1,
+      );
 
       final puzzle = await service.nextPuzzle();
       expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
@@ -124,17 +148,25 @@ void main() {
       final sharedPreferences = await SharedPreferences.getInstance();
 
       final db = PuzzleLocalDB(sharedPreferences);
-      final service = PuzzleService(mockLogger,
-          db: db, repository: puzzleRepo, localQueueLength: 1);
+      final service = PuzzleService(
+        mockLogger,
+        db: db,
+        repository: puzzleRepo,
+        localQueueLength: 1,
+      );
 
-      when(() => mockClient.get(
-            Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
-          )).thenAnswer((_) => mockResponse(batchOf1, 200));
+      when(
+        () => mockClient.get(
+          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
+        ),
+      ).thenAnswer((_) => mockResponse(batchOf1, 200));
 
       final puzzle = await service.nextPuzzle(userId: 'testUserId');
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
-      verify(() => mockClient
-          .get(Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'))).called(1);
+      verify(
+        () => mockClient
+            .get(Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1')),
+      ).called(1);
 
       expect(db.fetch(userId: 'testUserId')?.unsolved.length, equals(1));
     });
@@ -146,17 +178,26 @@ void main() {
       final sharedPreferences = await SharedPreferences.getInstance();
 
       final db = PuzzleLocalDB(sharedPreferences);
-      final service = PuzzleService(mockLogger,
-          db: db, repository: puzzleRepo, localQueueLength: 1);
+      final service = PuzzleService(
+        mockLogger,
+        db: db,
+        repository: puzzleRepo,
+        localQueueLength: 1,
+      );
 
-      when(() => mockClient.get(
-            Uri.parse('$kLichessHost/api/puzzle/batch/opening?nb=1'),
-          )).thenAnswer((_) => mockResponse(batchOf1, 200));
+      when(
+        () => mockClient.get(
+          Uri.parse('$kLichessHost/api/puzzle/batch/opening?nb=1'),
+        ),
+      ).thenAnswer((_) => mockResponse(batchOf1, 200));
 
       final puzzle = await service.nextPuzzle(angle: PuzzleTheme.opening);
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
-      verify(() => mockClient.get(
-          Uri.parse('$kLichessHost/api/puzzle/batch/opening?nb=1'))).called(1);
+      verify(
+        () => mockClient.get(
+          Uri.parse('$kLichessHost/api/puzzle/batch/opening?nb=1'),
+        ),
+      ).called(1);
 
       expect(db.fetch(angle: PuzzleTheme.opening)?.unsolved.length, equals(1));
     });
@@ -168,21 +209,32 @@ void main() {
       final sharedPreferences = await SharedPreferences.getInstance();
 
       final db = PuzzleLocalDB(sharedPreferences);
-      final service = PuzzleService(mockLogger,
-          db: db, repository: puzzleRepo, localQueueLength: 1);
+      final service = PuzzleService(
+        mockLogger,
+        db: db,
+        repository: puzzleRepo,
+        localQueueLength: 1,
+      );
 
-      when(() => mockClient.post(
-            Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
-            headers: any(
-                named: 'headers',
-                that: sameHeaders({'Content-type': 'application/json'})),
-            body:
-                '{"solutions":[{"id":{"value":"pId3"},"win":true,"rated":true}]}',
-          )).thenAnswer((_) => mockResponse(batchOf1, 200));
+      when(
+        () => mockClient.post(
+          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
+          headers: any(
+            named: 'headers',
+            that: sameHeaders({'Content-type': 'application/json'}),
+          ),
+          body:
+              '{"solutions":[{"id":{"value":"pId3"},"win":true,"rated":true}]}',
+        ),
+      ).thenAnswer((_) => mockResponse(batchOf1, 200));
 
       await service.solve(
-          solution: const PuzzleSolution(
-              id: PuzzleId('pId3'), win: true, rated: true));
+        solution: const PuzzleSolution(
+          id: PuzzleId('pId3'),
+          win: true,
+          rated: true,
+        ),
+      );
       final data = db.fetch();
       expect(data?.solved, equals(IList(const [])));
       expect(data?.unsolved[0].puzzle.id, equals(const PuzzleId('20yWT')));
@@ -195,30 +247,40 @@ void main() {
       final sharedPreferences = await SharedPreferences.getInstance();
 
       final db = PuzzleLocalDB(sharedPreferences);
-      final service = PuzzleService(mockLogger,
-          db: db, repository: puzzleRepo, localQueueLength: 1);
+      final service = PuzzleService(
+        mockLogger,
+        db: db,
+        repository: puzzleRepo,
+        localQueueLength: 1,
+      );
 
-      when(() => mockClient.post(
-            Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
-            headers: any(
-                named: 'headers',
-                that: sameHeaders({'Content-type': 'application/json'})),
-            body:
-                '{"solutions":[{"id":{"value":"pId3"},"win":true,"rated":true}]}',
-          )).thenAnswer((_) => Future.error(const SocketException('offline')));
+      when(
+        () => mockClient.post(
+          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
+          headers: any(
+            named: 'headers',
+            that: sameHeaders({'Content-type': 'application/json'}),
+          ),
+          body:
+              '{"solutions":[{"id":{"value":"pId3"},"win":true,"rated":true}]}',
+        ),
+      ).thenAnswer((_) => Future.error(const SocketException('offline')));
 
       const solution =
           PuzzleSolution(id: PuzzleId('pId3'), win: true, rated: true);
       await service.solve(solution: solution);
 
-      verify(() => mockClient.post(
-            Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
-            headers: any(
-                named: 'headers',
-                that: sameHeaders({'Content-type': 'application/json'})),
-            body:
-                '{"solutions":[{"id":{"value":"pId3"},"win":true,"rated":true}]}',
-          )).called(1);
+      verify(
+        () => mockClient.post(
+          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
+          headers: any(
+            named: 'headers',
+            that: sameHeaders({'Content-type': 'application/json'}),
+          ),
+          body:
+              '{"solutions":[{"id":{"value":"pId3"},"win":true,"rated":true}]}',
+        ),
+      ).called(1);
 
       final data = db.fetch();
       expect(data?.solved, equals(IList(const [solution])));
@@ -235,26 +297,28 @@ const batchOf1 = '''
 {"puzzles":[{"game":{"id":"PrlkCqOv","perf":{"key":"rapid","name":"Rapid"},"rated":true,"players":[{"userId":"silverjo","name":"silverjo (1777)","color":"white"},{"userId":"robyarchitetto","name":"Robyarchitetto (1742)","color":"black"}],"pgn":"e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2 Bb7 Bh6 d5 e5 d4 Bxg7 Kxg7 Qf4 Bxf3 Qxf3 dxc3 Nxc3 Nac6 Qf6+ Kg8 Rd1 Nd4 O-O c5 Ne4 Nef5 Rd2 Qxf6 Nxf6+ Kg7 Re1 h5 h3 Rad8 b4 Nh4 Re3 Nhf5 Re1 a5 bxc5 bxc5 Bc4 Ra8 Rb1 Nh4 Rdb2 Nc6 Rb7 Nxe5 Bxe6 Kxf6 Bd5 Nf5 R7b6+ Kg7 Bxa8 Rxa8 R6b3 Nd4 Rb7 Nxd3 Rd1 Ne2+ Kh2 Ndf4 Rdd7 Rf8 Ra7 c4 Rxa5 c3 Rc5 Ne6 Rc4 Ra8 a4 Rb8 a5 Rb2 a6 c2","clock":"5+8"},"puzzle":{"id":"20yWT","rating":1859,"plays":551,"initialPly":93,"solution":["a6a7","b2a2","c4c2","a2a7","d7a7"],"themes":["endgame","long","advantage","advancedPawn"]}}]}
 ''';
 
-final String oneSavedPuzzle = jsonEncode(PuzzleLocalData(
+final String oneSavedPuzzle = jsonEncode(
+  PuzzleLocalData(
     solved: IList(const []),
     unsolved: IList([
       Puzzle(
         puzzle: PuzzleData(
-            id: const PuzzleId('pId3'),
-            rating: 1988,
-            plays: 5,
-            initialPly: 23,
-            solution: IList(const ['a6a7', 'b2a2', 'c4c2']),
-            themes: ISet(const ['endgame', 'advantage'])),
+          id: const PuzzleId('pId3'),
+          rating: 1988,
+          plays: 5,
+          initialPly: 23,
+          solution: IList(const ['a6a7', 'b2a2', 'c4c2']),
+          themes: ISet(const ['endgame', 'advantage']),
+        ),
         game: const PuzzleGame(
-            id: GameId('PrlkCqOv'),
-            perf: Perf.blitz,
-            rated: true,
-            white:
-                PuzzlePlayer(side: Side.white, userId: 'user1', name: 'user1'),
-            black:
-                PuzzlePlayer(side: Side.black, userId: 'user2', name: 'user2'),
-            pgn:
-                'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2'),
+          id: GameId('PrlkCqOv'),
+          perf: Perf.blitz,
+          rated: true,
+          white: PuzzlePlayer(side: Side.white, userId: 'user1', name: 'user1'),
+          black: PuzzlePlayer(side: Side.black, userId: 'user2', name: 'user2'),
+          pgn: 'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
+        ),
       ),
-    ])).toJson());
+    ]),
+  ).toJson(),
+);

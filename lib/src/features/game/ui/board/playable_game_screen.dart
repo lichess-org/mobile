@@ -22,8 +22,11 @@ import '../play/play_action_notifier.dart';
 import './playable_game_screen_providers.dart';
 
 class PlayableGameScreen extends ConsumerWidget {
-  const PlayableGameScreen(
-      {required this.game, required this.account, super.key});
+  const PlayableGameScreen({
+    required this.game,
+    required this.account,
+    super.key,
+  });
 
   final PlayableGame game;
   final User account;
@@ -44,8 +47,9 @@ class PlayableGameScreen extends ConsumerWidget {
         ref.invalidate(gameStateProvider);
         Navigator.of(context).pushReplacement(
           MaterialPageRoute<void>(
-              builder: (context) =>
-                  PlayableGameScreen(game: state.value!, account: account)),
+            builder: (context) =>
+                PlayableGameScreen(game: state.value!, account: account),
+          ),
         );
       }
     });
@@ -65,21 +69,23 @@ class PlayableGameScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              if (gameState?.gameOver == true) {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              } else {
-                _showExitConfirmDialog(context);
-              }
-            }),
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            if (gameState?.gameOver == true) {
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            } else {
+              _showExitConfirmDialog(context);
+            }
+          },
+        ),
         actions: [
           IconButton(
-              icon: isSoundMuted
-                  ? const Icon(Icons.volume_off)
-                  : const Icon(Icons.volume_up),
-              onPressed: () =>
-                  ref.read(isSoundMutedProvider.notifier).toggleSound())
+            icon: isSoundMuted
+                ? const Icon(Icons.volume_off)
+                : const Icon(Icons.volume_up),
+            onPressed: () =>
+                ref.read(isSoundMutedProvider.notifier).toggleSound(),
+          )
         ],
       ),
       body: _BoardBody(game: game, account: account),
@@ -92,25 +98,27 @@ class PlayableGameScreen extends ConsumerWidget {
     final gameState = ref.watch(gameStateProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-          padding: const EdgeInsetsDirectional.only(start: 0, end: 16.0),
-          leading: CupertinoButton(
-            padding: EdgeInsets.zero,
-            onPressed: () {
-              if (gameState?.gameOver == true) {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              } else {
-                _showExitConfirmDialog(context);
-              }
-            },
-            child: const Icon(CupertinoIcons.back),
-          ),
-          trailing: CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: isSoundMuted
-                  ? const Icon(CupertinoIcons.volume_off)
-                  : const Icon(CupertinoIcons.volume_up),
-              onPressed: () =>
-                  ref.read(isSoundMutedProvider.notifier).toggleSound())),
+        padding: const EdgeInsetsDirectional.only(start: 0, end: 16.0),
+        leading: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () {
+            if (gameState?.gameOver == true) {
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            } else {
+              _showExitConfirmDialog(context);
+            }
+          },
+          child: const Icon(CupertinoIcons.back),
+        ),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: isSoundMuted
+              ? const Icon(CupertinoIcons.volume_off)
+              : const Icon(CupertinoIcons.volume_up),
+          onPressed: () =>
+              ref.read(isSoundMutedProvider.notifier).toggleSound(),
+        ),
+      ),
       child: SafeArea(
         child: Column(
           children: [
@@ -254,7 +262,8 @@ class _BoardBody extends ConsumerWidget {
       },
       error: (err, stackTrace) {
         debugPrint(
-            'SEVERE: [PlayableGameScreen] could not load game; $err\n$stackTrace');
+          'SEVERE: [PlayableGameScreen] could not load game; $err\n$stackTrace',
+        );
         return const Text('Could not load game stream.');
       },
     );
@@ -282,57 +291,59 @@ class _BottomBar extends ConsumerWidget {
             },
             icon: const Icon(Icons.menu),
           ),
-          Row(children: [
-            IconButton(
-              key: const ValueKey('cursor-first'),
-              // TODO add translation
-              tooltip: 'First position',
-              onPressed: positionCursor > 0
-                  ? () {
-                      ref.read(positionCursorProvider.notifier).state = 0;
-                    }
-                  : null,
-              icon: const Icon(LichessIcons.fast_backward),
-              iconSize: 20,
-            ),
-            IconButton(
-              key: const ValueKey('cursor-back'),
-              // TODO add translation
-              tooltip: 'Backward',
-              onPressed: positionCursor > 0
-                  ? () {
-                      ref.read(positionCursorProvider.notifier).state--;
-                    }
-                  : null,
-              icon: const Icon(LichessIcons.step_backward),
-              iconSize: 20,
-            ),
-            IconButton(
-              key: const ValueKey('cursor-forward'),
-              // TODO add translation
-              tooltip: 'Forward',
-              onPressed: positionCursor < (gameState?.positionIndex ?? 0)
-                  ? () {
-                      ref.read(positionCursorProvider.notifier).state++;
-                    }
-                  : null,
-              icon: const Icon(LichessIcons.step_forward),
-              iconSize: 20,
-            ),
-            IconButton(
-              key: const ValueKey('cursor-last'),
-              // TODO add translation
-              tooltip: 'Last position',
-              onPressed: positionCursor < (gameState?.positionIndex ?? 0)
-                  ? () {
-                      ref.read(positionCursorProvider.notifier).state =
-                          gameState?.positionIndex ?? 0;
-                    }
-                  : null,
-              icon: const Icon(LichessIcons.fast_forward),
-              iconSize: 20,
-            ),
-          ]),
+          Row(
+            children: [
+              IconButton(
+                key: const ValueKey('cursor-first'),
+                // TODO add translation
+                tooltip: 'First position',
+                onPressed: positionCursor > 0
+                    ? () {
+                        ref.read(positionCursorProvider.notifier).state = 0;
+                      }
+                    : null,
+                icon: const Icon(LichessIcons.fast_backward),
+                iconSize: 20,
+              ),
+              IconButton(
+                key: const ValueKey('cursor-back'),
+                // TODO add translation
+                tooltip: 'Backward',
+                onPressed: positionCursor > 0
+                    ? () {
+                        ref.read(positionCursorProvider.notifier).state--;
+                      }
+                    : null,
+                icon: const Icon(LichessIcons.step_backward),
+                iconSize: 20,
+              ),
+              IconButton(
+                key: const ValueKey('cursor-forward'),
+                // TODO add translation
+                tooltip: 'Forward',
+                onPressed: positionCursor < (gameState?.positionIndex ?? 0)
+                    ? () {
+                        ref.read(positionCursorProvider.notifier).state++;
+                      }
+                    : null,
+                icon: const Icon(LichessIcons.step_forward),
+                iconSize: 20,
+              ),
+              IconButton(
+                key: const ValueKey('cursor-last'),
+                // TODO add translation
+                tooltip: 'Last position',
+                onPressed: positionCursor < (gameState?.positionIndex ?? 0)
+                    ? () {
+                        ref.read(positionCursorProvider.notifier).state =
+                            gameState?.positionIndex ?? 0;
+                      }
+                    : null,
+                icon: const Icon(LichessIcons.fast_forward),
+                iconSize: 20,
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -376,16 +387,19 @@ class _BottomBar extends ConsumerWidget {
           ),
         if (gameState?.gameOver == true)
           BottomSheetAction(
-              leading: const Icon(CupertinoIcons.arrow_2_squarepath),
-              label: playActionAsync.isLoading
-                  ? const ButtonLoadingIndicator()
-                  : Text(context.l10n.rematch),
-              onPressed: (context) {
-                if (!playActionAsync.isLoading) {
-                  ref.read(playActionProvider.notifier).createGame(
-                      account: account, side: game.orientation.opposite);
-                }
-              }),
+            leading: const Icon(CupertinoIcons.arrow_2_squarepath),
+            label: playActionAsync.isLoading
+                ? const ButtonLoadingIndicator()
+                : Text(context.l10n.rematch),
+            onPressed: (context) {
+              if (!playActionAsync.isLoading) {
+                ref.read(playActionProvider.notifier).createGame(
+                      account: account,
+                      side: game.orientation.opposite,
+                    );
+              }
+            },
+          ),
       ],
     );
   }

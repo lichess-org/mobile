@@ -79,4 +79,8 @@ final fakeUser = User(
 );
 
 const _fakePerf = UserPerf(
-    rating: 1500, ratingDeviation: 0, progression: 0, numberOfGames: 0);
+  rating: 1500,
+  ratingDeviation: 0,
+  progression: 0,
+  numberOfGames: 0,
+);

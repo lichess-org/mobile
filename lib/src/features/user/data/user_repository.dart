@@ -26,26 +26,42 @@ class UserRepository {
 
   FutureResult<User> getUser(String username) {
     return apiClient.get(Uri.parse('$kLichessHost/api/user/$username')).then(
-        (result) => result.flatMap((response) => readJsonObject(response.body,
-            mapper: User.fromJson, logger: _log)));
+          (result) => result.flatMap(
+            (response) => readJsonObject(
+              response.body,
+              mapper: User.fromJson,
+              logger: _log,
+            ),
+          ),
+        );
   }
 
   FutureResult<UserPerfStats> getUserPerfStats(String username, Perf perf) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/user/$username/perf/${perf.name}'))
-        .then((result) => result.flatMap((response) => readJsonObject(
-            response.body,
-            mapper: _userPerfStatsFromJson,
-            logger: _log)));
+        .then(
+          (result) => result.flatMap(
+            (response) => readJsonObject(
+              response.body,
+              mapper: _userPerfStatsFromJson,
+              logger: _log,
+            ),
+          ),
+        );
   }
 
   FutureResult<List<UserStatus>> getUsersStatus(List<String> ids) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'))
-        .then((result) => result.flatMap((response) => readJsonListOfObjects(
-            response.body,
-            mapper: UserStatus.fromJson,
-            logger: _log)));
+        .then(
+          (result) => result.flatMap(
+            (response) => readJsonListOfObjects(
+              response.body,
+              mapper: UserStatus.fromJson,
+              logger: _log,
+            ),
+          ),
+        );
   }
 
   void dispose() {
@@ -121,18 +137,20 @@ UserStreak _userStreakFromPick(RequiredPick pick) {
   switch (type) {
     case 'time':
       return UserStreak.timeStreak(
-          timePlayed: value.asDurationFromSecondsOrThrow(),
-          isValueEmpty: isValueEmpty,
-          startGame: startGame,
-          endGame: endGame);
+        timePlayed: value.asDurationFromSecondsOrThrow(),
+        isValueEmpty: isValueEmpty,
+        startGame: startGame,
+        endGame: endGame,
+      );
     case 'win':
     case 'loss':
     case 'nb':
       return UserStreak.gameStreak(
-          gamesPlayed: value.asIntOrThrow(),
-          isValueEmpty: isValueEmpty,
-          startGame: startGame,
-          endGame: endGame);
+        gamesPlayed: value.asIntOrThrow(),
+        isValueEmpty: isValueEmpty,
+        startGame: startGame,
+        endGame: endGame,
+      );
     default:
       throw PickException("cannot decode $pick as 'UserStreak'");
   }

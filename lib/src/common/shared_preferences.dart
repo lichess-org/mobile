@@ -14,17 +14,22 @@ NotifierProvider<PrefNotifier<T>, T> createPrefProvider<T>({
   String Function(T)? mapTo,
 }) {
   return NotifierProvider<PrefNotifier<T>, T>(() {
-    return PrefNotifier<T>(prefKey, defaultValue,
-        mapFrom: mapFrom, mapTo: mapTo);
+    return PrefNotifier<T>(
+      prefKey,
+      defaultValue,
+      mapFrom: mapFrom,
+      mapTo: mapTo,
+    );
   });
 }
 
 class PrefNotifier<T> extends Notifier<T> {
   PrefNotifier(this.prefKey, this.defaultValue, {this.mapFrom, this.mapTo})
       : assert(
-            (mapFrom == null && mapTo == null) ||
-                (mapFrom != null && mapTo != null),
-            'You must pass both `mapFrom` and `mapTo`, or none.');
+          (mapFrom == null && mapTo == null) ||
+              (mapFrom != null && mapTo != null),
+          'You must pass both `mapFrom` and `mapTo`, or none.',
+        );
 
   @override
   T build() {

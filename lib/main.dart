@@ -15,7 +15,8 @@ void main() async {
     Logger.root.onRecord.listen((record) {
       final time = DateFormat.Hms().format(record.time);
       debugPrint(
-          '${record.level.name} at $time [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error}' : ''}');
+        '${record.level.name} at $time [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error}' : ''}',
+      );
     });
   }
 
@@ -35,10 +36,12 @@ void main() async {
   await container.read(authRepositoryProvider).init();
   await container.read(soundServiceProvider).init();
 
-  runApp(UncontrolledProviderScope(
-    container: container,
-    child: const App(),
-  ));
+  runApp(
+    UncontrolledProviderScope(
+      container: container,
+      child: const App(),
+    ),
+  );
 }
 
 class ProviderLogger extends ProviderObserver {
@@ -51,7 +54,8 @@ class ProviderLogger extends ProviderObserver {
     ProviderContainer container,
   ) {
     _logger.info(
-        '${provider.name ?? provider.runtimeType} initialized with: $value.');
+      '${provider.name ?? provider.runtimeType} initialized with: $value.',
+    );
   }
 
   @override
@@ -70,6 +74,9 @@ class ProviderLogger extends ProviderObserver {
     ProviderContainer container,
   ) {
     _logger.severe(
-        '${provider.name ?? provider.runtimeType} error', error, stackTrace);
+      '${provider.name ?? provider.runtimeType} error',
+      error,
+      stackTrace,
+    );
   }
 }

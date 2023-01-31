@@ -14,13 +14,17 @@ class ChallengeRepository {
   final ApiClient apiClient;
 
   FutureResult<void> challenge(String username, ChallengeRequest req) {
-    return apiClient.post(Uri.parse('$kLichessHost/api/challenge/$username'),
-        body: req.toRequestBody);
+    return apiClient.post(
+      Uri.parse('$kLichessHost/api/challenge/$username'),
+      body: req.toRequestBody,
+    );
   }
 
   FutureResult<void> challengeAI(AiChallengeRequest req) {
-    return apiClient.post(Uri.parse('$kLichessHost/api/challenge/ai'),
-        body: req.toRequestBody);
+    return apiClient.post(
+      Uri.parse('$kLichessHost/api/challenge/ai'),
+      body: req.toRequestBody,
+    );
   }
 
   void dispose() {

@@ -34,82 +34,95 @@ void main() {
 
   setUpAll(() {
     when(
-      () => mockClient.get(Uri.parse('$kLichessHost/game/export/qVChCOTc'),
-          headers: any(
-              named: 'headers',
-              that: sameHeaders({'Accept': 'application/json'}))),
+      () => mockClient.get(
+        Uri.parse('$kLichessHost/game/export/qVChCOTc'),
+        headers: any(
+          named: 'headers',
+          that: sameHeaders({'Accept': 'application/json'}),
+        ),
+      ),
     ).thenAnswer((_) => mockResponse(gameResponse, 200));
     registerFallbackValue(http.Request('GET', Uri.parse('http://api.test')));
   });
 
   group('ArchivedGameScreen', () {
-    testWidgets('displays game data and last fen immediately, then moves',
-        (tester) async {
-      SharedPreferences.setMockInitialValues({});
-      final sharedPreferences = await SharedPreferences.getInstance();
+    testWidgets(
+      'displays game data and last fen immediately, then moves',
+      (tester) async {
+        SharedPreferences.setMockInitialValues({});
+        final sharedPreferences = await SharedPreferences.getInstance();
 
-      final app = await buildTestApp(
-        tester,
-        home: Consumer(builder: (context, ref, _) {
-          return ArchivedGameScreen(
-              gameData: gameData, orientation: Side.white);
-        }),
-      );
+        final app = await buildTestApp(
+          tester,
+          home: Consumer(
+            builder: (context, ref, _) {
+              return ArchivedGameScreen(
+                gameData: gameData,
+                orientation: Side.white,
+              );
+            },
+          ),
+        );
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-            apiClientProvider
-                .overrideWithValue(ApiClient(mockLogger, mockClient)),
-            soundServiceProvider.overrideWithValue(mockSoundService),
-          ],
-          child: app,
-        ),
-      );
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+              apiClientProvider
+                  .overrideWithValue(ApiClient(mockLogger, mockClient)),
+              soundServiceProvider.overrideWithValue(mockSoundService),
+            ],
+            child: app,
+          ),
+        );
 
-      // data shown immediately
-      expect(find.byType(cg.Board), findsOneWidget);
-      expect(find.byType(cg.PieceWidget), findsNWidgets(25));
-      expect(find.widgetWithText(BoardPlayer, 'veloce'), findsOneWidget);
-      expect(find.widgetWithText(BoardPlayer, 'Stockfish'), findsOneWidget);
+        // data shown immediately
+        expect(find.byType(cg.Board), findsOneWidget);
+        expect(find.byType(cg.PieceWidget), findsNWidgets(25));
+        expect(find.widgetWithText(BoardPlayer, 'veloce'), findsOneWidget);
+        expect(find.widgetWithText(BoardPlayer, 'Stockfish'), findsOneWidget);
 
-      // cannot interact with board
-      expect(
+        // cannot interact with board
+        expect(
           tester.widget<cg.Board>(find.byType(cg.Board)).data.interactableSide,
-          cg.InteractableSide.none);
+          cg.InteractableSide.none,
+        );
 
-      // moves are not loaded
-      expect(find.byType(MoveList), findsNothing);
-      expect(
+        // moves are not loaded
+        expect(find.byType(MoveList), findsNothing);
+        expect(
           tester
               .widget<IconButton>(find.byKey(const ValueKey('cursor-back')))
               .onPressed,
-          isNull);
+          isNull,
+        );
 
-      // wait for game steps loading
-      await tester.pump(const Duration(milliseconds: 100));
-      // wait for move list ensureVisible animation to finish
-      await tester.pumpAndSettle();
+        // wait for game steps loading
+        await tester.pump(const Duration(milliseconds: 100));
+        // wait for move list ensureVisible animation to finish
+        await tester.pumpAndSettle();
 
-      // same info still displayed
-      expect(find.byType(cg.Board), findsOneWidget);
-      expect(find.byType(cg.PieceWidget), findsNWidgets(25));
-      expect(find.widgetWithText(BoardPlayer, 'veloce'), findsOneWidget);
-      expect(find.widgetWithText(BoardPlayer, 'Stockfish'), findsOneWidget);
+        // same info still displayed
+        expect(find.byType(cg.Board), findsOneWidget);
+        expect(find.byType(cg.PieceWidget), findsNWidgets(25));
+        expect(find.widgetWithText(BoardPlayer, 'veloce'), findsOneWidget);
+        expect(find.widgetWithText(BoardPlayer, 'Stockfish'), findsOneWidget);
 
-      // now with the clocks
-      expect(find.widgetWithText(CountdownClock, '1:46'), findsNWidgets(1));
-      expect(find.widgetWithText(CountdownClock, '0:46'), findsNWidgets(1));
+        // now with the clocks
+        expect(find.widgetWithText(CountdownClock, '1:46'), findsNWidgets(1));
+        expect(find.widgetWithText(CountdownClock, '0:46'), findsNWidgets(1));
 
-      // moves are loaded
-      expect(find.byType(MoveList), findsOneWidget);
-      expect(
+        // moves are loaded
+        expect(find.byType(MoveList), findsOneWidget);
+        expect(
           tester
               .widget<IconButton>(find.byKey(const ValueKey('cursor-back')))
               .onPressed,
-          isNotNull);
-    }, variant: kPlatformVariant);
+          isNotNull,
+        );
+      },
+      variant: kPlatformVariant,
+    );
 
     testWidgets('navigate game positions', (tester) async {
       SharedPreferences.setMockInitialValues({});
@@ -117,10 +130,14 @@ void main() {
 
       final app = await buildTestApp(
         tester,
-        home: Consumer(builder: (context, ref, _) {
-          return ArchivedGameScreen(
-              gameData: gameData, orientation: Side.white);
-        }),
+        home: Consumer(
+          builder: (context, ref, _) {
+            return ArchivedGameScreen(
+              gameData: gameData,
+              orientation: Side.white,
+            );
+          },
+        ),
       );
 
       await tester.pumpWidget(
@@ -150,11 +167,13 @@ void main() {
               .toList();
 
       expect(
-          tester
-              .widget<InlineMoveItem>(
-                  find.widgetWithText(InlineMoveItem, 'Qe1#'))
-              .current,
-          isTrue);
+        tester
+            .widget<InlineMoveItem>(
+              find.widgetWithText(InlineMoveItem, 'Qe1#'),
+            )
+            .current,
+        isTrue,
+      );
 
       for (var i = 0; i < movesAfterE4.length; i++) {
         // go back in history
@@ -173,10 +192,11 @@ void main() {
 
       // cannot go backward anymore
       expect(
-          tester
-              .widget<IconButton>(find.byKey(const Key('cursor-back')))
-              .onPressed,
-          isNull);
+        tester
+            .widget<IconButton>(find.byKey(const Key('cursor-back')))
+            .onPressed,
+        isNull,
+      );
 
       // go to last
       await tester.tap(find.byKey(const Key('cursor-last')));
@@ -185,16 +205,19 @@ void main() {
 
       // cannot go forward anymore
       expect(
-          tester
-              .widget<IconButton>(find.byKey(const Key('cursor-forward')))
-              .onPressed,
-          isNull);
+        tester
+            .widget<IconButton>(find.byKey(const Key('cursor-forward')))
+            .onPressed,
+        isNull,
+      );
       expect(
-          tester
-              .widget<InlineMoveItem>(
-                  find.widgetWithText(InlineMoveItem, 'Qe1#'))
-              .current,
-          isTrue);
+        tester
+            .widget<InlineMoveItem>(
+              find.widgetWithText(InlineMoveItem, 'Qe1#'),
+            )
+            .current,
+        isTrue,
+      );
     });
   });
 }

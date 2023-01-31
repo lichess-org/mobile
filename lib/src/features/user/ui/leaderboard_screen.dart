@@ -20,28 +20,37 @@ class LeaderboardScreen extends StatelessWidget {
 
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          previousPageTitle: 'Home',
-          middle: Text(context.l10n.leaderboard),
-        ),
-        child: LayoutBuilder(builder: (context, constraints) {
-          return CustomScrollView(slivers: [
-            SliverSafeArea(
+      navigationBar: CupertinoNavigationBar(
+        previousPageTitle: 'Home',
+        middle: Text(context.l10n.leaderboard),
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return CustomScrollView(
+            slivers: [
+              SliverSafeArea(
                 sliver: SliverPadding(
-                    padding: kBodyPadding,
-                    sliver: constraints.maxWidth > kLargeScreenWidth
-                        ? SliverGrid(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    mainAxisExtent: 644,
-                                    crossAxisCount:
-                                        (constraints.maxWidth / 300).floor()),
-                            delegate: SliverChildListDelegate(_buildList()))
-                        : SliverList(
-                            delegate: SliverChildListDelegate(_buildList()),
-                          )))
-          ]);
-        }));
+                  padding: kBodyPadding,
+                  sliver: constraints.maxWidth > kLargeScreenWidth
+                      ? SliverGrid(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            mainAxisExtent: 644,
+                            crossAxisCount:
+                                (constraints.maxWidth / 300).floor(),
+                          ),
+                          delegate: SliverChildListDelegate(_buildList()),
+                        )
+                      : SliverList(
+                          delegate: SliverChildListDelegate(_buildList()),
+                        ),
+                ),
+              )
+            ],
+          );
+        },
+      ),
+    );
   }
 
   Widget _buildAndroid(BuildContext context) {
@@ -76,23 +85,47 @@ class LeaderboardScreen extends StatelessWidget {
       _BuildLeaderboard(leaderboard.blitz, LichessIcons.blitz, 'BLITZ'),
       _BuildLeaderboard(leaderboard.rapid, LichessIcons.rapid, 'RAPID'),
       _BuildLeaderboard(
-          leaderboard.classical, LichessIcons.classical, 'CLASSICAL'),
+        leaderboard.classical,
+        LichessIcons.classical,
+        'CLASSICAL',
+      ),
       _BuildLeaderboard(
-          leaderboard.ultrabullet, LichessIcons.ultrabullet, 'ULTRA BULLET'),
+        leaderboard.ultrabullet,
+        LichessIcons.ultrabullet,
+        'ULTRA BULLET',
+      ),
       _BuildLeaderboard(
-          leaderboard.crazyhouse, LichessIcons.h_square, 'CRAZYHOUSE'),
+        leaderboard.crazyhouse,
+        LichessIcons.h_square,
+        'CRAZYHOUSE',
+      ),
       _BuildLeaderboard(
-          leaderboard.chess960, LichessIcons.die_six, 'CHESS 960'),
+        leaderboard.chess960,
+        LichessIcons.die_six,
+        'CHESS 960',
+      ),
       _BuildLeaderboard(
-          leaderboard.kingOfThehill, LichessIcons.bullet, 'KING OF THE HILL'),
+        leaderboard.kingOfThehill,
+        LichessIcons.bullet,
+        'KING OF THE HILL',
+      ),
       _BuildLeaderboard(
-          leaderboard.threeCheck, LichessIcons.three_check, 'THREE CHECK'),
+        leaderboard.threeCheck,
+        LichessIcons.three_check,
+        'THREE CHECK',
+      ),
       _BuildLeaderboard(leaderboard.atomic, LichessIcons.atom, 'ATOMIC'),
       _BuildLeaderboard(leaderboard.horde, LichessIcons.horde, 'HORDE'),
       _BuildLeaderboard(
-          leaderboard.antichess, LichessIcons.antichess, 'ANTICHESS'),
+        leaderboard.antichess,
+        LichessIcons.antichess,
+        'ANTICHESS',
+      ),
       _BuildLeaderboard(
-          leaderboard.racingKings, LichessIcons.racing_kings, 'RACING KINGS'),
+        leaderboard.racingKings,
+        LichessIcons.racing_kings,
+        'RACING KINGS',
+      ),
     ];
   }
 }
@@ -113,9 +146,10 @@ class _BuildLeaderboard extends StatelessWidget {
           title: Text(title),
         ),
         ...ListTile.divideTiles(
-            color: dividerColor(context),
-            context: context,
-            tiles: userList.map((user) => LeaderboardListTile(user: user))),
+          color: dividerColor(context),
+          context: context,
+          tiles: userList.map((user) => LeaderboardListTile(user: user)),
+        ),
         const SizedBox(height: 12),
       ],
     );
@@ -139,9 +173,13 @@ class LeaderboardListTile extends StatelessWidget {
       title: Row(
         children: [
           if (user.title != null) ...[
-            Text(user.title!,
-                style: const TextStyle(
-                    color: LichessColors.brag, fontWeight: FontWeight.bold)),
+            Text(
+              user.title!,
+              style: const TextStyle(
+                color: LichessColors.brag,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(width: 5)
           ],
           Flexible(
@@ -171,14 +209,18 @@ class _RatingAndProgress extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              const Icon(LichessIcons.arrow_full_lowerright,
-                  size: 20, color: LichessColors.red),
+              const Icon(
+                LichessIcons.arrow_full_lowerright,
+                size: 20,
+                color: LichessColors.red,
+              ),
               SizedBox(
-                  width: 30,
-                  child: Text(
-                    '${progress.abs()}',
-                    style: const TextStyle(color: LichessColors.red),
-                  ))
+                width: 30,
+                child: Text(
+                  '${progress.abs()}',
+                  style: const TextStyle(color: LichessColors.red),
+                ),
+              )
             ],
           )
         else if (progress > 0)
@@ -186,14 +228,18 @@ class _RatingAndProgress extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(LichessIcons.arrow_full_upperright,
-                  size: 20, color: LichessColors.good),
+              const Icon(
+                LichessIcons.arrow_full_upperright,
+                size: 20,
+                color: LichessColors.good,
+              ),
               SizedBox(
-                  width: 30,
-                  child: Text(
-                    '$progress',
-                    style: const TextStyle(color: LichessColors.good),
-                  ))
+                width: 30,
+                child: Text(
+                  '$progress',
+                  style: const TextStyle(color: LichessColors.good),
+                ),
+              )
             ],
           )
         else
@@ -211,12 +257,16 @@ class _OnlineOrPatron extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (patron != null) {
-      return Icon(LichessIcons.patron,
-          color: online != null ? LichessColors.good : LichessColors.grey);
+      return Icon(
+        LichessIcons.patron,
+        color: online != null ? LichessColors.good : LichessColors.grey,
+      );
     } else {
-      return Icon(CupertinoIcons.circle_fill,
-          size: 20,
-          color: online != null ? LichessColors.good : LichessColors.grey);
+      return Icon(
+        CupertinoIcons.circle_fill,
+        size: 20,
+        color: online != null ? LichessColors.good : LichessColors.grey,
+      );
     }
   }
 }

@@ -13,13 +13,16 @@ final tvStreamProvider = StreamProvider.autoDispose<FeaturedPosition>((ref) {
     tvRepository.dispose();
   });
   return tvRepository.tvFeed().map((event) {
-    return event.map(featured: (featuredEvent) {
-      featuredGameNotifier.onFeaturedEvent(featuredEvent);
-      return FeaturedPosition.fromTvEvent(featuredEvent);
-    }, fen: (fenEvent) {
-      featuredGameNotifier.onFenEvent(fenEvent);
-      soundService.playMove();
-      return FeaturedPosition.fromTvEvent(fenEvent);
-    });
+    return event.map(
+      featured: (featuredEvent) {
+        featuredGameNotifier.onFeaturedEvent(featuredEvent);
+        return FeaturedPosition.fromTvEvent(featuredEvent);
+      },
+      fen: (fenEvent) {
+        featuredGameNotifier.onFenEvent(fenEvent);
+        soundService.playMove();
+        return FeaturedPosition.fromTvEvent(fenEvent);
+      },
+    );
   });
 });

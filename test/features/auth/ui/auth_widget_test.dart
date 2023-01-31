@@ -9,41 +9,47 @@ import '../data/fake_auth_repository.dart';
 import '../../../utils.dart';
 
 void main() {
-  testWidgets('Auth widget sign in and sign out', (WidgetTester tester) async {
-    final app = await buildTestApp(
-      tester,
-      home: Consumer(builder: (context, ref, _) {
-        return Scaffold(
-          appBar: AppBar(
-            actions: const [
-              SignInWidget(),
-            ],
-          ),
-        );
-      }),
-    );
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          authRepositoryProvider.overrideWithValue(FakeAuthRepository(null)),
-          selectedBrigthnessProvider.overrideWithValue(Brightness.dark),
-        ],
-        child: app,
-      ),
-    );
+  testWidgets(
+    'Auth widget sign in and sign out',
+    (WidgetTester tester) async {
+      final app = await buildTestApp(
+        tester,
+        home: Consumer(
+          builder: (context, ref, _) {
+            return Scaffold(
+              appBar: AppBar(
+                actions: const [
+                  SignInWidget(),
+                ],
+              ),
+            );
+          },
+        ),
+      );
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            authRepositoryProvider.overrideWithValue(FakeAuthRepository(null)),
+            selectedBrigthnessProvider.overrideWithValue(Brightness.dark),
+          ],
+          child: app,
+        ),
+      );
 
-    // first frame is a loading state
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    await tester.pump();
+      // first frame is a loading state
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      await tester.pump();
 
-    expect(find.text('Sign in'), findsOneWidget);
+      expect(find.text('Sign in'), findsOneWidget);
 
-    await tester.tap(find.text('Sign in'));
-    await tester.pump();
+      await tester.tap(find.text('Sign in'));
+      await tester.pump();
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    await tester.pump(const Duration(seconds: 1)); // wait for sign in future
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      await tester.pump(const Duration(seconds: 1)); // wait for sign in future
 
-    expect(find.text('Sign in'), findsNothing);
-  }, variant: kPlatformVariant);
+      expect(find.text('Sign in'), findsNothing);
+    },
+    variant: kPlatformVariant,
+  );
 }

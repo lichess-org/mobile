@@ -35,11 +35,12 @@ class TvScreen extends ConsumerWidget {
         title: const Text('Lichess TV'),
         actions: [
           IconButton(
-              icon: isSoundMuted
-                  ? const Icon(Icons.volume_off)
-                  : const Icon(Icons.volume_up),
-              onPressed: () =>
-                  ref.read(isSoundMutedProvider.notifier).toggleSound())
+            icon: isSoundMuted
+                ? const Icon(Icons.volume_off)
+                : const Icon(Icons.volume_up),
+            onPressed: () =>
+                ref.read(isSoundMutedProvider.notifier).toggleSound(),
+          )
         ],
       ),
       body: _buildBody(context, ref),
@@ -50,13 +51,15 @@ class TvScreen extends ConsumerWidget {
     final isSoundMuted = ref.watch(isSoundMutedProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-          trailing: CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: isSoundMuted
-                  ? const Icon(CupertinoIcons.volume_off)
-                  : const Icon(CupertinoIcons.volume_up),
-              onPressed: () =>
-                  ref.read(isSoundMutedProvider.notifier).toggleSound())),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: isSoundMuted
+              ? const Icon(CupertinoIcons.volume_off)
+              : const Icon(CupertinoIcons.volume_up),
+          onPressed: () =>
+              ref.read(isSoundMutedProvider.notifier).toggleSound(),
+        ),
+      ),
       child: _buildBody(context, ref),
     );
   }
@@ -96,7 +99,8 @@ class TvScreen extends ConsumerWidget {
                     rating: topPlayer.rating,
                     clock: Duration(seconds: topPlayer.seconds ?? 0),
                     active:
-                        !position.isGameOver && position.turn == topPlayer.side)
+                        !position.isGameOver && position.turn == topPlayer.side,
+                  )
                 : kEmptyWidget;
             final bottomPlayerWidget = bottomPlayer != null
                 ? BoardPlayer(
@@ -105,7 +109,8 @@ class TvScreen extends ConsumerWidget {
                     rating: bottomPlayer.rating,
                     clock: Duration(seconds: bottomPlayer.seconds ?? 0),
                     active: !position.isGameOver &&
-                        position.turn == bottomPlayer.side)
+                        position.turn == bottomPlayer.side,
+                  )
                 : kEmptyWidget;
             return GameBoardLayout(
               boardData: boardData,
@@ -126,7 +131,8 @@ class TvScreen extends ConsumerWidget {
           ),
           error: (err, stackTrace) {
             debugPrint(
-                'SEVERE: [TvScreen] could not load stream; $err\n$stackTrace');
+              'SEVERE: [TvScreen] could not load stream; $err\n$stackTrace',
+            );
             return const Text('Could not load TV stream.');
           },
         ),

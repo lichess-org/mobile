@@ -73,26 +73,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         ],
       ),
       body: authState.maybeWhen(
-          data: (account) {
-            return account != null
-                ? RefreshIndicator(
-                    key: _androidRefreshKey,
-                    onRefresh: () => _refreshData(account),
-                    child: ListView(
-                      padding: kBodyPadding,
-                      children: _buildList(context, account),
-                    ),
-                  )
-                : Center(
-                    child: FatButton(
-                        semanticsLabel: context.l10n.signIn,
-                        onPressed: authActionsAsync.isLoading
-                            ? null
-                            : () =>
-                                ref.read(authActionsProvider.notifier).signIn(),
-                        child: Text(context.l10n.signIn)));
-          },
-          orElse: () => const Center(child: CircularProgressIndicator())),
+        data: (account) {
+          return account != null
+              ? RefreshIndicator(
+                  key: _androidRefreshKey,
+                  onRefresh: () => _refreshData(account),
+                  child: ListView(
+                    padding: kBodyPadding,
+                    children: _buildList(context, account),
+                  ),
+                )
+              : Center(
+                  child: FatButton(
+                    semanticsLabel: context.l10n.signIn,
+                    onPressed: authActionsAsync.isLoading
+                        ? null
+                        : () => ref.read(authActionsProvider.notifier).signIn(),
+                    child: Text(context.l10n.signIn),
+                  ),
+                );
+        },
+        orElse: () => const Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 
@@ -137,14 +139,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 else
                   SliverFillRemaining(
                     child: Center(
-                        child: FatButton(
-                            semanticsLabel: context.l10n.signIn,
-                            onPressed: authActionsAsync.isLoading
-                                ? null
-                                : () => ref
-                                    .read(authActionsProvider.notifier)
-                                    .signIn(),
-                            child: Text(context.l10n.signIn))),
+                      child: FatButton(
+                        semanticsLabel: context.l10n.signIn,
+                        onPressed: authActionsAsync.isLoading
+                            ? null
+                            : () =>
+                                ref.read(authActionsProvider.notifier).signIn(),
+                        child: Text(context.l10n.signIn),
+                      ),
+                    ),
                   ),
               ];
             },
@@ -183,13 +186,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             kEmptyWidget,
           const SizedBox(height: 5),
           Text(
-              '${context.l10n.memberSince} ${DateFormat.yMMMMd().format(account.createdAt)}'),
+            '${context.l10n.memberSince} ${DateFormat.yMMMMd().format(account.createdAt)}',
+          ),
           const SizedBox(height: 5),
           Text(context.l10n.lastSeenActive(timeago.format(account.seenAt))),
           const SizedBox(height: 5),
           if (account.playTime != null)
-            Text(context.l10n.tpTimeSpentPlaying(account.playTime!.total
-                .toDaysHoursMinutes(AppLocalizations.of(context))))
+            Text(
+              context.l10n.tpTimeSpentPlaying(
+                account.playTime!.total
+                    .toDaysHoursMinutes(AppLocalizations.of(context)),
+              ),
+            )
           else
             kEmptyWidget,
         ],
@@ -246,11 +254,15 @@ class PerfCards extends StatelessWidget {
                 onTap: isPerfWithoutStats
                     ? null
                     : () => pushPlatformRoute(
-                        context: context,
-                        title: context.l10n
-                            .perfStats('${account.username} ${perf.title}'),
-                        builder: (context) => PerfStatsScreen(
-                            user: account, perf: perf, loggedInUser: account)),
+                          context: context,
+                          title: context.l10n
+                              .perfStats('${account.username} ${perf.title}'),
+                          builder: (context) => PerfStatsScreen(
+                            user: account,
+                            perf: perf,
+                            loggedInUser: account,
+                          ),
+                        ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -281,12 +293,15 @@ class PerfCards extends StatelessWidget {
                                   : LichessColors.red,
                               size: 12,
                             ),
-                            Text(userPerf.progression.abs().toString(),
-                                style: TextStyle(
-                                    color: userPerf.progression > 0
-                                        ? LichessColors.good
-                                        : LichessColors.red,
-                                    fontSize: 12)),
+                            Text(
+                              userPerf.progression.abs().toString(),
+                              style: TextStyle(
+                                color: userPerf.progression > 0
+                                    ? LichessColors.good
+                                    : LichessColors.red,
+                                fontSize: 12,
+                              ),
+                            ),
                           ],
                         ],
                       ),
@@ -316,52 +331,60 @@ class RecentGames extends ConsumerWidget {
       data: (data) {
         return Column(
           children: ListTile.divideTiles(
-              color: dividerColor(context),
-              context: context,
-              tiles: data.map((game) {
-                final mySide =
-                    game.white.id == account.id ? Side.white : Side.black;
-                final opponent =
-                    game.white.id == account.id ? game.black : game.white;
-                final opponentName = opponent.name == 'Stockfish'
-                    ? context.l10n.aiNameLevelAiLevel(
-                        opponent.name, opponent.aiLevel.toString())
-                    : opponent.name;
+            color: dividerColor(context),
+            context: context,
+            tiles: data.map((game) {
+              final mySide =
+                  game.white.id == account.id ? Side.white : Side.black;
+              final opponent =
+                  game.white.id == account.id ? game.black : game.white;
+              final opponentName = opponent.name == 'Stockfish'
+                  ? context.l10n.aiNameLevelAiLevel(
+                      opponent.name,
+                      opponent.aiLevel.toString(),
+                    )
+                  : opponent.name;
 
-                return ListTile(
-                  onTap: () {
-                    Navigator.of(context, rootNavigator: true).push<void>(
-                      MaterialPageRoute(
-                        builder: (context) => ArchivedGameScreen(
-                          gameData: game,
-                          orientation: account.id == game.white.id
-                              ? Side.white
-                              : Side.black,
-                        ),
+              return ListTile(
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push<void>(
+                    MaterialPageRoute(
+                      builder: (context) => ArchivedGameScreen(
+                        gameData: game,
+                        orientation: account.id == game.white.id
+                            ? Side.white
+                            : Side.black,
                       ),
-                    );
-                  },
-                  leading: Icon(game.perf.icon),
-                  title: ListTileUser(
-                    user: LightUser(name: opponentName, title: opponent.title),
-                    rating: opponent.rating,
-                  ),
-                  subtitle: Text(
-                    timeago.format(game.lastMoveAt),
-                    style: TextStyle(color: textShade(context, 0.7)),
-                  ),
-                  trailing: game.winner == mySide
-                      ? const Icon(CupertinoIcons.plus_square_fill,
-                          color: LichessColors.good)
-                      : const Icon(CupertinoIcons.minus_square_fill,
-                          color: LichessColors.red),
-                );
-              })).toList(growable: false),
+                    ),
+                  );
+                },
+                leading: Icon(game.perf.icon),
+                title: ListTileUser(
+                  user: LightUser(name: opponentName, title: opponent.title),
+                  rating: opponent.rating,
+                ),
+                subtitle: Text(
+                  timeago.format(game.lastMoveAt),
+                  style: TextStyle(color: textShade(context, 0.7)),
+                ),
+                trailing: game.winner == mySide
+                    ? const Icon(
+                        CupertinoIcons.plus_square_fill,
+                        color: LichessColors.good,
+                      )
+                    : const Icon(
+                        CupertinoIcons.minus_square_fill,
+                        color: LichessColors.red,
+                      ),
+              );
+            }),
+          ).toList(growable: false),
         );
       },
       error: (error, stackTrace) {
         debugPrint(
-            'SEVERE: [ProfileScreen] could not load user games; $error\n$stackTrace');
+          'SEVERE: [ProfileScreen] could not load user games; $error\n$stackTrace',
+        );
         return const Text('Could not load games.');
       },
       loading: () => const CenterLoadingIndicator(),
@@ -376,17 +399,19 @@ class Location extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      if (profile.country != null)
-        CachedNetworkImage(
-          imageUrl: lichessFlagSrc(profile.country!),
-          errorWidget: (_, __, ___) => kEmptyWidget,
-        )
-      else
-        kEmptyWidget,
-      const SizedBox(width: 10),
-      Text(profile.location ?? ''),
-    ]);
+    return Row(
+      children: [
+        if (profile.country != null)
+          CachedNetworkImage(
+            imageUrl: lichessFlagSrc(profile.country!),
+            errorWidget: (_, __, ___) => kEmptyWidget,
+          )
+        else
+          kEmptyWidget,
+        const SizedBox(width: 10),
+        Text(profile.location ?? ''),
+      ],
+    );
   }
 }
 

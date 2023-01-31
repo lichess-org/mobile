@@ -28,75 +28,98 @@ void main() {
         .thenAnswer((_) => mockResponse(testRes, 200));
   });
 
-  testWidgets('meets accessibility guidelines', (WidgetTester tester) async {
-    final SemanticsHandle handle = tester.ensureSemantics();
+  testWidgets(
+    'meets accessibility guidelines',
+    (WidgetTester tester) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
 
-    final app = await buildTestApp(
-      tester,
-      home: Consumer(builder: (context, ref, _) {
-        return LeaderboardScreen(leaderboard: testLeaderboard);
-      }),
-    );
-    await tester.pumpWidget(ProviderScope(child: app));
-
-    await tester.pump();
-
-    await meetsTapTargetGuideline(tester);
-
-    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
-
-    if (debugDefaultTargetPlatformOverride == TargetPlatform.android) {
-      await expectLater(tester, meetsGuideline(textContrastGuideline));
-    }
-    handle.dispose();
-  }, variant: kPlatformVariant);
-
-  testWidgets('leaderbord widget test', (WidgetTester tester) async {
-    final SemanticsHandle handle = tester.ensureSemantics();
-
-    final app = await buildTestApp(tester,
+      final app = await buildTestApp(
+        tester,
         home: Consumer(
-            builder: (context, ref, _) =>
-                Column(children: [LeaderboardWidget()])));
+          builder: (context, ref, _) {
+            return LeaderboardScreen(leaderboard: testLeaderboard);
+          },
+        ),
+      );
+      await tester.pumpWidget(ProviderScope(child: app));
 
-    await tester.pumpWidget(ProviderScope(overrides: [
-      apiClientProvider.overrideWithValue(ApiClient(mockLogger, mockClient))
-    ], child: app));
+      await tester.pump();
 
-    await tester.pump(const Duration(milliseconds: 50));
+      await meetsTapTargetGuideline(tester);
 
-    // 11 leaderboard rows with username test
-    expect(find.widgetWithText(Row, 'test'), findsNWidgets(11));
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
-    await meetsTapTargetGuideline(tester);
+      if (debugDefaultTargetPlatformOverride == TargetPlatform.android) {
+        await expectLater(tester, meetsGuideline(textContrastGuideline));
+      }
+      handle.dispose();
+    },
+    variant: kPlatformVariant,
+  );
 
-    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+  testWidgets(
+    'leaderbord widget test',
+    (WidgetTester tester) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
 
-    if (debugDefaultTargetPlatformOverride == TargetPlatform.android) {
-      await expectLater(tester, meetsGuideline(textContrastGuideline));
-    }
-    handle.dispose();
-  }, variant: kPlatformVariant);
+      final app = await buildTestApp(
+        tester,
+        home: Consumer(
+          builder: (context, ref, _) => Column(children: [LeaderboardWidget()]),
+        ),
+      );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            apiClientProvider
+                .overrideWithValue(ApiClient(mockLogger, mockClient))
+          ],
+          child: app,
+        ),
+      );
+
+      await tester.pump(const Duration(milliseconds: 50));
+
+      // 11 leaderboard rows with username test
+      expect(find.widgetWithText(Row, 'test'), findsNWidgets(11));
+
+      await meetsTapTargetGuideline(tester);
+
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+
+      if (debugDefaultTargetPlatformOverride == TargetPlatform.android) {
+        await expectLater(tester, meetsGuideline(textContrastGuideline));
+      }
+      handle.dispose();
+    },
+    variant: kPlatformVariant,
+  );
 }
 
 final testLeaderboard = Leaderboard(
-    bullet: _fakeList,
-    blitz: _fakeList,
-    rapid: _fakeList,
-    classical: _fakeList,
-    ultrabullet: _fakeList,
-    crazyhouse: _fakeList,
-    chess960: _fakeList,
-    kingOfThehill: _fakeList,
-    threeCheck: _fakeList,
-    antichess: _fakeList,
-    atomic: _fakeList,
-    horde: _fakeList,
-    racingKings: _fakeList);
+  bullet: _fakeList,
+  blitz: _fakeList,
+  rapid: _fakeList,
+  classical: _fakeList,
+  ultrabullet: _fakeList,
+  crazyhouse: _fakeList,
+  chess960: _fakeList,
+  kingOfThehill: _fakeList,
+  threeCheck: _fakeList,
+  antichess: _fakeList,
+  atomic: _fakeList,
+  horde: _fakeList,
+  racingKings: _fakeList,
+);
 
 final _fakeList = [
   const LeaderboardUser(
-      id: 'test', username: 'test', rating: 1000, progress: 10)
+    id: 'test',
+    username: 'test',
+    rating: 1000,
+    progress: 10,
+  )
 ];
 
 const testRes = '''

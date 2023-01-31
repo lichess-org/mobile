@@ -21,8 +21,11 @@ const defaultRetries = [
 /// Convenient client that captures and returns API errors.
 class ApiClient {
   ApiClient(this._log, this._client, {List<Duration> retries = defaultRetries})
-      : _retryClient = RetryClient.withDelays(_client, retries,
-            whenError: (_, __) => true) {
+      : _retryClient = RetryClient.withDelays(
+          _client,
+          retries,
+          whenError: (_, __) => true,
+        ) {
     _log.info('Creating new ApiClient.');
   }
 
@@ -36,8 +39,8 @@ class ApiClient {
     bool retry = false,
   }) =>
       Result.capture(
-              (retry ? _retryClient : _client).get(url, headers: headers))
-          .mapError((error, stackTrace) {
+        (retry ? _retryClient : _client).get(url, headers: headers),
+      ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
         return GenericIOException();
       }).flatMap((response) => _validateResponseStatusResult(url, response));
@@ -49,9 +52,10 @@ class ApiClient {
     Encoding? encoding,
     bool retry = false,
   }) =>
-      Result.capture((retry ? _retryClient : _client)
-              .post(url, headers: headers, body: body, encoding: encoding))
-          .mapError((error, stackTrace) {
+      Result.capture(
+        (retry ? _retryClient : _client)
+            .post(url, headers: headers, body: body, encoding: encoding),
+      ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
         return GenericIOException();
       }).flatMap((response) => _validateResponseStatusResult(url, response));
@@ -63,15 +67,18 @@ class ApiClient {
     Encoding? encoding,
     bool retry = false,
   }) =>
-      Result.capture((retry ? _retryClient : _client)
-              .delete(url, headers: headers, body: body, encoding: encoding))
-          .mapError((error, stackTrace) {
+      Result.capture(
+        (retry ? _retryClient : _client)
+            .delete(url, headers: headers, body: body, encoding: encoding),
+      ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
         return GenericIOException();
       }).flatMap((response) => _validateResponseStatusResult(url, response));
 
-  Future<StreamedResponse> stream(Uri url,
-      {Map<String, String>? headers}) async {
+  Future<StreamedResponse> stream(
+    Uri url, {
+    Map<String, String>? headers,
+  }) async {
     final request = Request('GET', url);
     if (headers != null) {
       request.headers.addAll(headers);
@@ -86,7 +93,9 @@ class ApiClient {
   }
 
   Result<T> _validateResponseStatusResult<T extends BaseResponse>(
-      Uri url, T response) {
+    Uri url,
+    T response,
+  ) {
     if (response.statusCode >= 500) {
       _log.severe('$url responded with status ${response.statusCode}');
     } else if (response.statusCode >= 400) {

@@ -6,11 +6,12 @@ import 'package:flutter/material.dart';
 ///
 /// Will use an [ElevatedButton] on Android and a [CupertinoButton.filled] on iOS.
 class FatButton extends StatelessWidget {
-  const FatButton(
-      {required this.semanticsLabel,
-      required this.child,
-      required this.onPressed,
-      super.key});
+  const FatButton({
+    required this.semanticsLabel,
+    required this.child,
+    required this.onPressed,
+    super.key,
+  });
 
   final String semanticsLabel;
   final VoidCallback? onPressed;
@@ -29,7 +30,8 @@ class FatButton extends StatelessWidget {
           : ElevatedButton(
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
-                  textStyle: const TextStyle(fontSize: 18)),
+                textStyle: const TextStyle(fontSize: 18),
+              ),
               child: child,
             ),
     );
@@ -38,12 +40,13 @@ class FatButton extends StatelessWidget {
 
 /// Platform agnostic button meant for medium importance actions.
 class SecondaryButton extends StatelessWidget {
-  const SecondaryButton(
-      {required this.semanticsLabel,
-      required this.child,
-      required this.onPressed,
-      this.textStyle,
-      super.key});
+  const SecondaryButton({
+    required this.semanticsLabel,
+    required this.child,
+    required this.onPressed,
+    this.textStyle,
+    super.key,
+  });
 
   final String semanticsLabel;
   final VoidCallback? onPressed;

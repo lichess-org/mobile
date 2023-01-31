@@ -15,8 +15,11 @@ class CountdownClock extends ConsumerStatefulWidget {
   final Duration duration;
   final bool active;
 
-  const CountdownClock(
-      {required this.duration, required this.active, super.key});
+  const CountdownClock({
+    required this.duration,
+    required this.active,
+    super.key,
+  });
 
   @override
   ConsumerState<CountdownClock> createState() => _CountdownClockState();
@@ -118,16 +121,18 @@ class ClockStyle {
   });
 
   static const darkThemeStyle = ClockStyle(
-      textColor: Colors.grey,
-      activeTextColor: Colors.black,
-      backgroundColor: Colors.black,
-      activeBackgroundColor: Colors.white);
+    textColor: Colors.grey,
+    activeTextColor: Colors.black,
+    backgroundColor: Colors.black,
+    activeBackgroundColor: Colors.white,
+  );
 
   static const lightThemeStyle = ClockStyle(
-      textColor: Colors.grey,
-      activeTextColor: Colors.black,
-      backgroundColor: Colors.white,
-      activeBackgroundColor: Color(0xFFD0E0BD));
+    textColor: Colors.grey,
+    activeTextColor: Colors.black,
+    backgroundColor: Colors.white,
+    activeBackgroundColor: Color(0xFFD0E0BD),
+  );
 
   final Color textColor;
   final Color activeTextColor;

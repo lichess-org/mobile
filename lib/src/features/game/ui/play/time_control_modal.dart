@@ -66,32 +66,44 @@ class TimeControlModal extends ConsumerWidget {
         padding: kBodyPadding,
         child: Column(
           children: [
-            _SectionChoices(timeControlPref,
-                choices: const [
-                  TimeControl.blitz1,
-                  TimeControl.blitz2,
-                  TimeControl.blitz3,
-                  TimeControl.blitz4
-                ],
-                title: const _SectionTitle(
-                    title: 'Blitz', icon: LichessIcons.blitz),
-                onSelected: onSelected),
+            _SectionChoices(
+              timeControlPref,
+              choices: const [
+                TimeControl.blitz1,
+                TimeControl.blitz2,
+                TimeControl.blitz3,
+                TimeControl.blitz4
+              ],
+              title: const _SectionTitle(
+                title: 'Blitz',
+                icon: LichessIcons.blitz,
+              ),
+              onSelected: onSelected,
+            ),
             const SizedBox(height: 30.0),
-            _SectionChoices(timeControlPref,
-                choices: const [
-                  TimeControl.rapid1,
-                  TimeControl.rapid2,
-                  TimeControl.rapid3
-                ],
-                title: const _SectionTitle(
-                    title: 'Rapid', icon: LichessIcons.rapid),
-                onSelected: onSelected),
+            _SectionChoices(
+              timeControlPref,
+              choices: const [
+                TimeControl.rapid1,
+                TimeControl.rapid2,
+                TimeControl.rapid3
+              ],
+              title: const _SectionTitle(
+                title: 'Rapid',
+                icon: LichessIcons.rapid,
+              ),
+              onSelected: onSelected,
+            ),
             const SizedBox(height: 30.0),
-            _SectionChoices(timeControlPref,
-                choices: const [TimeControl.classical1, TimeControl.classical2],
-                title: const _SectionTitle(
-                    title: 'Classical', icon: LichessIcons.classical),
-                onSelected: onSelected),
+            _SectionChoices(
+              timeControlPref,
+              choices: const [TimeControl.classical1, TimeControl.classical2],
+              title: const _SectionTitle(
+                title: 'Classical',
+                icon: LichessIcons.classical,
+              ),
+              onSelected: onSelected,
+            ),
           ],
         ),
       ),
@@ -100,8 +112,12 @@ class TimeControlModal extends ConsumerWidget {
 }
 
 class _SectionChoices extends StatelessWidget {
-  const _SectionChoices(this.selected,
-      {required this.title, required this.choices, required this.onSelected});
+  const _SectionChoices(
+    this.selected, {
+    required this.title,
+    required this.choices,
+    required this.onSelected,
+  });
 
   final TimeControl selected;
   final List<TimeControl> choices;

@@ -6,8 +6,10 @@ import '../model/time_control.dart';
 final computerOpponentPrefProvider = createPrefProvider(
   prefKey: 'play.computerOpponent',
   defaultValue: ComputerOpponent.maia,
-  mapFrom: (v) => ComputerOpponent.values.firstWhere((e) => e.toString() == v,
-      orElse: () => ComputerOpponent.maia),
+  mapFrom: (v) => ComputerOpponent.values.firstWhere(
+    (e) => e.toString() == v,
+    orElse: () => ComputerOpponent.maia,
+  ),
   mapTo: (v) => v.toString(),
 );
 
@@ -28,7 +30,8 @@ final timeControlPrefProvider = createPrefProvider(
   prefKey: 'play.timeControl',
   defaultValue: TimeControl.blitz4,
   mapFrom: (v) => TimeControl.values.firstWhere(
-      (e) => v != null && e.value == TimeInc.fromString(v),
-      orElse: () => TimeControl.blitz4),
+    (e) => v != null && e.value == TimeInc.fromString(v),
+    orElse: () => TimeControl.blitz4,
+  ),
   mapTo: (v) => v.value.toString(),
 );

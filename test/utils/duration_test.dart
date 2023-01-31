@@ -26,12 +26,22 @@ void main() {
   group('DurationExtensions.toDaysHoursMinutes()', () {
     test('all values nonzero, plural', () {
       testTimeStr(
-          mockAppLocalizations, 2, 2, 2, '2 days, 2 hours and 2 minutes');
+        mockAppLocalizations,
+        2,
+        2,
+        2,
+        '2 days, 2 hours and 2 minutes',
+      );
     });
 
     test('all values nonzero, plural', () {
       testTimeStr(
-          mockAppLocalizations, 2, 2, 2, '2 days, 2 hours and 2 minutes');
+        mockAppLocalizations,
+        2,
+        2,
+        2,
+        '2 days, 2 hours and 2 minutes',
+      );
     });
 
     test('all values nonzero, single', () {
@@ -68,8 +78,13 @@ void main() {
   });
 }
 
-void testTimeStr(MockAppLocalizations mockAppLocalizations, int days, int hours,
-    int minutes, String expected) {
+void testTimeStr(
+  MockAppLocalizations mockAppLocalizations,
+  int days,
+  int hours,
+  int minutes,
+  String expected,
+) {
   final timeStr = Duration(days: days, hours: hours, minutes: minutes)
       .toDaysHoursMinutes(mockAppLocalizations);
   expect(timeStr, expected);

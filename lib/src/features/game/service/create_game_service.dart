@@ -34,46 +34,52 @@ class CreateGameService {
     );
     final createChallengeTask = opponent == ComputerOpponent.stockfish
         ? challengeRepo.challengeAI(
-            AiChallengeRequest(level: level, challenge: challengeRequest))
+            AiChallengeRequest(level: level, challenge: challengeRequest),
+          )
         : challengeRepo.challenge(maiaStrength.name, challengeRequest);
 
     return createChallengeTask.flatMap((_) => _waitForGameStart(account));
   }
 
   FutureResult<PlayableGame> _waitForGameStart(User account) {
-    return Result.capture((() async {
-      final gameRepo = ref.read(gameRepositoryProvider);
-      final stream = gameRepo.events().timeout(const Duration(seconds: 15),
-          onTimeout: (sink) => sink.close());
+    return Result.capture(
+      (() async {
+        final gameRepo = ref.read(gameRepositoryProvider);
+        final stream = gameRepo.events().timeout(
+              const Duration(seconds: 15),
+              onTimeout: (sink) => sink.close(),
+            );
 
-      final startEvent = await stream.firstWhere(
+        final startEvent = await stream.firstWhere(
           (event) =>
               event.type == GameEventLifecycle.start && event.boardCompat,
           orElse: () {
-        throw Exception('Could not create game.');
-      });
+            throw Exception('Could not create game.');
+          },
+        );
 
-      final player = Player(
-        id: account.id,
-        name: account.username,
-        rating: account.perfs[startEvent.perf]!.rating,
-      );
-      final opponent = Player(
+        final player = Player(
+          id: account.id,
+          name: account.username,
+          rating: account.perfs[startEvent.perf]!.rating,
+        );
+        final opponent = Player(
           id: startEvent.opponent.id,
           name: startEvent.opponent.username,
-          rating: startEvent.opponent.rating);
-      return PlayableGame(
-        id: startEvent.gameId,
-        initialFen: startEvent.fen,
-        speed: startEvent.speed,
-        orientation: startEvent.side,
-        rated: startEvent.rated,
-        white: startEvent.side == Side.white ? player : opponent,
-        black: startEvent.side == Side.white ? opponent : player,
-        variant: Variant.standard,
-      );
-    })())
-        .mapError(
+          rating: startEvent.opponent.rating,
+        );
+        return PlayableGame(
+          id: startEvent.gameId,
+          initialFen: startEvent.fen,
+          speed: startEvent.speed,
+          orientation: startEvent.side,
+          rated: startEvent.rated,
+          white: startEvent.side == Side.white ? player : opponent,
+          black: startEvent.side == Side.white ? opponent : player,
+          variant: Variant.standard,
+        );
+      })(),
+    ).mapError(
       (error, trace) {
         _log.severe('Request error', error, trace);
         return GenericIOException();

@@ -28,90 +28,105 @@ void main() {
   setUpAll(() {
     when(
       () => mockClient.get(
-          Uri.parse(
-              '$kLichessHost/api/games/user/$testUserId?max=10&moves=false&lastFen=true'),
-          headers: any(
-              named: 'headers',
-              that: sameHeaders({'Accept': 'application/x-ndjson'}))),
+        Uri.parse(
+          '$kLichessHost/api/games/user/$testUserId?max=10&moves=false&lastFen=true',
+        ),
+        headers: any(
+          named: 'headers',
+          that: sameHeaders({'Accept': 'application/x-ndjson'}),
+        ),
+      ),
     ).thenAnswer((_) => mockResponse(userGameResponse, 200));
   });
 
   group('ProfileScreen', () {
-    testWidgets('meets accessibility guidelines', (WidgetTester tester) async {
-      final SemanticsHandle handle = tester.ensureSemantics();
+    testWidgets(
+      'meets accessibility guidelines',
+      (WidgetTester tester) async {
+        final SemanticsHandle handle = tester.ensureSemantics();
 
-      final app = await buildTestApp(
-        tester,
-        home: Consumer(builder: (context, ref, _) {
-          return const ProfileScreen();
-        }),
-      );
+        final app = await buildTestApp(
+          tester,
+          home: Consumer(
+            builder: (context, ref, _) {
+              return const ProfileScreen();
+            },
+          ),
+        );
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            authRepositoryProvider
-                .overrideWithValue(FakeAuthRepository(testUser)),
-            apiClientProvider
-                .overrideWithValue(ApiClient(mockLogger, mockClient)),
-          ],
-          child: app,
-        ),
-      );
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              authRepositoryProvider
+                  .overrideWithValue(FakeAuthRepository(testUser)),
+              apiClientProvider
+                  .overrideWithValue(ApiClient(mockLogger, mockClient)),
+            ],
+            child: app,
+          ),
+        );
 
-      // wait for auth state
-      await tester.pump();
+        // wait for auth state
+        await tester.pump();
 
-      // profile user name at the top
-      expect(find.widgetWithText(ListTile, testUserName), findsOneWidget);
+        // profile user name at the top
+        expect(find.widgetWithText(ListTile, testUserName), findsOneWidget);
 
-      // wait for recent games
-      await tester.pump(const Duration(milliseconds: 50));
+        // wait for recent games
+        await tester.pump(const Duration(milliseconds: 50));
 
-      await meetsTapTargetGuideline(tester);
+        await meetsTapTargetGuideline(tester);
 
-      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+        await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
-      if (debugDefaultTargetPlatformOverride == TargetPlatform.android) {
-        await expectLater(tester, meetsGuideline(textContrastGuideline));
-      }
-      handle.dispose();
-    }, variant: kPlatformVariant);
+        if (debugDefaultTargetPlatformOverride == TargetPlatform.android) {
+          await expectLater(tester, meetsGuideline(textContrastGuideline));
+        }
+        handle.dispose();
+      },
+      variant: kPlatformVariant,
+    );
 
-    testWidgets('should see recent games', (WidgetTester tester) async {
-      final app = await buildTestApp(
-        tester,
-        home: Consumer(builder: (context, ref, _) {
-          return const ProfileScreen();
-        }),
-      );
+    testWidgets(
+      'should see recent games',
+      (WidgetTester tester) async {
+        final app = await buildTestApp(
+          tester,
+          home: Consumer(
+            builder: (context, ref, _) {
+              return const ProfileScreen();
+            },
+          ),
+        );
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            authRepositoryProvider
-                .overrideWithValue(FakeAuthRepository(testUser)),
-            apiClientProvider
-                .overrideWithValue(ApiClient(mockLogger, mockClient)),
-          ],
-          child: app,
-        ),
-      );
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              authRepositoryProvider
+                  .overrideWithValue(FakeAuthRepository(testUser)),
+              apiClientProvider
+                  .overrideWithValue(ApiClient(mockLogger, mockClient)),
+            ],
+            child: app,
+          ),
+        );
 
-      // wait for auth state
-      await tester.pump();
+        // wait for auth state
+        await tester.pump();
 
-      // profile user name at the top
-      expect(find.widgetWithText(ListTile, testUserName), findsOneWidget);
+        // profile user name at the top
+        expect(find.widgetWithText(ListTile, testUserName), findsOneWidget);
 
-      // wait for recent games
-      await tester.pump(const Duration(milliseconds: 50));
+        // wait for recent games
+        await tester.pump(const Duration(milliseconds: 50));
 
-      // opponent in recent games
-      expect(find.widgetWithText(ListTile, 'maia1 (1397)'), findsOneWidget);
-      expect(find.widgetWithText(ListTile, 'maia1 (1399)'), findsOneWidget);
-      expect(find.widgetWithText(ListTile, 'maia1 (1410)'), findsOneWidget);
-    }, variant: kPlatformVariant);
+        // opponent in recent games
+        expect(find.widgetWithText(ListTile, 'maia1 (1397)'), findsOneWidget);
+        expect(find.widgetWithText(ListTile, 'maia1 (1399)'), findsOneWidget);
+        expect(find.widgetWithText(ListTile, 'maia1 (1410)'), findsOneWidget);
+      },
+      variant: kPlatformVariant,
+    );
   });
 }
 
@@ -149,4 +164,8 @@ final testUser = User(
 );
 
 const _fakePerf = UserPerf(
-    rating: 1500, ratingDeviation: 0, progression: 0, numberOfGames: 0);
+  rating: 1500,
+  ratingDeviation: 0,
+  progression: 0,
+  numberOfGames: 0,
+);

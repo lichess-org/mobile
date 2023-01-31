@@ -40,8 +40,11 @@ final archivedGameProvider =
 });
 
 class ArchivedGameScreen extends ConsumerWidget {
-  const ArchivedGameScreen(
-      {required this.gameData, required this.orientation, super.key});
+  const ArchivedGameScreen({
+    required this.gameData,
+    required this.orientation,
+    super.key,
+  });
 
   final ArchivedGameData gameData;
   final Side orientation;
@@ -62,21 +65,26 @@ class ArchivedGameScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pop();
-            }),
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         actions: [
           IconButton(
-              icon: isSoundMuted
-                  ? const Icon(Icons.volume_off)
-                  : const Icon(Icons.volume_up),
-              onPressed: () =>
-                  ref.read(isSoundMutedProvider.notifier).toggleSound())
+            icon: isSoundMuted
+                ? const Icon(Icons.volume_off)
+                : const Icon(Icons.volume_up),
+            onPressed: () =>
+                ref.read(isSoundMutedProvider.notifier).toggleSound(),
+          )
         ],
       ),
       body: _BoardBody(
-          gameData: gameData, game: archivedGame, orientation: orientation),
+        gameData: gameData,
+        game: archivedGame,
+        orientation: orientation,
+      ),
       bottomNavigationBar:
           _BottomBar(gameData: gameData, steps: archivedGame?.steps),
     );
@@ -88,29 +96,33 @@ class ArchivedGameScreen extends ConsumerWidget {
         ref.watch(archivedGameProvider(gameData.id)).asData?.value;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-          padding: const EdgeInsetsDirectional.only(start: 0, end: 16.0),
-          leading: CupertinoButton(
-            padding: EdgeInsets.zero,
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Icon(CupertinoIcons.back),
-          ),
-          trailing: CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: isSoundMuted
-                  ? const Icon(CupertinoIcons.volume_off)
-                  : const Icon(CupertinoIcons.volume_up),
-              onPressed: () =>
-                  ref.read(isSoundMutedProvider.notifier).toggleSound())),
+        padding: const EdgeInsetsDirectional.only(start: 0, end: 16.0),
+        leading: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Icon(CupertinoIcons.back),
+        ),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: isSoundMuted
+              ? const Icon(CupertinoIcons.volume_off)
+              : const Icon(CupertinoIcons.volume_up),
+          onPressed: () =>
+              ref.read(isSoundMutedProvider.notifier).toggleSound(),
+        ),
+      ),
       child: SafeArea(
         child: Column(
           children: [
             Expanded(
-                child: _BoardBody(
-                    gameData: gameData,
-                    game: archivedGame,
-                    orientation: orientation)),
+              child: _BoardBody(
+                gameData: gameData,
+                game: archivedGame,
+                orientation: orientation,
+              ),
+            ),
             _BottomBar(gameData: gameData, steps: archivedGame?.steps),
           ],
         ),
@@ -120,8 +132,11 @@ class ArchivedGameScreen extends ConsumerWidget {
 }
 
 class _BoardBody extends ConsumerWidget {
-  const _BoardBody(
-      {required this.gameData, this.game, required this.orientation});
+  const _BoardBody({
+    required this.gameData,
+    this.game,
+    required this.orientation,
+  });
 
   final ArchivedGameData gameData;
   final ArchivedGame? game;
@@ -211,71 +226,73 @@ class _BottomBar extends ConsumerWidget {
             },
             icon: const Icon(Icons.menu),
           ),
-          Row(children: [
-            IconButton(
-              key: const ValueKey('cursor-first'),
-              // TODO add translation
-              tooltip: 'First position',
-              onPressed: canGoBackward
-                  ? () {
-                      ref.read(_positionCursorProvider.notifier).state = 0;
-                    }
-                  : null,
-              icon: const Icon(LichessIcons.fast_backward),
-              iconSize: 20,
-            ),
-            IconButton(
-              key: const ValueKey('cursor-back'),
-              // TODO add translation
-              tooltip: 'Backward',
-              onPressed: canGoBackward
-                  ? () {
-                      ref
-                          .read(_positionCursorProvider.notifier)
-                          .update((state) {
-                        if (state != null) {
-                          state--;
-                        }
-                        return state;
-                      });
-                    }
-                  : null,
-              icon: const Icon(LichessIcons.step_backward),
-              iconSize: 20,
-            ),
-            IconButton(
-              key: const ValueKey('cursor-forward'),
-              // TODO add translation
-              tooltip: 'Forward',
-              onPressed: canGoForward
-                  ? () {
-                      ref
-                          .read(_positionCursorProvider.notifier)
-                          .update((state) {
-                        if (state != null) {
-                          state++;
-                        }
-                        return state;
-                      });
-                    }
-                  : null,
-              icon: const Icon(LichessIcons.step_forward),
-              iconSize: 20,
-            ),
-            IconButton(
-              key: const ValueKey('cursor-last'),
-              // TODO add translation
-              tooltip: 'Last position',
-              onPressed: canGoForward
-                  ? () {
-                      ref.read(_positionCursorProvider.notifier).state =
-                          steps!.length - 1;
-                    }
-                  : null,
-              icon: const Icon(LichessIcons.fast_forward),
-              iconSize: 20,
-            ),
-          ]),
+          Row(
+            children: [
+              IconButton(
+                key: const ValueKey('cursor-first'),
+                // TODO add translation
+                tooltip: 'First position',
+                onPressed: canGoBackward
+                    ? () {
+                        ref.read(_positionCursorProvider.notifier).state = 0;
+                      }
+                    : null,
+                icon: const Icon(LichessIcons.fast_backward),
+                iconSize: 20,
+              ),
+              IconButton(
+                key: const ValueKey('cursor-back'),
+                // TODO add translation
+                tooltip: 'Backward',
+                onPressed: canGoBackward
+                    ? () {
+                        ref
+                            .read(_positionCursorProvider.notifier)
+                            .update((state) {
+                          if (state != null) {
+                            state--;
+                          }
+                          return state;
+                        });
+                      }
+                    : null,
+                icon: const Icon(LichessIcons.step_backward),
+                iconSize: 20,
+              ),
+              IconButton(
+                key: const ValueKey('cursor-forward'),
+                // TODO add translation
+                tooltip: 'Forward',
+                onPressed: canGoForward
+                    ? () {
+                        ref
+                            .read(_positionCursorProvider.notifier)
+                            .update((state) {
+                          if (state != null) {
+                            state++;
+                          }
+                          return state;
+                        });
+                      }
+                    : null,
+                icon: const Icon(LichessIcons.step_forward),
+                iconSize: 20,
+              ),
+              IconButton(
+                key: const ValueKey('cursor-last'),
+                // TODO add translation
+                tooltip: 'Last position',
+                onPressed: canGoForward
+                    ? () {
+                        ref.read(_positionCursorProvider.notifier).state =
+                            steps!.length - 1;
+                      }
+                    : null,
+                icon: const Icon(LichessIcons.fast_forward),
+                iconSize: 20,
+              ),
+            ],
+          ),
         ],
       ),
     );

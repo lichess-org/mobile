@@ -27,21 +27,22 @@ class ListTileChoice<T extends Enum> extends StatelessWidget {
     return PlatformCard(
       child: Column(
         children: ListTile.divideTiles(
-            color: dividerColor(context),
-            context: context,
-            tiles: choices.map((value) {
-              return ListTile(
-                selected: selectedItem == value,
-                trailing: selectedItem == value
-                    ? defaultTargetPlatform == TargetPlatform.iOS
-                        ? const Icon(CupertinoIcons.check_mark_circled_solid)
-                        : const Icon(Icons.check)
-                    : null,
-                title: titleBuilder(value),
-                subtitle: subtitleBuilder?.call(value),
-                onTap: () => onSelectedItemChanged(value),
-              );
-            })).toList(growable: false),
+          color: dividerColor(context),
+          context: context,
+          tiles: choices.map((value) {
+            return ListTile(
+              selected: selectedItem == value,
+              trailing: selectedItem == value
+                  ? defaultTargetPlatform == TargetPlatform.iOS
+                      ? const Icon(CupertinoIcons.check_mark_circled_solid)
+                      : const Icon(Icons.check)
+                  : null,
+              title: titleBuilder(value),
+              subtitle: subtitleBuilder?.call(value),
+              onTap: () => onSelectedItemChanged(value),
+            );
+          }),
+        ).toList(growable: false),
       ),
     );
   }

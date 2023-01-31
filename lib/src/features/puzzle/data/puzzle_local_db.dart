@@ -25,24 +25,28 @@ class PuzzleLocalDB {
   final SharedPreferences _prefs;
 
   // TODO enum for angle
-  PuzzleLocalData? fetch(
-      {String? userId, PuzzleTheme angle = PuzzleTheme.mix}) {
+  PuzzleLocalData? fetch({
+    String? userId,
+    PuzzleTheme angle = PuzzleTheme.mix,
+  }) {
     final raw = _prefs.getString(_makeKey(userId, angle));
     if (raw != null) {
       final json = jsonDecode(raw);
       if (json is! Map<String, dynamic>) {
         throw const FormatException(
-            '[PuzzleLocalDB] cannot fetch puzzles: expected an object');
+          '[PuzzleLocalDB] cannot fetch puzzles: expected an object',
+        );
       }
       return PuzzleLocalData.fromJson(json);
     }
     return null;
   }
 
-  Future<bool> save(
-      {String? userId,
-      PuzzleTheme angle = PuzzleTheme.mix,
-      required PuzzleLocalData data}) {
+  Future<bool> save({
+    String? userId,
+    PuzzleTheme angle = PuzzleTheme.mix,
+    required PuzzleLocalData data,
+  }) {
     return _prefs.setString(_makeKey(userId, angle), jsonEncode(data.toJson()));
   }
 

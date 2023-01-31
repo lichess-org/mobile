@@ -36,10 +36,12 @@ void main() {
   }
 }
 ''';
-      when(() => mockApiClient
-              .get(Uri.parse('$kLichessHost/api/user/$testUserId')))
-          .thenAnswer((_) async =>
-              Result.value(http.Response(testUserResponseMinimal, 200)));
+      when(
+        () =>
+            mockApiClient.get(Uri.parse('$kLichessHost/api/user/$testUserId')),
+      ).thenAnswer(
+        (_) async => Result.value(http.Response(testUserResponseMinimal, 200)),
+      );
 
       final result = await repo.getUser(testUserId);
 
@@ -86,10 +88,12 @@ void main() {
   }
 }
 ''';
-      when(() => mockApiClient
-              .get(Uri.parse('$kLichessHost/api/user/$testUserId')))
-          .thenAnswer(
-              (_) async => Result.value(http.Response(testUserResponse, 200)));
+      when(
+        () =>
+            mockApiClient.get(Uri.parse('$kLichessHost/api/user/$testUserId')),
+      ).thenAnswer(
+        (_) async => Result.value(http.Response(testUserResponse, 200)),
+      );
 
       final result = await repo.getUser(testUserId);
 
@@ -133,7 +137,8 @@ void main() {
 }
 ''';
       when(() => mockApiClient.get(Uri.parse(uriString))).thenAnswer(
-          (_) async => Result.value(http.Response(responseMinimal, 200)));
+        (_) async => Result.value(http.Response(responseMinimal, 200)),
+      );
 
       final result = await repo.getUserPerfStats(testUserId, testPerf);
 
@@ -379,7 +384,8 @@ void main() {
 }
 ''';
       when(() => mockApiClient.get(Uri.parse(uriString))).thenAnswer(
-          (_) async => Result.value(http.Response(responseFull, 200)));
+        (_) async => Result.value(http.Response(responseFull, 200)),
+      );
 
       final result = await repo.getUserPerfStats(testUserId, testPerf);
 
@@ -390,9 +396,11 @@ void main() {
   group('UserRepository.getUsersStatusTask', () {
     test('json read, minimal example', () async {
       final ids = ['maia1', 'maia5', 'maia9'];
-      when(() => mockApiClient.get(
-              Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}')))
-          .thenAnswer((_) async => Result.value(http.Response('[]', 200)));
+      when(
+        () => mockApiClient.get(
+          Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'),
+        ),
+      ).thenAnswer((_) async => Result.value(http.Response('[]', 200)));
 
       final result = await repo.getUsersStatus(ids);
 
@@ -421,9 +429,11 @@ void main() {
 ]
 ''';
       final ids = ['maia1', 'maia5', 'maia9'];
-      when(() => mockApiClient.get(
-              Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}')))
-          .thenAnswer((_) async => Result.value(http.Response(response, 200)));
+      when(
+        () => mockApiClient.get(
+          Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'),
+        ),
+      ).thenAnswer((_) async => Result.value(http.Response(response, 200)));
 
       final result = await repo.getUsersStatus(['maia1', 'maia5', 'maia9']);
 

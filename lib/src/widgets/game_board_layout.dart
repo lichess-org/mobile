@@ -23,8 +23,10 @@ class GameBoardLayout extends StatelessWidget {
     this.currentMoveIndex,
     this.onSelectMove,
     super.key,
-  }) : assert(moves == null || currentMoveIndex != null,
-            'You must provide `currentMoveIndex` along with `moves`');
+  }) : assert(
+          moves == null || currentMoveIndex != null,
+          'You must provide `currentMoveIndex` along with `moves`',
+        );
 
   final BoardData boardData;
 
@@ -44,68 +46,70 @@ class GameBoardLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      final aspectRatio = constraints.biggest.aspectRatio;
-      final defaultBoardSize = constraints.biggest.shortestSide;
-      final double boardSize = aspectRatio < 1 && aspectRatio >= 0.84 ||
-              aspectRatio > 1 && aspectRatio <= 1.18
-          ? defaultBoardSize * 0.94
-          : defaultBoardSize;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final aspectRatio = constraints.biggest.aspectRatio;
+        final defaultBoardSize = constraints.biggest.shortestSide;
+        final double boardSize = aspectRatio < 1 && aspectRatio >= 0.84 ||
+                aspectRatio > 1 && aspectRatio <= 1.18
+            ? defaultBoardSize * 0.94
+            : defaultBoardSize;
 
-      final board = boardSettings != null
-          ? Board(size: boardSize, data: boardData, settings: boardSettings!)
-          : Board(size: boardSize, data: boardData);
-      final List<List<MapEntry<int, String>>>? slicedMoves =
-          moves?.asMap().entries.slices(2).toList(growable: false);
-      return aspectRatio > 1
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                board,
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        topPlayer,
-                        if (slicedMoves != null)
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: MoveList(
-                                type: MoveListType.stacked,
-                                slicedMoves: slicedMoves,
-                                currentMoveIndex: currentMoveIndex ?? 0,
-                                onSelectMove: onSelectMove,
+        final board = boardSettings != null
+            ? Board(size: boardSize, data: boardData, settings: boardSettings!)
+            : Board(size: boardSize, data: boardData);
+        final List<List<MapEntry<int, String>>>? slicedMoves =
+            moves?.asMap().entries.slices(2).toList(growable: false);
+        return aspectRatio > 1
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  board,
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          topPlayer,
+                          if (slicedMoves != null)
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: MoveList(
+                                  type: MoveListType.stacked,
+                                  slicedMoves: slicedMoves,
+                                  currentMoveIndex: currentMoveIndex ?? 0,
+                                  onSelectMove: onSelectMove,
+                                ),
                               ),
                             ),
-                          ),
-                        bottomPlayer,
-                      ],
+                          bottomPlayer,
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            )
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (slicedMoves != null)
-                  MoveList(
-                    type: MoveListType.inline,
-                    slicedMoves: slicedMoves,
-                    currentMoveIndex: currentMoveIndex ?? 0,
-                    onSelectMove: onSelectMove,
-                  ),
-                topPlayer,
-                board,
-                bottomPlayer,
-              ],
-            );
-    });
+                ],
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (slicedMoves != null)
+                    MoveList(
+                      type: MoveListType.inline,
+                      slicedMoves: slicedMoves,
+                      currentMoveIndex: currentMoveIndex ?? 0,
+                      onSelectMove: onSelectMove,
+                    ),
+                  topPlayer,
+                  board,
+                  bottomPlayer,
+                ],
+              );
+      },
+    );
   }
 }
 
@@ -285,12 +289,15 @@ class InlineMoveItem extends StatelessWidget {
           color: current == true
               ? defaultTargetPlatform == TargetPlatform.iOS
                   ? CupertinoDynamicColor.resolve(
-                      CupertinoColors.secondarySystemBackground, context)
+                      CupertinoColors.secondarySystemBackground,
+                      context,
+                    )
                   : null
               // TODO add bg color on android
               : null,
           shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(4.0))),
+            borderRadius: BorderRadius.all(Radius.circular(4.0)),
+          ),
         ),
         child: Text(
           move.value,

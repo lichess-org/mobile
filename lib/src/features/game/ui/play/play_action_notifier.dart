@@ -26,4 +26,5 @@ class PlayActionNotifier
 
 final playActionProvider =
     AutoDisposeNotifierProvider<PlayActionNotifier, AsyncValue<PlayableGame?>>(
-        PlayActionNotifier.new);
+  PlayActionNotifier.new,
+);

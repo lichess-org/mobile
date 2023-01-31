@@ -64,8 +64,9 @@ class PlayTime with _$PlayTime {
 
   factory PlayTime.fromPick(RequiredPick pick) {
     return PlayTime(
-        total: pick('total').asDurationFromSecondsOrThrow(),
-        tv: pick('tv').asDurationFromSecondsOrThrow());
+      total: pick('total').asDurationFromSecondsOrThrow(),
+      tv: pick('tv').asDurationFromSecondsOrThrow(),
+    );
   }
 }
 
@@ -154,37 +155,38 @@ class UserPerfStatsParameters with _$UserPerfStatsParameters {
 
 @freezed
 class UserPerfStats with _$UserPerfStats {
-  const factory UserPerfStats(
-      {required double rating,
-      required double deviation,
-      bool? provisional,
-      required int totalGames,
-      required int progress,
-      int? rank,
-      double? percentile,
-      required int berserkGames,
-      required int tournamentGames,
-      required int ratedGames,
-      required int wonGames,
-      required int lostGames,
-      required int drawnGames,
-      required int disconnections,
-      double? avgOpponent,
-      required Duration timePlayed,
-      int? lowestRating,
-      UserPerfGame? lowestRatingGame,
-      int? highestRating,
-      UserPerfGame? highestRatingGame,
-      UserStreak? curWinStreak,
-      UserStreak? maxWinStreak,
-      UserStreak? curLossStreak,
-      UserStreak? maxLossStreak,
-      UserStreak? curPlayStreak,
-      UserStreak? maxPlayStreak,
-      UserStreak? curTimeStreak,
-      UserStreak? maxTimeStreak,
-      List<UserPerfGame>? worstLosses,
-      List<UserPerfGame>? bestWins}) = _UserPerfStats;
+  const factory UserPerfStats({
+    required double rating,
+    required double deviation,
+    bool? provisional,
+    required int totalGames,
+    required int progress,
+    int? rank,
+    double? percentile,
+    required int berserkGames,
+    required int tournamentGames,
+    required int ratedGames,
+    required int wonGames,
+    required int lostGames,
+    required int drawnGames,
+    required int disconnections,
+    double? avgOpponent,
+    required Duration timePlayed,
+    int? lowestRating,
+    UserPerfGame? lowestRatingGame,
+    int? highestRating,
+    UserPerfGame? highestRatingGame,
+    UserStreak? curWinStreak,
+    UserStreak? maxWinStreak,
+    UserStreak? curLossStreak,
+    UserStreak? maxLossStreak,
+    UserStreak? curPlayStreak,
+    UserStreak? maxPlayStreak,
+    UserStreak? curTimeStreak,
+    UserStreak? maxTimeStreak,
+    List<UserPerfGame>? worstLosses,
+    List<UserPerfGame>? bestWins,
+  }) = _UserPerfStats;
 }
 
 @freezed
@@ -206,11 +208,12 @@ class UserStreak with _$UserStreak {
 
 @freezed
 class UserPerfGame with _$UserPerfGame {
-  const factory UserPerfGame(
-      {required DateTime finishedAt,
-      required GameId gameId,
-      int? opponentRating,
-      String? opponentId,
-      String? opponentName,
-      String? opponentTitle}) = _UserPerfGame;
+  const factory UserPerfGame({
+    required DateTime finishedAt,
+    required GameId gameId,
+    int? opponentRating,
+    String? opponentId,
+    String? opponentName,
+    String? opponentTitle,
+  }) = _UserPerfGame;
 }

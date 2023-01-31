@@ -21,11 +21,13 @@ extension Dartchess on Pick {
         return move;
       } else {
         throw PickException(
-            "value $value at $debugParsingExit can't be casted to Move: invalid UCI string.");
+          "value $value at $debugParsingExit can't be casted to Move: invalid UCI string.",
+        );
       }
     }
     throw PickException(
-        "value $value at $debugParsingExit can't be casted to Move");
+      "value $value at $debugParsingExit can't be casted to Move",
+    );
   }
 
   Move? asUciMoveOrNull() {
@@ -46,7 +48,8 @@ extension Dartchess on Pick {
       return value == 'white' ? Side.white : Side.black;
     }
     throw PickException(
-        "value $value at $debugParsingExit can't be casted to Side");
+      "value $value at $debugParsingExit can't be casted to Side",
+    );
   }
 
   Side? asSideOrNull() {
@@ -70,7 +73,8 @@ extension GameExtension on Pick {
           .firstWhere((v) => v.name == value, orElse: () => Speed.blitz);
     }
     throw PickException(
-        "value $value at $debugParsingExit can't be casted to Speed");
+      "value $value at $debugParsingExit can't be casted to Speed",
+    );
   }
 
   Speed? asSpeedOrNull() {
@@ -92,7 +96,8 @@ extension GameExtension on Pick {
           .firstWhere((v) => v.title == value, orElse: () => Perf.blitz);
     }
     throw PickException(
-        "value $value at $debugParsingExit can't be casted to Perf");
+      "value $value at $debugParsingExit can't be casted to Perf",
+    );
   }
 
   Perf? asPerfOrNull() {
@@ -114,7 +119,8 @@ extension GameExtension on Pick {
           .firstWhere((e) => e.name == value, orElse: () => GameStatus.unknown);
     }
     throw PickException(
-        "value $value at $debugParsingExit can't be casted to GameStatus");
+      "value $value at $debugParsingExit can't be casted to GameStatus",
+    );
   }
 
   GameStatus? asGameStatusOrNull() {
@@ -136,7 +142,8 @@ extension GameExtension on Pick {
           .firstWhere((e) => e.name == value, orElse: () => Variant.standard);
     }
     throw PickException(
-        "value $value at $debugParsingExit can't be casted to GameStatus");
+      "value $value at $debugParsingExit can't be casted to GameStatus",
+    );
   }
 
   Variant? asVariantOrNull() {
@@ -160,7 +167,8 @@ extension TimeExtension on Pick {
       return DateTime.fromMillisecondsSinceEpoch(value);
     }
     throw PickException(
-        "value $value at $debugParsingExit can't be casted to DateTime");
+      "value $value at $debugParsingExit can't be casted to DateTime",
+    );
   }
 
   /// Matches a DateTime from milliseconds since unix epoch.
@@ -183,7 +191,8 @@ extension TimeExtension on Pick {
       return Duration(seconds: value);
     }
     throw PickException(
-        "value $value at $debugParsingExit can't be casted to Duration");
+      "value $value at $debugParsingExit can't be casted to Duration",
+    );
   }
 
   /// Matches a DateTime from milliseconds since unix epoch.
@@ -207,7 +216,8 @@ extension ModelsPick on Pick {
       return UserId(value);
     }
     throw PickException(
-        "value $value at $debugParsingExit can't be casted to UserId");
+      "value $value at $debugParsingExit can't be casted to UserId",
+    );
   }
 
   UserId? asUserIdOrNull() {
@@ -228,7 +238,8 @@ extension ModelsPick on Pick {
       return GameId(value);
     }
     throw PickException(
-        "value $value at $debugParsingExit can't be casted to GameId");
+      "value $value at $debugParsingExit can't be casted to GameId",
+    );
   }
 
   GameId? asGameIdOrNull() {
@@ -249,7 +260,8 @@ extension ModelsPick on Pick {
       return GameFullId(value);
     }
     throw PickException(
-        "value $value at $debugParsingExit can't be casted to GameId");
+      "value $value at $debugParsingExit can't be casted to GameId",
+    );
   }
 
   GameFullId? asGameFullIdOrNull() {
@@ -270,7 +282,8 @@ extension ModelsPick on Pick {
       return PuzzleId(value);
     }
     throw PickException(
-        "value $value at $debugParsingExit can't be casted to PuzzleId");
+      "value $value at $debugParsingExit can't be casted to PuzzleId",
+    );
   }
 
   PuzzleId? asPuzzleIdOrNull() {

@@ -14,9 +14,10 @@ extension ChessgroundMoveCompat on Move {
     }
 
     return chessground.Move(
-        from: toAlgebraic((this as NormalMove).from),
-        to: toAlgebraic(to),
-        promotion: (this as NormalMove).promotion?.cg);
+      from: toAlgebraic((this as NormalMove).from),
+      to: toAlgebraic(to),
+      promotion: (this as NormalMove).promotion?.cg,
+    );
   }
 }
 

@@ -32,7 +32,9 @@ class PlatformWidget extends StatelessWidget {
 }
 
 typedef ConsumerWidgetBuilder = Widget Function(
-    BuildContext context, WidgetRef ref);
+  BuildContext context,
+  WidgetRef ref,
+);
 
 /// A widget that builds different things on different platforms with riverpod.
 class ConsumerPlatformWidget extends StatelessWidget {
@@ -96,7 +98,9 @@ class PlatformCard extends StatelessWidget {
               margin: margin ?? EdgeInsets.zero,
               elevation: 0,
               color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.secondarySystemBackground, context),
+                CupertinoColors.secondarySystemBackground,
+                context,
+              ),
               shape: kPlatformCardBorder,
               semanticContainer: semanticContainer,
               child: child,

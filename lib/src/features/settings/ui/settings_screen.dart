@@ -69,27 +69,28 @@ class SettingsScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 30),
             authState.maybeWhen(
-                data: (data) {
-                  return data != null
-                      ? PlatformCard(
-                          child: ListTile(
-                            leading: const Icon(Icons.exit_to_app),
-                            title: Text(context.l10n.logOut),
-                            onTap: authActionsAsync.isLoading
-                                ? null
-                                : () async {
-                                    await ref
-                                        .read(authActionsProvider.notifier)
-                                        .signOut();
-                                    ref
-                                        .read(currentBottomTabProvider.notifier)
-                                        .state = BottomTab.play;
-                                  },
-                          ),
-                        )
-                      : const SizedBox.shrink();
-                },
-                orElse: () => const SizedBox.shrink()),
+              data: (data) {
+                return data != null
+                    ? PlatformCard(
+                        child: ListTile(
+                          leading: const Icon(Icons.exit_to_app),
+                          title: Text(context.l10n.logOut),
+                          onTap: authActionsAsync.isLoading
+                              ? null
+                              : () async {
+                                  await ref
+                                      .read(authActionsProvider.notifier)
+                                      .signOut();
+                                  ref
+                                      .read(currentBottomTabProvider.notifier)
+                                      .state = BottomTab.play;
+                                },
+                        ),
+                      )
+                    : const SizedBox.shrink();
+              },
+              orElse: () => const SizedBox.shrink(),
+            ),
           ],
         ),
       ),

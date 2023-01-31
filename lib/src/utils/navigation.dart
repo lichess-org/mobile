@@ -10,9 +10,11 @@ void pushPlatformRoute({
   required WidgetBuilder builder,
   String? title,
 }) {
-  Navigator.of(context).push<void>(defaultTargetPlatform == TargetPlatform.iOS
-      ? CupertinoPageRoute(builder: builder, title: title)
-      : MaterialPageRoute(
-          builder: builder,
-        ));
+  Navigator.of(context).push<void>(
+    defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoPageRoute(builder: builder, title: title)
+        : MaterialPageRoute(
+            builder: builder,
+          ),
+  );
 }

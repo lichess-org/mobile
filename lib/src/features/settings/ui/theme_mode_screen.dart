@@ -45,10 +45,11 @@ class ThemeModeScreen extends ConsumerWidget {
         padding: kBodyPadding,
         children: [
           ListTileChoice(
-              choices: ThemeMode.values,
-              selectedItem: themeMode,
-              titleBuilder: (t) => Text(themeTitle(context, t)),
-              onSelectedItemChanged: onChanged)
+            choices: ThemeMode.values,
+            selectedItem: themeMode,
+            titleBuilder: (t) => Text(themeTitle(context, t)),
+            onSelectedItemChanged: onChanged,
+          )
         ],
       ),
     );

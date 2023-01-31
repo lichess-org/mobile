@@ -14,11 +14,13 @@ final isBoardTurnedProvider = StateProvider.autoDispose<bool>((ref) => false);
 
 final gameStateProvider =
     AutoDisposeNotifierProvider<GameStateNotifier, GameState?>(
-        GameStateNotifier.new);
+  GameStateNotifier.new,
+);
 
 final gameActionProvider =
     AutoDisposeNotifierProvider<GameActionNotifier, AsyncValue<void>>(
-        GameActionNotifier.new);
+  GameActionNotifier.new,
+);
 
 final gameStreamProvider =
     StreamProvider.autoDispose.family<GameClock, GameId>((ref, gameId) {

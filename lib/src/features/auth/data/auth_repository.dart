@@ -24,9 +24,12 @@ class AuthError {
 }
 
 class AuthRepository {
-  AuthRepository(ApiClient apiClient, FlutterAppAuth appAuth,
-      FlutterSecureStorage storage, Logger log)
-      : _apiClient = apiClient,
+  AuthRepository(
+    ApiClient apiClient,
+    FlutterAppAuth appAuth,
+    FlutterSecureStorage storage,
+    Logger log,
+  )   : _apiClient = apiClient,
         _appAuth = appAuth,
         _storage = storage,
         _log = log;
@@ -50,20 +53,24 @@ class AuthRepository {
 
   FutureResult<void> signIn() {
     final future = (() async {
-      final result =
-          await _appAuth.authorizeAndExchangeCode(AuthorizationTokenRequest(
-        kLichessClientId,
-        redirectUri,
-        allowInsecureConnections: kDebugMode,
-        serviceConfiguration: const AuthorizationServiceConfiguration(
+      final result = await _appAuth.authorizeAndExchangeCode(
+        AuthorizationTokenRequest(
+          kLichessClientId,
+          redirectUri,
+          allowInsecureConnections: kDebugMode,
+          serviceConfiguration: const AuthorizationServiceConfiguration(
             authorizationEndpoint: '$kLichessHost/oauth',
-            tokenEndpoint: '$kLichessHost/api/token'),
-        scopes: oauthScopes,
-      ));
+            tokenEndpoint: '$kLichessHost/api/token',
+          ),
+          scopes: oauthScopes,
+        ),
+      );
       if (result != null) {
         _log.fine('Got accessToken ${result.accessToken}');
         await _storage.write(
-            key: kOAuthTokenStorageKey, value: result.accessToken);
+          key: kOAuthTokenStorageKey,
+          value: result.accessToken,
+        );
       } else {
         throw Exception('FlutterAppAuth.authorizeAndExchangeCode null result');
       }
@@ -81,18 +88,24 @@ class AuthRepository {
   }
 
   FutureResult<void> signOut() {
-    return _apiClient
-        .delete(Uri.parse('$kLichessHost/api/token'))
-        .then((result) => result.map((_) async {
-              await _storage.delete(key: kOAuthTokenStorageKey);
-              _authState.value = null;
-            }));
+    return _apiClient.delete(Uri.parse('$kLichessHost/api/token')).then(
+          (result) => result.map((_) async {
+            await _storage.delete(key: kOAuthTokenStorageKey);
+            _authState.value = null;
+          }),
+        );
   }
 
   FutureResult<User> getAccount() {
     return _apiClient.get(Uri.parse('$kLichessHost/api/account')).then(
-        (result) => result.flatMap((response) => readJsonObject(response.body,
-            mapper: User.fromJson, logger: _log)));
+          (result) => result.flatMap(
+            (response) => readJsonObject(
+              response.body,
+              mapper: User.fromJson,
+              logger: _log,
+            ),
+          ),
+        );
   }
 
   void dispose() {

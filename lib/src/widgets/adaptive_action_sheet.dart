@@ -48,15 +48,17 @@ Future<T?> _showCupertinoBottomSheet<T>(
       return CupertinoActionSheet(
         title: title,
         actions: actions
-            .map((action) => CupertinoActionSheetAction(
-                  onPressed: () {
-                    action.onPressed(context);
-                    if (action.dismissOnPress) {
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: action.label,
-                ))
+            .map(
+              (action) => CupertinoActionSheetAction(
+                onPressed: () {
+                  action.onPressed(context);
+                  if (action.dismissOnPress) {
+                    Navigator.of(context).pop();
+                  }
+                },
+                child: action.label,
+              ),
+            )
             .toList(),
         cancelButton: CupertinoActionSheetAction(
           isDefaultAction: true,

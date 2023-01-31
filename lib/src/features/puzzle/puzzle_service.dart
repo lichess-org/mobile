@@ -34,10 +34,13 @@ class PuzzleService {
   /// Loads the next puzzle from database. Will sync with server if necessary.
   ///
   /// This future should never fail on network errors.
-  Future<Puzzle?> nextPuzzle(
-      {String? userId, PuzzleTheme angle = PuzzleTheme.mix}) {
+  Future<Puzzle?> nextPuzzle({
+    String? userId,
+    PuzzleTheme angle = PuzzleTheme.mix,
+  }) {
     return Result.release(
-        _syncAndLoadData(userId, angle).map((data) => data?.unsolved[0]));
+      _syncAndLoadData(userId, angle).map((data) => data?.unsolved[0]),
+    );
   }
 
   /// Update puzzle queue with the solved puzzle and sync with server
@@ -72,7 +75,9 @@ class PuzzleService {
   /// This method should never fail, as if the network is down it will fallback
   /// to the local database.
   FutureResult<PuzzleLocalData?> _syncAndLoadData(
-      String? userId, PuzzleTheme angle) {
+    String? userId,
+    PuzzleTheme angle,
+  ) {
     final data = db.fetch(userId: userId, angle: angle);
 
     final unsolved = data?.unsolved ?? IList(const []);
@@ -89,11 +94,15 @@ class PuzzleService {
 
       return batchResult
           .fold(
-        (value) => Result.value(Tuple2(
+        (value) => Result.value(
+          Tuple2(
             PuzzleLocalData(
-                solved: IList(const []),
-                unsolved: IList([...unsolved, ...value])),
-            true)),
+              solved: IList(const []),
+              unsolved: IList([...unsolved, ...value]),
+            ),
+            true,
+          ),
+        ),
         (_, __) => Result.value(Tuple2(data, false)),
       )
           .flatMap((tuple) async {

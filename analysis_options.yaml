@@ -23,7 +23,6 @@ analyzer:
 
 linter:
   rules:
-    require_trailing_commas: false
     directives_ordering: false
     always_use_package_imports: false
     avoid_redundant_argument_values: false

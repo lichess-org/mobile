@@ -5,12 +5,13 @@ part 'featured_player.freezed.dart';
 
 @freezed
 class FeaturedPlayer with _$FeaturedPlayer {
-  const factory FeaturedPlayer(
-      {required Side side,
-      required String name,
-      String? title,
-      int? rating,
-      int? seconds}) = _FeaturedPlayer;
+  const factory FeaturedPlayer({
+    required Side side,
+    required String name,
+    String? title,
+    int? rating,
+    int? seconds,
+  }) = _FeaturedPlayer;
 
   const FeaturedPlayer._();
 

@@ -178,14 +178,17 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
       if (tabFocusNodes.length > BottomTab.values.length) {
         discardedNodes.addAll(tabFocusNodes.sublist(BottomTab.values.length));
         tabFocusNodes.removeRange(
-            BottomTab.values.length, tabFocusNodes.length);
+          BottomTab.values.length,
+          tabFocusNodes.length,
+        );
       } else {
         tabFocusNodes.addAll(
           List<FocusScopeNode>.generate(
             BottomTab.values.length - tabFocusNodes.length,
             (int index) => FocusScopeNode(
-                debugLabel:
-                    '$BottomNavScaffold Tab ${index + tabFocusNodes.length}'),
+              debugLabel:
+                  '$BottomNavScaffold Tab ${index + tabFocusNodes.length}',
+            ),
           ),
         );
       }
@@ -221,11 +224,13 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
               enabled: active,
               child: FocusScope(
                 node: tabFocusNodes[index],
-                child: Builder(builder: (BuildContext context) {
-                  return shouldBuildTab[index]
-                      ? widget.tabBuilder(context, index)
-                      : Container();
-                }),
+                child: Builder(
+                  builder: (BuildContext context) {
+                    return shouldBuildTab[index]
+                        ? widget.tabBuilder(context, index)
+                        : Container();
+                  },
+                ),
               ),
             ),
           ),

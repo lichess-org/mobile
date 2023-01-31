@@ -35,8 +35,10 @@ class PuzzleRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  FutureResult<List<Puzzle>> selectBatch(
-      {PuzzleTheme angle = PuzzleTheme.mix, int nb = kPuzzleLocalQueueLength}) {
+  FutureResult<List<Puzzle>> selectBatch({
+    PuzzleTheme angle = PuzzleTheme.mix,
+    int nb = kPuzzleLocalQueueLength,
+  }) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb'))
         .flatMap(_decodeJson);
@@ -59,18 +61,22 @@ class PuzzleRepository {
   }
 
   Result<List<Puzzle>> _decodeJson(http.Response response) {
-    return readJsonObject(response.body, mapper: (Map<String, dynamic> json) {
-      final puzzles = json['puzzles'];
-      if (puzzles is! List<dynamic>) {
-        throw const FormatException('puzzles: expected a list');
-      }
-      return puzzles.map((e) {
-        if (e is! Map<String, dynamic>) {
-          throw const FormatException('Expected an object');
+    return readJsonObject(
+      response.body,
+      mapper: (Map<String, dynamic> json) {
+        final puzzles = json['puzzles'];
+        if (puzzles is! List<dynamic>) {
+          throw const FormatException('puzzles: expected a list');
         }
-        return _puzzleFromJson(e);
-      }).toList();
-    }, logger: _log);
+        return puzzles.map((e) {
+          if (e is! Map<String, dynamic>) {
+            throw const FormatException('Expected an object');
+          }
+          return _puzzleFromJson(e);
+        }).toList();
+      },
+      logger: _log,
+    );
   }
 }
 
@@ -103,15 +109,20 @@ PuzzleGame _puzzleGameFromPick(RequiredPick pick) {
     id: pick('id').asGameIdOrThrow(),
     perf: pick('perf', 'key').asPerfOrThrow(),
     rated: pick('rated').asBoolOrThrow(),
-    white: pick('players').letOrThrow((it) => it
-        .asListOrThrow(_puzzlePlayerFromPick)
-        .firstWhere((p) => p.side == Side.white)),
-    black: pick('players').letOrThrow((it) => it
-        .asListOrThrow(_puzzlePlayerFromPick)
-        .firstWhere((p) => p.side == Side.black)),
+    white: pick('players').letOrThrow(
+      (it) => it
+          .asListOrThrow(_puzzlePlayerFromPick)
+          .firstWhere((p) => p.side == Side.white),
+    ),
+    black: pick('players').letOrThrow(
+      (it) => it
+          .asListOrThrow(_puzzlePlayerFromPick)
+          .firstWhere((p) => p.side == Side.black),
+    ),
     pgn: pick('pgn').asStringOrThrow(),
     clock: pick('clock').letOrNull(
-        (p) => TimeInc.fromString(p.asStringOrThrow()) ?? const TimeInc(0, 0)),
+      (p) => TimeInc.fromString(p.asStringOrThrow()) ?? const TimeInc(0, 0),
+    ),
   );
 }
 

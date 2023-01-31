@@ -21,10 +21,13 @@ Future<http.Response> mockResponse(String body, int code) async =>
         .then((_) => http.Response(body, code));
 
 Future<http.StreamedResponse> mockHttpStreamFromIterable(
-    Iterable<String> events) async {
+  Iterable<String> events,
+) async {
   await Future<void>.delayed(const Duration(milliseconds: 20));
   return http.StreamedResponse(
-      _streamFromFutures(events.map((e) => _withDelay(utf8.encode(e)))), 200);
+    _streamFromFutures(events.map((e) => _withDelay(utf8.encode(e)))),
+    200,
+  );
 }
 
 Future<http.StreamedResponse> mockHttpStream(Stream<String> stream) async =>
@@ -54,8 +57,10 @@ Offset squareOffset(
 }) {
   final squareSize = boardRect.width / 8;
   final o = cg.Coord.fromSquareId(id).offset(orientation, squareSize);
-  return Offset(o.dx + boardRect.left + squareSize / 2,
-      o.dy + boardRect.top + squareSize / 2);
+  return Offset(
+    o.dx + boardRect.left + squareSize / 2,
+    o.dy + boardRect.top + squareSize / 2,
+  );
 }
 
 // simplified version of class [App] in lib/src/app.dart
@@ -119,6 +124,8 @@ Stream<T> _streamFromFutures<T>(Iterable<Future<T>> futures) async* {
   }
 }
 
-Future<T> _withDelay<T>(T value,
-        {Duration delay = const Duration(milliseconds: 10)}) =>
+Future<T> _withDelay<T>(
+  T value, {
+  Duration delay = const Duration(milliseconds: 10),
+}) =>
     Future<void>.delayed(delay).then((_) => value);
