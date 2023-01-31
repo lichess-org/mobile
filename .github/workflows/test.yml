@@ -36,6 +36,9 @@ jobs:
       - name: Analyze project source
         run: flutter analyze
 
+      - name: Run DCM checks
+        run: flutter pub run dart_code_metrics:metrics analyze lib --no-fatal-style
+
       - name: Run unit tests
         run: flutter test
 
