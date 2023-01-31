@@ -48,7 +48,7 @@ const _defaultValueFontSize = 18.0;
 const _titleFontSize = 18.0;
 const _mainValueStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 30);
 
-class PerfStatsScreen extends ConsumerWidget {
+class PerfStatsScreen extends StatelessWidget {
   const PerfStatsScreen({
     required this.user,
     required this.perf,
@@ -61,15 +61,14 @@ class PerfStatsScreen extends ConsumerWidget {
   final User? loggedInUser;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ConsumerPlatformWidget(
-      ref: ref,
+  Widget build(BuildContext context) {
+    return PlatformWidget(
       androidBuilder: _androidBuilder,
       iosBuilder: _iosBuilder,
     );
   }
 
-  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
+  Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
@@ -92,19 +91,32 @@ class PerfStatsScreen extends ConsumerWidget {
           ],
         ),
       ),
-      body: _buildBody(context, ref),
+      body: _Body(user: user, perf: perf, loggedInUser: loggedInUser),
     );
   }
 
-  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
+  Widget _iosBuilder(BuildContext context) {
     // TODO: Add perf icon to title.
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(),
-      child: _buildBody(context, ref),
+      child: _Body(user: user, perf: perf, loggedInUser: loggedInUser),
     );
   }
+}
 
-  Widget _buildBody(BuildContext context, WidgetRef ref) {
+class _Body extends ConsumerWidget {
+  const _Body({
+    required this.user,
+    required this.perf,
+    required this.loggedInUser,
+  });
+
+  final User user;
+  final Perf perf;
+  final User? loggedInUser;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final perfStats = ref.watch(
       perfStatsProvider(
         UserPerfStatsParameters(username: user.username, perf: perf),

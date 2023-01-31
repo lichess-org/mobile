@@ -69,8 +69,8 @@ class SecondaryButton extends StatelessWidget {
               ? const EdgeInsets.all(10.0)
               : null,
           shape: defaultTargetPlatform == TargetPlatform.iOS
-              ? RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+              ? const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 )
               : null,
         ),

@@ -23,12 +23,18 @@ class TvScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformWidget(
-      androidBuilder: (context) => _androidBuilder(context, ref),
-      iosBuilder: (context) => _iosBuilder(context, ref),
+      androidBuilder: (context) =>
+          _androidBuilder(context, ref, contentBuilder: _buildBody),
+      iosBuilder: (context) =>
+          _iosBuilder(context, ref, contentBuilder: _buildBody),
     );
   }
 
-  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
+  Widget _androidBuilder(
+    BuildContext context,
+    WidgetRef ref, {
+    required ConsumerWidgetBuilder contentBuilder,
+  }) {
     final isSoundMuted = ref.watch(isSoundMutedProvider);
     return Scaffold(
       appBar: AppBar(
@@ -43,11 +49,15 @@ class TvScreen extends ConsumerWidget {
           )
         ],
       ),
-      body: _buildBody(context, ref),
+      body: contentBuilder(context, ref),
     );
   }
 
-  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
+  Widget _iosBuilder(
+    BuildContext context,
+    WidgetRef ref, {
+    required ConsumerWidgetBuilder contentBuilder,
+  }) {
     final isSoundMuted = ref.watch(isSoundMutedProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -60,7 +70,7 @@ class TvScreen extends ConsumerWidget {
               ref.read(isSoundMutedProvider.notifier).toggleSound(),
         ),
       ),
-      child: _buildBody(context, ref),
+      child: contentBuilder(context, ref),
     );
   }
 

@@ -16,7 +16,7 @@ const kPlatformVariant =
 Matcher sameRequest(http.BaseRequest request) => _SameRequest(request);
 Matcher sameHeaders(Map<String, String> headers) => _SameHeaders(headers);
 
-Future<http.Response> mockResponse(String body, int code) async =>
+Future<http.Response> mockResponse(String body, int code) =>
     Future<void>.delayed(const Duration(milliseconds: 20))
         .then((_) => http.Response(body, code));
 
@@ -30,7 +30,7 @@ Future<http.StreamedResponse> mockHttpStreamFromIterable(
   );
 }
 
-Future<http.StreamedResponse> mockHttpStream(Stream<String> stream) async =>
+Future<http.StreamedResponse> mockHttpStream(Stream<String> stream) =>
     Future<void>.delayed(const Duration(milliseconds: 20))
         .then((_) => http.StreamedResponse(stream.map(utf8.encode), 200));
 

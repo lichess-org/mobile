@@ -29,5 +29,28 @@ linter:
     sort_pub_dependencies: false
     sort_unnamed_constructors_first: false
 
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+dart_code_metrics:
+  rules:
+    # common
+    - avoid-collection-methods-with-unrelated-types
+    - avoid-double-slash-imports
+    - avoid-redundant-async
+    - prefer-iterable-of
+    # flutter
+    - always-remove-listener
+    - avoid-border-all
+    - avoid-returning-widgets:
+        exclude:
+          - test/**
+        ignored-annotations:
+          - allowedWidgetReturn
+    - avoid-shrink-wrap-in-lists
+    - avoid-unnecessary-setstate
+    - avoid-expanded-as-spacer
+    - avoid-wrapping-in-padding
+    - check-for-equals-in-render-object-setters
+    - consistent-update-render-object
+    - prefer-const-border-radius
+    - prefer-correct-edge-insets-constructor
+    # - prefer-extracting-callbacks
+    - use-setstate-synchronously

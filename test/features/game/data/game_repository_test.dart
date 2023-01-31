@@ -53,7 +53,7 @@ void main() {
   });
 
   group('GameRepository.events', () {
-    test('can read all supported types of events', () async {
+    test('can read all supported types of events', () {
       when(
         () => mockApiClient.stream(Uri.parse('$kLichessHost/api/stream/event')),
       ).thenAnswer(
@@ -101,7 +101,7 @@ void main() {
       );
     });
 
-    test('filter out unsupported types of events', () async {
+    test('filter out unsupported types of events', () {
       when(
         () => mockApiClient.stream(Uri.parse('$kLichessHost/api/stream/event')),
       ).thenAnswer(
@@ -115,7 +115,7 @@ void main() {
   });
 
   group('GameRepository.gameStateEvents', () {
-    test('can read all supported types of events', () async {
+    test('can read all supported types of events', () {
       when(
         () => mockApiClient.stream(
           Uri.parse('$kLichessHost/api/board/game/stream/$gameIdTest'),
@@ -138,7 +138,7 @@ void main() {
       );
     });
 
-    test('filter out unsupported types of events', () async {
+    test('filter out unsupported types of events', () {
       when(
         () => mockApiClient.stream(
           Uri.parse('$kLichessHost/api/board/game/stream/$gameIdTest'),

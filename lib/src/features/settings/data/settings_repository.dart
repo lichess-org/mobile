@@ -12,7 +12,7 @@ class SettingsRepository {
   final SharedPreferences _prefs;
 
   // Theme
-  Future<bool> setThemeMode(ThemeMode mode) async {
+  Future<bool> setThemeMode(ThemeMode mode) {
     return _prefs.setString(backgroundModeKey, mode.name);
   }
 
@@ -31,7 +31,7 @@ class SettingsRepository {
   }
 
   // Sound
-  Future<bool> toggleSound() async {
+  Future<bool> toggleSound() {
     return _prefs.setBool(soundMutedKey, !isSoundMuted());
   }
 

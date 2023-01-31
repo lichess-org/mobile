@@ -9,19 +9,18 @@ import '../../../../constants.dart';
 import '../../data/play_preferences.dart';
 import '../../model/time_control.dart';
 
-class TimeControlModal extends ConsumerWidget {
+class TimeControlModal extends StatelessWidget {
   const TimeControlModal({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ConsumerPlatformWidget(
-      ref: ref,
+  Widget build(BuildContext context) {
+    return PlatformWidget(
       androidBuilder: _androidBuilder,
       iosBuilder: _iosBuilder,
     );
   }
 
-  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
+  Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -34,11 +33,11 @@ class TimeControlModal extends ConsumerWidget {
           ),
         ],
       ),
-      body: _buildContent(context, ref),
+      body: _Body(),
     );
   }
 
-  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
+  Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: EdgeInsetsDirectional.zero,
@@ -50,11 +49,14 @@ class TimeControlModal extends ConsumerWidget {
           child: const Icon(CupertinoIcons.clear),
         ),
       ),
-      child: _buildContent(context, ref),
+      child: _Body(),
     );
   }
+}
 
-  Widget _buildContent(BuildContext context, WidgetRef ref) {
+class _Body extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final timeControlPref = ref.watch(timeControlPrefProvider);
     void onSelected(TimeControl choice) {
       Navigator.pop(context);
