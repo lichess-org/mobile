@@ -4,6 +4,7 @@
 
 - [Set up your development environment](https://docs.flutter.dev/get-started/install);
 - You may want to install a local instance of lila, [see lila wiki for that](https://github.com/lichess-org/lila/wiki/Lichess-Development-Onboarding);
+- check the [wiki](https://github.com/lichess-org/mobile/wiki) for more documentation
 - [Pick a GitHub issue to work on](https://github.com/lichess-org/mobile/issues).
 The [`good first issue`](https://github.com/lichess-org/mobile/labels/good%20first%20issue)
 and [`help wanted`](https://github.com/lichess-org/mobile/labels/help%20wanted)
