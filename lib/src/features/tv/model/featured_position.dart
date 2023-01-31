@@ -22,7 +22,10 @@ class FeaturedPosition with _$FeaturedPosition {
       turn: event.fen.substring(event.fen.length - 1) == 'w'
           ? Side.white
           : Side.black,
-      position: Chess.fromSetup(Setup.parseFen(event.fen)),
+      position: Chess.fromSetup(
+        Setup.parseFen(event.fen),
+        ignoreImpossibleCheck: true,
+      ),
       lastMove: event is TvFenEvent ? event.lastMove : null,
     );
   }
