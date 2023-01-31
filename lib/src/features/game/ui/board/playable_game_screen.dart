@@ -98,7 +98,7 @@ class PlayableGameScreen extends ConsumerWidget {
     final gameState = ref.watch(gameStateProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        padding: const EdgeInsetsDirectional.only(start: 0, end: 16.0),
+        padding: const EdgeInsetsDirectional.only(end: 16.0),
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () {

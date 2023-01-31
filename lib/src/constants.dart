@@ -31,6 +31,15 @@ const kPlatformCardBorder = RoundedRectangleBorder(
 const kEmptyWidget = SizedBox.shrink();
 const kEmptyFen = '8/8/8/8/8/8/8/8 w - - 0 1';
 
+// annotations
+class _AllowedWidgetReturn {
+  const _AllowedWidgetReturn();
+}
+
+/// Use to annotate a function that is allowed to return a Widget
+const allowedWidgetReturn = _AllowedWidgetReturn();
+
+// locales
 const kSupportedLocales = [
   Locale('af', ''),
   Locale('ar', ''),

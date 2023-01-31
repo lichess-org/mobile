@@ -8,32 +8,46 @@ import 'package:lichess_mobile/src/widgets/list_tile_choice.dart';
 
 import './theme_mode_notifier.dart';
 
-class ThemeModeScreen extends ConsumerWidget {
+class ThemeModeScreen extends StatelessWidget {
   const ThemeModeScreen({super.key});
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ConsumerPlatformWidget(
-      ref: ref,
+  Widget build(BuildContext context) {
+    return PlatformWidget(
       androidBuilder: _androidBuilder,
       iosBuilder: _iosBuilder,
     );
   }
 
-  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
+  Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.background)),
-      body: _buildBody(context, ref),
+      body: _Body(),
     );
   }
 
-  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
+  Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(),
-      child: _buildBody(context, ref),
+      child: _Body(),
     );
   }
 
-  Widget _buildBody(BuildContext context, WidgetRef ref) {
+  static String themeTitle(BuildContext context, ThemeMode theme) {
+    switch (theme) {
+      case ThemeMode.system:
+        return context.l10n.deviceTheme;
+      case ThemeMode.dark:
+        return context.l10n.dark;
+      case ThemeMode.light:
+        return context.l10n.light;
+    }
+  }
+}
+
+class _Body extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
 
     void onChanged(ThemeMode? value) => ref
@@ -47,22 +61,11 @@ class ThemeModeScreen extends ConsumerWidget {
           ListTileChoice(
             choices: ThemeMode.values,
             selectedItem: themeMode,
-            titleBuilder: (t) => Text(themeTitle(context, t)),
+            titleBuilder: (t) => Text(ThemeModeScreen.themeTitle(context, t)),
             onSelectedItemChanged: onChanged,
           )
         ],
       ),
     );
-  }
-
-  static String themeTitle(BuildContext context, ThemeMode theme) {
-    switch (theme) {
-      case ThemeMode.system:
-        return context.l10n.deviceTheme;
-      case ThemeMode.dark:
-        return context.l10n.dark;
-      case ThemeMode.light:
-        return context.l10n.light;
-    }
   }
 }

@@ -79,6 +79,7 @@ class LeaderboardScreen extends StatelessWidget {
     );
   }
 
+  @allowedWidgetReturn
   List<Widget> _buildList() {
     return [
       _BuildLeaderboard(leaderboard.bullet, LichessIcons.bullet, 'BULLET'),

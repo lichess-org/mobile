@@ -15,35 +15,37 @@ import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
 import './theme_mode_screen.dart';
 import './theme_mode_notifier.dart';
 
-class SettingsScreen extends ConsumerWidget {
+class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ConsumerPlatformWidget(
-      ref: ref,
+  Widget build(BuildContext context) {
+    return PlatformWidget(
       androidBuilder: _androidBuilder,
       iosBuilder: _iosBuilder,
     );
   }
 
-  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
+  Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.settings),
       ),
-      body: _buildBody(context, ref),
+      body: _Body(),
     );
   }
 
-  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
+  Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(),
-      child: _buildBody(context, ref),
+      child: _Body(),
     );
   }
+}
 
-  Widget _buildBody(BuildContext context, WidgetRef ref) {
+class _Body extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
     final authState = ref.watch(authStateChangesProvider);
     final authActionsAsync = ref.watch(authActionsProvider);

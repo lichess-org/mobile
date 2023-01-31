@@ -78,7 +78,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
 
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5.0),
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         color: widget.active
             ? clockStyle.activeBackgroundColor
             : clockStyle.backgroundColor,

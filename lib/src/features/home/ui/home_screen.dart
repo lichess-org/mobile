@@ -28,18 +28,21 @@ class HomeScreen extends StatelessWidget {
           SignInWidget(),
         ],
       ),
-      body: _buildBody(context),
+      body: _Body(),
     );
   }
 
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(trailing: SignInWidget()),
-      child: _buildBody(context),
+      child: _Body(),
     );
   }
+}
 
-  Widget _buildBody(BuildContext context) {
+class _Body extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

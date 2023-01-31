@@ -34,8 +34,7 @@ final perfStatsProvider = FutureProvider.autoDispose
 
 // that one can be cached forever
 final perfGamesProvider =
-    FutureProvider.family<List<ArchivedGameData>, List<GameId>>(
-        (ref, ids) async {
+    FutureProvider.family<List<ArchivedGameData>, List<GameId>>((ref, ids) {
   final gameRepo = ref.watch(gameRepositoryProvider);
   return Result.release(gameRepo.getGamesByIds(ids));
 });
@@ -404,6 +403,7 @@ class _CustomPlatformCardRow extends StatelessWidget {
   }
 }
 
+@allowedWidgetReturn
 Iterable<Widget> _divideRow(Iterable<Widget> elements) {
   final list = elements.toList();
 
