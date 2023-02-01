@@ -13,7 +13,7 @@ class MockApiClient extends Mock implements ApiClient {}
 
 class MockLogger extends Mock implements Logger {}
 
-const testUserId = 'test';
+const testUserId = UserId('test');
 
 void main() {
   final mockLogger = MockLogger();
@@ -26,7 +26,7 @@ void main() {
 
   group('UserRepository.getUserTask', () {
     test('json read, minimal example', () async {
-      const testUserResponseMinimal = '''
+      final testUserResponseMinimal = '''
 {
   "id": "$testUserId",
   "username": "$testUserId",
@@ -49,7 +49,7 @@ void main() {
     });
 
     test('json read, full example', () async {
-      const testUserResponse = '''
+      final testUserResponse = '''
 {
   "id": "$testUserId",
   "username": "$testUserId",
@@ -106,7 +106,7 @@ void main() {
     final uriString =
         '$kLichessHost/api/user/$testUserId/perf/${testPerf.name}';
     test('json read, minimal example', () async {
-      const responseMinimal = '''
+      final responseMinimal = '''
       {
   "user": {
     "name": "$testUserId"
@@ -146,7 +146,7 @@ void main() {
     });
 
     test('json read, full example', () async {
-      const responseFull = '''
+      final responseFull = '''
 {
   "user": {
     "name": "testOpponentName"

@@ -9,6 +9,7 @@ part 'user.freezed.dart';
 @freezed
 class LightUser with _$LightUser {
   const factory LightUser({
+    required UserId id,
     required String name,
     String? title,
     bool? isPatron,
@@ -148,7 +149,7 @@ class UserStatus with _$UserStatus {
 @freezed
 class UserPerfStatsParameters with _$UserPerfStatsParameters {
   factory UserPerfStatsParameters({
-    required String username,
+    required UserId userId,
     required Perf perf,
   }) = _UserPerfStatsParameters;
 }

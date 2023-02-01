@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
-import 'package:lichess_mobile/src/features/user/model/user.dart';
 
 class UserRating extends StatelessWidget {
   const UserRating({
@@ -33,26 +32,26 @@ class UserRating extends StatelessWidget {
 /// This widget is meant to display the user basic informations in a [ListTile.title].
 class ListTileUser extends StatelessWidget {
   const ListTileUser({
-    required this.user,
+    required this.userName,
+    this.title,
     this.rating,
     super.key,
   });
 
-  final LightUser user;
+  final String userName;
+  final String? title;
   final int? rating;
 
   @override
   Widget build(BuildContext context) {
-    final nameAndRating = user.name + (rating != null ? ' ($rating)' : '');
+    final nameAndRating = userName + (rating != null ? ' ($rating)' : '');
     return Row(
       children: [
-        if (user.title != null) ...[
+        if (title != null) ...[
           Text(
-            user.title!,
+            title!,
             style: TextStyle(
-              color: user.title == 'BOT'
-                  ? LichessColors.fancy
-                  : LichessColors.brag,
+              color: title == 'BOT' ? LichessColors.fancy : LichessColors.brag,
               fontWeight: FontWeight.bold,
             ),
           ),

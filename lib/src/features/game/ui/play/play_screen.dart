@@ -29,9 +29,9 @@ final maiaBotsProvider =
     FutureProvider.autoDispose<List<Tuple2<User, UserStatus>>>((ref) async {
   final userRepo = ref.watch(userRepositoryProvider);
   final FutureResult<List<User>> maiaBots = Future.wait([
-    userRepo.getUser('maia1'),
-    userRepo.getUser('maia5'),
-    userRepo.getUser('maia9'),
+    userRepo.getUser(const UserId('maia1')),
+    userRepo.getUser(const UserId('maia5')),
+    userRepo.getUser(const UserId('maia9')),
   ]).then(Result.flattenAll);
   final maiaStatuses = userRepo.getUsersStatus(['maia1', 'maia5', 'maia9']);
   final result = maiaBots.flatMap(

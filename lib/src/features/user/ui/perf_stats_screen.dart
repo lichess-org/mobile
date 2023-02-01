@@ -22,13 +22,13 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:lichess_mobile/src/widgets/user_widgets.dart';
 
 final perfStatsProvider = FutureProvider.autoDispose
     .family<UserPerfStats, UserPerfStatsParameters>((ref, perfParams) {
   final userRepo = ref.watch(userRepositoryProvider);
   return Result.release(
-    userRepo.getUserPerfStats(perfParams.username, perfParams.perf),
+    userRepo.getUserPerfStats(perfParams.userId, perfParams.perf),
   );
 });
 
@@ -118,7 +118,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final perfStats = ref.watch(
       perfStatsProvider(
-        UserPerfStatsParameters(username: user.username, perf: perf),
+        UserPerfStatsParameters(userId: user.id, perf: perf),
       ),
     );
 
@@ -693,10 +693,8 @@ class _GameListWidget extends ConsumerWidget {
               },
               leading: Icon(perf.icon),
               title: ListTileUser(
-                user: LightUser(
-                  name: game.opponentName ?? '?',
-                  title: game.opponentTitle,
-                ),
+                userName: game.opponentName ?? '?',
+                title: game.opponentTitle,
                 rating: game.opponentRating,
               ),
               subtitle: Text(

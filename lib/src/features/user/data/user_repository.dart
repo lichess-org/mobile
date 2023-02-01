@@ -24,8 +24,8 @@ class UserRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  FutureResult<User> getUser(String username) {
-    return apiClient.get(Uri.parse('$kLichessHost/api/user/$username')).then(
+  FutureResult<User> getUser(UserId id) {
+    return apiClient.get(Uri.parse('$kLichessHost/api/user/$id')).then(
           (result) => result.flatMap(
             (response) => readJsonObject(
               response.body,
@@ -36,9 +36,9 @@ class UserRepository {
         );
   }
 
-  FutureResult<UserPerfStats> getUserPerfStats(String username, Perf perf) {
+  FutureResult<UserPerfStats> getUserPerfStats(UserId id, Perf perf) {
     return apiClient
-        .get(Uri.parse('$kLichessHost/api/user/$username/perf/${perf.name}'))
+        .get(Uri.parse('$kLichessHost/api/user/$id/perf/${perf.name}'))
         .then(
           (result) => result.flatMap(
             (response) => readJsonObject(
