@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 part 'models.freezed.dart';
 part 'models.g.dart';
@@ -36,6 +37,8 @@ enum Perf {
   final String shortTitle;
   final IconData icon;
 }
+
+final IMap<String, Perf> perfNameMap = IMap(Perf.values.asNameMap());
 
 @Freezed(fromJson: true, toJson: true, toStringOverride: false)
 class GameAnyId with _$GameAnyId {

@@ -34,7 +34,6 @@ class User with _$User {
       User.fromPick(pick(json).required());
 
   factory User.fromPick(RequiredPick pick) {
-    final perfsMap = Perf.values.asNameMap();
     final receivedPerfsMap =
         pick('perfs').asMapOrThrow<String, Map<String, dynamic>>();
     return User(
@@ -48,8 +47,8 @@ class User with _$User {
       profile: pick('profile').letOrNull(Profile.fromPick),
       perfs: Map.unmodifiable({
         for (final entry in receivedPerfsMap.entries)
-          if (perfsMap.containsKey(entry.key) && entry.key != 'storm')
-            Perf.values.byName(entry.key): UserPerf.fromJson(entry.value)
+          if (perfNameMap.containsKey(entry.key) && entry.key != 'storm')
+            perfNameMap.get(entry.key): UserPerf.fromJson(entry.value)
       }),
     );
   }
