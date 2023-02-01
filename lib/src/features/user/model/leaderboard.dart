@@ -1,6 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:deep_pick/deep_pick.dart';
 
+import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
+
 part 'leaderboard.freezed.dart';
 
 @freezed
@@ -47,7 +50,7 @@ class Leaderboard with _$Leaderboard {
 @freezed
 class LeaderboardUser with _$LeaderboardUser {
   const factory LeaderboardUser({
-    required String id,
+    required UserId id,
     required String username,
     bool? patron,
     String? title,
@@ -63,7 +66,7 @@ class LeaderboardUser with _$LeaderboardUser {
     final prefMap = pick('perfs').asMapOrThrow<String, Map<String, dynamic>>();
 
     return LeaderboardUser(
-      id: pick('id').asStringOrThrow(),
+      id: pick('id').asUserIdOrThrow(),
       username: pick('username').asStringOrThrow(),
       title: pick('title').asStringOrNull(),
       patron: pick('patron').asBoolOrNull(),

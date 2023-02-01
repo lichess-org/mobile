@@ -102,18 +102,20 @@ class PlayerRating extends StatelessWidget {
   }
 }
 
-/// This widget is meant to display the user basic informations in a [ListTile.title].
-class ListTilePlayer extends StatelessWidget {
-  const ListTilePlayer({
+/// Displays a player's name and title with an optional rating.
+class PlayerTitle extends StatelessWidget {
+  const PlayerTitle({
     required this.userName,
     this.title,
     this.rating,
+    this.style,
     super.key,
   });
 
   final String userName;
   final String? title;
   final int? rating;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +125,7 @@ class ListTilePlayer extends StatelessWidget {
         if (title != null) ...[
           Text(
             title!,
-            style: TextStyle(
+            style: (style ?? const TextStyle()).copyWith(
               color: title == 'BOT' ? LichessColors.fancy : LichessColors.brag,
               fontWeight: FontWeight.bold,
             ),
@@ -131,8 +133,12 @@ class ListTilePlayer extends StatelessWidget {
           const SizedBox(width: 5)
         ],
         Flexible(
-          child:
-              Text(nameAndRating, maxLines: 1, overflow: TextOverflow.ellipsis),
+          child: Text(
+            nameAndRating,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: style,
+          ),
         ),
       ],
     );

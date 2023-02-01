@@ -22,7 +22,7 @@ class User with _$User {
     required UserId id,
     required String username,
     String? title,
-    bool? patron,
+    bool? isPatron,
     required DateTime createdAt,
     required DateTime seenAt,
     required Map<Perf, UserPerf> perfs,
@@ -34,19 +34,21 @@ class User with _$User {
       User.fromPick(pick(json).required());
 
   factory User.fromPick(RequiredPick pick) {
-    final perfsMap = pick('perfs').asMapOrThrow<String, Map<String, dynamic>>();
+    final perfsMap = Perf.values.asNameMap();
+    final receivedPerfsMap =
+        pick('perfs').asMapOrThrow<String, Map<String, dynamic>>();
     return User(
       id: pick('id').asUserIdOrThrow(),
       username: pick('username').asStringOrThrow(),
       title: pick('title').asStringOrNull(),
-      patron: pick('patron').asBoolOrNull(),
+      isPatron: pick('patron').asBoolOrNull(),
       createdAt: pick('createdAt').asDateTimeFromMillisecondsOrThrow(),
       seenAt: pick('seenAt').asDateTimeFromMillisecondsOrThrow(),
       playTime: pick('playTime').letOrNull(PlayTime.fromPick),
       profile: pick('profile').letOrNull(Profile.fromPick),
       perfs: Map.unmodifiable({
-        for (final entry in perfsMap.entries)
-          if (entry.key != 'storm')
+        for (final entry in receivedPerfsMap.entries)
+          if (perfsMap.containsKey(entry.key) && entry.key != 'storm')
             Perf.values.byName(entry.key): UserPerf.fromJson(entry.value)
       }),
     );

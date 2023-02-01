@@ -9,6 +9,7 @@ import 'package:logging/logging.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:lichess_mobile/src/common/http.dart';
+import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/features/user/model/leaderboard.dart';
 import '../../../utils.dart';
@@ -115,7 +116,7 @@ final testLeaderboard = Leaderboard(
 
 final _fakeList = [
   const LeaderboardUser(
-    id: 'test',
+    id: UserId('test'),
     username: 'test',
     rating: 1000,
     progress: 10,

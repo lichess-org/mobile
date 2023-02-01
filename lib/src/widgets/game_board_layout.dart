@@ -175,7 +175,7 @@ class _MoveListState extends State<MoveList> {
             child: ListView.builder(
               // hack to allow ensureVisible working
               // TODO work on a different solution
-              cacheExtent: 5000,
+              cacheExtent: 10000,
               controller: scrollController,
               scrollDirection: Axis.horizontal,
               itemCount: widget.slicedMoves.length,
@@ -205,7 +205,7 @@ class _MoveListState extends State<MoveList> {
               child: ListView.builder(
                 // hack to allow ensureVisible working
                 // TODO work on a different solution
-                cacheExtent: 5000,
+                cacheExtent: 10000,
                 controller: scrollController,
                 itemCount: widget.slicedMoves.length,
                 itemBuilder: (_, index) => Row(

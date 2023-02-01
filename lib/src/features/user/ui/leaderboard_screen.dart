@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/features/user/model/user.dart';
 import 'package:lichess_mobile/src/features/user/model/leaderboard.dart';
+import 'package:lichess_mobile/src/features/user/ui/user_screen.dart';
 
 /// Create a Screen with Top 10 players for each Lichess Variant
 class LeaderboardScreen extends StatelessWidget {
@@ -82,78 +85,52 @@ class LeaderboardScreen extends StatelessWidget {
   @allowedWidgetReturn
   List<Widget> _buildList() {
     return [
-      _BuildLeaderboard(leaderboard.bullet, LichessIcons.bullet, 'BULLET'),
-      _BuildLeaderboard(leaderboard.blitz, LichessIcons.blitz, 'BLITZ'),
-      _BuildLeaderboard(leaderboard.rapid, LichessIcons.rapid, 'RAPID'),
-      _BuildLeaderboard(
+      _Leaderboard(leaderboard.bullet, LichessIcons.bullet, 'BULLET'),
+      _Leaderboard(leaderboard.blitz, LichessIcons.blitz, 'BLITZ'),
+      _Leaderboard(leaderboard.rapid, LichessIcons.rapid, 'RAPID'),
+      _Leaderboard(
         leaderboard.classical,
         LichessIcons.classical,
         'CLASSICAL',
       ),
-      _BuildLeaderboard(
+      _Leaderboard(
         leaderboard.ultrabullet,
         LichessIcons.ultrabullet,
         'ULTRA BULLET',
       ),
-      _BuildLeaderboard(
+      _Leaderboard(
         leaderboard.crazyhouse,
         LichessIcons.h_square,
         'CRAZYHOUSE',
       ),
-      _BuildLeaderboard(
+      _Leaderboard(
         leaderboard.chess960,
         LichessIcons.die_six,
         'CHESS 960',
       ),
-      _BuildLeaderboard(
+      _Leaderboard(
         leaderboard.kingOfThehill,
         LichessIcons.bullet,
         'KING OF THE HILL',
       ),
-      _BuildLeaderboard(
+      _Leaderboard(
         leaderboard.threeCheck,
         LichessIcons.three_check,
         'THREE CHECK',
       ),
-      _BuildLeaderboard(leaderboard.atomic, LichessIcons.atom, 'ATOMIC'),
-      _BuildLeaderboard(leaderboard.horde, LichessIcons.horde, 'HORDE'),
-      _BuildLeaderboard(
+      _Leaderboard(leaderboard.atomic, LichessIcons.atom, 'ATOMIC'),
+      _Leaderboard(leaderboard.horde, LichessIcons.horde, 'HORDE'),
+      _Leaderboard(
         leaderboard.antichess,
         LichessIcons.antichess,
         'ANTICHESS',
       ),
-      _BuildLeaderboard(
+      _Leaderboard(
         leaderboard.racingKings,
         LichessIcons.racing_kings,
         'RACING KINGS',
       ),
     ];
-  }
-}
-
-class _BuildLeaderboard extends StatelessWidget {
-  const _BuildLeaderboard(this.userList, this.iconData, this.title);
-  final List<LeaderboardUser> userList;
-  final IconData iconData;
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ListTile(
-          leading: Icon(iconData, color: LichessColors.brag),
-          title: Text(title),
-        ),
-        ...ListTile.divideTiles(
-          color: dividerColor(context),
-          context: context,
-          tiles: userList.map((user) => LeaderboardListTile(user: user)),
-        ),
-        const SizedBox(height: 12),
-      ],
-    );
   }
 }
 
@@ -168,6 +145,7 @@ class LeaderboardListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () => _handleTap(context),
       leading: perfIcon != null
           ? Icon(perfIcon)
           : _OnlineOrPatron(patron: user.patron, online: user.online),
@@ -189,6 +167,21 @@ class LeaderboardListTile extends StatelessWidget {
         ],
       ),
       trailing: _RatingAndProgress(user.rating, user.progress),
+    );
+  }
+
+  void _handleTap(BuildContext context) {
+    Navigator.of(context, rootNavigator: true).push<void>(
+      MaterialPageRoute(
+        builder: (context) => UserScreen(
+          user: LightUser(
+            id: user.id,
+            name: user.username,
+            title: user.title,
+            isPatron: user.patron,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -245,6 +238,32 @@ class _RatingAndProgress extends StatelessWidget {
           )
         else
           const SizedBox.shrink(),
+      ],
+    );
+  }
+}
+
+class _Leaderboard extends StatelessWidget {
+  const _Leaderboard(this.userList, this.iconData, this.title);
+  final List<LeaderboardUser> userList;
+  final IconData iconData;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ListTile(
+          leading: Icon(iconData, color: LichessColors.brag),
+          title: Text(title),
+        ),
+        ...ListTile.divideTiles(
+          color: dividerColor(context),
+          context: context,
+          tiles: userList.map((user) => LeaderboardListTile(user: user)),
+        ),
+        const SizedBox(height: 12),
       ],
     );
   }

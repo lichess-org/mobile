@@ -692,7 +692,7 @@ class _GameListWidget extends ConsumerWidget {
                 });
               },
               leading: Icon(perf.icon),
-              title: ListTilePlayer(
+              title: PlayerTitle(
                 userName: game.opponentName ?? '?',
                 title: game.opponentTitle,
                 rating: game.opponentRating,

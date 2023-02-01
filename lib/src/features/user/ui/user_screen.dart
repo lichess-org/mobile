@@ -39,9 +39,9 @@ final userProvider =
 });
 
 class UserScreen extends ConsumerWidget {
-  const UserScreen({required this.userId, super.key});
+  const UserScreen({required this.user, super.key});
 
-  final UserId userId;
+  final LightUser user;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -53,88 +53,129 @@ class UserScreen extends ConsumerWidget {
   }
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
-    final asyncUser = ref.watch(userProvider(userId));
+    final asyncUser = ref.watch(userProvider(user.id));
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.profile),
+        title: PlayerTitle(userName: user.name, title: user.title),
       ),
-      body: asyncUser.maybeWhen(
+      body: asyncUser.when(
         data: (user) {
           return UserScreenBody(user: user);
         },
-        orElse: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: _handleFetchUserError,
       ),
     );
   }
 
   Widget _buildIos(BuildContext context, WidgetRef ref) {
-    final asyncUser = ref.watch(userProvider(userId));
+    final asyncUser = ref.watch(userProvider(user.id));
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: asyncUser.maybeWhen(
-        data: (user) => UserScreenBody(user: user),
-        orElse: () => const Center(child: CircularProgressIndicator.adaptive()),
+      navigationBar: CupertinoNavigationBar(
+        middle: PlayerTitle(userName: user.name, title: user.title),
+      ),
+      child: asyncUser.when(
+        data: (user) => SafeArea(child: UserScreenBody(user: user)),
+        loading: () =>
+            const Center(child: CircularProgressIndicator.adaptive()),
+        error: _handleFetchUserError,
       ),
     );
   }
+
+  Widget _handleFetchUserError(Object error, StackTrace stackTrace) {
+    debugPrint(
+      'SEVERE: [UserScreen] could not fetch user; $error\n$stackTrace',
+    );
+    return const Center(child: Text('Could not load user data.'));
+  }
 }
 
+/// Common widget for [UserScreen] and [ProfileScreen].
+///
+/// The `showPlayerTitle` param is used by [ProfileScreen] because the username is
+/// not present in the app bar.
+///
+/// Use `inCustomScrollView` parameter to return a [SliverPadding] widget needed
+/// by [ProfileScreen].
 class UserScreenBody extends StatelessWidget {
-  const UserScreenBody({required this.user, super.key});
+  const UserScreenBody({
+    required this.user,
+    this.inCustomScrollView = false,
+    this.showPlayerTitle = false,
+    super.key,
+  });
 
   final User user;
+  final bool showPlayerTitle;
+  final bool inCustomScrollView;
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: kBodyPadding,
-      children: [
+    final playerTitle = PlayerTitle(
+      userName: user.username,
+      title: user.title,
+      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+    );
+    final userFullName =
+        user.profile?.fullName != null ? Text(user.profile!.fullName!) : null;
+    final title = showPlayerTitle ? playerTitle : userFullName;
+    final subTitle = showPlayerTitle ? userFullName : null;
+
+    final list = [
+      if (user.isPatron == true || title != null || subTitle != null)
         ListTile(
-          leading: user.patron == true
+          leading: user.isPatron == true
               ? const Icon(LichessIcons.patron, size: 40)
               : null,
-          title: Text(
-            user.username,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-          ),
-          subtitle: user.profile?.fullName != null
-              ? Text(user.profile!.fullName!)
-              : null,
+          title: title,
+          subtitle: subTitle,
           contentPadding: const EdgeInsets.symmetric(vertical: 10),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (user.profile != null)
-              Location(profile: user.profile!)
-            else
-              kEmptyWidget,
-            const SizedBox(height: 5),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (user.profile != null)
+            Location(profile: user.profile!)
+          else
+            kEmptyWidget,
+          const SizedBox(height: 5),
+          Text(
+            '${context.l10n.memberSince} ${DateFormat.yMMMMd().format(user.createdAt)}',
+          ),
+          const SizedBox(height: 5),
+          Text(context.l10n.lastSeenActive(timeago.format(user.seenAt))),
+          const SizedBox(height: 5),
+          if (user.playTime != null)
             Text(
-              '${context.l10n.memberSince} ${DateFormat.yMMMMd().format(user.createdAt)}',
+              context.l10n.tpTimeSpentPlaying(
+                user.playTime!.total
+                    .toDaysHoursMinutes(AppLocalizations.of(context)),
+              ),
+            )
+          else
+            kEmptyWidget,
+        ],
+      ),
+      const SizedBox(height: 20),
+      PerfCards(user: user),
+      const SizedBox(height: 20),
+      // TODO translate
+      const Text('Recent games', style: kSectionTitle),
+      RecentGames(user: user),
+    ];
+
+    return inCustomScrollView
+        ? SliverPadding(
+            padding: kBodyPadding,
+            sliver: SliverList(
+              delegate: SliverChildListDelegate(list),
             ),
-            const SizedBox(height: 5),
-            Text(context.l10n.lastSeenActive(timeago.format(user.seenAt))),
-            const SizedBox(height: 5),
-            if (user.playTime != null)
-              Text(
-                context.l10n.tpTimeSpentPlaying(
-                  user.playTime!.total
-                      .toDaysHoursMinutes(AppLocalizations.of(context)),
-                ),
-              )
-            else
-              kEmptyWidget,
-          ],
-        ),
-        const SizedBox(height: 20),
-        PerfCards(user: user),
-        const SizedBox(height: 20),
-        // TODO translate
-        const Text('Recent games', style: kSectionTitle),
-        RecentGames(user: user),
-      ],
-    );
+          )
+        : ListView(
+            padding: kBodyPadding,
+            children: list,
+          );
   }
 }
 
@@ -185,7 +226,7 @@ class PerfCards extends StatelessWidget {
                           ),
                         ),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -196,6 +237,8 @@ class PerfCards extends StatelessWidget {
                       Icon(perf.icon, color: textShade(context, 0.6)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
                         children: [
                           PlayerRating(
                             rating: userPerf.rating,
@@ -220,7 +263,7 @@ class PerfCards extends StatelessWidget {
                                 color: userPerf.progression > 0
                                     ? LichessColors.good
                                     : LichessColors.red,
-                                fontSize: 12,
+                                fontSize: 11,
                               ),
                             ),
                           ],
@@ -278,7 +321,7 @@ class RecentGames extends ConsumerWidget {
                   );
                 },
                 leading: Icon(game.perf.icon),
-                title: ListTilePlayer(
+                title: PlayerTitle(
                   userName: opponentName,
                   title: opponent.title,
                   rating: opponent.rating,
