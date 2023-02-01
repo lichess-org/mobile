@@ -31,7 +31,8 @@ class LeaderboardWidget extends ConsumerWidget {
             dense: true,
             child: Column(
               children: [
-                ListTile(
+                PlatformListTile(
+                  dense: false,
                   title: Text(
                     context.l10n.leaderboard,
                     style: const TextStyle(fontWeight: FontWeight.bold),
