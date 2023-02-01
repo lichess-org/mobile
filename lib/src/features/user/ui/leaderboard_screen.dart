@@ -170,7 +170,7 @@ class LeaderboardListTile extends StatelessWidget {
   }
 
   void _handleTap(BuildContext context) {
-    Navigator.of(context, rootNavigator: true).push<void>(
+    Navigator.of(context).push<void>(
       MaterialPageRoute(
         builder: (context) => UserScreen(
           user: user.lightUser,
