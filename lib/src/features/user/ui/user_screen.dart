@@ -162,6 +162,7 @@ class UserScreenBody extends StatelessWidget {
       const SizedBox(height: 20),
       // TODO translate
       const Text('Recent games', style: kSectionTitle),
+      const SizedBox(height: 5),
       RecentGames(user: user),
     ];
 
@@ -308,7 +309,7 @@ class RecentGames extends ConsumerWidget {
                     )
                   : opponent.name;
 
-              return ListTile(
+              return PlatformListTile(
                 onTap: () {
                   Navigator.of(context, rootNavigator: true).push<void>(
                     MaterialPageRoute(
@@ -328,7 +329,7 @@ class RecentGames extends ConsumerWidget {
                 ),
                 subtitle: Text(
                   timeago.format(game.lastMoveAt),
-                  style: TextStyle(color: textShade(context, 0.7)),
+                  style: TextStyle(color: textShade(context, kSubtitleOpacity)),
                 ),
                 trailing: game.winner == mySide
                     ? const Icon(

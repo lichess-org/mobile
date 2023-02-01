@@ -123,14 +123,23 @@ class PlatformListTile extends StatelessWidget {
     required this.title,
     this.subtitle,
     this.trailing,
+    this.additionalInfo,
     this.dense,
     this.onTap,
+    this.selected = false,
   });
 
   final Widget? leading;
   final Widget title;
   final Widget? subtitle;
   final Widget? trailing;
+
+  /// only on iOS
+  final Widget? additionalInfo;
+
+  // only on android
+  final bool selected;
+
   final bool? dense;
   final GestureTapCallback? onTap;
 
@@ -145,15 +154,27 @@ class PlatformListTile extends StatelessWidget {
           trailing: trailing,
           dense: dense,
           onTap: onTap,
+          selected: selected,
         );
       case TargetPlatform.iOS:
-        return CupertinoListTile(
-          leading: leading,
-          title: title,
-          subtitle: subtitle,
-          trailing: trailing,
-          onTap: onTap,
-        );
+        final theme = ListTileTheme.of(context);
+        return (dense == true || theme.dense == true)
+            ? CupertinoListTile(
+                leading: leading,
+                title: title,
+                subtitle: subtitle,
+                trailing: trailing,
+                additionalInfo: additionalInfo,
+                onTap: onTap,
+              )
+            : CupertinoListTile.notched(
+                leading: leading,
+                title: title,
+                subtitle: subtitle,
+                trailing: trailing,
+                additionalInfo: additionalInfo,
+                onTap: onTap,
+              );
 
       default:
         assert(false, 'Unexpected platform $defaultTargetPlatform');

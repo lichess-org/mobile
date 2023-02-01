@@ -30,11 +30,11 @@ class ListTileChoice<T extends Enum> extends StatelessWidget {
           color: dividerColor(context),
           context: context,
           tiles: choices.map((value) {
-            return ListTile(
+            return PlatformListTile(
               selected: selectedItem == value,
               trailing: selectedItem == value
                   ? defaultTargetPlatform == TargetPlatform.iOS
-                      ? const Icon(CupertinoIcons.check_mark_circled_solid)
+                      ? const Icon(CupertinoIcons.checkmark_alt)
                       : const Icon(Icons.check)
                   : null,
               title: titleBuilder(value),

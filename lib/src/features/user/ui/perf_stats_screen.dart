@@ -672,7 +672,7 @@ class _GameListWidget extends ConsumerWidget {
         context: context,
         tiles: [
           for (final game in games)
-            ListTile(
+            PlatformListTile(
               onTap: () {
                 ref.read(perfGamesProvider(gameIds).future).then((list) {
                   final gameData =

@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
 import 'package:lichess_mobile/src/features/user/ui/profile_screen.dart';
 import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../auth/data/fake_auth_repository.dart';
 import '../../../utils.dart';
 
@@ -115,15 +116,27 @@ void main() {
         await tester.pump();
 
         // profile user name at the top
-        expect(find.widgetWithText(ListTile, testUserName), findsOneWidget);
+        expect(
+          find.widgetWithText(ListTile, testUserName),
+          findsOneWidget,
+        );
 
         // wait for recent games
         await tester.pump(const Duration(milliseconds: 50));
 
         // opponent in recent games
-        expect(find.widgetWithText(ListTile, 'maia1 (1397)'), findsOneWidget);
-        expect(find.widgetWithText(ListTile, 'maia1 (1399)'), findsOneWidget);
-        expect(find.widgetWithText(ListTile, 'maia1 (1410)'), findsOneWidget);
+        expect(
+          find.widgetWithText(PlatformListTile, 'maia1 (1397)'),
+          findsOneWidget,
+        );
+        expect(
+          find.widgetWithText(PlatformListTile, 'maia1 (1399)'),
+          findsOneWidget,
+        );
+        expect(
+          find.widgetWithText(PlatformListTile, 'maia1 (1410)'),
+          findsOneWidget,
+        );
       },
       variant: kPlatformVariant,
     );

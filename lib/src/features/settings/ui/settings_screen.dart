@@ -1,12 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/settings_group_tile.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/features/auth/ui/auth_actions_notifier.dart';
@@ -74,7 +75,7 @@ class _Body extends ConsumerWidget {
               data: (data) {
                 return data != null
                     ? PlatformCard(
-                        child: ListTile(
+                        child: PlatformListTile(
                           leading: const Icon(Icons.exit_to_app),
                           title: Text(context.l10n.logOut),
                           onTap: authActionsAsync.isLoading
@@ -96,6 +97,51 @@ class _Body extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// A tappable [ListTile] that represents a settings value.
+class SettingsGroupTile extends StatelessWidget {
+  const SettingsGroupTile({
+    required this.icon,
+    required this.settingsLabel,
+    required this.settingsValue,
+    required this.onTap,
+    super.key,
+  });
+
+  final Icon icon;
+  final String settingsLabel;
+  final String settingsValue;
+  final void Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final tile = defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoListTile(
+            leading: icon,
+            title: Text(settingsLabel),
+            additionalInfo: Text(settingsValue),
+            onTap: onTap,
+            trailing: const CupertinoListTileChevron(),
+          )
+        : ListTile(
+            leading: icon,
+            title: Text(settingsLabel),
+            subtitle: Text(
+              settingsValue,
+              style: TextStyle(color: textShade(context, kSubtitleOpacity)),
+            ),
+            onTap: onTap,
+            trailing: const Icon(Icons.keyboard_arrow_right),
+          );
+    return Semantics(
+      container: true,
+      button: true,
+      label: '$settingsLabel: $settingsValue',
+      excludeSemantics: true,
+      child: tile,
     );
   }
 }
