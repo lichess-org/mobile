@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
+import 'user.dart';
 
 part 'leaderboard.freezed.dart';
 
@@ -25,6 +26,8 @@ class Leaderboard with _$Leaderboard {
 
 @freezed
 class LeaderboardUser with _$LeaderboardUser {
+  const LeaderboardUser._();
+
   const factory LeaderboardUser({
     required UserId id,
     required String username,
@@ -34,4 +37,11 @@ class LeaderboardUser with _$LeaderboardUser {
     required int rating,
     required int progress,
   }) = _LeaderboardUser;
+
+  LightUser get lightUser => LightUser(
+        id: id,
+        name: username,
+        title: title,
+        isPatron: patron,
+      );
 }

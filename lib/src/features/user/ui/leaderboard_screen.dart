@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/features/user/model/user.dart';
 import 'package:lichess_mobile/src/features/user/model/leaderboard.dart';
 import 'package:lichess_mobile/src/features/user/ui/user_screen.dart';
 
@@ -174,12 +173,7 @@ class LeaderboardListTile extends StatelessWidget {
     Navigator.of(context, rootNavigator: true).push<void>(
       MaterialPageRoute(
         builder: (context) => UserScreen(
-          user: LightUser(
-            id: user.id,
-            name: user.username,
-            title: user.title,
-            isPatron: user.patron,
-          ),
+          user: user.lightUser,
         ),
       ),
     );
