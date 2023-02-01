@@ -24,7 +24,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/user_widgets.dart';
+import 'package:lichess_mobile/src/widgets/player.dart';
 
 final recentGamesProvider = FutureProvider.autoDispose
     .family<List<ArchivedGameData>, UserId>((ref, userId) {
@@ -197,7 +197,7 @@ class PerfCards extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          UserRating(
+                          PlayerRating(
                             rating: userPerf.rating,
                             deviation: userPerf.ratingDeviation,
                             provisional: userPerf.provisional,
@@ -278,7 +278,7 @@ class RecentGames extends ConsumerWidget {
                   );
                 },
                 leading: Icon(game.perf.icon),
-                title: ListTileUser(
+                title: ListTilePlayer(
                   userName: opponentName,
                   title: opponent.title,
                   rating: opponent.rating,

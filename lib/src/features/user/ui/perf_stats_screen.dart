@@ -22,7 +22,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/user_widgets.dart';
+import 'package:lichess_mobile/src/widgets/player.dart';
 
 final perfStatsProvider = FutureProvider.autoDispose
     .family<UserPerfStats, UserPerfStatsParameters>((ref, perfParams) {
@@ -137,7 +137,7 @@ class _Body extends ConsumerWidget {
                 textBaseline: TextBaseline.alphabetic,
                 children: [
                   Text('${context.l10n.rating} ', style: kSectionTitle),
-                  UserRating(
+                  PlayerRating(
                     rating: data.rating,
                     deviation: data.deviation,
                     provisional: data.provisional,
@@ -692,7 +692,7 @@ class _GameListWidget extends ConsumerWidget {
                 });
               },
               leading: Icon(perf.icon),
-              title: ListTileUser(
+              title: ListTilePlayer(
                 userName: game.opponentName ?? '?',
                 title: game.opponentTitle,
                 rating: game.opponentRating,
