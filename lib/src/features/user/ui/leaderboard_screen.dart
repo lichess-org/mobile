@@ -143,7 +143,7 @@ class LeaderboardListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return PlatformListTile(
       onTap: () => _handleTap(context),
       leading: perfIcon != null
           ? Icon(perfIcon)
@@ -189,49 +189,37 @@ class _RatingAndProgress extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.baseline,
+      textBaseline: TextBaseline.alphabetic,
       children: [
-        SizedBox(width: 50, child: Text(rating.toString())),
+        Text(rating.toString()),
         const SizedBox(width: 5),
-        if (progress < 0)
+        if (progress != 0)
           Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              const Icon(
-                LichessIcons.arrow_full_lowerright,
-                size: 20,
-                color: LichessColors.red,
+              Icon(
+                progress > 0
+                    ? LichessIcons.arrow_full_upperright
+                    : LichessIcons.arrow_full_lowerright,
+                size: 16,
+                color: progress > 0 ? LichessColors.good : LichessColors.red,
               ),
               SizedBox(
-                width: 30,
+                width: 20,
                 child: Text(
                   '${progress.abs()}',
-                  style: const TextStyle(color: LichessColors.red),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color:
+                        progress > 0 ? LichessColors.good : LichessColors.red,
+                  ),
                 ),
               )
             ],
-          )
-        else if (progress > 0)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                LichessIcons.arrow_full_upperright,
-                size: 20,
-                color: LichessColors.good,
-              ),
-              SizedBox(
-                width: 30,
-                child: Text(
-                  '$progress',
-                  style: const TextStyle(color: LichessColors.good),
-                ),
-              )
-            ],
-          )
-        else
-          const SizedBox.shrink(),
+          ),
       ],
     );
   }
@@ -248,7 +236,7 @@ class _Leaderboard extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        ListTile(
+        PlatformListTile(
           leading: Icon(iconData, color: LichessColors.brag),
           title: Text(title),
         ),

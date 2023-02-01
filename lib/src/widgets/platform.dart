@@ -113,3 +113,51 @@ class PlatformCard extends StatelessWidget {
     );
   }
 }
+
+/// Platform agnostic list tile widget.
+///
+/// Will use [ListTile] on android and [CupertinoListTile] on iOS.
+class PlatformListTile extends StatelessWidget {
+  const PlatformListTile({
+    this.leading,
+    required this.title,
+    this.subtitle,
+    this.trailing,
+    this.dense,
+    this.onTap,
+  });
+
+  final Widget? leading;
+  final Widget title;
+  final Widget? subtitle;
+  final Widget? trailing;
+  final bool? dense;
+  final GestureTapCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return ListTile(
+          leading: leading,
+          title: title,
+          subtitle: subtitle,
+          trailing: trailing,
+          dense: dense,
+          onTap: onTap,
+        );
+      case TargetPlatform.iOS:
+        return CupertinoListTile(
+          leading: leading,
+          title: title,
+          subtitle: subtitle,
+          trailing: trailing,
+          onTap: onTap,
+        );
+
+      default:
+        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        return const SizedBox.shrink();
+    }
+  }
+}
