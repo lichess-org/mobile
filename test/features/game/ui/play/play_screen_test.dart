@@ -138,20 +138,32 @@ void main() {
 
         // loaded maia ratings
         expect(
-          find.widgetWithIcon(PlatformCard, LichessIcons.blitz),
+          find.widgetWithIcon(ListTileChoice<MaiaStrength>, LichessIcons.blitz),
           findsNWidgets(3),
         );
-        expect(find.widgetWithText(PlatformCard, '1541'), findsOneWidget);
         expect(
-          find.widgetWithIcon(PlatformCard, LichessIcons.rapid),
-          findsNWidgets(3),
+          find.widgetWithText(ListTileChoice<MaiaStrength>, '1541'),
+          findsOneWidget,
         );
-        expect(find.widgetWithText(PlatformCard, '1477'), findsOneWidget);
         expect(
-          find.widgetWithIcon(PlatformCard, LichessIcons.classical),
+          find.widgetWithIcon(ListTileChoice<MaiaStrength>, LichessIcons.rapid),
           findsNWidgets(3),
         );
-        expect(find.widgetWithText(PlatformCard, '1421'), findsOneWidget);
+        expect(
+          find.widgetWithText(ListTileChoice<MaiaStrength>, '1477'),
+          findsOneWidget,
+        );
+        expect(
+          find.widgetWithIcon(
+            ListTileChoice<MaiaStrength>,
+            LichessIcons.classical,
+          ),
+          findsNWidgets(3),
+        );
+        expect(
+          find.widgetWithText(ListTileChoice<MaiaStrength>, '1421'),
+          findsOneWidget,
+        );
 
         // change maia opponent
         await tester.tap(find.text('maia5'));
