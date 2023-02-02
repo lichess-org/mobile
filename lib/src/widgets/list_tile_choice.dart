@@ -3,8 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'platform.dart';
 
-import '../utils/style.dart';
-
 /// A platform agnostic choice picker component.
 class ListTileChoice<T extends Enum> extends StatelessWidget {
   const ListTileChoice({
@@ -29,7 +27,6 @@ class ListTileChoice<T extends Enum> extends StatelessWidget {
         return PlatformCard(
           child: Column(
             children: ListTile.divideTiles(
-              color: dividerColor(context),
               context: context,
               tiles: choices.map((value) {
                 return PlatformListTile(
@@ -50,6 +47,7 @@ class ListTileChoice<T extends Enum> extends StatelessWidget {
       case TargetPlatform.iOS:
         return CupertinoListSection.insetGrouped(
           hasLeading: false,
+          margin: EdgeInsets.zero,
           children: choices.map((value) {
             return CupertinoListTile.notched(
               trailing: selectedItem == value

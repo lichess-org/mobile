@@ -6,6 +6,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -58,37 +59,42 @@ class _Body extends ConsumerWidget {
           padding: kBodyPadding,
           children: [
             const SizedBox(height: 10),
-            PlatformCard(
-              child: SettingsGroupTile(
-                icon: const Icon(Icons.brightness_medium),
-                settingsLabel: context.l10n.background,
-                settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
-                onTap: () => pushPlatformRoute(
-                  context: context,
-                  title: context.l10n.background,
-                  builder: (context) => const ThemeModeScreen(),
+            CardListSection(
+              showDivider: true,
+              children: [
+                SettingsGroupTile(
+                  icon: const Icon(Icons.brightness_medium),
+                  settingsLabel: context.l10n.background,
+                  settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
+                  onTap: () => pushPlatformRoute(
+                    context: context,
+                    title: context.l10n.background,
+                    builder: (context) => const ThemeModeScreen(),
+                  ),
                 ),
-              ),
+              ],
             ),
             const SizedBox(height: 30),
             authState.maybeWhen(
               data: (data) {
                 return data != null
-                    ? PlatformCard(
-                        child: PlatformListTile(
-                          leading: const Icon(Icons.exit_to_app),
-                          title: Text(context.l10n.logOut),
-                          onTap: authActionsAsync.isLoading
-                              ? null
-                              : () async {
-                                  await ref
-                                      .read(authActionsProvider.notifier)
-                                      .signOut();
-                                  ref
-                                      .read(currentBottomTabProvider.notifier)
-                                      .state = BottomTab.play;
-                                },
-                        ),
+                    ? CardListSection(
+                        children: [
+                          PlatformListTile(
+                            leading: const Icon(Icons.exit_to_app),
+                            title: Text(context.l10n.logOut),
+                            onTap: authActionsAsync.isLoading
+                                ? null
+                                : () async {
+                                    await ref
+                                        .read(authActionsProvider.notifier)
+                                        .signOut();
+                                    ref
+                                        .read(currentBottomTabProvider.notifier)
+                                        .state = BottomTab.play;
+                                  },
+                          ),
+                        ],
                       )
                     : const SizedBox.shrink();
               },

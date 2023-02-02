@@ -86,6 +86,8 @@ class PlatformCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
+    final cupertinoBrightness =
+        CupertinoTheme.maybeBrightnessOf(context) ?? Brightness.light;
     return MediaQuery(
       data: mediaQueryData.copyWith(
         textScaleFactor: math.min(
@@ -97,10 +99,10 @@ class PlatformCard extends StatelessWidget {
           ? Card(
               margin: margin ?? EdgeInsets.zero,
               elevation: 0,
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.secondarySystemBackground,
-                context,
-              ),
+              color: cupertinoBrightness == Brightness.light
+                  ? CupertinoColors.systemBackground
+                  : CupertinoColors.secondarySystemBackground
+                      .resolveFrom(context),
               shape: kPlatformCardBorder,
               semanticContainer: semanticContainer,
               child: child,

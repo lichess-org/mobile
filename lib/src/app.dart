@@ -30,6 +30,9 @@ class App extends ConsumerWidget {
         return CupertinoTheme(
           data: CupertinoThemeData(
             brightness: brightness,
+            scaffoldBackgroundColor: brightness == Brightness.light
+                ? CupertinoColors.systemGroupedBackground
+                : null,
           ),
           child: Material(child: child),
         );
