@@ -72,14 +72,9 @@ class BottomNavScaffold extends ConsumerWidget {
           ),
         );
       case TargetPlatform.iOS:
-        // we could use [CupertinoTabScaffold] here but we need [Scaffold] for
-        // showing the [SnackBar]
-        return Scaffold(
-          body: _TabSwitchingView(
-            currentTab: currentTab,
-            tabBuilder: _tabBuilder,
-          ),
-          bottomNavigationBar: CupertinoTabBar(
+        return CupertinoTabScaffold(
+          tabBuilder: _tabBuilder,
+          tabBar: CupertinoTabBar(
             currentIndex: currentTab.index,
             items: [
               for (final tab in tabs)
