@@ -7,5 +7,5 @@ Color? textShade(BuildContext context, double opacity) =>
 
 Color? dividerColor(BuildContext context) =>
     defaultTargetPlatform == TargetPlatform.iOS
-        ? CupertinoDynamicColor.resolve(CupertinoColors.separator, context)
+        ? CupertinoColors.separator.resolveFrom(context)
         : null;

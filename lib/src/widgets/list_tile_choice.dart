@@ -5,7 +5,7 @@ import 'platform.dart';
 
 import '../utils/style.dart';
 
-/// A choice picker component that displays a [Card] with [ListTile] as items.
+/// A platform agnostic choice picker component.
 class ListTileChoice<T extends Enum> extends StatelessWidget {
   const ListTileChoice({
     super.key,
@@ -24,14 +24,34 @@ class ListTileChoice<T extends Enum> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformCard(
-      child: Column(
-        children: ListTile.divideTiles(
-          color: dividerColor(context),
-          context: context,
-          tiles: choices.map((value) {
-            return PlatformListTile(
-              selected: selectedItem == value,
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return PlatformCard(
+          child: Column(
+            children: ListTile.divideTiles(
+              color: dividerColor(context),
+              context: context,
+              tiles: choices.map((value) {
+                return PlatformListTile(
+                  selected: selectedItem == value,
+                  trailing: selectedItem == value
+                      ? defaultTargetPlatform == TargetPlatform.iOS
+                          ? const Icon(CupertinoIcons.checkmark_alt)
+                          : const Icon(Icons.check)
+                      : null,
+                  title: titleBuilder(value),
+                  subtitle: subtitleBuilder?.call(value),
+                  onTap: () => onSelectedItemChanged(value),
+                );
+              }),
+            ).toList(growable: false),
+          ),
+        );
+      case TargetPlatform.iOS:
+        return CupertinoListSection.insetGrouped(
+          hasLeading: false,
+          children: choices.map((value) {
+            return CupertinoListTile.notched(
               trailing: selectedItem == value
                   ? defaultTargetPlatform == TargetPlatform.iOS
                       ? const Icon(CupertinoIcons.checkmark_alt)
@@ -41,9 +61,11 @@ class ListTileChoice<T extends Enum> extends StatelessWidget {
               subtitle: subtitleBuilder?.call(value),
               onTap: () => onSelectedItemChanged(value),
             );
-          }),
-        ).toList(growable: false),
-      ),
-    );
+          }).toList(growable: false),
+        );
+      default:
+        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        return const SizedBox.shrink();
+    }
   }
 }
