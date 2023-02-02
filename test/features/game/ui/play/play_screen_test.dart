@@ -19,8 +19,7 @@ import 'package:lichess_mobile/src/features/game/ui/board/playable_game_screen.d
 import 'package:lichess_mobile/src/features/game/model/time_control.dart';
 import 'package:lichess_mobile/src/features/game/model/computer_opponent.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/list_tile_choice.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/card.dart';
 import '../../../auth/data/fake_auth_repository.dart';
 import '../../../../utils.dart';
 
@@ -138,30 +137,36 @@ void main() {
 
         // loaded maia ratings
         expect(
-          find.widgetWithIcon(ListTileChoice<MaiaStrength>, LichessIcons.blitz),
+          find.widgetWithIcon(
+            CardChoicePicker<MaiaStrength>,
+            LichessIcons.blitz,
+          ),
           findsNWidgets(3),
         );
         expect(
-          find.widgetWithText(ListTileChoice<MaiaStrength>, '1541'),
-          findsOneWidget,
-        );
-        expect(
-          find.widgetWithIcon(ListTileChoice<MaiaStrength>, LichessIcons.rapid),
-          findsNWidgets(3),
-        );
-        expect(
-          find.widgetWithText(ListTileChoice<MaiaStrength>, '1477'),
+          find.widgetWithText(CardChoicePicker<MaiaStrength>, '1541'),
           findsOneWidget,
         );
         expect(
           find.widgetWithIcon(
-            ListTileChoice<MaiaStrength>,
+            CardChoicePicker<MaiaStrength>,
+            LichessIcons.rapid,
+          ),
+          findsNWidgets(3),
+        );
+        expect(
+          find.widgetWithText(CardChoicePicker<MaiaStrength>, '1477'),
+          findsOneWidget,
+        );
+        expect(
+          find.widgetWithIcon(
+            CardChoicePicker<MaiaStrength>,
             LichessIcons.classical,
           ),
           findsNWidgets(3),
         );
         expect(
-          find.widgetWithText(ListTileChoice<MaiaStrength>, '1421'),
+          find.widgetWithText(CardChoicePicker<MaiaStrength>, '1421'),
           findsOneWidget,
         );
 
@@ -171,7 +176,9 @@ void main() {
 
         expect(
           tester
-              .widget<ListTileChoice>(find.byType(ListTileChoice<MaiaStrength>))
+              .widget<CardChoicePicker>(
+                find.byType(CardChoicePicker<MaiaStrength>),
+              )
               .selectedItem,
           equals(MaiaStrength.maia5),
         );

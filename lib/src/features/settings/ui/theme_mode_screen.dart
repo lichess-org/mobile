@@ -4,7 +4,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/list_tile_choice.dart';
+import 'package:lichess_mobile/src/widgets/card.dart';
 
 import '../theme_mode_provider.dart';
 
@@ -58,7 +58,7 @@ class _Body extends ConsumerWidget {
       child: ListView(
         padding: kBodyPadding,
         children: [
-          ListTileChoice(
+          CardChoicePicker(
             choices: ThemeMode.values,
             selectedItem: themeMode,
             titleBuilder: (t) => Text(ThemeModeScreen.themeTitle(context, t)),
