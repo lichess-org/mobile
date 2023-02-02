@@ -216,85 +216,83 @@ class _BottomBar extends ConsumerWidget {
     final canGoForward = ref.watch(_canGoForwardProvider(steps));
     final canGoBackward = ref.watch(_canGoBackwardProvider);
 
-    return SizedBox(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            onPressed: () {
-              _showGameMenu(context, ref);
-            },
-            icon: const Icon(Icons.menu),
-          ),
-          Row(
-            children: [
-              IconButton(
-                key: const ValueKey('cursor-first'),
-                // TODO add translation
-                tooltip: 'First position',
-                onPressed: canGoBackward
-                    ? () {
-                        ref.read(_positionCursorProvider.notifier).state = 0;
-                      }
-                    : null,
-                icon: const Icon(LichessIcons.fast_backward),
-                iconSize: 20,
-              ),
-              IconButton(
-                key: const ValueKey('cursor-back'),
-                // TODO add translation
-                tooltip: 'Backward',
-                onPressed: canGoBackward
-                    ? () {
-                        ref
-                            .read(_positionCursorProvider.notifier)
-                            .update((state) {
-                          if (state != null) {
-                            state--;
-                          }
-                          return state;
-                        });
-                      }
-                    : null,
-                icon: const Icon(LichessIcons.step_backward),
-                iconSize: 20,
-              ),
-              IconButton(
-                key: const ValueKey('cursor-forward'),
-                // TODO add translation
-                tooltip: 'Forward',
-                onPressed: canGoForward
-                    ? () {
-                        ref
-                            .read(_positionCursorProvider.notifier)
-                            .update((state) {
-                          if (state != null) {
-                            state++;
-                          }
-                          return state;
-                        });
-                      }
-                    : null,
-                icon: const Icon(LichessIcons.step_forward),
-                iconSize: 20,
-              ),
-              IconButton(
-                key: const ValueKey('cursor-last'),
-                // TODO add translation
-                tooltip: 'Last position',
-                onPressed: canGoForward
-                    ? () {
-                        ref.read(_positionCursorProvider.notifier).state =
-                            steps!.length - 1;
-                      }
-                    : null,
-                icon: const Icon(LichessIcons.fast_forward),
-                iconSize: 20,
-              ),
-            ],
-          ),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          onPressed: () {
+            _showGameMenu(context, ref);
+          },
+          icon: const Icon(Icons.menu),
+        ),
+        Row(
+          children: [
+            IconButton(
+              key: const ValueKey('cursor-first'),
+              // TODO add translation
+              tooltip: 'First position',
+              onPressed: canGoBackward
+                  ? () {
+                      ref.read(_positionCursorProvider.notifier).state = 0;
+                    }
+                  : null,
+              icon: const Icon(LichessIcons.fast_backward),
+              iconSize: 20,
+            ),
+            IconButton(
+              key: const ValueKey('cursor-back'),
+              // TODO add translation
+              tooltip: 'Backward',
+              onPressed: canGoBackward
+                  ? () {
+                      ref
+                          .read(_positionCursorProvider.notifier)
+                          .update((state) {
+                        if (state != null) {
+                          state--;
+                        }
+                        return state;
+                      });
+                    }
+                  : null,
+              icon: const Icon(LichessIcons.step_backward),
+              iconSize: 20,
+            ),
+            IconButton(
+              key: const ValueKey('cursor-forward'),
+              // TODO add translation
+              tooltip: 'Forward',
+              onPressed: canGoForward
+                  ? () {
+                      ref
+                          .read(_positionCursorProvider.notifier)
+                          .update((state) {
+                        if (state != null) {
+                          state++;
+                        }
+                        return state;
+                      });
+                    }
+                  : null,
+              icon: const Icon(LichessIcons.step_forward),
+              iconSize: 20,
+            ),
+            IconButton(
+              key: const ValueKey('cursor-last'),
+              // TODO add translation
+              tooltip: 'Last position',
+              onPressed: canGoForward
+                  ? () {
+                      ref.read(_positionCursorProvider.notifier).state =
+                          steps!.length - 1;
+                    }
+                  : null,
+              icon: const Icon(LichessIcons.fast_forward),
+              iconSize: 20,
+            ),
+          ],
+        ),
+      ],
     );
   }
 
