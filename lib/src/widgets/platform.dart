@@ -129,6 +129,7 @@ class PlatformListTile extends StatelessWidget {
     this.dense,
     this.onTap,
     this.selected = false,
+    this.notched = true,
   });
 
   final Widget? leading;
@@ -139,10 +140,15 @@ class PlatformListTile extends StatelessWidget {
   /// only on iOS
   final Widget? additionalInfo;
 
+  /// only on iOS, will use the [CupertinoListTile.notched] constructor
+  final bool notched;
+
   // only on android
   final bool selected;
 
+  // only on android
   final bool? dense;
+
   final GestureTapCallback? onTap;
 
   @override
@@ -160,7 +166,7 @@ class PlatformListTile extends StatelessWidget {
         );
       case TargetPlatform.iOS:
         final theme = ListTileTheme.of(context);
-        return (dense == true || theme.dense == true)
+        return (notched == false || theme.dense == true)
             ? CupertinoListTile(
                 leading: leading,
                 title: title,

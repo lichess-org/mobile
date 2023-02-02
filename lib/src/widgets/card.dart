@@ -28,7 +28,7 @@ class CardListSection extends StatelessWidget {
   /// Only on android
   final bool showDivider;
 
-  /// Only on android, use it to set [ListTileTheme.dense] property.
+  /// Use it to set [ListTileTheme.dense] property.
   final bool dense;
 
   /// Show a header above the children rows. Will be wrapped in a [PlatformListTile].
@@ -66,26 +66,24 @@ class CardListSection extends StatelessWidget {
           ),
         );
       case TargetPlatform.iOS:
-        return CupertinoListSection.insetGrouped(
-          // to match android where default margin is here to show the drop shadow
-          margin: margin ?? EdgeInsets.zero,
-          hasLeading: hasLeading,
-          children: [
-            if (header != null)
-              CupertinoListTile.notched(
-                // see https://github.com/flutter/flutter/blob/7048ed95a5ad3e43d697e0c397464193991fc230/packages/flutter/lib/src/cupertino/list_tile.dart#L24 for base value
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14.0,
-                  vertical: 10.0,
+        return ListTileTheme(
+          dense: true,
+          child: CupertinoListSection.insetGrouped(
+            // to match android where default margin is here to show the drop shadow
+            margin: margin ?? EdgeInsets.zero,
+            hasLeading: hasLeading,
+            children: [
+              if (header != null)
+                CupertinoListTile(
+                  title: header!,
+                  trailing: onHeaderTap != null
+                      ? const Icon(CupertinoIcons.forward)
+                      : null,
+                  onTap: onHeaderTap,
                 ),
-                title: header!,
-                trailing: onHeaderTap != null
-                    ? const Icon(CupertinoIcons.forward)
-                    : null,
-                onTap: onHeaderTap,
-              ),
-            ...children,
-          ],
+              ...children,
+            ],
+          ),
         );
       default:
         assert(false, 'Unexpected platform $defaultTargetPlatform');
@@ -106,6 +104,7 @@ class CardChoicePicker<T extends Enum> extends StatelessWidget {
     required this.titleBuilder,
     this.subtitleBuilder,
     required this.onSelectedItemChanged,
+    this.notchedListTile = false,
   });
 
   final List<T> choices;
@@ -113,6 +112,9 @@ class CardChoicePicker<T extends Enum> extends StatelessWidget {
   final Widget Function(T choice) titleBuilder;
   final Widget Function(T choice)? subtitleBuilder;
   final void Function(T choice) onSelectedItemChanged;
+
+  /// On iOS only, use this to choose the constructor of [CupertinoListTile].
+  final bool notchedListTile;
 
   @override
   Widget build(BuildContext context) {
@@ -141,12 +143,17 @@ class CardChoicePicker<T extends Enum> extends StatelessWidget {
       case TargetPlatform.iOS:
         return CupertinoListSection.insetGrouped(
           hasLeading: false,
-          margin: EdgeInsets.zero,
+          margin: const EdgeInsets.symmetric(vertical: 10.0),
+          // Estimated. Only useful with [CupertinoListTile]
+          // With [CupertinoListTile.notched] the `hasLeading` is enough.
+          additionalDividerMargin: notchedListTile ? null : 6.0,
           children: choices.map((value) {
-            return CupertinoListTile.notched(
+            return (notchedListTile
+                ? CupertinoListTile.notched
+                : CupertinoListTile.new)(
               trailing: selectedItem == value
                   ? defaultTargetPlatform == TargetPlatform.iOS
-                      ? const Icon(CupertinoIcons.checkmark_alt)
+                      ? const Icon(CupertinoIcons.checkmark)
                       : const Icon(Icons.check)
                   : null,
               title: titleBuilder(value),

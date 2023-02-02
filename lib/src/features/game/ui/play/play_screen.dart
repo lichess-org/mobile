@@ -159,6 +159,7 @@ class PlayForm extends ConsumerWidget {
                         ),
                         const SizedBox(height: 10),
                         CardChoicePicker(
+                          notchedListTile: true,
                           choices: MaiaStrength.values,
                           selectedItem: maiaStrength,
                           titleBuilder: (ms) => Text(ms.name),
