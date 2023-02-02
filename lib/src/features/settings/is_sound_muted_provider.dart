@@ -1,6 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../settings/data/settings_repository.dart';
+import '../settings/data/settings_repository.dart';
+
+final isSoundMutedProvider =
+    StateNotifierProvider.autoDispose<IsSoundMutedNotifier, bool>((ref) {
+  final settingsRepository = ref.watch(settingsRepositoryProvider);
+  return IsSoundMutedNotifier(
+    settingsRepository,
+    initialValue: settingsRepository.isSoundMuted(),
+  );
+});
 
 class IsSoundMutedNotifier extends StateNotifier<bool> {
   IsSoundMutedNotifier(this.settings, {required bool initialValue})
@@ -15,12 +24,3 @@ class IsSoundMutedNotifier extends StateNotifier<bool> {
     }
   }
 }
-
-final isSoundMutedProvider =
-    StateNotifierProvider.autoDispose<IsSoundMutedNotifier, bool>((ref) {
-  final settingsRepository = ref.watch(settingsRepositoryProvider);
-  return IsSoundMutedNotifier(
-    settingsRepository,
-    initialValue: settingsRepository.isSoundMuted(),
-  );
-});

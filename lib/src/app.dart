@@ -6,7 +6,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'constants.dart';
 import 'common/lichess_colors.dart';
-import 'features/settings/ui/theme_mode_notifier.dart';
+import 'features/settings/theme_mode_provider.dart';
 import 'widgets/bottom_navigation.dart';
 
 class App extends ConsumerWidget {

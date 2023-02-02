@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list_tile_choice.dart';
 
-import './theme_mode_notifier.dart';
+import '../theme_mode_provider.dart';
 
 class ThemeModeScreen extends StatelessWidget {
   const ThemeModeScreen({super.key});

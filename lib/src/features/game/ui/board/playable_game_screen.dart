@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/features/settings/ui/is_sound_muted_notifier.dart';
+import 'package:lichess_mobile/src/features/settings/is_sound_muted_provider.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
 
 import '../../model/game_status.dart';

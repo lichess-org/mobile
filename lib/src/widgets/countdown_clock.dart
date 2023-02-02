@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 import 'dart:ui';
 
-import '../features/settings/ui/theme_mode_notifier.dart';
+import 'package:lichess_mobile/src/features/settings/theme_mode_provider.dart';
 
 const _kMaxClockTextScaleFactor = 1.94;
 

@@ -1,24 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../data/settings_repository.dart';
+import './data/settings_repository.dart';
 
-class ThemeModeNotifier extends StateNotifier<ThemeMode> {
-  ThemeModeNotifier(this.ref, ThemeMode initialThemeMode)
-      : super(initialThemeMode);
-
-  final Ref ref;
-
-  Future<void> changeTheme(ThemeMode theme) async {
-    final repository = ref.read(settingsRepositoryProvider);
-    final ok = await repository.setThemeMode(theme);
-    if (ok) {
-      state = theme;
-    }
-  }
-}
-
-// keep this always available by not using autoDispose
 final themeModeProvider =
     StateNotifierProvider<ThemeModeNotifier, ThemeMode>((ref) {
   final repository = ref.watch(settingsRepositoryProvider);
@@ -37,3 +21,18 @@ final selectedBrigthnessProvider = Provider<Brightness>((ref) {
       return WidgetsBinding.instance.platformDispatcher.platformBrightness;
   }
 });
+
+class ThemeModeNotifier extends StateNotifier<ThemeMode> {
+  ThemeModeNotifier(this.ref, ThemeMode initialThemeMode)
+      : super(initialThemeMode);
+
+  final Ref ref;
+
+  Future<void> changeTheme(ThemeMode theme) async {
+    final repository = ref.read(settingsRepositoryProvider);
+    final ok = await repository.setThemeMode(theme);
+    if (ok) {
+      state = theme;
+    }
+  }
+}
