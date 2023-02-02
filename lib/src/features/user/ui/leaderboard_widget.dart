@@ -30,24 +30,20 @@ class LeaderboardWidget extends ConsumerWidget {
         return CardListSection(
           dense: true,
           hasLeading: true,
-          children: [
-            PlatformListTile(
-              dense: false,
-              title: Text(
-                context.l10n.leaderboard,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+          header: Text(
+            context.l10n.leaderboard,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          onHeaderTap: () {
+            Navigator.of(context).push<void>(
+              MaterialPageRoute(
+                builder: (context) => LeaderboardScreen(
+                  leaderboard: data,
+                ),
               ),
-              onTap: () {
-                Navigator.of(context).push<void>(
-                  MaterialPageRoute(
-                    builder: (context) => LeaderboardScreen(
-                      leaderboard: data,
-                    ),
-                  ),
-                );
-              },
-              trailing: const Icon(CupertinoIcons.forward),
-            ),
+            );
+          },
+          children: [
             LeaderboardListTile(
               user: data.bullet.first,
               perfIcon: LichessIcons.bullet,

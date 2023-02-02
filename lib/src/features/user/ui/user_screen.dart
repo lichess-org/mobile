@@ -107,7 +107,12 @@ class UserScreenBody extends StatelessWidget {
   });
 
   final User user;
+
+  /// Should show the player title on top of the body.
   final bool showPlayerTitle;
+
+  /// If set to `true` this widget will return a [SliverPadding] instead of a
+  /// [ListView].
   final bool inCustomScrollView;
 
   @override
