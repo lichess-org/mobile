@@ -43,7 +43,7 @@ class FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  FutureResult<User> getAccount() async {
+  FutureResult<User> getAccount({String? bearerToken}) async {
     await Future<void>.delayed(const Duration(milliseconds: 5));
     return Result.value(fakeUser);
   }

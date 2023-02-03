@@ -79,10 +79,13 @@ class AuthRepository {
   User? get currentAccount => _authState.value;
   bool get isAuthenticated => _authState.value != null;
 
-  Future<void> init() {
-    return getAccount().forEach((account) {
-      _authState.value = account;
-    });
+  Future<void> init() async {
+    final token = await _storage.read(key: kOAuthTokenStorageKey);
+    if (token != null) {
+      return getAccount(bearerToken: token).forEach((account) {
+        _authState.value = account;
+      });
+    }
   }
 
   FutureResult<void> signIn() {
@@ -139,16 +142,19 @@ class AuthRepository {
         return ApiRequestException();
       });
 
-  FutureResult<User> getAccount() {
+  FutureResult<User> getAccount({String? bearerToken}) {
     return FutureResultExtension.guard(() async {
-      final token = await _storage.read(key: kOAuthTokenStorageKey);
+      final token =
+          bearerToken ?? await _storage.read(key: kOAuthTokenStorageKey);
+      if (token == null) {
+        throw Exception('/api/account requires a token');
+      }
+
       final uri = Uri.parse('$kLichessHost/api/account');
       final headers = {
         'user-agent': ApiClient.userAgent(_info, currentAccount),
       };
-      if (token != null) {
-        headers['Authorization'] = 'Bearer $token';
-      }
+      headers['Authorization'] = 'Bearer $token';
       _log.info('GET $uri $headers');
       final response = await _client.get(uri, headers: headers);
       final json = jsonDecode(response.body) as Map<String, dynamic>;
