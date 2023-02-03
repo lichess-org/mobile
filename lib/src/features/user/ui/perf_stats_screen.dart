@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
@@ -16,7 +17,6 @@ import 'package:lichess_mobile/src/features/game/model/game.dart';
 import 'package:lichess_mobile/src/features/game/ui/board/archived_game_screen.dart';
 import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
-import 'package:lichess_mobile/src/utils/async_value.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/style.dart';
@@ -32,9 +32,9 @@ final perfStatsProvider = FutureProvider.autoDispose
   );
 });
 
-// that one can be cached forever
+// that one can be cached forever, thus no .autoDispose
 final perfGamesProvider =
-    FutureProvider.family<List<ArchivedGameData>, List<GameId>>((ref, ids) {
+    FutureProvider.family<List<ArchivedGameData>, ISet<GameId>>((ref, ids) {
   final gameRepo = ref.watch(gameRepositoryProvider);
   return Result.release(gameRepo.getGamesByIds(ids));
 });
@@ -658,13 +658,6 @@ class _GameListWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameIds = games.map((g) => g.gameId).toList();
-
-    ref.listen<AsyncValue<List<ArchivedGameData>>>(perfGamesProvider(gameIds),
-        (_, state) {
-      state.showSnackbarOnError(context);
-    });
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: ListTile.divideTiles(
@@ -674,6 +667,7 @@ class _GameListWidget extends ConsumerWidget {
           for (final game in games)
             PlatformListTile(
               onTap: () {
+                final gameIds = ISet(games.map((g) => g.gameId));
                 ref.read(perfGamesProvider(gameIds).future).then((list) {
                   final gameData =
                       list.firstWhereOrNull((g) => g.id == game.gameId);

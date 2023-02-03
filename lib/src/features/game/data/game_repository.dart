@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/errors.dart';
@@ -55,7 +56,7 @@ class GameRepository {
     ).flatMap(_decodeNdJsonGames);
   }
 
-  FutureResult<List<ArchivedGameData>> getGamesByIds(List<GameId> ids) {
+  FutureResult<List<ArchivedGameData>> getGamesByIds(ISet<GameId> ids) {
     return apiClient
         .post(
           Uri.parse(
