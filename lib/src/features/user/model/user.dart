@@ -35,7 +35,7 @@ class User with _$User {
 
   factory User.fromPick(RequiredPick pick) {
     final receivedPerfsMap =
-        pick('perfs').asMapOrThrow<String, Map<String, dynamic>>();
+        pick('perfs').asMapOrEmpty<String, Map<String, dynamic>>();
     return User(
       id: pick('id').asUserIdOrThrow(),
       username: pick('username').asStringOrThrow(),

@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:http/http.dart' as http;
+import 'package:async/async.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -77,13 +80,13 @@ class AuthRepository {
   bool get isAuthenticated => _authState.value != null;
 
   Future<void> init() {
-    return getAccount().then((account) {
+    return getAccount().forEach((account) {
       _authState.value = account;
     });
   }
 
-  Future<void> signIn() async {
-    try {
+  FutureResult<void> signIn() {
+    final future = (() async {
       final result = await _appAuth.authorizeAndExchangeCode(
         AuthorizationTokenRequest(
           kLichessClientId,
@@ -103,46 +106,70 @@ class AuthRepository {
           value: result.accessToken,
         );
       } else {
-        _log.severe('FlutterAppAuth.authorizeAndExchangeCode null result');
-        throw ApiRequestException();
+        throw Exception('FlutterAppAuth.authorizeAndExchangeCode null result');
       }
-    } catch (error, trace) {
-      _log.severe('signIn error', error, trace);
-      throw GenericIOException();
-    }
+    })();
 
-    _authState.value = await getAccount();
+    return Result.capture(future)
+        .mapError((error, trace) {
+          _log.severe('signIn error', error, trace);
+          return ApiRequestException();
+        })
+        .flatMap((_) => getAccount())
+        .map((account) {
+          _authState.value = account;
+        });
   }
 
-  Future<void> signOut() async {
+  FutureResult<void> signOut() async {
     final token = await _storage.read(key: kOAuthTokenStorageKey);
     final headers = {
-      'Authorization': 'Bearer $token',
       'user-agent': ApiClient.userAgent(_info, currentAccount),
     };
+    if (token != null) {
+      headers['Authorization'] = 'Bearer $token';
+    }
     final uri = Uri.parse('$kLichessHost/api/token');
     _log.info('DELETE $uri $headers');
-    return _client.delete(uri, headers: headers).then((_) async {
-      await _storage.delete(key: kOAuthTokenStorageKey);
-      _authState.value = null;
+    return Result.capture(
+      _client.delete(uri, headers: headers).then((_) async {
+        await _storage.delete(key: kOAuthTokenStorageKey);
+        _authState.value = null;
+      }),
+    ).mapError((error, trace) {
+      _log.severe('signOut error', error, trace);
+      return ApiRequestException();
     });
   }
 
-  Future<User> getAccount() async {
+  FutureResult<User> getAccount() async {
     final token = await _storage.read(key: kOAuthTokenStorageKey);
     final uri = Uri.parse('$kLichessHost/api/account');
     final headers = {
-      'Authorization': 'Bearer $token',
       'user-agent': ApiClient.userAgent(_info, currentAccount),
     };
+    if (token != null) {
+      headers['Authorization'] = 'Bearer $token';
+    }
     _log.info('GET $uri $headers');
-    return _client.get(uri, headers: headers).then(
-          (response) => readJsonObject(
-            response.body,
-            mapper: User.fromJson,
-            logger: _log,
-          ).asFuture,
-        );
+    return Result.capture(
+      _client.get(uri, headers: headers).then((response) async {
+        final json = jsonDecode(response.body) as Map<String, dynamic>;
+        // server returns {"error":"No such token"} in case of wrong token
+        if (json['error'] != null) {
+          await _storage.delete(key: kOAuthTokenStorageKey);
+          throw Exception('Server does not recognize token: $token');
+        }
+        return readJsonObject(
+          response.body,
+          mapper: User.fromJson,
+          logger: _log,
+        ).asFuture;
+      }),
+    ).mapError((error, trace) {
+      _log.severe('getAccount error', error, trace);
+      return ApiRequestException();
+    });
   }
 
   void dispose() {
