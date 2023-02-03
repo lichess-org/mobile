@@ -797,8 +797,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: ba696e9aeb7fc85b5b5c1d022799ce933399e66b
-      resolved-ref: ba696e9aeb7fc85b5b5c1d022799ce933399e66b
+      ref: b2c283a9554dab416da89e1334b842b87257002d
+      resolved-ref: b2c283a9554dab416da89e1334b842b87257002d
       url: "https://github.com/veloce/result_extensions.git"
     source: git
     version: "0.1.0"

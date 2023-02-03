@@ -121,52 +121,48 @@ class AuthRepository {
         });
   }
 
-  FutureResult<void> signOut() async {
-    final token = await _storage.read(key: kOAuthTokenStorageKey);
-    final headers = {
-      'user-agent': ApiClient.userAgent(_info, currentAccount),
-    };
-    if (token != null) {
-      headers['Authorization'] = 'Bearer $token';
-    }
-    final uri = Uri.parse('$kLichessHost/api/token');
-    _log.info('DELETE $uri $headers');
-    return Result.capture(
-      _client.delete(uri, headers: headers).then((_) async {
+  FutureResult<void> signOut() => FutureResultExtension.guard(() async {
+        final token = await _storage.read(key: kOAuthTokenStorageKey);
+        final headers = {
+          'user-agent': ApiClient.userAgent(_info, currentAccount),
+        };
+        if (token != null) {
+          headers['Authorization'] = 'Bearer $token';
+        }
+        final uri = Uri.parse('$kLichessHost/api/token');
+        _log.info('DELETE $uri $headers');
+        await _client.delete(uri, headers: headers);
         await _storage.delete(key: kOAuthTokenStorageKey);
         _authState.value = null;
-      }),
-    ).mapError((error, trace) {
-      _log.severe('signOut error', error, trace);
-      return ApiRequestException();
-    });
-  }
+      }).mapError((error, trace) {
+        _log.severe('signOut error', error, trace);
+        return ApiRequestException();
+      });
 
-  FutureResult<User> getAccount() async {
-    final token = await _storage.read(key: kOAuthTokenStorageKey);
-    final uri = Uri.parse('$kLichessHost/api/account');
-    final headers = {
-      'user-agent': ApiClient.userAgent(_info, currentAccount),
-    };
-    if (token != null) {
-      headers['Authorization'] = 'Bearer $token';
-    }
-    _log.info('GET $uri $headers');
-    return Result.capture(
-      _client.get(uri, headers: headers).then((response) async {
-        final json = jsonDecode(response.body) as Map<String, dynamic>;
-        // server returns {"error":"No such token"} in case of wrong token
-        if (json['error'] != null) {
-          await _storage.delete(key: kOAuthTokenStorageKey);
-          throw Exception('Server does not recognize token: $token');
-        }
-        return readJsonObject(
-          response.body,
-          mapper: User.fromJson,
-          logger: _log,
-        ).asFuture;
-      }),
-    ).mapError((error, trace) {
+  FutureResult<User> getAccount() {
+    return FutureResultExtension.guard(() async {
+      final token = await _storage.read(key: kOAuthTokenStorageKey);
+      final uri = Uri.parse('$kLichessHost/api/account');
+      final headers = {
+        'user-agent': ApiClient.userAgent(_info, currentAccount),
+      };
+      if (token != null) {
+        headers['Authorization'] = 'Bearer $token';
+      }
+      _log.info('GET $uri $headers');
+      final response = await _client.get(uri, headers: headers);
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
+      // server returns {"error":"No such token"} in case of wrong token
+      if (json['error'] != null) {
+        await _storage.delete(key: kOAuthTokenStorageKey);
+        throw Exception('Server does not recognize token: $token');
+      }
+      return readJsonObject(
+        response.body,
+        mapper: User.fromJson,
+        logger: _log,
+      ).asFuture;
+    }).mapError((error, trace) {
       _log.severe('getAccount error', error, trace);
       return ApiRequestException();
     });

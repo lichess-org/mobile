@@ -61,7 +61,7 @@ dependencies:
   result_extensions:
     git:
       url: https://github.com/veloce/result_extensions.git
-      ref: ba696e9aeb7fc85b5b5c1d022799ce933399e66b
+      ref: b2c283a9554dab416da89e1334b842b87257002d
   async: ^2.10.0
   package_info_plus: ^3.0.2
 
