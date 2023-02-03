@@ -29,6 +29,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
+            ...defaultProviderOverrides,
             authRepositoryProvider.overrideWithValue(FakeAuthRepository(null)),
             selectedBrigthnessProvider.overrideWithValue(Brightness.dark),
           ],

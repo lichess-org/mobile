@@ -1,13 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
-import 'package:async/async.dart';
-import 'package:result_extensions/result_extensions.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/http.dart';
+import 'package:lichess_mobile/src/common/package_info.dart';
 import 'package:lichess_mobile/src/utils/in_memory_store.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -15,6 +16,33 @@ import '../../user/model/user.dart';
 
 const redirectUri = 'org.lichess.mobile://login-callback';
 const oauthScopes = ['board:play'];
+
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  const auth = FlutterAppAuth();
+  const storage = FlutterSecureStorage();
+  final info = ref.watch(packageInfoProvider);
+  final repo = AuthRepository(
+    info,
+    http.Client(),
+    auth,
+    storage,
+    Logger('AuthRepository'),
+  );
+  ref.onDispose(() => repo.dispose());
+  return repo;
+});
+
+/// A provider that gets current authenticated user.
+final currentAccountProvider = Provider<User?>((ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return authRepository.currentAccount;
+});
+
+/// A provider that stream the changes of the authenticated user.
+final authStateChangesProvider = StreamProvider.autoDispose<User?>((ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return authRepository.authStateChanges();
+});
 
 class AuthError {
   AuthError(this.message, this.stackTrace);
@@ -25,16 +53,19 @@ class AuthError {
 
 class AuthRepository {
   AuthRepository(
-    ApiClient apiClient,
+    PackageInfo info,
+    http.Client client,
     FlutterAppAuth appAuth,
     FlutterSecureStorage storage,
     Logger log,
-  )   : _apiClient = apiClient,
+  )   : _info = info,
+        _client = client,
         _appAuth = appAuth,
         _storage = storage,
         _log = log;
 
-  final ApiClient _apiClient;
+  final PackageInfo _info;
+  final http.Client _client;
   final Logger _log;
   final FlutterAppAuth _appAuth;
   final FlutterSecureStorage _storage;
@@ -46,13 +77,13 @@ class AuthRepository {
   bool get isAuthenticated => _authState.value != null;
 
   Future<void> init() {
-    return getAccount().forEach((account) {
+    return getAccount().then((account) {
       _authState.value = account;
     });
   }
 
-  FutureResult<void> signIn() {
-    final future = (() async {
+  Future<void> signIn() async {
+    try {
       final result = await _appAuth.authorizeAndExchangeCode(
         AuthorizationTokenRequest(
           kLichessClientId,
@@ -72,59 +103,50 @@ class AuthRepository {
           value: result.accessToken,
         );
       } else {
-        throw Exception('FlutterAppAuth.authorizeAndExchangeCode null result');
+        _log.severe('FlutterAppAuth.authorizeAndExchangeCode null result');
+        throw ApiRequestException();
       }
-    })();
+    } catch (error, trace) {
+      _log.severe('signIn error', error, trace);
+      throw GenericIOException();
+    }
 
-    return Result.capture(future)
-        .mapError((error, trace) {
-          _log.severe('signIn error', error, trace);
-          return GenericIOException();
-        })
-        .flatMap((_) => getAccount())
-        .map((account) {
-          _authState.value = account;
-        });
+    _authState.value = await getAccount();
   }
 
-  FutureResult<void> signOut() {
-    return _apiClient.delete(Uri.parse('$kLichessHost/api/token')).then(
-          (result) => result.map((_) async {
-            await _storage.delete(key: kOAuthTokenStorageKey);
-            _authState.value = null;
-          }),
-        );
+  Future<void> signOut() async {
+    final token = await _storage.read(key: kOAuthTokenStorageKey);
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'user-agent': ApiClient.userAgent(_info, currentAccount),
+    };
+    final uri = Uri.parse('$kLichessHost/api/token');
+    _log.info('DELETE $uri $headers');
+    return _client.delete(uri, headers: headers).then((_) async {
+      await _storage.delete(key: kOAuthTokenStorageKey);
+      _authState.value = null;
+    });
   }
 
-  FutureResult<User> getAccount() {
-    return _apiClient.get(Uri.parse('$kLichessHost/api/account')).then(
-          (result) => result.flatMap(
-            (response) => readJsonObject(
-              response.body,
-              mapper: User.fromJson,
-              logger: _log,
-            ),
-          ),
+  Future<User> getAccount() async {
+    final token = await _storage.read(key: kOAuthTokenStorageKey);
+    final uri = Uri.parse('$kLichessHost/api/account');
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'user-agent': ApiClient.userAgent(_info, currentAccount),
+    };
+    _log.info('GET $uri $headers');
+    return _client.get(uri, headers: headers).then(
+          (response) => readJsonObject(
+            response.body,
+            mapper: User.fromJson,
+            logger: _log,
+          ).asFuture,
         );
   }
 
   void dispose() {
     _authState.close();
-    _apiClient.close();
+    _client.close();
   }
 }
-
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  const auth = FlutterAppAuth();
-  const storage = FlutterSecureStorage();
-  final apiClient = ref.watch(apiClientProvider);
-  final repo =
-      AuthRepository(apiClient, auth, storage, Logger('AuthRepository'));
-  ref.onDispose(() => repo.dispose());
-  return repo;
-});
-
-final authStateChangesProvider = StreamProvider.autoDispose<User?>((ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  return authRepository.authStateChanges();
-});

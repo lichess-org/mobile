@@ -3,11 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:logging/logging.dart';
 
 import 'src/app.dart';
 import 'src/common/sound.dart';
 import 'src/common/shared_preferences.dart';
+import 'src/common/package_info.dart';
 import 'src/features/auth/data/auth_repository.dart';
 
 void main() async {
@@ -23,10 +25,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final sharedPreferences = await SharedPreferences.getInstance();
+  final packageInfo = await PackageInfo.fromPlatform();
 
   final container = ProviderContainer(
     overrides: [
       sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+      packageInfoProvider.overrideWithValue(packageInfo),
     ],
     observers: [
       ProviderLogger(),

@@ -73,6 +73,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
+              ...defaultProviderOverrides,
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
               authRepositoryProvider
                   .overrideWithValue(FakeAuthRepository(fakeUser)),
@@ -113,6 +114,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
+              ...defaultProviderOverrides,
               authRepositoryProvider
                   .overrideWithValue(FakeAuthRepository(fakeUser)),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
@@ -211,6 +213,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
+              ...defaultProviderOverrides,
               authRepositoryProvider
                   .overrideWithValue(FakeAuthRepository(fakeUser)),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
@@ -336,6 +339,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
+              ...defaultProviderOverrides,
               authRepositoryProvider
                   .overrideWithValue(FakeAuthRepository(fakeUser)),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),

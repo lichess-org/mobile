@@ -1,14 +1,19 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:async/async.dart';
 import 'package:logging/logging.dart';
 import 'package:http/http.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:http/retry.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
+import 'package:lichess_mobile/src/features/user/model/user.dart';
 import '../constants.dart';
-import 'errors.dart';
+import './package_info.dart';
+import './errors.dart';
 
 const defaultRetries = [
   Duration(milliseconds: 200),
@@ -17,6 +22,23 @@ const defaultRetries = [
   Duration(milliseconds: 800),
   Duration(milliseconds: 1300),
 ];
+
+final apiClientProvider = Provider<ApiClient>((ref) {
+  const storage = FlutterSecureStorage();
+  final packageInfo = ref.watch(packageInfoProvider);
+  final authClient = AuthClient(
+    ref,
+    storage,
+    packageInfo,
+    Client(),
+    Logger('AuthClient'),
+  );
+  final apiClient = ApiClient(Logger('ApiClient'), authClient);
+  ref.onDispose(() {
+    apiClient.close();
+  });
+  return apiClient;
+});
 
 /// Convenient client that captures and returns API errors.
 class ApiClient {
@@ -32,6 +54,10 @@ class ApiClient {
   final Logger _log;
   final Client _client;
   final RetryClient _retryClient;
+
+  /// Makes app user agent
+  static String userAgent(PackageInfo info, User? user) =>
+      '${info.appName}/${info.version} $defaultTargetPlatform ${user != null ? user.id : 'anon.'}';
 
   FutureResult<Response> get(
     Uri url, {
@@ -121,10 +147,13 @@ class ApiClient {
 
 /// Http client that sets the Authorization header when a token has been stored.
 class AuthClient extends BaseClient {
-  final FlutterSecureStorage storage;
-  final Client _inner;
+  AuthClient(this.ref, this.storage, this._info, this._inner, this._logger);
 
-  AuthClient(this.storage, this._inner);
+  final Ref ref;
+  final FlutterSecureStorage storage;
+  final PackageInfo _info;
+  final Client _inner;
+  final Logger _logger;
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
@@ -133,16 +162,12 @@ class AuthClient extends BaseClient {
       request.headers['Authorization'] = 'Bearer $token';
     }
 
+    final user = ref.read(currentAccountProvider);
+
+    request.headers['user-agent'] = ApiClient.userAgent(_info, user);
+
+    _logger.info('${request.method} ${request.url} ${request.headers}');
+
     return _inner.send(request);
   }
 }
-
-final apiClientProvider = Provider<ApiClient>((ref) {
-  const storage = FlutterSecureStorage();
-  final authClient = AuthClient(storage, Client());
-  final apiClient = ApiClient(Logger('ApiClient'), authClient);
-  ref.onDispose(() {
-    apiClient.close();
-  });
-  return apiClient;
-});

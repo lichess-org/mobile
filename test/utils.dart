@@ -3,9 +3,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:chessground/chessground.dart' as cg;
+import 'package:package_info_plus/package_info_plus.dart';
+
+import 'package:lichess_mobile/src/common/package_info.dart';
+
+final List<Override> defaultProviderOverrides = List.unmodifiable([
+  packageInfoProvider.overrideWithValue(
+    PackageInfo(
+      appName: 'lichess_mobile_test',
+      version: 'test',
+      buildNumber: '0.0.0',
+      packageName: 'lichess_mobile_test',
+    ),
+  ),
+]);
 
 const double _kTestScreenWidth = 390.0;
 const double _kTestScreenHeight = 844.0;

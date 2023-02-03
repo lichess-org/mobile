@@ -58,6 +58,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
+              ...defaultProviderOverrides,
               authRepositoryProvider
                   .overrideWithValue(FakeAuthRepository(testUser)),
               apiClientProvider
@@ -103,6 +104,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
+              ...defaultProviderOverrides,
               authRepositoryProvider
                   .overrideWithValue(FakeAuthRepository(testUser)),
               apiClientProvider

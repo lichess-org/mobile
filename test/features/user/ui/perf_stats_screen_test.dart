@@ -54,6 +54,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
+              ...defaultProviderOverrides,
               // Don't need a logged in user to test this screen.
               authRepositoryProvider
                   .overrideWithValue(FakeAuthRepository(null)),
@@ -97,6 +98,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
+              ...defaultProviderOverrides,
               // Don't need a logged in user to test this screen.
               authRepositoryProvider
                   .overrideWithValue(FakeAuthRepository(null)),

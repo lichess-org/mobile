@@ -1,6 +1,3 @@
-import 'package:async/async.dart';
-import 'package:result_extensions/result_extensions.dart';
-
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/in_memory_store.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
@@ -30,23 +27,21 @@ class FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  FutureResult<void> signIn() async {
+  Future<void> signIn() async {
     await Future<void>.delayed(const Duration(milliseconds: 5));
     _authState.value = fakeUser;
-    return Result.value(null);
   }
 
   @override
-  FutureResult<void> signOut() async {
+  Future<void> signOut() async {
     await Future<void>.delayed(const Duration(milliseconds: 5));
     _authState.value = null;
-    return Result.value(null);
   }
 
   @override
-  FutureResult<User> getAccount() async {
+  Future<User> getAccount() async {
     await Future<void>.delayed(const Duration(milliseconds: 5));
-    return Result.value(fakeUser);
+    return fakeUser;
   }
 
   @override

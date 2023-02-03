@@ -67,6 +67,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
+              ...defaultProviderOverrides,
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
               apiClientProvider
                   .overrideWithValue(ApiClient(mockLogger, mockClient)),
@@ -143,6 +144,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
+            ...defaultProviderOverrides,
             sharedPreferencesProvider.overrideWithValue(sharedPreferences),
             apiClientProvider
                 .overrideWithValue(ApiClient(mockLogger, mockClient)),

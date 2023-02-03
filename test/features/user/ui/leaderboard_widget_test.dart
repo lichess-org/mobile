@@ -43,6 +43,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
+              ...defaultProviderOverrides,
               apiClientProvider
                   .overrideWithValue(ApiClient(mockLogger, mockClient))
             ],
