@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:logging/logging.dart';
 import 'package:http/http.dart' as http;
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -158,7 +159,7 @@ final testUser = User(
   username: testUserName,
   createdAt: DateTime.now(),
   seenAt: DateTime.now(),
-  perfs: {
+  perfs: IMap(const {
     Perf.ultraBullet: _fakePerf,
     Perf.bullet: _fakePerf,
     Perf.blitz: _fakePerf,
@@ -175,7 +176,7 @@ final testUser = User(
     Perf.crazyhouse: _fakePerf,
     Perf.puzzle: _fakePerf,
     Perf.storm: _fakePerf,
-  },
+  }),
 );
 
 const _fakePerf = UserPerf(

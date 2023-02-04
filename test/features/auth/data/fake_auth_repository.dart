@@ -1,5 +1,7 @@
 import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/in_memory_store.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
@@ -57,7 +59,7 @@ final fakeUser = User(
   username: 'test',
   createdAt: DateTime.now(),
   seenAt: DateTime.now(),
-  perfs: {
+  perfs: IMap(const {
     Perf.ultraBullet: _fakePerf,
     Perf.bullet: _fakePerf,
     Perf.blitz: _fakePerf,
@@ -74,7 +76,7 @@ final fakeUser = User(
     Perf.crazyhouse: _fakePerf,
     Perf.puzzle: _fakePerf,
     Perf.storm: _fakePerf,
-  },
+  }),
 );
 
 const _fakePerf = UserPerf(

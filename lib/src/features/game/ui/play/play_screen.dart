@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:tuple/tuple.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart'
+    hide Tuple2;
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/models.dart';
@@ -33,7 +35,11 @@ final maiaBotsProvider =
     userRepo.getUser(const UserId('maia5')),
     userRepo.getUser(const UserId('maia9')),
   ]).then(Result.flattenAll);
-  final maiaStatuses = userRepo.getUsersStatus(['maia1', 'maia5', 'maia9']);
+  final maiaStatuses = userRepo.getUsersStatus(
+    ISet(
+      {const UserId('maia1'), const UserId('maia5'), const UserId('maia9')},
+    ),
+  );
   final result = maiaBots.flatMap(
     (bots) => maiaStatuses.map(
       (statuses) => bots

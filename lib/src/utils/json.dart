@@ -3,6 +3,7 @@ import 'package:async/async.dart';
 import 'package:logging/logging.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/models.dart';
@@ -312,7 +313,7 @@ Result<T> readJsonObject<T>(
       return mapper(obj);
     });
 
-Result<List<T>> readJsonListOfObjects<T>(
+Result<IList<T>> readJsonListOfObjects<T>(
   String json, {
   required Mapper<T> mapper,
   Logger? logger,
@@ -323,11 +324,13 @@ Result<List<T>> readJsonListOfObjects<T>(
         logger?.severe('Received json is not a list');
         throw DataFormatException();
       }
-      return list.map((e) {
-        if (e is! Map<String, dynamic>) {
-          logger?.severe('Could not read json object as $T');
-          throw DataFormatException();
-        }
-        return mapper(e);
-      }).toList();
+      return IList(
+        list.map((e) {
+          if (e is! Map<String, dynamic>) {
+            logger?.severe('Could not read json object as $T');
+            throw DataFormatException();
+          }
+          return mapper(e);
+        }),
+      );
     });

@@ -34,7 +34,7 @@ final perfStatsProvider = FutureProvider.autoDispose
 
 // that one can be cached forever, thus no .autoDispose
 final perfGamesProvider =
-    FutureProvider.family<List<ArchivedGameData>, ISet<GameId>>((ref, ids) {
+    FutureProvider.family<IList<ArchivedGameData>, ISet<GameId>>((ref, ids) {
   final gameRepo = ref.watch(gameRepositoryProvider);
   return Result.release(gameRepo.getGamesByIds(ids));
 });
@@ -646,7 +646,7 @@ class _StreakWidget extends StatelessWidget {
 }
 
 class _GameListWidget extends ConsumerWidget {
-  final List<UserPerfGame> games;
+  final IList<UserPerfGame> games;
   final Perf perf;
   final User user;
 

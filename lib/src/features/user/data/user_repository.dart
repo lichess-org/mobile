@@ -2,6 +2,7 @@ import 'package:logging/logging.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/common/models.dart';
@@ -50,7 +51,7 @@ class UserRepository {
         );
   }
 
-  FutureResult<List<UserStatus>> getUsersStatus(List<String> ids) {
+  FutureResult<IList<UserStatus>> getUsersStatus(ISet<UserId> ids) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'))
         .then(
@@ -113,9 +114,11 @@ UserPerfStats _userPerfStatsFromPick(RequiredPick pick) {
     maxPlayStreak: playStreak('nb', 'max').letOrNull(_userStreakFromPick),
     curTimeStreak: playStreak('time', 'cur').letOrNull(_userStreakFromPick),
     maxTimeStreak: playStreak('time', 'max').letOrNull(_userStreakFromPick),
-    worstLosses:
-        stat('worstLosses', 'results').asListOrNull(_userPerfGameFromPick),
-    bestWins: stat('bestWins', 'results').asListOrNull(_userPerfGameFromPick),
+    worstLosses: IList(
+      stat('worstLosses', 'results').asListOrNull(_userPerfGameFromPick),
+    ),
+    bestWins:
+        IList(stat('bestWins', 'results').asListOrNull(_userPerfGameFromPick)),
   );
 }
 

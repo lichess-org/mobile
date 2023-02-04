@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/features/auth/ui/auth_actions_notifier.dart';
@@ -17,7 +18,7 @@ import '../../auth/data/auth_repository.dart';
 import 'user_screen.dart';
 
 final recentGamesProvider = FutureProvider.autoDispose
-    .family<List<ArchivedGameData>, UserId>((ref, userId) {
+    .family<IList<ArchivedGameData>, UserId>((ref, userId) {
   final repo = ref.watch(gameRepositoryProvider);
   return Result.release(repo.getUserGames(userId));
 });

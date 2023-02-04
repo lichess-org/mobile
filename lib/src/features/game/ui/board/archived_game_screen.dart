@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:chessground/chessground.dart' as cg;
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
@@ -193,11 +194,11 @@ class _BoardBody extends ConsumerWidget {
 }
 
 final _canGoForwardProvider =
-    Provider.autoDispose.family<bool, List<GameStep>?>((ref, steps) {
+    Provider.autoDispose.family<bool, int?>((ref, stepsLength) {
   final positionCursor = ref.watch(_positionCursorProvider);
-  return steps != null &&
+  return stepsLength != null &&
       positionCursor != null &&
-      positionCursor < steps.length - 1;
+      positionCursor < stepsLength - 1;
 });
 
 final _canGoBackwardProvider = Provider.autoDispose<bool>((ref) {
@@ -209,11 +210,11 @@ class _BottomBar extends ConsumerWidget {
   const _BottomBar({required this.gameData, this.steps});
 
   final ArchivedGameData gameData;
-  final List<GameStep>? steps;
+  final IList<GameStep>? steps;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final canGoForward = ref.watch(_canGoForwardProvider(steps));
+    final canGoForward = ref.watch(_canGoForwardProvider(steps?.length));
     final canGoBackward = ref.watch(_canGoBackwardProvider);
 
     return Row(

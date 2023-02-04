@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/features/user/model/user.dart';
@@ -51,8 +52,8 @@ class ArchivedGame with _$ArchivedGame {
 
   const factory ArchivedGame({
     required ArchivedGameData data,
-    required List<GameStep> steps,
-    // List<MoveAnalysis>? analysis,
+    required IList<GameStep> steps,
+    // IList<MoveAnalysis>? analysis,
     ClockData? clock,
   }) = _ArchivedGame;
 

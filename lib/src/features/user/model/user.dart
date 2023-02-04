@@ -1,5 +1,6 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
@@ -25,7 +26,7 @@ class User with _$User {
     bool? isPatron,
     required DateTime createdAt,
     required DateTime seenAt,
-    required Map<Perf, UserPerf> perfs,
+    required IMap<Perf, UserPerf> perfs,
     PlayTime? playTime,
     Profile? profile,
   }) = _User;
@@ -45,10 +46,10 @@ class User with _$User {
       seenAt: pick('seenAt').asDateTimeFromMillisecondsOrThrow(),
       playTime: pick('playTime').letOrNull(PlayTime.fromPick),
       profile: pick('profile').letOrNull(Profile.fromPick),
-      perfs: Map.unmodifiable({
+      perfs: IMap({
         for (final entry in receivedPerfsMap.entries)
           if (perfNameMap.containsKey(entry.key) && entry.key != 'storm')
-            perfNameMap.get(entry.key): UserPerf.fromJson(entry.value)
+            perfNameMap.get(entry.key)!: UserPerf.fromJson(entry.value)
       }),
     );
   }
@@ -186,8 +187,8 @@ class UserPerfStats with _$UserPerfStats {
     UserStreak? maxPlayStreak,
     UserStreak? curTimeStreak,
     UserStreak? maxTimeStreak,
-    List<UserPerfGame>? worstLosses,
-    List<UserPerfGame>? bestWins,
+    IList<UserPerfGame>? worstLosses,
+    IList<UserPerfGame>? bestWins,
   }) = _UserPerfStats;
 }
 

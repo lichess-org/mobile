@@ -3,6 +3,7 @@ import 'package:async/async.dart';
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:http/http.dart' as http;
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/common/models.dart';
@@ -395,7 +396,9 @@ void main() {
 
   group('UserRepository.getUsersStatusTask', () {
     test('json read, minimal example', () async {
-      final ids = ['maia1', 'maia5', 'maia9'];
+      final ids = ISet(
+        {const UserId('maia1'), const UserId('maia5'), const UserId('maia9')},
+      );
       when(
         () => mockApiClient.get(
           Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'),
@@ -428,14 +431,16 @@ void main() {
   }
 ]
 ''';
-      final ids = ['maia1', 'maia5', 'maia9'];
+      final ids = ISet(
+        {const UserId('maia1'), const UserId('maia5'), const UserId('maia9')},
+      );
       when(
         () => mockApiClient.get(
           Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'),
         ),
       ).thenAnswer((_) async => Result.value(http.Response(response, 200)));
 
-      final result = await repo.getUsersStatus(['maia1', 'maia5', 'maia9']);
+      final result = await repo.getUsersStatus(ids);
 
       expect(result.isValue, true);
     });

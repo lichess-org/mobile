@@ -47,7 +47,7 @@ class GameRepository {
   }
 
   // TODO parameters
-  FutureResult<List<ArchivedGameData>> getUserGames(UserId userId) {
+  FutureResult<IList<ArchivedGameData>> getUserGames(UserId userId) {
     return apiClient.get(
       Uri.parse(
         '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true',
@@ -56,7 +56,7 @@ class GameRepository {
     ).flatMap(_decodeNdJsonGames);
   }
 
-  FutureResult<List<ArchivedGameData>> getGamesByIds(ISet<GameId> ids) {
+  FutureResult<IList<ArchivedGameData>> getGamesByIds(ISet<GameId> ids) {
     return apiClient
         .post(
           Uri.parse(
@@ -121,13 +121,15 @@ class GameRepository {
     );
   }
 
-  Result<List<ArchivedGameData>> _decodeNdJsonGames(http.Response response) {
+  Result<IList<ArchivedGameData>> _decodeNdJsonGames(http.Response response) {
     return Result(() {
       final lines = response.body.split('\n');
-      return lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
-        final json = jsonDecode(e) as Map<String, dynamic>;
-        return _makeArchivedGameDataFromJson(json);
-      }).toList(growable: false);
+      return IList(
+        lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
+          final json = jsonDecode(e) as Map<String, dynamic>;
+          return _makeArchivedGameDataFromJson(json);
+        }),
+      );
     }).mapError((error, _) {
       _log.severe('Could not read json object as ArchivedGame: $error');
       return DataFormatException();
@@ -177,7 +179,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
         );
         clock = stepClock;
       }
-      return steps;
+      return IList(steps);
     }),
     clock: clockData,
   );
