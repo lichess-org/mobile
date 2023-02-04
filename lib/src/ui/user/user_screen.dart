@@ -12,6 +12,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
@@ -167,20 +168,20 @@ class UserScreenBody extends StatelessWidget {
       PerfCards(user: user),
       const SizedBox(height: 20),
       // TODO translate
-      const Text('Recent games', style: kSectionTitle),
+      const Text('Recent games', style: Styles.sectionTitle),
       const SizedBox(height: 5),
       RecentGames(user: user),
     ];
 
     return inCustomScrollView
         ? SliverPadding(
-            padding: kBodyPadding,
+            padding: Styles.bodyPadding,
             sliver: SliverList(
               delegate: SliverChildListDelegate(list),
             ),
           )
         : ListView(
-            padding: kBodyPadding,
+            padding: Styles.bodyPadding,
             children: list,
           );
   }
@@ -214,24 +215,11 @@ class PerfCards extends StatelessWidget {
           return SizedBox(
             height: 100,
             width: 100,
-            child: PlatformCard(
-              child: InkWell(
-                splashFactory: isPerfWithoutStats
-                    ? NoSplash.splashFactory
-                    : InkSplash.splashFactory,
-                customBorder: kPlatformCardBorder,
-                onTap: isPerfWithoutStats
-                    ? null
-                    : () => pushPlatformRoute(
-                          context: context,
-                          title: context.l10n
-                              .perfStats('${user.username} ${perf.title}'),
-                          builder: (context) => PerfStatsScreen(
-                            user: user,
-                            perf: perf,
-                            loggedInUser: user,
-                          ),
-                        ),
+            child: GestureDetector(
+              onTap: isPerfWithoutStats
+                  ? null
+                  : () => _handlePerfCardTap(context, perf),
+              child: PlatformCard(
                 child: Padding(
                   padding: const EdgeInsets.all(6.0),
                   child: Column(
@@ -251,7 +239,7 @@ class PerfCards extends StatelessWidget {
                             rating: userPerf.rating,
                             deviation: userPerf.ratingDeviation,
                             provisional: userPerf.provisional,
-                            style: kBold,
+                            style: Styles.bold,
                           ),
                           const SizedBox(width: 3),
                           if (userPerf.progression != 0) ...[
@@ -284,6 +272,18 @@ class PerfCards extends StatelessWidget {
           );
         },
         separatorBuilder: (context, index) => const SizedBox(width: 10),
+      ),
+    );
+  }
+
+  void _handlePerfCardTap(BuildContext context, Perf perf) {
+    pushPlatformRoute(
+      context: context,
+      title: context.l10n.perfStats('${user.username} ${perf.title}'),
+      builder: (context) => PerfStatsScreen(
+        user: user,
+        perf: perf,
+        loggedInUser: user,
       ),
     );
   }
@@ -335,7 +335,9 @@ class RecentGames extends ConsumerWidget {
                 ),
                 subtitle: Text(
                   timeago.format(game.lastMoveAt),
-                  style: TextStyle(color: textShade(context, kSubtitleOpacity)),
+                  style: TextStyle(
+                    color: textShade(context, Styles.subtitleOpacity),
+                  ),
                 ),
                 trailing: game.winner == mySide
                     ? const Icon(

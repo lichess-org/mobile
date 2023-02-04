@@ -9,25 +9,12 @@ const kLichessDevPassword = String.fromEnvironment('LICHESS_DEV_PASSWORD');
 const kLichessClientId = 'lichess_mobile';
 const kOAuthTokenStorageKey = 'oAuthToken';
 
-// SPACING
-const kBodyPadding = EdgeInsets.symmetric(vertical: 16.0, horizontal: 14.0);
-
-// TEXT STYLE
-const kBold = TextStyle(fontWeight: FontWeight.bold);
-const kSectionTitle = TextStyle(fontSize: 16);
-const kSubtitleOpacity = 0.7;
-
 // lichess
 // https://github.com/lichess-org/lila/blob/4562a83cdb263c3ebf7e148c0f666f0ff92b91c7/modules/rating/src/main/Glicko.scala#L71
 const kProvisionalDeviation = 110;
 const kClueLessDeviation = 230;
 
 const kLargeScreenWidth = 600;
-
-// Misc
-const kPlatformCardBorder = RoundedRectangleBorder(
-  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-);
 
 const kEmptyWidget = SizedBox.shrink();
 const kEmptyFen = '8/8/8/8/8/8/8/8 w - - 0 1';

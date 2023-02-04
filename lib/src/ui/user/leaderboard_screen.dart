@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -32,7 +33,7 @@ class LeaderboardScreen extends StatelessWidget {
             slivers: [
               SliverSafeArea(
                 sliver: SliverPadding(
-                  padding: kBodyPadding,
+                  padding: Styles.bodyPadding,
                   sliver: constraints.maxWidth > kLargeScreenWidth
                       ? SliverGrid(
                           gridDelegate:

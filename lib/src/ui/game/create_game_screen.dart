@@ -7,7 +7,7 @@ import 'package:tuple/tuple.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
-import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
@@ -133,7 +133,7 @@ class PlayForm extends ConsumerWidget {
 
     return SafeArea(
       child: ListView(
-        padding: kBodyPadding,
+        padding: Styles.bodyPadding,
         children: [
           Text(
             context.l10n.playWithTheMachine,

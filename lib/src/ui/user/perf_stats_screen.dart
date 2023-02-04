@@ -11,6 +11,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
@@ -129,14 +130,14 @@ class _Body extends ConsumerWidget {
       data: (data) {
         return SafeArea(
           child: ListView(
-            padding: kBodyPadding,
+            padding: Styles.bodyPadding,
             scrollDirection: Axis.vertical,
             children: [
               Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: [
-                  Text('${context.l10n.rating} ', style: kSectionTitle),
+                  Text('${context.l10n.rating} ', style: Styles.sectionTitle),
                   PlayerRating(
                     rating: data.rating,
                     deviation: data.deviation,
@@ -202,7 +203,10 @@ class _Body extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: [
-                  Text('${context.l10n.totalGames} ', style: kSectionTitle),
+                  Text(
+                    '${context.l10n.totalGames} ',
+                    style: Styles.sectionTitle,
+                  ),
                   Text(data.totalGames.toString(), style: _mainValueStyle),
                 ],
               ),
@@ -304,7 +308,7 @@ class _Body extends ConsumerWidget {
               ),
               if (data.bestWins != null && data.bestWins!.isNotEmpty) ...[
                 statGroupSpace,
-                Text(context.l10n.bestRated, style: kSectionTitle),
+                Text(context.l10n.bestRated, style: Styles.sectionTitle),
                 _GameListWidget(
                   games: data.bestWins!,
                   perf: perf,
@@ -313,7 +317,7 @@ class _Body extends ConsumerWidget {
               ],
               if (data.worstLosses != null && data.worstLosses!.isNotEmpty) ...[
                 statGroupSpace,
-                Text(context.l10n.worstRated, style: kSectionTitle),
+                Text(context.l10n.worstRated, style: Styles.sectionTitle),
                 _GameListWidget(
                   games: data.worstLosses!,
                   perf: perf,

@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/card.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/style.dart';
-import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_actions_notifier.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
@@ -56,7 +56,7 @@ class _Body extends ConsumerWidget {
       progressIndicator: const CircularProgressIndicator.adaptive(),
       child: SafeArea(
         child: ListView(
-          padding: kBodyPadding,
+          padding: Styles.bodyPadding,
           children: [
             const SizedBox(height: 10),
             CardListSection(
@@ -137,7 +137,8 @@ class SettingsGroupTile extends StatelessWidget {
             title: Text(settingsLabel),
             subtitle: Text(
               settingsValue,
-              style: TextStyle(color: textShade(context, kSubtitleOpacity)),
+              style:
+                  TextStyle(color: textShade(context, Styles.subtitleOpacity)),
             ),
             onTap: onTap,
             trailing: const Icon(Icons.keyboard_arrow_right),

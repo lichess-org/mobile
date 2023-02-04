@@ -4,8 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/constants.dart';
-
 /// A simple widget that builds different things on different platforms.
 class PlatformWidget extends StatelessWidget {
   const PlatformWidget({
@@ -103,7 +101,9 @@ class PlatformCard extends StatelessWidget {
                   ? CupertinoColors.systemBackground
                   : CupertinoColors.secondarySystemBackground
                       .resolveFrom(context),
-              shape: kPlatformCardBorder,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
               semanticContainer: semanticContainer,
               child: child,
             )
