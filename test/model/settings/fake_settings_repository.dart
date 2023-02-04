@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/model/settings/data/settings_repository.dart';
+import 'package:lichess_mobile/src/model/settings/settings_repository.dart';
 
 class FakeSettingsRepository implements SettingsRepository {
   ThemeMode themeMode = ThemeMode.system;

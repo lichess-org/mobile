@@ -11,11 +11,11 @@ import 'package:logging/logging.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/features/puzzle/data/puzzle_local_db.dart';
-import 'package:lichess_mobile/src/features/puzzle/puzzle_service.dart';
-import 'package:lichess_mobile/src/features/puzzle/model/puzzle.dart';
-import 'package:lichess_mobile/src/features/puzzle/model/puzzle_theme.dart';
-import 'package:lichess_mobile/src/features/puzzle/data/puzzle_repository.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_local_db.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import '../../utils.dart';
 
 class MockLogger extends Mock implements Logger {}

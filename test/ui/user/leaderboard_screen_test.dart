@@ -5,7 +5,7 @@ import 'package:lichess_mobile/src/ui/user/leaderboard_screen.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
-import '../../../utils.dart';
+import '../../utils.dart';
 
 void main() {
   group('LeaderboardScreen', () {

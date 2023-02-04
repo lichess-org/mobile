@@ -6,8 +6,8 @@ import 'package:logging/logging.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 
-import 'package:lichess_mobile/src/features/puzzle/data/puzzle_repository.dart';
-import '../../../utils.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
+import '../../utils.dart';
 
 class MockClient extends Mock implements http.Client {}
 

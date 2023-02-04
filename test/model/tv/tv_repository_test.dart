@@ -6,8 +6,8 @@ import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/http.dart';
-import 'package:lichess_mobile/src/features/tv/data/tv_repository.dart';
-import 'package:lichess_mobile/src/features/tv/data/tv_event.dart';
+import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
+import 'package:lichess_mobile/src/model/tv/tv_event.dart';
 
 class MockApiClient extends Mock implements ApiClient {}
 

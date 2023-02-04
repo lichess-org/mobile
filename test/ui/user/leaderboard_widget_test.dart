@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import '../../../utils.dart';
+import '../../utils.dart';
 
 class MockClient extends Mock implements http.Client {}
 

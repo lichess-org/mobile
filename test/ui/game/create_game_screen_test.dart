@@ -20,8 +20,8 @@ import 'package:lichess_mobile/src/model/game/time_control.dart';
 import 'package:lichess_mobile/src/model/game/computer_opponent.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/card.dart';
-import '../../../auth/data/fake_auth_repository.dart';
-import '../../../../utils.dart';
+import '../../model/auth/fake_auth_repository.dart';
+import '../../utils.dart';
 
 class MockClient extends Mock implements http.Client {}
 

@@ -4,9 +4,9 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/features/puzzle/data/puzzle_local_db.dart';
-import 'package:lichess_mobile/src/features/puzzle/model/puzzle.dart';
-import 'package:lichess_mobile/src/features/puzzle/model/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_local_db.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 
 void main() {
   group('PuzzleLocalDB', () {

@@ -11,11 +11,11 @@ import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/ui/user/profile_screen.dart';
+import 'package:lichess_mobile/src/ui/account/profile_screen.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import '../../auth/data/fake_auth_repository.dart';
-import '../../../utils.dart';
+import '../../model/auth/fake_auth_repository.dart';
+import '../../utils.dart';
 
 class MockClient extends Mock implements http.Client {}
 

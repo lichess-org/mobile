@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_event.dart';
 import 'package:lichess_mobile/src/model/game/api_event.dart';
-import '../../../utils.dart';
+import '../../utils.dart';
 
 class MockApiClient extends Mock implements ApiClient {}
 

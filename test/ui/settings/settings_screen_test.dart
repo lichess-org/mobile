@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/model/settings/settings_repository.dart';
-import '../data/fake_settings_repository.dart';
-import '../../../utils.dart';
+import '../../model/settings/fake_settings_repository.dart';
+import '../../utils.dart';
 
 void main() {
   group('SettingsScreen', () {
