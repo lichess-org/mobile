@@ -10,8 +10,8 @@ import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-import '../../settings/is_sound_muted_provider.dart';
-import '../model/featured_position.dart';
+import 'package:lichess_mobile/src/model/settings/is_sound_muted_provider.dart';
+import 'package:lichess_mobile/src/model/tv/featured_position.dart';
 import './tv_stream.dart';
 import './featured_game_notifier.dart';
 
