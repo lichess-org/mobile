@@ -8,12 +8,12 @@ import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-import 'package:lichess_mobile/src/features/game/model/time_control.dart';
+import 'package:lichess_mobile/src/model/game/time_control.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-import '../model/puzzle.dart';
-import '../model/puzzle_theme.dart';
+import 'puzzle.dart';
+import 'puzzle_theme.dart';
 
 final puzzleRepositoryProvider = Provider<PuzzleRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../settings/data/settings_repository.dart';
+import 'package:lichess_mobile/src/model/settings/settings_repository.dart';
 
 final isSoundMutedProvider =
     StateNotifierProvider.autoDispose<IsSoundMutedNotifier, bool>((ref) {

@@ -5,9 +5,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/features/auth/ui/sign_in_widget.dart';
-import 'package:lichess_mobile/src/features/game/ui/play/play_screen.dart';
-import 'package:lichess_mobile/src/features/user/ui/leaderboard_widget.dart';
+import 'package:lichess_mobile/src/ui/auth/sign_in_widget.dart';
+import 'package:lichess_mobile/src/ui/game/create_game_screen.dart';
+import 'package:lichess_mobile/src/ui/user/leaderboard_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

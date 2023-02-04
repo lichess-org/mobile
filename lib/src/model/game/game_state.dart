@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 
-import './game_status.dart';
-import '../data/game_event.dart';
+import 'game_status.dart';
+import 'game_event.dart';
 
 part 'game_state.freezed.dart';
 

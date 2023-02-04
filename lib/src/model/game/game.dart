@@ -3,7 +3,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/features/user/model/user.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import './game_status.dart';
 
 part 'game.freezed.dart';

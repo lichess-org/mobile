@@ -13,9 +13,10 @@ import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-import './api_event.dart';
-import './game_event.dart';
-import '../model/game.dart';
+
+import 'api_event.dart';
+import 'game_event.dart';
+import 'game.dart';
 
 final gameRepositoryProvider = Provider<GameRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);

@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/common/package_info.dart';
 import 'package:lichess_mobile/src/utils/in_memory_store.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import '../../user/model/user.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 
 const redirectUri = 'org.lichess.mobile://login-callback';
 const oauthScopes = ['board:play'];

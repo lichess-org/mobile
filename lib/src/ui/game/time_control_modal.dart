@@ -5,9 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
-import '../../../../constants.dart';
-import '../../data/play_preferences.dart';
-import '../../model/time_control.dart';
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/game/play_preferences.dart';
+import 'package:lichess_mobile/src/model/game/time_control.dart';
 
 class TimeControlModal extends StatelessWidget {
   const TimeControlModal({super.key});

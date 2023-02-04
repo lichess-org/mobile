@@ -7,10 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
-import './data/puzzle_local_db.dart';
-import './data/puzzle_repository.dart';
-import './model/puzzle.dart';
-import './model/puzzle_theme.dart';
+import 'puzzle_local_db.dart';
+import 'puzzle_repository.dart';
+import 'puzzle.dart';
+import 'puzzle_theme.dart';
 
 final puzzleOfflineServiceProvider = Provider<PuzzleService>((ref) {
   final db = ref.watch(puzzleLocalDbProvider);

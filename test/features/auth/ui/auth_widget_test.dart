@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:lichess_mobile/src/features/auth/ui/sign_in_widget.dart';
-import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
-import 'package:lichess_mobile/src/features/settings/theme_mode_provider.dart';
+import 'package:lichess_mobile/src/ui/auth/sign_in_widget.dart';
+import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/settings/theme_mode_provider.dart';
 import '../data/fake_auth_repository.dart';
 import '../../../utils.dart';
 

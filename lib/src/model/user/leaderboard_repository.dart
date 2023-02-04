@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:deep_pick/deep_pick.dart';
 
 import 'package:lichess_mobile/src/common/http.dart';
-import 'package:lichess_mobile/src/features/user/model/leaderboard.dart';
+import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/constants.dart';
 

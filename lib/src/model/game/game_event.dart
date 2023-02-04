@@ -3,7 +3,8 @@ import 'package:deep_pick/deep_pick.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-import '../model/game_status.dart';
+
+import 'game_status.dart';
 
 part 'game_event.freezed.dart';
 

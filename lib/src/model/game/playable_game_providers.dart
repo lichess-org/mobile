@@ -4,9 +4,9 @@ import 'package:result_extensions/result_extensions.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/sound.dart';
-import '../../data/game_repository.dart';
-import '../../data/game_event.dart';
-import '../../model/game_state.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
+import 'package:lichess_mobile/src/model/game/game_event.dart';
+import 'package:lichess_mobile/src/model/game/game_state.dart';
 
 final positionCursorProvider = StateProvider.autoDispose<int>((ref) => 0);
 

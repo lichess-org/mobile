@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/card.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
-import 'package:lichess_mobile/src/features/user/data/leaderboard_repository.dart';
+import 'package:lichess_mobile/src/model/user/leaderboard_repository.dart';
 
 import 'leaderboard_screen.dart';
 

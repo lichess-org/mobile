@@ -12,8 +12,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 
 import 'package:lichess_mobile/src/model/settings/is_sound_muted_provider.dart';
 import 'package:lichess_mobile/src/model/tv/featured_position.dart';
-import './tv_stream.dart';
-import './featured_game_notifier.dart';
+import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
+import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
 
 const _boardSettings = BoardSettings(animationDuration: Duration.zero);
 

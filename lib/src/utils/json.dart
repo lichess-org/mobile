@@ -7,8 +7,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/features/game/model/game.dart';
-import 'package:lichess_mobile/src/features/game/model/game_status.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 
 extension Dartchess on Pick {
   Move asUciMoveOrThrow() {

@@ -11,10 +11,10 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/style.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/features/auth/ui/auth_actions_notifier.dart';
-import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_actions_notifier.dart';
+import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/settings/theme_mode_provider.dart';
 
-import '../theme_mode_provider.dart';
 import './theme_mode_screen.dart';
 
 class SettingsScreen extends StatelessWidget {

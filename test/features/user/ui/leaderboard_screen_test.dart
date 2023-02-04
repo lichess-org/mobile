@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/features/user/ui/leaderboard_screen.dart';
+import 'package:lichess_mobile/src/ui/user/leaderboard_screen.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/features/user/model/leaderboard.dart';
+import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import '../../../utils.dart';
 
 void main() {

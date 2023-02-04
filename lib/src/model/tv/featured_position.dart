@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 
-import '../data/tv_event.dart';
+import 'tv_event.dart';
 
 part 'featured_position.freezed.dart';
 

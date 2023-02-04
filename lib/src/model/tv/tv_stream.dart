@@ -1,9 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/sound.dart';
-import '../model/featured_position.dart';
-import '../data/tv_repository.dart';
-import './featured_game_notifier.dart';
+
+import 'featured_position.dart';
+import 'tv_repository.dart';
+import 'featured_game_notifier.dart';
 
 final tvStreamProvider = StreamProvider.autoDispose<FeaturedPosition>((ref) {
   final soundService = ref.watch(soundServiceProvider);

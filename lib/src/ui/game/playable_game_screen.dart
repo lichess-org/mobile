@@ -13,13 +13,12 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/features/settings/is_sound_muted_provider.dart';
-import 'package:lichess_mobile/src/features/user/model/user.dart';
-
-import '../../model/game_status.dart';
-import '../../model/game.dart';
-import '../play/play_action_notifier.dart';
-import './playable_game_screen_providers.dart';
+import 'package:lichess_mobile/src/model/settings/is_sound_muted_provider.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/play_action_notifier.dart';
+import 'package:lichess_mobile/src/model/game/playable_game_providers.dart';
 
 class PlayableGameScreen extends ConsumerWidget {
   const PlayableGameScreen({

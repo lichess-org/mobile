@@ -8,7 +8,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
+import 'package:lichess_mobile/src/model/user/user_repository.dart';
 
 class MockApiClient extends Mock implements ApiClient {}
 

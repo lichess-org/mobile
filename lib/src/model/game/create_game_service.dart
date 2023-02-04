@@ -5,14 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:result_extensions/result_extensions.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
-import 'package:lichess_mobile/src/features/user/model/user.dart';
-import '../data/play_preferences.dart';
-import '../data/challenge_repository.dart';
-import '../data/challenge_request.dart';
-import '../data/game_repository.dart';
-import '../data/api_event.dart';
-import '../model/computer_opponent.dart';
-import '../model/game.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'play_preferences.dart';
+import 'challenge_repository.dart';
+import 'challenge_request.dart';
+import 'game_repository.dart';
+import 'api_event.dart';
+import 'computer_opponent.dart';
+import 'game.dart';
 
 class CreateGameService {
   const CreateGameService(this._log, {required this.ref});

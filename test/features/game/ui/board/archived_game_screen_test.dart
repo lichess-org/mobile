@@ -16,9 +16,9 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/common/sound.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
-import 'package:lichess_mobile/src/features/game/ui/board/archived_game_screen.dart';
-import 'package:lichess_mobile/src/features/game/model/game.dart';
-import 'package:lichess_mobile/src/features/game/model/game_status.dart';
+import 'package:lichess_mobile/src/ui/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 import '../../../../utils.dart';
 
 class MockClient extends Mock implements http.Client {}

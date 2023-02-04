@@ -10,9 +10,9 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/http.dart';
-import 'package:lichess_mobile/src/features/game/data/game_repository.dart';
-import 'package:lichess_mobile/src/features/game/data/game_event.dart';
-import 'package:lichess_mobile/src/features/game/data/api_event.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
+import 'package:lichess_mobile/src/model/game/game_event.dart';
+import 'package:lichess_mobile/src/model/game/api_event.dart';
 import '../../../utils.dart';
 
 class MockApiClient extends Mock implements ApiClient {}

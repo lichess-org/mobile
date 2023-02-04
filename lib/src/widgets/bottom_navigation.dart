@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import '../common/lichess_icons.dart';
-import '../features/home/ui/home_screen.dart';
-import '../features/user/ui/profile_screen.dart';
-import '../features/tv/ui/tv_screen.dart';
-import '../features/puzzle/ui/puzzle_screen.dart';
+import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/ui/home/home_screen.dart';
+import 'package:lichess_mobile/src/ui/account/profile_screen.dart';
+import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 
 enum BottomTab {
   play,

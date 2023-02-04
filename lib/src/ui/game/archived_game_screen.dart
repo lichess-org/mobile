@@ -14,10 +14,9 @@ import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/features/settings/is_sound_muted_provider.dart';
-
-import '../../data/game_repository.dart';
-import '../../model/game.dart';
+import 'package:lichess_mobile/src/model/settings/is_sound_muted_provider.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 
 final _positionCursorProvider = StateProvider.autoDispose<int?>((ref) => null);
 

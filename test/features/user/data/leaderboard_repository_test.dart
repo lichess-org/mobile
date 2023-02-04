@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:logging/logging.dart';
-import 'package:lichess_mobile/src/features/user/data/leaderboard_repository.dart';
+import 'package:lichess_mobile/src/model/user/leaderboard_repository.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
 class MockApiClient extends Mock implements ApiClient {}

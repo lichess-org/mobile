@@ -5,17 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/features/auth/ui/auth_actions_notifier.dart';
-import 'package:lichess_mobile/src/features/game/data/game_repository.dart';
-import 'package:lichess_mobile/src/features/game/model/game.dart';
-import 'package:lichess_mobile/src/features/settings/ui/settings_screen.dart';
-import 'package:lichess_mobile/src/features/user/model/user.dart';
+import 'package:lichess_mobile/src/model/auth/auth_actions_notifier.dart';
+import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
+import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-
-import '../../auth/data/auth_repository.dart';
-import 'user_screen.dart';
 
 final recentGamesProvider = FutureProvider.autoDispose
     .family<IList<ArchivedGameData>, UserId>((ref, userId) {

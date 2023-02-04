@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/features/settings/ui/settings_screen.dart';
-import 'package:lichess_mobile/src/features/settings/data/settings_repository.dart';
+import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
+import 'package:lichess_mobile/src/model/settings/settings_repository.dart';
 import '../data/fake_settings_repository.dart';
 import '../../../utils.dart';
 

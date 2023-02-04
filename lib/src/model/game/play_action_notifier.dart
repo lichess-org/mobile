@@ -3,9 +3,9 @@ import 'package:dartchess/dartchess.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/features/user/model/user.dart';
-import '../../model/game.dart';
-import '../../service/create_game_service.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'game.dart';
+import 'create_game_service.dart';
 
 class PlayActionNotifier
     extends AutoDisposeNotifier<AsyncValue<PlayableGame?>> {

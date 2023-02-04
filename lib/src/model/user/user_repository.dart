@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-import '../model/user.dart';
+import 'user.dart';
 
 final userRepositoryProvider = Provider<UserRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);

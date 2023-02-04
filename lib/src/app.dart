@@ -4,10 +4,10 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import 'constants.dart';
-import 'common/lichess_colors.dart';
-import 'features/settings/theme_mode_provider.dart';
-import 'widgets/bottom_navigation.dart';
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/common/lichess_colors.dart';
+import 'package:lichess_mobile/src/model/settings/theme_mode_provider.dart';
+import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 
 class App extends ConsumerWidget {
   const App({super.key});

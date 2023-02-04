@@ -16,16 +16,17 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/card.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/features/user/model/user.dart';
-import 'package:lichess_mobile/src/features/auth/ui/auth_actions_notifier.dart';
-import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
-import 'package:lichess_mobile/src/features/user/data/user_repository.dart';
-import '../../data/play_preferences.dart';
-import '../../model/game.dart';
-import '../../model/computer_opponent.dart';
-import '../board/playable_game_screen.dart';
-import './time_control_modal.dart';
-import './play_action_notifier.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/auth/auth_actions_notifier.dart';
+import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/user/user_repository.dart';
+import 'package:lichess_mobile/src/model/game/play_preferences.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/computer_opponent.dart';
+import 'package:lichess_mobile/src/model/game/play_action_notifier.dart';
+
+import 'time_control_modal.dart';
+import 'playable_game_screen.dart';
 
 final maiaBotsProvider =
     FutureProvider.autoDispose<List<Tuple2<User, UserStatus>>>((ref) async {

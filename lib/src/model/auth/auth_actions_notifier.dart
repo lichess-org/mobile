@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:result_extensions/result_extensions.dart';
 
-import '../data/auth_repository.dart';
+import 'auth_repository.dart';
 
 class AuthActionsNotifier extends StateNotifier<AsyncValue<void>> {
   AuthActionsNotifier({required this.authRepository})

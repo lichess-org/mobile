@@ -7,8 +7,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/features/user/model/leaderboard.dart';
-import 'package:lichess_mobile/src/features/user/ui/user_screen.dart';
+import 'package:lichess_mobile/src/model/user/leaderboard.dart';
+import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 
 /// Create a Screen with Top 10 players for each Lichess Variant
 class LeaderboardScreen extends StatelessWidget {

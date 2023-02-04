@@ -9,11 +9,11 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
-import 'package:lichess_mobile/src/features/user/model/user.dart';
-import '../constants.dart';
-import './package_info.dart';
-import './errors.dart';
+import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/constants.dart';
+import 'package_info.dart';
+import 'errors.dart';
 
 const defaultRetries = [
   Duration(milliseconds: 200),

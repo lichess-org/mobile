@@ -4,8 +4,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/in_memory_store.dart';
-import 'package:lichess_mobile/src/features/user/model/user.dart';
-import 'package:lichess_mobile/src/features/auth/data/auth_repository.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 
 /// A fake AuthRepository
 ///

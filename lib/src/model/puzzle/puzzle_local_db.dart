@@ -6,8 +6,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
 
-import '../model/puzzle.dart';
-import '../model/puzzle_theme.dart';
+import 'puzzle.dart';
+import 'puzzle_theme.dart';
 
 part 'puzzle_local_db.freezed.dart';
 part 'puzzle_local_db.g.dart';
