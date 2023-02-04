@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chessground/chessground.dart';
 
-import 'package:lichess_mobile/src/utils/style.dart';
+import 'package:lichess_mobile/src/common/styles.dart';
 import 'platform.dart';
 
 const _scrollAnimationDuration = Duration(milliseconds: 200);
