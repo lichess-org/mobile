@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/settings/is_sound_muted_provider.dart';
 import 'package:lichess_mobile/src/model/tv/featured_position.dart';
 import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel_provider.dart';
 
 const _boardSettings = BoardSettings(animationDuration: Duration.zero);
 
@@ -34,9 +35,16 @@ class TvScreen extends ConsumerWidget {
     WidgetRef ref,
   ) {
     final isSoundMuted = ref.watch(isSoundMutedProvider);
+    final tvChannel = ref.watch(tvChannelProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lichess TV'),
+        title: InkWell(
+          onTap: () => showChoices(context, tvChannel.getListString()),
+          child: Row(children: [
+            Text(tvChannel.string),
+            const Icon(Icons.arrow_drop_down)
+          ]),
+        ),
         actions: [
           IconButton(
             icon: isSoundMuted

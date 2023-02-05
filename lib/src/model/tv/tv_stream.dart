@@ -13,6 +13,8 @@ final tvStreamProvider = StreamProvider.autoDispose<FeaturedPosition>((ref) {
   ref.onDispose(() {
     tvRepository.dispose();
   });
+
+  // get the state of the tv screen
   return tvRepository.tvFeed().map((event) {
     return event.map(
       featured: (featuredEvent) {
