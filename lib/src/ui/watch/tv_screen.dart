@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart';
 
@@ -36,14 +37,18 @@ class TvScreen extends ConsumerWidget {
   ) {
     final isSoundMuted = ref.watch(isSoundMutedProvider);
     final tvChannel = ref.watch(tvChannelProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: InkWell(
-          onTap: () => showChoices(context, tvChannel.getListString()),
-          child: Row(children: [
-            Text(tvChannel.string),
-            const Icon(Icons.arrow_drop_down)
-          ]),
+          onTap: () => showChoices(context, ref, TvChannel.getListString()),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(tvChannel.string),
+              const Icon(Icons.arrow_drop_down)
+            ],
+          ),
         ),
         actions: [
           IconButton(
@@ -64,8 +69,13 @@ class TvScreen extends ConsumerWidget {
     WidgetRef ref,
   ) {
     final isSoundMuted = ref.watch(isSoundMutedProvider);
+    final tvChannel = ref.watch(tvChannelProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        middle: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [Text(tvChannel.string), const Icon(Icons.arrow_drop_down)],
+        ),
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
           child: isSoundMuted
@@ -158,5 +168,76 @@ class _Body extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+void showChoices(BuildContext context, WidgetRef ref, List<String> choices) {
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.android:
+      showDialog<void>(
+        context: context,
+        builder: (context) {
+          int? selectedRadio = 0;
+          return AlertDialog(
+            contentPadding: const EdgeInsets.only(top: 12),
+            content: StatefulBuilder(
+              builder: (context, setState) {
+                return SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List<Widget>.generate(choices.length, (index) {
+                      return RadioListTile<int?>(
+                        title: Text(choices[index]),
+                        value: index,
+                        groupValue: selectedRadio,
+                        onChanged: (value) {
+                          setState(() => selectedRadio = value);
+                          if (value != null) {
+                            ref
+                                .read(tvChannelProvider.notifier)
+                                .toggleChannel(value);
+                          }
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    }),
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      );
+      return;
+    case TargetPlatform.iOS:
+      showCupertinoModalPopup<void>(
+        context: context,
+        builder: (context) {
+          return SizedBox(
+            height: 250,
+            child: CupertinoPicker(
+              backgroundColor: Theme.of(context).canvasColor,
+              useMagnifier: true,
+              magnification: 1.1,
+              itemExtent: 40,
+              scrollController: FixedExtentScrollController(initialItem: 1),
+              children: List<Widget>.generate(choices.length, (index) {
+                return Center(
+                  child: Text(
+                    choices[index],
+                    style: const TextStyle(
+                      fontSize: 21,
+                    ),
+                  ),
+                );
+              }),
+              onSelectedItemChanged: (value) {},
+            ),
+          );
+        },
+      );
+      return;
+    default:
+      assert(false, 'Unexpected platform $defaultTargetPlatform');
   }
 }
