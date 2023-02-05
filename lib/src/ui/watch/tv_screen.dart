@@ -177,7 +177,7 @@ void showChoices(BuildContext context, WidgetRef ref, List<String> choices) {
       showDialog<void>(
         context: context,
         builder: (context) {
-          int? selectedRadio = 0;
+          int? selectedRadio;
           return AlertDialog(
             contentPadding: const EdgeInsets.only(top: 12),
             content: StatefulBuilder(

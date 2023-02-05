@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:chessground/chessground.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -27,6 +28,20 @@ class TvRepository {
         .map((event) => jsonDecode(event) as Map<String, dynamic>)
         .where((json) => json['t'] == 'featured' || json['t'] == 'fen')
         .map((json) => TvEvent.fromJson(json))
+        .handleError((Object error) => _log.warning(error));
+  }
+
+  Stream<TvEvent> tvChannelGameStream(String gameId) async* {
+    print('$kLichessHost/api/stream/game/$gameId');
+    print('dsfasfdsfsdfsf');
+    final resp = await apiClient
+        .stream(Uri.parse('$kLichessHost/api/stream/game/$gameId'));
+    _log.fine('Start Streaming Channel Game');
+    yield* resp.stream
+        .toStringStream()
+        .where((event) => event.isNotEmpty && event != '\n')
+        .map((event) => jsonDecode(event) as Map<String, dynamic>)
+        .map((json) => TvEvent.fromChannelGame(json))
         .handleError((Object error) => _log.warning(error));
   }
 

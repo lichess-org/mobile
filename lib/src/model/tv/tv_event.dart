@@ -69,6 +69,27 @@ class TvEvent with _$TvEvent {
     }
   }
 
+  factory TvEvent.fromChannelGame(Map<String, dynamic> json) {
+    final jsonPick = pick(json).required();
+    if (json.containsKey('id')) {
+      return TvEvent.featured(
+        id: jsonPick('id').asGameIdOrThrow(),
+        orientation: jsonPick('player').asSideOrThrow(),
+        fen: jsonPick('fen').asStringOrThrow(),
+        white: const FeaturedPlayer(side: Side.white, name: 'Anon'),
+        black: const FeaturedPlayer(side: Side.black, name: 'Anon'),
+      );
+    } else {
+      return TvEvent.fen(
+        fen: jsonPick('fen').asStringOrThrow(),
+        lastMove: jsonPick('lm')
+            .letOrThrow((it) => Move.fromUci(it.asStringOrThrow())!),
+        whiteSeconds: jsonPick('wc').asIntOrThrow(),
+        blackSeconds: jsonPick('bc').asIntOrThrow(),
+      );
+    }
+  }
+
   static FeaturedPlayer _featuredPlayerFromPick(RequiredPick pick) {
     return FeaturedPlayer(
       side: pick('color').asSideOrThrow(),

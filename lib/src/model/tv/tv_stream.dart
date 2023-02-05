@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:async/async.dart';
 import 'package:lichess_mobile/src/common/sound.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel_provider.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -17,7 +16,6 @@ final tvStreamProvider = StreamProvider.autoDispose<FeaturedPosition>((ref) {
     tvRepository.dispose();
   });
 
-  // get the state of the tv screen
   if (tvChannel == TvChannel.top) {
     return tvRepository.tvFeed().map((event) {
       return event.map(
@@ -33,20 +31,21 @@ final tvStreamProvider = StreamProvider.autoDispose<FeaturedPosition>((ref) {
       );
     });
   } else {
-    print('hello');
-    tvRepository.tvChannelGame(tvChannel.string).map((p0) => print(p0));
-    return tvRepository.tvFeed().map((event) {
-      return event.map(
-        featured: (featuredEvent) {
-          featuredGameNotifier.onFeaturedEvent(featuredEvent);
-          return FeaturedPosition.fromTvEvent(featuredEvent);
-        },
-        fen: (fenEvent) {
-          featuredGameNotifier.onFenEvent(fenEvent);
-          soundService.playMove();
-          return FeaturedPosition.fromTvEvent(fenEvent);
-        },
-      );
+    tvRepository.tvChannelGame(tvChannel.string).map((gameId) {
+      return tvRepository.tvFeed().map((event) {
+        return event.map(
+          featured: (featuredEvent) {
+            featuredGameNotifier.onFeaturedEvent(featuredEvent);
+            return FeaturedPosition.fromTvEvent(featuredEvent);
+          },
+          fen: (fenEvent) {
+            featuredGameNotifier.onFenEvent(fenEvent);
+            soundService.playMove();
+            return FeaturedPosition.fromTvEvent(fenEvent);
+          },
+        );
+      });
     });
   }
+  throw Error;
 });
