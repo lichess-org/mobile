@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/common/errors.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:logging/logging.dart';
-
+import 'package:async/async.dart';
+import 'package:deep_pick/deep_pick.dart';
 import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import './tv_event.dart';
@@ -26,6 +29,23 @@ class TvRepository {
         .map((json) => TvEvent.fromJson(json))
         .handleError((Object error) => _log.warning(error));
   }
+
+  FutureResult<String> tvChannelGame(String channel) {
+    return apiClient
+        .get(Uri.parse('$kLichessHost/api/tv/channels'))
+        .flatMap((response) => gameIdfromJson(response.body, channel));
+  }
+
+  Result<String> gameIdfromJson(String json, String channel) => Result(() {
+        final dynamic obj = jsonDecode(json);
+        if (obj is! Map<String, dynamic>) {
+          _log.severe('Could not read json object');
+          throw DataFormatException();
+        }
+        final jsonPick = pick(obj).required();
+        return jsonPick(channel)
+            .letOrThrow((mapPick) => mapPick('gameId').asStringOrThrow());
+      });
 
   void dispose() {
     apiClient.close();
