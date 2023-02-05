@@ -27,3 +27,9 @@ doc/api/
 *.js.map
 
 .DS_Store
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
