@@ -27,19 +27,47 @@ class HomeScreen extends StatelessWidget {
           SignInWidget(),
         ],
       ),
-      body: _Body(),
+      body: _HomeScaffold(
+        child: ListView(
+          children: [
+            LeaderboardWidget(),
+          ],
+        ),
+      ),
     );
   }
 
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(trailing: SignInWidget()),
-      child: _Body(),
+      // navigationBar: const CupertinoNavigationBar(trailing: SignInWidget()),
+      child: _HomeScaffold(
+        child: CustomScrollView(
+          slivers: [
+            const CupertinoSliverNavigationBar(
+              largeTitle: Text('Home'),
+              trailing: SignInWidget(),
+            ),
+            SliverSafeArea(
+              top: false,
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([LeaderboardWidget()]),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
-class _Body extends StatelessWidget {
+/// Scaffold with a sticky Create Game button at the bottom
+class _HomeScaffold extends StatelessWidget {
+  const _HomeScaffold({
+    required this.child,
+  });
+
+  final Widget child;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -47,11 +75,7 @@ class _Body extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: ListView(
-              children: [
-                LeaderboardWidget(),
-              ],
-            ),
+            child: child,
           ),
           SizedBox(
             height: 80,
