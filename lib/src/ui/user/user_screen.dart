@@ -22,7 +22,6 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/ui/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -291,13 +290,13 @@ class PerfCards extends StatelessWidget {
   }
 
   void _handlePerfCardTap(BuildContext context, Perf perf) {
-    pushPlatformRoute(
-      context: context,
-      title: context.l10n.perfStats('${user.username} ${perf.title}'),
-      builder: (context) => PerfStatsScreen(
-        user: user,
-        perf: perf,
-        loggedInUser: user,
+    Navigator.of(context).push<void>(
+      MaterialPageRoute(
+        builder: (context) => PerfStatsScreen(
+          user: user,
+          perf: perf,
+          loggedInUser: user,
+        ),
       ),
     );
   }

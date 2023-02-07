@@ -45,7 +45,6 @@ final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
 const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;
 const _defaultValueFontSize = 18.0;
-const _titleFontSize = 18.0;
 const _mainValueStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 30);
 
 class PerfStatsScreen extends StatelessWidget {
@@ -72,34 +71,42 @@ class PerfStatsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Icon(perf.icon),
-            const SizedBox(width: 5),
-            Expanded(
-              child: FittedBox(
-                alignment: Alignment.centerLeft,
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  context.l10n.perfStats('${user.username} ${perf.title}'),
-                  style: const TextStyle(fontSize: _titleFontSize),
-                ),
-              ),
-            ),
-            const SizedBox(width: 5)
-          ],
-        ),
+        title: _Title(user: user, perf: perf),
       ),
       body: _Body(user: user, perf: perf, loggedInUser: loggedInUser),
     );
   }
 
   Widget _iosBuilder(BuildContext context) {
-    // TODO: Add perf icon to title.
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
+      navigationBar: CupertinoNavigationBar(
+        middle: _Title(user: user, perf: perf),
+      ),
       child: _Body(user: user, perf: perf, loggedInUser: loggedInUser),
+    );
+  }
+}
+
+class _Title extends StatelessWidget {
+  const _Title({required this.user, required this.perf});
+
+  final User user;
+  final Perf perf;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Flexible(
+          child: PlayerTitle(userName: user.username, title: user.title),
+        ),
+        Flexible(
+          child: Text(
+            ' ${context.l10n.perfStats(perf.title)}',
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
     );
   }
 }

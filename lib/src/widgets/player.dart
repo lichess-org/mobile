@@ -121,6 +121,7 @@ class PlayerTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     final nameAndRating = userName + (rating != null ? ' ($rating)' : '');
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         if (title != null) ...[
           Text(
