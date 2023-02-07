@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -29,6 +30,7 @@ class HomeScreen extends StatelessWidget {
       ),
       body: _HomeScaffold(
         child: ListView(
+          padding: Styles.verticalBodyPadding,
           children: [
             LeaderboardWidget(),
           ],
@@ -49,8 +51,11 @@ class HomeScreen extends StatelessWidget {
             ),
             SliverSafeArea(
               top: false,
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([LeaderboardWidget()]),
+              sliver: SliverPadding(
+                padding: Styles.verticalBodyPadding,
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([LeaderboardWidget()]),
+                ),
               ),
             ),
           ],

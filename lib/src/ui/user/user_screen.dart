@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 
@@ -118,6 +119,35 @@ class UserScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final list = [
+      _Profile(user: user, showPlayerTitle: showPlayerTitle),
+      const SizedBox(height: 20),
+      PerfCards(user: user),
+      const SizedBox(height: 20),
+      RecentGames(user: user),
+    ];
+
+    return inCustomScrollView
+        ? SliverList(
+            delegate: SliverChildListDelegate(list),
+          )
+        : ListView(
+            children: list,
+          );
+  }
+}
+
+class _Profile extends StatelessWidget {
+  const _Profile({
+    required this.user,
+    required this.showPlayerTitle,
+  });
+
+  final User user;
+  final bool showPlayerTitle;
+
+  @override
+  Widget build(BuildContext context) {
     final playerTitle = PlayerTitle(
       userName: user.username,
       title: user.title,
@@ -128,19 +158,20 @@ class UserScreenBody extends StatelessWidget {
     final title = showPlayerTitle ? playerTitle : userFullName;
     final subTitle = showPlayerTitle ? userFullName : null;
 
-    final list = [
-      if (user.isPatron == true || title != null || subTitle != null)
-        ListTile(
-          leading: user.isPatron == true
-              ? const Icon(LichessIcons.patron, size: 40)
-              : null,
-          title: title,
-          subtitle: subTitle,
-          contentPadding: const EdgeInsets.symmetric(vertical: 10),
-        ),
-      Column(
+    return Padding(
+      padding: Styles.sectionEdgePadding,
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (user.isPatron == true || title != null || subTitle != null)
+            ListTile(
+              leading: user.isPatron == true
+                  ? const Icon(LichessIcons.patron, size: 40)
+                  : null,
+              title: title,
+              subtitle: subTitle,
+              contentPadding: const EdgeInsets.symmetric(vertical: 10),
+            ),
           if (user.profile != null)
             Location(profile: user.profile!)
           else
@@ -163,26 +194,7 @@ class UserScreenBody extends StatelessWidget {
             kEmptyWidget,
         ],
       ),
-      const SizedBox(height: 20),
-      PerfCards(user: user),
-      const SizedBox(height: 20),
-      // TODO translate
-      const Text('Recent games', style: Styles.sectionTitle),
-      const SizedBox(height: 5),
-      RecentGames(user: user),
-    ];
-
-    return inCustomScrollView
-        ? SliverPadding(
-            padding: Styles.bodyPadding,
-            sliver: SliverList(
-              delegate: SliverChildListDelegate(list),
-            ),
-          )
-        : ListView(
-            padding: Styles.bodyPadding,
-            children: list,
-          );
+    );
   }
 }
 
@@ -200,77 +212,80 @@ class PerfCards extends StatelessWidget {
           p.ratingDeviation < kClueLessDeviation;
     }).toList(growable: false);
 
-    return SizedBox(
-      height: 106,
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(vertical: 3.0),
-        scrollDirection: Axis.horizontal,
-        itemCount: userPerfs.length,
-        itemBuilder: (context, index) {
-          final perf = userPerfs[index];
-          final userPerf = user.perfs[perf]!;
-          final bool isPerfWithoutStats =
-              [Perf.puzzle, Perf.storm].contains(perf);
-          return SizedBox(
-            height: 100,
-            width: 100,
-            child: GestureDetector(
-              onTap: isPerfWithoutStats
-                  ? null
-                  : () => _handlePerfCardTap(context, perf),
-              child: PlatformCard(
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        perf.shortTitle,
-                        style: TextStyle(color: textShade(context, 0.7)),
-                      ),
-                      Icon(perf.icon, color: textShade(context, 0.6)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          PlayerRating(
-                            rating: userPerf.rating,
-                            deviation: userPerf.ratingDeviation,
-                            provisional: userPerf.provisional,
-                            style: Styles.bold,
-                          ),
-                          const SizedBox(width: 3),
-                          if (userPerf.progression != 0) ...[
-                            Icon(
-                              userPerf.progression > 0
-                                  ? LichessIcons.arrow_full_upperright
-                                  : LichessIcons.arrow_full_lowerright,
-                              color: userPerf.progression > 0
-                                  ? LichessColors.good
-                                  : LichessColors.red,
-                              size: 12,
+    return Padding(
+      padding: Styles.sectionEdgePadding,
+      child: SizedBox(
+        height: 106,
+        child: ListView.separated(
+          padding: const EdgeInsets.symmetric(vertical: 3.0),
+          scrollDirection: Axis.horizontal,
+          itemCount: userPerfs.length,
+          itemBuilder: (context, index) {
+            final perf = userPerfs[index];
+            final userPerf = user.perfs[perf]!;
+            final bool isPerfWithoutStats =
+                [Perf.puzzle, Perf.storm].contains(perf);
+            return SizedBox(
+              height: 100,
+              width: 100,
+              child: GestureDetector(
+                onTap: isPerfWithoutStats
+                    ? null
+                    : () => _handlePerfCardTap(context, perf),
+                child: PlatformCard(
+                  child: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          perf.shortTitle,
+                          style: TextStyle(color: textShade(context, 0.7)),
+                        ),
+                        Icon(perf.icon, color: textShade(context, 0.6)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            PlayerRating(
+                              rating: userPerf.rating,
+                              deviation: userPerf.ratingDeviation,
+                              provisional: userPerf.provisional,
+                              style: Styles.bold,
                             ),
-                            Text(
-                              userPerf.progression.abs().toString(),
-                              style: TextStyle(
+                            const SizedBox(width: 3),
+                            if (userPerf.progression != 0) ...[
+                              Icon(
+                                userPerf.progression > 0
+                                    ? LichessIcons.arrow_full_upperright
+                                    : LichessIcons.arrow_full_lowerright,
                                 color: userPerf.progression > 0
                                     ? LichessColors.good
                                     : LichessColors.red,
-                                fontSize: 11,
+                                size: 12,
                               ),
-                            ),
+                              Text(
+                                userPerf.progression.abs().toString(),
+                                style: TextStyle(
+                                  color: userPerf.progression > 0
+                                      ? LichessColors.good
+                                      : LichessColors.red,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ],
                           ],
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        },
-        separatorBuilder: (context, index) => const SizedBox(width: 10),
+            );
+          },
+          separatorBuilder: (context, index) => const SizedBox(width: 10),
+        ),
       ),
     );
   }
@@ -299,57 +314,55 @@ class RecentGames extends ConsumerWidget {
 
     return recentGames.when(
       data: (data) {
-        return Column(
-          children: ListTile.divideTiles(
-            color: dividerColor(context),
-            context: context,
-            tiles: data.map((game) {
-              final mySide = game.white.id == user.id ? Side.white : Side.black;
-              final opponent =
-                  game.white.id == user.id ? game.black : game.white;
-              final opponentName = opponent.name == 'Stockfish'
-                  ? context.l10n.aiNameLevelAiLevel(
-                      opponent.name,
-                      opponent.aiLevel.toString(),
-                    )
-                  : opponent.name;
+        return ListSection(
+          // TODO translate
+          header: const Text('Recent games', style: Styles.sectionTitle),
+          hasLeading: true,
+          children: data.map((game) {
+            final mySide = game.white.id == user.id ? Side.white : Side.black;
+            final opponent = game.white.id == user.id ? game.black : game.white;
+            final opponentName = opponent.name == 'Stockfish'
+                ? context.l10n.aiNameLevelAiLevel(
+                    opponent.name,
+                    opponent.aiLevel.toString(),
+                  )
+                : opponent.name;
 
-              return PlatformListTile(
-                onTap: () {
-                  Navigator.of(context, rootNavigator: true).push<void>(
-                    MaterialPageRoute(
-                      builder: (context) => ArchivedGameScreen(
-                        gameData: game,
-                        orientation:
-                            user.id == game.white.id ? Side.white : Side.black,
-                      ),
+            return PlatformListTile(
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).push<void>(
+                  MaterialPageRoute(
+                    builder: (context) => ArchivedGameScreen(
+                      gameData: game,
+                      orientation:
+                          user.id == game.white.id ? Side.white : Side.black,
                     ),
-                  );
-                },
-                leading: Icon(game.perf.icon),
-                title: PlayerTitle(
-                  userName: opponentName,
-                  title: opponent.title,
-                  rating: opponent.rating,
-                ),
-                subtitle: Text(
-                  timeago.format(game.lastMoveAt),
-                  style: TextStyle(
-                    color: textShade(context, Styles.subtitleOpacity),
                   ),
+                );
+              },
+              leading: Icon(game.perf.icon),
+              title: PlayerTitle(
+                userName: opponentName,
+                title: opponent.title,
+                rating: opponent.rating,
+              ),
+              subtitle: Text(
+                timeago.format(game.lastMoveAt),
+                style: TextStyle(
+                  color: textShade(context, Styles.subtitleOpacity),
                 ),
-                trailing: game.winner == mySide
-                    ? const Icon(
-                        CupertinoIcons.plus_square_fill,
-                        color: LichessColors.good,
-                      )
-                    : const Icon(
-                        CupertinoIcons.minus_square_fill,
-                        color: LichessColors.red,
-                      ),
-              );
-            }),
-          ).toList(growable: false),
+              ),
+              trailing: game.winner == mySide
+                  ? const Icon(
+                      CupertinoIcons.plus_square_fill,
+                      color: LichessColors.good,
+                    )
+                  : const Icon(
+                      CupertinoIcons.minus_square_fill,
+                      color: LichessColors.red,
+                    ),
+            );
+          }).toList(),
         );
       },
       error: (error, stackTrace) {
