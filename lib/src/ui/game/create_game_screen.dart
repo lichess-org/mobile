@@ -164,13 +164,13 @@ class PlayForm extends ConsumerWidget {
                         const Text(
                           'Maia is a human-like neural network chess engine. It was trained by learning from over 10 million Lichess games. It is an ongoing research project aiming to make a more human-friendly, useful, and fun chess AI. For more information go to maiachess.com. ',
                         ),
-                        const SizedBox(height: 10),
                         CardChoicePicker(
-                          notchedListTile: true,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
                           choices: MaiaStrength.values,
                           selectedItem: maiaStrength,
                           titleBuilder: (ms) => Text(ms.name),
                           subtitleBuilder: (ms) => Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [Perf.blitz, Perf.rapid, Perf.classical]
                                 .map((p) {
                               final bot = bots
@@ -181,10 +181,17 @@ class PlayForm extends ConsumerWidget {
                               return Semantics(
                                 label: p.title,
                                 child: Row(
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Icon(p.icon, size: 18.0),
                                     const SizedBox(width: 3.0),
-                                    Text(bot.perfs[p]!.rating.toString()),
+                                    Flexible(
+                                      child: Text(
+                                        bot.perfs[p]!.rating.toString(),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+                                    ),
                                     const SizedBox(width: 12.0),
                                   ],
                                 ),

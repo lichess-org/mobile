@@ -2,6 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+const EdgeInsetsDirectional _kDefaultInsetGroupedRowsMargin =
+    EdgeInsetsDirectional.fromSTEB(20.0, 20.0, 20.0, 10.0);
+
 /// A platform agnostic list section that fits inside a card.
 ///
 /// It should be used for a small number of children only.
@@ -28,7 +31,7 @@ class CardListSection extends StatelessWidget {
   /// Only on android
   final bool showDivider;
 
-  /// Use it to set [ListTileTheme.dense] property.
+  /// Use it to set [ListTileTheme.dense] property. Only on Android.
   final bool dense;
 
   /// Show a header above the children rows. Will be wrapped in a [PlatformListTile].
@@ -52,7 +55,7 @@ class CardListSection extends StatelessWidget {
           ...children,
         ];
         return Card(
-          margin: margin,
+          margin: margin ?? _kDefaultInsetGroupedRowsMargin,
           child: ListTileTheme(
             dense: dense,
             child: Column(
@@ -66,24 +69,23 @@ class CardListSection extends StatelessWidget {
           ),
         );
       case TargetPlatform.iOS:
-        return ListTileTheme(
-          dense: true,
-          child: CupertinoListSection.insetGrouped(
-            // to match android where default margin is here to show the drop shadow
-            margin: margin ?? EdgeInsets.zero,
-            hasLeading: hasLeading,
-            children: [
-              if (header != null)
-                CupertinoListTile(
-                  title: header!,
-                  trailing: onHeaderTap != null
-                      ? const Icon(CupertinoIcons.forward)
-                      : null,
-                  onTap: onHeaderTap,
-                ),
-              ...children,
-            ],
-          ),
+        return CupertinoListSection.insetGrouped(
+          margin: margin,
+          hasLeading: hasLeading,
+          header: header != null
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    header!,
+                    if (onHeaderTap != null)
+                      GestureDetector(
+                        onTap: onHeaderTap,
+                        child: const Icon(CupertinoIcons.ellipsis),
+                      ),
+                  ],
+                )
+              : null,
+          children: children,
         );
       default:
         assert(false, 'Unexpected platform $defaultTargetPlatform');
@@ -104,7 +106,7 @@ class CardChoicePicker<T extends Enum> extends StatelessWidget {
     required this.titleBuilder,
     this.subtitleBuilder,
     required this.onSelectedItemChanged,
-    this.notchedListTile = false,
+    this.margin,
   });
 
   final List<T> choices;
@@ -112,15 +114,14 @@ class CardChoicePicker<T extends Enum> extends StatelessWidget {
   final Widget Function(T choice) titleBuilder;
   final Widget Function(T choice)? subtitleBuilder;
   final void Function(T choice) onSelectedItemChanged;
-
-  /// On iOS only, use this to choose the constructor of [CupertinoListTile].
-  final bool notchedListTile;
+  final EdgeInsetsGeometry? margin;
 
   @override
   Widget build(BuildContext context) {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return Card(
+          margin: margin ?? _kDefaultInsetGroupedRowsMargin,
           child: Column(
             children: ListTile.divideTiles(
               context: context,
@@ -143,17 +144,12 @@ class CardChoicePicker<T extends Enum> extends StatelessWidget {
       case TargetPlatform.iOS:
         return CupertinoListSection.insetGrouped(
           hasLeading: false,
-          margin: const EdgeInsets.symmetric(vertical: 10.0),
-          // Estimated. Only useful with [CupertinoListTile]
-          // With [CupertinoListTile.notched] the `hasLeading` is enough.
-          additionalDividerMargin: notchedListTile ? null : 6.0,
+          margin: margin,
           children: choices.map((value) {
-            return (notchedListTile
-                ? CupertinoListTile.notched
-                : CupertinoListTile.new)(
+            return CupertinoListTile.notched(
               trailing: selectedItem == value
                   ? defaultTargetPlatform == TargetPlatform.iOS
-                      ? const Icon(CupertinoIcons.checkmark)
+                      ? const Icon(CupertinoIcons.check_mark_circled_solid)
                       : const Icon(Icons.check)
                   : null,
               title: titleBuilder(value),

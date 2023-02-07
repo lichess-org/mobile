@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/card.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 
@@ -31,23 +31,18 @@ class LeaderboardScreen extends StatelessWidget {
           return CustomScrollView(
             slivers: [
               SliverSafeArea(
-                sliver: SliverPadding(
-                  padding: Styles.bodyPadding,
-                  sliver: constraints.maxWidth > kLargeScreenWidth
-                      ? SliverGrid(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            mainAxisExtent: 644,
-                            crossAxisCount:
-                                (constraints.maxWidth / 300).floor(),
-                          ),
-                          delegate: SliverChildListDelegate(_buildList()),
-                        )
-                      : SliverList(
-                          delegate: SliverChildListDelegate(_buildList()),
+                sliver: constraints.maxWidth > kLargeScreenWidth
+                    ? SliverGrid(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          mainAxisExtent: 644,
+                          crossAxisCount: (constraints.maxWidth / 300).floor(),
                         ),
-                ),
-              )
+                        delegate: SliverChildListDelegate(_buildList()),
+                      )
+                    : SliverList(
+                        delegate: SliverChildListDelegate(_buildList()),
+                      ),
+              ),
             ],
           );
         },
@@ -233,20 +228,16 @@ class _Leaderboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        PlatformListTile(
-          leading: Icon(iconData, color: LichessColors.brag),
-          title: Text(title),
-        ),
-        ...ListTile.divideTiles(
-          color: dividerColor(context),
-          context: context,
-          tiles: userList.map((user) => LeaderboardListTile(user: user)),
-        ),
-        const SizedBox(height: 12),
-      ],
+    return CardListSection(
+      header: Row(
+        children: [
+          Icon(iconData, color: LichessColors.brag),
+          const SizedBox(width: 10.0),
+          Text(title),
+        ],
+      ),
+      children:
+          userList.map((user) => LeaderboardListTile(user: user)).toList(),
     );
   }
 }

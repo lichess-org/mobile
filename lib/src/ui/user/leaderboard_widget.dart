@@ -26,7 +26,6 @@ class LeaderboardWidget extends ConsumerWidget {
     return leaderboardState.when(
       data: (data) {
         return CardListSection(
-          dense: true,
           hasLeading: true,
           header: Text(
             context.l10n.leaderboard,

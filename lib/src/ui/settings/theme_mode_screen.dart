@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -56,7 +55,6 @@ class _Body extends ConsumerWidget {
 
     return SafeArea(
       child: ListView(
-        padding: Styles.bodyPadding,
         children: [
           CardChoicePicker(
             choices: ThemeMode.values,
