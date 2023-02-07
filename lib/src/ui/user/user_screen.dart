@@ -127,14 +127,20 @@ class UserScreenBody extends StatelessWidget {
     ];
 
     return inCustomScrollView
-        ? SliverList(
-            delegate: SliverChildListDelegate(list),
+        ? SliverPadding(
+            padding: Styles.verticalBodyPadding,
+            sliver: SliverList(
+              delegate: SliverChildListDelegate(list),
+            ),
           )
         : ListView(
+            padding: Styles.verticalBodyPadding,
             children: list,
           );
   }
 }
+
+const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 
 class _Profile extends StatelessWidget {
   const _Profile({
@@ -150,10 +156,14 @@ class _Profile extends StatelessWidget {
     final playerTitle = PlayerTitle(
       userName: user.username,
       title: user.title,
-      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+      style: _userNameStyle,
     );
-    final userFullName =
-        user.profile?.fullName != null ? Text(user.profile!.fullName!) : null;
+    final userFullName = user.profile?.fullName != null
+        ? Text(
+            user.profile!.fullName!,
+            style: showPlayerTitle ? null : _userNameStyle,
+          )
+        : null;
     final title = showPlayerTitle ? playerTitle : userFullName;
     final subTitle = showPlayerTitle ? userFullName : null;
 
