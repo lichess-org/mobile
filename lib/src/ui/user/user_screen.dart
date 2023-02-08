@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -121,9 +120,7 @@ class UserScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final list = [
       _Profile(user: user, showPlayerTitle: showPlayerTitle),
-      const SizedBox(height: 20),
       PerfCards(user: user),
-      const SizedBox(height: 20),
       RecentGames(user: user),
     ];
 
@@ -169,7 +166,7 @@ class _Profile extends StatelessWidget {
     final subTitle = showPlayerTitle ? userFullName : null;
 
     return Padding(
-      padding: Styles.horizontalBodyPadding,
+      padding: Styles.bodySectionPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -223,7 +220,7 @@ class PerfCards extends StatelessWidget {
     }).toList(growable: false);
 
     return Padding(
-      padding: Styles.horizontalBodyPadding,
+      padding: Styles.bodySectionPadding,
       child: SizedBox(
         height: 106,
         child: ListView.separated(
@@ -338,7 +335,7 @@ class RecentGames extends ConsumerWidget {
                   )
                 : opponent.name;
 
-            return PlatformListTile(
+            return GameListTile(
               onTap: () {
                 Navigator.of(context, rootNavigator: true).push<void>(
                   MaterialPageRoute(
@@ -350,20 +347,14 @@ class RecentGames extends ConsumerWidget {
                   ),
                 );
               },
-              leading: Icon(
-                game.perf.icon,
-                size: defaultTargetPlatform == TargetPlatform.iOS ? 26.0 : 38.0,
-              ),
-              title: PlayerTitle(
+              icon: game.perf.icon,
+              playerTitle: PlayerTitle(
                 userName: opponentName,
                 title: opponent.title,
                 rating: opponent.rating,
               ),
               subtitle: Text(
                 timeago.format(game.lastMoveAt),
-                style: TextStyle(
-                  color: textShade(context, Styles.subtitleOpacity),
-                ),
               ),
               trailing: game.winner == mySide
                   ? const Icon(

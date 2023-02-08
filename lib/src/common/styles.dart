@@ -23,8 +23,11 @@ abstract class Styles {
           ? const EdgeInsets.symmetric(horizontal: 20.0)
           : const EdgeInsets.symmetric(horizontal: 16.0);
 
-  // spacing
   static const sectionBottomPadding = EdgeInsets.only(bottom: 16);
+
+  /// Horizontal and bottom padding for a body section
+  static EdgeInsetsGeometry get bodySectionPadding =>
+      horizontalBodyPadding.add(sectionBottomPadding);
 }
 
 /// Retrieve the default text color and apply an opacity to it.

@@ -711,7 +711,7 @@ class _GameListWidget extends ConsumerWidget {
       hasLeading: true,
       children: [
         for (final game in games)
-          PlatformListTile(
+          GameListTile(
             onTap: () {
               final gameIds = ISet(games.map((g) => g.gameId));
               ref.read(perfGamesProvider(gameIds).future).then((list) {
@@ -731,15 +731,14 @@ class _GameListWidget extends ConsumerWidget {
                 }
               });
             },
-            leading: Icon(perf.icon),
-            title: PlayerTitle(
+            icon: perf.icon,
+            playerTitle: PlayerTitle(
               userName: game.opponentName ?? '?',
               title: game.opponentTitle,
               rating: game.opponentRating,
             ),
             subtitle: Text(
               _dateFormatter.format(game.finishedAt),
-              style: TextStyle(color: textShade(context, 0.7)),
             ),
           ),
       ],

@@ -163,13 +163,18 @@ class PlatformListTile extends StatelessWidget {
           selected: selected,
         );
       case TargetPlatform.iOS:
-        return CupertinoListTile.notched(
-          leading: leading,
-          title: title,
-          subtitle: subtitle,
-          trailing: trailing,
-          additionalInfo: additionalInfo,
-          onTap: onTap,
+        return IconTheme(
+          data: CupertinoIconThemeData(
+            color: CupertinoColors.systemGrey.resolveFrom(context),
+          ),
+          child: CupertinoListTile.notched(
+            leading: leading,
+            title: title,
+            subtitle: subtitle,
+            trailing: trailing,
+            additionalInfo: additionalInfo,
+            onTap: onTap,
+          ),
         );
 
       default:

@@ -145,22 +145,25 @@ class LeaderboardListTile extends StatelessWidget {
       leading: perfIcon != null
           ? Icon(perfIcon)
           : _OnlineOrPatron(patron: user.patron, online: user.online),
-      title: Row(
-        children: [
-          if (user.title != null) ...[
-            Text(
-              user.title!,
-              style: const TextStyle(
-                color: LichessColors.brag,
-                fontWeight: FontWeight.bold,
+      title: Padding(
+        padding: const EdgeInsets.only(right: 5.0),
+        child: Row(
+          children: [
+            if (user.title != null) ...[
+              Text(
+                user.title!,
+                style: const TextStyle(
+                  color: LichessColors.brag,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+              const SizedBox(width: 5)
+            ],
+            Flexible(
+              child: Text(user.username, overflow: TextOverflow.ellipsis),
             ),
-            const SizedBox(width: 5)
           ],
-          Flexible(
-            child: Text(user.username, overflow: TextOverflow.ellipsis),
-          ),
-        ],
+        ),
       ),
       trailing: _RatingAndProgress(user.rating, user.progress),
     );
@@ -184,40 +187,47 @@ class _RatingAndProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.baseline,
-      textBaseline: TextBaseline.alphabetic,
-      children: [
-        Text(rating.toString()),
-        const SizedBox(width: 5),
-        if (progress != 0)
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Icon(
-                progress > 0
-                    ? LichessIcons.arrow_full_upperright
-                    : LichessIcons.arrow_full_lowerright,
-                size: 16,
-                color: progress > 0 ? LichessColors.good : LichessColors.red,
-              ),
-              SizedBox(
-                width: 20,
-                child: Text(
+    return SizedBox(
+      width: 80,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.baseline,
+        textBaseline: TextBaseline.alphabetic,
+        children: [
+          Flexible(
+            child: Text(
+              rating.toString(),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          const SizedBox(width: 5),
+          if (progress != 0)
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  progress > 0
+                      ? LichessIcons.arrow_full_upperright
+                      : LichessIcons.arrow_full_lowerright,
+                  size: 16,
+                  color: progress > 0 ? LichessColors.good : LichessColors.red,
+                ),
+                Text(
                   '${progress.abs()}',
+                  maxLines: 1,
                   style: TextStyle(
                     fontSize: 12,
                     color:
                         progress > 0 ? LichessColors.good : LichessColors.red,
                   ),
-                ),
-              )
-            ],
-          ),
-      ],
+                )
+              ],
+            ),
+        ],
+      ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
 const _kTitleMedium = TextStyle(
   fontSize: 18,
@@ -106,7 +107,45 @@ class ListSection extends StatelessWidget {
   }
 }
 
-/// A tappable [ListTile] that represents a settings value.
+/// A list tile that shows game info.
+class GameListTile extends StatelessWidget {
+  const GameListTile({
+    required this.icon,
+    required this.playerTitle,
+    this.subtitle,
+    this.trailing,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final Widget playerTitle;
+  final Widget? subtitle;
+  final Widget? trailing;
+  final GestureTapCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformListTile(
+      onTap: onTap,
+      leading: Icon(
+        icon,
+        size: defaultTargetPlatform == TargetPlatform.iOS ? 26.0 : 36.0,
+      ),
+      title: playerTitle,
+      subtitle: subtitle != null
+          ? DefaultTextStyle.merge(
+              child: subtitle!,
+              style: TextStyle(
+                color: textShade(context, Styles.subtitleOpacity),
+              ),
+            )
+          : null,
+      trailing: trailing,
+    );
+  }
+}
+
+/// A platform agnostic tappable list tile that represents a settings value.
 class SettingsListTile extends StatelessWidget {
   const SettingsListTile({
     this.icon,
