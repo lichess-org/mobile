@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('lichess.org'),
+        title: const Text('Home'),
         actions: const [
           SignInWidget(),
         ],

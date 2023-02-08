@@ -38,7 +38,19 @@ class App extends ConsumerWidget {
                 ? CupertinoColors.systemGroupedBackground
                 : null,
           ),
-          child: Material(child: child),
+          child: Material(
+            // icon theme is needed here because cupertino theme overrides
+            // default icon theme
+            child: child != null
+                ? IconTheme(
+                    data: IconThemeData(
+                      // TODO choose a real base color for icons
+                      color: Theme.of(context).dividerColor,
+                    ),
+                    child: child,
+                  )
+                : child,
+          ),
         );
       },
       onGenerateRoute: (RouteSettings settings) {

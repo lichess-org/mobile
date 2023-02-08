@@ -5,7 +5,6 @@ import 'package:loading_overlay/loading_overlay.dart';
 
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
-import 'package:lichess_mobile/src/widgets/card.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -55,12 +54,10 @@ class _Body extends ConsumerWidget {
       child: SafeArea(
         child: ListView(
           children: [
-            const SizedBox(height: 10),
-            CardListSection(
-              showDivider: true,
+            ListSection(
+              // showDivider: true,
               children: [
                 SettingsListTile(
-                  icon: const Icon(Icons.brightness_medium),
                   settingsLabel: context.l10n.background,
                   settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
                   onTap: () => pushPlatformRoute(
@@ -74,7 +71,7 @@ class _Body extends ConsumerWidget {
             authState.maybeWhen(
               data: (data) {
                 return data != null
-                    ? CardListSection(
+                    ? ListSection(
                         children: [
                           PlatformListTile(
                             leading: const Icon(Icons.exit_to_app),

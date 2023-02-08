@@ -1,10 +1,11 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:async/async.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -349,7 +350,10 @@ class RecentGames extends ConsumerWidget {
                   ),
                 );
               },
-              leading: Icon(game.perf.icon),
+              leading: Icon(
+                game.perf.icon,
+                size: defaultTargetPlatform == TargetPlatform.iOS ? 26.0 : 38.0,
+              ),
               title: PlayerTitle(
                 userName: opponentName,
                 title: opponent.title,

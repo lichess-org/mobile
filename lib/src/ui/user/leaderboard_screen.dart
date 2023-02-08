@@ -5,8 +5,9 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
+import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/card.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 
@@ -123,6 +124,7 @@ class LeaderboardScreen extends StatelessWidget {
         leaderboard.racingKings,
         LichessIcons.racing_kings,
         'RACING KINGS',
+        showDivider: false,
       ),
     ];
   }
@@ -221,23 +223,33 @@ class _RatingAndProgress extends StatelessWidget {
 }
 
 class _Leaderboard extends StatelessWidget {
-  const _Leaderboard(this.userList, this.iconData, this.title);
+  const _Leaderboard(
+    this.userList,
+    this.iconData,
+    this.title, {
+    this.showDivider = true,
+  });
   final List<LeaderboardUser> userList;
   final IconData iconData;
   final String title;
+  final bool showDivider;
 
   @override
   Widget build(BuildContext context) {
-    return CardListSection(
-      header: Row(
-        children: [
-          Icon(iconData, color: LichessColors.brag),
-          const SizedBox(width: 10.0),
-          Text(title),
-        ],
+    return Padding(
+      padding: Styles.sectionBottomPadding,
+      child: ListSection(
+        showDivider: showDivider,
+        header: Row(
+          children: [
+            Icon(iconData, color: LichessColors.brag),
+            const SizedBox(width: 10.0),
+            Text(title),
+          ],
+        ),
+        children:
+            userList.map((user) => LeaderboardListTile(user: user)).toList(),
       ),
-      children:
-          userList.map((user) => LeaderboardListTile(user: user)).toList(),
     );
   }
 }
