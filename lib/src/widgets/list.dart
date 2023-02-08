@@ -55,7 +55,7 @@ class ListSection extends StatelessWidget {
           children: [
             if (header != null)
               ListTile(
-                title: DefaultTextStyle(
+                title: DefaultTextStyle.merge(
                   style: _kTitleMedium,
                   child: header!,
                 ),
@@ -76,7 +76,7 @@ class ListSection extends StatelessWidget {
             if (showDivider)
               const Padding(
                 padding: EdgeInsets.only(top: 10.0),
-                child: Divider(),
+                child: Divider(thickness: 0),
               ),
           ],
         );
