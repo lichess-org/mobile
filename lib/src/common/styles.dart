@@ -18,7 +18,7 @@ abstract class Styles {
   static const verticalBodyPadding = EdgeInsets.symmetric(vertical: 16.0);
 
   /// Gets horizontal padding according to platform.
-  static EdgeInsets get sectionEdgePadding =>
+  static EdgeInsets get horizontalBodyPadding =>
       defaultTargetPlatform == TargetPlatform.iOS
           ? const EdgeInsets.symmetric(horizontal: 20.0)
           : const EdgeInsets.symmetric(horizontal: 16.0);

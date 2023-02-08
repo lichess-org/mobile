@@ -169,7 +169,7 @@ class _Profile extends StatelessWidget {
     final subTitle = showPlayerTitle ? userFullName : null;
 
     return Padding(
-      padding: Styles.sectionEdgePadding,
+      padding: Styles.horizontalBodyPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -223,7 +223,7 @@ class PerfCards extends StatelessWidget {
     }).toList(growable: false);
 
     return Padding(
-      padding: Styles.sectionEdgePadding,
+      padding: Styles.horizontalBodyPadding,
       child: SizedBox(
         height: 106,
         child: ListView.separated(

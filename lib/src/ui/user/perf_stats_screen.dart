@@ -141,7 +141,7 @@ class _Body extends ConsumerWidget {
             scrollDirection: Axis.vertical,
             children: [
               Padding(
-                padding: Styles.sectionEdgePadding,
+                padding: Styles.horizontalBodyPadding,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -185,7 +185,7 @@ class _Body extends ConsumerWidget {
               // The number '12' here is not arbitrary, since the API returns the progression for the last 12 games (as far as I know).
               _CustomPlatformCard(
                 context.l10n.progressOverLastXGames('12').replaceAll(':', ''),
-                padding: Styles.sectionEdgePadding,
+                padding: Styles.horizontalBodyPadding,
                 child: _ProgressionWidget(data.progress),
               ),
               _CustomPlatformCardRow([
@@ -221,7 +221,7 @@ class _Body extends ConsumerWidget {
               ]),
               statGroupSpace,
               Padding(
-                padding: Styles.sectionEdgePadding,
+                padding: Styles.horizontalBodyPadding,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   textBaseline: TextBaseline.alphabetic,
@@ -307,7 +307,7 @@ class _Body extends ConsumerWidget {
                 ),
               ]),
               _CustomPlatformCard(
-                padding: Styles.sectionEdgePadding,
+                padding: Styles.horizontalBodyPadding,
                 context.l10n.winningStreak,
                 child: _StreakWidget(
                   data.maxWinStreak,
@@ -316,7 +316,7 @@ class _Body extends ConsumerWidget {
                 ),
               ),
               _CustomPlatformCard(
-                padding: Styles.sectionEdgePadding,
+                padding: Styles.horizontalBodyPadding,
                 context.l10n.losingStreak,
                 child: _StreakWidget(
                   data.maxLossStreak,
@@ -325,12 +325,12 @@ class _Body extends ConsumerWidget {
                 ),
               ),
               _CustomPlatformCard(
-                padding: Styles.sectionEdgePadding,
+                padding: Styles.horizontalBodyPadding,
                 context.l10n.gamesInARow,
                 child: _StreakWidget(data.maxPlayStreak, data.curPlayStreak),
               ),
               _CustomPlatformCard(
-                padding: Styles.sectionEdgePadding,
+                padding: Styles.horizontalBodyPadding,
                 context.l10n.maxTimePlaying,
                 child: _StreakWidget(data.maxTimeStreak, data.curTimeStreak),
               ),
@@ -435,7 +435,7 @@ class _CustomPlatformCardRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: Styles.sectionEdgePadding,
+      padding: Styles.horizontalBodyPadding,
       child: IntrinsicHeight(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
