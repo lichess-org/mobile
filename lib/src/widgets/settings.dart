@@ -57,6 +57,7 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
     required this.selectedItem,
     required this.titleBuilder,
     this.subtitleBuilder,
+    this.leadingBuilder,
     required this.onSelectedItemChanged,
     this.margin,
     this.notchedTile = false,
@@ -66,6 +67,7 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
   final Enum selectedItem;
   final Widget Function(T choice) titleBuilder;
   final Widget Function(T choice)? subtitleBuilder;
+  final Widget Function(T choice)? leadingBuilder;
   final void Function(T choice) onSelectedItemChanged;
   final EdgeInsetsGeometry? margin;
 
@@ -86,6 +88,7 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
                     selectedItem == value ? const Icon(Icons.check) : null,
                 title: titleBuilder(value),
                 subtitle: subtitleBuilder?.call(value),
+                leading: leadingBuilder?.call(value),
                 onTap: () => onSelectedItemChanged(value),
               );
             }),
@@ -96,7 +99,7 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
             notchedTile ? CupertinoListTile.notched : CupertinoListTile.new;
         return CupertinoListSection.insetGrouped(
           additionalDividerMargin: notchedTile ? null : 6.0,
-          hasLeading: false,
+          hasLeading: leadingBuilder != null,
           margin: margin,
           children: choices.map((value) {
             return tileConstructor(
@@ -105,6 +108,7 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
                   : null,
               title: titleBuilder(value),
               subtitle: subtitleBuilder?.call(value),
+              leading: leadingBuilder?.call(value),
               onTap: () => onSelectedItemChanged(value),
             );
           }).toList(growable: false),

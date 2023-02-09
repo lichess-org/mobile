@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 
 import './theme_mode_screen.dart';
+import './piece_set_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -51,6 +52,7 @@ class _Body extends ConsumerWidget {
     final themeMode = ref.watch(themeModeSettingProvider);
     final authState = ref.watch(authStateChangesProvider);
     final authActionsAsync = ref.watch(authActionsProvider);
+    final pieceSet = ref.watch(pieceSetPrefProvider);
     return LoadingOverlay(
       isLoading: authActionsAsync.isLoading,
       progressIndicator: const CircularProgressIndicator.adaptive(),
@@ -81,6 +83,17 @@ class _Body extends ConsumerWidget {
                         builder: (context) => const ThemeModeScreen(),
                       );
                     }
+                  },
+                ),
+                SettingsListTile(
+                  settingsLabel: context.l10n.pieceSet,
+                  settingsValue: pieceSet.label,
+                  onTap: () {
+                    pushPlatformRoute(
+                      context: context,
+                      title: context.l10n.pieceSet,
+                      builder: (context) => const PieceSetScreen(),
+                    );
                   },
                 ),
               ],
