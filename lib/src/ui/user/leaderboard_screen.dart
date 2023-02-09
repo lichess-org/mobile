@@ -249,6 +249,7 @@ class _Leaderboard extends StatelessWidget {
     return Padding(
       padding: Styles.sectionBottomPadding,
       child: ListSection(
+        hasLeading: true,
         showDivider: showDivider,
         header: Row(
           children: [
