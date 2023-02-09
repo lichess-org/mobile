@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
-import 'package:lichess_mobile/src/model/settings/settings_repository.dart';
-import '../../model/settings/fake_settings_repository.dart';
 import '../../utils.dart';
 
 void main() {
@@ -12,6 +12,10 @@ void main() {
       'meets accessibility guidelines',
       (WidgetTester tester) async {
         final SemanticsHandle handle = tester.ensureSemantics();
+
+        SharedPreferences.setMockInitialValues({});
+        final sharedPreferences = await SharedPreferences.getInstance();
+
         final app = await buildTestApp(
           tester,
           home: Consumer(
@@ -25,8 +29,7 @@ void main() {
           ProviderScope(
             overrides: [
               ...defaultProviderOverrides,
-              settingsRepositoryProvider
-                  .overrideWithValue(FakeSettingsRepository()),
+              sharedPreferencesProvider.overrideWithValue(sharedPreferences),
             ],
             child: app,
           ),

@@ -72,7 +72,7 @@ class _Body extends ConsumerWidget {
                             Text(ThemeModeScreen.themeTitle(context, t)),
                         onSelectedItemChanged: (ThemeMode? value) => ref
                             .read(themeModeSettingProvider.notifier)
-                            .changeTheme(value ?? ThemeMode.system),
+                            .set(value ?? ThemeMode.system),
                       );
                     } else {
                       pushPlatformRoute(

@@ -76,7 +76,7 @@ class ArchivedGameScreen extends ConsumerWidget {
                 ? const Icon(Icons.volume_off)
                 : const Icon(Icons.volume_up),
             onPressed: () =>
-                ref.read(muteSoundSettingProvider.notifier).toggleSound(),
+                ref.read(muteSoundSettingProvider.notifier).toggle(),
           )
         ],
       ),
@@ -109,8 +109,7 @@ class ArchivedGameScreen extends ConsumerWidget {
           child: isSoundMuted
               ? const Icon(CupertinoIcons.volume_off)
               : const Icon(CupertinoIcons.volume_up),
-          onPressed: () =>
-              ref.read(muteSoundSettingProvider.notifier).toggleSound(),
+          onPressed: () => ref.read(muteSoundSettingProvider.notifier).toggle(),
         ),
       ),
       child: SafeArea(

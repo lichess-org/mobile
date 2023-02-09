@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'settings_repository.dart';
+import 'package:lichess_mobile/src/common/shared_preferences.dart';
 
 part 'providers.g.dart';
 
-@Riverpod(keepAlive: true)
-class ThemeModeSetting extends _$ThemeModeSetting {
-  @override
-  ThemeMode build() {
-    final repository = ref.watch(settingsRepositoryProvider);
-    return repository.getThemeMode();
-  }
+const kSettingsStorePrefix = 'settings';
 
-  Future<void> changeTheme(ThemeMode theme) async {
-    final repository = ref.read(settingsRepositoryProvider);
-    final ok = await repository.setThemeMode(theme);
-    if (ok) {
-      state = theme;
+final themeModeSettingProvider = createPrefProvider(
+  prefKey: '$kSettingsStorePrefix.themeMode',
+  defaultValue: ThemeMode.system,
+  mapFrom: (string) {
+    switch (string) {
+      case 'dark':
+        return ThemeMode.dark;
+      case 'light':
+        return ThemeMode.light;
+      case 'system':
+        return ThemeMode.system;
+      default:
+        return ThemeMode.system;
     }
-  }
-}
+  },
+  mapTo: (ThemeMode theme) => theme.name,
+);
 
 @Riverpod(keepAlive: true)
 Brightness selectedBrigthness(SelectedBrigthnessRef ref) {
@@ -36,19 +39,7 @@ Brightness selectedBrigthness(SelectedBrigthnessRef ref) {
   }
 }
 
-@Riverpod(keepAlive: true)
-class MuteSoundSetting extends _$MuteSoundSetting {
-  @override
-  bool build() {
-    final repository = ref.watch(settingsRepositoryProvider);
-    return repository.isSoundMuted();
-  }
-
-  Future<void> toggleSound() async {
-    final repository = ref.read(settingsRepositoryProvider);
-    final ok = await repository.toggleSound();
-    if (ok) {
-      state = repository.isSoundMuted();
-    }
-  }
-}
+final muteSoundSettingProvider = createBoolPrefProvider(
+  prefKey: '$kSettingsStorePrefix.muteSound',
+  defaultValue: false,
+);

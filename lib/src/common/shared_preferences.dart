@@ -6,21 +6,40 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError();
 });
 
-/// Creates a Notifier backed by SharedPreferences and of value `T`.
+/// Creates a pref provider backed by SharedPreferences and of value `T`.
 NotifierProvider<PrefNotifier<T>, T> createPrefProvider<T>({
   required String prefKey,
   required T defaultValue,
   T Function(String?)? mapFrom,
   String Function(T)? mapTo,
 }) {
-  return NotifierProvider<PrefNotifier<T>, T>(() {
-    return PrefNotifier<T>(
-      prefKey,
-      defaultValue,
-      mapFrom: mapFrom,
-      mapTo: mapTo,
-    );
-  });
+  return NotifierProvider<PrefNotifier<T>, T>(
+    () {
+      return PrefNotifier<T>(
+        prefKey,
+        defaultValue,
+        mapFrom: mapFrom,
+        mapTo: mapTo,
+      );
+    },
+    name: '${prefKey}PrefProvider',
+  );
+}
+
+/// Creates a boolean pref provider that has a `toggle` method.
+NotifierProvider<ToggleBoolPrefNotifier, bool> createBoolPrefProvider({
+  required String prefKey,
+  required bool defaultValue,
+}) {
+  return NotifierProvider<ToggleBoolPrefNotifier, bool>(
+    () {
+      return ToggleBoolPrefNotifier(
+        prefKey: prefKey,
+        defaultValue: defaultValue,
+      );
+    },
+    name: '${prefKey}ToggleBoolPrefProvider',
+  );
 }
 
 class PrefNotifier<T> extends Notifier<T> {
@@ -31,17 +50,17 @@ class PrefNotifier<T> extends Notifier<T> {
           'You must pass both `mapFrom` and `mapTo`, or none.',
         );
 
+  final String prefKey;
+  final T defaultValue;
+  final T Function(String?)? mapFrom;
+  final String Function(T)? mapTo;
+
   @override
   T build() {
     final saved = prefs.get(prefKey);
     final mapped = mapFrom != null ? mapFrom!(saved as String?) : saved as T?;
     return mapped ?? defaultValue;
   }
-
-  String prefKey;
-  T defaultValue;
-  T Function(String?)? mapFrom;
-  String Function(T)? mapTo;
 
   SharedPreferences get prefs => ref.read(sharedPreferencesProvider);
 
@@ -62,6 +81,28 @@ class PrefNotifier<T> extends Notifier<T> {
     }
     if (success) {
       state = value;
+    }
+  }
+}
+
+class ToggleBoolPrefNotifier extends Notifier<bool> {
+  ToggleBoolPrefNotifier({required this.prefKey, required this.defaultValue});
+
+  final String prefKey;
+  final bool defaultValue;
+
+  @override
+  bool build() {
+    final prefs = ref.read(sharedPreferencesProvider);
+    return prefs.getBool(prefKey) ?? defaultValue;
+  }
+
+  Future<void> toggle() async {
+    final prefs = ref.read(sharedPreferencesProvider);
+    final toggled = !(prefs.getBool(prefKey) ?? false);
+    final ok = await prefs.setBool(prefKey, toggled);
+    if (ok) {
+      state = toggled;
     }
   }
 }

@@ -51,7 +51,7 @@ class _Body extends ConsumerWidget {
 
     void onChanged(ThemeMode? value) => ref
         .read(themeModeSettingProvider.notifier)
-        .changeTheme(value ?? ThemeMode.system);
+        .set(value ?? ThemeMode.system);
 
     return SafeArea(
       child: ListView(
