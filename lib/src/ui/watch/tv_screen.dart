@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-import 'package:lichess_mobile/src/model/settings/is_sound_muted_provider.dart';
+import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/model/tv/featured_position.dart';
 import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
@@ -33,7 +33,7 @@ class TvScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-    final isSoundMuted = ref.watch(isSoundMutedProvider);
+    final isSoundMuted = ref.watch(muteSoundSettingProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lichess TV'),
@@ -43,7 +43,7 @@ class TvScreen extends ConsumerWidget {
                 ? const Icon(Icons.volume_off)
                 : const Icon(Icons.volume_up),
             onPressed: () =>
-                ref.read(isSoundMutedProvider.notifier).toggleSound(),
+                ref.read(muteSoundSettingProvider.notifier).toggleSound(),
           )
         ],
       ),
@@ -55,7 +55,7 @@ class TvScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-    final isSoundMuted = ref.watch(isSoundMutedProvider);
+    final isSoundMuted = ref.watch(muteSoundSettingProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         trailing: CupertinoButton(
@@ -64,7 +64,7 @@ class TvScreen extends ConsumerWidget {
               ? const Icon(CupertinoIcons.volume_off)
               : const Icon(CupertinoIcons.volume_up),
           onPressed: () =>
-              ref.read(isSoundMutedProvider.notifier).toggleSound(),
+              ref.read(muteSoundSettingProvider.notifier).toggleSound(),
         ),
       ),
       child: const _Body(),

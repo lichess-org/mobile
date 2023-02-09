@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_actions_notifier.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
-import 'package:lichess_mobile/src/model/settings/theme_mode_provider.dart';
+import 'package:lichess_mobile/src/model/settings/providers.dart';
 
 import './theme_mode_screen.dart';
 
@@ -48,7 +48,7 @@ class SettingsScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeProvider);
+    final themeMode = ref.watch(themeModeSettingProvider);
     final authState = ref.watch(authStateChangesProvider);
     final authActionsAsync = ref.watch(authActionsProvider);
     return LoadingOverlay(
@@ -71,7 +71,7 @@ class _Body extends ConsumerWidget {
                         labelBuilder: (t) =>
                             Text(ThemeModeScreen.themeTitle(context, t)),
                         onSelectedItemChanged: (ThemeMode? value) => ref
-                            .read(themeModeProvider.notifier)
+                            .read(themeModeSettingProvider.notifier)
                             .changeTheme(value ?? ThemeMode.system),
                       );
                     } else {
