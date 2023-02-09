@@ -18,6 +18,7 @@ default_platform(:ios)
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
+    sh "flutter build ipa -v --dart-define=LICHESS_HOST=https://lichess.org"
     increment_build_number(
       build_number: latest_testflight_build_number + 1,
       xcodeproj: "Runner.xcodeproj"
