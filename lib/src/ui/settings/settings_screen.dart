@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +7,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_actions_notifier.dart';
@@ -59,11 +61,26 @@ class _Body extends ConsumerWidget {
                 SettingsListTile(
                   settingsLabel: context.l10n.background,
                   settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
-                  onTap: () => pushPlatformRoute(
-                    context: context,
-                    title: context.l10n.background,
-                    builder: (context) => const ThemeModeScreen(),
-                  ),
+                  onTap: () {
+                    if (defaultTargetPlatform == TargetPlatform.android) {
+                      showChoicesPicker(
+                        context,
+                        choices: ThemeMode.values,
+                        selectedItem: themeMode,
+                        labelBuilder: (t) =>
+                            Text(ThemeModeScreen.themeTitle(context, t)),
+                        onSelectedItemChanged: (ThemeMode? value) => ref
+                            .read(themeModeProvider.notifier)
+                            .changeTheme(value ?? ThemeMode.system),
+                      );
+                    } else {
+                      pushPlatformRoute(
+                        context: context,
+                        title: context.l10n.background,
+                        builder: (context) => const ThemeModeScreen(),
+                      );
+                    }
+                  },
                 ),
               ],
             ),
