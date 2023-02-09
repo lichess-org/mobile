@@ -137,7 +137,7 @@ class PlayForm extends ConsumerWidget {
         children: [
           Text(
             context.l10n.playWithTheMachine,
-            style: const TextStyle(fontSize: 20),
+            style: Styles.sectionTitle,
             overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 10),
@@ -165,6 +165,7 @@ class PlayForm extends ConsumerWidget {
                           'Maia is a human-like neural network chess engine. It was trained by learning from over 10 million Lichess games. It is an ongoing research project aiming to make a more human-friendly, useful, and fun chess AI. For more information go to maiachess.com. ',
                         ),
                         CardChoicePicker(
+                          notchedTile: true,
                           margin: const EdgeInsets.symmetric(vertical: 10),
                           choices: MaiaStrength.values,
                           selectedItem: maiaStrength,

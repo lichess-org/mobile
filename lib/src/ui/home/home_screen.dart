@@ -85,8 +85,8 @@ class _HomeScaffold extends StatelessWidget {
           SizedBox(
             height: 80,
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(vertical: 15.0)
+                  .add(Styles.horizontalBodyPadding),
               child: FatButton(
                 semanticsLabel: context.l10n.createAGame,
                 child: Text(context.l10n.createAGame),

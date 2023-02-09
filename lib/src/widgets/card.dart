@@ -18,6 +18,7 @@ class CardChoicePicker<T extends Enum> extends StatelessWidget {
     this.subtitleBuilder,
     required this.onSelectedItemChanged,
     this.margin,
+    this.notchedTile = false,
   });
 
   final List<T> choices;
@@ -26,6 +27,9 @@ class CardChoicePicker<T extends Enum> extends StatelessWidget {
   final Widget Function(T choice)? subtitleBuilder;
   final void Function(T choice) onSelectedItemChanged;
   final EdgeInsetsGeometry? margin;
+
+  /// iOS only, for choosing the style of the tile.
+  final bool notchedTile;
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +57,14 @@ class CardChoicePicker<T extends Enum> extends StatelessWidget {
           ),
         );
       case TargetPlatform.iOS:
+        final tileConstructor =
+            notchedTile ? CupertinoListTile.notched : CupertinoListTile.new;
         return CupertinoListSection.insetGrouped(
+          additionalDividerMargin: notchedTile ? null : 6.0,
           hasLeading: false,
           margin: margin,
           children: choices.map((value) {
-            return CupertinoListTile.notched(
+            return tileConstructor(
               trailing: selectedItem == value
                   ? defaultTargetPlatform == TargetPlatform.iOS
                       ? const Icon(CupertinoIcons.check_mark_circled_solid)

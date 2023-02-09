@@ -55,7 +55,6 @@ class _Body extends ConsumerWidget {
         child: ListView(
           children: [
             ListSection(
-              // showDivider: true,
               children: [
                 SettingsListTile(
                   settingsLabel: context.l10n.background,
