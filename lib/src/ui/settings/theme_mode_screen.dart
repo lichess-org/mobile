@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/card.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 
 import 'package:lichess_mobile/src/model/settings/theme_mode_provider.dart';
 
@@ -56,7 +56,7 @@ class _Body extends ConsumerWidget {
     return SafeArea(
       child: ListView(
         children: [
-          CardChoicePicker(
+          ChoicePicker(
             choices: ThemeMode.values,
             selectedItem: themeMode,
             titleBuilder: (t) => Text(ThemeModeScreen.themeTitle(context, t)),
