@@ -104,7 +104,3 @@ class TvChannelNotifier extends StateNotifier<TvChannel> {
 
   void toggleChannel(int value) => state = TvChannel.getChannel(value);
 }
-
-class TvGameIdNotifier extends StateNotifier<String> {
-  TvGameIdNotifier({required String gameId}) : super(gameId);
-}
