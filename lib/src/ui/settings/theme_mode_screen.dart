@@ -47,11 +47,10 @@ class ThemeModeScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeSettingProvider);
+    final themeMode = ref.watch(themeModePrefProvider);
 
-    void onChanged(ThemeMode? value) => ref
-        .read(themeModeSettingProvider.notifier)
-        .set(value ?? ThemeMode.system);
+    void onChanged(ThemeMode? value) =>
+        ref.read(themeModePrefProvider.notifier).set(value ?? ThemeMode.system);
 
     return SafeArea(
       child: ListView(

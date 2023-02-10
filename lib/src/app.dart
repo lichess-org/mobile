@@ -14,8 +14,8 @@ class App extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeSettingProvider);
-    final brightness = ref.watch(selectedBrigthnessProvider);
+    final themeMode = ref.watch(themeModePrefProvider);
+    final brightness = ref.watch(currentBrightnessProvider);
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: kSupportedLocales,

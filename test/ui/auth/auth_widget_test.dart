@@ -31,7 +31,7 @@ void main() {
           overrides: [
             ...defaultProviderOverrides,
             authRepositoryProvider.overrideWithValue(FakeAuthRepository(null)),
-            selectedBrigthnessProvider.overrideWithValue(Brightness.dark),
+            currentBrightnessProvider.overrideWithValue(Brightness.dark),
           ],
           child: app,
         ),

@@ -30,19 +30,19 @@ class SoundService {
   }
 
   void playMove() {
-    final isMuted = ref.read(muteSoundSettingProvider);
+    final isMuted = ref.read(muteSoundPrefProvider);
     if (_moveId != null && !isMuted) _pool.play(_moveId!);
   }
 
   void playCapture() {
-    final isMuted = ref.read(muteSoundSettingProvider);
+    final isMuted = ref.read(muteSoundPrefProvider);
     if (_captureId != null && !isMuted) {
       _pool.play(_captureId!);
     }
   }
 
   void playDong() {
-    final isMuted = ref.read(muteSoundSettingProvider);
+    final isMuted = ref.read(muteSoundPrefProvider);
     if (_dongId != null && !isMuted) _pool.play(_dongId!);
   }
 

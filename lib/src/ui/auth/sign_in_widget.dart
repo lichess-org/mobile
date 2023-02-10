@@ -16,7 +16,7 @@ class SignInWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateChangesProvider);
     final authActionsAsync = ref.watch(authActionsProvider);
-    final brightness = ref.watch(selectedBrigthnessProvider);
+    final brightness = ref.watch(currentBrightnessProvider);
     ref.listen<AsyncValue<void>>(
       authActionsProvider,
       (_, state) => state.showSnackbarOnError(context),

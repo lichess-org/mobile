@@ -9,7 +9,7 @@ part 'providers.g.dart';
 
 const kSettingsStorePrefix = 'settings';
 
-final themeModeSettingProvider = createPrefProvider(
+final themeModePrefProvider = createPrefProvider(
   prefKey: '$kSettingsStorePrefix.themeMode',
   defaultValue: ThemeMode.system,
   mapFrom: (string) {
@@ -28,8 +28,8 @@ final themeModeSettingProvider = createPrefProvider(
 );
 
 @Riverpod(keepAlive: true)
-Brightness selectedBrigthness(SelectedBrigthnessRef ref) {
-  final themeMode = ref.watch(themeModeSettingProvider);
+Brightness currentBrightness(CurrentBrightnessRef ref) {
+  final themeMode = ref.watch(themeModePrefProvider);
 
   switch (themeMode) {
     case ThemeMode.dark:
@@ -41,7 +41,7 @@ Brightness selectedBrigthness(SelectedBrigthnessRef ref) {
   }
 }
 
-final muteSoundSettingProvider = createBoolPrefProvider(
+final muteSoundPrefProvider = createBoolPrefProvider(
   prefKey: '$kSettingsStorePrefix.muteSound',
   defaultValue: false,
 );

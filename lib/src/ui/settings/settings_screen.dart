@@ -50,7 +50,7 @@ class SettingsScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeSettingProvider);
+    final themeMode = ref.watch(themeModePrefProvider);
     final authState = ref.watch(authStateChangesProvider);
     final authActionsAsync = ref.watch(authActionsProvider);
     final pieceSet = ref.watch(pieceSetPrefProvider);
@@ -77,7 +77,7 @@ class _Body extends ConsumerWidget {
                         labelBuilder: (t) =>
                             Text(ThemeModeScreen.themeTitle(context, t)),
                         onSelectedItemChanged: (ThemeMode? value) => ref
-                            .read(themeModeSettingProvider.notifier)
+                            .read(themeModePrefProvider.notifier)
                             .set(value ?? ThemeMode.system),
                       );
                     } else {

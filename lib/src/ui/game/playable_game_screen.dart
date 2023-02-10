@@ -63,7 +63,7 @@ class PlayableGameScreen extends ConsumerWidget {
   }
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    final isSoundMuted = ref.watch(muteSoundSettingProvider);
+    final isSoundMuted = ref.watch(muteSoundPrefProvider);
     final gameState = ref.watch(gameStateProvider);
     return Scaffold(
       appBar: AppBar(
@@ -82,8 +82,7 @@ class PlayableGameScreen extends ConsumerWidget {
             icon: isSoundMuted
                 ? const Icon(Icons.volume_off)
                 : const Icon(Icons.volume_up),
-            onPressed: () =>
-                ref.read(muteSoundSettingProvider.notifier).toggle(),
+            onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
           )
         ],
       ),
@@ -93,7 +92,7 @@ class PlayableGameScreen extends ConsumerWidget {
   }
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    final isSoundMuted = ref.watch(muteSoundSettingProvider);
+    final isSoundMuted = ref.watch(muteSoundPrefProvider);
     final gameState = ref.watch(gameStateProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -114,7 +113,7 @@ class PlayableGameScreen extends ConsumerWidget {
           child: isSoundMuted
               ? const Icon(CupertinoIcons.volume_off)
               : const Icon(CupertinoIcons.volume_up),
-          onPressed: () => ref.read(muteSoundSettingProvider.notifier).toggle(),
+          onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
         ),
       ),
       child: SafeArea(

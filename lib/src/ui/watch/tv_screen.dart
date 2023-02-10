@@ -31,7 +31,7 @@ class TvScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-    final isSoundMuted = ref.watch(muteSoundSettingProvider);
+    final isSoundMuted = ref.watch(muteSoundPrefProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lichess TV'),
@@ -40,8 +40,7 @@ class TvScreen extends ConsumerWidget {
             icon: isSoundMuted
                 ? const Icon(Icons.volume_off)
                 : const Icon(Icons.volume_up),
-            onPressed: () =>
-                ref.read(muteSoundSettingProvider.notifier).toggle(),
+            onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
           )
         ],
       ),
@@ -53,7 +52,7 @@ class TvScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-    final isSoundMuted = ref.watch(muteSoundSettingProvider);
+    final isSoundMuted = ref.watch(muteSoundPrefProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         trailing: CupertinoButton(
@@ -61,7 +60,7 @@ class TvScreen extends ConsumerWidget {
           child: isSoundMuted
               ? const Icon(CupertinoIcons.volume_off)
               : const Icon(CupertinoIcons.volume_up),
-          onPressed: () => ref.read(muteSoundSettingProvider.notifier).toggle(),
+          onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
         ),
       ),
       child: const _Body(),
