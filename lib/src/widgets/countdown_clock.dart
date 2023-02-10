@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:lichess_mobile/src/model/settings/theme_mode_provider.dart';
+import 'package:lichess_mobile/src/model/settings/providers.dart';
 
 const _kMaxClockTextScaleFactor = 1.94;
 
@@ -70,7 +70,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   Widget build(BuildContext context) {
     final min = timeLeft.inMinutes.remainder(60);
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
-    final brightness = ref.watch(selectedBrigthnessProvider);
+    final brightness = ref.watch(currentBrightnessProvider);
     final clockStyle = brightness == Brightness.dark
         ? ClockStyle.darkThemeStyle
         : ClockStyle.lightThemeStyle;

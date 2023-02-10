@@ -13,9 +13,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_modal_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/card.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/auth/auth_actions_notifier.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
@@ -164,7 +164,7 @@ class PlayForm extends ConsumerWidget {
                         const Text(
                           'Maia is a human-like neural network chess engine. It was trained by learning from over 10 million Lichess games. It is an ongoing research project aiming to make a more human-friendly, useful, and fun chess AI. For more information go to maiachess.com. ',
                         ),
-                        CardChoicePicker(
+                        ChoicePicker(
                           notchedTile: true,
                           margin: const EdgeInsets.symmetric(vertical: 10),
                           choices: MaiaStrength.values,

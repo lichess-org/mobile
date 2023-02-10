@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/model/settings/is_sound_muted_provider.dart';
+import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
@@ -63,7 +63,7 @@ class PlayableGameScreen extends ConsumerWidget {
   }
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    final isSoundMuted = ref.watch(isSoundMutedProvider);
+    final isSoundMuted = ref.watch(muteSoundPrefProvider);
     final gameState = ref.watch(gameStateProvider);
     return Scaffold(
       appBar: AppBar(
@@ -82,8 +82,7 @@ class PlayableGameScreen extends ConsumerWidget {
             icon: isSoundMuted
                 ? const Icon(Icons.volume_off)
                 : const Icon(Icons.volume_up),
-            onPressed: () =>
-                ref.read(isSoundMutedProvider.notifier).toggleSound(),
+            onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
           )
         ],
       ),
@@ -93,7 +92,7 @@ class PlayableGameScreen extends ConsumerWidget {
   }
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    final isSoundMuted = ref.watch(isSoundMutedProvider);
+    final isSoundMuted = ref.watch(muteSoundPrefProvider);
     final gameState = ref.watch(gameStateProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -114,8 +113,7 @@ class PlayableGameScreen extends ConsumerWidget {
           child: isSoundMuted
               ? const Icon(CupertinoIcons.volume_off)
               : const Icon(CupertinoIcons.volume_up),
-          onPressed: () =>
-              ref.read(isSoundMutedProvider.notifier).toggleSound(),
+          onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
         ),
       ),
       child: SafeArea(
@@ -170,6 +168,7 @@ class _BoardBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final pieceSet = ref.watch(pieceSetPrefProvider);
     final gameState = ref.watch(gameStateProvider);
     final gameClockStream = ref.watch(gameStreamProvider(game.id));
     final positionCursor = ref.watch(positionCursorProvider);
@@ -205,6 +204,9 @@ class _BoardBody extends ConsumerWidget {
         final bottomPlayer = game.orientation == Side.white ? white : black;
 
         return GameBoardLayout(
+          boardSettings: cg.BoardSettings(
+            pieceAssets: pieceSet.assets,
+          ),
           boardData: cg.BoardData(
             interactableSide:
                 gameState == null || !gameState.playing || isReplaying

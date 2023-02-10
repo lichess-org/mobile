@@ -1,14 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:chessground/chessground.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
-
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 
-class ThemeModeScreen extends StatelessWidget {
-  const ThemeModeScreen({super.key});
+class PieceSetScreen extends StatelessWidget {
+  const PieceSetScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,34 +32,31 @@ class ThemeModeScreen extends StatelessWidget {
       child: _Body(),
     );
   }
-
-  static String themeTitle(BuildContext context, ThemeMode theme) {
-    switch (theme) {
-      case ThemeMode.system:
-        return context.l10n.deviceTheme;
-      case ThemeMode.dark:
-        return context.l10n.dark;
-      case ThemeMode.light:
-        return context.l10n.light;
-    }
-  }
 }
 
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModePrefProvider);
+    final pieceSet = ref.watch(pieceSetPrefProvider);
 
-    void onChanged(ThemeMode? value) =>
-        ref.read(themeModePrefProvider.notifier).set(value ?? ThemeMode.system);
+    void onChanged(PieceSet? value) =>
+        ref.read(pieceSetPrefProvider.notifier).set(value ?? PieceSet.cburnett);
 
     return SafeArea(
       child: ListView(
         children: [
           ChoicePicker(
-            choices: ThemeMode.values,
-            selectedItem: themeMode,
-            titleBuilder: (t) => Text(ThemeModeScreen.themeTitle(context, t)),
+            notchedTile: true,
+            tileContentPadding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
+            choices: PieceSet.values,
+            selectedItem: pieceSet,
+            titleBuilder: (t) => Text(t.label),
+            leadingBuilder: (t) => Image(
+              image: t.assets['whiteknight']!,
+            ),
             onSelectedItemChanged: onChanged,
           )
         ],

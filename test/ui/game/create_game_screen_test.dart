@@ -19,7 +19,7 @@ import 'package:lichess_mobile/src/ui/game/playable_game_screen.dart';
 import 'package:lichess_mobile/src/model/game/time_control.dart';
 import 'package:lichess_mobile/src/model/game/computer_opponent.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/card.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 import '../../model/auth/fake_auth_repository.dart';
 import '../../utils.dart';
 
@@ -140,35 +140,35 @@ void main() {
         // loaded maia ratings
         expect(
           find.widgetWithIcon(
-            CardChoicePicker<MaiaStrength>,
+            ChoicePicker<MaiaStrength>,
             LichessIcons.blitz,
           ),
           findsNWidgets(3),
         );
         expect(
-          find.widgetWithText(CardChoicePicker<MaiaStrength>, '1541'),
+          find.widgetWithText(ChoicePicker<MaiaStrength>, '1541'),
           findsOneWidget,
         );
         expect(
           find.widgetWithIcon(
-            CardChoicePicker<MaiaStrength>,
+            ChoicePicker<MaiaStrength>,
             LichessIcons.rapid,
           ),
           findsNWidgets(3),
         );
         expect(
-          find.widgetWithText(CardChoicePicker<MaiaStrength>, '1477'),
+          find.widgetWithText(ChoicePicker<MaiaStrength>, '1477'),
           findsOneWidget,
         );
         expect(
           find.widgetWithIcon(
-            CardChoicePicker<MaiaStrength>,
+            ChoicePicker<MaiaStrength>,
             LichessIcons.classical,
           ),
           findsNWidgets(3),
         );
         expect(
-          find.widgetWithText(CardChoicePicker<MaiaStrength>, '1421'),
+          find.widgetWithText(ChoicePicker<MaiaStrength>, '1421'),
           findsOneWidget,
         );
 
@@ -178,8 +178,8 @@ void main() {
 
         expect(
           tester
-              .widget<CardChoicePicker>(
-                find.byType(CardChoicePicker<MaiaStrength>),
+              .widget<ChoicePicker>(
+                find.byType(ChoicePicker<MaiaStrength>),
               )
               .selectedItem,
           equals(MaiaStrength.maia5),

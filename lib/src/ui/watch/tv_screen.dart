@@ -11,13 +11,11 @@ import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-import 'package:lichess_mobile/src/model/settings/is_sound_muted_provider.dart';
+import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/model/tv/featured_position.dart';
 import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel_provider.dart';
-
-const _boardSettings = BoardSettings(animationDuration: Duration.zero);
 
 class TvScreen extends ConsumerWidget {
   const TvScreen({super.key});
@@ -35,8 +33,12 @@ class TvScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-    final isSoundMuted = ref.watch(isSoundMutedProvider);
+
+
     final tvChannel = ref.watch(tvChannelProvider);
+
+    final isSoundMuted = ref.watch(muteSoundPrefProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: InkWell(
@@ -54,8 +56,7 @@ class TvScreen extends ConsumerWidget {
             icon: isSoundMuted
                 ? const Icon(Icons.volume_off)
                 : const Icon(Icons.volume_up),
-            onPressed: () =>
-                ref.read(isSoundMutedProvider.notifier).toggleSound(),
+            onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
           )
         ],
       ),
@@ -67,8 +68,11 @@ class TvScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-    final isSoundMuted = ref.watch(isSoundMutedProvider);
+
+
     final tvChannel = ref.watch(tvChannelProvider);
+    final isSoundMuted = ref.watch(muteSoundPrefProvider);
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Row(
@@ -80,8 +84,7 @@ class TvScreen extends ConsumerWidget {
           child: isSoundMuted
               ? const Icon(CupertinoIcons.volume_off)
               : const Icon(CupertinoIcons.volume_up),
-          onPressed: () =>
-              ref.read(isSoundMutedProvider.notifier).toggleSound(),
+          onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
         ),
       ),
       child: const _Body(),
@@ -94,6 +97,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final pieceSet = ref.watch(pieceSetPrefProvider);
     final currentTab = ref.watch(currentBottomTabProvider);
     // ensure the stream is closed when offstage
     final tvStream = currentTab == BottomTab.watch
@@ -143,7 +147,10 @@ class _Body extends ConsumerWidget {
                 : kEmptyWidget;
             return GameBoardLayout(
               boardData: boardData,
-              boardSettings: _boardSettings,
+              boardSettings: BoardSettings(
+                animationDuration: Duration.zero,
+                pieceAssets: pieceSet.assets,
+              ),
               topPlayer: topPlayerWidget,
               bottomPlayer: bottomPlayerWidget,
             );
@@ -156,7 +163,6 @@ class _Body extends ConsumerWidget {
               orientation: Side.white,
               fen: kEmptyFen,
             ),
-            boardSettings: _boardSettings,
           ),
           error: (err, stackTrace) {
             debugPrint(

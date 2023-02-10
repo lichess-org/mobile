@@ -6,7 +6,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
-import 'package:lichess_mobile/src/model/settings/theme_mode_provider.dart';
+import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 
 class App extends ConsumerWidget {
@@ -14,8 +14,8 @@ class App extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeProvider);
-    final brightness = ref.watch(selectedBrigthnessProvider);
+    final themeMode = ref.watch(themeModePrefProvider);
+    final brightness = ref.watch(currentBrightnessProvider);
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: kSupportedLocales,
