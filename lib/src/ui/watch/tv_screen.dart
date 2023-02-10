@@ -37,7 +37,6 @@ class TvScreen extends ConsumerWidget {
   ) {
     final isSoundMuted = ref.watch(isSoundMutedProvider);
     final tvChannel = ref.watch(tvChannelProvider);
-    final tvGameIdState = ref.watch(tvGameIdProvider);
     return Scaffold(
       appBar: AppBar(
         title: InkWell(
@@ -60,34 +59,7 @@ class TvScreen extends ConsumerWidget {
           )
         ],
       ),
-      body: tvGameIdState.when(
-        data: (data) => _Body(data),
-        error: (err, stackTrace) {
-          debugPrint(
-            'SEVERE: [TvScreen] could not load stream; $err\n$stackTrace',
-          );
-          return const GameBoardLayout(
-            topPlayer: kEmptyWidget,
-            bottomPlayer: kEmptyWidget,
-            boardData: BoardData(
-              fen: kEmptyFen,
-              interactableSide: InteractableSide.none,
-              orientation: Side.white,
-            ),
-            errorMessage: 'Could not load TV stream.',
-          );
-        },
-        loading: () => const GameBoardLayout(
-          topPlayer: kEmptyWidget,
-          bottomPlayer: kEmptyWidget,
-          boardData: BoardData(
-            interactableSide: InteractableSide.none,
-            orientation: Side.white,
-            fen: kEmptyFen,
-          ),
-          boardSettings: _boardSettings,
-        ),
-      ),
+      body: const _Body(),
     );
   }
 
@@ -112,21 +84,20 @@ class TvScreen extends ConsumerWidget {
               ref.read(isSoundMutedProvider.notifier).toggleSound(),
         ),
       ),
-      child: _Body(''),
+      child: const _Body(),
     );
   }
 }
 
 class _Body extends ConsumerWidget {
-  _Body(this.gameId);
+  const _Body();
 
-  String? gameId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
     // ensure the stream is closed when offstage
     final tvStream = currentTab == BottomTab.watch
-        ? ref.watch(tvStreamProvider(gameId))
+        ? ref.watch(tvStreamProvider)
         : const AsyncLoading<FeaturedPosition>();
     final featuredGame = ref.watch(featuredGameProvider);
 
