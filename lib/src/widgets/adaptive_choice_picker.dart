@@ -18,6 +18,7 @@ void showChoicesPicker<T extends Enum>(
         builder: (context) {
           return AlertDialog(
             contentPadding: const EdgeInsets.only(top: 12),
+            scrollable: true,
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: choices.map((value) {

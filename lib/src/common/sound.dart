@@ -2,13 +2,13 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soundpool/soundpool.dart';
 
-import 'package:lichess_mobile/src/model/settings/settings_repository.dart';
+import 'package:lichess_mobile/src/model/settings/providers.dart';
 
 class SoundService {
-  SoundService(this._pool, this._settings);
+  SoundService(this._pool, this.ref);
 
   final Soundpool _pool;
-  final SettingsRepository _settings;
+  final Ref ref;
 
   int? _moveId;
   int? _captureId;
@@ -30,17 +30,20 @@ class SoundService {
   }
 
   void playMove() {
-    if (_moveId != null && !_settings.isSoundMuted()) _pool.play(_moveId!);
+    final isMuted = ref.read(muteSoundPrefProvider);
+    if (_moveId != null && !isMuted) _pool.play(_moveId!);
   }
 
   void playCapture() {
-    if (_captureId != null && !_settings.isSoundMuted()) {
+    final isMuted = ref.read(muteSoundPrefProvider);
+    if (_captureId != null && !isMuted) {
       _pool.play(_captureId!);
     }
   }
 
   void playDong() {
-    if (_dongId != null && !_settings.isSoundMuted()) _pool.play(_dongId!);
+    final isMuted = ref.read(muteSoundPrefProvider);
+    if (_dongId != null && !isMuted) _pool.play(_dongId!);
   }
 
   void dispose() {
@@ -50,8 +53,7 @@ class SoundService {
 
 final soundServiceProvider = Provider<SoundService>((ref) {
   final pool = Soundpool.fromOptions();
-  final settingsRepository = ref.watch(settingsRepositoryProvider);
-  final soundService = SoundService(pool, settingsRepository);
+  final soundService = SoundService(pool, ref);
   ref.onDispose(() => soundService.dispose());
   return soundService;
 });

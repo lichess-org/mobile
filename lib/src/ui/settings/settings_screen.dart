@@ -4,17 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
+import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_actions_notifier.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
-import 'package:lichess_mobile/src/model/settings/theme_mode_provider.dart';
+import 'package:lichess_mobile/src/model/settings/providers.dart';
 
 import './theme_mode_screen.dart';
+import './piece_set_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -47,9 +50,10 @@ class SettingsScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeProvider);
+    final themeMode = ref.watch(themeModePrefProvider);
     final authState = ref.watch(authStateChangesProvider);
     final authActionsAsync = ref.watch(authActionsProvider);
+    final pieceSet = ref.watch(pieceSetPrefProvider);
     return LoadingOverlay(
       isLoading: authActionsAsync.isLoading,
       progressIndicator: const CircularProgressIndicator.adaptive(),
@@ -57,8 +61,11 @@ class _Body extends ConsumerWidget {
         child: ListView(
           children: [
             ListSection(
+              hasLeading: true,
+              showDivider: true,
               children: [
                 SettingsListTile(
+                  icon: const Icon(Icons.brightness_medium),
                   settingsLabel: context.l10n.background,
                   settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
                   onTap: () {
@@ -70,8 +77,8 @@ class _Body extends ConsumerWidget {
                         labelBuilder: (t) =>
                             Text(ThemeModeScreen.themeTitle(context, t)),
                         onSelectedItemChanged: (ThemeMode? value) => ref
-                            .read(themeModeProvider.notifier)
-                            .changeTheme(value ?? ThemeMode.system),
+                            .read(themeModePrefProvider.notifier)
+                            .set(value ?? ThemeMode.system),
                       );
                     } else {
                       pushPlatformRoute(
@@ -80,6 +87,18 @@ class _Body extends ConsumerWidget {
                         builder: (context) => const ThemeModeScreen(),
                       );
                     }
+                  },
+                ),
+                SettingsListTile(
+                  icon: const Icon(LichessIcons.chess_knight),
+                  settingsLabel: context.l10n.pieceSet,
+                  settingsValue: pieceSet.label,
+                  onTap: () {
+                    pushPlatformRoute(
+                      context: context,
+                      title: context.l10n.pieceSet,
+                      builder: (context) => const PieceSetScreen(),
+                    );
                   },
                 ),
               ],

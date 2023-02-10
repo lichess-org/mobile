@@ -29,7 +29,7 @@ class ListSection extends StatelessWidget {
   /// Usually a list of [PlatformListTile] widgets
   final List<Widget> children;
 
-  /// Only useful on iOS
+  /// Whether the iOS tiles have a leading widget.
   final bool hasLeading;
 
   /// Show a header above the children rows. Typically a [Text] widget.
@@ -51,35 +51,38 @@ class ListSection extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (header != null)
-              ListTile(
-                title: DefaultTextStyle.merge(
-                  style: _kTitleMedium,
-                  child: header!,
+        return Padding(
+          padding: margin ?? EdgeInsets.zero,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (header != null)
+                ListTile(
+                  title: DefaultTextStyle.merge(
+                    style: _kTitleMedium,
+                    child: header!,
+                  ),
+                  trailing: (onHeaderTap != null)
+                      ? GestureDetector(
+                          onTap: onHeaderTap,
+                          child: const Icon(Icons.more_horiz),
+                        )
+                      : null,
                 ),
-                trailing: (onHeaderTap != null)
-                    ? GestureDetector(
-                        onTap: onHeaderTap,
-                        child: const Icon(Icons.more_horiz),
-                      )
-                    : null,
-              ),
-            if (showDividerBetweenTiles)
-              ...ListTile.divideTiles(
-                context: context,
-                tiles: children,
-              )
-            else
-              ...children,
-            if (showDivider)
-              const Padding(
-                padding: EdgeInsets.only(top: 10.0),
-                child: Divider(thickness: 0),
-              ),
-          ],
+              if (showDividerBetweenTiles)
+                ...ListTile.divideTiles(
+                  context: context,
+                  tiles: children,
+                )
+              else
+                ...children,
+              if (showDivider)
+                const Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: Divider(thickness: 0),
+                ),
+            ],
+          ),
         );
       case TargetPlatform.iOS:
         return CupertinoListSection.insetGrouped(
@@ -141,51 +144,6 @@ class GameListTile extends StatelessWidget {
             )
           : null,
       trailing: trailing,
-    );
-  }
-}
-
-/// A platform agnostic tappable list tile that represents a settings value.
-class SettingsListTile extends StatelessWidget {
-  const SettingsListTile({
-    this.icon,
-    required this.settingsLabel,
-    required this.settingsValue,
-    required this.onTap,
-    super.key,
-  });
-
-  final Icon? icon;
-  final String settingsLabel;
-  final String settingsValue;
-  final void Function() onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final tile = defaultTargetPlatform == TargetPlatform.iOS
-        ? CupertinoListTile(
-            leading: icon,
-            title: Text(settingsLabel),
-            additionalInfo: Text(settingsValue),
-            onTap: onTap,
-            trailing: const CupertinoListTileChevron(),
-          )
-        : ListTile(
-            leading: icon,
-            title: Text(settingsLabel),
-            subtitle: Text(
-              settingsValue,
-              style:
-                  TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-            ),
-            onTap: onTap,
-          );
-    return Semantics(
-      container: true,
-      button: true,
-      label: '$settingsLabel: $settingsValue',
-      excludeSemantics: true,
-      child: tile,
     );
   }
 }
