@@ -8,8 +8,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 
-const whiteKnight = Piece(color: Side.white, role: PieceRole.knight);
-
 class PieceSetScreen extends StatelessWidget {
   const PieceSetScreen({super.key});
 
@@ -53,9 +51,7 @@ class _Body extends ConsumerWidget {
             selectedItem: pieceSet,
             titleBuilder: (t) => Text(t.label),
             leadingBuilder: (t) => Image(
-              image: t.assets[whiteKnight.kind]!,
-              width: 60,
-              height: 60,
+              image: t.assets['whiteknight']!,
             ),
             onSelectedItemChanged: onChanged,
           )

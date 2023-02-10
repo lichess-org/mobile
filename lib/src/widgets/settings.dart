@@ -61,6 +61,7 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
     required this.onSelectedItemChanged,
     this.margin,
     this.notchedTile = false,
+    this.showDividerBetweenTiles = false,
   });
 
   final List<T> choices;
@@ -71,6 +72,9 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
   final void Function(T choice) onSelectedItemChanged;
   final EdgeInsetsGeometry? margin;
 
+  /// Only on android.
+  final bool showDividerBetweenTiles;
+
   /// iOS only, for choosing the style of the tile.
   final bool notchedTile;
 
@@ -78,21 +82,26 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
+        final tiles = choices.map((value) {
+          return ListTile(
+            selected: selectedItem == value,
+            trailing: selectedItem == value ? const Icon(Icons.check) : null,
+            title: titleBuilder(value),
+            subtitle: subtitleBuilder?.call(value),
+            leading: leadingBuilder?.call(value),
+            onTap: () => onSelectedItemChanged(value),
+          );
+        });
         return Column(
-          children: ListTile.divideTiles(
-            context: context,
-            tiles: choices.map((value) {
-              return ListTile(
-                selected: selectedItem == value,
-                trailing:
-                    selectedItem == value ? const Icon(Icons.check) : null,
-                title: titleBuilder(value),
-                subtitle: subtitleBuilder?.call(value),
-                leading: leadingBuilder?.call(value),
-                onTap: () => onSelectedItemChanged(value),
-              );
-            }),
-          ).toList(growable: false),
+          children: [
+            if (showDividerBetweenTiles)
+              ...ListTile.divideTiles(
+                context: context,
+                tiles: tiles,
+              )
+            else
+              ...tiles
+          ],
         );
       case TargetPlatform.iOS:
         final tileConstructor =
