@@ -180,7 +180,10 @@ class _BoardBody extends ConsumerWidget {
         gameState != null && positionCursor < gameState.positionIndex;
 
     final pieceSet = ref.watch(pieceSetProvider);
-    final boardSettings = cg.BoardSettings(animationDuration: Duration.zero, pieceAssets: cg.PieceSetAssets.from(pieceSet.assets));
+    final boardSettings = cg.BoardSettings(
+      animationDuration: Duration.zero,
+      pieceAssets: cg.PieceSetAssets.from(pieceSet.assets),
+    );
 
     return gameClockStream.when(
       data: (clock) {

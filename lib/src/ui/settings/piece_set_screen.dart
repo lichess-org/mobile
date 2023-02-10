@@ -37,8 +37,6 @@ class PieceSetScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pieceSet = ref.watch(pieceSetProvider);
-
     void onTap(cg.PieceSet pieceSet) {
       ref.read(pieceSetProvider.notifier).changePieceSet(pieceSet);
 
@@ -50,8 +48,9 @@ class _Body extends ConsumerWidget {
 
       return ListTile(
         leading: Image(
-            image: asset,
-            errorBuilder: (context, o, st) => const SizedBox.shrink()),
+          image: asset,
+          errorBuilder: (context, o, st) => const SizedBox.shrink(),
+        ),
         title: Text(pieceSet.label),
         onTap: () => onTap(pieceSet),
       );

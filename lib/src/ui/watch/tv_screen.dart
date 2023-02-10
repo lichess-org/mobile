@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart';
 import 'package:lichess_mobile/src/model/settings/piece_set_provider.dart';
-import 'package:lichess_mobile/src/model/settings/settings_repository.dart';
 
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -87,7 +86,10 @@ class _Body extends ConsumerWidget {
     final featuredGame = ref.watch(featuredGameProvider);
 
     final pieceSet = ref.watch(pieceSetProvider);
-    final boardSettings = BoardSettings(animationDuration: Duration.zero, pieceAssets: PieceSetAssets.from(pieceSet.assets));
+    final boardSettings = BoardSettings(
+      animationDuration: Duration.zero,
+      pieceAssets: PieceSetAssets.from(pieceSet.assets),
+    );
 
     return SafeArea(
       child: Center(

@@ -47,8 +47,10 @@ class SettingsRepository {
   }
 
   PieceSet getPieceSet() {
-    final str = _prefs.getString(pieceSetKey) ?? 'merida'; // TODO: Should this be cburnett, to match lila and lichobile?
-    return PieceSet.values.firstWhereOrNull((p) => p.name == str) ?? PieceSet.merida;
+    final str = _prefs.getString(pieceSetKey) ??
+        'merida'; // TODO: Should this be cburnett, to match lila and lichobile?
+    return PieceSet.values.firstWhereOrNull((p) => p.name == str) ??
+        PieceSet.merida;
   }
 
   // --

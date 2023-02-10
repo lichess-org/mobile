@@ -172,7 +172,10 @@ class _BoardBody extends ConsumerWidget {
     final bottomPlayer = orientation == Side.white ? white : black;
 
     final pieceSet = ref.watch(pieceSetProvider);
-    final boardSettings = cg.BoardSettings(animationDuration: Duration.zero, pieceAssets: cg.PieceSetAssets.from(pieceSet.assets));
+    final boardSettings = cg.BoardSettings(
+      animationDuration: Duration.zero,
+      pieceAssets: cg.PieceSetAssets.from(pieceSet.assets),
+    );
 
     return GameBoardLayout(
       boardData: cg.BoardData(
