@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
+import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -60,8 +61,11 @@ class _Body extends ConsumerWidget {
         child: ListView(
           children: [
             ListSection(
+              hasLeading: true,
+              showDivider: true,
               children: [
                 SettingsListTile(
+                  icon: const Icon(Icons.brightness_medium),
                   settingsLabel: context.l10n.background,
                   settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
                   onTap: () {
@@ -86,6 +90,7 @@ class _Body extends ConsumerWidget {
                   },
                 ),
                 SettingsListTile(
+                  icon: const Icon(LichessIcons.chess_knight),
                   settingsLabel: context.l10n.pieceSet,
                   settingsValue: pieceSet.label,
                   onTap: () {

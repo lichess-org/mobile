@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:lichess_mobile/src/common/styles.dart';
+import 'platform.dart';
 
 /// A platform agnostic tappable list tile that represents a settings value.
 class SettingsListTile extends StatelessWidget {
@@ -21,24 +22,22 @@ class SettingsListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tile = defaultTargetPlatform == TargetPlatform.iOS
-        ? CupertinoListTile(
-            leading: icon,
-            title: Text(settingsLabel),
-            additionalInfo: Text(settingsValue),
-            onTap: onTap,
-            trailing: const CupertinoListTileChevron(),
-          )
-        : ListTile(
-            leading: icon,
-            title: Text(settingsLabel),
-            subtitle: Text(
+    final tile = PlatformListTile(
+      leading: icon,
+      title: Text(settingsLabel),
+      additionalInfo: Text(settingsValue),
+      subtitle: defaultTargetPlatform == TargetPlatform.android
+          ? Text(
               settingsValue,
               style:
                   TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-            ),
-            onTap: onTap,
-          );
+            )
+          : null,
+      onTap: onTap,
+      trailing: defaultTargetPlatform == TargetPlatform.iOS
+          ? const CupertinoListTileChevron()
+          : null,
+    );
     return Semantics(
       container: true,
       button: true,

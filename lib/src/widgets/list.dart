@@ -51,35 +51,38 @@ class ListSection extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (header != null)
-              ListTile(
-                title: DefaultTextStyle.merge(
-                  style: _kTitleMedium,
-                  child: header!,
+        return Padding(
+          padding: margin ?? EdgeInsets.zero,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (header != null)
+                ListTile(
+                  title: DefaultTextStyle.merge(
+                    style: _kTitleMedium,
+                    child: header!,
+                  ),
+                  trailing: (onHeaderTap != null)
+                      ? GestureDetector(
+                          onTap: onHeaderTap,
+                          child: const Icon(Icons.more_horiz),
+                        )
+                      : null,
                 ),
-                trailing: (onHeaderTap != null)
-                    ? GestureDetector(
-                        onTap: onHeaderTap,
-                        child: const Icon(Icons.more_horiz),
-                      )
-                    : null,
-              ),
-            if (showDividerBetweenTiles)
-              ...ListTile.divideTiles(
-                context: context,
-                tiles: children,
-              )
-            else
-              ...children,
-            if (showDivider)
-              const Padding(
-                padding: EdgeInsets.only(top: 10.0),
-                child: Divider(thickness: 0),
-              ),
-          ],
+              if (showDividerBetweenTiles)
+                ...ListTile.divideTiles(
+                  context: context,
+                  tiles: children,
+                )
+              else
+                ...children,
+              if (showDivider)
+                const Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: Divider(thickness: 0),
+                ),
+            ],
+          ),
         );
       case TargetPlatform.iOS:
         return CupertinoListSection.insetGrouped(

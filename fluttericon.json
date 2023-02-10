@@ -313,6 +313,48 @@
       "search": [
         "racing_kings"
       ]
+    },
+    {
+      "uid": "975ad1aa7a1a0b661c0af07b4f764634",
+      "css": "chess",
+      "code": 62521,
+      "src": "fontawesome5"
+    },
+    {
+      "uid": "d6a02c4b0ddcb701baf6341cc7dee45d",
+      "css": "chess_bishop",
+      "code": 62522,
+      "src": "fontawesome5"
+    },
+    {
+      "uid": "1790dd8d857ac32e6aec5d5f38020aae",
+      "css": "chess_board",
+      "code": 62524,
+      "src": "fontawesome5"
+    },
+    {
+      "uid": "3731d77df643bb8e164f8ebcceb0a093",
+      "css": "chess_knight",
+      "code": 62529,
+      "src": "fontawesome5"
+    },
+    {
+      "uid": "eae0a21ae83020577dc274e297d0fd97",
+      "css": "chess_pawn",
+      "code": 62531,
+      "src": "fontawesome5"
+    },
+    {
+      "uid": "4b37c89e30055bcbb6e25135bc33d908",
+      "css": "chess_queen",
+      "code": 62533,
+      "src": "fontawesome5"
+    },
+    {
+      "uid": "314421158a52dbff6ce3423a1d430cc1",
+      "css": "chess_rook",
+      "code": 62535,
+      "src": "fontawesome5"
     }
   ]
 }
