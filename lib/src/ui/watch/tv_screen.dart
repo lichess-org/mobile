@@ -15,8 +15,6 @@ import 'package:lichess_mobile/src/model/tv/featured_position.dart';
 import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
 
-const _boardSettings = BoardSettings(animationDuration: Duration.zero);
-
 class TvScreen extends ConsumerWidget {
   const TvScreen({super.key});
 
@@ -76,6 +74,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final pieceSet = ref.watch(pieceSetPrefProvider);
     final currentTab = ref.watch(currentBottomTabProvider);
     // ensure the stream is closed when offstage
     final tvStream = currentTab == BottomTab.watch
@@ -125,7 +124,10 @@ class _Body extends ConsumerWidget {
                 : kEmptyWidget;
             return GameBoardLayout(
               boardData: boardData,
-              boardSettings: _boardSettings,
+              boardSettings: BoardSettings(
+                animationDuration: Duration.zero,
+                pieceAssets: pieceSet.assets,
+              ),
               topPlayer: topPlayerWidget,
               bottomPlayer: bottomPlayerWidget,
             );
@@ -138,7 +140,6 @@ class _Body extends ConsumerWidget {
               orientation: Side.white,
               fen: kEmptyFen,
             ),
-            boardSettings: _boardSettings,
           ),
           error: (err, stackTrace) {
             debugPrint(

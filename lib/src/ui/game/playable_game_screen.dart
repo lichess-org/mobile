@@ -169,6 +169,7 @@ class _BoardBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final pieceSet = ref.watch(pieceSetPrefProvider);
     final gameState = ref.watch(gameStateProvider);
     final gameClockStream = ref.watch(gameStreamProvider(game.id));
     final positionCursor = ref.watch(positionCursorProvider);
@@ -204,6 +205,9 @@ class _BoardBody extends ConsumerWidget {
         final bottomPlayer = game.orientation == Side.white ? white : black;
 
         return GameBoardLayout(
+          boardSettings: cg.BoardSettings(
+            pieceAssets: pieceSet.assets,
+          ),
           boardData: cg.BoardData(
             interactableSide:
                 gameState == null || !gameState.playing || isReplaying

@@ -143,6 +143,7 @@ class _BoardBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final pieceSet = ref.watch(pieceSetPrefProvider);
     final isBoardTurned = ref.watch(_isBoardTurnedProvider);
     final positionCursor = ref.watch(_positionCursorProvider);
     final black = BoardPlayer(
@@ -179,6 +180,9 @@ class _BoardBody extends ConsumerWidget {
                 ? game?.moveAt(positionCursor)
                 : game?.lastMove)
             ?.cg,
+      ),
+      boardSettings: cg.BoardSettings(
+        pieceAssets: pieceSet.assets,
       ),
       topPlayer: topPlayer,
       bottomPlayer: bottomPlayer,
