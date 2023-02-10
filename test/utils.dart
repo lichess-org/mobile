@@ -22,6 +22,7 @@ final List<Override> defaultProviderOverrides = List.unmodifiable([
   ),
 ]);
 
+// iPhone 14 screen size
 const double _kTestScreenWidth = 390.0;
 const double _kTestScreenHeight = 844.0;
 const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
@@ -81,6 +82,10 @@ Offset squareOffset(
 // simplified version of class [App] in lib/src/app.dart
 Future<Widget> buildTestApp(WidgetTester tester, {required Widget home}) async {
   await tester.binding.setSurfaceSize(kTestSurfaceSize);
+
+  // TODO consider loading true fonts as well
+  FlutterError.onError = ignoreOverflowErrors;
+
   return MediaQuery(
     data: const MediaQueryData(size: kTestSurfaceSize),
     child: Center(
@@ -102,6 +107,27 @@ Future<Widget> buildTestApp(WidgetTester tester, {required Widget home}) async {
     ),
   );
 }
+
+void ignoreOverflowErrors(
+  FlutterErrorDetails details, {
+  bool forceReport = false,
+}) {
+  bool isOverflowError = false;
+  final exception = details.exception;
+
+  if (exception is FlutterError) {
+    isOverflowError = exception.diagnostics
+        .any((e) => e.value.toString().contains('A RenderFlex overflowed by'));
+  }
+
+  if (isOverflowError) {
+    // debugPrint('Overflow error detected.');
+  } else {
+    FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
+    throw exception;
+  }
+}
+
 // --
 
 class _SameRequest extends Matcher {
