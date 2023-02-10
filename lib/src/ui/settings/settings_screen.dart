@@ -6,9 +6,9 @@ import 'package:loading_overlay/loading_overlay.dart';
 
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
-import 'package:lichess_mobile/src/widgets/card.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_actions_notifier.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
@@ -55,29 +55,39 @@ class _Body extends ConsumerWidget {
       progressIndicator: const CircularProgressIndicator.adaptive(),
       child: SafeArea(
         child: ListView(
-          padding: Styles.bodyPadding,
           children: [
-            const SizedBox(height: 10),
-            CardListSection(
-              showDivider: true,
+            ListSection(
               children: [
-                SettingsGroupTile(
-                  icon: const Icon(Icons.brightness_medium),
+                SettingsListTile(
                   settingsLabel: context.l10n.background,
                   settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
-                  onTap: () => pushPlatformRoute(
-                    context: context,
-                    title: context.l10n.background,
-                    builder: (context) => const ThemeModeScreen(),
-                  ),
+                  onTap: () {
+                    if (defaultTargetPlatform == TargetPlatform.android) {
+                      showChoicesPicker(
+                        context,
+                        choices: ThemeMode.values,
+                        selectedItem: themeMode,
+                        labelBuilder: (t) =>
+                            Text(ThemeModeScreen.themeTitle(context, t)),
+                        onSelectedItemChanged: (ThemeMode? value) => ref
+                            .read(themeModeProvider.notifier)
+                            .changeTheme(value ?? ThemeMode.system),
+                      );
+                    } else {
+                      pushPlatformRoute(
+                        context: context,
+                        title: context.l10n.background,
+                        builder: (context) => const ThemeModeScreen(),
+                      );
+                    }
+                  },
                 ),
               ],
             ),
-            const SizedBox(height: 30),
             authState.maybeWhen(
               data: (data) {
                 return data != null
-                    ? CardListSection(
+                    ? ListSection(
                         children: [
                           PlatformListTile(
                             leading: const Icon(Icons.exit_to_app),
@@ -102,52 +112,6 @@ class _Body extends ConsumerWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-/// A tappable [ListTile] that represents a settings value.
-class SettingsGroupTile extends StatelessWidget {
-  const SettingsGroupTile({
-    required this.icon,
-    required this.settingsLabel,
-    required this.settingsValue,
-    required this.onTap,
-    super.key,
-  });
-
-  final Icon icon;
-  final String settingsLabel;
-  final String settingsValue;
-  final void Function() onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final tile = defaultTargetPlatform == TargetPlatform.iOS
-        ? CupertinoListTile(
-            leading: icon,
-            title: Text(settingsLabel),
-            additionalInfo: Text(settingsValue),
-            onTap: onTap,
-            trailing: const CupertinoListTileChevron(),
-          )
-        : ListTile(
-            leading: icon,
-            title: Text(settingsLabel),
-            subtitle: Text(
-              settingsValue,
-              style:
-                  TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-            ),
-            onTap: onTap,
-            trailing: const Icon(Icons.keyboard_arrow_right),
-          );
-    return Semantics(
-      container: true,
-      button: true,
-      label: '$settingsLabel: $settingsValue',
-      excludeSemantics: true,
-      child: tile,
     );
   }
 }

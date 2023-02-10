@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/constants.dart';
+
 /// A simple widget that builds different things on different platforms.
 class PlatformWidget extends StatelessWidget {
   const PlatformWidget({
@@ -90,7 +92,7 @@ class PlatformCard extends StatelessWidget {
       data: mediaQueryData.copyWith(
         textScaleFactor: math.min(
           mediaQueryData.textScaleFactor,
-          1.64,
+          kCardTextScaleFactor,
         ),
       ),
       child: defaultTargetPlatform == TargetPlatform.iOS
@@ -129,7 +131,6 @@ class PlatformListTile extends StatelessWidget {
     this.dense,
     this.onTap,
     this.selected = false,
-    this.notched = true,
   });
 
   final Widget? leading;
@@ -139,9 +140,6 @@ class PlatformListTile extends StatelessWidget {
 
   /// only on iOS
   final Widget? additionalInfo;
-
-  /// only on iOS, will use the [CupertinoListTile.notched] constructor
-  final bool notched;
 
   // only on android
   final bool selected;
@@ -165,24 +163,19 @@ class PlatformListTile extends StatelessWidget {
           selected: selected,
         );
       case TargetPlatform.iOS:
-        final theme = ListTileTheme.of(context);
-        return (notched == false || theme.dense == true)
-            ? CupertinoListTile(
-                leading: leading,
-                title: title,
-                subtitle: subtitle,
-                trailing: trailing,
-                additionalInfo: additionalInfo,
-                onTap: onTap,
-              )
-            : CupertinoListTile.notched(
-                leading: leading,
-                title: title,
-                subtitle: subtitle,
-                trailing: trailing,
-                additionalInfo: additionalInfo,
-                onTap: onTap,
-              );
+        return IconTheme(
+          data: CupertinoIconThemeData(
+            color: CupertinoColors.systemGrey.resolveFrom(context),
+          ),
+          child: CupertinoListTile.notched(
+            leading: leading,
+            title: title,
+            subtitle: subtitle,
+            trailing: trailing,
+            additionalInfo: additionalInfo,
+            onTap: onTap,
+          ),
+        );
 
       default:
         assert(false, 'Unexpected platform $defaultTargetPlatform');

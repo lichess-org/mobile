@@ -163,7 +163,16 @@ class _Body extends ConsumerWidget {
             debugPrint(
               'SEVERE: [TvScreen] could not load stream; $err\n$stackTrace',
             );
-            return const Text('Could not load TV stream.');
+            return const GameBoardLayout(
+              topPlayer: kEmptyWidget,
+              bottomPlayer: kEmptyWidget,
+              boardData: BoardData(
+                fen: kEmptyFen,
+                interactableSide: InteractableSide.none,
+                orientation: Side.white,
+              ),
+              errorMessage: 'Could not load TV stream.',
+            );
           },
         ),
       ),

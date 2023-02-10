@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chessground/chessground.dart';
 
@@ -22,6 +23,7 @@ class GameBoardLayout extends StatelessWidget {
     this.moves,
     this.currentMoveIndex,
     this.onSelectMove,
+    this.errorMessage,
     super.key,
   }) : assert(
           moves == null || currentMoveIndex != null,
@@ -44,6 +46,9 @@ class GameBoardLayout extends StatelessWidget {
 
   final void Function(int moveIndex)? onSelectMove;
 
+  /// Optional error message that will be displayed on top of the board.
+  final String? errorMessage;
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -55,17 +60,53 @@ class GameBoardLayout extends StatelessWidget {
             ? defaultBoardSize * 0.94
             : defaultBoardSize;
 
+        final error = errorMessage != null
+            ? SizedBox.square(
+                dimension: boardSize,
+                child: Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: defaultTargetPlatform == TargetPlatform.iOS
+                          ? CupertinoColors.secondarySystemBackground
+                              .resolveFrom(context)
+                          : Theme.of(context).colorScheme.background,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(errorMessage!),
+                    ),
+                  ),
+                ),
+              )
+            : null;
+
         final board = boardSettings != null
             ? Board(size: boardSize, data: boardData, settings: boardSettings!)
             : Board(size: boardSize, data: boardData);
+
+        final boardOrError = error != null
+            ? SizedBox.square(
+                dimension: boardSize,
+                child: Stack(
+                  children: [
+                    board,
+                    error,
+                  ],
+                ),
+              )
+            : board;
+
         final List<List<MapEntry<int, String>>>? slicedMoves =
             moves?.asMap().entries.slices(2).toList(growable: false);
+
         return aspectRatio > 1
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  board,
+                  boardOrError,
                   Flexible(
                     fit: FlexFit.loose,
                     child: Padding(
@@ -104,7 +145,7 @@ class GameBoardLayout extends StatelessWidget {
                       onSelectMove: onSelectMove,
                     ),
                   topPlayer,
-                  board,
+                  boardOrError,
                   bottomPlayer,
                 ],
               );

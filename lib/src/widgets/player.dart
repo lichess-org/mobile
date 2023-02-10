@@ -39,8 +39,11 @@ class BoardPlayer extends StatelessWidget {
                   if (title != null) ...[
                     Text(
                       title!,
-                      style:
-                          const TextStyle(fontSize: 18, color: Colors.orange),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: LichessColors.brag,
+                      ),
                     ),
                     const SizedBox(width: 5),
                   ],
@@ -121,6 +124,7 @@ class PlayerTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     final nameAndRating = userName + (rating != null ? ' ($rating)' : '');
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         if (title != null) ...[
           Text(

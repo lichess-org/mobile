@@ -18,10 +18,11 @@ default_platform(:android)
 platform :android do
   desc "Deploy an internal test version to Google Play"
   lane :internal_test do
-    sh "flutter build appbundle -v"
+    sh "flutter build appbundle -v --dart-define=LICHESS_HOST=https://lichess.org"
     upload_to_play_store(
       track: 'internal',
       aab: '../build/app/outputs/bundle/release/app-release.aab',
+      release_status: 'draft',
     )
   end
 end

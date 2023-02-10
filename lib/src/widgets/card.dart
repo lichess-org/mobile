@@ -2,95 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-/// A platform agnostic list section that fits inside a card.
-///
-/// It should be used for a small number of children only.
-class CardListSection extends StatelessWidget {
-  const CardListSection({
-    super.key,
-    required this.children,
-    this.header,
-    this.onHeaderTap,
-    this.margin,
-    this.hasLeading = false,
-    this.showDivider = false,
-    this.dense = false,
-  });
-
-  /// Usually a list of [PlatformListTile] widgets
-  final List<Widget> children;
-
-  final EdgeInsetsGeometry? margin;
-
-  /// Only useful on iOS
-  final bool hasLeading;
-
-  /// Only on android
-  final bool showDivider;
-
-  /// Use it to set [ListTileTheme.dense] property.
-  final bool dense;
-
-  /// Show a header above the children rows. Will be wrapped in a [PlatformListTile].
-  final Widget? header;
-  final GestureTapCallback? onHeaderTap;
-
-  @override
-  Widget build(BuildContext context) {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-        final childrenAndHeader = [
-          if (header != null)
-            ListTile(
-              dense: false,
-              title: header,
-              onTap: onHeaderTap,
-              trailing: onHeaderTap != null
-                  ? const Icon(CupertinoIcons.forward)
-                  : null,
-            ),
-          ...children,
-        ];
-        return Card(
-          margin: margin,
-          child: ListTileTheme(
-            dense: dense,
-            child: Column(
-              children: showDivider
-                  ? ListTile.divideTiles(
-                      context: context,
-                      tiles: childrenAndHeader,
-                    ).toList(growable: false)
-                  : childrenAndHeader,
-            ),
-          ),
-        );
-      case TargetPlatform.iOS:
-        return ListTileTheme(
-          dense: true,
-          child: CupertinoListSection.insetGrouped(
-            // to match android where default margin is here to show the drop shadow
-            margin: margin ?? EdgeInsets.zero,
-            hasLeading: hasLeading,
-            children: [
-              if (header != null)
-                CupertinoListTile(
-                  title: header!,
-                  trailing: onHeaderTap != null
-                      ? const Icon(CupertinoIcons.forward)
-                      : null,
-                  onTap: onHeaderTap,
-                ),
-              ...children,
-            ],
-          ),
-        );
-      default:
-        assert(false, 'Unexpected platform $defaultTargetPlatform');
-        return const SizedBox.shrink();
-    }
-  }
-}
+const EdgeInsetsDirectional _kDefaultInsetGroupedRowsMargin =
+    EdgeInsetsDirectional.fromSTEB(20.0, 20.0, 20.0, 10.0);
 
 /// A platform agnostic choice picker composed of rows inside a card widget.
 ///
@@ -104,7 +17,8 @@ class CardChoicePicker<T extends Enum> extends StatelessWidget {
     required this.titleBuilder,
     this.subtitleBuilder,
     required this.onSelectedItemChanged,
-    this.notchedListTile = false,
+    this.margin,
+    this.notchedTile = false,
   });
 
   final List<T> choices;
@@ -112,15 +26,17 @@ class CardChoicePicker<T extends Enum> extends StatelessWidget {
   final Widget Function(T choice) titleBuilder;
   final Widget Function(T choice)? subtitleBuilder;
   final void Function(T choice) onSelectedItemChanged;
+  final EdgeInsetsGeometry? margin;
 
-  /// On iOS only, use this to choose the constructor of [CupertinoListTile].
-  final bool notchedListTile;
+  /// iOS only, for choosing the style of the tile.
+  final bool notchedTile;
 
   @override
   Widget build(BuildContext context) {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return Card(
+          margin: margin ?? _kDefaultInsetGroupedRowsMargin,
           child: Column(
             children: ListTile.divideTiles(
               context: context,
@@ -141,19 +57,17 @@ class CardChoicePicker<T extends Enum> extends StatelessWidget {
           ),
         );
       case TargetPlatform.iOS:
+        final tileConstructor =
+            notchedTile ? CupertinoListTile.notched : CupertinoListTile.new;
         return CupertinoListSection.insetGrouped(
+          additionalDividerMargin: notchedTile ? null : 6.0,
           hasLeading: false,
-          margin: const EdgeInsets.symmetric(vertical: 10.0),
-          // Estimated. Only useful with [CupertinoListTile]
-          // With [CupertinoListTile.notched] the `hasLeading` is enough.
-          additionalDividerMargin: notchedListTile ? null : 6.0,
+          margin: margin,
           children: choices.map((value) {
-            return (notchedListTile
-                ? CupertinoListTile.notched
-                : CupertinoListTile.new)(
+            return tileConstructor(
               trailing: selectedItem == value
                   ? defaultTargetPlatform == TargetPlatform.iOS
-                      ? const Icon(CupertinoIcons.checkmark)
+                      ? const Icon(CupertinoIcons.check_mark_circled_solid)
                       : const Icon(Icons.check)
                   : null,
               title: titleBuilder(value),

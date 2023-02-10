@@ -3,10 +3,11 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
+import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 
@@ -31,23 +32,18 @@ class LeaderboardScreen extends StatelessWidget {
           return CustomScrollView(
             slivers: [
               SliverSafeArea(
-                sliver: SliverPadding(
-                  padding: Styles.bodyPadding,
-                  sliver: constraints.maxWidth > kLargeScreenWidth
-                      ? SliverGrid(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            mainAxisExtent: 644,
-                            crossAxisCount:
-                                (constraints.maxWidth / 300).floor(),
-                          ),
-                          delegate: SliverChildListDelegate(_buildList()),
-                        )
-                      : SliverList(
-                          delegate: SliverChildListDelegate(_buildList()),
+                sliver: constraints.maxWidth > kLargeScreenWidth
+                    ? SliverGrid(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          mainAxisExtent: 644,
+                          crossAxisCount: (constraints.maxWidth / 300).floor(),
                         ),
-                ),
-              )
+                        delegate: SliverChildListDelegate(_buildList()),
+                      )
+                    : SliverList(
+                        delegate: SliverChildListDelegate(_buildList()),
+                      ),
+              ),
             ],
           );
         },
@@ -128,6 +124,7 @@ class LeaderboardScreen extends StatelessWidget {
         leaderboard.racingKings,
         LichessIcons.racing_kings,
         'RACING KINGS',
+        showDivider: false,
       ),
     ];
   }
@@ -148,22 +145,25 @@ class LeaderboardListTile extends StatelessWidget {
       leading: perfIcon != null
           ? Icon(perfIcon)
           : _OnlineOrPatron(patron: user.patron, online: user.online),
-      title: Row(
-        children: [
-          if (user.title != null) ...[
-            Text(
-              user.title!,
-              style: const TextStyle(
-                color: LichessColors.brag,
-                fontWeight: FontWeight.bold,
+      title: Padding(
+        padding: const EdgeInsets.only(right: 5.0),
+        child: Row(
+          children: [
+            if (user.title != null) ...[
+              Text(
+                user.title!,
+                style: const TextStyle(
+                  color: LichessColors.brag,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+              const SizedBox(width: 5)
+            ],
+            Flexible(
+              child: Text(user.username, overflow: TextOverflow.ellipsis),
             ),
-            const SizedBox(width: 5)
           ],
-          Flexible(
-            child: Text(user.username, overflow: TextOverflow.ellipsis),
-          ),
-        ],
+        ),
       ),
       trailing: _RatingAndProgress(user.rating, user.progress),
     );
@@ -187,66 +187,80 @@ class _RatingAndProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.baseline,
-      textBaseline: TextBaseline.alphabetic,
-      children: [
-        Text(rating.toString()),
-        const SizedBox(width: 5),
-        if (progress != 0)
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Icon(
-                progress > 0
-                    ? LichessIcons.arrow_full_upperright
-                    : LichessIcons.arrow_full_lowerright,
-                size: 16,
-                color: progress > 0 ? LichessColors.good : LichessColors.red,
-              ),
-              SizedBox(
-                width: 20,
-                child: Text(
+    return SizedBox(
+      width: 80,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.baseline,
+        textBaseline: TextBaseline.alphabetic,
+        children: [
+          Flexible(
+            child: Text(
+              rating.toString(),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          const SizedBox(width: 5),
+          if (progress != 0)
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  progress > 0
+                      ? LichessIcons.arrow_full_upperright
+                      : LichessIcons.arrow_full_lowerright,
+                  size: 16,
+                  color: progress > 0 ? LichessColors.good : LichessColors.red,
+                ),
+                Text(
                   '${progress.abs()}',
+                  maxLines: 1,
                   style: TextStyle(
                     fontSize: 12,
                     color:
                         progress > 0 ? LichessColors.good : LichessColors.red,
                   ),
-                ),
-              )
-            ],
-          ),
-      ],
+                )
+              ],
+            ),
+        ],
+      ),
     );
   }
 }
 
 class _Leaderboard extends StatelessWidget {
-  const _Leaderboard(this.userList, this.iconData, this.title);
+  const _Leaderboard(
+    this.userList,
+    this.iconData,
+    this.title, {
+    this.showDivider = true,
+  });
   final List<LeaderboardUser> userList;
   final IconData iconData;
   final String title;
+  final bool showDivider;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        PlatformListTile(
-          leading: Icon(iconData, color: LichessColors.brag),
-          title: Text(title),
+    return Padding(
+      padding: Styles.sectionBottomPadding,
+      child: ListSection(
+        hasLeading: true,
+        showDivider: showDivider,
+        header: Row(
+          children: [
+            Icon(iconData, color: LichessColors.brag),
+            const SizedBox(width: 10.0),
+            Text(title),
+          ],
         ),
-        ...ListTile.divideTiles(
-          color: dividerColor(context),
-          context: context,
-          tiles: userList.map((user) => LeaderboardListTile(user: user)),
-        ),
-        const SizedBox(height: 12),
-      ],
+        children:
+            userList.map((user) => LeaderboardListTile(user: user)).toList(),
+      ),
     );
   }
 }
