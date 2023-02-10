@@ -18,6 +18,8 @@ import 'package:lichess_mobile/src/model/settings/is_sound_muted_provider.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 
+import '../../model/settings/piece_set_provider.dart';
+
 final _positionCursorProvider = StateProvider.autoDispose<int?>((ref) => null);
 
 final _isBoardTurnedProvider = StateProvider.autoDispose<bool>((ref) => false);
@@ -169,6 +171,9 @@ class _BoardBody extends ConsumerWidget {
     final topPlayer = orientation == Side.white ? black : white;
     final bottomPlayer = orientation == Side.white ? white : black;
 
+    final pieceSet = ref.watch(pieceSetProvider);
+    final boardSettings = cg.BoardSettings(animationDuration: Duration.zero, pieceAssets: cg.PieceSetAssets.from(pieceSet.assets));
+
     return GameBoardLayout(
       boardData: cg.BoardData(
         interactableSide: cg.InteractableSide.none,
@@ -188,6 +193,7 @@ class _BoardBody extends ConsumerWidget {
       onSelectMove: (moveIndex) {
         ref.read(_positionCursorProvider.notifier).state = moveIndex;
       },
+      boardSettings: boardSettings,
     );
   }
 }

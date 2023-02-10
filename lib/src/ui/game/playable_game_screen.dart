@@ -20,6 +20,8 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/play_action_notifier.dart';
 import 'package:lichess_mobile/src/model/game/playable_game_providers.dart';
 
+import '../../model/settings/piece_set_provider.dart';
+
 class PlayableGameScreen extends ConsumerWidget {
   const PlayableGameScreen({
     required this.game,
@@ -177,6 +179,9 @@ class _BoardBody extends ConsumerWidget {
     final isReplaying =
         gameState != null && positionCursor < gameState.positionIndex;
 
+    final pieceSet = ref.watch(pieceSetProvider);
+    final boardSettings = cg.BoardSettings(animationDuration: Duration.zero, pieceAssets: cg.PieceSetAssets.from(pieceSet.assets));
+
     return gameClockStream.when(
       data: (clock) {
         final black = BoardPlayer(
@@ -231,6 +236,7 @@ class _BoardBody extends ConsumerWidget {
           bottomPlayer: bottomPlayer,
           moves: gameState?.sanMoves,
           currentMoveIndex: positionCursor - 1,
+          boardSettings: boardSettings,
         );
       },
       loading: () {
@@ -257,6 +263,7 @@ class _BoardBody extends ConsumerWidget {
             orientation: game.orientation.cg,
             fen: game.initialFen,
           ),
+          boardSettings: boardSettings,
         );
       },
       error: (err, stackTrace) {

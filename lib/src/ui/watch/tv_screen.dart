@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart';
+import 'package:lichess_mobile/src/model/settings/piece_set_provider.dart';
+import 'package:lichess_mobile/src/model/settings/settings_repository.dart';
 
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -15,7 +17,7 @@ import 'package:lichess_mobile/src/model/tv/featured_position.dart';
 import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
 
-const _boardSettings = BoardSettings(animationDuration: Duration.zero);
+// const _boardSettings = BoardSettings(animationDuration: Duration.zero, pieceAssets: pieceSetProvider.);
 
 class TvScreen extends ConsumerWidget {
   const TvScreen({super.key});
@@ -84,6 +86,9 @@ class _Body extends ConsumerWidget {
         : const AsyncLoading<FeaturedPosition>();
     final featuredGame = ref.watch(featuredGameProvider);
 
+    final pieceSet = ref.watch(pieceSetProvider);
+    final boardSettings = BoardSettings(animationDuration: Duration.zero, pieceAssets: PieceSetAssets.from(pieceSet.assets));
+
     return SafeArea(
       child: Center(
         child: tvStream.when(
@@ -126,20 +131,20 @@ class _Body extends ConsumerWidget {
                 : kEmptyWidget;
             return GameBoardLayout(
               boardData: boardData,
-              boardSettings: _boardSettings,
+              boardSettings: boardSettings,
               topPlayer: topPlayerWidget,
               bottomPlayer: bottomPlayerWidget,
             );
           },
-          loading: () => const GameBoardLayout(
+          loading: () => GameBoardLayout(
             topPlayer: kEmptyWidget,
             bottomPlayer: kEmptyWidget,
-            boardData: BoardData(
+            boardData: const BoardData(
               interactableSide: InteractableSide.none,
               orientation: Side.white,
               fen: kEmptyFen,
             ),
-            boardSettings: _boardSettings,
+            boardSettings: boardSettings,
           ),
           error: (err, stackTrace) {
             debugPrint(

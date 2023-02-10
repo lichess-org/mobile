@@ -1,4 +1,6 @@
+import 'package:chessground/chessground.dart';
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -39,10 +41,21 @@ class SettingsRepository {
     return _prefs.getBool(soundMutedKey) ?? false;
   }
 
+  // Piece Sets
+  Future<bool> setPieceSet(PieceSet pieceSet) {
+    return _prefs.setString(pieceSetKey, pieceSet.name);
+  }
+
+  PieceSet getPieceSet() {
+    final str = _prefs.getString(pieceSetKey) ?? 'merida'; // TODO: Should this be cburnett, to match lila and lichobile?
+    return PieceSet.values.firstWhereOrNull((p) => p.name == str) ?? PieceSet.merida;
+  }
+
   // --
 
   static const backgroundModeKey = '$prefix.backgroundMode';
   static const soundMutedKey = '$prefix.soundMuted';
+  static const pieceSetKey = '$prefix.pieceSet';
 }
 
 final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
