@@ -1,9 +1,9 @@
-import 'package:chessground/chessground.dart' as cg;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/piece_set_provider.dart';
+import 'package:lichess_mobile/src/ui/settings/piece_set_screen.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -89,24 +89,11 @@ class _Body extends ConsumerWidget {
                   settingsLabel: context.l10n.pieceSet,
                   settingsValue: pieceSet.label,
                   onTap: () {
-                    if (defaultTargetPlatform == TargetPlatform.android) {
-                      showChoicesPicker(
-                        context,
-                        choices: cg.PieceSet.values,
-                        selectedItem: pieceSet,
-                        labelBuilder: (p) =>
-                            Text(p.label),
-                        onSelectedItemChanged: (cg.PieceSet? value) => ref
-                            .read(pieceSetProvider.notifier)
-                            .changePieceSet(value ?? pieceSet),
-                      );
-                    } else {
-                      pushPlatformRoute(
-                        context: context,
-                        title: context.l10n.background,
-                        builder: (context) => const ThemeModeScreen(),
-                      );
-                    }
+                    pushPlatformRoute(
+                      context: context,
+                      title: context.l10n.pieceSet,
+                      builder: (context) => const PieceSetScreen(),
+                    );
                   },
                 ),
               ],

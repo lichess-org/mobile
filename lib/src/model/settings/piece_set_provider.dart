@@ -5,14 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'settings_repository.dart';
 
 final pieceSetProvider =
-StateNotifierProvider<PieceSetNotifier, PieceSet>((ref) {
+    StateNotifierProvider<PieceSetNotifier, PieceSet>((ref) {
   final repository = ref.watch(settingsRepositoryProvider);
   return PieceSetNotifier(ref, repository.getPieceSet());
 });
 
 class PieceSetNotifier extends StateNotifier<PieceSet> {
-  PieceSetNotifier(this.ref, PieceSet initialSet)
-      : super(initialSet);
+  PieceSetNotifier(this.ref, PieceSet initialSet) : super(initialSet);
 
   final Ref ref;
 
