@@ -59,6 +59,7 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
     this.subtitleBuilder,
     this.leadingBuilder,
     required this.onSelectedItemChanged,
+    this.tileContentPadding,
     this.margin,
     this.notchedTile = false,
     this.showDividerBetweenTiles = false,
@@ -70,10 +71,15 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
   final Widget Function(T choice)? subtitleBuilder;
   final Widget Function(T choice)? leadingBuilder;
   final void Function(T choice) onSelectedItemChanged;
-  final EdgeInsetsGeometry? margin;
 
   /// Only on android.
   final bool showDividerBetweenTiles;
+
+  /// Android tiles content padding.
+  final EdgeInsetsGeometry? tileContentPadding;
+
+  /// iOS margin.
+  final EdgeInsetsGeometry? margin;
 
   /// iOS only, for choosing the style of the tile.
   final bool notchedTile;
@@ -86,6 +92,7 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
           return ListTile(
             selected: selectedItem == value,
             trailing: selectedItem == value ? const Icon(Icons.check) : null,
+            contentPadding: tileContentPadding,
             title: titleBuilder(value),
             subtitle: subtitleBuilder?.call(value),
             leading: leadingBuilder?.call(value),

@@ -47,6 +47,10 @@ class _Body extends ConsumerWidget {
         children: [
           ChoicePicker(
             notchedTile: true,
+            tileContentPadding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
             choices: PieceSet.values,
             selectedItem: pieceSet,
             titleBuilder: (t) => Text(t.label),
