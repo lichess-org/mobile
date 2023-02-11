@@ -40,9 +40,10 @@ enum Perf {
 
 final IMap<String, Perf> perfNameMap = IMap(Perf.values.asNameMap());
 
+/// A pair of time and increment used as game clock
 @immutable
-class TimeInc {
-  const TimeInc(this.time, this.increment);
+class TimeIncrement {
+  const TimeIncrement(this.time, this.increment);
 
   /// Clock initial time in minutes
   final int time;
@@ -50,16 +51,16 @@ class TimeInc {
   /// Clock increment in seconds
   final int increment;
 
-  static TimeInc? fromString(String str) {
+  static TimeIncrement? fromString(String str) {
     try {
       final nums = str.split('+').map(int.parse).toList();
-      return TimeInc(nums.first, nums[1]);
+      return TimeIncrement(nums.first, nums[1]);
     } catch (_) {
       return null;
     }
   }
 
-  TimeInc.fromJson(Map<String, dynamic> json)
+  TimeIncrement.fromJson(Map<String, dynamic> json)
       : time = json['time'] as int,
         increment = json['increment'] as int;
 
@@ -73,7 +74,7 @@ class TimeInc {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TimeInc &&
+      other is TimeIncrement &&
           runtimeType == other.runtimeType &&
           time == other.time &&
           increment == other.increment;
@@ -85,19 +86,20 @@ class TimeInc {
   String toString() => '$time+$increment';
 }
 
-enum TimeControl {
-  blitz1(TimeInc(3, 0), Perf.blitz),
-  blitz2(TimeInc(3, 2), Perf.blitz),
-  blitz3(TimeInc(5, 0), Perf.blitz),
-  blitz4(TimeInc(5, 3), Perf.blitz),
-  rapid1(TimeInc(10, 0), Perf.rapid),
-  rapid2(TimeInc(10, 5), Perf.rapid),
-  rapid3(TimeInc(15, 10), Perf.rapid),
-  classical1(TimeInc(30, 0), Perf.classical),
-  classical2(TimeInc(30, 20), Perf.classical);
+/// Default game clock choice of lichess
+enum DefaultGameClock {
+  blitz3_0(TimeIncrement(3, 0), Perf.blitz),
+  blitz3_2(TimeIncrement(3, 2), Perf.blitz),
+  blitz5_0(TimeIncrement(5, 0), Perf.blitz),
+  blitz5_3(TimeIncrement(5, 3), Perf.blitz),
+  rapid10_0(TimeIncrement(10, 0), Perf.rapid),
+  rapid10_5(TimeIncrement(10, 5), Perf.rapid),
+  rapid15_10(TimeIncrement(15, 10), Perf.rapid),
+  classical30_0(TimeIncrement(30, 0), Perf.classical),
+  classical30_20(TimeIncrement(30, 20), Perf.classical);
 
-  const TimeControl(this.value, this.perf);
-  final TimeInc value;
+  const DefaultGameClock(this.value, this.perf);
+  final TimeIncrement value;
   final Perf perf;
 }
 

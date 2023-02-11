@@ -270,7 +270,7 @@ class PlayForm extends ConsumerWidget {
                 useRootNavigator: true,
                 context: context,
                 builder: (BuildContext context) {
-                  return const TimeControlModal();
+                  return const DefaultGameClockModal();
                 },
               );
             },

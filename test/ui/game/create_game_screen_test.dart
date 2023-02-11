@@ -230,7 +230,8 @@ void main() {
         await tester.tap(find.text('3 + 2'));
         await tester.pumpAndSettle(); // wait for the animation to finish
 
-        await tester.tap(find.byKey(const ValueKey(TimeControl.rapid1)));
+        await tester
+            .tap(find.byKey(const ValueKey(DefaultGameClock.rapid10_0)));
         await tester.pumpAndSettle(); // wait for the animation to finish
 
         expect(find.widgetWithText(OutlinedButton, '10 + 0'), findsOneWidget);

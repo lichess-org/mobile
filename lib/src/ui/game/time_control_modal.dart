@@ -9,8 +9,8 @@ import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/board/play_preferences.dart';
 
-class TimeControlModal extends StatelessWidget {
-  const TimeControlModal({super.key});
+class DefaultGameClockModal extends StatelessWidget {
+  const DefaultGameClockModal({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final timeControlPref = ref.watch(timeControlPrefProvider);
-    void onSelected(TimeControl choice) {
+    void onSelected(DefaultGameClock choice) {
       Navigator.pop(context);
       ref.read(timeControlPrefProvider.notifier).set(choice);
     }
@@ -71,10 +71,10 @@ class _Body extends ConsumerWidget {
             _SectionChoices(
               timeControlPref,
               choices: const [
-                TimeControl.blitz1,
-                TimeControl.blitz2,
-                TimeControl.blitz3,
-                TimeControl.blitz4
+                DefaultGameClock.blitz3_0,
+                DefaultGameClock.blitz3_2,
+                DefaultGameClock.blitz5_0,
+                DefaultGameClock.blitz5_3
               ],
               title: const _SectionTitle(
                 title: 'Blitz',
@@ -86,9 +86,9 @@ class _Body extends ConsumerWidget {
             _SectionChoices(
               timeControlPref,
               choices: const [
-                TimeControl.rapid1,
-                TimeControl.rapid2,
-                TimeControl.rapid3
+                DefaultGameClock.rapid10_0,
+                DefaultGameClock.rapid10_5,
+                DefaultGameClock.rapid15_10
               ],
               title: const _SectionTitle(
                 title: 'Rapid',
@@ -99,7 +99,10 @@ class _Body extends ConsumerWidget {
             const SizedBox(height: 30.0),
             _SectionChoices(
               timeControlPref,
-              choices: const [TimeControl.classical1, TimeControl.classical2],
+              choices: const [
+                DefaultGameClock.classical30_0,
+                DefaultGameClock.classical30_20
+              ],
               title: const _SectionTitle(
                 title: 'Classical',
                 icon: LichessIcons.classical,
@@ -121,10 +124,10 @@ class _SectionChoices extends StatelessWidget {
     required this.onSelected,
   });
 
-  final TimeControl selected;
-  final List<TimeControl> choices;
+  final DefaultGameClock selected;
+  final List<DefaultGameClock> choices;
   final _SectionTitle title;
-  final void Function(TimeControl choice) onSelected;
+  final void Function(DefaultGameClock choice) onSelected;
 
   @override
   Widget build(BuildContext context) {

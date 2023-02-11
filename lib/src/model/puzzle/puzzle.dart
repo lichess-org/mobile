@@ -41,7 +41,7 @@ class PuzzleGame with _$PuzzleGame {
     required PuzzlePlayer white,
     required PuzzlePlayer black,
     required String pgn,
-    TimeInc? clock,
+    TimeIncrement? clock,
   }) = _PuzzleGame;
 
   factory PuzzleGame.fromJson(Map<String, dynamic> json) =>

@@ -119,7 +119,9 @@ PuzzleGame _puzzleGameFromPick(RequiredPick pick) {
     ),
     pgn: pick('pgn').asStringOrThrow(),
     clock: pick('clock').letOrNull(
-      (p) => TimeInc.fromString(p.asStringOrThrow()) ?? const TimeInc(0, 0),
+      (p) =>
+          TimeIncrement.fromString(p.asStringOrThrow()) ??
+          const TimeIncrement(0, 0),
     ),
   );
 }
