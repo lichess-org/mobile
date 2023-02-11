@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
@@ -8,7 +7,6 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
-import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -16,11 +14,9 @@ import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:lichess_mobile/src/model/game/providers.dart';
+import 'package:lichess_mobile/src/model/game/game_providers.dart';
 
-part 'archived_game_screen.g.dart';
-
-final _isBoardTurnedProvider = StateProvider.autoDispose<bool>((ref) => false);
+import 'archived_game_screen_providers.dart';
 
 class ArchivedGameScreen extends ConsumerWidget {
   const ArchivedGameScreen({
@@ -122,7 +118,7 @@ class _BoardBody extends ConsumerWidget {
     });
 
     final pieceSet = ref.watch(pieceSetPrefProvider);
-    final isBoardTurned = ref.watch(_isBoardTurnedProvider);
+    final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
     final boardSettings = cg.BoardSettings(
       pieceAssets: pieceSet.assets,
@@ -200,27 +196,6 @@ class _BoardBody extends ConsumerWidget {
   }
 }
 
-final _canGoForwardProvider =
-    Provider.autoDispose.family<bool, GameId>((ref, id) {
-  final gameCursor = ref.watch(gameCursorProvider(id));
-  if (gameCursor.hasValue) {
-    final stepsLength = gameCursor.value!.item1.steps.length;
-    final cursor = gameCursor.value!.item2;
-    return cursor < stepsLength - 1;
-  }
-  return false;
-});
-
-final _canGoBackwardProvider =
-    Provider.autoDispose.family<bool, GameId>((ref, id) {
-  final gameCursor = ref.watch(gameCursorProvider(id));
-  if (gameCursor.hasValue) {
-    final cursor = gameCursor.value!.item2;
-    return cursor > 0;
-  }
-  return false;
-});
-
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({required this.gameData});
 
@@ -228,8 +203,8 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final canGoForward = ref.watch(_canGoForwardProvider(gameData.id));
-    final canGoBackward = ref.watch(_canGoBackwardProvider(gameData.id));
+    final canGoForward = ref.watch(canGoForwardProvider(gameData.id));
+    final canGoBackward = ref.watch(canGoBackwardProvider(gameData.id));
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -312,49 +287,10 @@ class _BottomBar extends ConsumerWidget {
           leading: const Icon(Icons.swap_vert),
           label: Text(context.l10n.flipBoard),
           onPressed: (context) {
-            ref.read(_isBoardTurnedProvider.notifier).state =
-                !ref.read(_isBoardTurnedProvider);
+            ref.read(isBoardTurnedProvider.notifier).toggle();
           },
         ),
       ],
     );
-  }
-}
-
-@riverpod
-class GameCursor extends _$GameCursor {
-  @override
-  FutureOr<Tuple2<ArchivedGame, int>> build(GameId id) async {
-    final data = await ref.watch(archivedGameProvider(id: id).future);
-
-    return Tuple2(data, data.steps.length - 1);
-  }
-
-  void cursorAt(int newPosition) {
-    if (state.hasValue) {
-      state = AsyncValue.data(state.value!.withItem2(newPosition));
-    }
-  }
-
-  void cursorForward() {
-    if (state.hasValue) {
-      final current = state.value!;
-      state = AsyncValue.data(current.withItem2(current.item2 + 1));
-    }
-  }
-
-  void cursorBackward() {
-    if (state.hasValue) {
-      final current = state.value!;
-      state = AsyncValue.data(current.withItem2(current.item2 - 1));
-    }
-  }
-
-  void cursorLast() {
-    if (state.hasValue) {
-      final current = state.value!;
-      state =
-          AsyncValue.data(current.withItem2(current.item1.steps.length - 1));
-    }
   }
 }

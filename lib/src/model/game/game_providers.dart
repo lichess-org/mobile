@@ -5,7 +5,7 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'game.dart';
 import 'game_repository.dart';
 
-part 'providers.g.dart';
+part 'game_providers.g.dart';
 
 @Riverpod(keepAlive: true)
 Future<ArchivedGame> archivedGame(
