@@ -104,7 +104,10 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
     steps: pick('moves').letOrThrow((it) {
       final moves = it.asStringOrThrow().split(' ');
       final List<GameStep> steps = [];
-      Position position = data.variant.initialPosition;
+      // assume lichess always send initialFen with fromPosition
+      Position position = data.variant == Variant.fromPosition
+          ? Chess.fromSetup(Setup.parseFen(data.initialFen!))
+          : data.variant.initialPosition;
       int ply = 0;
       Duration? clock = clockData?.initial;
       for (final san in moves) {

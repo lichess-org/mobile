@@ -33,7 +33,10 @@ final archivedGameProvider =
           .update((_) => data.steps.length - 1);
       return data;
     },
-    (error, _) {
+    (error, stackTrace) {
+      debugPrint(
+        'SEVERE: [ArchivedGameScreen] could not load game; $error\n$stackTrace',
+      );
       throw error;
     },
   );
