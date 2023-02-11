@@ -19,6 +19,8 @@ This project is meant to run on iOS and Android, so you need to follow the
 
 Note that this project is not meant to be run on web platform.
 
+Read the [wiki](https://github.com/lichess-org/mobile/wiki) for more information.
+
 ## Run
 
 First run the code generator:
