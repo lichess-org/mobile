@@ -126,6 +126,14 @@ class GameBoardLayout extends StatelessWidget {
                                   onSelectMove: onSelectMove,
                                 ),
                               ),
+                            )
+                          else
+                            // same height as [MoveList]
+                            const Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: SizedBox(height: 40),
+                              ),
                             ),
                           bottomPlayer,
                         ],
@@ -176,7 +184,6 @@ class MoveList extends StatefulWidget {
 }
 
 class _MoveListState extends State<MoveList> {
-  final ScrollController scrollController = ScrollController();
   final currentMoveKey = GlobalKey();
 
   @override
@@ -213,53 +220,18 @@ class _MoveListState extends State<MoveList> {
         ? Container(
             padding: const EdgeInsets.only(left: 5),
             height: 40,
-            child: ListView.builder(
-              // hack to allow ensureVisible working
-              // TODO work on a different solution
-              cacheExtent: 10000,
-              controller: scrollController,
+            child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              itemCount: widget.slicedMoves.length,
-              itemBuilder: (_, index) => Container(
-                margin: const EdgeInsets.only(right: 10),
-                child: Row(
-                  children: [
-                    InlineMoveCount(count: index + 1),
-                    ...widget.slicedMoves[index].map(
-                      (move) => InlineMoveItem(
-                        key: widget.currentMoveIndex == move.key
-                            ? currentMoveKey
-                            : null,
-                        move: move,
-                        current: widget.currentMoveIndex == move.key,
-                        onSelectMove: widget.onSelectMove,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          )
-        : PlatformCard(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ListView.builder(
-                // hack to allow ensureVisible working
-                // TODO work on a different solution
-                cacheExtent: 10000,
-                controller: scrollController,
-                itemCount: widget.slicedMoves.length,
-                itemBuilder: (_, index) => Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    StackedMoveCount(count: index + 1),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          ...widget.slicedMoves[index].map(
-                            (move) => Expanded(
-                              child: StackedMoveItem(
+              child: Row(
+                children: widget.slicedMoves
+                    .mapIndexed(
+                      (index, moves) => Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: Row(
+                          children: [
+                            InlineMoveCount(count: index + 1),
+                            ...moves.map(
+                              (move) => InlineMoveItem(
                                 key: widget.currentMoveIndex == move.key
                                     ? currentMoveKey
                                     : null,
@@ -268,11 +240,49 @@ class _MoveListState extends State<MoveList> {
                                 onSelectMove: widget.onSelectMove,
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    )
+                    .toList(growable: false),
+              ),
+            ),
+          )
+        : PlatformCard(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: widget.slicedMoves
+                      .mapIndexed(
+                        (index, moves) => Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            StackedMoveCount(count: index + 1),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  ...moves.map(
+                                    (move) => Expanded(
+                                      child: StackedMoveItem(
+                                        key: widget.currentMoveIndex == move.key
+                                            ? currentMoveKey
+                                            : null,
+                                        move: move,
+                                        current:
+                                            widget.currentMoveIndex == move.key,
+                                        onSelectMove: widget.onSelectMove,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                      .toList(growable: false),
                 ),
               ),
             ),

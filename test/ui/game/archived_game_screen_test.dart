@@ -184,11 +184,17 @@ void main() {
         await tester.pumpAndSettle();
 
         // move list is updated
-        if (i + 1 < movesAfterE4.length) {
+        final prevMoveIndex = i + 1;
+        if (prevMoveIndex < movesAfterE4.length) {
           final prevMove =
-              find.widgetWithText(InlineMoveItem, movesAfterE4[i + 1]);
+              find.widgetWithText(InlineMoveItem, movesAfterE4[prevMoveIndex]);
           expect(prevMove, findsAtLeastNWidgets(1));
-          expect(tester.widget<InlineMoveItem>(prevMove).current, isTrue);
+          expect(
+            tester
+                .widgetList<InlineMoveItem>(prevMove)
+                .any((e) => e.current ?? false),
+            isTrue,
+          );
         }
       }
 
