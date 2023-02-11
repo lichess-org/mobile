@@ -179,9 +179,7 @@ class _BoardBody extends ConsumerWidget {
       data: (clock) {
         final black = BoardPlayer(
           key: const ValueKey('black-player'),
-          name: game.black.name,
-          rating: game.black.rating,
-          title: game.black.title,
+          player: game.black,
           active: gameState != null &&
               gameState.status == GameStatus.started &&
               gameState.position.fullmoves > 1 &&
@@ -190,9 +188,7 @@ class _BoardBody extends ConsumerWidget {
         );
         final white = BoardPlayer(
           key: const ValueKey('white-player'),
-          name: game.white.name,
-          rating: game.white.rating,
-          title: game.white.title,
+          player: game.white,
           active: gameState != null &&
               gameState.status == GameStatus.started &&
               gameState.position.fullmoves > 1 &&
@@ -236,16 +232,12 @@ class _BoardBody extends ConsumerWidget {
       },
       loading: () {
         final player = BoardPlayer(
-          name: game.player.name,
-          rating: game.player.rating,
-          title: game.player.title,
+          player: game.player,
           active: false,
           clock: Duration.zero,
         );
         final opponent = BoardPlayer(
-          name: game.opponent.name,
-          rating: game.opponent.rating,
-          title: game.opponent.title,
+          player: game.opponent,
           active: false,
           clock: Duration.zero,
         );

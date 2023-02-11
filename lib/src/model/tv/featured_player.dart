@@ -1,10 +1,14 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 
+import 'package:lichess_mobile/src/model/game/player.dart';
+
 part 'featured_player.freezed.dart';
 
 @freezed
 class FeaturedPlayer with _$FeaturedPlayer {
+  const FeaturedPlayer._();
+
   const factory FeaturedPlayer({
     required Side side,
     required String name,
@@ -12,8 +16,6 @@ class FeaturedPlayer with _$FeaturedPlayer {
     int? rating,
     int? seconds,
   }) = _FeaturedPlayer;
-
-  const FeaturedPlayer._();
 
   FeaturedPlayer withSeconds(int newSeconds) {
     return FeaturedPlayer(
@@ -24,4 +26,6 @@ class FeaturedPlayer with _$FeaturedPlayer {
       seconds: newSeconds,
     );
   }
+
+  Player get asPlayer => Player(name: name, title: title, rating: rating);
 }

@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
 import 'game.dart';
+import 'player.dart';
 
 final gameRepositoryProvider = Provider<GameRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);

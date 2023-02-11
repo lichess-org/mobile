@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:chessground/chessground.dart' as cg;
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/async_value.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -15,32 +15,12 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/providers.dart';
 
-final _positionCursorProvider = StateProvider.autoDispose<int?>((ref) => null);
+part 'archived_game_screen.g.dart';
 
 final _isBoardTurnedProvider = StateProvider.autoDispose<bool>((ref) => false);
-
-final archivedGameProvider =
-    FutureProvider.autoDispose.family<ArchivedGame, GameId>((ref, id) async {
-  final gameRepo = ref.watch(gameRepositoryProvider);
-  final result = await gameRepo.getGame(id);
-  return result.fold(
-    (data) {
-      ref
-          .read(_positionCursorProvider.notifier)
-          .update((_) => data.steps.length - 1);
-      return data;
-    },
-    (error, stackTrace) {
-      debugPrint(
-        'SEVERE: [ArchivedGameScreen] could not load game; $error\n$stackTrace',
-      );
-      throw error;
-    },
-  );
-});
 
 class ArchivedGameScreen extends ConsumerWidget {
   const ArchivedGameScreen({
@@ -63,8 +43,6 @@ class ArchivedGameScreen extends ConsumerWidget {
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
     final isSoundMuted = ref.watch(muteSoundPrefProvider);
-    final ArchivedGame? archivedGame =
-        ref.watch(archivedGameProvider(gameData.id)).asData?.value;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -84,18 +62,14 @@ class ArchivedGameScreen extends ConsumerWidget {
       ),
       body: _BoardBody(
         gameData: gameData,
-        game: archivedGame,
         orientation: orientation,
       ),
-      bottomNavigationBar:
-          _BottomBar(gameData: gameData, steps: archivedGame?.steps),
+      bottomNavigationBar: _BottomBar(gameData: gameData),
     );
   }
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
     final isSoundMuted = ref.watch(muteSoundPrefProvider);
-    final ArchivedGame? archivedGame =
-        ref.watch(archivedGameProvider(gameData.id)).asData?.value;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 16.0),
@@ -120,11 +94,10 @@ class ArchivedGameScreen extends ConsumerWidget {
             Expanded(
               child: _BoardBody(
                 gameData: gameData,
-                game: archivedGame,
                 orientation: orientation,
               ),
             ),
-            _BottomBar(gameData: gameData, steps: archivedGame?.steps),
+            _BottomBar(gameData: gameData),
           ],
         ),
       ),
@@ -135,91 +108,128 @@ class ArchivedGameScreen extends ConsumerWidget {
 class _BoardBody extends ConsumerWidget {
   const _BoardBody({
     required this.gameData,
-    this.game,
     required this.orientation,
   });
 
   final ArchivedGameData gameData;
-  final ArchivedGame? game;
   final Side orientation;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<AsyncValue<ArchivedGame>>(archivedGameProvider(id: gameData.id),
+        (_, state) {
+      state.showSnackbarOnError(context);
+    });
+
     final pieceSet = ref.watch(pieceSetPrefProvider);
     final isBoardTurned = ref.watch(_isBoardTurnedProvider);
-    final positionCursor = ref.watch(_positionCursorProvider);
+    final gameCursor = ref.watch(gameCursorProvider(gameData.id));
+    final boardSettings = cg.BoardSettings(
+      pieceAssets: pieceSet.assets,
+    );
     final black = BoardPlayer(
       key: const ValueKey('black-player'),
-      name: gameData.black.name,
-      rating: gameData.black.rating,
-      title: gameData.black.title,
+      player: gameData.black,
       active: false,
-      clock: positionCursor != null
-          ? game?.blackClockAt(positionCursor)
-          : game?.clock?.initial,
     );
     final white = BoardPlayer(
       key: const ValueKey('white-player'),
-      name: gameData.white.name,
-      rating: gameData.white.rating,
-      title: gameData.white.title,
+      player: gameData.white,
       active: false,
-      clock: positionCursor != null
-          ? game?.whiteClockAt(positionCursor)
-          : game?.clock?.initial,
     );
     final topPlayer = orientation == Side.white ? black : white;
     final bottomPlayer = orientation == Side.white ? white : black;
-
-    return GameBoardLayout(
+    final loadingBoard = GameBoardLayout(
       boardData: cg.BoardData(
         interactableSide: cg.InteractableSide.none,
         orientation: (isBoardTurned ? orientation.opposite : orientation).cg,
-        fen: game?.fenAt(positionCursor ?? 0) ??
-            gameData.lastFen ??
-            kInitialBoardFEN,
-        lastMove: (positionCursor != null
-                ? game?.moveAt(positionCursor)
-                : game?.lastMove)
-            ?.cg,
+        fen: gameData.lastFen ?? kInitialBoardFEN,
       ),
-      boardSettings: cg.BoardSettings(
-        pieceAssets: pieceSet.assets,
-      ),
+      boardSettings: boardSettings,
       topPlayer: topPlayer,
       bottomPlayer: bottomPlayer,
-      moves: game?.steps.map((e) => e.san).toList(growable: false),
-      currentMoveIndex: positionCursor,
-      onSelectMove: (moveIndex) {
-        ref.read(_positionCursorProvider.notifier).state = moveIndex;
+    );
+
+    return gameCursor.when(
+      data: (data) {
+        final game = data.item1;
+        final cursor = data.item2;
+        final black = BoardPlayer(
+          key: const ValueKey('black-player'),
+          player: gameData.black,
+          active: false,
+          clock: game.blackClockAt(cursor),
+        );
+        final white = BoardPlayer(
+          key: const ValueKey('white-player'),
+          player: gameData.white,
+          active: false,
+          clock: game.whiteClockAt(cursor),
+        );
+        final topPlayer = orientation == Side.white ? black : white;
+        final bottomPlayer = orientation == Side.white ? white : black;
+
+        return GameBoardLayout(
+          boardData: cg.BoardData(
+            interactableSide: cg.InteractableSide.none,
+            orientation:
+                (isBoardTurned ? orientation.opposite : orientation).cg,
+            fen: game.fenAt(cursor) ?? gameData.lastFen ?? kInitialBoardFEN,
+            lastMove: game.moveAt(cursor)?.cg,
+          ),
+          boardSettings: boardSettings,
+          topPlayer: topPlayer,
+          bottomPlayer: bottomPlayer,
+          moves: game.steps.map((e) => e.san).toList(growable: false),
+          currentMoveIndex: cursor,
+          onSelectMove: (moveIndex) {
+            ref
+                .read(gameCursorProvider(gameData.id).notifier)
+                .cursorAt(moveIndex);
+          },
+        );
+      },
+      loading: () => loadingBoard,
+      error: (error, stackTrace) {
+        debugPrint(
+          'SEVERE: [ArchivedGameScreen] could not load game; $error\n$stackTrace',
+        );
+        return loadingBoard;
       },
     );
   }
 }
 
 final _canGoForwardProvider =
-    Provider.autoDispose.family<bool, int?>((ref, stepsLength) {
-  final positionCursor = ref.watch(_positionCursorProvider);
-  return stepsLength != null &&
-      positionCursor != null &&
-      positionCursor < stepsLength - 1;
+    Provider.autoDispose.family<bool, GameId>((ref, id) {
+  final gameCursor = ref.watch(gameCursorProvider(id));
+  if (gameCursor.hasValue) {
+    final stepsLength = gameCursor.value!.item1.steps.length;
+    final cursor = gameCursor.value!.item2;
+    return cursor < stepsLength - 1;
+  }
+  return false;
 });
 
-final _canGoBackwardProvider = Provider.autoDispose<bool>((ref) {
-  final positionCursor = ref.watch(_positionCursorProvider);
-  return positionCursor != null && positionCursor > 0;
+final _canGoBackwardProvider =
+    Provider.autoDispose.family<bool, GameId>((ref, id) {
+  final gameCursor = ref.watch(gameCursorProvider(id));
+  if (gameCursor.hasValue) {
+    final cursor = gameCursor.value!.item2;
+    return cursor > 0;
+  }
+  return false;
 });
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.gameData, this.steps});
+  const _BottomBar({required this.gameData});
 
   final ArchivedGameData gameData;
-  final IList<GameStep>? steps;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final canGoForward = ref.watch(_canGoForwardProvider(steps?.length));
-    final canGoBackward = ref.watch(_canGoBackwardProvider);
+    final canGoForward = ref.watch(_canGoForwardProvider(gameData.id));
+    final canGoBackward = ref.watch(_canGoBackwardProvider(gameData.id));
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -238,7 +248,9 @@ class _BottomBar extends ConsumerWidget {
               tooltip: 'First position',
               onPressed: canGoBackward
                   ? () {
-                      ref.read(_positionCursorProvider.notifier).state = 0;
+                      ref
+                          .read(gameCursorProvider(gameData.id).notifier)
+                          .cursorAt(0);
                     }
                   : null,
               icon: const Icon(LichessIcons.fast_backward),
@@ -251,13 +263,8 @@ class _BottomBar extends ConsumerWidget {
               onPressed: canGoBackward
                   ? () {
                       ref
-                          .read(_positionCursorProvider.notifier)
-                          .update((state) {
-                        if (state != null) {
-                          state--;
-                        }
-                        return state;
-                      });
+                          .read(gameCursorProvider(gameData.id).notifier)
+                          .cursorBackward();
                     }
                   : null,
               icon: const Icon(LichessIcons.step_backward),
@@ -270,13 +277,8 @@ class _BottomBar extends ConsumerWidget {
               onPressed: canGoForward
                   ? () {
                       ref
-                          .read(_positionCursorProvider.notifier)
-                          .update((state) {
-                        if (state != null) {
-                          state++;
-                        }
-                        return state;
-                      });
+                          .read(gameCursorProvider(gameData.id).notifier)
+                          .cursorForward();
                     }
                   : null,
               icon: const Icon(LichessIcons.step_forward),
@@ -288,8 +290,9 @@ class _BottomBar extends ConsumerWidget {
               tooltip: 'Last position',
               onPressed: canGoForward
                   ? () {
-                      ref.read(_positionCursorProvider.notifier).state =
-                          steps!.length - 1;
+                      ref
+                          .read(gameCursorProvider(gameData.id).notifier)
+                          .cursorLast();
                     }
                   : null,
               icon: const Icon(LichessIcons.fast_forward),
@@ -315,5 +318,43 @@ class _BottomBar extends ConsumerWidget {
         ),
       ],
     );
+  }
+}
+
+@riverpod
+class GameCursor extends _$GameCursor {
+  @override
+  FutureOr<Tuple2<ArchivedGame, int>> build(GameId id) async {
+    final data = await ref.watch(archivedGameProvider(id: id).future);
+
+    return Tuple2(data, data.steps.length - 1);
+  }
+
+  void cursorAt(int newPosition) {
+    if (state.hasValue) {
+      state = AsyncValue.data(state.value!.withItem2(newPosition));
+    }
+  }
+
+  void cursorForward() {
+    if (state.hasValue) {
+      final current = state.value!;
+      state = AsyncValue.data(current.withItem2(current.item2 + 1));
+    }
+  }
+
+  void cursorBackward() {
+    if (state.hasValue) {
+      final current = state.value!;
+      state = AsyncValue.data(current.withItem2(current.item2 - 1));
+    }
+  }
+
+  void cursorLast() {
+    if (state.hasValue) {
+      final current = state.value!;
+      state =
+          AsyncValue.data(current.withItem2(current.item1.steps.length - 1));
+    }
   }
 }
