@@ -4,7 +4,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import './game_status.dart';
 
 part 'game.freezed.dart';
 
@@ -187,4 +186,24 @@ enum Variant {
         throw UnimplementedError();
     }
   }
+}
+
+enum GameStatus {
+  unknown(-1),
+  created(10),
+  started(20),
+  aborted(25),
+  mate(30),
+  resign(31),
+  stalemate(32),
+  timeout(33),
+  draw(34),
+  outoftime(35),
+  cheat(36),
+  noStart(37),
+  unknownFinish(38),
+  variantEnd(60);
+
+  const GameStatus(this.value);
+  final int value;
 }

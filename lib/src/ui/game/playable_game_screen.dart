@@ -15,10 +15,9 @@ import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:lichess_mobile/src/model/game/play_action_notifier.dart';
-import 'package:lichess_mobile/src/model/game/playable_game_providers.dart';
+import 'package:lichess_mobile/src/model/board/play_action_notifier.dart';
+import 'package:lichess_mobile/src/model/board/board_providers.dart';
 
 class PlayableGameScreen extends ConsumerWidget {
   const PlayableGameScreen({
@@ -33,7 +32,7 @@ class PlayableGameScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AsyncValue<void>>(
-      gameActionProvider,
+      boardActionProvider,
       (_, state) => state.showSnackbarOnError(context),
     );
     ref.listen<AsyncValue<PlayableGame?>>(playActionProvider, (_, state) {
@@ -43,7 +42,7 @@ class PlayableGameScreen extends ConsumerWidget {
         ref.invalidate(playActionProvider);
         ref.invalidate(positionCursorProvider);
         ref.invalidate(isBoardTurnedProvider);
-        ref.invalidate(gameStateProvider);
+        ref.invalidate(boardStateProvider);
         Navigator.of(context).pushReplacement(
           MaterialPageRoute<void>(
             builder: (context) =>
@@ -64,7 +63,7 @@ class PlayableGameScreen extends ConsumerWidget {
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
     final isSoundMuted = ref.watch(muteSoundPrefProvider);
-    final gameState = ref.watch(gameStateProvider);
+    final gameState = ref.watch(boardStateProvider);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -93,7 +92,7 @@ class PlayableGameScreen extends ConsumerWidget {
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
     final isSoundMuted = ref.watch(muteSoundPrefProvider);
-    final gameState = ref.watch(gameStateProvider);
+    final gameState = ref.watch(boardStateProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 16.0),
@@ -169,8 +168,8 @@ class _BoardBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet = ref.watch(pieceSetPrefProvider);
-    final gameState = ref.watch(gameStateProvider);
-    final gameClockStream = ref.watch(gameStreamProvider(game.id));
+    final gameState = ref.watch(boardStateProvider);
+    final gameClockStream = ref.watch(boardStreamProvider(game.id));
     final positionCursor = ref.watch(positionCursorProvider);
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final isReplaying =
@@ -226,7 +225,7 @@ class _BoardBody extends ConsumerWidget {
                 : gameState?.lastMove?.cg,
             sideToMove: gameState?.position.turn.cg ?? game.orientation.cg,
             onMove: (cg.Move move, {bool? isPremove}) => ref
-                .read(gameStateProvider.notifier)
+                .read(boardStateProvider.notifier)
                 .onUserMove(game.id, Move.fromUci(move.uci)!),
           ),
           topPlayer: topPlayer,
@@ -280,7 +279,7 @@ class _BottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final positionCursor = ref.watch(positionCursorProvider);
-    final gameState = ref.watch(gameStateProvider);
+    final gameState = ref.watch(boardStateProvider);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -349,8 +348,8 @@ class _BottomBar extends ConsumerWidget {
   }
 
   Future<void> _showGameMenu(BuildContext context, WidgetRef ref) {
-    final gameState = ref.watch(gameStateProvider);
-    final gameActionAsync = ref.watch(gameActionProvider);
+    final gameState = ref.watch(boardStateProvider);
+    final gameActionAsync = ref.watch(boardActionProvider);
     final playActionAsync = ref.watch(playActionProvider);
 
     return showAdaptiveActionSheet(
@@ -370,7 +369,7 @@ class _BottomBar extends ConsumerWidget {
             label: Text(context.l10n.abortTheGame),
             onPressed: (context) {
               if (!gameActionAsync.isLoading) {
-                ref.read(gameActionProvider.notifier).abort(game.id);
+                ref.read(boardActionProvider.notifier).abort(game.id);
               }
             },
           ),
@@ -380,7 +379,7 @@ class _BottomBar extends ConsumerWidget {
             label: Text(context.l10n.resignTheGame),
             onPressed: (context) {
               if (!gameActionAsync.isLoading) {
-                ref.read(gameActionProvider.notifier).resign(game.id);
+                ref.read(boardActionProvider.notifier).resign(game.id);
               }
             },
           ),

@@ -6,13 +6,13 @@ import 'package:result_extensions/result_extensions.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_request.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'play_preferences.dart';
-import 'challenge_repository.dart';
-import 'challenge_request.dart';
-import 'game_repository.dart';
+import 'board_repository.dart';
 import 'api_event.dart';
 import 'computer_opponent.dart';
-import 'game.dart';
 
 class CreateGameService {
   const CreateGameService(this._log, {required this.ref});
@@ -44,15 +44,15 @@ class CreateGameService {
   FutureResult<PlayableGame> _waitForGameStart(User account) {
     return Result.capture(
       (() async {
-        final gameRepo = ref.read(gameRepositoryProvider);
-        final stream = gameRepo.events().timeout(
+        final boardRepo = ref.read(boardRepositoryProvider);
+        final stream = boardRepo.events().timeout(
               const Duration(seconds: 15),
               onTimeout: (sink) => sink.close(),
             );
 
         final startEvent = await stream.firstWhere(
           (event) =>
-              event.type == GameEventLifecycle.start && event.boardCompat,
+              event.type == BoardEventLifecycle.start && event.boardCompat,
           orElse: () {
             throw Exception('Could not create game.');
           },

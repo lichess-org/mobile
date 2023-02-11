@@ -14,8 +14,6 @@ import 'package:lichess_mobile/src/common/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
-import 'api_event.dart';
-import 'game_event.dart';
 import 'game.dart';
 
 final gameRepositoryProvider = Provider<GameRepository>((ref) {
@@ -67,59 +65,6 @@ class GameRepository {
           body: ids.join(','),
         )
         .flatMap(_decodeNdJsonGames);
-  }
-
-  /// Stream the events reaching a lichess user in real time as ndjson.
-  Stream<ApiEvent> events() async* {
-    final resp =
-        await apiClient.stream(Uri.parse('$kLichessHost/api/stream/event'));
-    _log.fine('Start streaming events.');
-    yield* resp.stream
-        .toStringStream()
-        .where((event) => event.isNotEmpty && event != '\n')
-        .map((event) => jsonDecode(event) as Map<String, dynamic>)
-        .where(
-          (json) => json['type'] == 'gameStart' || json['type'] == 'gameFinish',
-        )
-        .map((json) => ApiEvent.fromJson(json))
-        .handleError((Object error) => _log.warning(error));
-  }
-
-  /// Stream the state of a game being played with the Board API, as ndjson.
-  Stream<GameEvent> gameStateEvents(GameId id) async* {
-    final resp = await apiClient
-        .stream(Uri.parse('$kLichessHost/api/board/game/stream/$id'));
-    yield* resp.stream
-        .toStringStream()
-        .where((event) => event.isNotEmpty && event != '\n')
-        .map((event) => jsonDecode(event) as Map<String, dynamic>)
-        .where(
-          (event) =>
-              event['type'] == 'gameFull' || event['type'] == 'gameState',
-        )
-        .map((json) => GameEvent.fromJson(json))
-        .handleError((Object error) => _log.warning(error));
-  }
-
-  FutureResult<void> playMove(GameId gameId, Move move) {
-    return apiClient.post(
-      Uri.parse('$kLichessHost/api/board/game/$gameId/move/${move.uci}'),
-      retry: true,
-    );
-  }
-
-  FutureResult<void> abort(GameId gameId) {
-    return apiClient.post(
-      Uri.parse('$kLichessHost/api/board/game/$gameId/abort'),
-      retry: true,
-    );
-  }
-
-  FutureResult<void> resign(GameId gameId) {
-    return apiClient.post(
-      Uri.parse('$kLichessHost/api/board/game/$gameId/resign'),
-      retry: true,
-    );
   }
 
   Result<IList<ArchivedGameData>> _decodeNdJsonGames(http.Response response) {

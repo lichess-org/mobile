@@ -6,8 +6,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
-import 'package:lichess_mobile/src/model/game/play_preferences.dart';
-import 'package:lichess_mobile/src/model/game/time_control.dart';
+import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/model/board/play_preferences.dart';
 
 class TimeControlModal extends StatelessWidget {
   const TimeControlModal({super.key});

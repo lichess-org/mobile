@@ -20,10 +20,10 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/auth/auth_actions_notifier.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
-import 'package:lichess_mobile/src/model/game/play_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:lichess_mobile/src/model/game/computer_opponent.dart';
-import 'package:lichess_mobile/src/model/game/play_action_notifier.dart';
+import 'package:lichess_mobile/src/model/board/play_preferences.dart';
+import 'package:lichess_mobile/src/model/board/computer_opponent.dart';
+import 'package:lichess_mobile/src/model/board/play_action_notifier.dart';
 
 import 'time_control_modal.dart';
 import 'playable_game_screen.dart';

@@ -4,7 +4,7 @@ import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'game.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 import 'create_game_service.dart';
 
 class PlayActionNotifier
