@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: ["appbundle --debug", "ios --no-codesign"]
+        target: ["appbundle --release", "ios --no-codesign"]
     steps:
       - name: Set up JDK 17
         uses: actions/setup-java@v3
