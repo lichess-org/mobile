@@ -74,10 +74,6 @@ class GameRepository {
       return DataFormatException();
     });
   }
-
-  void dispose() {
-    apiClient.close();
-  }
 }
 
 // --

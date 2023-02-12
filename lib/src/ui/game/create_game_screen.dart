@@ -19,7 +19,7 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/auth/auth_actions_notifier.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
-import 'package:lichess_mobile/src/model/user/user_repository.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/board/play_preferences.dart';
 import 'package:lichess_mobile/src/model/board/computer_opponent.dart';
@@ -36,7 +36,7 @@ final maiaBotsProvider =
     userRepo.getUser(const UserId('maia5')),
     userRepo.getUser(const UserId('maia9')),
   ]).then(Result.flattenAll);
-  final maiaStatuses = userRepo.getUsersStatus(
+  final maiaStatuses = userRepo.getUsersStatuses(
     ISet(
       {const UserId('maia1'), const UserId('maia5'), const UserId('maia9')},
     ),

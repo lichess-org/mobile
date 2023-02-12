@@ -394,7 +394,7 @@ void main() {
     });
   });
 
-  group('UserRepository.getUsersStatusTask', () {
+  group('UserRepository.getUsersStatuses', () {
     test('json read, minimal example', () async {
       final ids = ISet(
         {const UserId('maia1'), const UserId('maia5'), const UserId('maia9')},
@@ -405,7 +405,7 @@ void main() {
         ),
       ).thenAnswer((_) async => Result.value(http.Response('[]', 200)));
 
-      final result = await repo.getUsersStatus(ids);
+      final result = await repo.getUsersStatuses(ids);
 
       expect(result.isValue, true);
     });
@@ -440,7 +440,7 @@ void main() {
         ),
       ).thenAnswer((_) async => Result.value(http.Response(response, 200)));
 
-      final result = await repo.getUsersStatus(ids);
+      final result = await repo.getUsersStatuses(ids);
 
       expect(result.isValue, true);
     });

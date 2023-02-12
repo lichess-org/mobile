@@ -16,7 +16,6 @@ part 'game_repository_providers.g.dart';
 GameRepository gameRepository(GameRepositoryRef ref) {
   final apiClient = ref.watch(apiClientProvider);
   final repo = GameRepository(Logger('GameRepository'), apiClient: apiClient);
-  ref.onDispose(() => repo.dispose());
   return repo;
 }
 
@@ -34,7 +33,7 @@ Future<IList<ArchivedGameData>> userRecentGames(
   UserRecentGamesRef ref, {
   required UserId userId,
 }) {
-  ref.cacheFor(kDefaultRequestCacheDuration);
+  ref.cacheFor(RequestCacheDuration.standard);
   final repo = ref.watch(gameRepositoryProvider);
   return Result.release(repo.getUserGames(userId));
 }

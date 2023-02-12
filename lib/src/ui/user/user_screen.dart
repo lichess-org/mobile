@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:async/async.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -15,7 +14,7 @@ import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/ui/game/archived_game_screen.dart';
-import 'package:lichess_mobile/src/model/user/user_repository.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/ui/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
@@ -24,12 +23,6 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
-
-final userProvider =
-    FutureProvider.autoDispose.family<User, UserId>((ref, userId) {
-  final repo = ref.watch(userRepositoryProvider);
-  return Result.release(repo.getUser(userId));
-});
 
 class UserScreen extends ConsumerWidget {
   const UserScreen({required this.user, super.key});
@@ -46,7 +39,7 @@ class UserScreen extends ConsumerWidget {
   }
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
-    final asyncUser = ref.watch(userProvider(user.id));
+    final asyncUser = ref.watch(userProvider(id: user.id));
     return Scaffold(
       appBar: AppBar(
         title: PlayerTitle(userName: user.name, title: user.title),
@@ -62,7 +55,7 @@ class UserScreen extends ConsumerWidget {
   }
 
   Widget _buildIos(BuildContext context, WidgetRef ref) {
-    final asyncUser = ref.watch(userProvider(user.id));
+    final asyncUser = ref.watch(userProvider(id: user.id));
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: PlayerTitle(userName: user.name, title: user.title),

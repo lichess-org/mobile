@@ -149,14 +149,6 @@ class UserStatus with _$UserStatus {
 }
 
 @freezed
-class UserPerfStatsParameters with _$UserPerfStatsParameters {
-  factory UserPerfStatsParameters({
-    required UserId userId,
-    required Perf perf,
-  }) = _UserPerfStatsParameters;
-}
-
-@freezed
 class UserPerfStats with _$UserPerfStats {
   const factory UserPerfStats({
     required double rating,

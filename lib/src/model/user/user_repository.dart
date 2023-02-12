@@ -1,6 +1,5 @@
 import 'package:logging/logging.dart';
 import 'package:result_extensions/result_extensions.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
@@ -9,14 +8,6 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'user.dart';
-
-final userRepositoryProvider = Provider<UserRepository>((ref) {
-  final apiClient = ref.watch(apiClientProvider);
-  final repo =
-      UserRepository(apiClient: apiClient, logger: Logger('UserRepository'));
-  ref.onDispose(() => repo.dispose());
-  return repo;
-});
 
 class UserRepository {
   const UserRepository({required this.apiClient, required Logger logger})
@@ -51,7 +42,7 @@ class UserRepository {
         );
   }
 
-  FutureResult<IList<UserStatus>> getUsersStatus(ISet<UserId> ids) {
+  FutureResult<IList<UserStatus>> getUsersStatuses(ISet<UserId> ids) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'))
         .then(
@@ -63,10 +54,6 @@ class UserRepository {
             ),
           ),
         );
-  }
-
-  void dispose() {
-    apiClient.close();
   }
 }
 
