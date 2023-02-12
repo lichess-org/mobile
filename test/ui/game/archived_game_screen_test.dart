@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/http.dart';
+import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/sound.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/ui/game/archived_game_screen.dart';

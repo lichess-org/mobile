@@ -3,7 +3,7 @@ import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:deep_pick/deep_pick.dart';
 
-import 'package:lichess_mobile/src/common/http.dart';
+import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/constants.dart';

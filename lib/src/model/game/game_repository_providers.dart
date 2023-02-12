@@ -5,7 +5,7 @@ import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/http.dart';
+import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'game.dart';
 import 'game_repository.dart';

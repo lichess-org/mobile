@@ -10,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
-import 'package:lichess_mobile/src/common/http.dart';
+import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/package_info.dart';
 import 'package:lichess_mobile/src/utils/in_memory_store.dart';
 import 'package:lichess_mobile/src/utils/json.dart';

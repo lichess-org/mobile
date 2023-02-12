@@ -5,7 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:lichess_mobile/src/common/http.dart';
+import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';

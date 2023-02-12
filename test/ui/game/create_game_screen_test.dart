@@ -10,7 +10,7 @@ import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/common/http.dart';
+import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/sound.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/common/models.dart';

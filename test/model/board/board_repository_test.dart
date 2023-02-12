@@ -4,7 +4,7 @@ import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/http.dart';
+import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/model/board/board_repository.dart';
 import 'package:lichess_mobile/src/model/board/board_event.dart';
 import 'package:lichess_mobile/src/model/board/api_event.dart';
