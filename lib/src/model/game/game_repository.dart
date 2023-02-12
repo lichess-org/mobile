@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 import 'package:result_extensions/result_extensions.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
@@ -16,13 +15,6 @@ import 'package:lichess_mobile/src/utils/json.dart';
 
 import 'game.dart';
 import 'player.dart';
-
-final gameRepositoryProvider = Provider<GameRepository>((ref) {
-  final apiClient = ref.watch(apiClientProvider);
-  final repo = GameRepository(Logger('GameRepository'), apiClient: apiClient);
-  ref.onDispose(() => repo.dispose());
-  return repo;
-});
 
 class GameRepository {
   const GameRepository(

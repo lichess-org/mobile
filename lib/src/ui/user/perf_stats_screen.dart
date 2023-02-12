@@ -13,8 +13,7 @@ import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/ui/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -31,13 +30,6 @@ final perfStatsProvider = FutureProvider.autoDispose
   return Result.release(
     userRepo.getUserPerfStats(perfParams.userId, perfParams.perf),
   );
-});
-
-// that one can be cached forever, thus no .autoDispose
-final perfGamesProvider =
-    FutureProvider.family<IList<ArchivedGameData>, ISet<GameId>>((ref, ids) {
-  final gameRepo = ref.watch(gameRepositoryProvider);
-  return Result.release(gameRepo.getGamesByIds(ids));
 });
 
 final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
@@ -714,7 +706,7 @@ class _GameListWidget extends ConsumerWidget {
           GameListTile(
             onTap: () {
               final gameIds = ISet(games.map((g) => g.gameId));
-              ref.read(perfGamesProvider(gameIds).future).then((list) {
+              ref.read(gamesByIdProvider(ids: gameIds).future).then((list) {
                 final gameData =
                     list.firstWhereOrNull((g) => g.id == game.gameId);
                 if (gameData != null) {

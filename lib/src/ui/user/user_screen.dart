@@ -7,15 +7,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:async/async.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/ui/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -26,12 +24,6 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
-
-final recentGamesProvider = FutureProvider.autoDispose
-    .family<IList<ArchivedGameData>, UserId>((ref, userId) {
-  final repo = ref.watch(gameRepositoryProvider);
-  return Result.release(repo.getUserGames(userId));
-});
 
 final userProvider =
     FutureProvider.autoDispose.family<User, UserId>((ref, userId) {
@@ -317,7 +309,7 @@ class RecentGames extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final recentGames = ref.watch(recentGamesProvider(user.id));
+    final recentGames = ref.watch(userRecentGamesProvider(userId: user.id));
 
     return recentGames.when(
       data: (data) {

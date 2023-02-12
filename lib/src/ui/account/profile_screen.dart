@@ -1,26 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/auth/auth_actions_notifier.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-
-final recentGamesProvider = FutureProvider.autoDispose
-    .family<IList<ArchivedGameData>, UserId>((ref, userId) {
-  final repo = ref.watch(gameRepositoryProvider);
-  return Result.release(repo.getUserGames(userId));
-});
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -144,6 +134,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   // TODO also refresh user account data for perfs
   Future<void> _refreshData(User account) {
-    return ref.refresh(recentGamesProvider(account.id).future);
+    return ref.refresh(userRecentGamesProvider(userId: account.id).future);
   }
 }

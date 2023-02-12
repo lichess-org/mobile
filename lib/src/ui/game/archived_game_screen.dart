@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:lichess_mobile/src/model/game/game_providers.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 
 import 'archived_game_screen_providers.dart';
 

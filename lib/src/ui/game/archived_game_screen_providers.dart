@@ -3,7 +3,7 @@ import 'package:tuple/tuple.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:lichess_mobile/src/model/game/game_providers.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 
 part 'archived_game_screen_providers.g.dart';
 
