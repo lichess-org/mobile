@@ -118,10 +118,12 @@ class _BoardBody extends ConsumerWidget {
     });
 
     final pieceSet = ref.watch(pieceSetPrefProvider);
+    final boardTheme = ref.watch(boardThemePrefProvider);
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
     final boardSettings = cg.BoardSettings(
       pieceAssets: pieceSet.assets,
+      colorScheme: boardTheme.colors,
     );
     final black = BoardPlayer(
       key: const ValueKey('black-player'),

@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/model/settings/providers.dart';
 
 import './theme_mode_screen.dart';
 import './piece_set_screen.dart';
+import './board_theme_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -53,6 +54,8 @@ class _Body extends ConsumerWidget {
     final themeMode = ref.watch(themeModePrefProvider);
     final authController = ref.watch(authControllerProvider);
     final pieceSet = ref.watch(pieceSetPrefProvider);
+    final boardTheme = ref.watch(boardThemePrefProvider);
+
     return SafeArea(
       child: ListView(
         children: [
@@ -97,6 +100,18 @@ class _Body extends ConsumerWidget {
                   );
                 },
               ),
+              SettingsListTile(
+                icon: const Icon(LichessIcons.chess_board),
+                settingsLabel: context.l10n.boardTheme,
+                settingsValue: boardTheme.label,
+                onTap: () {
+                  pushPlatformRoute(
+                    context: context,
+                    title: context.l10n.boardTheme,
+                    builder: (context) => const BoardThemeScreen(),
+                  );
+                },
+              ),
             ],
           ),
           authController.when(
@@ -119,6 +134,18 @@ class _Body extends ConsumerWidget {
               children: [
                 PlatformListTile(
                   title: Center(child: ButtonLoadingIndicator()),
+                ),
+                SettingsListTile(
+                  icon: const Icon(LichessIcons.chess_board),
+                  settingsLabel: context.l10n.boardTheme,
+                  settingsValue: boardTheme.label,
+                  onTap: () {
+                    pushPlatformRoute(
+                      context: context,
+                      title: context.l10n.boardTheme,
+                      builder: (context) => const BoardThemeScreen(),
+                    );
+                  },
                 ),
               ],
             ),
