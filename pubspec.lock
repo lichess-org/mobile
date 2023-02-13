@@ -165,8 +165,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "2a4083794449a348f6cd6bd14c6a1db89db2a1d8"
-      resolved-ref: "2a4083794449a348f6cd6bd14c6a1db89db2a1d8"
+      ref: "3fa7a1dfdfbcf6dfbbcfb6e03d10f52c5f630c79"
+      resolved-ref: "3fa7a1dfdfbcf6dfbbcfb6e03d10f52c5f630c79"
       url: "https://github.com/lichess-org/flutter-chessground.git"
     source: git
     version: "0.1.0"
@@ -456,6 +456,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  fpdart:
+    dependency: "direct main"
+    description:
+      name: fpdart
+      sha256: "19db038cf3bb49bfe28b2a0b363ce84cf2e6a0f471a93ae09271cfef03dae935"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0"
   freezed:
     dependency: "direct dev"
     description:
@@ -576,6 +584,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  loading_overlay:
+    dependency: "direct main"
+    description:
+      name: loading_overlay
+      sha256: a4dd5a790e0d60568d4c684e46eed00de883db0dc660f90ffd583aca8f4a1d91
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.0"
   logging:
     dependency: "direct main"
     description:
