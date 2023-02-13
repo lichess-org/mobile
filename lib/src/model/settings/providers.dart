@@ -63,7 +63,7 @@ final pieceSetPrefProvider = createPrefProvider<PieceSet>(
 );
 
 final IMap<String, BoardTheme> _boardThemeNameMap =
-  IMap(BoardTheme.values.asNameMap());
+    IMap(BoardTheme.values.asNameMap());
 
 final boardThemePrefProvider = createPrefProvider<BoardTheme>(
   prefKey: '$kSettingsStorePrefix.boardTheme',
