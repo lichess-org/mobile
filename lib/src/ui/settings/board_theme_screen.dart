@@ -40,32 +40,14 @@ class _Body extends ConsumerWidget {
     final pieceSet = ref.watch(pieceSetPrefProvider);
     final boardTheme = ref.watch(boardThemePrefProvider);
 
-    List<Image> getPieceImages() {
+    List<AssetImage> getPieceImages() {
       return [
-        Image(
-          image: pieceSet.assets['whiteking']!,
-          height: 32,
-        ),
-        Image(
-          image: pieceSet.assets['blackqueen']!,
-          height: 32,
-        ),
-        Image(
-          image: pieceSet.assets['whiterook']!,
-          height: 32,
-        ),
-        Image(
-          image: pieceSet.assets['blackbishop']!,
-          height: 32,
-        ),
-        Image(
-          image: pieceSet.assets['whiteknight']!,
-          height: 32,
-        ),
-        Image(
-          image: pieceSet.assets['blackpawn']!,
-          height: 32,
-        )
+        pieceSet.assets['whiteking']!,
+        pieceSet.assets['blackqueen']!,
+        pieceSet.assets['whiterook']!,
+        pieceSet.assets['blackbishop']!,
+        pieceSet.assets['whiteknight']!,
+        pieceSet.assets['blackpawn']!,
       ];
     }
 
@@ -95,7 +77,16 @@ class _Body extends ConsumerWidget {
                     height: 32,
                     errorBuilder: (context, o, st) => const SizedBox.shrink(),
                   ),
-                  Row(children: getPieceImages())
+                  Row(
+                    children: getPieceImages()
+                        .map(
+                          (img) => Image(
+                            image: img,
+                            height: 32,
+                          ),
+                        )
+                        .toList(),
+                  )
                 ],
               ),
             ),
