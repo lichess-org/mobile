@@ -47,10 +47,6 @@ void main() {
       ),
     ).thenAnswer((_) => mockResponse(maiaStatusResponses, 200));
 
-    when(
-      () => mockClient.get(Uri.parse('$kLichessHost/api/account')),
-    ).thenAnswer((_) => mockResponse(testAccountResponse, 200));
-
     registerFallbackValue(http.Request('GET', Uri.parse('http://api.test')));
   });
 

@@ -72,7 +72,7 @@ void main() {
           tester,
           home: Consumer(
             builder: (context, ref, _) {
-              return PlayableGameScreen(game: testGame, account: fakeUser);
+              return PlayableGameScreen(game: testGame);
             },
           ),
         );
@@ -134,7 +134,7 @@ void main() {
           tester,
           home: Consumer(
             builder: (context, ref, _) {
-              return PlayableGameScreen(game: testGame, account: fakeUser);
+              return PlayableGameScreen(game: testGame);
             },
           ),
         );
@@ -283,7 +283,7 @@ void main() {
           tester,
           home: Consumer(
             builder: (context, ref, _) {
-              return PlayableGameScreen(game: testGame, account: fakeUser);
+              return PlayableGameScreen(game: testGame);
             },
           ),
         );

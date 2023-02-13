@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/board/play_action_notifier.dart';
 import 'package:lichess_mobile/src/model/board/board_providers.dart';
@@ -22,12 +21,10 @@ import 'package:lichess_mobile/src/model/board/board_providers.dart';
 class PlayableGameScreen extends ConsumerWidget {
   const PlayableGameScreen({
     required this.game,
-    required this.account,
     super.key,
   });
 
   final PlayableGame game;
-  final User account;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -45,8 +42,7 @@ class PlayableGameScreen extends ConsumerWidget {
         ref.invalidate(boardStateProvider);
         Navigator.of(context).pushReplacement(
           MaterialPageRoute<void>(
-            builder: (context) =>
-                PlayableGameScreen(game: state.value!, account: account),
+            builder: (context) => PlayableGameScreen(game: state.value!),
           ),
         );
       }
@@ -85,8 +81,8 @@ class PlayableGameScreen extends ConsumerWidget {
           )
         ],
       ),
-      body: _BoardBody(game: game, account: account),
-      bottomNavigationBar: _BottomBar(game: game, account: account),
+      body: _BoardBody(game: game),
+      bottomNavigationBar: _BottomBar(game: game),
     );
   }
 
@@ -118,8 +114,8 @@ class PlayableGameScreen extends ConsumerWidget {
       child: SafeArea(
         child: Column(
           children: [
-            Expanded(child: _BoardBody(game: game, account: account)),
-            _BottomBar(game: game, account: account),
+            Expanded(child: _BoardBody(game: game)),
+            _BottomBar(game: game),
           ],
         ),
       ),
@@ -160,10 +156,9 @@ class PlayableGameScreen extends ConsumerWidget {
 }
 
 class _BoardBody extends ConsumerWidget {
-  const _BoardBody({required this.game, required this.account});
+  const _BoardBody({required this.game});
 
   final PlayableGame game;
-  final User account;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -263,10 +258,9 @@ class _BoardBody extends ConsumerWidget {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.game, required this.account});
+  const _BottomBar({required this.game});
 
   final PlayableGame game;
-  final User account;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -384,7 +378,6 @@ class _BottomBar extends ConsumerWidget {
             onPressed: (context) {
               if (!playActionAsync.isLoading) {
                 ref.read(playActionProvider.notifier).createGame(
-                      account: account,
                       side: game.orientation.opposite,
                     );
               }

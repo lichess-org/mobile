@@ -60,3 +60,9 @@ class AuthUser extends _$AuthUser {
     state = user;
   }
 }
+
+@Riverpod(keepAlive: true)
+bool isAuthenticated(IsAuthenticatedRef ref) {
+  final user = ref.watch(authUserProvider);
+  return user != null;
+}
