@@ -84,6 +84,7 @@ flutter:
 
   assets:
     - assets/sounds/
+    - assets/board-thumbnails/
 
   fonts:
     - family:  LichessIcons
