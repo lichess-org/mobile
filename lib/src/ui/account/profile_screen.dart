@@ -2,8 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:lichess_mobile/src/model/auth/auth_actions_notifier.dart';
-import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/common/errors.dart';
+import 'package:lichess_mobile/src/model/account/account_providers.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
@@ -31,8 +32,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Widget _buildAndroid(BuildContext context) {
-    final authState = ref.watch(authStateChangesProvider);
-    final authActionsAsync = ref.watch(authActionsProvider);
+    final accountProfile = ref.watch(accountProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.profile),
@@ -48,32 +48,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         ],
       ),
-      body: authState.maybeWhen(
+      body: accountProfile.when(
         data: (account) {
-          return account != null
-              ? RefreshIndicator(
-                  key: _androidRefreshKey,
-                  onRefresh: () => _refreshData(account),
-                  child: UserScreenBody(user: account, showPlayerTitle: true),
-                )
-              : Center(
-                  child: FatButton(
-                    semanticsLabel: context.l10n.signIn,
-                    onPressed: authActionsAsync.isLoading
-                        ? null
-                        : () => ref.read(authActionsProvider.notifier).signIn(),
-                    child: Text(context.l10n.signIn),
-                  ),
-                );
+          return RefreshIndicator(
+            key: _androidRefreshKey,
+            onRefresh: () => _refreshData(account),
+            child: UserScreenBody(user: account, showPlayerTitle: true),
+          );
         },
-        orElse: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, _) {
+          if (error is UnauthorizedException) {
+            return _SignInBody();
+          } else {
+            return const Center(child: Text('Could not load profile'));
+          }
+        },
       ),
     );
   }
 
   Widget _buildIos(BuildContext context) {
-    final authState = ref.watch(authStateChangesProvider);
-    final authActionsAsync = ref.watch(authActionsProvider);
+    final accountProfile = ref.watch(accountProvider);
     return CupertinoPageScaffold(
       child: CustomScrollView(
         slivers: [
@@ -90,42 +86,44 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               icon: const Icon(Icons.settings),
             ),
           ),
-          ...authState.maybeWhen(
+          ...accountProfile.when(
             data: (account) {
               return [
-                if (account != null)
-                  CupertinoSliverRefreshControl(
-                    onRefresh: () => _refreshData(account),
+                CupertinoSliverRefreshControl(
+                  onRefresh: () => _refreshData(account),
+                ),
+                SliverSafeArea(
+                  top: false,
+                  sliver: UserScreenBody(
+                    user: account,
+                    showPlayerTitle: true,
+                    inCustomScrollView: true,
                   ),
-                if (account != null)
-                  SliverSafeArea(
-                    top: false,
-                    sliver: UserScreenBody(
-                      user: account,
-                      showPlayerTitle: true,
-                      inCustomScrollView: true,
-                    ),
-                  )
-                else
-                  SliverFillRemaining(
-                    child: Center(
-                      child: FatButton(
-                        semanticsLabel: context.l10n.signIn,
-                        onPressed: authActionsAsync.isLoading
-                            ? null
-                            : () =>
-                                ref.read(authActionsProvider.notifier).signIn(),
-                        child: Text(context.l10n.signIn),
-                      ),
-                    ),
-                  ),
+                ),
               ];
             },
-            orElse: () => const [
+            loading: () => const [
               SliverFillRemaining(
                 child: Center(child: CircularProgressIndicator.adaptive()),
               )
             ],
+            error: (error, _) {
+              if (error is UnauthorizedException) {
+                return [
+                  SliverFillRemaining(
+                    child: _SignInBody(),
+                  )
+                ];
+              } else {
+                return const [
+                  SliverFillRemaining(
+                    child: Center(
+                      child: Text('Could not load profile'),
+                    ),
+                  )
+                ];
+              }
+            },
           ),
         ],
       ),
@@ -135,5 +133,22 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   // TODO also refresh user account data for perfs
   Future<void> _refreshData(User account) {
     return ref.refresh(userRecentGamesProvider(userId: account.id).future);
+  }
+}
+
+class _SignInBody extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authController = ref.watch(authControllerProvider);
+
+    return Center(
+      child: FatButton(
+        semanticsLabel: context.l10n.signIn,
+        onPressed: authController.isLoading
+            ? null
+            : () => ref.read(authControllerProvider.notifier).signIn(),
+        child: Text(context.l10n.signIn),
+      ),
+    );
   }
 }

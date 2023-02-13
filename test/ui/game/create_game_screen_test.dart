@@ -14,13 +14,11 @@ import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/sound.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/ui/game/create_game_screen.dart';
 import 'package:lichess_mobile/src/ui/game/playable_game_screen.dart';
 import 'package:lichess_mobile/src/model/board/computer_opponent.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
-import '../../model/auth/fake_auth_repository.dart';
 import '../../utils.dart';
 
 class MockClient extends Mock implements http.Client {}
@@ -49,6 +47,10 @@ void main() {
       ),
     ).thenAnswer((_) => mockResponse(maiaStatusResponses, 200));
 
+    when(
+      () => mockClient.get(Uri.parse('$kLichessHost/api/account')),
+    ).thenAnswer((_) => mockResponse(testAccountResponse, 200));
+
     registerFallbackValue(http.Request('GET', Uri.parse('http://api.test')));
   });
 
@@ -75,8 +77,6 @@ void main() {
             overrides: [
               ...defaultProviderOverrides,
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-              authRepositoryProvider
-                  .overrideWithValue(FakeAuthRepository(fakeUser)),
               apiClientProvider
                   .overrideWithValue(ApiClient(mockLogger, mockClient)),
             ],
@@ -115,8 +115,6 @@ void main() {
           ProviderScope(
             overrides: [
               ...defaultProviderOverrides,
-              authRepositoryProvider
-                  .overrideWithValue(FakeAuthRepository(fakeUser)),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
               apiClientProvider
                   .overrideWithValue(ApiClient(mockLogger, mockClient)),
@@ -214,8 +212,6 @@ void main() {
           ProviderScope(
             overrides: [
               ...defaultProviderOverrides,
-              authRepositoryProvider
-                  .overrideWithValue(FakeAuthRepository(fakeUser)),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
               apiClientProvider
                   .overrideWithValue(ApiClient(mockLogger, mockClient)),
@@ -341,8 +337,6 @@ void main() {
           ProviderScope(
             overrides: [
               ...defaultProviderOverrides,
-              authRepositoryProvider
-                  .overrideWithValue(FakeAuthRepository(fakeUser)),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
               apiClientProvider
                   .overrideWithValue(ApiClient(mockLogger, mockClient)),
@@ -483,4 +477,44 @@ const maiaStatusResponses = '''
       "online": true
     }
   ]
+''';
+
+const testAccountResponse = '''
+{
+  "id": "test",
+  "username": "test",
+  "createdAt": 1290415680000,
+  "seenAt": 1290415680000,
+  "title": "GM",
+  "patron": true,
+  "perfs": {
+    "blitz": {
+      "games": 2340,
+      "rating": 1681,
+      "rd": 30,
+      "prog": 10
+    },
+    "rapid": {
+      "games": 2340,
+      "rating": 1677,
+      "rd": 30,
+      "prog": 10
+    },
+    "classical": {
+      "games": 2340,
+      "rating": 1618,
+      "rd": 30,
+      "prog": 10
+    }
+  },
+  "profile": {
+    "country": "France",
+    "location": "Lille",
+    "bio": "test bio",
+    "firstName": "John",
+    "lastName": "Doe",
+    "fideRating": 1800,
+    "links": "http://test.com"
+  }
+}
 ''';

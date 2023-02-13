@@ -10,8 +10,11 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:lichess_mobile/src/common/package_info.dart';
+import 'package:lichess_mobile/src/model/auth/auth_repository_providers.dart';
+import './model/auth/fake_auth_repository.dart';
 
 final List<Override> defaultProviderOverrides = List.unmodifiable([
+  authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
   packageInfoProvider.overrideWithValue(
     PackageInfo(
       appName: 'lichess_mobile_test',

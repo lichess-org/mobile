@@ -9,7 +9,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package_info.dart';
@@ -56,7 +56,7 @@ class ApiClient {
   final RetryClient _retryClient;
 
   /// Makes app user agent
-  static String userAgent(PackageInfo info, User? user) =>
+  static String userAgent(PackageInfo info, LightUser? user) =>
       '${info.appName}/${info.version} $defaultTargetPlatform ${user != null ? user.id : 'anon.'}';
 
   FutureResult<Response> get(
@@ -162,7 +162,7 @@ class AuthClient extends BaseClient {
       request.headers['Authorization'] = 'Bearer $token';
     }
 
-    final user = ref.read(currentAccountProvider);
+    final user = ref.read(authUserProvider);
 
     request.headers['user-agent'] = ApiClient.userAgent(_info, user);
 

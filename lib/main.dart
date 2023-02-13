@@ -10,7 +10,7 @@ import 'src/app.dart';
 import 'src/common/sound.dart';
 import 'src/common/shared_preferences.dart';
 import 'src/common/package_info.dart';
-import 'src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 
 void main() async {
   if (kDebugMode) {
@@ -37,8 +37,8 @@ void main() async {
     ],
   );
 
-  await container.read(authRepositoryProvider).init();
   await container.read(soundServiceProvider).init();
+  await container.read(authUserProvider.notifier).appInit();
 
   runApp(
     UncontrolledProviderScope(

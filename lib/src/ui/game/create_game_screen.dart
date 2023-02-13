@@ -17,8 +17,8 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/auth/auth_actions_notifier.dart';
-import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/account/account_providers.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/board/play_preferences.dart';
@@ -76,11 +76,11 @@ class PlayScreen extends ConsumerWidget {
   }
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authStateChangesProvider);
+    final loggedInUser = ref.watch(accountProvider);
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.play)),
       body: Center(
-        child: authState.maybeWhen(
+        child: loggedInUser.maybeWhen(
           data: (account) => PlayForm(account: account),
           orElse: () => const CircularProgressIndicator(),
         ),
@@ -89,11 +89,11 @@ class PlayScreen extends ConsumerWidget {
   }
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authStateChangesProvider);
+    final loggedInUser = ref.watch(accountProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(middle: Text(context.l10n.play)),
       child: Center(
-        child: authState.maybeWhen(
+        child: loggedInUser.maybeWhen(
           data: (account) => PlayForm(account: account),
           orElse: () => const CircularProgressIndicator.adaptive(),
         ),
@@ -114,7 +114,7 @@ class PlayForm extends ConsumerWidget {
     final maiaStrength = ref.watch(maiaStrengthProvider);
     final stockfishLevel = ref.watch(stockfishLevelProvider);
     final timeControlPref = ref.watch(timeControlPrefProvider);
-    final authActionsAsync = ref.watch(authActionsProvider);
+    final authController = ref.watch(authControllerProvider);
     final playActionAsync = ref.watch(playActionProvider);
 
     ref.listen<AsyncValue<PlayableGame?>>(playActionProvider, (_, state) {
@@ -300,15 +300,15 @@ class PlayForm extends ConsumerWidget {
                 ? 'Sign in to start playing'
                 : context.l10n.play,
             onPressed: account == null
-                ? authActionsAsync.isLoading
+                ? authController.isLoading
                     ? null
-                    : () => ref.read(authActionsProvider.notifier).signIn()
+                    : () => ref.read(authControllerProvider.notifier).signIn()
                 : playActionAsync.isLoading
                     ? null
                     : () => ref
                         .read(playActionProvider.notifier)
                         .createGame(account: account!),
-            child: authActionsAsync.isLoading || playActionAsync.isLoading
+            child: authController.isLoading || playActionAsync.isLoading
                 ? const ButtonLoadingIndicator()
                 : Text(
                     account == null

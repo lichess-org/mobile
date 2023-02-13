@@ -3,55 +3,21 @@ import 'package:result_extensions/result_extensions.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/utils/in_memory_store.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 
-/// A fake AuthRepository
-///
-/// Optionnall pass a [User] to have it initialized with an already logged in user
 class FakeAuthRepository implements AuthRepository {
-  FakeAuthRepository(User? loggedInUser)
-      : _authState = InMemoryStore<User?>(loggedInUser);
-
-  final InMemoryStore<User?> _authState;
-
-  @override
-  Stream<User?> authStateChanges() => _authState.stream;
-
-  @override
-  User? get currentAccount => _authState.value;
-
-  @override
-  bool get isAuthenticated => _authState.value != null;
-
-  @override
-  Future<void> init() async {
-    return;
-  }
-
   @override
   FutureResult<void> signIn() async {
     await Future<void>.delayed(const Duration(milliseconds: 5));
-    _authState.value = fakeUser;
     return Result.value(null);
   }
 
   @override
   FutureResult<void> signOut() async {
     await Future<void>.delayed(const Duration(milliseconds: 5));
-    _authState.value = null;
     return Result.value(null);
   }
-
-  @override
-  FutureResult<User> getAccount({String? bearerToken}) async {
-    await Future<void>.delayed(const Duration(milliseconds: 5));
-    return Result.value(fakeUser);
-  }
-
-  @override
-  void dispose() {}
 }
 
 final fakeUser = User(

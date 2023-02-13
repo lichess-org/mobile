@@ -19,6 +19,8 @@ class LightUser with _$LightUser {
 
 @freezed
 class User with _$User {
+  const User._();
+
   const factory User({
     required UserId id,
     required String username,
@@ -30,6 +32,9 @@ class User with _$User {
     PlayTime? playTime,
     Profile? profile,
   }) = _User;
+
+  LightUser get lightUser =>
+      LightUser(id: id, name: username, title: title, isPatron: isPatron);
 
   factory User.fromJson(Map<String, dynamic> json) =>
       User.fromPick(pick(json).required());
