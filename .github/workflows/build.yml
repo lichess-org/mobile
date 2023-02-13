@@ -41,9 +41,3 @@ jobs:
         run: flutter pub run build_runner build
 
       - run: flutter build ${{ matrix.target }}
-      
-      - name: Upload files
-        uses: actions/upload-artifact@v3.1.2
-        with:
-          name: ${{ matrix.target }}
-          path: /*
