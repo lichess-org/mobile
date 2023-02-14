@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:async/async.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -26,16 +27,27 @@ class AuthController extends _$AuthController {
             .signIn()
             .flatMap((oAuthResp) async {
       if (oAuthResp.accessToken != null) {
-        final sr = ref.read(sessionRepositoryProvider);
+        final sessionRepo = ref.read(sessionRepositoryProvider);
         final client = http.Client();
         try {
-          final resp = await client.get(Uri.parse('$kLichessHost/api/account'));
+          final resp = await client.get(
+            Uri.parse('$kLichessHost/api/account'),
+            headers: {'Authorization': 'Bearer ${oAuthResp.accessToken}'},
+          );
           return readJsonObject(resp.body, mapper: User.fromJson).map((user) {
-            sr.write(
+            sessionRepo.write(
               UserSession(token: oAuthResp.accessToken!, user: user.lightUser),
             );
+          }).mapError((err, st) {
+            debugPrint(
+              'SEVERE: [AuthController] could not fetch account; $err\n$st',
+            );
+            return GenericIOException();
           });
         } catch (err, st) {
+          debugPrint(
+            'SEVERE: [AuthController] could not fetch account; $err\n$st',
+          );
           return Result<void>.error(err, st);
         } finally {
           client.close();
