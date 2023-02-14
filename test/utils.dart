@@ -10,6 +10,7 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:lichess_mobile/src/common/package_info.dart';
+import 'package:lichess_mobile/src/model/account/account_providers.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository_providers.dart';
 import './model/auth/fake_auth_repository.dart';
 

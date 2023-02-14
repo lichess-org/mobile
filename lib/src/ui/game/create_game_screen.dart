@@ -286,8 +286,8 @@ class PlayForm extends ConsumerWidget {
           const SizedBox(height: 10),
           FatButton(
             semanticsLabel:
-                isAuth ? 'Sign in to start playing' : context.l10n.play,
-            onPressed: isAuth
+                !isAuth ? 'Sign in to start playing' : context.l10n.play,
+            onPressed: !isAuth
                 ? authController.isLoading
                     ? null
                     : () => ref.read(authControllerProvider.notifier).signIn()
@@ -297,7 +297,7 @@ class PlayForm extends ConsumerWidget {
             child: authController.isLoading || playActionAsync.isLoading
                 ? const ButtonLoadingIndicator()
                 : Text(
-                    isAuth
+                    !isAuth
                         // TODO translate
                         ? 'Sign in to start playing'
                         : context.l10n.play,

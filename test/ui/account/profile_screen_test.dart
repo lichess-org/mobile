@@ -40,52 +40,6 @@ void main() {
   });
 
   group('ProfileScreen', () {
-    // testWidgets(
-    //   'meets accessibility guidelines',
-    //   (WidgetTester tester) async {
-    //     final SemanticsHandle handle = tester.ensureSemantics();
-
-    //     final app = await buildTestApp(
-    //       tester,
-    //       home: Consumer(
-    //         builder: (context, ref, _) {
-    //           return const ProfileScreen();
-    //         },
-    //       ),
-    //     );
-
-    //     await tester.pumpWidget(
-    //       ProviderScope(
-    //         overrides: [
-    //           ...defaultProviderOverrides,
-    //           apiClientProvider
-    //               .overrideWithValue(ApiClient(mockLogger, mockClient)),
-    //         ],
-    //         child: app,
-    //       ),
-    //     );
-
-    //     // wait for account
-    //     await tester.pump(const Duration(milliseconds: 50));
-
-    //     // profile user name at the top
-    //     expect(find.widgetWithText(ListTile, testUserName), findsOneWidget);
-
-    //     // wait for recent games
-    //     await tester.pump(const Duration(milliseconds: 50));
-
-    //     await meetsTapTargetGuideline(tester);
-
-    //     await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
-
-    //     if (debugDefaultTargetPlatformOverride == TargetPlatform.android) {
-    //       await expectLater(tester, meetsGuideline(textContrastGuideline));
-    //     }
-    //     handle.dispose();
-    //   },
-    //   variant: kPlatformVariant,
-    // );
-
     testWidgets(
       'should see recent games',
       (WidgetTester tester) async {

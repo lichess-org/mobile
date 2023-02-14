@@ -17,8 +17,10 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/ui/game/create_game_screen.dart';
 import 'package:lichess_mobile/src/ui/game/playable_game_screen.dart';
 import 'package:lichess_mobile/src/model/board/computer_opponent.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import '../../model/account/fake_account_repository.dart';
 import '../../utils.dart';
 
 class MockClient extends Mock implements http.Client {}
@@ -72,6 +74,7 @@ void main() {
           ProviderScope(
             overrides: [
               ...defaultProviderOverrides,
+              isAuthenticatedProvider.overrideWithValue(true),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
               apiClientProvider
                   .overrideWithValue(ApiClient(mockLogger, mockClient)),
@@ -80,7 +83,6 @@ void main() {
           ),
         );
 
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
         await tester.pump();
 
         // wait for maia bots request to return
@@ -111,6 +113,7 @@ void main() {
           ProviderScope(
             overrides: [
               ...defaultProviderOverrides,
+              isAuthenticatedProvider.overrideWithValue(true),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
               apiClientProvider
                   .overrideWithValue(ApiClient(mockLogger, mockClient)),
@@ -119,7 +122,6 @@ void main() {
           ),
         );
 
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
         await tester.pump();
 
         // maia bots loading state
@@ -208,6 +210,7 @@ void main() {
           ProviderScope(
             overrides: [
               ...defaultProviderOverrides,
+              isAuthenticatedProvider.overrideWithValue(true),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
               apiClientProvider
                   .overrideWithValue(ApiClient(mockLogger, mockClient)),
@@ -216,7 +219,6 @@ void main() {
           ),
         );
 
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
         await tester.pump();
 
         await tester.tap(find.text('3 + 2'));
@@ -242,6 +244,12 @@ void main() {
         final sharedPreferences = await SharedPreferences.getInstance();
 
         const gameIdTest = 'rCRw1AuO';
+
+        when(
+          () => mockClient.get(
+            Uri.parse('$kLichessHost/api/account'),
+          ),
+        ).thenAnswer((_) => mockResponse(testAccountResponse, 200));
 
         when(
           () => mockClient.post(
@@ -333,6 +341,7 @@ void main() {
           ProviderScope(
             overrides: [
               ...defaultProviderOverrides,
+              isAuthenticatedProvider.overrideWithValue(true),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
               apiClientProvider
                   .overrideWithValue(ApiClient(mockLogger, mockClient)),
@@ -342,7 +351,6 @@ void main() {
           ),
         );
 
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
         await tester.pump();
 
         await tester.pump(
