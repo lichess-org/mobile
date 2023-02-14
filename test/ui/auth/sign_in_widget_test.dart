@@ -40,7 +40,7 @@ void main() {
 
       // first frame is a loading state
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 10));
 
       expect(find.text('Sign in'), findsOneWidget);
 

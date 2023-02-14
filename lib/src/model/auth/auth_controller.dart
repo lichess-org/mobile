@@ -1,9 +1,16 @@
+import 'package:async/async.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
+import 'package:http/http.dart' as http;
 
-import 'package:lichess_mobile/src/model/account/account_providers.dart';
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/common/errors.dart';
+import 'package:lichess_mobile/src/model/auth/session_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'auth_repository_providers.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
+
+import 'user_session.dart';
+import 'auth_repository.dart';
 
 part 'auth_controller.g.dart';
 
@@ -17,52 +24,37 @@ class AuthController extends _$AuthController {
     state = (await ref
             .read(authRepositoryProvider)
             .signIn()
-            .flatMap((_) => ref.read(accountRepositoryProvider).getProfile())
-            .map(
-              (account) =>
-                  ref.read(authUserProvider.notifier).update(account.lightUser),
-            ))
+            .flatMap((oAuthResp) async {
+      if (oAuthResp.accessToken != null) {
+        final sr = ref.read(sessionRepositoryProvider);
+        final client = http.Client();
+        try {
+          final resp = await client.get(Uri.parse('$kLichessHost/api/account'));
+          return readJsonObject(resp.body, mapper: User.fromJson).map((user) {
+            sr.write(
+              UserSession(token: oAuthResp.accessToken!, user: user.lightUser),
+            );
+          });
+        } catch (err, st) {
+          return Result<void>.error(err, st);
+        } finally {
+          client.close();
+        }
+      } else {
+        return Result<void>.error(ApiRequestException());
+      }
+    }))
         .asAsyncValue;
   }
 
   Future<void> signOut() async {
     state = const AsyncLoading();
     final result = await ref.read(authRepositoryProvider).signOut();
-    final notifier = ref.read(authUserProvider.notifier);
+    final sessionRepo = ref.read(sessionRepositoryProvider);
     result.match(
-      onSuccess: (_) => notifier.update(null),
-      onError: (_, __) => notifier.update(null),
+      onSuccess: (_) => sessionRepo.delete(),
+      onError: (_, __) => sessionRepo.delete(),
     );
     state = result.asAsyncValue;
   }
-}
-
-/// A provider that retrieves the authenticated user
-@Riverpod(keepAlive: true)
-class AuthUser extends _$AuthUser {
-  @override
-  LightUser? build() {
-    return null;
-  }
-
-  Future<void> appInit() async {
-    final accountRepo = ref.read(accountRepositoryProvider);
-    final result = await accountRepo.getProfile();
-    result.match(
-      onSuccess: (account) {
-        state = account.lightUser;
-      },
-    );
-  }
-
-  // ignore: use_setters_to_change_properties
-  void update(LightUser? user) {
-    state = user;
-  }
-}
-
-@Riverpod(keepAlive: true)
-bool isAuthenticated(IsAuthenticatedRef ref) {
-  final user = ref.watch(authUserProvider);
-  return user != null;
 }

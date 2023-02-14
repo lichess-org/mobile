@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/session_providers.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 
 import './theme_mode_screen.dart';
@@ -50,7 +51,7 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModePrefProvider);
-    final authUser = ref.watch(authUserProvider);
+    final session = ref.watch(sessionProvider);
     final authController = ref.watch(authControllerProvider);
     final pieceSet = ref.watch(pieceSetPrefProvider);
     return LoadingOverlay(
@@ -102,24 +103,31 @@ class _Body extends ConsumerWidget {
                 ),
               ],
             ),
-            if (authUser != null)
-              ListSection(
-                children: [
-                  PlatformListTile(
-                    leading: const Icon(Icons.exit_to_app),
-                    title: Text(context.l10n.logOut),
-                    onTap: authController.isLoading
-                        ? null
-                        : () async {
-                            await ref
-                                .read(authControllerProvider.notifier)
-                                .signOut();
-                            ref.read(currentBottomTabProvider.notifier).state =
-                                BottomTab.play;
-                          },
-                  ),
-                ],
-              ),
+            session.maybeWhen(
+              data: (data) {
+                return data != null
+                    ? ListSection(
+                        children: [
+                          PlatformListTile(
+                            leading: const Icon(Icons.exit_to_app),
+                            title: Text(context.l10n.logOut),
+                            onTap: authController.isLoading
+                                ? null
+                                : () async {
+                                    await ref
+                                        .read(authControllerProvider.notifier)
+                                        .signOut();
+                                    ref
+                                        .read(currentBottomTabProvider.notifier)
+                                        .state = BottomTab.play;
+                                  },
+                          ),
+                        ],
+                      )
+                    : const SizedBox.shrink();
+              },
+              orElse: () => const SizedBox.shrink(),
+            ),
           ],
         ),
       ),

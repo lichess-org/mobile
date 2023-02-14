@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/ui/game/create_game_screen.dart';
 import 'package:lichess_mobile/src/ui/game/playable_game_screen.dart';
 import 'package:lichess_mobile/src/model/board/computer_opponent.dart';
-import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import '../../utils.dart';
@@ -73,7 +72,6 @@ void main() {
           ProviderScope(
             overrides: [
               ...defaultProviderOverrides,
-              isAuthenticatedProvider.overrideWithValue(true),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
               apiClientProvider
                   .overrideWithValue(ApiClient(mockLogger, mockClient)),
@@ -112,7 +110,6 @@ void main() {
           ProviderScope(
             overrides: [
               ...defaultProviderOverrides,
-              isAuthenticatedProvider.overrideWithValue(true),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
               apiClientProvider
                   .overrideWithValue(ApiClient(mockLogger, mockClient)),
@@ -209,7 +206,6 @@ void main() {
           ProviderScope(
             overrides: [
               ...defaultProviderOverrides,
-              isAuthenticatedProvider.overrideWithValue(true),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
               apiClientProvider
                   .overrideWithValue(ApiClient(mockLogger, mockClient)),
@@ -340,7 +336,6 @@ void main() {
           ProviderScope(
             overrides: [
               ...defaultProviderOverrides,
-              isAuthenticatedProvider.overrideWithValue(true),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
               apiClientProvider
                   .overrideWithValue(ApiClient(mockLogger, mockClient)),

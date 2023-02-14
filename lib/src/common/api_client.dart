@@ -9,9 +9,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/session_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package_info.dart';
 import 'errors.dart';
 
@@ -157,14 +156,14 @@ class AuthClient extends BaseClient {
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
-    final token = await storage.read(key: kOAuthTokenStorageKey);
-    if (token != null) {
-      request.headers['Authorization'] = 'Bearer $token';
+    final sessionRepo = ref.read(sessionRepositoryProvider);
+    final session = await sessionRepo.read();
+
+    if (session != null) {
+      request.headers['Authorization'] = 'Bearer ${session.token}';
     }
 
-    final user = ref.read(authUserProvider);
-
-    request.headers['user-agent'] = ApiClient.userAgent(_info, user);
+    request.headers['user-agent'] = ApiClient.userAgent(_info, session?.user);
 
     _logger.info('${request.method} ${request.url} ${request.headers}');
 

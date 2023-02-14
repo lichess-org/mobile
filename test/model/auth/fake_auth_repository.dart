@@ -1,6 +1,7 @@
 import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_appauth/flutter_appauth.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -8,9 +9,20 @@ import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 
 class FakeAuthRepository implements AuthRepository {
   @override
-  FutureResult<void> signIn() async {
+  FutureResult<AuthorizationTokenResponse> signIn() async {
     await Future<void>.delayed(const Duration(milliseconds: 5));
-    return Result.value(null);
+    return Result.value(
+      AuthorizationTokenResponse(
+        'testToken',
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+      ),
+    );
   }
 
   @override

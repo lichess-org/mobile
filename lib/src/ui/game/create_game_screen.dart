@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/session_providers.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/board/play_preferences.dart';
@@ -98,7 +99,7 @@ class PlayForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isAuth = ref.watch(isAuthenticatedProvider);
+    final session = ref.watch(sessionProvider);
     final maiaBots = ref.watch(maiaBotsProvider);
     final opponentPref = ref.watch(computerOpponentPrefProvider);
     final maiaStrength = ref.watch(maiaStrengthProvider);
@@ -284,24 +285,28 @@ class PlayForm extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 10),
-          FatButton(
-            semanticsLabel:
-                !isAuth ? 'Sign in to start playing' : context.l10n.play,
-            onPressed: !isAuth
-                ? authController.isLoading
-                    ? null
-                    : () => ref.read(authControllerProvider.notifier).signIn()
-                : playActionAsync.isLoading
-                    ? null
-                    : () => ref.read(playActionProvider.notifier).createGame(),
-            child: authController.isLoading || playActionAsync.isLoading
-                ? const ButtonLoadingIndicator()
-                : Text(
-                    !isAuth
-                        // TODO translate
-                        ? 'Sign in to start playing'
-                        : context.l10n.play,
-                  ),
+          session.maybeWhen(
+            data: (data) => FatButton(
+              semanticsLabel:
+                  data == null ? 'Sign in to start playing' : context.l10n.play,
+              onPressed: data == null
+                  ? authController.isLoading
+                      ? null
+                      : () => ref.read(authControllerProvider.notifier).signIn()
+                  : playActionAsync.isLoading
+                      ? null
+                      : () =>
+                          ref.read(playActionProvider.notifier).createGame(),
+              child: authController.isLoading || playActionAsync.isLoading
+                  ? const ButtonLoadingIndicator()
+                  : Text(
+                      data == null
+                          // TODO translate
+                          ? 'Sign in to start playing'
+                          : context.l10n.play,
+                    ),
+            ),
+            orElse: () => const CircularProgressIndicator.adaptive(),
           ),
         ],
       ),
