@@ -37,19 +37,7 @@ class BoardThemeScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pieceSet = ref.watch(pieceSetPrefProvider);
     final boardTheme = ref.watch(boardThemePrefProvider);
-
-    List<AssetImage> getPieceImages() {
-      return [
-        pieceSet.assets['whiteking']!,
-        pieceSet.assets['blackqueen']!,
-        pieceSet.assets['whiterook']!,
-        pieceSet.assets['blackbishop']!,
-        pieceSet.assets['whiteknight']!,
-        pieceSet.assets['blackpawn']!,
-      ];
-    }
 
     void onChanged(BoardTheme? value) => ref
         .read(boardThemePrefProvider.notifier)
@@ -70,24 +58,10 @@ class _Body extends ConsumerWidget {
               constraints: const BoxConstraints(
                 maxWidth: 192,
               ),
-              child: Stack(
-                children: [
-                  Image.asset(
-                    "assets/board-thumbnails/${t.name}.jpg",
-                    height: 32,
-                    errorBuilder: (context, o, st) => const SizedBox.shrink(),
-                  ),
-                  Row(
-                    children: getPieceImages()
-                        .map(
-                          (img) => Image(
-                            image: img,
-                            height: 32,
-                          ),
-                        )
-                        .toList(),
-                  )
-                ],
+              child: Image.asset(
+                "assets/board-thumbnails/${t.name}.jpg",
+                height: 32,
+                errorBuilder: (context, o, st) => const SizedBox.shrink(),
               ),
             ),
             titleBuilder: (t) => Text(t.label),
