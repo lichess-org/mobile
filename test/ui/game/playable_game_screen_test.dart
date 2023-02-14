@@ -20,7 +20,6 @@ import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/ui/game/playable_game_screen.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
-import '../../model/auth/fake_auth_repository.dart';
 import '../../utils.dart';
 
 class MockClient extends Mock implements http.Client {}
@@ -72,7 +71,7 @@ void main() {
           tester,
           home: Consumer(
             builder: (context, ref, _) {
-              return PlayableGameScreen(game: testGame);
+              return const PlayableGameScreen(game: testGame);
             },
           ),
         );
@@ -134,7 +133,7 @@ void main() {
           tester,
           home: Consumer(
             builder: (context, ref, _) {
-              return PlayableGameScreen(game: testGame);
+              return const PlayableGameScreen(game: testGame);
             },
           ),
         );
@@ -283,7 +282,7 @@ void main() {
           tester,
           home: Consumer(
             builder: (context, ref, _) {
-              return PlayableGameScreen(game: testGame);
+              return const PlayableGameScreen(game: testGame);
             },
           ),
         );

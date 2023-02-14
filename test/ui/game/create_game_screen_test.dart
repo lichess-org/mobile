@@ -20,7 +20,6 @@ import 'package:lichess_mobile/src/model/board/computer_opponent.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
-import '../../model/account/fake_account_repository.dart';
 import '../../utils.dart';
 
 class MockClient extends Mock implements http.Client {}

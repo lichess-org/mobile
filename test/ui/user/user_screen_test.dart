@@ -8,8 +8,9 @@ import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/ui/account/profile_screen.dart';
+import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import '../../utils.dart';
 
 class MockClient extends Mock implements http.Client {}
@@ -34,11 +35,11 @@ void main() {
     ).thenAnswer((_) => mockResponse(userGameResponse, 200));
 
     when(
-      () => mockClient.get(Uri.parse('$kLichessHost/api/account')),
-    ).thenAnswer((_) => mockResponse(testAccountResponse, 200));
+      () => mockClient.get(Uri.parse('$kLichessHost/api/user/$testUserId')),
+    ).thenAnswer((_) => mockResponse(testUserResponse, 200));
   });
 
-  group('ProfileScreen', () {
+  group('UserScreen', () {
     testWidgets(
       'should see recent games',
       (WidgetTester tester) async {
@@ -46,7 +47,7 @@ void main() {
           tester,
           home: Consumer(
             builder: (context, ref, _) {
-              return const ProfileScreen();
+              return const UserScreen(user: testUser);
             },
           ),
         );
@@ -62,12 +63,12 @@ void main() {
           ),
         );
 
-        // wait for account
+        // wait for user request
         await tester.pump(const Duration(milliseconds: 50));
 
-        // profile user name at the top
+        // full name at the top
         expect(
-          find.widgetWithText(ListTile, testUserName),
+          find.widgetWithText(ListTile, 'John Doe'),
           findsOneWidget,
         );
 
@@ -95,13 +96,14 @@ void main() {
 
 const testUserName = 'FakeUserName';
 const testUserId = UserId('fakeuserid');
+const testUser = LightUser(id: testUserId, name: testUserName);
 final userGameResponse = '''
 {"id":"rfBxF2P5","rated":false,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1672074461465,"lastMoveAt":1672074683485,"status":"mate","players":{"white":{"user":{"name":"$testUserName","patron":true,"id":"$testUserId"},"rating":1178},"black":{"user":{"name":"maia1","title":"BOT","id":"maia1"},"rating":1397}},"winner":"white","clock":{"initial":300,"increment":3,"totalTime":420,"lastFen":"r7/pppk4/4p1B1/3pP3/6Pp/q1P1P1nP/P1QK1r2/R5R1 w - - 1 1"}}
 {"id":"msAKIkqp","rated":false,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1671791341158,"lastMoveAt":1671791589063,"status":"resign","players":{"white":{"user":{"name":"maia1","title":"BOT","id":"maia1"},"rating":1399},"black":{"user":{"name":"$testUserName","patron":true,"id":"$testUserId"},"rating":1178}},"winner":"white","clock":{"initial":300,"increment":3,"totalTime":420,"lastFen":"r7/pppk4/4p1B1/3pP3/6Pp/q1P1P1nP/P1QK1r2/R5R1 w - - 1 1"}}
 {"id":"7Jxi9mBF","rated":false,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1671100908073,"lastMoveAt":1671101322211,"status":"mate","players":{"white":{"user":{"name":"$testUserName","patron":true,"id":"$testUserId"},"rating":1178},"black":{"user":{"name":"maia1","title":"BOT","id":"maia1"},"rating":1410}},"winner":"white","clock":{"initial":300,"increment":3,"totalTime":420,"lastFen":"r7/pppk4/4p1B1/3pP3/6Pp/q1P1P1nP/P1QK1r2/R5R1 w - - 1 1"}}
 ''';
 
-final testAccountResponse = '''
+final testUserResponse = '''
 {
   "id": "$testUserId",
   "username": "$testUserName",
