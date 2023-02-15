@@ -1,10 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
+import 'package:lichess_mobile/src/model/auth/session_repository.dart';
 import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
 import '../../utils.dart';
+import '../../model/auth/fake_session_repository.dart';
 
 void main() {
   group('SettingsScreen', () {
@@ -44,6 +47,82 @@ void main() {
 
         await expectLater(tester, meetsGuideline(textContrastGuideline));
         handle.dispose();
+      },
+      variant: kPlatformVariant,
+    );
+
+    testWidgets(
+      "don't show signOut if no session",
+      (WidgetTester tester) async {
+        SharedPreferences.setMockInitialValues({});
+        final sharedPreferences = await SharedPreferences.getInstance();
+
+        final app = await buildTestApp(
+          tester,
+          home: Consumer(
+            builder: (context, ref, _) {
+              return const SettingsScreen();
+            },
+          ),
+        );
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              ...defaultProviderOverrides,
+              sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+            ],
+            child: app,
+          ),
+        );
+
+        // wait for auth controller
+        await tester.pump(const Duration(milliseconds: 20));
+
+        expect(find.text('Sign out'), findsNothing);
+      },
+      variant: kPlatformVariant,
+    );
+
+    testWidgets(
+      'signout',
+      (WidgetTester tester) async {
+        SharedPreferences.setMockInitialValues({});
+        final sharedPreferences = await SharedPreferences.getInstance();
+
+        final app = await buildTestApp(
+          tester,
+          home: Consumer(
+            builder: (context, ref, _) {
+              return const SettingsScreen();
+            },
+          ),
+        );
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              ...defaultProviderOverrides,
+              sessionRepositoryProvider
+                  .overrideWithValue(FakeSessionRepository(fakeSession)),
+              sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+            ],
+            child: app,
+          ),
+        );
+
+        // wait for auth controller
+        await tester.pump(const Duration(milliseconds: 20));
+
+        expect(find.text('Sign out'), findsOneWidget);
+
+        await tester.tap(find.text('Sign out'));
+        await tester.pump();
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        // wait for sign out future
+        await tester.pump(const Duration(milliseconds: 100));
+
+        expect(find.text('Sign out'), findsNothing);
       },
       variant: kPlatformVariant,
     );
