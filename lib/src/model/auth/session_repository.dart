@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'package:lichess_mobile/src/constants.dart';
 import 'user_session.dart';
 
 class SessionRepository {
@@ -28,4 +29,4 @@ class SessionRepository {
   }
 }
 
-const _kSessionStorageKey = 'userSession';
+const _kSessionStorageKey = '$kLichessHost.userSession';

@@ -7,7 +7,6 @@ const kLichessDevUser =
 const kLichessDevPassword = String.fromEnvironment('LICHESS_DEV_PASSWORD');
 
 const kLichessClientId = 'lichess_mobile';
-const kOAuthTokenStorageKey = 'oAuthToken';
 
 abstract class RequestCacheDuration {
   /// Default cache duration for requests

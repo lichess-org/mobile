@@ -12,12 +12,14 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:lichess_mobile/src/common/package_info.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/session_providers.dart';
+import 'package:lichess_mobile/src/model/settings/providers.dart';
 import './model/auth/fake_auth_repository.dart';
 import './model/auth/fake_session_repository.dart';
 
 final List<Override> defaultProviderOverrides = List.unmodifiable([
   authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
   sessionRepositoryProvider.overrideWithValue(FakeSessionRepository()),
+  currentBrightnessProvider.overrideWithValue(Brightness.dark),
   packageInfoProvider.overrideWithValue(
     PackageInfo(
       appName: 'lichess_mobile_test',

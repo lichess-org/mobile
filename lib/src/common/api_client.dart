@@ -159,7 +159,7 @@ class AuthClient extends BaseClient {
     final sessionRepo = ref.read(sessionRepositoryProvider);
     final session = await sessionRepo.read();
 
-    if (session != null) {
+    if (session != null && !request.headers.containsKey('Authorization')) {
       request.headers['Authorization'] = 'Bearer ${session.token}';
     }
 

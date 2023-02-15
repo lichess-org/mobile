@@ -17,9 +17,11 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/ui/game/create_game_screen.dart';
 import 'package:lichess_mobile/src/ui/game/playable_game_screen.dart';
 import 'package:lichess_mobile/src/model/board/computer_opponent.dart';
+import 'package:lichess_mobile/src/model/auth/session_providers.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import '../../utils.dart';
+import '../../model/auth/fake_session_repository.dart';
 
 class MockClient extends Mock implements http.Client {}
 
@@ -80,7 +82,8 @@ void main() {
           ),
         );
 
-        await tester.pump();
+        // auth controller state
+        await tester.pump(const Duration(milliseconds: 10));
 
         // wait for maia bots request to return
         await tester.pump(const Duration(milliseconds: 100));
@@ -118,7 +121,8 @@ void main() {
           ),
         );
 
-        await tester.pump();
+        // auth controller state
+        await tester.pump(const Duration(milliseconds: 10));
 
         // maia bots loading state
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
@@ -214,7 +218,8 @@ void main() {
           ),
         );
 
-        await tester.pump();
+        // auth controller state
+        await tester.pump(const Duration(milliseconds: 10));
 
         await tester.tap(find.text('3 + 2'));
         await tester.pumpAndSettle(); // wait for the animation to finish
@@ -337,6 +342,8 @@ void main() {
             overrides: [
               ...defaultProviderOverrides,
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+              sessionRepositoryProvider
+                  .overrideWithValue(FakeSessionRepository(fakeSession)),
               apiClientProvider
                   .overrideWithValue(ApiClient(mockLogger, mockClient)),
               soundServiceProvider.overrideWithValue(mockSoundService),
@@ -345,13 +352,11 @@ void main() {
           ),
         );
 
-        await tester.pump();
+        // auth controller state
+        await tester.pump(const Duration(milliseconds: 10));
 
-        await tester.pump(
-          const Duration(
-            milliseconds: 100,
-          ),
-        ); // wait for maia bots request to return
+        // wait for maia bots request to return
+        await tester.pump(const Duration(milliseconds: 100));
 
         expect(find.byType(CircularProgressIndicator), findsNothing);
         await tester.tap(find.widgetWithText(FatButton, 'Play'));

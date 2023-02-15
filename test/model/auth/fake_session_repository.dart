@@ -1,5 +1,7 @@
+import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/auth/session_repository.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 
 class FakeSessionRepository implements SessionRepository {
   FakeSessionRepository([UserSession? initial]) : _session = initial;
@@ -24,3 +26,8 @@ class FakeSessionRepository implements SessionRepository {
     _session = null;
   }
 }
+
+const fakeSession = UserSession(
+  token: 'testToken',
+  user: LightUser(id: UserId('testuser'), name: 'testUser'),
+);

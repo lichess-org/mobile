@@ -51,85 +51,83 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModePrefProvider);
-    final session = ref.watch(sessionProvider);
     final authController = ref.watch(authControllerProvider);
     final pieceSet = ref.watch(pieceSetPrefProvider);
-    return LoadingOverlay(
-      isLoading: authController.isLoading,
-      progressIndicator: const CircularProgressIndicator.adaptive(),
-      child: SafeArea(
-        child: ListView(
-          children: [
-            ListSection(
-              hasLeading: true,
-              showDivider: true,
-              children: [
-                SettingsListTile(
-                  icon: const Icon(Icons.brightness_medium),
-                  settingsLabel: context.l10n.background,
-                  settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
-                  onTap: () {
-                    if (defaultTargetPlatform == TargetPlatform.android) {
-                      showChoicesPicker(
-                        context,
-                        choices: ThemeMode.values,
-                        selectedItem: themeMode,
-                        labelBuilder: (t) =>
-                            Text(ThemeModeScreen.themeTitle(context, t)),
-                        onSelectedItemChanged: (ThemeMode? value) => ref
-                            .read(themeModePrefProvider.notifier)
-                            .set(value ?? ThemeMode.system),
-                      );
-                    } else {
-                      pushPlatformRoute(
-                        context: context,
-                        title: context.l10n.background,
-                        builder: (context) => const ThemeModeScreen(),
-                      );
-                    }
-                  },
-                ),
-                SettingsListTile(
-                  icon: const Icon(LichessIcons.chess_knight),
-                  settingsLabel: context.l10n.pieceSet,
-                  settingsValue: pieceSet.label,
-                  onTap: () {
+    return SafeArea(
+      child: ListView(
+        children: [
+          ListSection(
+            hasLeading: true,
+            showDivider: true,
+            children: [
+              SettingsListTile(
+                icon: const Icon(Icons.brightness_medium),
+                settingsLabel: context.l10n.background,
+                settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
+                onTap: () {
+                  if (defaultTargetPlatform == TargetPlatform.android) {
+                    showChoicesPicker(
+                      context,
+                      choices: ThemeMode.values,
+                      selectedItem: themeMode,
+                      labelBuilder: (t) =>
+                          Text(ThemeModeScreen.themeTitle(context, t)),
+                      onSelectedItemChanged: (ThemeMode? value) => ref
+                          .read(themeModePrefProvider.notifier)
+                          .set(value ?? ThemeMode.system),
+                    );
+                  } else {
                     pushPlatformRoute(
                       context: context,
-                      title: context.l10n.pieceSet,
-                      builder: (context) => const PieceSetScreen(),
+                      title: context.l10n.background,
+                      builder: (context) => const ThemeModeScreen(),
                     );
-                  },
-                ),
-              ],
-            ),
-            session.maybeWhen(
-              data: (data) {
-                return data != null
-                    ? ListSection(
-                        children: [
-                          PlatformListTile(
-                            leading: const Icon(Icons.exit_to_app),
-                            title: Text(context.l10n.logOut),
-                            onTap: authController.isLoading
-                                ? null
-                                : () async {
-                                    await ref
-                                        .read(authControllerProvider.notifier)
-                                        .signOut();
-                                    ref
-                                        .read(currentBottomTabProvider.notifier)
-                                        .state = BottomTab.play;
-                                  },
-                          ),
-                        ],
-                      )
-                    : const SizedBox.shrink();
-              },
-              orElse: () => const SizedBox.shrink(),
-            ),
-          ],
-        ),
+                  }
+                },
+              ),
+              SettingsListTile(
+                icon: const Icon(LichessIcons.chess_knight),
+                settingsLabel: context.l10n.pieceSet,
+                settingsValue: pieceSet.label,
+                onTap: () {
+                  pushPlatformRoute(
+                    context: context,
+                    title: context.l10n.pieceSet,
+                    builder: (context) => const PieceSetScreen(),
+                  );
+                },
+              ),
+            ],
+          ),
+          authController.when(
+            data: (session) {
+              return session != null
+                  ? ListSection(
+                      children: [
+                        PlatformListTile(
+                          leading: const Icon(Icons.exit_to_app),
+                          title: Text(context.l10n.logOut),
+                          onTap: () async {
+                            await ref
+                                .read(authControllerProvider.notifier)
+                                .signOut();
+                            ref.read(currentBottomTabProvider.notifier).state =
+                                BottomTab.play;
+                          },
+                        ),
+                      ],
+                    )
+                  : const SizedBox.shrink();
+            },
+            loading: () => const CircularProgressIndicator.adaptive(),
+            error: (err, st) {
+              debugPrint(
+                'SEVERE: [SettingsScreen] error: $err\n$st',
+              );
+              return const SizedBox.shrink();
+            },
+          ),
+        ],
       ),
     );
   }

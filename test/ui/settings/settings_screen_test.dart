@@ -35,6 +35,9 @@ void main() {
           ),
         );
 
+        // wait for auth controller
+        await tester.pump(const Duration(milliseconds: 20));
+
         await meetsTapTargetGuideline(tester);
 
         await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
