@@ -52,7 +52,8 @@ class AuthController extends _$AuthController {
           });
         } else {
           return Future.value(
-              Result<UserSession?>.error(ApiRequestException()));
+            Result<UserSession?>.error(ApiRequestException()),
+          );
         }
       },
     ))
