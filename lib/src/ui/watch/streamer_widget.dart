@@ -7,8 +7,6 @@ import 'package:lichess_mobile/src/model/tv/streamer_repository.dart';
 import 'package:lichess_mobile/src/model/tv/streamer.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 final streamerlistProvider = FutureProvider.autoDispose((ref) {
