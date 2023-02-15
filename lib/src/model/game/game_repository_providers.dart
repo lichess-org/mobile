@@ -15,8 +15,7 @@ part 'game_repository_providers.g.dart';
 @Riverpod(keepAlive: true)
 GameRepository gameRepository(GameRepositoryRef ref) {
   final apiClient = ref.watch(apiClientProvider);
-  final repo = GameRepository(Logger('GameRepository'), apiClient: apiClient);
-  return repo;
+  return GameRepository(Logger('GameRepository'), apiClient: apiClient);
 }
 
 @Riverpod(keepAlive: true)

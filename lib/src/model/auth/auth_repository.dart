@@ -17,12 +17,11 @@ const oauthScopes = ['board:play'];
 @Riverpod(keepAlive: true)
 AuthRepository authRepository(AuthRepositoryRef ref) {
   const auth = FlutterAppAuth();
-  final repo = AuthRepository(
+  return AuthRepository(
     ref.watch(apiClientProvider),
     auth,
     Logger('AuthRepository'),
   );
-  return repo;
 }
 
 class AuthRepository {

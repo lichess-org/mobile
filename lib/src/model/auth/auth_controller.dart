@@ -69,8 +69,8 @@ class AuthController extends _$AuthController {
     state = const AsyncData(null);
   }
 
-  Future<void> _deleteSession() async {
+  Future<void> _deleteSession() {
     final sessionRepo = ref.read(sessionRepositoryProvider);
-    sessionRepo.delete();
+    return sessionRepo.delete();
   }
 }
