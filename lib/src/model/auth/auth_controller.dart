@@ -18,7 +18,7 @@ part 'auth_controller.g.dart';
 @riverpod
 class AuthController extends _$AuthController {
   @override
-  Future<UserSession?> build() async {
+  FutureOr<UserSession?> build() {
     final repo = ref.watch(sessionRepositoryProvider);
     return repo.read();
   }
