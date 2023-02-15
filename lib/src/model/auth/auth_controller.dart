@@ -61,6 +61,7 @@ class AuthController extends _$AuthController {
 
   Future<void> signOut() async {
     state = const AsyncLoading();
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     final result = await ref.read(authRepositoryProvider).signOut();
     result.match(
       onSuccess: (_) => _deleteSession(),
