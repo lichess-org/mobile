@@ -102,5 +102,6 @@ final tvChannelProvider = StateNotifierProvider<TvChannelNotifier, TvChannel>(
 class TvChannelNotifier extends StateNotifier<TvChannel> {
   TvChannelNotifier({required TvChannel initialValue}) : super(initialValue);
 
-  void toggleChannel(int value) => state = TvChannel.getChannel(value);
+  TvChannel get channel => state;
+  set channel(TvChannel value) => state = value;
 }

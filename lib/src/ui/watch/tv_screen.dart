@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart';
 
@@ -10,6 +9,7 @@ import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/model/tv/featured_position.dart';
@@ -33,16 +33,20 @@ class TvScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-
-
     final tvChannel = ref.watch(tvChannelProvider);
-
     final isSoundMuted = ref.watch(muteSoundPrefProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: InkWell(
-          onTap: () => showChoices(context, ref, TvChannel.getListString()),
+          onTap: () => showChoicesPicker<TvChannel>(
+            context,
+            selectedItem: TvChannel.top,
+            labelBuilder: (TvChannel channel) => Text(channel.string),
+            onSelectedItemChanged: (channel) =>
+                ref.read(tvChannelProvider.notifier).channel = channel,
+            choices: TvChannel.values,
+          ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -68,8 +72,6 @@ class TvScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-
-
     final tvChannel = ref.watch(tvChannelProvider);
     final isSoundMuted = ref.watch(muteSoundPrefProvider);
 
@@ -182,76 +184,5 @@ class _Body extends ConsumerWidget {
         ),
       ),
     );
-  }
-}
-
-void showChoices(BuildContext context, WidgetRef ref, List<String> choices) {
-  switch (defaultTargetPlatform) {
-    case TargetPlatform.android:
-      showDialog<void>(
-        context: context,
-        builder: (context) {
-          int? selectedRadio;
-          return AlertDialog(
-            contentPadding: const EdgeInsets.only(top: 12),
-            content: StatefulBuilder(
-              builder: (context, setState) {
-                return SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: List<Widget>.generate(choices.length, (index) {
-                      return RadioListTile<int?>(
-                        title: Text(choices[index]),
-                        value: index,
-                        groupValue: selectedRadio,
-                        onChanged: (value) {
-                          setState(() => selectedRadio = value);
-                          if (value != null) {
-                            ref
-                                .read(tvChannelProvider.notifier)
-                                .toggleChannel(value);
-                          }
-                          Navigator.of(context).pop();
-                        },
-                      );
-                    }),
-                  ),
-                );
-              },
-            ),
-          );
-        },
-      );
-      return;
-    case TargetPlatform.iOS:
-      showCupertinoModalPopup<void>(
-        context: context,
-        builder: (context) {
-          return SizedBox(
-            height: 250,
-            child: CupertinoPicker(
-              backgroundColor: Theme.of(context).canvasColor,
-              useMagnifier: true,
-              magnification: 1.1,
-              itemExtent: 40,
-              scrollController: FixedExtentScrollController(initialItem: 1),
-              children: List<Widget>.generate(choices.length, (index) {
-                return Center(
-                  child: Text(
-                    choices[index],
-                    style: const TextStyle(
-                      fontSize: 21,
-                    ),
-                  ),
-                );
-              }),
-              onSelectedItemChanged: (value) {},
-            ),
-          );
-        },
-      );
-      return;
-    default:
-      assert(false, 'Unexpected platform $defaultTargetPlatform');
   }
 }

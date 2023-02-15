@@ -20,7 +20,6 @@ class TvEvent with _$TvEvent {
     required String fen,
     required FeaturedPlayer white,
     required FeaturedPlayer black,
-    int? gameStatus,
   }) = TvFeaturedEvent;
 
   const factory TvEvent.fen({
