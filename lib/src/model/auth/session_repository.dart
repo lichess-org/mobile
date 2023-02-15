@@ -1,8 +1,16 @@
 import 'dart:convert';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'user_session.dart';
+
+part 'session_repository.g.dart';
+
+@Riverpod(keepAlive: true)
+SessionRepository sessionRepository(SessionRepositoryRef ref) {
+  return const SessionRepository(FlutterSecureStorage());
+}
 
 class SessionRepository {
   const SessionRepository(FlutterSecureStorage storage) : _storage = storage;

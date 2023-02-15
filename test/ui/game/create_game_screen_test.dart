@@ -17,7 +17,7 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/ui/game/create_game_screen.dart';
 import 'package:lichess_mobile/src/ui/game/playable_game_screen.dart';
 import 'package:lichess_mobile/src/model/board/computer_opponent.dart';
-import 'package:lichess_mobile/src/model/auth/session_providers.dart';
+import 'package:lichess_mobile/src/model/auth/session_repository.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import '../../utils.dart';

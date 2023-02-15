@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
-import 'session_providers.dart';
+import 'session_repository.dart';
 import 'user_session.dart';
 import 'auth_repository.dart';
 
@@ -41,7 +41,6 @@ class AuthController extends _$AuthController {
                 user: user.lightUser,
               );
               sessionRepo.write(newSession);
-              ref.invalidate(sessionProvider);
               return newSession;
             });
           }).mapError((err, st) {
@@ -73,6 +72,5 @@ class AuthController extends _$AuthController {
   Future<void> _deleteSession() async {
     final sessionRepo = ref.read(sessionRepositoryProvider);
     sessionRepo.delete();
-    ref.invalidate(sessionProvider);
   }
 }
