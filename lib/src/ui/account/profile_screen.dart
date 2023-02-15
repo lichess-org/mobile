@@ -1,8 +1,8 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/model/account/account_providers.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
@@ -12,6 +12,17 @@ import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+
+part 'profile_screen.g.dart';
+
+@riverpod
+Future<User?> sessionProfile(SessionProfileRef ref) async {
+  final session = await ref.watch(authControllerProvider.future);
+  if (session != null) {
+    return ref.watch(accountProvider.future);
+  }
+  return null;
+}
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -32,7 +43,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Widget _buildAndroid(BuildContext context) {
-    final accountProfile = ref.watch(accountProvider);
+    final sessionProfile = ref.watch(sessionProfileProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.profile),
@@ -48,28 +59,26 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         ],
       ),
-      body: accountProfile.when(
+      body: sessionProfile.when(
         data: (account) {
-          return RefreshIndicator(
-            key: _androidRefreshKey,
-            onRefresh: () => _refreshData(account),
-            child: UserScreenBody(user: account, showPlayerTitle: true),
-          );
+          return account != null
+              ? RefreshIndicator(
+                  key: _androidRefreshKey,
+                  onRefresh: () => _refreshData(account),
+                  child: UserScreenBody(user: account, showPlayerTitle: true),
+                )
+              : _SignInBody();
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) {
-          if (error is UnauthorizedException) {
-            return _SignInBody();
-          } else {
-            return const Center(child: Text('Could not load profile'));
-          }
+          return const Center(child: Text('Could not load profile.'));
         },
       ),
     );
   }
 
   Widget _buildIos(BuildContext context) {
-    final accountProfile = ref.watch(accountProvider);
+    final sessionProfile = ref.watch(sessionProfileProvider);
     return CupertinoPageScaffold(
       child: CustomScrollView(
         slivers: [
@@ -86,20 +95,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               icon: const Icon(Icons.settings),
             ),
           ),
-          ...accountProfile.when(
+          ...sessionProfile.when(
             data: (account) {
               return [
-                CupertinoSliverRefreshControl(
-                  onRefresh: () => _refreshData(account),
-                ),
-                SliverSafeArea(
-                  top: false,
-                  sliver: UserScreenBody(
-                    user: account,
-                    showPlayerTitle: true,
-                    inCustomScrollView: true,
+                if (account != null)
+                  CupertinoSliverRefreshControl(
+                    onRefresh: () => _refreshData(account),
                   ),
-                ),
+                if (account != null)
+                  SliverSafeArea(
+                    top: false,
+                    sliver: UserScreenBody(
+                      user: account,
+                      showPlayerTitle: true,
+                      inCustomScrollView: true,
+                    ),
+                  )
+                else
+                  SliverFillRemaining(child: _SignInBody()),
               ];
             },
             loading: () => const [
@@ -108,21 +121,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               )
             ],
             error: (error, _) {
-              if (error is UnauthorizedException) {
-                return [
-                  SliverFillRemaining(
-                    child: _SignInBody(),
-                  )
-                ];
-              } else {
-                return const [
-                  SliverFillRemaining(
-                    child: Center(
-                      child: Text('Could not load profile'),
-                    ),
-                  )
-                ];
-              }
+              return const [
+                SliverFillRemaining(
+                  child: Center(
+                    child: Text('Could not load profile.'),
+                  ),
+                )
+              ];
             },
           ),
         ],
@@ -130,9 +135,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  // TODO also refresh user account data for perfs
   Future<void> _refreshData(User account) {
-    return ref.refresh(userRecentGamesProvider(userId: account.id).future);
+    return ref
+        .refresh(userRecentGamesProvider(userId: account.id).future)
+        .then((_) => ref.refresh(accountProvider));
   }
 }
 
