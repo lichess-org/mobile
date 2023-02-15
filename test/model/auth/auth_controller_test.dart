@@ -73,16 +73,17 @@ void main() {
       ),
     ).thenAnswer((_) => mockResponse(testAccountResponse, 200));
 
+    when(
+      () => mockClient.delete(Uri.parse('$kLichessHost/api/token')),
+    ).thenAnswer((_) => mockResponse('ok', 200));
+
     registerFallbackValue(testUserSession);
+    registerFallbackValue(const AsyncLoading<UserSession?>());
   });
 
   setUp(() {
     reset(mockAuthRepository);
     reset(mockSessionRepository);
-
-    when(
-      () => mockSessionRepository.write(any()),
-    ).thenAnswer((_) => delayedAnswer(null));
   });
 
   group('AuthController', () {
@@ -104,7 +105,9 @@ void main() {
       await container.read(authControllerProvider.future);
 
       verifyInOrder([
+        // first state is loading, waiting for session repository
         () => listener(null, loading),
+        // transition to retrieved session data from repository
         () => listener(loading, sessionData),
       ]);
       verifyNoMoreInteractions(listener);
@@ -115,6 +118,9 @@ void main() {
           .thenAnswer((_) => delayedAnswer(null));
       when(() => mockAuthRepository.signIn())
           .thenAnswer((_) => delayedAnswer(signInResponse));
+      when(
+        () => mockSessionRepository.write(any()),
+      ).thenAnswer((_) => delayedAnswer(null));
 
       final container =
           makeContainer(mockAuthRepository, mockSessionRepository);
@@ -127,20 +133,80 @@ void main() {
         fireImmediately: true,
       );
 
-      final controller = container.read(authControllerProvider.notifier);
+      await container.read(authControllerProvider.future);
 
+      verifyInOrder([
+        // first state is loading, waiting for session repository
+        () => listener(null, loading),
+        // transition to null because session repository returned nothing
+        () => listener(loading, nullData),
+      ]);
+
+      final controller = container.read(authControllerProvider.notifier);
       await controller.signIn();
 
       verifyInOrder([
-        () => listener(null, loading),
-        () => listener(loading, nullData),
-        // () => listener(nullData, loading),
-        () => listener(nullData, sessionData),
+        // state is loading, waiting for signin logic to complete
+        () => listener(nullData, any(that: isA<AsyncLoading<UserSession?>>())),
+        // signin logic completed with session data
+        () =>
+            listener(any(that: isA<AsyncLoading<UserSession?>>()), sessionData),
       ]);
       verifyNoMoreInteractions(listener);
       verify(mockAuthRepository.signIn).called(1);
+
+      // it should successfully write the session, which is then used by
+      // api client and the AuthController first load
       verify(
         () => mockSessionRepository.write(testUserSession),
+      ).called(1);
+    });
+
+    test('sign out', () async {
+      when(() => mockSessionRepository.read())
+          .thenAnswer((_) => delayedAnswer(testUserSession));
+      when(() => mockAuthRepository.signOut())
+          .thenAnswer((_) => delayedAnswer(Result.value(null)));
+      when(
+        () => mockSessionRepository.delete(),
+      ).thenAnswer((_) => delayedAnswer(null));
+
+      final container =
+          makeContainer(mockAuthRepository, mockSessionRepository);
+
+      final listener = Listener<AsyncValue<UserSession?>>();
+
+      container.listen<AsyncValue<UserSession?>>(
+        authControllerProvider,
+        listener,
+        fireImmediately: true,
+      );
+
+      await container.read(authControllerProvider.future);
+
+      verifyInOrder([
+        // first state is loading, waiting for session repository
+        () => listener(null, loading),
+        // transition to loaded session data from repository
+        () => listener(loading, sessionData),
+      ]);
+
+      final controller = container.read(authControllerProvider.notifier);
+      await controller.signOut();
+
+      verifyInOrder([
+        // state is loading, waiting for signin logic to complete
+        () =>
+            listener(sessionData, any(that: isA<AsyncLoading<UserSession?>>())),
+        // signOut logic completed
+        () => listener(any(that: isA<AsyncLoading<UserSession?>>()), nullData),
+      ]);
+      verifyNoMoreInteractions(listener);
+      verify(mockAuthRepository.signOut).called(1);
+
+      // session should be deleted
+      verify(
+        () => mockSessionRepository.delete(),
       ).called(1);
     });
   });
