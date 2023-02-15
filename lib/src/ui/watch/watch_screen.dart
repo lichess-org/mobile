@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/ui/watch/streamer_widget.dart';
 
 class WatchScreen extends StatelessWidget {
   const WatchScreen({super.key});
@@ -23,7 +24,7 @@ class WatchScreen extends StatelessWidget {
       body: _WatchScaffold(
         child: ListView(
           padding: Styles.verticalBodyPadding,
-          children: const [Text('TODO')],
+          children: [StreamerWidget()],
         ),
       ),
     );
@@ -32,10 +33,18 @@ class WatchScreen extends StatelessWidget {
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
       child: _WatchScaffold(
-        child: const CustomScrollView(
-          slivers: const [
-            CupertinoNavigationBar(
+        child: CustomScrollView(
+          slivers: [
+            const CupertinoNavigationBar(
               middle: Text('Watch'),
+            ),
+            SliverSafeArea(
+              sliver: SliverPadding(
+                padding: Styles.verticalBodyPadding,
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([StreamerWidget()]),
+                ),
+              ),
             )
           ],
         ),
