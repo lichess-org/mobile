@@ -135,18 +135,6 @@ class _Body extends ConsumerWidget {
                 PlatformListTile(
                   title: Center(child: ButtonLoadingIndicator()),
                 ),
-                SettingsListTile(
-                  icon: const Icon(LichessIcons.chess_board),
-                  settingsLabel: context.l10n.boardTheme,
-                  settingsValue: boardTheme.label,
-                  onTap: () {
-                    pushPlatformRoute(
-                      context: context,
-                      title: context.l10n.boardTheme,
-                      builder: (context) => const BoardThemeScreen(),
-                    );
-                  },
-                ),
               ],
             ),
             error: (err, st) {
