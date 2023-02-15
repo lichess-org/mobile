@@ -1,6 +1,7 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/common/lichess_colors.dart';
 
 import 'package:lichess_mobile/src/model/tv/streamer_repository.dart';
 import 'package:lichess_mobile/src/model/tv/streamer.dart';
@@ -27,9 +28,6 @@ class StreamerWidget extends ConsumerWidget {
           header: const Text('Live Streamer'),
           children: [
             StreamerListTile(streamer: data[0]),
-            StreamerListTile(streamer: data[1]),
-            StreamerListTile(streamer: data[2]),
-            StreamerListTile(streamer: data[3]),
           ],
         );
       },
@@ -51,6 +49,29 @@ class StreamerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(title: Text(streamer.streamerName));
+    return PlatformListTile(
+      leading: Image.network(streamer.image),
+      title: Padding(
+        padding: const EdgeInsets.only(right: 5.0),
+        child: Row(
+          children: [
+            if (streamer.title != null) ...[
+              Text(
+                streamer.title!,
+                style: const TextStyle(
+                  color: LichessColors.brag,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(width: 5)
+            ],
+            Flexible(
+              child: Text(streamer.username, overflow: TextOverflow.ellipsis),
+            )
+          ],
+        ),
+      ),
+      trailing: Text(streamer.lang),
+    );
   }
 }

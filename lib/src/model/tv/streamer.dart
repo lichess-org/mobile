@@ -13,11 +13,19 @@ class Streamer with _$Streamer {
     required String streamService,
     required String lang,
     required String streamerName,
-    required String streamerDesc,
     required String streamerHeadline,
     required String image,
+    String? title,
     bool? patron,
     String? twitch,
     String? youTube,
   }) = _Streamer;
+
+  String getLink() {
+    if (streamService == 'twitch') {
+      return twitch!;
+    } else {
+      return youTube!;
+    }
+  }
 }
