@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:loading_overlay/loading_overlay.dart';
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -53,81 +53,83 @@ class _Body extends ConsumerWidget {
     final themeMode = ref.watch(themeModePrefProvider);
     final authController = ref.watch(authControllerProvider);
     final pieceSet = ref.watch(pieceSetPrefProvider);
-    return LoadingOverlay(
-      isLoading: authController.isLoading,
-      progressIndicator: const CircularProgressIndicator.adaptive(),
-      child: SafeArea(
-        child: ListView(
-          children: [
-            ListSection(
-              hasLeading: true,
-              showDivider: true,
-              children: [
-                SettingsListTile(
-                  icon: const Icon(Icons.brightness_medium),
-                  settingsLabel: context.l10n.background,
-                  settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
-                  onTap: () {
-                    if (defaultTargetPlatform == TargetPlatform.android) {
-                      showChoicesPicker(
-                        context,
-                        choices: ThemeMode.values,
-                        selectedItem: themeMode,
-                        labelBuilder: (t) =>
-                            Text(ThemeModeScreen.themeTitle(context, t)),
-                        onSelectedItemChanged: (ThemeMode? value) => ref
-                            .read(themeModePrefProvider.notifier)
-                            .set(value ?? ThemeMode.system),
-                      );
-                    } else {
-                      pushPlatformRoute(
-                        context: context,
-                        title: context.l10n.background,
-                        builder: (context) => const ThemeModeScreen(),
-                      );
-                    }
-                  },
-                ),
-                SettingsListTile(
-                  icon: const Icon(LichessIcons.chess_knight),
-                  settingsLabel: context.l10n.pieceSet,
-                  settingsValue: pieceSet.label,
-                  onTap: () {
+    return SafeArea(
+      child: ListView(
+        children: [
+          ListSection(
+            hasLeading: true,
+            showDivider: true,
+            children: [
+              SettingsListTile(
+                icon: const Icon(Icons.brightness_medium),
+                settingsLabel: context.l10n.background,
+                settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
+                onTap: () {
+                  if (defaultTargetPlatform == TargetPlatform.android) {
+                    showChoicesPicker(
+                      context,
+                      choices: ThemeMode.values,
+                      selectedItem: themeMode,
+                      labelBuilder: (t) =>
+                          Text(ThemeModeScreen.themeTitle(context, t)),
+                      onSelectedItemChanged: (ThemeMode? value) => ref
+                          .read(themeModePrefProvider.notifier)
+                          .set(value ?? ThemeMode.system),
+                    );
+                  } else {
                     pushPlatformRoute(
                       context: context,
-                      title: context.l10n.pieceSet,
-                      builder: (context) => const PieceSetScreen(),
+                      title: context.l10n.background,
+                      builder: (context) => const ThemeModeScreen(),
                     );
-                  },
+                  }
+                },
+              ),
+              SettingsListTile(
+                icon: const Icon(LichessIcons.chess_knight),
+                settingsLabel: context.l10n.pieceSet,
+                settingsValue: pieceSet.label,
+                onTap: () {
+                  pushPlatformRoute(
+                    context: context,
+                    title: context.l10n.pieceSet,
+                    builder: (context) => const PieceSetScreen(),
+                  );
+                },
+              ),
+            ],
+          ),
+          authController.when(
+            data: (session) {
+              return session != null
+                  ? ListSection(
+                      children: [
+                        PlatformListTile(
+                          leading: const Icon(Icons.exit_to_app),
+                          title: Text(context.l10n.logOut),
+                          onTap: () {
+                            _showExitConfirmDialog(context, ref);
+                          },
+                        ),
+                      ],
+                    )
+                  : const SizedBox.shrink();
+            },
+            loading: () => const ListSection(
+              children: [
+                PlatformListTile(
+                  title: Center(child: ButtonLoadingIndicator()),
                 ),
               ],
             ),
-            authController.when(
-              data: (session) {
-                return session != null
-                    ? ListSection(
-                        children: [
-                          PlatformListTile(
-                            leading: const Icon(Icons.exit_to_app),
-                            title: Text(context.l10n.logOut),
-                            onTap: () {
-                              _showExitConfirmDialog(context, ref);
-                            },
-                          ),
-                        ],
-                      )
-                    : const SizedBox.shrink();
-              },
-              loading: () => const SizedBox.shrink(),
-              error: (err, st) {
-                debugPrint(
-                  'SEVERE: [SettingsScreen] error: $err\n$st',
-                );
-                return const SizedBox.shrink();
-              },
-            ),
-          ],
-        ),
+            error: (err, st) {
+              debugPrint(
+                'SEVERE: [SettingsScreen] error: $err\n$st',
+              );
+              return const SizedBox.shrink();
+            },
+          ),
+        ],
       ),
     );
   }

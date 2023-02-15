@@ -8,9 +8,11 @@ import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/model/auth/session_repository.dart';
 import 'package:lichess_mobile/src/ui/account/profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../utils.dart';
+import '../../model/auth/fake_session_repository.dart';
 
 class MockClient extends Mock implements http.Client {}
 
@@ -55,6 +57,8 @@ void main() {
           ProviderScope(
             overrides: [
               ...defaultProviderOverrides,
+              sessionRepositoryProvider
+                  .overrideWithValue(FakeSessionRepository(fakeSession)),
               apiClientProvider
                   .overrideWithValue(ApiClient(mockLogger, mockClient)),
             ],

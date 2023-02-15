@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/session_repository.dart';
 import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../utils.dart';
 import '../../model/auth/fake_session_repository.dart';
 
@@ -116,11 +119,24 @@ void main() {
 
         expect(find.text('Sign out'), findsOneWidget);
 
-        await tester.tap(find.text('Sign out'));
+        await tester.tap(
+          find.widgetWithText(PlatformListTile, 'Sign out'),
+          warnIfMissed: false,
+        );
+        await tester.pumpAndSettle();
+
+        // confirm
+        if (debugDefaultTargetPlatformOverride == TargetPlatform.iOS) {
+          await tester
+              .tap(find.widgetWithText(CupertinoActionSheetAction, 'Sign out'));
+        } else {
+          await tester.tap(find.text('Accept'));
+        }
         await tester.pump();
+
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
         // wait for sign out future
-        await tester.pump(const Duration(milliseconds: 100));
+        await tester.pump(const Duration(seconds: 1));
 
         expect(find.text('Sign out'), findsNothing);
       },
