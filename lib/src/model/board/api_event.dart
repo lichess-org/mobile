@@ -4,11 +4,11 @@ import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-import 'game.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 
 part 'api_event.freezed.dart';
 
-enum GameEventLifecycle { start, finish }
+enum BoardEventLifecycle { start, finish }
 
 /// Represents a lichess API stream event.
 ///
@@ -19,7 +19,7 @@ enum GameEventLifecycle { start, finish }
 @freezed
 class ApiEvent with _$ApiEvent {
   const factory ApiEvent.gameStartOrFinish({
-    required GameEventLifecycle type,
+    required BoardEventLifecycle type,
     required GameId gameId,
     required GameFullId fullId,
     required Side side,
@@ -47,8 +47,8 @@ class ApiEvent with _$ApiEvent {
         return pick('game').letOrThrow(
           (gamePick) => ApiEvent.gameStartOrFinish(
             type: type == 'gameStart'
-                ? GameEventLifecycle.start
-                : GameEventLifecycle.finish,
+                ? BoardEventLifecycle.start
+                : BoardEventLifecycle.finish,
             gameId: gamePick('gameId').asGameIdOrThrow(),
             fullId: gamePick('fullId').asGameFullIdOrThrow(),
             side: gamePick('color').asSideOrThrow(),

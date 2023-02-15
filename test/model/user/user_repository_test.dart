@@ -5,7 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:http/http.dart' as http;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-import 'package:lichess_mobile/src/common/http.dart';
+import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
@@ -394,7 +394,7 @@ void main() {
     });
   });
 
-  group('UserRepository.getUsersStatusTask', () {
+  group('UserRepository.getUsersStatuses', () {
     test('json read, minimal example', () async {
       final ids = ISet(
         {const UserId('maia1'), const UserId('maia5'), const UserId('maia9')},
@@ -405,7 +405,7 @@ void main() {
         ),
       ).thenAnswer((_) async => Result.value(http.Response('[]', 200)));
 
-      final result = await repo.getUsersStatus(ids);
+      final result = await repo.getUsersStatuses(ids);
 
       expect(result.isValue, true);
     });
@@ -440,7 +440,7 @@ void main() {
         ),
       ).thenAnswer((_) async => Result.value(http.Response(response, 200)));
 
-      final result = await repo.getUsersStatus(ids);
+      final result = await repo.getUsersStatuses(ids);
 
       expect(result.isValue, true);
     });

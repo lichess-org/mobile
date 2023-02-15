@@ -3,8 +3,8 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
-import './game_status.dart';
+
+import 'player.dart';
 
 part 'game.freezed.dart';
 
@@ -94,31 +94,6 @@ class GameStep with _$GameStep {
 }
 
 @freezed
-class Player with _$Player {
-  const Player._();
-
-  const factory Player({
-    UserId? id,
-    required String name,
-    int? rating,
-    int? ratingDiff,
-    bool? provisional,
-    String? title,
-    bool? patron,
-    int? aiLevel,
-  }) = _Player;
-
-  LightUser? get lightUser => id != null
-      ? LightUser(
-          id: id!,
-          name: name,
-          title: title,
-          isPatron: patron,
-        )
-      : null;
-}
-
-@freezed
 class PlayerAnalysis with _$PlayerAnalysis {
   const factory PlayerAnalysis({
     required int inaccuracy,
@@ -159,6 +134,7 @@ enum Speed {
 enum Variant {
   standard,
   chess960,
+  fromPosition,
   antichess,
   kingOfTheHill,
   threeCheck,
@@ -167,12 +143,17 @@ enum Variant {
   racingKings,
   crazyhouse;
 
-  // TODO implement missing variants
+  /// Returns the initial position for this [Variant].
+  ///
+  /// Will throw an [ArgumentError] if called on [Variant.fromPosition].
   Position get initialPosition {
+    // TODO implement missing variants
     switch (this) {
       case Variant.standard:
       case Variant.chess960:
         return Chess.initial;
+      case Variant.fromPosition:
+        throw ArgumentError('Check the variant is not `fromPosition` before!');
       case Variant.antichess:
         return Antichess.initial;
       case Variant.kingOfTheHill:
@@ -187,4 +168,47 @@ enum Variant {
         throw UnimplementedError();
     }
   }
+
+  Rules get rules {
+    switch (this) {
+      case Variant.standard:
+      case Variant.chess960:
+      case Variant.fromPosition:
+        return Rules.chess;
+      case Variant.antichess:
+        return Rules.antichess;
+      case Variant.kingOfTheHill:
+        return Rules.kingofthehill;
+      case Variant.threeCheck:
+        return Rules.threecheck;
+      case Variant.atomic:
+        return Rules.atomic;
+      case Variant.horde:
+        return Rules.horde;
+      case Variant.racingKings:
+        return Rules.racingKings;
+      case Variant.crazyhouse:
+        return Rules.crazyhouse;
+    }
+  }
+}
+
+enum GameStatus {
+  unknown(-1),
+  created(10),
+  started(20),
+  aborted(25),
+  mate(30),
+  resign(31),
+  stalemate(32),
+  timeout(33),
+  draw(34),
+  outoftime(35),
+  cheat(36),
+  noStart(37),
+  unknownFinish(38),
+  variantEnd(60);
+
+  const GameStatus(this.value);
+  final int value;
 }

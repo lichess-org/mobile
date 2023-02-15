@@ -1,7 +1,7 @@
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
+import 'package:lichess_mobile/src/common/models.dart';
 
 import 'computer_opponent.dart';
-import 'time_control.dart';
 
 final computerOpponentPrefProvider = createPrefProvider(
   prefKey: 'play.computerOpponent',
@@ -28,10 +28,10 @@ final maiaStrengthProvider = createPrefProvider(
 
 final timeControlPrefProvider = createPrefProvider(
   prefKey: 'play.timeControl',
-  defaultValue: TimeControl.blitz4,
-  mapFrom: (v) => TimeControl.values.firstWhere(
-    (e) => v != null && e.value == TimeInc.fromString(v),
-    orElse: () => TimeControl.blitz4,
+  defaultValue: DefaultGameClock.blitz5_3,
+  mapFrom: (v) => DefaultGameClock.values.firstWhere(
+    (e) => v != null && e.value == TimeIncrement.fromString(v),
+    orElse: () => DefaultGameClock.blitz5_3,
   ),
   mapTo: (v) => v.value.toString(),
 );

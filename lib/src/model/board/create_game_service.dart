@@ -5,14 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:result_extensions/result_extensions.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/account/account_providers.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_request.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'play_preferences.dart';
-import 'challenge_repository.dart';
-import 'challenge_request.dart';
-import 'game_repository.dart';
+import 'board_repository.dart';
 import 'api_event.dart';
 import 'computer_opponent.dart';
-import 'game.dart';
 
 class CreateGameService {
   const CreateGameService(this._log, {required this.ref});
@@ -20,7 +21,7 @@ class CreateGameService {
   final Ref ref;
   final Logger _log;
 
-  FutureResult<PlayableGame> aiGame(User account, {Side? side}) {
+  FutureResult<PlayableGame> aiGame({Side? side}) {
     final challengeRepo = ref.read(challengeRepositoryProvider);
     final opponent = ref.read(computerOpponentPrefProvider);
     final maiaStrength = ref.read(maiaStrengthProvider);
@@ -38,25 +39,27 @@ class CreateGameService {
           )
         : challengeRepo.challenge(maiaStrength.name, challengeRequest);
 
-    return createChallengeTask.flatMap((_) => _waitForGameStart(account));
+    return createChallengeTask.flatMap((_) => _waitForGameStart());
   }
 
-  FutureResult<PlayableGame> _waitForGameStart(User account) {
+  FutureResult<PlayableGame> _waitForGameStart() {
     return Result.capture(
       (() async {
-        final gameRepo = ref.read(gameRepositoryProvider);
-        final stream = gameRepo.events().timeout(
+        final boardRepo = ref.read(boardRepositoryProvider);
+        final stream = boardRepo.events().timeout(
               const Duration(seconds: 15),
               onTimeout: (sink) => sink.close(),
             );
 
         final startEvent = await stream.firstWhere(
           (event) =>
-              event.type == GameEventLifecycle.start && event.boardCompat,
+              event.type == BoardEventLifecycle.start && event.boardCompat,
           orElse: () {
             throw Exception('Could not create game.');
           },
         );
+
+        final account = await ref.read(accountProvider.future);
 
         final player = Player(
           id: account.id,

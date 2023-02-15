@@ -13,12 +13,12 @@ import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/http.dart';
+import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/sound.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/ui/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import '../../utils.dart';
 
 class MockClient extends Mock implements http.Client {}
@@ -184,11 +184,17 @@ void main() {
         await tester.pumpAndSettle();
 
         // move list is updated
-        if (i + 1 < movesAfterE4.length) {
+        final prevMoveIndex = i + 1;
+        if (prevMoveIndex < movesAfterE4.length) {
           final prevMove =
-              find.widgetWithText(InlineMoveItem, movesAfterE4[i + 1]);
+              find.widgetWithText(InlineMoveItem, movesAfterE4[prevMoveIndex]);
           expect(prevMove, findsAtLeastNWidgets(1));
-          expect(tester.widget<InlineMoveItem>(prevMove).current, isTrue);
+          expect(
+            tester
+                .widgetList<InlineMoveItem>(prevMove)
+                .any((e) => e.current ?? false),
+            isTrue,
+          );
         }
       }
 

@@ -14,12 +14,12 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/http.dart';
+import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/sound.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/ui/game/playable_game_screen.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-import '../../model/auth/fake_auth_repository.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import '../../utils.dart';
 
 class MockClient extends Mock implements http.Client {}
@@ -71,7 +71,7 @@ void main() {
           tester,
           home: Consumer(
             builder: (context, ref, _) {
-              return PlayableGameScreen(game: testGame, account: fakeUser);
+              return const PlayableGameScreen(game: testGame);
             },
           ),
         );
@@ -133,7 +133,7 @@ void main() {
           tester,
           home: Consumer(
             builder: (context, ref, _) {
-              return PlayableGameScreen(game: testGame, account: fakeUser);
+              return const PlayableGameScreen(game: testGame);
             },
           ),
         );
@@ -282,7 +282,7 @@ void main() {
           tester,
           home: Consumer(
             builder: (context, ref, _) {
-              return PlayableGameScreen(game: testGame, account: fakeUser);
+              return const PlayableGameScreen(game: testGame);
             },
           ),
         );
@@ -414,7 +414,7 @@ class FakeGameClient extends Fake implements http.Client {
       moves.add(move);
       whiteTime -= 5000;
       position = position.play(Move.fromUci(move)!);
-      _sendGameEvent(
+      _sendBoardEvent(
         '{ "type": "gameState", "moves": "${moves.join(' ')}", "wtime": $whiteTime, "btime": $blackTime, "status": "started" }',
       );
 
@@ -425,7 +425,7 @@ class FakeGameClient extends Fake implements http.Client {
           moves.add('e7e5');
           blackTime -= 3000;
           position = position.play(Move.fromUci('e7e5')!);
-          _sendGameEvent(
+          _sendBoardEvent(
             '{ "type": "gameState", "moves": "${moves.join(' ')}", "wtime": $whiteTime, "btime": $blackTime, "status": "started" }',
           );
           break;
@@ -433,7 +433,7 @@ class FakeGameClient extends Fake implements http.Client {
           moves.add('b8c6');
           blackTime -= 6000;
           position = position.play(Move.fromUci('b8c6')!);
-          _sendGameEvent(
+          _sendBoardEvent(
             '{ "type": "gameState", "moves": "${moves.join(' ')}", "wtime": $whiteTime, "btime": $blackTime, "status": "started" }',
           );
           break;
@@ -451,7 +451,7 @@ class FakeGameClient extends Fake implements http.Client {
     streamController.close();
   }
 
-  void _sendGameEvent(String event) {
+  void _sendBoardEvent(String event) {
     Future<void>.delayed(const Duration(milliseconds: 10))
         .then((_) => streamController.add(event));
   }

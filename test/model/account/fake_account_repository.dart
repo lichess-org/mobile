@@ -4,19 +4,12 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 
-class FakeAuthRepository implements AuthRepository {
+class FakeAccountRepository implements AccountRepository {
   @override
-  FutureResult<void> signIn() async {
-    await Future<void>.delayed(const Duration(milliseconds: 5));
-    return Result.value(null);
-  }
-
-  @override
-  FutureResult<void> signOut() async {
-    await Future<void>.delayed(const Duration(milliseconds: 5));
-    return Result.value(null);
+  FutureResult<User> getProfile() {
+    return Future.value(Result.value(fakeUser));
   }
 }
 

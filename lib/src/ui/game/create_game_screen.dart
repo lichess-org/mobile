@@ -17,13 +17,12 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/auth/auth_actions_notifier.dart';
-import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
-import 'package:lichess_mobile/src/model/user/user_repository.dart';
-import 'package:lichess_mobile/src/model/game/play_preferences.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:lichess_mobile/src/model/game/computer_opponent.dart';
-import 'package:lichess_mobile/src/model/game/play_action_notifier.dart';
+import 'package:lichess_mobile/src/model/board/play_preferences.dart';
+import 'package:lichess_mobile/src/model/board/computer_opponent.dart';
+import 'package:lichess_mobile/src/model/board/play_action_notifier.dart';
 
 import 'time_control_modal.dart';
 import 'playable_game_screen.dart';
@@ -36,7 +35,7 @@ final maiaBotsProvider =
     userRepo.getUser(const UserId('maia5')),
     userRepo.getUser(const UserId('maia9')),
   ]).then(Result.flattenAll);
-  final maiaStatuses = userRepo.getUsersStatus(
+  final maiaStatuses = userRepo.getUsersStatuses(
     ISet(
       {const UserId('maia1'), const UserId('maia5'), const UserId('maia9')},
     ),
@@ -76,56 +75,46 @@ class PlayScreen extends ConsumerWidget {
   }
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authStateChangesProvider);
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.play)),
-      body: Center(
-        child: authState.maybeWhen(
-          data: (account) => PlayForm(account: account),
-          orElse: () => const CircularProgressIndicator(),
-        ),
+      body: const Center(
+        child: PlayForm(),
       ),
     );
   }
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authStateChangesProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(middle: Text(context.l10n.play)),
-      child: Center(
-        child: authState.maybeWhen(
-          data: (account) => PlayForm(account: account),
-          orElse: () => const CircularProgressIndicator.adaptive(),
-        ),
+      child: const Center(
+        child: PlayForm(),
       ),
     );
   }
 }
 
 class PlayForm extends ConsumerWidget {
-  const PlayForm({this.account, super.key});
-
-  final User? account;
+  const PlayForm();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isAuth = ref.watch(isAuthenticatedProvider);
     final maiaBots = ref.watch(maiaBotsProvider);
     final opponentPref = ref.watch(computerOpponentPrefProvider);
     final maiaStrength = ref.watch(maiaStrengthProvider);
     final stockfishLevel = ref.watch(stockfishLevelProvider);
     final timeControlPref = ref.watch(timeControlPrefProvider);
-    final authActionsAsync = ref.watch(authActionsProvider);
+    final authController = ref.watch(authControllerProvider);
     final playActionAsync = ref.watch(playActionProvider);
 
     ref.listen<AsyncValue<PlayableGame?>>(playActionProvider, (_, state) {
       state.showSnackbarOnError(context);
 
-      if (state.valueOrNull is PlayableGame && account != null) {
+      if (state.valueOrNull is PlayableGame) {
         ref.invalidate(playActionProvider);
         Navigator.of(context, rootNavigator: true).push(
           MaterialPageRoute<void>(
-            builder: (context) =>
-                PlayableGameScreen(game: state.value!, account: account!),
+            builder: (context) => PlayableGameScreen(game: state.value!),
           ),
         );
       }
@@ -270,7 +259,7 @@ class PlayForm extends ConsumerWidget {
                 useRootNavigator: true,
                 context: context,
                 builder: (BuildContext context) {
-                  return const TimeControlModal();
+                  return const DefaultGameClockModal();
                 },
               );
             },
@@ -296,22 +285,19 @@ class PlayForm extends ConsumerWidget {
           ),
           const SizedBox(height: 10),
           FatButton(
-            semanticsLabel: account == null
-                ? 'Sign in to start playing'
-                : context.l10n.play,
-            onPressed: account == null
-                ? authActionsAsync.isLoading
+            semanticsLabel:
+                !isAuth ? 'Sign in to start playing' : context.l10n.play,
+            onPressed: !isAuth
+                ? authController.isLoading
                     ? null
-                    : () => ref.read(authActionsProvider.notifier).signIn()
+                    : () => ref.read(authControllerProvider.notifier).signIn()
                 : playActionAsync.isLoading
                     ? null
-                    : () => ref
-                        .read(playActionProvider.notifier)
-                        .createGame(account: account!),
-            child: authActionsAsync.isLoading || playActionAsync.isLoading
+                    : () => ref.read(playActionProvider.notifier).createGame(),
+            child: authController.isLoading || playActionAsync.isLoading
                 ? const ButtonLoadingIndicator()
                 : Text(
-                    account == null
+                    !isAuth
                         // TODO translate
                         ? 'Sign in to start playing'
                         : context.l10n.play,

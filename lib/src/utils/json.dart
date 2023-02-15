@@ -8,7 +8,46 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:lichess_mobile/src/model/game/game_status.dart';
+
+typedef Mapper<T> = T Function(Map<String, dynamic>);
+
+Result<T> readJsonObject<T>(
+  String json, {
+  required Mapper<T> mapper,
+  Logger? logger,
+}) =>
+    Result(() {
+      final dynamic obj = jsonDecode(json);
+      if (obj is! Map<String, dynamic>) {
+        logger?.severe('Could not read json object as $T: expected an object.');
+        throw DataFormatException();
+      }
+      return mapper(obj);
+    });
+
+Result<IList<T>> readJsonListOfObjects<T>(
+  String json, {
+  required Mapper<T> mapper,
+  Logger? logger,
+}) =>
+    Result(() {
+      final dynamic list = jsonDecode(json);
+      if (list is! List<dynamic>) {
+        logger?.severe('Received json is not a list');
+        throw DataFormatException();
+      }
+      return IList(
+        list.map((e) {
+          if (e is! Map<String, dynamic>) {
+            logger?.severe('Could not read json object as $T');
+            throw DataFormatException();
+          }
+          return mapper(e);
+        }),
+      );
+    });
+
+// -- pick extensions
 
 extension Dartchess on Pick {
   Move asUciMoveOrThrow() {
@@ -296,41 +335,3 @@ extension ModelsPick on Pick {
     }
   }
 }
-
-typedef Mapper<T> = T Function(Map<String, dynamic>);
-
-Result<T> readJsonObject<T>(
-  String json, {
-  required Mapper<T> mapper,
-  Logger? logger,
-}) =>
-    Result(() {
-      final dynamic obj = jsonDecode(json);
-      if (obj is! Map<String, dynamic>) {
-        logger?.severe('Could not read json object as $T: expected an object.');
-        throw DataFormatException();
-      }
-      return mapper(obj);
-    });
-
-Result<IList<T>> readJsonListOfObjects<T>(
-  String json, {
-  required Mapper<T> mapper,
-  Logger? logger,
-}) =>
-    Result(() {
-      final dynamic list = jsonDecode(json);
-      if (list is! List<dynamic>) {
-        logger?.severe('Received json is not a list');
-        throw DataFormatException();
-      }
-      return IList(
-        list.map((e) {
-          if (e is! Map<String, dynamic>) {
-            logger?.severe('Could not read json object as $T');
-            throw DataFormatException();
-          }
-          return mapper(e);
-        }),
-      );
-    });

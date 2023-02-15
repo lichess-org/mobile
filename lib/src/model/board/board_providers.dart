@@ -4,32 +4,32 @@ import 'package:result_extensions/result_extensions.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/sound.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
-import 'package:lichess_mobile/src/model/game/game_event.dart';
-import 'package:lichess_mobile/src/model/game/game_state.dart';
+import 'package:lichess_mobile/src/model/board/board_repository.dart';
+import 'package:lichess_mobile/src/model/board/board_event.dart';
+import 'package:lichess_mobile/src/model/board/game_state.dart';
 
 final positionCursorProvider = StateProvider.autoDispose<int>((ref) => 0);
 
 final isBoardTurnedProvider = StateProvider.autoDispose<bool>((ref) => false);
 
-final gameStateProvider =
+final boardStateProvider =
     AutoDisposeNotifierProvider<GameStateNotifier, GameState?>(
   GameStateNotifier.new,
 );
 
-final gameActionProvider =
-    AutoDisposeNotifierProvider<GameActionNotifier, AsyncValue<void>>(
-  GameActionNotifier.new,
+final boardActionProvider =
+    AutoDisposeNotifierProvider<BoardActionNotifier, AsyncValue<void>>(
+  BoardActionNotifier.new,
 );
 
-final gameStreamProvider =
+final boardStreamProvider =
     StreamProvider.autoDispose.family<GameClock, GameId>((ref, gameId) {
-  final gameRepository = ref.watch(gameRepositoryProvider);
-  final gameStateNotifier = ref.read(gameStateProvider.notifier);
+  final boardRepository = ref.watch(boardRepositoryProvider);
+  final gameStateNotifier = ref.read(boardStateProvider.notifier);
   ref.onDispose(() {
-    gameRepository.dispose();
+    boardRepository.dispose();
   });
-  return gameRepository.gameStateEvents(gameId).map((event) {
+  return boardRepository.gameStateEvents(gameId).map((event) {
     return event.map(
       gameFull: (gameFull) {
         gameStateNotifier.onGameStateEvent(gameFull.state);
@@ -43,7 +43,7 @@ final gameStreamProvider =
   });
 });
 
-class GameActionNotifier extends AutoDisposeNotifier<AsyncValue<void>> {
+class BoardActionNotifier extends AutoDisposeNotifier<AsyncValue<void>> {
   @override
   AsyncValue<void> build() {
     return const AsyncData(null);
@@ -51,12 +51,12 @@ class GameActionNotifier extends AutoDisposeNotifier<AsyncValue<void>> {
 
   Future<void> abort(GameId id) async {
     state = const AsyncLoading();
-    state = (await ref.read(gameRepositoryProvider).abort(id)).asAsyncValue;
+    state = (await ref.read(boardRepositoryProvider).abort(id)).asAsyncValue;
   }
 
   Future<void> resign(GameId id) async {
     state = const AsyncLoading();
-    state = (await ref.read(gameRepositoryProvider).resign(id)).asAsyncValue;
+    state = (await ref.read(boardRepositoryProvider).resign(id)).asAsyncValue;
   }
 }
 
@@ -90,7 +90,7 @@ class GameStateNotifier extends AutoDisposeNotifier<GameState?> {
   }
 
   Future<void> onUserMove(GameId gameId, Move move) async {
-    final gameRepository = ref.read(gameRepositoryProvider);
+    final boardRepository = ref.read(boardRepositoryProvider);
     final savedState = state;
     if (state != null) {
       final newPos = state!.position.playToSan(move);
@@ -112,7 +112,7 @@ class GameStateNotifier extends AutoDisposeNotifier<GameState?> {
       state = newState;
 
       // TODO show error
-      final resp = await gameRepository.playMove(gameId, move);
+      final resp = await boardRepository.playMove(gameId, move);
       if (resp.isError) {
         state = savedState;
       }

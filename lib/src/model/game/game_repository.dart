@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 import 'package:result_extensions/result_extensions.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
@@ -10,20 +9,12 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/errors.dart';
-import 'package:lichess_mobile/src/common/http.dart';
+import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
-import 'api_event.dart';
-import 'game_event.dart';
 import 'game.dart';
-
-final gameRepositoryProvider = Provider<GameRepository>((ref) {
-  final apiClient = ref.watch(apiClientProvider);
-  final repo = GameRepository(Logger('GameRepository'), apiClient: apiClient);
-  ref.onDispose(() => repo.dispose());
-  return repo;
-});
+import 'player.dart';
 
 class GameRepository {
   const GameRepository(
@@ -69,59 +60,6 @@ class GameRepository {
         .flatMap(_decodeNdJsonGames);
   }
 
-  /// Stream the events reaching a lichess user in real time as ndjson.
-  Stream<ApiEvent> events() async* {
-    final resp =
-        await apiClient.stream(Uri.parse('$kLichessHost/api/stream/event'));
-    _log.fine('Start streaming events.');
-    yield* resp.stream
-        .toStringStream()
-        .where((event) => event.isNotEmpty && event != '\n')
-        .map((event) => jsonDecode(event) as Map<String, dynamic>)
-        .where(
-          (json) => json['type'] == 'gameStart' || json['type'] == 'gameFinish',
-        )
-        .map((json) => ApiEvent.fromJson(json))
-        .handleError((Object error) => _log.warning(error));
-  }
-
-  /// Stream the state of a game being played with the Board API, as ndjson.
-  Stream<GameEvent> gameStateEvents(GameId id) async* {
-    final resp = await apiClient
-        .stream(Uri.parse('$kLichessHost/api/board/game/stream/$id'));
-    yield* resp.stream
-        .toStringStream()
-        .where((event) => event.isNotEmpty && event != '\n')
-        .map((event) => jsonDecode(event) as Map<String, dynamic>)
-        .where(
-          (event) =>
-              event['type'] == 'gameFull' || event['type'] == 'gameState',
-        )
-        .map((json) => GameEvent.fromJson(json))
-        .handleError((Object error) => _log.warning(error));
-  }
-
-  FutureResult<void> playMove(GameId gameId, Move move) {
-    return apiClient.post(
-      Uri.parse('$kLichessHost/api/board/game/$gameId/move/${move.uci}'),
-      retry: true,
-    );
-  }
-
-  FutureResult<void> abort(GameId gameId) {
-    return apiClient.post(
-      Uri.parse('$kLichessHost/api/board/game/$gameId/abort'),
-      retry: true,
-    );
-  }
-
-  FutureResult<void> resign(GameId gameId) {
-    return apiClient.post(
-      Uri.parse('$kLichessHost/api/board/game/$gameId/resign'),
-      retry: true,
-    );
-  }
-
   Result<IList<ArchivedGameData>> _decodeNdJsonGames(http.Response response) {
     return Result(() {
       final lines = response.body.split('\n');
@@ -135,10 +73,6 @@ class GameRepository {
       _log.severe('Could not read json object as ArchivedGame: $error');
       return DataFormatException();
     });
-  }
-
-  void dispose() {
-    apiClient.close();
   }
 }
 
@@ -159,7 +93,10 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
     steps: pick('moves').letOrThrow((it) {
       final moves = it.asStringOrThrow().split(' ');
       final List<GameStep> steps = [];
-      Position position = data.variant.initialPosition;
+      // assume lichess always send initialFen with fromPosition
+      Position position = data.variant == Variant.fromPosition
+          ? Chess.fromSetup(Setup.parseFen(data.initialFen!))
+          : data.variant.initialPosition;
       int ply = 0;
       Duration? clock = clockData?.initial;
       for (final san in moves) {

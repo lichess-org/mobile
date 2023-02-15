@@ -14,26 +14,22 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:lichess_mobile/src/model/game/play_action_notifier.dart';
-import 'package:lichess_mobile/src/model/game/playable_game_providers.dart';
+import 'package:lichess_mobile/src/model/board/play_action_notifier.dart';
+import 'package:lichess_mobile/src/model/board/board_providers.dart';
 
 class PlayableGameScreen extends ConsumerWidget {
   const PlayableGameScreen({
     required this.game,
-    required this.account,
     super.key,
   });
 
   final PlayableGame game;
-  final User account;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AsyncValue<void>>(
-      gameActionProvider,
+      boardActionProvider,
       (_, state) => state.showSnackbarOnError(context),
     );
     ref.listen<AsyncValue<PlayableGame?>>(playActionProvider, (_, state) {
@@ -43,11 +39,10 @@ class PlayableGameScreen extends ConsumerWidget {
         ref.invalidate(playActionProvider);
         ref.invalidate(positionCursorProvider);
         ref.invalidate(isBoardTurnedProvider);
-        ref.invalidate(gameStateProvider);
+        ref.invalidate(boardStateProvider);
         Navigator.of(context).pushReplacement(
           MaterialPageRoute<void>(
-            builder: (context) =>
-                PlayableGameScreen(game: state.value!, account: account),
+            builder: (context) => PlayableGameScreen(game: state.value!),
           ),
         );
       }
@@ -64,7 +59,7 @@ class PlayableGameScreen extends ConsumerWidget {
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
     final isSoundMuted = ref.watch(muteSoundPrefProvider);
-    final gameState = ref.watch(gameStateProvider);
+    final gameState = ref.watch(boardStateProvider);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -86,14 +81,14 @@ class PlayableGameScreen extends ConsumerWidget {
           )
         ],
       ),
-      body: _BoardBody(game: game, account: account),
-      bottomNavigationBar: _BottomBar(game: game, account: account),
+      body: _BoardBody(game: game),
+      bottomNavigationBar: _BottomBar(game: game),
     );
   }
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
     final isSoundMuted = ref.watch(muteSoundPrefProvider);
-    final gameState = ref.watch(gameStateProvider);
+    final gameState = ref.watch(boardStateProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 16.0),
@@ -119,8 +114,8 @@ class PlayableGameScreen extends ConsumerWidget {
       child: SafeArea(
         child: Column(
           children: [
-            Expanded(child: _BoardBody(game: game, account: account)),
-            _BottomBar(game: game, account: account),
+            Expanded(child: _BoardBody(game: game)),
+            _BottomBar(game: game),
           ],
         ),
       ),
@@ -161,16 +156,15 @@ class PlayableGameScreen extends ConsumerWidget {
 }
 
 class _BoardBody extends ConsumerWidget {
-  const _BoardBody({required this.game, required this.account});
+  const _BoardBody({required this.game});
 
   final PlayableGame game;
-  final User account;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet = ref.watch(pieceSetPrefProvider);
-    final gameState = ref.watch(gameStateProvider);
-    final gameClockStream = ref.watch(gameStreamProvider(game.id));
+    final gameState = ref.watch(boardStateProvider);
+    final gameClockStream = ref.watch(boardStreamProvider(game.id));
     final positionCursor = ref.watch(positionCursorProvider);
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final isReplaying =
@@ -180,9 +174,7 @@ class _BoardBody extends ConsumerWidget {
       data: (clock) {
         final black = BoardPlayer(
           key: const ValueKey('black-player'),
-          name: game.black.name,
-          rating: game.black.rating,
-          title: game.black.title,
+          player: game.black,
           active: gameState != null &&
               gameState.status == GameStatus.started &&
               gameState.position.fullmoves > 1 &&
@@ -191,9 +183,7 @@ class _BoardBody extends ConsumerWidget {
         );
         final white = BoardPlayer(
           key: const ValueKey('white-player'),
-          name: game.white.name,
-          rating: game.white.rating,
-          title: game.white.title,
+          player: game.white,
           active: gameState != null &&
               gameState.status == GameStatus.started &&
               gameState.position.fullmoves > 1 &&
@@ -226,7 +216,7 @@ class _BoardBody extends ConsumerWidget {
                 : gameState?.lastMove?.cg,
             sideToMove: gameState?.position.turn.cg ?? game.orientation.cg,
             onMove: (cg.Move move, {bool? isPremove}) => ref
-                .read(gameStateProvider.notifier)
+                .read(boardStateProvider.notifier)
                 .onUserMove(game.id, Move.fromUci(move.uci)!),
           ),
           topPlayer: topPlayer,
@@ -237,16 +227,12 @@ class _BoardBody extends ConsumerWidget {
       },
       loading: () {
         final player = BoardPlayer(
-          name: game.player.name,
-          rating: game.player.rating,
-          title: game.player.title,
+          player: game.player,
           active: false,
           clock: Duration.zero,
         );
         final opponent = BoardPlayer(
-          name: game.opponent.name,
-          rating: game.opponent.rating,
-          title: game.opponent.title,
+          player: game.opponent,
           active: false,
           clock: Duration.zero,
         );
@@ -272,15 +258,14 @@ class _BoardBody extends ConsumerWidget {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.game, required this.account});
+  const _BottomBar({required this.game});
 
   final PlayableGame game;
-  final User account;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final positionCursor = ref.watch(positionCursorProvider);
-    final gameState = ref.watch(gameStateProvider);
+    final gameState = ref.watch(boardStateProvider);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -349,8 +334,8 @@ class _BottomBar extends ConsumerWidget {
   }
 
   Future<void> _showGameMenu(BuildContext context, WidgetRef ref) {
-    final gameState = ref.watch(gameStateProvider);
-    final gameActionAsync = ref.watch(gameActionProvider);
+    final gameState = ref.watch(boardStateProvider);
+    final gameActionAsync = ref.watch(boardActionProvider);
     final playActionAsync = ref.watch(playActionProvider);
 
     return showAdaptiveActionSheet(
@@ -370,7 +355,7 @@ class _BottomBar extends ConsumerWidget {
             label: Text(context.l10n.abortTheGame),
             onPressed: (context) {
               if (!gameActionAsync.isLoading) {
-                ref.read(gameActionProvider.notifier).abort(game.id);
+                ref.read(boardActionProvider.notifier).abort(game.id);
               }
             },
           ),
@@ -380,7 +365,7 @@ class _BottomBar extends ConsumerWidget {
             label: Text(context.l10n.resignTheGame),
             onPressed: (context) {
               if (!gameActionAsync.isLoading) {
-                ref.read(gameActionProvider.notifier).resign(game.id);
+                ref.read(boardActionProvider.notifier).resign(game.id);
               }
             },
           ),
@@ -393,7 +378,6 @@ class _BottomBar extends ConsumerWidget {
             onPressed: (context) {
               if (!playActionAsync.isLoading) {
                 ref.read(playActionProvider.notifier).createGame(
-                      account: account,
                       side: game.orientation.opposite,
                     );
               }

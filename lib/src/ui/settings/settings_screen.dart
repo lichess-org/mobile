@@ -12,8 +12,7 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/model/auth/auth_actions_notifier.dart';
-import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 
 import './theme_mode_screen.dart';
@@ -51,11 +50,11 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModePrefProvider);
-    final authState = ref.watch(authStateChangesProvider);
-    final authActionsAsync = ref.watch(authActionsProvider);
+    final authUser = ref.watch(authUserProvider);
+    final authController = ref.watch(authControllerProvider);
     final pieceSet = ref.watch(pieceSetPrefProvider);
     return LoadingOverlay(
-      isLoading: authActionsAsync.isLoading,
+      isLoading: authController.isLoading,
       progressIndicator: const CircularProgressIndicator.adaptive(),
       child: SafeArea(
         child: ListView(
@@ -103,31 +102,24 @@ class _Body extends ConsumerWidget {
                 ),
               ],
             ),
-            authState.maybeWhen(
-              data: (data) {
-                return data != null
-                    ? ListSection(
-                        children: [
-                          PlatformListTile(
-                            leading: const Icon(Icons.exit_to_app),
-                            title: Text(context.l10n.logOut),
-                            onTap: authActionsAsync.isLoading
-                                ? null
-                                : () async {
-                                    await ref
-                                        .read(authActionsProvider.notifier)
-                                        .signOut();
-                                    ref
-                                        .read(currentBottomTabProvider.notifier)
-                                        .state = BottomTab.play;
-                                  },
-                          ),
-                        ],
-                      )
-                    : const SizedBox.shrink();
-              },
-              orElse: () => const SizedBox.shrink(),
-            ),
+            if (authUser != null)
+              ListSection(
+                children: [
+                  PlatformListTile(
+                    leading: const Icon(Icons.exit_to_app),
+                    title: Text(context.l10n.logOut),
+                    onTap: authController.isLoading
+                        ? null
+                        : () async {
+                            await ref
+                                .read(authControllerProvider.notifier)
+                                .signOut();
+                            ref.read(currentBottomTabProvider.notifier).state =
+                                BottomTab.play;
+                          },
+                  ),
+                ],
+              ),
           ],
         ),
       ),

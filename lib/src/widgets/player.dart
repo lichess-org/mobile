@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import './countdown_clock.dart';
 
 /// A widget to display player information above/below the chess board.
@@ -9,17 +10,13 @@ import './countdown_clock.dart';
 /// It shows the full player name with title and rating and the clock if relevant.
 class BoardPlayer extends StatelessWidget {
   const BoardPlayer({
-    required this.name,
-    this.title,
-    this.rating,
+    required this.player,
     this.active,
     this.clock,
     super.key,
   });
 
-  final String name;
-  final int? rating;
-  final String? title;
+  final Player player;
   final Duration? clock;
   final bool? active;
 
@@ -36,9 +33,9 @@ class BoardPlayer extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  if (title != null) ...[
+                  if (player.title != null) ...[
                     Text(
-                      title!,
+                      player.title!,
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -49,7 +46,7 @@ class BoardPlayer extends StatelessWidget {
                   ],
                   Flexible(
                     child: Text(
-                      name,
+                      player.name,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 18,
@@ -58,9 +55,9 @@ class BoardPlayer extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 3),
-                  if (rating != null)
+                  if (player.rating != null)
                     Text(
-                      rating.toString(),
+                      player.rating.toString(),
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 13),
                     ),

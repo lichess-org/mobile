@@ -3,7 +3,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/model/game/time_control.dart';
 
 part 'puzzle.freezed.dart';
 part 'puzzle.g.dart';
@@ -42,7 +41,7 @@ class PuzzleGame with _$PuzzleGame {
     required PuzzlePlayer white,
     required PuzzlePlayer black,
     required String pgn,
-    TimeInc? clock,
+    TimeIncrement? clock,
   }) = _PuzzleGame;
 
   factory PuzzleGame.fromJson(Map<String, dynamic> json) =>

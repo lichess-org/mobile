@@ -4,9 +4,9 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
-import 'game_status.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 
-part 'game_event.freezed.dart';
+part 'board_event.freezed.dart';
 
 /// Represents a game event from lichess API.
 ///
@@ -15,29 +15,29 @@ part 'game_event.freezed.dart';
 ///
 /// We supports here only `gameFull` and `gameState`.
 @freezed
-class GameEvent with _$GameEvent {
-  const factory GameEvent.gameState({
+class BoardEvent with _$BoardEvent {
+  const factory BoardEvent.gameState({
     required String moves,
     required int whiteTime,
     required int blackTime,
     required GameStatus status,
   }) = GameStateEvent;
 
-  const factory GameEvent.gameFull({
+  const factory BoardEvent.gameFull({
     required GameId id,
     required String initialFen,
     required GameStateEvent state,
   }) = GameFullEvent;
 
-  factory GameEvent.fromJson(Map<String, dynamic> json) {
-    return GameEvent.fromPick(pick(json).required());
+  factory BoardEvent.fromJson(Map<String, dynamic> json) {
+    return BoardEvent.fromPick(pick(json).required());
   }
 
-  factory GameEvent.fromPick(RequiredPick pick) {
+  factory BoardEvent.fromPick(RequiredPick pick) {
     final type = pick('type').asStringOrThrow();
     switch (type) {
       case 'gameFull':
-        return GameEvent.gameFull(
+        return BoardEvent.gameFull(
           id: pick('id').asGameIdOrThrow(),
           initialFen: pick('initialFen').asStringOrThrow(),
           state: pick('state').letOrThrow((it) => _gameStateEventfromPick(it)),

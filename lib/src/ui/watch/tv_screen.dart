@@ -129,9 +129,7 @@ class _Body extends ConsumerWidget {
                 : null;
             final topPlayerWidget = topPlayer != null
                 ? BoardPlayer(
-                    name: topPlayer.name,
-                    title: topPlayer.title,
-                    rating: topPlayer.rating,
+                    player: topPlayer.asPlayer,
                     clock: Duration(seconds: topPlayer.seconds ?? 0),
                     active:
                         !position.isGameOver && position.turn == topPlayer.side,
@@ -139,9 +137,7 @@ class _Body extends ConsumerWidget {
                 : kEmptyWidget;
             final bottomPlayerWidget = bottomPlayer != null
                 ? BoardPlayer(
-                    name: bottomPlayer.name,
-                    title: bottomPlayer.title,
-                    rating: bottomPlayer.rating,
+                    player: bottomPlayer.asPlayer,
                     clock: Duration(seconds: bottomPlayer.seconds ?? 0),
                     active: !position.isGameOver &&
                         position.turn == bottomPlayer.side,

@@ -3,14 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:lichess_mobile/src/ui/auth/sign_in_widget.dart';
-import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
-import '../../model/auth/fake_auth_repository.dart';
+import 'package:lichess_mobile/src/model/account/account_providers.dart';
 import '../../utils.dart';
+import '../../model/account/fake_account_repository.dart';
 
 void main() {
   testWidgets(
-    'Auth widget sign in and sign out',
+    'SignInWidget',
     (WidgetTester tester) async {
       final app = await buildTestApp(
         tester,
@@ -30,7 +30,8 @@ void main() {
         ProviderScope(
           overrides: [
             ...defaultProviderOverrides,
-            authRepositoryProvider.overrideWithValue(FakeAuthRepository(null)),
+            accountRepositoryProvider
+                .overrideWithValue(FakeAccountRepository()),
             currentBrightnessProvider.overrideWithValue(Brightness.dark),
           ],
           child: app,

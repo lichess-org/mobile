@@ -27,7 +27,7 @@ dependencies:
   json_annotation: ^4.7.0
   http: ^0.13.5
   flutter_appauth: ^4.2.1
-  flutter_secure_storage: ^7.0.1
+  flutter_secure_storage: ^8.0.0
   rxdart: ^0.27.6
   fpdart: ^0.4.0
   logging: ^1.1.0
@@ -68,7 +68,7 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.3.2
-  riverpod_generator: ^1.1.1
+  riverpod_generator: ^1.2.0
   dart_code_metrics: ^5.5.1
   flutter_test:
     sdk: flutter
