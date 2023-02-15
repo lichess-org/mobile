@@ -20,12 +20,4 @@ class Streamer with _$Streamer {
     String? twitch,
     String? youTube,
   }) = _Streamer;
-
-  String getLink() {
-    if (streamService == 'twitch') {
-      return twitch!;
-    } else {
-      return youTube!;
-    }
-  }
 }
