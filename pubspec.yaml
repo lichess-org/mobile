@@ -45,7 +45,6 @@ dependencies:
   deep_pick: ^0.10.0
   timeago: ^3.3.0
   collection: ^1.16.0 # can't upgrade because of flutter_test
-  loading_overlay: ^0.3.0
   # TODO remove that package
   modal_bottom_sheet:
     git:
