@@ -28,8 +28,6 @@ dependencies:
   http: ^0.13.5
   flutter_appauth: ^4.2.1
   flutter_secure_storage: ^8.0.0
-  rxdart: ^0.27.6
-  fpdart: ^0.4.0
   logging: ^1.1.0
   shared_preferences: ^2.0.15
   cached_network_image: ^3.2.2
