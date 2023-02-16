@@ -3,10 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:logging/logging.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/common/api_client.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/auth/session_repository.dart';
 import 'package:lichess_mobile/src/ui/account/profile_screen.dart';
@@ -14,30 +13,16 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../utils.dart';
 import '../../model/auth/fake_session_repository.dart';
 
-class MockClient extends Mock implements http.Client {}
-
 class MockLogger extends Mock implements Logger {}
 
 void main() {
-  final mockClient = MockClient();
-  final mockLogger = MockLogger();
-
-  setUpAll(() {
-    when(
-      () => mockClient.get(
-        Uri.parse(
-          '$kLichessHost/api/games/user/$testUserId?max=10&moves=false&lastFen=true',
-        ),
-        headers: any(
-          named: 'headers',
-          that: sameHeaders({'Accept': 'application/x-ndjson'}),
-        ),
-      ),
-    ).thenAnswer((_) => mockResponse(userGameResponse, 200));
-
-    when(
-      () => mockClient.get(Uri.parse('$kLichessHost/api/account')),
-    ).thenAnswer((_) => mockResponse(testAccountResponse, 200));
+  final mockClient = MockClient((request) {
+    if (request.url.path == '/api/games/user/$testUserId') {
+      return mockResponse(userGameResponse, 200);
+    } else if (request.url.path == '/api/account') {
+      return mockResponse(testAccountResponse, 200);
+    }
+    return mockResponse('', 404);
   });
 
   group('ProfileScreen', () {
@@ -56,11 +41,10 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              ...defaultProviderOverrides,
+              ...await makeDefaultProviderOverrides(),
               sessionRepositoryProvider
                   .overrideWithValue(FakeSessionRepository(fakeSession)),
-              apiClientProvider
-                  .overrideWithValue(ApiClient(mockLogger, mockClient)),
+              httpClientProvider.overrideWithValue(mockClient),
             ],
             child: app,
           ),

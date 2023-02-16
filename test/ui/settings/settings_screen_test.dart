@@ -34,7 +34,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              ...defaultProviderOverrides,
+              ...await makeDefaultProviderOverrides(),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
             ],
             child: app,
@@ -72,7 +72,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              ...defaultProviderOverrides,
+              ...await makeDefaultProviderOverrides(),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
             ],
             child: app,
@@ -105,7 +105,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              ...defaultProviderOverrides,
+              ...await makeDefaultProviderOverrides(),
               sessionRepositoryProvider
                   .overrideWithValue(FakeSessionRepository(fakeSession)),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),

@@ -8,7 +8,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:chessground/chessground.dart' as cg;
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/common/package_info.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/session_repository.dart';
@@ -16,19 +18,24 @@ import 'package:lichess_mobile/src/model/settings/providers.dart';
 import './model/auth/fake_auth_repository.dart';
 import './model/auth/fake_session_repository.dart';
 
-final List<Override> defaultProviderOverrides = List.unmodifiable([
-  authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
-  sessionRepositoryProvider.overrideWithValue(FakeSessionRepository()),
-  currentBrightnessProvider.overrideWithValue(Brightness.dark),
-  packageInfoProvider.overrideWithValue(
-    PackageInfo(
-      appName: 'lichess_mobile_test',
-      version: 'test',
-      buildNumber: '0.0.0',
-      packageName: 'lichess_mobile_test',
+Future<List<Override>> makeDefaultProviderOverrides() async {
+  SharedPreferences.setMockInitialValues({});
+  final sharedPreferences = await SharedPreferences.getInstance();
+  return List.unmodifiable([
+    sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+    authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
+    sessionRepositoryProvider.overrideWithValue(FakeSessionRepository()),
+    currentBrightnessProvider.overrideWithValue(Brightness.dark),
+    packageInfoProvider.overrideWithValue(
+      PackageInfo(
+        appName: 'lichess_mobile_test',
+        version: 'test',
+        buildNumber: '0.0.0',
+        packageName: 'lichess_mobile_test',
+      ),
     ),
-  ),
-]);
+  ]);
+}
 
 // iPhone 14 screen size
 const double _kTestScreenWidth = 390.0;
@@ -46,6 +53,11 @@ Future<T> delayedAnswer<T>(T value) =>
 Future<http.Response> mockResponse(String body, int code) =>
     Future<void>.delayed(const Duration(milliseconds: 20))
         .then((_) => http.Response(body, code));
+
+Future<http.StreamedResponse> mockStreamedResponse(String body, int code) =>
+    Future<void>.delayed(const Duration(milliseconds: 20)).then(
+      (_) => http.StreamedResponse(Stream.value(body).map(utf8.encode), code),
+    );
 
 Future<http.StreamedResponse> mockHttpStreamFromIterable(
   Iterable<String> events,
@@ -150,7 +162,9 @@ class _SameRequest extends Matcher {
   bool matches(Object? item, Map<dynamic, dynamic> matchState) =>
       item is http.BaseRequest &&
       item.method == _expected.method &&
-      item.url == _expected.url;
+      item.url == _expected.url &&
+      mapEquals(item.headers, _expected.headers);
+
   @override
   Description describe(Description description) =>
       description.add('same Request as ').addDescriptionOf(_expected);

@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:logging/logging.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
@@ -18,8 +17,6 @@ import '../../utils.dart';
 
 class MockClient extends Mock implements http.Client {}
 
-class MockLogger extends Mock implements Logger {}
-
 class MockAuthRepository extends Mock implements AuthRepository {}
 
 class MockSessionRepository extends Mock implements SessionRepository {}
@@ -30,7 +27,6 @@ class Listener<T> extends Mock {
 
 void main() {
   final mockClient = MockClient();
-  final mockLogger = MockLogger();
   final mockSessionRepository = MockSessionRepository();
   final mockAuthRepository = MockAuthRepository();
 
@@ -55,7 +51,7 @@ void main() {
       overrides: [
         authRepositoryProvider.overrideWithValue(authRepository),
         sessionRepositoryProvider.overrideWithValue(sessionRepository),
-        apiClientProvider.overrideWithValue(ApiClient(mockLogger, mockClient)),
+        httpClientProvider.overrideWithValue(mockClient),
       ],
     );
     addTearDown(container.dispose);

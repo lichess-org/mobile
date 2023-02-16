@@ -1,36 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:http/http.dart' as http;
-import 'package:logging/logging.dart';
+import 'package:http/testing.dart';
 
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/ui/auth/sign_in_widget.dart';
 import '../../utils.dart';
 
-class MockClient extends Mock implements http.Client {}
-
-class MockLogger extends Mock implements Logger {}
-
 void main() {
-  final mockClient = MockClient();
-  final mockLogger = MockLogger();
+  final mockClient = MockClient((request) {
+    if (request.url.path != '/api/account') {
+      return mockResponse('', 404);
+    }
+    return mockResponse(testAccountResponse, 200);
+  });
 
   testWidgets(
     'SignInWidget',
     (WidgetTester tester) async {
-      when(
-        () => mockClient.get(
-          Uri.parse('$kLichessHost/api/account'),
-          headers: any(
-            named: 'headers',
-            that: sameHeaders({'Authorization': 'Bearer testToken'}),
-          ),
-        ),
-      ).thenAnswer((_) => mockResponse(testAccountResponse, 200));
-
       final app = await buildTestApp(
         tester,
         home: Consumer(
@@ -48,9 +35,8 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            ...defaultProviderOverrides,
-            apiClientProvider
-                .overrideWithValue(ApiClient(mockLogger, mockClient)),
+            ...await makeDefaultProviderOverrides(),
+            httpClientProvider.overrideWithValue(mockClient),
           ],
           child: app,
         ),

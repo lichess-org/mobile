@@ -118,6 +118,7 @@ class _Body extends ConsumerWidget {
             loading: () => const ListSection(
               children: [
                 PlatformListTile(
+                  leading: Icon(Icons.exit_to_app),
                   title: Center(child: ButtonLoadingIndicator()),
                 ),
               ],

@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/api_client.dart';
-import 'package:lichess_mobile/src/common/sound.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/ui/game/create_game_screen.dart';
@@ -23,42 +19,37 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 import '../../utils.dart';
 import '../../model/auth/fake_session_repository.dart';
 
-class MockClient extends Mock implements http.Client {}
-
-class MockLogger extends Mock implements Logger {}
-
-class MockSoundService extends Mock implements SoundService {}
-
 void main() {
-  final mockLogger = MockLogger();
-  final mockClient = MockClient();
-  final mockSoundService = MockSoundService();
+  final mockClient = MockClient.streaming((request, bodyStream) {
+    if (request.url.path == '/api/user/maia1') {
+      return mockStreamedResponse(maiaResponses['maia1']!, 200);
+    } else if (request.url.path == '/api/user/maia5') {
+      return mockStreamedResponse(maiaResponses['maia5']!, 200);
+    } else if (request.url.path == '/api/user/maia9') {
+      return mockStreamedResponse(maiaResponses['maia9']!, 200);
+    } else if (request.url.path == '/api/users/status') {
+      return mockStreamedResponse(maiaStatusResponses, 200);
+    } else if (request.url.path == '/api/account') {
+      return mockStreamedResponse(testAccountResponse, 200);
+    } else if (request.method == 'POST' &&
+        request.url.path == '/api/challenge/maia1') {
+      return mockStreamedResponse('ok', 200);
+    } else if (request.method == 'POST' &&
+        request.url.path == '/api/challenge/maia1') {
+      return mockStreamedResponse('ok', 200);
+    } else if (request.url.path == '/api/stream/event') {
+      return mockHttpStreamFromIterable([gameStartEvent]);
+    } else if (request.url.path == '/api/board/game/stream/rCRw1AuO') {
+      return mockHttpStreamFromIterable([boardEvent]);
+    }
 
-  setUpAll(() {
-    when(() => mockClient.get(Uri.parse('$kLichessHost/api/user/maia1')))
-        .thenAnswer((_) => mockResponse(maiaResponses['maia1']!, 200));
-
-    when(() => mockClient.get(Uri.parse('$kLichessHost/api/user/maia5')))
-        .thenAnswer((_) => mockResponse(maiaResponses['maia5']!, 200));
-
-    when(() => mockClient.get(Uri.parse('$kLichessHost/api/user/maia9')))
-        .thenAnswer((_) => mockResponse(maiaResponses['maia9']!, 200));
-    when(
-      () => mockClient.get(
-        Uri.parse('$kLichessHost/api/users/status?ids=maia1,maia5,maia9'),
-      ),
-    ).thenAnswer((_) => mockResponse(maiaStatusResponses, 200));
-
-    registerFallbackValue(http.Request('GET', Uri.parse('http://api.test')));
+    return mockStreamedResponse('', 404);
   });
 
-  group('PlayScreen', () {
+  group('CreateGameScreen', () {
     testWidgets(
       'meets accessibility guidelines',
       (tester) async {
-        SharedPreferences.setMockInitialValues({});
-        final sharedPreferences = await SharedPreferences.getInstance();
-
         final SemanticsHandle handle = tester.ensureSemantics();
 
         final app = await buildTestApp(
@@ -73,10 +64,8 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              ...defaultProviderOverrides,
-              sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-              apiClientProvider
-                  .overrideWithValue(ApiClient(mockLogger, mockClient)),
+              ...await makeDefaultProviderOverrides(),
+              httpClientProvider.overrideWithValue(mockClient),
             ],
             child: app,
           ),
@@ -97,9 +86,6 @@ void main() {
     testWidgets(
       'loads maia bots info',
       (tester) async {
-        SharedPreferences.setMockInitialValues({});
-        final sharedPreferences = await SharedPreferences.getInstance();
-
         final app = await buildTestApp(
           tester,
           home: Consumer(
@@ -112,10 +98,8 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              ...defaultProviderOverrides,
-              sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-              apiClientProvider
-                  .overrideWithValue(ApiClient(mockLogger, mockClient)),
+              ...await makeDefaultProviderOverrides(),
+              httpClientProvider.overrideWithValue(mockClient),
             ],
             child: app,
           ),
@@ -209,10 +193,9 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              ...defaultProviderOverrides,
+              ...await makeDefaultProviderOverrides(),
               sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-              apiClientProvider
-                  .overrideWithValue(ApiClient(mockLogger, mockClient)),
+              httpClientProvider.overrideWithValue(mockClient),
             ],
             child: app,
           ),
@@ -240,94 +223,6 @@ void main() {
     testWidgets(
       'creates a game',
       (tester) async {
-        SharedPreferences.setMockInitialValues({});
-        final sharedPreferences = await SharedPreferences.getInstance();
-
-        const gameIdTest = 'rCRw1AuO';
-
-        when(
-          () => mockClient.get(
-            Uri.parse('$kLichessHost/api/account'),
-          ),
-        ).thenAnswer((_) => mockResponse(testAccountResponse, 200));
-
-        when(
-          () => mockClient.post(
-            Uri.parse('$kLichessHost/api/challenge/maia1'),
-            body: {
-              'clock.limit': '${5 * 60}',
-              'clock.increment': '3',
-              'color': 'random',
-            },
-          ),
-        ).thenAnswer((_) => mockResponse('ok', 200));
-
-        when(
-          () => mockClient.send(
-            any(
-              that: sameRequest(
-                http.Request(
-                  'GET',
-                  Uri.parse('$kLichessHost/api/stream/event'),
-                ),
-              ),
-            ),
-          ),
-        ).thenAnswer(
-          (_) => mockHttpStreamFromIterable([
-            '''
-{
-  "type": "gameStart",
-  "game": {
-    "gameId": "$gameIdTest",
-    "fullId": "${gameIdTest}vonq",
-    "color": "black",
-    "fen": "$kInitialFEN",
-    "hasMoved": true,
-    "isMyTurn": false,
-    "opponent": {
-      "id": "maia1",
-      "rating": 1541,
-      "username": "maia1"
-    },
-    "perf": "blitz",
-    "rated": false,
-    "secondsLeft": 180,
-    "source": "friend",
-    "speed": "blitz",
-    "variant": {
-      "key": "standard",
-      "name": "Standard"
-    },
-    "compat": {
-      "bot": false,
-      "board": true
-    }
-  }
-}
-'''
-          ]),
-        );
-
-        when(
-          () => mockClient.send(
-            any(
-              that: sameRequest(
-                http.Request(
-                  'GET',
-                  Uri.parse(
-                    '$kLichessHost/api/board/game/stream/$gameIdTest',
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ).thenAnswer(
-          (_) => mockHttpStreamFromIterable([
-            '{ "type": "gameFull", "id": "$gameIdTest", "speed": "blitz", "initialFen": "$kInitialFEN", "white": { "id": "white", "name": "White", "rating": 1405 }, "black": { "id": "black", "name": "Black", "rating": 1789 }, "state": { "type": "gameState", "moves": "", "wtime": 180000, "btime": 180000, "status": "started" }}'
-          ]),
-        );
-
         final app = await buildTestApp(
           tester,
           home: Consumer(
@@ -340,13 +235,10 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              ...defaultProviderOverrides,
-              sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+              ...await makeDefaultProviderOverrides(),
               sessionRepositoryProvider
                   .overrideWithValue(FakeSessionRepository(fakeSession)),
-              apiClientProvider
-                  .overrideWithValue(ApiClient(mockLogger, mockClient)),
-              soundServiceProvider.overrideWithValue(mockSoundService),
+              httpClientProvider.overrideWithValue(mockClient),
             ],
             child: app,
           ),
@@ -521,3 +413,38 @@ const testAccountResponse = '''
   }
 }
 ''';
+
+const gameStartEvent = '''
+{
+  "type": "gameStart",
+  "game": {
+    "gameId": "rCRw1AuO",
+    "fullId": "rCRw1AuOvonq",
+    "color": "black",
+    "fen": "$kInitialFEN",
+    "hasMoved": true,
+    "isMyTurn": false,
+    "opponent": {
+      "id": "maia1",
+      "rating": 1541,
+      "username": "maia1"
+    },
+    "perf": "blitz",
+    "rated": false,
+    "secondsLeft": 180,
+    "source": "friend",
+    "speed": "blitz",
+    "variant": {
+      "key": "standard",
+      "name": "Standard"
+    },
+    "compat": {
+      "bot": false,
+      "board": true
+    }
+  }
+}
+''';
+
+const boardEvent =
+    '{ "type": "gameFull", "id": "rCRw1AuO", "speed": "blitz", "initialFen": "$kInitialFEN", "white": { "id": "white", "name": "White", "rating": 1405 }, "black": { "id": "black", "name": "Black", "rating": 1789 }, "state": { "type": "gameState", "moves": "", "wtime": 180000, "btime": 180000, "status": "started" }}';

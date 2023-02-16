@@ -1,57 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:chessground/chessground.dart' as cg;
 
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/api_client.dart';
-import 'package:lichess_mobile/src/common/sound.dart';
-import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/ui/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import '../../utils.dart';
 
-class MockClient extends Mock implements http.Client {}
-
-class MockLogger extends Mock implements Logger {}
-
-class MockSoundService extends Mock implements SoundService {}
-
 void main() {
-  final mockLogger = MockLogger();
-  final mockClient = MockClient();
-  final mockSoundService = MockSoundService();
-
-  setUpAll(() {
-    when(
-      () => mockClient.get(
-        Uri.parse('$kLichessHost/game/export/qVChCOTc'),
-        headers: any(
-          named: 'headers',
-          that: sameHeaders({'Accept': 'application/json'}),
-        ),
-      ),
-    ).thenAnswer((_) => mockResponse(gameResponse, 200));
-    registerFallbackValue(http.Request('GET', Uri.parse('http://api.test')));
+  final mockClient = MockClient((request) {
+    if (request.url.path == '/game/export/qVChCOTc') {
+      return mockResponse(gameResponse, 200);
+    }
+    return mockResponse('', 404);
   });
 
   group('ArchivedGameScreen', () {
     testWidgets(
       'displays game data and last fen immediately, then moves',
       (tester) async {
-        SharedPreferences.setMockInitialValues({});
-        final sharedPreferences = await SharedPreferences.getInstance();
-
         final app = await buildTestApp(
           tester,
           home: Consumer(
@@ -67,11 +42,8 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              ...defaultProviderOverrides,
-              sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-              apiClientProvider
-                  .overrideWithValue(ApiClient(mockLogger, mockClient)),
-              soundServiceProvider.overrideWithValue(mockSoundService),
+              ...await makeDefaultProviderOverrides(),
+              httpClientProvider.overrideWithValue(mockClient),
             ],
             child: app,
           ),
@@ -126,9 +98,6 @@ void main() {
     );
 
     testWidgets('navigate game positions', (tester) async {
-      SharedPreferences.setMockInitialValues({});
-      final sharedPreferences = await SharedPreferences.getInstance();
-
       final app = await buildTestApp(
         tester,
         home: Consumer(
@@ -144,11 +113,8 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            ...defaultProviderOverrides,
-            sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-            apiClientProvider
-                .overrideWithValue(ApiClient(mockLogger, mockClient)),
-            soundServiceProvider.overrideWithValue(mockSoundService),
+            ...await makeDefaultProviderOverrides(),
+            httpClientProvider.overrideWithValue(mockClient),
           ],
           child: app,
         ),

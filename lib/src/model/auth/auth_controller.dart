@@ -29,10 +29,12 @@ class AuthController extends _$AuthController {
       (oAuthResp) {
         if (oAuthResp.accessToken != null) {
           final sessionRepo = ref.read(sessionRepositoryProvider);
-          final apiClient = ref.read(apiClientProvider);
-          return apiClient.get(
-            Uri.parse('$kLichessHost/api/account'),
-            headers: {'Authorization': 'Bearer ${oAuthResp.accessToken}'},
+          final client = ref.read(httpClientProvider);
+          return FutureResultExtension.guard(
+            () => client.get(
+              Uri.parse('$kLichessHost/api/account'),
+              headers: {'Authorization': 'Bearer ${oAuthResp.accessToken}'},
+            ),
           ).flatMap((response) {
             return readJsonObject(response.body, mapper: User.fromJson)
                 .map((user) {
@@ -67,6 +69,11 @@ class AuthController extends _$AuthController {
       onSuccess: (_) => _deleteSession(),
       onError: (_, __) => _deleteSession(),
     );
+    state = const AsyncData(null);
+  }
+
+  Future<void> invalidateSession() async {
+    await _deleteSession();
     state = const AsyncData(null);
   }
 
