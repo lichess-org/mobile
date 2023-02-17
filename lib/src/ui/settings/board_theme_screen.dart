@@ -54,17 +54,15 @@ class _Body extends ConsumerWidget {
             ),
             choices: BoardTheme.values,
             selectedItem: boardTheme,
-            leadingBuilder: (t) => ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 192,
-              ),
+            titleBuilder: (t) => Text(t.label),
+            subtitleBuilder: (t) => Align(
+              alignment: Alignment.topLeft,
               child: Image.asset(
                 "assets/board-thumbnails/${t.name}.jpg",
                 height: 32,
                 errorBuilder: (context, o, st) => const SizedBox.shrink(),
               ),
             ),
-            titleBuilder: (t) => Text(t.label),
             onSelectedItemChanged: onChanged,
           )
         ],

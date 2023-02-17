@@ -66,7 +66,7 @@ class _Body extends ConsumerWidget {
             choices: PieceSet.values,
             selectedItem: pieceSet,
             titleBuilder: (t) => Text(t.label),
-            leadingBuilder: (t) => ConstrainedBox(
+            subtitleBuilder: (t) => ConstrainedBox(
               constraints: const BoxConstraints(
                 maxWidth: 192,
               ),
