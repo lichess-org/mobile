@@ -108,29 +108,36 @@ class _WatchTvWidget extends ConsumerWidget {
             debugPrint(
               'SEVERE: [WatchTvWidget] could not load tv stream; $err\n$stackTrace',
             );
-            return emptyBoard(errorMessage: 'Could not load TV Stream');
+            return const EmptyBoard(errorMessage: 'Could not load TV Stream');
           },
-          loading: () => emptyBoard(),
+          loading: () => const EmptyBoard(),
         ),
       ],
     );
   }
 }
 
-Widget emptyBoard({String? errorMessage}) {
-  return ConstrainedBox(
-    constraints: BoxConstraints.tight(const Size.square(350)),
-    child: GameBoardLayout(
-      topPlayer: kEmptyWidget,
-      bottomPlayer: kEmptyWidget,
-      boardData: const BoardData(
-        interactableSide: InteractableSide.none,
-        orientation: Side.white,
-        fen: kEmptyFen,
+class EmptyBoard extends StatelessWidget {
+  const EmptyBoard({this.errorMessage});
+
+  final String? errorMessage;
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: BoxConstraints.tight(const Size.square(350)),
+      child: GameBoardLayout(
+        topPlayer: kEmptyWidget,
+        bottomPlayer: kEmptyWidget,
+        boardData: const BoardData(
+          interactableSide: InteractableSide.none,
+          orientation: Side.white,
+          fen: kEmptyFen,
+        ),
+        errorMessage: errorMessage,
       ),
-      errorMessage: errorMessage,
-    ),
-  );
+    );
+  }
 }
 
 class _WatchScaffold extends StatelessWidget {

@@ -112,6 +112,8 @@ class StreamerListTile extends StatelessWidget {
           ],
         ),
       ),
+      subtitle:
+          Text(streamer.streamerHeadline, overflow: TextOverflow.ellipsis),
       trailing: Text(streamer.lang),
     );
   }
