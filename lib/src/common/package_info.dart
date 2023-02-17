@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-import 'package:lichess_mobile/src/app.dart';
+import 'package:lichess_mobile/src/app_dependencies.dart';
 
 part 'package_info.g.dart';
 
@@ -9,6 +9,7 @@ part 'package_info.g.dart';
 PackageInfo packageInfo(PackageInfoRef ref) {
   // requireValue is possible because appDependenciesProvider is loaded before
   // anything. See: lib/src/app.dart
-  return ref
-      .watch(appDependenciesProvider.select((data) => data.requireValue.item1));
+  return ref.watch(
+    appDependenciesProvider.select((data) => data.requireValue.packageInfo),
+  );
 }

@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/api_client.dart';
-import 'package:lichess_mobile/src/common/sound.dart';
+import 'package:lichess_mobile/src/common/sound_service.dart';
 import 'package:lichess_mobile/src/ui/game/playable_game_screen.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
@@ -23,11 +23,6 @@ class MockSoundService extends Mock implements SoundService {}
 
 void main() {
   final mockSoundService = MockSoundService();
-
-  setUpAll(() {
-    when(() => mockSoundService.playMove()).thenAnswer((_) async {});
-    when(() => mockSoundService.playDong()).thenAnswer((_) async {});
-  });
 
   group('PlayableGameScreen', () {
     testWidgets(

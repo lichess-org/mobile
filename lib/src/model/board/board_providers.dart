@@ -3,7 +3,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:result_extensions/result_extensions.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/sound.dart';
+import 'package:lichess_mobile/src/common/sound_service.dart';
 import 'package:lichess_mobile/src/model/board/board_repository.dart';
 import 'package:lichess_mobile/src/model/board/board_event.dart';
 import 'package:lichess_mobile/src/model/board/game_state.dart';

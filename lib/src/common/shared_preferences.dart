@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:lichess_mobile/src/app.dart';
+import 'package:lichess_mobile/src/app_dependencies.dart';
 
 part 'shared_preferences.g.dart';
 
@@ -9,8 +9,10 @@ part 'shared_preferences.g.dart';
 SharedPreferences sharedPreferences(SharedPreferencesRef ref) {
   // requireValue is possible because appDependenciesProvider is loaded before
   // anything. See: lib/src/app.dart
-  return ref
-      .watch(appDependenciesProvider.select((data) => data.requireValue.item2));
+  return ref.watch(
+    appDependenciesProvider
+        .select((data) => data.requireValue.sharedPreferences),
+  );
 }
 
 /// Creates a pref provider backed by SharedPreferences and of value `T`.
