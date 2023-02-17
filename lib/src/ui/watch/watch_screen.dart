@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chessground/chessground.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/settings/providers.dart';
+import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
+import 'package:lichess_mobile/src/model/tv/featured_position.dart';
+import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/ui/watch/streamer_widget.dart';
@@ -57,9 +64,17 @@ class WatchScreen extends StatelessWidget {
   }
 }
 
-class _WatchTvWidget extends StatelessWidget {
+class _WatchTvWidget extends ConsumerWidget {
+  const _WatchTvWidget();
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pieceSet = ref.watch(pieceSetPrefProvider);
+    final currentTab = ref.watch(currentBottomTabProvider);
+    final tvStream = currentTab == BottomTab.watch
+        ? ref.watch(tvStreamProvider)
+        : const AsyncLoading<FeaturedPosition>();
+    final featuredGame = ref.watch(featuredGameProvider);
     return ListSection(
       hasLeading: true,
       header: const Text('Watch Top Games'),
@@ -67,15 +82,58 @@ class _WatchTvWidget extends StatelessWidget {
         MaterialPageRoute(builder: (context) => const TvScreen()),
       ),
       children: [
-        const GameBoardLayout(
-          topPlayer: kEmptyWidget,
-          bottomPlayer: kEmptyWidget,
-          boardData: BoardData(
-            interactableSide: InteractableSide.none,
-            orientation: Side.white,
-            fen: kEmptyFen,
+        tvStream.when(
+          data: (position) {
+            final boardData = BoardData(
+              interactableSide: InteractableSide.none,
+              orientation: featuredGame?.orientation.cg ?? Side.white,
+              fen: position.fen,
+              lastMove: position.lastMove?.cg,
+            );
+            return ConstrainedBox(
+              constraints: BoxConstraints.tight(const Size.square(350)),
+              child: GameBoardLayout(
+                topPlayer: kEmptyWidget,
+                bottomPlayer: kEmptyWidget,
+                boardData: boardData,
+                boardSettings: BoardSettings(
+                  animationDuration: Duration.zero,
+                  pieceAssets: pieceSet.assets,
+                ),
+              ),
+            );
+          },
+          error: (err, stackTrace) {
+            debugPrint(
+              'SEVERE: [WatchTvWidget] could not load tv stream; $err\n$stackTrace',
+            );
+            return ConstrainedBox(
+              constraints: BoxConstraints.tight(const Size.square(350)),
+              child: const GameBoardLayout(
+                topPlayer: kEmptyWidget,
+                bottomPlayer: kEmptyWidget,
+                boardData: BoardData(
+                  interactableSide: InteractableSide.none,
+                  orientation: Side.white,
+                  fen: kEmptyFen,
+                ),
+                errorMessage: 'Cound not load TV Stream.',
+              ),
+            );
+          },
+          loading: () => ConstrainedBox(
+            constraints: BoxConstraints.tight(const Size.square(350)),
+            child: const GameBoardLayout(
+              topPlayer: kEmptyWidget,
+              bottomPlayer: kEmptyWidget,
+              boardData: BoardData(
+                interactableSide: InteractableSide.none,
+                orientation: Side.white,
+                fen: kEmptyFen,
+              ),
+            ),
           ),
-        ),
+        )
       ],
     );
   }
