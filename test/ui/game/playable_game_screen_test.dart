@@ -17,7 +17,7 @@ import 'package:lichess_mobile/src/ui/game/playable_game_screen.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import '../../test_app.dart';
-import '../../utils.dart';
+import '../../test_utils.dart';
 
 class MockSoundService extends Mock implements SoundService {}
 

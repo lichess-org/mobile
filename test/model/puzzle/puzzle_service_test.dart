@@ -17,7 +17,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import '../../utils.dart';
+import '../../test_utils.dart';
 
 class MockLogger extends Mock implements Logger {}
 

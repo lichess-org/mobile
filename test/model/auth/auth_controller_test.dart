@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/session_repository.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import '../../utils.dart';
+import '../../test_utils.dart';
 
 class MockClient extends Mock implements http.Client {}
 

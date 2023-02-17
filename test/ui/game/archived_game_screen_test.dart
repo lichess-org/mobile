@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/ui/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
-import '../../utils.dart';
+import '../../test_utils.dart';
 import '../../test_app.dart';
 
 void main() {

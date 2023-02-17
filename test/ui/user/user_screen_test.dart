@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import '../../utils.dart';
+import '../../test_utils.dart';
 import '../../test_app.dart';
 
 void main() {

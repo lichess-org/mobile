@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/auth/session_repository.dart';
 import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import '../../utils.dart';
+import '../../test_utils.dart';
 import '../../test_app.dart';
 import '../../model/auth/fake_session_repository.dart';
 

@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/ui/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import '../../utils.dart';
+import '../../test_utils.dart';
 import '../../test_app.dart';
 import '../../model/auth/fake_auth_repository.dart';
 

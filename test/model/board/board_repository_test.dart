@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/model/board/board_repository.dart';
 import 'package:lichess_mobile/src/model/board/board_event.dart';
 import 'package:lichess_mobile/src/model/board/api_event.dart';
-import '../../utils.dart';
+import '../../test_utils.dart';
 
 class MockApiClient extends Mock implements ApiClient {}
 

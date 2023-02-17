@@ -4,7 +4,7 @@ import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/ui/auth/sign_in_widget.dart';
-import '../../utils.dart' hide buildTestApp;
+import '../../test_utils.dart';
 import '../../test_app.dart';
 
 void main() {
