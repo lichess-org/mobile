@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:http/testing.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:chessground/chessground.dart' as cg;
 
@@ -14,6 +13,7 @@ import 'package:lichess_mobile/src/ui/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import '../../utils.dart';
+import '../../test_app.dart';
 
 void main() {
   final mockClient = MockClient((request) {
@@ -29,25 +29,16 @@ void main() {
       (tester) async {
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return ArchivedGameScreen(
-                gameData: gameData,
-                orientation: Side.white,
-              );
-            },
+          home: ArchivedGameScreen(
+            gameData: gameData,
+            orientation: Side.white,
           ),
+          overrides: [
+            httpClientProvider.overrideWithValue(mockClient),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...await makeDefaultProviderOverrides(),
-              httpClientProvider.overrideWithValue(mockClient),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         // data shown immediately
         expect(find.byType(cg.Board), findsOneWidget);
@@ -100,25 +91,16 @@ void main() {
     testWidgets('navigate game positions', (tester) async {
       final app = await buildTestApp(
         tester,
-        home: Consumer(
-          builder: (context, ref, _) {
-            return ArchivedGameScreen(
-              gameData: gameData,
-              orientation: Side.white,
-            );
-          },
+        home: ArchivedGameScreen(
+          gameData: gameData,
+          orientation: Side.white,
         ),
+        overrides: [
+          httpClientProvider.overrideWithValue(mockClient),
+        ],
       );
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            ...await makeDefaultProviderOverrides(),
-            httpClientProvider.overrideWithValue(mockClient),
-          ],
-          child: app,
-        ),
-      );
+      await tester.pumpWidget(app);
 
       // wait for game steps loading
       await tester.pump(const Duration(milliseconds: 100));

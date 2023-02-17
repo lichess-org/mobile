@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/ui/game/playable_game_screen.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import '../../test_app.dart';
 import '../../utils.dart';
 
 class MockSoundService extends Mock implements SoundService {}
@@ -42,23 +43,14 @@ void main() {
 
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return const PlayableGameScreen(game: testGame);
-            },
-          ),
+          home: const PlayableGameScreen(game: testGame),
+          overrides: [
+            httpClientProvider.overrideWithValue(mockClient),
+            soundServiceProvider.overrideWithValue(mockSoundService),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...await makeDefaultProviderOverrides(),
-              httpClientProvider.overrideWithValue(mockClient),
-              soundServiceProvider.overrideWithValue(mockSoundService),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         expect(find.byType(cg.Board), findsOneWidget);
         expect(find.byType(cg.PieceWidget), findsNWidgets(32));
@@ -97,29 +89,16 @@ void main() {
     testWidgets(
       'play two moves',
       (tester) async {
-        SharedPreferences.setMockInitialValues({});
-        final sharedPreferences = await SharedPreferences.getInstance();
-
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return const PlayableGameScreen(game: testGame);
-            },
-          ),
+          home: const PlayableGameScreen(game: testGame),
+          overrides: [
+            httpClientProvider.overrideWithValue(FakeGameClient()),
+            soundServiceProvider.overrideWithValue(mockSoundService),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...await makeDefaultProviderOverrides(),
-              sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-              httpClientProvider.overrideWithValue(FakeGameClient()),
-              soundServiceProvider.overrideWithValue(mockSoundService),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         await tester
             .pump(const Duration(milliseconds: 100)); // wait for stream loading
@@ -240,23 +219,14 @@ void main() {
 
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return const PlayableGameScreen(game: testGame);
-            },
-          ),
+          home: const PlayableGameScreen(game: testGame),
+          overrides: [
+            httpClientProvider.overrideWithValue(mockClient),
+            soundServiceProvider.overrideWithValue(mockSoundService),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...await makeDefaultProviderOverrides(),
-              httpClientProvider.overrideWithValue(mockClient),
-              soundServiceProvider.overrideWithValue(mockSoundService),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         // wait for stream loading
         await tester.pump(const Duration(milliseconds: 50));

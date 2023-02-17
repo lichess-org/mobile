@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 
@@ -8,6 +7,7 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/ui/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../utils.dart';
+import '../../test_app.dart';
 import '../../model/auth/fake_auth_repository.dart';
 
 void main() {
@@ -26,26 +26,17 @@ void main() {
 
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return PerfStatsScreen(
-                user: fakeUser,
-                perf: testPerf,
-                loggedInUser: null,
-              );
-            },
+          home: PerfStatsScreen(
+            user: fakeUser,
+            perf: testPerf,
+            loggedInUser: null,
           ),
+          overrides: [
+            httpClientProvider.overrideWithValue(mockClient),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...await makeDefaultProviderOverrides(),
-              httpClientProvider.overrideWithValue(mockClient),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         // wait for auth state and perf stats
         await tester.pump(const Duration(milliseconds: 50));
@@ -66,26 +57,17 @@ void main() {
       (WidgetTester tester) async {
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return PerfStatsScreen(
-                user: fakeUser,
-                perf: testPerf,
-                loggedInUser: null,
-              );
-            },
+          home: PerfStatsScreen(
+            user: fakeUser,
+            perf: testPerf,
+            loggedInUser: null,
           ),
+          overrides: [
+            httpClientProvider.overrideWithValue(mockClient),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...await makeDefaultProviderOverrides(),
-              httpClientProvider.overrideWithValue(mockClient),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         // wait for auth state and perf stats
         await tester.pump(const Duration(milliseconds: 50));

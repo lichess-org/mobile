@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/ui/user/leaderboard_screen.dart';
 import 'package:lichess_mobile/src/ui/user/leaderboard_widget.dart';
 import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/common/api_client.dart';
 import '../../utils.dart';
+import '../../test_app.dart';
 
 void main() {
   final mockClient = MockClient((request) {
@@ -24,21 +24,11 @@ void main() {
         final SemanticsHandle handle = tester.ensureSemantics();
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) =>
-                Column(children: [LeaderboardWidget()]),
-          ),
+          home: Column(children: [LeaderboardWidget()]),
+          overrides: [httpClientProvider.overrideWithValue(mockClient)],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...await makeDefaultProviderOverrides(),
-              httpClientProvider.overrideWithValue(mockClient)
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         await tester.pump(const Duration(milliseconds: 50));
 

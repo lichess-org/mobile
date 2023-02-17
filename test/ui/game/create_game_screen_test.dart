@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:http/testing.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:chessground/chessground.dart' as cg;
@@ -17,6 +16,7 @@ import 'package:lichess_mobile/src/model/auth/session_repository.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import '../../utils.dart';
+import '../../test_app.dart';
 import '../../model/auth/fake_session_repository.dart';
 
 void main() {
@@ -54,22 +54,13 @@ void main() {
 
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return const PlayScreen();
-            },
-          ),
+          home: const PlayScreen(),
+          overrides: [
+            httpClientProvider.overrideWithValue(mockClient),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...await makeDefaultProviderOverrides(),
-              httpClientProvider.overrideWithValue(mockClient),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         // auth controller state
         await tester.pump(const Duration(milliseconds: 10));
@@ -88,22 +79,13 @@ void main() {
       (tester) async {
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return const PlayScreen();
-            },
-          ),
+          home: const PlayScreen(),
+          overrides: [
+            httpClientProvider.overrideWithValue(mockClient),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...await makeDefaultProviderOverrides(),
-              httpClientProvider.overrideWithValue(mockClient),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         // auth controller state
         await tester.pump(const Duration(milliseconds: 10));
@@ -183,23 +165,14 @@ void main() {
 
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return const PlayScreen();
-            },
-          ),
+          home: const PlayScreen(),
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+            httpClientProvider.overrideWithValue(mockClient),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...await makeDefaultProviderOverrides(),
-              sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-              httpClientProvider.overrideWithValue(mockClient),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         // auth controller state
         await tester.pump(const Duration(milliseconds: 10));
@@ -225,24 +198,15 @@ void main() {
       (tester) async {
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return const PlayScreen();
-            },
-          ),
+          home: const PlayScreen(),
+          overrides: [
+            sessionRepositoryProvider
+                .overrideWithValue(FakeSessionRepository(fakeSession)),
+            httpClientProvider.overrideWithValue(mockClient),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...await makeDefaultProviderOverrides(),
-              sessionRepositoryProvider
-                  .overrideWithValue(FakeSessionRepository(fakeSession)),
-              httpClientProvider.overrideWithValue(mockClient),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         // auth controller state
         await tester.pump(const Duration(milliseconds: 10));

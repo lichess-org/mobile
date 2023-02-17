@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/auth/session_repository.dart';
 import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../utils.dart';
+import '../../test_app.dart';
 import '../../model/auth/fake_session_repository.dart';
 
 void main() {
@@ -19,27 +20,12 @@ void main() {
       (WidgetTester tester) async {
         final SemanticsHandle handle = tester.ensureSemantics();
 
-        SharedPreferences.setMockInitialValues({});
-        final sharedPreferences = await SharedPreferences.getInstance();
-
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return const SettingsScreen();
-            },
-          ),
+          home: const SettingsScreen(),
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...await makeDefaultProviderOverrides(),
-              sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         // wait for auth controller
         await tester.pump(const Duration(milliseconds: 20));
@@ -57,27 +43,12 @@ void main() {
     testWidgets(
       "don't show signOut if no session",
       (WidgetTester tester) async {
-        SharedPreferences.setMockInitialValues({});
-        final sharedPreferences = await SharedPreferences.getInstance();
-
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return const SettingsScreen();
-            },
-          ),
+          home: const SettingsScreen(),
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...await makeDefaultProviderOverrides(),
-              sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         // wait for auth controller
         await tester.pump(const Duration(milliseconds: 20));
@@ -90,29 +61,16 @@ void main() {
     testWidgets(
       'signout',
       (WidgetTester tester) async {
-        SharedPreferences.setMockInitialValues({});
-        final sharedPreferences = await SharedPreferences.getInstance();
-
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return const SettingsScreen();
-            },
-          ),
+          home: const SettingsScreen(),
+          overrides: [
+            sessionRepositoryProvider
+                .overrideWithValue(FakeSessionRepository(fakeSession)),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...await makeDefaultProviderOverrides(),
-              sessionRepositoryProvider
-                  .overrideWithValue(FakeSessionRepository(fakeSession)),
-              sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         // wait for auth controller
         await tester.pump(const Duration(milliseconds: 20));

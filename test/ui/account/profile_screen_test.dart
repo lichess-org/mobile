@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/auth/session_repository.dart';
 import 'package:lichess_mobile/src/ui/account/profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../utils.dart';
+import '../../test_app.dart';
 import '../../model/auth/fake_session_repository.dart';
 
 class MockLogger extends Mock implements Logger {}
@@ -31,24 +32,15 @@ void main() {
       (WidgetTester tester) async {
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return const ProfileScreen();
-            },
-          ),
+          home: const ProfileScreen(),
+          overrides: [
+            sessionRepositoryProvider
+                .overrideWithValue(FakeSessionRepository(fakeSession)),
+            httpClientProvider.overrideWithValue(mockClient),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...await makeDefaultProviderOverrides(),
-              sessionRepositoryProvider
-                  .overrideWithValue(FakeSessionRepository(fakeSession)),
-              httpClientProvider.overrideWithValue(mockClient),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         // wait for account
         await tester.pump(const Duration(milliseconds: 50));

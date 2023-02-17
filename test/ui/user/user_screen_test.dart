@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/common/api_client.dart';
@@ -9,6 +8,7 @@ import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import '../../utils.dart';
+import '../../test_app.dart';
 
 void main() {
   final mockClient = MockClient((request) {
@@ -26,22 +26,13 @@ void main() {
       (WidgetTester tester) async {
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return const UserScreen(user: testUser);
-            },
-          ),
+          home: const UserScreen(user: testUser),
+          overrides: [
+            httpClientProvider.overrideWithValue(mockClient),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...await makeDefaultProviderOverrides(),
-              httpClientProvider.overrideWithValue(mockClient),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         // wait for user request
         await tester.pump(const Duration(milliseconds: 50));

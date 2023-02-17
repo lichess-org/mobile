@@ -5,7 +5,8 @@ import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/ui/auth/sign_in_widget.dart';
-import '../../utils.dart';
+import '../../utils.dart' hide buildTestApp;
+import '../../test_app.dart';
 
 void main() {
   final mockClient = MockClient((request) {
@@ -20,27 +21,19 @@ void main() {
     (WidgetTester tester) async {
       final app = await buildTestApp(
         tester,
-        home: Consumer(
-          builder: (context, ref, _) {
-            return Scaffold(
-              appBar: AppBar(
-                actions: const [
-                  SignInWidget(),
-                ],
-              ),
-            );
-          },
+        home: Scaffold(
+          appBar: AppBar(
+            actions: const [
+              SignInWidget(),
+            ],
+          ),
         ),
+        overrides: [
+          httpClientProvider.overrideWithValue(mockClient),
+        ],
       );
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            ...await makeDefaultProviderOverrides(),
-            httpClientProvider.overrideWithValue(mockClient),
-          ],
-          child: app,
-        ),
-      );
+
+      await tester.pumpWidget(app);
 
       // first frame is a loading state
       await tester.pump(const Duration(milliseconds: 50));
