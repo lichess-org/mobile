@@ -6,7 +6,7 @@ import 'package:logging/logging.dart';
 
 import 'src/app.dart';
 
-void main() async {
+void main() {
   if (kDebugMode) {
     Logger.root.onRecord.listen((record) {
       final time = DateFormat.Hms().format(record.time);
