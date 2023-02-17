@@ -1,12 +1,12 @@
 name: lichess_mobile
 description: Lichess mobile app V2
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 version: 0.1.0+3
 
 environment:
-  sdk: '>=2.18.2 <3.0.0'
+  sdk: ">=2.18.2 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -78,7 +78,6 @@ dev_dependencies:
   riverpod_lint: ^1.0.1
 
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -89,9 +88,12 @@ flutter:
     - assets/board-thumbnails/
 
   fonts:
-    - family:  LichessIcons
+    - family: LichessIcons
       fonts:
         - asset: assets/fonts/LichessIcons.ttf
+    - family: SocialIcons
+      fonts:
+        - asset: assets/fonts/SocialIcons.ttf
 
   # Enable generation of localized Strings from arb files.
   generate: true

@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/tv/streamer.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
+import 'package:lichess_mobile/src/common/social_icons.dart';
 
 class StreamerScreen extends StatelessWidget {
   const StreamerScreen({required this.streamers});
@@ -61,18 +62,20 @@ class StreamerScreen extends StatelessWidget {
                           mainAxisExtent: 644,
                           crossAxisCount: (constraints.maxWidth / 300).floor(),
                         ),
-                        delegate: SliverChildListDelegate(
+                        delegate: SliverChildListDelegate.fixed(
                           streamers
                               .map((e) => StreamerListTile(streamer: e))
                               .toList(),
                         ),
                       )
                     : SliverList(
-                        delegate: SliverChildListDelegate(
-                          streamers
-                              .map((e) => StreamerListTile(streamer: e))
-                              .toList(),
-                        ),
+                        delegate: SliverChildListDelegate([
+                          CupertinoListSection(
+                            children: streamers
+                                .map((e) => StreamerListTile(streamer: e))
+                                .toList(),
+                          )
+                        ]),
                       ),
               ),
             ],
@@ -90,7 +93,7 @@ class StreamerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
+    return CupertinoListTile(
       leading: Image.network(streamer.image),
       title: Padding(
         padding: const EdgeInsets.only(right: 5.0),
@@ -114,7 +117,17 @@ class StreamerListTile extends StatelessWidget {
       ),
       subtitle:
           Text(streamer.streamerHeadline, overflow: TextOverflow.ellipsis),
-      trailing: Text(streamer.lang),
+      trailing: Column(
+        children: [
+          if (streamer.streamService == 'twitch') ...{
+            const Icon(SocialIcons.twitch)
+          } else ...{
+            const Icon(SocialIcons.youtube)
+          },
+          const SizedBox(height: 10),
+          Text(streamer.lang),
+        ],
+      ),
     );
   }
 }
