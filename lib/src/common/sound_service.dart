@@ -30,11 +30,11 @@ Future<SoundMap> loadSounds(Soundpool pool) async {
 }
 
 class SoundService {
-  SoundService(this._pool, this._sounds, this.ref);
+  SoundService(this._pool, this._sounds, this._ref);
 
   final Soundpool _pool;
   final SoundMap _sounds;
-  final SoundServiceRef ref;
+  final SoundServiceRef _ref;
 
   void playMove() => _play(Sound.move);
 
@@ -43,7 +43,7 @@ class SoundService {
   void playDong() => _play(Sound.dong);
 
   void _play(Sound sound) {
-    final isMuted = ref.read(muteSoundPrefProvider);
+    final isMuted = _ref.read(muteSoundPrefProvider);
     final soundId = _sounds[sound];
     if (soundId != null && !isMuted) _pool.play(soundId);
   }
