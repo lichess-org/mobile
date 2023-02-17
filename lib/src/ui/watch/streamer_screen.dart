@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/tv/streamer.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
@@ -22,25 +21,10 @@ class StreamerScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Live Streamers'),
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return constraints.maxWidth > kLargeScreenWidth
-              ? GridView(
-                  shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    mainAxisExtent: 644,
-                    crossAxisCount: (constraints.maxWidth / 300).floor(),
-                  ),
-                  children: streamers
-                      .map((e) => StreamerListTile(streamer: e))
-                      .toList(growable: false),
-                )
-              : ListView(
-                  children: streamers
-                      .map((e) => StreamerListTile(streamer: e))
-                      .toList(growable: false),
-                );
-        },
+      body: ListView(
+        children: streamers
+            .map((e) => StreamerListTile(streamer: e))
+            .toList(growable: false),
       ),
     );
   }
@@ -51,36 +35,20 @@ class StreamerScreen extends StatelessWidget {
         previousPageTitle: 'Lichess TV',
         middle: Text('Live Streamers'),
       ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return CustomScrollView(
-            slivers: [
-              SliverSafeArea(
-                sliver: constraints.maxWidth > kLargeScreenWidth
-                    ? SliverGrid(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          mainAxisExtent: 644,
-                          crossAxisCount: (constraints.maxWidth / 300).floor(),
-                        ),
-                        delegate: SliverChildListDelegate.fixed(
-                          streamers
-                              .map((e) => StreamerListTile(streamer: e))
-                              .toList(),
-                        ),
-                      )
-                    : SliverList(
-                        delegate: SliverChildListDelegate([
-                          CupertinoListSection(
-                            children: streamers
-                                .map((e) => StreamerListTile(streamer: e))
-                                .toList(),
-                          )
-                        ]),
-                      ),
-              ),
-            ],
-          );
-        },
+      child: CustomScrollView(
+        slivers: [
+          SliverSafeArea(
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                CupertinoListSection(
+                  children: streamers
+                      .map((e) => StreamerListTile(streamer: e))
+                      .toList(),
+                )
+              ]),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -93,7 +61,7 @@ class StreamerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoListTile(
+    return PlatformListTile(
       leading: Image.network(streamer.image),
       title: Padding(
         padding: const EdgeInsets.only(right: 5.0),
@@ -109,9 +77,7 @@ class StreamerListTile extends StatelessWidget {
               ),
               const SizedBox(width: 5)
             ],
-            Flexible(
-              child: Text(streamer.username, overflow: TextOverflow.ellipsis),
-            )
+            Text(streamer.username, overflow: TextOverflow.ellipsis),
           ],
         ),
       ),
@@ -124,7 +90,6 @@ class StreamerListTile extends StatelessWidget {
           } else ...{
             const Icon(SocialIcons.youtube)
           },
-          const SizedBox(height: 10),
           Text(streamer.lang),
         ],
       ),
