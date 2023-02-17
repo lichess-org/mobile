@@ -77,9 +77,22 @@ class TvScreen extends ConsumerWidget {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [Text(tvChannel.string), const Icon(Icons.arrow_drop_down)],
+        middle: InkWell(
+          onTap: () => showChoicesPicker(
+            context,
+            choices: TvChannel.values,
+            selectedItem: TvChannel.top,
+            labelBuilder: (e) => Text(e.string),
+            onSelectedItemChanged: (channel) =>
+                ref.read(tvChannelProvider.notifier).channel = channel,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(tvChannel.string),
+              const Icon(Icons.arrow_drop_down)
+            ],
+          ),
         ),
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
