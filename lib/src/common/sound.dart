@@ -1,59 +1,46 @@
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:soundpool/soundpool.dart';
 
 import 'package:lichess_mobile/src/model/settings/providers.dart';
+
+part 'sound.g.dart';
+
+@Riverpod(keepAlive: true)
+SoundService soundService(SoundServiceRef ref) {
+  final pool = Soundpool.fromOptions();
+  final soundService = SoundService(pool, ref);
+  ref.onDispose(pool.release);
+  return soundService;
+}
 
 class SoundService {
   SoundService(this._pool, this.ref);
 
   final Soundpool _pool;
-  final Ref ref;
+  final SoundServiceRef ref;
 
-  int? _moveId;
-  int? _captureId;
-  int? _dongId;
+  final Map<String, int> _soundMap = {};
 
-  Future<void> init() async {
-    _moveId = await rootBundle.load('assets/sounds/move.mp3').then((soundData) {
-      return _pool.load(soundData);
-    });
+  Future<void> playMove() => _play('move');
 
-    _captureId =
-        await rootBundle.load('assets/sounds/capture.mp3').then((soundData) {
-      return _pool.load(soundData);
-    });
+  Future<void> playCapture() => _play('capture');
 
-    _dongId = await rootBundle.load('assets/sounds/dong.mp3').then((soundData) {
-      return _pool.load(soundData);
-    });
+  Future<void> playDong() => _play('dong');
+
+  Future<void> _play(String sound) async {
+    await _loadOnce(sound);
+    final isMuted = ref.read(muteSoundPrefProvider);
+    final soundId = _soundMap[sound];
+    if (soundId != null && !isMuted) _pool.play(soundId);
   }
 
-  void playMove() {
-    final isMuted = ref.read(muteSoundPrefProvider);
-    if (_moveId != null && !isMuted) _pool.play(_moveId!);
-  }
-
-  void playCapture() {
-    final isMuted = ref.read(muteSoundPrefProvider);
-    if (_captureId != null && !isMuted) {
-      _pool.play(_captureId!);
+  Future<void> _loadOnce(String sound) async {
+    if (_soundMap[sound] == null) {
+      _soundMap[sound] =
+          await rootBundle.load('assets/sounds/$sound.mp3').then((soundData) {
+        return _pool.load(soundData);
+      });
     }
   }
-
-  void playDong() {
-    final isMuted = ref.read(muteSoundPrefProvider);
-    if (_dongId != null && !isMuted) _pool.play(_dongId!);
-  }
-
-  void dispose() {
-    _pool.release();
-  }
 }
-
-final soundServiceProvider = Provider<SoundService>((ref) {
-  final pool = Soundpool.fromOptions();
-  final soundService = SoundService(pool, ref);
-  ref.onDispose(() => soundService.dispose());
-  return soundService;
-});

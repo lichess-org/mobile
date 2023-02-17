@@ -37,14 +37,14 @@ Future<Widget> buildTestApp(
       authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
       sessionRepositoryProvider.overrideWithValue(FakeSessionRepository()),
       currentBrightnessProvider.overrideWithValue(Brightness.dark),
-      packageInfoProvider.overrideWithValue(
-        PackageInfo(
+      packageInfoProvider.overrideWith((ref) {
+        return PackageInfo(
           appName: 'lichess_mobile_test',
           version: 'test',
           buildNumber: '0.0.0',
           packageName: 'lichess_mobile_test',
-        ),
-      ),
+        );
+      }),
       ...overrides ?? [],
     ],
     // simplified version of class [App] in lib/src/app.dart

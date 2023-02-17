@@ -35,13 +35,11 @@ Client httpClient(HttpClientRef ref) {
 
 @Riverpod(keepAlive: true)
 ApiClient apiClient(ApiClientRef ref) {
-  final packageInfo = ref.watch(packageInfoProvider);
   final httpClient = ref.watch(httpClientProvider);
   final AuthController authController =
       ref.read(authControllerProvider.notifier);
   final authClient = _AuthClient(
     ref,
-    packageInfo,
     httpClient,
     Logger('AuthClient'),
   );
@@ -175,23 +173,23 @@ class ApiClient {
 
 /// Http client that sets the Authorization header when a token has been stored.
 class _AuthClient extends BaseClient {
-  _AuthClient(this.ref, this._info, this._inner, this._logger);
+  _AuthClient(this.ref, this._inner, this._logger);
 
   final ApiClientRef ref;
-  final PackageInfo _info;
   final Client _inner;
   final Logger _logger;
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
     final sessionRepo = ref.read(sessionRepositoryProvider);
+    final info = ref.watch(packageInfoProvider);
     final session = await sessionRepo.read();
 
     if (session != null && !request.headers.containsKey('Authorization')) {
       request.headers['Authorization'] = 'Bearer ${session.token}';
     }
 
-    request.headers['user-agent'] = ApiClient.userAgent(_info, session?.user);
+    request.headers['user-agent'] = ApiClient.userAgent(info, session?.user);
 
     _logger.info('${request.method} ${request.url} ${request.headers}');
 

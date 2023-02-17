@@ -24,6 +24,11 @@ class MockSoundService extends Mock implements SoundService {}
 void main() {
   final mockSoundService = MockSoundService();
 
+  setUpAll(() {
+    when(() => mockSoundService.playMove()).thenAnswer((_) async {});
+    when(() => mockSoundService.playDong()).thenAnswer((_) async {});
+  });
+
   group('PlayableGameScreen', () {
     testWidgets(
       'displays game info during loading state and update state after 1st gameFull event',

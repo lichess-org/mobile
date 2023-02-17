@@ -1,10 +1,17 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
-  // see lib/src/main.dart for initialization
-  throw UnimplementedError();
-});
+import 'package:lichess_mobile/src/app.dart';
+
+part 'shared_preferences.g.dart';
+
+@Riverpod(keepAlive: true)
+SharedPreferences sharedPreferences(SharedPreferencesRef ref) {
+  // requireValue is possible because appDependenciesProvider is loaded before
+  // anything. See: lib/src/app.dart
+  return ref
+      .watch(appDependenciesProvider.select((data) => data.requireValue.item2));
+}
 
 /// Creates a pref provider backed by SharedPreferences and of value `T`.
 NotifierProvider<PrefNotifier<T>, T> createPrefProvider<T>({

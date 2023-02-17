@@ -1,13 +1,48 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tuple/tuple.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
+
+part 'app.g.dart';
+
+/// Provider that initializes async dependencies commonly used in the app
+@Riverpod(keepAlive: true)
+Future<Tuple2<PackageInfo, SharedPreferences>> appDependencies(
+  AppDependenciesRef ref,
+) async {
+  final pInfo = await PackageInfo.fromPlatform();
+  final prefs = await SharedPreferences.getInstance();
+  return Tuple2(pInfo, prefs);
+}
+
+class LoadApp extends ConsumerWidget {
+  const LoadApp({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appDependencies = ref.watch(appDependenciesProvider);
+    return appDependencies.when(
+      data: (_) => const App(),
+      loading: () => const SizedBox.shrink(),
+      error: (err, st) {
+        debugPrint(
+          'SEVERE: [App] could not load appInitProvider; $err\n$st',
+        );
+        return const SizedBox.shrink();
+      },
+    );
+  }
+}
 
 class App extends ConsumerWidget {
   const App({super.key});
