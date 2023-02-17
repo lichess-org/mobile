@@ -1,32 +1,21 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:logging/logging.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/ui/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import '../../utils.dart';
+import '../../test_utils.dart';
+import '../../test_app.dart';
 import '../../model/auth/fake_auth_repository.dart';
 
-class MockClient extends Mock implements http.Client {}
-
-class MockLogger extends Mock implements Logger {}
-
 void main() {
-  final mockClient = MockClient();
-  final mockLogger = MockLogger();
-
-  final uriString =
-      '$kLichessHost/api/user/${fakeUser.id}/perf/${testPerf.name}';
-
-  setUpAll(() {
-    when(() => mockClient.get(Uri.parse(uriString)))
-        .thenAnswer((_) => mockResponse(userPerfStatsResponse, 200));
+  final mockClient = MockClient((request) {
+    if (request.url.path == '/api/user/${fakeUser.id}/perf/${testPerf.name}') {
+      return mockResponse(userPerfStatsResponse, 200);
+    }
+    return mockResponse('', 404);
   });
 
   group('PerfStatsScreen', () {
@@ -37,27 +26,17 @@ void main() {
 
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return PerfStatsScreen(
-                user: fakeUser,
-                perf: testPerf,
-                loggedInUser: null,
-              );
-            },
+          home: PerfStatsScreen(
+            user: fakeUser,
+            perf: testPerf,
+            loggedInUser: null,
           ),
+          overrides: [
+            httpClientProvider.overrideWithValue(mockClient),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...defaultProviderOverrides,
-              apiClientProvider
-                  .overrideWithValue(ApiClient(mockLogger, mockClient)),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         // wait for auth state and perf stats
         await tester.pump(const Duration(milliseconds: 50));
@@ -78,27 +57,17 @@ void main() {
       (WidgetTester tester) async {
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return PerfStatsScreen(
-                user: fakeUser,
-                perf: testPerf,
-                loggedInUser: null,
-              );
-            },
+          home: PerfStatsScreen(
+            user: fakeUser,
+            perf: testPerf,
+            loggedInUser: null,
           ),
+          overrides: [
+            httpClientProvider.overrideWithValue(mockClient),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...defaultProviderOverrides,
-              apiClientProvider
-                  .overrideWithValue(ApiClient(mockLogger, mockClient)),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         // wait for auth state and perf stats
         await tester.pump(const Duration(milliseconds: 50));

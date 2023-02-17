@@ -1,34 +1,43 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
+part 'auth_repository.g.dart';
+
 const redirectUri = 'org.lichess.mobile://login-callback';
 const oauthScopes = ['board:play'];
+
+@Riverpod(keepAlive: true)
+AuthRepository authRepository(AuthRepositoryRef ref) {
+  const auth = FlutterAppAuth();
+  return AuthRepository(
+    ref.watch(apiClientProvider),
+    auth,
+    Logger('AuthRepository'),
+  );
+}
 
 class AuthRepository {
   AuthRepository(
     ApiClient apiClient,
     FlutterAppAuth appAuth,
-    FlutterSecureStorage storage,
     Logger log,
   )   : _apiClient = apiClient,
         _appAuth = appAuth,
-        _storage = storage,
         _log = log;
 
   final ApiClient _apiClient;
   final Logger _log;
   final FlutterAppAuth _appAuth;
-  final FlutterSecureStorage _storage;
 
-  FutureResult<void> signIn() {
+  FutureResult<AuthorizationTokenResponse> signIn() {
     final future = (() async {
       final result = await _appAuth.authorizeAndExchangeCode(
         AuthorizationTokenRequest(
@@ -43,13 +52,12 @@ class AuthRepository {
         ),
       );
       if (result != null) {
-        _log.fine('Got accessToken ${result.accessToken}');
-        await _storage.write(
-          key: kOAuthTokenStorageKey,
-          value: result.accessToken,
-        );
+        _log.fine('Got oAuth response $result');
+        return result;
       } else {
-        throw Exception('FlutterAppAuth.authorizeAndExchangeCode null result');
+        throw Exception(
+          'FlutterAppAuth.authorizeAndExchangeCode failed to get token',
+        );
       }
     })();
 
@@ -60,10 +68,6 @@ class AuthRepository {
   }
 
   FutureResult<void> signOut() {
-    return _apiClient.delete(Uri.parse('$kLichessHost/api/token')).then(
-          (result) => result.map((_) async {
-            await _storage.delete(key: kOAuthTokenStorageKey);
-          }),
-        );
+    return _apiClient.delete(Uri.parse('$kLichessHost/api/token'));
   }
 }

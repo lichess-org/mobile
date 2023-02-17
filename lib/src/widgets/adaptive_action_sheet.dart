@@ -19,26 +19,26 @@ Future<T?> showAdaptiveActionSheet<T>({
   bool isDismissible = true,
 }) async {
   if (defaultTargetPlatform == TargetPlatform.iOS) {
-    return _showCupertinoBottomSheet(
-      context,
-      title,
-      actions,
+    return showCupertinoActionSheet(
+      context: context,
+      title: title,
+      actions: actions,
       isDismissible: isDismissible,
     );
   } else {
-    return _showMaterialBottomSheet(
-      context,
-      title,
-      actions,
+    return showMaterialActionSheet(
+      context: context,
+      title: title,
+      actions: actions,
       isDismissible: isDismissible,
     );
   }
 }
 
-Future<T?> _showCupertinoBottomSheet<T>(
-  BuildContext context,
+Future<T?> showCupertinoActionSheet<T>({
+  required BuildContext context,
   Widget? title,
-  List<BottomSheetAction> actions, {
+  required List<BottomSheetAction> actions,
   bool isDismissible = true,
 }) {
   return showCupertinoModalPopup(
@@ -56,6 +56,7 @@ Future<T?> _showCupertinoBottomSheet<T>(
                     Navigator.of(context).pop();
                   }
                 },
+                isDestructiveAction: action.isDestructiveAction,
                 child: action.label,
               ),
             )
@@ -72,10 +73,10 @@ Future<T?> _showCupertinoBottomSheet<T>(
   );
 }
 
-Future<T?> _showMaterialBottomSheet<T>(
-  BuildContext context,
+Future<T?> showMaterialActionSheet<T>({
+  required BuildContext context,
   Widget? title,
-  List<BottomSheetAction> actions, {
+  required List<BottomSheetAction> actions,
   bool isDismissible = true,
 }) {
   final defaultTextStyle =
@@ -177,11 +178,14 @@ class BottomSheetAction {
   /// Typically an [Icon] or a [CircleAvatar] widget. Only for android.
   final Widget? leading;
 
+  final bool isDestructiveAction;
+
   BottomSheetAction({
     required this.label,
     required this.onPressed,
     this.dismissOnPress = true,
     this.trailing,
     this.leading,
+    this.isDestructiveAction = false,
   });
 }

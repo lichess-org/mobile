@@ -1,43 +1,28 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:chessground/chessground.dart' as cg;
-import 'package:package_info_plus/package_info_plus.dart';
 
-import 'package:lichess_mobile/src/common/package_info.dart';
-import 'package:lichess_mobile/src/model/auth/auth_repository_providers.dart';
-import './model/auth/fake_auth_repository.dart';
-
-final List<Override> defaultProviderOverrides = List.unmodifiable([
-  authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
-  packageInfoProvider.overrideWithValue(
-    PackageInfo(
-      appName: 'lichess_mobile_test',
-      version: 'test',
-      buildNumber: '0.0.0',
-      packageName: 'lichess_mobile_test',
-    ),
-  ),
-]);
-
-// iPhone 14 screen size
-const double _kTestScreenWidth = 390.0;
-const double _kTestScreenHeight = 844.0;
-const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
 const kPlatformVariant =
     TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
 
 Matcher sameRequest(http.BaseRequest request) => _SameRequest(request);
 Matcher sameHeaders(Map<String, String> headers) => _SameHeaders(headers);
 
+Future<T> delayedAnswer<T>(T value) =>
+    Future<void>.delayed(const Duration(milliseconds: 5)).then((_) => value);
+
 Future<http.Response> mockResponse(String body, int code) =>
     Future<void>.delayed(const Duration(milliseconds: 20))
         .then((_) => http.Response(body, code));
+
+Future<http.StreamedResponse> mockStreamedResponse(String body, int code) =>
+    Future<void>.delayed(const Duration(milliseconds: 20)).then(
+      (_) => http.StreamedResponse(Stream.value(body).map(utf8.encode), code),
+    );
 
 Future<http.StreamedResponse> mockHttpStreamFromIterable(
   Iterable<String> events,
@@ -82,55 +67,6 @@ Offset squareOffset(
   );
 }
 
-// simplified version of class [App] in lib/src/app.dart
-Future<Widget> buildTestApp(WidgetTester tester, {required Widget home}) async {
-  await tester.binding.setSurfaceSize(kTestSurfaceSize);
-
-  // TODO consider loading true fonts as well
-  FlutterError.onError = ignoreOverflowErrors;
-
-  return MediaQuery(
-    data: const MediaQueryData(size: kTestSurfaceSize),
-    child: Center(
-      child: SizedBox(
-        width: _kTestScreenWidth,
-        height: _kTestScreenHeight,
-        child: MaterialApp(
-          useInheritedMediaQuery: true,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          home: home,
-          builder: (context, child) {
-            return CupertinoTheme(
-              data: const CupertinoThemeData(),
-              child: Material(child: child),
-            );
-          },
-        ),
-      ),
-    ),
-  );
-}
-
-void ignoreOverflowErrors(
-  FlutterErrorDetails details, {
-  bool forceReport = false,
-}) {
-  bool isOverflowError = false;
-  final exception = details.exception;
-
-  if (exception is FlutterError) {
-    isOverflowError = exception.diagnostics
-        .any((e) => e.value.toString().contains('A RenderFlex overflowed by'));
-  }
-
-  if (isOverflowError) {
-    // debugPrint('Overflow error detected.');
-  } else {
-    FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
-    throw exception;
-  }
-}
-
 // --
 
 class _SameRequest extends Matcher {
@@ -142,7 +78,9 @@ class _SameRequest extends Matcher {
   bool matches(Object? item, Map<dynamic, dynamic> matchState) =>
       item is http.BaseRequest &&
       item.method == _expected.method &&
-      item.url == _expected.url;
+      item.url == _expected.url &&
+      mapEquals(item.headers, _expected.headers);
+
   @override
   Description describe(Description description) =>
       description.add('same Request as ').addDescriptionOf(_expected);

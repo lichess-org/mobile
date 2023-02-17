@@ -15,9 +15,7 @@ part 'user_repository_providers.g.dart';
 @Riverpod(keepAlive: true)
 UserRepository userRepository(UserRepositoryRef ref) {
   final apiClient = ref.watch(apiClientProvider);
-  final repo =
-      UserRepository(logger: Logger('UserRepository'), apiClient: apiClient);
-  return repo;
+  return UserRepository(logger: Logger('UserRepository'), apiClient: apiClient);
 }
 
 @riverpod

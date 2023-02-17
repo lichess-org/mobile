@@ -165,8 +165,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "2a4083794449a348f6cd6bd14c6a1db89db2a1d8"
-      resolved-ref: "2a4083794449a348f6cd6bd14c6a1db89db2a1d8"
+      ref: "3fa7a1dfdfbcf6dfbbcfb6e03d10f52c5f630c79"
+      resolved-ref: "3fa7a1dfdfbcf6dfbbcfb6e03d10f52c5f630c79"
       url: "https://github.com/lichess-org/flutter-chessground.git"
     source: git
     version: "0.1.0"
@@ -243,21 +243,29 @@ packages:
     source: hosted
     version: "1.0.5"
   custom_lint:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: custom_lint
       sha256: "29b7e51b5e75fcd5ffce8fc12af87b71cbde7a59d080467b187630231aeb42c0"
       url: "https://pub.dev"
     source: hosted
     version: "0.2.5"
+  custom_lint_builder:
+    dependency: transitive
+    description:
+      name: custom_lint_builder
+      sha256: "8a863ca33632105117697aeb605d083feddf35dd845ad98a4f85f3e10dccd834"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.9"
   custom_lint_core:
     dependency: transitive
     description:
       name: custom_lint_core
-      sha256: "71f7996c36ef3fbe4598b98741d68c74d596f8e974436c6310df44685e372319"
+      sha256: "2a55aa194ae6aacb9c45c59fdec8804427904314fcec48b4749f2b343dc233d1"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.7"
+    version: "0.2.9"
   dart_code_metrics:
     dependency: "direct dev"
     description:
@@ -456,14 +464,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  fpdart:
-    dependency: "direct main"
-    description:
-      name: fpdart
-      sha256: "19db038cf3bb49bfe28b2a0b363ce84cf2e6a0f471a93ae09271cfef03dae935"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.0"
   freezed:
     dependency: "direct dev"
     description:
@@ -504,6 +504,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+  hotreloader:
+    dependency: transitive
+    description:
+      name: hotreloader
+      sha256: "66b78edf340352fcdd2043ab6116e58ec018c5968cab6485cde0f1769d28e0b8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.5"
   html:
     dependency: transitive
     description:
@@ -584,14 +592,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
-  loading_overlay:
-    dependency: "direct main"
-    description:
-      name: loading_overlay
-      sha256: a4dd5a790e0d60568d4c684e46eed00de883db0dc660f90ffd583aca8f4a1d91
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0"
   logging:
     dependency: "direct main"
     description:
@@ -632,6 +632,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  mockito:
+    dependency: "direct dev"
+    description:
+      name: mockito
+      sha256: "2a8a17b82b1bde04d514e75d90d634a0ac23f6cb4991f6098009dd56836aeafe"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.3.2"
   mocktail:
     dependency: "direct dev"
     description:
@@ -846,10 +854,10 @@ packages:
     dependency: transitive
     description:
       name: riverpod_analyzer_utils
-      sha256: "7a833039b3a4699591772eca5aa0f496df4bd5a2152152c51c44857b95238c0e"
+      sha256: "4f0d8f5887186f5fad5377a003beabc36f21f48098828e61be11c03578a8f03a"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.1"
+    version: "0.0.2"
   riverpod_annotation:
     dependency: "direct main"
     description:
@@ -866,8 +874,16 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  riverpod_lint:
+    dependency: "direct dev"
+    description:
+      name: riverpod_lint
+      sha256: "37b8a886cda7018ce86b03edcc8b09f9674b6a8f572757e748506fd91c1e51b5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   rxdart:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: rxdart
       sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"

@@ -100,6 +100,7 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet = ref.watch(pieceSetPrefProvider);
+    final boardTheme = ref.watch(boardThemePrefProvider);
     final currentTab = ref.watch(currentBottomTabProvider);
     // ensure the stream is closed when offstage
     final tvStream = currentTab == BottomTab.watch
@@ -148,15 +149,19 @@ class _Body extends ConsumerWidget {
               boardSettings: BoardSettings(
                 animationDuration: Duration.zero,
                 pieceAssets: pieceSet.assets,
+                colorScheme: boardTheme.colors,
               ),
               topPlayer: topPlayerWidget,
               bottomPlayer: bottomPlayerWidget,
             );
           },
-          loading: () => const GameBoardLayout(
+          loading: () => GameBoardLayout(
             topPlayer: kEmptyWidget,
             bottomPlayer: kEmptyWidget,
-            boardData: BoardData(
+            boardSettings: BoardSettings(
+              colorScheme: boardTheme.colors,
+            ),
+            boardData: const BoardData(
               interactableSide: InteractableSide.none,
               orientation: Side.white,
               fen: kEmptyFen,

@@ -1,30 +1,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/ui/user/leaderboard_screen.dart';
 import 'package:lichess_mobile/src/ui/user/leaderboard_widget.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:logging/logging.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/common/api_client.dart';
-import 'package:lichess_mobile/src/constants.dart';
-import '../../utils.dart';
-
-class MockClient extends Mock implements http.Client {}
-
-class MockApiClient extends Mock implements ApiClient {}
-
-class MockLogger extends Mock implements Logger {}
+import '../../test_utils.dart';
+import '../../test_app.dart';
 
 void main() {
-  final mockClient = MockClient();
-  final mockLogger = MockLogger();
-
-  setUpAll(() {
-    when(() => mockClient.get(Uri.parse('$kLichessHost/api/player')))
-        .thenAnswer((_) => mockResponse(testRes, 200));
+  final mockClient = MockClient((request) {
+    if (request.url.path == '/api/player') {
+      return mockResponse(testRes, 200);
+    }
+    return mockResponse('', 404);
   });
 
   group('LeaderboardWidget', () {
@@ -34,22 +24,11 @@ void main() {
         final SemanticsHandle handle = tester.ensureSemantics();
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) =>
-                Column(children: [LeaderboardWidget()]),
-          ),
+          home: Column(children: [LeaderboardWidget()]),
+          overrides: [httpClientProvider.overrideWithValue(mockClient)],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...defaultProviderOverrides,
-              apiClientProvider
-                  .overrideWithValue(ApiClient(mockLogger, mockClient))
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         await tester.pump(const Duration(milliseconds: 50));
 

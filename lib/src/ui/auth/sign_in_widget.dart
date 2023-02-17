@@ -13,28 +13,32 @@ class SignInWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authUser = ref.watch(authUserProvider);
-    final authActionsAsync = ref.watch(authControllerProvider);
+    final authController = ref.watch(authControllerProvider);
     final brightness = ref.watch(currentBrightnessProvider);
     ref.listen<AsyncValue<void>>(
       authControllerProvider,
       (_, state) => state.showSnackbarOnError(context),
     );
-    return authUser == null
-        ? TextButton(
-            onPressed: authActionsAsync.isLoading
-                ? null
-                : () => ref.read(authControllerProvider.notifier).signIn(),
-            child: authActionsAsync.isLoading
-                ? const ButtonLoadingIndicator()
-                : Text(
-                    context.l10n.signIn,
-                    style: defaultTargetPlatform == TargetPlatform.android &&
-                            brightness == Brightness.light
-                        ? const TextStyle(color: Colors.white)
-                        : null,
-                  ),
-          )
-        : const SizedBox.shrink();
+
+    final button = TextButton(
+      onPressed: () => ref.read(authControllerProvider.notifier).signIn(),
+      child: Text(
+        context.l10n.signIn,
+        style: defaultTargetPlatform == TargetPlatform.android &&
+                brightness == Brightness.light
+            ? const TextStyle(color: Colors.white)
+            : null,
+      ),
+    );
+    return authController.when(
+      data: (session) => session == null ? button : const SizedBox.shrink(),
+      error: (err, st) {
+        debugPrint(
+          'SEVERE: [SignInWidget] error: $err\n$st',
+        );
+        return button;
+      },
+      loading: () => const ButtonLoadingIndicator(),
+    );
   }
 }

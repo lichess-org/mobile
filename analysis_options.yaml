@@ -20,6 +20,8 @@ analyzer:
     - lib/src/common/lichess_icons.dart
   errors:
     invalid_annotation_target: ignore
+  plugins:
+    - custom_lint
 
 linter:
   rules:
@@ -28,7 +30,7 @@ linter:
     avoid_redundant_argument_values: false
     sort_pub_dependencies: false
     sort_unnamed_constructors_first: false
-
+      
 dart_code_metrics:
   rules:
     # common

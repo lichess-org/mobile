@@ -1,93 +1,58 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/testing.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:chessground/chessground.dart' as cg;
 
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/api_client.dart';
-import 'package:lichess_mobile/src/common/sound.dart';
-import 'package:lichess_mobile/src/common/shared_preferences.dart';
+import 'package:lichess_mobile/src/common/sound_service.dart';
 import 'package:lichess_mobile/src/ui/game/playable_game_screen.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
-import '../../utils.dart';
-
-class MockClient extends Mock implements http.Client {}
-
-class MockLogger extends Mock implements Logger {}
+import '../../test_app.dart';
+import '../../test_utils.dart';
 
 class MockSoundService extends Mock implements SoundService {}
 
 void main() {
-  final mockLogger = MockLogger();
-  final mockClient = MockClient();
   final mockSoundService = MockSoundService();
 
   setUpAll(() {
-    registerFallbackValue(http.Request('GET', Uri.parse('http://api.test')));
-  });
-
-  setUp(() {
-    reset(mockClient);
+    when(() => mockSoundService.playMove()).thenAnswer((_) {});
+    when(() => mockSoundService.playDong()).thenAnswer((_) {});
   });
 
   group('PlayableGameScreen', () {
     testWidgets(
       'displays game info during loading state and update state after 1st gameFull event',
       (tester) async {
-        SharedPreferences.setMockInitialValues({});
-        final sharedPreferences = await SharedPreferences.getInstance();
+        final mockClient = MockClient.streaming((request, bodyStream) {
+          if (request.url.path == '/api/board/game/stream/$gameIdTest') {
+            return mockHttpStreamFromIterable([
+              '{ "type": "gameFull", "id": "$gameIdTest", "speed": "blitz", "initialFen": "$kInitialFEN", "white": { "id": "white", "name": "White", "rating": 1405 }, "black": { "id": "black", "name": "Black", "rating": 1789 }, "state": { "type": "gameState", "moves": "", "wtime": 180000, "btime": 180000, "status": "started" }}'
+            ]);
+          }
 
-        when(
-          () => mockClient.send(
-            any(
-              that: sameRequest(
-                http.Request(
-                  'GET',
-                  Uri.parse(
-                    '$kLichessHost/api/board/game/stream/$gameIdTest',
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ).thenAnswer(
-          (_) => mockHttpStreamFromIterable([
-            '{ "type": "gameFull", "id": "$gameIdTest", "speed": "blitz", "initialFen": "$kInitialFEN", "white": { "id": "white", "name": "White", "rating": 1405 }, "black": { "id": "black", "name": "Black", "rating": 1789 }, "state": { "type": "gameState", "moves": "", "wtime": 180000, "btime": 180000, "status": "started" }}'
-          ]),
-        );
+          return mockStreamedResponse('', 404);
+        });
 
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return const PlayableGameScreen(game: testGame);
-            },
-          ),
+          home: const PlayableGameScreen(game: testGame),
+          overrides: [
+            httpClientProvider.overrideWithValue(mockClient),
+            soundServiceProvider.overrideWithValue(mockSoundService),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...defaultProviderOverrides,
-              sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-              apiClientProvider
-                  .overrideWithValue(ApiClient(mockLogger, mockClient)),
-              soundServiceProvider.overrideWithValue(mockSoundService),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         expect(find.byType(cg.Board), findsOneWidget);
         expect(find.byType(cg.PieceWidget), findsNWidgets(32));
@@ -126,31 +91,16 @@ void main() {
     testWidgets(
       'play two moves',
       (tester) async {
-        SharedPreferences.setMockInitialValues({});
-        final sharedPreferences = await SharedPreferences.getInstance();
-
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return const PlayableGameScreen(game: testGame);
-            },
-          ),
+          home: const PlayableGameScreen(game: testGame),
+          overrides: [
+            httpClientProvider.overrideWithValue(FakeGameClient()),
+            soundServiceProvider.overrideWithValue(mockSoundService),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...defaultProviderOverrides,
-              sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-              apiClientProvider.overrideWithValue(
-                ApiClient(mockLogger, FakeGameClient(), retries: []),
-              ),
-              soundServiceProvider.overrideWithValue(mockSoundService),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         await tester
             .pump(const Duration(milliseconds: 100)); // wait for stream loading
@@ -254,8 +204,6 @@ void main() {
     testWidgets(
       'reacts to abort event',
       (tester) async {
-        SharedPreferences.setMockInitialValues({});
-        final sharedPreferences = await SharedPreferences.getInstance();
         final streamController = StreamController<String>();
         streamController.onListen = () {
           streamController.add(
@@ -263,42 +211,24 @@ void main() {
           );
         };
 
-        when(
-          () => mockClient.send(
-            any(
-              that: sameRequest(
-                http.Request(
-                  'GET',
-                  Uri.parse(
-                    '$kLichessHost/api/board/game/stream/$gameIdTest',
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ).thenAnswer((_) => mockHttpStream(streamController.stream));
+        final mockClient = MockClient.streaming((request, bodyStream) {
+          if (request.url.path == '/api/board/game/stream/$gameIdTest') {
+            return mockHttpStream(streamController.stream);
+          }
+
+          return mockStreamedResponse('', 404);
+        });
 
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return const PlayableGameScreen(game: testGame);
-            },
-          ),
+          home: const PlayableGameScreen(game: testGame),
+          overrides: [
+            httpClientProvider.overrideWithValue(mockClient),
+            soundServiceProvider.overrideWithValue(mockSoundService),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...defaultProviderOverrides,
-              sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-              apiClientProvider
-                  .overrideWithValue(ApiClient(mockLogger, mockClient)),
-              soundServiceProvider.overrideWithValue(mockSoundService),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         // wait for stream loading
         await tester.pump(const Duration(milliseconds: 50));

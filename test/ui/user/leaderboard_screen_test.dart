@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/ui/user/leaderboard_screen.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
-import '../../utils.dart';
+import '../../test_utils.dart';
+import '../../test_app.dart';
 
 void main() {
   group('LeaderboardScreen', () {
@@ -16,13 +16,10 @@ void main() {
 
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return LeaderboardScreen(leaderboard: testLeaderboard);
-            },
-          ),
+          home: LeaderboardScreen(leaderboard: testLeaderboard),
         );
-        await tester.pumpWidget(ProviderScope(child: app));
+
+        await tester.pumpWidget(app);
 
         await tester.pump();
 

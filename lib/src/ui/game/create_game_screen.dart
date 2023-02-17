@@ -98,7 +98,6 @@ class PlayForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isAuth = ref.watch(isAuthenticatedProvider);
     final maiaBots = ref.watch(maiaBotsProvider);
     final opponentPref = ref.watch(computerOpponentPrefProvider);
     final maiaStrength = ref.watch(maiaStrengthProvider);
@@ -284,24 +283,28 @@ class PlayForm extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 10),
-          FatButton(
-            semanticsLabel:
-                !isAuth ? 'Sign in to start playing' : context.l10n.play,
-            onPressed: !isAuth
-                ? authController.isLoading
-                    ? null
-                    : () => ref.read(authControllerProvider.notifier).signIn()
-                : playActionAsync.isLoading
-                    ? null
-                    : () => ref.read(playActionProvider.notifier).createGame(),
-            child: authController.isLoading || playActionAsync.isLoading
-                ? const ButtonLoadingIndicator()
-                : Text(
-                    !isAuth
-                        // TODO translate
-                        ? 'Sign in to start playing'
-                        : context.l10n.play,
-                  ),
+          authController.when(
+            data: (session) => FatButton(
+              semanticsLabel: session == null
+                  ? 'Sign in to start playing'
+                  : context.l10n.play,
+              onPressed: session == null
+                  ? () => ref.read(authControllerProvider.notifier).signIn()
+                  : playActionAsync.isLoading
+                      ? null
+                      : () =>
+                          ref.read(playActionProvider.notifier).createGame(),
+              child: playActionAsync.isLoading
+                  ? const ButtonLoadingIndicator()
+                  : Text(
+                      session == null
+                          // TODO translate
+                          ? 'Sign in to start playing'
+                          : context.l10n.play,
+                    ),
+            ),
+            loading: () => const CircularProgressIndicator.adaptive(),
+            error: (err, st) => const CircularProgressIndicator.adaptive(),
           ),
         ],
       ),

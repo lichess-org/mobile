@@ -1,42 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:logging/logging.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/common/api_client.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import '../../utils.dart';
-
-class MockClient extends Mock implements http.Client {}
-
-class MockLogger extends Mock implements Logger {}
+import '../../test_utils.dart';
+import '../../test_app.dart';
 
 void main() {
-  final mockClient = MockClient();
-  final mockLogger = MockLogger();
-
-  setUpAll(() {
-    when(
-      () => mockClient.get(
-        Uri.parse(
-          '$kLichessHost/api/games/user/$testUserId?max=10&moves=false&lastFen=true',
-        ),
-        headers: any(
-          named: 'headers',
-          that: sameHeaders({'Accept': 'application/x-ndjson'}),
-        ),
-      ),
-    ).thenAnswer((_) => mockResponse(userGameResponse, 200));
-
-    when(
-      () => mockClient.get(Uri.parse('$kLichessHost/api/user/$testUserId')),
-    ).thenAnswer((_) => mockResponse(testUserResponse, 200));
+  final mockClient = MockClient((request) {
+    if (request.url.path == '/api/games/user/$testUserId') {
+      return mockResponse(userGameResponse, 200);
+    } else if (request.url.path == '/api/user/$testUserId') {
+      return mockResponse(testUserResponse, 200);
+    }
+    return mockResponse('', 404);
   });
 
   group('UserScreen', () {
@@ -45,23 +26,13 @@ void main() {
       (WidgetTester tester) async {
         final app = await buildTestApp(
           tester,
-          home: Consumer(
-            builder: (context, ref, _) {
-              return const UserScreen(user: testUser);
-            },
-          ),
+          home: const UserScreen(user: testUser),
+          overrides: [
+            httpClientProvider.overrideWithValue(mockClient),
+          ],
         );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              ...defaultProviderOverrides,
-              apiClientProvider
-                  .overrideWithValue(ApiClient(mockLogger, mockClient)),
-            ],
-            child: app,
-          ),
-        );
+        await tester.pumpWidget(app);
 
         // wait for user request
         await tester.pump(const Duration(milliseconds: 50));

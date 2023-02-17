@@ -4,10 +4,30 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
+
+class LoadApp extends ConsumerWidget {
+  const LoadApp({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appDependencies = ref.watch(appDependenciesProvider);
+    return appDependencies.when(
+      data: (_) => const App(),
+      loading: () => const SizedBox.shrink(),
+      error: (err, st) {
+        debugPrint(
+          'SEVERE: [App] could not load appInitProvider; $err\n$st',
+        );
+        return const SizedBox.shrink();
+      },
+    );
+  }
+}
 
 class App extends ConsumerWidget {
   const App({super.key});

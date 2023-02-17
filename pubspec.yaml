@@ -28,8 +28,6 @@ dependencies:
   http: ^0.13.5
   flutter_appauth: ^4.2.1
   flutter_secure_storage: ^8.0.0
-  rxdart: ^0.27.6
-  fpdart: ^0.4.0
   logging: ^1.1.0
   shared_preferences: ^2.0.15
   cached_network_image: ^3.2.2
@@ -40,14 +38,13 @@ dependencies:
   chessground:
     git:
       url: https://github.com/lichess-org/flutter-chessground.git
-      ref: 2a4083794449a348f6cd6bd14c6a1db89db2a1d8
+      ref: 3fa7a1dfdfbcf6dfbbcfb6e03d10f52c5f630c79
   soundpool: ^2.3.0
   meta: ^1.8.0
   tuple: ^2.0.1
   deep_pick: ^0.10.0
   timeago: ^3.3.0
   collection: ^1.16.0 # can't upgrade because of flutter_test
-  loading_overlay: ^0.3.0
   # TODO remove that package
   modal_bottom_sheet:
     git:
@@ -76,6 +73,9 @@ dev_dependencies:
   json_serializable: ^6.5.4
   lint: ^2.0.1
   mocktail: ^0.3.0
+  mockito: ^5.3.2
+  custom_lint: ^0.2.5
+  riverpod_lint: ^1.0.1
 
 flutter:
 
@@ -86,6 +86,7 @@ flutter:
 
   assets:
     - assets/sounds/
+    - assets/board-thumbnails/
 
   fonts:
     - family:  LichessIcons

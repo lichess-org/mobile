@@ -6,14 +6,15 @@ import 'package:http/http.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:http/retry.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/session_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package_info.dart';
 import 'errors.dart';
+
+part 'api_client.g.dart';
 
 const defaultRetries = [
   Duration(milliseconds: 200),
@@ -23,27 +24,44 @@ const defaultRetries = [
   Duration(milliseconds: 1300),
 ];
 
-final apiClientProvider = Provider<ApiClient>((ref) {
-  const storage = FlutterSecureStorage();
-  final packageInfo = ref.watch(packageInfoProvider);
-  final authClient = AuthClient(
+@Riverpod(keepAlive: true)
+Client httpClient(HttpClientRef ref) {
+  final client = Client();
+  ref.onDispose(() {
+    client.close();
+  });
+  return client;
+}
+
+@Riverpod(keepAlive: true)
+ApiClient apiClient(ApiClientRef ref) {
+  final httpClient = ref.watch(httpClientProvider);
+  final AuthController authController =
+      ref.read(authControllerProvider.notifier);
+  final authClient = _AuthClient(
     ref,
-    storage,
-    packageInfo,
-    Client(),
+    httpClient,
     Logger('AuthClient'),
   );
-  final apiClient = ApiClient(Logger('ApiClient'), authClient);
+  final apiClient = ApiClient(
+    Logger('ApiClient'),
+    authClient,
+    authController,
+  );
   ref.onDispose(() {
     apiClient.close();
   });
   return apiClient;
-});
+}
 
 /// Convenient client that captures and returns API errors.
 class ApiClient {
-  ApiClient(this._log, this._client, {List<Duration> retries = defaultRetries})
-      : _retryClient = RetryClient.withDelays(
+  ApiClient(
+    this._log,
+    this._client,
+    this._auth, {
+    List<Duration> retries = defaultRetries,
+  }) : _retryClient = RetryClient.withDelays(
           _client,
           retries,
           whenError: (_, __) => true,
@@ -51,6 +69,7 @@ class ApiClient {
     _log.info('Creating new ApiClient.');
   }
 
+  final AuthController _auth;
   final Logger _log;
   final Client _client;
   final RetryClient _retryClient;
@@ -127,6 +146,13 @@ class ApiClient {
     } else if (response.statusCode >= 400) {
       _log.warning('$url responded with status ${response.statusCode}');
     }
+
+    if (response.statusCode == 401) {
+      // assume the oAuth token has been invalidated server side, so let's
+      // discard it
+      _auth.invalidateSession();
+    }
+
     return response.statusCode < 400
         ? Result.value(response)
         : response.statusCode == 404
@@ -146,25 +172,24 @@ class ApiClient {
 }
 
 /// Http client that sets the Authorization header when a token has been stored.
-class AuthClient extends BaseClient {
-  AuthClient(this.ref, this.storage, this._info, this._inner, this._logger);
+class _AuthClient extends BaseClient {
+  _AuthClient(this.ref, this._inner, this._logger);
 
-  final Ref ref;
-  final FlutterSecureStorage storage;
-  final PackageInfo _info;
+  final ApiClientRef ref;
   final Client _inner;
   final Logger _logger;
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
-    final token = await storage.read(key: kOAuthTokenStorageKey);
-    if (token != null) {
-      request.headers['Authorization'] = 'Bearer $token';
+    final sessionRepo = ref.read(sessionRepositoryProvider);
+    final info = ref.watch(packageInfoProvider);
+    final session = await sessionRepo.read();
+
+    if (session != null && !request.headers.containsKey('Authorization')) {
+      request.headers['Authorization'] = 'Bearer ${session.token}';
     }
 
-    final user = ref.read(authUserProvider);
-
-    request.headers['user-agent'] = ApiClient.userAgent(_info, user);
+    request.headers['user-agent'] = ApiClient.userAgent(info, session?.user);
 
     _logger.info('${request.method} ${request.url} ${request.headers}');
 

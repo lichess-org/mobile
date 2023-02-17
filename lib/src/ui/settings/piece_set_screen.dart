@@ -38,6 +38,18 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet = ref.watch(pieceSetPrefProvider);
+    final boardTheme = ref.watch(boardThemePrefProvider);
+
+    List<AssetImage> getPieceImages(PieceSet set) {
+      return [
+        set.assets['whiteking']!,
+        set.assets['blackqueen']!,
+        set.assets['whiterook']!,
+        set.assets['blackbishop']!,
+        set.assets['whiteknight']!,
+        set.assets['blackpawn']!,
+      ];
+    }
 
     void onChanged(PieceSet? value) =>
         ref.read(pieceSetPrefProvider.notifier).set(value ?? PieceSet.cburnett);
@@ -54,8 +66,29 @@ class _Body extends ConsumerWidget {
             choices: PieceSet.values,
             selectedItem: pieceSet,
             titleBuilder: (t) => Text(t.label),
-            leadingBuilder: (t) => Image(
-              image: t.assets['whiteknight']!,
+            subtitleBuilder: (t) => ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: 192,
+              ),
+              child: Stack(
+                children: [
+                  Image.asset(
+                    "assets/board-thumbnails/${boardTheme.name}.jpg",
+                    height: 32,
+                    errorBuilder: (context, o, st) => const SizedBox.shrink(),
+                  ),
+                  Row(
+                    children: getPieceImages(t)
+                        .map(
+                          (img) => Image(
+                            image: img,
+                            height: 32,
+                          ),
+                        )
+                        .toList(),
+                  )
+                ],
+              ),
             ),
             onSelectedItemChanged: onChanged,
           )
