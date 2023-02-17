@@ -35,10 +35,9 @@ class WatchScreen extends StatelessWidget {
       child: _WatchScaffold(
         child: CustomScrollView(
           slivers: [
-            const CupertinoNavigationBar(
-              middle: Text('Watch'),
-            ),
+            const CupertinoSliverNavigationBar(),
             SliverSafeArea(
+              top: false,
               sliver: SliverPadding(
                 padding: Styles.verticalBodyPadding,
                 sliver: SliverList(
