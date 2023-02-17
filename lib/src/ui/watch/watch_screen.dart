@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:chessground/chessground.dart';
+import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/ui/watch/streamer_widget.dart';
+import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 
 class WatchScreen extends StatelessWidget {
   const WatchScreen({super.key});
@@ -41,13 +45,38 @@ class WatchScreen extends StatelessWidget {
               sliver: SliverPadding(
                 padding: Styles.verticalBodyPadding,
                 sliver: SliverList(
-                  delegate: SliverChildListDelegate([StreamerWidget()]),
+                  delegate: SliverChildListDelegate(
+                      [_WatchTvWidget(), StreamerWidget()]),
                 ),
               ),
             )
           ],
         ),
       ),
+    );
+  }
+}
+
+class _WatchTvWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ListSection(
+      hasLeading: true,
+      header: const Text('Watch Top Games'),
+      onHeaderTap: () => Navigator.of(context).push<void>(
+        MaterialPageRoute(builder: (context) => const TvScreen()),
+      ),
+      children: [
+        const GameBoardLayout(
+          topPlayer: kEmptyWidget,
+          bottomPlayer: kEmptyWidget,
+          boardData: BoardData(
+            interactableSide: InteractableSide.none,
+            orientation: Side.white,
+            fen: kEmptyFen,
+          ),
+        ),
+      ],
     );
   }
 }
