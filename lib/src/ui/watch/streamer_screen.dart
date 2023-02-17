@@ -50,31 +50,35 @@ class StreamerScreen extends StatelessWidget {
         previousPageTitle: 'Lichess TV',
         middle: Text('Live Streamers'),
       ),
-      child: LayoutBuilder(builder: (context, constraints) {
-        return CustomScrollView(slivers: [
-          SliverSafeArea(
-            sliver: constraints.maxWidth > kLargeScreenWidth
-                ? SliverGrid(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      mainAxisExtent: 644,
-                      crossAxisCount: (constraints.maxWidth / 300).floor(),
-                    ),
-                    delegate: SliverChildListDelegate(
-                      streamers
-                          .map((e) => StreamerListTile(streamer: e))
-                          .toList(),
-                    ),
-                  )
-                : SliverList(
-                    delegate: SliverChildListDelegate(
-                      streamers
-                          .map((e) => StreamerListTile(streamer: e))
-                          .toList(),
-                    ),
-                  ),
-          ),
-        ]);
-      }),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return CustomScrollView(
+            slivers: [
+              SliverSafeArea(
+                sliver: constraints.maxWidth > kLargeScreenWidth
+                    ? SliverGrid(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          mainAxisExtent: 644,
+                          crossAxisCount: (constraints.maxWidth / 300).floor(),
+                        ),
+                        delegate: SliverChildListDelegate(
+                          streamers
+                              .map((e) => StreamerListTile(streamer: e))
+                              .toList(),
+                        ),
+                      )
+                    : SliverList(
+                        delegate: SliverChildListDelegate(
+                          streamers
+                              .map((e) => StreamerListTile(streamer: e))
+                              .toList(),
+                        ),
+                      ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

@@ -1,9 +1,6 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
-
-
 
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/model/tv/streamer_repository.dart';
@@ -26,9 +23,13 @@ class StreamerWidget extends ConsumerWidget {
     return streamerState.when(
       data: (data) {
         return ListSection(
-          onHeaderTap: () {Navigator.of(context).push<void>(MaterialPageRoute(
+          onHeaderTap: () {
+            Navigator.of(context).push<void>(
+              MaterialPageRoute(
                 builder: (context) => StreamerScreen(streamers: data),
-          ),);},
+              ),
+            );
+          },
           hasLeading: true,
           header: const Text('Live Streamer'),
           children: [...data.take(5).map((e) => StreamerListTile(streamer: e))],

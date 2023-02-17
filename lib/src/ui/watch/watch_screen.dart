@@ -53,7 +53,8 @@ class WatchScreen extends StatelessWidget {
                 padding: Styles.verticalBodyPadding,
                 sliver: SliverList(
                   delegate: SliverChildListDelegate(
-                      [_WatchTvWidget(), StreamerWidget()]),
+                    [const _WatchTvWidget(), StreamerWidget()],
+                  ),
                 ),
               ),
             )
@@ -107,36 +108,29 @@ class _WatchTvWidget extends ConsumerWidget {
             debugPrint(
               'SEVERE: [WatchTvWidget] could not load tv stream; $err\n$stackTrace',
             );
-            return ConstrainedBox(
-              constraints: BoxConstraints.tight(const Size.square(350)),
-              child: const GameBoardLayout(
-                topPlayer: kEmptyWidget,
-                bottomPlayer: kEmptyWidget,
-                boardData: BoardData(
-                  interactableSide: InteractableSide.none,
-                  orientation: Side.white,
-                  fen: kEmptyFen,
-                ),
-                errorMessage: 'Cound not load TV Stream.',
-              ),
-            );
+            return emptyBoard(errorMessage: 'Could not load TV Stream');
           },
-          loading: () => ConstrainedBox(
-            constraints: BoxConstraints.tight(const Size.square(350)),
-            child: const GameBoardLayout(
-              topPlayer: kEmptyWidget,
-              bottomPlayer: kEmptyWidget,
-              boardData: BoardData(
-                interactableSide: InteractableSide.none,
-                orientation: Side.white,
-                fen: kEmptyFen,
-              ),
-            ),
-          ),
-        )
+          loading: () => emptyBoard(),
+        ),
       ],
     );
   }
+}
+
+Widget emptyBoard({String? errorMessage}) {
+  return ConstrainedBox(
+    constraints: BoxConstraints.tight(const Size.square(350)),
+    child: GameBoardLayout(
+      topPlayer: kEmptyWidget,
+      bottomPlayer: kEmptyWidget,
+      boardData: const BoardData(
+        interactableSide: InteractableSide.none,
+        orientation: Side.white,
+        fen: kEmptyFen,
+      ),
+      errorMessage: errorMessage,
+    ),
+  );
 }
 
 class _WatchScaffold extends StatelessWidget {
