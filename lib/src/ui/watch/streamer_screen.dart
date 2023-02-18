@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+
+import 'package:url_launcher/url_launcher.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/tv/streamer.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/social_icons.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 
 class StreamerScreen extends StatelessWidget {
   const StreamerScreen({required this.streamers});
@@ -22,9 +25,19 @@ class StreamerScreen extends StatelessWidget {
         title: const Text('Live Streamers'),
       ),
       body: ListView(
-        children: streamers
-            .map((e) => StreamerListTile(streamer: e))
-            .toList(growable: false),
+        children: [
+          ListSection(
+            showDividerBetweenTiles: true,
+            children: streamers
+                .map(
+                  (e) => StreamerListTile(
+                    streamer: e,
+                    showSubtitle: true,
+                  ),
+                )
+                .toList(growable: false),
+          ),
+        ],
       ),
     );
   }
@@ -40,9 +53,14 @@ class StreamerScreen extends StatelessWidget {
           SliverSafeArea(
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                CupertinoListSection(
+                ListSection(
                   children: streamers
-                      .map((e) => StreamerListTile(streamer: e))
+                      .map(
+                        (e) => StreamerListTile(
+                          streamer: e,
+                          showSubtitle: true,
+                        ),
+                      )
                       .toList(),
                 )
               ]),
@@ -55,14 +73,29 @@ class StreamerScreen extends StatelessWidget {
 }
 
 class StreamerListTile extends StatelessWidget {
-  const StreamerListTile({required this.streamer});
+  const StreamerListTile({required this.streamer, this.showSubtitle = false});
 
   final Streamer streamer;
+  final bool showSubtitle;
 
   @override
   Widget build(BuildContext context) {
     return PlatformListTile(
-      leading: Image.network(streamer.image),
+      onTap: () async {
+        final url = streamer.streamService == 'twitch'
+            ? streamer.twitch
+            : streamer.youTube;
+        if (!await launchUrl(
+          Uri.parse(url!),
+          mode: LaunchMode.externalApplication,
+        )) {
+          debugPrint('ERROR: [StreamerWidget] Could not launch $url');
+        }
+      },
+      leading: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Image.network(streamer.image),
+      ),
       title: Padding(
         padding: const EdgeInsets.only(right: 5.0),
         child: Row(
@@ -77,20 +110,23 @@ class StreamerListTile extends StatelessWidget {
               ),
               const SizedBox(width: 5)
             ],
-            Text(streamer.username, overflow: TextOverflow.ellipsis),
+            Flexible(
+              child: Text(streamer.username, overflow: TextOverflow.ellipsis),
+            )
           ],
         ),
       ),
-      subtitle:
-          Text(streamer.streamerHeadline, overflow: TextOverflow.ellipsis),
+      subtitle: showSubtitle == true ? Text(streamer.streamerHeadline) : null,
       trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.max,
         children: [
           if (streamer.streamService == 'twitch') ...{
             const Icon(SocialIcons.twitch)
           } else ...{
             const Icon(SocialIcons.youtube)
           },
-          Text(streamer.lang),
+          if (streamer.lang.isNotEmpty) Text(streamer.lang),
         ],
       ),
     );
