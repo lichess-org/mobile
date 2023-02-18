@@ -31,6 +31,8 @@ class StreamerWidget extends ConsumerWidget {
             );
           },
           hasLeading: true,
+          showDividerBetweenTiles: true,
+          margin: const EdgeInsets.only(top: 2),
           header: const Text('Live Streamer'),
           children: [...data.take(5).map((e) => StreamerListTile(streamer: e))],
         );
@@ -54,7 +56,10 @@ class StreamerListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformListTile(
-      leading: Image.network(streamer.image),
+      leading: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Image.network(streamer.image),
+      ),
       title: Padding(
         padding: const EdgeInsets.only(right: 5.0),
         child: Row(

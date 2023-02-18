@@ -16,37 +16,57 @@ import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
-class WatchScreen extends StatelessWidget {
+class WatchScreen extends ConsumerWidget {
   const WatchScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return PlatformWidget(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ConsumerPlatformWidget(
+      ref: ref,
       androidBuilder: _buildAndroid,
       iosBuilder: _buildIos,
     );
   }
 
-  Widget _buildAndroid(BuildContext context) {
+  Widget _buildAndroid(BuildContext context, WidgetRef ref) {
+    final isSoundMuted = ref.watch(muteSoundPrefProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Watch'),
+        actions: [
+          IconButton(
+            icon: isSoundMuted
+                ? const Icon(Icons.volume_off)
+                : const Icon(Icons.volume_up),
+            onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
+          ),
+        ],
       ),
       body: _WatchScaffold(
         child: ListView(
           padding: Styles.verticalBodyPadding,
-          children: [StreamerWidget()],
+          children: [const _WatchTvWidget(), StreamerWidget()],
         ),
       ),
     );
   }
 
-  Widget _buildIos(BuildContext context) {
+  Widget _buildIos(BuildContext context, WidgetRef ref) {
+    final isSoundMuted = ref.watch(muteSoundPrefProvider);
     return CupertinoPageScaffold(
       child: _WatchScaffold(
         child: CustomScrollView(
           slivers: [
-            const CupertinoSliverNavigationBar(),
+            CupertinoSliverNavigationBar(
+              trailing: CupertinoButton(
+                padding: EdgeInsets.zero,
+                child: isSoundMuted
+                    ? const Icon(CupertinoIcons.volume_off)
+                    : const Icon(CupertinoIcons.volume_up),
+                onPressed: () =>
+                    ref.read(muteSoundPrefProvider.notifier).toggle(),
+              ),
+            ),
             SliverSafeArea(
               top: false,
               sliver: SliverPadding(
@@ -91,15 +111,17 @@ class _WatchTvWidget extends ConsumerWidget {
               fen: position.fen,
               lastMove: position.lastMove?.cg,
             );
-            return ConstrainedBox(
-              constraints: BoxConstraints.tight(const Size.square(350)),
-              child: GameBoardLayout(
-                topPlayer: kEmptyWidget,
-                bottomPlayer: kEmptyWidget,
-                boardData: boardData,
-                boardSettings: BoardSettings(
-                  animationDuration: Duration.zero,
-                  pieceAssets: pieceSet.assets,
+            return Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints.tight(const Size.square(350)),
+                child: GameBoardLayout(
+                  topPlayer: kEmptyWidget,
+                  bottomPlayer: kEmptyWidget,
+                  boardData: boardData,
+                  boardSettings: BoardSettings(
+                    animationDuration: Duration.zero,
+                    pieceAssets: pieceSet.assets,
+                  ),
                 ),
               ),
             );
