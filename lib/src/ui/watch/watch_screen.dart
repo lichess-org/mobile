@@ -32,7 +32,7 @@ class WatchScreen extends ConsumerWidget {
     final isSoundMuted = ref.watch(muteSoundPrefProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Watch'),
+        title: const Text('Lichess TV'),
         actions: [
           IconButton(
             icon: isSoundMuted

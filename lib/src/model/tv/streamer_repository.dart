@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:logging/logging.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:async/async.dart';
@@ -39,7 +40,7 @@ class StreamerRepository {
         .get(Uri.parse('$kLichessHost/api/streamer/live'))
         .flatMap((response) {
       return readJsonListOfObjects(
-        response.body,
+        utf8.decode(response.bodyBytes),
         mapper: _streamersFromJson,
         logger: _log,
       );
