@@ -1,26 +1,24 @@
-import 'dart:convert';
 import 'package:logging/logging.dart';
-import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-import 'package:lichess_mobile/src/common/errors.dart';
 import 'streamer.dart';
 
-final streamerRepositoryProvider = Provider<StreamerRepository>((ref) {
+part 'streamer_repository.g.dart';
+
+@Riverpod(keepAlive: true)
+StreamerRepository streamerRepository(StreamerRepositoryRef ref) {
   final apiClient = ref.watch(apiClientProvider);
-  final repo = StreamerRepository(
+  return StreamerRepository(
     apiClient: apiClient,
     logger: Logger('StreamerRepository'),
   );
-  ref.onDispose(() => repo.dispose());
-  return repo;
-});
+}
 
 class StreamerRepository {
   const StreamerRepository({required this.apiClient, required Logger logger})
@@ -33,8 +31,9 @@ class StreamerRepository {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/streamer/live'))
         .flatMap((response) {
-      return _streamersFromListOfJson(
+      return readJsonListOfObjects(
         response.body,
+        mapper: _streamersFromJson,
         logger: _log,
       );
     });
@@ -42,27 +41,6 @@ class StreamerRepository {
 
   void dispose() => apiClient.close();
 }
-
-Result<IList<Streamer>> _streamersFromListOfJson(
-  String json, {
-  Logger? logger,
-}) =>
-    Result(() {
-      final dynamic list = jsonDecode(json);
-      if (list is! List<dynamic>) {
-        logger?.severe('Received json is not a list');
-        throw DataFormatException();
-      }
-      return IList(
-        list.map((e) {
-          if (e is! Map<String, dynamic>) {
-            logger?.severe('Could not read json object as Streamer');
-            throw DataFormatException();
-          }
-          return _streamersFromJson(e);
-        }),
-      );
-    });
 
 Streamer _streamersFromJson(Map<String, dynamic> json) =>
     _streamersFromPick(pick(json).required());

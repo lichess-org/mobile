@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/tv/tv_channel_provider.dart';
 
 import 'package:lichess_mobile/src/common/sound_service.dart';
 

@@ -55,6 +55,7 @@ class StreamerScreen extends StatelessWidget {
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 ListSection(
+                  hasLeading: true,
                   children: streamers
                       .map(
                         (e) => StreamerListTile(
