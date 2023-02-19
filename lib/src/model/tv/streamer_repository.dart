@@ -1,5 +1,6 @@
 import 'package:logging/logging.dart';
 import 'package:result_extensions/result_extensions.dart';
+import 'package:async/async.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -18,6 +19,12 @@ StreamerRepository streamerRepository(StreamerRepositoryRef ref) {
     apiClient: apiClient,
     logger: Logger('StreamerRepository'),
   );
+}
+
+@riverpod
+Future<IList<Streamer>> streamerList(StreamerListRef ref) {
+  final repo = ref.watch(streamerRepositoryProvider);
+  return Result.release(repo.getStreamers());
 }
 
 class StreamerRepository {

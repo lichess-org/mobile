@@ -46,53 +46,6 @@ enum TvChannel {
         return 'Computer';
     }
   }
-
-  // the int values should match the list from [getListString]
-  static TvChannel getChannel(int value) {
-    switch (value) {
-      case 0:
-        return TvChannel.top;
-      case 1:
-        return TvChannel.ultrabullet;
-      case 2:
-        return TvChannel.bullet;
-      case 3:
-        return TvChannel.blitz;
-      case 4:
-        return TvChannel.rapid;
-      case 5:
-        return TvChannel.classical;
-      case 6:
-        return TvChannel.threecheck;
-      case 7:
-        return TvChannel.kingofthehill;
-      case 8:
-        return TvChannel.antichess;
-      case 9:
-        return TvChannel.chess960;
-      case 10:
-        return TvChannel.computer;
-      case 11:
-        return TvChannel.bot;
-      default:
-        return TvChannel.top;
-    }
-  }
-
-  static List<String> getListString() => [
-        'Top Rated',
-        'UltraBullet',
-        'Bullet',
-        'Blitz',
-        'Rapid',
-        'Classical',
-        'Three-check',
-        'King of the Hill',
-        'Antichess',
-        'Chess960',
-        'Computer',
-        'Bot',
-      ];
 }
 
 final tvChannelProvider = StateNotifierProvider<TvChannelNotifier, TvChannel>(

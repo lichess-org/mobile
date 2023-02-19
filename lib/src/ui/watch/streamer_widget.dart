@@ -1,4 +1,3 @@
-import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,15 +6,10 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/ui/watch/streamer_screen.dart';
 
-final streamerlistProvider = FutureProvider.autoDispose((ref) {
-  final streamerRepo = ref.watch(streamerRepositoryProvider);
-  return Result.release(streamerRepo.getStreamers());
-});
-
 class StreamerWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final streamerState = ref.watch(streamerlistProvider);
+    final streamerState = ref.watch(streamerListProvider);
 
     return streamerState.when(
       data: (data) {
