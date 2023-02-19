@@ -146,17 +146,19 @@ class EmptyBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints.tight(const Size.square(350)),
-      child: GameBoardLayout(
-        topPlayer: kEmptyWidget,
-        bottomPlayer: kEmptyWidget,
-        boardData: const BoardData(
-          interactableSide: InteractableSide.none,
-          orientation: Side.white,
-          fen: kEmptyFen,
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints.tight(const Size.square(350)),
+        child: GameBoardLayout(
+          topPlayer: kEmptyWidget,
+          bottomPlayer: kEmptyWidget,
+          boardData: const BoardData(
+            interactableSide: InteractableSide.none,
+            orientation: Side.white,
+            fen: kEmptyFen,
+          ),
+          errorMessage: errorMessage,
         ),
-        errorMessage: errorMessage,
       ),
     );
   }

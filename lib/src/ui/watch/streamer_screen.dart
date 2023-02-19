@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -82,9 +83,8 @@ class StreamerListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformListTile(
       onTap: () async {
-        final url = streamer.streamService == 'twitch'
-            ? streamer.twitch
-            : streamer.youTube;
+        final url =
+            streamer.platform == 'twitch' ? streamer.twitch : streamer.youTube;
         if (!await launchUrl(
           Uri.parse(url!),
           mode: LaunchMode.externalApplication,
@@ -93,7 +93,9 @@ class StreamerListTile extends StatelessWidget {
         }
       },
       leading: Padding(
-        padding: const EdgeInsets.all(5.0),
+        padding: defaultTargetPlatform == TargetPlatform.android
+            ? const EdgeInsets.all(5.0)
+            : EdgeInsets.zero,
         child: Image.network(streamer.image),
       ),
       title: Padding(
@@ -116,12 +118,12 @@ class StreamerListTile extends StatelessWidget {
           ],
         ),
       ),
-      subtitle: showSubtitle == true ? Text(streamer.streamerHeadline) : null,
+      subtitle: showSubtitle == true ? Text(streamer.headline) : null,
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.max,
         children: [
-          if (streamer.streamService == 'twitch') ...{
+          if (streamer.platform == 'twitch') ...{
             const Icon(SocialIcons.twitch)
           } else ...{
             const Icon(SocialIcons.youtube)
