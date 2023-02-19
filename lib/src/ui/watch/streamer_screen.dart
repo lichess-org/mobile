@@ -119,7 +119,8 @@ class StreamerListTile extends StatelessWidget {
           ],
         ),
       ),
-      subtitle: showSubtitle == true ? Text(streamer.headline) : null,
+      subtitle: showSubtitle ? Text(streamer.headline) : null,
+      isThreeLine: showSubtitle,
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.max,
