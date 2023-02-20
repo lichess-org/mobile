@@ -13,7 +13,7 @@ import 'streamer.dart';
 
 part 'streamer_repository.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 StreamerRepository streamerRepository(StreamerRepositoryRef ref) {
   final apiClient = ref.watch(apiClientProvider);
   return StreamerRepository(

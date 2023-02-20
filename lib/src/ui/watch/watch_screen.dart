@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
 import 'package:lichess_mobile/src/model/tv/featured_position.dart';
+import 'package:lichess_mobile/src/model/tv/streamer_repository.dart';
 import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -16,11 +17,18 @@ import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
-class WatchScreen extends ConsumerWidget {
+class WatchScreen extends ConsumerStatefulWidget {
   const WatchScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _WatchScreenState createState() => _WatchScreenState();
+}
+
+class _WatchScreenState extends ConsumerState<WatchScreen> {
+  final _andoirdRefreshKey = GlobalKey<RefreshIndicatorState>();
+
+  @override
+  Widget build(BuildContext context) {
     return ConsumerPlatformWidget(
       ref: ref,
       androidBuilder: _buildAndroid,
@@ -42,10 +50,14 @@ class WatchScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: _WatchScaffold(
-        child: ListView(
-          padding: Styles.verticalBodyPadding,
-          children: [const _WatchTvWidget(), StreamerWidget()],
+      body: RefreshIndicator(
+        key: _andoirdRefreshKey,
+        onRefresh: () => ref.refresh(streamerListProvider.future),
+        child: _WatchScaffold(
+          child: ListView(
+            padding: Styles.verticalBodyPadding,
+            children: [const _WatchTvWidget(), StreamerWidget()],
+          ),
         ),
       ),
     );
@@ -66,6 +78,9 @@ class WatchScreen extends ConsumerWidget {
                 onPressed: () =>
                     ref.read(muteSoundPrefProvider.notifier).toggle(),
               ),
+            ),
+            CupertinoSliverRefreshControl(
+              onRefresh: () => ref.refresh(streamerListProvider.future),
             ),
             SliverSafeArea(
               top: false,
