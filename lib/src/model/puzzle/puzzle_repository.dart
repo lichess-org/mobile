@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:async/async.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:http/http.dart' as http;
@@ -15,10 +15,13 @@ import 'package:lichess_mobile/src/utils/json.dart';
 import 'puzzle.dart';
 import 'puzzle_theme.dart';
 
-final puzzleRepositoryProvider = Provider<PuzzleRepository>((ref) {
+part 'puzzle_repository.g.dart';
+
+@Riverpod(keepAlive: true)
+PuzzleRepository puzzleRepository(PuzzleRepositoryRef ref) {
   final apiClient = ref.watch(apiClientProvider);
   return PuzzleRepository(Logger('PuzzleRepository'), apiClient: apiClient);
-});
+}
 
 /// Size of puzzle local cache
 const kPuzzleLocalQueueLength = 30;

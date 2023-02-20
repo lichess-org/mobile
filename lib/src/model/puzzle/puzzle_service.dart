@@ -3,7 +3,7 @@ import 'package:logging/logging.dart';
 import 'package:tuple/tuple.dart';
 import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
@@ -12,11 +12,14 @@ import 'puzzle_repository.dart';
 import 'puzzle.dart';
 import 'puzzle_theme.dart';
 
-final puzzleOfflineServiceProvider = Provider<PuzzleService>((ref) {
-  final db = ref.watch(puzzleLocalDbProvider);
+part 'puzzle_service.g.dart';
+
+@Riverpod(keepAlive: true)
+PuzzleService puzzleOfflineService(PuzzleOfflineServiceRef ref) {
+  final db = ref.watch(puzzleLocalDBProvider);
   final repository = ref.watch(puzzleRepositoryProvider);
   return PuzzleService(Logger('PuzzleService'), db: db, repository: repository);
-});
+}
 
 class PuzzleService {
   const PuzzleService(

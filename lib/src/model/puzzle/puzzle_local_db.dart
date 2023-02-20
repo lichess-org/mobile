@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
@@ -14,10 +14,11 @@ part 'puzzle_local_db.g.dart';
 
 const prefix = 'PuzzleLocalDB';
 
-final puzzleLocalDbProvider = Provider<PuzzleLocalDB>((ref) {
+@Riverpod(keepAlive: true)
+PuzzleLocalDB puzzleLocalDB(PuzzleLocalDBRef ref) {
   final sharedPrefs = ref.watch(sharedPreferencesProvider);
   return PuzzleLocalDB(sharedPrefs);
-});
+}
 
 class PuzzleLocalDB {
   const PuzzleLocalDB(this._prefs);
