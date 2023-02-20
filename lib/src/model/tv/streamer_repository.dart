@@ -64,7 +64,7 @@ Streamer _streamersFromPick(RequiredPick pick) {
     status: stream('status').asStringOrThrow(),
     lang: stream('lang').asStringOrThrow(),
     streamerName: streamer('name').asStringOrThrow(),
-    headline: streamer('headline').asStringOrThrow(),
+    headline: streamer('headline').asStringOrNull(),
     title: pick('title').asStringOrNull(),
     image: streamer('image').asStringOrThrow(),
     twitch: streamer('twitch').asStringOrNull(),

@@ -28,7 +28,6 @@ class StreamerScreen extends StatelessWidget {
       body: ListView(
         children: [
           ListSection(
-            showDividerBetweenTiles: true,
             children: streamers
                 .map(
                   (e) => StreamerListTile(
@@ -116,7 +115,7 @@ class StreamerListTile extends StatelessWidget {
           ],
         ),
       ),
-      subtitle: showSubtitle ? Text(streamer.headline) : null,
+      subtitle: showSubtitle ? Text(streamer.status) : null,
       isThreeLine: showSubtitle,
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

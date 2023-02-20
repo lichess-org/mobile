@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/ui/watch/streamer_widget.dart';
-import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
+import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
@@ -58,12 +58,12 @@ class _WatchScreenState extends ConsumerState<WatchScreen> {
 
   Widget _buildIos(BuildContext context, WidgetRef ref) {
     return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        trailing: SoundButton(),
+      ),
       child: _WatchScaffold(
         child: CustomScrollView(
           slivers: [
-            CupertinoSliverNavigationBar(
-              trailing: SoundButton(),
-            ),
             CupertinoSliverRefreshControl(
               onRefresh: () => ref.refresh(streamerListProvider.future),
             ),
@@ -96,70 +96,71 @@ class _WatchTvWidget extends ConsumerWidget {
         ? ref.watch(tvStreamProvider)
         : const AsyncLoading<FeaturedPosition>();
     final featuredGame = ref.watch(featuredGameProvider);
-    return ListSection(
-      hasLeading: true,
-      header: const Text('Watch Top Games'),
-      onHeaderTap: () => Navigator.of(context).push<void>(
-        MaterialPageRoute(builder: (context) => const TvScreen()),
-      ),
-      children: [
-        tvStream.when(
-          data: (position) {
-            final boardData = BoardData(
-              interactableSide: InteractableSide.none,
-              orientation: featuredGame?.orientation.cg ?? Side.white,
-              fen: position.fen,
-              lastMove: position.lastMove?.cg,
-            );
-            return Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints.tight(const Size.square(350)),
-                child: GameBoardLayout(
-                  topPlayer: kEmptyWidget,
-                  bottomPlayer: kEmptyWidget,
-                  boardData: boardData,
-                  boardSettings: BoardSettings(
-                    animationDuration: Duration.zero,
-                    pieceAssets: pieceSet.assets,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final boardDim =
+            constraints.maxWidth > kLargeScreenWidth ? 650.0 : 350.0;
+        return ListSection(
+          hasLeading: true,
+          header: const Text('Watch Top Games'),
+          onHeaderTap: () => Navigator.of(context).push<void>(
+            MaterialPageRoute(builder: (context) => const TvScreen()),
+          ),
+          children: [
+            tvStream.when(
+              data: (position) {
+                return Center(
+                  child: SizedBox.square(
+                    dimension: boardDim,
+                    child: BoardPreview(
+                      boardData: BoardData(
+                        interactableSide: InteractableSide.none,
+                        orientation: featuredGame?.orientation.cg ?? Side.white,
+                        fen: position.fen,
+                        lastMove: position.lastMove?.cg,
+                      ),
+                      boardSettings: BoardSettings(
+                        animationDuration: Duration.zero,
+                        pieceAssets: pieceSet.assets,
+                      ),
+                    ),
+                  ),
+                );
+              },
+              error: (err, stackTrace) {
+                debugPrint(
+                  'SEVERE: [WatchTvWidget] could not load tv stream; $err\n$stackTrace',
+                );
+                return Center(
+                  child: SizedBox.square(
+                    dimension: boardDim,
+                    child: const BoardPreview(
+                      boardData: BoardData(
+                        interactableSide: InteractableSide.none,
+                        orientation: Side.white,
+                        fen: kEmptyFen,
+                      ),
+                      errorMessage: 'Could not load Tv Stream',
+                    ),
+                  ),
+                );
+              },
+              loading: () => Center(
+                child: SizedBox.square(
+                  dimension: boardDim,
+                  child: const BoardPreview(
+                    boardData: BoardData(
+                      interactableSide: InteractableSide.none,
+                      orientation: Side.white,
+                      fen: kEmptyFen,
+                    ),
                   ),
                 ),
               ),
-            );
-          },
-          error: (err, stackTrace) {
-            debugPrint(
-              'SEVERE: [WatchTvWidget] could not load tv stream; $err\n$stackTrace',
-            );
-            return const EmptyBoard(errorMessage: 'Could not load TV Stream');
-          },
-          loading: () => const EmptyBoard(),
-        ),
-      ],
-    );
-  }
-}
-
-class EmptyBoard extends StatelessWidget {
-  const EmptyBoard({this.errorMessage});
-
-  final String? errorMessage;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: ConstrainedBox(
-        constraints: BoxConstraints.tight(const Size.square(350)),
-        child: GameBoardLayout(
-          topPlayer: kEmptyWidget,
-          bottomPlayer: kEmptyWidget,
-          boardData: const BoardData(
-            interactableSide: InteractableSide.none,
-            orientation: Side.white,
-            fen: kEmptyFen,
-          ),
-          errorMessage: errorMessage,
-        ),
-      ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

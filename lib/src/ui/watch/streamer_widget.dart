@@ -22,7 +22,6 @@ class StreamerWidget extends ConsumerWidget {
             );
           },
           hasLeading: true,
-          showDividerBetweenTiles: true,
           header: const Text('Live Streamers'),
           children: [...data.take(5).map((e) => StreamerListTile(streamer: e))],
         );
