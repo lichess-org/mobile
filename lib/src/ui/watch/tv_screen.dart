@@ -5,6 +5,7 @@ import 'package:chessground/chessground.dart';
 
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
@@ -33,8 +34,7 @@ class TvScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-    final tvChannel = ref.watch(tvChannelProvider);
-    final isSoundMuted = ref.watch(muteSoundPrefProvider);
+    final tvChannel = ref.watch(tvChannelNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -44,7 +44,7 @@ class TvScreen extends ConsumerWidget {
             selectedItem: TvChannel.top,
             labelBuilder: (TvChannel channel) => Text(channel.string),
             onSelectedItemChanged: (channel) =>
-                ref.read(tvChannelProvider.notifier).channel = channel,
+                ref.read(tvChannelNotifierProvider.notifier).channel = channel,
             choices: TvChannel.values,
           ),
           child: Row(
@@ -56,12 +56,7 @@ class TvScreen extends ConsumerWidget {
           ),
         ),
         actions: [
-          IconButton(
-            icon: isSoundMuted
-                ? const Icon(Icons.volume_off)
-                : const Icon(Icons.volume_up),
-            onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
-          )
+          SoundButton(),
         ],
       ),
       body: const _Body(),
@@ -72,8 +67,7 @@ class TvScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-    final tvChannel = ref.watch(tvChannelProvider);
-    final isSoundMuted = ref.watch(muteSoundPrefProvider);
+    final tvChannel = ref.watch(tvChannelNotifierProvider);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -84,7 +78,7 @@ class TvScreen extends ConsumerWidget {
             selectedItem: TvChannel.top,
             labelBuilder: (e) => Text(e.string),
             onSelectedItemChanged: (channel) =>
-                ref.read(tvChannelProvider.notifier).channel = channel,
+                ref.read(tvChannelNotifierProvider.notifier).channel = channel,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -94,13 +88,7 @@ class TvScreen extends ConsumerWidget {
             ],
           ),
         ),
-        trailing: CupertinoButton(
-          padding: EdgeInsets.zero,
-          child: isSoundMuted
-              ? const Icon(CupertinoIcons.volume_off)
-              : const Icon(CupertinoIcons.volume_up),
-          onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
-        ),
+        trailing: SoundButton(),
       ),
       child: const _Body(),
     );

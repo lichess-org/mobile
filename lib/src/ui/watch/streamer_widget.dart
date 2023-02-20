@@ -31,7 +31,7 @@ class StreamerWidget extends ConsumerWidget {
         debugPrint(
           'SEVERE: [StreamerWidget] could not load streamer data; $error\n $stackTrace',
         );
-        return const Text('Counld not load live streamers');
+        return const Text('Could not load live streamers');
       },
       loading: () => const CenterLoadingIndicator(),
     );

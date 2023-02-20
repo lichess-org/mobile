@@ -1,4 +1,6 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'tv_channel_provider.g.dart';
 
 enum TvChannel {
   top,
@@ -48,12 +50,12 @@ enum TvChannel {
   }
 }
 
-final tvChannelProvider = StateNotifierProvider<TvChannelNotifier, TvChannel>(
-  (ref) => TvChannelNotifier(initialValue: TvChannel.top),
-);
-
-class TvChannelNotifier extends StateNotifier<TvChannel> {
-  TvChannelNotifier({required TvChannel initialValue}) : super(initialValue);
+@riverpod
+class TvChannelNotifier extends _$TvChannelNotifier {
+  @override
+  TvChannel build() {
+    return TvChannel.top;
+  }
 
   TvChannel get channel => state;
   set channel(TvChannel value) => state = value;

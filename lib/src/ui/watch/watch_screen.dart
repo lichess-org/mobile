@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/ui/watch/streamer_widget.dart';
@@ -25,7 +26,7 @@ class WatchScreen extends ConsumerStatefulWidget {
 }
 
 class _WatchScreenState extends ConsumerState<WatchScreen> {
-  final _andoirdRefreshKey = GlobalKey<RefreshIndicatorState>();
+  final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -37,21 +38,13 @@ class _WatchScreenState extends ConsumerState<WatchScreen> {
   }
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
-    final isSoundMuted = ref.watch(muteSoundPrefProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lichess TV'),
-        actions: [
-          IconButton(
-            icon: isSoundMuted
-                ? const Icon(Icons.volume_off)
-                : const Icon(Icons.volume_up),
-            onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
-          ),
-        ],
+        actions: [SoundButton()],
       ),
       body: RefreshIndicator(
-        key: _andoirdRefreshKey,
+        key: _androidRefreshKey,
         onRefresh: () => ref.refresh(streamerListProvider.future),
         child: _WatchScaffold(
           child: ListView(
@@ -64,20 +57,12 @@ class _WatchScreenState extends ConsumerState<WatchScreen> {
   }
 
   Widget _buildIos(BuildContext context, WidgetRef ref) {
-    final isSoundMuted = ref.watch(muteSoundPrefProvider);
     return CupertinoPageScaffold(
       child: _WatchScaffold(
         child: CustomScrollView(
           slivers: [
             CupertinoSliverNavigationBar(
-              trailing: CupertinoButton(
-                padding: EdgeInsets.zero,
-                child: isSoundMuted
-                    ? const Icon(CupertinoIcons.volume_off)
-                    : const Icon(CupertinoIcons.volume_up),
-                onPressed: () =>
-                    ref.read(muteSoundPrefProvider.notifier).toggle(),
-              ),
+              trailing: SoundButton(),
             ),
             CupertinoSliverRefreshControl(
               onRefresh: () => ref.refresh(streamerListProvider.future),
