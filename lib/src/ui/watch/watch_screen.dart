@@ -91,6 +91,7 @@ class _WatchTvWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet = ref.watch(pieceSetPrefProvider);
+    final boardColor = ref.watch(boardThemePrefProvider);
     final currentTab = ref.watch(currentBottomTabProvider);
     final tvStream = currentTab == BottomTab.watch
         ? ref.watch(tvStreamProvider)
@@ -122,6 +123,7 @@ class _WatchTvWidget extends ConsumerWidget {
                       boardSettings: BoardSettings(
                         animationDuration: Duration.zero,
                         pieceAssets: pieceSet.assets,
+                        colorScheme: boardColor.colors,
                       ),
                     ),
                   ),
@@ -134,11 +136,14 @@ class _WatchTvWidget extends ConsumerWidget {
                 return Center(
                   child: SizedBox.square(
                     dimension: boardDim,
-                    child: const BoardPreview(
-                      boardData: BoardData(
+                    child: BoardPreview(
+                      boardData: const BoardData(
                         interactableSide: InteractableSide.none,
                         orientation: Side.white,
                         fen: kEmptyFen,
+                      ),
+                      boardSettings: BoardSettings(
+                        colorScheme: boardColor.colors,
                       ),
                       errorMessage: 'Could not load Tv Stream',
                     ),
@@ -148,11 +153,14 @@ class _WatchTvWidget extends ConsumerWidget {
               loading: () => Center(
                 child: SizedBox.square(
                   dimension: boardDim,
-                  child: const BoardPreview(
-                    boardData: BoardData(
+                  child: BoardPreview(
+                    boardData: const BoardData(
                       interactableSide: InteractableSide.none,
                       orientation: Side.white,
                       fen: kEmptyFen,
+                    ),
+                    boardSettings: BoardSettings(
+                      colorScheme: boardColor.colors,
                     ),
                   ),
                 ),
