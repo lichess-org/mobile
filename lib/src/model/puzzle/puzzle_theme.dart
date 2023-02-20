@@ -1,6 +1,17 @@
 import 'package:flutter/widgets.dart';
 
+import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+
+final puzzleThemePrefProvider = createPrefProvider<PuzzleTheme>(
+  prefKey: 'puzzle.theme',
+  defaultValue: PuzzleTheme.mix,
+  mapFrom: (v) => PuzzleTheme.values.firstWhere(
+    (e) => e.toString() == v,
+    orElse: () => PuzzleTheme.mix,
+  ),
+  mapTo: (v) => v.toString(),
+);
 
 enum PuzzleTheme {
   mix,
