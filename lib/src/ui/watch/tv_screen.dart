@@ -10,13 +10,11 @@ import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/model/tv/featured_position.dart';
 import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
-import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 
 class TvScreen extends ConsumerWidget {
   const TvScreen({super.key});
@@ -34,27 +32,9 @@ class TvScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-    final tvChannel = ref.watch(tvChannelPrefProvider);
-
     return Scaffold(
       appBar: AppBar(
-        title: InkWell(
-          onTap: () => showChoicesPicker<TvChannel>(
-            context,
-            selectedItem: tvChannel,
-            labelBuilder: (TvChannel channel) => Text(channel.toString()),
-            onSelectedItemChanged: (channel) =>
-                ref.read(tvChannelPrefProvider.notifier).set(channel),
-            choices: TvChannel.values,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(tvChannel.toString()),
-              const Icon(Icons.arrow_drop_down)
-            ],
-          ),
-        ),
+        title: const Text('Top Rated'),
         actions: [
           SoundButton(),
         ],
@@ -67,27 +47,9 @@ class TvScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-    final tvChannel = ref.watch(tvChannelPrefProvider);
-
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: InkWell(
-          onTap: () => showChoicesPicker(
-            context,
-            choices: TvChannel.values,
-            selectedItem: tvChannel,
-            labelBuilder: (e) => Text(e.toString()),
-            onSelectedItemChanged: (channel) =>
-                ref.read(tvChannelPrefProvider.notifier).set(channel),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(tvChannel.toString()),
-              const Icon(Icons.arrow_drop_down)
-            ],
-          ),
-        ),
+        middle: const Text('Top Rated'),
         trailing: SoundButton(),
       ),
       child: const _Body(),
