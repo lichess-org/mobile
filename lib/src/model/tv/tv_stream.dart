@@ -13,6 +13,7 @@ final tvStreamProvider = StreamProvider.autoDispose<FeaturedPosition>((ref) {
   ref.onDispose(() {
     tvRepository.dispose();
   });
+
   return tvRepository.tvFeed().map((event) {
     return event.map(
       featured: (featuredEvent) {
