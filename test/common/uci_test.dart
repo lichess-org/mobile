@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:dartchess/dartchess.dart';
 
-import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/common/uci.dart';
 
 void main() {
   test('UciCharPair', () {

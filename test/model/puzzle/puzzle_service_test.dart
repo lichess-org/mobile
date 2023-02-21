@@ -165,14 +165,18 @@ void main() {
         ),
       ).thenAnswer((_) => mockResponse(batchOf1, 200));
 
-      final puzzle = await service.nextPuzzle(userId: 'testUserId');
+      final puzzle =
+          await service.nextPuzzle(userId: const UserId('testUserId'));
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
       verify(
         () => mockClient
             .get(Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1')),
       ).called(1);
 
-      expect(db.fetch(userId: 'testUserId')?.unsolved.length, equals(1));
+      expect(
+        db.fetch(userId: const UserId('testUserId'))?.unsolved.length,
+        equals(1),
+      );
     });
 
     test('different batch is saved per angle', () async {

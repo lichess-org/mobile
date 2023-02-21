@@ -7,6 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
+import 'package:lichess_mobile/src/common/models.dart';
 import 'puzzle_local_db.dart';
 import 'puzzle_repository.dart';
 import 'puzzle.dart';
@@ -15,7 +16,7 @@ import 'puzzle_theme.dart';
 part 'puzzle_service.g.dart';
 
 @Riverpod(keepAlive: true)
-PuzzleService puzzleOfflineService(PuzzleOfflineServiceRef ref) {
+PuzzleService puzzleService(PuzzleServiceRef ref) {
   final db = ref.watch(puzzleLocalDBProvider);
   final repository = ref.watch(puzzleRepositoryProvider);
   return PuzzleService(Logger('PuzzleService'), db: db, repository: repository);
@@ -38,7 +39,7 @@ class PuzzleService {
   ///
   /// This future should never fail on network errors.
   Future<Puzzle?> nextPuzzle({
-    String? userId,
+    UserId? userId,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) {
     return Result.release(
@@ -50,7 +51,7 @@ class PuzzleService {
   ///
   /// This future should never fail on network errors.
   Future<void> solve({
-    String? userId,
+    UserId? userId,
     PuzzleTheme angle = PuzzleTheme.mix,
     required PuzzleSolution solution,
   }) async {
@@ -78,7 +79,7 @@ class PuzzleService {
   /// This method should never fail, as if the network is down it will fallback
   /// to the local database.
   FutureResult<PuzzleLocalData?> _syncAndLoadData(
-    String? userId,
+    UserId? userId,
     PuzzleTheme angle,
   ) {
     final data = db.fetch(userId: userId, angle: angle);

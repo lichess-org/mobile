@@ -1,13 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
+
+part 'puzzle_dashboard_screen.g.dart';
+
+@riverpod
+Future<Puzzle?> nextPuzzle(NextPuzzleRef ref, PuzzleTheme theme) async {
+  final session = await ref.watch(authControllerProvider.future);
+  final puzzleService = ref.watch(puzzleServiceProvider);
+  return puzzleService.nextPuzzle(
+    userId: session?.user.id,
+    angle: theme,
+  );
+}
 
 class PuzzleDashboardScreen extends StatelessWidget {
   const PuzzleDashboardScreen({super.key});
@@ -42,28 +58,48 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final authController = ref.watch(authControllerProvider);
     final theme = ref.watch(puzzleThemePrefProvider);
-    return SafeArea(
-      child: ListView(
-        padding: Styles.bodyPadding,
-        children: [
-          Padding(
-            padding: Styles.sectionBottomPadding,
-            child: PuzzleTabButton(
-              icon: const Icon(LichessIcons.target, size: 44),
-              title: Text(context.l10n.puzzles, style: Styles.sectionTitle),
-              subtitle: Text(puzzleThemeL10n(context, theme).description),
-              onTap: () {
-                Navigator.of(context, rootNavigator: true).push<void>(
-                  MaterialPageRoute(
-                    builder: (context) => const PuzzlesScreen(),
-                  ),
-                );
-              },
-            ),
+    return authController.when(
+      data: (session) {
+        return SafeArea(
+          child: ListView(
+            padding: Styles.bodyPadding,
+            children: [
+              Padding(
+                padding: Styles.sectionBottomPadding,
+                child: PuzzleTabButton(
+                  icon: const Icon(LichessIcons.target, size: 44),
+                  title: Text(context.l10n.puzzles, style: Styles.sectionTitle),
+                  subtitle: Text(puzzleThemeL10n(context, theme).description),
+                  onTap: () async {
+                    // TODO handle loading state
+                    final puzzleService = ref.read(puzzleServiceProvider);
+                    final puzzle = await puzzleService.nextPuzzle(
+                      userId: session?.user.id,
+                      angle: theme,
+                    );
+                    if (puzzle != null && context.mounted) {
+                      Navigator.of(context, rootNavigator: true).push<void>(
+                        MaterialPageRoute(
+                          builder: (context) => PuzzlesScreen(puzzle: puzzle),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
+      error: (err, st) {
+        debugPrint(
+          'SEVERE: [PuzzleDashboardScreen] error: $err\n$st',
+        );
+        return const SizedBox.shrink();
+      },
+      loading: () => const CircularProgressIndicator.adaptive(),
     );
   }
 }

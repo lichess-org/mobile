@@ -2,18 +2,23 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+
+import 'puzzle_screen_state.dart';
 
 class PuzzlesScreen extends StatelessWidget {
-  const PuzzlesScreen({super.key});
+  const PuzzlesScreen({required this.puzzle, super.key});
+
+  final Puzzle puzzle;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +33,7 @@ class PuzzlesScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(context.l10n.puzzles),
       ),
-      body: const _Body(),
+      body: _Body(puzzle: puzzle),
       bottomNavigationBar: const _BottomBar(),
     );
   }
@@ -39,11 +44,11 @@ class PuzzlesScreen extends StatelessWidget {
         middle: Text(context.l10n.puzzles),
       ),
       child: Column(
-        children: const [
+        children: [
           Expanded(
-            child: _Body(),
+            child: _Body(puzzle: puzzle),
           ),
-          _BottomBar(),
+          const _BottomBar(),
         ],
       ),
     );
@@ -51,19 +56,22 @@ class PuzzlesScreen extends StatelessWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body();
+  const _Body({required this.puzzle});
+
+  final Puzzle puzzle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet = ref.watch(pieceSetPrefProvider);
     final boardTheme = ref.watch(boardThemePrefProvider);
+    final puzzleState = ref.watch(puzzleScreenStateProvider(puzzle));
     return Center(
       child: SafeArea(
         child: GameBoardLayout(
-          boardData: const cg.BoardData(
-            orientation: cg.Side.white,
+          boardData: cg.BoardData(
+            orientation: puzzleState.pov.cg,
             interactableSide: cg.InteractableSide.none,
-            fen: kInitialBoardFEN,
+            fen: puzzleState.currentNode.fen,
           ),
           boardSettings: cg.BoardSettings(
             pieceAssets: pieceSet.assets,
