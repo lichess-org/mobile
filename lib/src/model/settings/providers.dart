@@ -27,7 +27,6 @@ final themeModePrefProvider = createPrefProvider(
   mapTo: (ThemeMode theme) => theme.name,
 );
 
-
 @Riverpod(keepAlive: true)
 Brightness currentBrightness(CurrentBrightnessRef ref) {
   final themeMode = ref.watch(themeModePrefProvider);
