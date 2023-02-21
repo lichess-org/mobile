@@ -1,7 +1,3 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'tv_channel_provider.g.dart';
-
 enum TvChannel {
   top,
   ultrabullet,
@@ -20,12 +16,13 @@ enum TvChannel {
   // threecheck,
   // racing kings,
 
-  String get string {
+  @override
+  String toString() {
     switch (this) {
       case TvChannel.top:
         return 'Top Rated';
       case TvChannel.ultrabullet:
-        return 'UltraBullet';
+        return 'Ultra Bullet';
       case TvChannel.blitz:
         return 'Blitz';
       case TvChannel.bullet:
@@ -48,15 +45,35 @@ enum TvChannel {
         return 'Computer';
     }
   }
-}
 
-@riverpod
-class TvChannelNotifier extends _$TvChannelNotifier {
-  @override
-  TvChannel build() {
-    return TvChannel.top;
+  static TvChannel fromString(String? str) {
+    switch (str) {
+      case 'Top Rated':
+        return TvChannel.top;
+      case 'Ultra Bullet':
+        return TvChannel.ultrabullet;
+      case 'Blitz':
+        return TvChannel.blitz;
+      case 'Bullet':
+        return TvChannel.bullet;
+      case 'Antichess':
+        return TvChannel.antichess;
+      case 'Bot':
+        return TvChannel.bot;
+      case 'Rapid':
+        return TvChannel.rapid;
+      case 'Classical':
+        return TvChannel.classical;
+      case 'Three Check':
+        return TvChannel.threecheck;
+      case 'Chess960':
+        return TvChannel.chess960;
+      case 'King of the Hill':
+        return TvChannel.kingofthehill;
+      case 'Computer':
+        return TvChannel.computer;
+      default:
+        return TvChannel.top;
+    }
   }
-
-  TvChannel get channel => state;
-  set channel(TvChannel value) => state = value;
 }

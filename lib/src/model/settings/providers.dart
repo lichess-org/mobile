@@ -4,6 +4,7 @@ import 'package:chessground/chessground.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 
 part 'providers.g.dart';
 
@@ -25,6 +26,13 @@ final themeModePrefProvider = createPrefProvider(
     }
   },
   mapTo: (ThemeMode theme) => theme.name,
+);
+
+final tvChannelPrefProvider = createPrefProvider(
+  prefKey: '$kSettingsStorePrefix.tvChannel',
+  defaultValue: TvChannel.top,
+  mapTo: (TvChannel channel) => channel.toString(),
+  mapFrom: (string) => TvChannel.fromString(string),
 );
 
 @Riverpod(keepAlive: true)
