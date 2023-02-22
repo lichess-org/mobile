@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/ui/watch/streamer_widget.dart';
@@ -41,7 +40,6 @@ class _WatchScreenState extends ConsumerState<WatchScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lichess TV'),
-        actions: [SoundButton()],
       ),
       body: RefreshIndicator(
         key: _androidRefreshKey,
@@ -58,9 +56,7 @@ class _WatchScreenState extends ConsumerState<WatchScreen> {
 
   Widget _buildIos(BuildContext context, WidgetRef ref) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        trailing: SoundButton(),
-      ),
+      navigationBar: const CupertinoNavigationBar(),
       child: _WatchScaffold(
         child: CustomScrollView(
           slivers: [
@@ -104,26 +100,29 @@ class _WatchTvWidget extends ConsumerWidget {
         return ListSection(
           hasLeading: true,
           header: const Text('Watch Top Games'),
-          onHeaderTap: () => Navigator.of(context).push<void>(
-            MaterialPageRoute(builder: (context) => const TvScreen()),
-          ),
           children: [
             tvStream.when(
               data: (position) {
-                return Center(
-                  child: SizedBox.square(
-                    dimension: boardDim,
-                    child: BoardPreview(
-                      boardData: BoardData(
-                        interactableSide: InteractableSide.none,
-                        orientation: featuredGame?.orientation.cg ?? Side.white,
-                        fen: position.fen,
-                        lastMove: position.lastMove?.cg,
-                      ),
-                      boardSettings: BoardSettings(
-                        animationDuration: Duration.zero,
-                        pieceAssets: pieceSet.assets,
-                        colorScheme: boardColor.colors,
+                return GestureDetector(
+                  onTap: () => Navigator.of(context).push<void>(
+                    MaterialPageRoute(builder: (context) => const TvScreen()),
+                  ),
+                  child: Center(
+                    child: SizedBox.square(
+                      dimension: boardDim,
+                      child: BoardPreview(
+                        boardData: BoardData(
+                          interactableSide: InteractableSide.none,
+                          orientation:
+                              featuredGame?.orientation.cg ?? Side.white,
+                          fen: position.fen,
+                          lastMove: position.lastMove?.cg,
+                        ),
+                        boardSettings: BoardSettings(
+                          animationDuration: Duration.zero,
+                          pieceAssets: pieceSet.assets,
+                          colorScheme: boardColor.colors,
+                        ),
                       ),
                     ),
                   ),

@@ -44,7 +44,9 @@ class StreamerScreen extends StatelessWidget {
 
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text('Live Streamers'),
+      ),
       child: CustomScrollView(
         slivers: [
           SliverSafeArea(
