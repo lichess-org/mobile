@@ -38,7 +38,7 @@ abstract class Node {
       final nextNode = Branch(
         id: UciCharPair.fromMove(move),
         ply: ply,
-        move: SanMove(san, move),
+        sanMove: SanMove(san, move),
         fen: position.fen,
         position: position,
         children: [],
@@ -59,16 +59,6 @@ abstract class Node {
     return UciPath(path.toString());
   }
 
-  Node? nodeAtPath(UciPath path) {
-    if (path.isEmpty) return this;
-    final child = path.head != null ? byId(path.head!) : null;
-    if (child != null) {
-      return child.nodeAtPath(path.tail);
-    } else {
-      return null;
-    }
-  }
-
   Iterable<Branch> get mainline sync* {
     Node current = this;
     while (current.children.isNotEmpty) {
@@ -82,8 +72,39 @@ abstract class Node {
 
   void addChild(Branch branch) => children.add(branch);
 
-  Node? byId(UciCharPair id) {
-    if (this is Branch && (this as Branch).id == id) return this;
+  Node nodeAt(UciPath path) {
+    if (path.isEmpty) return this;
+    final child = path.head != null ? byId(path.head!) : null;
+    if (child != null) {
+      return child.nodeAt(path.tail);
+    } else {
+      return this;
+    }
+  }
+
+  Branch branchAt(UciPath path) {
+    if (path.isEmpty) return this as Branch;
+    final child = byId(path.head!);
+    if (child != null) {
+      return child.branchAt(path.tail);
+    } else {
+      return this as Branch;
+    }
+  }
+
+  Branch? branchAtOrNull(UciPath path) {
+    if (path.isEmpty) return this as Branch;
+    final child = byId(path.head!);
+    if (child != null) {
+      return child.branchAtOrNull(path.tail);
+    } else {
+      return null;
+    }
+  }
+
+  Branch? byId(UciCharPair id) {
+    final me = this;
+    if (me is Branch && me.id == id) return me;
     for (final child in children) {
       final node = child.byId(id);
       if (node != null) return node;
@@ -115,6 +136,39 @@ abstract class Node {
       const ListEquality<Branch>().hash(children);
 }
 
+class Branch extends Node {
+  Branch({
+    required this.id,
+    required super.ply,
+    required super.fen,
+    required super.position,
+    required this.sanMove,
+    required super.children,
+  });
+
+  final UciCharPair id;
+
+  final SanMove sanMove;
+
+  @override
+  Branch copyWith({
+    int? ply,
+    String? fen,
+    SanMove? sanMove,
+    Position? position,
+    List<Branch>? children,
+  }) {
+    return Branch(
+      id: id,
+      ply: ply ?? this.ply,
+      fen: fen ?? this.fen,
+      sanMove: sanMove ?? this.sanMove,
+      position: position ?? this.position,
+      children: children ?? this.children,
+    );
+  }
+}
+
 class Root extends Node {
   Root({
     required super.ply,
@@ -134,38 +188,6 @@ class Root extends Node {
       ply: ply ?? this.ply,
       position: position ?? this.position,
       fen: fen ?? this.fen,
-      children: children ?? this.children,
-    );
-  }
-}
-
-class Branch extends Node {
-  Branch({
-    required this.id,
-    required super.ply,
-    required super.fen,
-    required super.position,
-    required this.move,
-    required super.children,
-  });
-
-  final UciCharPair id;
-  final SanMove move;
-
-  @override
-  Branch copyWith({
-    int? ply,
-    String? fen,
-    SanMove? move,
-    Position? position,
-    List<Branch>? children,
-  }) {
-    return Branch(
-      id: id,
-      ply: ply ?? this.ply,
-      fen: fen ?? this.fen,
-      move: move ?? this.move,
-      position: position ?? this.position,
       children: children ?? this.children,
     );
   }

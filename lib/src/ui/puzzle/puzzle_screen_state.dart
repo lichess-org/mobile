@@ -14,27 +14,47 @@ class PuzzleVm with _$PuzzleVm {
   const PuzzleVm._();
 
   const factory PuzzleVm({
-    required Puzzle puzzle,
-    required Node gameTree,
     required UciPath initialPath,
     required UciPath currentPath,
+    required Side pov,
+    required String fen,
+    required Position position,
+    Move? lastMove,
   }) = _PuzzleVm;
-
-  Node get initialNode => gameTree.nodeAtPath(initialPath) ?? gameTree;
-  Node get currentNode => gameTree.nodeAtPath(currentPath) ?? gameTree;
-  Side get pov => initialNode.ply.isEven ? Side.white : Side.black;
 }
 
 @riverpod
 class PuzzleScreenState extends _$PuzzleScreenState {
+  Node? _gameTree;
+
   @override
   PuzzleVm build(Puzzle puzzle) {
-    final gameTree = Node.fromPgn(puzzle.game.pgn);
+    _gameTree = Node.fromPgn(puzzle.game.pgn);
+
+    Future<void>.delayed(const Duration(seconds: 1))
+        .then((_) => _replayFirstMove());
+
+    final initialPath = _gameTree!.mainlinePath;
+    final currentPath = _gameTree!.mainlinePath.penultimate;
+    final currentNode = _gameTree!.nodeAt(currentPath);
+
     return PuzzleVm(
-      puzzle: puzzle,
-      gameTree: gameTree,
-      initialPath: gameTree.mainlinePath,
-      currentPath: gameTree.mainlinePath.penultimate,
+      initialPath: initialPath,
+      currentPath: currentPath,
+      position: currentNode.position,
+      fen: currentNode.fen,
+      pov: _gameTree!.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
+    );
+  }
+
+  void _replayFirstMove() {
+    final newPath = state.initialPath;
+    final newNode = _gameTree!.branchAt(newPath);
+    state = state.copyWith(
+      currentPath: newPath,
+      position: newNode.position,
+      fen: newNode.fen,
+      lastMove: newNode.sanMove.move,
     );
   }
 }

@@ -71,7 +71,8 @@ class _Body extends ConsumerWidget {
           boardData: cg.BoardData(
             orientation: puzzleState.pov.cg,
             interactableSide: cg.InteractableSide.none,
-            fen: puzzleState.currentNode.fen,
+            fen: puzzleState.fen,
+            lastMove: puzzleState.lastMove?.cg,
           ),
           boardSettings: cg.BoardSettings(
             pieceAssets: pieceSet.assets,

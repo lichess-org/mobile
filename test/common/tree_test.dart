@@ -33,7 +33,7 @@ void main() {
         id: UciCharPair.fromMove(move.move),
         ply: 2,
         fen: 'fen',
-        move: move,
+        sanMove: move,
         position: Chess.initial,
         children: [],
       );
@@ -55,7 +55,7 @@ void main() {
               id: UciCharPair.fromMove(move.move),
               ply: 3,
               fen: 'fen',
-              move: move,
+              sanMove: move,
               position: Chess.initial,
               children: [],
             ) ==
@@ -63,7 +63,7 @@ void main() {
               id: UciCharPair.fromMove(move.move),
               ply: 2,
               fen: 'fen',
-              move: move,
+              sanMove: move,
               position: Chess.initial,
               children: [],
             ),
@@ -76,7 +76,7 @@ void main() {
               id: UciCharPair.fromMove(move.move),
               ply: 2,
               fen: 'otherfen',
-              move: move,
+              sanMove: move,
               position: Chess.initial,
               children: [],
             ) ==
@@ -84,7 +84,7 @@ void main() {
               id: UciCharPair.fromMove(move.move),
               ply: 2,
               fen: 'fen',
-              move: move,
+              sanMove: move,
               position: Chess.initial,
               children: [],
             ),
@@ -97,7 +97,7 @@ void main() {
               id: UciCharPair.fromMove(move.move),
               ply: 2,
               fen: 'fen',
-              move: move,
+              sanMove: move,
               position: Chess.initial,
               children: [],
             ) ==
@@ -105,7 +105,7 @@ void main() {
               id: UciCharPair.fromMove(move.move),
               ply: 2,
               fen: 'fen',
-              move: move,
+              sanMove: move,
               position: Chess.initial.playUnchecked(Move.fromUci('e2e4')!),
               children: [],
             ),
@@ -119,8 +119,8 @@ void main() {
 
       expect(mainline.length, equals(2));
       final list = mainline.toList();
-      expect(list[0].move, equals(SanMove('e4', Move.fromUci('e2e4')!)));
-      expect(list[1].move, equals(SanMove('e5', Move.fromUci('e7e5')!)));
+      expect(list[0].sanMove, equals(SanMove('e4', Move.fromUci('e2e4')!)));
+      expect(list[1].sanMove, equals(SanMove('e5', Move.fromUci('e7e5')!)));
     });
   });
 }
