@@ -64,6 +64,27 @@ abstract class Node {
     }
   }
 
+  Iterable<Branch> nodeListAt(UciPath path) sync* {
+    UciPath currentPath = path;
+
+    Branch? pickChild(Node node) {
+      final id = currentPath.head;
+      if (id == null) {
+        return null;
+      }
+      return node.byId(id);
+    }
+
+    Node current = this;
+    Branch? child;
+
+    while ((child = pickChild(current)) != null) {
+      yield child!;
+      current = child;
+      currentPath = currentPath.tail;
+    }
+  }
+
   UciPath get mainlinePath => pathFrom(mainline);
 
   void addChild(Branch branch) => children.add(branch);

@@ -28,6 +28,34 @@ void main() {
       );
     });
 
+    test('nodeListAt, simple', () {
+      final node = Node.fromPgn('e4 e5');
+      final path = UciPath.fromId(UciCharPair.fromUci('e2e4'));
+      final nodeList = node.nodeListAt(path);
+      expect(nodeList.length, equals(1));
+      expect(nodeList.first, equals(node.nodeAt(path)));
+    });
+
+    test('nodeListAt, with variation', () {
+      final node = Node.fromPgn('e4 e5 Nf3');
+      final move = Move.fromUci('b1c3')!;
+      final tuple = node.addMoveAt(
+        UciPath.fromIds(
+          [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,
+        ),
+        move,
+      );
+
+      // mainline has not changed
+      expect(node.mainline.length, equals(3));
+      expect(node.mainline.last, equals(node.nodeAt(node.mainlinePath)));
+
+      final path = tuple.item1!;
+      final nodeList = node.nodeListAt(path);
+      expect(nodeList.length, equals(3));
+      expect(nodeList.last, equals(tuple.item2));
+    });
+
     test('mainline', () {
       final node = Node.fromPgn('e4 e5');
       final mainline = node.mainline;
