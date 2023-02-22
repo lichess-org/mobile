@@ -12,6 +12,14 @@ class UciCharPair with _$UciCharPair {
 
   const factory UciCharPair(String a, String b) = _UciCharPair;
 
+  factory UciCharPair.fromUci(String uci) {
+    final move = Move.fromUci(uci);
+    if (move == null) {
+      throw ArgumentError('Invalid uci $uci');
+    }
+    return UciCharPair.fromMove(move);
+  }
+
   factory UciCharPair.fromMove(Move move) {
     if (move is DropMove) {
       final roles = [
@@ -42,7 +50,7 @@ class UciCharPair with _$UciCharPair {
       );
     }
 
-    return const UciCharPair('0', '0');
+    throw ArgumentError('Invalid move type $move');
   }
 
   factory UciCharPair.fromJson(Map<String, dynamic> json) =>

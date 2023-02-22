@@ -7,109 +7,23 @@ import 'package:lichess_mobile/src/common/tree.dart';
 
 void main() {
   group('Node', () {
-    test('overrides equal', () {
-      // same
-      final root = Root(
-        ply: 1,
-        fen: 'fen',
-        position: Chess.initial,
-        children: [],
+    test('Node.fromPgn', () {
+      final node = Node.fromPgn('e4 e5');
+      expect(node.ply, equals(0));
+      expect(node.fen, equals(kInitialFEN));
+      expect(node.position, equals(Chess.initial));
+      expect(node.children.length, equals(1));
+      final child = node.children.first;
+      expect(child.id, equals(UciCharPair.fromMove(Move.fromUci('e2e4')!)));
+      expect(child.ply, equals(1));
+      expect(child.sanMove, equals(SanMove('e4', Move.fromUci('e2e4')!)));
+      expect(
+        child.fen,
+        equals('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1'),
       );
       expect(
-        root,
-        equals(
-          Root(
-            ply: 1,
-            fen: 'fen',
-            position: Chess.initial,
-            children: [],
-          ),
-        ),
-      );
-
-      // branch vs root
-      final move = SanMove('e4', Move.fromUci('e2e4')!);
-      final branch = Branch(
-        id: UciCharPair.fromMove(move.move),
-        ply: 2,
-        fen: 'fen',
-        sanMove: move,
-        position: Chess.initial,
-        children: [],
-      );
-
-      expect(branch == root, isFalse);
-
-      // different children
-      final node = Root(
-        ply: 1,
-        fen: 'fen',
-        position: Chess.initial,
-        children: [branch],
-      );
-      expect(node == root, isFalse);
-
-      // different ply
-      expect(
-        Branch(
-              id: UciCharPair.fromMove(move.move),
-              ply: 3,
-              fen: 'fen',
-              sanMove: move,
-              position: Chess.initial,
-              children: [],
-            ) ==
-            Branch(
-              id: UciCharPair.fromMove(move.move),
-              ply: 2,
-              fen: 'fen',
-              sanMove: move,
-              position: Chess.initial,
-              children: [],
-            ),
-        isFalse,
-      );
-
-      // different fen
-      expect(
-        Branch(
-              id: UciCharPair.fromMove(move.move),
-              ply: 2,
-              fen: 'otherfen',
-              sanMove: move,
-              position: Chess.initial,
-              children: [],
-            ) ==
-            Branch(
-              id: UciCharPair.fromMove(move.move),
-              ply: 2,
-              fen: 'fen',
-              sanMove: move,
-              position: Chess.initial,
-              children: [],
-            ),
-        isFalse,
-      );
-
-      // different position
-      expect(
-        Branch(
-              id: UciCharPair.fromMove(move.move),
-              ply: 2,
-              fen: 'fen',
-              sanMove: move,
-              position: Chess.initial,
-              children: [],
-            ) ==
-            Branch(
-              id: UciCharPair.fromMove(move.move),
-              ply: 2,
-              fen: 'fen',
-              sanMove: move,
-              position: Chess.initial.playUnchecked(Move.fromUci('e2e4')!),
-              children: [],
-            ),
-        isFalse,
+        child.position,
+        equals(Chess.initial.playUnchecked(Move.fromUci('e2e4')!)),
       );
     });
 
@@ -121,6 +35,41 @@ void main() {
       final list = mainline.toList();
       expect(list[0].sanMove, equals(SanMove('e4', Move.fromUci('e2e4')!)));
       expect(list[1].sanMove, equals(SanMove('e5', Move.fromUci('e7e5')!)));
+    });
+
+    test('add child', () {
+      final node = Root(
+        ply: 0,
+        fen: 'fen',
+        position: Chess.initial,
+      );
+      final child = Branch(
+        id: UciCharPair.fromMove(Move.fromUci('e2e4')!),
+        ply: 1,
+        sanMove: SanMove('e4', Move.fromUci('e2e4')!),
+        fen: 'fen2',
+        position: Chess.initial,
+      );
+      node.addChild(child);
+      expect(node.children.length, equals(1));
+      expect(node.children.first, equals(child));
+    });
+
+    test('branchAt', () {
+      final node = Node.fromPgn('e4 e5');
+      final branch = node.branchAt(UciPath.fromId(UciCharPair.fromUci('e2e4')));
+      expect(branch, equals(node.children.first));
+    });
+
+    test('branchAtOrNull', () {
+      final node = Node.fromPgn('e4 e5');
+      final branch =
+          node.branchAtOrNull(UciPath.fromId(UciCharPair.fromUci('e2e4')));
+      expect(branch, equals(node.children.first));
+
+      final branch2 =
+          node.branchAtOrNull(UciPath.fromId(UciCharPair.fromUci('c1b3')));
+      expect(branch2, isNull);
     });
   });
 }

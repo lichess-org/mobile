@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
@@ -9,13 +8,12 @@ abstract class Node {
     required this.ply,
     required this.fen,
     required this.position,
-    required this.children,
   });
 
   final int ply;
   final String fen;
   final Position position;
-  final List<Branch> children;
+  final List<Branch> children = [];
 
   /// Creates a game tree from a PGN string.
   ///
@@ -27,7 +25,6 @@ abstract class Node {
       ply: ply,
       fen: kInitialFEN,
       position: position,
-      children: [],
     );
     Node current = root;
     final moves = pgn.split(' ');
@@ -41,7 +38,6 @@ abstract class Node {
         sanMove: SanMove(san, move),
         fen: position.fen,
         position: position,
-        children: [],
       );
       current.addChild(nextNode);
       current = nextNode;
@@ -88,7 +84,7 @@ abstract class Node {
     if (child != null) {
       return child.branchAt(path.tail);
     } else {
-      return this as Branch;
+      throw ArgumentError('Invalid path: no branch found at $path');
     }
   }
 
@@ -111,29 +107,6 @@ abstract class Node {
     }
     return null;
   }
-
-  Node copyWith({
-    int? ply,
-    String? fen,
-    List<Branch>? children,
-  });
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        other is Node &&
-            other.ply == ply &&
-            other.fen == fen &&
-            other.position == position &&
-            const ListEquality<Branch>().equals(other.children, children);
-  }
-
-  @override
-  int get hashCode =>
-      ply.hashCode ^
-      fen.hashCode ^
-      position.hashCode ^
-      const ListEquality<Branch>().hash(children);
 }
 
 class Branch extends Node {
@@ -143,20 +116,17 @@ class Branch extends Node {
     required super.fen,
     required super.position,
     required this.sanMove,
-    required super.children,
   });
 
   final UciCharPair id;
 
   final SanMove sanMove;
 
-  @override
   Branch copyWith({
     int? ply,
     String? fen,
     SanMove? sanMove,
     Position? position,
-    List<Branch>? children,
   }) {
     return Branch(
       id: id,
@@ -164,7 +134,6 @@ class Branch extends Node {
       fen: fen ?? this.fen,
       sanMove: sanMove ?? this.sanMove,
       position: position ?? this.position,
-      children: children ?? this.children,
     );
   }
 }
@@ -174,21 +143,5 @@ class Root extends Node {
     required super.ply,
     required super.fen,
     required super.position,
-    required super.children,
   });
-
-  @override
-  Root copyWith({
-    int? ply,
-    String? fen,
-    Position? position,
-    List<Branch>? children,
-  }) {
-    return Root(
-      ply: ply ?? this.ply,
-      position: position ?? this.position,
-      fen: fen ?? this.fen,
-      children: children ?? this.children,
-    );
-  }
 }
