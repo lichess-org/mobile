@@ -1,23 +1,21 @@
-import 'package:meta/meta.dart';
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
 
-@immutable
 abstract class Node {
   Node({
     required this.ply,
     required this.fen,
     required this.position,
-    required Iterable<Branch> children,
-  }) : children = IList(children);
+    required this.children,
+  });
 
   final int ply;
   final String fen;
   final Position position;
-  final IList<Branch> children;
+  final List<Branch> children;
 
   /// Creates a game tree from a PGN string.
   ///
@@ -25,32 +23,33 @@ abstract class Node {
   factory Node.fromPgn(String pgn) {
     int ply = 0;
     Position position = Chess.initial;
-    Node node = Root(
+    final root = Root(
       ply: ply,
       fen: kInitialFEN,
       position: position,
-      children: const [],
+      children: [],
     );
+    Node current = root;
     final moves = pgn.split(' ');
     for (final san in moves) {
       ply++;
       final move = position.parseSan(san);
       position = position.playUnchecked(move!);
-      node = node.addChild(
-        Branch(
-          id: UciCharPair.fromMove(move),
-          ply: ply,
-          move: SanMove(san, move),
-          fen: position.fen,
-          position: position,
-          children: const [],
-        ),
+      final nextNode = Branch(
+        id: UciCharPair.fromMove(move),
+        ply: ply,
+        move: SanMove(san, move),
+        fen: position.fen,
+        position: position,
+        children: [],
       );
+      current.addChild(nextNode);
+      current = nextNode;
     }
-    return node;
+    return root;
   }
 
-  static UciPath pathFrom(IList<Node> nodeList) {
+  static UciPath pathFrom(Iterable<Node> nodeList) {
     final path = StringBuffer();
     for (final node in nodeList) {
       if (node is Branch) {
@@ -70,19 +69,18 @@ abstract class Node {
     }
   }
 
-  IList<Branch> get mainline {
-    final List<Branch> mainline = [];
+  Iterable<Branch> get mainline sync* {
     Node current = this;
     while (current.children.isNotEmpty) {
-      current = current.children.first;
-      mainline.add(current as Branch);
+      final child = current.children.first;
+      yield child;
+      current = child;
     }
-    return IList(mainline);
   }
 
   UciPath get mainlinePath => pathFrom(mainline);
 
-  Node addChild(Branch branch);
+  void addChild(Branch branch) => children.add(branch);
 
   Node? byId(UciCharPair id) {
     if (this is Branch && (this as Branch).id == id) return this;
@@ -96,7 +94,7 @@ abstract class Node {
   Node copyWith({
     int? ply,
     String? fen,
-    Iterable<Branch>? children,
+    List<Branch>? children,
   });
 
   @override
@@ -105,14 +103,18 @@ abstract class Node {
         other is Node &&
             other.ply == ply &&
             other.fen == fen &&
-            other.children == children;
+            other.position == position &&
+            const ListEquality<Branch>().equals(other.children, children);
   }
 
   @override
-  int get hashCode => ply.hashCode ^ fen.hashCode ^ children.hashCode;
+  int get hashCode =>
+      ply.hashCode ^
+      fen.hashCode ^
+      position.hashCode ^
+      const ListEquality<Branch>().hash(children);
 }
 
-@immutable
 class Root extends Node {
   Root({
     required super.ply,
@@ -122,14 +124,11 @@ class Root extends Node {
   });
 
   @override
-  Root addChild(Branch branch) => copyWith(children: children.add(branch));
-
-  @override
   Root copyWith({
     int? ply,
     String? fen,
     Position? position,
-    Iterable<Branch>? children,
+    List<Branch>? children,
   }) {
     return Root(
       ply: ply ?? this.ply,
@@ -140,7 +139,6 @@ class Root extends Node {
   }
 }
 
-@immutable
 class Branch extends Node {
   Branch({
     required this.id,
@@ -155,15 +153,12 @@ class Branch extends Node {
   final SanMove move;
 
   @override
-  Branch addChild(Branch branch) => copyWith(children: children.add(branch));
-
-  @override
   Branch copyWith({
     int? ply,
     String? fen,
     SanMove? move,
     Position? position,
-    Iterable<Branch>? children,
+    List<Branch>? children,
   }) {
     return Branch(
       id: id,

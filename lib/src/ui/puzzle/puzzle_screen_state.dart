@@ -3,7 +3,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/common/tree.dart';
-import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 
@@ -30,34 +29,12 @@ class PuzzleVm with _$PuzzleVm {
 class PuzzleScreenState extends _$PuzzleScreenState {
   @override
   PuzzleVm build(Puzzle puzzle) {
-    int ply = 0;
-    Node root = Root(
-      ply: ply,
-      fen: kInitialFEN,
-      position: Chess.initial,
-      children: const [],
-    );
-    final moves = puzzle.game.pgn.split(' ');
-    for (final san in moves) {
-      ply++;
-      final move = root.position.parseSan(san);
-      final position = root.position.playUnchecked(move!);
-      root = root.addChild(
-        Branch(
-          id: UciCharPair.fromMove(move),
-          ply: ply,
-          move: SanMove(san, move),
-          fen: position.fen,
-          position: position,
-          children: const [],
-        ),
-      );
-    }
+    final gameTree = Node.fromPgn(puzzle.game.pgn);
     return PuzzleVm(
       puzzle: puzzle,
-      gameTree: root,
-      initialPath: root.mainlinePath,
-      currentPath: root.mainlinePath.penultimate,
+      gameTree: gameTree,
+      initialPath: gameTree.mainlinePath,
+      currentPath: gameTree.mainlinePath.penultimate,
     );
   }
 }
