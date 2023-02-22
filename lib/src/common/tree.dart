@@ -68,6 +68,31 @@ abstract class Node {
 
   void addChild(Branch branch) => children.add(branch);
 
+  UciPath? addBranchAt(UciPath path, Branch newBranch) {
+    final newPath = path + newBranch.id;
+    final branch = branchAtOrNull(path);
+    if (branch != null) {
+      branch.addChild(newBranch);
+      return newPath;
+    } else {
+      return null;
+    }
+  }
+
+  Tuple2<UciPath?, Branch?> addMoveAt(UciPath path, Move move) {
+    final pos = nodeAt(path).position;
+    final newPosSan = pos.playToSan(move);
+    final newBranch = Branch(
+      id: UciCharPair.fromMove(move),
+      ply: 2 * (pos.fullmoves - 1) + (pos.turn == Side.white ? 0 : 1),
+      sanMove: SanMove(newPosSan.item2, move),
+      fen: newPosSan.item1.fen,
+      position: newPosSan.item1,
+    );
+    final newPath = addBranchAt(path, newBranch);
+    return Tuple2(newPath, newBranch);
+  }
+
   Node nodeAt(UciPath path) {
     if (path.isEmpty) return this;
     final child = path.head != null ? byId(path.head!) : null;

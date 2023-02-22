@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
@@ -68,8 +69,56 @@ void main() {
       expect(branch, equals(node.children.first));
 
       final branch2 =
-          node.branchAtOrNull(UciPath.fromId(UciCharPair.fromUci('c1b3')));
+          node.branchAtOrNull(UciPath.fromId(UciCharPair.fromUci('b1c3')));
       expect(branch2, isNull);
+    });
+
+    test('addBranchAt', () {
+      final node = Node.fromPgn('e4 e5');
+      final branch = Branch(
+        id: UciCharPair.fromMove(Move.fromUci('b8c6')!),
+        ply: 2,
+        sanMove: SanMove('e4', Move.fromUci('b8c6')!),
+        fen: 'fen2',
+        position: Chess.initial,
+      );
+      node.addBranchAt(UciPath.fromId(UciCharPair.fromUci('e2e4')), branch);
+
+      final testNode =
+          node.branchAt(UciPath.fromId(UciCharPair.fromUci('e2e4')));
+      expect(testNode.children.length, equals(2));
+      expect(testNode.children[1], equals(branch));
+    });
+
+    test('addMoveAt', () {
+      final node = Node.fromPgn('e4 e5');
+      final move = Move.fromUci('b1c3')!;
+      final path = UciPath.fromIds(
+        [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,
+      );
+      final currentPath = node.mainlinePath;
+      final tuple = node.addMoveAt(path, move);
+      expect(
+        tuple.item1,
+        equals(currentPath + UciCharPair.fromMove(move)),
+      );
+      expect(tuple.item2?.sanMove, equals(SanMove('Nc3', move)));
+      expect(
+        tuple.item2?.fen,
+        equals(
+          'rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2',
+        ),
+      );
+
+      final testNode = node.branchAt(path);
+      expect(testNode.children.length, equals(1));
+      expect(testNode.children.first.sanMove, equals(SanMove('Nc3', move)));
+      expect(
+        testNode.children.first.fen,
+        equals(
+          'rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2',
+        ),
+      );
     });
   });
 }

@@ -72,6 +72,8 @@ class UciPath with _$UciPath {
   factory UciPath.fromIds(IList<UciCharPair> ids) =>
       UciPath(ids.map((id) => id.toString()).join(''));
 
+  UciPath operator +(UciCharPair id) => UciPath(value + id.toString());
+
   UciCharPair? get head =>
       value.isEmpty ? null : UciCharPair(value[0], value[1]);
 

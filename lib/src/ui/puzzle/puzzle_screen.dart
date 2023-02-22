@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
+import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
@@ -70,9 +71,18 @@ class _Body extends ConsumerWidget {
         child: GameBoardLayout(
           boardData: cg.BoardData(
             orientation: puzzleState.pov.cg,
-            interactableSide: cg.InteractableSide.none,
+            interactableSide: puzzleState.pov == Side.white
+                ? cg.InteractableSide.white
+                : cg.InteractableSide.black,
             fen: puzzleState.fen,
             lastMove: puzzleState.lastMove?.cg,
+            sideToMove: puzzleState.position.turn.cg,
+            validMoves: puzzleState.validMoves,
+            onMove: (move, {isPremove}) {
+              ref
+                  .read(puzzleScreenStateProvider(puzzle).notifier)
+                  .playMove(Move.fromUci(move.uci)!);
+            },
           ),
           boardSettings: cg.BoardSettings(
             pieceAssets: pieceSet.assets,

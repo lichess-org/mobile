@@ -21,6 +21,8 @@ class PuzzleVm with _$PuzzleVm {
     required Position position,
     Move? lastMove,
   }) = _PuzzleVm;
+
+  Map<String, Set<String>> get validMoves => algebraicLegalMoves(position);
 }
 
 @riverpod
@@ -45,6 +47,20 @@ class PuzzleScreenState extends _$PuzzleScreenState {
       fen: currentNode.fen,
       pov: _gameTree!.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
     );
+  }
+
+  void playMove(Move move) {
+    final tuple = _gameTree!.addMoveAt(state.currentPath, move);
+    final newPath = tuple.item1;
+    final newBranch = tuple.item2;
+    if (newPath != null && newBranch != null) {
+      state = state.copyWith(
+        currentPath: newPath,
+        position: newBranch.position,
+        fen: newBranch.fen,
+        lastMove: newBranch.sanMove.move,
+      );
+    }
   }
 
   void _replayFirstMove() {
