@@ -3,6 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/common/chess.dart';
 
 part 'puzzle.freezed.dart';
 part 'puzzle.g.dart';
@@ -19,6 +20,8 @@ class Puzzle with _$Puzzle {
 
 @Freezed(fromJson: true, toJson: true)
 class PuzzleData with _$PuzzleData {
+  const PuzzleData._();
+
   const factory PuzzleData({
     required PuzzleId id,
     required int rating,
@@ -27,6 +30,26 @@ class PuzzleData with _$PuzzleData {
     required IList<UCIMove> solution,
     required ISet<String> themes,
   }) = _PuzzleData;
+
+  /// Test user moves against solution.
+  bool testSolution(Iterable<SanMove> sanMoves) {
+    for (var i = 0; i < sanMoves.length; i++) {
+      final sanMove = sanMoves.elementAt(i);
+      final uci = sanMove.move.uci;
+      final isCheckmate = sanMove.san.endsWith('#');
+      final solutionUci = solution.getOrNull(i);
+      if (isCheckmate) {
+        return true;
+      }
+      if (uci == solutionUci) {
+        return true;
+      }
+      if (altCastles.containsKey(uci) && altCastles[uci] == solutionUci) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   factory PuzzleData.fromJson(Map<String, dynamic> json) =>
       _$PuzzleDataFromJson(json);

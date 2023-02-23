@@ -56,9 +56,10 @@ class PuzzleScreenState extends _$PuzzleScreenState {
   Future<void> playUserMove(Move move) async {
     _addMove(move);
 
-    if (_testMoveAgainstSolution(move)) {
-      final nextUci =
-          state.puzzle.solution.getOrNull(state.nodeList.length - 1);
+    final movesToTest = state.nodeList.sublist(1).map((e) => e.sanMove);
+
+    if (state.puzzle.testSolution(movesToTest)) {
+      final nextUci = state.puzzle.solution.getOrNull(movesToTest.length);
       if (nextUci != null) {
         await Future<void>.delayed(const Duration(milliseconds: 500));
         _addMove(Move.fromUci(nextUci)!);
@@ -79,27 +80,6 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     }
   }
 
-  bool _testMoveAgainstSolution(Move move) {
-    final sanMoves = state.nodeList.sublist(1).map((e) => e.sanMove);
-    print('sanMoves: $sanMoves');
-    for (var i = 0; i < sanMoves.length; i++) {
-      final sanMove = sanMoves.elementAt(i);
-      final uci = sanMove.move.uci;
-      final isCheckmate = sanMove.san.endsWith('#');
-      final solutionUci = state.puzzle.solution.elementAt(i);
-      if (isCheckmate) {
-        return true;
-      }
-      if (uci == solutionUci) {
-        return true;
-      }
-      if (altCastles.containsKey(uci) && altCastles[uci] == solutionUci) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   void _replayFirstMove() {
     final newPath = state.initialPath;
     final newNodeList = _makeNodeList(newPath, state.initialPath);
@@ -116,10 +96,3 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     return IList(nodeList).sublist(math.min(current.size, initial.size) - 1);
   }
 }
-
-const altCastles = {
-  'e1a1': 'e1c1',
-  'e1h1': 'e1g1',
-  'e8a8': 'e8c8',
-  'e8h8': 'e8g8',
-};
