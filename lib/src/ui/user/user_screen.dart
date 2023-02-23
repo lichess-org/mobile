@@ -24,8 +24,6 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 
-import '../game/create_game_screen.dart';
-
 class UserScreen extends ConsumerWidget {
   const UserScreen({required this.user, super.key});
 
