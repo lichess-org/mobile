@@ -62,26 +62,40 @@ class PuzzleScreenState extends _$PuzzleScreenState {
   Future<void> playUserMove(Move move) async {
     _addMove(move);
 
-    final movesToTest = state.nodeList.sublist(1).map((e) => e.sanMove);
+    if (state.mode == PuzzleMode.play) {
+      final movesToTest = state.nodeList.sublist(1).map((e) => e.sanMove);
+      final isGoodMove = state.puzzle.testSolution(movesToTest);
 
-    if (state.mode == PuzzleMode.play &&
-        state.puzzle.testSolution(movesToTest)) {
-      final isCheckmate = movesToTest.last.san.endsWith('#');
-      final nextUci = state.puzzle.solution.getOrNull(movesToTest.length);
-      // checkmate is always a win
-      if (isCheckmate) {
-        state = state.copyWith(mode: PuzzleMode.view);
-      }
-      // good move: let's continue
-      else if (nextUci != null) {
+      if (isGoodMove) {
+        final isCheckmate = movesToTest.last.san.endsWith('#');
+        final nextUci = state.puzzle.solution.getOrNull(movesToTest.length);
+        // checkmate is always a win
+        if (isCheckmate) {
+          state = state.copyWith(mode: PuzzleMode.view);
+        }
+        // another puzzle move: let's continue
+        else if (nextUci != null) {
+          await Future<void>.delayed(const Duration(milliseconds: 500));
+          _addMove(Move.fromUci(nextUci)!);
+        }
+        // no more puzzle move: it's a win
+        else {
+          state = state.copyWith(mode: PuzzleMode.view);
+        }
+      } else {
         await Future<void>.delayed(const Duration(milliseconds: 500));
-        _addMove(Move.fromUci(nextUci)!);
-      }
-      // no more solution move: it's a win
-      else {
-        state = state.copyWith(mode: PuzzleMode.view);
+        _setPath(state.currentPath.penultimate);
       }
     }
+  }
+
+  void _setPath(UciPath path) {
+    final newNodeList = _makeNodeList(path, state.initialPath);
+    state = state.copyWith(
+      currentPath: path,
+      nodeList: newNodeList,
+      lastMove: newNodeList.last.sanMove.move,
+    );
   }
 
   void _addMove(Move move) {

@@ -41,14 +41,12 @@ class PuzzleData with _$PuzzleData {
       if (isCheckmate) {
         return true;
       }
-      if (uci == solutionUci) {
-        return true;
-      }
-      if (altCastles.containsKey(uci) && altCastles[uci] == solutionUci) {
-        return true;
+      if (uci != solutionUci &&
+          (!altCastles.containsKey(uci) || altCastles[uci] != solutionUci)) {
+        return false;
       }
     }
-    return false;
+    return true;
   }
 
   factory PuzzleData.fromJson(Map<String, dynamic> json) =>
