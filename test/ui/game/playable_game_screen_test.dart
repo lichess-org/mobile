@@ -63,7 +63,7 @@ void main() {
         expect(find.widgetWithText(CountdownClock, '0:00'), findsNWidgets(2));
 
         // cannot interact with board during loading state
-        await tester.tap(find.byKey(const Key('e2-whitepawn')));
+        await tester.tap(find.byKey(const Key('e2-whitePawn')));
         await tester.pump();
         expect(find.byKey(const Key('e2-selected')), findsNothing);
 
@@ -81,7 +81,7 @@ void main() {
         expect(find.widgetWithText(CountdownClock, '3:00'), findsNWidgets(2));
 
         // board interaction is now possible
-        await tester.tap(find.byKey(const Key('e2-whitepawn')));
+        await tester.tap(find.byKey(const Key('e2-whitePawn')));
         await tester.pump();
         expect(find.byKey(const Key('e2-selected')), findsOneWidget);
       },
@@ -114,8 +114,8 @@ void main() {
 
         // move made
         verify(() => mockSoundService.playMove()).called(1);
-        expect(find.byKey(const Key('e4-whitepawn')), findsOneWidget);
-        expect(find.byKey(const Key('e2-whitepawn')), findsNothing);
+        expect(find.byKey(const Key('e4-whitePawn')), findsOneWidget);
+        expect(find.byKey(const Key('e2-whitePawn')), findsNothing);
 
         // can interact to make premoves
         await tester.tapAt(squareOffset('f1', boardRect));
@@ -140,16 +140,16 @@ void main() {
 
         // black move happened
         verify(() => mockSoundService.playMove()).called(1);
-        expect(find.byKey(const Key('e7-blackpawn')), findsNothing);
-        expect(find.byKey(const Key('e5-blackpawn')), findsOneWidget);
+        expect(find.byKey(const Key('e7-blackPawn')), findsNothing);
+        expect(find.byKey(const Key('e5-blackPawn')), findsOneWidget);
 
         _checkActiveClocks(tester, whiteActive: true, blackActive: false);
 
         // white plays a second move
         await makeMove(tester, boardRect, 'd2', 'd4');
         verify(() => mockSoundService.playMove()).called(1);
-        expect(find.byKey(const Key('d4-whitepawn')), findsOneWidget);
-        expect(find.byKey(const Key('d2-whitepawn')), findsNothing);
+        expect(find.byKey(const Key('d4-whitePawn')), findsOneWidget);
+        expect(find.byKey(const Key('d2-whitePawn')), findsNothing);
 
         _checkActiveClocks(tester, whiteActive: false, blackActive: true);
 
@@ -158,8 +158,8 @@ void main() {
 
         // black 2nd move happened
         verify(() => mockSoundService.playMove()).called(1);
-        expect(find.byKey(const Key('b8-blackknight')), findsNothing);
-        expect(find.byKey(const Key('c6-blackknight')), findsOneWidget);
+        expect(find.byKey(const Key('b8-blackKnight')), findsNothing);
+        expect(find.byKey(const Key('c6-blackKnight')), findsOneWidget);
 
         _checkActiveClocks(tester, whiteActive: true, blackActive: false);
 
@@ -180,7 +180,7 @@ void main() {
         await tester.tap(find.byKey(const Key('cursor-back')));
         await tester.pump();
         // back at initial position
-        expect(find.byKey(const Key('e2-whitepawn')), findsOneWidget);
+        expect(find.byKey(const Key('e2-whitePawn')), findsOneWidget);
         // cannot go backward anymore
         expect(
           tester

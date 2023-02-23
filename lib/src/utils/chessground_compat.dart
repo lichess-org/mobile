@@ -22,20 +22,20 @@ extension ChessgroundMoveCompat on Move {
 }
 
 extension ChessgroundRoleCompat on Role {
-  chessground.PieceRole get cg {
+  chessground.Role get cg {
     switch (this) {
       case Role.pawn:
-        return chessground.PieceRole.pawn;
+        return chessground.Role.pawn;
       case Role.knight:
-        return chessground.PieceRole.knight;
+        return chessground.Role.knight;
       case Role.bishop:
-        return chessground.PieceRole.bishop;
+        return chessground.Role.bishop;
       case Role.rook:
-        return chessground.PieceRole.rook;
+        return chessground.Role.rook;
       case Role.king:
-        return chessground.PieceRole.king;
+        return chessground.Role.king;
       case Role.queen:
-        return chessground.PieceRole.queen;
+        return chessground.Role.queen;
     }
   }
 }

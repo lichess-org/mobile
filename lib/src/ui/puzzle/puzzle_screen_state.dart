@@ -13,6 +13,10 @@ part 'puzzle_screen_state.freezed.dart';
 
 enum PuzzleMode { play, view }
 
+enum PuzzleResult { win, lose }
+
+enum PuzzleFeedback { good, bad }
+
 @freezed
 class PuzzleVm with _$PuzzleVm {
   const PuzzleVm._();
@@ -27,6 +31,8 @@ class PuzzleVm with _$PuzzleVm {
     /// Must be non empty
     required IList<Branch> nodeList,
     Move? lastMove,
+    PuzzleResult? result,
+    PuzzleFeedback? feedback,
   }) = _PuzzleVm;
 
   Position get position => nodeList.last.position;
@@ -67,11 +73,18 @@ class PuzzleScreenState extends _$PuzzleScreenState {
       final isGoodMove = state.puzzle.testSolution(movesToTest);
 
       if (isGoodMove) {
+        state = state.copyWith(
+          feedback: PuzzleFeedback.good,
+        );
+
         final isCheckmate = movesToTest.last.san.endsWith('#');
         final nextUci = state.puzzle.solution.getOrNull(movesToTest.length);
         // checkmate is always a win
         if (isCheckmate) {
-          state = state.copyWith(mode: PuzzleMode.view);
+          state = state.copyWith(
+            mode: PuzzleMode.view,
+            result: state.result ?? PuzzleResult.win,
+          );
         }
         // another puzzle move: let's continue
         else if (nextUci != null) {
@@ -80,9 +93,16 @@ class PuzzleScreenState extends _$PuzzleScreenState {
         }
         // no more puzzle move: it's a win
         else {
-          state = state.copyWith(mode: PuzzleMode.view);
+          state = state.copyWith(
+            mode: PuzzleMode.view,
+            result: state.result ?? PuzzleResult.win,
+          );
         }
       } else {
+        state = state.copyWith(
+          feedback: PuzzleFeedback.bad,
+          result: PuzzleResult.lose,
+        );
         await Future<void>.delayed(const Duration(milliseconds: 500));
         _setPath(state.currentPath.penultimate);
       }

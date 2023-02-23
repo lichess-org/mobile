@@ -6,6 +6,7 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -91,14 +92,82 @@ class _Body extends ConsumerWidget {
             colorScheme: boardTheme.colors,
           ),
           topPlayer: const SizedBox.shrink(),
-          bottomPlayer: ListTile(
-            leading: const Icon(LichessIcons.chess_king, size: 36),
-            title: Text(context.l10n.yourTurn),
-            subtitle: Text(context.l10n.findTheBestMoveForBlack),
+          bottomPlayer: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: _Feedback(state: puzzleState, pieceSet: pieceSet),
           ),
         ),
       ),
     );
+  }
+}
+
+class _Feedback extends StatelessWidget {
+  const _Feedback({
+    required this.state,
+    required this.pieceSet,
+  });
+
+  final PuzzleVm state;
+  final cg.PieceSet pieceSet;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (state.mode) {
+      case PuzzleMode.view:
+        return PlatformCard(
+          child: ListTile(
+            leading: state.result == PuzzleResult.win
+                ? const Icon(Icons.check, size: 36, color: LichessColors.good)
+                : null,
+            title: Text(
+              state.result == PuzzleResult.win
+                  ? context.l10n.puzzleSuccess
+                  : context.l10n.puzzleComplete,
+            ),
+          ),
+        );
+      case PuzzleMode.play:
+        if (state.feedback == PuzzleFeedback.bad) {
+          return PlatformCard(
+            child: ListTile(
+              leading: const Icon(
+                Icons.close,
+                size: 36,
+                color: LichessColors.error,
+              ),
+              title: Text(context.l10n.notTheMove),
+              subtitle: Text(context.l10n.trySomethingElse),
+            ),
+          );
+        } else if (state.feedback == PuzzleFeedback.good) {
+          return PlatformCard(
+            child: ListTile(
+              leading:
+                  const Icon(Icons.check, size: 36, color: LichessColors.good),
+              title: Text(context.l10n.bestMove),
+              subtitle: Text(context.l10n.keepGoing),
+            ),
+          );
+        } else {
+          return PlatformCard(
+            child: ListTile(
+              leading: Image(
+                image: pieceSet.assets[state.pov == Side.white
+                    ? cg.PieceKind.whiteKing
+                    : cg.PieceKind.blackKing]!,
+                height: 56,
+              ),
+              title: Text(context.l10n.yourTurn),
+              subtitle: Text(
+                state.pov == Side.white
+                    ? context.l10n.findTheBestMoveForWhite
+                    : context.l10n.findTheBestMoveForBlack,
+              ),
+            ),
+          );
+        }
+    }
   }
 }
 
