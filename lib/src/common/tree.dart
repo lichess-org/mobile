@@ -45,15 +45,7 @@ abstract class Node {
     return root;
   }
 
-  static UciPath pathFrom(Iterable<Node> nodeList) {
-    final path = StringBuffer();
-    for (final node in nodeList) {
-      if (node is Branch) {
-        path.write(node.id);
-      }
-    }
-    return UciPath(path.toString());
-  }
+  void addChild(Branch branch) => children.add(branch);
 
   Iterable<Branch> get mainline sync* {
     Node current = this;
@@ -64,7 +56,8 @@ abstract class Node {
     }
   }
 
-  Iterable<Branch> nodeListAt(UciPath path) sync* {
+  /// Selects all nodes on that path.
+  Iterable<Branch> nodesOn(UciPath path) sync* {
     UciPath currentPath = path;
 
     Branch? pickChild(Node node) {
@@ -85,33 +78,41 @@ abstract class Node {
     }
   }
 
-  UciPath get mainlinePath => pathFrom(mainline);
+  UciPath get mainlinePath => UciPath.fromNodeList(mainline);
 
-  void addChild(Branch branch) => children.add(branch);
-
-  UciPath? addBranchAt(UciPath path, Branch newBranch) {
+  /// Adds a new node at the given path.
+  ///
+  /// If the node already exists, it is not added again.
+  UciPath? addNodeAt(UciPath path, Branch newBranch) {
     final newPath = path + newBranch.id;
     final branch = branchAtOrNull(path);
     if (branch != null) {
-      branch.addChild(newBranch);
+      final existing = branchAtOrNull(newPath) != null;
+      if (!existing) {
+        branch.addChild(newBranch);
+      }
       return newPath;
     } else {
       return null;
     }
   }
 
+  /// Adds a new node with that [Move] at the given path.
+  ///
+  /// If the node already exists, it is not added again.
   Tuple2<UciPath?, Branch?> addMoveAt(UciPath path, Move move) {
     final pos = nodeAt(path).position;
     final newPosSan = pos.playToSan(move);
+    final newPos = newPosSan.item1;
     final newBranch = Branch(
       id: UciCharPair.fromMove(move),
-      ply: 2 * (pos.fullmoves - 1) + (pos.turn == Side.white ? 0 : 1),
+      ply: 2 * (newPos.fullmoves - 1) + (newPos.turn == Side.white ? 0 : 1),
       sanMove: SanMove(newPosSan.item2, move),
-      fen: newPosSan.item1.fen,
-      position: newPosSan.item1,
+      fen: newPos.fen,
+      position: newPos,
     );
-    final newPath = addBranchAt(path, newBranch);
-    return Tuple2(newPath, newBranch);
+    final newPath = addNodeAt(path, newBranch);
+    return Tuple2(newPath, newPath != null ? newBranch : null);
   }
 
   Node nodeAt(UciPath path) {
@@ -181,6 +182,11 @@ class Branch extends Node {
       sanMove: sanMove ?? this.sanMove,
       position: position ?? this.position,
     );
+  }
+
+  @override
+  String toString() {
+    return 'Branch(id: $id, ply: $ply, fen: $fen)';
   }
 }
 

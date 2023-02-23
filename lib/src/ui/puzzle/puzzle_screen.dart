@@ -81,7 +81,7 @@ class _Body extends ConsumerWidget {
             onMove: (move, {isPremove}) {
               ref
                   .read(puzzleScreenStateProvider(puzzle).notifier)
-                  .playMove(Move.fromUci(move.uci)!);
+                  .playUserMove(Move.fromUci(move.uci)!);
             },
           ),
           boardSettings: cg.BoardSettings(

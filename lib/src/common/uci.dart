@@ -2,6 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
+import 'package:lichess_mobile/src/common/tree.dart';
+
 part 'uci.freezed.dart';
 part 'uci.g.dart';
 
@@ -72,7 +74,23 @@ class UciPath with _$UciPath {
   factory UciPath.fromIds(IList<UciCharPair> ids) =>
       UciPath(ids.map((id) => id.toString()).join(''));
 
+  factory UciPath.fromNodeList(Iterable<Node> nodeList) {
+    final path = StringBuffer();
+    for (final node in nodeList) {
+      if (node is Branch) {
+        path.write(node.id);
+      }
+    }
+    return UciPath(path.toString());
+  }
+
+  static const empty = UciPath('');
+
   UciPath operator +(UciCharPair id) => UciPath(value + id.toString());
+
+  bool contains(UciPath other) => value.startsWith(other.value);
+
+  int get size => value.length ~/ 2;
 
   UciCharPair? get head =>
       value.isEmpty ? null : UciCharPair(value[0], value[1]);
@@ -82,10 +100,10 @@ class UciPath with _$UciPath {
       : UciCharPair(value[value.length - 2], value[value.length - 1]);
 
   UciPath get tail =>
-      value.isEmpty ? const UciPath('') : UciPath(value.substring(2));
+      value.isEmpty ? UciPath.empty : UciPath(value.substring(2));
 
   UciPath get penultimate => value.isEmpty
-      ? const UciPath('')
+      ? UciPath.empty
       : UciPath(value.substring(0, value.length - 2));
 
   bool get isEmpty => value.isEmpty;
