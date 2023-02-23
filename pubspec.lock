@@ -282,15 +282,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  dart_result:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: fff48e1d9b7b33a3cff54ef60d9d6ee669224ebf
-      resolved-ref: fff48e1d9b7b33a3cff54ef60d9d6ee669224ebf
-      url: "https://github.com/veloce/dart_result.git"
-    source: git
-    version: "0.1.0"
   dart_style:
     dependency: transitive
     description:
@@ -303,8 +294,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "038cae53f4609c4d5aa2eb34aa495cb7ec4510e9"
-      resolved-ref: "038cae53f4609c4d5aa2eb34aa495cb7ec4510e9"
+      ref: "95799f3e9ca8a7fc8788293ac94e716eeb9d320e"
+      resolved-ref: "95799f3e9ca8a7fc8788293ac94e716eeb9d320e"
       url: "https://github.com/lichess-org/dartchess.git"
     source: git
     version: "0.1.0"

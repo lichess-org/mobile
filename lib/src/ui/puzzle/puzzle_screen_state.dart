@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
@@ -41,7 +42,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
 
     final initialPath = _gameTree!.mainlinePath;
     final currentPath = _gameTree!.mainlinePath.penultimate;
-    final nodeList = _makeNodeList(currentPath);
+    final nodeList = _makeNodeList(currentPath, initialPath);
 
     return PuzzleVm(
       puzzle: puzzle.puzzle,
@@ -56,12 +57,12 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     _addMove(move);
 
     if (_testMoveAgainstSolution(move)) {
-      final replyMove = Move.fromUci(
-        state.puzzle.solution.elementAt(state.nodeList.length - 1),
-      );
-      await Future<void>.delayed(const Duration(seconds: 1));
-
-      _addMove(replyMove!);
+      final nextUci =
+          state.puzzle.solution.getOrNull(state.nodeList.length - 1);
+      if (nextUci != null) {
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        _addMove(Move.fromUci(nextUci)!);
+      }
     }
   }
 
@@ -69,7 +70,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     final tuple = _gameTree!.addMoveAt(state.currentPath, move);
     final newPath = tuple.item1;
     if (newPath != null) {
-      final newNodeList = _makeNodeList(newPath);
+      final newNodeList = _makeNodeList(newPath, state.initialPath);
       state = state.copyWith(
         currentPath: newPath,
         nodeList: newNodeList,
@@ -80,6 +81,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
 
   bool _testMoveAgainstSolution(Move move) {
     final sanMoves = state.nodeList.sublist(1).map((e) => e.sanMove);
+    print('sanMoves: $sanMoves');
     for (var i = 0; i < sanMoves.length; i++) {
       final sanMove = sanMoves.elementAt(i);
       final uci = sanMove.move.uci;
@@ -100,7 +102,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
 
   void _replayFirstMove() {
     final newPath = state.initialPath;
-    final newNodeList = _makeNodeList(newPath);
+    final newNodeList = _makeNodeList(newPath, state.initialPath);
     state = state.copyWith(
       currentPath: newPath,
       nodeList: newNodeList,
@@ -109,9 +111,9 @@ class PuzzleScreenState extends _$PuzzleScreenState {
   }
 
   // don't show all game moves but only the ones from the puzzle position
-  IList<Branch> _makeNodeList(UciPath current) {
+  IList<Branch> _makeNodeList(UciPath current, UciPath initial) {
     final nodeList = _gameTree!.nodesOn(current);
-    return IList(nodeList).sublist(current.size - 1);
+    return IList(nodeList).sublist(math.min(current.size, initial.size) - 1);
   }
 }
 

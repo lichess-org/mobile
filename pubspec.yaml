@@ -34,7 +34,7 @@ dependencies:
   dartchess:
     git:
       url: https://github.com/lichess-org/dartchess.git
-      ref: 038cae53f4609c4d5aa2eb34aa495cb7ec4510e9
+      ref: 95799f3e9ca8a7fc8788293ac94e716eeb9d320e
   chessground:
     git:
       url: https://github.com/lichess-org/flutter-chessground.git
@@ -52,10 +52,6 @@ dependencies:
       path: modal_bottom_sheet
       ref: e7e630e10b27ccab12da27acada9d47a13d79e9a
   fast_immutable_collections: ^8.1.1
-  dart_result:
-    git:
-      url: https://github.com/veloce/dart_result.git
-      ref: fff48e1d9b7b33a3cff54ef60d9d6ee669224ebf
   result_extensions:
     git:
       url: https://github.com/veloce/result_extensions.git
