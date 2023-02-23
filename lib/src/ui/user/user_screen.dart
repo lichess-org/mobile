@@ -24,6 +24,8 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 
+import '../game/create_game_screen.dart';
+
 class UserScreen extends ConsumerWidget {
   const UserScreen({required this.user, super.key});
 
@@ -204,6 +206,47 @@ class PerfCards extends StatelessWidget {
           p.ratingDeviation < kClueLessDeviation;
     }).toList(growable: false);
 
+    if (userPerfs.isEmpty) {
+      return Padding(
+        padding: Styles.bodySectionPadding,
+        child: SizedBox(
+          height: 106,
+          child: SizedBox(
+            height: 100,
+            width: 100,
+            child: GestureDetector(
+              onTap: () => _handlePlayGameCardTap(context),
+              child: PlatformCard(
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        context.l10n.playWithAFriend,
+                        // TODO: maybe put a new message to be translated
+                        style: TextStyle(color: textShade(context, 0.7)),
+                      ),
+                      Icon(
+                        LichessIcons.chess_king,
+                        color: textShade(context, 0.6),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: const [SizedBox(width: 3)],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     return Padding(
       padding: Styles.bodySectionPadding,
       child: SizedBox(
@@ -290,6 +333,14 @@ class PerfCards extends StatelessWidget {
           perf: perf,
           loggedInUser: user,
         ),
+      ),
+    );
+  }
+
+  void _handlePlayGameCardTap(BuildContext context) {
+    Navigator.of(context).push<void>(
+      MaterialPageRoute(
+        builder: (context) => const PlayScreen(),
       ),
     );
   }
