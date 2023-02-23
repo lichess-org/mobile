@@ -299,14 +299,6 @@ class PerfCards extends StatelessWidget {
       ),
     );
   }
-
-  void _handlePlayGameCardTap(BuildContext context) {
-    Navigator.of(context).push<void>(
-      MaterialPageRoute(
-        builder: (context) => const PlayScreen(),
-      ),
-    );
-  }
 }
 
 class RecentGames extends ConsumerWidget {
