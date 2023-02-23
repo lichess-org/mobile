@@ -11,15 +11,20 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 part 'puzzle_screen_state.g.dart';
 part 'puzzle_screen_state.freezed.dart';
 
+enum PuzzleMode { play, view }
+
 @freezed
 class PuzzleVm with _$PuzzleVm {
   const PuzzleVm._();
 
   const factory PuzzleVm({
     required PuzzleData puzzle,
+    required PuzzleMode mode,
     required UciPath initialPath,
     required UciPath currentPath,
     required Side pov,
+
+    /// Must be non empty
     required IList<Branch> nodeList,
     Move? lastMove,
   }) = _PuzzleVm;
@@ -46,6 +51,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
 
     return PuzzleVm(
       puzzle: puzzle.puzzle,
+      mode: PuzzleMode.play,
       initialPath: initialPath,
       currentPath: currentPath,
       nodeList: IList(nodeList),
@@ -58,11 +64,22 @@ class PuzzleScreenState extends _$PuzzleScreenState {
 
     final movesToTest = state.nodeList.sublist(1).map((e) => e.sanMove);
 
-    if (state.puzzle.testSolution(movesToTest)) {
+    if (state.mode == PuzzleMode.play &&
+        state.puzzle.testSolution(movesToTest)) {
+      final isCheckmate = movesToTest.last.san.endsWith('#');
       final nextUci = state.puzzle.solution.getOrNull(movesToTest.length);
-      if (nextUci != null) {
+      // checkmate is always a win
+      if (isCheckmate) {
+        state = state.copyWith(mode: PuzzleMode.view);
+      }
+      // good move: let's continue
+      else if (nextUci != null) {
         await Future<void>.delayed(const Duration(milliseconds: 500));
         _addMove(Move.fromUci(nextUci)!);
+      }
+      // no more solution move: it's a win
+      else {
+        state = state.copyWith(mode: PuzzleMode.view);
       }
     }
   }

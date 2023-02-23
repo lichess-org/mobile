@@ -71,9 +71,11 @@ class _Body extends ConsumerWidget {
         child: GameBoardLayout(
           boardData: cg.BoardData(
             orientation: puzzleState.pov.cg,
-            interactableSide: puzzleState.pov == Side.white
-                ? cg.InteractableSide.white
-                : cg.InteractableSide.black,
+            interactableSide: puzzleState.mode == PuzzleMode.view
+                ? cg.InteractableSide.both
+                : puzzleState.pov == Side.white
+                    ? cg.InteractableSide.white
+                    : cg.InteractableSide.black,
             fen: puzzleState.fen,
             lastMove: puzzleState.lastMove?.cg,
             sideToMove: puzzleState.position.turn.cg,
