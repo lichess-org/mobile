@@ -15,6 +15,9 @@ import 'puzzle_theme.dart';
 
 part 'puzzle_service.g.dart';
 
+/// Size of puzzle local cache
+const kPuzzleLocalQueueLength = 30;
+
 @Riverpod(keepAlive: true)
 PuzzleService puzzleService(PuzzleServiceRef ref) {
   final db = ref.watch(puzzleLocalDBProvider);
@@ -43,14 +46,18 @@ class PuzzleService {
     PuzzleTheme angle = PuzzleTheme.mix,
   }) {
     return Result.release(
-      _syncAndLoadData(userId, angle).map((data) => data?.unsolved[0]),
+      _syncAndLoadData(userId, angle).map(
+        (data) =>
+            data != null && data.unsolved.isNotEmpty ? data.unsolved[0] : null,
+      ),
     );
   }
 
-  /// Update puzzle queue with the solved puzzle and sync with server
+  /// Update puzzle queue with the solved puzzle, sync with server and returns
+  /// the next puzzle.
   ///
   /// This future should never fail on network errors.
-  Future<void> solve({
+  Future<Puzzle?> solve({
     UserId? userId,
     PuzzleTheme angle = PuzzleTheme.mix,
     required PuzzleSolution solution,
@@ -66,8 +73,9 @@ class PuzzleService {
               data.unsolved.removeWhere((e) => e.puzzle.id == solution.id),
         ),
       );
-      await _syncAndLoadData(userId, angle);
+      return nextPuzzle(userId: userId, angle: angle);
     }
+    return Future.value(null);
   }
 
   /// Synchronize offline puzzle queue with server and gets latest data.

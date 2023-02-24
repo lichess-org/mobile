@@ -51,11 +51,16 @@ void main() {
       final sharedPreferences = await SharedPreferences.getInstance();
 
       final db = PuzzleLocalDB(sharedPreferences);
-      final service = PuzzleService(mockLogger, db: db, repository: puzzleRepo);
+      final service = PuzzleService(
+        mockLogger,
+        db: db,
+        repository: puzzleRepo,
+        localQueueLength: 3,
+      );
 
       when(
         () => mockClient.get(
-          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=30'),
+          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=3'),
         ),
       ).thenAnswer((_) => mockResponse(batchOf3, 200));
 
@@ -63,7 +68,7 @@ void main() {
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
       verify(
         () => mockClient.get(
-          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=30'),
+          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=3'),
         ),
       ).called(1);
       expect(db.fetch()?.solved, equals(IList(const [])));
@@ -72,7 +77,8 @@ void main() {
 
     test('will not download data if local queue is full', () async {
       SharedPreferences.setMockInitialValues({
-        'PuzzleLocalDB.angle:mix': oneSavedPuzzle,
+        'PuzzleLocalDB.angle:mix':
+            _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       });
       final sharedPreferences = await SharedPreferences.getInstance();
 
@@ -92,7 +98,8 @@ void main() {
 
     test('will fetch puzzle deficit if local queue is not full', () async {
       SharedPreferences.setMockInitialValues({
-        'PuzzleLocalDB.angle:mix': oneSavedPuzzle,
+        'PuzzleLocalDB.angle:mix':
+            _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       });
       final sharedPreferences = await SharedPreferences.getInstance();
 
@@ -120,11 +127,11 @@ void main() {
       expect(db.fetch()?.unsolved.length, equals(2));
     });
 
-    test(
-        'nextPuzzle will always get the first puzzle of the queue as long as it is not solved',
+    test('nextPuzzle will always get the first puzzle of unsolved queue',
         () async {
       SharedPreferences.setMockInitialValues({
-        'PuzzleLocalDB.angle:mix': oneSavedPuzzle,
+        'PuzzleLocalDB.angle:mix':
+            _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       });
       final sharedPreferences = await SharedPreferences.getInstance();
 
@@ -145,9 +152,34 @@ void main() {
       expect(db.fetch()?.unsolved.length, equals(1));
     });
 
+    test('nextPuzzle returns null is unsolved queue is empty and is offline',
+        () async {
+      SharedPreferences.setMockInitialValues({});
+      final sharedPreferences = await SharedPreferences.getInstance();
+
+      when(
+        () => mockClient.get(
+          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
+        ),
+      ).thenAnswer((_) => Future.error(const SocketException('offline')));
+
+      final db = PuzzleLocalDB(sharedPreferences);
+      final service = PuzzleService(
+        mockLogger,
+        db: db,
+        repository: puzzleRepo,
+        localQueueLength: 1,
+      );
+
+      final nextPuzzle = await service.nextPuzzle();
+
+      expect(nextPuzzle, isNull);
+    });
+
     test('different batch is saved per userId', () async {
       SharedPreferences.setMockInitialValues({
-        'PuzzleLocalDB.angle:mix': oneSavedPuzzle,
+        'PuzzleLocalDB.angle:mix':
+            _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       });
       final sharedPreferences = await SharedPreferences.getInstance();
 
@@ -181,7 +213,8 @@ void main() {
 
     test('different batch is saved per angle', () async {
       SharedPreferences.setMockInitialValues({
-        'PuzzleLocalDB.angle:mix': oneSavedPuzzle,
+        'PuzzleLocalDB.angle:mix':
+            _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       });
       final sharedPreferences = await SharedPreferences.getInstance();
 
@@ -193,26 +226,23 @@ void main() {
         localQueueLength: 1,
       );
 
-      when(
-        () => mockClient.get(
-          Uri.parse('$kLichessHost/api/puzzle/batch/opening?nb=1'),
-        ),
-      ).thenAnswer((_) => mockResponse(batchOf1, 200));
+      Future<http.Response> getReq() => mockClient.get(
+            Uri.parse('$kLichessHost/api/puzzle/batch/opening?nb=1'),
+          );
+
+      when(() => getReq()).thenAnswer((_) => mockResponse(batchOf1, 200));
 
       final puzzle = await service.nextPuzzle(angle: PuzzleTheme.opening);
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
-      verify(
-        () => mockClient.get(
-          Uri.parse('$kLichessHost/api/puzzle/batch/opening?nb=1'),
-        ),
-      ).called(1);
+      verify(getReq).called(1);
 
       expect(db.fetch(angle: PuzzleTheme.opening)?.unsolved.length, equals(1));
     });
 
     test('solve puzzle when online', () async {
       SharedPreferences.setMockInitialValues({
-        'PuzzleLocalDB.angle:mix': oneSavedPuzzle,
+        'PuzzleLocalDB.angle:mix':
+            _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       });
       final sharedPreferences = await SharedPreferences.getInstance();
 
@@ -224,33 +254,40 @@ void main() {
         localQueueLength: 1,
       );
 
-      when(
-        () => mockClient.post(
-          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
-          headers: any(
-            named: 'headers',
-            that: sameHeaders({'Content-type': 'application/json'}),
-          ),
-          body:
-              '{"solutions":[{"id":{"value":"pId3"},"win":true,"rated":true}]}',
-        ),
-      ).thenAnswer((_) => mockResponse(batchOf1, 200));
+      Future<http.Response> postReq() => mockClient.post(
+            Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
+            headers: any(
+              named: 'headers',
+              that: sameHeaders({'Content-type': 'application/json'}),
+            ),
+            body:
+                '{"solutions":[{"id":{"value":"pId3"},"win":true,"rated":true}]}',
+          );
 
-      await service.solve(
+      when(postReq).thenAnswer((_) => mockResponse(batchOf1, 200));
+
+      final next = await service.solve(
         solution: const PuzzleSolution(
           id: PuzzleId('pId3'),
           win: true,
           rated: true,
         ),
       );
+
+      verify(postReq).called(1);
+
       final data = db.fetch();
       expect(data?.solved, equals(IList(const [])));
       expect(data?.unsolved[0].puzzle.id, equals(const PuzzleId('20yWT')));
+      expect(next?.puzzle.id, equals(const PuzzleId('20yWT')));
     });
 
     test('solve puzzle when offline', () async {
       SharedPreferences.setMockInitialValues({
-        'PuzzleLocalDB.angle:mix': oneSavedPuzzle,
+        'PuzzleLocalDB.angle:mix': _makeUnsolvedPuzzles([
+          const PuzzleId('pId3'),
+          const PuzzleId('pId4'),
+        ]),
       });
       final sharedPreferences = await SharedPreferences.getInstance();
 
@@ -259,40 +296,33 @@ void main() {
         mockLogger,
         db: db,
         repository: puzzleRepo,
-        localQueueLength: 1,
+        localQueueLength: 2,
       );
 
-      when(
-        () => mockClient.post(
-          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
-          headers: any(
-            named: 'headers',
-            that: sameHeaders({'Content-type': 'application/json'}),
-          ),
-          body:
-              '{"solutions":[{"id":{"value":"pId3"},"win":true,"rated":true}]}',
-        ),
-      ).thenAnswer((_) => Future.error(const SocketException('offline')));
+      Future<http.Response> postReq() => mockClient.post(
+            Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
+            headers: any(
+              named: 'headers',
+              that: sameHeaders({'Content-type': 'application/json'}),
+            ),
+            body:
+                '{"solutions":[{"id":{"value":"pId3"},"win":true,"rated":true}]}',
+          );
+
+      when(postReq)
+          .thenAnswer((_) => Future.error(const SocketException('offline')));
 
       const solution =
           PuzzleSolution(id: PuzzleId('pId3'), win: true, rated: true);
-      await service.solve(solution: solution);
 
-      verify(
-        () => mockClient.post(
-          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
-          headers: any(
-            named: 'headers',
-            that: sameHeaders({'Content-type': 'application/json'}),
-          ),
-          body:
-              '{"solutions":[{"id":{"value":"pId3"},"win":true,"rated":true}]}',
-        ),
-      ).called(1);
+      final next = await service.solve(solution: solution);
+
+      verify(postReq).called(1);
 
       final data = db.fetch();
       expect(data?.solved, equals(IList(const [solution])));
-      expect(data?.unsolved, equals(IList(const [])));
+      expect(data?.unsolved.length, equals(1));
+      expect(next?.puzzle.id, equals(const PuzzleId('pId4')));
     });
   });
 }
@@ -305,28 +335,40 @@ const batchOf1 = '''
 {"puzzles":[{"game":{"id":"PrlkCqOv","perf":{"key":"rapid","name":"Rapid"},"rated":true,"players":[{"userId":"silverjo","name":"silverjo (1777)","color":"white"},{"userId":"robyarchitetto","name":"Robyarchitetto (1742)","color":"black"}],"pgn":"e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2 Bb7 Bh6 d5 e5 d4 Bxg7 Kxg7 Qf4 Bxf3 Qxf3 dxc3 Nxc3 Nac6 Qf6+ Kg8 Rd1 Nd4 O-O c5 Ne4 Nef5 Rd2 Qxf6 Nxf6+ Kg7 Re1 h5 h3 Rad8 b4 Nh4 Re3 Nhf5 Re1 a5 bxc5 bxc5 Bc4 Ra8 Rb1 Nh4 Rdb2 Nc6 Rb7 Nxe5 Bxe6 Kxf6 Bd5 Nf5 R7b6+ Kg7 Bxa8 Rxa8 R6b3 Nd4 Rb7 Nxd3 Rd1 Ne2+ Kh2 Ndf4 Rdd7 Rf8 Ra7 c4 Rxa5 c3 Rc5 Ne6 Rc4 Ra8 a4 Rb8 a5 Rb2 a6 c2","clock":"5+8"},"puzzle":{"id":"20yWT","rating":1859,"plays":551,"initialPly":93,"solution":["a6a7","b2a2","c4c2","a2a7","d7a7"],"themes":["endgame","long","advantage","advancedPawn"]}}]}
 ''';
 
-final String oneSavedPuzzle = jsonEncode(
-  PuzzleLocalData(
-    solved: IList(const []),
-    unsolved: IList([
-      Puzzle(
-        puzzle: PuzzleData(
-          id: const PuzzleId('pId3'),
-          rating: 1988,
-          plays: 5,
-          initialPly: 23,
-          solution: IList(const ['a6a7', 'b2a2', 'c4c2']),
-          themes: ISet(const ['endgame', 'advantage']),
-        ),
-        game: const PuzzleGame(
-          id: GameId('PrlkCqOv'),
-          perf: Perf.blitz,
-          rated: true,
-          white: PuzzlePlayer(side: Side.white, userId: 'user1', name: 'user1'),
-          black: PuzzlePlayer(side: Side.black, userId: 'user2', name: 'user2'),
-          pgn: 'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
-        ),
-      ),
-    ]),
-  ).toJson(),
-);
+String _makeUnsolvedPuzzles(List<PuzzleId> ids) {
+  return jsonEncode(
+    PuzzleLocalData(
+      solved: IList(const []),
+      unsolved: IList([
+        for (final id in ids)
+          Puzzle(
+            puzzle: PuzzleData(
+              id: id,
+              rating: 1988,
+              plays: 5,
+              initialPly: 23,
+              solution: IList(const ['a6a7', 'b2a2', 'c4c2']),
+              themes: ISet(const ['endgame', 'advantage']),
+            ),
+            game: const PuzzleGame(
+              id: GameId('PrlkCqOv'),
+              perf: Perf.blitz,
+              rated: true,
+              white: PuzzlePlayer(
+                side: Side.white,
+                userId: 'user1',
+                name: 'user1',
+              ),
+              black: PuzzlePlayer(
+                side: Side.black,
+                userId: 'user2',
+                name: 'user2',
+              ),
+              pgn:
+                  'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
+            ),
+          ),
+      ]),
+    ).toJson(),
+  );
+}

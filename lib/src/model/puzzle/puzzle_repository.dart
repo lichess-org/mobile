@@ -23,9 +23,6 @@ PuzzleRepository puzzleRepository(PuzzleRepositoryRef ref) {
   return PuzzleRepository(Logger('PuzzleRepository'), apiClient: apiClient);
 }
 
-/// Size of puzzle local cache
-const kPuzzleLocalQueueLength = 30;
-
 /// Repository that interacts with lichess.org puzzle API
 class PuzzleRepository {
   const PuzzleRepository(
@@ -38,7 +35,7 @@ class PuzzleRepository {
 
   FutureResult<List<Puzzle>> selectBatch({
     PuzzleTheme angle = PuzzleTheme.mix,
-    int nb = kPuzzleLocalQueueLength,
+    required int nb,
   }) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb'))
