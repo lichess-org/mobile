@@ -7,6 +7,7 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
@@ -25,13 +26,17 @@ import 'puzzle_screen_state.dart';
 part 'puzzle_screen.g.dart';
 
 @riverpod
-Future<Puzzle?> _nextPuzzle(_NextPuzzleRef ref, PuzzleTheme theme) async {
+Future<Tuple2<Puzzle?, UserId?>> _nextPuzzle(
+  _NextPuzzleRef ref,
+  PuzzleTheme theme,
+) async {
   final session = await ref.watch(authControllerProvider.future);
   final puzzleService = ref.watch(puzzleServiceProvider);
-  return puzzleService.nextPuzzle(
+  final puzzle = await puzzleService.nextPuzzle(
     userId: session?.user.id,
     angle: theme,
   );
+  return Tuple2(puzzle, session?.user.id);
 }
 
 class PuzzlesScreen extends StatelessWidget {
@@ -81,8 +86,8 @@ class _LoadPuzzle extends ConsumerWidget {
     final nextPuzzle = ref.watch(_nextPuzzleProvider(theme));
 
     return nextPuzzle.when(
-      data: (puzzle) {
-        if (puzzle == null) {
+      data: (data) {
+        if (data.item1 == null) {
           return const Center(
             child: GameBoardLayout(
               topPlayer: kEmptyWidget,
@@ -96,7 +101,7 @@ class _LoadPuzzle extends ConsumerWidget {
             ),
           );
         } else {
-          return _Body(puzzle: puzzle);
+          return _Body(puzzle: data.item1!, userId: data.item2);
         }
       },
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
@@ -122,15 +127,17 @@ class _LoadPuzzle extends ConsumerWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({required this.puzzle});
+  const _Body({required this.puzzle, required this.userId});
 
   final Puzzle puzzle;
+  final UserId? userId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet = ref.watch(pieceSetPrefProvider);
     final boardTheme = ref.watch(boardThemePrefProvider);
-    final puzzleState = ref.watch(puzzleScreenStateProvider(puzzle));
+    final puzzleStateProvider = puzzleScreenStateProvider(puzzle, userId);
+    final puzzleState = ref.watch(puzzleStateProvider);
     return Center(
       child: SafeArea(
         child: GameBoardLayout(
@@ -147,7 +154,7 @@ class _Body extends ConsumerWidget {
             validMoves: puzzleState.validMoves,
             onMove: (move, {isPremove}) {
               ref
-                  .read(puzzleScreenStateProvider(puzzle).notifier)
+                  .read(puzzleStateProvider.notifier)
                   .playUserMove(Move.fromUci(move.uci)!);
             },
           ),
@@ -189,6 +196,7 @@ class _Feedback extends StatelessWidget {
                   ? context.l10n.puzzleSuccess
                   : context.l10n.puzzleComplete,
             ),
+            subtitle: Text(context.l10n.continueTraining),
           ),
         );
       case PuzzleMode.play:
@@ -251,14 +259,19 @@ class _BottomBar extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _BottomBarButton(
-              onTap: () {},
+              onTap: null,
               label: context.l10n.puzzleThemes,
               icon: LichessIcons.target,
             ),
             _BottomBarButton(
               onTap: () {},
-              label: context.l10n.flipBoard,
-              icon: Icons.swap_vert,
+              label: 'Previous',
+              icon: CupertinoIcons.chevron_back,
+            ),
+            _BottomBarButton(
+              onTap: () {},
+              label: context.l10n.next,
+              icon: CupertinoIcons.chevron_forward,
             ),
           ],
         ),
@@ -276,49 +289,55 @@ class _BottomBarButton extends StatelessWidget {
 
   final IconData icon;
   final String label;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
+
+  bool get enabled => onTap != null;
 
   @override
   Widget build(BuildContext context) {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return SizedBox(
-          height: 50,
-          child: InkWell(
-            onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        return Theme(
+          data: Theme.of(context),
+          child: SizedBox(
+            height: 50,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  visualDensity: VisualDensity.compact,
+                  onPressed: onTap,
+                  icon: Icon(icon),
+                  tooltip: label,
+                ),
+              ],
+            ),
+          ),
+        );
+      case TargetPlatform.iOS:
+        final themeData = CupertinoTheme.of(context);
+        return CupertinoTheme(
+          data: themeData.copyWith(
+            primaryColor: themeData.textTheme.textStyle.color,
+          ),
+          child: SizedBox(
+            height: 50,
+            child: CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: onTap,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(icon, color: Theme.of(context).iconTheme.color),
+                  Icon(icon),
                   Text(
                     label,
                     style: const TextStyle(fontSize: 11),
                   ),
                 ],
               ),
-            ),
-          ),
-        );
-      case TargetPlatform.iOS:
-        final color = CupertinoTheme.of(context).textTheme.textStyle.color;
-        return SizedBox(
-          height: 50,
-          child: CupertinoButton(
-            padding: EdgeInsets.zero,
-            onPressed: onTap,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(icon, color: color),
-                Text(
-                  label,
-                  style: TextStyle(fontSize: 11, color: color),
-                ),
-              ],
             ),
           ),
         );

@@ -4,9 +4,12 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
+import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/tree.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+// import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+// import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 
 part 'puzzle_screen_state.g.dart';
 part 'puzzle_screen_state.freezed.dart';
@@ -23,16 +26,16 @@ class PuzzleVm with _$PuzzleVm {
 
   const factory PuzzleVm({
     required PuzzleData puzzle,
+    required UserId? userId,
     required PuzzleMode mode,
     required UciPath initialPath,
     required UciPath currentPath,
     required Side pov,
-
-    /// Must be non empty
-    required IList<Branch> nodeList,
+    required IList<Branch> nodeList, // must be non empty
     Move? lastMove,
     PuzzleResult? result,
     PuzzleFeedback? feedback,
+    required bool resultSent,
   }) = _PuzzleVm;
 
   Position get position => nodeList.last.position;
@@ -45,7 +48,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
   Node? _gameTree;
 
   @override
-  PuzzleVm build(Puzzle puzzle) {
+  PuzzleVm build(Puzzle puzzle, UserId? userId) {
     _gameTree = Node.fromPgn(puzzle.game.pgn);
 
     Future<void>.delayed(const Duration(seconds: 1))
@@ -57,11 +60,13 @@ class PuzzleScreenState extends _$PuzzleScreenState {
 
     return PuzzleVm(
       puzzle: puzzle.puzzle,
+      userId: userId,
       mode: PuzzleMode.play,
       initialPath: initialPath,
       currentPath: currentPath,
       nodeList: IList(nodeList),
       pov: _gameTree!.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
+      resultSent: false,
     );
   }
 
@@ -81,10 +86,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
         final nextUci = state.puzzle.solution.getOrNull(movesToTest.length);
         // checkmate is always a win
         if (isCheckmate) {
-          state = state.copyWith(
-            mode: PuzzleMode.view,
-            result: state.result ?? PuzzleResult.win,
-          );
+          _completePuzzle();
         }
         // another puzzle move: let's continue
         else if (nextUci != null) {
@@ -93,20 +95,50 @@ class PuzzleScreenState extends _$PuzzleScreenState {
         }
         // no more puzzle move: it's a win
         else {
-          state = state.copyWith(
-            mode: PuzzleMode.view,
-            result: state.result ?? PuzzleResult.win,
-          );
+          _completePuzzle();
         }
       } else {
         state = state.copyWith(
           feedback: PuzzleFeedback.bad,
           result: PuzzleResult.lose,
         );
+        _sendResult();
         await Future<void>.delayed(const Duration(milliseconds: 500));
         _setPath(state.currentPath.penultimate);
       }
     }
+  }
+
+  Future<void> _completePuzzle() async {
+    state = state.copyWith(
+      mode: PuzzleMode.view,
+      result: state.result ?? PuzzleResult.win,
+    );
+    _sendResult();
+  }
+
+  Future<void> _sendResult() async {
+    if (state.resultSent) return;
+
+    state = state.copyWith(
+      resultSent: true,
+    );
+
+    // TODO enable later
+
+    // final theme = ref.read(puzzleThemePrefProvider);
+    // final service = ref.read(puzzleServiceProvider);
+
+    // await service.solve(
+    //   userId: state.userId,
+    //   angle: theme,
+    //   solution: PuzzleSolution(
+    //     id: state.puzzle.id,
+    //     win: state.result == PuzzleResult.win,
+    //     // TODO add rating option
+    //     rated: userId != null,
+    //   ),
+    // );
   }
 
   void _setPath(UciPath path) {
