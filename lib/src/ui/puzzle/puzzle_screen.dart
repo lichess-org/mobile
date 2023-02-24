@@ -1,26 +1,41 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
 import 'puzzle_screen_state.dart';
 
-class PuzzlesScreen extends StatelessWidget {
-  const PuzzlesScreen({required this.puzzle, super.key});
+part 'puzzle_screen.g.dart';
 
-  final Puzzle puzzle;
+@riverpod
+Future<Puzzle?> _nextPuzzle(_NextPuzzleRef ref, PuzzleTheme theme) async {
+  final session = await ref.watch(authControllerProvider.future);
+  final puzzleService = ref.watch(puzzleServiceProvider);
+  return puzzleService.nextPuzzle(
+    userId: session?.user.id,
+    angle: theme,
+  );
+}
+
+class PuzzlesScreen extends StatelessWidget {
+  const PuzzlesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +50,7 @@ class PuzzlesScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(context.l10n.puzzles),
       ),
-      body: _Body(puzzle: puzzle),
+      body: const _LoadPuzzle(),
       bottomNavigationBar: const _BottomBar(),
     );
   }
@@ -46,13 +61,62 @@ class PuzzlesScreen extends StatelessWidget {
         middle: Text(context.l10n.puzzles),
       ),
       child: Column(
-        children: [
+        children: const [
           Expanded(
-            child: _Body(puzzle: puzzle),
+            child: _LoadPuzzle(),
           ),
-          const _BottomBar(),
+          _BottomBar(),
         ],
       ),
+    );
+  }
+}
+
+class _LoadPuzzle extends ConsumerWidget {
+  const _LoadPuzzle();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = ref.watch(puzzleThemePrefProvider);
+    final nextPuzzle = ref.watch(_nextPuzzleProvider(theme));
+
+    return nextPuzzle.when(
+      data: (puzzle) {
+        if (puzzle == null) {
+          return const Center(
+            child: GameBoardLayout(
+              topPlayer: kEmptyWidget,
+              bottomPlayer: kEmptyWidget,
+              boardData: cg.BoardData(
+                fen: kEmptyFen,
+                interactableSide: cg.InteractableSide.none,
+                orientation: cg.Side.white,
+              ),
+              errorMessage: 'No more puzzles. Go online to get more.',
+            ),
+          );
+        } else {
+          return _Body(puzzle: puzzle);
+        }
+      },
+      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      error: (e, s) {
+        debugPrint(
+          'SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s',
+        );
+        return Center(
+          child: GameBoardLayout(
+            topPlayer: kEmptyWidget,
+            bottomPlayer: kEmptyWidget,
+            boardData: const cg.BoardData(
+              fen: kEmptyFen,
+              interactableSide: cg.InteractableSide.none,
+              orientation: cg.Side.white,
+            ),
+            errorMessage: e.toString(),
+          ),
+        );
+      },
     );
   }
 }
