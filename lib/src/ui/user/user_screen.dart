@@ -205,7 +205,7 @@ class PerfCards extends StatelessWidget {
     }).toList(growable: false);
 
     if (userPerfs.isEmpty) {
-      return Container();
+      return const SizedBox.shrink();
     }
 
     return Padding(
