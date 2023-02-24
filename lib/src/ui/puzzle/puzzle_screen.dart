@@ -56,7 +56,6 @@ class PuzzlesScreen extends StatelessWidget {
         title: Text(context.l10n.puzzles),
       ),
       body: const _LoadPuzzle(),
-      bottomNavigationBar: const _BottomBar(),
     );
   }
 
@@ -65,14 +64,7 @@ class PuzzlesScreen extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         middle: Text(context.l10n.puzzles),
       ),
-      child: Column(
-        children: const [
-          Expanded(
-            child: _LoadPuzzle(),
-          ),
-          _BottomBar(),
-        ],
-      ),
+      child: const _LoadPuzzle(),
     );
   }
 }
@@ -138,37 +130,46 @@ class _Body extends ConsumerWidget {
     final boardTheme = ref.watch(boardThemePrefProvider);
     final puzzleStateProvider = puzzleScreenStateProvider(puzzle, userId);
     final puzzleState = ref.watch(puzzleStateProvider);
-    return Center(
-      child: SafeArea(
-        child: GameBoardLayout(
-          boardData: cg.BoardData(
-            orientation: puzzleState.pov.cg,
-            interactableSide: puzzleState.mode == PuzzleMode.view
-                ? cg.InteractableSide.both
-                : puzzleState.pov == Side.white
-                    ? cg.InteractableSide.white
-                    : cg.InteractableSide.black,
-            fen: puzzleState.fen,
-            lastMove: puzzleState.lastMove?.cg,
-            sideToMove: puzzleState.position.turn.cg,
-            validMoves: puzzleState.validMoves,
-            onMove: (move, {isPremove}) {
-              ref
-                  .read(puzzleStateProvider.notifier)
-                  .playUserMove(Move.fromUci(move.uci)!);
-            },
-          ),
-          boardSettings: cg.BoardSettings(
-            pieceAssets: pieceSet.assets,
-            colorScheme: boardTheme.colors,
-          ),
-          topPlayer: const SizedBox.shrink(),
-          bottomPlayer: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: _Feedback(state: puzzleState, pieceSet: pieceSet),
+    return Column(
+      children: [
+        Expanded(
+          child: Center(
+            child: SafeArea(
+              child: GameBoardLayout(
+                boardData: cg.BoardData(
+                  orientation: puzzleState.pov.cg,
+                  interactableSide: puzzleState.mode == PuzzleMode.view
+                      ? cg.InteractableSide.both
+                      : puzzleState.isReplaying
+                          ? cg.InteractableSide.none
+                          : puzzleState.pov == Side.white
+                              ? cg.InteractableSide.white
+                              : cg.InteractableSide.black,
+                  fen: puzzleState.fen,
+                  lastMove: puzzleState.lastMove?.cg,
+                  sideToMove: puzzleState.position.turn.cg,
+                  validMoves: puzzleState.validMoves,
+                  onMove: (move, {isPremove}) {
+                    ref
+                        .read(puzzleStateProvider.notifier)
+                        .playUserMove(Move.fromUci(move.uci)!);
+                  },
+                ),
+                boardSettings: cg.BoardSettings(
+                  pieceAssets: pieceSet.assets,
+                  colorScheme: boardTheme.colors,
+                ),
+                topPlayer: const SizedBox.shrink(),
+                bottomPlayer: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: _Feedback(state: puzzleState, pieceSet: pieceSet),
+                ),
+              ),
+            ),
           ),
         ),
-      ),
+        _BottomBar(puzzle: puzzle, userId: userId),
+      ],
     );
   }
 }
@@ -244,10 +245,16 @@ class _Feedback extends StatelessWidget {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar();
+  const _BottomBar({required this.puzzle, required this.userId});
+
+  final Puzzle puzzle;
+  final UserId? userId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final puzzleStateProvider = puzzleScreenStateProvider(puzzle, userId);
+    final puzzleState = ref.watch(puzzleStateProvider);
+
     return Container(
       padding: Styles.horizontalBodyPadding,
       color: defaultTargetPlatform == TargetPlatform.iOS
@@ -264,12 +271,17 @@ class _BottomBar extends ConsumerWidget {
               icon: LichessIcons.target,
             ),
             _BottomBarButton(
-              onTap: () {},
+              onTap: puzzleState.canGoBack
+                  ? () =>
+                      ref.read(puzzleStateProvider.notifier).goToPreviousNode()
+                  : null,
               label: 'Previous',
               icon: CupertinoIcons.chevron_back,
             ),
             _BottomBarButton(
-              onTap: () {},
+              onTap: puzzleState.canGoNext
+                  ? () => ref.read(puzzleStateProvider.notifier).goToNextNode()
+                  : null,
               label: context.l10n.next,
               icon: CupertinoIcons.chevron_forward,
             ),

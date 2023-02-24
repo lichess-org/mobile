@@ -45,8 +45,10 @@ abstract class Node {
     return root;
   }
 
+  /// Adds a child to this node.
   void addChild(Branch branch) => children.add(branch);
 
+  /// An iterable of all nodes on the mainline.
   Iterable<Branch> get mainline sync* {
     Node current = this;
     while (current.children.isNotEmpty) {
@@ -78,6 +80,7 @@ abstract class Node {
     }
   }
 
+  /// Gets the path of the mainline.
   UciPath get mainlinePath => UciPath.fromNodeList(mainline);
 
   /// Adds a new node at the given path.
@@ -115,9 +118,10 @@ abstract class Node {
     return Tuple2(newPath, newPath != null ? newBranch : null);
   }
 
+  /// Gets the node at the given path.
   Node nodeAt(UciPath path) {
     if (path.isEmpty) return this;
-    final child = path.head != null ? byId(path.head!) : null;
+    final child = byId(path.head!);
     if (child != null) {
       return child.nodeAt(path.tail);
     } else {
@@ -125,6 +129,18 @@ abstract class Node {
     }
   }
 
+  /// Gets the node at the given path, or null if it does not exist.
+  Node? nodeAtOrNull(UciPath path) {
+    if (path.isEmpty) return this;
+    final child = byId(path.head!);
+    if (child != null) {
+      return child.nodeAtOrNull(path.tail);
+    } else {
+      return null;
+    }
+  }
+
+  /// Gets the branch at the given path.
   Branch branchAt(UciPath path) {
     if (path.isEmpty) return this as Branch;
     final child = byId(path.head!);
@@ -135,6 +151,7 @@ abstract class Node {
     }
   }
 
+  /// Gets the branch at the given path, or null if it does not exist.
   Branch? branchAtOrNull(UciPath path) {
     if (path.isEmpty) return this as Branch;
     final child = byId(path.head!);
@@ -145,6 +162,7 @@ abstract class Node {
     }
   }
 
+  /// Finds the branch with that id.
   Branch? byId(UciCharPair id) {
     final me = this;
     if (me is Branch && me.id == id) return me;

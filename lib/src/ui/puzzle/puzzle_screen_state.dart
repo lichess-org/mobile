@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
@@ -38,34 +37,39 @@ class PuzzleVm with _$PuzzleVm {
     required bool resultSent,
   }) = _PuzzleVm;
 
+  Node get node => nodeList.last;
   Position get position => nodeList.last.position;
   String get fen => nodeList.last.fen;
+  bool get isReplaying => mode == PuzzleMode.play && canGoNext;
+  bool get canGoNext => node.children.isNotEmpty;
+  bool get canGoBack => currentPath.size > initialPath.size;
+
   Map<String, Set<String>> get validMoves => algebraicLegalMoves(position);
 }
 
 @riverpod
 class PuzzleScreenState extends _$PuzzleScreenState {
-  Node? _gameTree;
+  late Node _gameTree;
 
   @override
   PuzzleVm build(Puzzle puzzle, UserId? userId) {
-    _gameTree = Node.fromPgn(puzzle.game.pgn);
+    final tree = Node.fromPgn(puzzle.game.pgn);
+    _gameTree = tree.nodeAt(tree.mainlinePath.penultimate);
 
+    // play first move after 1 second
     Future<void>.delayed(const Duration(seconds: 1))
-        .then((_) => _replayFirstMove());
+        .then((_) => _setPath(state.initialPath));
 
-    final initialPath = _gameTree!.mainlinePath;
-    final currentPath = _gameTree!.mainlinePath.penultimate;
-    final nodeList = _makeNodeList(currentPath, initialPath);
+    final initialPath = UciPath.fromId(_gameTree.children.first.id);
 
     return PuzzleVm(
       puzzle: puzzle.puzzle,
       userId: userId,
       mode: PuzzleMode.play,
       initialPath: initialPath,
-      currentPath: currentPath,
-      nodeList: IList(nodeList),
-      pov: _gameTree!.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
+      currentPath: UciPath.empty,
+      nodeList: IList([_gameTree as Branch]),
+      pov: _gameTree.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
       resultSent: false,
     );
   }
@@ -74,7 +78,9 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     _addMove(move);
 
     if (state.mode == PuzzleMode.play) {
-      final movesToTest = state.nodeList.sublist(1).map((e) => e.sanMove);
+      final movesToTest =
+          state.nodeList.sublist(state.initialPath.size).map((e) => e.sanMove);
+
       final isGoodMove = state.puzzle.testSolution(movesToTest);
 
       if (isGoodMove) {
@@ -107,6 +113,15 @@ class PuzzleScreenState extends _$PuzzleScreenState {
         _setPath(state.currentPath.penultimate);
       }
     }
+  }
+
+  void goToNextNode() {
+    if (state.node.children.isEmpty) return;
+    _setPath(state.currentPath + state.node.children.first.id);
+  }
+
+  void goToPreviousNode() {
+    _setPath(state.currentPath.penultimate);
   }
 
   Future<void> _completePuzzle() async {
@@ -142,7 +157,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
   }
 
   void _setPath(UciPath path) {
-    final newNodeList = _makeNodeList(path, state.initialPath);
+    final newNodeList = IList(_gameTree.nodesOn(path));
     state = state.copyWith(
       currentPath: path,
       nodeList: newNodeList,
@@ -151,31 +166,15 @@ class PuzzleScreenState extends _$PuzzleScreenState {
   }
 
   void _addMove(Move move) {
-    final tuple = _gameTree!.addMoveAt(state.currentPath, move);
+    final tuple = _gameTree.addMoveAt(state.currentPath, move);
     final newPath = tuple.item1;
     if (newPath != null) {
-      final newNodeList = _makeNodeList(newPath, state.initialPath);
+      final newNodeList = IList(_gameTree.nodesOn(newPath));
       state = state.copyWith(
         currentPath: newPath,
         nodeList: newNodeList,
         lastMove: newNodeList.last.sanMove.move,
       );
     }
-  }
-
-  void _replayFirstMove() {
-    final newPath = state.initialPath;
-    final newNodeList = _makeNodeList(newPath, state.initialPath);
-    state = state.copyWith(
-      currentPath: newPath,
-      nodeList: newNodeList,
-      lastMove: newNodeList.last.sanMove.move,
-    );
-  }
-
-  // don't show all game moves but only the ones from the puzzle position
-  IList<Branch> _makeNodeList(UciPath current, UciPath initial) {
-    final nodeList = _gameTree!.nodesOn(current);
-    return IList(nodeList).sublist(math.min(current.size, initial.size) - 1);
   }
 }
