@@ -16,23 +16,19 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import '../../test_utils.dart';
 
 class MockLogger extends Mock implements Logger {}
 
 class MockClient extends Mock implements http.Client {}
 
-class MockAuthController extends Mock implements AuthController {}
-
 void main() {
   final mockLogger = MockLogger();
   final mockClient = MockClient();
-  final mockAuthController = MockAuthController();
 
   final puzzleRepo = PuzzleRepository(
     mockLogger,
-    apiClient: ApiClient(mockLogger, mockClient, mockAuthController),
+    apiClient: ApiClient(mockLogger, mockClient),
   );
 
   setUpAll(() {
