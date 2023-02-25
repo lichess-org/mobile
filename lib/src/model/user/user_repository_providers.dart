@@ -37,6 +37,16 @@ Future<UserPerfStats> userPerfStats(
 }
 
 @riverpod
+Future<IList<UserActitity>> userActitity(
+  UserActitityRef ref, {
+  required UserId id,
+}) {
+  ref.cacheFor(RequestCacheDuration.standard);
+  final repo = ref.watch(userRepositoryProvider);
+  return Result.release(repo.getUserActivity(id));
+}
+
+@riverpod
 Future<IList<UserStatus>> userStatuses(
   UserStatusesRef ref, {
   required ISet<UserId> ids,

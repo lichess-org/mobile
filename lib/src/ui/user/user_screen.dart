@@ -106,6 +106,7 @@ class UserScreenBody extends StatelessWidget {
     final list = [
       _Profile(user: user, showPlayerTitle: showPlayerTitle),
       PerfCards(user: user),
+      Activity(user: user),
       RecentGames(user: user),
     ];
 
@@ -291,6 +292,70 @@ class PerfCards extends StatelessWidget {
           loggedInUser: user,
         ),
       ),
+    );
+  }
+}
+
+const List<String> _monthName = [
+  '',
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec'
+];
+
+class Activity extends ConsumerWidget {
+  const Activity({required this.user, super.key});
+
+  final User user;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activity = ref.watch(userActitityProvider(id: user.id));
+
+    return activity.when(
+      data: (data) {
+        return ListSection(
+          // TODO translate
+          header: const Text('Activity', style: Styles.sectionTitle),
+          hasLeading: true,
+          children: data.map((entry) {
+            debugPrint(entry.games.toString());
+            return Column(
+              children: [
+                Text(
+                  "${_monthName[entry.startTime.month].toUpperCase()} ${entry.startTime.day}, ${entry.startTime.year}",
+                  style: TextStyle(color: LichessColors.brag),
+                ),
+                if (entry.followIn!.isNotEmpty)
+                  PlatformListTile(
+                    leading: Icon(
+                      LichessIcons.chess,
+                      color: LichessColors.brag,
+                    ),
+                    title: Text("Gained ${entry.followIn!.length} followers"),
+                    dense: true,
+                  ),
+              ],
+            );
+          }).toList(),
+        );
+      },
+      error: (error, stackTrace) {
+        debugPrint(
+          'SEVERE: [UserScreen] could not load user activity; $error\n$stackTrace',
+        );
+        return const Text('Could not load activity.');
+      },
+      loading: () => const CenterLoadingIndicator(),
     );
   }
 }

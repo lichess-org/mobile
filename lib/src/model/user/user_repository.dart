@@ -55,10 +55,47 @@ class UserRepository {
           ),
         );
   }
+
+  FutureResult<IList<UserActitity>> getUserActivity(UserId id) {
+    return apiClient.get(Uri.parse('$kLichessHost/api/user/$id/activity')).then(
+          (result) => result.flatMap(
+            (response) => readJsonListOfObjects(
+              response.body,
+              mapper: _userActitityFromJson,
+              logger: _log,
+            ),
+          ),
+        );
+  }
 }
 
 // --
+UserActitity _userActitityFromJson(Map<String, dynamic> json) =>
+    _userActitityFromPick(pick(json).required());
 
+UserActitity _userActitityFromPick(RequiredPick pick) {
+  final receivedGamesMap =
+      pick('games').asMapOrEmpty<String, Map<String, dynamic>>();
+
+  return UserActitity(
+    startTime: pick('interval', 'start').asDateTimeFromMillisecondsOrThrow(),
+    endTime: pick('interval', 'end').asDateTimeFromMillisecondsOrThrow(),
+    games: IMap({
+      for (final entry in receivedGamesMap.entries)
+        perfNameMap.get(entry.key)!: UserActitityGameScore.fromJson(entry.value)
+    }),
+    followIn: IList(
+      pick('follows', 'in', 'ids')
+          .asListOrNull((p0) => pick(p0).asStringOrNull()),
+    ),
+    followOut: IList(
+      pick('follows', 'out', 'ids')
+          .asListOrNull((p0) => pick(p0).asStringOrNull()),
+    ),
+  );
+}
+
+// --
 UserPerfStats _userPerfStatsFromJson(Map<String, dynamic> json) =>
     _userPerfStatsFromPick(pick(json).required());
 

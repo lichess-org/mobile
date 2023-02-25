@@ -158,6 +158,40 @@ class UserStatus with _$UserStatus {
 }
 
 @freezed
+class UserActitityGameScore with _$UserActitityGameScore {
+  const factory UserActitityGameScore({
+    required int win,
+    required int loss,
+    required int draw,
+    required int rpBefore,
+    required int rpAfter,
+  }) = _UserActitityGameScore;
+
+  factory UserActitityGameScore.fromJson(Map<String, dynamic> json) =>
+      UserActitityGameScore.fromPick(pick(json).required());
+
+  factory UserActitityGameScore.fromPick(RequiredPick pick) =>
+      UserActitityGameScore(
+        win: pick('win').asIntOrThrow(),
+        loss: pick('loss').asIntOrThrow(),
+        draw: pick('draw').asIntOrThrow(),
+        rpBefore: pick('rp', 'before').asIntOrThrow(),
+        rpAfter: pick('rp', 'after').asIntOrThrow(),
+      );
+}
+
+@freezed
+class UserActitity with _$UserActitity {
+  const factory UserActitity({
+    required DateTime startTime,
+    required DateTime endTime,
+    IMap<Perf, UserActitityGameScore>? games,
+    IList<String?>? followIn,
+    IList<String?>? followOut,
+  }) = _UserActitity;
+}
+
+@freezed
 class UserPerfStats with _$UserPerfStats {
   const factory UserPerfStats({
     required double rating,
