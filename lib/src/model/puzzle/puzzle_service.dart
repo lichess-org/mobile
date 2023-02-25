@@ -16,7 +16,7 @@ import 'puzzle_theme.dart';
 part 'puzzle_service.g.dart';
 
 /// Size of puzzle local cache
-const kPuzzleLocalQueueLength = 30;
+const kPuzzleLocalQueueLength = 100;
 
 @Riverpod(keepAlive: true)
 PuzzleService puzzleService(PuzzleServiceRef ref) {
