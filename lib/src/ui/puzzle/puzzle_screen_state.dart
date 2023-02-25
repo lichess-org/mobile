@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:lichess_mobile/src/common/move_feedback.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/tree.dart';
@@ -158,10 +159,19 @@ class PuzzleScreenState extends _$PuzzleScreenState {
 
   void _setPath(UciPath path) {
     final newNodeList = IList(_gameTree.nodesOn(path));
+    final sanMove = newNodeList.last.sanMove;
+    final isForward = path.size > state.currentPath.size;
+    if (isForward) {
+      if (sanMove.san.contains('x')) {
+        ref.read(moveFeedbackServiceProvider).moveFeedback();
+      } else {
+        ref.read(moveFeedbackServiceProvider).captureFeedback();
+      }
+    }
     state = state.copyWith(
       currentPath: path,
       nodeList: newNodeList,
-      lastMove: newNodeList.last.sanMove.move,
+      lastMove: sanMove.move,
     );
   }
 
@@ -169,12 +179,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     final tuple = _gameTree.addMoveAt(state.currentPath, move);
     final newPath = tuple.item1;
     if (newPath != null) {
-      final newNodeList = IList(_gameTree.nodesOn(newPath));
-      state = state.copyWith(
-        currentPath: newPath,
-        nodeList: newNodeList,
-        lastMove: newNodeList.last.sanMove.move,
-      );
+      _setPath(newPath);
     }
   }
 }

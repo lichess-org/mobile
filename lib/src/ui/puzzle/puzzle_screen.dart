@@ -159,11 +159,11 @@ class _Body extends ConsumerWidget {
                   pieceAssets: pieceSet.assets,
                   colorScheme: boardTheme.colors,
                 ),
-                topPlayer: const SizedBox.shrink(),
-                bottomPlayer: Padding(
+                topPlayer: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: _Feedback(state: puzzleState, pieceSet: pieceSet),
                 ),
+                bottomPlayer: const SizedBox.shrink(),
               ),
             ),
           ),
