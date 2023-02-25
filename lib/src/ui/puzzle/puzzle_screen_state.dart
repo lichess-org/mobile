@@ -30,7 +30,7 @@ class PuzzleVm with _$PuzzleVm {
     required UciPath initialPath,
     required UciPath currentPath,
     required Side pov,
-    required IList<Branch> nodeList, // must be non empty
+    required IList<Node> nodeList, // must be non empty
     Move? lastMove,
     PuzzleResult? result,
     PuzzleFeedback? feedback,
@@ -53,8 +53,8 @@ class PuzzleScreenState extends _$PuzzleScreenState {
 
   @override
   PuzzleVm build(Puzzle puzzle, UserId? userId) {
-    final tree = Node.fromPgn(puzzle.game.pgn);
-    _gameTree = tree.nodeAt(tree.mainlinePath.penultimate);
+    final root = Root.fromPgn(puzzle.game.pgn);
+    _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
 
     // play first move after 1 second
     Future<void>.delayed(const Duration(seconds: 1))
@@ -68,7 +68,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
       mode: PuzzleMode.play,
       initialPath: initialPath,
       currentPath: UciPath.empty,
-      nodeList: IList([_gameTree as Branch]),
+      nodeList: IList([_gameTree]),
       pov: _gameTree.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
       resultSent: false,
     );

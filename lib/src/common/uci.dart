@@ -74,10 +74,10 @@ class UciPath with _$UciPath {
   factory UciPath.fromIds(IList<UciCharPair> ids) =>
       UciPath(ids.map((id) => id.toString()).join(''));
 
-  factory UciPath.fromNodeList(Iterable<Node> nodeList) {
+  factory UciPath.fromNodeList(Iterable<RootOrNode> nodeList) {
     final path = StringBuffer();
     for (final node in nodeList) {
-      if (node is Branch) {
+      if (node is Node) {
         path.write(node.id);
       }
     }

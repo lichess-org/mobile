@@ -3,8 +3,8 @@ import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
 
-abstract class Node {
-  Node({
+abstract class RootOrNode {
+  RootOrNode({
     required this.ply,
     required this.fen,
     required this.position,
@@ -13,44 +13,14 @@ abstract class Node {
   final int ply;
   final String fen;
   final Position position;
-  final List<Branch> children = [];
-
-  /// Creates a game tree from a PGN string.
-  ///
-  /// Assumes that the PGN string is valid and that the moves are legal.
-  factory Node.fromPgn(String pgn) {
-    int ply = 0;
-    Position position = Chess.initial;
-    final root = Root(
-      ply: ply,
-      fen: kInitialFEN,
-      position: position,
-    );
-    Node current = root;
-    final moves = pgn.split(' ');
-    for (final san in moves) {
-      ply++;
-      final move = position.parseSan(san);
-      position = position.playUnchecked(move!);
-      final nextNode = Branch(
-        id: UciCharPair.fromMove(move),
-        ply: ply,
-        sanMove: SanMove(san, move),
-        fen: position.fen,
-        position: position,
-      );
-      current.addChild(nextNode);
-      current = nextNode;
-    }
-    return root;
-  }
+  final List<Node> children = [];
 
   /// Adds a child to this node.
-  void addChild(Branch branch) => children.add(branch);
+  void addChild(Node node) => children.add(node);
 
   /// An iterable of all nodes on the mainline.
-  Iterable<Branch> get mainline sync* {
-    Node current = this;
+  Iterable<Node> get mainline sync* {
+    RootOrNode current = this;
     while (current.children.isNotEmpty) {
       final child = current.children.first;
       yield child;
@@ -59,10 +29,10 @@ abstract class Node {
   }
 
   /// Selects all nodes on that path.
-  Iterable<Branch> nodesOn(UciPath path) sync* {
+  Iterable<Node> nodesOn(UciPath path) sync* {
     UciPath currentPath = path;
 
-    Branch? pickChild(Node node) {
+    Node? pickChild(RootOrNode node) {
       final id = currentPath.head;
       if (id == null) {
         return null;
@@ -70,8 +40,8 @@ abstract class Node {
       return node.byId(id);
     }
 
-    Node current = this;
-    Branch? child;
+    RootOrNode current = this;
+    Node? child;
 
     while ((child = pickChild(current)) != null) {
       yield child!;
@@ -83,16 +53,16 @@ abstract class Node {
   /// Gets the path of the mainline.
   UciPath get mainlinePath => UciPath.fromNodeList(mainline);
 
-  /// Adds a new node at the given path.
+  /// Adds a new node at the given path and returns the new path.
   ///
   /// If the node already exists, it is not added again.
-  UciPath? addNodeAt(UciPath path, Branch newBranch) {
-    final newPath = path + newBranch.id;
-    final branch = branchAtOrNull(path);
-    if (branch != null) {
-      final existing = branchAtOrNull(newPath) != null;
+  UciPath? addNodeAt(UciPath path, Node newNode) {
+    final newPath = path + newNode.id;
+    final node = nodeAtOrNull(path);
+    if (node != null) {
+      final existing = nodeAtOrNull(newPath) != null;
       if (!existing) {
-        branch.addChild(newBranch);
+        node.addChild(newNode);
       }
       return newPath;
     } else {
@@ -102,24 +72,25 @@ abstract class Node {
 
   /// Adds a new node with that [Move] at the given path.
   ///
+  /// Returns the new path and the new node.
   /// If the node already exists, it is not added again.
-  Tuple2<UciPath?, Branch?> addMoveAt(UciPath path, Move move) {
+  Tuple2<UciPath?, Node?> addMoveAt(UciPath path, Move move) {
     final pos = nodeAt(path).position;
     final newPosSan = pos.playToSan(move);
     final newPos = newPosSan.item1;
-    final newBranch = Branch(
+    final newNode = Node(
       id: UciCharPair.fromMove(move),
       ply: 2 * (newPos.fullmoves - 1) + (newPos.turn == Side.white ? 0 : 1),
       sanMove: SanMove(newPosSan.item2, move),
       fen: newPos.fen,
       position: newPos,
     );
-    final newPath = addNodeAt(path, newBranch);
-    return Tuple2(newPath, newPath != null ? newBranch : null);
+    final newPath = addNodeAt(path, newNode);
+    return Tuple2(newPath, newPath != null ? newNode : null);
   }
 
   /// Gets the node at the given path.
-  Node nodeAt(UciPath path) {
+  RootOrNode nodeAt(UciPath path) {
     if (path.isEmpty) return this;
     final child = byId(path.head!);
     if (child != null) {
@@ -130,7 +101,7 @@ abstract class Node {
   }
 
   /// Gets the node at the given path, or null if it does not exist.
-  Node? nodeAtOrNull(UciPath path) {
+  RootOrNode? nodeAtOrNull(UciPath path) {
     if (path.isEmpty) return this;
     final child = byId(path.head!);
     if (child != null) {
@@ -140,32 +111,10 @@ abstract class Node {
     }
   }
 
-  /// Gets the branch at the given path.
-  Branch branchAt(UciPath path) {
-    if (path.isEmpty) return this as Branch;
-    final child = byId(path.head!);
-    if (child != null) {
-      return child.branchAt(path.tail);
-    } else {
-      throw ArgumentError('Invalid path: no branch found at $path');
-    }
-  }
-
-  /// Gets the branch at the given path, or null if it does not exist.
-  Branch? branchAtOrNull(UciPath path) {
-    if (path.isEmpty) return this as Branch;
-    final child = byId(path.head!);
-    if (child != null) {
-      return child.branchAtOrNull(path.tail);
-    } else {
-      return null;
-    }
-  }
-
-  /// Finds the branch with that id.
-  Branch? byId(UciCharPair id) {
+  /// Finds the node with that id.
+  Node? byId(UciCharPair id) {
     final me = this;
-    if (me is Branch && me.id == id) return me;
+    if (me is Node && me.id == id) return me;
     for (final child in children) {
       final node = child.byId(id);
       if (node != null) return node;
@@ -174,8 +123,8 @@ abstract class Node {
   }
 }
 
-class Branch extends Node {
-  Branch({
+class Node extends RootOrNode {
+  Node({
     required this.id,
     required super.ply,
     required super.fen,
@@ -187,13 +136,13 @@ class Branch extends Node {
 
   final SanMove sanMove;
 
-  Branch copyWith({
+  Node copyWith({
     int? ply,
     String? fen,
     SanMove? sanMove,
     Position? position,
   }) {
-    return Branch(
+    return Node(
       id: id,
       ply: ply ?? this.ply,
       fen: fen ?? this.fen,
@@ -204,14 +153,44 @@ class Branch extends Node {
 
   @override
   String toString() {
-    return 'Branch(id: $id, ply: $ply, fen: $fen)';
+    return 'Node(id: $id, ply: $ply, fen: $fen)';
   }
 }
 
-class Root extends Node {
+class Root extends RootOrNode {
   Root({
     required super.ply,
     required super.fen,
     required super.position,
   });
+
+  /// Creates a game tree from a PGN string.
+  ///
+  /// Assumes that the PGN string is valid and that the moves are legal.
+  factory Root.fromPgn(String pgn) {
+    int ply = 0;
+    Position position = Chess.initial;
+    final root = Root(
+      ply: ply,
+      fen: kInitialFEN,
+      position: position,
+    );
+    RootOrNode current = root;
+    final moves = pgn.split(' ');
+    for (final san in moves) {
+      ply++;
+      final move = position.parseSan(san);
+      position = position.playUnchecked(move!);
+      final nextNode = Node(
+        id: UciCharPair.fromMove(move),
+        ply: ply,
+        sanMove: SanMove(san, move),
+        fen: position.fen,
+        position: position,
+      );
+      current.addChild(nextNode);
+      current = nextNode;
+    }
+    return root;
+  }
 }
