@@ -2,20 +2,19 @@ import 'package:async/async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:http/testing.dart';
 
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/common/package_info.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/session_repository.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import '../../test_utils.dart';
-
-class MockClient extends Mock implements http.Client {}
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 
@@ -26,9 +25,17 @@ class Listener<T> extends Mock {
 }
 
 void main() {
-  final mockClient = MockClient();
   final mockSessionRepository = MockSessionRepository();
   final mockAuthRepository = MockAuthRepository();
+
+  final mockClient = MockClient((request) {
+    if (request.url.path == '/api/account') {
+      return mockResponse(testAccountResponse, 200);
+    } else if (request.method == 'DELETE' && request.url.path == '/api/token') {
+      return mockResponse('ok', 200);
+    }
+    return mockResponse('', 404);
+  });
 
   const testUserSession = UserSession(
     token: 'testToken',
@@ -52,6 +59,14 @@ void main() {
         authRepositoryProvider.overrideWithValue(authRepository),
         sessionRepositoryProvider.overrideWithValue(sessionRepository),
         httpClientProvider.overrideWithValue(mockClient),
+        packageInfoProvider.overrideWith((ref) {
+          return PackageInfo(
+            appName: 'lichess_mobile_test',
+            version: 'test',
+            buildNumber: '0.0.0',
+            packageName: 'lichess_mobile_test',
+          );
+        }),
       ],
     );
     addTearDown(container.dispose);
@@ -59,20 +74,6 @@ void main() {
   }
 
   setUpAll(() {
-    when(
-      () => mockClient.get(
-        Uri.parse('$kLichessHost/api/account'),
-        headers: any(
-          named: 'headers',
-          that: sameHeaders({'Authorization': 'Bearer testToken'}),
-        ),
-      ),
-    ).thenAnswer((_) => mockResponse(testAccountResponse, 200));
-
-    when(
-      () => mockClient.delete(Uri.parse('$kLichessHost/api/token')),
-    ).thenAnswer((_) => mockResponse('ok', 200));
-
     registerFallbackValue(testUserSession);
     registerFallbackValue(const AsyncLoading<UserSession?>());
   });
