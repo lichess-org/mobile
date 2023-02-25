@@ -84,6 +84,21 @@ void main() {
       expect(root.children.first, equals(child));
     });
 
+    test('prepend child', () {
+      final root = Root.fromPgn('e4 e5');
+      final child = Node(
+        id: UciCharPair.fromMove(Move.fromUci('d2d4')!),
+        ply: 1,
+        sanMove: SanMove('d4', Move.fromUci('d2d4')!),
+        fen: 'fen2',
+        position: Chess.initial,
+      );
+      root.prependChild(child);
+      expect(root.children.length, equals(2));
+      expect(root.children.first, equals(child));
+      expect(root.children.last.id, equals(UciCharPair.fromUci('e2e4')));
+    });
+
     test('nodeAt', () {
       final root = Root.fromPgn('e4 e5');
       final branch = root.nodeAt(UciPath.fromId(UciCharPair.fromUci('e2e4')));
@@ -117,7 +132,27 @@ void main() {
       expect(testNode.children[1], equals(branch));
     });
 
-    test('addNodeAt, with an existing root at path', () {
+    test('addNodeAt, prepend', () {
+      final root = Root.fromPgn('e4 e5');
+      final branch = Node(
+        id: UciCharPair.fromMove(Move.fromUci('b8c6')!),
+        ply: 2,
+        sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
+        fen: 'fen2',
+        position: Chess.initial,
+      );
+      root.addNodeAt(
+        UciPath.fromId(UciCharPair.fromUci('e2e4')),
+        branch,
+        prepend: true,
+      );
+
+      final testNode = root.nodeAt(UciPath.fromId(UciCharPair.fromUci('e2e4')));
+      expect(testNode.children.length, equals(2));
+      expect(testNode.children[0], equals(branch));
+    });
+
+    test('addNodeAt, with an existing node at path', () {
       final root = Root.fromPgn('e4 e5');
       final branch = Node(
         id: UciCharPair.fromMove(Move.fromUci('e7e5')!),
@@ -130,7 +165,7 @@ void main() {
 
       final testNode = root.nodeAt(UciPath.fromId(UciCharPair.fromUci('e2e4')));
 
-      // root is not replaced
+      // node is not replaced
       expect(testNode.children.length, equals(1));
       expect(testNode.children[0], isNot(branch));
     });

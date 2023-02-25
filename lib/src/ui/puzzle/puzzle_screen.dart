@@ -140,11 +140,9 @@ class _Body extends ConsumerWidget {
                   orientation: puzzleState.pov.cg,
                   interactableSide: puzzleState.mode == PuzzleMode.view
                       ? cg.InteractableSide.both
-                      : puzzleState.isReplaying
-                          ? cg.InteractableSide.none
-                          : puzzleState.pov == Side.white
-                              ? cg.InteractableSide.white
-                              : cg.InteractableSide.black,
+                      : puzzleState.pov == Side.white
+                          ? cg.InteractableSide.white
+                          : cg.InteractableSide.black,
                   fen: puzzleState.fen,
                   lastMove: puzzleState.lastMove?.cg,
                   sideToMove: puzzleState.position.turn.cg,
@@ -265,10 +263,30 @@ class _BottomBar extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _BottomBarButton(
+            const _BottomBarButton(
               onTap: null,
-              label: context.l10n.puzzleThemes,
+              label: 'Themes',
               icon: LichessIcons.target,
+            ),
+            _BottomBarButton(
+              onTap: puzzleState.mode == PuzzleMode.view
+                  ? () {
+                      // be sure to invalidate the providers in case there is no more puzzle
+                      ref.invalidate(_nextPuzzleProvider);
+                      ref.invalidate(puzzleStateProvider);
+                      Navigator.of(context).pushReplacement(
+                        PageRouteBuilder<void>(
+                          pageBuilder: (context, _, __) =>
+                              const PuzzlesScreen(),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                      );
+                    }
+                  : null,
+              highlighted: puzzleState.mode == PuzzleMode.view,
+              label: 'Continue',
+              icon: CupertinoIcons.play_arrow_solid,
             ),
             _BottomBarButton(
               onTap: puzzleState.canGoBack
@@ -297,11 +315,13 @@ class _BottomBarButton extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.onTap,
+    this.highlighted = false,
   });
 
   final IconData icon;
   final String label;
   final VoidCallback? onTap;
+  final bool highlighted;
 
   bool get enabled => onTap != null;
 
@@ -330,6 +350,7 @@ class _BottomBarButton extends StatelessWidget {
         );
       case TargetPlatform.iOS:
         final themeData = CupertinoTheme.of(context);
+        final hightlightedColor = themeData.primaryColor;
         return CupertinoTheme(
           data: themeData.copyWith(
             primaryColor: themeData.textTheme.textStyle.color,
@@ -343,10 +364,13 @@ class _BottomBarButton extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(icon),
+                  Icon(icon, color: highlighted ? hightlightedColor : null),
                   Text(
                     label,
-                    style: const TextStyle(fontSize: 11),
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: highlighted ? hightlightedColor : null,
+                    ),
                   ),
                 ],
               ),

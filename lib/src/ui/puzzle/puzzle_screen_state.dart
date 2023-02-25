@@ -8,8 +8,8 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/tree.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
-// import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-// import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 
 part 'puzzle_screen_state.g.dart';
 part 'puzzle_screen_state.freezed.dart';
@@ -41,15 +41,16 @@ class PuzzleVm with _$PuzzleVm {
   Node get node => nodeList.last;
   Position get position => nodeList.last.position;
   String get fen => nodeList.last.fen;
-  bool get isReplaying => mode == PuzzleMode.play && canGoNext;
-  bool get canGoNext => node.children.isNotEmpty;
-  bool get canGoBack => currentPath.size > initialPath.size;
+  bool get canGoNext => mode == PuzzleMode.view && node.children.isNotEmpty;
+  bool get canGoBack =>
+      mode == PuzzleMode.view && currentPath.size > initialPath.size;
 
   Map<String, Set<String>> get validMoves => algebraicLegalMoves(position);
 }
 
 @riverpod
 class PuzzleScreenState extends _$PuzzleScreenState {
+  // ignore: avoid-late-keyword
   late Node _gameTree;
 
   @override
@@ -140,12 +141,10 @@ class PuzzleScreenState extends _$PuzzleScreenState {
       resultSent: true,
     );
 
-    // TODO enable later
+    final theme = ref.read(puzzleThemePrefProvider);
+    final service = ref.read(puzzleServiceProvider);
 
-    // final theme = ref.read(puzzleThemePrefProvider);
-    // final service = ref.read(puzzleServiceProvider);
-
-    // await service.solve(
+    // final nextPuzzle = await service.solve(
     //   userId: state.userId,
     //   angle: theme,
     //   solution: PuzzleSolution(
@@ -163,9 +162,9 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     final isForward = path.size > state.currentPath.size;
     if (isForward) {
       if (sanMove.san.contains('x')) {
-        ref.read(moveFeedbackServiceProvider).moveFeedback();
-      } else {
         ref.read(moveFeedbackServiceProvider).captureFeedback();
+      } else {
+        ref.read(moveFeedbackServiceProvider).moveFeedback();
       }
     }
     state = state.copyWith(
@@ -176,7 +175,11 @@ class PuzzleScreenState extends _$PuzzleScreenState {
   }
 
   void _addMove(Move move) {
-    final tuple = _gameTree.addMoveAt(state.currentPath, move);
+    final tuple = _gameTree.addMoveAt(
+      state.currentPath,
+      move,
+      prepend: state.mode == PuzzleMode.play,
+    );
     final newPath = tuple.item1;
     if (newPath != null) {
       _setPath(newPath);

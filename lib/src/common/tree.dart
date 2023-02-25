@@ -18,6 +18,9 @@ abstract class RootOrNode {
   /// Adds a child to this node.
   void addChild(Node node) => children.add(node);
 
+  /// Prepends a child to this node.
+  void prependChild(Node node) => children.insert(0, node);
+
   /// An iterable of all nodes on the mainline.
   Iterable<Node> get mainline sync* {
     RootOrNode current = this;
@@ -56,13 +59,17 @@ abstract class RootOrNode {
   /// Adds a new node at the given path and returns the new path.
   ///
   /// If the node already exists, it is not added again.
-  UciPath? addNodeAt(UciPath path, Node newNode) {
+  UciPath? addNodeAt(UciPath path, Node newNode, {bool prepend = false}) {
     final newPath = path + newNode.id;
     final node = nodeAtOrNull(path);
     if (node != null) {
       final existing = nodeAtOrNull(newPath) != null;
       if (!existing) {
-        node.addChild(newNode);
+        if (prepend) {
+          node.prependChild(newNode);
+        } else {
+          node.addChild(newNode);
+        }
       }
       return newPath;
     } else {
@@ -74,7 +81,11 @@ abstract class RootOrNode {
   ///
   /// Returns the new path and the new node.
   /// If the node already exists, it is not added again.
-  Tuple2<UciPath?, Node?> addMoveAt(UciPath path, Move move) {
+  Tuple2<UciPath?, Node?> addMoveAt(
+    UciPath path,
+    Move move, {
+    bool prepend = false,
+  }) {
     final pos = nodeAt(path).position;
     final newPosSan = pos.playToSan(move);
     final newPos = newPosSan.item1;
@@ -85,7 +96,7 @@ abstract class RootOrNode {
       fen: newPos.fen,
       position: newPos,
     );
-    final newPath = addNodeAt(path, newNode);
+    final newPath = addNodeAt(path, newNode, prepend: prepend);
     return Tuple2(newPath, newPath != null ? newNode : null);
   }
 
