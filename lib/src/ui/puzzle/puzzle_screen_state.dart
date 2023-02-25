@@ -131,7 +131,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
       mode: PuzzleMode.view,
       result: state.result ?? PuzzleResult.win,
     );
-    _sendResult();
+    await _sendResult();
   }
 
   Future<void> _sendResult() async {
@@ -144,16 +144,16 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     final theme = ref.read(puzzleThemePrefProvider);
     final service = ref.read(puzzleServiceProvider);
 
-    // final nextPuzzle = await service.solve(
-    //   userId: state.userId,
-    //   angle: theme,
-    //   solution: PuzzleSolution(
-    //     id: state.puzzle.id,
-    //     win: state.result == PuzzleResult.win,
-    //     // TODO add rating option
-    //     rated: userId != null,
-    //   ),
-    // );
+    await service.solve(
+      userId: state.userId,
+      angle: theme,
+      solution: PuzzleSolution(
+        id: state.puzzle.id,
+        win: state.result == PuzzleResult.win,
+        // TODO add rating option
+        rated: userId != null,
+      ),
+    );
   }
 
   void _setPath(UciPath path) {
