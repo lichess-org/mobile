@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/common/sound_service.dart';
@@ -32,6 +34,15 @@ Future<Widget> buildTestApp(
 
   // TODO consider loading true fonts as well
   FlutterError.onError = _ignoreOverflowErrors;
+
+  Logger.root.onRecord.listen((record) {
+    if (record.level > Level.WARNING) {
+      final time = DateFormat.Hms().format(record.time);
+      debugPrint(
+        '${record.level.name} at $time [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error}' : ''}',
+      );
+    }
+  });
 
   return ProviderScope(
     overrides: [

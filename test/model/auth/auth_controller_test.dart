@@ -3,18 +3,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/package_info.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/session_repository.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import '../../test_utils.dart';
+import '../../test_container.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 
@@ -50,29 +49,6 @@ void main() {
   const sessionData = AsyncData<UserSession?>(testUserSession);
   const nullData = AsyncData<UserSession?>(null);
 
-  ProviderContainer makeContainer(
-    MockAuthRepository authRepository,
-    MockSessionRepository sessionRepository,
-  ) {
-    final container = ProviderContainer(
-      overrides: [
-        authRepositoryProvider.overrideWithValue(authRepository),
-        sessionRepositoryProvider.overrideWithValue(sessionRepository),
-        httpClientProvider.overrideWithValue(mockClient),
-        packageInfoProvider.overrideWith((ref) {
-          return PackageInfo(
-            appName: 'lichess_mobile_test',
-            version: 'test',
-            buildNumber: '0.0.0',
-            packageName: 'lichess_mobile_test',
-          );
-        }),
-      ],
-    );
-    addTearDown(container.dispose);
-    return container;
-  }
-
   setUpAll(() {
     registerFallbackValue(testUserSession);
     registerFallbackValue(const AsyncLoading<UserSession?>());
@@ -88,8 +64,13 @@ void main() {
       when(() => mockSessionRepository.read())
           .thenAnswer((_) => delayedAnswer(testUserSession));
 
-      final container =
-          makeContainer(mockAuthRepository, mockSessionRepository);
+      final container = await makeContainer(
+        overrides: [
+          authRepositoryProvider.overrideWithValue(mockAuthRepository),
+          sessionRepositoryProvider.overrideWithValue(mockSessionRepository),
+          httpClientProvider.overrideWithValue(mockClient),
+        ],
+      );
 
       final listener = Listener<AsyncValue<UserSession?>>();
 
@@ -119,8 +100,13 @@ void main() {
         () => mockSessionRepository.write(any()),
       ).thenAnswer((_) => delayedAnswer(null));
 
-      final container =
-          makeContainer(mockAuthRepository, mockSessionRepository);
+      final container = await makeContainer(
+        overrides: [
+          authRepositoryProvider.overrideWithValue(mockAuthRepository),
+          sessionRepositoryProvider.overrideWithValue(mockSessionRepository),
+          httpClientProvider.overrideWithValue(mockClient),
+        ],
+      );
 
       final listener = Listener<AsyncValue<UserSession?>>();
 
@@ -168,8 +154,13 @@ void main() {
         () => mockSessionRepository.delete(),
       ).thenAnswer((_) => delayedAnswer(null));
 
-      final container =
-          makeContainer(mockAuthRepository, mockSessionRepository);
+      final container = await makeContainer(
+        overrides: [
+          authRepositoryProvider.overrideWithValue(mockAuthRepository),
+          sessionRepositoryProvider.overrideWithValue(mockSessionRepository),
+          httpClientProvider.overrideWithValue(mockClient),
+        ],
+      );
 
       final listener = Listener<AsyncValue<UserSession?>>();
 

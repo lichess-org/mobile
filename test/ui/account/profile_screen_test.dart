@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:logging/logging.dart';
 import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/common/api_client.dart';
@@ -12,8 +10,6 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../test_utils.dart';
 import '../../test_app.dart';
 import '../../model/auth/fake_session_repository.dart';
-
-class MockLogger extends Mock implements Logger {}
 
 void main() {
   final mockClient = MockClient((request) {
