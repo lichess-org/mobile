@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,10 +17,11 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 part 'profile_screen.g.dart';
 
 @riverpod
-Future<User?> sessionProfile(SessionProfileRef ref) async {
+Future<User?> _sessionProfile(_SessionProfileRef ref) async {
   final session = await ref.watch(authControllerProvider.future);
+  final accountRepo = ref.watch(accountRepositoryProvider);
   if (session != null) {
-    return ref.watch(accountProvider.future);
+    return Result.release(accountRepo.getProfile());
   }
   return null;
 }
@@ -43,7 +45,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Widget _buildAndroid(BuildContext context) {
-    final sessionProfile = ref.watch(sessionProfileProvider);
+    final sessionProfile = ref.watch(_sessionProfileProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.profile),
@@ -78,7 +80,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Widget _buildIos(BuildContext context) {
-    final sessionProfile = ref.watch(sessionProfileProvider);
+    final sessionProfile = ref.watch(_sessionProfileProvider);
     return CupertinoPageScaffold(
       child: CustomScrollView(
         slivers: [
@@ -138,7 +140,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Future<void> _refreshData(User account) {
     return ref
         .refresh(userRecentGamesProvider(userId: account.id).future)
-        .then((_) => ref.refresh(accountProvider));
+        .then((_) => ref.refresh(_sessionProfileProvider));
   }
 }
 
