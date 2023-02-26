@@ -12,11 +12,11 @@ import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/common/sound_service.dart';
 import 'package:lichess_mobile/src/common/package_info.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
-import 'package:lichess_mobile/src/model/auth/session_repository.dart';
+import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 import './common/fake_sound_service.dart';
 import './model/auth/fake_auth_repository.dart';
-import './model/auth/fake_session_repository.dart';
+import './model/auth/fake_session_storage.dart';
 
 // iPhone 14 screen size
 const double _kTestScreenWidth = 390.0;
@@ -49,7 +49,7 @@ Future<Widget> buildTestApp(
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       sharedPreferencesProvider.overrideWithValue(sharedPreferences),
       authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
-      sessionRepositoryProvider.overrideWithValue(FakeSessionRepository()),
+      sessionStorageProvider.overrideWithValue(FakeSessionStorage()),
       currentBrightnessProvider.overrideWithValue(Brightness.dark),
       packageInfoProvider.overrideWith((ref) {
         return PackageInfo(

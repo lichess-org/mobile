@@ -4,12 +4,12 @@ import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/model/auth/session_repository.dart';
+import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/ui/account/profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../test_utils.dart';
 import '../../test_app.dart';
-import '../../model/auth/fake_session_repository.dart';
+import '../../model/auth/fake_session_storage.dart';
 
 void main() {
   final mockClient = MockClient((request) {
@@ -29,8 +29,8 @@ void main() {
           tester,
           home: const ProfileScreen(),
           overrides: [
-            sessionRepositoryProvider
-                .overrideWithValue(FakeSessionRepository(fakeSession)),
+            sessionStorageProvider
+                .overrideWithValue(FakeSessionStorage(fakeSession)),
             httpClientProvider.overrideWithValue(mockClient),
           ],
         );

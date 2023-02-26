@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
-import 'session_repository.dart';
+import 'session_storage.dart';
 import 'user_session.dart';
 import 'auth_repository.dart';
 
@@ -19,7 +19,7 @@ part 'auth_controller.g.dart';
 class AuthController extends _$AuthController {
   @override
   FutureOr<UserSession?> build() {
-    final repo = ref.watch(sessionRepositoryProvider);
+    final repo = ref.watch(sessionStorageProvider);
     return repo.read();
   }
 
@@ -28,7 +28,7 @@ class AuthController extends _$AuthController {
     state = (await ref.read(authRepositoryProvider).signIn().flatMap(
       (oAuthResp) {
         if (oAuthResp.accessToken != null) {
-          final sessionRepo = ref.read(sessionRepositoryProvider);
+          final sessionRepo = ref.read(sessionStorageProvider);
           final apiClient = ref.read(apiClientProvider);
           return apiClient.get(
             Uri.parse('$kLichessHost/api/account'),
@@ -71,7 +71,7 @@ class AuthController extends _$AuthController {
   }
 
   Future<void> _deleteSession() {
-    final sessionRepo = ref.read(sessionRepositoryProvider);
+    final sessionRepo = ref.read(sessionStorageProvider);
     return sessionRepo.delete();
   }
 }

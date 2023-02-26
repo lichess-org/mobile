@@ -10,10 +10,10 @@ import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/common/sound_service.dart';
 import 'package:lichess_mobile/src/common/package_info.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
-import 'package:lichess_mobile/src/model/auth/session_repository.dart';
+import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import './common/fake_sound_service.dart';
 import './model/auth/fake_auth_repository.dart';
-import './model/auth/fake_session_repository.dart';
+import './model/auth/fake_session_storage.dart';
 
 Future<ProviderContainer> makeContainer({
   List<Override>? overrides,
@@ -35,7 +35,7 @@ Future<ProviderContainer> makeContainer({
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       sharedPreferencesProvider.overrideWithValue(sharedPreferences),
       authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
-      sessionRepositoryProvider.overrideWithValue(FakeSessionRepository()),
+      sessionStorageProvider.overrideWithValue(FakeSessionStorage()),
       packageInfoProvider.overrideWith((ref) {
         return PackageInfo(
           appName: 'lichess_mobile_test',

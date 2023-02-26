@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
-import 'package:lichess_mobile/src/model/auth/session_repository.dart';
+import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import '../../test_utils.dart';
@@ -17,14 +17,14 @@ import '../../test_container.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 
-class MockSessionRepository extends Mock implements SessionRepository {}
+class MockSessionStorage extends Mock implements SessionStorage {}
 
 class Listener<T> extends Mock {
   void call(T? previous, T value);
 }
 
 void main() {
-  final mockSessionRepository = MockSessionRepository();
+  final mockSessionStorage = MockSessionStorage();
   final mockAuthRepository = MockAuthRepository();
 
   final mockClient = MockClient((request) {
@@ -56,18 +56,18 @@ void main() {
 
   setUp(() {
     reset(mockAuthRepository);
-    reset(mockSessionRepository);
+    reset(mockSessionStorage);
   });
 
   group('AuthController', () {
     test('loads the session from session repository', () async {
-      when(() => mockSessionRepository.read())
+      when(() => mockSessionStorage.read())
           .thenAnswer((_) => delayedAnswer(testUserSession));
 
       final container = await makeContainer(
         overrides: [
           authRepositoryProvider.overrideWithValue(mockAuthRepository),
-          sessionRepositoryProvider.overrideWithValue(mockSessionRepository),
+          sessionStorageProvider.overrideWithValue(mockSessionStorage),
           httpClientProvider.overrideWithValue(mockClient),
         ],
       );
@@ -92,18 +92,18 @@ void main() {
     });
 
     test('sign in', () async {
-      when(() => mockSessionRepository.read())
+      when(() => mockSessionStorage.read())
           .thenAnswer((_) => delayedAnswer(null));
       when(() => mockAuthRepository.signIn())
           .thenAnswer((_) => delayedAnswer(signInResponse));
       when(
-        () => mockSessionRepository.write(any()),
+        () => mockSessionStorage.write(any()),
       ).thenAnswer((_) => delayedAnswer(null));
 
       final container = await makeContainer(
         overrides: [
           authRepositoryProvider.overrideWithValue(mockAuthRepository),
-          sessionRepositoryProvider.overrideWithValue(mockSessionRepository),
+          sessionStorageProvider.overrideWithValue(mockSessionStorage),
           httpClientProvider.overrideWithValue(mockClient),
         ],
       );
@@ -141,23 +141,23 @@ void main() {
       // it should successfully write the session, which is then used by
       // api client and the AuthController first load
       verify(
-        () => mockSessionRepository.write(testUserSession),
+        () => mockSessionStorage.write(testUserSession),
       ).called(1);
     });
 
     test('sign out', () async {
-      when(() => mockSessionRepository.read())
+      when(() => mockSessionStorage.read())
           .thenAnswer((_) => delayedAnswer(testUserSession));
       when(() => mockAuthRepository.signOut())
           .thenAnswer((_) => delayedAnswer(Result.value(null)));
       when(
-        () => mockSessionRepository.delete(),
+        () => mockSessionStorage.delete(),
       ).thenAnswer((_) => delayedAnswer(null));
 
       final container = await makeContainer(
         overrides: [
           authRepositoryProvider.overrideWithValue(mockAuthRepository),
-          sessionRepositoryProvider.overrideWithValue(mockSessionRepository),
+          sessionStorageProvider.overrideWithValue(mockSessionStorage),
           httpClientProvider.overrideWithValue(mockClient),
         ],
       );
@@ -194,7 +194,7 @@ void main() {
 
       // session should be deleted
       verify(
-        () => mockSessionRepository.delete(),
+        () => mockSessionStorage.delete(),
       ).called(1);
     });
   });

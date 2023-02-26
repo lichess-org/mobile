@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:lichess_mobile/src/model/auth/session_repository.dart';
+import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../test_utils.dart';
 import '../../test_app.dart';
-import '../../model/auth/fake_session_repository.dart';
+import '../../model/auth/fake_session_storage.dart';
 
 void main() {
   group('SettingsScreen', () {
@@ -62,8 +62,8 @@ void main() {
           tester,
           home: const SettingsScreen(),
           overrides: [
-            sessionRepositoryProvider
-                .overrideWithValue(FakeSessionRepository(fakeSession)),
+            sessionStorageProvider
+                .overrideWithValue(FakeSessionStorage(fakeSession)),
           ],
         );
 
