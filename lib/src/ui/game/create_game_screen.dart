@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/board/play_preferences.dart';
@@ -104,6 +105,7 @@ class PlayForm extends ConsumerWidget {
     final stockfishLevel = ref.watch(stockfishLevelProvider);
     final timeControlPref = ref.watch(timeControlPrefProvider);
     final authController = ref.watch(authControllerProvider);
+    final userSession = ref.watch(userSessionStateProvider);
     final playActionAsync = ref.watch(playActionProvider);
 
     ref.listen<AsyncValue<PlayableGame?>>(playActionProvider, (_, state) {
@@ -283,28 +285,25 @@ class PlayForm extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 10),
-          authController.when(
-            data: (session) => FatButton(
-              semanticsLabel: session == null
-                  ? 'Sign in to start playing'
-                  : context.l10n.play,
-              onPressed: session == null
-                  ? () => ref.read(authControllerProvider.notifier).signIn()
-                  : playActionAsync.isLoading
-                      ? null
-                      : () =>
-                          ref.read(playActionProvider.notifier).createGame(),
-              child: playActionAsync.isLoading
-                  ? const ButtonLoadingIndicator()
-                  : Text(
-                      session == null
-                          // TODO translate
-                          ? 'Sign in to start playing'
-                          : context.l10n.play,
-                    ),
-            ),
-            loading: () => const CircularProgressIndicator.adaptive(),
-            error: (err, st) => const CircularProgressIndicator.adaptive(),
+          FatButton(
+            semanticsLabel: userSession == null
+                ? 'Sign in to start playing'
+                : context.l10n.play,
+            onPressed: userSession == null
+                ? authController.isLoading
+                    ? null
+                    : () => ref.read(authControllerProvider.notifier).signIn()
+                : playActionAsync.isLoading
+                    ? null
+                    : () => ref.read(playActionProvider.notifier).createGame(),
+            child: (authController.isLoading || playActionAsync.isLoading)
+                ? const ButtonLoadingIndicator()
+                : Text(
+                    userSession == null
+                        // TODO translate
+                        ? 'Sign in to start playing'
+                        : context.l10n.play,
+                  ),
           ),
         ],
       ),

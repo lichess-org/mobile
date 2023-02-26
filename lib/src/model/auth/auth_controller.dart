@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:async/async.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -9,7 +8,6 @@ import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
-import 'session_storage.dart';
 import 'user_session.dart';
 import 'auth_repository.dart';
 
@@ -18,17 +16,15 @@ part 'auth_controller.g.dart';
 @riverpod
 class AuthController extends _$AuthController {
   @override
-  FutureOr<UserSession?> build() {
-    final repo = ref.watch(sessionStorageProvider);
-    return repo.read();
-  }
+  Future<void> build() async {}
 
   Future<void> signIn() async {
     state = const AsyncLoading();
-    state = (await ref.read(authRepositoryProvider).signIn().flatMap(
+
+    final Result<UserSession> result =
+        await ref.read(authRepositoryProvider).signIn().flatMap(
       (oAuthResp) {
         if (oAuthResp.accessToken != null) {
-          final sessionRepo = ref.read(sessionStorageProvider);
           final apiClient = ref.read(apiClientProvider);
           return apiClient.get(
             Uri.parse('$kLichessHost/api/account'),
@@ -36,42 +32,34 @@ class AuthController extends _$AuthController {
           ).flatMap((response) {
             return readJsonObject(response.body, mapper: User.fromJson)
                 .map((user) {
-              final newSession = UserSession(
+              return UserSession(
                 token: oAuthResp.accessToken!,
                 user: user.lightUser,
               );
-              sessionRepo.write(newSession);
-              return newSession;
             });
-          }).mapError((err, st) {
-            debugPrint(
-              'SEVERE: [AuthController] could not fetch account; $err\n$st',
-            );
-            return ApiRequestException();
           });
         } else {
           return Future.value(
-            Result<UserSession?>.error(ApiRequestException()),
+            Result<UserSession>.error(ApiRequestException()),
           );
         }
       },
-    ))
-        .asAsyncValue;
+    );
+
+    result.match(
+      onSuccess: (session) {
+        ref.read(userSessionStateProvider.notifier).update(session);
+      },
+    );
+
+    state = const AsyncData(null);
   }
 
   Future<void> signOut() async {
     state = const AsyncLoading();
     await Future<void>.delayed(const Duration(milliseconds: 500));
-    final result = await ref.read(authRepositoryProvider).signOut();
-    result.match(
-      onSuccess: (_) => _deleteSession(),
-      onError: (_, __) => _deleteSession(),
-    );
+    await ref.read(authRepositoryProvider).signOut();
+    await ref.read(userSessionStateProvider.notifier).delete();
     state = const AsyncData(null);
-  }
-
-  Future<void> _deleteSession() {
-    final sessionRepo = ref.read(sessionStorageProvider);
-    return sessionRepo.delete();
   }
 }

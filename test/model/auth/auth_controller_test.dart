@@ -45,13 +45,12 @@ void main() {
       isPatron: true,
     ),
   );
-  const loading = AsyncLoading<UserSession?>();
-  const sessionData = AsyncData<UserSession?>(testUserSession);
-  const nullData = AsyncData<UserSession?>(null);
+  const loading = AsyncLoading<void>();
+  const nullData = AsyncData<void>(null);
 
   setUpAll(() {
     registerFallbackValue(testUserSession);
-    registerFallbackValue(const AsyncLoading<UserSession?>());
+    registerFallbackValue(const AsyncLoading<void>());
   });
 
   setUp(() {
@@ -60,37 +59,6 @@ void main() {
   });
 
   group('AuthController', () {
-    test('loads the session from session repository', () async {
-      when(() => mockSessionStorage.read())
-          .thenAnswer((_) => delayedAnswer(testUserSession));
-
-      final container = await makeContainer(
-        overrides: [
-          authRepositoryProvider.overrideWithValue(mockAuthRepository),
-          sessionStorageProvider.overrideWithValue(mockSessionStorage),
-          httpClientProvider.overrideWithValue(mockClient),
-        ],
-      );
-
-      final listener = Listener<AsyncValue<UserSession?>>();
-
-      container.listen<AsyncValue<UserSession?>>(
-        authControllerProvider,
-        listener,
-        fireImmediately: true,
-      );
-
-      await container.read(authControllerProvider.future);
-
-      verifyInOrder([
-        // first state is loading, waiting for session repository
-        () => listener(null, loading),
-        // transition to retrieved session data from repository
-        () => listener(loading, sessionData),
-      ]);
-      verifyNoMoreInteractions(listener);
-    });
-
     test('sign in', () async {
       when(() => mockSessionStorage.read())
           .thenAnswer((_) => delayedAnswer(null));
@@ -108,9 +76,9 @@ void main() {
         ],
       );
 
-      final listener = Listener<AsyncValue<UserSession?>>();
+      final listener = Listener<AsyncValue<void>>();
 
-      container.listen<AsyncValue<UserSession?>>(
+      container.listen<AsyncValue<void>>(
         authControllerProvider,
         listener,
         fireImmediately: true,
@@ -119,9 +87,9 @@ void main() {
       await container.read(authControllerProvider.future);
 
       verifyInOrder([
-        // first state is loading, waiting for session repository
+        // first state is loading
         () => listener(null, loading),
-        // transition to null because session repository returned nothing
+        // transition to null
         () => listener(loading, nullData),
       ]);
 
@@ -130,16 +98,14 @@ void main() {
 
       verifyInOrder([
         // state is loading, waiting for signin logic to complete
-        () => listener(nullData, any(that: isA<AsyncLoading<UserSession?>>())),
-        // signin logic completed with session data
-        () =>
-            listener(any(that: isA<AsyncLoading<UserSession?>>()), sessionData),
+        () => listener(nullData, any(that: isA<AsyncLoading<void>>())),
+        // signin logic completed
+        () => listener(any(that: isA<AsyncLoading<void>>()), nullData),
       ]);
       verifyNoMoreInteractions(listener);
       verify(mockAuthRepository.signIn).called(1);
 
-      // it should successfully write the session, which is then used by
-      // api client and the AuthController first load
+      // it should successfully write the session
       verify(
         () => mockSessionStorage.write(testUserSession),
       ).called(1);
@@ -162,9 +128,9 @@ void main() {
         ],
       );
 
-      final listener = Listener<AsyncValue<UserSession?>>();
+      final listener = Listener<AsyncValue<void>>();
 
-      container.listen<AsyncValue<UserSession?>>(
+      container.listen<AsyncValue<void>>(
         authControllerProvider,
         listener,
         fireImmediately: true,
@@ -173,10 +139,10 @@ void main() {
       await container.read(authControllerProvider.future);
 
       verifyInOrder([
-        // first state is loading, waiting for session repository
+        // first state is loading
         () => listener(null, loading),
-        // transition to loaded session data from repository
-        () => listener(loading, sessionData),
+        // transition to null
+        () => listener(loading, nullData),
       ]);
 
       final controller = container.read(authControllerProvider.notifier);
@@ -184,10 +150,9 @@ void main() {
 
       verifyInOrder([
         // state is loading, waiting for signin logic to complete
-        () =>
-            listener(sessionData, any(that: isA<AsyncLoading<UserSession?>>())),
+        () => listener(nullData, any(that: isA<AsyncLoading<void>>())),
         // signOut logic completed
-        () => listener(any(that: isA<AsyncLoading<UserSession?>>()), nullData),
+        () => listener(any(that: isA<AsyncLoading<void>>()), nullData),
       ]);
       verifyNoMoreInteractions(listener);
       verify(mockAuthRepository.signOut).called(1);

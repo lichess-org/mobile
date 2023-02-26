@@ -34,7 +34,7 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      // first frame is a loading state
+      // wait for auth controller
       await tester.pump(const Duration(milliseconds: 50));
 
       expect(find.text('Sign in'), findsOneWidget);
@@ -42,12 +42,19 @@ void main() {
       await tester.tap(find.text('Sign in'));
       await tester.pump();
 
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(
+        tester
+            .widget<TextButton>(
+              find.widgetWithText(TextButton, 'Sign in'),
+            )
+            .onPressed,
+        isNull,
+      );
+
       await tester.pump(const Duration(seconds: 1)); // wait for sign in future
 
       expect(find.text('Sign in'), findsNothing);
     },
-    // fails on iOS, no idea why
     // variant: kPlatformVariant,
   );
 }

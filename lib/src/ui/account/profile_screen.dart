@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:lichess_mobile/src/model/account/account_providers.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
@@ -18,7 +19,7 @@ part 'profile_screen.g.dart';
 
 @riverpod
 Future<User?> _sessionProfile(_SessionProfileRef ref) async {
-  final session = await ref.watch(authControllerProvider.future);
+  final session = ref.watch(userSessionStateProvider);
   final accountRepo = ref.watch(accountRepositoryProvider);
   if (session != null) {
     return Result.release(accountRepo.getProfile());
