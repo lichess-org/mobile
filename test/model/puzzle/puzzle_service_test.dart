@@ -392,12 +392,12 @@ String _makeUnsolvedPuzzles(List<PuzzleId> ids) {
               id: GameId('PrlkCqOv'),
               perf: Perf.blitz,
               rated: true,
-              white: PuzzlePlayer(
+              white: PuzzleGamePlayer(
                 side: Side.white,
                 userId: 'user1',
                 name: 'user1',
               ),
-              black: PuzzlePlayer(
+              black: PuzzleGamePlayer(
                 side: Side.black,
                 userId: 'user2',
                 name: 'user2',

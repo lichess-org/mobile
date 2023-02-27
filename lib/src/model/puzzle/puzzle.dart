@@ -59,8 +59,8 @@ class PuzzleGame with _$PuzzleGame {
     required GameId id,
     required Perf perf,
     required bool rated,
-    required PuzzlePlayer white,
-    required PuzzlePlayer black,
+    required PuzzleGamePlayer white,
+    required PuzzleGamePlayer black,
     required String pgn,
     TimeIncrement? clock,
   }) = _PuzzleGame;
@@ -70,16 +70,16 @@ class PuzzleGame with _$PuzzleGame {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PuzzlePlayer with _$PuzzlePlayer {
-  const factory PuzzlePlayer({
+class PuzzleGamePlayer with _$PuzzleGamePlayer {
+  const factory PuzzleGamePlayer({
     required Side side,
     required String userId,
     required String name,
     String? title,
-  }) = _PuzzlePlayer;
+  }) = _PuzzleGamePlayer;
 
-  factory PuzzlePlayer.fromJson(Map<String, dynamic> json) =>
-      _$PuzzlePlayerFromJson(json);
+  factory PuzzleGamePlayer.fromJson(Map<String, dynamic> json) =>
+      _$PuzzleGamePlayerFromJson(json);
 }
 
 @Freezed(fromJson: true, toJson: true)

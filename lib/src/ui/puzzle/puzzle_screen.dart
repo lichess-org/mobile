@@ -122,6 +122,9 @@ class _Feedback extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (state.mode) {
       case PuzzleMode.view:
+        final puzzleRating =
+            context.l10n.ratingX(state.puzzle.rating.toString());
+        final playedXTimes = context.l10n.playedXTimes(state.puzzle.plays);
         return PlatformCard(
           child: ListTile(
             leading: state.result == PuzzleResult.win
@@ -132,7 +135,7 @@ class _Feedback extends StatelessWidget {
                   ? context.l10n.puzzleSuccess
                   : context.l10n.puzzleComplete,
             ),
-            subtitle: Text(context.l10n.continueTraining),
+            subtitle: Text('$puzzleRating. $playedXTimes.'),
           ),
         );
       case PuzzleMode.play:
@@ -200,9 +203,10 @@ class _BottomBar extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const _BottomBarButton(
+            _BottomBarButton(
               onTap: null,
-              label: 'Themes',
+              label: context.l10n.puzzleThemes,
+              shortLabel: 'Themes',
               icon: LichessIcons.target,
             ),
             _BottomBarButton(
@@ -222,7 +226,8 @@ class _BottomBar extends ConsumerWidget {
                     }
                   : null,
               highlighted: puzzleState.mode == PuzzleMode.view,
-              label: 'Continue',
+              label: context.l10n.continueTraining,
+              shortLabel: 'Continue',
               icon: CupertinoIcons.play_arrow_solid,
             ),
             _BottomBarButton(
@@ -231,6 +236,7 @@ class _BottomBar extends ConsumerWidget {
                       ref.read(puzzleStateProvider.notifier).goToPreviousNode()
                   : null,
               label: 'Previous',
+              shortLabel: 'Previous',
               icon: CupertinoIcons.chevron_back,
             ),
             _BottomBarButton(
@@ -238,6 +244,7 @@ class _BottomBar extends ConsumerWidget {
                   ? () => ref.read(puzzleStateProvider.notifier).goToNextNode()
                   : null,
               label: context.l10n.next,
+              shortLabel: context.l10n.next,
               icon: CupertinoIcons.chevron_forward,
             ),
           ],
@@ -251,12 +258,14 @@ class _BottomBarButton extends StatelessWidget {
   const _BottomBarButton({
     required this.icon,
     required this.label,
+    required this.shortLabel,
     required this.onTap,
     this.highlighted = false,
   });
 
   final IconData icon;
   final String label;
+  final String shortLabel;
   final VoidCallback? onTap;
   final bool highlighted;
 
@@ -294,22 +303,26 @@ class _BottomBarButton extends StatelessWidget {
           ),
           child: SizedBox(
             height: 50,
-            child: CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: onTap,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(icon, color: highlighted ? hightlightedColor : null),
-                  Text(
-                    label,
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: highlighted ? hightlightedColor : null,
+            child: Tooltip(
+              message: label,
+              triggerMode: TooltipTriggerMode.longPress,
+              child: CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: onTap,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(icon, color: highlighted ? hightlightedColor : null),
+                    Text(
+                      shortLabel,
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: highlighted ? hightlightedColor : null,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

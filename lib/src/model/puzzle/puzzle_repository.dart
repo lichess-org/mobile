@@ -136,8 +136,8 @@ PuzzleGame _puzzleGameFromPick(RequiredPick pick) {
   );
 }
 
-PuzzlePlayer _puzzlePlayerFromPick(RequiredPick pick) {
-  return PuzzlePlayer(
+PuzzleGamePlayer _puzzlePlayerFromPick(RequiredPick pick) {
+  return PuzzleGamePlayer(
     name: pick('name').asStringOrThrow(),
     userId: pick('userId').asStringOrThrow(),
     side: pick('color').asSideOrThrow(),
