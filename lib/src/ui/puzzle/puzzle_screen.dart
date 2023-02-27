@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
@@ -30,7 +30,7 @@ Future<Tuple2<Puzzle?, UserId?>> _nextPuzzle(
   _NextPuzzleRef ref,
   PuzzleTheme theme,
 ) async {
-  final session = await ref.watch(authControllerProvider.future);
+  final session = ref.watch(userSessionStateProvider);
   final puzzleService = ref.watch(puzzleServiceProvider);
   final puzzle = await puzzleService.nextPuzzle(
     userId: session?.user.id,
