@@ -52,7 +52,15 @@ class PuzzleRepository {
           Uri.parse('$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb'),
           headers: {'Content-type': 'application/json'},
           body: jsonEncode({
-            'solutions': solved.map((e) => e.toJson()).toList(),
+            'solutions': solved
+                .map(
+                  (e) => {
+                    'id': e.id.value,
+                    'win': e.win,
+                    'rated': e.rated,
+                  },
+                )
+                .toList(),
           }),
         )
         .flatMap(_decodeJson);

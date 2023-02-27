@@ -42,7 +42,7 @@ Future<AppDependencies> appDependencies(
         await sessionStorage.delete();
       }
     } catch (e) {
-      debugPrint('SEVERE: [AppDependencies] Error while checking session: $e');
+      debugPrint('WARNING: [AppDependencies] Error while checking session: $e');
     }
   }
 
