@@ -52,7 +52,7 @@ void main() {
 
       expect(find.text('Sign in'), findsNothing);
     },
-    // variant: kPlatformVariant,
+    variant: kPlatformVariant,
   );
 }
 
