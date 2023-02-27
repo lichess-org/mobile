@@ -1,10 +1,11 @@
+
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
-import 'package:lichess_mobile/src/model/auth/session_repository.dart';
+import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
-class FakeSessionRepository implements SessionRepository {
-  FakeSessionRepository([UserSession? initial]) : _session = initial;
+class FakeSessionStorage implements SessionStorage {
+  FakeSessionStorage([UserSession? initial]) : _session = initial;
 
   UserSession? _session;
 

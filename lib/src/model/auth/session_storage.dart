@@ -5,15 +5,15 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'user_session.dart';
 
-part 'session_repository.g.dart';
+part 'session_storage.g.dart';
 
 @Riverpod(keepAlive: true)
-SessionRepository sessionRepository(SessionRepositoryRef ref) {
-  return const SessionRepository(FlutterSecureStorage());
+SessionStorage sessionStorage(SessionStorageRef ref) {
+  return const SessionStorage(FlutterSecureStorage());
 }
 
-class SessionRepository {
-  const SessionRepository(FlutterSecureStorage storage) : _storage = storage;
+class SessionStorage {
+  const SessionStorage(FlutterSecureStorage storage) : _storage = storage;
 
   final FlutterSecureStorage _storage;
 
