@@ -10,25 +10,22 @@ import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'puzzle.dart';
 import 'puzzle_theme.dart';
 
-part 'puzzle_local_db.freezed.dart';
-part 'puzzle_local_db.g.dart';
-
-const prefix = 'PuzzleLocalDB';
+part 'puzzle_storage.freezed.dart';
+part 'puzzle_storage.g.dart';
 
 @Riverpod(keepAlive: true)
-PuzzleLocalDB puzzleLocalDB(PuzzleLocalDBRef ref) {
+PuzzleStorage puzzleStorage(PuzzleStorageRef ref) {
   final sharedPrefs = ref.watch(sharedPreferencesProvider);
-  return PuzzleLocalDB(sharedPrefs);
+  return PuzzleStorage(sharedPrefs);
 }
 
-class PuzzleLocalDB {
-  const PuzzleLocalDB(this._prefs);
+class PuzzleStorage {
+  const PuzzleStorage(this._prefs);
 
   final SharedPreferences _prefs;
 
-  // TODO enum for angle
   PuzzleLocalData? fetch({
-    UserId? userId,
+    required UserId? userId,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) {
     final raw = _prefs.getString(_makeKey(userId, angle));
@@ -36,7 +33,7 @@ class PuzzleLocalDB {
       final json = jsonDecode(raw);
       if (json is! Map<String, dynamic>) {
         throw const FormatException(
-          '[PuzzleLocalDB] cannot fetch puzzles: expected an object',
+          '[PuzzleStorage] cannot fetch puzzles: expected an object',
         );
       }
       return PuzzleLocalData.fromJson(json);
@@ -45,7 +42,7 @@ class PuzzleLocalDB {
   }
 
   Future<bool> save({
-    UserId? userId,
+    required UserId? userId,
     PuzzleTheme angle = PuzzleTheme.mix,
     required PuzzleLocalData data,
   }) {
@@ -54,7 +51,7 @@ class PuzzleLocalDB {
 
   String _makeKey(UserId? userId, PuzzleTheme angle) {
     final buffer = StringBuffer();
-    buffer.write(prefix);
+    buffer.write('PuzzleStorage');
     if (userId != null) {
       buffer.write('.userId:$userId');
     }

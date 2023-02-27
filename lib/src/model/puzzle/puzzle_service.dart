@@ -8,7 +8,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
 import 'package:lichess_mobile/src/common/models.dart';
-import 'puzzle_local_db.dart';
+import 'puzzle_storage.dart';
 import 'puzzle_repository.dart';
 import 'puzzle.dart';
 import 'puzzle_theme.dart';
@@ -20,7 +20,7 @@ const kPuzzleLocalQueueLength = 100;
 
 @Riverpod(keepAlive: true)
 PuzzleService puzzleService(PuzzleServiceRef ref) {
-  final db = ref.watch(puzzleLocalDBProvider);
+  final db = ref.watch(puzzleStorageProvider);
   final repository = ref.watch(puzzleRepositoryProvider);
   return PuzzleService(Logger('PuzzleService'), db: db, repository: repository);
 }
@@ -34,7 +34,7 @@ class PuzzleService {
   });
 
   final int localQueueLength;
-  final PuzzleLocalDB db;
+  final PuzzleStorage db;
   final PuzzleRepository repository;
   final Logger _log;
 
@@ -100,7 +100,8 @@ class PuzzleService {
     if (deficit > 0) {
       _log.fine('Have a puzzle deficit of $deficit, will sync with lichess');
 
-      final batchResult = solved.isNotEmpty
+      // anonymous users can't solve puzzles so we just download the deficit
+      final batchResult = solved.isNotEmpty && userId != null
           ? repository.solveBatch(nb: deficit, solved: solved, angle: angle)
           : repository.selectBatch(nb: deficit, angle: angle);
 

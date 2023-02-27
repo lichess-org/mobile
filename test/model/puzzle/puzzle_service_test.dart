@@ -11,7 +11,7 @@ import 'package:logging/logging.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_local_db.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
@@ -46,7 +46,7 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       final sharedPreferences = await SharedPreferences.getInstance();
 
-      final db = PuzzleLocalDB(sharedPreferences);
+      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
         db: db,
@@ -67,18 +67,18 @@ void main() {
           Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=3'),
         ),
       ).called(1);
-      expect(db.fetch()?.solved, equals(IList(const [])));
-      expect(db.fetch()?.unsolved.length, equals(3));
+      expect(db.fetch(userId: null)?.solved, equals(IList(const [])));
+      expect(db.fetch(userId: null)?.unsolved.length, equals(3));
     });
 
     test('will not download data if local queue is full', () async {
       SharedPreferences.setMockInitialValues({
-        'PuzzleLocalDB.angle:mix':
+        'PuzzleStorage.angle:mix':
             _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       });
       final sharedPreferences = await SharedPreferences.getInstance();
 
-      final db = PuzzleLocalDB(sharedPreferences);
+      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
         db: db,
@@ -89,17 +89,17 @@ void main() {
       final puzzle = await service.nextPuzzle();
       expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
       verifyNever(() => mockClient.get(any()));
-      expect(db.fetch()?.unsolved.length, equals(1));
+      expect(db.fetch(userId: null)?.unsolved.length, equals(1));
     });
 
     test('will fetch puzzle deficit if local queue is not full', () async {
       SharedPreferences.setMockInitialValues({
-        'PuzzleLocalDB.angle:mix':
+        'PuzzleStorage.angle:mix':
             _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       });
       final sharedPreferences = await SharedPreferences.getInstance();
 
-      final db = PuzzleLocalDB(sharedPreferences);
+      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
         db: db,
@@ -120,18 +120,18 @@ void main() {
         () => mockClient
             .get(Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1')),
       ).called(1);
-      expect(db.fetch()?.unsolved.length, equals(2));
+      expect(db.fetch(userId: null)?.unsolved.length, equals(2));
     });
 
     test('nextPuzzle will always get the first puzzle of unsolved queue',
         () async {
       SharedPreferences.setMockInitialValues({
-        'PuzzleLocalDB.angle:mix':
+        'PuzzleStorage.angle:mix':
             _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       });
       final sharedPreferences = await SharedPreferences.getInstance();
 
-      final db = PuzzleLocalDB(sharedPreferences);
+      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
         db: db,
@@ -141,11 +141,11 @@ void main() {
 
       final puzzle = await service.nextPuzzle();
       expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
-      expect(db.fetch()?.unsolved.length, equals(1));
+      expect(db.fetch(userId: null)?.unsolved.length, equals(1));
 
       final puzzle2 = await service.nextPuzzle();
       expect(puzzle2?.puzzle.id, equals(const PuzzleId('pId3')));
-      expect(db.fetch()?.unsolved.length, equals(1));
+      expect(db.fetch(userId: null)?.unsolved.length, equals(1));
     });
 
     test('nextPuzzle returns null is unsolved queue is empty and is offline',
@@ -159,7 +159,7 @@ void main() {
         ),
       ).thenAnswer((_) => Future.error(const SocketException('offline')));
 
-      final db = PuzzleLocalDB(sharedPreferences);
+      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
         db: db,
@@ -174,12 +174,12 @@ void main() {
 
     test('different batch is saved per userId', () async {
       SharedPreferences.setMockInitialValues({
-        'PuzzleLocalDB.angle:mix':
+        'PuzzleStorage.angle:mix':
             _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       });
       final sharedPreferences = await SharedPreferences.getInstance();
 
-      final db = PuzzleLocalDB(sharedPreferences);
+      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
         db: db,
@@ -209,12 +209,12 @@ void main() {
 
     test('different batch is saved per angle', () async {
       SharedPreferences.setMockInitialValues({
-        'PuzzleLocalDB.angle:mix':
+        'PuzzleStorage.angle:mix':
             _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       });
       final sharedPreferences = await SharedPreferences.getInstance();
 
-      final db = PuzzleLocalDB(sharedPreferences);
+      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
         db: db,
@@ -232,17 +232,57 @@ void main() {
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
       verify(getReq).called(1);
 
-      expect(db.fetch(angle: PuzzleTheme.opening)?.unsolved.length, equals(1));
+      expect(
+        db.fetch(userId: null, angle: PuzzleTheme.opening)?.unsolved.length,
+        equals(1),
+      );
     });
 
-    test('solve puzzle when online', () async {
+    test('solve puzzle when online, no userId', () async {
       SharedPreferences.setMockInitialValues({
-        'PuzzleLocalDB.angle:mix':
+        'PuzzleStorage.angle:mix':
             _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       });
       final sharedPreferences = await SharedPreferences.getInstance();
 
-      final db = PuzzleLocalDB(sharedPreferences);
+      final db = PuzzleStorage(sharedPreferences);
+      final service = PuzzleService(
+        mockLogger,
+        db: db,
+        repository: puzzleRepo,
+        localQueueLength: 1,
+      );
+
+      Future<http.Response> getReq() => mockClient.get(
+            Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
+          );
+
+      when(getReq).thenAnswer((_) => mockResponse(batchOf1, 200));
+
+      final next = await service.solve(
+        solution: const PuzzleSolution(
+          id: PuzzleId('pId3'),
+          win: true,
+          rated: true,
+        ),
+      );
+
+      verify(getReq).called(1);
+
+      final data = db.fetch(userId: null);
+      expect(data?.solved, equals(IList(const [])));
+      expect(data?.unsolved[0].puzzle.id, equals(const PuzzleId('20yWT')));
+      expect(next?.puzzle.id, equals(const PuzzleId('20yWT')));
+    });
+
+    test('solve puzzle when online, with a userId', () async {
+      SharedPreferences.setMockInitialValues({
+        'PuzzleStorage.userId:testUserId.angle:mix':
+            _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
+      });
+      final sharedPreferences = await SharedPreferences.getInstance();
+
+      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
         db: db,
@@ -268,11 +308,12 @@ void main() {
           win: true,
           rated: true,
         ),
+        userId: const UserId('testUserId'),
       );
 
       verify(postReq).called(1);
 
-      final data = db.fetch();
+      final data = db.fetch(userId: const UserId('testUserId'));
       expect(data?.solved, equals(IList(const [])));
       expect(data?.unsolved[0].puzzle.id, equals(const PuzzleId('20yWT')));
       expect(next?.puzzle.id, equals(const PuzzleId('20yWT')));
@@ -280,14 +321,14 @@ void main() {
 
     test('solve puzzle when offline', () async {
       SharedPreferences.setMockInitialValues({
-        'PuzzleLocalDB.angle:mix': _makeUnsolvedPuzzles([
+        'PuzzleStorage.userId:testUserId.angle:mix': _makeUnsolvedPuzzles([
           const PuzzleId('pId3'),
           const PuzzleId('pId4'),
         ]),
       });
       final sharedPreferences = await SharedPreferences.getInstance();
 
-      final db = PuzzleLocalDB(sharedPreferences);
+      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
         db: db,
@@ -311,11 +352,14 @@ void main() {
       const solution =
           PuzzleSolution(id: PuzzleId('pId3'), win: true, rated: true);
 
-      final next = await service.solve(solution: solution);
+      final next = await service.solve(
+        solution: solution,
+        userId: const UserId('testUserId'),
+      );
 
       verify(postReq).called(1);
 
-      final data = db.fetch();
+      final data = db.fetch(userId: const UserId('testUserId'));
       expect(data?.solved, equals(IList(const [solution])));
       expect(data?.unsolved.length, equals(1));
       expect(next?.puzzle.id, equals(const PuzzleId('pId4')));

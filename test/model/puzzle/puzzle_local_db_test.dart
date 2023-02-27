@@ -4,17 +4,17 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_local_db.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 
 void main() {
-  group('PuzzleLocalDB', () {
+  group('PuzzleStorage', () {
     test('save and fetch data', () async {
       SharedPreferences.setMockInitialValues({});
       final sharedPreferences = await SharedPreferences.getInstance();
 
-      final db = PuzzleLocalDB(sharedPreferences);
+      final db = PuzzleStorage(sharedPreferences);
 
       final data = PuzzleLocalData(
         solved: IList(const [
@@ -52,9 +52,9 @@ void main() {
         ]),
       );
 
-      await db.save(angle: PuzzleTheme.mix, data: data);
+      await db.save(userId: null, angle: PuzzleTheme.mix, data: data);
 
-      expect(db.fetch(angle: PuzzleTheme.mix), data);
+      expect(db.fetch(userId: null, angle: PuzzleTheme.mix), data);
     });
   });
 }
