@@ -5,8 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 
 class PuzzleDashboardScreen extends StatelessWidget {
@@ -43,22 +45,45 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(puzzleThemePrefProvider);
+    final nextPuzzle = ref.watch(nextPuzzleProvider(theme));
+
     return SafeArea(
       child: ListView(
         padding: Styles.bodyPadding,
         children: [
           Padding(
             padding: Styles.sectionBottomPadding,
-            child: PuzzleTabButton(
-              icon: const Icon(LichessIcons.target, size: 44),
-              title: Text(context.l10n.puzzles, style: Styles.sectionTitle),
-              subtitle: Text(puzzleThemeL10n(context, theme).description),
-              onTap: () {
-                Navigator.of(context, rootNavigator: true).push<void>(
-                  MaterialPageRoute(
-                    builder: (context) => const PuzzlesScreen(),
-                  ),
+            child: nextPuzzle.when(
+              data: (data) {
+                final puzzle = data.item1;
+                if (puzzle == null) {
+                  return _PuzzleButton(
+                    theme: theme,
+                    subtitle:
+                        'Could not find any puzzle! Go online to get more.',
+                  );
+                } else {
+                  return _PuzzleButton(
+                    theme: theme,
+                    onTap: () {
+                      Navigator.of(context, rootNavigator: true).push<void>(
+                        MaterialPageRoute(
+                          builder: (context) => PuzzlesScreen(
+                            userId: data.item2,
+                            puzzle: puzzle,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
+              loading: () => _PuzzleButton(theme: theme),
+              error: (e, s) {
+                debugPrint(
+                  'SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s',
                 );
+                return _PuzzleButton(theme: theme);
               },
             ),
           ),
@@ -68,56 +93,24 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class PuzzleTabButton extends StatefulWidget {
-  const PuzzleTabButton({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
+class _PuzzleButton extends StatelessWidget {
+  const _PuzzleButton({
+    required this.theme,
+    this.onTap,
+    this.subtitle,
   });
 
-  final Widget icon;
-  final Widget title;
-  final Widget subtitle;
-  final VoidCallback onTap;
-
-  @override
-  State<PuzzleTabButton> createState() => _PuzzleTabButtonState();
-}
-
-class _PuzzleTabButtonState extends State<PuzzleTabButton> {
-  double scale = 1.0;
-
-  void _onTapDown() {
-    setState(() => scale = 0.97);
-  }
-
-  void _onTapCancel() {
-    setState(() => scale = 1.00);
-  }
+  final PuzzleTheme theme;
+  final VoidCallback? onTap;
+  final String? subtitle;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onTap,
-      onTapDown: (_) => _onTapDown(),
-      onTapCancel: _onTapCancel,
-      onTapUp: (_) => _onTapCancel(),
-      child: AnimatedScale(
-        scale: scale,
-        duration: const Duration(milliseconds: 100),
-        child: PlatformCard(
-          child: Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: ListTile(
-              leading: widget.icon,
-              title: widget.title,
-              subtitle: widget.subtitle,
-            ),
-          ),
-        ),
-      ),
+    return CardButton(
+      icon: const Icon(LichessIcons.target, size: 44),
+      title: Text(context.l10n.puzzles, style: Styles.sectionTitle),
+      subtitle: Text(subtitle ?? puzzleThemeL10n(context, theme).description),
+      onTap: onTap,
     );
   }
 }

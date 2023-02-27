@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 
 part 'puzzle_screen_state.g.dart';
 part 'puzzle_screen_state.freezed.dart';
@@ -36,6 +37,7 @@ class PuzzleVm with _$PuzzleVm {
     PuzzleResult? result,
     PuzzleFeedback? feedback,
     required bool resultSent,
+    Puzzle? nextPuzzle,
   }) = _PuzzleVm;
 
   Node get node => nodeList.last;
@@ -144,7 +146,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     final theme = ref.read(puzzleThemePrefProvider);
     final service = ref.read(puzzleServiceProvider);
 
-    await service.solve(
+    final next = await service.solve(
       userId: state.userId,
       angle: theme,
       solution: PuzzleSolution(
@@ -153,6 +155,14 @@ class PuzzleScreenState extends _$PuzzleScreenState {
         // TODO add rating option
         rated: userId != null,
       ),
+    );
+
+    // TODO check if next is null and show a message
+
+    ref.invalidate(nextPuzzleProvider);
+
+    state = state.copyWith(
+      nextPuzzle: next,
     );
   }
 
