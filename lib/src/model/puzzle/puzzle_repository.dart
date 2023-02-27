@@ -33,7 +33,7 @@ class PuzzleRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  FutureResult<List<Puzzle>> selectBatch({
+  FutureResult<IList<Puzzle>> selectBatch({
     PuzzleTheme angle = PuzzleTheme.mix,
     required int nb,
   }) {
@@ -42,7 +42,7 @@ class PuzzleRepository {
         .flatMap(_decodeJson);
   }
 
-  FutureResult<List<Puzzle>> solveBatch({
+  FutureResult<IList<Puzzle>> solveBatch({
     required int nb,
     required IList<PuzzleSolution> solved,
     PuzzleTheme angle = PuzzleTheme.mix,
@@ -66,7 +66,7 @@ class PuzzleRepository {
         .flatMap(_decodeJson);
   }
 
-  Result<List<Puzzle>> _decodeJson(http.Response response) {
+  Result<IList<Puzzle>> _decodeJson(http.Response response) {
     return readJsonObject(
       response.body,
       mapper: (Map<String, dynamic> json) {
@@ -74,12 +74,14 @@ class PuzzleRepository {
         if (puzzles is! List<dynamic>) {
           throw const FormatException('puzzles: expected a list');
         }
-        return puzzles.map((e) {
-          if (e is! Map<String, dynamic>) {
-            throw const FormatException('Expected an object');
-          }
-          return _puzzleFromJson(e);
-        }).toList();
+        return IList(
+          puzzles.map((e) {
+            if (e is! Map<String, dynamic>) {
+              throw const FormatException('Expected an object');
+            }
+            return _puzzleFromJson(e);
+          }),
+        );
       },
       logger: _log,
     );
