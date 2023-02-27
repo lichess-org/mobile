@@ -8,7 +8,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/sound_service.dart';
-import 'package:lichess_mobile/src/model/account/account_providers.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
 
