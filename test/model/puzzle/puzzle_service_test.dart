@@ -296,8 +296,7 @@ void main() {
               named: 'headers',
               that: sameHeaders({'Content-type': 'application/json'}),
             ),
-            body:
-                '{"solutions":[{"id":{"value":"pId3"},"win":true,"rated":true}]}',
+            body: '{"solutions":[{"id":"pId3","win":true,"rated":true}]}',
           );
 
       when(postReq).thenAnswer((_) => mockResponse(batchOf1, 200));
@@ -342,8 +341,7 @@ void main() {
               named: 'headers',
               that: sameHeaders({'Content-type': 'application/json'}),
             ),
-            body:
-                '{"solutions":[{"id":{"value":"pId3"},"win":true,"rated":true}]}',
+            body: '{"solutions":[{"id":"pId3","win":true,"rated":true}]}',
           );
 
       when(postReq)
