@@ -16,7 +16,9 @@ part 'auth_controller.g.dart';
 @riverpod
 class AuthController extends _$AuthController {
   @override
-  Future<void> build() async {}
+  AsyncValue<void> build() {
+    return const AsyncValue.data(null);
+  }
 
   Future<void> signIn() async {
     state = const AsyncLoading();

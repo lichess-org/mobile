@@ -84,23 +84,16 @@ void main() {
         fireImmediately: true,
       );
 
-      await container.read(authControllerProvider.future);
-
-      verifyInOrder([
-        // first state is loading
-        () => listener(null, loading),
-        // transition to null
-        () => listener(loading, nullData),
-      ]);
-
       final controller = container.read(authControllerProvider.notifier);
       await controller.signIn();
 
       verifyInOrder([
+        // init state
+        () => listener(null, nullData),
         // state is loading, waiting for signin logic to complete
-        () => listener(nullData, any(that: isA<AsyncLoading<void>>())),
+        () => listener(nullData, loading),
         // signin logic completed
-        () => listener(any(that: isA<AsyncLoading<void>>()), nullData),
+        () => listener(loading, nullData),
       ]);
       verifyNoMoreInteractions(listener);
       verify(mockAuthRepository.signIn).called(1);
@@ -136,23 +129,16 @@ void main() {
         fireImmediately: true,
       );
 
-      await container.read(authControllerProvider.future);
-
-      verifyInOrder([
-        // first state is loading
-        () => listener(null, loading),
-        // transition to null
-        () => listener(loading, nullData),
-      ]);
-
       final controller = container.read(authControllerProvider.notifier);
       await controller.signOut();
 
       verifyInOrder([
+        // init state
+        () => listener(null, nullData),
         // state is loading, waiting for signin logic to complete
-        () => listener(nullData, any(that: isA<AsyncLoading<void>>())),
+        () => listener(nullData, loading),
         // signOut logic completed
-        () => listener(any(that: isA<AsyncLoading<void>>()), nullData),
+        () => listener(loading, nullData),
       ]);
       verifyNoMoreInteractions(listener);
       verify(mockAuthRepository.signOut).called(1);

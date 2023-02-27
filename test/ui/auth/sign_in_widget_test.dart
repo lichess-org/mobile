@@ -34,9 +34,6 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      // wait for auth controller
-      await tester.pump(const Duration(milliseconds: 50));
-
       expect(find.text('Sign in'), findsOneWidget);
 
       await tester.tap(find.text('Sign in'));
