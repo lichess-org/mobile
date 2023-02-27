@@ -332,17 +332,19 @@ class Activity extends ConsumerWidget {
           header: const Text('Activity', style: Styles.sectionTitle),
           hasLeading: true,
           children: data.map((entry) {
-            debugPrint(entry.games.toString());
             return Column(
               children: [
-                Text(
-                  "${_monthName[entry.startTime.month].toUpperCase()} ${entry.startTime.day}, ${entry.startTime.year}",
-                  style: TextStyle(color: LichessColors.brag),
+                PlatformListTile(
+                  title: Text(
+                    "${_monthName[entry.startTime.month].toUpperCase()} ${entry.startTime.day}, ${entry.startTime.year}",
+                    style: const TextStyle(
+                        color: LichessColors.brag, fontWeight: FontWeight.bold,),
+                  ),
                 ),
                 if (entry.followIn!.isNotEmpty)
                   PlatformListTile(
-                    leading: Icon(
-                      LichessIcons.chess,
+                    leading: const Icon(
+                      Icons.thumb_up,
                       color: LichessColors.brag,
                     ),
                     title: Text("Gained ${entry.followIn!.length} followers"),
