@@ -8,7 +8,7 @@ import 'package:http/retry.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:lichess_mobile/src/model/auth/session_storage.dart';
+import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package_info.dart';
 import 'errors.dart';
@@ -169,9 +169,8 @@ class _AuthClient extends BaseClient {
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
-    final sessionRepo = ref.read(sessionStorageProvider);
-    final info = ref.watch(packageInfoProvider);
-    final session = await sessionRepo.read();
+    final session = ref.read(userSessionStateProvider);
+    final info = ref.read(packageInfoProvider);
 
     if (session != null && !request.headers.containsKey('Authorization')) {
       request.headers['Authorization'] = 'Bearer ${session.token}';

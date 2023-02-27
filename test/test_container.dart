@@ -5,18 +5,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logging/logging.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:soundpool/soundpool.dart';
 
+import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/common/sound_service.dart';
-import 'package:lichess_mobile/src/common/package_info.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import './common/fake_sound_service.dart';
 import './model/auth/fake_auth_repository.dart';
 import './model/auth/fake_session_storage.dart';
 
+class MockSoundPool extends Mock implements Soundpool {}
+
 Future<ProviderContainer> makeContainer({
   List<Override>? overrides,
+  UserSession? userSession,
 }) async {
   SharedPreferences.setMockInitialValues({});
   final sharedPreferences = await SharedPreferences.getInstance();
@@ -36,12 +43,18 @@ Future<ProviderContainer> makeContainer({
       sharedPreferencesProvider.overrideWithValue(sharedPreferences),
       authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
       sessionStorageProvider.overrideWithValue(FakeSessionStorage()),
-      packageInfoProvider.overrideWith((ref) {
-        return PackageInfo(
-          appName: 'lichess_mobile_test',
-          version: 'test',
-          buildNumber: '0.0.0',
-          packageName: 'lichess_mobile_test',
+      appDependenciesProvider.overrideWith((ref) {
+        return AppDependencies(
+          packageInfo: PackageInfo(
+            appName: 'lichess_mobile_test',
+            version: 'test',
+            buildNumber: '0.0.0',
+            packageName: 'lichess_mobile_test',
+          ),
+          sharedPreferences: sharedPreferences,
+          soundPool: MockSoundPool(),
+          sounds: IMap<Sound, int>(const {}),
+          userSession: userSession,
         );
       }),
       ...overrides ?? [],
