@@ -51,7 +51,7 @@ dependencies:
       url: https://github.com/saltedpotatos/modal_bottom_sheet.git
       path: modal_bottom_sheet
       ref: e7e630e10b27ccab12da27acada9d47a13d79e9a
-  fast_immutable_collections: ^8.1.1
+  fast_immutable_collections: ^9.0.0
   dart_result:
     git:
       url: https://github.com/veloce/dart_result.git
