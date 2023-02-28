@@ -5,13 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -20,13 +22,15 @@ import 'puzzle_screen_state.dart';
 
 class PuzzlesScreen extends StatelessWidget {
   const PuzzlesScreen({
-    required this.userId,
-    required this.puzzle,
+    required this.theme,
+    this.userId,
+    this.puzzle,
     super.key,
   });
 
   final UserId? userId;
-  final Puzzle puzzle;
+  final Puzzle? puzzle;
+  final PuzzleTheme theme;
 
   @override
   Widget build(BuildContext context) {
@@ -39,33 +43,93 @@ class PuzzlesScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.puzzles),
+        title: Text(puzzleThemeL10n(context, theme).name),
       ),
-      body: _Body(userId: userId, puzzle: puzzle),
+      body: puzzle != null
+          ? _Body(userId: userId, puzzle: puzzle!, theme: theme)
+          : _LoadPuzzle(theme: theme),
     );
   }
 
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(context.l10n.puzzles),
+        middle: Text(puzzleThemeL10n(context, theme).name),
       ),
-      child: _Body(userId: userId, puzzle: puzzle),
+      child: puzzle != null
+          ? _Body(userId: userId, puzzle: puzzle!, theme: theme)
+          : _LoadPuzzle(theme: theme),
+    );
+  }
+}
+
+class _LoadPuzzle extends ConsumerWidget {
+  const _LoadPuzzle({required this.theme});
+
+  final PuzzleTheme theme;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final nextPuzzle = ref.watch(nextPuzzleProvider(theme));
+
+    return nextPuzzle.when(
+      data: (data) {
+        if (data.item1 == null) {
+          return const Center(
+            child: GameBoardLayout(
+              topPlayer: kEmptyWidget,
+              bottomPlayer: kEmptyWidget,
+              boardData: cg.BoardData(
+                fen: kEmptyFen,
+                interactableSide: cg.InteractableSide.none,
+                orientation: cg.Side.white,
+              ),
+              errorMessage: 'No more puzzles. Go online to get more.',
+            ),
+          );
+        } else {
+          return _Body(puzzle: data.item1!, userId: data.item2, theme: theme);
+        }
+      },
+      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      error: (e, s) {
+        debugPrint(
+          'SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s',
+        );
+        return Center(
+          child: GameBoardLayout(
+            topPlayer: kEmptyWidget,
+            bottomPlayer: kEmptyWidget,
+            boardData: const cg.BoardData(
+              fen: kEmptyFen,
+              interactableSide: cg.InteractableSide.none,
+              orientation: cg.Side.white,
+            ),
+            errorMessage: e.toString(),
+          ),
+        );
+      },
     );
   }
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({required this.puzzle, required this.userId});
+  const _Body({
+    required this.puzzle,
+    required this.userId,
+    required this.theme,
+  });
 
   final Puzzle puzzle;
+  final PuzzleTheme theme;
   final UserId? userId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet = ref.watch(pieceSetPrefProvider);
     final boardTheme = ref.watch(boardThemePrefProvider);
-    final puzzleStateProvider = puzzleScreenStateProvider(puzzle, userId);
+    final puzzleStateProvider =
+        puzzleScreenStateProvider(theme, puzzle, userId);
     final puzzleState = ref.watch(puzzleStateProvider);
     return Column(
       children: [
@@ -103,7 +167,11 @@ class _Body extends ConsumerWidget {
             ),
           ),
         ),
-        _BottomBar(puzzle: puzzle, userId: userId),
+        _BottomBar(
+          puzzle: puzzle,
+          userId: userId,
+          theme: theme,
+        ),
       ],
     );
   }
@@ -183,14 +251,20 @@ class _Feedback extends StatelessWidget {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.puzzle, required this.userId});
+  const _BottomBar({
+    required this.puzzle,
+    required this.theme,
+    required this.userId,
+  });
 
   final Puzzle puzzle;
+  final PuzzleTheme theme;
   final UserId? userId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzleStateProvider = puzzleScreenStateProvider(puzzle, userId);
+    final puzzleStateProvider =
+        puzzleScreenStateProvider(theme, puzzle, userId);
     final puzzleState = ref.watch(puzzleStateProvider);
 
     return Container(
@@ -204,20 +278,16 @@ class _BottomBar extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _BottomBarButton(
-              onTap: null,
-              label: context.l10n.puzzleThemes,
-              shortLabel: 'Themes',
-              icon: LichessIcons.target,
-            ),
-            _BottomBarButton(
               onTap: puzzleState.mode == PuzzleMode.view &&
                       puzzleState.nextPuzzle != null
                   ? () {
+                      ref.invalidate(nextPuzzleProvider(theme));
                       Navigator.of(context).pushReplacement(
                         PageRouteBuilder<void>(
                           pageBuilder: (context, _, __) => PuzzlesScreen(
+                            theme: theme,
                             userId: puzzleState.userId,
-                            puzzle: puzzleState.nextPuzzle!,
+                            puzzle: puzzleState.nextPuzzle,
                           ),
                           transitionDuration: Duration.zero,
                           reverseTransitionDuration: Duration.zero,
@@ -231,9 +301,9 @@ class _BottomBar extends ConsumerWidget {
               icon: CupertinoIcons.play_arrow_solid,
             ),
             _BottomBarButton(
-              icon: Icons.lightbulb,
+              icon: Icons.help,
               label: context.l10n.viewTheSolution,
-              shortLabel: context.l10n.help.replaceAll(':', ''),
+              shortLabel: context.l10n.solution,
               onTap: puzzleState.mode == PuzzleMode.view
                   ? null
                   : () => ref.read(puzzleStateProvider.notifier).viewSolution(),

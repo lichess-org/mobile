@@ -51,7 +51,7 @@ void main() {
         mockLogger,
         db: db,
         repository: puzzleRepo,
-        localQueueLength: 3,
+        queueLength: 3,
       );
 
       when(
@@ -83,7 +83,7 @@ void main() {
         mockLogger,
         db: db,
         repository: puzzleRepo,
-        localQueueLength: 1,
+        queueLength: 1,
       );
 
       final puzzle = await service.nextPuzzle();
@@ -104,10 +104,10 @@ void main() {
         mockLogger,
         db: db,
         repository: puzzleRepo,
-        localQueueLength: 2,
+        queueLength: 2,
       );
 
-      // will fetch only 1 since localQueueLength is 2
+      // will fetch only 1 since queueLength is 2
       when(
         () => mockClient.get(
           Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
@@ -136,7 +136,7 @@ void main() {
         mockLogger,
         db: db,
         repository: puzzleRepo,
-        localQueueLength: 1,
+        queueLength: 1,
       );
 
       final puzzle = await service.nextPuzzle();
@@ -164,7 +164,7 @@ void main() {
         mockLogger,
         db: db,
         repository: puzzleRepo,
-        localQueueLength: 1,
+        queueLength: 1,
       );
 
       final nextPuzzle = await service.nextPuzzle();
@@ -184,7 +184,7 @@ void main() {
         mockLogger,
         db: db,
         repository: puzzleRepo,
-        localQueueLength: 1,
+        queueLength: 1,
       );
 
       when(
@@ -219,7 +219,7 @@ void main() {
         mockLogger,
         db: db,
         repository: puzzleRepo,
-        localQueueLength: 1,
+        queueLength: 1,
       );
 
       Future<http.Response> getReq() => mockClient.get(
@@ -250,7 +250,7 @@ void main() {
         mockLogger,
         db: db,
         repository: puzzleRepo,
-        localQueueLength: 1,
+        queueLength: 1,
       );
 
       Future<http.Response> getReq() => mockClient.get(
@@ -287,7 +287,7 @@ void main() {
         mockLogger,
         db: db,
         repository: puzzleRepo,
-        localQueueLength: 1,
+        queueLength: 1,
       );
 
       Future<http.Response> postReq() => mockClient.post(
@@ -332,7 +332,7 @@ void main() {
         mockLogger,
         db: db,
         repository: puzzleRepo,
-        localQueueLength: 2,
+        queueLength: 2,
       );
 
       Future<http.Response> postReq() => mockClient.post(

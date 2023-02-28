@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
+
+import 'puzzle_themes_screen.dart';
 
 class PuzzleDashboardScreen extends StatelessWidget {
   const PuzzleDashboardScreen({super.key});
@@ -44,7 +46,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = ref.watch(puzzleThemePrefProvider);
+    const theme = PuzzleTheme.mix;
     final nextPuzzle = ref.watch(nextPuzzleProvider(theme));
 
     return SafeArea(
@@ -57,7 +59,7 @@ class _Body extends ConsumerWidget {
               data: (data) {
                 final puzzle = data.item1;
                 if (puzzle == null) {
-                  return _PuzzleButton(
+                  return const _PuzzleButton(
                     theme: theme,
                     subtitle:
                         'Could not find any puzzle! Go online to get more.',
@@ -71,6 +73,7 @@ class _Body extends ConsumerWidget {
                           builder: (context) => PuzzlesScreen(
                             userId: data.item2,
                             puzzle: puzzle,
+                            theme: theme,
                           ),
                         ),
                       );
@@ -78,12 +81,27 @@ class _Body extends ConsumerWidget {
                   );
                 }
               },
-              loading: () => _PuzzleButton(theme: theme),
+              loading: () => const _PuzzleButton(theme: theme),
               error: (e, s) {
                 debugPrint(
                   'SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s',
                 );
-                return _PuzzleButton(theme: theme);
+                return const _PuzzleButton(theme: theme);
+              },
+            ),
+          ),
+          Padding(
+            padding: Styles.sectionBottomPadding,
+            child: CardButton(
+              icon: const Icon(LichessIcons.target, size: 44),
+              title: Text(context.l10n.puzzleThemes),
+              subtitle: const Text('Play puzzles from a specific theme.'),
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).push<void>(
+                  MaterialPageRoute(
+                    builder: (context) => const PuzzleThemesScreen(),
+                  ),
+                );
               },
             ),
           ),
@@ -108,7 +126,10 @@ class _PuzzleButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CardButton(
       icon: const Icon(LichessIcons.target, size: 44),
-      title: Text(context.l10n.puzzles, style: Styles.sectionTitle),
+      title: Text(
+        puzzleThemeL10n(context, theme).name,
+        style: Styles.sectionTitle,
+      ),
       subtitle: Text(subtitle ?? puzzleThemeL10n(context, theme).description),
       onTap: onTap,
     );

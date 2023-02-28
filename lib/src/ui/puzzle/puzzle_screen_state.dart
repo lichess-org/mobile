@@ -10,9 +10,8 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/tree.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 
 part 'puzzle_screen_state.g.dart';
 part 'puzzle_screen_state.freezed.dart';
@@ -28,6 +27,7 @@ class PuzzleVm with _$PuzzleVm {
   const PuzzleVm._();
 
   const factory PuzzleVm({
+    required PuzzleTheme theme,
     required PuzzleData puzzle,
     required UserId? userId,
     required PuzzleMode mode,
@@ -58,7 +58,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
   late Node _gameTree;
 
   @override
-  PuzzleVm build(Puzzle puzzle, UserId? userId) {
+  PuzzleVm build(PuzzleTheme theme, Puzzle puzzle, UserId? userId) {
     final root = Root.fromPgn(puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
 
@@ -69,6 +69,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
 
     return PuzzleVm(
+      theme: theme,
       puzzle: puzzle.puzzle,
       userId: userId,
       mode: PuzzleMode.play,
@@ -160,12 +161,11 @@ class PuzzleScreenState extends _$PuzzleScreenState {
       resultSent: true,
     );
 
-    final theme = ref.read(puzzleThemePrefProvider);
     final service = ref.read(puzzleServiceProvider);
 
     final next = await service.solve(
       userId: state.userId,
-      angle: theme,
+      angle: state.theme,
       solution: PuzzleSolution(
         id: state.puzzle.id,
         win: state.result == PuzzleResult.win,
@@ -175,8 +175,6 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     );
 
     // TODO check if next is null and show a message
-
-    ref.invalidate(nextPuzzleProvider);
 
     state = state.copyWith(
       nextPuzzle: next,

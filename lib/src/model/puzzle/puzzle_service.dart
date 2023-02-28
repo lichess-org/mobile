@@ -30,10 +30,10 @@ class PuzzleService {
     this._log, {
     required this.db,
     required this.repository,
-    this.localQueueLength = kPuzzleLocalQueueLength,
+    this.queueLength = kPuzzleLocalQueueLength,
   });
 
-  final int localQueueLength;
+  final int queueLength;
   final PuzzleStorage db;
   final PuzzleRepository repository;
   final Logger _log;
@@ -81,7 +81,7 @@ class PuzzleService {
   /// Synchronize offline puzzle queue with server and gets latest data.
   ///
   /// This task will fetch missing puzzles so the queue length is always equal to
-  /// `localQueueLength`.
+  /// `queueLength`.
   /// It will also call the `solveBatchTask` with solved puzzles.
   ///
   /// This method should never fail, as if the network is down it will fallback
@@ -95,7 +95,7 @@ class PuzzleService {
     final unsolved = data?.unsolved ?? IList(const []);
     final solved = data?.solved ?? IList(const []);
 
-    final deficit = max(0, localQueueLength - unsolved.length);
+    final deficit = max(0, queueLength - unsolved.length);
 
     if (deficit > 0) {
       _log.fine('Have a puzzle deficit of $deficit, will sync with lichess');
