@@ -231,6 +231,14 @@ class _BottomBar extends ConsumerWidget {
               icon: CupertinoIcons.play_arrow_solid,
             ),
             _BottomBarButton(
+              icon: Icons.lightbulb,
+              label: context.l10n.viewTheSolution,
+              shortLabel: context.l10n.help.replaceAll(':', ''),
+              onTap: puzzleState.mode == PuzzleMode.view
+                  ? null
+                  : () => ref.read(puzzleStateProvider.notifier).viewSolution(),
+            ),
+            _BottomBarButton(
               onTap: puzzleState.canGoBack
                   ? () =>
                       ref.read(puzzleStateProvider.notifier).goToPreviousNode()

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
@@ -75,6 +76,20 @@ abstract class RootOrNode {
     } else {
       return null;
     }
+  }
+
+  /// Adds a list of nodes at the given path and returns the new path.
+  UciPath? addNodesAt(
+    UciPath path,
+    Iterable<Node> newNodes, {
+    bool prepend = false,
+  }) {
+    final node = newNodes.elementAtOrNull(0);
+    if (node == null) return path;
+    final newPath = addNodeAt(path, node, prepend: prepend);
+    return newPath != null
+        ? addNodesAt(newPath, newNodes.skip(1), prepend: prepend)
+        : null;
   }
 
   /// Adds a new node with that [Move] at the given path.

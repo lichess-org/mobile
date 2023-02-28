@@ -170,6 +170,33 @@ void main() {
       expect(testNode.children[0], isNot(branch));
     });
 
+    test('addNodesAt', () {
+      final root = Root.fromPgn('e4 e5');
+      final branch = Node(
+        id: UciCharPair.fromMove(Move.fromUci('b8c6')!),
+        ply: 2,
+        sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
+        fen: 'fen2',
+        position: Chess.initial,
+      );
+      final branch2 = Node(
+        id: UciCharPair.fromMove(Move.fromUci('b8a6')!),
+        ply: 3,
+        sanMove: SanMove('Na6', Move.fromUci('b8a6')!),
+        fen: 'fen3',
+        position: Chess.initial,
+      );
+      root.addNodesAt(
+        UciPath.fromId(UciCharPair.fromUci('e2e4')),
+        [branch, branch2],
+      );
+
+      final testNode = root.nodeAt(UciPath.fromId(UciCharPair.fromUci('e2e4')));
+      expect(testNode.children.length, equals(2));
+      expect(testNode.children[1], equals(branch));
+      expect(testNode.children[1].children[0], equals(branch2));
+    });
+
     test('addMoveAt', () {
       final root = Root.fromPgn('e4 e5');
       final move = Move.fromUci('b1c3')!;

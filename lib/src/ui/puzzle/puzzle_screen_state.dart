@@ -1,7 +1,9 @@
+import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart'
+    hide Tuple2;
 import 'package:lichess_mobile/src/common/move_feedback.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
@@ -110,9 +112,8 @@ class PuzzleScreenState extends _$PuzzleScreenState {
       } else {
         state = state.copyWith(
           feedback: PuzzleFeedback.bad,
-          result: PuzzleResult.lose,
         );
-        _sendResult();
+        _sendResult(PuzzleResult.lose);
         await Future<void>.delayed(const Duration(milliseconds: 500));
         _setPath(state.currentPath.penultimate);
       }
@@ -128,18 +129,34 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     _setPath(state.currentPath.penultimate);
   }
 
+  void viewSolution() {
+    if (state.mode == PuzzleMode.view) return;
+
+    _mergeSolution();
+    _sendResult(PuzzleResult.lose);
+    state = state.copyWith(
+      mode: PuzzleMode.view,
+    );
+
+    final nextNode = state.node.children.firstOrNull;
+    if (nextNode != null) {
+      Future<void>.delayed(const Duration(milliseconds: 500))
+          .then((_) => _setPath(state.currentPath + nextNode.id));
+    }
+  }
+
   Future<void> _completePuzzle() async {
     state = state.copyWith(
       mode: PuzzleMode.view,
-      result: state.result ?? PuzzleResult.win,
     );
-    await _sendResult();
+    await _sendResult(state.result ?? PuzzleResult.win);
   }
 
-  Future<void> _sendResult() async {
+  Future<void> _sendResult(PuzzleResult result) async {
     if (state.resultSent) return;
 
     state = state.copyWith(
+      result: result,
       resultSent: true,
     );
 
@@ -194,5 +211,32 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     if (newPath != null) {
       _setPath(newPath);
     }
+  }
+
+  void _mergeSolution() {
+    final initialNode = _gameTree.nodeAt(state.initialPath);
+    final fromPly = initialNode.ply;
+    final posAndNodes = state.puzzle.solution.foldIndexed(
+      Tuple2(initialNode.position, IList<Node>(const [])),
+      (index, previous, uci) {
+        final move = Move.fromUci(uci);
+        final tuple = previous.item1.playToSan(move!);
+        final newPos = tuple.item1;
+        final newSan = tuple.item2;
+        return Tuple2(
+          newPos,
+          previous.item2.add(
+            Node(
+              id: UciCharPair.fromMove(move),
+              ply: fromPly + index,
+              fen: newPos.fen,
+              position: newPos,
+              sanMove: SanMove(newSan, move),
+            ),
+          ),
+        );
+      },
+    );
+    _gameTree.addNodesAt(state.initialPath, posAndNodes.item2, prepend: true);
   }
 }
