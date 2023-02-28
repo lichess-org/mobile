@@ -33,7 +33,10 @@ void main() {
       final path = UciPath.fromId(UciCharPair.fromUci('e2e4'));
       final nodeList = root.nodesOn(path);
       expect(nodeList.length, equals(1));
-      expect(nodeList.first, equals(root.nodeAt(path)));
+      expect(
+        nodeList.first,
+        equals(ViewNode.fromNode(root.nodeAt(path) as Node)),
+      );
     });
 
     test('nodesOn, with variation', () {
@@ -48,12 +51,15 @@ void main() {
 
       // mainline has not changed
       expect(root.mainline.length, equals(3));
-      expect(root.mainline.last, equals(root.nodeAt(root.mainlinePath)));
+      expect(
+        root.mainline.last,
+        equals(ViewNode.fromNode(root.nodeAt(root.mainlinePath) as Node)),
+      );
 
       final path = tuple.item1!;
       final nodeList = root.nodesOn(path);
       expect(nodeList.length, equals(3));
-      expect(nodeList.last, equals(tuple.item2));
+      expect(nodeList.last, equals(ViewNode.fromNode(tuple.item2!)));
     });
 
     test('mainline', () {

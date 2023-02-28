@@ -1,8 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart'
+    hide Tuple2;
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
+
+part 'tree.freezed.dart';
 
 abstract class RootOrNode {
   RootOrNode({
@@ -23,17 +28,17 @@ abstract class RootOrNode {
   void prependChild(Node node) => children.insert(0, node);
 
   /// An iterable of all nodes on the mainline.
-  Iterable<Node> get mainline sync* {
+  Iterable<ViewNode> get mainline sync* {
     RootOrNode current = this;
     while (current.children.isNotEmpty) {
       final child = current.children.first;
-      yield child;
+      yield ViewNode.fromNode(child);
       current = child;
     }
   }
 
   /// Selects all nodes on that path.
-  Iterable<Node> nodesOn(UciPath path) sync* {
+  Iterable<ViewNode> nodesOn(UciPath path) sync* {
     UciPath currentPath = path;
 
     Node? pickChild(RootOrNode node) {
@@ -48,7 +53,7 @@ abstract class RootOrNode {
     Node? child;
 
     while ((child = pickChild(current)) != null) {
-      yield child!;
+      yield ViewNode.fromNode(child!);
       current = child;
       currentPath = currentPath.tail;
     }
@@ -218,5 +223,31 @@ class Root extends RootOrNode {
       current = nextNode;
     }
     return root;
+  }
+}
+
+/// An immutable view of a [Node].
+@freezed
+class ViewNode with _$ViewNode {
+  const ViewNode._();
+
+  const factory ViewNode({
+    required UciCharPair id,
+    required int ply,
+    required String fen,
+    required Position position,
+    required SanMove sanMove,
+    required IList<ViewNode> children,
+  }) = _ViewNode;
+
+  factory ViewNode.fromNode(Node node) {
+    return ViewNode(
+      id: node.id,
+      ply: node.ply,
+      fen: node.fen,
+      position: node.position,
+      sanMove: node.sanMove,
+      children: node.children.map(ViewNode.fromNode).toIList(),
+    );
   }
 }

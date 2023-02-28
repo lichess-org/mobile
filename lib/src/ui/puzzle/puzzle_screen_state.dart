@@ -34,7 +34,7 @@ class PuzzleVm with _$PuzzleVm {
     required UciPath initialPath,
     required UciPath currentPath,
     required Side pov,
-    required IList<Node> nodeList, // must be non empty
+    required IList<ViewNode> nodeList, // must be non empty
     Move? lastMove,
     PuzzleResult? result,
     PuzzleFeedback? feedback,
@@ -42,7 +42,7 @@ class PuzzleVm with _$PuzzleVm {
     Puzzle? nextPuzzle,
   }) = _PuzzleVm;
 
-  Node get node => nodeList.last;
+  ViewNode get node => nodeList.last;
   Position get position => nodeList.last.position;
   String get fen => nodeList.last.fen;
   bool get canGoNext => mode == PuzzleMode.view && node.children.isNotEmpty;
@@ -74,7 +74,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
       mode: PuzzleMode.play,
       initialPath: initialPath,
       currentPath: UciPath.empty,
-      nodeList: IList([_gameTree]),
+      nodeList: IList([ViewNode.fromNode(_gameTree)]),
       pov: _gameTree.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
       resultSent: false,
     );
