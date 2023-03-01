@@ -310,8 +310,7 @@ class _BottomBar extends ConsumerWidget {
             ),
             _BottomBarButton(
               onTap: puzzleState.canGoBack
-                  ? () =>
-                      ref.read(puzzleStateProvider.notifier).goToPreviousNode()
+                  ? () => ref.read(puzzleStateProvider.notifier).userPrevious()
                   : null,
               label: 'Previous',
               shortLabel: 'Previous',
@@ -319,7 +318,7 @@ class _BottomBar extends ConsumerWidget {
             ),
             _BottomBarButton(
               onTap: puzzleState.canGoNext
-                  ? () => ref.read(puzzleStateProvider.notifier).goToNextNode()
+                  ? () => ref.read(puzzleStateProvider.notifier).userNext()
                   : null,
               label: context.l10n.next,
               shortLabel: context.l10n.next,

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -56,6 +57,7 @@ class PuzzleVm with _$PuzzleVm {
 class PuzzleScreenState extends _$PuzzleScreenState {
   // ignore: avoid-late-keyword
   late Node _gameTree;
+  Timer? _viewSolutionTimer;
 
   @override
   PuzzleVm build(PuzzleTheme theme, Puzzle puzzle, UserId? userId) {
@@ -121,12 +123,22 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     }
   }
 
-  void goToNextNode() {
+  void userNext() {
+    _viewSolutionTimer?.cancel();
+    _goToNextNode();
+  }
+
+  void userPrevious() {
+    _viewSolutionTimer?.cancel();
+    _goToPreviousNode();
+  }
+
+  void _goToNextNode() {
     if (state.node.children.isEmpty) return;
     _setPath(state.currentPath + state.node.children.first.id);
   }
 
-  void goToPreviousNode() {
+  void _goToPreviousNode() {
     _setPath(state.currentPath.penultimate);
   }
 
@@ -134,16 +146,25 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     if (state.mode == PuzzleMode.view) return;
 
     _mergeSolution();
+
+    state = state.copyWith(
+      nodeList: IList(_gameTree.nodesOn(state.currentPath)),
+    );
+
     _sendResult(PuzzleResult.lose);
+
     state = state.copyWith(
       mode: PuzzleMode.view,
     );
 
-    final nextNode = state.node.children.firstOrNull;
-    if (nextNode != null) {
-      Future<void>.delayed(const Duration(milliseconds: 500))
-          .then((_) => _setPath(state.currentPath + nextNode.id));
-    }
+    _viewSolutionTimer =
+        Timer.periodic(const Duration(milliseconds: 800), (timer) {
+      if (state.canGoNext) {
+        _goToNextNode();
+      } else {
+        timer.cancel();
+      }
+    });
   }
 
   Future<void> _completePuzzle() async {
