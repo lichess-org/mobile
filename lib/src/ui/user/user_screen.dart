@@ -316,6 +316,28 @@ const List<String> _monthName = [
   'Dec'
 ];
 
+class UserActivityGameEntry {
+  const UserActivityGameEntry({
+    required this.icon,
+    required this.varient,
+    required this.win,
+    required this.draw,
+    required this.loss,
+    required this.cnt,
+    required this.rpBefore,
+    required this.rpAfter,
+  });
+
+  final IconData icon;
+  final String varient;
+  final int win;
+  final int draw;
+  final int loss;
+  final int cnt;
+  final int rpBefore;
+  final int rpAfter;
+}
+
 class Activity extends ConsumerWidget {
   const Activity({required this.user, super.key});
 
@@ -332,22 +354,169 @@ class Activity extends ConsumerWidget {
           header: const Text('Activity', style: Styles.sectionTitle),
           hasLeading: true,
           children: data.map((entry) {
+            final g = entry.games!.mapTo((key, value) {
+              return UserActivityGameEntry(
+                icon: key.icon,
+                varient: key.title,
+                win: value.win,
+                draw: value.draw,
+                loss: value.loss,
+                cnt: value.win + value.draw + value.loss,
+                rpBefore: value.rpBefore,
+                rpAfter: value.rpAfter,
+              );
+            });
+
             return Column(
               children: [
                 PlatformListTile(
                   title: Text(
                     "${_monthName[entry.startTime.month].toUpperCase()} ${entry.startTime.day}, ${entry.startTime.year}",
                     style: const TextStyle(
-                        color: LichessColors.brag, fontWeight: FontWeight.bold,),
+                      color: LichessColors.brag,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
+                for (final e in g)
+                  PlatformListTile(
+                    leading: Icon(
+                      e.icon,
+                      color: LichessColors.brag,
+                    ),
+                    title: Row(
+                      children: [
+                        Text(
+                          "Played ${e.cnt} ${e.varient} game${e.cnt == 1 ? '' : 's'}",
+                        ),
+                      ],
+                    ),
+                    subtitle: Row(
+                      children: [
+                        PlayerRating(
+                          deviation: 0,
+                          rating: e.rpAfter,
+                        ),
+                        const SizedBox(width: 3),
+                        if (e.rpAfter - e.rpBefore != 0) ...[
+                          Icon(
+                            e.rpAfter - e.rpBefore > 0
+                                ? LichessIcons.arrow_full_upperright
+                                : LichessIcons.arrow_full_lowerright,
+                            color: e.rpAfter - e.rpBefore > 0
+                                ? LichessColors.good
+                                : LichessColors.red,
+                            size: 12,
+                          ),
+                          Text(
+                            (e.rpAfter - e.rpBefore).abs().toString(),
+                            style: TextStyle(
+                              color: e.rpAfter - e.rpBefore > 0
+                                  ? LichessColors.good
+                                  : LichessColors.red,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    trailing: SizedBox(
+                      height: 20,
+                      width: (e.win != 0 ? 1 : 0) * 18 +
+                          (e.draw != 0 ? 1 : 0) * 18 +
+                          (e.loss != 0 ? 1 : 0) * 18 +
+                          ((e.win != 0 ? 1 : 0) +
+                                  (e.draw != 0 ? 1 : 0) +
+                                  (e.loss != 0 ? 1 : 0) -
+                                  1) *
+                              3,
+                      child: Row(
+                        children: [
+                          if (e.win != 0)
+                            SizedBox(
+                              height: 18,
+                              width: 18,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: LichessColors.good,
+                                  borderRadius: BorderRadius.circular(3.0),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    e.win.toString(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          if (e.win != 0 && e.draw != 0)
+                            const SizedBox(
+                              width: 3,
+                            ),
+                          if (e.draw != 0)
+                            SizedBox(
+                              height: 18,
+                              width: 18,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: LichessColors.brag,
+                                  borderRadius: BorderRadius.circular(3.0),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    e.draw.toString(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          if ((e.draw != 0 && e.loss != 0) ||
+                              (e.win != 0 && e.loss != 0))
+                            const SizedBox(
+                              width: 3,
+                            ),
+                          if (e.loss != 0)
+                            SizedBox(
+                              height: 18,
+                              width: 18,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: LichessColors.red,
+                                  borderRadius: BorderRadius.circular(3.0),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    e.loss.toString(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    dense: true,
+                  ),
                 if (entry.followIn!.isNotEmpty)
                   PlatformListTile(
                     leading: const Icon(
                       Icons.thumb_up,
                       color: LichessColors.brag,
                     ),
-                    title: Text("Gained ${entry.followIn!.length} followers"),
+                    title: Text(
+                        "Gained ${entry.followIn!.length} follower${entry.followIn!.length == 1 ? '' : 's'}"),
                     dense: true,
                   ),
               ],
