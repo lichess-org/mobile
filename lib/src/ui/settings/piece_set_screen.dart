@@ -42,12 +42,12 @@ class _Body extends ConsumerWidget {
 
     List<AssetImage> getPieceImages(PieceSet set) {
       return [
-        set.assets['whiteking']!,
-        set.assets['blackqueen']!,
-        set.assets['whiterook']!,
-        set.assets['blackbishop']!,
-        set.assets['whiteknight']!,
-        set.assets['blackpawn']!,
+        set.assets[PieceKind.whiteKing]!,
+        set.assets[PieceKind.blackQueen]!,
+        set.assets[PieceKind.whiteRook]!,
+        set.assets[PieceKind.blackBishop]!,
+        set.assets[PieceKind.whiteKnight]!,
+        set.assets[PieceKind.blackPawn]!,
       ];
     }
 

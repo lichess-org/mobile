@@ -38,7 +38,7 @@ dependencies:
   chessground:
     git:
       url: https://github.com/lichess-org/flutter-chessground.git
-      ref: 12b5868ae2eef5a08fdad1edfdf25bbf62c16100
+      ref: 0adbb3d136adf23fd54ac60a97d6eb5a852841a2
   soundpool: ^2.3.0
   meta: ^1.8.0
   tuple: ^2.0.1
@@ -51,7 +51,7 @@ dependencies:
       url: https://github.com/saltedpotatos/modal_bottom_sheet.git
       path: modal_bottom_sheet
       ref: e7e630e10b27ccab12da27acada9d47a13d79e9a
-  fast_immutable_collections: ^8.1.1
+  fast_immutable_collections: ^9.0.0
   result_extensions:
     git:
       url: https://github.com/veloce/result_extensions.git
