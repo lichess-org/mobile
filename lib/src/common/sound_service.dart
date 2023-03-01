@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:lichess_mobile/src/common/sound_theme.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -8,7 +9,14 @@ import 'package:lichess_mobile/src/app_dependencies.dart';
 
 part 'sound_service.g.dart';
 
-enum Sound { move, capture, dong }
+enum Sound {
+  move("Move"),
+  capture("Capture"),
+  dong("Dong");
+
+  final String label;
+  const Sound(this.label);
+}
 
 typedef SoundMap = IMap<Sound, int>;
 

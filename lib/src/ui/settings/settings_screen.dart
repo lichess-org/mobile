@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/ui/settings/sound_theme_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
@@ -57,6 +58,7 @@ class _Body extends ConsumerWidget {
     final userSession = ref.watch(userSessionStateProvider);
     final pieceSet = ref.watch(pieceSetPrefProvider);
     final boardTheme = ref.watch(boardThemePrefProvider);
+    final soundTheme = ref.watch(soundThemePrefProvider);
 
     return SafeArea(
       child: ListView(
@@ -111,6 +113,18 @@ class _Body extends ConsumerWidget {
                     context: context,
                     title: context.l10n.boardTheme,
                     builder: (context) => const BoardThemeScreen(),
+                  );
+                },
+              ),
+              SettingsListTile(
+                icon: const Icon(LichessIcons.storm),
+                settingsLabel: context.l10n.soundTheme,
+                settingsValue: soundTheme.label,
+                onTap: () {
+                  pushPlatformRoute(
+                    context: context,
+                    title: context.l10n.soundTheme,
+                    builder: (context) => const SoundThemeScreen(),
                   );
                 },
               ),

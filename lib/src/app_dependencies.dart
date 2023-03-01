@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +24,7 @@ Future<AppDependencies> appDependencies(
   final pInfo = await PackageInfo.fromPlatform();
   final prefs = await SharedPreferences.getInstance();
   final pool = Soundpool.fromOptions();
+  //final soundTheme = ref.watch(soundThemePrefProvider);
   final sounds = await loadSounds(pool);
 
   ref.onDispose(pool.release);

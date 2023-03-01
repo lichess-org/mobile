@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/common/sound_theme.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:chessground/chessground.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -76,4 +77,20 @@ final boardThemePrefProvider = createPrefProvider<BoardTheme>(
     }
   },
   mapTo: (BoardTheme boardTheme) => boardTheme.name,
+);
+
+final IMap<String, SoundTheme> _soundThemeNameMap =
+    IMap(SoundTheme.values.asNameMap());
+
+final soundThemePrefProvider = createPrefProvider<SoundTheme>(
+  prefKey: '$kSettingsStorePrefix.soundTheme',
+  defaultValue: SoundTheme.piano,
+  mapFrom: (string) {
+    if (string != null) {
+      return _soundThemeNameMap.get(string) ?? SoundTheme.music;
+    } else {
+      return SoundTheme.music;
+    }
+  },
+  mapTo: (SoundTheme soundTheme) => soundTheme.name,
 );

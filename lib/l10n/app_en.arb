@@ -1132,6 +1132,7 @@
   "backgroundImageUrl": "Background image URL:",
   "boardGeometry": "Board geometry",
   "boardTheme": "Board theme",
+  "soundTheme": "Sound theme",
   "boardSize": "Board size",
   "pieceSet": "Piece set",
   "embedInYourWebsite": "Embed in your website",
