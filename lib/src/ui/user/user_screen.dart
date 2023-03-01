@@ -346,6 +346,11 @@ class Activity extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final activity = ref.watch(userActitityProvider(id: user.id));
+    const gameStatsFontStyle = TextStyle(
+      color: Colors.white,
+      fontSize: 10,
+      fontWeight: FontWeight.bold,
+    );
 
     return activity.when(
       data: (data) {
@@ -444,11 +449,7 @@ class Activity extends ConsumerWidget {
                                 child: Center(
                                   child: Text(
                                     e.win.toString(),
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    style: gameStatsFontStyle,
                                   ),
                                 ),
                               ),
@@ -469,11 +470,7 @@ class Activity extends ConsumerWidget {
                                 child: Center(
                                   child: Text(
                                     e.draw.toString(),
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    style: gameStatsFontStyle,
                                   ),
                                 ),
                               ),
@@ -495,11 +492,7 @@ class Activity extends ConsumerWidget {
                                 child: Center(
                                   child: Text(
                                     e.loss.toString(),
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    style: gameStatsFontStyle,
                                   ),
                                 ),
                               ),
@@ -516,7 +509,17 @@ class Activity extends ConsumerWidget {
                       color: LichessColors.brag,
                     ),
                     title: Text(
-                        "Gained ${entry.followIn!.length} follower${entry.followIn!.length == 1 ? '' : 's'}"),
+                        "Gained ${entry.followIn!.length} follower${entry.followIn!.length == 1 ? '' : 's'}",),
+                    dense: true,
+                  ),
+                if (entry.tournamentNb != null)
+                  PlatformListTile(
+                    leading: const Icon(
+                      Icons.emoji_events,
+                      color: LichessColors.brag,
+                    ),
+                    title: Text(
+                        "Competed in ${entry.tournamentNb} tournament${entry.tournamentNb == 1 ? '' : 's'}",),
                     dense: true,
                   ),
               ],

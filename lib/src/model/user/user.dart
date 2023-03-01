@@ -158,6 +158,31 @@ class UserStatus with _$UserStatus {
 }
 
 @freezed
+class UserActivityTournament with _$UserActivityTournament {
+  const factory UserActivityTournament({
+    required String id,
+    required String name,
+    required int nbGames,
+    required int score,
+    required int rank,
+    required int rankPercent,
+  }) = _UserActivityTournament;
+
+  factory UserActivityTournament.fromJson(Map<String, dynamic> json) =>
+      UserActivityTournament.fromPick(pick(json).required());
+
+  factory UserActivityTournament.fromPick(RequiredPick pick) =>
+      UserActivityTournament(
+        id: pick('tournament', 'id').asStringOrThrow(),
+        name: pick('tournament', 'name').asStringOrThrow(),
+        nbGames: pick('nbGames').asIntOrThrow(),
+        score: pick('score').asIntOrThrow(),
+        rank: pick('rank').asIntOrThrow(),
+        rankPercent: pick('rankPercent').asIntOrThrow(),
+      );
+}
+
+@freezed
 class UserActitityGameScore with _$UserActitityGameScore {
   const factory UserActitityGameScore({
     required int win,
@@ -188,6 +213,8 @@ class UserActitity with _$UserActitity {
     IMap<Perf, UserActitityGameScore>? games,
     IList<String?>? followIn,
     IList<String?>? followOut,
+    IList<UserActivityTournament?>? tournament,
+    int? tournamentNb,
   }) = _UserActitity;
 }
 

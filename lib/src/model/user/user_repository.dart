@@ -92,6 +92,11 @@ UserActitity _userActitityFromPick(RequiredPick pick) {
       pick('follows', 'out', 'ids')
           .asListOrNull((p0) => pick(p0).asStringOrNull()),
     ),
+    tournament: IList(
+      pick('tournaments', 'best')
+          .asListOrNull((p0) => UserActivityTournament.fromPick(p0)),
+    ),
+    tournamentNb: pick('tournaments', 'nb').asIntOrNull(),
   );
 }
 
