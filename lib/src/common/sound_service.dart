@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:lichess_mobile/src/common/sound_theme.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -12,7 +11,7 @@ part 'sound_service.g.dart';
 enum Sound {
   move("Move"),
   capture("Capture"),
-  dong("Dong");
+  dong("Victory"); //Dong does not exist in given Dataset
 
   final String label;
   const Sound(this.label);
@@ -32,7 +31,7 @@ Future<SoundMap> loadSounds(Soundpool pool) async {
   return IMap({
     for (final sound in Sound.values)
       sound: await rootBundle
-          .load('assets/sounds/${sound.name}.mp3')
+          .load('assets/sounds/robot/${sound.label}.mp3')
           .then((soundData) => pool.load(soundData)),
   });
 }
