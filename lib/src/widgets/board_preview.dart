@@ -2,20 +2,23 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chessground/chessground.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BoardPreview extends StatelessWidget {
+import 'package:lichess_mobile/src/model/settings/providers.dart';
+
+class BoardPreview extends ConsumerWidget {
   const BoardPreview({
     required this.boardData,
-    this.boardSettings,
     this.errorMessage,
   });
 
   final BoardData boardData;
-  final BoardSettings? boardSettings;
   final String? errorMessage;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pieceSet = ref.watch(pieceSetPrefProvider);
+    final boardColor = ref.watch(boardThemePrefProvider);
     return LayoutBuilder(
       builder: (context, constrains) {
         final aspectRatio = constrains.biggest.aspectRatio;
@@ -47,9 +50,16 @@ class BoardPreview extends StatelessWidget {
               )
             : null;
 
-        final board = boardSettings != null
-            ? Board(size: boardSize, data: boardData, settings: boardSettings!)
-            : Board(size: boardSize, data: boardData);
+        final board = Board(
+          size: boardSize,
+          data: boardData,
+          settings: BoardSettings(
+            enableCoordinates: false,
+            animationDuration: const Duration(milliseconds: 150),
+            pieceAssets: pieceSet.assets,
+            colorScheme: boardColor.colors,
+          ),
+        );
 
         final boardOrError = error != null
             ? SizedBox.square(

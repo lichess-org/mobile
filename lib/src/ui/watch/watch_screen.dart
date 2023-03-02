@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
-import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
 import 'package:lichess_mobile/src/model/tv/featured_position.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
@@ -88,8 +87,6 @@ class _WatchTvWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pieceSet = ref.watch(pieceSetPrefProvider);
-    final boardColor = ref.watch(boardThemePrefProvider);
     final currentTab = ref.watch(currentBottomTabProvider);
     final tvStream = currentTab == BottomTab.watch
         ? ref.watch(tvStreamProvider(false))
@@ -120,12 +117,6 @@ class _WatchTvWidget extends ConsumerWidget {
                           fen: position.fen,
                           lastMove: position.lastMove?.cg,
                         ),
-                        boardSettings: BoardSettings(
-                          enableCoordinates: false,
-                          animationDuration: Duration.zero,
-                          pieceAssets: pieceSet.assets,
-                          colorScheme: boardColor.colors,
-                        ),
                       ),
                     ),
                   ),
@@ -138,14 +129,11 @@ class _WatchTvWidget extends ConsumerWidget {
                 return Center(
                   child: SizedBox.square(
                     dimension: boardDim,
-                    child: BoardPreview(
-                      boardData: const BoardData(
+                    child: const BoardPreview(
+                      boardData: BoardData(
                         interactableSide: InteractableSide.none,
                         orientation: Side.white,
                         fen: kEmptyFen,
-                      ),
-                      boardSettings: BoardSettings(
-                        colorScheme: boardColor.colors,
                       ),
                       errorMessage: 'Could not load Tv Stream',
                     ),
@@ -155,14 +143,11 @@ class _WatchTvWidget extends ConsumerWidget {
               loading: () => Center(
                 child: SizedBox.square(
                   dimension: boardDim,
-                  child: BoardPreview(
-                    boardData: const BoardData(
+                  child: const BoardPreview(
+                    boardData: BoardData(
                       interactableSide: InteractableSide.none,
                       orientation: Side.white,
                       fen: kEmptyFen,
-                    ),
-                    boardSettings: BoardSettings(
-                      colorScheme: boardColor.colors,
                     ),
                   ),
                 ),
