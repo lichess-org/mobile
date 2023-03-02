@@ -34,11 +34,11 @@ dependencies:
   dartchess:
     git:
       url: https://github.com/lichess-org/dartchess.git
-      ref: 95799f3e9ca8a7fc8788293ac94e716eeb9d320e
+      ref: 945b8ac08dd5d258031f6588d13b41bcb10c23cb
   chessground:
     git:
       url: https://github.com/lichess-org/flutter-chessground.git
-      ref: 0adbb3d136adf23fd54ac60a97d6eb5a852841a2
+      ref: 383697889d2108b98b0c5824b04cb8719156006b
   soundpool: ^2.3.0
   meta: ^1.8.0
   tuple: ^2.0.1

@@ -1,3 +1,5 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart'
+    hide Tuple2;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 
@@ -60,7 +62,7 @@ class GameState with _$GameState {
   bool get resignable => status == GameStatus.started && position.fullmoves > 1;
   bool get playing => status == GameStatus.started;
   bool get gameOver => status.value > GameStatus.started.value;
-  Map<String, Set<String>> get validMoves => algebraicLegalMoves(position);
+  IMap<String, ISet<String>> get validMoves => algebraicLegalMoves(position);
   bool get isLastMoveCapture {
     final lm = sanMoves.isNotEmpty ? sanMoves.last : null;
     return lm != null && lm.contains('x');

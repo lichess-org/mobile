@@ -50,7 +50,7 @@ class PuzzleVm with _$PuzzleVm {
   bool get canGoBack =>
       mode == PuzzleMode.view && currentPath.size > initialPath.size;
 
-  Map<String, Set<String>> get validMoves => algebraicLegalMoves(position);
+  IMap<String, ISet<String>> get validMoves => algebraicLegalMoves(position);
 }
 
 @riverpod
