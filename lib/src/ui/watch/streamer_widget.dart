@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/model/tv/streamer_repository.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/ui/watch/streamer_screen.dart';
@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/ui/watch/streamer_screen.dart';
 class StreamerWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final streamerState = ref.watch(streamerListProvider);
+    final streamerState = ref.watch(liveStreamersProvider);
 
     return streamerState.when(
       data: (data) {

@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
 import 'package:lichess_mobile/src/model/tv/featured_position.dart';
-import 'package:lichess_mobile/src/model/tv/streamer_repository.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -45,7 +45,7 @@ class _WatchScreenState extends ConsumerState<WatchScreen> {
       ),
       body: RefreshIndicator(
         key: _androidRefreshKey,
-        onRefresh: () => ref.refresh(streamerListProvider.future),
+        onRefresh: () => ref.refresh(liveStreamersProvider.future),
         child: _WatchScaffold(
           child: ListView(
             padding: Styles.verticalBodyPadding,
@@ -63,7 +63,7 @@ class _WatchScreenState extends ConsumerState<WatchScreen> {
         child: CustomScrollView(
           slivers: [
             CupertinoSliverRefreshControl(
-              onRefresh: () => ref.refresh(streamerListProvider.future),
+              onRefresh: () => ref.refresh(liveStreamersProvider.future),
             ),
             SliverSafeArea(
               top: false,

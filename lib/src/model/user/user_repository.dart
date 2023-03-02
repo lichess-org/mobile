@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:logging/logging.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:deep_pick/deep_pick.dart';
@@ -8,6 +9,7 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'user.dart';
+import 'streamer.dart';
 
 class UserRepository {
   const UserRepository({required this.apiClient, required Logger logger})
@@ -54,6 +56,18 @@ class UserRepository {
             ),
           ),
         );
+  }
+
+  FutureResult<IList<Streamer>> getLiveStreamers() {
+    return apiClient
+        .get(Uri.parse('$kLichessHost/api/streamer/live'))
+        .flatMap((response) {
+      return readJsonListOfObjects(
+        utf8.decode(response.bodyBytes),
+        mapper: _streamersFromJson,
+        logger: _log,
+      );
+    });
   }
 }
 
@@ -156,5 +170,27 @@ UserPerfGame _userPerfGameFromPick(RequiredPick pick) {
     opponentId: opId('id').asStringOrNull(),
     opponentName: opId('name').asStringOrNull(),
     opponentTitle: opId('title').asStringOrNull(),
+  );
+}
+
+Streamer _streamersFromJson(Map<String, dynamic> json) =>
+    _streamersFromPick(pick(json).required());
+
+Streamer _streamersFromPick(RequiredPick pick) {
+  final stream = pick('stream');
+  final streamer = pick('streamer');
+  return Streamer(
+    username: pick('name').asStringOrThrow(),
+    id: pick('id').asUserIdOrThrow(),
+    patron: pick('patron').asBoolOrNull(),
+    platform: stream('service').asStringOrThrow(),
+    status: stream('status').asStringOrThrow(),
+    lang: stream('lang').asStringOrThrow(),
+    streamerName: streamer('name').asStringOrThrow(),
+    headline: streamer('headline').asStringOrNull(),
+    title: pick('title').asStringOrNull(),
+    image: streamer('image').asStringOrThrow(),
+    twitch: streamer('twitch').asStringOrNull(),
+    youTube: streamer('youTube').asStringOrNull(),
   );
 }
