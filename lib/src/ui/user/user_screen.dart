@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/brief_game_results.dart';
 
 class UserScreen extends ConsumerWidget {
   const UserScreen({required this.user, super.key});
@@ -346,11 +347,6 @@ class Activity extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final activity = ref.watch(userActitityProvider(id: user.id));
-    const gameStatsFontStyle = TextStyle(
-      color: Colors.white,
-      fontSize: 10,
-      fontWeight: FontWeight.bold,
-    );
 
     return activity.when(
       data: (data) {
@@ -425,80 +421,10 @@ class Activity extends ConsumerWidget {
                         ],
                       ],
                     ),
-                    trailing: SizedBox(
-                      height: 20,
-                      width: (e.win != 0 ? 1 : 0) * 18 +
-                          (e.draw != 0 ? 1 : 0) * 18 +
-                          (e.loss != 0 ? 1 : 0) * 18 +
-                          ((e.win != 0 ? 1 : 0) +
-                                  (e.draw != 0 ? 1 : 0) +
-                                  (e.loss != 0 ? 1 : 0) -
-                                  1) *
-                              3,
-                      child: Row(
-                        children: [
-                          if (e.win != 0)
-                            SizedBox(
-                              height: 18,
-                              width: 18,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color: LichessColors.good,
-                                  borderRadius: BorderRadius.circular(3.0),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    e.win.toString(),
-                                    style: gameStatsFontStyle,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          if (e.win != 0 && e.draw != 0)
-                            const SizedBox(
-                              width: 3,
-                            ),
-                          if (e.draw != 0)
-                            SizedBox(
-                              height: 18,
-                              width: 18,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color: LichessColors.brag,
-                                  borderRadius: BorderRadius.circular(3.0),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    e.draw.toString(),
-                                    style: gameStatsFontStyle,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          if ((e.draw != 0 && e.loss != 0) ||
-                              (e.win != 0 && e.loss != 0))
-                            const SizedBox(
-                              width: 3,
-                            ),
-                          if (e.loss != 0)
-                            SizedBox(
-                              height: 18,
-                              width: 18,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color: LichessColors.red,
-                                  borderRadius: BorderRadius.circular(3.0),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    e.loss.toString(),
-                                    style: gameStatsFontStyle,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
+                    trailing: BriefGameResultBox(
+                      win: e.win,
+                      draw: e.draw,
+                      loss: e.loss,
                     ),
                     dense: true,
                   ),
@@ -548,56 +474,10 @@ class Activity extends ConsumerWidget {
                         ],
                       ],
                     ),
-                    trailing: SizedBox(
-                      height: 20,
-                      width: (entry.puzzle!.win != 0 ? 1 : 0) * 18 +
-                          (entry.puzzle!.loss != 0 ? 1 : 0) * 18 +
-                          ((entry.puzzle!.win != 0 ? 1 : 0) +
-                                  (entry.puzzle!.loss != 0 ? 1 : 0) -
-                                  1) *
-                              3,
-                      child: Row(
-                        children: [
-                          if (entry.puzzle!.win != 0)
-                            SizedBox(
-                              height: 18,
-                              width: 18,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color: LichessColors.good,
-                                  borderRadius: BorderRadius.circular(3.0),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    entry.puzzle!.win.toString(),
-                                    style: gameStatsFontStyle,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          if (entry.puzzle!.win != 0 && entry.puzzle!.loss != 0)
-                            const SizedBox(
-                              width: 3,
-                            ),
-                          if (entry.puzzle!.loss != 0)
-                            SizedBox(
-                              height: 18,
-                              width: 18,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color: LichessColors.red,
-                                  borderRadius: BorderRadius.circular(3.0),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    entry.puzzle!.loss.toString(),
-                                    style: gameStatsFontStyle,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
+                    trailing: BriefGameResultBox(
+                      win: entry.puzzle!.win,
+                      draw: 0,
+                      loss: entry.puzzle!.loss,
                     ),
                   ),
                 if (entry.tournamentNb != null)
