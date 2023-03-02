@@ -391,7 +391,8 @@ class Activity extends ConsumerWidget {
                     title: Row(
                       children: [
                         Text(
-                          "Played ${e.cnt} ${e.varient} game${e.cnt == 1 ? '' : 's'}",
+                          context.l10n.activityGames(
+                              e.cnt, e.varient, e.cnt == 1 ? '' : 's'),
                         ),
                       ],
                     ),
@@ -437,7 +438,11 @@ class Activity extends ConsumerWidget {
                       color: LichessColors.brag,
                     ),
                     title: Text(
-                      "Solved ${entry.puzzle!.win + entry.puzzle!.loss} tactical puzzle${entry.puzzle!.win + entry.puzzle!.loss == 1 ? '' : 's'}",
+                      context.l10n.activityPuzzles(
+                          entry.puzzle!.win + entry.puzzle!.loss,
+                          entry.puzzle!.win + entry.puzzle!.loss == 1
+                              ? ''
+                              : 's'),
                     ),
                     visualDensity: const VisualDensity(vertical: -2.5),
                     dense: true,
@@ -490,7 +495,16 @@ class Activity extends ConsumerWidget {
                       color: LichessColors.brag,
                     ),
                     title: Text(
-                      "Finished ${entry.correspondenceEnds!.win + entry.correspondenceEnds!.draw + entry.correspondenceEnds!.loss} Correspondence game${entry.correspondenceEnds!.win + entry.correspondenceEnds!.draw + entry.correspondenceEnds!.loss == 1 ? '' : 's'}",
+                      context.l10n.activityCorrespondenceEnds(
+                          entry.correspondenceEnds!.win +
+                              entry.correspondenceEnds!.draw +
+                              entry.correspondenceEnds!.loss,
+                          entry.correspondenceEnds!.win +
+                                      entry.correspondenceEnds!.draw +
+                                      entry.correspondenceEnds!.loss ==
+                                  1
+                              ? ''
+                              : 's'),
                     ),
                     trailing: BriefGameResultBox(
                       win: entry.correspondenceEnds!.win,
@@ -507,7 +521,9 @@ class Activity extends ConsumerWidget {
                       color: LichessColors.brag,
                     ),
                     title: Text(
-                      "Played ${entry.correspondenceMovesNb} move${entry.correspondenceMovesNb == 1 ? '' : 's'} in Correspondence games",
+                      context.l10n.activityCorrespondenceMoves(
+                          entry.correspondenceMovesNb!.toString(),
+                          entry.correspondenceMovesNb == 1 ? '' : 's'),
                     ),
                     visualDensity: const VisualDensity(vertical: -2.5),
                     dense: true,
@@ -519,7 +535,8 @@ class Activity extends ConsumerWidget {
                       color: LichessColors.brag,
                     ),
                     title: Text(
-                      "Competed in ${entry.tournamentNb} tournament${entry.tournamentNb == 1 ? '' : 's'}",
+                      context.l10n.activityTournament(entry.tournamentNb!.toString(),
+                          entry!.tournamentNb == 1 ? '' : 's'),
                     ),
                     visualDensity: const VisualDensity(vertical: -2.5),
                     dense: true,
@@ -531,7 +548,12 @@ class Activity extends ConsumerWidget {
                       color: LichessColors.brag,
                     ),
                     title: Text(
-                      "Gained ${(entry.followIn!.length == 15 && entry.followInNb != null) ? entry.followInNb : entry.followIn!.length} follower${entry.followIn!.length == 1 ? '' : 's'}",
+                      context.l10n.activityFollow(
+                          (entry.followIn!.length == 15 &&
+                                  entry.followInNb != null)
+                              ? entry.followInNb!.toString()
+                              : entry.followIn!.length.toString(),
+                          entry.followIn!.length == 1 ? '' : 's'),
                     ),
                     visualDensity: const VisualDensity(vertical: -2.5),
                     dense: true,
@@ -545,7 +567,7 @@ class Activity extends ConsumerWidget {
         debugPrint(
           'SEVERE: [UserScreen] could not load user activity; $error\n$stackTrace',
         );
-        return const Text('Could not load activity.');
+        return Text(context.l10n.couldNotLoadActivity);
       },
       loading: () => const CenterLoadingIndicator(),
     );

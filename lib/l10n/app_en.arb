@@ -2203,5 +2203,75 @@
   "cantOpenSimilarAccount": "You will not be allowed to open a new account with the same name, even if the case is different.",
   "changedMindDoNotCloseAccount": "I changed my mind, don't close my account",
   "closeAccountExplanation": "Are you sure you want to close your account? Closing your account is a permanent decision. You will NEVER be able to log in EVER AGAIN.",
-  "thisAccountIsClosed": "This account is closed."
+  "thisAccountIsClosed": "This account is closed.",
+  "activityGames": "Played {param1} {param2} game{param3}",
+  "@activityGames": {
+    "placeholders": {
+      "param1": {
+        "type": "int"
+      },
+      "param2": {
+        "type": "String"
+      },
+      "param3": {
+        "type": "String"
+      }
+    }
+  },
+  "activityPuzzles": "Solved {param1} tactical puzzle{param2}",
+  "@activityPuzzles": {
+    "placeholders": {
+      "param1": {
+        "type": "int"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "activityCorrespondenceEnds": "Finished {param1} Correspondence game{param2}",
+  "@activityCorrespondenceEnds": {
+    "placeholders": {
+      "param1": {
+        "type": "int"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "activityCorrespondenceMoves": "Played {param1} move{param2} in Correspondence games",
+  "@activityCorrespondenceMoves": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "activityTournament": "Competed in {param1} tournament{param2}",
+  "@activityTournament": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "activityFollow": "Gained {param1} follower{param2}",
+  "@activityFollow": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "couldNotLoadActivity": "Could not load activity."
 }
