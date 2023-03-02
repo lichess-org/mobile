@@ -94,3 +94,30 @@ final soundThemePrefProvider = createPrefProvider<SoundTheme>(
   },
   mapTo: (SoundTheme soundTheme) => soundTheme.name,
 );
+
+@Riverpod(keepAlive: true)
+SoundTheme currentSelectedSoundTheme(CurrentSelectedSoundThemeRef ref) {
+  final soundTheme = ref.watch(soundThemePrefProvider);
+
+  //switch required because ref returns dynamic
+  switch (soundTheme) {
+    case SoundTheme.futuristic:
+      return SoundTheme.futuristic;
+    case SoundTheme.lisp:
+      return SoundTheme.lisp;
+    case SoundTheme.music:
+      return SoundTheme.music;
+    case SoundTheme.nes:
+      return SoundTheme.nes;
+    case SoundTheme.piano:
+      return SoundTheme.piano;
+    case SoundTheme.robot:
+      return SoundTheme.robot;
+    case SoundTheme.sfx:
+      return SoundTheme.sfx;
+    case SoundTheme.speech:
+      return SoundTheme.speech;
+    default:
+      return SoundTheme.music;
+  }
+}

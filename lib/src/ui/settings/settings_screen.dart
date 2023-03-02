@@ -117,7 +117,7 @@ class _Body extends ConsumerWidget {
                 },
               ),
               SettingsListTile(
-                icon: const Icon(LichessIcons.storm),
+                icon: const Icon(Icons.volume_up),
                 settingsLabel: context.l10n.soundTheme,
                 settingsValue: soundTheme.label,
                 onTap: () {

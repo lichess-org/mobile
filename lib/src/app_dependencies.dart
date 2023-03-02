@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/common/sound_service.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
 
+
 part 'app_dependencies.freezed.dart';
 part 'app_dependencies.g.dart';
 
@@ -20,10 +21,11 @@ Future<AppDependencies> appDependencies(
   AppDependenciesRef ref,
 ) async {
   final sessionStorage = ref.watch(sessionStorageProvider);
-  final pInfo = await PackageInfo.fromPlatform();
   final prefs = await SharedPreferences.getInstance();
+  //TODO: find out how to load soundTheme
+  //final soundTheme = ref.watch(currentSelectedSoundThemeProvider);
+  final pInfo = await PackageInfo.fromPlatform();
   final pool = Soundpool.fromOptions();
-  //final soundTheme = ref.watch(soundThemePrefProvider);
   final sounds = await loadSounds(pool);
 
   ref.onDispose(pool.release);
