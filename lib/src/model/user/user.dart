@@ -218,6 +218,8 @@ class UserActitity with _$UserActitity {
     IList<UserActivityTournament?>? tournament,
     int? tournamentNb,
     UserActitityGameScore? puzzle,
+    UserActitityGameScore? correspondenceEnds,
+    int? correspondenceMovesNb,
   }) = _UserActitity;
 }
 

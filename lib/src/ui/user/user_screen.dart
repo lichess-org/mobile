@@ -483,6 +483,35 @@ class Activity extends ConsumerWidget {
                       loss: entry.puzzle!.loss,
                     ),
                   ),
+                if (entry.correspondenceEnds != null)
+                  PlatformListTile(
+                    leading: const Icon(
+                      LichessIcons.correspondence,
+                      color: LichessColors.brag,
+                    ),
+                    title: Text(
+                      "Finished ${entry.correspondenceEnds!.win + entry.correspondenceEnds!.draw + entry.correspondenceEnds!.loss} Correspondence game${entry.correspondenceEnds!.win + entry.correspondenceEnds!.draw + entry.correspondenceEnds!.loss == 1 ? '' : 's'}",
+                    ),
+                    trailing: BriefGameResultBox(
+                      win: entry.correspondenceEnds!.win,
+                      draw: entry.correspondenceEnds!.draw,
+                      loss: entry.correspondenceEnds!.loss,
+                    ),
+                    visualDensity: const VisualDensity(vertical: -2.5),
+                    dense: true,
+                  ),
+                if (entry.correspondenceMovesNb != null)
+                  PlatformListTile(
+                    leading: const Icon(
+                      LichessIcons.correspondence,
+                      color: LichessColors.brag,
+                    ),
+                    title: Text(
+                      "Played ${entry.correspondenceMovesNb} move${entry.correspondenceMovesNb == 1 ? '' : 's'} in Correspondence games",
+                    ),
+                    visualDensity: const VisualDensity(vertical: -2.5),
+                    dense: true,
+                  ),
                 if (entry.tournamentNb != null)
                   PlatformListTile(
                     leading: const Icon(

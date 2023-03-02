@@ -100,6 +100,9 @@ UserActitity _userActitityFromPick(RequiredPick pick) {
     ),
     tournamentNb: pick('tournaments', 'nb').asIntOrNull(),
     puzzle: pick('puzzles', 'score').letOrNull(UserActitityGameScore.fromPick),
+    correspondenceEnds: pick('correspondenceEnds', 'score')
+        .letOrNull(UserActitityGameScore.fromPick),
+    correspondenceMovesNb: pick('correspondenceMoves', 'nb').asIntOrNull(),
   );
 }
 
