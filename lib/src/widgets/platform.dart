@@ -129,6 +129,7 @@ class PlatformListTile extends StatelessWidget {
     this.trailing,
     this.additionalInfo,
     this.dense,
+    this.visualDensity,
     this.onTap,
     this.selected = false,
   });
@@ -147,6 +148,9 @@ class PlatformListTile extends StatelessWidget {
   // only on android
   final bool? dense;
 
+  // only on android
+  final VisualDensity? visualDensity;
+
   final GestureTapCallback? onTap;
 
   @override
@@ -159,6 +163,7 @@ class PlatformListTile extends StatelessWidget {
           subtitle: subtitle,
           trailing: trailing,
           dense: dense,
+          visualDensity: visualDensity,
           onTap: onTap,
           selected: selected,
         );

@@ -371,6 +371,7 @@ class Activity extends ConsumerWidget {
             return Column(
               children: [
                 PlatformListTile(
+                  visualDensity: const VisualDensity(vertical: -2.5),
                   title: Text(
                     "${_monthName[entry.startTime.month].toUpperCase()} ${entry.startTime.day}, ${entry.startTime.year}",
                     style: const TextStyle(
@@ -381,6 +382,8 @@ class Activity extends ConsumerWidget {
                 ),
                 for (final e in g)
                   PlatformListTile(
+                    visualDensity: const VisualDensity(vertical: -2.5),
+                    dense: true,
                     leading: Icon(
                       e.icon,
                       color: LichessColors.brag,
@@ -426,7 +429,6 @@ class Activity extends ConsumerWidget {
                       draw: e.draw,
                       loss: e.loss,
                     ),
-                    dense: true,
                   ),
                 if (entry.puzzle != null)
                   PlatformListTile(
@@ -437,6 +439,7 @@ class Activity extends ConsumerWidget {
                     title: Text(
                       "Solved ${entry.puzzle!.win + entry.puzzle!.loss} tactical puzzle${entry.puzzle!.win + entry.puzzle!.loss == 1 ? '' : 's'}",
                     ),
+                    visualDensity: const VisualDensity(vertical: -2.5),
                     dense: true,
                     subtitle: Row(
                       children: [
@@ -489,6 +492,7 @@ class Activity extends ConsumerWidget {
                     title: Text(
                       "Competed in ${entry.tournamentNb} tournament${entry.tournamentNb == 1 ? '' : 's'}",
                     ),
+                    visualDensity: const VisualDensity(vertical: -2.5),
                     dense: true,
                   ),
                 if (entry.followIn!.isNotEmpty)
@@ -500,6 +504,7 @@ class Activity extends ConsumerWidget {
                     title: Text(
                       "Gained ${(entry.followIn!.length == 15 && entry.followInNb != null) ? entry.followInNb : entry.followIn!.length} follower${entry.followIn!.length == 1 ? '' : 's'}",
                     ),
+                    visualDensity: const VisualDensity(vertical: -2.5),
                     dense: true,
                   ),
               ],
