@@ -535,7 +535,8 @@ class Activity extends ConsumerWidget {
                       color: LichessColors.brag,
                     ),
                     title: Text(
-                      context.l10n.activityTournament(entry.tournamentNb!.toString(),
+                      context.l10n.activityTournament(
+                          entry.tournamentNb!.toString(),
                           entry!.tournamentNb == 1 ? '' : 's'),
                     ),
                     visualDensity: const VisualDensity(vertical: -2.5),
