@@ -21,7 +21,7 @@ const lilaTranslationsPath = `${tmpDir}/[lichess-org.lila] master/translation/de
 const unzipMaxBufferSize = 1024 * 1024 * 10 // Set maxbuffer to 10MB to avoid errors when default 1MB used
 
 // selection of lila translation modules to include
-const modules = ['site', 'puzzle', 'puzzleTheme', 'perfStat', 'settings']
+const modules = ['site', 'puzzle', 'puzzleTheme', 'perfStat', 'settings', 'streamer']
 
 // Order of locales with variants matters: the fallback must always be first
 // eg: 'de-DE' is before 'de-CH'
