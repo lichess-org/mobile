@@ -15,6 +15,8 @@ import 'package:lichess_mobile/src/model/tv/featured_position.dart';
 import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
 
+import 'package:lichess_mobile/src/widgets/list.dart';
+
 class TvScreen extends ConsumerWidget {
   const TvScreen({super.key});
 
@@ -118,15 +120,30 @@ class _Body extends ConsumerWidget {
                         position.turn == bottomPlayer.side,
                   )
                 : kEmptyWidget;
-            return GameBoardLayout(
-              boardData: boardData,
-              boardSettings: BoardSettings(
-                animationDuration: Duration.zero,
-                pieceAssets: pieceSet.assets,
-                colorScheme: boardTheme.colors,
+            return ListSection(
+              header: Text("Lichess TV"),
+              children: [
+                GameBoardLayout(
+                  boardData: boardData,
+                  boardSettings: BoardSettings(
+                    animationDuration: Duration.zero,
+                    pieceAssets: pieceSet.assets,
+                    colorScheme: boardTheme.colors,
+                  ),
+                  topPlayer: topPlayerWidget,
+                  bottomPlayer: bottomPlayerWidget,
+                ),
+              ],
+              onHeaderTap: () {
+                /*
+            Navigator.of(context).push<void>(
+              MaterialPageRoute(
+                builder: (context) => LeaderboardScreen(
+                  leaderboard: data,
+                ),
               ),
-              topPlayer: topPlayerWidget,
-              bottomPlayer: bottomPlayerWidget,
+            );*/
+              },
             );
           },
           loading: () => GameBoardLayout(
