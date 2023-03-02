@@ -6,7 +6,7 @@ abstract class Styles {
   // text
   static const bold = TextStyle(fontWeight: FontWeight.bold);
   static const sectionTitle = TextStyle(
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: FontWeight.bold,
   );
   static const subtitleOpacity = 0.7;

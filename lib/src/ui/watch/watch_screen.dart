@@ -92,70 +92,51 @@ class _WatchTvWidget extends ConsumerWidget {
         ? ref.watch(tvStreamProvider(false))
         : const AsyncLoading<FeaturedPosition>();
     final featuredGame = ref.watch(featuredGameProvider);
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final boardDim =
-            constraints.maxWidth > kLargeScreenWidth ? 650.0 : 350.0;
-        return ListSection(
-          hasLeading: true,
-          header: const Text('Lichess TV'),
-          children: [
-            tvStream.when(
-              data: (position) {
-                return GestureDetector(
-                  onTap: () => Navigator.of(context).push<void>(
-                    MaterialPageRoute(builder: (context) => const TvScreen()),
-                  ),
-                  child: Center(
-                    child: SizedBox.square(
-                      dimension: boardDim,
-                      child: BoardPreview(
-                        boardData: BoardData(
-                          interactableSide: InteractableSide.none,
-                          orientation:
-                              featuredGame?.orientation.cg ?? Side.white,
-                          fen: position.fen,
-                          lastMove: position.lastMove?.cg,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-              error: (err, stackTrace) {
-                debugPrint(
-                  'SEVERE: [WatchTvWidget] could not load tv stream; $err\n$stackTrace',
-                );
-                return Center(
-                  child: SizedBox.square(
-                    dimension: boardDim,
-                    child: const BoardPreview(
-                      boardData: BoardData(
-                        interactableSide: InteractableSide.none,
-                        orientation: Side.white,
-                        fen: kEmptyFen,
-                      ),
-                      errorMessage: 'Could not load Tv Stream',
-                    ),
-                  ),
-                );
-              },
-              loading: () => Center(
-                child: SizedBox.square(
-                  dimension: boardDim,
-                  child: const BoardPreview(
-                    boardData: BoardData(
-                      interactableSide: InteractableSide.none,
-                      orientation: Side.white,
-                      fen: kEmptyFen,
-                    ),
+    return Padding(
+      padding: Styles.bodySectionPadding,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Lichess TV', style: Styles.sectionTitle),
+          tvStream.when(
+            data: (position) {
+              return GestureDetector(
+                onTap: () => Navigator.of(context).push<void>(
+                  MaterialPageRoute(builder: (context) => const TvScreen()),
+                ),
+                child: BoardPreview(
+                  boardData: BoardData(
+                    interactableSide: InteractableSide.none,
+                    orientation: featuredGame?.orientation.cg ?? Side.white,
+                    fen: position.fen,
+                    lastMove: position.lastMove?.cg,
                   ),
                 ),
+              );
+            },
+            error: (err, stackTrace) {
+              debugPrint(
+                'SEVERE: [WatchTvWidget] could not load tv stream; $err\n$stackTrace',
+              );
+              return const BoardPreview(
+                boardData: BoardData(
+                  interactableSide: InteractableSide.none,
+                  orientation: Side.white,
+                  fen: kEmptyFen,
+                ),
+                errorMessage: 'Could not load Tv Stream',
+              );
+            },
+            loading: () => const BoardPreview(
+              boardData: BoardData(
+                interactableSide: InteractableSide.none,
+                orientation: Side.white,
+                fen: kEmptyFen,
               ),
             ),
-          ],
-        );
-      },
+          ),
+        ],
+      ),
     );
   }
 }
