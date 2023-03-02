@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chessground/chessground.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
 import 'package:lichess_mobile/src/model/tv/featured_position.dart';
 import 'package:lichess_mobile/src/model/tv/streamer_repository.dart';
 import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
-import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/common/styles.dart';
-import 'package:lichess_mobile/src/ui/watch/streamer_widget.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/ui/watch/streamer_widget.dart';
+import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
 
 class WatchScreen extends ConsumerStatefulWidget {
   const WatchScreen({super.key});
@@ -39,7 +41,7 @@ class _WatchScreenState extends ConsumerState<WatchScreen> {
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lichess TV'),
+        title: Text(context.l10n.watch),
       ),
       body: RefreshIndicator(
         key: _androidRefreshKey,
@@ -90,7 +92,7 @@ class _WatchTvWidget extends ConsumerWidget {
     final boardColor = ref.watch(boardThemePrefProvider);
     final currentTab = ref.watch(currentBottomTabProvider);
     final tvStream = currentTab == BottomTab.watch
-        ? ref.watch(tvStreamProvider)
+        ? ref.watch(tvStreamProvider(false))
         : const AsyncLoading<FeaturedPosition>();
     final featuredGame = ref.watch(featuredGameProvider);
     return LayoutBuilder(
@@ -99,7 +101,7 @@ class _WatchTvWidget extends ConsumerWidget {
             constraints.maxWidth > kLargeScreenWidth ? 650.0 : 350.0;
         return ListSection(
           hasLeading: true,
-          header: const Text('Watch Top Games'),
+          header: const Text('Lichess TV'),
           children: [
             tvStream.when(
               data: (position) {
@@ -119,6 +121,7 @@ class _WatchTvWidget extends ConsumerWidget {
                           lastMove: position.lastMove?.cg,
                         ),
                         boardSettings: BoardSettings(
+                          enableCoordinates: false,
                           animationDuration: Duration.zero,
                           pieceAssets: pieceSet.assets,
                           colorScheme: boardColor.colors,

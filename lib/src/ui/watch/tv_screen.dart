@@ -67,7 +67,7 @@ class _Body extends ConsumerWidget {
     final currentTab = ref.watch(currentBottomTabProvider);
     // ensure the stream is closed when offstage
     final tvStream = currentTab == BottomTab.watch
-        ? ref.watch(tvStreamProvider)
+        ? ref.watch(tvStreamProvider(true))
         : const AsyncLoading<FeaturedPosition>();
     final featuredGame = ref.watch(featuredGameProvider);
 
