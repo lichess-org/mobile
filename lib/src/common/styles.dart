@@ -5,10 +5,10 @@ import 'package:flutter/cupertino.dart';
 abstract class Styles {
   // text
   static const bold = TextStyle(fontWeight: FontWeight.bold);
-  static const sectionTitle = TextStyle(
-    fontSize: 20,
-    fontWeight: FontWeight.bold,
-  );
+  static TextStyle get sectionTitle => TextStyle(
+        fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
+        fontWeight: FontWeight.bold,
+      );
   static const subtitleOpacity = 0.7;
 
   // padding
@@ -18,12 +18,9 @@ abstract class Styles {
   static const verticalBodyPadding = EdgeInsets.symmetric(vertical: 16.0);
 
   /// Gets horizontal padding according to platform.
-  static EdgeInsets get horizontalBodyPadding =>
-      defaultTargetPlatform == TargetPlatform.iOS
-          ? const EdgeInsets.symmetric(horizontal: 20.0)
-          : const EdgeInsets.symmetric(horizontal: 16.0);
+  static const horizontalBodyPadding = EdgeInsets.symmetric(horizontal: 16.0);
 
-  static const sectionBottomPadding = EdgeInsets.only(bottom: 16);
+  static const sectionBottomPadding = EdgeInsets.only(bottom: 20);
 
   /// Horizontal and bottom padding for a body section
   static EdgeInsetsGeometry get bodySectionPadding =>

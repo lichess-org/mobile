@@ -15,7 +15,8 @@ import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/ui/watch/streamer_widget.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/ui/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
 
 class WatchScreen extends ConsumerStatefulWidget {
@@ -45,10 +46,26 @@ class _WatchScreenState extends ConsumerState<WatchScreen> {
       body: RefreshIndicator(
         key: _androidRefreshKey,
         onRefresh: () => ref.refresh(liveStreamersProvider.future),
-        child: _WatchScaffold(
-          child: ListView(
-            padding: Styles.verticalBodyPadding,
-            children: [const _WatchTvWidget(), StreamerWidget()],
+        child: SafeArea(
+          child: OrientationBuilder(
+            builder: (context, orientation) {
+              return orientation == Orientation.portrait
+                  ? ListView(
+                      children: const [_WatchTvWidget(), _StreamerWidget()],
+                    )
+                  : GridView(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.98,
+                      ),
+                      padding: Styles.verticalBodyPadding,
+                      children: const [
+                        _WatchTvWidget(),
+                        _StreamerWidget(numberOfItems: 8)
+                      ],
+                    );
+            },
           ),
         ),
       ),
@@ -58,24 +75,45 @@ class _WatchScreenState extends ConsumerState<WatchScreen> {
   Widget _buildIos(BuildContext context, WidgetRef ref) {
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(),
-      child: _WatchScaffold(
-        child: CustomScrollView(
-          slivers: [
-            CupertinoSliverRefreshControl(
-              onRefresh: () => ref.refresh(liveStreamersProvider.future),
-            ),
-            SliverSafeArea(
-              top: false,
-              sliver: SliverPadding(
-                padding: Styles.verticalBodyPadding,
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate(
-                    [const _WatchTvWidget(), StreamerWidget()],
-                  ),
+      child: SafeArea(
+        child: OrientationBuilder(
+          builder: (context, orientation) {
+            return CustomScrollView(
+              slivers: [
+                CupertinoSliverRefreshControl(
+                  onRefresh: () => ref.refresh(liveStreamersProvider.future),
                 ),
-              ),
-            )
-          ],
+                SliverSafeArea(
+                  top: false,
+                  sliver: SliverPadding(
+                    padding: Styles.verticalBodyPadding,
+                    sliver: orientation == Orientation.portrait
+                        ? SliverList(
+                            delegate: SliverChildListDelegate(
+                              const [
+                                _WatchTvWidget(),
+                                _StreamerWidget(),
+                              ],
+                            ),
+                          )
+                        : SliverGrid(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.98,
+                            ),
+                            delegate: SliverChildListDelegate(
+                              const [
+                                _WatchTvWidget(),
+                                _StreamerWidget(numberOfItems: 8),
+                              ],
+                            ),
+                          ),
+                  ),
+                )
+              ],
+            );
+          },
         ),
       ),
     );
@@ -97,7 +135,7 @@ class _WatchTvWidget extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Lichess TV', style: Styles.sectionTitle),
+          Text('Lichess TV', style: Styles.sectionTitle),
           tvStream.when(
             data: (position) {
               return GestureDetector(
@@ -141,22 +179,41 @@ class _WatchTvWidget extends ConsumerWidget {
   }
 }
 
-class _WatchScaffold extends StatelessWidget {
-  const _WatchScaffold({required this.child});
+class _StreamerWidget extends ConsumerWidget {
+  const _StreamerWidget({this.numberOfItems = 5});
 
-  final Widget child;
+  final int numberOfItems;
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: child,
-          )
-        ],
-      ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final streamerState = ref.watch(liveStreamersProvider);
+
+    return streamerState.when(
+      data: (data) {
+        return ListSection(
+          header: Text(context.l10n.lichessStreamers),
+          hasLeading: true,
+          onHeaderTap: () {
+            Navigator.of(context).push<void>(
+              MaterialPageRoute(
+                builder: (context) => StreamerScreen(streamers: data),
+              ),
+            );
+          },
+          children: [
+            ...data
+                .take(numberOfItems)
+                .map((e) => StreamerListTile(streamer: e))
+          ],
+        );
+      },
+      error: (error, stackTrace) {
+        debugPrint(
+          'SEVERE: [StreamerWidget] could not load streamer data; $error\n $stackTrace',
+        );
+        return const Text('Could not load live streamers');
+      },
+      loading: () => const CenterLoadingIndicator(),
     );
   }
 }

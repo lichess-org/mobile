@@ -22,12 +22,7 @@ class BoardPreview extends ConsumerWidget {
     final boardColor = ref.watch(boardThemePrefProvider);
     return LayoutBuilder(
       builder: (context, constraints) {
-        final aspectRatio = constraints.biggest.aspectRatio;
-        final defaultBoardSize = constraints.biggest.shortestSide;
-        final double boardSize = aspectRatio < 1 && aspectRatio >= 0.84 ||
-                aspectRatio > 1 && aspectRatio <= 1.18
-            ? defaultBoardSize * 0.94
-            : defaultBoardSize;
+        final boardSize = constraints.biggest.shortestSide;
 
         final error = errorMessage != null
             ? Center(

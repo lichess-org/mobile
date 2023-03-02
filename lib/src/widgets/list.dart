@@ -5,11 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-const _kTitleMedium = TextStyle(
-  fontSize: 18,
-  letterSpacing: .25,
-);
-
 /// A platform agnostic list section.
 ///
 /// Use to show a limited number of items.
@@ -59,7 +54,7 @@ class ListSection extends StatelessWidget {
               if (header != null)
                 ListTile(
                   title: DefaultTextStyle.merge(
-                    style: _kTitleMedium,
+                    style: Styles.sectionTitle,
                     child: header!,
                   ),
                   trailing: (onHeaderTap != null)
@@ -85,23 +80,38 @@ class ListSection extends StatelessWidget {
           ),
         );
       case TargetPlatform.iOS:
-        return CupertinoListSection.insetGrouped(
-          margin: margin,
-          hasLeading: hasLeading,
-          header: header != null
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    header!,
-                    if (onHeaderTap != null)
-                      GestureDetector(
-                        onTap: onHeaderTap,
-                        child: const Icon(CupertinoIcons.ellipsis),
+        return Padding(
+          padding: margin ?? Styles.bodySectionPadding,
+          child: Column(
+            children: [
+              if (header != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 6.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      DefaultTextStyle(
+                        style: CupertinoTheme.of(context)
+                            .textTheme
+                            .textStyle
+                            .merge(Styles.sectionTitle),
+                        child: header!,
                       ),
-                  ],
-                )
-              : null,
-          children: children,
+                      if (onHeaderTap != null)
+                        GestureDetector(
+                          onTap: onHeaderTap,
+                          child: const Icon(CupertinoIcons.ellipsis),
+                        ),
+                    ],
+                  ),
+                ),
+              CupertinoListSection.insetGrouped(
+                margin: EdgeInsets.zero,
+                hasLeading: hasLeading,
+                children: children,
+              ),
+            ],
+          ),
         );
       default:
         assert(false, 'Unexpected platform $defaultTargetPlatform');

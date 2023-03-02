@@ -312,7 +312,7 @@ class RecentGames extends ConsumerWidget {
       data: (data) {
         return ListSection(
           // TODO translate
-          header: const Text('Recent games', style: Styles.sectionTitle),
+          header: Text('Recent games', style: Styles.sectionTitle),
           hasLeading: true,
           children: data.map((game) {
             final mySide = game.white.id == user.id ? Side.white : Side.black;

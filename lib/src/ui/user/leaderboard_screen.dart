@@ -29,22 +29,27 @@ class LeaderboardScreen extends StatelessWidget {
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          return CustomScrollView(
-            slivers: [
-              SliverSafeArea(
-                sliver: constraints.maxWidth > kLargeScreenWidth
-                    ? SliverGrid(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          mainAxisExtent: 644,
-                          crossAxisCount: (constraints.maxWidth / 300).floor(),
+          return Padding(
+            padding: Styles.verticalBodyPadding,
+            child: CustomScrollView(
+              slivers: [
+                SliverSafeArea(
+                  sliver: constraints.maxWidth > kLargeScreenWidth
+                      ? SliverGrid(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            mainAxisExtent: 644,
+                            crossAxisCount:
+                                (constraints.maxWidth / 300).floor(),
+                          ),
+                          delegate: SliverChildListDelegate(_buildList()),
+                        )
+                      : SliverList(
+                          delegate: SliverChildListDelegate(_buildList()),
                         ),
-                        delegate: SliverChildListDelegate(_buildList()),
-                      )
-                    : SliverList(
-                        delegate: SliverChildListDelegate(_buildList()),
-                      ),
-              ),
-            ],
+                ),
+              ],
+            ),
           );
         },
       ),
