@@ -204,6 +204,10 @@ class PerfCards extends StatelessWidget {
           p.ratingDeviation < kClueLessDeviation;
     }).toList(growable: false);
 
+    if (userPerfs.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return Padding(
       padding: Styles.bodySectionPadding,
       child: SizedBox(

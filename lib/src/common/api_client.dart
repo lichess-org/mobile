@@ -8,8 +8,7 @@ import 'package:http/retry.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/auth/session_repository.dart';
+import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package_info.dart';
 import 'errors.dart';
@@ -36,8 +35,6 @@ Client httpClient(HttpClientRef ref) {
 @Riverpod(keepAlive: true)
 ApiClient apiClient(ApiClientRef ref) {
   final httpClient = ref.watch(httpClientProvider);
-  final AuthController authController =
-      ref.read(authControllerProvider.notifier);
   final authClient = _AuthClient(
     ref,
     httpClient,
@@ -46,7 +43,6 @@ ApiClient apiClient(ApiClientRef ref) {
   final apiClient = ApiClient(
     Logger('ApiClient'),
     authClient,
-    authController,
   );
   ref.onDispose(() {
     apiClient.close();
@@ -58,8 +54,7 @@ ApiClient apiClient(ApiClientRef ref) {
 class ApiClient {
   ApiClient(
     this._log,
-    this._client,
-    this._auth, {
+    this._client, {
     List<Duration> retries = defaultRetries,
   }) : _retryClient = RetryClient.withDelays(
           _client,
@@ -69,7 +64,6 @@ class ApiClient {
     _log.info('Creating new ApiClient.');
   }
 
-  final AuthController _auth;
   final Logger _log;
   final Client _client;
   final RetryClient _retryClient;
@@ -147,12 +141,6 @@ class ApiClient {
       _log.warning('$url responded with status ${response.statusCode}');
     }
 
-    if (response.statusCode == 401) {
-      // assume the oAuth token has been invalidated server side, so let's
-      // discard it
-      _auth.invalidateSession();
-    }
-
     return response.statusCode < 400
         ? Result.value(response)
         : response.statusCode == 404
@@ -181,9 +169,8 @@ class _AuthClient extends BaseClient {
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
-    final sessionRepo = ref.read(sessionRepositoryProvider);
-    final info = ref.watch(packageInfoProvider);
-    final session = await sessionRepo.read();
+    final session = ref.read(userSessionStateProvider);
+    final info = ref.read(packageInfoProvider);
 
     if (session != null && !request.headers.containsKey('Authorization')) {
       request.headers['Authorization'] = 'Bearer ${session.token}';

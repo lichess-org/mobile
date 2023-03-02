@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 
 import './theme_mode_screen.dart';
@@ -53,6 +54,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModePrefProvider);
     final authController = ref.watch(authControllerProvider);
+    final userSession = ref.watch(userSessionStateProvider);
     final pieceSet = ref.watch(pieceSetPrefProvider);
     final boardTheme = ref.watch(boardThemePrefProvider);
 
@@ -114,37 +116,28 @@ class _Body extends ConsumerWidget {
               ),
             ],
           ),
-          authController.when(
-            data: (session) {
-              return session != null
-                  ? ListSection(
-                      children: [
-                        PlatformListTile(
-                          leading: const Icon(Icons.exit_to_app),
-                          title: Text(context.l10n.logOut),
-                          onTap: () {
-                            _showExitConfirmDialog(context, ref);
-                          },
-                        ),
-                      ],
-                    )
-                  : const SizedBox.shrink();
-            },
-            loading: () => const ListSection(
-              children: [
-                PlatformListTile(
-                  leading: Icon(Icons.exit_to_app),
-                  title: Center(child: ButtonLoadingIndicator()),
-                ),
-              ],
-            ),
-            error: (err, st) {
-              debugPrint(
-                'SEVERE: [SettingsScreen] error: $err\n$st',
-              );
-              return const SizedBox.shrink();
-            },
-          ),
+          if (userSession != null)
+            if (authController.isLoading)
+              const ListSection(
+                children: [
+                  PlatformListTile(
+                    leading: Icon(Icons.exit_to_app),
+                    title: Center(child: ButtonLoadingIndicator()),
+                  ),
+                ],
+              )
+            else
+              ListSection(
+                children: [
+                  PlatformListTile(
+                    leading: const Icon(Icons.exit_to_app),
+                    title: Text(context.l10n.logOut),
+                    onTap: () {
+                      _showExitConfirmDialog(context, ref);
+                    },
+                  ),
+                ],
+              ),
         ],
       ),
     );

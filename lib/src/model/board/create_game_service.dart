@@ -7,7 +7,7 @@ import 'package:result_extensions/result_extensions.dart';
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
-import 'package:lichess_mobile/src/model/account/account_providers.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_request.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'play_preferences.dart';

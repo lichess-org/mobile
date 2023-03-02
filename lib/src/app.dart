@@ -18,6 +18,7 @@ class LoadApp extends ConsumerWidget {
     final appDependencies = ref.watch(appDependenciesProvider);
     return appDependencies.when(
       data: (_) => const App(),
+      // TODO splash screen
       loading: () => const SizedBox.shrink(),
       error: (err, st) {
         debugPrint(

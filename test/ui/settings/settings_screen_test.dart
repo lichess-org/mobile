@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:lichess_mobile/src/model/auth/session_repository.dart';
 import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../test_utils.dart';
 import '../../test_app.dart';
-import '../../model/auth/fake_session_repository.dart';
+import '../../model/auth/fake_session_storage.dart';
 
 void main() {
   group('SettingsScreen', () {
@@ -23,9 +22,6 @@ void main() {
         );
 
         await tester.pumpWidget(app);
-
-        // wait for auth controller
-        await tester.pump(const Duration(milliseconds: 20));
 
         await meetsTapTargetGuideline(tester);
 
@@ -47,9 +43,6 @@ void main() {
 
         await tester.pumpWidget(app);
 
-        // wait for auth controller
-        await tester.pump(const Duration(milliseconds: 20));
-
         expect(find.text('Sign out'), findsNothing);
       },
       variant: kPlatformVariant,
@@ -61,16 +54,10 @@ void main() {
         final app = await buildTestApp(
           tester,
           home: const SettingsScreen(),
-          overrides: [
-            sessionRepositoryProvider
-                .overrideWithValue(FakeSessionRepository(fakeSession)),
-          ],
+          userSession: fakeSession,
         );
 
         await tester.pumpWidget(app);
-
-        // wait for auth controller
-        await tester.pump(const Duration(milliseconds: 20));
 
         expect(find.text('Sign out'), findsOneWidget);
 
