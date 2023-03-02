@@ -502,15 +502,103 @@ class Activity extends ConsumerWidget {
                     ),
                     dense: true,
                   ),
-                if (entry.followIn!.isNotEmpty)
+                if (entry.puzzle != null)
                   PlatformListTile(
                     leading: const Icon(
-                      Icons.thumb_up,
+                      LichessIcons.target,
                       color: LichessColors.brag,
                     ),
                     title: Text(
-                        "Gained ${entry.followIn!.length} follower${entry.followIn!.length == 1 ? '' : 's'}",),
+                      "Solved ${entry.puzzle!.win + entry.puzzle!.loss} tactical puzzle${entry.puzzle!.win + entry.puzzle!.loss == 1 ? '' : 's'}",
+                    ),
                     dense: true,
+                    subtitle: Row(
+                      children: [
+                        PlayerRating(
+                          deviation: 0,
+                          rating: entry.puzzle!.rpAfter,
+                        ),
+                        const SizedBox(width: 3),
+                        if (entry.puzzle!.rpAfter - entry.puzzle!.rpBefore !=
+                            0) ...[
+                          Icon(
+                            entry.puzzle!.rpAfter - entry.puzzle!.rpBefore > 0
+                                ? LichessIcons.arrow_full_upperright
+                                : LichessIcons.arrow_full_lowerright,
+                            color:
+                                entry.puzzle!.rpAfter - entry.puzzle!.rpBefore >
+                                        0
+                                    ? LichessColors.good
+                                    : LichessColors.red,
+                            size: 12,
+                          ),
+                          Text(
+                            (entry.puzzle!.rpAfter - entry.puzzle!.rpBefore)
+                                .abs()
+                                .toString(),
+                            style: TextStyle(
+                              color: entry.puzzle!.rpAfter -
+                                          entry.puzzle!.rpBefore >
+                                      0
+                                  ? LichessColors.good
+                                  : LichessColors.red,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    trailing: SizedBox(
+                      height: 20,
+                      width: (entry.puzzle!.win != 0 ? 1 : 0) * 18 +
+                          (entry.puzzle!.loss != 0 ? 1 : 0) * 18 +
+                          ((entry.puzzle!.win != 0 ? 1 : 0) +
+                                  (entry.puzzle!.loss != 0 ? 1 : 0) -
+                                  1) *
+                              3,
+                      child: Row(
+                        children: [
+                          if (entry.puzzle!.win != 0)
+                            SizedBox(
+                              height: 18,
+                              width: 18,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: LichessColors.good,
+                                  borderRadius: BorderRadius.circular(3.0),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    entry.puzzle!.win.toString(),
+                                    style: gameStatsFontStyle,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          if (entry.puzzle!.win != 0 && entry.puzzle!.loss != 0)
+                            const SizedBox(
+                              width: 3,
+                            ),
+                          if (entry.puzzle!.loss != 0)
+                            SizedBox(
+                              height: 18,
+                              width: 18,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: LichessColors.red,
+                                  borderRadius: BorderRadius.circular(3.0),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    entry.puzzle!.loss.toString(),
+                                    style: gameStatsFontStyle,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
                   ),
                 if (entry.tournamentNb != null)
                   PlatformListTile(
@@ -519,7 +607,19 @@ class Activity extends ConsumerWidget {
                       color: LichessColors.brag,
                     ),
                     title: Text(
-                        "Competed in ${entry.tournamentNb} tournament${entry.tournamentNb == 1 ? '' : 's'}",),
+                      "Competed in ${entry.tournamentNb} tournament${entry.tournamentNb == 1 ? '' : 's'}",
+                    ),
+                    dense: true,
+                  ),
+                if (entry.followIn!.isNotEmpty)
+                  PlatformListTile(
+                    leading: const Icon(
+                      Icons.thumb_up,
+                      color: LichessColors.brag,
+                    ),
+                    title: Text(
+                      "Gained ${(entry.followIn!.length == 15 && entry.followInNb != null) ? entry.followInNb : entry.followIn!.length} follower${entry.followIn!.length == 1 ? '' : 's'}",
+                    ),
                     dense: true,
                   ),
               ],

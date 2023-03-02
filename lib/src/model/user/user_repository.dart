@@ -88,15 +88,18 @@ UserActitity _userActitityFromPick(RequiredPick pick) {
       pick('follows', 'in', 'ids')
           .asListOrNull((p0) => pick(p0).asStringOrNull()),
     ),
+    followInNb: pick('follows', 'in', 'nb').asIntOrNull(),
     followOut: IList(
       pick('follows', 'out', 'ids')
           .asListOrNull((p0) => pick(p0).asStringOrNull()),
     ),
+    followOutNb: pick('follows', 'in', 'nb').asIntOrNull(),
     tournament: IList(
       pick('tournaments', 'best')
           .asListOrNull((p0) => UserActivityTournament.fromPick(p0)),
     ),
     tournamentNb: pick('tournaments', 'nb').asIntOrNull(),
+    puzzle: pick('puzzles', 'score').letOrNull(UserActitityGameScore.fromPick),
   );
 }
 

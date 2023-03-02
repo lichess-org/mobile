@@ -212,9 +212,12 @@ class UserActitity with _$UserActitity {
     required DateTime endTime,
     IMap<Perf, UserActitityGameScore>? games,
     IList<String?>? followIn,
+    int? followInNb,
     IList<String?>? followOut,
+    int? followOutNb,
     IList<UserActivityTournament?>? tournament,
     int? tournamentNb,
+    UserActitityGameScore? puzzle,
   }) = _UserActitity;
 }
 
