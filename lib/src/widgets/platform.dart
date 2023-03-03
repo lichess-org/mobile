@@ -131,6 +131,7 @@ class PlatformListTile extends StatelessWidget {
     this.dense,
     this.onTap,
     this.selected = false,
+    this.isThreeLine = false,
   });
 
   final Widget? leading;
@@ -147,6 +148,9 @@ class PlatformListTile extends StatelessWidget {
   // only on android
   final bool? dense;
 
+  // only on android
+  final bool isThreeLine;
+
   final GestureTapCallback? onTap;
 
   @override
@@ -161,6 +165,7 @@ class PlatformListTile extends StatelessWidget {
           dense: dense,
           onTap: onTap,
           selected: selected,
+          isThreeLine: isThreeLine,
         );
       case TargetPlatform.iOS:
         return IconTheme(

@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
@@ -38,7 +39,6 @@ class ArchivedGameScreen extends ConsumerWidget {
   }
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    final isSoundMuted = ref.watch(muteSoundPrefProvider);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -48,12 +48,7 @@ class ArchivedGameScreen extends ConsumerWidget {
           },
         ),
         actions: [
-          IconButton(
-            icon: isSoundMuted
-                ? const Icon(Icons.volume_off)
-                : const Icon(Icons.volume_up),
-            onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
-          )
+          SoundButton(),
         ],
       ),
       body: _BoardBody(
@@ -65,7 +60,6 @@ class ArchivedGameScreen extends ConsumerWidget {
   }
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    final isSoundMuted = ref.watch(muteSoundPrefProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 16.0),
@@ -76,13 +70,7 @@ class ArchivedGameScreen extends ConsumerWidget {
           },
           child: const Icon(CupertinoIcons.back),
         ),
-        trailing: CupertinoButton(
-          padding: EdgeInsets.zero,
-          child: isSoundMuted
-              ? const Icon(CupertinoIcons.volume_off)
-              : const Icon(CupertinoIcons.volume_up),
-          onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
-        ),
+        trailing: SoundButton(),
       ),
       child: SafeArea(
         child: Column(

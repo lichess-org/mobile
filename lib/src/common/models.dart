@@ -1,16 +1,30 @@
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 part 'models.freezed.dart';
 part 'models.g.dart';
 
-/// Move represented with Standard Algebraic Notation
-typedef SANMove = String;
-
 /// Move represented with UCI notation
 typedef UCIMove = String;
+
+/// Represents a [Move] with its associated SAN.
+@Freezed(fromJson: true, toJson: true, toStringOverride: false)
+class SanMove with _$SanMove {
+  const factory SanMove({
+    required String san,
+    @JsonKey(fromJson: _moveFromJson, toJson: _moveToJson) required Move move,
+  }) = _SanMove;
+
+  factory SanMove.fromJson(Map<String, dynamic> json) =>
+      _$SanMoveFromJson(json);
+}
+
+String _moveToJson(Move move) => move.uci;
+// assume we are serializing only valid uci strings
+Move _moveFromJson(String uci) => Move.fromUci(uci)!;
 
 /// Represents a lichess rating perf item
 enum Perf {
@@ -101,6 +115,53 @@ enum DefaultGameClock {
   const DefaultGameClock(this.value, this.perf);
   final TimeIncrement value;
   final Perf perf;
+}
+
+/// UciCharPair from scalachess
+@Freezed(fromJson: true, toJson: true, toStringOverride: false)
+class UciCharPair with _$UciCharPair {
+  const UciCharPair._();
+
+  const factory UciCharPair(String a, String b) = _UciCharPair;
+
+  factory UciCharPair.fromMove(Move move) {
+    if (move is DropMove) {
+      final roles = [
+        Role.queen,
+        Role.rook,
+        Role.bishop,
+        Role.knight,
+        Role.pawn
+      ];
+      return UciCharPair(
+        String.fromCharCode(35 + move.to),
+        String.fromCharCode(35 + 64 + 8 * 5 + roles.indexOf(move.role)),
+      );
+    } else if (move is NormalMove) {
+      final roles = [
+        Role.queen,
+        Role.rook,
+        Role.bishop,
+        Role.knight,
+        Role.king
+      ];
+      final b = move.promotion != null
+          ? 35 + 64 + 8 * roles.indexOf(move.promotion!) + squareFile(move.to)
+          : 35 + move.to;
+      return UciCharPair(
+        String.fromCharCode(35 + move.from),
+        String.fromCharCode(b),
+      );
+    }
+
+    return const UciCharPair('0', '0');
+  }
+
+  factory UciCharPair.fromJson(Map<String, dynamic> json) =>
+      _$UciCharPairFromJson(json);
+
+  @override
+  String toString() => '$a$b';
 }
 
 @Freezed(fromJson: true, toJson: true, toStringOverride: false)
