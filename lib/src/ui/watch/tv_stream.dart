@@ -38,7 +38,6 @@ class TvStream extends ConsumerWidget {
       appBar: AppBar(
         title: InkWell(
           onTap: () {
-            print("Title Text CLicked");
             showChoices(context, ['a', 'b', 'c']);
           },
           child: Text("Lichess TV ++"),
@@ -63,6 +62,12 @@ class TvStream extends ConsumerWidget {
     final isSoundMuted = ref.watch(muteSoundPrefProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        middle: InkWell(
+          onTap: () {
+            showChoices(context, ['a', 'b', 'c']);
+          },
+          child: Text("Lichess TV ++"),
+        ),
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
           child: isSoundMuted
@@ -171,7 +176,7 @@ class _Body extends ConsumerWidget {
 }
 
 void showChoices(BuildContext context, List<String> choices) {
-  const TargetPlatform defaultTargetPlatform = TargetPlatform.android;
+  const TargetPlatform defaultTargetPlatform = TargetPlatform.iOS;
 
   switch (defaultTargetPlatform) {
     // defaultTargetPlatform
