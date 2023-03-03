@@ -57,7 +57,7 @@ class _WatchScreenState extends ConsumerState<WatchScreen> {
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        childAspectRatio: 0.98,
+                        childAspectRatio: 0.92,
                       ),
                       children: const [
                         _WatchTvWidget(),
@@ -97,7 +97,7 @@ class _WatchScreenState extends ConsumerState<WatchScreen> {
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            childAspectRatio: 0.98,
+                            childAspectRatio: 0.92,
                           ),
                           delegate: SliverChildListDelegate(
                             const [

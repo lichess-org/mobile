@@ -5,7 +5,6 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
-import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
@@ -35,6 +34,7 @@ class LeaderboardScreen extends StatelessWidget {
                 sliver: constraints.maxWidth > kLargeScreenWidth
                     ? SliverGrid(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          // TODO change for a solution that let have dynamic heights
                           mainAxisExtent: 644,
                           crossAxisCount: (constraints.maxWidth / 300).floor(),
                         ),
