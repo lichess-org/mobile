@@ -4,27 +4,67 @@ import 'package:flutter/cupertino.dart';
 import 'package:chessground/chessground.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
 
-class BoardPreview extends ConsumerWidget {
+/// A simple board preview widget that is not interactable.
+class BoardPreview extends ConsumerStatefulWidget {
   const BoardPreview({
-    required this.boardData,
+    required this.orientation,
+    required this.fen,
+    this.header,
+    this.margin,
+    this.lastMove,
     this.errorMessage,
+    this.onTap,
   });
 
-  final BoardData boardData;
+  /// Side by which the board is oriented.
+  final Side orientation;
+
+  /// FEN string describing the position of the board.
+  final String fen;
+
+  /// Last move played, used to highlight corresponding squares.
+  final Move? lastMove;
+
+  /// An optional error message to display over the board.
   final String? errorMessage;
 
+  /// Show a header above the board. Typically a [Text] widget.
+  final Widget? header;
+
+  final EdgeInsetsGeometry? margin;
+
+  final GestureTapCallback? onTap;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _BoardPreviewState createState() => _BoardPreviewState();
+}
+
+class _BoardPreviewState extends ConsumerState<BoardPreview> {
+  double scale = 1.0;
+
+  void _onTapDown() {
+    if (widget.onTap == null) return;
+    setState(() => scale = 0.97);
+  }
+
+  void _onTapCancel() {
+    if (widget.onTap == null) return;
+    setState(() => scale = 1.00);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final pieceSet = ref.watch(pieceSetPrefProvider);
     final boardColor = ref.watch(boardThemePrefProvider);
-    return LayoutBuilder(
+
+    final board = LayoutBuilder(
       builder: (context, constraints) {
         final boardSize = constraints.biggest.shortestSide;
 
-        final error = errorMessage != null
+        final error = widget.errorMessage != null
             ? Center(
                 child: Container(
                   decoration: BoxDecoration(
@@ -36,7 +76,7 @@ class BoardPreview extends ConsumerWidget {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: Text(errorMessage!),
+                    child: Text(widget.errorMessage!),
                   ),
                 ),
               )
@@ -51,7 +91,12 @@ class BoardPreview extends ConsumerWidget {
           ),
           child: Board(
             size: boardSize,
-            data: boardData,
+            data: BoardData(
+              interactableSide: InteractableSide.none,
+              fen: widget.fen,
+              orientation: widget.orientation,
+              lastMove: widget.lastMove,
+            ),
             settings: BoardSettings(
               enableCoordinates: false,
               animationDuration: const Duration(milliseconds: 150),
@@ -73,6 +118,51 @@ class BoardPreview extends ConsumerWidget {
               )
             : board;
       },
+    );
+
+    final maybeTappableBoard = widget.onTap != null
+        ? GestureDetector(
+            onTap: widget.onTap,
+            onTapDown: (_) => _onTapDown(),
+            onTapCancel: _onTapCancel,
+            onTapUp: (_) => _onTapCancel(),
+            child: AnimatedScale(
+              scale: scale,
+              duration: const Duration(milliseconds: 100),
+              child: board,
+            ),
+          )
+        : board;
+
+    final headerWidget = widget.header != null
+        ? Padding(
+            padding: const EdgeInsets.only(bottom: 6.0),
+            child: defaultTargetPlatform == TargetPlatform.android
+                ? DefaultTextStyle.merge(
+                    style: Styles.sectionTitle,
+                    child: widget.header!,
+                  )
+                : DefaultTextStyle(
+                    style: CupertinoTheme.of(context)
+                        .textTheme
+                        .textStyle
+                        .merge(Styles.sectionTitle),
+                    child: widget.header!,
+                  ),
+          )
+        : null;
+
+    return Padding(
+      padding: widget.margin ?? Styles.bodySectionPadding,
+      child: headerWidget != null
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                headerWidget,
+                maybeTappableBoard,
+              ],
+            )
+          : maybeTappableBoard,
     );
   }
 }

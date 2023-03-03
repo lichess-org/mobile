@@ -126,50 +126,33 @@ class _WatchTvWidget extends ConsumerWidget {
         ? ref.watch(tvStreamProvider(false))
         : const AsyncLoading<FeaturedPosition>();
     final featuredGame = ref.watch(featuredGameProvider);
-    return Padding(
-      padding: Styles.bodySectionPadding,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Lichess TV', style: Styles.sectionTitle),
-          tvStream.when(
-            data: (position) {
-              return GestureDetector(
-                onTap: () => Navigator.of(context).push<void>(
-                  MaterialPageRoute(builder: (context) => const TvScreen()),
-                ),
-                child: BoardPreview(
-                  boardData: BoardData(
-                    interactableSide: InteractableSide.none,
-                    orientation: featuredGame?.orientation.cg ?? Side.white,
-                    fen: position.fen,
-                    lastMove: position.lastMove?.cg,
-                  ),
-                ),
-              );
-            },
-            error: (err, stackTrace) {
-              debugPrint(
-                'SEVERE: [WatchTvWidget] could not load tv stream; $err\n$stackTrace',
-              );
-              return const BoardPreview(
-                boardData: BoardData(
-                  interactableSide: InteractableSide.none,
-                  orientation: Side.white,
-                  fen: kEmptyFen,
-                ),
-                errorMessage: 'Could not load Tv Stream',
-              );
-            },
-            loading: () => const BoardPreview(
-              boardData: BoardData(
-                interactableSide: InteractableSide.none,
-                orientation: Side.white,
-                fen: kEmptyFen,
-              ),
-            ),
+    return tvStream.when(
+      data: (position) {
+        return BoardPreview(
+          header: Text('Lichess TV', style: Styles.sectionTitle),
+          onTap: () => Navigator.of(context).push<void>(
+            MaterialPageRoute(builder: (context) => const TvScreen()),
           ),
-        ],
+          orientation: featuredGame?.orientation.cg ?? Side.white,
+          fen: position.fen,
+          lastMove: position.lastMove?.cg,
+        );
+      },
+      error: (err, stackTrace) {
+        debugPrint(
+          'SEVERE: [WatchTvWidget] could not load tv stream; $err\n$stackTrace',
+        );
+        return BoardPreview(
+          header: Text('Lichess TV', style: Styles.sectionTitle),
+          orientation: Side.white,
+          fen: kEmptyFen,
+          errorMessage: 'Could not load Tv Stream',
+        );
+      },
+      loading: () => BoardPreview(
+        header: Text('Lichess TV', style: Styles.sectionTitle),
+        orientation: Side.white,
+        fen: kEmptyFen,
       ),
     );
   }
@@ -207,7 +190,10 @@ class _StreamerWidget extends ConsumerWidget {
         debugPrint(
           'SEVERE: [StreamerWidget] could not load streamer data; $error\n $stackTrace',
         );
-        return const Text('Could not load live streamers');
+        return Padding(
+          padding: Styles.bodySectionPadding,
+          child: const Text('Could not load live streamers'),
+        );
       },
       loading: () => const CenterLoadingIndicator(),
     );

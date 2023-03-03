@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:lichess_mobile/src/common/tree.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/chess.dart';
@@ -8,8 +9,29 @@ import 'package:lichess_mobile/src/common/chess.dart';
 part 'puzzle.freezed.dart';
 part 'puzzle.g.dart';
 
+@freezed
+class PuzzlePreview with _$PuzzlePreview {
+  const factory PuzzlePreview({
+    required Side orientation,
+    required String initialFen,
+    required Move initialMove,
+  }) = _PuzzlePreview;
+
+  factory PuzzlePreview.fromPuzzle(Puzzle puzzle) {
+    final root = Root.fromPgn(puzzle.game.pgn);
+    final node = root.nodeAt(root.mainlinePath) as Node;
+    return PuzzlePreview(
+      orientation: node.ply.isEven ? Side.white : Side.black,
+      initialFen: node.position.fen,
+      initialMove: node.sanMove.move,
+    );
+  }
+}
+
 @Freezed(fromJson: true, toJson: true)
 class Puzzle with _$Puzzle {
+  const Puzzle._();
+
   const factory Puzzle({
     required PuzzleData puzzle,
     required PuzzleGame game,

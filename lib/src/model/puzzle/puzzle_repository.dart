@@ -39,7 +39,7 @@ class PuzzleRepository {
   }) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb'))
-        .flatMap(_decodeJson);
+        .flatMap(_decodeJsonList);
   }
 
   FutureResult<IList<Puzzle>> solveBatch({
@@ -63,10 +63,20 @@ class PuzzleRepository {
                 .toList(),
           }),
         )
-        .flatMap(_decodeJson);
+        .flatMap(_decodeJsonList);
   }
 
-  Result<IList<Puzzle>> _decodeJson(http.Response response) {
+  FutureResult<Puzzle> daily() {
+    return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/daily')).flatMap(
+          (response) => readJsonObject(
+            response.body,
+            mapper: _puzzleFromJson,
+            logger: _log,
+          ),
+        );
+  }
+
+  Result<IList<Puzzle>> _decodeJsonList(http.Response response) {
     return readJsonObject(
       response.body,
       mapper: (Map<String, dynamic> json) {

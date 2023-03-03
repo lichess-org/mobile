@@ -26,12 +26,17 @@ class PuzzlesScreen extends StatelessWidget {
     required this.theme,
     this.userId,
     this.puzzle,
+    this.isDailyPuzzle = false,
     super.key,
-  });
+  }) : assert(
+          puzzle == null || userId != null,
+          'userId must be provided when puzzle is provided!',
+        );
 
   final UserId? userId;
   final Puzzle? puzzle;
   final PuzzleTheme theme;
+  final bool isDailyPuzzle;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +50,9 @@ class PuzzlesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [ToggleSoundButton()],
-        title: Text(puzzleThemeL10n(context, theme).name),
+        title: isDailyPuzzle
+            ? const Text('Daily Puzzle')
+            : Text(puzzleThemeL10n(context, theme).name),
       ),
       body: puzzle != null
           ? _Body(userId: userId, puzzle: puzzle!, theme: theme)
@@ -56,7 +63,9 @@ class PuzzlesScreen extends StatelessWidget {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(puzzleThemeL10n(context, theme).name),
+        middle: isDailyPuzzle
+            ? const Text('Daily Puzzle')
+            : Text(puzzleThemeL10n(context, theme).name),
         trailing: ToggleSoundButton(),
       ),
       child: puzzle != null
