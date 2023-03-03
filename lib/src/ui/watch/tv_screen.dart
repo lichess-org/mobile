@@ -36,7 +36,7 @@ class TvScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Top Rated'),
         actions: [
-          SoundButton(),
+          ToggleSoundButton(),
         ],
       ),
       body: const _Body(),
@@ -50,7 +50,7 @@ class TvScreen extends ConsumerWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: const Text('Top Rated'),
-        trailing: SoundButton(),
+        trailing: ToggleSoundButton(),
       ),
       child: const _Body(),
     );

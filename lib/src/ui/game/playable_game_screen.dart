@@ -73,7 +73,7 @@ class PlayableGameScreen extends ConsumerWidget {
           },
         ),
         actions: [
-          SoundButton(),
+          ToggleSoundButton(),
         ],
       ),
       body: _BoardBody(game: game),
@@ -97,7 +97,7 @@ class PlayableGameScreen extends ConsumerWidget {
           },
           child: const Icon(CupertinoIcons.back),
         ),
-        trailing: SoundButton(),
+        trailing: ToggleSoundButton(),
       ),
       child: SafeArea(
         child: Column(

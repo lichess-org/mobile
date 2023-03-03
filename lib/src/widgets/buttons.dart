@@ -174,7 +174,7 @@ class _CardButtonState extends State<CardButton> {
   }
 }
 
-class SoundButton extends ConsumerWidget {
+class ToggleSoundButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isSoundMuted = ref.watch(muteSoundPrefProvider);

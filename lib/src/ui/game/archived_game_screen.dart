@@ -48,7 +48,7 @@ class ArchivedGameScreen extends ConsumerWidget {
           },
         ),
         actions: [
-          SoundButton(),
+          ToggleSoundButton(),
         ],
       ),
       body: _BoardBody(
@@ -70,7 +70,7 @@ class ArchivedGameScreen extends ConsumerWidget {
           },
           child: const Icon(CupertinoIcons.back),
         ),
-        trailing: SoundButton(),
+        trailing: ToggleSoundButton(),
       ),
       child: SafeArea(
         child: Column(

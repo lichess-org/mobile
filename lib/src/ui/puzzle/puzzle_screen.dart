@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -43,6 +44,7 @@ class PuzzlesScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [ToggleSoundButton()],
         title: Text(puzzleThemeL10n(context, theme).name),
       ),
       body: puzzle != null
@@ -55,6 +57,7 @@ class PuzzlesScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(puzzleThemeL10n(context, theme).name),
+        trailing: ToggleSoundButton(),
       ),
       child: puzzle != null
           ? _Body(userId: userId, puzzle: puzzle!, theme: theme)
