@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'user_repository.dart';
 import 'user.dart';
+import 'streamer.dart';
 
 part 'user_repository_providers.g.dart';
 
@@ -44,4 +45,10 @@ Future<IList<UserStatus>> userStatuses(
   ref.cacheFor(RequestCacheDuration.short);
   final repo = ref.watch(userRepositoryProvider);
   return Result.release(repo.getUsersStatuses(ids));
+}
+
+@riverpod
+Future<IList<Streamer>> liveStreamers(LiveStreamersRef ref) {
+  final repo = ref.watch(userRepositoryProvider);
+  return Result.release(repo.getLiveStreamers());
 }

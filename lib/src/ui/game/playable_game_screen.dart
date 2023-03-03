@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/board/play_action_notifier.dart';
 import 'package:lichess_mobile/src/model/board/board_providers.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class PlayableGameScreen extends ConsumerWidget {
   const PlayableGameScreen({
@@ -58,7 +59,6 @@ class PlayableGameScreen extends ConsumerWidget {
   }
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    final isSoundMuted = ref.watch(muteSoundPrefProvider);
     final gameState = ref.watch(boardStateProvider);
     return Scaffold(
       appBar: AppBar(
@@ -73,12 +73,7 @@ class PlayableGameScreen extends ConsumerWidget {
           },
         ),
         actions: [
-          IconButton(
-            icon: isSoundMuted
-                ? const Icon(Icons.volume_off)
-                : const Icon(Icons.volume_up),
-            onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
-          )
+          SoundButton(),
         ],
       ),
       body: _BoardBody(game: game),
@@ -87,7 +82,6 @@ class PlayableGameScreen extends ConsumerWidget {
   }
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    final isSoundMuted = ref.watch(muteSoundPrefProvider);
     final gameState = ref.watch(boardStateProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -103,13 +97,7 @@ class PlayableGameScreen extends ConsumerWidget {
           },
           child: const Icon(CupertinoIcons.back),
         ),
-        trailing: CupertinoButton(
-          padding: EdgeInsets.zero,
-          child: isSoundMuted
-              ? const Icon(CupertinoIcons.volume_off)
-              : const Icon(CupertinoIcons.volume_up),
-          onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
-        ),
+        trailing: SoundButton(),
       ),
       child: SafeArea(
         child: Column(

@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/settings/providers.dart';
 
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -169,5 +171,33 @@ class _CardButtonState extends State<CardButton> {
         ),
       ),
     );
+  }
+}
+
+class SoundButton extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isSoundMuted = ref.watch(muteSoundPrefProvider);
+
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return IconButton(
+          icon: isSoundMuted
+              ? const Icon(Icons.volume_off)
+              : const Icon(Icons.volume_up),
+          onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
+        );
+      case TargetPlatform.iOS:
+        return CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: isSoundMuted
+              ? const Icon(CupertinoIcons.volume_off)
+              : const Icon(CupertinoIcons.volume_up),
+          onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
+        );
+      default:
+        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        return const SizedBox.shrink();
+    }
   }
 }

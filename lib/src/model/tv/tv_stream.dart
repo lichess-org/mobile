@@ -6,13 +6,15 @@ import 'featured_position.dart';
 import 'tv_repository.dart';
 import 'featured_game_notifier.dart';
 
-final tvStreamProvider = StreamProvider.autoDispose<FeaturedPosition>((ref) {
+final tvStreamProvider =
+    StreamProvider.autoDispose.family<FeaturedPosition, bool>((ref, withSound) {
   final soundService = ref.watch(soundServiceProvider);
   final tvRepository = ref.watch(tvRepositoryProvider);
   final featuredGameNotifier = ref.read(featuredGameProvider.notifier);
   ref.onDispose(() {
     tvRepository.dispose();
   });
+
   return tvRepository.tvFeed().map((event) {
     return event.map(
       featured: (featuredEvent) {
@@ -21,7 +23,9 @@ final tvStreamProvider = StreamProvider.autoDispose<FeaturedPosition>((ref) {
       },
       fen: (fenEvent) {
         featuredGameNotifier.onFenEvent(fenEvent);
-        soundService.playMove();
+        if (withSound) {
+          soundService.playMove();
+        }
         return FeaturedPosition.fromTvEvent(fenEvent);
       },
     );
