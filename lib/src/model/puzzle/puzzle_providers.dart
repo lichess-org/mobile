@@ -26,7 +26,7 @@ Future<Tuple2<Puzzle?, UserId?>> nextPuzzle(
 }
 
 @riverpod
-Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) async {
+Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
   final repo = ref.watch(puzzleRepositoryProvider);
   return Result.release(repo.daily());
 }
