@@ -10,22 +10,6 @@ part 'models.g.dart';
 /// Move represented with UCI notation
 typedef UCIMove = String;
 
-/// Represents a [Move] with its associated SAN.
-@Freezed(fromJson: true, toJson: true, toStringOverride: false)
-class SanMove with _$SanMove {
-  const factory SanMove({
-    required String san,
-    @JsonKey(fromJson: _moveFromJson, toJson: _moveToJson) required Move move,
-  }) = _SanMove;
-
-  factory SanMove.fromJson(Map<String, dynamic> json) =>
-      _$SanMoveFromJson(json);
-}
-
-String _moveToJson(Move move) => move.uci;
-// assume we are serializing only valid uci strings
-Move _moveFromJson(String uci) => Move.fromUci(uci)!;
-
 /// Represents a lichess rating perf item
 enum Perf {
   ultraBullet('UltraBullet', 'Ultra', LichessIcons.ultrabullet),
