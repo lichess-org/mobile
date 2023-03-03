@@ -5,8 +5,7 @@ enum SoundTheme {
   futuristic("Futuristic"),
   lisp("Lisp"),
   robot("Robot"),
-  music("Pentatonic"),
-  speech("Speech");
+  standard("Standard");
 
   final String label;
 
@@ -26,10 +25,8 @@ enum SoundTheme {
         return "lisp";
       case robot:
         return "robot";
-      case music:
-        return "music";
-      case speech:
-        return "speech";
+      case standard:
+        return "standard";
     }
   }
 }

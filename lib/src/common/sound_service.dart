@@ -11,7 +11,7 @@ part 'sound_service.g.dart';
 enum Sound {
   move("Move"),
   capture("Capture"),
-  dong("Victory"); //Dong does not exist in given Dataset
+  dong("Dong");
 
   final String label;
   const Sound(this.label);

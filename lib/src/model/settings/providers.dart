@@ -87,9 +87,9 @@ final soundThemePrefProvider = createPrefProvider<SoundTheme>(
   defaultValue: SoundTheme.piano,
   mapFrom: (string) {
     if (string != null) {
-      return _soundThemeNameMap.get(string) ?? SoundTheme.music;
+      return _soundThemeNameMap.get(string) ?? SoundTheme.standard;
     } else {
-      return SoundTheme.music;
+      return SoundTheme.standard;
     }
   },
   mapTo: (SoundTheme soundTheme) => soundTheme.name,
@@ -105,8 +105,8 @@ SoundTheme currentSelectedSoundTheme(CurrentSelectedSoundThemeRef ref) {
       return SoundTheme.futuristic;
     case SoundTheme.lisp:
       return SoundTheme.lisp;
-    case SoundTheme.music:
-      return SoundTheme.music;
+    case SoundTheme.standard:
+      return SoundTheme.standard;
     case SoundTheme.nes:
       return SoundTheme.nes;
     case SoundTheme.piano:
@@ -115,9 +115,7 @@ SoundTheme currentSelectedSoundTheme(CurrentSelectedSoundThemeRef ref) {
       return SoundTheme.robot;
     case SoundTheme.sfx:
       return SoundTheme.sfx;
-    case SoundTheme.speech:
-      return SoundTheme.speech;
     default:
-      return SoundTheme.music;
+      return SoundTheme.standard;
   }
 }
