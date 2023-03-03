@@ -16,10 +16,9 @@ import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
 
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/ui/watch/tv_stream.dart';
 
-class TvScreen extends ConsumerWidget {
-  const TvScreen({super.key});
+class TvStream extends ConsumerWidget {
+  const TvStream({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,7 +36,13 @@ class TvScreen extends ConsumerWidget {
     final isSoundMuted = ref.watch(muteSoundPrefProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lichess TV'),
+        title: InkWell(
+          onTap: () {
+            print("Title Text CLicked");
+            showChoices(context, ['a', 'b', 'c']);
+          },
+          child: Text("Lichess TV ++"),
+        ),
         actions: [
           IconButton(
             icon: isSoundMuted
@@ -121,27 +126,15 @@ class _Body extends ConsumerWidget {
                         position.turn == bottomPlayer.side,
                   )
                 : kEmptyWidget;
-            return ListSection(
-              header: Text("Lichess TV"),
-              children: [
-                GameBoardLayout(
-                  boardData: boardData,
-                  boardSettings: BoardSettings(
-                    animationDuration: Duration.zero,
-                    pieceAssets: pieceSet.assets,
-                    colorScheme: boardTheme.colors,
-                  ),
-                  topPlayer: topPlayerWidget,
-                  bottomPlayer: bottomPlayerWidget,
-                ),
-              ],
-              onHeaderTap: () {
-                Navigator.of(context).push<void>(
-                  MaterialPageRoute(
-                    builder: (context) => TvStream(),
-                  ),
-                );
-              },
+            return GameBoardLayout(
+              boardData: boardData,
+              boardSettings: BoardSettings(
+                animationDuration: Duration.zero,
+                pieceAssets: pieceSet.assets,
+                colorScheme: boardTheme.colors,
+              ),
+              topPlayer: topPlayerWidget,
+              bottomPlayer: bottomPlayerWidget,
             );
           },
           loading: () => GameBoardLayout(
@@ -174,5 +167,81 @@ class _Body extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+void showChoices(BuildContext context, List<String> choices) {
+  const TargetPlatform defaultTargetPlatform = TargetPlatform.android;
+
+  switch (defaultTargetPlatform) {
+    // defaultTargetPlatform
+    case TargetPlatform.android:
+      showDialog<void>(
+        context: context,
+        builder: (context) {
+          int? selectedRadio = 1;
+          return AlertDialog(
+            contentPadding: const EdgeInsets.only(top: 12),
+            content: StatefulBuilder(
+              builder: (context, setState) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: List<Widget>.generate(choices.length, (index) {
+                    return RadioListTile<int?>(
+                      title: Text(choices[index]),
+                      value: index,
+                      groupValue: selectedRadio,
+                      onChanged: (value) {
+                        setState(() => selectedRadio = value);
+                      },
+                    );
+                  }),
+                );
+              },
+            ),
+            actions: [
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              TextButton(
+                child: const Text('CANCEL'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    case TargetPlatform.iOS:
+      showCupertinoModalPopup<void>(
+        context: context,
+        builder: (context) {
+          return SizedBox(
+            height: 250,
+            child: CupertinoPicker(
+              backgroundColor: Theme.of(context).canvasColor,
+              useMagnifier: true,
+              magnification: 1.1,
+              itemExtent: 40,
+              scrollController: FixedExtentScrollController(initialItem: 1),
+              children: List<Widget>.generate(choices.length, (index) {
+                return Center(
+                  child: Text(
+                    choices[index],
+                    style: const TextStyle(
+                      fontSize: 21,
+                    ),
+                  ),
+                );
+              }),
+              onSelectedItemChanged: (value) {},
+            ),
+          );
+        },
+      );
+      return;
+    default:
+      assert(false, 'Unexpected platform $defaultTargetPlatform');
   }
 }
