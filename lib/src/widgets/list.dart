@@ -47,12 +47,13 @@ class ListSection extends StatelessWidget {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return Padding(
-          padding: margin ?? EdgeInsets.zero,
+          padding: margin ?? Styles.sectionBottomPadding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (header != null)
                 ListTile(
+                  dense: true,
                   title: DefaultTextStyle.merge(
                     style: Styles.sectionTitle,
                     child: header!,

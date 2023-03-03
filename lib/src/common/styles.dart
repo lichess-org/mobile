@@ -20,11 +20,12 @@ abstract class Styles {
   /// Gets horizontal padding according to platform.
   static const horizontalBodyPadding = EdgeInsets.symmetric(horizontal: 16.0);
 
-  static const sectionBottomPadding = EdgeInsets.only(bottom: 20);
+  static const sectionBottomPadding = EdgeInsets.only(bottom: 16);
+  static const sectionTopPadding = EdgeInsets.only(top: 16);
 
   /// Horizontal and bottom padding for a body section
   static EdgeInsetsGeometry get bodySectionPadding =>
-      horizontalBodyPadding.add(sectionBottomPadding);
+      horizontalBodyPadding.add(sectionBottomPadding).add(sectionTopPadding);
 }
 
 /// Retrieve the default text color and apply an opacity to it.

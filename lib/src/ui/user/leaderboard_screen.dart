@@ -29,27 +29,22 @@ class LeaderboardScreen extends StatelessWidget {
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          return Padding(
-            padding: Styles.verticalBodyPadding,
-            child: CustomScrollView(
-              slivers: [
-                SliverSafeArea(
-                  sliver: constraints.maxWidth > kLargeScreenWidth
-                      ? SliverGrid(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            mainAxisExtent: 644,
-                            crossAxisCount:
-                                (constraints.maxWidth / 300).floor(),
-                          ),
-                          delegate: SliverChildListDelegate(_buildList()),
-                        )
-                      : SliverList(
-                          delegate: SliverChildListDelegate(_buildList()),
+          return CustomScrollView(
+            slivers: [
+              SliverSafeArea(
+                sliver: constraints.maxWidth > kLargeScreenWidth
+                    ? SliverGrid(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          mainAxisExtent: 644,
+                          crossAxisCount: (constraints.maxWidth / 300).floor(),
                         ),
-                ),
-              ],
-            ),
+                        delegate: SliverChildListDelegate(_buildList()),
+                      )
+                    : SliverList(
+                        delegate: SliverChildListDelegate(_buildList()),
+                      ),
+              ),
+            ],
           );
         },
       ),
@@ -252,7 +247,7 @@ class _Leaderboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: Styles.sectionBottomPadding,
+      padding: const EdgeInsets.only(bottom: 6),
       child: ListSection(
         hasLeading: true,
         showDivider: showDivider,

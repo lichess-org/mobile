@@ -30,7 +30,6 @@ class HomeScreen extends StatelessWidget {
       ),
       body: _HomeScaffold(
         child: ListView(
-          padding: Styles.verticalBodyPadding,
           children: [
             LeaderboardWidget(),
           ],
@@ -51,11 +50,8 @@ class HomeScreen extends StatelessWidget {
             ),
             SliverSafeArea(
               top: false,
-              sliver: SliverPadding(
-                padding: Styles.verticalBodyPadding,
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate([LeaderboardWidget()]),
-                ),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([LeaderboardWidget()]),
               ),
             ),
           ],

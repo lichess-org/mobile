@@ -110,14 +110,10 @@ class UserScreenBody extends StatelessWidget {
     ];
 
     return inCustomScrollView
-        ? SliverPadding(
-            padding: Styles.verticalBodyPadding,
-            sliver: SliverList(
-              delegate: SliverChildListDelegate(list),
-            ),
+        ? SliverList(
+            delegate: SliverChildListDelegate(list),
           )
         : ListView(
-            padding: Styles.verticalBodyPadding,
             children: list,
           );
   }
