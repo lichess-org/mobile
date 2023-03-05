@@ -186,6 +186,9 @@ class _StreamerWidget extends ConsumerWidget {
 
     return streamerState.when(
       data: (data) {
+        if (data.isEmpty) {
+          return const SizedBox.shrink();
+        }
         return ListSection(
           header: Text(context.l10n.lichessStreamers),
           hasLeading: true,
