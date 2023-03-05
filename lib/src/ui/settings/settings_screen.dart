@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/common/package_info.dart';
+import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
@@ -57,6 +59,7 @@ class _Body extends ConsumerWidget {
     final userSession = ref.watch(userSessionStateProvider);
     final pieceSet = ref.watch(pieceSetPrefProvider);
     final boardTheme = ref.watch(boardThemePrefProvider);
+    final packageInfo = ref.watch(packageInfoProvider);
 
     return SafeArea(
       child: ListView(
@@ -138,6 +141,13 @@ class _Body extends ConsumerWidget {
                   ),
                 ],
               ),
+          Padding(
+            padding: Styles.horizontalBodyPadding,
+            child: Text(
+              'v${packageInfo.version} (${packageInfo.buildNumber})',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ),
         ],
       ),
     );
