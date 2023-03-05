@@ -6,7 +6,7 @@ import 'package:chessground/chessground.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
+import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -107,20 +107,20 @@ class _Body extends ConsumerWidget {
                         position.turn == bottomPlayer.side,
                   )
                 : kEmptyWidget;
-            return GameBoardLayout(
+            return TableBoardLayout(
               boardData: boardData,
               boardSettings: BoardSettings(
                 animationDuration: Duration.zero,
                 pieceAssets: pieceSet.assets,
                 colorScheme: boardTheme.colors,
               ),
-              topPlayer: topPlayerWidget,
-              bottomPlayer: bottomPlayerWidget,
+              topTable: topPlayerWidget,
+              bottomTable: bottomPlayerWidget,
             );
           },
-          loading: () => GameBoardLayout(
-            topPlayer: kEmptyWidget,
-            bottomPlayer: kEmptyWidget,
+          loading: () => TableBoardLayout(
+            topTable: kEmptyWidget,
+            bottomTable: kEmptyWidget,
             boardSettings: BoardSettings(
               colorScheme: boardTheme.colors,
             ),
@@ -134,9 +134,9 @@ class _Body extends ConsumerWidget {
             debugPrint(
               'SEVERE: [TvScreen] could not load stream; $err\n$stackTrace',
             );
-            return const GameBoardLayout(
-              topPlayer: kEmptyWidget,
-              bottomPlayer: kEmptyWidget,
+            return const TableBoardLayout(
+              topTable: kEmptyWidget,
+              bottomTable: kEmptyWidget,
               boardData: BoardData(
                 fen: kEmptyFen,
                 interactableSide: InteractableSide.none,

@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
+import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -88,9 +88,9 @@ class _LoadPuzzle extends ConsumerWidget {
       data: (data) {
         if (data.item1 == null) {
           return const Center(
-            child: GameBoardLayout(
-              topPlayer: kEmptyWidget,
-              bottomPlayer: kEmptyWidget,
+            child: TableBoardLayout(
+              topTable: kEmptyWidget,
+              bottomTable: kEmptyWidget,
               boardData: cg.BoardData(
                 fen: kEmptyFen,
                 interactableSide: cg.InteractableSide.none,
@@ -109,9 +109,9 @@ class _LoadPuzzle extends ConsumerWidget {
           'SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s',
         );
         return Center(
-          child: GameBoardLayout(
-            topPlayer: kEmptyWidget,
-            bottomPlayer: kEmptyWidget,
+          child: TableBoardLayout(
+            topTable: kEmptyWidget,
+            bottomTable: kEmptyWidget,
             boardData: const cg.BoardData(
               fen: kEmptyFen,
               interactableSide: cg.InteractableSide.none,
@@ -148,7 +148,7 @@ class _Body extends ConsumerWidget {
         Expanded(
           child: Center(
             child: SafeArea(
-              child: GameBoardLayout(
+              child: TableBoardLayout(
                 boardData: cg.BoardData(
                   orientation: puzzleState.pov.cg,
                   interactableSide: puzzleState.mode == PuzzleMode.view
@@ -170,11 +170,11 @@ class _Body extends ConsumerWidget {
                   pieceAssets: pieceSet.assets,
                   colorScheme: boardTheme.colors,
                 ),
-                topPlayer: Padding(
+                topTable: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: _Feedback(state: puzzleState, pieceSet: pieceSet),
                 ),
-                bottomPlayer: const SizedBox.shrink(),
+                bottomTable: const SizedBox.shrink(),
               ),
             ),
           ),

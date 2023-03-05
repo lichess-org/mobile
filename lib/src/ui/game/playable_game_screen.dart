@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
-import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
+import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
@@ -182,7 +182,7 @@ class _BoardBody extends ConsumerWidget {
         final topPlayer = game.orientation == Side.white ? black : white;
         final bottomPlayer = game.orientation == Side.white ? white : black;
 
-        return GameBoardLayout(
+        return TableBoardLayout(
           boardSettings: cg.BoardSettings(
             pieceAssets: pieceSet.assets,
             colorScheme: boardTheme.colors,
@@ -209,8 +209,8 @@ class _BoardBody extends ConsumerWidget {
                 .read(boardStateProvider.notifier)
                 .onUserMove(game.id, Move.fromUci(move.uci)!),
           ),
-          topPlayer: topPlayer,
-          bottomPlayer: bottomPlayer,
+          topTable: topPlayer,
+          bottomTable: bottomPlayer,
           moves: gameState?.sanMoves,
           currentMoveIndex: positionCursor - 1,
         );
@@ -227,9 +227,9 @@ class _BoardBody extends ConsumerWidget {
           clock: Duration.zero,
         );
 
-        return GameBoardLayout(
-          topPlayer: opponent,
-          bottomPlayer: player,
+        return TableBoardLayout(
+          topTable: opponent,
+          bottomTable: player,
           boardSettings: cg.BoardSettings(
             colorScheme: boardTheme.colors,
           ),
