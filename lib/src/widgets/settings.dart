@@ -48,6 +48,36 @@ class SettingsListTile extends StatelessWidget {
   }
 }
 
+class SwitchSettingTile extends StatelessWidget {
+  const SwitchSettingTile({
+    required this.title,
+    this.subtitle,
+    required this.value,
+    required this.onChanged,
+    this.leading,
+    super.key,
+  });
+
+  final Widget title;
+  final Widget? subtitle;
+  final bool value;
+  final void Function(bool value) onChanged;
+  final Widget? leading;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformListTile(
+      leading: leading,
+      title: title,
+      subtitle: subtitle,
+      trailing: Switch.adaptive(
+        value: value,
+        onChanged: onChanged,
+      ),
+    );
+  }
+}
+
 /// A platform agnostic choice picker.
 class ChoicePicker<T extends Enum> extends StatelessWidget {
   const ChoicePicker({

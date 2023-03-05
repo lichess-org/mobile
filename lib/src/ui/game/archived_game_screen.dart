@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 
@@ -105,14 +104,8 @@ class _BoardBody extends ConsumerWidget {
       state.showSnackbarOnError(context);
     });
 
-    final pieceSet = ref.watch(pieceSetPrefProvider);
-    final boardTheme = ref.watch(boardThemePrefProvider);
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
-    final boardSettings = cg.BoardSettings(
-      pieceAssets: pieceSet.assets,
-      colorScheme: boardTheme.colors,
-    );
     final black = BoardPlayer(
       key: const ValueKey('black-player'),
       player: gameData.black,
@@ -131,7 +124,6 @@ class _BoardBody extends ConsumerWidget {
         orientation: (isBoardTurned ? orientation.opposite : orientation).cg,
         fen: gameData.lastFen ?? kInitialBoardFEN,
       ),
-      boardSettings: boardSettings,
       topTable: topPlayer,
       bottomTable: bottomPlayer,
     );
@@ -163,7 +155,6 @@ class _BoardBody extends ConsumerWidget {
             fen: game.fenAt(cursor) ?? gameData.lastFen ?? kInitialBoardFEN,
             lastMove: game.moveAt(cursor)?.cg,
           ),
-          boardSettings: boardSettings,
           topTable: topPlayer,
           bottomTable: bottomPlayer,
           moves: game.steps.map((e) => e.san).toList(growable: false),

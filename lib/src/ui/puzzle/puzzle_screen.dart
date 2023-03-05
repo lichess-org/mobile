@@ -139,7 +139,6 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet = ref.watch(pieceSetPrefProvider);
-    final boardTheme = ref.watch(boardThemePrefProvider);
     final puzzleStateProvider =
         puzzleScreenStateProvider(theme, puzzle, userId);
     final puzzleState = ref.watch(puzzleStateProvider);
@@ -165,10 +164,6 @@ class _Body extends ConsumerWidget {
                         .read(puzzleStateProvider.notifier)
                         .playUserMove(Move.fromUci(move.uci)!);
                   },
-                ),
-                boardSettings: cg.BoardSettings(
-                  pieceAssets: pieceSet.assets,
-                  colorScheme: boardTheme.colors,
                 ),
                 topTable: Padding(
                   padding: const EdgeInsets.all(10.0),

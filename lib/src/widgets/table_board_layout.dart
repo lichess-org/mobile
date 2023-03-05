@@ -3,8 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chessground/chessground.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'platform.dart';
 
 const _scrollAnimationDuration = Duration(milliseconds: 200);
@@ -14,10 +16,10 @@ const _moveListOpacity = 0.6;
 ///
 /// This widget will try to adapt the board and tables display according to screen
 /// size constraints and aspect ratio.
-class TableBoardLayout extends StatelessWidget {
+class TableBoardLayout extends ConsumerWidget {
   const TableBoardLayout({
     required this.boardData,
-    this.boardSettings,
+    this.boardSettingsOverrides,
     required this.topTable,
     required this.bottomTable,
     this.moves,
@@ -32,7 +34,7 @@ class TableBoardLayout extends StatelessWidget {
 
   final BoardData boardData;
 
-  final BoardSettings? boardSettings;
+  final BoardSettingsOverrides? boardSettingsOverrides;
 
   /// Widget that will appear at the top of the board.
   final Widget topTable;
@@ -50,7 +52,11 @@ class TableBoardLayout extends StatelessWidget {
   final String? errorMessage;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pieceSet = ref.watch(pieceSetPrefProvider);
+    final boardTheme = ref.watch(boardThemePrefProvider);
+    final showLegalMoves = ref.watch(boardShowLegalMovesPrefProvider);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final aspectRatio = constraints.biggest.aspectRatio;
@@ -82,9 +88,20 @@ class TableBoardLayout extends StatelessWidget {
               )
             : null;
 
-        final board = boardSettings != null
-            ? Board(size: boardSize, data: boardData, settings: boardSettings!)
-            : Board(size: boardSize, data: boardData);
+        final defaultSettings = BoardSettings(
+          pieceAssets: pieceSet.assets,
+          colorScheme: boardTheme.colors,
+          showValidMoves: showLegalMoves,
+        );
+
+        final settings = boardSettingsOverrides != null
+            ? defaultSettings.copyWith(
+                animationDuration: boardSettingsOverrides!.animationDuration,
+              )
+            : defaultSettings;
+
+        final board =
+            Board(size: boardSize, data: boardData, settings: settings);
 
         final boardOrError = error != null
             ? SizedBox.square(
@@ -160,6 +177,14 @@ class TableBoardLayout extends StatelessWidget {
       },
     );
   }
+}
+
+class BoardSettingsOverrides {
+  const BoardSettingsOverrides({
+    this.animationDuration,
+  });
+
+  final Duration? animationDuration;
 }
 
 enum MoveListType { inline, stacked }

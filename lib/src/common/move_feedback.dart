@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'sound_service.dart';
 
 part 'move_feedback.g.dart';
@@ -8,21 +9,34 @@ part 'move_feedback.g.dart';
 @Riverpod(keepAlive: true)
 MoveFeedbackService moveFeedbackService(MoveFeedbackServiceRef ref) {
   final soundService = ref.watch(soundServiceProvider);
-  return MoveFeedbackService(soundService);
+  return MoveFeedbackService(soundService, ref);
 }
 
 class MoveFeedbackService {
-  MoveFeedbackService(this._soundService);
+  MoveFeedbackService(this._soundService, this._ref);
 
   final SoundService _soundService;
+  final MoveFeedbackServiceRef _ref;
 
   void moveFeedback() {
     _soundService.playMove();
-    HapticFeedback.lightImpact();
+
+    if (_ref.read(boardHapticFeedbackPrefProvider)) {
+      HapticFeedback.lightImpact();
+    }
   }
 
   void captureFeedback() {
     _soundService.playCapture();
-    HapticFeedback.mediumImpact();
+
+    if (_ref.read(boardHapticFeedbackPrefProvider)) {
+      HapticFeedback.lightImpact();
+    }
+  }
+
+  void checkFeedback() {
+    if (_ref.read(boardHapticFeedbackPrefProvider)) {
+      HapticFeedback.mediumImpact();
+    }
   }
 }

@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/model/settings/providers.dart';
 import './theme_mode_screen.dart';
 import './piece_set_screen.dart';
 import './board_theme_screen.dart';
+import './board_settings_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -94,6 +95,18 @@ class _Body extends ConsumerWidget {
                 },
               ),
               SettingsListTile(
+                icon: const Icon(LichessIcons.chess_board),
+                settingsLabel: context.l10n.boardTheme,
+                settingsValue: boardTheme.label,
+                onTap: () {
+                  pushPlatformRoute(
+                    context: context,
+                    title: context.l10n.boardTheme,
+                    builder: (context) => const BoardThemeScreen(),
+                  );
+                },
+              ),
+              SettingsListTile(
                 icon: const Icon(LichessIcons.chess_knight),
                 settingsLabel: context.l10n.pieceSet,
                 settingsValue: pieceSet.label,
@@ -105,15 +118,23 @@ class _Body extends ConsumerWidget {
                   );
                 },
               ),
-              SettingsListTile(
-                icon: const Icon(LichessIcons.chess_board),
-                settingsLabel: context.l10n.boardTheme,
-                settingsValue: boardTheme.label,
+            ],
+          ),
+          ListSection(
+            hasLeading: true,
+            showDivider: true,
+            children: [
+              PlatformListTile(
+                leading: const Icon(LichessIcons.chess_board),
+                title: const Text('Board'),
+                trailing: defaultTargetPlatform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
                 onTap: () {
                   pushPlatformRoute(
                     context: context,
-                    title: context.l10n.boardTheme,
-                    builder: (context) => const BoardThemeScreen(),
+                    title: 'Board',
+                    builder: (context) => const BoardSettingsScreen(),
                   );
                 },
               ),

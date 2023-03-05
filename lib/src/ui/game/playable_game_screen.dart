@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/board/play_action_notifier.dart';
 import 'package:lichess_mobile/src/model/board/board_providers.dart';
@@ -150,8 +149,6 @@ class _BoardBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pieceSet = ref.watch(pieceSetPrefProvider);
-    final boardTheme = ref.watch(boardThemePrefProvider);
     final gameState = ref.watch(boardStateProvider);
     final gameClockStream = ref.watch(boardStreamProvider(game.id));
     final positionCursor = ref.watch(positionCursorProvider);
@@ -183,10 +180,6 @@ class _BoardBody extends ConsumerWidget {
         final bottomPlayer = game.orientation == Side.white ? white : black;
 
         return TableBoardLayout(
-          boardSettings: cg.BoardSettings(
-            pieceAssets: pieceSet.assets,
-            colorScheme: boardTheme.colors,
-          ),
           boardData: cg.BoardData(
             interactableSide:
                 gameState == null || !gameState.playing || isReplaying
@@ -230,9 +223,6 @@ class _BoardBody extends ConsumerWidget {
         return TableBoardLayout(
           topTable: opponent,
           bottomTable: player,
-          boardSettings: cg.BoardSettings(
-            colorScheme: boardTheme.colors,
-          ),
           boardData: cg.BoardData(
             interactableSide: cg.InteractableSide.none,
             orientation: game.orientation.cg,
