@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import '../../test_utils.dart';
 import '../../test_app.dart';
 import '../../model/auth/fake_session_storage.dart';

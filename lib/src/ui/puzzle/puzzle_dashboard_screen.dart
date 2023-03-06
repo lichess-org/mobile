@@ -101,7 +101,7 @@ class _Body extends ConsumerWidget {
               title: Text(context.l10n.puzzleThemes),
               subtitle: const Text('Play puzzles from a specific theme.'),
               onTap: () {
-                Navigator.of(context, rootNavigator: true).push<void>(
+                Navigator.of(context).push<void>(
                   MaterialPageRoute(
                     builder: (context) => const PuzzleThemesScreen(),
                   ),

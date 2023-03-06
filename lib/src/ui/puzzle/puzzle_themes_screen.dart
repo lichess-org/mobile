@@ -1,9 +1,12 @@
+import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 
@@ -44,14 +47,30 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final list = ref.watch(puzzleThemeCategoriesProvider);
+    // skip recommended category since we display it on the puzzle tab screen
+    final list = ref.watch(puzzleThemeCategoriesProvider).skip(1).toList();
 
     return SafeArea(
-      child: ListView(
-        padding: Styles.bodyPadding,
-        children: [
-          for (final category in list) _Category(category: category),
-        ],
+      child: SingleChildScrollView(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final crossAxisCount =
+                math.min(3, (constraints.maxWidth / 300).floor());
+            return LayoutGrid(
+              columnSizes: List.generate(
+                crossAxisCount,
+                (_) => 1.fr,
+              ),
+              rowSizes: List.generate(
+                (list.length / crossAxisCount).ceil(),
+                (_) => auto,
+              ),
+              children: [
+                for (final category in list) _Category(category: category),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -64,33 +83,34 @@ class _Category extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Padding(
-      padding: Styles.sectionBottomPadding,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(category.item1, style: Styles.sectionTitle),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final theme in category.item2)
-                ListTile(
-                  title: Text(puzzleThemeL10n(context, theme).name),
-                  subtitle: Text(puzzleThemeL10n(context, theme).description),
-                  onTap: () {
-                    Navigator.of(context, rootNavigator: true).push<void>(
-                      MaterialPageRoute(
-                        builder: (context) => PuzzlesScreen(theme: theme),
-                      ),
-                    );
-                  },
-                ),
-            ],
+    return ListSection(
+      header: Text(category.item1, style: Styles.sectionTitle),
+      showDivider: true,
+      children: [
+        for (final theme in category.item2)
+          Tooltip(
+            message: puzzleThemeL10n(context, theme).description,
+            triggerMode: TooltipTriggerMode.longPress,
+            showDuration: const Duration(seconds: 7),
+            child: PlatformListTile(
+              title: Text(puzzleThemeL10n(context, theme).name),
+              subtitle: Text(
+                puzzleThemeL10n(context, theme).description,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              isThreeLine:
+                  puzzleThemeL10n(context, theme).description.length > 60,
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).push<void>(
+                  MaterialPageRoute(
+                    builder: (context) => PuzzlesScreen(theme: theme),
+                  ),
+                );
+              },
+            ),
           ),
-        ],
-      ),
+      ],
     );
   }
 }

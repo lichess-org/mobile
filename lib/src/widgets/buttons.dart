@@ -138,7 +138,7 @@ class _CardButtonState extends State<CardButton> {
 
   void _onTapDown() {
     if (widget.onTap == null) return;
-    setState(() => scale = 0.97);
+    setState(() => scale = 0.98);
   }
 
   void _onTapCancel() {

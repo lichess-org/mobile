@@ -28,10 +28,7 @@ class PuzzlesScreen extends StatelessWidget {
     this.puzzle,
     this.isDailyPuzzle = false,
     super.key,
-  }) : assert(
-          puzzle == null || userId != null,
-          'userId must be provided when puzzle is provided!',
-        );
+  });
 
   final UserId? userId;
   final Puzzle? puzzle;
