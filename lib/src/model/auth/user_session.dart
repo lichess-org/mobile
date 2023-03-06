@@ -20,7 +20,7 @@ class UserSession with _$UserSession {
       _$UserSessionFromJson(json);
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class UserSessionState extends _$UserSessionState {
   @override
   UserSession? build() {

@@ -1,34 +1,52 @@
 import 'dart:convert';
+import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:sqflite/sqflite.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/shared_preferences.dart';
+import 'package:lichess_mobile/src/common/database.dart';
 
 import 'puzzle.dart';
 import 'puzzle_theme.dart';
+import 'puzzle_difficulty.dart';
 
 part 'puzzle_storage.freezed.dart';
 part 'puzzle_storage.g.dart';
 
 @Riverpod(keepAlive: true)
 PuzzleStorage puzzleStorage(PuzzleStorageRef ref) {
-  final sharedPrefs = ref.watch(sharedPreferencesProvider);
-  return PuzzleStorage(sharedPrefs);
+  final database = ref.watch(databaseProvider);
+  return PuzzleStorage(database);
 }
 
 class PuzzleStorage {
-  const PuzzleStorage(this._prefs);
+  const PuzzleStorage(this._db);
 
-  final SharedPreferences _prefs;
+  final Database _db;
 
-  PuzzleLocalData? fetch({
+  Future<PuzzleLocalData?> fetch({
     required UserId? userId,
     PuzzleTheme angle = PuzzleTheme.mix,
-  }) {
-    final raw = _prefs.getString(_makeKey(userId, angle));
+    PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
+  }) async {
+    final list = await _db.query(
+      'puzzle_batchs',
+      where: '''
+      userId = ? AND
+      angle = ? AND
+      difficulty = ?
+    ''',
+      whereArgs: [
+        userId?.value,
+        angle.name,
+        difficulty.name,
+      ],
+    );
+
+    final raw = list.firstOrNull?['data'] as String?;
+
     if (raw != null) {
       final json = jsonDecode(raw);
       if (json is! Map<String, dynamic>) {
@@ -41,22 +59,21 @@ class PuzzleStorage {
     return null;
   }
 
-  Future<bool> save({
+  Future<void> save({
     required UserId? userId,
     PuzzleTheme angle = PuzzleTheme.mix,
     required PuzzleLocalData data,
-  }) {
-    return _prefs.setString(_makeKey(userId, angle), jsonEncode(data.toJson()));
-  }
-
-  String _makeKey(UserId? userId, PuzzleTheme angle) {
-    final buffer = StringBuffer();
-    buffer.write('PuzzleStorage');
-    if (userId != null) {
-      buffer.write('.userId:$userId');
-    }
-    buffer.write('.angle:${angle.name}');
-    return buffer.toString();
+  }) async {
+    await _db.insert(
+      'puzzle_batchs',
+      {
+        'userId': userId?.value,
+        'angle': angle.name,
+        'difficulty': PuzzleDifficulty.normal.name,
+        'data': jsonEncode(data.toJson()),
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 }
 

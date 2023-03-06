@@ -8,6 +8,7 @@ import 'package:logging/logging.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:soundpool/soundpool.dart';
+import 'package:sqflite/sqflite.dart';
 
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
@@ -20,6 +21,8 @@ import './model/auth/fake_auth_repository.dart';
 import './model/auth/fake_session_storage.dart';
 
 class MockSoundPool extends Mock implements Soundpool {}
+
+class MockDatabase extends Mock implements Database {}
 
 Future<ProviderContainer> makeContainer({
   List<Override>? overrides,
@@ -55,6 +58,7 @@ Future<ProviderContainer> makeContainer({
           soundPool: MockSoundPool(),
           sounds: IMap<Sound, int>(const {}),
           userSession: userSession,
+          database: MockDatabase(),
         );
       }),
       ...overrides ?? [],

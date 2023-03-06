@@ -4,9 +4,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soundpool/soundpool.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/common/database.dart';
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/sound_service.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
@@ -52,6 +54,7 @@ Future<AppDependencies> appDependencies(
     soundPool: pool,
     sounds: sounds,
     userSession: await sessionStorage.read(),
+    database: await openDb(),
   );
 }
 
@@ -63,5 +66,6 @@ class AppDependencies with _$AppDependencies {
     required Soundpool soundPool,
     required IMap<Sound, int> sounds,
     required UserSession? userSession,
+    required Database database,
   }) = _AppDependencies;
 }
