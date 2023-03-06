@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -62,18 +61,7 @@ class App extends ConsumerWidget {
           child: Material(child: child),
         );
       },
-      onGenerateRoute: (RouteSettings settings) {
-        // we don't use named routes but we need this for iOS modal animation
-        // see: https://pub.dev/packages/modal_bottom_sheet
-        switch (settings.name) {
-          case '/':
-            return MaterialWithModalsPageRoute(
-              builder: (_) => const BottomNavScaffold(),
-              settings: settings,
-            );
-        }
-        return null;
-      },
+      home: const BottomNavScaffold(),
     );
   }
 }

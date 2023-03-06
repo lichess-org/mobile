@@ -2,10 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
@@ -13,7 +11,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/ui/auth/sign_in_widget.dart';
-import 'package:lichess_mobile/src/ui/game/create_game_screen.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/ui/user/leaderboard_widget.dart';
 
@@ -89,24 +86,25 @@ class _HomeScaffold extends StatelessWidget {
           Expanded(
             child: child,
           ),
-          SizedBox(
-            height: 80,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15.0)
-                  .add(Styles.horizontalBodyPadding),
-              child: FatButton(
-                semanticsLabel: context.l10n.createAGame,
-                child: Text(context.l10n.createAGame),
-                onPressed: () {
-                  Navigator.of(context).push<void>(
-                    MaterialPageRoute(
-                      builder: (context) => const PlayScreen(),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
+          // TODO: Implement Create Game
+          // SizedBox(
+          //   height: 80,
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(vertical: 15.0)
+          //         .add(Styles.horizontalBodyPadding),
+          //     child: FatButton(
+          //       semanticsLabel: context.l10n.createAGame,
+          //       child: Text(context.l10n.createAGame),
+          //       onPressed: () {
+          //         Navigator.of(context).push<void>(
+          //           MaterialPageRoute(
+          //             builder: (context) => const PlayScreen(),
+          //           ),
+          //         );
+          //       },
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

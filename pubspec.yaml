@@ -45,12 +45,6 @@ dependencies:
   deep_pick: ^0.10.0
   timeago: ^3.3.0
   collection: ^1.16.0 # can't upgrade because of flutter_test
-  # TODO remove that package
-  modal_bottom_sheet:
-    git:
-      url: https://github.com/saltedpotatos/modal_bottom_sheet.git
-      path: modal_bottom_sheet
-      ref: e7e630e10b27ccab12da27acada9d47a13d79e9a
   fast_immutable_collections: ^9.0.0
   result_extensions:
     git:
