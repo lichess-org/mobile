@@ -165,8 +165,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "3fa7a1dfdfbcf6dfbbcfb6e03d10f52c5f630c79"
-      resolved-ref: "3fa7a1dfdfbcf6dfbbcfb6e03d10f52c5f630c79"
+      ref: "68cd3d522bba2d09232eb6126636c3a08c3cecfa"
+      resolved-ref: "68cd3d522bba2d09232eb6126636c3a08c3cecfa"
       url: "https://github.com/lichess-org/flutter-chessground.git"
     source: git
     version: "0.1.0"
@@ -282,15 +282,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  dart_result:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: fff48e1d9b7b33a3cff54ef60d9d6ee669224ebf
-      resolved-ref: fff48e1d9b7b33a3cff54ef60d9d6ee669224ebf
-      url: "https://github.com/veloce/dart_result.git"
-    source: git
-    version: "0.1.0"
   dart_style:
     dependency: transitive
     description:
@@ -303,8 +294,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "038cae53f4609c4d5aa2eb34aa495cb7ec4510e9"
-      resolved-ref: "038cae53f4609c4d5aa2eb34aa495cb7ec4510e9"
+      ref: "945b8ac08dd5d258031f6588d13b41bcb10c23cb"
+      resolved-ref: "945b8ac08dd5d258031f6588d13b41bcb10c23cb"
       url: "https://github.com/lichess-org/dartchess.git"
     source: git
     version: "0.1.0"
@@ -328,10 +319,10 @@ packages:
     dependency: "direct main"
     description:
       name: fast_immutable_collections
-      sha256: affdcd944170e14a31cc564f9ef19b67480ce110851a8ec4294f5dd36be30fbc
+      sha256: "60d68b272a33f919da05cd5f6dddcc69f62ace6a81b29f87a23b54a9126c971e"
       url: "https://pub.dev"
     source: hosted
-    version: "8.2.0"
+    version: "9.0.0"
   ffi:
     dependency: transitive
     description:
@@ -393,6 +384,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.0"
+  flutter_layout_grid:
+    dependency: "direct main"
+    description:
+      name: flutter_layout_grid
+      sha256: "1df27a2e9cd34faa0c0a33148c8bb9d9259e87cc5b934c989a59a77e1a4c0d6b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -648,15 +647,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.0"
-  modal_bottom_sheet:
-    dependency: "direct main"
-    description:
-      path: modal_bottom_sheet
-      ref: e7e630e10b27ccab12da27acada9d47a13d79e9a
-      resolved-ref: e7e630e10b27ccab12da27acada9d47a13d79e9a
-      url: "https://github.com/saltedpotatos/modal_bottom_sheet.git"
-    source: git
-    version: "2.1.2"
   node_preamble:
     dependency: transitive
     description:
@@ -825,6 +815,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
+  quiver:
+    dependency: transitive
+    description:
+      name: quiver
+      sha256: b1c1ac5ce6688d77f65f3375a9abb9319b3cb32486bdc7a1e0fdf004d7ba4e47
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.1"
   recase:
     dependency: transitive
     description:

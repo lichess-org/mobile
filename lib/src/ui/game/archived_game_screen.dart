@@ -9,11 +9,10 @@ import 'package:lichess_mobile/src/utils/async_value.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
+import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 
@@ -48,7 +47,7 @@ class ArchivedGameScreen extends ConsumerWidget {
           },
         ),
         actions: [
-          SoundButton(),
+          ToggleSoundButton(),
         ],
       ),
       body: _BoardBody(
@@ -70,7 +69,7 @@ class ArchivedGameScreen extends ConsumerWidget {
           },
           child: const Icon(CupertinoIcons.back),
         ),
-        trailing: SoundButton(),
+        trailing: ToggleSoundButton(),
       ),
       child: SafeArea(
         child: Column(
@@ -105,14 +104,8 @@ class _BoardBody extends ConsumerWidget {
       state.showSnackbarOnError(context);
     });
 
-    final pieceSet = ref.watch(pieceSetPrefProvider);
-    final boardTheme = ref.watch(boardThemePrefProvider);
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
-    final boardSettings = cg.BoardSettings(
-      pieceAssets: pieceSet.assets,
-      colorScheme: boardTheme.colors,
-    );
     final black = BoardPlayer(
       key: const ValueKey('black-player'),
       player: gameData.black,
@@ -125,15 +118,14 @@ class _BoardBody extends ConsumerWidget {
     );
     final topPlayer = orientation == Side.white ? black : white;
     final bottomPlayer = orientation == Side.white ? white : black;
-    final loadingBoard = GameBoardLayout(
+    final loadingBoard = TableBoardLayout(
       boardData: cg.BoardData(
         interactableSide: cg.InteractableSide.none,
         orientation: (isBoardTurned ? orientation.opposite : orientation).cg,
         fen: gameData.lastFen ?? kInitialBoardFEN,
       ),
-      boardSettings: boardSettings,
-      topPlayer: topPlayer,
-      bottomPlayer: bottomPlayer,
+      topTable: topPlayer,
+      bottomTable: bottomPlayer,
     );
 
     return gameCursor.when(
@@ -155,7 +147,7 @@ class _BoardBody extends ConsumerWidget {
         final topPlayer = orientation == Side.white ? black : white;
         final bottomPlayer = orientation == Side.white ? white : black;
 
-        return GameBoardLayout(
+        return TableBoardLayout(
           boardData: cg.BoardData(
             interactableSide: cg.InteractableSide.none,
             orientation:
@@ -163,9 +155,8 @@ class _BoardBody extends ConsumerWidget {
             fen: game.fenAt(cursor) ?? gameData.lastFen ?? kInitialBoardFEN,
             lastMove: game.moveAt(cursor)?.cg,
           ),
-          boardSettings: boardSettings,
-          topPlayer: topPlayer,
-          bottomPlayer: bottomPlayer,
+          topTable: topPlayer,
+          bottomTable: bottomPlayer,
           moves: game.steps.map((e) => e.san).toList(growable: false),
           currentMoveIndex: cursor,
           onSelectMove: (moveIndex) {

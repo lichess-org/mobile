@@ -77,3 +77,13 @@ final boardThemePrefProvider = createPrefProvider<BoardTheme>(
   },
   mapTo: (BoardTheme boardTheme) => boardTheme.name,
 );
+
+final boardHapticFeedbackPrefProvider = createBoolPrefProvider(
+  prefKey: '$kSettingsStorePrefix.board.hapticFeedback',
+  defaultValue: true,
+);
+
+final boardShowLegalMovesPrefProvider = createBoolPrefProvider(
+  prefKey: '$kSettingsStorePrefix.board.showLegalMoves',
+  defaultValue: true,
+);

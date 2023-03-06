@@ -3,23 +3,25 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chessground/chessground.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'platform.dart';
 
 const _scrollAnimationDuration = Duration(milliseconds: 200);
 const _moveListOpacity = 0.6;
 
-/// Widget that provides a board layout for games according to screen constraints
+/// Widget that provides a board layout according to screen constraints.
 ///
-/// This widget will try to adapt the board and players display according to screen
+/// This widget will try to adapt the board and tables display according to screen
 /// size constraints and aspect ratio.
-class GameBoardLayout extends StatelessWidget {
-  const GameBoardLayout({
+class TableBoardLayout extends ConsumerWidget {
+  const TableBoardLayout({
     required this.boardData,
-    this.boardSettings,
-    required this.topPlayer,
-    required this.bottomPlayer,
+    this.boardSettingsOverrides,
+    required this.topTable,
+    required this.bottomTable,
     this.moves,
     this.currentMoveIndex,
     this.onSelectMove,
@@ -32,13 +34,13 @@ class GameBoardLayout extends StatelessWidget {
 
   final BoardData boardData;
 
-  final BoardSettings? boardSettings;
+  final BoardSettingsOverrides? boardSettingsOverrides;
 
-  /// Player which should appear at the top of the board
-  final Widget topPlayer;
+  /// Widget that will appear at the top of the board.
+  final Widget topTable;
 
-  /// Player which should appear at the bottom of the board
-  final Widget bottomPlayer;
+  /// Widget that will appear at the bottom of the board.
+  final Widget bottomTable;
 
   final List<String>? moves;
 
@@ -50,7 +52,11 @@ class GameBoardLayout extends StatelessWidget {
   final String? errorMessage;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pieceSet = ref.watch(pieceSetPrefProvider);
+    final boardTheme = ref.watch(boardThemePrefProvider);
+    final showLegalMoves = ref.watch(boardShowLegalMovesPrefProvider);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final aspectRatio = constraints.biggest.aspectRatio;
@@ -82,9 +88,20 @@ class GameBoardLayout extends StatelessWidget {
               )
             : null;
 
-        final board = boardSettings != null
-            ? Board(size: boardSize, data: boardData, settings: boardSettings!)
-            : Board(size: boardSize, data: boardData);
+        final defaultSettings = BoardSettings(
+          pieceAssets: pieceSet.assets,
+          colorScheme: boardTheme.colors,
+          showValidMoves: showLegalMoves,
+        );
+
+        final settings = boardSettingsOverrides != null
+            ? defaultSettings.copyWith(
+                animationDuration: boardSettingsOverrides!.animationDuration,
+              )
+            : defaultSettings;
+
+        final board =
+            Board(size: boardSize, data: boardData, settings: settings);
 
         final boardOrError = error != null
             ? SizedBox.square(
@@ -114,7 +131,7 @@ class GameBoardLayout extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          topPlayer,
+                          topTable,
                           if (slicedMoves != null)
                             Expanded(
                               child: Padding(
@@ -135,7 +152,7 @@ class GameBoardLayout extends StatelessWidget {
                                 child: SizedBox(height: 40),
                               ),
                             ),
-                          bottomPlayer,
+                          bottomTable,
                         ],
                       ),
                     ),
@@ -152,14 +169,22 @@ class GameBoardLayout extends StatelessWidget {
                       currentMoveIndex: currentMoveIndex ?? 0,
                       onSelectMove: onSelectMove,
                     ),
-                  topPlayer,
+                  topTable,
                   boardOrError,
-                  bottomPlayer,
+                  bottomTable,
                 ],
               );
       },
     );
   }
+}
+
+class BoardSettingsOverrides {
+  const BoardSettingsOverrides({
+    this.animationDuration,
+  });
+
+  final Duration? animationDuration;
 }
 
 enum MoveListType { inline, stacked }
