@@ -21,7 +21,7 @@ class LoadApp extends ConsumerWidget {
       loading: () => const SizedBox.shrink(),
       error: (err, st) {
         debugPrint(
-          'SEVERE: [App] could not load appInitProvider; $err\n$st',
+          'SEVERE: [App] could not load app dependencies; $err\n$st',
         );
         return const SizedBox.shrink();
       },
