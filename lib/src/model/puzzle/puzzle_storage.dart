@@ -21,6 +21,8 @@ PuzzleStorage puzzleStorage(PuzzleStorageRef ref) {
   return PuzzleStorage(database);
 }
 
+const _anonUserKey = '**anon**';
+
 class PuzzleStorage {
   const PuzzleStorage(this._db);
 
@@ -39,7 +41,7 @@ class PuzzleStorage {
       difficulty = ?
     ''',
       whereArgs: [
-        userId?.value,
+        userId?.value ?? _anonUserKey,
         angle.name,
         difficulty.name,
       ],
@@ -61,15 +63,16 @@ class PuzzleStorage {
 
   Future<void> save({
     required UserId? userId,
-    PuzzleTheme angle = PuzzleTheme.mix,
     required PuzzleLocalData data,
+    PuzzleTheme angle = PuzzleTheme.mix,
+    PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) async {
     await _db.insert(
       'puzzle_batchs',
       {
-        'userId': userId?.value,
+        'userId': userId?.value ?? _anonUserKey,
         'angle': angle.name,
-        'difficulty': PuzzleDifficulty.normal.name,
+        'difficulty': difficulty.name,
         'data': jsonEncode(data.toJson()),
       },
       conflictAlgorithm: ConflictAlgorithm.replace,

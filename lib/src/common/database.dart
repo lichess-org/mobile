@@ -1,20 +1,29 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart' as p;
 
 import 'package:lichess_mobile/src/app_dependencies.dart';
 
 part 'database.g.dart';
 
-Future<Database> openDb() async {
-  return openDatabase(
-    p.join(await getDatabasesPath(), 'lichess_mobile.db'),
-    onCreate: (db, version) {
-      return db.execute(
-        'CREATE TABLE puzzle_batchs(userId TEXT PRIMARY KEY, angle TEXT, difficulty TEXT, data TEXT)',
-      );
-    },
-    version: 1,
+Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
+  return dbFactory.openDatabase(
+    path,
+    options: OpenDatabaseOptions(
+      version: 1,
+      onCreate: (db, version) async {
+        await db.execute(
+          '''
+          CREATE TABLE puzzle_batchs(
+            userId TEXT NOT NULL,
+            angle TEXT NOT NULL,
+            difficulty TEXT NOT NULL,
+            data TEXT NOT NULL,
+            PRIMARY KEY (userId, angle, difficulty)
+          )
+          ''',
+        );
+      },
+    ),
   );
 }
 

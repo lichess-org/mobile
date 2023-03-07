@@ -1,14 +1,16 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:logging/logging.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/common/database.dart';
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
@@ -17,6 +19,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import '../../test_utils.dart';
+import '../../test_container.dart';
 
 class MockLogger extends Mock implements Logger {}
 
@@ -41,15 +44,30 @@ void main() {
     reset(mockClient);
   });
 
+  final dbFactory = databaseFactoryFfi;
+  sqfliteFfiInit();
+
+  Future<ProviderContainer> makeTestContainer() async {
+    final db = await openDb(dbFactory, inMemoryDatabasePath);
+
+    return makeContainer(
+      overrides: [
+        databaseProvider.overrideWith((ref) {
+          ref.onDispose(db.close);
+          return db;
+        }),
+      ],
+    );
+  }
+
   group('PuzzleService', () {
     test('will download data if local queue is empty', () async {
-      SharedPreferences.setMockInitialValues({});
-      final sharedPreferences = await SharedPreferences.getInstance();
+      final container = await makeTestContainer();
+      final storage = container.read(puzzleStorageProvider);
 
-      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
-        db: db,
+        storage: storage,
         repository: puzzleRepo,
         queueLength: 3,
       );
@@ -67,21 +85,22 @@ void main() {
           Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=3'),
         ),
       ).called(1);
-      expect(db.fetch(userId: null)?.solved, equals(IList(const [])));
-      expect(db.fetch(userId: null)?.unsolved.length, equals(3));
+      final data = await storage.fetch(userId: null);
+      expect(data?.solved, equals(IList(const [])));
+      expect(data?.unsolved.length, equals(3));
     });
 
     test('will not download data if local queue is full', () async {
-      SharedPreferences.setMockInitialValues({
-        'PuzzleStorage.angle:mix':
-            _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      });
-      final sharedPreferences = await SharedPreferences.getInstance();
+      final container = await makeTestContainer();
+      final storage = container.read(puzzleStorageProvider);
+      await storage.save(
+        userId: null,
+        data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
+      );
 
-      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
-        db: db,
+        storage: storage,
         repository: puzzleRepo,
         queueLength: 1,
       );
@@ -89,20 +108,21 @@ void main() {
       final puzzle = await service.nextPuzzle();
       expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
       verifyNever(() => mockClient.get(any()));
-      expect(db.fetch(userId: null)?.unsolved.length, equals(1));
+      final data = await storage.fetch(userId: null);
+      expect(data?.unsolved.length, equals(1));
     });
 
     test('will fetch puzzle deficit if local queue is not full', () async {
-      SharedPreferences.setMockInitialValues({
-        'PuzzleStorage.angle:mix':
-            _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      });
-      final sharedPreferences = await SharedPreferences.getInstance();
+      final container = await makeTestContainer();
+      final storage = container.read(puzzleStorageProvider);
+      await storage.save(
+        userId: null,
+        data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
+      );
 
-      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
-        db: db,
+        storage: storage,
         repository: puzzleRepo,
         queueLength: 2,
       );
@@ -120,38 +140,41 @@ void main() {
         () => mockClient
             .get(Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1')),
       ).called(1);
-      expect(db.fetch(userId: null)?.unsolved.length, equals(2));
+      final data = await storage.fetch(userId: null);
+      expect(data?.unsolved.length, equals(2));
     });
 
     test('nextPuzzle will always get the first puzzle of unsolved queue',
         () async {
-      SharedPreferences.setMockInitialValues({
-        'PuzzleStorage.angle:mix':
-            _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      });
-      final sharedPreferences = await SharedPreferences.getInstance();
+      final container = await makeTestContainer();
+      final storage = container.read(puzzleStorageProvider);
+      await storage.save(
+        userId: null,
+        data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
+      );
 
-      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
-        db: db,
+        storage: storage,
         repository: puzzleRepo,
         queueLength: 1,
       );
 
       final puzzle = await service.nextPuzzle();
       expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
-      expect(db.fetch(userId: null)?.unsolved.length, equals(1));
+      final data = await storage.fetch(userId: null);
+      expect(data?.unsolved.length, equals(1));
 
       final puzzle2 = await service.nextPuzzle();
       expect(puzzle2?.puzzle.id, equals(const PuzzleId('pId3')));
-      expect(db.fetch(userId: null)?.unsolved.length, equals(1));
+      final data2 = await storage.fetch(userId: null);
+      expect(data2?.unsolved.length, equals(1));
     });
 
     test('nextPuzzle returns null is unsolved queue is empty and is offline',
         () async {
-      SharedPreferences.setMockInitialValues({});
-      final sharedPreferences = await SharedPreferences.getInstance();
+      final container = await makeTestContainer();
+      final storage = container.read(puzzleStorageProvider);
 
       when(
         () => mockClient.get(
@@ -159,10 +182,9 @@ void main() {
         ),
       ).thenAnswer((_) => Future.error(const SocketException('offline')));
 
-      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
-        db: db,
+        storage: storage,
         repository: puzzleRepo,
         queueLength: 1,
       );
@@ -173,16 +195,16 @@ void main() {
     });
 
     test('different batch is saved per userId', () async {
-      SharedPreferences.setMockInitialValues({
-        'PuzzleStorage.angle:mix':
-            _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      });
-      final sharedPreferences = await SharedPreferences.getInstance();
+      final container = await makeTestContainer();
+      final storage = container.read(puzzleStorageProvider);
+      await storage.save(
+        userId: null,
+        data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
+      );
 
-      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
-        db: db,
+        storage: storage,
         repository: puzzleRepo,
         queueLength: 1,
       );
@@ -201,23 +223,24 @@ void main() {
             .get(Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1')),
       ).called(1);
 
+      final data = await storage.fetch(userId: const UserId('testUserId'));
       expect(
-        db.fetch(userId: const UserId('testUserId'))?.unsolved.length,
+        data?.unsolved.length,
         equals(1),
       );
     });
 
     test('different batch is saved per angle', () async {
-      SharedPreferences.setMockInitialValues({
-        'PuzzleStorage.angle:mix':
-            _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      });
-      final sharedPreferences = await SharedPreferences.getInstance();
+      final container = await makeTestContainer();
+      final storage = container.read(puzzleStorageProvider);
+      await storage.save(
+        userId: null,
+        data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
+      );
 
-      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
-        db: db,
+        storage: storage,
         repository: puzzleRepo,
         queueLength: 1,
       );
@@ -232,23 +255,25 @@ void main() {
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
       verify(getReq).called(1);
 
+      final data =
+          await storage.fetch(userId: null, angle: PuzzleTheme.opening);
       expect(
-        db.fetch(userId: null, angle: PuzzleTheme.opening)?.unsolved.length,
+        data?.unsolved.length,
         equals(1),
       );
     });
 
     test('solve puzzle when online, no userId', () async {
-      SharedPreferences.setMockInitialValues({
-        'PuzzleStorage.angle:mix':
-            _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      });
-      final sharedPreferences = await SharedPreferences.getInstance();
+      final container = await makeTestContainer();
+      final storage = container.read(puzzleStorageProvider);
+      await storage.save(
+        userId: null,
+        data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
+      );
 
-      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
-        db: db,
+        storage: storage,
         repository: puzzleRepo,
         queueLength: 1,
       );
@@ -269,23 +294,23 @@ void main() {
 
       verify(getReq).called(1);
 
-      final data = db.fetch(userId: null);
+      final data = await storage.fetch(userId: null);
       expect(data?.solved, equals(IList(const [])));
       expect(data?.unsolved[0].puzzle.id, equals(const PuzzleId('20yWT')));
       expect(next?.puzzle.id, equals(const PuzzleId('20yWT')));
     });
 
     test('solve puzzle when online, with a userId', () async {
-      SharedPreferences.setMockInitialValues({
-        'PuzzleStorage.userId:testUserId.angle:mix':
-            _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      });
-      final sharedPreferences = await SharedPreferences.getInstance();
+      final container = await makeTestContainer();
+      final storage = container.read(puzzleStorageProvider);
+      await storage.save(
+        userId: const UserId('testUserId'),
+        data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
+      );
 
-      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
-        db: db,
+        storage: storage,
         repository: puzzleRepo,
         queueLength: 1,
       );
@@ -312,25 +337,26 @@ void main() {
 
       verify(postReq).called(1);
 
-      final data = db.fetch(userId: const UserId('testUserId'));
+      final data = await storage.fetch(userId: const UserId('testUserId'));
       expect(data?.solved, equals(IList(const [])));
       expect(data?.unsolved[0].puzzle.id, equals(const PuzzleId('20yWT')));
       expect(next?.puzzle.id, equals(const PuzzleId('20yWT')));
     });
 
     test('solve puzzle when offline', () async {
-      SharedPreferences.setMockInitialValues({
-        'PuzzleStorage.userId:testUserId.angle:mix': _makeUnsolvedPuzzles([
+      final container = await makeTestContainer();
+      final storage = container.read(puzzleStorageProvider);
+      await storage.save(
+        userId: const UserId('testUserId'),
+        data: _makeUnsolvedPuzzles([
           const PuzzleId('pId3'),
           const PuzzleId('pId4'),
         ]),
-      });
-      final sharedPreferences = await SharedPreferences.getInstance();
+      );
 
-      final db = PuzzleStorage(sharedPreferences);
       final service = PuzzleService(
         mockLogger,
-        db: db,
+        storage: storage,
         repository: puzzleRepo,
         queueLength: 2,
       );
@@ -357,7 +383,7 @@ void main() {
 
       verify(postReq).called(1);
 
-      final data = db.fetch(userId: const UserId('testUserId'));
+      final data = await storage.fetch(userId: const UserId('testUserId'));
       expect(data?.solved, equals(IList(const [solution])));
       expect(data?.unsolved.length, equals(1));
       expect(next?.puzzle.id, equals(const PuzzleId('pId4')));
@@ -373,40 +399,38 @@ const batchOf1 = '''
 {"puzzles":[{"game":{"id":"PrlkCqOv","perf":{"key":"rapid","name":"Rapid"},"rated":true,"players":[{"userId":"silverjo","name":"silverjo (1777)","color":"white"},{"userId":"robyarchitetto","name":"Robyarchitetto (1742)","color":"black"}],"pgn":"e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2 Bb7 Bh6 d5 e5 d4 Bxg7 Kxg7 Qf4 Bxf3 Qxf3 dxc3 Nxc3 Nac6 Qf6+ Kg8 Rd1 Nd4 O-O c5 Ne4 Nef5 Rd2 Qxf6 Nxf6+ Kg7 Re1 h5 h3 Rad8 b4 Nh4 Re3 Nhf5 Re1 a5 bxc5 bxc5 Bc4 Ra8 Rb1 Nh4 Rdb2 Nc6 Rb7 Nxe5 Bxe6 Kxf6 Bd5 Nf5 R7b6+ Kg7 Bxa8 Rxa8 R6b3 Nd4 Rb7 Nxd3 Rd1 Ne2+ Kh2 Ndf4 Rdd7 Rf8 Ra7 c4 Rxa5 c3 Rc5 Ne6 Rc4 Ra8 a4 Rb8 a5 Rb2 a6 c2","clock":"5+8"},"puzzle":{"id":"20yWT","rating":1859,"plays":551,"initialPly":93,"solution":["a6a7","b2a2","c4c2","a2a7","d7a7"],"themes":["endgame","long","advantage","advancedPawn"]}}]}
 ''';
 
-String _makeUnsolvedPuzzles(List<PuzzleId> ids) {
-  return jsonEncode(
-    PuzzleLocalData(
-      solved: IList(const []),
-      unsolved: IList([
-        for (final id in ids)
-          Puzzle(
-            puzzle: PuzzleData(
-              id: id,
-              rating: 1988,
-              plays: 5,
-              initialPly: 23,
-              solution: IList(const ['a6a7', 'b2a2', 'c4c2']),
-              themes: ISet(const ['endgame', 'advantage']),
-            ),
-            game: const PuzzleGame(
-              id: GameId('PrlkCqOv'),
-              perf: Perf.blitz,
-              rated: true,
-              white: PuzzleGamePlayer(
-                side: Side.white,
-                userId: 'user1',
-                name: 'user1',
-              ),
-              black: PuzzleGamePlayer(
-                side: Side.black,
-                userId: 'user2',
-                name: 'user2',
-              ),
-              pgn:
-                  'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
-            ),
+PuzzleLocalData _makeUnsolvedPuzzles(List<PuzzleId> ids) {
+  return PuzzleLocalData(
+    solved: IList(const []),
+    unsolved: IList([
+      for (final id in ids)
+        Puzzle(
+          puzzle: PuzzleData(
+            id: id,
+            rating: 1988,
+            plays: 5,
+            initialPly: 23,
+            solution: IList(const ['a6a7', 'b2a2', 'c4c2']),
+            themes: ISet(const ['endgame', 'advantage']),
           ),
-      ]),
-    ).toJson(),
+          game: const PuzzleGame(
+            id: GameId('PrlkCqOv'),
+            perf: Perf.blitz,
+            rated: true,
+            white: PuzzleGamePlayer(
+              side: Side.white,
+              userId: 'user1',
+              name: 'user1',
+            ),
+            black: PuzzleGamePlayer(
+              side: Side.black,
+              userId: 'user2',
+              name: 'user2',
+            ),
+            pgn:
+                'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
+          ),
+        ),
+    ]),
   );
 }

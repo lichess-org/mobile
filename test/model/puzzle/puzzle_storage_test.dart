@@ -1,20 +1,34 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
+import 'package:lichess_mobile/src/common/database.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import '../../test_container.dart';
 
 void main() {
+  final dbFactory = databaseFactoryFfi;
+  sqfliteFfiInit();
+
   group('PuzzleStorage', () {
     test('save and fetch data', () async {
-      SharedPreferences.setMockInitialValues({});
-      final sharedPreferences = await SharedPreferences.getInstance();
+      final db = await openDb(dbFactory, inMemoryDatabasePath);
 
-      final db = PuzzleStorage(sharedPreferences);
+      final container = await makeContainer(
+        overrides: [
+          databaseProvider.overrideWith((ref) {
+            ref.onDispose(db.close);
+            return db;
+          }),
+        ],
+      );
+
+      final storage = container.read(puzzleStorageProvider);
 
       final data = PuzzleLocalData(
         solved: IList(const [
@@ -52,9 +66,12 @@ void main() {
         ]),
       );
 
-      await db.save(userId: null, angle: PuzzleTheme.mix, data: data);
+      await storage.save(userId: null, angle: PuzzleTheme.mix, data: data);
 
-      expect(db.fetch(userId: null, angle: PuzzleTheme.mix), data);
+      expect(
+        storage.fetch(userId: null, angle: PuzzleTheme.mix),
+        completion(equals(data)),
+      );
     });
   });
 }

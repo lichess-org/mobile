@@ -64,6 +64,8 @@ Future<ProviderContainer> makeContainer({
       ...overrides ?? [],
     ],
   );
+
   addTearDown(container.dispose);
+
   return container;
 }

@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:path/path.dart' as p;
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/database.dart';
@@ -48,13 +49,16 @@ Future<AppDependencies> appDependencies(
     }
   }
 
+  final dbPath = p.join(await getDatabasesPath(), 'lichess_mobile.db');
+  final db = await openDb(databaseFactory, dbPath);
+
   return AppDependencies(
     packageInfo: pInfo,
     sharedPreferences: prefs,
     soundPool: pool,
     sounds: sounds,
     userSession: await sessionStorage.read(),
-    database: await openDb(),
+    database: db,
   );
 }
 

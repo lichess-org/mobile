@@ -20,21 +20,25 @@ const kPuzzleLocalQueueLength = 100;
 
 @Riverpod(keepAlive: true)
 PuzzleService puzzleService(PuzzleServiceRef ref) {
-  final db = ref.watch(puzzleStorageProvider);
+  final storage = ref.watch(puzzleStorageProvider);
   final repository = ref.watch(puzzleRepositoryProvider);
-  return PuzzleService(Logger('PuzzleService'), db: db, repository: repository);
+  return PuzzleService(
+    Logger('PuzzleService'),
+    storage: storage,
+    repository: repository,
+  );
 }
 
 class PuzzleService {
   const PuzzleService(
     this._log, {
-    required this.db,
+    required this.storage,
     required this.repository,
     this.queueLength = kPuzzleLocalQueueLength,
   });
 
   final int queueLength;
-  final PuzzleStorage db;
+  final PuzzleStorage storage;
   final PuzzleRepository repository;
   final Logger _log;
 
@@ -62,9 +66,9 @@ class PuzzleService {
     PuzzleTheme angle = PuzzleTheme.mix,
     required PuzzleSolution solution,
   }) async {
-    final data = db.fetch(userId: userId, angle: angle);
+    final data = await storage.fetch(userId: userId, angle: angle);
     if (data != null) {
-      await db.save(
+      await storage.save(
         userId: userId,
         angle: angle,
         data: PuzzleLocalData(
@@ -89,8 +93,8 @@ class PuzzleService {
   FutureResult<PuzzleLocalData?> _syncAndLoadData(
     UserId? userId,
     PuzzleTheme angle,
-  ) {
-    final data = db.fetch(userId: userId, angle: angle);
+  ) async {
+    final data = await storage.fetch(userId: userId, angle: angle);
 
     final unsolved = data?.unsolved ?? IList(const []);
     final solved = data?.solved ?? IList(const []);
@@ -122,7 +126,7 @@ class PuzzleService {
         final newData = tuple.item1;
         final shouldSave = tuple.item2;
         if (newData != null && shouldSave) {
-          await db.save(
+          await storage.save(
             userId: userId,
             angle: angle,
             data: newData,
@@ -132,6 +136,6 @@ class PuzzleService {
       });
     }
 
-    return Future.value(Result.value(data));
+    return Result.value(data);
   }
 }
