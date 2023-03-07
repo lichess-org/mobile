@@ -12,6 +12,7 @@ import 'puzzle_storage.dart';
 import 'puzzle_repository.dart';
 import 'puzzle.dart';
 import 'puzzle_theme.dart';
+import 'puzzle_difficulty.dart';
 
 part 'puzzle_service.g.dart';
 
@@ -48,9 +49,10 @@ class PuzzleService {
   Future<Puzzle?> nextPuzzle({
     UserId? userId,
     PuzzleTheme angle = PuzzleTheme.mix,
+    PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) {
     return Result.release(
-      _syncAndLoadData(userId, angle).map(
+      _syncAndLoadData(userId, angle, difficulty).map(
         (data) =>
             data != null && data.unsolved.isNotEmpty ? data.unsolved[0] : null,
       ),
@@ -64,6 +66,7 @@ class PuzzleService {
   Future<Puzzle?> solve({
     UserId? userId,
     PuzzleTheme angle = PuzzleTheme.mix,
+    PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
     required PuzzleSolution solution,
   }) async {
     final data = await storage.fetch(userId: userId, angle: angle);
@@ -77,7 +80,7 @@ class PuzzleService {
               data.unsolved.removeWhere((e) => e.puzzle.id == solution.id),
         ),
       );
-      return nextPuzzle(userId: userId, angle: angle);
+      return nextPuzzle(userId: userId, angle: angle, difficulty: difficulty);
     }
     return Future.value(null);
   }
@@ -86,13 +89,14 @@ class PuzzleService {
   ///
   /// This task will fetch missing puzzles so the queue length is always equal to
   /// `queueLength`.
-  /// It will also call the `solveBatchTask` with solved puzzles.
+  /// It will call [PuzzleRepository.solveBatch] if necessary.
   ///
   /// This method should never fail, as if the network is down it will fallback
   /// to the local database.
   FutureResult<PuzzleLocalData?> _syncAndLoadData(
     UserId? userId,
     PuzzleTheme angle,
+    PuzzleDifficulty difficulty,
   ) async {
     final data = await storage.fetch(userId: userId, angle: angle);
 

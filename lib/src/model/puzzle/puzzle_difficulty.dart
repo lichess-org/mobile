@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 enum PuzzleDifficulty {
   easiest(-600),
@@ -11,6 +12,9 @@ enum PuzzleDifficulty {
   final int ratingDelta;
   const PuzzleDifficulty(this.ratingDelta);
 }
+
+final IMap<String, PuzzleDifficulty> puzzleDifficultyNameMap =
+    IMap(PuzzleDifficulty.values.asNameMap());
 
 String puzzleDifficultyL10n(BuildContext context, PuzzleDifficulty difficulty) {
   switch (difficulty) {

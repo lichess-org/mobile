@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'puzzle.dart';
 import 'puzzle_theme.dart';
+import 'puzzle_difficulty.dart';
 
 part 'puzzle_repository.g.dart';
 
@@ -34,11 +35,16 @@ class PuzzleRepository {
   final Logger _log;
 
   FutureResult<IList<Puzzle>> selectBatch({
-    PuzzleTheme angle = PuzzleTheme.mix,
     required int nb,
+    PuzzleTheme angle = PuzzleTheme.mix,
+    PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) {
     return apiClient
-        .get(Uri.parse('$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb'))
+        .get(
+          Uri.parse(
+            '$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb&difficulty=${difficulty.name}',
+          ),
+        )
         .flatMap(_decodeJsonList);
   }
 
@@ -46,10 +52,13 @@ class PuzzleRepository {
     required int nb,
     required IList<PuzzleSolution> solved,
     PuzzleTheme angle = PuzzleTheme.mix,
+    PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) {
     return apiClient
         .post(
-          Uri.parse('$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb'),
+          Uri.parse(
+            '$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb&difficulty=${difficulty.name}',
+          ),
           headers: {'Content-type': 'application/json'},
           body: jsonEncode({
             'solutions': solved

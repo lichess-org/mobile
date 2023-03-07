@@ -36,7 +36,7 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(
-      Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=30'),
+      Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=100'),
     );
   });
 
@@ -72,19 +72,16 @@ void main() {
         queueLength: 3,
       );
 
-      when(
-        () => mockClient.get(
-          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=3'),
-        ),
-      ).thenAnswer((_) => mockResponse(batchOf3, 200));
+      Future<http.Response> getReq() => mockClient.get(
+            Uri.parse(
+              '$kLichessHost/api/puzzle/batch/mix?nb=3&difficulty=normal',
+            ),
+          );
+      when(getReq).thenAnswer((_) => mockResponse(batchOf3, 200));
 
       final puzzle = await service.nextPuzzle();
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
-      verify(
-        () => mockClient.get(
-          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=3'),
-        ),
-      ).called(1);
+      verify(getReq).called(1);
       final data = await storage.fetch(userId: null);
       expect(data?.solved, equals(IList(const [])));
       expect(data?.unsolved.length, equals(3));
@@ -127,19 +124,18 @@ void main() {
         queueLength: 2,
       );
 
+      Future<http.Response> getReq() => mockClient.get(
+            Uri.parse(
+              '$kLichessHost/api/puzzle/batch/mix?nb=1&difficulty=normal',
+            ),
+          );
+
       // will fetch only 1 since queueLength is 2
-      when(
-        () => mockClient.get(
-          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
-        ),
-      ).thenAnswer((_) => mockResponse(batchOf1, 200));
+      when(getReq).thenAnswer((_) => mockResponse(batchOf1, 200));
 
       final puzzle = await service.nextPuzzle();
       expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
-      verify(
-        () => mockClient
-            .get(Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1')),
-      ).called(1);
+      verify(getReq).called(1);
       final data = await storage.fetch(userId: null);
       expect(data?.unsolved.length, equals(2));
     });
@@ -178,7 +174,9 @@ void main() {
 
       when(
         () => mockClient.get(
-          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
+          Uri.parse(
+            '$kLichessHost/api/puzzle/batch/mix?nb=1&difficulty=normal',
+          ),
         ),
       ).thenAnswer((_) => Future.error(const SocketException('offline')));
 
@@ -209,19 +207,18 @@ void main() {
         queueLength: 1,
       );
 
-      when(
-        () => mockClient.get(
-          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
-        ),
-      ).thenAnswer((_) => mockResponse(batchOf1, 200));
+      Future<http.Response> getReq() => mockClient.get(
+            Uri.parse(
+              '$kLichessHost/api/puzzle/batch/mix?nb=1&difficulty=normal',
+            ),
+          );
+
+      when(getReq).thenAnswer((_) => mockResponse(batchOf1, 200));
 
       final puzzle =
           await service.nextPuzzle(userId: const UserId('testUserId'));
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
-      verify(
-        () => mockClient
-            .get(Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1')),
-      ).called(1);
+      verify(getReq).called(1);
 
       final data = await storage.fetch(userId: const UserId('testUserId'));
       expect(
@@ -246,7 +243,9 @@ void main() {
       );
 
       Future<http.Response> getReq() => mockClient.get(
-            Uri.parse('$kLichessHost/api/puzzle/batch/opening?nb=1'),
+            Uri.parse(
+              '$kLichessHost/api/puzzle/batch/opening?nb=1&difficulty=normal',
+            ),
           );
 
       when(() => getReq()).thenAnswer((_) => mockResponse(batchOf1, 200));
@@ -279,7 +278,9 @@ void main() {
       );
 
       Future<http.Response> getReq() => mockClient.get(
-            Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
+            Uri.parse(
+              '$kLichessHost/api/puzzle/batch/mix?nb=1&difficulty=normal',
+            ),
           );
 
       when(getReq).thenAnswer((_) => mockResponse(batchOf1, 200));
@@ -316,7 +317,9 @@ void main() {
       );
 
       Future<http.Response> postReq() => mockClient.post(
-            Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
+            Uri.parse(
+              '$kLichessHost/api/puzzle/batch/mix?nb=1&difficulty=normal',
+            ),
             headers: any(
               named: 'headers',
               that: sameHeaders({'Content-type': 'application/json'}),
@@ -362,7 +365,9 @@ void main() {
       );
 
       Future<http.Response> postReq() => mockClient.post(
-            Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
+            Uri.parse(
+              '$kLichessHost/api/puzzle/batch/mix?nb=1&difficulty=normal',
+            ),
             headers: any(
               named: 'headers',
               that: sameHeaders({'Content-type': 'application/json'}),

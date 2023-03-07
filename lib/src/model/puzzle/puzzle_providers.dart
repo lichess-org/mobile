@@ -3,8 +3,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tuple/tuple.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
@@ -30,3 +32,11 @@ Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
   final repo = ref.watch(puzzleRepositoryProvider);
   return Result.release(repo.daily());
 }
+
+final puzzleDifficultyPrefProvider = createPrefProvider(
+  prefKey: 'puzzle.difficulty',
+  defaultValue: PuzzleDifficulty.normal,
+  mapFrom: (string) =>
+      puzzleDifficultyNameMap.get(string) ?? PuzzleDifficulty.normal,
+  mapTo: (PuzzleDifficulty difficulty) => difficulty.name,
+);

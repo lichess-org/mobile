@@ -52,13 +52,7 @@ final IMap<String, PieceSet> _pieceSetNameMap =
 final pieceSetPrefProvider = createPrefProvider<PieceSet>(
   prefKey: '$kSettingsStorePrefix.pieceSet',
   defaultValue: PieceSet.cburnett,
-  mapFrom: (string) {
-    if (string != null) {
-      return _pieceSetNameMap.get(string) ?? PieceSet.cburnett;
-    } else {
-      return PieceSet.cburnett;
-    }
-  },
+  mapFrom: (string) => _pieceSetNameMap.get(string) ?? PieceSet.cburnett,
   mapTo: (PieceSet pieceSet) => pieceSet.name,
 );
 
@@ -68,13 +62,7 @@ final IMap<String, BoardTheme> _boardThemeNameMap =
 final boardThemePrefProvider = createPrefProvider<BoardTheme>(
   prefKey: '$kSettingsStorePrefix.boardTheme',
   defaultValue: BoardTheme.brown,
-  mapFrom: (string) {
-    if (string != null) {
-      return _boardThemeNameMap.get(string) ?? BoardTheme.brown;
-    } else {
-      return BoardTheme.brown;
-    }
-  },
+  mapFrom: (string) => _boardThemeNameMap.get(string) ?? BoardTheme.brown,
   mapTo: (BoardTheme boardTheme) => boardTheme.name,
 );
 
