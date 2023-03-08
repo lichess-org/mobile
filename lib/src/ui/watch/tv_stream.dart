@@ -15,7 +15,10 @@ import 'package:lichess_mobile/src/model/tv/featured_position.dart';
 import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
 
+import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 class TvStream extends ConsumerWidget {
   const TvStream({super.key});
@@ -38,7 +41,7 @@ class TvStream extends ConsumerWidget {
       appBar: AppBar(
         title: InkWell(
           onTap: () {
-            showChoices(context, ['a', 'b', 'c']);
+            showChoices(ref, context, ['a', 'b', 'c']);
           },
           child: Text("Lichess TV ++"),
         ),
@@ -64,7 +67,7 @@ class TvStream extends ConsumerWidget {
       navigationBar: CupertinoNavigationBar(
         middle: InkWell(
           onTap: () {
-            showChoices(context, ['a', 'b', 'c']);
+            showChoices(ref, context, ['a', 'b', 'c']);
           },
           child: Text("Lichess TV ++"),
         ),
@@ -175,8 +178,9 @@ class _Body extends ConsumerWidget {
   }
 }
 
-void showChoices(BuildContext context, List<String> choices) {
+void showChoices(WidgetRef ref, BuildContext context, List<String> choices) {
   const TargetPlatform defaultTargetPlatform = TargetPlatform.iOS;
+  //final tvGamesState = ref.watch(testProvider);
 
   switch (defaultTargetPlatform) {
     // defaultTargetPlatform

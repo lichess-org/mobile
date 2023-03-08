@@ -6,6 +6,9 @@ import 'package:logging/logging.dart';
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import './tv_event.dart';
+import 'package:lichess_mobile/src/model/tv/tv_game_repository.dart';
+
+import 'package:async/async.dart';
 
 class TvRepository {
   const TvRepository(
@@ -67,10 +70,26 @@ class TvStreamRepository {
   }
 }
 
+/*
 final tvStreamProvider = Provider<TvStreamRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
   final repo =
       TvStreamRepository(Logger('TvStreamRepository'), apiClient: apiClient);
   ref.onDispose(() => repo.dispose());
   return repo;
+});
+*/
+final tvGamesProvider = Provider<TvGameRepository>((ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  final repo = TvGameRepository(
+    apiClient: apiClient,
+    logger: Logger('TvGameRepository'),
+  );
+  ref.onDispose(() => repo.dispose());
+  return repo;
+});
+
+final testProvider = FutureProvider.autoDispose((ref) {
+  final leaderRepo = ref.watch(tvGamesProvider);
+  return Result.release(leaderRepo.getTvGames());
 });
