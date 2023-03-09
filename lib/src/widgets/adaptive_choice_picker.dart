@@ -3,34 +3,39 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
-void showChoicesPicker<T extends Enum>(
+Future<void> showChoicesPicker<T extends Enum>(
   BuildContext context, {
   required List<T> choices,
   required T selectedItem,
   required Widget Function(T choice) labelBuilder,
-  required void Function(T choice) onSelectedItemChanged,
+  void Function(T choice)? onSelectedItemChanged,
 }) {
   switch (defaultTargetPlatform) {
     case TargetPlatform.android:
-      showDialog<void>(
+      return showDialog<void>(
         context: context,
         builder: (context) {
           return AlertDialog(
             contentPadding: const EdgeInsets.only(top: 12),
             scrollable: true,
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: choices.map((value) {
-                return RadioListTile<T>(
-                  title: labelBuilder(value),
-                  value: value,
-                  groupValue: selectedItem,
-                  onChanged: (value) {
-                    if (value != null) onSelectedItemChanged(value);
-                    Navigator.of(context).pop();
-                  },
+            content: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: choices.map((value) {
+                    return RadioListTile<T>(
+                      title: labelBuilder(value),
+                      value: value,
+                      groupValue: selectedItem,
+                      onChanged: (value) {
+                        if (value != null && onSelectedItemChanged != null) {
+                          onSelectedItemChanged(value);
+                        }
+                      },
+                    );
+                  }).toList(growable: false),
                 );
-              }).toList(growable: false),
+              },
             ),
             actions: [
               TextButton(
@@ -41,9 +46,8 @@ void showChoicesPicker<T extends Enum>(
           );
         },
       );
-      return;
     case TargetPlatform.iOS:
-      showCupertinoModalPopup<void>(
+      return showCupertinoModalPopup<void>(
         context: context,
         builder: (context) {
           return SizedBox(
@@ -53,26 +57,24 @@ void showChoicesPicker<T extends Enum>(
               useMagnifier: true,
               magnification: 1.1,
               itemExtent: 40,
-              scrollController: FixedExtentScrollController(initialItem: 1),
+              scrollController: FixedExtentScrollController(
+                initialItem: choices.indexWhere((t) => t == selectedItem),
+              ),
               children: choices.map((value) {
                 return Center(
-                  child: Text(
-                    value.toString(),
-                    style: const TextStyle(
-                      fontSize: 21,
-                    ),
-                  ),
+                  child: labelBuilder(value),
                 );
               }).toList(),
               onSelectedItemChanged: (index) {
-                onSelectedItemChanged(choices[index]);
+                if (onSelectedItemChanged != null) {
+                  onSelectedItemChanged(choices[index]);
+                }
               },
             ),
           );
         },
       );
-      return;
     default:
-      assert(false, 'Unexpected platform $defaultTargetPlatform');
+      throw Exception('Unexpected platform $defaultTargetPlatform');
   }
 }

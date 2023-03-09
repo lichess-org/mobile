@@ -47,9 +47,9 @@ class PuzzleService {
   ///
   /// This future should never fail on network errors.
   Future<Puzzle?> nextPuzzle({
-    UserId? userId,
+    required UserId? userId,
+    required PuzzleDifficulty difficulty,
     PuzzleTheme angle = PuzzleTheme.mix,
-    PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) {
     return Result.release(
       _syncAndLoadData(userId, angle, difficulty).map(
@@ -64,16 +64,21 @@ class PuzzleService {
   ///
   /// This future should never fail on network errors.
   Future<Puzzle?> solve({
-    UserId? userId,
-    PuzzleTheme angle = PuzzleTheme.mix,
-    PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
+    required UserId? userId,
+    required PuzzleDifficulty difficulty,
     required PuzzleSolution solution,
+    PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
-    final data = await storage.fetch(userId: userId, angle: angle);
+    final data = await storage.fetch(
+      userId: userId,
+      angle: angle,
+      difficulty: difficulty,
+    );
     if (data != null) {
       await storage.save(
         userId: userId,
         angle: angle,
+        difficulty: difficulty,
         data: PuzzleLocalData(
           solved: IList([...data.solved, solution]),
           unsolved:
@@ -98,7 +103,11 @@ class PuzzleService {
     PuzzleTheme angle,
     PuzzleDifficulty difficulty,
   ) async {
-    final data = await storage.fetch(userId: userId, angle: angle);
+    final data = await storage.fetch(
+      userId: userId,
+      angle: angle,
+      difficulty: difficulty,
+    );
 
     final unsolved = data?.unsolved ?? IList(const []);
     final solved = data?.solved ?? IList(const []);
@@ -110,8 +119,17 @@ class PuzzleService {
 
       // anonymous users can't solve puzzles so we just download the deficit
       final batchResult = solved.isNotEmpty && userId != null
-          ? repository.solveBatch(nb: deficit, solved: solved, angle: angle)
-          : repository.selectBatch(nb: deficit, angle: angle);
+          ? repository.solveBatch(
+              nb: deficit,
+              solved: solved,
+              angle: angle,
+              difficulty: difficulty,
+            )
+          : repository.selectBatch(
+              nb: deficit,
+              angle: angle,
+              difficulty: difficulty,
+            );
 
       return batchResult
           .fold(
@@ -133,6 +151,7 @@ class PuzzleService {
           await storage.save(
             userId: userId,
             angle: angle,
+            difficulty: difficulty,
             data: newData,
           );
         }

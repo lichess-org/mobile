@@ -9,10 +9,13 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
@@ -52,7 +55,12 @@ class PuzzlesScreen extends StatelessWidget {
             : Text(puzzleThemeL10n(context, theme).name),
       ),
       body: puzzle != null
-          ? _Body(userId: userId, puzzle: puzzle!, theme: theme)
+          ? _Body(
+              userId: userId,
+              puzzle: puzzle!,
+              theme: theme,
+              isDailyPuzzle: isDailyPuzzle,
+            )
           : _LoadPuzzle(theme: theme),
     );
   }
@@ -66,7 +74,12 @@ class PuzzlesScreen extends StatelessWidget {
         trailing: ToggleSoundButton(),
       ),
       child: puzzle != null
-          ? _Body(userId: userId, puzzle: puzzle!, theme: theme)
+          ? _Body(
+              userId: userId,
+              puzzle: puzzle!,
+              theme: theme,
+              isDailyPuzzle: isDailyPuzzle,
+            )
           : _LoadPuzzle(theme: theme),
     );
   }
@@ -83,7 +96,7 @@ class _LoadPuzzle extends ConsumerWidget {
 
     return nextPuzzle.when(
       data: (data) {
-        if (data.item1 == null) {
+        if (data.item2 == null) {
           return const Center(
             child: TableBoardLayout(
               topTable: kEmptyWidget,
@@ -97,7 +110,12 @@ class _LoadPuzzle extends ConsumerWidget {
             ),
           );
         } else {
-          return _Body(puzzle: data.item1!, userId: data.item2, theme: theme);
+          return _Body(
+            puzzle: data.item2!,
+            userId: data.item1,
+            theme: theme,
+            isDailyPuzzle: false,
+          );
         }
       },
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
@@ -127,17 +145,19 @@ class _Body extends ConsumerWidget {
     required this.puzzle,
     required this.userId,
     required this.theme,
+    required this.isDailyPuzzle,
   });
 
   final Puzzle puzzle;
   final PuzzleTheme theme;
   final UserId? userId;
+  final bool isDailyPuzzle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet = ref.watch(pieceSetPrefProvider);
     final puzzleStateProvider =
-        puzzleScreenStateProvider(theme, puzzle, userId);
+        puzzleScreenStateProvider(userId, theme, puzzle);
     final puzzleState = ref.watch(puzzleStateProvider);
     return Column(
       children: [
@@ -164,7 +184,11 @@ class _Body extends ConsumerWidget {
                 ),
                 topTable: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: _Feedback(state: puzzleState, pieceSet: pieceSet),
+                  child: _Feedback(
+                    puzzle: puzzle,
+                    state: puzzleState,
+                    pieceSet: pieceSet,
+                  ),
                 ),
                 bottomTable: const SizedBox.shrink(),
               ),
@@ -175,6 +199,7 @@ class _Body extends ConsumerWidget {
           puzzle: puzzle,
           userId: userId,
           theme: theme,
+          isDailyPuzzle: isDailyPuzzle,
         ),
       ],
     );
@@ -183,10 +208,12 @@ class _Body extends ConsumerWidget {
 
 class _Feedback extends StatelessWidget {
   const _Feedback({
+    required this.puzzle,
     required this.state,
     required this.pieceSet,
   });
 
+  final Puzzle puzzle;
   final PuzzleVm state;
   final cg.PieceSet pieceSet;
 
@@ -195,8 +222,8 @@ class _Feedback extends StatelessWidget {
     switch (state.mode) {
       case PuzzleMode.view:
         final puzzleRating =
-            context.l10n.ratingX(state.puzzle.rating.toString());
-        final playedXTimes = context.l10n.playedXTimes(state.puzzle.plays);
+            context.l10n.ratingX(puzzle.puzzle.rating.toString());
+        final playedXTimes = context.l10n.playedXTimes(puzzle.puzzle.plays);
         return PlatformCard(
           child: ListTile(
             leading: state.result == PuzzleResult.win
@@ -259,16 +286,21 @@ class _BottomBar extends ConsumerWidget {
     required this.puzzle,
     required this.theme,
     required this.userId,
+    required this.isDailyPuzzle,
   });
 
   final Puzzle puzzle;
   final PuzzleTheme theme;
   final UserId? userId;
+  final bool isDailyPuzzle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final difficulty = ref.watch(
+      puzzlePrefsStateProvider(userId).select((state) => state.difficulty),
+    );
     final puzzleStateProvider =
-        puzzleScreenStateProvider(theme, puzzle, userId);
+        puzzleScreenStateProvider(userId, theme, puzzle);
     final puzzleState = ref.watch(puzzleStateProvider);
 
     return Container(
@@ -281,53 +313,99 @@ class _BottomBar extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _BottomBarButton(
-              onTap: puzzleState.mode == PuzzleMode.view &&
-                      puzzleState.nextPuzzle != null
-                  ? () {
-                      ref.invalidate(nextPuzzleProvider(theme));
-                      Navigator.of(context).pushReplacement(
-                        PageRouteBuilder<void>(
-                          pageBuilder: (context, _, __) => PuzzlesScreen(
-                            theme: theme,
-                            userId: puzzleState.userId,
-                            puzzle: puzzleState.nextPuzzle,
-                          ),
-                          transitionDuration: Duration.zero,
-                          reverseTransitionDuration: Duration.zero,
-                        ),
+            if (!isDailyPuzzle && puzzleState.mode != PuzzleMode.view)
+              Builder(
+                builder: (context) {
+                  PuzzleDifficulty selectedDifficulty = difficulty;
+                  return StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                      return _BottomBarButton(
+                        icon: Icons.tune,
+                        label: context.l10n.difficultyLevel,
+                        shortLabel: puzzleDifficultyL10n(context, difficulty),
+                        onTap: () {
+                          showChoicesPicker(
+                            context,
+                            choices: PuzzleDifficulty.values,
+                            selectedItem: difficulty,
+                            labelBuilder: (t) =>
+                                Text(puzzleDifficultyL10n(context, t)),
+                            onSelectedItemChanged:
+                                (PuzzleDifficulty? difficulty) {
+                              if (difficulty != null) {
+                                setState(() {
+                                  selectedDifficulty = difficulty;
+                                });
+                              }
+                            },
+                          ).then(
+                            (_) {
+                              ref
+                                  .read(
+                                    puzzlePrefsStateProvider(userId).notifier,
+                                  )
+                                  .setDifficulty(selectedDifficulty);
+                            },
+                          );
+                        },
                       );
-                    }
-                  : null,
-              highlighted: puzzleState.mode == PuzzleMode.view,
-              label: context.l10n.continueTraining,
-              shortLabel: 'Continue',
-              icon: CupertinoIcons.play_arrow_solid,
-            ),
-            _BottomBarButton(
-              icon: Icons.help,
-              label: context.l10n.viewTheSolution,
-              shortLabel: context.l10n.solution,
-              onTap: puzzleState.mode == PuzzleMode.view
-                  ? null
-                  : () => ref.read(puzzleStateProvider.notifier).viewSolution(),
-            ),
-            _BottomBarButton(
-              onTap: puzzleState.canGoBack
-                  ? () => ref.read(puzzleStateProvider.notifier).userPrevious()
-                  : null,
-              label: 'Previous',
-              shortLabel: 'Previous',
-              icon: CupertinoIcons.chevron_back,
-            ),
-            _BottomBarButton(
-              onTap: puzzleState.canGoNext
-                  ? () => ref.read(puzzleStateProvider.notifier).userNext()
-                  : null,
-              label: context.l10n.next,
-              shortLabel: context.l10n.next,
-              icon: CupertinoIcons.chevron_forward,
-            ),
+                    },
+                  );
+                },
+              ),
+            if (puzzleState.mode == PuzzleMode.view)
+              _BottomBarButton(
+                onTap: puzzleState.mode == PuzzleMode.view &&
+                        puzzleState.nextPuzzle != null
+                    ? () {
+                        ref.invalidate(nextPuzzleProvider(theme));
+                        Navigator.of(context).pushReplacement(
+                          PageRouteBuilder<void>(
+                            pageBuilder: (context, _, __) => PuzzlesScreen(
+                              theme: theme,
+                              userId: userId,
+                              puzzle: puzzleState.nextPuzzle,
+                            ),
+                            transitionDuration: Duration.zero,
+                            reverseTransitionDuration: Duration.zero,
+                          ),
+                        );
+                      }
+                    : null,
+                highlighted: puzzleState.mode == PuzzleMode.view,
+                label: context.l10n.continueTraining,
+                shortLabel: 'Continue',
+                icon: CupertinoIcons.play_arrow_solid,
+              ),
+            if (puzzleState.mode != PuzzleMode.view)
+              _BottomBarButton(
+                icon: Icons.help,
+                label: context.l10n.viewTheSolution,
+                shortLabel: context.l10n.solution,
+                onTap: puzzleState.mode == PuzzleMode.view
+                    ? null
+                    : () =>
+                        ref.read(puzzleStateProvider.notifier).viewSolution(),
+              ),
+            if (puzzleState.mode == PuzzleMode.view)
+              _BottomBarButton(
+                onTap: puzzleState.canGoBack
+                    ? () =>
+                        ref.read(puzzleStateProvider.notifier).userPrevious()
+                    : null,
+                label: 'Previous',
+                shortLabel: 'Previous',
+                icon: CupertinoIcons.chevron_back,
+              ),
+            if (puzzleState.mode == PuzzleMode.view)
+              _BottomBarButton(
+                onTap: puzzleState.canGoNext
+                    ? () => ref.read(puzzleStateProvider.notifier).userNext()
+                    : null,
+                label: context.l10n.next,
+                shortLabel: context.l10n.next,
+                icon: CupertinoIcons.chevron_forward,
+              ),
           ],
         ),
       ),

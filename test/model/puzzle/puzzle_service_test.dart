@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import '../../test_utils.dart';
@@ -79,7 +80,10 @@ void main() {
           );
       when(getReq).thenAnswer((_) => mockResponse(batchOf3, 200));
 
-      final puzzle = await service.nextPuzzle();
+      final puzzle = await service.nextPuzzle(
+        userId: null,
+        difficulty: PuzzleDifficulty.normal,
+      );
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
       verify(getReq).called(1);
       final data = await storage.fetch(userId: null);
@@ -102,7 +106,10 @@ void main() {
         queueLength: 1,
       );
 
-      final puzzle = await service.nextPuzzle();
+      final puzzle = await service.nextPuzzle(
+        userId: null,
+        difficulty: PuzzleDifficulty.normal,
+      );
       expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
       verifyNever(() => mockClient.get(any()));
       final data = await storage.fetch(userId: null);
@@ -133,7 +140,10 @@ void main() {
       // will fetch only 1 since queueLength is 2
       when(getReq).thenAnswer((_) => mockResponse(batchOf1, 200));
 
-      final puzzle = await service.nextPuzzle();
+      final puzzle = await service.nextPuzzle(
+        userId: null,
+        difficulty: PuzzleDifficulty.normal,
+      );
       expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
       verify(getReq).called(1);
       final data = await storage.fetch(userId: null);
@@ -156,12 +166,18 @@ void main() {
         queueLength: 1,
       );
 
-      final puzzle = await service.nextPuzzle();
+      final puzzle = await service.nextPuzzle(
+        userId: null,
+        difficulty: PuzzleDifficulty.normal,
+      );
       expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
       final data = await storage.fetch(userId: null);
       expect(data?.unsolved.length, equals(1));
 
-      final puzzle2 = await service.nextPuzzle();
+      final puzzle2 = await service.nextPuzzle(
+        userId: null,
+        difficulty: PuzzleDifficulty.normal,
+      );
       expect(puzzle2?.puzzle.id, equals(const PuzzleId('pId3')));
       final data2 = await storage.fetch(userId: null);
       expect(data2?.unsolved.length, equals(1));
@@ -187,7 +203,10 @@ void main() {
         queueLength: 1,
       );
 
-      final nextPuzzle = await service.nextPuzzle();
+      final nextPuzzle = await service.nextPuzzle(
+        userId: null,
+        difficulty: PuzzleDifficulty.normal,
+      );
 
       expect(nextPuzzle, isNull);
     });
@@ -215,8 +234,10 @@ void main() {
 
       when(getReq).thenAnswer((_) => mockResponse(batchOf1, 200));
 
-      final puzzle =
-          await service.nextPuzzle(userId: const UserId('testUserId'));
+      final puzzle = await service.nextPuzzle(
+        userId: const UserId('testUserId'),
+        difficulty: PuzzleDifficulty.normal,
+      );
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
       verify(getReq).called(1);
 
@@ -250,7 +271,11 @@ void main() {
 
       when(() => getReq()).thenAnswer((_) => mockResponse(batchOf1, 200));
 
-      final puzzle = await service.nextPuzzle(angle: PuzzleTheme.opening);
+      final puzzle = await service.nextPuzzle(
+        angle: PuzzleTheme.opening,
+        userId: null,
+        difficulty: PuzzleDifficulty.normal,
+      );
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
       verify(getReq).called(1);
 
@@ -291,6 +316,8 @@ void main() {
           win: true,
           rated: true,
         ),
+        difficulty: PuzzleDifficulty.normal,
+        userId: null,
       );
 
       verify(getReq).called(1);
@@ -336,6 +363,7 @@ void main() {
           rated: true,
         ),
         userId: const UserId('testUserId'),
+        difficulty: PuzzleDifficulty.normal,
       );
 
       verify(postReq).called(1);
@@ -384,6 +412,7 @@ void main() {
       final next = await service.solve(
         solution: solution,
         userId: const UserId('testUserId'),
+        difficulty: PuzzleDifficulty.normal,
       );
 
       verify(postReq).called(1);
