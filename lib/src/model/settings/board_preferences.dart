@@ -41,19 +41,19 @@ class BoardPrefsState extends _$BoardPrefsState {
           );
   }
 
-  Future<void> setPieceSet(PieceSet pieceSet) async {
+  Future<void> setPieceSet(PieceSet pieceSet) {
     return _save(state.copyWith(pieceSet: pieceSet));
   }
 
-  Future<void> setBoardTheme(BoardTheme boardTheme) async {
+  Future<void> setBoardTheme(BoardTheme boardTheme) {
     return _save(state.copyWith(boardTheme: boardTheme));
   }
 
-  Future<void> toggleHapticFeedback() async {
+  Future<void> toggleHapticFeedback() {
     return _save(state.copyWith(hapticFeedback: !state.hapticFeedback));
   }
 
-  Future<void> toggleShowLegalMoves() async {
+  Future<void> toggleShowLegalMoves() {
     return _save(state.copyWith(showLegalMoves: !state.showLegalMoves));
   }
 

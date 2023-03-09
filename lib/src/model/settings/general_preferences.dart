@@ -37,11 +37,11 @@ class GeneralPreferencesState extends _$GeneralPreferencesState {
           );
   }
 
-  Future<void> setThemeMode(ThemeMode themeMode) async {
+  Future<void> setThemeMode(ThemeMode themeMode) {
     return _save(state.copyWith(themeMode: themeMode));
   }
 
-  Future<void> toggleSoundEnabled() async {
+  Future<void> toggleSoundEnabled() {
     return _save(state.copyWith(isSoundEnabled: !state.isSoundEnabled));
   }
 
