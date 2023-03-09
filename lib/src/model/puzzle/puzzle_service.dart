@@ -12,32 +12,41 @@ import 'puzzle_storage.dart';
 import 'puzzle_repository.dart';
 import 'puzzle.dart';
 import 'puzzle_theme.dart';
-import 'puzzle_difficulty.dart';
+import 'puzzle_preferences.dart';
 
 part 'puzzle_service.g.dart';
 
 /// Size of puzzle local cache
-const kPuzzleLocalQueueLength = 100;
+const kPuzzleLocalQueueLength = 50;
 
 @Riverpod(keepAlive: true)
-PuzzleService puzzleService(PuzzleServiceRef ref) {
+PuzzleService puzzleService(PuzzleServiceRef ref, {required int queueLength}) {
   final storage = ref.watch(puzzleStorageProvider);
   final repository = ref.watch(puzzleRepositoryProvider);
   return PuzzleService(
+    ref,
     Logger('PuzzleService'),
     storage: storage,
     repository: repository,
+    queueLength: queueLength,
   );
 }
 
+/// Puzzle service provider with the default queue length.
+final defaultPuzzleServiceProvider = puzzleServiceProvider(
+  queueLength: kPuzzleLocalQueueLength,
+);
+
 class PuzzleService {
   const PuzzleService(
+    this._ref,
     this._log, {
     required this.storage,
     required this.repository,
-    this.queueLength = kPuzzleLocalQueueLength,
+    required this.queueLength,
   });
 
+  final PuzzleServiceRef _ref;
   final int queueLength;
   final PuzzleStorage storage;
   final PuzzleRepository repository;
@@ -48,11 +57,10 @@ class PuzzleService {
   /// This future should never fail on network errors.
   Future<Puzzle?> nextPuzzle({
     required UserId? userId,
-    required PuzzleDifficulty difficulty,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) {
     return Result.release(
-      _syncAndLoadData(userId, angle, difficulty).map(
+      _syncAndLoadData(userId, angle).map(
         (data) =>
             data != null && data.unsolved.isNotEmpty ? data.unsolved[0] : null,
       ),
@@ -65,29 +73,35 @@ class PuzzleService {
   /// This future should never fail on network errors.
   Future<Puzzle?> solve({
     required UserId? userId,
-    required PuzzleDifficulty difficulty,
     required PuzzleSolution solution,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
     final data = await storage.fetch(
       userId: userId,
       angle: angle,
-      difficulty: difficulty,
     );
     if (data != null) {
       await storage.save(
         userId: userId,
         angle: angle,
-        difficulty: difficulty,
         data: PuzzleLocalData(
           solved: IList([...data.solved, solution]),
           unsolved:
               data.unsolved.removeWhere((e) => e.puzzle.id == solution.id),
         ),
       );
-      return nextPuzzle(userId: userId, angle: angle, difficulty: difficulty);
+      return nextPuzzle(userId: userId, angle: angle);
     }
     return Future.value(null);
+  }
+
+  /// Clears the current puzzle batch, fetches a new one and returns the next puzzle.
+  Future<Puzzle?> resetBatch({
+    required UserId? userId,
+    PuzzleTheme angle = PuzzleTheme.mix,
+  }) async {
+    await storage.delete(userId: userId, angle: angle);
+    return nextPuzzle(userId: userId, angle: angle);
   }
 
   /// Synchronize offline puzzle queue with server and gets latest data.
@@ -101,12 +115,10 @@ class PuzzleService {
   FutureResult<PuzzleLocalData?> _syncAndLoadData(
     UserId? userId,
     PuzzleTheme angle,
-    PuzzleDifficulty difficulty,
   ) async {
     final data = await storage.fetch(
       userId: userId,
       angle: angle,
-      difficulty: difficulty,
     );
 
     final unsolved = data?.unsolved ?? IList(const []);
@@ -116,6 +128,8 @@ class PuzzleService {
 
     if (deficit > 0) {
       _log.fine('Have a puzzle deficit of $deficit, will sync with lichess');
+
+      final difficulty = _ref.read(puzzlePrefsStateProvider(userId)).difficulty;
 
       // anonymous users can't solve puzzles so we just download the deficit
       final batchResult = solved.isNotEmpty && userId != null
@@ -151,7 +165,6 @@ class PuzzleService {
           await storage.save(
             userId: userId,
             angle: angle,
-            difficulty: difficulty,
             data: newData,
           );
         }

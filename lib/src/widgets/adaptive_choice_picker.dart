@@ -18,24 +18,20 @@ Future<void> showChoicesPicker<T extends Enum>(
           return AlertDialog(
             contentPadding: const EdgeInsets.only(top: 12),
             scrollable: true,
-            content: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: choices.map((value) {
-                    return RadioListTile<T>(
-                      title: labelBuilder(value),
-                      value: value,
-                      groupValue: selectedItem,
-                      onChanged: (value) {
-                        if (value != null && onSelectedItemChanged != null) {
-                          onSelectedItemChanged(value);
-                        }
-                      },
-                    );
-                  }).toList(growable: false),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: choices.map((value) {
+                return RadioListTile<T>(
+                  title: labelBuilder(value),
+                  value: value,
+                  groupValue: selectedItem,
+                  onChanged: (value) {
+                    if (value != null && onSelectedItemChanged != null) {
+                      onSelectedItemChanged(value);
+                    }
+                  },
                 );
-              },
+              }).toList(growable: false),
             ),
             actions: [
               TextButton(

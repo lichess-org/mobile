@@ -5,9 +5,9 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:logging/logging.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/database.dart';
@@ -16,9 +16,7 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import '../../test_utils.dart';
 import '../../test_container.dart';
 
@@ -30,14 +28,9 @@ void main() {
   final mockLogger = MockLogger();
   final mockClient = MockClient();
 
-  final puzzleRepo = PuzzleRepository(
-    mockLogger,
-    apiClient: ApiClient(mockLogger, mockClient),
-  );
-
   setUpAll(() {
     registerFallbackValue(
-      Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=100'),
+      Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=50'),
     );
   });
 
@@ -57,6 +50,9 @@ void main() {
           ref.onDispose(db.close);
           return db;
         }),
+        apiClientProvider.overrideWith((ref) {
+          return ApiClient(mockLogger, mockClient);
+        }),
       ],
     );
   }
@@ -65,13 +61,7 @@ void main() {
     test('will download data if local queue is empty', () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
-
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 3,
-      );
+      final service = container.read(puzzleServiceProvider(queueLength: 3));
 
       Future<http.Response> getReq() => mockClient.get(
             Uri.parse(
@@ -82,7 +72,6 @@ void main() {
 
       final puzzle = await service.nextPuzzle(
         userId: null,
-        difficulty: PuzzleDifficulty.normal,
       );
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
       verify(getReq).called(1);
@@ -94,21 +83,14 @@ void main() {
     test('will not download data if local queue is full', () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 1));
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       );
 
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 1,
-      );
-
       final puzzle = await service.nextPuzzle(
         userId: null,
-        difficulty: PuzzleDifficulty.normal,
       );
       expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
       verifyNever(() => mockClient.get(any()));
@@ -119,16 +101,10 @@ void main() {
     test('will fetch puzzle deficit if local queue is not full', () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 2));
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      );
-
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 2,
       );
 
       Future<http.Response> getReq() => mockClient.get(
@@ -142,7 +118,6 @@ void main() {
 
       final puzzle = await service.nextPuzzle(
         userId: null,
-        difficulty: PuzzleDifficulty.normal,
       );
       expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
       verify(getReq).called(1);
@@ -154,21 +129,14 @@ void main() {
         () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 1));
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       );
 
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 1,
-      );
-
       final puzzle = await service.nextPuzzle(
         userId: null,
-        difficulty: PuzzleDifficulty.normal,
       );
       expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
       final data = await storage.fetch(userId: null);
@@ -176,7 +144,6 @@ void main() {
 
       final puzzle2 = await service.nextPuzzle(
         userId: null,
-        difficulty: PuzzleDifficulty.normal,
       );
       expect(puzzle2?.puzzle.id, equals(const PuzzleId('pId3')));
       final data2 = await storage.fetch(userId: null);
@@ -186,7 +153,7 @@ void main() {
     test('nextPuzzle returns null is unsolved queue is empty and is offline',
         () async {
       final container = await makeTestContainer();
-      final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 1));
 
       when(
         () => mockClient.get(
@@ -196,16 +163,8 @@ void main() {
         ),
       ).thenAnswer((_) => Future.error(const SocketException('offline')));
 
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 1,
-      );
-
       final nextPuzzle = await service.nextPuzzle(
         userId: null,
-        difficulty: PuzzleDifficulty.normal,
       );
 
       expect(nextPuzzle, isNull);
@@ -214,16 +173,10 @@ void main() {
     test('different batch is saved per userId', () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 1));
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      );
-
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 1,
       );
 
       Future<http.Response> getReq() => mockClient.get(
@@ -236,7 +189,6 @@ void main() {
 
       final puzzle = await service.nextPuzzle(
         userId: const UserId('testUserId'),
-        difficulty: PuzzleDifficulty.normal,
       );
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
       verify(getReq).called(1);
@@ -251,16 +203,10 @@ void main() {
     test('different batch is saved per angle', () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 1));
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      );
-
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 1,
       );
 
       Future<http.Response> getReq() => mockClient.get(
@@ -274,7 +220,6 @@ void main() {
       final puzzle = await service.nextPuzzle(
         angle: PuzzleTheme.opening,
         userId: null,
-        difficulty: PuzzleDifficulty.normal,
       );
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
       verify(getReq).called(1);
@@ -290,16 +235,10 @@ void main() {
     test('solve puzzle when online, no userId', () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 1));
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      );
-
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 1,
       );
 
       Future<http.Response> getReq() => mockClient.get(
@@ -316,7 +255,6 @@ void main() {
           win: true,
           rated: true,
         ),
-        difficulty: PuzzleDifficulty.normal,
         userId: null,
       );
 
@@ -331,16 +269,10 @@ void main() {
     test('solve puzzle when online, with a userId', () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 1));
       await storage.save(
         userId: const UserId('testUserId'),
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      );
-
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 1,
       );
 
       Future<http.Response> postReq() => mockClient.post(
@@ -363,7 +295,6 @@ void main() {
           rated: true,
         ),
         userId: const UserId('testUserId'),
-        difficulty: PuzzleDifficulty.normal,
       );
 
       verify(postReq).called(1);
@@ -377,19 +308,13 @@ void main() {
     test('solve puzzle when offline', () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 2));
       await storage.save(
         userId: const UserId('testUserId'),
         data: _makeUnsolvedPuzzles([
           const PuzzleId('pId3'),
           const PuzzleId('pId4'),
         ]),
-      );
-
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 2,
       );
 
       Future<http.Response> postReq() => mockClient.post(
@@ -412,7 +337,6 @@ void main() {
       final next = await service.solve(
         solution: solution,
         userId: const UserId('testUserId'),
-        difficulty: PuzzleDifficulty.normal,
       );
 
       verify(postReq).called(1);

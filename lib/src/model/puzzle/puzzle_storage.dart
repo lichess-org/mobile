@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/common/database.dart';
 
 import 'puzzle.dart';
 import 'puzzle_theme.dart';
-import 'puzzle_difficulty.dart';
 
 part 'puzzle_storage.freezed.dart';
 part 'puzzle_storage.g.dart';
@@ -31,19 +30,16 @@ class PuzzleStorage {
   Future<PuzzleLocalData?> fetch({
     required UserId? userId,
     PuzzleTheme angle = PuzzleTheme.mix,
-    PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) async {
     final list = await _db.query(
       'puzzle_batchs',
       where: '''
       userId = ? AND
-      angle = ? AND
-      difficulty = ?
+      angle = ?
     ''',
       whereArgs: [
         userId?.value ?? _anonUserKey,
         angle.name,
-        difficulty.name,
       ],
     );
 
@@ -65,17 +61,32 @@ class PuzzleStorage {
     required UserId? userId,
     required PuzzleLocalData data,
     PuzzleTheme angle = PuzzleTheme.mix,
-    PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) async {
     await _db.insert(
       'puzzle_batchs',
       {
         'userId': userId?.value ?? _anonUserKey,
         'angle': angle.name,
-        'difficulty': difficulty.name,
         'data': jsonEncode(data.toJson()),
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> delete({
+    required UserId? userId,
+    PuzzleTheme angle = PuzzleTheme.mix,
+  }) async {
+    await _db.delete(
+      'puzzle_batchs',
+      where: '''
+      userId = ? AND
+      angle = ?
+    ''',
+      whereArgs: [
+        userId?.value ?? _anonUserKey,
+        angle.name,
+      ],
     );
   }
 }

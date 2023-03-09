@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 
 part 'puzzle_screen_state.g.dart';
 part 'puzzle_screen_state.freezed.dart';
@@ -177,13 +176,11 @@ class PuzzleScreenState extends _$PuzzleScreenState {
       resultSent: true,
     );
 
-    final service = ref.read(puzzleServiceProvider);
-    final difficulty = ref.read(puzzlePrefsStateProvider(userId)).difficulty;
+    final service = ref.read(defaultPuzzleServiceProvider);
 
     final next = await service.solve(
       userId: userId,
       angle: theme,
-      difficulty: difficulty,
       solution: PuzzleSolution(
         id: puzzle.puzzle.id,
         win: state.result == PuzzleResult.win,

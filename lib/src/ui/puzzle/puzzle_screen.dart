@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
 import 'puzzle_screen_state.dart';
+import 'puzzle_difficulty_controller.dart';
 
 class PuzzlesScreen extends StatelessWidget {
   const PuzzlesScreen({
@@ -281,6 +282,27 @@ class _Feedback extends StatelessWidget {
   }
 }
 
+void _goToNextPuzzle(
+  BuildContext context,
+  WidgetRef ref,
+  PuzzleTheme theme,
+  UserId? userId,
+  Puzzle nextPuzzle,
+) {
+  ref.invalidate(nextPuzzleProvider(theme));
+  Navigator.of(context).pushReplacement(
+    PageRouteBuilder<void>(
+      pageBuilder: (context, _, __) => PuzzlesScreen(
+        theme: theme,
+        userId: userId,
+        puzzle: nextPuzzle,
+      ),
+      transitionDuration: Duration.zero,
+      reverseTransitionDuration: Duration.zero,
+    ),
+  );
+}
+
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({
     required this.puzzle,
@@ -296,9 +318,6 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final difficulty = ref.watch(
-      puzzlePrefsStateProvider(userId).select((state) => state.difficulty),
-    );
     final puzzleStateProvider =
         puzzleScreenStateProvider(userId, theme, puzzle);
     final puzzleState = ref.watch(puzzleStateProvider);
@@ -313,62 +332,21 @@ class _BottomBar extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            if (!isDailyPuzzle && puzzleState.mode != PuzzleMode.view)
-              Builder(
-                builder: (context) {
-                  PuzzleDifficulty selectedDifficulty = difficulty;
-                  return StatefulBuilder(
-                    builder: (BuildContext context, StateSetter setState) {
-                      return _BottomBarButton(
-                        icon: Icons.tune,
-                        label: context.l10n.difficultyLevel,
-                        shortLabel: puzzleDifficultyL10n(context, difficulty),
-                        onTap: () {
-                          showChoicesPicker(
-                            context,
-                            choices: PuzzleDifficulty.values,
-                            selectedItem: difficulty,
-                            labelBuilder: (t) =>
-                                Text(puzzleDifficultyL10n(context, t)),
-                            onSelectedItemChanged:
-                                (PuzzleDifficulty? difficulty) {
-                              if (difficulty != null) {
-                                setState(() {
-                                  selectedDifficulty = difficulty;
-                                });
-                              }
-                            },
-                          ).then(
-                            (_) {
-                              ref
-                                  .read(
-                                    puzzlePrefsStateProvider(userId).notifier,
-                                  )
-                                  .setDifficulty(selectedDifficulty);
-                            },
-                          );
-                        },
-                      );
-                    },
-                  );
-                },
-              ),
+            if (userId != null &&
+                !isDailyPuzzle &&
+                puzzleState.mode != PuzzleMode.view)
+              _DifficultySelector(theme: theme, userId: userId),
             if (puzzleState.mode == PuzzleMode.view)
               _BottomBarButton(
                 onTap: puzzleState.mode == PuzzleMode.view &&
                         puzzleState.nextPuzzle != null
                     ? () {
-                        ref.invalidate(nextPuzzleProvider(theme));
-                        Navigator.of(context).pushReplacement(
-                          PageRouteBuilder<void>(
-                            pageBuilder: (context, _, __) => PuzzlesScreen(
-                              theme: theme,
-                              userId: userId,
-                              puzzle: puzzleState.nextPuzzle,
-                            ),
-                            transitionDuration: Duration.zero,
-                            reverseTransitionDuration: Duration.zero,
-                          ),
+                        _goToNextPuzzle(
+                          context,
+                          ref,
+                          theme,
+                          userId,
+                          puzzleState.nextPuzzle!,
                         );
                       }
                     : null,
@@ -409,6 +387,75 @@ class _BottomBar extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _DifficultySelector extends ConsumerWidget {
+  const _DifficultySelector({
+    required this.userId,
+    required this.theme,
+  });
+
+  final UserId? userId;
+  final PuzzleTheme theme;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final difficulty = ref.watch(
+      puzzlePrefsStateProvider(userId).select((state) => state.difficulty),
+    );
+    final difficultyController = ref.watch(puzzleDifficultyControllerProvider);
+    return StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) {
+        PuzzleDifficulty selectedDifficulty = difficulty;
+        return _BottomBarButton(
+          icon: Icons.tune,
+          label: context.l10n.difficultyLevel,
+          shortLabel: puzzleDifficultyL10n(context, difficulty),
+          onTap: difficultyController.isLoading
+              ? null
+              : () {
+                  showChoicesPicker(
+                    context,
+                    choices: PuzzleDifficulty.values,
+                    selectedItem: difficulty,
+                    labelBuilder: (t) => Text(puzzleDifficultyL10n(context, t)),
+                    onSelectedItemChanged: (PuzzleDifficulty? d) {
+                      if (d != null) {
+                        setState(() {
+                          selectedDifficulty = d;
+                        });
+                      }
+                    },
+                  ).then(
+                    (_) async {
+                      if (selectedDifficulty == difficulty) {
+                        return;
+                      }
+                      final nextPuzzle = await ref
+                          .read(
+                            puzzleDifficultyControllerProvider.notifier,
+                          )
+                          .changeDifficulty(
+                            userId,
+                            theme,
+                            selectedDifficulty,
+                          );
+                      if (context.mounted && nextPuzzle != null) {
+                        _goToNextPuzzle(
+                          context,
+                          ref,
+                          theme,
+                          userId,
+                          nextPuzzle,
+                        );
+                      }
+                    },
+                  );
+                },
+        );
+      },
     );
   }
 }
