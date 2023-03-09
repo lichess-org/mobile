@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/settings/providers.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 
 import './theme_mode_screen.dart';
 import './piece_set_screen.dart';
@@ -55,7 +56,11 @@ class SettingsScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModePrefProvider);
+    final themeMode = ref.watch(
+      generalPreferencesStateProvider.select(
+        (state) => state.themeMode,
+      ),
+    );
     final authController = ref.watch(authControllerProvider);
     final userSession = ref.watch(userSessionStateProvider);
     final pieceSet = ref.watch(pieceSetPrefProvider);
@@ -82,8 +87,8 @@ class _Body extends ConsumerWidget {
                       labelBuilder: (t) =>
                           Text(ThemeModeScreen.themeTitle(context, t)),
                       onSelectedItemChanged: (ThemeMode? value) => ref
-                          .read(themeModePrefProvider.notifier)
-                          .set(value ?? ThemeMode.system),
+                          .read(generalPreferencesStateProvider.notifier)
+                          .setThemeMode(value ?? ThemeMode.system),
                     );
                   } else {
                     pushPlatformRoute(

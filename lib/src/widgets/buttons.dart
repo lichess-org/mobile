@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/settings/providers.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -177,23 +177,31 @@ class _CardButtonState extends State<CardButton> {
 class ToggleSoundButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isSoundMuted = ref.watch(muteSoundPrefProvider);
+    final isSoundEnabled = ref.watch(
+      generalPreferencesStateProvider.select(
+        (prefs) => prefs.isSoundEnabled,
+      ),
+    );
 
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return IconButton(
-          icon: isSoundMuted
-              ? const Icon(Icons.volume_off)
-              : const Icon(Icons.volume_up),
-          onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
+          icon: isSoundEnabled
+              ? const Icon(Icons.volume_up)
+              : const Icon(Icons.volume_off),
+          onPressed: () => ref
+              .read(generalPreferencesStateProvider.notifier)
+              .toggleSoundEnabled(),
         );
       case TargetPlatform.iOS:
         return CupertinoButton(
           padding: EdgeInsets.zero,
-          child: isSoundMuted
-              ? const Icon(CupertinoIcons.volume_off)
-              : const Icon(CupertinoIcons.volume_up),
-          onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
+          child: isSoundEnabled
+              ? const Icon(CupertinoIcons.volume_up)
+              : const Icon(CupertinoIcons.volume_off),
+          onPressed: () => ref
+              .read(generalPreferencesStateProvider.notifier)
+              .toggleSoundEnabled(),
         );
       default:
         assert(false, 'Unexpected platform $defaultTargetPlatform');

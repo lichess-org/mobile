@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-import 'package:lichess_mobile/src/model/settings/providers.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 
 class ThemeModeScreen extends StatelessWidget {
   const ThemeModeScreen({super.key});
@@ -47,10 +47,13 @@ class ThemeModeScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModePrefProvider);
+    final themeMode = ref.watch(
+      generalPreferencesStateProvider.select((state) => state.themeMode),
+    );
 
-    void onChanged(ThemeMode? value) =>
-        ref.read(themeModePrefProvider.notifier).set(value ?? ThemeMode.system);
+    void onChanged(ThemeMode? value) => ref
+        .read(generalPreferencesStateProvider.notifier)
+        .setThemeMode(value ?? ThemeMode.system);
 
     return SafeArea(
       child: ListView(
