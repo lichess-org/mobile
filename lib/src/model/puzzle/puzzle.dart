@@ -9,25 +9,6 @@ import 'package:lichess_mobile/src/common/chess.dart';
 part 'puzzle.freezed.dart';
 part 'puzzle.g.dart';
 
-@freezed
-class PuzzlePreview with _$PuzzlePreview {
-  const factory PuzzlePreview({
-    required Side orientation,
-    required String initialFen,
-    required Move initialMove,
-  }) = _PuzzlePreview;
-
-  factory PuzzlePreview.fromPuzzle(Puzzle puzzle) {
-    final root = Root.fromPgn(puzzle.game.pgn);
-    final node = root.nodeAt(root.mainlinePath) as Node;
-    return PuzzlePreview(
-      orientation: node.ply.isEven ? Side.white : Side.black,
-      initialFen: node.position.fen,
-      initialMove: node.sanMove.move,
-    );
-  }
-}
-
 @Freezed(fromJson: true, toJson: true)
 class Puzzle with _$Puzzle {
   const Puzzle._();
@@ -38,6 +19,24 @@ class Puzzle with _$Puzzle {
   }) = _Puzzle;
 
   factory Puzzle.fromJson(Map<String, dynamic> json) => _$PuzzleFromJson(json);
+
+  /// Test user moves against solution.
+  bool testSolution(Iterable<SanMove> sanMoves) {
+    for (var i = 0; i < sanMoves.length; i++) {
+      final sanMove = sanMoves.elementAt(i);
+      final uci = sanMove.move.uci;
+      final isCheckmate = sanMove.san.endsWith('#');
+      final solutionUci = puzzle.solution.getOrNull(i);
+      if (isCheckmate) {
+        return true;
+      }
+      if (uci != solutionUci &&
+          (!altCastles.containsKey(uci) || altCastles[uci] != solutionUci)) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -52,24 +51,6 @@ class PuzzleData with _$PuzzleData {
     required IList<UCIMove> solution,
     required ISet<String> themes,
   }) = _PuzzleData;
-
-  /// Test user moves against solution.
-  bool testSolution(Iterable<SanMove> sanMoves) {
-    for (var i = 0; i < sanMoves.length; i++) {
-      final sanMove = sanMoves.elementAt(i);
-      final uci = sanMove.move.uci;
-      final isCheckmate = sanMove.san.endsWith('#');
-      final solutionUci = solution.getOrNull(i);
-      if (isCheckmate) {
-        return true;
-      }
-      if (uci != solutionUci &&
-          (!altCastles.containsKey(uci) || altCastles[uci] != solutionUci)) {
-        return false;
-      }
-    }
-    return true;
-  }
 
   factory PuzzleData.fromJson(Map<String, dynamic> json) =>
       _$PuzzleDataFromJson(json);
@@ -114,4 +95,23 @@ class PuzzleSolution with _$PuzzleSolution {
 
   factory PuzzleSolution.fromJson(Map<String, dynamic> json) =>
       _$PuzzleSolutionFromJson(json);
+}
+
+@freezed
+class PuzzlePreview with _$PuzzlePreview {
+  const factory PuzzlePreview({
+    required Side orientation,
+    required String initialFen,
+    required Move initialMove,
+  }) = _PuzzlePreview;
+
+  factory PuzzlePreview.fromPuzzle(Puzzle puzzle) {
+    final root = Root.fromPgn(puzzle.game.pgn);
+    final node = root.nodeAt(root.mainlinePath) as Node;
+    return PuzzlePreview(
+      orientation: node.ply.isEven ? Side.white : Side.black,
+      initialFen: node.position.fen,
+      initialMove: node.sanMove.move,
+    );
+  }
 }

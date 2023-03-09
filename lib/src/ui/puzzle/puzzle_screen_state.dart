@@ -28,9 +28,6 @@ class PuzzleVm with _$PuzzleVm {
   const PuzzleVm._();
 
   const factory PuzzleVm({
-    required PuzzleTheme theme,
-    required PuzzleData puzzle,
-    required UserId? userId,
     required PuzzleMode mode,
     required UciPath initialPath,
     required UciPath currentPath,
@@ -60,7 +57,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
   Timer? _viewSolutionTimer;
 
   @override
-  PuzzleVm build(PuzzleTheme theme, Puzzle puzzle, UserId? userId) {
+  PuzzleVm build(UserId? userId, PuzzleTheme theme, Puzzle puzzle) {
     final root = Root.fromPgn(puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
 
@@ -71,9 +68,6 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
 
     return PuzzleVm(
-      theme: theme,
-      puzzle: puzzle.puzzle,
-      userId: userId,
       mode: PuzzleMode.play,
       initialPath: initialPath,
       currentPath: UciPath.empty,
@@ -90,7 +84,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
       final movesToTest =
           state.nodeList.sublist(state.initialPath.size).map((e) => e.sanMove);
 
-      final isGoodMove = state.puzzle.testSolution(movesToTest);
+      final isGoodMove = puzzle.testSolution(movesToTest);
 
       if (isGoodMove) {
         state = state.copyWith(
@@ -98,7 +92,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
         );
 
         final isCheckmate = movesToTest.last.san.endsWith('#');
-        final nextUci = state.puzzle.solution.getOrNull(movesToTest.length);
+        final nextUci = puzzle.puzzle.solution.getOrNull(movesToTest.length);
         // checkmate is always a win
         if (isCheckmate) {
           _completePuzzle();
@@ -133,15 +127,6 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     _goToPreviousNode();
   }
 
-  void _goToNextNode() {
-    if (state.node.children.isEmpty) return;
-    _setPath(state.currentPath + state.node.children.first.id);
-  }
-
-  void _goToPreviousNode() {
-    _setPath(state.currentPath.penultimate);
-  }
-
   void viewSolution() {
     if (state.mode == PuzzleMode.view) return;
 
@@ -167,6 +152,15 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     });
   }
 
+  void _goToNextNode() {
+    if (state.node.children.isEmpty) return;
+    _setPath(state.currentPath + state.node.children.first.id);
+  }
+
+  void _goToPreviousNode() {
+    _setPath(state.currentPath.penultimate);
+  }
+
   Future<void> _completePuzzle() async {
     state = state.copyWith(
       mode: PuzzleMode.view,
@@ -182,13 +176,13 @@ class PuzzleScreenState extends _$PuzzleScreenState {
       resultSent: true,
     );
 
-    final service = ref.read(puzzleServiceProvider);
+    final service = ref.read(defaultPuzzleServiceProvider);
 
     final next = await service.solve(
-      userId: state.userId,
-      angle: state.theme,
+      userId: userId,
+      angle: theme,
       solution: PuzzleSolution(
-        id: state.puzzle.id,
+        id: puzzle.puzzle.id,
         win: state.result == PuzzleResult.win,
         // TODO add rating option
         rated: userId != null,
@@ -235,7 +229,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
   void _mergeSolution() {
     final initialNode = _gameTree.nodeAt(state.initialPath);
     final fromPly = initialNode.ply;
-    final posAndNodes = state.puzzle.solution.foldIndexed(
+    final posAndNodes = puzzle.puzzle.solution.foldIndexed(
       Tuple2(initialNode.position, IList<Node>(const [])),
       (index, previous, uci) {
         final move = Move.fromUci(uci);

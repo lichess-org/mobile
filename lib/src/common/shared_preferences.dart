@@ -19,7 +19,7 @@ SharedPreferences sharedPreferences(SharedPreferencesRef ref) {
 NotifierProvider<PrefNotifier<T>, T> createPrefProvider<T>({
   required String prefKey,
   required T defaultValue,
-  T Function(String?)? mapFrom,
+  T Function(String)? mapFrom,
   String Function(T)? mapTo,
 }) {
   return NotifierProvider<PrefNotifier<T>, T>(
@@ -61,14 +61,18 @@ class PrefNotifier<T> extends Notifier<T> {
 
   final String prefKey;
   final T defaultValue;
-  final T Function(String?)? mapFrom;
+  final T Function(String)? mapFrom;
   final String Function(T)? mapTo;
 
   @override
   T build() {
-    final saved = prefs.get(prefKey);
-    final mapped = mapFrom != null ? mapFrom!(saved as String?) : saved as T?;
-    return mapped ?? defaultValue;
+    if (mapFrom != null) {
+      final saved = prefs.getString(prefKey);
+      return saved != null ? mapFrom!(saved) : defaultValue;
+    }
+
+    final saved = prefs.get(prefKey) as T?;
+    return saved ?? defaultValue;
   }
 
   SharedPreferences get prefs => ref.read(sharedPreferencesProvider);

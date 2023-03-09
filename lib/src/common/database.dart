@@ -16,9 +16,8 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
           CREATE TABLE puzzle_batchs(
             userId TEXT NOT NULL,
             angle TEXT NOT NULL,
-            difficulty TEXT NOT NULL,
             data TEXT NOT NULL,
-            PRIMARY KEY (userId, angle, difficulty)
+            PRIMARY KEY (userId, angle)
           )
           ''',
         );

@@ -31,7 +31,7 @@ void main() {
 ''';
     when(
       () => mockClient.get(
-        Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=3'),
+        Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=3&difficulty=normal'),
       ),
     ).thenAnswer((_) => mockResponse(batchResponse, 200));
 

@@ -126,16 +126,18 @@ class _DailyPuzzle extends ConsumerWidget {
           fen: preview.initialFen,
           lastMove: preview.initialMove.cg,
           header: Text(context.l10n.dailyPuzzle),
-          onTap: () => Navigator.of(context, rootNavigator: true).push<void>(
-            MaterialPageRoute(
-              builder: (context) => PuzzlesScreen(
-                theme: PuzzleTheme.mix,
-                puzzle: data,
-                userId: session?.user.id,
-                isDailyPuzzle: true,
+          onTap: () {
+            Navigator.of(context, rootNavigator: true).push<void>(
+              MaterialPageRoute(
+                builder: (context) => PuzzlesScreen(
+                  theme: PuzzleTheme.mix,
+                  puzzle: data,
+                  userId: session?.user.id,
+                  isDailyPuzzle: true,
+                ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),

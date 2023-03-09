@@ -5,9 +5,9 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:logging/logging.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/database.dart';
@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import '../../test_utils.dart';
 import '../../test_container.dart';
 
@@ -29,14 +28,9 @@ void main() {
   final mockLogger = MockLogger();
   final mockClient = MockClient();
 
-  final puzzleRepo = PuzzleRepository(
-    mockLogger,
-    apiClient: ApiClient(mockLogger, mockClient),
-  );
-
   setUpAll(() {
     registerFallbackValue(
-      Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=30'),
+      Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=50'),
     );
   });
 
@@ -56,6 +50,9 @@ void main() {
           ref.onDispose(db.close);
           return db;
         }),
+        apiClientProvider.overrideWith((ref) {
+          return ApiClient(mockLogger, mockClient);
+        }),
       ],
     );
   }
@@ -64,27 +61,20 @@ void main() {
     test('will download data if local queue is empty', () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 3));
 
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 3,
+      Future<http.Response> getReq() => mockClient.get(
+            Uri.parse(
+              '$kLichessHost/api/puzzle/batch/mix?nb=3&difficulty=normal',
+            ),
+          );
+      when(getReq).thenAnswer((_) => mockResponse(batchOf3, 200));
+
+      final puzzle = await service.nextPuzzle(
+        userId: null,
       );
-
-      when(
-        () => mockClient.get(
-          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=3'),
-        ),
-      ).thenAnswer((_) => mockResponse(batchOf3, 200));
-
-      final puzzle = await service.nextPuzzle();
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
-      verify(
-        () => mockClient.get(
-          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=3'),
-        ),
-      ).called(1);
+      verify(getReq).called(1);
       final data = await storage.fetch(userId: null);
       expect(data?.solved, equals(IList(const [])));
       expect(data?.unsolved.length, equals(3));
@@ -93,19 +83,15 @@ void main() {
     test('will not download data if local queue is full', () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 1));
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       );
 
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 1,
+      final puzzle = await service.nextPuzzle(
+        userId: null,
       );
-
-      final puzzle = await service.nextPuzzle();
       expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
       verifyNever(() => mockClient.get(any()));
       final data = await storage.fetch(userId: null);
@@ -115,31 +101,26 @@ void main() {
     test('will fetch puzzle deficit if local queue is not full', () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 2));
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       );
 
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 2,
-      );
+      Future<http.Response> getReq() => mockClient.get(
+            Uri.parse(
+              '$kLichessHost/api/puzzle/batch/mix?nb=1&difficulty=normal',
+            ),
+          );
 
       // will fetch only 1 since queueLength is 2
-      when(
-        () => mockClient.get(
-          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
-        ),
-      ).thenAnswer((_) => mockResponse(batchOf1, 200));
+      when(getReq).thenAnswer((_) => mockResponse(batchOf1, 200));
 
-      final puzzle = await service.nextPuzzle();
+      final puzzle = await service.nextPuzzle(
+        userId: null,
+      );
       expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
-      verify(
-        () => mockClient
-            .get(Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1')),
-      ).called(1);
+      verify(getReq).called(1);
       final data = await storage.fetch(userId: null);
       expect(data?.unsolved.length, equals(2));
     });
@@ -148,24 +129,22 @@ void main() {
         () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 1));
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       );
 
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 1,
+      final puzzle = await service.nextPuzzle(
+        userId: null,
       );
-
-      final puzzle = await service.nextPuzzle();
       expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
       final data = await storage.fetch(userId: null);
       expect(data?.unsolved.length, equals(1));
 
-      final puzzle2 = await service.nextPuzzle();
+      final puzzle2 = await service.nextPuzzle(
+        userId: null,
+      );
       expect(puzzle2?.puzzle.id, equals(const PuzzleId('pId3')));
       final data2 = await storage.fetch(userId: null);
       expect(data2?.unsolved.length, equals(1));
@@ -174,22 +153,19 @@ void main() {
     test('nextPuzzle returns null is unsolved queue is empty and is offline',
         () async {
       final container = await makeTestContainer();
-      final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 1));
 
       when(
         () => mockClient.get(
-          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
+          Uri.parse(
+            '$kLichessHost/api/puzzle/batch/mix?nb=1&difficulty=normal',
+          ),
         ),
       ).thenAnswer((_) => Future.error(const SocketException('offline')));
 
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 1,
+      final nextPuzzle = await service.nextPuzzle(
+        userId: null,
       );
-
-      final nextPuzzle = await service.nextPuzzle();
 
       expect(nextPuzzle, isNull);
     });
@@ -197,31 +173,25 @@ void main() {
     test('different batch is saved per userId', () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 1));
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       );
 
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 1,
+      Future<http.Response> getReq() => mockClient.get(
+            Uri.parse(
+              '$kLichessHost/api/puzzle/batch/mix?nb=1&difficulty=normal',
+            ),
+          );
+
+      when(getReq).thenAnswer((_) => mockResponse(batchOf1, 200));
+
+      final puzzle = await service.nextPuzzle(
+        userId: const UserId('testUserId'),
       );
-
-      when(
-        () => mockClient.get(
-          Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
-        ),
-      ).thenAnswer((_) => mockResponse(batchOf1, 200));
-
-      final puzzle =
-          await service.nextPuzzle(userId: const UserId('testUserId'));
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
-      verify(
-        () => mockClient
-            .get(Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1')),
-      ).called(1);
+      verify(getReq).called(1);
 
       final data = await storage.fetch(userId: const UserId('testUserId'));
       expect(
@@ -233,25 +203,24 @@ void main() {
     test('different batch is saved per angle', () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 1));
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       );
 
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 1,
-      );
-
       Future<http.Response> getReq() => mockClient.get(
-            Uri.parse('$kLichessHost/api/puzzle/batch/opening?nb=1'),
+            Uri.parse(
+              '$kLichessHost/api/puzzle/batch/opening?nb=1&difficulty=normal',
+            ),
           );
 
       when(() => getReq()).thenAnswer((_) => mockResponse(batchOf1, 200));
 
-      final puzzle = await service.nextPuzzle(angle: PuzzleTheme.opening);
+      final puzzle = await service.nextPuzzle(
+        angle: PuzzleTheme.opening,
+        userId: null,
+      );
       expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
       verify(getReq).called(1);
 
@@ -266,20 +235,16 @@ void main() {
     test('solve puzzle when online, no userId', () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 1));
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       );
 
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 1,
-      );
-
       Future<http.Response> getReq() => mockClient.get(
-            Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
+            Uri.parse(
+              '$kLichessHost/api/puzzle/batch/mix?nb=1&difficulty=normal',
+            ),
           );
 
       when(getReq).thenAnswer((_) => mockResponse(batchOf1, 200));
@@ -290,6 +255,7 @@ void main() {
           win: true,
           rated: true,
         ),
+        userId: null,
       );
 
       verify(getReq).called(1);
@@ -303,20 +269,16 @@ void main() {
     test('solve puzzle when online, with a userId', () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 1));
       await storage.save(
         userId: const UserId('testUserId'),
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       );
 
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 1,
-      );
-
       Future<http.Response> postReq() => mockClient.post(
-            Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
+            Uri.parse(
+              '$kLichessHost/api/puzzle/batch/mix?nb=1&difficulty=normal',
+            ),
             headers: any(
               named: 'headers',
               that: sameHeaders({'Content-type': 'application/json'}),
@@ -346,6 +308,7 @@ void main() {
     test('solve puzzle when offline', () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 2));
       await storage.save(
         userId: const UserId('testUserId'),
         data: _makeUnsolvedPuzzles([
@@ -354,15 +317,10 @@ void main() {
         ]),
       );
 
-      final service = PuzzleService(
-        mockLogger,
-        storage: storage,
-        repository: puzzleRepo,
-        queueLength: 2,
-      );
-
       Future<http.Response> postReq() => mockClient.post(
-            Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=1'),
+            Uri.parse(
+              '$kLichessHost/api/puzzle/batch/mix?nb=1&difficulty=normal',
+            ),
             headers: any(
               named: 'headers',
               that: sameHeaders({'Content-type': 'application/json'}),
@@ -388,6 +346,38 @@ void main() {
       expect(data?.unsolved.length, equals(1));
       expect(next?.puzzle.id, equals(const PuzzleId('pId4')));
     });
+
+    test('resetBatch', () async {
+      final container = await makeTestContainer();
+      final storage = container.read(puzzleStorageProvider);
+      final service = container.read(puzzleServiceProvider(queueLength: 2));
+
+      await storage.save(
+        userId: const UserId('testUserId'),
+        data: _makeUnsolvedPuzzles([
+          const PuzzleId('pId3'),
+          const PuzzleId('pId4'),
+        ]),
+      );
+
+      Future<http.Response> getReq() => mockClient.get(
+            Uri.parse(
+              '$kLichessHost/api/puzzle/batch/mix?nb=2&difficulty=normal',
+            ),
+          );
+
+      when(getReq).thenAnswer((_) => mockResponse(batchOf2, 200));
+      final nextPuzle =
+          await service.resetBatch(userId: const UserId('testUserId'));
+
+      verify(getReq).called(1);
+      final data = await storage.fetch(userId: const UserId('testUserId'));
+      expect(nextPuzle?.puzzle.id, equals(const PuzzleId('20yWT')));
+      expect(data?.solved, equals(IList(const [])));
+      expect(data?.unsolved.length, equals(2));
+      expect(data?.unsolved[0].puzzle.id, equals(const PuzzleId('20yWT')));
+      expect(data?.unsolved[1].puzzle.id, equals(const PuzzleId('7H5EV')));
+    });
   });
 }
 
@@ -397,6 +387,10 @@ const batchOf3 = '''
 
 const batchOf1 = '''
 {"puzzles":[{"game":{"id":"PrlkCqOv","perf":{"key":"rapid","name":"Rapid"},"rated":true,"players":[{"userId":"silverjo","name":"silverjo (1777)","color":"white"},{"userId":"robyarchitetto","name":"Robyarchitetto (1742)","color":"black"}],"pgn":"e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2 Bb7 Bh6 d5 e5 d4 Bxg7 Kxg7 Qf4 Bxf3 Qxf3 dxc3 Nxc3 Nac6 Qf6+ Kg8 Rd1 Nd4 O-O c5 Ne4 Nef5 Rd2 Qxf6 Nxf6+ Kg7 Re1 h5 h3 Rad8 b4 Nh4 Re3 Nhf5 Re1 a5 bxc5 bxc5 Bc4 Ra8 Rb1 Nh4 Rdb2 Nc6 Rb7 Nxe5 Bxe6 Kxf6 Bd5 Nf5 R7b6+ Kg7 Bxa8 Rxa8 R6b3 Nd4 Rb7 Nxd3 Rd1 Ne2+ Kh2 Ndf4 Rdd7 Rf8 Ra7 c4 Rxa5 c3 Rc5 Ne6 Rc4 Ra8 a4 Rb8 a5 Rb2 a6 c2","clock":"5+8"},"puzzle":{"id":"20yWT","rating":1859,"plays":551,"initialPly":93,"solution":["a6a7","b2a2","c4c2","a2a7","d7a7"],"themes":["endgame","long","advantage","advancedPawn"]}}]}
+''';
+
+const batchOf2 = '''
+{"puzzles":[{"game":{"id":"PrlkCqOv","perf":{"key":"rapid","name":"Rapid"},"rated":true,"players":[{"userId":"silverjo","name":"silverjo (1777)","color":"white"},{"userId":"robyarchitetto","name":"Robyarchitetto (1742)","color":"black"}],"pgn":"e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2 Bb7 Bh6 d5 e5 d4 Bxg7 Kxg7 Qf4 Bxf3 Qxf3 dxc3 Nxc3 Nac6 Qf6+ Kg8 Rd1 Nd4 O-O c5 Ne4 Nef5 Rd2 Qxf6 Nxf6+ Kg7 Re1 h5 h3 Rad8 b4 Nh4 Re3 Nhf5 Re1 a5 bxc5 bxc5 Bc4 Ra8 Rb1 Nh4 Rdb2 Nc6 Rb7 Nxe5 Bxe6 Kxf6 Bd5 Nf5 R7b6+ Kg7 Bxa8 Rxa8 R6b3 Nd4 Rb7 Nxd3 Rd1 Ne2+ Kh2 Ndf4 Rdd7 Rf8 Ra7 c4 Rxa5 c3 Rc5 Ne6 Rc4 Ra8 a4 Rb8 a5 Rb2 a6 c2","clock":"5+8"},"puzzle":{"id":"20yWT","rating":1859,"plays":551,"initialPly":93,"solution":["a6a7","b2a2","c4c2","a2a7","d7a7"],"themes":["endgame","long","advantage","advancedPawn"]}},{"game":{"id":"0lwkiJbZ","perf":{"key":"classical","name":"Classical"},"rated":true,"players":[{"userId":"nirdosh","name":"nirdosh (2035)","color":"white"},{"userId":"burn_it_down","name":"burn_it_down (2139)","color":"black"}],"pgn":"d4 Nf6 Nf3 c5 e3 g6 Bd3 Bg7 c3 Qc7 O-O O-O Nbd2 d6 Qe2 Nbd7 e4 cxd4 cxd4 e5 dxe5 dxe5 b3 Nc5 Bb2 Nh5 g3 Bh3 Rfc1 Qd6 Bc4 Rac8 Bd5 Qb8 Ng5 Bd7 Ba3 b6 Rc2 h6 Ngf3 Rfe8 Rac1 Ne6 Nc4 Bb5 Qe3 Bxc4 Bxc4 Nd4 Nxd4 exd4 Qd3 Rcd8 f4 Nf6 e5 Ng4 Qxg6 Ne3 Bxf7+ Kh8 Rc7 Qa8 Qxg7+ Kxg7 Bd5+ Kg6 Bxa8 Rxa8 Rd7 Rad8 Rc6+ Kf5 Rcd6 Rxd7 Rxd7 Ke4 Bb2 Nc2 Kf2 d3 Bc1 Nd4 h3","clock":"15+15"},"puzzle":{"id":"7H5EV","rating":1852,"plays":410,"initialPly":84,"solution":["e8c8","d7d4","e4d4"],"themes":["endgame","short","advantage"]}}]}
 ''';
 
 PuzzleLocalData _makeUnsolvedPuzzles(List<PuzzleId> ids) {

@@ -12,31 +12,41 @@ import 'puzzle_storage.dart';
 import 'puzzle_repository.dart';
 import 'puzzle.dart';
 import 'puzzle_theme.dart';
+import 'puzzle_preferences.dart';
 
 part 'puzzle_service.g.dart';
 
 /// Size of puzzle local cache
-const kPuzzleLocalQueueLength = 100;
+const kPuzzleLocalQueueLength = 50;
 
 @Riverpod(keepAlive: true)
-PuzzleService puzzleService(PuzzleServiceRef ref) {
+PuzzleService puzzleService(PuzzleServiceRef ref, {required int queueLength}) {
   final storage = ref.watch(puzzleStorageProvider);
   final repository = ref.watch(puzzleRepositoryProvider);
   return PuzzleService(
+    ref,
     Logger('PuzzleService'),
     storage: storage,
     repository: repository,
+    queueLength: queueLength,
   );
 }
 
+/// Puzzle service provider with the default queue length.
+final defaultPuzzleServiceProvider = puzzleServiceProvider(
+  queueLength: kPuzzleLocalQueueLength,
+);
+
 class PuzzleService {
   const PuzzleService(
+    this._ref,
     this._log, {
     required this.storage,
     required this.repository,
-    this.queueLength = kPuzzleLocalQueueLength,
+    required this.queueLength,
   });
 
+  final PuzzleServiceRef _ref;
   final int queueLength;
   final PuzzleStorage storage;
   final PuzzleRepository repository;
@@ -46,7 +56,7 @@ class PuzzleService {
   ///
   /// This future should never fail on network errors.
   Future<Puzzle?> nextPuzzle({
-    UserId? userId,
+    required UserId? userId,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) {
     return Result.release(
@@ -62,11 +72,14 @@ class PuzzleService {
   ///
   /// This future should never fail on network errors.
   Future<Puzzle?> solve({
-    UserId? userId,
-    PuzzleTheme angle = PuzzleTheme.mix,
+    required UserId? userId,
     required PuzzleSolution solution,
+    PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
-    final data = await storage.fetch(userId: userId, angle: angle);
+    final data = await storage.fetch(
+      userId: userId,
+      angle: angle,
+    );
     if (data != null) {
       await storage.save(
         userId: userId,
@@ -82,11 +95,20 @@ class PuzzleService {
     return Future.value(null);
   }
 
+  /// Clears the current puzzle batch, fetches a new one and returns the next puzzle.
+  Future<Puzzle?> resetBatch({
+    required UserId? userId,
+    PuzzleTheme angle = PuzzleTheme.mix,
+  }) async {
+    await storage.delete(userId: userId, angle: angle);
+    return nextPuzzle(userId: userId, angle: angle);
+  }
+
   /// Synchronize offline puzzle queue with server and gets latest data.
   ///
   /// This task will fetch missing puzzles so the queue length is always equal to
   /// `queueLength`.
-  /// It will also call the `solveBatchTask` with solved puzzles.
+  /// It will call [PuzzleRepository.solveBatch] if necessary.
   ///
   /// This method should never fail, as if the network is down it will fallback
   /// to the local database.
@@ -94,7 +116,10 @@ class PuzzleService {
     UserId? userId,
     PuzzleTheme angle,
   ) async {
-    final data = await storage.fetch(userId: userId, angle: angle);
+    final data = await storage.fetch(
+      userId: userId,
+      angle: angle,
+    );
 
     final unsolved = data?.unsolved ?? IList(const []);
     final solved = data?.solved ?? IList(const []);
@@ -104,10 +129,21 @@ class PuzzleService {
     if (deficit > 0) {
       _log.fine('Have a puzzle deficit of $deficit, will sync with lichess');
 
+      final difficulty = _ref.read(puzzlePrefsStateProvider(userId)).difficulty;
+
       // anonymous users can't solve puzzles so we just download the deficit
       final batchResult = solved.isNotEmpty && userId != null
-          ? repository.solveBatch(nb: deficit, solved: solved, angle: angle)
-          : repository.selectBatch(nb: deficit, angle: angle);
+          ? repository.solveBatch(
+              nb: deficit,
+              solved: solved,
+              angle: angle,
+              difficulty: difficulty,
+            )
+          : repository.selectBatch(
+              nb: deficit,
+              angle: angle,
+              difficulty: difficulty,
+            );
 
       return batchResult
           .fold(
