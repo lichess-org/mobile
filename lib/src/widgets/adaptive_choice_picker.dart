@@ -28,6 +28,7 @@ Future<void> showChoicesPicker<T extends Enum>(
                   onChanged: (value) {
                     if (value != null && onSelectedItemChanged != null) {
                       onSelectedItemChanged(value);
+                      Navigator.of(context).pop();
                     }
                   },
                 );

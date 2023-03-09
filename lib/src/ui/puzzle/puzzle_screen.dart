@@ -360,6 +360,7 @@ class _BottomBar extends ConsumerWidget {
                 icon: Icons.help,
                 label: context.l10n.viewTheSolution,
                 shortLabel: context.l10n.solution,
+                showAndroidShortLabel: true,
                 onTap: puzzleState.mode == PuzzleMode.view
                     ? null
                     : () =>
@@ -413,6 +414,7 @@ class _DifficultySelector extends ConsumerWidget {
           icon: Icons.tune,
           label: context.l10n.difficultyLevel,
           shortLabel: puzzleDifficultyL10n(context, difficulty),
+          showAndroidShortLabel: true,
           onTap: difficultyController.isLoading
               ? null
               : () {
@@ -467,6 +469,7 @@ class _BottomBarButton extends StatelessWidget {
     required this.shortLabel,
     required this.onTap,
     this.highlighted = false,
+    this.showAndroidShortLabel = false,
   });
 
   final IconData icon;
@@ -474,6 +477,7 @@ class _BottomBarButton extends StatelessWidget {
   final String shortLabel;
   final VoidCallback? onTap;
   final bool highlighted;
+  final bool showAndroidShortLabel;
 
   bool get enabled => onTap != null;
 
@@ -481,23 +485,26 @@ class _BottomBarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
+        final themeData = Theme.of(context);
         return Theme(
-          data: Theme.of(context),
+          data: themeData,
           child: SizedBox(
             height: 50,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                IconButton(
-                  visualDensity: VisualDensity.compact,
-                  onPressed: onTap,
-                  icon: Icon(icon),
-                  tooltip: label,
-                ),
-              ],
-            ),
+            child: showAndroidShortLabel
+                ? TextButton.icon(
+                    onPressed: onTap,
+                    icon: Icon(icon),
+                    label: Text(shortLabel),
+                    style: TextButton.styleFrom(
+                      foregroundColor: themeData.colorScheme.onBackground,
+                    ),
+                  )
+                : IconButton(
+                    visualDensity: VisualDensity.compact,
+                    onPressed: onTap,
+                    icon: Icon(icon),
+                    tooltip: label,
+                  ),
           ),
         );
       case TargetPlatform.iOS:
