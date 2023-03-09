@@ -6,7 +6,7 @@ import 'package:chessground/chessground.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/styles.dart';
-import 'package:lichess_mobile/src/model/settings/providers.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'platform.dart';
 
 const _scrollAnimationDuration = Duration(milliseconds: 200);
@@ -53,9 +53,7 @@ class TableBoardLayout extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pieceSet = ref.watch(pieceSetPrefProvider);
-    final boardTheme = ref.watch(boardThemePrefProvider);
-    final showLegalMoves = ref.watch(boardShowLegalMovesPrefProvider);
+    final boardPrefs = ref.watch(boardPrefsStateProvider);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -89,9 +87,9 @@ class TableBoardLayout extends ConsumerWidget {
             : null;
 
         final defaultSettings = BoardSettings(
-          pieceAssets: pieceSet.assets,
-          colorScheme: boardTheme.colors,
-          showValidMoves: showLegalMoves,
+          pieceAssets: boardPrefs.pieceSet.assets,
+          colorScheme: boardPrefs.boardTheme.colors,
+          showValidMoves: boardPrefs.showLegalMoves,
         );
 
         final settings = boardSettingsOverrides != null

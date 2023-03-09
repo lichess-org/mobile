@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/model/settings/providers.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 
 class BoardSettingsScreen extends StatelessWidget {
   const BoardSettingsScreen({super.key});
@@ -37,8 +37,7 @@ class BoardSettingsScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final hapticFeedback = ref.watch(boardHapticFeedbackPrefProvider);
-    final showLegalMoves = ref.watch(boardShowLegalMovesPrefProvider);
+    final boardPrefs = ref.watch(boardPrefsStateProvider);
 
     return SafeArea(
       child: ListView(
@@ -49,16 +48,20 @@ class _Body extends ConsumerWidget {
             children: [
               SwitchSettingTile(
                 title: const Text('Haptic feedback'),
-                value: hapticFeedback,
+                value: boardPrefs.hapticFeedback,
                 onChanged: (value) {
-                  ref.read(boardHapticFeedbackPrefProvider.notifier).toggle();
+                  ref
+                      .read(boardPrefsStateProvider.notifier)
+                      .toggleHapticFeedback();
                 },
               ),
               SwitchSettingTile(
                 title: const Text('Show legal moves'),
-                value: showLegalMoves,
+                value: boardPrefs.showLegalMoves,
                 onChanged: (value) {
-                  ref.read(boardShowLegalMovesPrefProvider.notifier).toggle();
+                  ref
+                      .read(boardPrefsStateProvider.notifier)
+                      .toggleShowLegalMoves();
                 },
               ),
             ],

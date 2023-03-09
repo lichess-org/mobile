@@ -5,7 +5,7 @@ import 'package:chessground/chessground.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/styles.dart';
-import 'package:lichess_mobile/src/model/settings/providers.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 
 /// A simple board preview widget that is not interactable.
 class BoardPreview extends ConsumerStatefulWidget {
@@ -57,8 +57,7 @@ class _BoardPreviewState extends ConsumerState<BoardPreview> {
 
   @override
   Widget build(BuildContext context) {
-    final pieceSet = ref.watch(pieceSetPrefProvider);
-    final boardColor = ref.watch(boardThemePrefProvider);
+    final boardPrefs = ref.watch(boardPrefsStateProvider);
 
     final board = LayoutBuilder(
       builder: (context, constraints) {
@@ -100,8 +99,8 @@ class _BoardPreviewState extends ConsumerState<BoardPreview> {
             settings: BoardSettings(
               enableCoordinates: false,
               animationDuration: const Duration(milliseconds: 150),
-              pieceAssets: pieceSet.assets,
-              colorScheme: boardColor.colors,
+              pieceAssets: boardPrefs.pieceSet.assets,
+              colorScheme: boardPrefs.boardTheme.colors,
             ),
           ),
         );

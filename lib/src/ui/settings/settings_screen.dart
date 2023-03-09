@@ -17,7 +17,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
-import 'package:lichess_mobile/src/model/settings/providers.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 
 import './theme_mode_screen.dart';
@@ -63,9 +63,8 @@ class _Body extends ConsumerWidget {
     );
     final authController = ref.watch(authControllerProvider);
     final userSession = ref.watch(userSessionStateProvider);
-    final pieceSet = ref.watch(pieceSetPrefProvider);
-    final boardTheme = ref.watch(boardThemePrefProvider);
     final packageInfo = ref.watch(packageInfoProvider);
+    final boardPrefs = ref.watch(boardPrefsStateProvider);
 
     return SafeArea(
       child: ListView(
@@ -102,7 +101,7 @@ class _Body extends ConsumerWidget {
               SettingsListTile(
                 icon: const Icon(LichessIcons.chess_board),
                 settingsLabel: context.l10n.boardTheme,
-                settingsValue: boardTheme.label,
+                settingsValue: boardPrefs.boardTheme.label,
                 onTap: () {
                   pushPlatformRoute(
                     context: context,
@@ -114,7 +113,7 @@ class _Body extends ConsumerWidget {
               SettingsListTile(
                 icon: const Icon(LichessIcons.chess_knight),
                 settingsLabel: context.l10n.pieceSet,
-                settingsValue: pieceSet.label,
+                settingsValue: boardPrefs.pieceSet.label,
                 onTap: () {
                   pushPlatformRoute(
                     context: context,

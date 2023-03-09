@@ -18,7 +18,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:lichess_mobile/src/model/settings/providers.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
@@ -156,7 +156,8 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pieceSet = ref.watch(pieceSetPrefProvider);
+    final pieceSet =
+        ref.watch(boardPrefsStateProvider.select((p) => p.pieceSet));
     final puzzleStateProvider =
         puzzleScreenStateProvider(userId, theme, puzzle);
     final puzzleState = ref.watch(puzzleStateProvider);

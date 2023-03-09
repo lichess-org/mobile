@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
-import 'package:lichess_mobile/src/model/settings/providers.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 
 class BoardThemeScreen extends StatelessWidget {
   const BoardThemeScreen({super.key});
@@ -37,11 +37,12 @@ class BoardThemeScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final boardTheme = ref.watch(boardThemePrefProvider);
+    final boardTheme =
+        ref.watch(boardPrefsStateProvider.select((p) => p.boardTheme));
 
     void onChanged(BoardTheme? value) => ref
-        .read(boardThemePrefProvider.notifier)
-        .set(value ?? BoardTheme.brown);
+        .read(boardPrefsStateProvider.notifier)
+        .setBoardTheme(value ?? BoardTheme.brown);
 
     return SafeArea(
       child: ListView(

@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:lichess_mobile/src/model/settings/providers.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'sound_service.dart';
 
 part 'move_feedback.g.dart';
@@ -21,7 +21,7 @@ class MoveFeedbackService {
   void moveFeedback() {
     _soundService.playMove();
 
-    if (_ref.read(boardHapticFeedbackPrefProvider)) {
+    if (_ref.read(boardPrefsStateProvider).hapticFeedback) {
       HapticFeedback.lightImpact();
     }
   }
@@ -29,13 +29,13 @@ class MoveFeedbackService {
   void captureFeedback() {
     _soundService.playCapture();
 
-    if (_ref.read(boardHapticFeedbackPrefProvider)) {
+    if (_ref.read(boardPrefsStateProvider).hapticFeedback) {
       HapticFeedback.lightImpact();
     }
   }
 
   void checkFeedback() {
-    if (_ref.read(boardHapticFeedbackPrefProvider)) {
+    if (_ref.read(boardPrefsStateProvider).hapticFeedback) {
       HapticFeedback.mediumImpact();
     }
   }
