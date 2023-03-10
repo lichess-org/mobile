@@ -74,6 +74,9 @@ enum PuzzleTheme {
   // checkFirst,
 }
 
+final IMap<String, PuzzleTheme> puzzleThemeNameMap =
+    IMap(PuzzleTheme.values.asNameMap());
+
 typedef PuzzleThemeCategory = Tuple2<String, List<PuzzleTheme>>;
 
 @Riverpod(keepAlive: true)

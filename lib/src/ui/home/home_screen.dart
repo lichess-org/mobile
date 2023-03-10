@@ -1,24 +1,46 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dartchess/dartchess.dart';
 
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/common/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/ui/auth/sign_in_widget.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/ui/user/leaderboard_widget.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
+
+  @override
   Widget build(BuildContext context) {
+    ref.listen(connectivityChangesProvider, (_, connectivity) {
+      if (!connectivity.isRefreshing &&
+          connectivity.hasValue &&
+          connectivity.value!.isOnline) {
+        _refreshData();
+      }
+    });
+
     return PlatformWidget(
       androidBuilder: _androidBuilder,
       iosBuilder: _iosBuilder,
@@ -33,39 +55,42 @@ class HomeScreen extends StatelessWidget {
           SignInWidget(),
         ],
       ),
-      body: _HomeScaffold(
-        child: ListView(
-          children: [
-            LeaderboardWidget(),
-            const _DailyPuzzle(),
-          ],
+      body: RefreshIndicator(
+        key: _androidRefreshKey,
+        onRefresh: _refreshData,
+        child: const _HomeScaffold(
+          child: _HomeBody(),
         ),
       ),
     );
   }
 
   Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      child: _HomeScaffold(
+    return _HomeScaffold(
+      child: CupertinoPageScaffold(
         child: CustomScrollView(
           slivers: [
             const CupertinoSliverNavigationBar(
               largeTitle: Text('Home'),
               trailing: SignInWidget(),
             ),
-            SliverSafeArea(
+            CupertinoSliverRefreshControl(
+              onRefresh: _refreshData,
+            ),
+            const SliverSafeArea(
               top: false,
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  LeaderboardWidget(),
-                  const _DailyPuzzle(),
-                ]),
-              ),
+              sliver: _HomeBody(),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _refreshData() {
+    return ref
+        .refresh(dailyPuzzleProvider.future)
+        .then((_) => ref.refresh(leaderboardProvider));
   }
 }
 
@@ -83,30 +108,104 @@ class _HomeScaffold extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          const _ConnectivityBanner(),
           Expanded(
             child: child,
           ),
-          // TODO: Implement Create Game
-          // SizedBox(
-          //   height: 80,
-          //   child: Padding(
-          //     padding: const EdgeInsets.symmetric(vertical: 15.0)
-          //         .add(Styles.horizontalBodyPadding),
-          //     child: FatButton(
-          //       semanticsLabel: context.l10n.createAGame,
-          //       child: Text(context.l10n.createAGame),
-          //       onPressed: () {
-          //         Navigator.of(context).push<void>(
-          //           MaterialPageRoute(
-          //             builder: (context) => const PlayScreen(),
-          //           ),
-          //         );
-          //       },
-          //     ),
-          //   ),
-          // ),
         ],
       ),
+    );
+  }
+}
+
+class _HomeBody extends ConsumerWidget {
+  const _HomeBody();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final connectivity = ref.watch(connectivityChangesProvider);
+    return connectivity.when(
+      data: (data) {
+        if (data.isOnline) {
+          return defaultTargetPlatform == TargetPlatform.android
+              ? ListView(
+                  children: [
+                    LeaderboardWidget(),
+                    const _DailyPuzzle(),
+                  ],
+                )
+              : SliverList(
+                  delegate: SliverChildListDelegate([
+                    LeaderboardWidget(),
+                    const _DailyPuzzle(),
+                  ]),
+                );
+        } else {
+          return defaultTargetPlatform == TargetPlatform.android
+              ? ListView(
+                  children: const [
+                    _OfflinePuzzlePreview(),
+                  ],
+                )
+              : SliverList(
+                  delegate: SliverChildListDelegate([
+                    const _OfflinePuzzlePreview(),
+                  ]),
+                );
+        }
+      },
+      loading: () {
+        const child = CenterLoadingIndicator();
+        return defaultTargetPlatform == TargetPlatform.android
+            ? child
+            : const SliverToBoxAdapter(child: child);
+      },
+      error: (error, stack) {
+        const child = SizedBox.shrink();
+        return defaultTargetPlatform == TargetPlatform.android
+            ? child
+            : const SliverToBoxAdapter(child: child);
+      },
+    );
+  }
+}
+
+class _ConnectivityBanner extends ConsumerWidget {
+  const _ConnectivityBanner();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final connectivity = ref.watch(connectivityChangesProvider);
+    final themeData = CupertinoTheme.of(context);
+    return connectivity.when(
+      data: (data) {
+        if (data.isOnline) {
+          return const SizedBox.shrink();
+        }
+        return Container(
+          height: 45,
+          color: themeData.barBackgroundColor,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.report, color: themeData.textTheme.textStyle.color),
+                const SizedBox(width: 5),
+                const Flexible(
+                  child: Text(
+                    'No internet connection. Enjoy the offline puzzles!',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (error, stack) => const SizedBox.shrink(),
     );
   }
 }
@@ -116,7 +215,6 @@ class _DailyPuzzle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(userSessionStateProvider);
     final puzzle = ref.watch(dailyPuzzleProvider);
     return puzzle.when(
       data: (data) {
@@ -127,6 +225,7 @@ class _DailyPuzzle extends ConsumerWidget {
           lastMove: preview.initialMove.cg,
           header: Text(context.l10n.dailyPuzzle),
           onTap: () {
+            final session = ref.read(userSessionStateProvider);
             Navigator.of(context, rootNavigator: true).push<void>(
               MaterialPageRoute(
                 builder: (context) => PuzzlesScreen(
@@ -141,8 +240,52 @@ class _DailyPuzzle extends ConsumerWidget {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stack) => Center(
-        child: Text(error.toString()),
+      error: (error, stack) => Padding(
+        padding: Styles.bodySectionPadding,
+        child: const Text('Could not load the daily puzzle.'),
+      ),
+    );
+  }
+}
+
+class _OfflinePuzzlePreview extends ConsumerWidget {
+  const _OfflinePuzzlePreview();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final puzzle = ref.watch(nextPuzzleProvider(PuzzleTheme.mix));
+    return puzzle.when(
+      data: (data) {
+        final puzzle = data.item2;
+        final preview =
+            puzzle != null ? PuzzlePreview.fromPuzzle(puzzle) : null;
+        return BoardPreview(
+          orientation: preview?.orientation.cg ?? Side.white.cg,
+          fen: preview?.initialFen ?? kEmptyFen,
+          lastMove: preview?.initialMove.cg,
+          header: Text(context.l10n.puzzles),
+          errorMessage: puzzle == null
+              ? 'No offline puzzles available. Go online to get more puzzles.'
+              : null,
+          onTap: puzzle != null
+              ? () {
+                  Navigator.of(context, rootNavigator: true).push<void>(
+                    MaterialPageRoute(
+                      builder: (context) => PuzzlesScreen(
+                        theme: PuzzleTheme.mix,
+                        puzzle: puzzle,
+                        userId: data.item1,
+                      ),
+                    ),
+                  );
+                }
+              : null,
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Padding(
+        padding: Styles.bodySectionPadding,
+        child: const Text('Could not load the daily puzzle.'),
       ),
     );
   }

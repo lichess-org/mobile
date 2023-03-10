@@ -22,7 +22,7 @@ AccountRepository accountRepository(AccountRepositoryRef ref) {
 
 @riverpod
 Future<User> account(AccountRef ref) {
-  ref.cacheFor(RequestCacheDuration.standard);
+  ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(accountRepositoryProvider);
   return Result.release(repo.getProfile());
 }
