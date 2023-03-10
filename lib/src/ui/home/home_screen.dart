@@ -185,13 +185,22 @@ class _ConnectivityBanner extends ConsumerWidget {
         return Container(
           height: 45,
           color: themeData.barBackgroundColor,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.report, color: themeData.textTheme.textStyle.color),
-              const SizedBox(width: 5),
-              const Text('No internet connection. Enjoy the offline puzzles!'),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.report, color: themeData.textTheme.textStyle.color),
+                const SizedBox(width: 5),
+                const Flexible(
+                  child: Text(
+                    'No internet connection. Enjoy the offline puzzles!',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
