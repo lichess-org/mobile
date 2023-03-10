@@ -26,7 +26,7 @@ Stream<ConnectivityStatus> connectivityChanges(ConnectivityChangesRef ref) {
 
 Future<bool> isOnline() async {
   try {
-    final result = await InternetAddress.lookup('example.com');
+    final result = await InternetAddress.lookup('lichess.org');
     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
       return true;
     }
