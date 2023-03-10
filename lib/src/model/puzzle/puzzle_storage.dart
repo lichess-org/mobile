@@ -22,6 +22,7 @@ PuzzleStorage puzzleStorage(PuzzleStorageRef ref) {
 
 const _anonUserKey = '**anon**';
 
+/// Local storage for puzzles.
 class PuzzleStorage {
   const PuzzleStorage(this._db);
 
@@ -87,6 +88,27 @@ class PuzzleStorage {
         userId?.value ?? _anonUserKey,
         angle.name,
       ],
+    );
+  }
+
+  Future<ISet<PuzzleTheme>> fetchSavedThemes({
+    required UserId? userId,
+  }) async {
+    final list = await _db.query(
+      'puzzle_batchs',
+      where: 'userId = ?',
+      whereArgs: [
+        userId?.value ?? _anonUserKey,
+      ],
+    );
+
+    return list.fold<ISet<PuzzleTheme>>(
+      ISet<PuzzleTheme>(const {}),
+      (set, map) {
+        final angle = map['angle'] as String?;
+        final theme = angle != null ? puzzleThemeNameMap.get(angle) : null;
+        return theme != null ? set.add(theme) : set;
+      },
     );
   }
 }
