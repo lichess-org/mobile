@@ -129,27 +129,40 @@ class _Category extends ConsumerWidget {
             message: puzzleThemeL10n(context, theme).description,
             triggerMode: TooltipTriggerMode.longPress,
             showDuration: const Duration(seconds: 7),
-            child: Opacity(
-              opacity: isOnline || savedThemes.contains(theme) ? 1 : 0.3,
-              child: PlatformListTile(
-                title: Text(puzzleThemeL10n(context, theme).name),
-                subtitle: Text(
-                  puzzleThemeL10n(context, theme).description,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+            child: PlatformListTile(
+              title: Text(
+                puzzleThemeL10n(context, theme).name,
+                style: TextStyle(
+                  color: textShade(
+                    context,
+                    isOnline || savedThemes.contains(theme) ? 1 : 0.3,
+                  ),
                 ),
-                isThreeLine:
-                    puzzleThemeL10n(context, theme).description.length > 60,
-                onTap: isOnline || savedThemes.contains(theme)
-                    ? () {
-                        Navigator.of(context, rootNavigator: true).push<void>(
-                          MaterialPageRoute(
-                            builder: (context) => PuzzlesScreen(theme: theme),
-                          ),
-                        );
-                      }
-                    : null,
               ),
+              subtitle: Text(
+                puzzleThemeL10n(context, theme).description,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: textShade(
+                    context,
+                    isOnline || savedThemes.contains(theme)
+                        ? Styles.subtitleOpacity
+                        : 0.3,
+                  ),
+                ),
+              ),
+              isThreeLine:
+                  puzzleThemeL10n(context, theme).description.length > 60,
+              onTap: isOnline || savedThemes.contains(theme)
+                  ? () {
+                      Navigator.of(context, rootNavigator: true).push<void>(
+                        MaterialPageRoute(
+                          builder: (context) => PuzzlesScreen(theme: theme),
+                        ),
+                      );
+                    }
+                  : null,
             ),
           ),
       ],
