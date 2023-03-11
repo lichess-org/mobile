@@ -57,6 +57,7 @@ dependencies:
   sqflite: ^2.2.5
   path: ^1.8.2
   connectivity_plus: ^3.0.3
+  share_plus: ^6.3.1
 
 dev_dependencies:
   build_runner: ^2.3.2

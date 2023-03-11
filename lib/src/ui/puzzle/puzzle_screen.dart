@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/models.dart';
@@ -339,6 +340,17 @@ class _BottomBar extends ConsumerWidget {
                 !isDailyPuzzle &&
                 puzzleState.mode != PuzzleMode.view)
               _DifficultySelector(theme: theme, userId: userId),
+            if (puzzleState.mode == PuzzleMode.view)
+              _BottomBarButton(
+                onTap: () {
+                  Share.share('$kLichessHost/training/${puzzle.puzzle.id}');
+                },
+                label: 'Share this puzzle',
+                shortLabel: 'Share',
+                icon: defaultTargetPlatform == TargetPlatform.iOS
+                    ? CupertinoIcons.share
+                    : Icons.share,
+              ),
             if (puzzleState.mode == PuzzleMode.view)
               _BottomBarButton(
                 onTap: puzzleState.mode == PuzzleMode.view &&

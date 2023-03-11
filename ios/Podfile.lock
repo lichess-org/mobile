@@ -23,6 +23,8 @@ PODS:
     - Flutter
     - FlutterMacOS
   - ReachabilitySwift (5.0.0)
+  - share_plus (0.0.1):
+    - Flutter
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -41,6 +43,7 @@ DEPENDENCIES:
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
+  - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
   - soundpool (from `.symlinks/plugins/soundpool/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -65,6 +68,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/ios"
+  share_plus:
+    :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/ios"
   soundpool:
@@ -84,6 +89,7 @@ SPEC CHECKSUMS:
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
+  share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
   shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
   soundpool: c7f4422ca206e77f8900ed3c4ee6a6ff5a0e38a9
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
