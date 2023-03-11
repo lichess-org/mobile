@@ -134,6 +134,7 @@ class PlatformListTile extends StatelessWidget {
     this.onTap,
     this.selected = false,
     this.isThreeLine = false,
+    this.visualDensity,
   });
 
   final Widget? leading;
@@ -152,6 +153,9 @@ class PlatformListTile extends StatelessWidget {
 
   // only on android
   final bool isThreeLine;
+
+  /// Only on android.
+  final VisualDensity? visualDensity;
 
   final GestureTapCallback? onTap;
 
@@ -172,6 +176,7 @@ class PlatformListTile extends StatelessWidget {
               : null,
           trailing: trailing,
           dense: dense,
+          visualDensity: visualDensity,
           onTap: onTap,
           selected: selected,
           isThreeLine: isThreeLine,

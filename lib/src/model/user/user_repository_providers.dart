@@ -42,7 +42,7 @@ Future<IList<UserActitity>> userActitity(
   UserActitityRef ref, {
   required UserId id,
 }) {
-  ref.cacheFor(RequestCacheDuration.standard);
+  ref.cacheFor(const Duration(seconds: 30));
   final repo = ref.watch(userRepositoryProvider);
   return Result.release(repo.getUserActivity(id));
 }

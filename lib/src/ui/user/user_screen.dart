@@ -348,7 +348,7 @@ class Activity extends ConsumerWidget {
       data: (data) {
         return ListSection(
           // TODO translate
-          header: const Text('Activity', style: Styles.sectionTitle),
+          header: Text('Activity', style: Styles.sectionTitle),
           hasLeading: true,
           children: data.map((entry) {
             final g = entry.games!.mapTo((key, value) {
