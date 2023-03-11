@@ -5,12 +5,12 @@ import 'package:chessground/chessground.dart';
 
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/widgets/game_board_layout.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-import 'package:lichess_mobile/src/model/settings/providers.dart';
 import 'package:lichess_mobile/src/model/tv/featured_position.dart';
 import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
@@ -31,17 +31,11 @@ class TvScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-    final isSoundMuted = ref.watch(muteSoundPrefProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lichess TV'),
+        title: const Text('Top Rated'),
         actions: [
-          IconButton(
-            icon: isSoundMuted
-                ? const Icon(Icons.volume_off)
-                : const Icon(Icons.volume_up),
-            onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
-          )
+          ToggleSoundButton(),
         ],
       ),
       body: const _Body(),
@@ -52,16 +46,10 @@ class TvScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-    final isSoundMuted = ref.watch(muteSoundPrefProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        trailing: CupertinoButton(
-          padding: EdgeInsets.zero,
-          child: isSoundMuted
-              ? const Icon(CupertinoIcons.volume_off)
-              : const Icon(CupertinoIcons.volume_up),
-          onPressed: () => ref.read(muteSoundPrefProvider.notifier).toggle(),
-        ),
+        middle: const Text('Top Rated'),
+        trailing: ToggleSoundButton(),
       ),
       child: const _Body(),
     );
@@ -73,12 +61,10 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pieceSet = ref.watch(pieceSetPrefProvider);
-    final boardTheme = ref.watch(boardThemePrefProvider);
     final currentTab = ref.watch(currentBottomTabProvider);
     // ensure the stream is closed when offstage
     final tvStream = currentTab == BottomTab.watch
-        ? ref.watch(tvStreamProvider)
+        ? ref.watch(tvStreamProvider(true))
         : const AsyncLoading<FeaturedPosition>();
     final featuredGame = ref.watch(featuredGameProvider);
 
@@ -118,24 +104,19 @@ class _Body extends ConsumerWidget {
                         position.turn == bottomPlayer.side,
                   )
                 : kEmptyWidget;
-            return GameBoardLayout(
+            return TableBoardLayout(
               boardData: boardData,
-              boardSettings: BoardSettings(
+              boardSettingsOverrides: const BoardSettingsOverrides(
                 animationDuration: Duration.zero,
-                pieceAssets: pieceSet.assets,
-                colorScheme: boardTheme.colors,
               ),
-              topPlayer: topPlayerWidget,
-              bottomPlayer: bottomPlayerWidget,
+              topTable: topPlayerWidget,
+              bottomTable: bottomPlayerWidget,
             );
           },
-          loading: () => GameBoardLayout(
-            topPlayer: kEmptyWidget,
-            bottomPlayer: kEmptyWidget,
-            boardSettings: BoardSettings(
-              colorScheme: boardTheme.colors,
-            ),
-            boardData: const BoardData(
+          loading: () => const TableBoardLayout(
+            topTable: kEmptyWidget,
+            bottomTable: kEmptyWidget,
+            boardData: BoardData(
               interactableSide: InteractableSide.none,
               orientation: Side.white,
               fen: kEmptyFen,
@@ -145,9 +126,9 @@ class _Body extends ConsumerWidget {
             debugPrint(
               'SEVERE: [TvScreen] could not load stream; $err\n$stackTrace',
             );
-            return const GameBoardLayout(
-              topPlayer: kEmptyWidget,
-              bottomPlayer: kEmptyWidget,
+            return const TableBoardLayout(
+              topTable: kEmptyWidget,
+              bottomTable: kEmptyWidget,
               boardData: BoardData(
                 fen: kEmptyFen,
                 interactableSide: InteractableSide.none,

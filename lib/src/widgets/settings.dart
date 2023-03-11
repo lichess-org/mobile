@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:lichess_mobile/src/common/styles.dart';
-import 'platform.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 
 /// A platform agnostic tappable list tile that represents a settings value.
 class SettingsListTile extends StatelessWidget {
@@ -44,6 +44,36 @@ class SettingsListTile extends StatelessWidget {
       label: '$settingsLabel: $settingsValue',
       excludeSemantics: true,
       child: tile,
+    );
+  }
+}
+
+class SwitchSettingTile extends StatelessWidget {
+  const SwitchSettingTile({
+    required this.title,
+    this.subtitle,
+    required this.value,
+    required this.onChanged,
+    this.leading,
+    super.key,
+  });
+
+  final Widget title;
+  final Widget? subtitle;
+  final bool value;
+  final void Function(bool value) onChanged;
+  final Widget? leading;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformListTile(
+      leading: leading,
+      title: title,
+      subtitle: subtitle,
+      trailing: Switch.adaptive(
+        value: value,
+        onChanged: onChanged,
+      ),
     );
   }
 }

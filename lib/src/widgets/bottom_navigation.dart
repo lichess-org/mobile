@@ -7,8 +7,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/ui/home/home_screen.dart';
 import 'package:lichess_mobile/src/ui/account/profile_screen.dart';
-import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
-import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
+import 'package:lichess_mobile/src/ui/watch/watch_screen.dart';
+import 'package:lichess_mobile/src/ui/puzzle/puzzle_dashboard_screen.dart';
 
 enum BottomTab {
   play,
@@ -99,12 +99,12 @@ class BottomNavScaffold extends ConsumerWidget {
       case 1:
         return CupertinoTabView(
           defaultTitle: context.l10n.puzzles,
-          builder: (context) => const PuzzlesScreen(),
+          builder: (context) => const PuzzleDashboardScreen(),
         );
       case 2:
         return CupertinoTabView(
-          defaultTitle: 'Lichess TV',
-          builder: (context) => const TvScreen(),
+          defaultTitle: context.l10n.watch,
+          builder: (context) => const WatchScreen(),
         );
       case 3:
         return CupertinoTabView(

@@ -2,12 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
-import 'package:lichess_mobile/src/model/settings/providers.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 
 class LoadApp extends ConsumerWidget {
@@ -18,10 +17,11 @@ class LoadApp extends ConsumerWidget {
     final appDependencies = ref.watch(appDependenciesProvider);
     return appDependencies.when(
       data: (_) => const App(),
+      // TODO splash screen
       loading: () => const SizedBox.shrink(),
       error: (err, st) {
         debugPrint(
-          'SEVERE: [App] could not load appInitProvider; $err\n$st',
+          'SEVERE: [App] could not load app dependencies; $err\n$st',
         );
         return const SizedBox.shrink();
       },
@@ -34,7 +34,11 @@ class App extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModePrefProvider);
+    final themeMode = ref.watch(
+      generalPreferencesStateProvider.select(
+        (state) => state.themeMode,
+      ),
+    );
     final brightness = ref.watch(currentBrightnessProvider);
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -61,18 +65,7 @@ class App extends ConsumerWidget {
           child: Material(child: child),
         );
       },
-      onGenerateRoute: (RouteSettings settings) {
-        // we don't use named routes but we need this for iOS modal animation
-        // see: https://pub.dev/packages/modal_bottom_sheet
-        switch (settings.name) {
-          case '/':
-            return MaterialWithModalsPageRoute(
-              builder: (_) => const BottomNavScaffold(),
-              settings: settings,
-            );
-        }
-        return null;
-      },
+      home: const BottomNavScaffold(),
     );
   }
 }

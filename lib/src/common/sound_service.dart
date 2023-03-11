@@ -3,7 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-import 'package:lichess_mobile/src/model/settings/providers.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
 
 part 'sound_service.g.dart';
@@ -43,8 +43,8 @@ class SoundService {
   void playDong() => _play(Sound.dong);
 
   void _play(Sound sound) {
-    final isMuted = _ref.read(muteSoundPrefProvider);
+    final isEnabled = _ref.read(generalPreferencesStateProvider).isSoundEnabled;
     final soundId = _sounds[sound];
-    if (soundId != null && !isMuted) _pool.play(soundId);
+    if (soundId != null && isEnabled) _pool.play(soundId);
   }
 }

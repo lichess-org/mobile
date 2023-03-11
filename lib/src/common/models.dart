@@ -1,16 +1,30 @@
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 part 'models.freezed.dart';
 part 'models.g.dart';
 
-/// Move represented with Standard Algebraic Notation
-typedef SANMove = String;
-
 /// Move represented with UCI notation
 typedef UCIMove = String;
+
+/// Represents a [Move] with its associated SAN.
+@Freezed(fromJson: true, toJson: true)
+class SanMove with _$SanMove {
+  const factory SanMove(
+    String san,
+    @JsonKey(fromJson: _moveFromJson, toJson: _moveToJson) Move move,
+  ) = _SanMove;
+
+  factory SanMove.fromJson(Map<String, dynamic> json) =>
+      _$SanMoveFromJson(json);
+}
+
+String _moveToJson(Move move) => move.uci;
+// assume we are serializing only valid uci strings
+Move _moveFromJson(String uci) => Move.fromUci(uci)!;
 
 /// Represents a lichess rating perf item
 enum Perf {

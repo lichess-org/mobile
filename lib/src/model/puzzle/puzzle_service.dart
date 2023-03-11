@@ -3,31 +3,52 @@ import 'package:logging/logging.dart';
 import 'package:tuple/tuple.dart';
 import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
-import 'puzzle_local_db.dart';
+import 'package:lichess_mobile/src/common/models.dart';
+import 'puzzle_storage.dart';
 import 'puzzle_repository.dart';
 import 'puzzle.dart';
 import 'puzzle_theme.dart';
+import 'puzzle_preferences.dart';
 
-final puzzleOfflineServiceProvider = Provider<PuzzleService>((ref) {
-  final db = ref.watch(puzzleLocalDbProvider);
+part 'puzzle_service.g.dart';
+
+/// Size of puzzle local cache
+const kPuzzleLocalQueueLength = 50;
+
+@Riverpod(keepAlive: true)
+PuzzleService puzzleService(PuzzleServiceRef ref, {required int queueLength}) {
+  final storage = ref.watch(puzzleStorageProvider);
   final repository = ref.watch(puzzleRepositoryProvider);
-  return PuzzleService(Logger('PuzzleService'), db: db, repository: repository);
-});
+  return PuzzleService(
+    ref,
+    Logger('PuzzleService'),
+    storage: storage,
+    repository: repository,
+    queueLength: queueLength,
+  );
+}
+
+/// Puzzle service provider with the default queue length.
+final defaultPuzzleServiceProvider = puzzleServiceProvider(
+  queueLength: kPuzzleLocalQueueLength,
+);
 
 class PuzzleService {
   const PuzzleService(
+    this._ref,
     this._log, {
-    required this.db,
+    required this.storage,
     required this.repository,
-    this.localQueueLength = kPuzzleLocalQueueLength,
+    required this.queueLength,
   });
 
-  final int localQueueLength;
-  final PuzzleLocalDB db;
+  final PuzzleServiceRef _ref;
+  final int queueLength;
+  final PuzzleStorage storage;
   final PuzzleRepository repository;
   final Logger _log;
 
@@ -35,25 +56,32 @@ class PuzzleService {
   ///
   /// This future should never fail on network errors.
   Future<Puzzle?> nextPuzzle({
-    String? userId,
+    required UserId? userId,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) {
     return Result.release(
-      _syncAndLoadData(userId, angle).map((data) => data?.unsolved[0]),
+      _syncAndLoadData(userId, angle).map(
+        (data) =>
+            data != null && data.unsolved.isNotEmpty ? data.unsolved[0] : null,
+      ),
     );
   }
 
-  /// Update puzzle queue with the solved puzzle and sync with server
+  /// Update puzzle queue with the solved puzzle, sync with server and returns
+  /// the next puzzle.
   ///
   /// This future should never fail on network errors.
-  Future<void> solve({
-    String? userId,
-    PuzzleTheme angle = PuzzleTheme.mix,
+  Future<Puzzle?> solve({
+    required UserId? userId,
     required PuzzleSolution solution,
+    PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
-    final data = db.fetch(userId: userId, angle: angle);
+    final data = await storage.fetch(
+      userId: userId,
+      angle: angle,
+    );
     if (data != null) {
-      await db.save(
+      await storage.save(
         userId: userId,
         angle: angle,
         data: PuzzleLocalData(
@@ -62,35 +90,60 @@ class PuzzleService {
               data.unsolved.removeWhere((e) => e.puzzle.id == solution.id),
         ),
       );
-      await _syncAndLoadData(userId, angle);
+      return nextPuzzle(userId: userId, angle: angle);
     }
+    return Future.value(null);
+  }
+
+  /// Clears the current puzzle batch, fetches a new one and returns the next puzzle.
+  Future<Puzzle?> resetBatch({
+    required UserId? userId,
+    PuzzleTheme angle = PuzzleTheme.mix,
+  }) async {
+    await storage.delete(userId: userId, angle: angle);
+    return nextPuzzle(userId: userId, angle: angle);
   }
 
   /// Synchronize offline puzzle queue with server and gets latest data.
   ///
   /// This task will fetch missing puzzles so the queue length is always equal to
-  /// `localQueueLength`.
-  /// It will also call the `solveBatchTask` with solved puzzles.
+  /// `queueLength`.
+  /// It will call [PuzzleRepository.solveBatch] if necessary.
   ///
   /// This method should never fail, as if the network is down it will fallback
   /// to the local database.
   FutureResult<PuzzleLocalData?> _syncAndLoadData(
-    String? userId,
+    UserId? userId,
     PuzzleTheme angle,
-  ) {
-    final data = db.fetch(userId: userId, angle: angle);
+  ) async {
+    final data = await storage.fetch(
+      userId: userId,
+      angle: angle,
+    );
 
     final unsolved = data?.unsolved ?? IList(const []);
     final solved = data?.solved ?? IList(const []);
 
-    final deficit = max(0, localQueueLength - unsolved.length);
+    final deficit = max(0, queueLength - unsolved.length);
 
     if (deficit > 0) {
       _log.fine('Have a puzzle deficit of $deficit, will sync with lichess');
 
-      final batchResult = solved.isNotEmpty
-          ? repository.solveBatch(nb: deficit, solved: solved, angle: angle)
-          : repository.selectBatch(nb: deficit, angle: angle);
+      final difficulty = _ref.read(puzzlePrefsStateProvider(userId)).difficulty;
+
+      // anonymous users can't solve puzzles so we just download the deficit
+      final batchResult = solved.isNotEmpty && userId != null
+          ? repository.solveBatch(
+              nb: deficit,
+              solved: solved,
+              angle: angle,
+              difficulty: difficulty,
+            )
+          : repository.selectBatch(
+              nb: deficit,
+              angle: angle,
+              difficulty: difficulty,
+            );
 
       return batchResult
           .fold(
@@ -109,7 +162,7 @@ class PuzzleService {
         final newData = tuple.item1;
         final shouldSave = tuple.item2;
         if (newData != null && shouldSave) {
-          await db.save(
+          await storage.save(
             userId: userId,
             angle: angle,
             data: newData,
@@ -119,6 +172,6 @@ class PuzzleService {
       });
     }
 
-    return Future.value(Result.value(data));
+    return Result.value(data);
   }
 }

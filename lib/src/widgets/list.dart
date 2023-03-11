@@ -3,12 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:lichess_mobile/src/common/styles.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
-
-const _kTitleMedium = TextStyle(
-  fontSize: 18,
-  letterSpacing: .25,
-);
 
 /// A platform agnostic list section.
 ///
@@ -52,14 +46,15 @@ class ListSection extends StatelessWidget {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return Padding(
-          padding: margin ?? EdgeInsets.zero,
+          padding: margin ?? Styles.sectionBottomPadding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (header != null)
                 ListTile(
+                  dense: true,
                   title: DefaultTextStyle.merge(
-                    style: _kTitleMedium,
+                    style: Styles.sectionTitle,
                     child: header!,
                   ),
                   trailing: (onHeaderTap != null)
@@ -85,24 +80,117 @@ class ListSection extends StatelessWidget {
           ),
         );
       case TargetPlatform.iOS:
-        return CupertinoListSection.insetGrouped(
-          margin: margin,
-          hasLeading: hasLeading,
-          header: header != null
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    header!,
-                    if (onHeaderTap != null)
-                      GestureDetector(
-                        onTap: onHeaderTap,
-                        child: const Icon(CupertinoIcons.ellipsis),
+        return Padding(
+          padding: margin ?? Styles.bodySectionPadding,
+          child: Column(
+            children: [
+              if (header != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 6.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      DefaultTextStyle(
+                        style: CupertinoTheme.of(context)
+                            .textTheme
+                            .textStyle
+                            .merge(Styles.sectionTitle),
+                        child: header!,
                       ),
-                  ],
+                      if (onHeaderTap != null)
+                        GestureDetector(
+                          onTap: onHeaderTap,
+                          child: const Icon(CupertinoIcons.ellipsis),
+                        ),
+                    ],
+                  ),
+                ),
+              CupertinoListSection.insetGrouped(
+                margin: EdgeInsets.zero,
+                hasLeading: hasLeading,
+                children: children,
+              ),
+            ],
+          ),
+        );
+      default:
+        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        return const SizedBox.shrink();
+    }
+  }
+}
+
+/// Platform agnostic list tile widget.
+///
+/// Will use [ListTile] on android and [CupertinoListTile] on iOS.
+class PlatformListTile extends StatelessWidget {
+  const PlatformListTile({
+    this.leading,
+    required this.title,
+    this.subtitle,
+    this.trailing,
+    this.additionalInfo,
+    this.dense,
+    this.onTap,
+    this.selected = false,
+    this.isThreeLine = false,
+  });
+
+  final Widget? leading;
+  final Widget title;
+  final Widget? subtitle;
+  final Widget? trailing;
+
+  /// only on iOS
+  final Widget? additionalInfo;
+
+  // only on android
+  final bool selected;
+
+  // only on android
+  final bool? dense;
+
+  // only on android
+  final bool isThreeLine;
+
+  final GestureTapCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return ListTile(
+          leading: leading,
+          title: title,
+          subtitle: subtitle != null
+              ? DefaultTextStyle.merge(
+                  child: subtitle!,
+                  style: TextStyle(
+                    color: textShade(context, Styles.subtitleOpacity),
+                  ),
                 )
               : null,
-          children: children,
+          trailing: trailing,
+          dense: dense,
+          onTap: onTap,
+          selected: selected,
+          isThreeLine: isThreeLine,
         );
+      case TargetPlatform.iOS:
+        return IconTheme(
+          data: CupertinoIconThemeData(
+            color: CupertinoColors.systemGrey.resolveFrom(context),
+          ),
+          child: CupertinoListTile.notched(
+            leading: leading,
+            title: title,
+            subtitle: subtitle,
+            trailing: trailing,
+            additionalInfo: additionalInfo,
+            onTap: onTap,
+          ),
+        );
+
       default:
         assert(false, 'Unexpected platform $defaultTargetPlatform');
         return const SizedBox.shrink();

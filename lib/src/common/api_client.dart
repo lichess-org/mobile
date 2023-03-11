@@ -8,7 +8,7 @@ import 'package:http/retry.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:lichess_mobile/src/model/auth/session_repository.dart';
+import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package_info.dart';
 import 'errors.dart';
@@ -82,7 +82,9 @@ class ApiClient {
       ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
         return GenericIOException();
-      }).flatMap((response) => _validateResponseStatusResult(url, response));
+      }).flatMap(
+        (response) => _validateResponseStatusResult('GET', url, response),
+      );
 
   FutureResult<Response> post(
     Uri url, {
@@ -97,7 +99,9 @@ class ApiClient {
       ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
         return GenericIOException();
-      }).flatMap((response) => _validateResponseStatusResult(url, response));
+      }).flatMap(
+        (response) => _validateResponseStatusResult('POST', url, response),
+      );
 
   FutureResult<Response> delete(
     Uri url, {
@@ -112,7 +116,9 @@ class ApiClient {
       ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
         return GenericIOException();
-      }).flatMap((response) => _validateResponseStatusResult(url, response));
+      }).flatMap(
+        (response) => _validateResponseStatusResult('DELETE', url, response),
+      );
 
   Future<StreamedResponse> stream(
     Uri url, {
@@ -127,18 +133,22 @@ class ApiClient {
           _log.severe('Request error', error, stackTrace);
           return GenericIOException();
         })
-        .flatMap((r) => _validateResponseStatusResult(url, r))
+        .flatMap((r) => _validateResponseStatusResult('GET', url, r))
         .then((r) => r.getOrThrow());
   }
 
   Result<T> _validateResponseStatusResult<T extends BaseResponse>(
+    String method,
     Uri url,
     T response,
   ) {
     if (response.statusCode >= 500) {
-      _log.severe('$url responded with status ${response.statusCode}');
+      _log.severe('$method $url responded with status ${response.statusCode}');
     } else if (response.statusCode >= 400) {
-      _log.warning('$url responded with status ${response.statusCode}');
+      final body = response is Response ? response.body : '';
+      _log.warning(
+        '$method $url responded with status ${response.statusCode}\n$body',
+      );
     }
 
     return response.statusCode < 400
@@ -169,9 +179,8 @@ class _AuthClient extends BaseClient {
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
-    final sessionRepo = ref.read(sessionRepositoryProvider);
-    final info = ref.watch(packageInfoProvider);
-    final session = await sessionRepo.read();
+    final session = ref.read(userSessionStateProvider);
+    final info = ref.read(packageInfoProvider);
 
     if (session != null && !request.headers.containsKey('Authorization')) {
       request.headers['Authorization'] = 'Bearer ${session.token}';

@@ -31,11 +31,11 @@ void main() {
 ''';
     when(
       () => mockClient.get(
-        Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=30'),
+        Uri.parse('$kLichessHost/api/puzzle/batch/mix?nb=3&difficulty=normal'),
       ),
     ).thenAnswer((_) => mockResponse(batchResponse, 200));
 
-    final result = await repo.selectBatch();
+    final result = await repo.selectBatch(nb: 3);
 
     expect(result.isValue, true);
   });

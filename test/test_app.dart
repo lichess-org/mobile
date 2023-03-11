@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -5,16 +6,26 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:logging/logging.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:soundpool/soundpool.dart';
+import 'package:sqflite/sqflite.dart';
 
+import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
 import 'package:lichess_mobile/src/common/sound_service.dart';
-import 'package:lichess_mobile/src/common/package_info.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
-import 'package:lichess_mobile/src/model/auth/session_repository.dart';
-import 'package:lichess_mobile/src/model/settings/providers.dart';
+import 'package:lichess_mobile/src/model/auth/session_storage.dart';
+import 'package:lichess_mobile/src/model/auth/user_session.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import './common/fake_sound_service.dart';
 import './model/auth/fake_auth_repository.dart';
-import './model/auth/fake_session_repository.dart';
+import './model/auth/fake_session_storage.dart';
+
+class MockSoundPool extends Mock implements Soundpool {}
+
+class MockDatabase extends Mock implements Database {}
 
 // iPhone 14 screen size
 const double _kTestScreenWidth = 390.0;
@@ -25,6 +36,7 @@ Future<Widget> buildTestApp(
   WidgetTester tester, {
   required Widget home,
   List<Override>? overrides,
+  UserSession? userSession,
 }) async {
   await tester.binding.setSurfaceSize(kTestSurfaceSize);
   SharedPreferences.setMockInitialValues({});
@@ -33,19 +45,35 @@ Future<Widget> buildTestApp(
   // TODO consider loading true fonts as well
   FlutterError.onError = _ignoreOverflowErrors;
 
+  Logger.root.onRecord.listen((record) {
+    if (record.level > Level.WARNING) {
+      final time = DateFormat.Hms().format(record.time);
+      debugPrint(
+        '${record.level.name} at $time [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error}' : ''}',
+      );
+    }
+  });
+
   return ProviderScope(
     overrides: [
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       sharedPreferencesProvider.overrideWithValue(sharedPreferences),
       authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
-      sessionRepositoryProvider.overrideWithValue(FakeSessionRepository()),
+      sessionStorageProvider.overrideWithValue(FakeSessionStorage(userSession)),
       currentBrightnessProvider.overrideWithValue(Brightness.dark),
-      packageInfoProvider.overrideWith((ref) {
-        return PackageInfo(
-          appName: 'lichess_mobile_test',
-          version: 'test',
-          buildNumber: '0.0.0',
-          packageName: 'lichess_mobile_test',
+      appDependenciesProvider.overrideWith((ref) {
+        return AppDependencies(
+          packageInfo: PackageInfo(
+            appName: 'lichess_mobile_test',
+            version: 'test',
+            buildNumber: '0.0.0',
+            packageName: 'lichess_mobile_test',
+          ),
+          sharedPreferences: sharedPreferences,
+          soundPool: MockSoundPool(),
+          sounds: IMap<Sound, int>(const {}),
+          userSession: userSession,
+          database: MockDatabase(),
         );
       }),
       ...overrides ?? [],

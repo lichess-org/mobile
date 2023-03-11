@@ -1,6 +1,13 @@
 import 'package:flutter/widgets.dart';
+import 'package:tuple/tuple.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart'
+    hide Tuple2;
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:lichess_mobile/src/common/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+
+part 'puzzle_theme.g.dart';
 
 enum PuzzleTheme {
   mix,
@@ -65,6 +72,128 @@ enum PuzzleTheme {
   xRayAttack,
   zugzwang,
   // checkFirst,
+}
+
+final IMap<String, PuzzleTheme> puzzleThemeNameMap =
+    IMap(PuzzleTheme.values.asNameMap());
+
+typedef PuzzleThemeCategory = Tuple2<String, List<PuzzleTheme>>;
+
+@Riverpod(keepAlive: true)
+IList<PuzzleThemeCategory> puzzleThemeCategories(
+  PuzzleThemeCategoriesRef ref,
+) {
+  final l10n = ref.watch(l10nProvider);
+
+  return IList([
+    Tuple2(
+      l10n.recommended,
+      [
+        PuzzleTheme.mix,
+      ],
+    ),
+    Tuple2(
+      l10n.phases,
+      [
+        PuzzleTheme.opening,
+        PuzzleTheme.middlegame,
+        PuzzleTheme.endgame,
+        PuzzleTheme.rookEndgame,
+        PuzzleTheme.bishopEndgame,
+        PuzzleTheme.pawnEndgame,
+        PuzzleTheme.knightEndgame,
+        PuzzleTheme.queenEndgame,
+        PuzzleTheme.queenRookEndgame,
+      ],
+    ),
+    Tuple2(
+      l10n.motifs,
+      [
+        PuzzleTheme.advancedPawn,
+        PuzzleTheme.attackingF2F7,
+        PuzzleTheme.capturingDefender,
+        PuzzleTheme.discoveredAttack,
+        PuzzleTheme.doubleCheck,
+        PuzzleTheme.exposedKing,
+        PuzzleTheme.fork,
+        PuzzleTheme.hangingPiece,
+        PuzzleTheme.kingsideAttack,
+        PuzzleTheme.pin,
+        PuzzleTheme.queensideAttack,
+        PuzzleTheme.sacrifice,
+        PuzzleTheme.skewer,
+        PuzzleTheme.trappedPiece,
+      ],
+    ),
+    Tuple2(
+      l10n.advanced,
+      [
+        PuzzleTheme.attraction,
+        PuzzleTheme.clearance,
+        PuzzleTheme.defensiveMove,
+        PuzzleTheme.deflection,
+        PuzzleTheme.interference,
+        PuzzleTheme.intermezzo,
+        PuzzleTheme.quietMove,
+        PuzzleTheme.xRayAttack,
+        PuzzleTheme.zugzwang,
+      ],
+    ),
+    Tuple2(
+      l10n.mates,
+      [
+        PuzzleTheme.mate,
+        PuzzleTheme.mateIn1,
+        PuzzleTheme.mateIn2,
+        PuzzleTheme.mateIn3,
+        PuzzleTheme.mateIn4,
+        PuzzleTheme.mateIn5,
+        PuzzleTheme.anastasiaMate,
+        PuzzleTheme.arabianMate,
+        PuzzleTheme.backRankMate,
+        PuzzleTheme.bodenMate,
+        PuzzleTheme.doubleBishopMate,
+        PuzzleTheme.dovetailMate,
+        PuzzleTheme.hookMate,
+        PuzzleTheme.smotheredMate,
+      ],
+    ),
+    Tuple2(
+      l10n.specialMoves,
+      [
+        PuzzleTheme.castling,
+        PuzzleTheme.enPassant,
+        PuzzleTheme.promotion,
+        PuzzleTheme.underPromotion,
+      ],
+    ),
+    Tuple2(
+      l10n.goals,
+      [
+        PuzzleTheme.equality,
+        PuzzleTheme.advantage,
+        PuzzleTheme.crushing,
+        PuzzleTheme.mate,
+      ],
+    ),
+    Tuple2(
+      l10n.lengths,
+      [
+        PuzzleTheme.oneMove,
+        PuzzleTheme.long,
+        PuzzleTheme.short,
+        PuzzleTheme.veryLong,
+      ],
+    ),
+    Tuple2(
+      l10n.origin,
+      [
+        PuzzleTheme.master,
+        PuzzleTheme.masterVsMaster,
+        PuzzleTheme.superGM,
+      ],
+    ),
+  ]);
 }
 
 class PuzzleThemeL10n {

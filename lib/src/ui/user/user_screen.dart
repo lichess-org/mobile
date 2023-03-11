@@ -112,14 +112,10 @@ class UserScreenBody extends StatelessWidget {
     ];
 
     return inCustomScrollView
-        ? SliverPadding(
-            padding: Styles.verticalBodyPadding,
-            sliver: SliverList(
-              delegate: SliverChildListDelegate(list),
-            ),
+        ? SliverList(
+            delegate: SliverChildListDelegate(list),
           )
         : ListView(
-            padding: Styles.verticalBodyPadding,
             children: list,
           );
   }
@@ -588,7 +584,7 @@ class RecentGames extends ConsumerWidget {
       data: (data) {
         return ListSection(
           // TODO translate
-          header: const Text('Recent games', style: Styles.sectionTitle),
+          header: Text('Recent games', style: Styles.sectionTitle),
           hasLeading: true,
           children: data.map((game) {
             final mySide = game.white.id == user.id ? Side.white : Side.black;

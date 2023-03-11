@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:async/async.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:http/http.dart' as http;
@@ -14,14 +14,15 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'puzzle.dart';
 import 'puzzle_theme.dart';
+import 'puzzle_difficulty.dart';
 
-final puzzleRepositoryProvider = Provider<PuzzleRepository>((ref) {
+part 'puzzle_repository.g.dart';
+
+@Riverpod(keepAlive: true)
+PuzzleRepository puzzleRepository(PuzzleRepositoryRef ref) {
   final apiClient = ref.watch(apiClientProvider);
   return PuzzleRepository(Logger('PuzzleRepository'), apiClient: apiClient);
-});
-
-/// Size of puzzle local cache
-const kPuzzleLocalQueueLength = 30;
+}
 
 /// Repository that interacts with lichess.org puzzle API
 class PuzzleRepository {
@@ -33,32 +34,58 @@ class PuzzleRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  FutureResult<List<Puzzle>> selectBatch({
+  FutureResult<IList<Puzzle>> selectBatch({
+    required int nb,
     PuzzleTheme angle = PuzzleTheme.mix,
-    int nb = kPuzzleLocalQueueLength,
+    PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) {
     return apiClient
-        .get(Uri.parse('$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb'))
-        .flatMap(_decodeJson);
+        .get(
+          Uri.parse(
+            '$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb&difficulty=${difficulty.name}',
+          ),
+        )
+        .flatMap(_decodeJsonList);
   }
 
-  FutureResult<List<Puzzle>> solveBatch({
+  FutureResult<IList<Puzzle>> solveBatch({
     required int nb,
     required IList<PuzzleSolution> solved,
     PuzzleTheme angle = PuzzleTheme.mix,
+    PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) {
     return apiClient
         .post(
-          Uri.parse('$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb'),
+          Uri.parse(
+            '$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb&difficulty=${difficulty.name}',
+          ),
           headers: {'Content-type': 'application/json'},
           body: jsonEncode({
-            'solutions': solved.map((e) => e.toJson()).toList(),
+            'solutions': solved
+                .map(
+                  (e) => {
+                    'id': e.id.value,
+                    'win': e.win,
+                    'rated': e.rated,
+                  },
+                )
+                .toList(),
           }),
         )
-        .flatMap(_decodeJson);
+        .flatMap(_decodeJsonList);
   }
 
-  Result<List<Puzzle>> _decodeJson(http.Response response) {
+  FutureResult<Puzzle> daily() {
+    return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/daily')).flatMap(
+          (response) => readJsonObject(
+            response.body,
+            mapper: _puzzleFromJson,
+            logger: _log,
+          ),
+        );
+  }
+
+  Result<IList<Puzzle>> _decodeJsonList(http.Response response) {
     return readJsonObject(
       response.body,
       mapper: (Map<String, dynamic> json) {
@@ -66,12 +93,14 @@ class PuzzleRepository {
         if (puzzles is! List<dynamic>) {
           throw const FormatException('puzzles: expected a list');
         }
-        return puzzles.map((e) {
-          if (e is! Map<String, dynamic>) {
-            throw const FormatException('Expected an object');
-          }
-          return _puzzleFromJson(e);
-        }).toList();
+        return IList(
+          puzzles.map((e) {
+            if (e is! Map<String, dynamic>) {
+              throw const FormatException('Expected an object');
+            }
+            return _puzzleFromJson(e);
+          }),
+        );
       },
       logger: _log,
     );
@@ -126,8 +155,8 @@ PuzzleGame _puzzleGameFromPick(RequiredPick pick) {
   );
 }
 
-PuzzlePlayer _puzzlePlayerFromPick(RequiredPick pick) {
-  return PuzzlePlayer(
+PuzzleGamePlayer _puzzlePlayerFromPick(RequiredPick pick) {
+  return PuzzleGamePlayer(
     name: pick('name').asStringOrThrow(),
     userId: pick('userId').asStringOrThrow(),
     side: pick('color').asSideOrThrow(),
