@@ -293,16 +293,13 @@ void _goToNextPuzzle(
   UserId? userId,
   Puzzle nextPuzzle,
 ) {
-  ref.invalidate(nextPuzzleProvider(theme));
   Navigator.of(context).pushReplacement(
-    PageRouteBuilder<void>(
-      pageBuilder: (context, _, __) => PuzzlesScreen(
+    MaterialPageRoute<void>(
+      builder: (context) => PuzzlesScreen(
         theme: theme,
         userId: userId,
         puzzle: nextPuzzle,
       ),
-      transitionDuration: Duration.zero,
-      reverseTransitionDuration: Duration.zero,
     ),
   );
 }

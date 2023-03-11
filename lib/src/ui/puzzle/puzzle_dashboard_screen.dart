@@ -68,19 +68,15 @@ class _Body extends ConsumerWidget {
                   return _PuzzleButton(
                     theme: theme,
                     onTap: () {
-                      Navigator.of(context, rootNavigator: true)
-                          .push<void>(
-                            MaterialPageRoute(
-                              builder: (context) => PuzzlesScreen(
-                                userId: data.item1,
-                                puzzle: puzzle,
-                                theme: theme,
-                              ),
-                            ),
-                          )
-                          .then(
-                            (_) => ref.invalidate(nextPuzzleProvider(theme)),
-                          );
+                      Navigator.of(context, rootNavigator: true).push<void>(
+                        MaterialPageRoute(
+                          builder: (context) => PuzzlesScreen(
+                            userId: data.item1,
+                            puzzle: puzzle,
+                            theme: theme,
+                          ),
+                        ),
+                      );
                     },
                   );
                 }

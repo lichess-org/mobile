@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/common/tree.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 
 part 'puzzle_screen_state.g.dart';
@@ -184,10 +185,13 @@ class PuzzleScreenState extends _$PuzzleScreenState {
       solution: PuzzleSolution(
         id: puzzle.puzzle.id,
         win: state.result == PuzzleResult.win,
-        // TODO add rating option
         rated: userId != null,
       ),
     );
+
+    if (theme == PuzzleTheme.mix) {
+      ref.invalidate(nextPuzzleProvider(theme));
+    }
 
     // TODO check if next is null and show a message
 
