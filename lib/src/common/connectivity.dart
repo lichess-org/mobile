@@ -27,7 +27,7 @@ Stream<ConnectivityStatus> connectivityChanges(ConnectivityChangesRef ref) {
 Future<bool> isOnline() async {
   try {
     final result = await InternetAddress.lookup('lichess.org');
-    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+    if (result.isNotEmpty && result.first.rawAddress.isNotEmpty) {
       return true;
     }
   } on SocketException catch (_) {

@@ -36,9 +36,8 @@ Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
 }
 
 @riverpod
-Future<ISet<PuzzleTheme>> savedThemes(SavedThemesRef ref) async {
+Future<ISet<PuzzleTheme>> savedThemes(SavedThemesRef ref) {
   final session = ref.watch(userSessionStateProvider);
   final storage = ref.watch(puzzleStorageProvider);
-  final themes = await storage.fetchSavedThemes(userId: session?.user.id);
-  return themes;
+  return storage.fetchSavedThemes(userId: session?.user.id);
 }
