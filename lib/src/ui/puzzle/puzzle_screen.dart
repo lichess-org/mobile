@@ -20,12 +20,14 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
 import 'puzzle_view_model.dart';
+import 'puzzle_session_view_model.dart';
 
 class PuzzlesScreen extends StatelessWidget {
   const PuzzlesScreen({
@@ -186,14 +188,17 @@ class _Body extends ConsumerWidget {
                   },
                 ),
                 topTable: Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10.0,
+                    vertical: 16.0,
+                  ),
                   child: _Feedback(
                     puzzle: puzzle,
                     state: puzzleState,
                     pieceSet: pieceSet,
                   ),
                 ),
-                bottomTable: const SizedBox.shrink(),
+                bottomTable: _PuzzleSession(userId: userId, theme: theme),
               ),
             ),
           ),
@@ -282,6 +287,61 @@ class _Feedback extends StatelessWidget {
           );
         }
     }
+  }
+}
+
+class _PuzzleSession extends ConsumerWidget {
+  const _PuzzleSession({
+    required this.theme,
+    required this.userId,
+  });
+
+  final PuzzleTheme theme;
+  final UserId? userId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(puzzleSessionViewModelProvider(userId, theme));
+    return SizedBox(
+      height: 100,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
+        child: SingleChildScrollView(
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final attempt in session.attempts)
+                _SessionItem(attempt: attempt),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SessionItem extends StatelessWidget {
+  const _SessionItem({
+    required this.attempt,
+  });
+
+  final PuzzleAttempt attempt;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      decoration: BoxDecoration(
+        color: attempt.win ? LichessColors.good : LichessColors.error,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Icon(
+        attempt.win ? Icons.check : Icons.close,
+        color: Colors.white,
+        size: 18,
+      ),
+    );
   }
 }
 

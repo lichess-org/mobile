@@ -159,6 +159,7 @@ class TableBoardLayout extends ConsumerWidget {
               )
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   if (slicedMoves != null)
                     MoveList(
