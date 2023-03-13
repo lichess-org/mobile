@@ -11,26 +11,15 @@ part 'puzzle_preferences.g.dart';
 
 const _prefKey = 'puzzle.preferences';
 
-@Freezed(fromJson: true, toJson: true)
-class PuzzlePrefs with _$PuzzlePrefs {
-  const factory PuzzlePrefs({
-    required UserId? id,
-    required PuzzleDifficulty difficulty,
-  }) = _PuzzlePrefs;
-
-  factory PuzzlePrefs.fromJson(Map<String, dynamic> json) =>
-      _$PuzzlePrefsFromJson(json);
-}
-
 @riverpod
-class PuzzlePrefsState extends _$PuzzlePrefsState {
+class PuzzlePreferences extends _$PuzzlePreferences {
   @override
-  PuzzlePrefs build(UserId? id) {
+  PuzzlePrefState build(UserId? id) {
     final prefs = ref.watch(sharedPreferencesProvider);
     final stored = prefs.getString(_makeKey(id));
     return stored != null
-        ? PuzzlePrefs.fromJson(jsonDecode(stored) as Map<String, dynamic>)
-        : PuzzlePrefs(id: id, difficulty: PuzzleDifficulty.normal);
+        ? PuzzlePrefState.fromJson(jsonDecode(stored) as Map<String, dynamic>)
+        : PuzzlePrefState(id: id, difficulty: PuzzleDifficulty.normal);
   }
 
   Future<void> setDifficulty(PuzzleDifficulty difficulty) async {
@@ -41,4 +30,15 @@ class PuzzlePrefsState extends _$PuzzlePrefsState {
   }
 
   String _makeKey(UserId? id) => '$_prefKey.${id ?? ''}';
+}
+
+@Freezed(fromJson: true, toJson: true)
+class PuzzlePrefState with _$PuzzlePrefState {
+  const factory PuzzlePrefState({
+    required UserId? id,
+    required PuzzleDifficulty difficulty,
+  }) = _PuzzlePrefState;
+
+  factory PuzzlePrefState.fromJson(Map<String, dynamic> json) =>
+      _$PuzzlePrefStateFromJson(json);
 }

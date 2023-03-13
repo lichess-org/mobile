@@ -419,7 +419,7 @@ class _DifficultySelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final difficulty = ref.watch(
-      puzzlePrefsStateProvider(userId).select((state) => state.difficulty),
+      puzzlePreferencesProvider(userId).select((state) => state.difficulty),
     );
     final state = ref.watch(vmProvider);
     final connectivity = ref.watch(connectivityChangesProvider);

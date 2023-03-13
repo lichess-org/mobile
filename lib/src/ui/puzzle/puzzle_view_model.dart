@@ -130,7 +130,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
 
     await ref
         .read(
-          puzzlePrefsStateProvider(userId).notifier,
+          puzzlePreferencesProvider(userId).notifier,
         )
         .setDifficulty(difficulty);
 

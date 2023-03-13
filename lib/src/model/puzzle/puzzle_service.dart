@@ -129,7 +129,8 @@ class PuzzleService {
     if (deficit > 0) {
       _log.fine('Have a puzzle deficit of $deficit, will sync with lichess');
 
-      final difficulty = _ref.read(puzzlePrefsStateProvider(userId)).difficulty;
+      final difficulty =
+          _ref.read(puzzlePreferencesProvider(userId)).difficulty;
 
       // anonymous users can't solve puzzles so we just download the deficit
       final batchResult = solved.isNotEmpty && userId != null
