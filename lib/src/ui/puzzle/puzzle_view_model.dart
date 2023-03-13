@@ -184,6 +184,12 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       ),
     );
 
+    // We need to invalidate the next puzzle for the offline puzzle preview on
+    // home screen tab and the healthy mix puzzle button on the puzzle screen tab.
+    // Not the best solution because we must ensure to always provide a puzzle
+    // parameter to the puzzle screen (PuzzleScreen must no be watching nextPuzzleProvider).
+    // It would be better to have invalidate the `nextPuzzleProvider` when the
+    // puzzle screen pops.
     if (theme == PuzzleTheme.mix) {
       ref.invalidate(nextPuzzleProvider(theme));
     }
