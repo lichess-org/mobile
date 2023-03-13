@@ -55,8 +55,8 @@ class App extends ConsumerWidget {
           data: CupertinoThemeData(
             brightness: brightness,
             barBackgroundColor: const CupertinoDynamicColor.withBrightness(
-              color: Color(0x96F9F9F9),
-              darkColor: Color(0x961D1D1D),
+              color: Color(0xC8F9F9F9),
+              darkColor: Color(0xC81D1D1D),
             ),
             scaffoldBackgroundColor: brightness == Brightness.light
                 ? CupertinoColors.systemGroupedBackground

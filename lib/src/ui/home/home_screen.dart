@@ -66,23 +66,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _iosBuilder(BuildContext context) {
-    return _HomeScaffold(
-      child: CupertinoPageScaffold(
-        child: CustomScrollView(
-          slivers: [
-            const CupertinoSliverNavigationBar(
-              largeTitle: Text('Home'),
-              trailing: SignInWidget(),
-            ),
-            CupertinoSliverRefreshControl(
-              onRefresh: _refreshData,
-            ),
-            const SliverSafeArea(
-              top: false,
-              sliver: _HomeBody(),
-            ),
-          ],
-        ),
+    return CupertinoPageScaffold(
+      child: CustomScrollView(
+        slivers: [
+          const CupertinoSliverNavigationBar(
+            largeTitle: Text('Home'),
+            trailing: SignInWidget(),
+          ),
+          CupertinoSliverRefreshControl(
+            onRefresh: _refreshData,
+          ),
+          const SliverToBoxAdapter(child: _ConnectivityBanner()),
+          const SliverSafeArea(
+            top: false,
+            sliver: _HomeBody(),
+          ),
+        ],
       ),
     );
   }
