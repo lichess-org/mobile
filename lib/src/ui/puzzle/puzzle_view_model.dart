@@ -15,50 +15,17 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 
-part 'puzzle_screen_state.g.dart';
-part 'puzzle_screen_state.freezed.dart';
-
-enum PuzzleMode { play, view }
-
-enum PuzzleResult { win, lose }
-
-enum PuzzleFeedback { good, bad }
-
-@freezed
-class PuzzleVm with _$PuzzleVm {
-  const PuzzleVm._();
-
-  const factory PuzzleVm({
-    required PuzzleMode mode,
-    required UciPath initialPath,
-    required UciPath currentPath,
-    required Side pov,
-    required IList<ViewNode> nodeList, // must be non empty
-    Move? lastMove,
-    PuzzleResult? result,
-    PuzzleFeedback? feedback,
-    required bool resultSent,
-    Puzzle? nextPuzzle,
-  }) = _PuzzleVm;
-
-  ViewNode get node => nodeList.last;
-  Position get position => nodeList.last.position;
-  String get fen => nodeList.last.fen;
-  bool get canGoNext => mode == PuzzleMode.view && node.children.isNotEmpty;
-  bool get canGoBack =>
-      mode == PuzzleMode.view && currentPath.size > initialPath.size;
-
-  IMap<String, ISet<String>> get validMoves => algebraicLegalMoves(position);
-}
+part 'puzzle_view_model.g.dart';
+part 'puzzle_view_model.freezed.dart';
 
 @riverpod
-class PuzzleScreenState extends _$PuzzleScreenState {
+class PuzzleViewModel extends _$PuzzleViewModel {
   // ignore: avoid-late-keyword
   late Node _gameTree;
   Timer? _viewSolutionTimer;
 
   @override
-  PuzzleVm build(UserId? userId, PuzzleTheme theme, Puzzle puzzle) {
+  PuzzleState build(UserId? userId, PuzzleTheme theme, Puzzle puzzle) {
     final root = Root.fromPgn(puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
 
@@ -68,7 +35,7 @@ class PuzzleScreenState extends _$PuzzleScreenState {
 
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
 
-    return PuzzleVm(
+    return PuzzleState(
       mode: PuzzleMode.play,
       initialPath: initialPath,
       currentPath: UciPath.empty,
@@ -256,4 +223,37 @@ class PuzzleScreenState extends _$PuzzleScreenState {
     );
     _gameTree.addNodesAt(state.initialPath, posAndNodes.item2, prepend: true);
   }
+}
+
+enum PuzzleMode { play, view }
+
+enum PuzzleResult { win, lose }
+
+enum PuzzleFeedback { good, bad }
+
+@freezed
+class PuzzleState with _$PuzzleState {
+  const PuzzleState._();
+
+  const factory PuzzleState({
+    required PuzzleMode mode,
+    required UciPath initialPath,
+    required UciPath currentPath,
+    required Side pov,
+    required IList<ViewNode> nodeList, // must be non empty
+    Move? lastMove,
+    PuzzleResult? result,
+    PuzzleFeedback? feedback,
+    required bool resultSent,
+    Puzzle? nextPuzzle,
+  }) = _PuzzleState;
+
+  ViewNode get node => nodeList.last;
+  Position get position => nodeList.last.position;
+  String get fen => nodeList.last.fen;
+  bool get canGoNext => mode == PuzzleMode.view && node.children.isNotEmpty;
+  bool get canGoBack =>
+      mode == PuzzleMode.view && currentPath.size > initialPath.size;
+
+  IMap<String, ISet<String>> get validMoves => algebraicLegalMoves(position);
 }

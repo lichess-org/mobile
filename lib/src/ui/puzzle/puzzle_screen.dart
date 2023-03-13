@@ -25,7 +25,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
-import 'puzzle_screen_state.dart';
+import 'puzzle_view_model.dart';
 import 'puzzle_difficulty_controller.dart';
 
 class PuzzlesScreen extends StatelessWidget {
@@ -161,9 +161,9 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet =
         ref.watch(boardPrefsStateProvider.select((p) => p.pieceSet));
-    final puzzleStateProvider =
-        puzzleScreenStateProvider(userId, theme, puzzle);
-    final puzzleState = ref.watch(puzzleStateProvider);
+    final vmProvider =
+        puzzleViewModelProvider(userId, theme, puzzle);
+    final puzzleState = ref.watch(vmProvider);
     return Column(
       children: [
         Expanded(
@@ -183,7 +183,7 @@ class _Body extends ConsumerWidget {
                   validMoves: puzzleState.validMoves,
                   onMove: (move, {isPremove}) {
                     ref
-                        .read(puzzleStateProvider.notifier)
+                        .read(vmProvider.notifier)
                         .playUserMove(Move.fromUci(move.uci)!);
                   },
                 ),
@@ -219,7 +219,7 @@ class _Feedback extends StatelessWidget {
   });
 
   final Puzzle puzzle;
-  final PuzzleVm state;
+  final PuzzleState state;
   final cg.PieceSet pieceSet;
 
   @override
@@ -319,9 +319,9 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzleStateProvider =
-        puzzleScreenStateProvider(userId, theme, puzzle);
-    final puzzleState = ref.watch(puzzleStateProvider);
+    final vmProvider =
+        puzzleViewModelProvider(userId, theme, puzzle);
+    final puzzleState = ref.watch(vmProvider);
 
     return Container(
       padding: Styles.horizontalBodyPadding,
@@ -376,13 +376,13 @@ class _BottomBar extends ConsumerWidget {
                 onTap: puzzleState.mode == PuzzleMode.view
                     ? null
                     : () =>
-                        ref.read(puzzleStateProvider.notifier).viewSolution(),
+                        ref.read(vmProvider.notifier).viewSolution(),
               ),
             if (puzzleState.mode == PuzzleMode.view)
               _BottomBarButton(
                 onTap: puzzleState.canGoBack
                     ? () =>
-                        ref.read(puzzleStateProvider.notifier).userPrevious()
+                        ref.read(vmProvider.notifier).userPrevious()
                     : null,
                 label: 'Previous',
                 shortLabel: 'Previous',
@@ -391,7 +391,7 @@ class _BottomBar extends ConsumerWidget {
             if (puzzleState.mode == PuzzleMode.view)
               _BottomBarButton(
                 onTap: puzzleState.canGoNext
-                    ? () => ref.read(puzzleStateProvider.notifier).userNext()
+                    ? () => ref.read(vmProvider.notifier).userNext()
                     : null,
                 label: context.l10n.next,
                 shortLabel: context.l10n.next,
