@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 
 part 'puzzle_providers.g.dart';
@@ -38,6 +38,6 @@ Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
 @riverpod
 Future<ISet<PuzzleTheme>> savedThemes(SavedThemesRef ref) {
   final session = ref.watch(userSessionStateProvider);
-  final storage = ref.watch(puzzleStorageProvider);
+  final storage = ref.watch(puzzleBatchStorageProvider);
   return storage.fetchSavedThemes(userId: session?.user.id);
 }

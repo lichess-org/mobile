@@ -8,7 +8,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
 import 'package:lichess_mobile/src/common/models.dart';
-import 'puzzle_storage.dart';
+import 'puzzle_batch_storage.dart';
 import 'puzzle_repository.dart';
 import 'puzzle.dart';
 import 'puzzle_theme.dart';
@@ -21,7 +21,7 @@ const kPuzzleLocalQueueLength = 50;
 
 @Riverpod(keepAlive: true)
 PuzzleService puzzleService(PuzzleServiceRef ref, {required int queueLength}) {
-  final storage = ref.watch(puzzleStorageProvider);
+  final storage = ref.watch(puzzleBatchStorageProvider);
   final repository = ref.watch(puzzleRepositoryProvider);
   return PuzzleService(
     ref,
@@ -48,7 +48,7 @@ class PuzzleService {
 
   final PuzzleServiceRef _ref;
   final int queueLength;
-  final PuzzleStorage storage;
+  final PuzzleBatchStorage storage;
   final PuzzleRepository repository;
   final Logger _log;
 
@@ -84,7 +84,7 @@ class PuzzleService {
       await storage.save(
         userId: userId,
         angle: angle,
-        data: PuzzleLocalData(
+        data: PuzzleBatch(
           solved: IList([...data.solved, solution]),
           unsolved:
               data.unsolved.removeWhere((e) => e.puzzle.id == solution.id),
@@ -112,7 +112,7 @@ class PuzzleService {
   ///
   /// This method should never fail, as if the network is down it will fallback
   /// to the local database.
-  FutureResult<PuzzleLocalData?> _syncAndLoadData(
+  FutureResult<PuzzleBatch?> _syncAndLoadData(
     UserId? userId,
     PuzzleTheme angle,
   ) async {
@@ -150,7 +150,7 @@ class PuzzleService {
           .fold(
         (value) => Result.value(
           Tuple2(
-            PuzzleLocalData(
+            PuzzleBatch(
               solved: IList(const []),
               unsolved: IList([...unsolved, ...value]),
             ),
