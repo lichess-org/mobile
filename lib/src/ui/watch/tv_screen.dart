@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
 
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/ui/watch/tv_stream.dart';
 
 class TvScreen extends ConsumerWidget {
   const TvScreen({super.key});
