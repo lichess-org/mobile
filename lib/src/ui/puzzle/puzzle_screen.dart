@@ -26,7 +26,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
 import 'puzzle_view_model.dart';
-import 'puzzle_difficulty_controller.dart';
 
 class PuzzlesScreen extends StatelessWidget {
   const PuzzlesScreen({
@@ -161,8 +160,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet =
         ref.watch(boardPrefsStateProvider.select((p) => p.pieceSet));
-    final vmProvider =
-        puzzleViewModelProvider(userId, theme, puzzle);
+    final vmProvider = puzzleViewModelProvider(userId, theme, puzzle);
     final puzzleState = ref.watch(vmProvider);
     return Column(
       children: [
@@ -205,6 +203,7 @@ class _Body extends ConsumerWidget {
           userId: userId,
           theme: theme,
           isDailyPuzzle: isDailyPuzzle,
+          vmProvider: vmProvider,
         ),
       ],
     );
@@ -219,7 +218,7 @@ class _Feedback extends StatelessWidget {
   });
 
   final Puzzle puzzle;
-  final PuzzleState state;
+  final PuzzleScreenState state;
   final cg.PieceSet pieceSet;
 
   @override
@@ -309,6 +308,7 @@ class _BottomBar extends ConsumerWidget {
     required this.puzzle,
     required this.theme,
     required this.userId,
+    required this.vmProvider,
     required this.isDailyPuzzle,
   });
 
@@ -316,11 +316,10 @@ class _BottomBar extends ConsumerWidget {
   final PuzzleTheme theme;
   final UserId? userId;
   final bool isDailyPuzzle;
+  final PuzzleViewModelProvider vmProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final vmProvider =
-        puzzleViewModelProvider(userId, theme, puzzle);
     final puzzleState = ref.watch(vmProvider);
 
     return Container(
@@ -336,7 +335,11 @@ class _BottomBar extends ConsumerWidget {
             if (userId != null &&
                 !isDailyPuzzle &&
                 puzzleState.mode != PuzzleMode.view)
-              _DifficultySelector(theme: theme, userId: userId),
+              _DifficultySelector(
+                theme: theme,
+                userId: userId,
+                vmProvider: vmProvider,
+              ),
             if (puzzleState.mode == PuzzleMode.view)
               _BottomBarButton(
                 onTap: () {
@@ -375,14 +378,12 @@ class _BottomBar extends ConsumerWidget {
                 showAndroidShortLabel: true,
                 onTap: puzzleState.mode == PuzzleMode.view
                     ? null
-                    : () =>
-                        ref.read(vmProvider.notifier).viewSolution(),
+                    : () => ref.read(vmProvider.notifier).viewSolution(),
               ),
             if (puzzleState.mode == PuzzleMode.view)
               _BottomBarButton(
                 onTap: puzzleState.canGoBack
-                    ? () =>
-                        ref.read(vmProvider.notifier).userPrevious()
+                    ? () => ref.read(vmProvider.notifier).userPrevious()
                     : null,
                 label: 'Previous',
                 shortLabel: 'Previous',
@@ -408,9 +409,11 @@ class _DifficultySelector extends ConsumerWidget {
   const _DifficultySelector({
     required this.userId,
     required this.theme,
+    required this.vmProvider,
   });
 
   final UserId? userId;
+  final PuzzleViewModelProvider vmProvider;
   final PuzzleTheme theme;
 
   @override
@@ -418,8 +421,8 @@ class _DifficultySelector extends ConsumerWidget {
     final difficulty = ref.watch(
       puzzlePrefsStateProvider(userId).select((state) => state.difficulty),
     );
+    final state = ref.watch(vmProvider);
     final connectivity = ref.watch(connectivityChangesProvider);
-    final difficultyController = ref.watch(puzzleDifficultyControllerProvider);
     return connectivity.when(
       data: (data) => StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
@@ -429,7 +432,7 @@ class _DifficultySelector extends ConsumerWidget {
             label: context.l10n.difficultyLevel,
             shortLabel: puzzleDifficultyL10n(context, difficulty),
             showAndroidShortLabel: true,
-            onTap: !data.isOnline || difficultyController.isLoading
+            onTap: !data.isOnline || state.isChangingDifficulty
                 ? null
                 : () {
                     showChoicesPicker(
@@ -451,14 +454,8 @@ class _DifficultySelector extends ConsumerWidget {
                           return;
                         }
                         final nextPuzzle = await ref
-                            .read(
-                              puzzleDifficultyControllerProvider.notifier,
-                            )
-                            .changeDifficulty(
-                              userId,
-                              theme,
-                              selectedDifficulty,
-                            );
+                            .read(vmProvider.notifier)
+                            .changeDifficulty(selectedDifficulty);
                         if (context.mounted && nextPuzzle != null) {
                           _goToNextPuzzle(
                             context,

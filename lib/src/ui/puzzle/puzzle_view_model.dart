@@ -13,7 +13,9 @@ import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 
 part 'puzzle_view_model.g.dart';
 part 'puzzle_view_model.freezed.dart';
@@ -25,7 +27,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   Timer? _viewSolutionTimer;
 
   @override
-  PuzzleState build(UserId? userId, PuzzleTheme theme, Puzzle puzzle) {
+  PuzzleScreenState build(UserId? userId, PuzzleTheme theme, Puzzle puzzle) {
     final root = Root.fromPgn(puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
 
@@ -35,13 +37,14 @@ class PuzzleViewModel extends _$PuzzleViewModel {
 
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
 
-    return PuzzleState(
+    return PuzzleScreenState(
       mode: PuzzleMode.play,
       initialPath: initialPath,
       currentPath: UciPath.empty,
       nodeList: IList([ViewNode.fromNode(_gameTree)]),
       pov: _gameTree.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
       resultSent: false,
+      isChangingDifficulty: false,
     );
   }
 
@@ -119,6 +122,31 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       }
     });
   }
+
+  Future<Puzzle?> changeDifficulty(PuzzleDifficulty difficulty) async {
+    state = state.copyWith(
+      isChangingDifficulty: true,
+    );
+
+    await ref
+        .read(
+          puzzlePrefsStateProvider(userId).notifier,
+        )
+        .setDifficulty(difficulty);
+
+    final nextPuzzle = await ref.read(defaultPuzzleServiceProvider).resetBatch(
+          userId: userId,
+          angle: theme,
+        );
+
+    state = state.copyWith(
+      isChangingDifficulty: false,
+    );
+
+    return nextPuzzle;
+  }
+
+  // --
 
   void _goToNextNode() {
     if (state.node.children.isEmpty) return;
@@ -232,10 +260,10 @@ enum PuzzleResult { win, lose }
 enum PuzzleFeedback { good, bad }
 
 @freezed
-class PuzzleState with _$PuzzleState {
-  const PuzzleState._();
+class PuzzleScreenState with _$PuzzleScreenState {
+  const PuzzleScreenState._();
 
-  const factory PuzzleState({
+  const factory PuzzleScreenState({
     required PuzzleMode mode,
     required UciPath initialPath,
     required UciPath currentPath,
@@ -245,8 +273,9 @@ class PuzzleState with _$PuzzleState {
     PuzzleResult? result,
     PuzzleFeedback? feedback,
     required bool resultSent,
+    required bool isChangingDifficulty,
     Puzzle? nextPuzzle,
-  }) = _PuzzleState;
+  }) = _PuzzleScreenState;
 
   ViewNode get node => nodeList.last;
   Position get position => nodeList.last.position;
