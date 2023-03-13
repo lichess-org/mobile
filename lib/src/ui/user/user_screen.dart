@@ -79,23 +79,16 @@ class UserScreen extends ConsumerWidget {
 
 /// Common widget for [UserScreen] and [ProfileScreen].
 ///
-/// The `showPlayerTitle` param is used by [ProfileScreen] because the username is
-/// not present in the app bar.
-///
 /// Use `inCustomScrollView` parameter to return a [SliverPadding] widget needed
 /// by [ProfileScreen].
 class UserScreenBody extends StatelessWidget {
   const UserScreenBody({
     required this.user,
     this.inCustomScrollView = false,
-    this.showPlayerTitle = false,
     super.key,
   });
 
   final User user;
-
-  /// Should show the player title on top of the body.
-  final bool showPlayerTitle;
 
   /// If set to `true` this widget will return a [SliverPadding] instead of a
   /// [ListView].
@@ -104,7 +97,7 @@ class UserScreenBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final list = [
-      _Profile(user: user, showPlayerTitle: showPlayerTitle),
+      _Profile(user: user),
       PerfCards(user: user),
       RecentGames(user: user),
     ];
@@ -124,40 +117,31 @@ const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 class _Profile extends StatelessWidget {
   const _Profile({
     required this.user,
-    required this.showPlayerTitle,
   });
 
   final User user;
-  final bool showPlayerTitle;
 
   @override
   Widget build(BuildContext context) {
-    final playerTitle = PlayerTitle(
-      userName: user.username,
-      title: user.title,
-      style: _userNameStyle,
-    );
     final userFullName = user.profile?.fullName != null
         ? Text(
             user.profile!.fullName!,
-            style: showPlayerTitle ? null : _userNameStyle,
+            style: _userNameStyle,
           )
         : null;
-    final title = showPlayerTitle ? playerTitle : userFullName;
-    final subTitle = showPlayerTitle ? userFullName : null;
+    final title = userFullName;
 
     return Padding(
-      padding: Styles.bodySectionPadding,
+      padding: Styles.bodyFirstSectionPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (user.isPatron == true || title != null || subTitle != null)
+          if (user.isPatron == true || title != null)
             ListTile(
               leading: user.isPatron == true
                   ? const Icon(LichessIcons.patron, size: 40)
                   : null,
               title: title,
-              subtitle: subTitle,
               contentPadding: const EdgeInsets.symmetric(vertical: 10),
             ),
           if (user.profile != null)

@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/ui/account/profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/player.dart';
 import '../../test_utils.dart';
 import '../../test_app.dart';
 import '../../model/auth/fake_session_storage.dart';
@@ -40,8 +41,9 @@ void main() {
 
         // profile user name at the top
         expect(
-          find.widgetWithText(ListTile, testUserName),
-          findsOneWidget,
+          find.widgetWithText(PlayerTitle, testUserName),
+          // on iOS 2 widgets are inserted in the tree: 1 for the large title, 1 for the collapted title
+          findsAtLeastNWidgets(1),
         );
 
         // wait for recent games

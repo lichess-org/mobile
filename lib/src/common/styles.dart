@@ -26,6 +26,9 @@ abstract class Styles {
   /// Horizontal and bottom padding for a body section
   static EdgeInsetsGeometry get bodySectionPadding =>
       horizontalBodyPadding.add(sectionBottomPadding).add(sectionTopPadding);
+
+  static EdgeInsetsGeometry bodyFirstSectionPadding =
+      horizontalBodyPadding.add(sectionBottomPadding);
 }
 
 /// Retrieve the default text color and apply an opacity to it.

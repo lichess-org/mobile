@@ -1,4 +1,5 @@
 import 'package:async/async.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,6 +15,7 @@ import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/player.dart';
 
 part 'profile_screen.g.dart';
 
@@ -47,94 +49,82 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Widget _buildAndroid(BuildContext context) {
     final sessionProfile = ref.watch(_sessionProfileProvider);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.profile),
-        actions: [
-          IconButton(
-            tooltip: context.l10n.settings,
-            icon: const Icon(Icons.settings),
-            onPressed: () => Navigator.of(context).push<void>(
-              MaterialPageRoute(
-                builder: (context) => const SettingsScreen(),
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: sessionProfile.when(
-        data: (account) {
-          return account != null
-              ? RefreshIndicator(
+    return sessionProfile.when(
+      data: (account) {
+        return account != null
+            ? Scaffold(
+                appBar: AppBar(
+                  title: PlayerTitle(
+                    userName: account.username,
+                    title: account.title,
+                  ),
+                  actions: const [
+                    _SettingsButton(),
+                  ],
+                ),
+                body: RefreshIndicator(
                   key: _androidRefreshKey,
                   onRefresh: () => _refreshData(account),
-                  child: UserScreenBody(user: account, showPlayerTitle: true),
-                )
-              : _SignInBody();
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) {
-          return const Center(child: Text('Could not load profile.'));
-        },
-      ),
+                  child: UserScreenBody(user: account),
+                ),
+              )
+            : Scaffold(
+                appBar: AppBar(
+                  title: Text(context.l10n.profile),
+                  actions: const [
+                    _SettingsButton(),
+                  ],
+                ),
+                body: _SignInBody(),
+              );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, _) {
+        return const Center(child: Text('Could not load profile.'));
+      },
     );
   }
 
   Widget _buildIos(BuildContext context) {
     final sessionProfile = ref.watch(_sessionProfileProvider);
-    return CupertinoPageScaffold(
-      child: CustomScrollView(
-        slivers: [
-          CupertinoSliverNavigationBar(
-            largeTitle: Text(context.l10n.profile),
-            trailing: CupertinoIconButton(
-              semanticsLabel: context.l10n.settings,
-              onPressed: () => Navigator.of(context).push<void>(
-                CupertinoPageRoute(
-                  title: context.l10n.settings,
-                  builder: (context) => const SettingsScreen(),
-                ),
-              ),
-              icon: const Icon(Icons.settings),
-            ),
-          ),
-          ...sessionProfile.when(
-            data: (account) {
-              return [
-                if (account != null)
-                  CupertinoSliverRefreshControl(
-                    onRefresh: () => _refreshData(account),
-                  ),
-                if (account != null)
-                  SliverSafeArea(
-                    top: false,
-                    sliver: UserScreenBody(
-                      user: account,
-                      showPlayerTitle: true,
-                      inCustomScrollView: true,
+    return sessionProfile.when(
+      data: (account) {
+        return account != null
+            ? CupertinoPageScaffold(
+                child: CustomScrollView(
+                  slivers: [
+                    CupertinoSliverNavigationBar(
+                      largeTitle: PlayerTitle(
+                        userName: account.username,
+                        title: account.title,
+                      ),
+                      trailing: const _SettingsButton(),
                     ),
-                  )
-                else
-                  SliverFillRemaining(child: _SignInBody()),
-              ];
-            },
-            loading: () => const [
-              SliverFillRemaining(
-                child: Center(child: CircularProgressIndicator.adaptive()),
+                    CupertinoSliverRefreshControl(
+                      onRefresh: () => _refreshData(account),
+                    ),
+                    SliverSafeArea(
+                      top: false,
+                      sliver: UserScreenBody(
+                        user: account,
+                        inCustomScrollView: true,
+                      ),
+                    ),
+                  ],
+                ),
               )
-            ],
-            error: (error, _) {
-              return const [
-                SliverFillRemaining(
-                  child: Center(
-                    child: Text('Could not load profile.'),
-                  ),
-                )
-              ];
-            },
-          ),
-        ],
-      ),
+            : CupertinoPageScaffold(
+                navigationBar: CupertinoNavigationBar(
+                  middle: Text(context.l10n.profile),
+                  trailing: const _SettingsButton(),
+                ),
+                child: _SignInBody(),
+              );
+      },
+      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      error: (error, _) {
+        return const Center(child: Text('Could not load profile.'));
+      },
     );
   }
 
@@ -142,6 +132,34 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return ref
         .refresh(userRecentGamesProvider(userId: account.id).future)
         .then((_) => ref.refresh(_sessionProfileProvider));
+  }
+}
+
+class _SettingsButton extends StatelessWidget {
+  const _SettingsButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoIconButton(
+            semanticsLabel: context.l10n.settings,
+            onPressed: () => Navigator.of(context).push<void>(
+              CupertinoPageRoute(
+                title: context.l10n.settings,
+                builder: (context) => const SettingsScreen(),
+              ),
+            ),
+            icon: const Icon(Icons.settings),
+          )
+        : IconButton(
+            tooltip: context.l10n.settings,
+            icon: const Icon(Icons.settings),
+            onPressed: () => Navigator.of(context).push<void>(
+              MaterialPageRoute(
+                builder: (context) => const SettingsScreen(),
+              ),
+            ),
+          );
   }
 }
 
