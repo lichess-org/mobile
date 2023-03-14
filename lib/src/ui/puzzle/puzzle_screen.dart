@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/common/brightness.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
@@ -290,7 +292,7 @@ class _Feedback extends StatelessWidget {
   }
 }
 
-class _PuzzleSession extends ConsumerWidget {
+class _PuzzleSession extends ConsumerStatefulWidget {
   const _PuzzleSession({
     required this.theme,
     required this.userId,
@@ -300,20 +302,60 @@ class _PuzzleSession extends ConsumerWidget {
   final UserId? userId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(puzzleSessionViewModelProvider(userId, theme));
+  ConsumerState<_PuzzleSession> createState() => _PuzzleSessionState();
+}
+
+class _PuzzleSessionState extends ConsumerState<_PuzzleSession> {
+  final lastAttemptKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (lastAttemptKey.currentContext != null) {
+        Scrollable.ensureVisible(
+          lastAttemptKey.currentContext!,
+        );
+      }
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant _PuzzleSession oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (lastAttemptKey.currentContext != null) {
+        Scrollable.ensureVisible(
+          lastAttemptKey.currentContext!,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeIn,
+        );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final session =
+        ref.watch(puzzleSessionViewModelProvider(widget.userId, widget.theme));
+    final brightness = ref.watch(currentBrightnessProvider);
     return SizedBox(
       height: 100,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
         child: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
           child: Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: [
-              for (final attempt in session.attempts)
-                _SessionItem(attempt: attempt),
-            ],
+            verticalDirection: VerticalDirection.up,
+            children: session.attempts.mapIndexed((i, attempt) {
+              return _SessionItem(
+                brightness: brightness,
+                attempt: attempt,
+                key: i == session.attempts.length - 1 ? lastAttemptKey : null,
+              );
+            }).toList(growable: false),
           ),
         ),
       ),
@@ -324,16 +366,27 @@ class _PuzzleSession extends ConsumerWidget {
 class _SessionItem extends StatelessWidget {
   const _SessionItem({
     required this.attempt,
+    required this.brightness,
+    super.key,
   });
 
   final PuzzleAttempt attempt;
+  final Brightness brightness;
+
+  Color get good => brightness == Brightness.light
+      ? LichessColors.good.shade300
+      : LichessColors.good.shade600;
+
+  Color get error => brightness == Brightness.light
+      ? LichessColors.error.shade300
+      : LichessColors.error.shade600;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       decoration: BoxDecoration(
-        color: attempt.win ? LichessColors.good : LichessColors.error,
+        color: attempt.win ? good : error,
         borderRadius: BorderRadius.circular(5),
       ),
       child: Icon(

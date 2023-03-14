@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/common/shared_preferences.dart';
 part 'general_preferences.freezed.dart';
 part 'general_preferences.g.dart';
 
-const _prefKey = 'preferences.display';
+const _prefKey = 'preferences.general';
 
 @Freezed(fromJson: true, toJson: true)
 class GeneralPreferences with _$GeneralPreferences {
@@ -52,23 +52,5 @@ class GeneralPreferencesState extends _$GeneralPreferencesState {
       jsonEncode(newState.toJson()),
     );
     state = newState;
-  }
-}
-
-@Riverpod(keepAlive: true)
-Brightness currentBrightness(CurrentBrightnessRef ref) {
-  final themeMode = ref.watch(
-    generalPreferencesStateProvider.select(
-      (state) => state.themeMode,
-    ),
-  );
-
-  switch (themeMode) {
-    case ThemeMode.dark:
-      return Brightness.dark;
-    case ThemeMode.light:
-      return Brightness.light;
-    case ThemeMode.system:
-      return WidgetsBinding.instance.platformDispatcher.platformBrightness;
   }
 }

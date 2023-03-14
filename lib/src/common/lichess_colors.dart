@@ -5,6 +5,9 @@ class LichessColors {
   // prevents instantiation and extension.
   LichessColors._();
 
+  // material colors palette generated with:
+  // http://mcg.mbitson.com
+
   // primary: blue
   static const MaterialColor primary =
       MaterialColor(_primaryPrimaryValue, <int, Color>{
@@ -60,8 +63,20 @@ class LichessColors {
   static const fancy = Color(0xFFB72FC6);
 
   // error: red
-  static const red = Color(0xFFCC3333);
-  static const error = Color(0xFFCC3333);
+  static const MaterialColor red = MaterialColor(_redPrimaryValue, <int, Color>{
+    50: Color(0xFFF9E7E7),
+    100: Color(0xFFF0C2C2),
+    200: Color(0xFFE69999),
+    300: Color(0xFFDB7070),
+    400: Color(0xFFD45252),
+    500: Color(_redPrimaryValue),
+    600: Color(0xFFC72E2E),
+    700: Color(0xFFC02727),
+    800: Color(0xFFB92020),
+    900: Color(0xFFAD1414),
+  });
+  static const int _redPrimaryValue = 0xFFCC3333;
+  static const error = red;
 
   // offline: grey
   static const grey = Color(0xCCCCCCCC);
