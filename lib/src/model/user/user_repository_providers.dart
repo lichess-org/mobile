@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'user_repository.dart';
 import 'user.dart';
 import 'streamer.dart';
@@ -58,4 +59,10 @@ Future<Leaderboard> leaderboard(LeaderboardRef ref) {
   ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(userRepositoryProvider);
   return Result.release(repo.getLeaderboard());
+}
+
+@riverpod
+Future<TvChannels> tvChannels(TvChannelsRef ref) {
+  final repo = ref.watch(userRepositoryProvider);
+  return Result.release(repo.getTvChannels());
 }

@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'user.dart';
 import 'streamer.dart';
 
@@ -78,6 +79,18 @@ class UserRepository {
       return readJsonObject(
         response.body,
         mapper: _leaderboardFromJson,
+        logger: _log,
+      );
+    });
+  }
+
+  FutureResult<TvChannels> getTvChannels() {
+    return apiClient
+        .get(Uri.parse('$kLichessHost/api/tv/channels'))
+        .flatMap((response) {
+      return readJsonObject(
+        utf8.decode(response.bodyBytes),
+        mapper: TvChannels.fromJson,
         logger: _log,
       );
     });
