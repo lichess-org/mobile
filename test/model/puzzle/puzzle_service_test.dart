@@ -70,10 +70,10 @@ void main() {
           );
       when(getReq).thenAnswer((_) => mockResponse(batchOf3, 200));
 
-      final puzzle = await service.nextPuzzle(
+      final next = await service.nextPuzzle(
         userId: null,
       );
-      expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
+      expect(next?.puzzle.puzzle.id, equals(const PuzzleId('20yWT')));
       verify(getReq).called(1);
       final data = await storage.fetch(userId: null);
       expect(data?.solved, equals(IList(const [])));
@@ -89,10 +89,10 @@ void main() {
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       );
 
-      final puzzle = await service.nextPuzzle(
+      final next = await service.nextPuzzle(
         userId: null,
       );
-      expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
+      expect(next?.puzzle.puzzle.id, equals(const PuzzleId('pId3')));
       verifyNever(() => mockClient.get(any()));
       final data = await storage.fetch(userId: null);
       expect(data?.unsolved.length, equals(1));
@@ -116,10 +116,10 @@ void main() {
       // will fetch only 1 since queueLength is 2
       when(getReq).thenAnswer((_) => mockResponse(batchOf1, 200));
 
-      final puzzle = await service.nextPuzzle(
+      final next = await service.nextPuzzle(
         userId: null,
       );
-      expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
+      expect(next?.puzzle.puzzle.id, equals(const PuzzleId('pId3')));
       verify(getReq).called(1);
       final data = await storage.fetch(userId: null);
       expect(data?.unsolved.length, equals(2));
@@ -135,17 +135,17 @@ void main() {
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       );
 
-      final puzzle = await service.nextPuzzle(
+      final next = await service.nextPuzzle(
         userId: null,
       );
-      expect(puzzle?.puzzle.id, equals(const PuzzleId('pId3')));
+      expect(next?.puzzle.puzzle.id, equals(const PuzzleId('pId3')));
       final data = await storage.fetch(userId: null);
       expect(data?.unsolved.length, equals(1));
 
-      final puzzle2 = await service.nextPuzzle(
+      final next2 = await service.nextPuzzle(
         userId: null,
       );
-      expect(puzzle2?.puzzle.id, equals(const PuzzleId('pId3')));
+      expect(next2?.puzzle.puzzle.id, equals(const PuzzleId('pId3')));
       final data2 = await storage.fetch(userId: null);
       expect(data2?.unsolved.length, equals(1));
     });
@@ -187,10 +187,10 @@ void main() {
 
       when(getReq).thenAnswer((_) => mockResponse(batchOf1, 200));
 
-      final puzzle = await service.nextPuzzle(
+      final next = await service.nextPuzzle(
         userId: const UserId('testUserId'),
       );
-      expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
+      expect(next?.puzzle.puzzle.id, equals(const PuzzleId('20yWT')));
       verify(getReq).called(1);
 
       final data = await storage.fetch(userId: const UserId('testUserId'));
@@ -217,11 +217,11 @@ void main() {
 
       when(() => getReq()).thenAnswer((_) => mockResponse(batchOf1, 200));
 
-      final puzzle = await service.nextPuzzle(
+      final next = await service.nextPuzzle(
         angle: PuzzleTheme.opening,
         userId: null,
       );
-      expect(puzzle?.puzzle.id, equals(const PuzzleId('20yWT')));
+      expect(next?.puzzle.puzzle.id, equals(const PuzzleId('20yWT')));
       verify(getReq).called(1);
 
       final data =
@@ -263,7 +263,7 @@ void main() {
       final data = await storage.fetch(userId: null);
       expect(data?.solved, equals(IList(const [])));
       expect(data?.unsolved[0].puzzle.id, equals(const PuzzleId('20yWT')));
-      expect(next?.puzzle.id, equals(const PuzzleId('20yWT')));
+      expect(next?.puzzle.puzzle.id, equals(const PuzzleId('20yWT')));
     });
 
     test('solve puzzle when online, with a userId', () async {
@@ -302,7 +302,7 @@ void main() {
       final data = await storage.fetch(userId: const UserId('testUserId'));
       expect(data?.solved, equals(IList(const [])));
       expect(data?.unsolved[0].puzzle.id, equals(const PuzzleId('20yWT')));
-      expect(next?.puzzle.id, equals(const PuzzleId('20yWT')));
+      expect(next?.puzzle.puzzle.id, equals(const PuzzleId('20yWT')));
     });
 
     test('solve puzzle when offline', () async {
@@ -344,7 +344,7 @@ void main() {
       final data = await storage.fetch(userId: const UserId('testUserId'));
       expect(data?.solved, equals(IList(const [solution])));
       expect(data?.unsolved.length, equals(1));
-      expect(next?.puzzle.id, equals(const PuzzleId('pId4')));
+      expect(next?.puzzle.puzzle.id, equals(const PuzzleId('pId4')));
     });
 
     test('resetBatch', () async {
@@ -367,12 +367,12 @@ void main() {
           );
 
       when(getReq).thenAnswer((_) => mockResponse(batchOf2, 200));
-      final nextPuzle =
-          await service.resetBatch(userId: const UserId('testUserId'));
+
+      final next = await service.resetBatch(userId: const UserId('testUserId'));
 
       verify(getReq).called(1);
       final data = await storage.fetch(userId: const UserId('testUserId'));
-      expect(nextPuzle?.puzzle.id, equals(const PuzzleId('20yWT')));
+      expect(next?.puzzle.puzzle.id, equals(const PuzzleId('20yWT')));
       expect(data?.solved, equals(IList(const [])));
       expect(data?.unsolved.length, equals(2));
       expect(data?.unsolved[0].puzzle.id, equals(const PuzzleId('20yWT')));

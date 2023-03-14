@@ -119,6 +119,7 @@ class PuzzleBatch with _$PuzzleBatch {
   const factory PuzzleBatch({
     required IList<PuzzleSolution> solved,
     required IList<Puzzle> unsolved,
+    PuzzleGlicko? lastGlicko,
   }) = _PuzzleBatch;
 
   factory PuzzleBatch.fromJson(Map<String, dynamic> json) =>

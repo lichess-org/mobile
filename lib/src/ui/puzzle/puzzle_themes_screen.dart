@@ -158,7 +158,9 @@ class _Category extends ConsumerWidget {
                   ? () {
                       Navigator.of(context, rootNavigator: true).push<void>(
                         MaterialPageRoute(
-                          builder: (context) => PuzzlesScreen(theme: theme),
+                          builder: (context) => PuzzlesScreen(
+                            theme: theme,
+                          ),
                         ),
                       );
                     }

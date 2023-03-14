@@ -9,7 +9,6 @@ import 'package:share_plus/share_plus.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/brightness.dart';
-import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/common/connectivity.dart';
@@ -23,6 +22,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -34,15 +34,13 @@ import 'puzzle_session_view_model.dart';
 class PuzzlesScreen extends StatelessWidget {
   const PuzzlesScreen({
     required this.theme,
-    this.userId,
-    this.puzzle,
+    this.puzzleContext,
     this.isDailyPuzzle = false,
     super.key,
   });
 
-  final UserId? userId;
-  final Puzzle? puzzle;
   final PuzzleTheme theme;
+  final PuzzleContext? puzzleContext;
   final bool isDailyPuzzle;
 
   @override
@@ -61,11 +59,9 @@ class PuzzlesScreen extends StatelessWidget {
             ? const Text('Daily Puzzle')
             : Text(puzzleThemeL10n(context, theme).name),
       ),
-      body: puzzle != null
+      body: puzzleContext != null
           ? _Body(
-              userId: userId,
-              puzzle: puzzle!,
-              theme: theme,
+              puzzleContext: puzzleContext!,
               isDailyPuzzle: isDailyPuzzle,
             )
           : _LoadPuzzle(theme: theme),
@@ -80,11 +76,9 @@ class PuzzlesScreen extends StatelessWidget {
             : Text(puzzleThemeL10n(context, theme).name),
         trailing: ToggleSoundButton(),
       ),
-      child: puzzle != null
+      child: puzzleContext != null
           ? _Body(
-              userId: userId,
-              puzzle: puzzle!,
-              theme: theme,
+              puzzleContext: puzzleContext!,
               isDailyPuzzle: isDailyPuzzle,
             )
           : _LoadPuzzle(theme: theme),
@@ -103,7 +97,7 @@ class _LoadPuzzle extends ConsumerWidget {
 
     return nextPuzzle.when(
       data: (data) {
-        if (data.item2 == null) {
+        if (data == null) {
           return const Center(
             child: TableBoardLayout(
               topTable: kEmptyWidget,
@@ -118,9 +112,7 @@ class _LoadPuzzle extends ConsumerWidget {
           );
         } else {
           return _Body(
-            puzzle: data.item2!,
-            userId: data.item1,
-            theme: theme,
+            puzzleContext: data,
             isDailyPuzzle: false,
           );
         }
@@ -149,22 +141,18 @@ class _LoadPuzzle extends ConsumerWidget {
 
 class _Body extends ConsumerWidget {
   const _Body({
-    required this.puzzle,
-    required this.userId,
-    required this.theme,
+    required this.puzzleContext,
     required this.isDailyPuzzle,
   });
 
-  final Puzzle puzzle;
-  final PuzzleTheme theme;
-  final UserId? userId;
+  final PuzzleContext puzzleContext;
   final bool isDailyPuzzle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet =
         ref.watch(boardPrefsStateProvider.select((p) => p.pieceSet));
-    final vmProvider = puzzleViewModelProvider(userId, theme, puzzle);
+    final vmProvider = puzzleViewModelProvider(puzzleContext);
     final puzzleState = ref.watch(vmProvider);
     return Column(
       children: [
@@ -195,24 +183,20 @@ class _Body extends ConsumerWidget {
                     vertical: 16.0,
                   ),
                   child: _Feedback(
-                    puzzle: puzzle,
+                    puzzle: puzzleContext.puzzle,
                     state: puzzleState,
                     pieceSet: pieceSet,
                   ),
                 ),
                 bottomTable: _PuzzleSession(
-                  puzzle: puzzle,
-                  userId: userId,
-                  theme: theme,
+                  puzzleContext: puzzleContext,
                 ),
               ),
             ),
           ),
         ),
         _BottomBar(
-          puzzle: puzzle,
-          userId: userId,
-          theme: theme,
+          puzzleContext: puzzleContext,
           isDailyPuzzle: isDailyPuzzle,
           vmProvider: vmProvider,
         ),
@@ -298,14 +282,10 @@ class _Feedback extends StatelessWidget {
 
 class _PuzzleSession extends ConsumerStatefulWidget {
   const _PuzzleSession({
-    required this.puzzle,
-    required this.theme,
-    required this.userId,
+    required this.puzzleContext,
   });
 
-  final Puzzle puzzle;
-  final PuzzleTheme theme;
-  final UserId? userId;
+  final PuzzleContext puzzleContext;
 
   @override
   ConsumerState<_PuzzleSession> createState() => _PuzzleSessionState();
@@ -342,8 +322,12 @@ class _PuzzleSessionState extends ConsumerState<_PuzzleSession> {
 
   @override
   Widget build(BuildContext context) {
-    final session =
-        ref.watch(puzzleSessionViewModelProvider(widget.userId, widget.theme));
+    final session = ref.watch(
+      puzzleSessionViewModelProvider(
+        widget.puzzleContext.userId,
+        widget.puzzleContext.theme,
+      ),
+    );
     final brightness = ref.watch(currentBrightnessProvider);
     return SizedBox(
       height: 100,
@@ -358,13 +342,14 @@ class _PuzzleSessionState extends ConsumerState<_PuzzleSession> {
             children: [
               for (final attempt in session.attempts)
                 _SessionItem(
-                  isCurrent: attempt.id == widget.puzzle.puzzle.id,
+                  isCurrent:
+                      attempt.id == widget.puzzleContext.puzzle.puzzle.id,
                   brightness: brightness,
                   attempt: attempt,
                 ),
               _SessionItem(
                 isCurrent: session.attempts.firstWhereOrNull(
-                      (a) => a.id == widget.puzzle.puzzle.id,
+                      (a) => a.id == widget.puzzleContext.puzzle.puzzle.id,
                     ) ==
                     null,
                 brightness: brightness,
@@ -405,6 +390,8 @@ class _SessionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 40,
+      height: 26,
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       decoration: BoxDecoration(
         color: isCurrent
@@ -416,15 +403,27 @@ class _SessionItem extends StatelessWidget {
                 : next,
         borderRadius: BorderRadius.circular(5),
       ),
-      child: Icon(
-        attempt != null
-            ? attempt!.win
-                ? Icons.check
-                : Icons.close
-            : null,
-        color: Colors.white,
-        size: 18,
-      ),
+      child: attempt?.ratingDiff != null
+          ? FittedBox(
+              fit: BoxFit.contain,
+              child: Text(
+                attempt!.ratingDiff!.toString(),
+                maxLines: 1,
+                style: const TextStyle(
+                  color: Colors.white,
+                  height: 1,
+                ),
+              ),
+            )
+          : Icon(
+              attempt != null
+                  ? attempt!.win
+                      ? Icons.check
+                      : Icons.close
+                  : null,
+              color: Colors.white,
+              size: 18,
+            ),
     );
   }
 }
@@ -432,16 +431,13 @@ class _SessionItem extends StatelessWidget {
 void _goToNextPuzzle(
   BuildContext context,
   WidgetRef ref,
-  PuzzleTheme theme,
-  UserId? userId,
-  Puzzle nextPuzzle,
+  PuzzleContext nextContext,
 ) {
   Navigator.of(context).pushReplacement(
     MaterialPageRoute<void>(
       builder: (context) => PuzzlesScreen(
-        theme: theme,
-        userId: userId,
-        puzzle: nextPuzzle,
+        theme: nextContext.theme,
+        puzzleContext: nextContext,
       ),
     ),
   );
@@ -449,16 +445,12 @@ void _goToNextPuzzle(
 
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({
-    required this.puzzle,
-    required this.theme,
-    required this.userId,
+    required this.puzzleContext,
     required this.vmProvider,
     required this.isDailyPuzzle,
   });
 
-  final Puzzle puzzle;
-  final PuzzleTheme theme;
-  final UserId? userId;
+  final PuzzleContext puzzleContext;
   final bool isDailyPuzzle;
   final PuzzleViewModelProvider vmProvider;
 
@@ -476,18 +468,19 @@ class _BottomBar extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            if (userId != null &&
+            if (puzzleContext.userId != null &&
                 !isDailyPuzzle &&
                 puzzleState.mode != PuzzleMode.view)
               _DifficultySelector(
-                theme: theme,
-                userId: userId,
+                puzzleContext: puzzleContext,
                 vmProvider: vmProvider,
               ),
             if (puzzleState.mode == PuzzleMode.view)
               _BottomBarButton(
                 onTap: () {
-                  Share.share('$kLichessHost/training/${puzzle.puzzle.id}');
+                  Share.share(
+                    '$kLichessHost/training/${puzzleContext.puzzle.puzzle.id}',
+                  );
                 },
                 label: 'Share this puzzle',
                 shortLabel: 'Share',
@@ -498,14 +491,12 @@ class _BottomBar extends ConsumerWidget {
             if (puzzleState.mode == PuzzleMode.view)
               _BottomBarButton(
                 onTap: puzzleState.mode == PuzzleMode.view &&
-                        puzzleState.nextPuzzle != null
+                        puzzleState.nextContext != null
                     ? () {
                         _goToNextPuzzle(
                           context,
                           ref,
-                          theme,
-                          userId,
-                          puzzleState.nextPuzzle!,
+                          puzzleState.nextContext!,
                         );
                       }
                     : null,
@@ -551,19 +542,18 @@ class _BottomBar extends ConsumerWidget {
 
 class _DifficultySelector extends ConsumerWidget {
   const _DifficultySelector({
-    required this.userId,
-    required this.theme,
+    required this.puzzleContext,
     required this.vmProvider,
   });
 
-  final UserId? userId;
+  final PuzzleContext puzzleContext;
   final PuzzleViewModelProvider vmProvider;
-  final PuzzleTheme theme;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final difficulty = ref.watch(
-      puzzlePreferencesProvider(userId).select((state) => state.difficulty),
+      puzzlePreferencesProvider(puzzleContext.userId)
+          .select((state) => state.difficulty),
     );
     final state = ref.watch(vmProvider);
     final connectivity = ref.watch(connectivityChangesProvider);
@@ -597,16 +587,14 @@ class _DifficultySelector extends ConsumerWidget {
                         if (selectedDifficulty == difficulty) {
                           return;
                         }
-                        final nextPuzzle = await ref
+                        final nextContext = await ref
                             .read(vmProvider.notifier)
                             .changeDifficulty(selectedDifficulty);
-                        if (context.mounted && nextPuzzle != null) {
+                        if (context.mounted && nextContext != null) {
                           _goToNextPuzzle(
                             context,
                             ref,
-                            theme,
-                            userId,
-                            nextPuzzle,
+                            nextContext,
                           );
                         }
                       },

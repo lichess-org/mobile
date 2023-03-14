@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:async/async.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:deep_pick/deep_pick.dart';
@@ -16,6 +17,7 @@ import 'puzzle.dart';
 import 'puzzle_theme.dart';
 import 'puzzle_difficulty.dart';
 
+part 'puzzle_repository.freezed.dart';
 part 'puzzle_repository.g.dart';
 
 @Riverpod(keepAlive: true)
@@ -34,7 +36,7 @@ class PuzzleRepository {
   final ApiClient apiClient;
   final Logger _log;
 
-  FutureResult<IList<Puzzle>> selectBatch({
+  FutureResult<PuzzleBatchResponse> selectBatch({
     required int nb,
     PuzzleTheme angle = PuzzleTheme.mix,
     PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
@@ -45,10 +47,10 @@ class PuzzleRepository {
             '$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb&difficulty=${difficulty.name}',
           ),
         )
-        .flatMap(_decodeJsonList);
+        .flatMap(_decodeBatchResponse);
   }
 
-  FutureResult<IList<Puzzle>> solveBatch({
+  FutureResult<PuzzleBatchResponse> solveBatch({
     required int nb,
     required IList<PuzzleSolution> solved,
     PuzzleTheme angle = PuzzleTheme.mix,
@@ -72,7 +74,7 @@ class PuzzleRepository {
                 .toList(),
           }),
         )
-        .flatMap(_decodeJsonList);
+        .flatMap(_decodeBatchResponse);
   }
 
   FutureResult<Puzzle> daily() {
@@ -85,7 +87,7 @@ class PuzzleRepository {
         );
   }
 
-  Result<IList<Puzzle>> _decodeJsonList(http.Response response) {
+  Result<PuzzleBatchResponse> _decodeBatchResponse(http.Response response) {
     return readJsonObject(
       response.body,
       mapper: (Map<String, dynamic> json) {
@@ -93,18 +95,29 @@ class PuzzleRepository {
         if (puzzles is! List<dynamic>) {
           throw const FormatException('puzzles: expected a list');
         }
-        return IList(
-          puzzles.map((e) {
-            if (e is! Map<String, dynamic>) {
-              throw const FormatException('Expected an object');
-            }
-            return _puzzleFromJson(e);
-          }),
+        return PuzzleBatchResponse(
+          puzzles: IList(
+            puzzles.map((e) {
+              if (e is! Map<String, dynamic>) {
+                throw const FormatException('Expected an object');
+              }
+              return _puzzleFromJson(e);
+            }),
+          ),
+          glicko: pick(json['glicko']).letOrNull(_puzzleGlickoFromPick),
         );
       },
       logger: _log,
     );
   }
+}
+
+@freezed
+class PuzzleBatchResponse with _$PuzzleBatchResponse {
+  const factory PuzzleBatchResponse({
+    required IList<Puzzle> puzzles,
+    PuzzleGlicko? glicko,
+  }) = _PuzzleBatchResponse;
 }
 
 // --
@@ -128,6 +141,14 @@ PuzzleData _puzzleDatafromPick(RequiredPick pick) {
     solution: pick('solution').asListOrThrow((p0) => p0.asStringOrThrow()).lock,
     themes:
         pick('themes').asListOrThrow((p0) => p0.asStringOrThrow()).toSet().lock,
+  );
+}
+
+PuzzleGlicko _puzzleGlickoFromPick(RequiredPick pick) {
+  return PuzzleGlicko(
+    rating: pick('rating').asDoubleOrThrow(),
+    deviation: pick('deviation').asDoubleOrThrow(),
+    provisional: pick('provisional').asBoolOrNull(),
   );
 }
 

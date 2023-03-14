@@ -3,6 +3,7 @@ import 'package:logging/logging.dart';
 import 'package:tuple/tuple.dart';
 import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
@@ -15,6 +16,7 @@ import 'puzzle_theme.dart';
 import 'puzzle_preferences.dart';
 
 part 'puzzle_service.g.dart';
+part 'puzzle_service.freezed.dart';
 
 /// Size of puzzle local cache
 const kPuzzleLocalQueueLength = 50;
@@ -37,6 +39,16 @@ final defaultPuzzleServiceProvider = puzzleServiceProvider(
   queueLength: kPuzzleLocalQueueLength,
 );
 
+@freezed
+class PuzzleContext with _$PuzzleContext {
+  const factory PuzzleContext({
+    required Puzzle puzzle,
+    required PuzzleTheme theme,
+    required UserId? userId,
+    required PuzzleGlicko? glicko,
+  }) = _PuzzleContext;
+}
+
 class PuzzleService {
   const PuzzleService(
     this._ref,
@@ -52,26 +64,33 @@ class PuzzleService {
   final PuzzleRepository repository;
   final Logger _log;
 
-  /// Loads the next puzzle from database. Will sync with server if necessary.
+  /// Loads the next puzzle from database and the glicko rating if available.
   ///
+  /// Will sync with server if necessary.
   /// This future should never fail on network errors.
-  Future<Puzzle?> nextPuzzle({
+  Future<PuzzleContext?> nextPuzzle({
     required UserId? userId,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) {
     return Result.release(
       _syncAndLoadData(userId, angle).map(
-        (data) =>
-            data != null && data.unsolved.isNotEmpty ? data.unsolved[0] : null,
+        (data) => data != null && data.unsolved.isNotEmpty
+            ? PuzzleContext(
+                puzzle: data.unsolved[0],
+                theme: angle,
+                userId: userId,
+                glicko: data.lastGlicko,
+              )
+            : null,
       ),
     );
   }
 
   /// Update puzzle queue with the solved puzzle, sync with server and returns
-  /// the next puzzle.
+  /// the next puzzle with the glicko rating if available.
   ///
   /// This future should never fail on network errors.
-  Future<Puzzle?> solve({
+  Future<PuzzleContext?> solve({
     required UserId? userId,
     required PuzzleSolution solution,
     PuzzleTheme angle = PuzzleTheme.mix,
@@ -96,7 +115,7 @@ class PuzzleService {
   }
 
   /// Clears the current puzzle batch, fetches a new one and returns the next puzzle.
-  Future<Puzzle?> resetBatch({
+  Future<PuzzleContext?> resetBatch({
     required UserId? userId,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
@@ -133,7 +152,7 @@ class PuzzleService {
           _ref.read(puzzlePreferencesProvider(userId)).difficulty;
 
       // anonymous users can't solve puzzles so we just download the deficit
-      final batchResult = solved.isNotEmpty && userId != null
+      final batchResponse = solved.isNotEmpty && userId != null
           ? repository.solveBatch(
               nb: deficit,
               solved: solved,
@@ -146,13 +165,14 @@ class PuzzleService {
               difficulty: difficulty,
             );
 
-      return batchResult
+      return batchResponse
           .fold(
         (value) => Result.value(
           Tuple2(
             PuzzleBatch(
               solved: IList(const []),
-              unsolved: IList([...unsolved, ...value]),
+              unsolved: IList([...unsolved, ...value.puzzles]),
+              lastGlicko: value.glicko,
             ),
             true,
           ),

@@ -57,8 +57,7 @@ class _Body extends ConsumerWidget {
             padding: Styles.sectionBottomPadding,
             child: nextPuzzle.when(
               data: (data) {
-                final puzzle = data.item2;
-                if (puzzle == null) {
+                if (data == null) {
                   return const _PuzzleButton(
                     theme: theme,
                     subtitle:
@@ -71,9 +70,8 @@ class _Body extends ConsumerWidget {
                       Navigator.of(context, rootNavigator: true).push<void>(
                         MaterialPageRoute(
                           builder: (context) => PuzzlesScreen(
-                            userId: data.item1,
-                            puzzle: puzzle,
                             theme: theme,
+                            puzzleContext: data,
                           ),
                         ),
                       );

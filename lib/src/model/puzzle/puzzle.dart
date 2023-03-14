@@ -57,6 +57,20 @@ class PuzzleData with _$PuzzleData {
 }
 
 @Freezed(fromJson: true, toJson: true)
+class PuzzleGlicko with _$PuzzleGlicko {
+  const PuzzleGlicko._();
+
+  const factory PuzzleGlicko({
+    required double rating,
+    required double deviation,
+    bool? provisional,
+  }) = _PuzzleGlicko;
+
+  factory PuzzleGlicko.fromJson(Map<String, dynamic> json) =>
+      _$PuzzleGlickoFromJson(json);
+}
+
+@Freezed(fromJson: true, toJson: true)
 class PuzzleGame with _$PuzzleGame {
   const factory PuzzleGame({
     required GameId id,
