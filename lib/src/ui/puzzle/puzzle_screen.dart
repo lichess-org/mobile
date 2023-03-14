@@ -200,7 +200,11 @@ class _Body extends ConsumerWidget {
                     pieceSet: pieceSet,
                   ),
                 ),
-                bottomTable: _PuzzleSession(userId: userId, theme: theme),
+                bottomTable: _PuzzleSession(
+                  puzzle: puzzle,
+                  userId: userId,
+                  theme: theme,
+                ),
               ),
             ),
           ),
@@ -294,10 +298,12 @@ class _Feedback extends StatelessWidget {
 
 class _PuzzleSession extends ConsumerStatefulWidget {
   const _PuzzleSession({
+    required this.puzzle,
     required this.theme,
     required this.userId,
   });
 
+  final Puzzle puzzle;
   final PuzzleTheme theme;
   final UserId? userId;
 
@@ -349,13 +355,22 @@ class _PuzzleSessionState extends ConsumerState<_PuzzleSession> {
             spacing: 8,
             runSpacing: 8,
             verticalDirection: VerticalDirection.up,
-            children: session.attempts.mapIndexed((i, attempt) {
-              return _SessionItem(
+            children: [
+              for (final attempt in session.attempts)
+                _SessionItem(
+                  isCurrent: attempt.id == widget.puzzle.puzzle.id,
+                  brightness: brightness,
+                  attempt: attempt,
+                ),
+              _SessionItem(
+                isCurrent: session.attempts.firstWhereOrNull(
+                      (a) => a.id == widget.puzzle.puzzle.id,
+                    ) ==
+                    null,
                 brightness: brightness,
-                attempt: attempt,
-                key: i == session.attempts.length - 1 ? lastAttemptKey : null,
-              );
-            }).toList(growable: false),
+                key: lastAttemptKey,
+              ),
+            ],
           ),
         ),
       ),
@@ -365,12 +380,14 @@ class _PuzzleSessionState extends ConsumerState<_PuzzleSession> {
 
 class _SessionItem extends StatelessWidget {
   const _SessionItem({
-    required this.attempt,
+    this.attempt,
+    required this.isCurrent,
     required this.brightness,
     super.key,
   });
 
-  final PuzzleAttempt attempt;
+  final bool isCurrent;
+  final PuzzleAttempt? attempt;
   final Brightness brightness;
 
   Color get good => brightness == Brightness.light
@@ -381,16 +398,30 @@ class _SessionItem extends StatelessWidget {
       ? LichessColors.error.shade300
       : LichessColors.error.shade600;
 
+  Color get next => brightness == Brightness.light
+      ? LichessColors.primary.shade300
+      : LichessColors.primary.shade600;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       decoration: BoxDecoration(
-        color: attempt.win ? good : error,
+        color: isCurrent
+            ? Colors.grey
+            : attempt != null
+                ? attempt!.win
+                    ? good
+                    : error
+                : next,
         borderRadius: BorderRadius.circular(5),
       ),
       child: Icon(
-        attempt.win ? Icons.check : Icons.close,
+        attempt != null
+            ? attempt!.win
+                ? Icons.check
+                : Icons.close
+            : null,
         color: Colors.white,
         size: 18,
       ),
