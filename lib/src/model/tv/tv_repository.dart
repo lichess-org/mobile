@@ -26,6 +26,20 @@ class TvRepository {
         .handleError((Object error) => _log.warning(error));
   }
 
+  // https://lichess.org/api/stream/game/{id}
+  Stream<TvEvent> tvGameFeed(String id) async* {
+    final resp =
+        await apiClient.stream(Uri.parse('$kLichessHost/api/stream/game/$id'));
+    _log.fine('Start streaming a game.');
+    yield* resp.stream
+        .toStringStream()
+        .where((event) => event.isNotEmpty && event != '\n')
+        .map((event) => jsonDecode(event) as Map<String, dynamic>)
+        //.where((json) => json['t'] == 'featured' || json['t'] == 'fen')
+        .map((json) => TvEvent.gameFromJson(json))
+        .handleError((Object error) => _log.warning(error));
+  }
+
   void dispose() {
     apiClient.close();
   }

@@ -69,6 +69,33 @@ class TvEvent with _$TvEvent {
     }
   }
 
+  factory TvEvent.gameFromJson(Map<String, dynamic> json) {
+    return TvEvent.gameFromPick(pick(json).required());
+  }
+
+  factory TvEvent.gameFromPick(RequiredPick pick) {
+    final type = pick('id').asStringOrNull();
+    if (type != null) {
+      return TvEvent.featured(
+        id: pick('id').asGameIdOrThrow(),
+        orientation: Side.white, // FIX
+        fen: pick('fen').asStringOrThrow(),
+        white: _featuredPlayerFromPick(pick('players', 'white').required()),
+        black: _featuredPlayerFromPick(pick('players', 'black').required()),
+      );
+    } else {
+      return TvEvent.fen(
+        fen: pick('fen').asStringOrThrow(),
+        lastMove:
+            pick('lm').letOrThrow((it) => Move.fromUci(it.asStringOrThrow())!),
+        whiteSeconds: pick('wc').asIntOrThrow(),
+        blackSeconds: pick('bc').asIntOrThrow(),
+      );
+    }
+    //default:
+    //  throw UnsupportedError('Unsupported event type $type');
+  }
+
   static FeaturedPlayer _featuredPlayerFromPick(RequiredPick pick) {
     return FeaturedPlayer(
       side: pick('color').asSideOrThrow(),
@@ -76,6 +103,17 @@ class TvEvent with _$TvEvent {
       title: pick('user', 'title').asStringOrNull(),
       rating: pick('rating').asIntOrNull(),
       seconds: pick('seconds').asIntOrNull(),
+    );
+  }
+
+  static FeaturedPlayer _featuredGamePlayerFromPick(RequiredPick pick) {
+    return FeaturedPlayer(
+      side: pick('color').asSideOrThrow(),
+      name: pick('user', 'name').asStringOrThrow(),
+      title: pick('user', 'title').asStringOrNull(),
+      rating: pick('rating').asIntOrNull(),
+
+      //seconds: pick('seconds').asIntOrNull(),
     );
   }
 }

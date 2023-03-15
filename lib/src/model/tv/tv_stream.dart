@@ -31,3 +31,29 @@ final tvStreamProvider =
     );
   });
 });
+
+final tvGameStreamProvider =
+    StreamProvider.autoDispose.family<FeaturedPosition, bool>((ref, withSound) {
+  final soundService = ref.watch(soundServiceProvider);
+  final tvRepository = ref.watch(tvRepositoryProvider);
+  final featuredGameNotifier = ref.read(featuredGameProvider.notifier);
+  ref.onDispose(() {
+    tvRepository.dispose();
+  });
+
+  return tvRepository.tvGameFeed("test").map((event) {
+    return event.map(
+      featured: (featuredEvent) {
+        featuredGameNotifier.onFeaturedEvent(featuredEvent);
+        return FeaturedPosition.fromTvEvent(featuredEvent);
+      },
+      fen: (fenEvent) {
+        featuredGameNotifier.onFenEvent(fenEvent);
+        if (withSound) {
+          soundService.playMove();
+        }
+        return FeaturedPosition.fromTvEvent(fenEvent);
+      },
+    );
+  });
+});

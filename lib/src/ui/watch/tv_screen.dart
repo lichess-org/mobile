@@ -63,10 +63,12 @@ class TvScreen extends ConsumerWidget {
             return InkWell(
               child: const Text('Top Rated'),
               onTap: () {
-                showIosChoices(
+                Future<int?> result = showIosChoices(
                   context,
                   data.channels.entries.map((e) => e.key).toList(),
                 );
+                print(result);
+                //setState()
               },
             );
           },
@@ -221,8 +223,8 @@ void showAndroidChoices(BuildContext context, List<String> choices) {
   return;
 }
 
-void showIosChoices(BuildContext context, List<String> choices) {
-  showCupertinoModalPopup<void>(
+Future<int?> showIosChoices(BuildContext context, List<String> choices) {
+  return showCupertinoModalPopup<int>(
     context: context,
     builder: (context) {
       return SizedBox(
@@ -243,10 +245,9 @@ void showIosChoices(BuildContext context, List<String> choices) {
               ),
             );
           }),
-          onSelectedItemChanged: (value) {},
+          onSelectedItemChanged: (int selectedItem) {},
         ),
       );
     },
   );
-  return;
 }
