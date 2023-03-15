@@ -45,6 +45,12 @@ class PuzzleContext with _$PuzzleContext {
     required Puzzle puzzle,
     required PuzzleTheme theme,
     required UserId? userId,
+
+    /// Current Glicko rating of the user if available.
+    PuzzleGlicko? glicko,
+
+    /// List of solved puzzle results if available.
+    IList<PuzzleRound>? rounds,
   }) = _PuzzleContext;
 }
 
@@ -73,11 +79,13 @@ class PuzzleService {
   }) {
     return Result.release(
       _syncAndLoadData(userId, angle).map(
-        (data) => data != null && data.unsolved.isNotEmpty
+        (data) => data.item1 != null && data.item1!.unsolved.isNotEmpty
             ? PuzzleContext(
-                puzzle: data.unsolved[0],
+                puzzle: data.item1!.unsolved[0],
                 theme: angle,
                 userId: userId,
+                glicko: data.item2,
+                rounds: data.item3,
               )
             : null,
       ),
@@ -129,7 +137,8 @@ class PuzzleService {
   ///
   /// This method should never fail, as if the network is down it will fallback
   /// to the local database.
-  FutureResult<PuzzleBatch?> _syncAndLoadData(
+  FutureResult<Tuple3<PuzzleBatch?, PuzzleGlicko?, IList<PuzzleRound>?>>
+      _syncAndLoadData(
     UserId? userId,
     PuzzleTheme angle,
   ) async {
@@ -166,30 +175,34 @@ class PuzzleService {
       return batchResponse
           .fold(
         (value) => Result.value(
-          Tuple2(
+          Tuple4(
             PuzzleBatch(
               solved: IList(const []),
               unsolved: IList([...unsolved, ...value.puzzles]),
             ),
+            value.glicko,
+            value.rounds,
             true,
           ),
         ),
-        (_, __) => Result.value(Tuple2(data, false)),
+        (_, __) => Result.value(Tuple4(data, null, null, false)),
       )
           .flatMap((tuple) async {
-        final newData = tuple.item1;
-        final shouldSave = tuple.item2;
-        if (newData != null && shouldSave) {
+        final newBatch = tuple.item1;
+        final glitcho = tuple.item2;
+        final rounds = tuple.item3;
+        final shouldSave = tuple.item4;
+        if (newBatch != null && shouldSave) {
           await storage.save(
             userId: userId,
             angle: angle,
-            data: newData,
+            data: newBatch,
           );
         }
-        return Result.value(newData);
+        return Result.value(Tuple3(newBatch, glitcho, rounds));
       });
     }
 
-    return Result.value(data);
+    return Result.value(Tuple3(data, null, null));
   }
 }

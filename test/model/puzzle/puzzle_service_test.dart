@@ -264,6 +264,8 @@ void main() {
       expect(data?.solved, equals(IList(const [])));
       expect(data?.unsolved[0].puzzle.id, equals(const PuzzleId('20yWT')));
       expect(next?.puzzle.puzzle.id, equals(const PuzzleId('20yWT')));
+      expect(next?.glicko, isNull);
+      expect(next?.rounds, isNull);
     });
 
     test('solve puzzle when online, with a userId', () async {
@@ -286,7 +288,12 @@ void main() {
             body: '{"solutions":[{"id":"pId3","win":true,"rated":true}]}',
           );
 
-      when(postReq).thenAnswer((_) => mockResponse(batchOf1, 200));
+      when(postReq).thenAnswer(
+        (_) => mockResponse(
+          '''{"puzzles":[{"game":{"id":"PrlkCqOv","perf":{"key":"rapid","name":"Rapid"},"rated":true,"players":[{"userId":"silverjo","name":"silverjo (1777)","color":"white"},{"userId":"robyarchitetto","name":"Robyarchitetto (1742)","color":"black"}],"pgn":"e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2 Bb7 Bh6 d5 e5 d4 Bxg7 Kxg7 Qf4 Bxf3 Qxf3 dxc3 Nxc3 Nac6 Qf6+ Kg8 Rd1 Nd4 O-O c5 Ne4 Nef5 Rd2 Qxf6 Nxf6+ Kg7 Re1 h5 h3 Rad8 b4 Nh4 Re3 Nhf5 Re1 a5 bxc5 bxc5 Bc4 Ra8 Rb1 Nh4 Rdb2 Nc6 Rb7 Nxe5 Bxe6 Kxf6 Bd5 Nf5 R7b6+ Kg7 Bxa8 Rxa8 R6b3 Nd4 Rb7 Nxd3 Rd1 Ne2+ Kh2 Ndf4 Rdd7 Rf8 Ra7 c4 Rxa5 c3 Rc5 Ne6 Rc4 Ra8 a4 Rb8 a5 Rb2 a6 c2","clock":"5+8"},"puzzle":{"id":"20yWT","rating":1859,"plays":551,"initialPly":93,"solution":["a6a7","b2a2","c4c2","a2a7","d7a7"],"themes":["endgame","long","advantage","advancedPawn"]}}], "glicko":{"rating":1834.54,"deviation":23.45},"rounds":[{"id": "pId3","ratingDiff": 10,"win": true}]}''',
+          200,
+        ),
+      );
 
       final next = await service.solve(
         solution: const PuzzleSolution(
@@ -303,6 +310,20 @@ void main() {
       expect(data?.solved, equals(IList(const [])));
       expect(data?.unsolved[0].puzzle.id, equals(const PuzzleId('20yWT')));
       expect(next?.puzzle.puzzle.id, equals(const PuzzleId('20yWT')));
+      expect(next?.glicko?.rating, equals(1834.54));
+      expect(next?.glicko?.deviation, equals(23.45));
+      expect(
+        next?.rounds,
+        equals(
+          IList(const [
+            PuzzleRound(
+              id: PuzzleId('pId3'),
+              ratingDiff: 10,
+              win: true,
+            )
+          ]),
+        ),
+      );
     });
 
     test('solve puzzle when offline', () async {
