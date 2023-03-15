@@ -70,6 +70,15 @@ class PuzzleGlicko with _$PuzzleGlicko {
       _$PuzzleGlickoFromJson(json);
 }
 
+@freezed
+class PuzzleRound with _$PuzzleRound {
+  const factory PuzzleRound({
+    required PuzzleId id,
+    required int ratingDiff,
+    required bool win,
+  }) = _PuzzleRound;
+}
+
 @Freezed(fromJson: true, toJson: true)
 class PuzzleGame with _$PuzzleGame {
   const factory PuzzleGame({

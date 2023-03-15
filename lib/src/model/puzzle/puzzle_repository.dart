@@ -105,6 +105,13 @@ class PuzzleRepository {
             }),
           ),
           glicko: pick(json['glicko']).letOrNull(_puzzleGlickoFromPick),
+          rounds: pick(json['rounds']).letOrNull(
+            (p0) => IList(
+              p0.asListOrNull(
+                (p1) => _puzzleRoundFromPick(p1),
+              ),
+            ),
+          ),
         );
       },
       logger: _log,
@@ -117,6 +124,7 @@ class PuzzleBatchResponse with _$PuzzleBatchResponse {
   const factory PuzzleBatchResponse({
     required IList<Puzzle> puzzles,
     PuzzleGlicko? glicko,
+    IList<PuzzleRound>? rounds,
   }) = _PuzzleBatchResponse;
 }
 
@@ -149,6 +157,14 @@ PuzzleGlicko _puzzleGlickoFromPick(RequiredPick pick) {
     rating: pick('rating').asDoubleOrThrow(),
     deviation: pick('deviation').asDoubleOrThrow(),
     provisional: pick('provisional').asBoolOrNull(),
+  );
+}
+
+PuzzleRound _puzzleRoundFromPick(RequiredPick pick) {
+  return PuzzleRound(
+    id: pick('id').asPuzzleIdOrThrow(),
+    ratingDiff: pick('ratingDiff').asIntOrThrow(),
+    win: pick('win').asBoolOrThrow(),
   );
 }
 
