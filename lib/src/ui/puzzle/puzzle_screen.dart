@@ -187,8 +187,37 @@ class _Body extends ConsumerWidget {
                     pieceSet: pieceSet,
                   ),
                 ),
-                bottomTable: _PuzzleSession(
-                  puzzleContext: puzzleContext,
+                bottomTable: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (puzzleContext.glicko != null)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 10.0,
+                          left: 10.0,
+                          right: 10.0,
+                        ),
+                        child: Row(
+                          children: [
+                            Text(context.l10n.yourRating),
+                            const SizedBox(width: 5.0),
+                            Text(
+                              puzzleContext.glicko!.rating
+                                  .truncate()
+                                  .toString(),
+                              style: const TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    _PuzzleSession(
+                      puzzleContext: puzzleContext,
+                      screenModelProvider: screenModelProvider,
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -282,9 +311,11 @@ class _Feedback extends StatelessWidget {
 class _PuzzleSession extends ConsumerStatefulWidget {
   const _PuzzleSession({
     required this.puzzleContext,
+    required this.screenModelProvider,
   });
 
   final PuzzleContext puzzleContext;
+  final PuzzleScreenModelProvider screenModelProvider;
 
   @override
   ConsumerState<_PuzzleSession> createState() => _PuzzleSessionState();
@@ -327,11 +358,15 @@ class _PuzzleSessionState extends ConsumerState<_PuzzleSession> {
         widget.puzzleContext.theme,
       ),
     );
+    final puzzleState = ref.watch(widget.screenModelProvider);
     final brightness = ref.watch(currentBrightnessProvider);
-    return SizedBox(
-      height: 100,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
+    final currentAttempt = session.attempts.firstWhereOrNull(
+      (a) => a.id == widget.puzzleContext.puzzle.puzzle.id,
+    );
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
+      child: SizedBox(
+        height: 60,
         child: SingleChildScrollView(
           physics: const NeverScrollableScrollPhysics(),
           child: Wrap(
@@ -346,14 +381,12 @@ class _PuzzleSessionState extends ConsumerState<_PuzzleSession> {
                   brightness: brightness,
                   attempt: attempt,
                 ),
-              _SessionItem(
-                isCurrent: session.attempts.firstWhereOrNull(
-                      (a) => a.id == widget.puzzleContext.puzzle.puzzle.id,
-                    ) ==
-                    null,
-                brightness: brightness,
-                key: lastAttemptKey,
-              ),
+              if (puzzleState.mode == PuzzleMode.view || currentAttempt == null)
+                _SessionItem(
+                  isCurrent: currentAttempt == null,
+                  brightness: brightness,
+                  key: lastAttemptKey,
+                ),
             ],
           ),
         ),
@@ -389,7 +422,7 @@ class _SessionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 40,
+      width: 38,
       height: 26,
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       decoration: BoxDecoration(
