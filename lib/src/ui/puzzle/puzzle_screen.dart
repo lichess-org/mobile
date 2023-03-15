@@ -436,14 +436,17 @@ class _SessionItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
       ),
       child: attempt?.ratingDiff != null && attempt!.ratingDiff != 0
-          ? FittedBox(
-              fit: BoxFit.contain,
-              child: Text(
-                attempt!.ratingDiffString!,
-                maxLines: 1,
-                style: const TextStyle(
-                  color: Colors.white,
-                  height: 1,
+          ? Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: Text(
+                  attempt!.ratingDiffString!,
+                  maxLines: 1,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    height: 1,
+                  ),
                 ),
               ),
             )
