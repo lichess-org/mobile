@@ -151,8 +151,8 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet =
         ref.watch(boardPreferencesProvider.select((p) => p.pieceSet));
-    final vmProvider = puzzleViewModelProvider(puzzleContext);
-    final puzzleState = ref.watch(vmProvider);
+    final screenModelProvider = puzzleScreenModelProvider(puzzleContext);
+    final puzzleState = ref.watch(screenModelProvider);
     return Column(
       children: [
         Expanded(
@@ -172,7 +172,7 @@ class _Body extends ConsumerWidget {
                   validMoves: puzzleState.validMoves,
                   onMove: (move, {isPremove}) {
                     ref
-                        .read(vmProvider.notifier)
+                        .read(screenModelProvider.notifier)
                         .playUserMove(Move.fromUci(move.uci)!);
                   },
                 ),
@@ -197,7 +197,7 @@ class _Body extends ConsumerWidget {
         _BottomBar(
           puzzleContext: puzzleContext,
           isDailyPuzzle: isDailyPuzzle,
-          vmProvider: vmProvider,
+          screenModelProvider: screenModelProvider,
         ),
       ],
     );
@@ -445,17 +445,17 @@ void _goToNextPuzzle(
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({
     required this.puzzleContext,
-    required this.vmProvider,
+    required this.screenModelProvider,
     required this.isDailyPuzzle,
   });
 
   final PuzzleContext puzzleContext;
   final bool isDailyPuzzle;
-  final PuzzleViewModelProvider vmProvider;
+  final PuzzleScreenModelProvider screenModelProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzleState = ref.watch(vmProvider);
+    final puzzleState = ref.watch(screenModelProvider);
 
     return Container(
       padding: Styles.horizontalBodyPadding,
@@ -472,7 +472,7 @@ class _BottomBar extends ConsumerWidget {
                 puzzleState.mode != PuzzleMode.view)
               _DifficultySelector(
                 puzzleContext: puzzleContext,
-                vmProvider: vmProvider,
+                screenModelProvider: screenModelProvider,
               ),
             if (puzzleState.mode == PuzzleMode.view)
               _BottomBarButton(
@@ -512,12 +512,14 @@ class _BottomBar extends ConsumerWidget {
                 showAndroidShortLabel: true,
                 onTap: puzzleState.mode == PuzzleMode.view
                     ? null
-                    : () => ref.read(vmProvider.notifier).viewSolution(),
+                    : () =>
+                        ref.read(screenModelProvider.notifier).viewSolution(),
               ),
             if (puzzleState.mode == PuzzleMode.view)
               _BottomBarButton(
                 onTap: puzzleState.canGoBack
-                    ? () => ref.read(vmProvider.notifier).userPrevious()
+                    ? () =>
+                        ref.read(screenModelProvider.notifier).userPrevious()
                     : null,
                 label: 'Previous',
                 shortLabel: 'Previous',
@@ -526,7 +528,7 @@ class _BottomBar extends ConsumerWidget {
             if (puzzleState.mode == PuzzleMode.view)
               _BottomBarButton(
                 onTap: puzzleState.canGoNext
-                    ? () => ref.read(vmProvider.notifier).userNext()
+                    ? () => ref.read(screenModelProvider.notifier).userNext()
                     : null,
                 label: context.l10n.next,
                 shortLabel: context.l10n.next,
@@ -542,11 +544,11 @@ class _BottomBar extends ConsumerWidget {
 class _DifficultySelector extends ConsumerWidget {
   const _DifficultySelector({
     required this.puzzleContext,
-    required this.vmProvider,
+    required this.screenModelProvider,
   });
 
   final PuzzleContext puzzleContext;
-  final PuzzleViewModelProvider vmProvider;
+  final PuzzleScreenModelProvider screenModelProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -554,7 +556,7 @@ class _DifficultySelector extends ConsumerWidget {
       puzzlePreferencesProvider(puzzleContext.userId)
           .select((state) => state.difficulty),
     );
-    final state = ref.watch(vmProvider);
+    final state = ref.watch(screenModelProvider);
     final connectivity = ref.watch(connectivityChangesProvider);
     return connectivity.when(
       data: (data) => StatefulBuilder(
@@ -587,7 +589,7 @@ class _DifficultySelector extends ConsumerWidget {
                           return;
                         }
                         final nextContext = await ref
-                            .read(vmProvider.notifier)
+                            .read(screenModelProvider.notifier)
                             .changeDifficulty(selectedDifficulty);
                         if (context.mounted && nextContext != null) {
                           _goToNextPuzzle(

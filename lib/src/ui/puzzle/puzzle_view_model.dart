@@ -22,7 +22,7 @@ part 'puzzle_view_model.g.dart';
 part 'puzzle_view_model.freezed.dart';
 
 @riverpod
-class PuzzleViewModel extends _$PuzzleViewModel {
+class PuzzleScreenModel extends _$PuzzleScreenModel {
   // ignore: avoid-late-keyword
   late Node _gameTree;
   Timer? _viewSolutionTimer;
