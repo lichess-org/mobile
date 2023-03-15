@@ -28,7 +28,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
-import 'puzzle_view_model.dart';
+import 'puzzle_screen_model.dart';
 
 class PuzzlesScreen extends StatelessWidget {
   const PuzzlesScreen({

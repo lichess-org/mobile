@@ -18,8 +18,8 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 
-part 'puzzle_view_model.g.dart';
-part 'puzzle_view_model.freezed.dart';
+part 'puzzle_screen_model.g.dart';
+part 'puzzle_screen_model.freezed.dart';
 
 @riverpod
 class PuzzleScreenModel extends _$PuzzleScreenModel {
