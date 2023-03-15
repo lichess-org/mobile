@@ -15,9 +15,8 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
-
-import 'puzzle_session_view_model.dart';
 
 part 'puzzle_view_model.g.dart';
 part 'puzzle_view_model.freezed.dart';
@@ -180,7 +179,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     );
 
     final sessionNotifier =
-        puzzleSessionViewModelProvider(context.userId, context.theme).notifier;
+        puzzleSessionProvider(context.userId, context.theme).notifier;
 
     ref.read(sessionNotifier).addAttempt(
           context.puzzle.puzzle.id,

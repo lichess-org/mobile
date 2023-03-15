@@ -29,7 +29,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
 import 'puzzle_view_model.dart';
-import 'puzzle_session_view_model.dart';
 
 class PuzzlesScreen extends StatelessWidget {
   const PuzzlesScreen({
@@ -323,7 +322,7 @@ class _PuzzleSessionState extends ConsumerState<_PuzzleSession> {
   @override
   Widget build(BuildContext context) {
     final session = ref.watch(
-      puzzleSessionViewModelProvider(
+      puzzleSessionProvider(
         widget.puzzleContext.userId,
         widget.puzzleContext.theme,
       ),
