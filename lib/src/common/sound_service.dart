@@ -43,7 +43,7 @@ class SoundService {
   void playDong() => _play(Sound.dong);
 
   void _play(Sound sound) {
-    final isEnabled = _ref.read(generalPreferencesStateProvider).isSoundEnabled;
+    final isEnabled = _ref.read(generalPreferencesProvider).isSoundEnabled;
     final soundId = _sounds[sound];
     if (soundId != null && isEnabled) _pool.play(soundId);
   }

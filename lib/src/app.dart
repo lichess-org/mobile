@@ -36,7 +36,7 @@ class App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(
-      generalPreferencesStateProvider.select(
+      generalPreferencesProvider.select(
         (state) => state.themeMode,
       ),
     );

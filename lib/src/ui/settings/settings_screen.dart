@@ -57,7 +57,7 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(
-      generalPreferencesStateProvider.select(
+      generalPreferencesProvider.select(
         (state) => state.themeMode,
       ),
     );
@@ -86,7 +86,7 @@ class _Body extends ConsumerWidget {
                       labelBuilder: (t) =>
                           Text(ThemeModeScreen.themeTitle(context, t)),
                       onSelectedItemChanged: (ThemeMode? value) => ref
-                          .read(generalPreferencesStateProvider.notifier)
+                          .read(generalPreferencesProvider.notifier)
                           .setThemeMode(value ?? ThemeMode.system),
                     );
                   } else {

@@ -8,7 +8,7 @@ part 'brightness.g.dart';
 @Riverpod(keepAlive: true)
 Brightness currentBrightness(CurrentBrightnessRef ref) {
   final themeMode = ref.watch(
-    generalPreferencesStateProvider.select(
+    generalPreferencesProvider.select(
       (state) => state.themeMode,
     ),
   );
