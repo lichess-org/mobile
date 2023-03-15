@@ -234,7 +234,6 @@ class _DailyPuzzle extends ConsumerWidget {
                     theme: PuzzleTheme.mix,
                     puzzle: data,
                     userId: session?.user.id,
-                    glicko: null,
                   ),
                   isDailyPuzzle: true,
                 ),

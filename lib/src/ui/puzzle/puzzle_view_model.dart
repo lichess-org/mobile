@@ -199,18 +199,18 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       ),
     );
 
-    final currentRating = context.glicko?.rating;
-    final newRating = next?.glicko?.rating;
-    print('currentRating: $currentRating, newRating: $newRating');
-    if (currentRating != null && newRating != null) {
-      final diff = newRating - currentRating;
-      final rounded = diff.round();
-      print('diff: $diff');
-      print('rounded: $rounded');
-      ref
-          .read(sessionNotifier)
-          .setRatingDiff(context.puzzle.puzzle.id, rounded);
-    }
+    // final currentRating = context.glicko?.rating;
+    // final newRating = next?.glicko?.rating;
+    // print('currentRating: $currentRating, newRating: $newRating');
+    // if (currentRating != null && newRating != null) {
+    //   final diff = newRating - currentRating;
+    //   final rounded = diff.round();
+    //   print('diff: $diff');
+    //   print('rounded: $rounded');
+    //   ref
+    //       .read(sessionNotifier)
+    //       .setRatingDiff(context.puzzle.puzzle.id, rounded);
+    // }
 
     // We need to invalidate the next puzzle for the offline puzzle preview on
     // home screen tab and the healthy mix puzzle button on the puzzle screen tab.

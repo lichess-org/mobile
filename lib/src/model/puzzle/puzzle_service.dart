@@ -45,7 +45,6 @@ class PuzzleContext with _$PuzzleContext {
     required Puzzle puzzle,
     required PuzzleTheme theme,
     required UserId? userId,
-    required PuzzleGlicko? glicko,
   }) = _PuzzleContext;
 }
 
@@ -79,7 +78,6 @@ class PuzzleService {
                 puzzle: data.unsolved[0],
                 theme: angle,
                 userId: userId,
-                glicko: data.lastGlicko,
               )
             : null,
       ),
@@ -172,7 +170,6 @@ class PuzzleService {
             PuzzleBatch(
               solved: IList(const []),
               unsolved: IList([...unsolved, ...value.puzzles]),
-              lastGlicko: value.glicko,
             ),
             true,
           ),
