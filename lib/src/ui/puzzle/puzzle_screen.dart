@@ -403,11 +403,11 @@ class _SessionItem extends StatelessWidget {
                 : next,
         borderRadius: BorderRadius.circular(5),
       ),
-      child: attempt?.ratingDiff != null
+      child: attempt?.ratingDiff != null && attempt!.ratingDiff != 0
           ? FittedBox(
               fit: BoxFit.contain,
               child: Text(
-                attempt!.ratingDiff!.toString(),
+                attempt!.ratingDiffString!,
                 maxLines: 1,
                 style: const TextStyle(
                   color: Colors.white,
@@ -500,7 +500,7 @@ class _BottomBar extends ConsumerWidget {
                         );
                       }
                     : null,
-                highlighted: puzzleState.mode == PuzzleMode.view,
+                highlighted: true,
                 label: context.l10n.continueTraining,
                 shortLabel: 'Continue',
                 icon: CupertinoIcons.play_arrow_solid,
@@ -651,6 +651,7 @@ class _BottomBarButton extends StatelessWidget {
                     onPressed: onTap,
                     icon: Icon(icon),
                     tooltip: label,
+                    color: highlighted ? LichessColors.primary : null,
                   ),
           ),
         );

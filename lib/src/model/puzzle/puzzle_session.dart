@@ -32,6 +32,8 @@ class PuzzleSession with _$PuzzleSession {
 
 @Freezed(fromJson: true, toJson: true)
 class PuzzleAttempt with _$PuzzleAttempt {
+  const PuzzleAttempt._();
+
   const factory PuzzleAttempt({
     required PuzzleId id,
     required bool win,
@@ -40,4 +42,10 @@ class PuzzleAttempt with _$PuzzleAttempt {
 
   factory PuzzleAttempt.fromJson(Map<String, dynamic> json) =>
       _$PuzzleAttemptFromJson(json);
+
+  String? get ratingDiffString {
+    if (ratingDiff == null) return null;
+    final prefix = ratingDiff! >= 0 ? '+' : '';
+    return '$prefix${ratingDiff!}';
+  }
 }
