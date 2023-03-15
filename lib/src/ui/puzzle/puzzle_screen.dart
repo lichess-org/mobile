@@ -150,7 +150,7 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet =
-        ref.watch(boardPrefsStateProvider.select((p) => p.pieceSet));
+        ref.watch(boardPreferencesProvider.select((p) => p.pieceSet));
     final vmProvider = puzzleViewModelProvider(puzzleContext);
     final puzzleState = ref.watch(vmProvider);
     return Column(

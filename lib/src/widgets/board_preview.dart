@@ -57,7 +57,7 @@ class _BoardPreviewState extends ConsumerState<BoardPreview> {
 
   @override
   Widget build(BuildContext context) {
-    final boardPrefs = ref.watch(boardPrefsStateProvider);
+    final boardPrefs = ref.watch(boardPreferencesProvider);
 
     final board = LayoutBuilder(
       builder: (context, constraints) {

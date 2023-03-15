@@ -53,7 +53,7 @@ class TableBoardLayout extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final boardPrefs = ref.watch(boardPrefsStateProvider);
+    final boardPrefs = ref.watch(boardPreferencesProvider);
 
     return LayoutBuilder(
       builder: (context, constraints) {

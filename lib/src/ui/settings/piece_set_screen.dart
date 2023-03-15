@@ -37,7 +37,7 @@ class PieceSetScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final boardPrefs = ref.watch(boardPrefsStateProvider);
+    final boardPrefs = ref.watch(boardPreferencesProvider);
 
     List<AssetImage> getPieceImages(PieceSet set) {
       return [
@@ -51,7 +51,7 @@ class _Body extends ConsumerWidget {
     }
 
     void onChanged(PieceSet? value) => ref
-        .read(boardPrefsStateProvider.notifier)
+        .read(boardPreferencesProvider.notifier)
         .setPieceSet(value ?? PieceSet.cburnett);
 
     return SafeArea(

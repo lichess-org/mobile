@@ -10,21 +10,8 @@ part 'board_preferences.g.dart';
 
 const _prefKey = 'preferences.board';
 
-@Freezed(fromJson: true, toJson: true)
-class BoardPrefs with _$BoardPrefs {
-  const factory BoardPrefs({
-    required PieceSet pieceSet,
-    required BoardTheme boardTheme,
-    required bool hapticFeedback,
-    required bool showLegalMoves,
-  }) = _BoardPrefs;
-
-  factory BoardPrefs.fromJson(Map<String, dynamic> json) =>
-      _$BoardPrefsFromJson(json);
-}
-
 @Riverpod(keepAlive: true)
-class BoardPrefsState extends _$BoardPrefsState {
+class BoardPreferences extends _$BoardPreferences {
   @override
   BoardPrefs build() {
     final prefs = ref.watch(sharedPreferencesProvider);
@@ -65,4 +52,17 @@ class BoardPrefsState extends _$BoardPrefsState {
     );
     state = newState;
   }
+}
+
+@Freezed(fromJson: true, toJson: true)
+class BoardPrefs with _$BoardPrefs {
+  const factory BoardPrefs({
+    required PieceSet pieceSet,
+    required BoardTheme boardTheme,
+    required bool hapticFeedback,
+    required bool showLegalMoves,
+  }) = _BoardPrefs;
+
+  factory BoardPrefs.fromJson(Map<String, dynamic> json) =>
+      _$BoardPrefsFromJson(json);
 }

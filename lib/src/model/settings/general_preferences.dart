@@ -10,17 +10,6 @@ part 'general_preferences.g.dart';
 
 const _prefKey = 'preferences.general';
 
-@Freezed(fromJson: true, toJson: true)
-class GeneralPrefsState with _$GeneralPrefsState {
-  const factory GeneralPrefsState({
-    required ThemeMode themeMode,
-    required bool isSoundEnabled,
-  }) = _GeneralPrefsState;
-
-  factory GeneralPrefsState.fromJson(Map<String, dynamic> json) =>
-      _$GeneralPrefsStateFromJson(json);
-}
-
 @Riverpod(keepAlive: true)
 class GeneralPreferences extends _$GeneralPreferences {
   @override
@@ -53,4 +42,15 @@ class GeneralPreferences extends _$GeneralPreferences {
     );
     state = newState;
   }
+}
+
+@Freezed(fromJson: true, toJson: true)
+class GeneralPrefsState with _$GeneralPrefsState {
+  const factory GeneralPrefsState({
+    required ThemeMode themeMode,
+    required bool isSoundEnabled,
+  }) = _GeneralPrefsState;
+
+  factory GeneralPrefsState.fromJson(Map<String, dynamic> json) =>
+      _$GeneralPrefsStateFromJson(json);
 }

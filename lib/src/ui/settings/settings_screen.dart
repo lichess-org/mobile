@@ -64,7 +64,7 @@ class _Body extends ConsumerWidget {
     final authController = ref.watch(authControllerProvider);
     final userSession = ref.watch(userSessionStateProvider);
     final packageInfo = ref.watch(packageInfoProvider);
-    final boardPrefs = ref.watch(boardPrefsStateProvider);
+    final boardPrefs = ref.watch(boardPreferencesProvider);
 
     return SafeArea(
       child: ListView(
