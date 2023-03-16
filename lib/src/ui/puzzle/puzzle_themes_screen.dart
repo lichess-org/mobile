@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 
@@ -156,11 +157,11 @@ class _Category extends ConsumerWidget {
                   puzzleThemeL10n(context, theme).description.length > 60,
               onTap: isOnline || savedThemes.contains(theme)
                   ? () {
-                      Navigator.of(context, rootNavigator: true).push<void>(
-                        MaterialPageRoute(
-                          builder: (context) => PuzzlesScreen(
-                            theme: theme,
-                          ),
+                      pushPlatformRoute(
+                        context,
+                        rootNavigator: true,
+                        builder: (context) => PuzzlesScreen(
+                          theme: theme,
                         ),
                       );
                     }

@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 
 import 'puzzle_themes_screen.dart';
@@ -67,12 +68,12 @@ class _Body extends ConsumerWidget {
                   return _PuzzleButton(
                     theme: theme,
                     onTap: () {
-                      Navigator.of(context, rootNavigator: true).push<void>(
-                        MaterialPageRoute(
-                          builder: (context) => PuzzlesScreen(
-                            theme: theme,
-                            puzzleContext: data,
-                          ),
+                      pushPlatformRoute(
+                        context,
+                        rootNavigator: true,
+                        builder: (context) => PuzzlesScreen(
+                          theme: theme,
+                          puzzleContext: data,
                         ),
                       );
                     },
@@ -95,10 +96,9 @@ class _Body extends ConsumerWidget {
               title: Text(context.l10n.puzzleThemes),
               subtitle: const Text('Play puzzles from a specific theme.'),
               onTap: () {
-                Navigator.of(context).push<void>(
-                  MaterialPageRoute(
-                    builder: (context) => const PuzzleThemesScreen(),
-                  ),
+                pushPlatformRoute(
+                  context,
+                  builder: (context) => const PuzzleThemesScreen(),
                 );
               },
             ),

@@ -91,7 +91,7 @@ class _Body extends ConsumerWidget {
                     );
                   } else {
                     pushPlatformRoute(
-                      context: context,
+                      context,
                       title: context.l10n.background,
                       builder: (context) => const ThemeModeScreen(),
                     );
@@ -104,7 +104,7 @@ class _Body extends ConsumerWidget {
                 settingsValue: boardPrefs.boardTheme.label,
                 onTap: () {
                   pushPlatformRoute(
-                    context: context,
+                    context,
                     title: context.l10n.boardTheme,
                     builder: (context) => const BoardThemeScreen(),
                   );
@@ -116,7 +116,7 @@ class _Body extends ConsumerWidget {
                 settingsValue: boardPrefs.pieceSet.label,
                 onTap: () {
                   pushPlatformRoute(
-                    context: context,
+                    context,
                     title: context.l10n.pieceSet,
                     builder: (context) => const PieceSetScreen(),
                   );
@@ -136,7 +136,7 @@ class _Body extends ConsumerWidget {
                     : null,
                 onTap: () {
                   pushPlatformRoute(
-                    context: context,
+                    context,
                     title: 'Board',
                     builder: (context) => const BoardSettingsScreen(),
                   );

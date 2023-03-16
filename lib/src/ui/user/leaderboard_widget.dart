@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 
 import 'leaderboard_screen.dart';
@@ -26,11 +27,10 @@ class LeaderboardWidget extends ConsumerWidget {
             context.l10n.leaderboard,
           ),
           onHeaderTap: () {
-            Navigator.of(context).push<void>(
-              MaterialPageRoute(
-                builder: (context) => LeaderboardScreen(
-                  leaderboard: data,
-                ),
+            pushPlatformRoute(
+              context,
+              builder: (context) => LeaderboardScreen(
+                leaderboard: data,
               ),
             );
           },

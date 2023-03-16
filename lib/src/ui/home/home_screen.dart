@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/common/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -226,17 +227,17 @@ class _DailyPuzzle extends ConsumerWidget {
           header: Text(context.l10n.dailyPuzzle),
           onTap: () {
             final session = ref.read(userSessionStateProvider);
-            Navigator.of(context, rootNavigator: true).push<void>(
-              MaterialPageRoute(
-                builder: (context) => PuzzlesScreen(
+            pushPlatformRoute(
+              context,
+              rootNavigator: true,
+              builder: (context) => PuzzlesScreen(
+                theme: PuzzleTheme.mix,
+                puzzleContext: PuzzleContext(
                   theme: PuzzleTheme.mix,
-                  puzzleContext: PuzzleContext(
-                    theme: PuzzleTheme.mix,
-                    puzzle: data,
-                    userId: session?.user.id,
-                  ),
-                  isDailyPuzzle: true,
+                  puzzle: data,
+                  userId: session?.user.id,
                 ),
+                isDailyPuzzle: true,
               ),
             );
           },
@@ -271,12 +272,12 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
               : null,
           onTap: data != null
               ? () {
-                  Navigator.of(context, rootNavigator: true).push<void>(
-                    MaterialPageRoute(
-                      builder: (context) => PuzzlesScreen(
-                        theme: PuzzleTheme.mix,
-                        puzzleContext: data,
-                      ),
+                  pushPlatformRoute(
+                    context,
+                    rootNavigator: true,
+                    builder: (context) => PuzzlesScreen(
+                      theme: PuzzleTheme.mix,
+                      puzzleContext: data,
                     ),
                   );
                 }
