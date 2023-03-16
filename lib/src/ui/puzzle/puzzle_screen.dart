@@ -502,7 +502,7 @@ class _PuzzleTransitionPageRoute extends PageRoute<void> {
   String? get barrierLabel => null;
 
   @override
-  bool get maintainState => true;
+  bool get maintainState => false;
 
   @override
   Duration get transitionDuration => Duration.zero;
