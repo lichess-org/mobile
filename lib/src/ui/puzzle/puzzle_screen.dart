@@ -501,7 +501,7 @@ class _PuzzleTransitionPageRoute extends PageRoute<void> {
   bool get maintainState => true;
 
   @override
-  Duration get transitionDuration => const Duration(milliseconds: 300);
+  Duration get transitionDuration => Duration.zero;
 
   @override
   Duration get reverseTransitionDuration => const Duration(milliseconds: 300);
@@ -522,27 +522,13 @@ class _PuzzleTransitionPageRoute extends PageRoute<void> {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    // TODO find a way to keep cupertino route transition gesture
-    if (animation.status == AnimationStatus.reverse) {
-      final PageTransitionsTheme theme = Theme.of(context).pageTransitionsTheme;
-      return theme.buildTransitions(
-        this,
-        context,
-        animation,
-        secondaryAnimation,
-        child,
-      );
-    }
-
-    return FadeTransition(
-      opacity: animation,
-      child: FadeTransition(
-        opacity: Tween<double>(
-          begin: 1.0,
-          end: 0.0,
-        ).animate(secondaryAnimation),
-        child: child,
-      ),
+    final PageTransitionsTheme theme = Theme.of(context).pageTransitionsTheme;
+    return theme.buildTransitions(
+      this,
+      context,
+      animation,
+      secondaryAnimation,
+      child,
     );
   }
 }
