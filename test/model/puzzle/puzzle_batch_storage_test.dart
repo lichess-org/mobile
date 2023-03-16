@@ -6,7 +6,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'package:lichess_mobile/src/common/database.dart';
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import '../../test_container.dart';
@@ -15,7 +15,7 @@ void main() {
   final dbFactory = databaseFactoryFfi;
   sqfliteFfiInit();
 
-  group('PuzzleStorage', () {
+  group('PuzzleBatchStorage', () {
     test('save and fetch data', () async {
       final db = await openDb(dbFactory, inMemoryDatabasePath);
 
@@ -28,7 +28,7 @@ void main() {
         ],
       );
 
-      final storage = container.read(puzzleStorageProvider);
+      final storage = container.read(puzzleBatchStorageProvider);
 
       await storage.save(userId: null, angle: PuzzleTheme.mix, data: data);
 
@@ -50,7 +50,7 @@ void main() {
         ],
       );
 
-      final storage = container.read(puzzleStorageProvider);
+      final storage = container.read(puzzleBatchStorageProvider);
 
       await storage.save(userId: null, angle: PuzzleTheme.mix, data: data);
       await storage.save(
@@ -80,7 +80,7 @@ void main() {
   });
 }
 
-final data = PuzzleLocalData(
+final data = PuzzleBatch(
   solved: IList(const [
     PuzzleSolution(id: PuzzleId('pId'), win: true, rated: true),
     PuzzleSolution(id: PuzzleId('pId2'), win: false, rated: true),

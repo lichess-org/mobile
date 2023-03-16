@@ -21,7 +21,7 @@ class MoveFeedbackService {
   void moveFeedback() {
     _soundService.playMove();
 
-    if (_ref.read(boardPrefsStateProvider).hapticFeedback) {
+    if (_ref.read(boardPreferencesProvider).hapticFeedback) {
       HapticFeedback.lightImpact();
     }
   }
@@ -29,13 +29,13 @@ class MoveFeedbackService {
   void captureFeedback() {
     _soundService.playCapture();
 
-    if (_ref.read(boardPrefsStateProvider).hapticFeedback) {
+    if (_ref.read(boardPreferencesProvider).hapticFeedback) {
       HapticFeedback.lightImpact();
     }
   }
 
   void checkFeedback() {
-    if (_ref.read(boardPrefsStateProvider).hapticFeedback) {
+    if (_ref.read(boardPreferencesProvider).hapticFeedback) {
       HapticFeedback.mediumImpact();
     }
   }

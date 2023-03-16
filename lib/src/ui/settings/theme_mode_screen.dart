@@ -48,11 +48,11 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(
-      generalPreferencesStateProvider.select((state) => state.themeMode),
+      generalPreferencesProvider.select((state) => state.themeMode),
     );
 
     void onChanged(ThemeMode? value) => ref
-        .read(generalPreferencesStateProvider.notifier)
+        .read(generalPreferencesProvider.notifier)
         .setThemeMode(value ?? ThemeMode.system);
 
     return SafeArea(

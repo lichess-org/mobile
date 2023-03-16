@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
+import 'package:lichess_mobile/src/common/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 
@@ -35,7 +36,7 @@ class App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(
-      generalPreferencesStateProvider.select(
+      generalPreferencesProvider.select(
         (state) => state.themeMode,
       ),
     );

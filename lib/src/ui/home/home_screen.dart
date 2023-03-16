@@ -9,12 +9,14 @@ import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/common/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/ui/auth/sign_in_widget.dart';
@@ -225,14 +227,17 @@ class _DailyPuzzle extends ConsumerWidget {
           header: Text(context.l10n.dailyPuzzle),
           onTap: () {
             final session = ref.read(userSessionStateProvider);
-            Navigator.of(context, rootNavigator: true).push<void>(
-              MaterialPageRoute(
-                builder: (context) => PuzzlesScreen(
+            pushPlatformRoute(
+              context,
+              rootNavigator: true,
+              builder: (context) => PuzzlesScreen(
+                theme: PuzzleTheme.mix,
+                puzzleContext: PuzzleContext(
                   theme: PuzzleTheme.mix,
                   puzzle: data,
                   userId: session?.user.id,
-                  isDailyPuzzle: true,
                 ),
+                isDailyPuzzle: true,
               ),
             );
           },
@@ -255,26 +260,24 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
     final puzzle = ref.watch(nextPuzzleProvider(PuzzleTheme.mix));
     return puzzle.when(
       data: (data) {
-        final puzzle = data.item2;
         final preview =
-            puzzle != null ? PuzzlePreview.fromPuzzle(puzzle) : null;
+            data != null ? PuzzlePreview.fromPuzzle(data.puzzle) : null;
         return BoardPreview(
           orientation: preview?.orientation.cg ?? Side.white.cg,
           fen: preview?.initialFen ?? kEmptyFen,
           lastMove: preview?.initialMove.cg,
           header: Text(context.l10n.puzzles),
-          errorMessage: puzzle == null
+          errorMessage: data == null
               ? 'No offline puzzles available. Go online to get more puzzles.'
               : null,
-          onTap: puzzle != null
+          onTap: data != null
               ? () {
-                  Navigator.of(context, rootNavigator: true).push<void>(
-                    MaterialPageRoute(
-                      builder: (context) => PuzzlesScreen(
-                        theme: PuzzleTheme.mix,
-                        puzzle: puzzle,
-                        userId: data.item1,
-                      ),
+                  pushPlatformRoute(
+                    context,
+                    rootNavigator: true,
+                    builder: (context) => PuzzlesScreen(
+                      theme: PuzzleTheme.mix,
+                      puzzleContext: data,
                     ),
                   );
                 }

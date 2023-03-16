@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -169,11 +170,10 @@ class LeaderboardListTile extends StatelessWidget {
   }
 
   void _handleTap(BuildContext context) {
-    Navigator.of(context).push<void>(
-      MaterialPageRoute(
-        builder: (context) => UserScreen(
-          user: user.lightUser,
-        ),
+    pushPlatformRoute(
+      context,
+      builder: (context) => UserScreen(
+        user: user.lightUser,
       ),
     );
   }

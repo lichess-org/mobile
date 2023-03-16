@@ -178,7 +178,7 @@ class ToggleSoundButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isSoundEnabled = ref.watch(
-      generalPreferencesStateProvider.select(
+      generalPreferencesProvider.select(
         (prefs) => prefs.isSoundEnabled,
       ),
     );
@@ -190,7 +190,7 @@ class ToggleSoundButton extends ConsumerWidget {
               ? const Icon(Icons.volume_up)
               : const Icon(Icons.volume_off),
           onPressed: () => ref
-              .read(generalPreferencesStateProvider.notifier)
+              .read(generalPreferencesProvider.notifier)
               .toggleSoundEnabled(),
         );
       case TargetPlatform.iOS:
@@ -200,7 +200,7 @@ class ToggleSoundButton extends ConsumerWidget {
               ? const Icon(CupertinoIcons.volume_up)
               : const Icon(CupertinoIcons.volume_off),
           onPressed: () => ref
-              .read(generalPreferencesStateProvider.notifier)
+              .read(generalPreferencesProvider.notifier)
               .toggleSoundEnabled(),
         );
       default:

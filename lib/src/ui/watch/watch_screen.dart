@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
@@ -130,8 +131,9 @@ class _WatchTvWidget extends ConsumerWidget {
       data: (position) {
         return BoardPreview(
           header: Text('Lichess TV', style: Styles.sectionTitle),
-          onTap: () => Navigator.of(context).push<void>(
-            MaterialPageRoute(builder: (context) => const TvScreen()),
+          onTap: () => pushPlatformRoute(
+            context,
+            builder: (context) => const TvScreen(),
           ),
           orientation: featuredGame?.orientation.cg ?? Side.white,
           fen: position.fen,
@@ -176,10 +178,9 @@ class _StreamerWidget extends ConsumerWidget {
           header: Text(context.l10n.lichessStreamers),
           hasLeading: true,
           onHeaderTap: () {
-            Navigator.of(context).push<void>(
-              MaterialPageRoute(
-                builder: (context) => StreamerScreen(streamers: data),
-              ),
+            pushPlatformRoute(
+              context,
+              builder: (context) => StreamerScreen(streamers: data),
             );
           },
           children: [

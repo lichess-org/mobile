@@ -15,20 +15,21 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 
-part 'puzzle_view_model.g.dart';
-part 'puzzle_view_model.freezed.dart';
+part 'puzzle_screen_model.g.dart';
+part 'puzzle_screen_model.freezed.dart';
 
 @riverpod
-class PuzzleViewModel extends _$PuzzleViewModel {
+class PuzzleScreenModel extends _$PuzzleScreenModel {
   // ignore: avoid-late-keyword
   late Node _gameTree;
   Timer? _viewSolutionTimer;
 
   @override
-  PuzzleScreenState build(UserId? userId, PuzzleTheme theme, Puzzle puzzle) {
-    final root = Root.fromPgn(puzzle.game.pgn);
+  PuzzleScreenState build(PuzzleContext context) {
+    final root = Root.fromPgn(context.puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
 
     // play first move after 1 second
@@ -36,6 +37,10 @@ class PuzzleViewModel extends _$PuzzleViewModel {
         .then((_) => _setPath(state.initialPath));
 
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
+
+    ref.onDispose(() {
+      _viewSolutionTimer?.cancel();
+    });
 
     return PuzzleScreenState(
       mode: PuzzleMode.play,
@@ -55,7 +60,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       final movesToTest =
           state.nodeList.sublist(state.initialPath.size).map((e) => e.sanMove);
 
-      final isGoodMove = puzzle.testSolution(movesToTest);
+      final isGoodMove = context.puzzle.testSolution(movesToTest);
 
       if (isGoodMove) {
         state = state.copyWith(
@@ -63,7 +68,8 @@ class PuzzleViewModel extends _$PuzzleViewModel {
         );
 
         final isCheckmate = movesToTest.last.san.endsWith('#');
-        final nextUci = puzzle.puzzle.solution.getOrNull(movesToTest.length);
+        final nextUci =
+            context.puzzle.puzzle.solution.getOrNull(movesToTest.length);
         // checkmate is always a win
         if (isCheckmate) {
           _completePuzzle();
@@ -123,20 +129,20 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     });
   }
 
-  Future<Puzzle?> changeDifficulty(PuzzleDifficulty difficulty) async {
+  Future<PuzzleContext?> changeDifficulty(PuzzleDifficulty difficulty) async {
     state = state.copyWith(
       isChangingDifficulty: true,
     );
 
     await ref
         .read(
-          puzzlePreferencesProvider(userId).notifier,
+          puzzlePreferencesProvider(context.userId).notifier,
         )
         .setDifficulty(difficulty);
 
     final nextPuzzle = await ref.read(defaultPuzzleServiceProvider).resetBatch(
-          userId: userId,
-          angle: theme,
+          userId: context.userId,
+          angle: context.theme,
         );
 
     state = state.copyWith(
@@ -172,17 +178,34 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       resultSent: true,
     );
 
+    final sessionNotifier =
+        puzzleSessionProvider(context.userId, context.theme).notifier;
+
+    ref.read(sessionNotifier).addAttempt(
+          context.puzzle.puzzle.id,
+          win: result == PuzzleResult.win,
+        );
+
     final service = ref.read(defaultPuzzleServiceProvider);
 
     final next = await service.solve(
-      userId: userId,
-      angle: theme,
+      userId: context.userId,
+      angle: context.theme,
       solution: PuzzleSolution(
-        id: puzzle.puzzle.id,
+        id: context.puzzle.puzzle.id,
         win: state.result == PuzzleResult.win,
-        rated: userId != null,
+        rated: context.userId != null,
       ),
     );
+
+    final round = next?.rounds?.firstWhereOrNull(
+      (p) => p.id == context.puzzle.puzzle.id,
+    );
+    if (round != null) {
+      ref
+          .read(sessionNotifier)
+          .setRatingDiff(context.puzzle.puzzle.id, round.ratingDiff);
+    }
 
     // We need to invalidate the next puzzle for the offline puzzle preview on
     // home screen tab and the healthy mix puzzle button on the puzzle screen tab.
@@ -190,14 +213,14 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     // parameter to the puzzle screen (PuzzleScreen must no be watching nextPuzzleProvider).
     // It would be better to have invalidate the `nextPuzzleProvider` when the
     // puzzle screen pops.
-    if (theme == PuzzleTheme.mix) {
-      ref.invalidate(nextPuzzleProvider(theme));
+    if (context.theme == PuzzleTheme.mix) {
+      ref.invalidate(nextPuzzleProvider(context.theme));
     }
 
     // TODO check if next is null and show a message
 
     state = state.copyWith(
-      nextPuzzle: next,
+      nextContext: next,
     );
   }
 
@@ -234,7 +257,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   void _mergeSolution() {
     final initialNode = _gameTree.nodeAt(state.initialPath);
     final fromPly = initialNode.ply;
-    final posAndNodes = puzzle.puzzle.solution.foldIndexed(
+    final posAndNodes = context.puzzle.puzzle.solution.foldIndexed(
       Tuple2(initialNode.position, IList<Node>(const [])),
       (index, previous, uci) {
         final move = Move.fromUci(uci);
@@ -280,7 +303,7 @@ class PuzzleScreenState with _$PuzzleScreenState {
     PuzzleFeedback? feedback,
     required bool resultSent,
     required bool isChangingDifficulty,
-    Puzzle? nextPuzzle,
+    PuzzleContext? nextContext,
   }) = _PuzzleScreenState;
 
   ViewNode get node => nodeList.last;

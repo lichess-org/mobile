@@ -11,29 +11,30 @@ import 'package:lichess_mobile/src/common/database.dart';
 import 'puzzle.dart';
 import 'puzzle_theme.dart';
 
-part 'puzzle_storage.freezed.dart';
-part 'puzzle_storage.g.dart';
+part 'puzzle_batch_storage.freezed.dart';
+part 'puzzle_batch_storage.g.dart';
 
 @Riverpod(keepAlive: true)
-PuzzleStorage puzzleStorage(PuzzleStorageRef ref) {
+PuzzleBatchStorage puzzleBatchStorage(PuzzleBatchStorageRef ref) {
   final database = ref.watch(databaseProvider);
-  return PuzzleStorage(database);
+  return PuzzleBatchStorage(database);
 }
 
 const _anonUserKey = '**anon**';
+const _dbName = 'puzzle_batchs';
 
 /// Local storage for puzzles.
-class PuzzleStorage {
-  const PuzzleStorage(this._db);
+class PuzzleBatchStorage {
+  const PuzzleBatchStorage(this._db);
 
   final Database _db;
 
-  Future<PuzzleLocalData?> fetch({
+  Future<PuzzleBatch?> fetch({
     required UserId? userId,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
     final list = await _db.query(
-      'puzzle_batchs',
+      _dbName,
       where: '''
       userId = ? AND
       angle = ?
@@ -50,21 +51,21 @@ class PuzzleStorage {
       final json = jsonDecode(raw);
       if (json is! Map<String, dynamic>) {
         throw const FormatException(
-          '[PuzzleStorage] cannot fetch puzzles: expected an object',
+          '[PuzzleBatchStorage] cannot fetch puzzles: expected an object',
         );
       }
-      return PuzzleLocalData.fromJson(json);
+      return PuzzleBatch.fromJson(json);
     }
     return null;
   }
 
   Future<void> save({
     required UserId? userId,
-    required PuzzleLocalData data,
+    required PuzzleBatch data,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
     await _db.insert(
-      'puzzle_batchs',
+      _dbName,
       {
         'userId': userId?.value ?? _anonUserKey,
         'angle': angle.name,
@@ -79,7 +80,7 @@ class PuzzleStorage {
     PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
     await _db.delete(
-      'puzzle_batchs',
+      _dbName,
       where: '''
       userId = ? AND
       angle = ?
@@ -95,7 +96,7 @@ class PuzzleStorage {
     required UserId? userId,
   }) async {
     final list = await _db.query(
-      'puzzle_batchs',
+      _dbName,
       where: 'userId = ?',
       whereArgs: [
         userId?.value ?? _anonUserKey,
@@ -114,12 +115,12 @@ class PuzzleStorage {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PuzzleLocalData with _$PuzzleLocalData {
-  const factory PuzzleLocalData({
+class PuzzleBatch with _$PuzzleBatch {
+  const factory PuzzleBatch({
     required IList<PuzzleSolution> solved,
     required IList<Puzzle> unsolved,
-  }) = _PuzzleLocalData;
+  }) = _PuzzleBatch;
 
-  factory PuzzleLocalData.fromJson(Map<String, dynamic> json) =>
-      _$PuzzleLocalDataFromJson(json);
+  factory PuzzleBatch.fromJson(Map<String, dynamic> json) =>
+      _$PuzzleBatchFromJson(json);
 }

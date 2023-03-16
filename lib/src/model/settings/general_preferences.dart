@@ -8,30 +8,19 @@ import 'package:lichess_mobile/src/common/shared_preferences.dart';
 part 'general_preferences.freezed.dart';
 part 'general_preferences.g.dart';
 
-const _prefKey = 'preferences.display';
-
-@Freezed(fromJson: true, toJson: true)
-class GeneralPreferences with _$GeneralPreferences {
-  const factory GeneralPreferences({
-    required ThemeMode themeMode,
-    required bool isSoundEnabled,
-  }) = _GeneralPreferences;
-
-  factory GeneralPreferences.fromJson(Map<String, dynamic> json) =>
-      _$GeneralPreferencesFromJson(json);
-}
+const _prefKey = 'preferences.general';
 
 @Riverpod(keepAlive: true)
-class GeneralPreferencesState extends _$GeneralPreferencesState {
+class GeneralPreferences extends _$GeneralPreferences {
   @override
-  GeneralPreferences build() {
+  GeneralPrefsState build() {
     final prefs = ref.watch(sharedPreferencesProvider);
     final stored = prefs.getString(_prefKey);
     return stored != null
-        ? GeneralPreferences.fromJson(
+        ? GeneralPrefsState.fromJson(
             jsonDecode(stored) as Map<String, dynamic>,
           )
-        : const GeneralPreferences(
+        : const GeneralPrefsState(
             themeMode: ThemeMode.dark,
             isSoundEnabled: true,
           );
@@ -45,7 +34,7 @@ class GeneralPreferencesState extends _$GeneralPreferencesState {
     return _save(state.copyWith(isSoundEnabled: !state.isSoundEnabled));
   }
 
-  Future<void> _save(GeneralPreferences newState) async {
+  Future<void> _save(GeneralPrefsState newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(
       _prefKey,
@@ -55,20 +44,13 @@ class GeneralPreferencesState extends _$GeneralPreferencesState {
   }
 }
 
-@Riverpod(keepAlive: true)
-Brightness currentBrightness(CurrentBrightnessRef ref) {
-  final themeMode = ref.watch(
-    generalPreferencesStateProvider.select(
-      (state) => state.themeMode,
-    ),
-  );
+@Freezed(fromJson: true, toJson: true)
+class GeneralPrefsState with _$GeneralPrefsState {
+  const factory GeneralPrefsState({
+    required ThemeMode themeMode,
+    required bool isSoundEnabled,
+  }) = _GeneralPrefsState;
 
-  switch (themeMode) {
-    case ThemeMode.dark:
-      return Brightness.dark;
-    case ThemeMode.light:
-      return Brightness.light;
-    case ThemeMode.system:
-      return WidgetsBinding.instance.platformDispatcher.platformBrightness;
-  }
+  factory GeneralPrefsState.fromJson(Map<String, dynamic> json) =>
+      _$GeneralPrefsStateFromJson(json);
 }

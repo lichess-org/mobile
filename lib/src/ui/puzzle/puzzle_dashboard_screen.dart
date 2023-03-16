@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 
 import 'puzzle_themes_screen.dart';
@@ -57,8 +58,7 @@ class _Body extends ConsumerWidget {
             padding: Styles.sectionBottomPadding,
             child: nextPuzzle.when(
               data: (data) {
-                final puzzle = data.item2;
-                if (puzzle == null) {
+                if (data == null) {
                   return const _PuzzleButton(
                     theme: theme,
                     subtitle:
@@ -68,13 +68,12 @@ class _Body extends ConsumerWidget {
                   return _PuzzleButton(
                     theme: theme,
                     onTap: () {
-                      Navigator.of(context, rootNavigator: true).push<void>(
-                        MaterialPageRoute(
-                          builder: (context) => PuzzlesScreen(
-                            userId: data.item1,
-                            puzzle: puzzle,
-                            theme: theme,
-                          ),
+                      pushPlatformRoute(
+                        context,
+                        rootNavigator: true,
+                        builder: (context) => PuzzlesScreen(
+                          theme: theme,
+                          puzzleContext: data,
                         ),
                       );
                     },
@@ -97,10 +96,9 @@ class _Body extends ConsumerWidget {
               title: Text(context.l10n.puzzleThemes),
               subtitle: const Text('Play puzzles from a specific theme.'),
               onTap: () {
-                Navigator.of(context).push<void>(
-                  MaterialPageRoute(
-                    builder: (context) => const PuzzleThemesScreen(),
-                  ),
+                pushPlatformRoute(
+                  context,
+                  builder: (context) => const PuzzleThemesScreen(),
                 );
               },
             ),

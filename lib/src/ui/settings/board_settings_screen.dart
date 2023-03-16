@@ -37,7 +37,7 @@ class BoardSettingsScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final boardPrefs = ref.watch(boardPrefsStateProvider);
+    final boardPrefs = ref.watch(boardPreferencesProvider);
 
     return SafeArea(
       child: ListView(
@@ -51,7 +51,7 @@ class _Body extends ConsumerWidget {
                 value: boardPrefs.hapticFeedback,
                 onChanged: (value) {
                   ref
-                      .read(boardPrefsStateProvider.notifier)
+                      .read(boardPreferencesProvider.notifier)
                       .toggleHapticFeedback();
                 },
               ),
@@ -60,7 +60,7 @@ class _Body extends ConsumerWidget {
                 value: boardPrefs.showLegalMoves,
                 onChanged: (value) {
                   ref
-                      .read(boardPrefsStateProvider.notifier)
+                      .read(boardPreferencesProvider.notifier)
                       .toggleShowLegalMoves();
                 },
               ),

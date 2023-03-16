@@ -38,10 +38,10 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardTheme =
-        ref.watch(boardPrefsStateProvider.select((p) => p.boardTheme));
+        ref.watch(boardPreferencesProvider.select((p) => p.boardTheme));
 
     void onChanged(BoardTheme? value) => ref
-        .read(boardPrefsStateProvider.notifier)
+        .read(boardPreferencesProvider.notifier)
         .setBoardTheme(value ?? BoardTheme.brown);
 
     return SafeArea(

@@ -53,7 +53,7 @@ class TableBoardLayout extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final boardPrefs = ref.watch(boardPrefsStateProvider);
+    final boardPrefs = ref.watch(boardPreferencesProvider);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -113,8 +113,7 @@ class TableBoardLayout extends ConsumerWidget {
               )
             : board;
 
-        final List<List<MapEntry<int, String>>>? slicedMoves =
-            moves?.asMap().entries.slices(2).toList(growable: false);
+        final slicedMoves = moves?.asMap().entries.slices(2);
 
         return aspectRatio > 1
             ? Row(
@@ -159,6 +158,7 @@ class TableBoardLayout extends ConsumerWidget {
               )
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   if (slicedMoves != null)
                     MoveList(
@@ -197,7 +197,7 @@ class MoveList extends StatefulWidget {
 
   final MoveListType type;
 
-  final List<List<MapEntry<int, String>>> slicedMoves;
+  final Iterable<List<MapEntry<int, String>>> slicedMoves;
 
   final int currentMoveIndex;
   final void Function(int moveIndex)? onSelectMove;

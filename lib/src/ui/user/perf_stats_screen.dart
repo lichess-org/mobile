@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -697,14 +698,14 @@ class _GameListWidget extends ConsumerWidget {
                 final gameData =
                     list.firstWhereOrNull((g) => g.id == game.gameId);
                 if (gameData != null) {
-                  Navigator.of(context, rootNavigator: true).push<void>(
-                    MaterialPageRoute(
-                      builder: (context) => ArchivedGameScreen(
-                        gameData: gameData,
-                        orientation: user.id == gameData.white.id
-                            ? Side.white
-                            : Side.black,
-                      ),
+                  pushPlatformRoute(
+                    context,
+                    rootNavigator: true,
+                    builder: (context) => ArchivedGameScreen(
+                      gameData: gameData,
+                      orientation: user.id == gameData.white.id
+                          ? Side.white
+                          : Side.black,
                     ),
                   );
                 }

@@ -57,14 +57,14 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(
-      generalPreferencesStateProvider.select(
+      generalPreferencesProvider.select(
         (state) => state.themeMode,
       ),
     );
     final authController = ref.watch(authControllerProvider);
     final userSession = ref.watch(userSessionStateProvider);
     final packageInfo = ref.watch(packageInfoProvider);
-    final boardPrefs = ref.watch(boardPrefsStateProvider);
+    final boardPrefs = ref.watch(boardPreferencesProvider);
 
     return SafeArea(
       child: ListView(
@@ -86,12 +86,12 @@ class _Body extends ConsumerWidget {
                       labelBuilder: (t) =>
                           Text(ThemeModeScreen.themeTitle(context, t)),
                       onSelectedItemChanged: (ThemeMode? value) => ref
-                          .read(generalPreferencesStateProvider.notifier)
+                          .read(generalPreferencesProvider.notifier)
                           .setThemeMode(value ?? ThemeMode.system),
                     );
                   } else {
                     pushPlatformRoute(
-                      context: context,
+                      context,
                       title: context.l10n.background,
                       builder: (context) => const ThemeModeScreen(),
                     );
@@ -104,7 +104,7 @@ class _Body extends ConsumerWidget {
                 settingsValue: boardPrefs.boardTheme.label,
                 onTap: () {
                   pushPlatformRoute(
-                    context: context,
+                    context,
                     title: context.l10n.boardTheme,
                     builder: (context) => const BoardThemeScreen(),
                   );
@@ -116,7 +116,7 @@ class _Body extends ConsumerWidget {
                 settingsValue: boardPrefs.pieceSet.label,
                 onTap: () {
                   pushPlatformRoute(
-                    context: context,
+                    context,
                     title: context.l10n.pieceSet,
                     builder: (context) => const PieceSetScreen(),
                   );
@@ -136,7 +136,7 @@ class _Body extends ConsumerWidget {
                     : null,
                 onTap: () {
                   pushPlatformRoute(
-                    context: context,
+                    context,
                     title: 'Board',
                     builder: (context) => const BoardSettingsScreen(),
                   );

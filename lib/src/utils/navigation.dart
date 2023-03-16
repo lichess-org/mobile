@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 /// Push a new route using Navigator
 ///
 /// Will use [MaterialPageRoute] on Android and [CupertinoPageRoute] on iOS.
-void pushPlatformRoute({
-  required BuildContext context,
+void pushPlatformRoute(
+  BuildContext context, {
   required WidgetBuilder builder,
+  bool rootNavigator = false,
   String? title,
 }) {
-  Navigator.of(context).push<void>(
+  Navigator.of(context, rootNavigator: rootNavigator).push<void>(
     defaultTargetPlatform == TargetPlatform.iOS
         ? CupertinoPageRoute(builder: builder, title: title)
         : MaterialPageRoute(
