@@ -578,23 +578,6 @@ class _BottomBar extends ConsumerWidget {
                     ? CupertinoIcons.share
                     : Icons.share,
               ),
-            if (puzzleState.mode == PuzzleMode.view)
-              _BottomBarButton(
-                onTap: puzzleState.mode == PuzzleMode.view &&
-                        puzzleState.nextContext != null
-                    ? () {
-                        _goToNextPuzzle(
-                          context,
-                          ref,
-                          puzzleState.nextContext!,
-                        );
-                      }
-                    : null,
-                highlighted: true,
-                label: context.l10n.continueTraining,
-                shortLabel: 'Continue',
-                icon: CupertinoIcons.play_arrow_solid,
-              ),
             if (puzzleState.mode != PuzzleMode.view)
               _BottomBarButton(
                 icon: Icons.help,
@@ -624,6 +607,23 @@ class _BottomBar extends ConsumerWidget {
                 label: context.l10n.next,
                 shortLabel: context.l10n.next,
                 icon: CupertinoIcons.chevron_forward,
+              ),
+            if (puzzleState.mode == PuzzleMode.view)
+              _BottomBarButton(
+                onTap: puzzleState.mode == PuzzleMode.view &&
+                        puzzleState.nextContext != null
+                    ? () {
+                        _goToNextPuzzle(
+                          context,
+                          ref,
+                          puzzleState.nextContext!,
+                        );
+                      }
+                    : null,
+                highlighted: true,
+                label: context.l10n.continueTraining,
+                shortLabel: 'Continue',
+                icon: CupertinoIcons.play_arrow_solid,
               ),
           ],
         ),
