@@ -469,13 +469,82 @@ void _goToNextPuzzle(
   PuzzleContext nextContext,
 ) {
   Navigator.of(context).pushReplacement(
-    MaterialPageRoute<void>(
+    _PuzzleTransitionPageRoute(
       builder: (context) => PuzzlesScreen(
         theme: nextContext.theme,
         puzzleContext: nextContext,
       ),
     ),
   );
+}
+
+class _PuzzleTransitionPageRoute extends PageRoute<void> {
+  _PuzzleTransitionPageRoute({
+    required this.builder,
+  });
+
+  final WidgetBuilder builder;
+
+  @override
+  bool get opaque => true;
+
+  @override
+  bool get barrierDismissible => false;
+
+  @override
+  Color? get barrierColor => null;
+
+  @override
+  String? get barrierLabel => null;
+
+  @override
+  bool get maintainState => true;
+
+  @override
+  Duration get transitionDuration => const Duration(milliseconds: 300);
+
+  @override
+  Duration get reverseTransitionDuration => const Duration(milliseconds: 300);
+
+  @override
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
+    return builder(context);
+  }
+
+  @override
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    // TODO find a way to keep cupertino route transition gesture
+    if (animation.status == AnimationStatus.reverse) {
+      final PageTransitionsTheme theme = Theme.of(context).pageTransitionsTheme;
+      return theme.buildTransitions(
+        this,
+        context,
+        animation,
+        secondaryAnimation,
+        child,
+      );
+    }
+
+    return FadeTransition(
+      opacity: animation,
+      child: FadeTransition(
+        opacity: Tween<double>(
+          begin: 1.0,
+          end: 0.0,
+        ).animate(secondaryAnimation),
+        child: child,
+      ),
+    );
+  }
 }
 
 class _BottomBar extends ConsumerWidget {
