@@ -20,6 +20,25 @@ enum BottomTab {
 final currentBottomTabProvider =
     StateProvider<BottomTab>((ref) => BottomTab.play);
 
+final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
+  final currentTab = ref.watch(currentBottomTabProvider);
+  switch (currentTab) {
+    case BottomTab.play:
+      return homeNavigatorKey;
+    case BottomTab.puzzles:
+      return puzzlesNavigatorKey;
+    case BottomTab.watch:
+      return watchNavigatorKey;
+    case BottomTab.profile:
+      return profileNavigatorKey;
+  }
+});
+
+final homeNavigatorKey = GlobalKey<NavigatorState>();
+final puzzlesNavigatorKey = GlobalKey<NavigatorState>();
+final watchNavigatorKey = GlobalKey<NavigatorState>();
+final profileNavigatorKey = GlobalKey<NavigatorState>();
+
 /// Implements a tabbed (iOS style) root layout and behavior structure.
 ///
 /// The scaffold lays out the tab bar at the bottom and the content between or
@@ -94,21 +113,25 @@ class BottomNavScaffold extends ConsumerWidget {
       case 0:
         return CupertinoTabView(
           defaultTitle: 'Home',
+          navigatorKey: homeNavigatorKey,
           builder: (context) => const HomeScreen(),
         );
       case 1:
         return CupertinoTabView(
           defaultTitle: context.l10n.puzzles,
+          navigatorKey: puzzlesNavigatorKey,
           builder: (context) => const PuzzleDashboardScreen(),
         );
       case 2:
         return CupertinoTabView(
           defaultTitle: context.l10n.watch,
+          navigatorKey: watchNavigatorKey,
           builder: (context) => const WatchScreen(),
         );
       case 3:
         return CupertinoTabView(
           defaultTitle: context.l10n.profile,
+          navigatorKey: profileNavigatorKey,
           builder: (context) => const ProfileScreen(),
         );
       default:
