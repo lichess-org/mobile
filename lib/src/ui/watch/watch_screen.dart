@@ -74,44 +74,42 @@ class _WatchScreenState extends ConsumerState<WatchScreen> {
 
   Widget _buildIos(BuildContext context, WidgetRef ref) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: SafeArea(
-        child: OrientationBuilder(
-          builder: (context, orientation) {
-            return CustomScrollView(
-              slivers: [
-                CupertinoSliverRefreshControl(
-                  onRefresh: () => ref.refresh(liveStreamersProvider.future),
-                ),
-                SliverSafeArea(
-                  top: false,
-                  sliver: orientation == Orientation.portrait
-                      ? SliverList(
-                          delegate: SliverChildListDelegate(
-                            const [
-                              _WatchTvWidget(),
-                              _StreamerWidget(),
-                            ],
-                          ),
-                        )
-                      : SliverGrid(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.92,
-                          ),
-                          delegate: SliverChildListDelegate(
-                            const [
-                              _WatchTvWidget(),
-                              _StreamerWidget(numberOfItems: 8),
-                            ],
-                          ),
+      child: OrientationBuilder(
+        builder: (context, orientation) {
+          return CustomScrollView(
+            slivers: [
+              const CupertinoSliverNavigationBar(),
+              CupertinoSliverRefreshControl(
+                onRefresh: () => ref.refresh(liveStreamersProvider.future),
+              ),
+              SliverSafeArea(
+                top: false,
+                sliver: orientation == Orientation.portrait
+                    ? SliverList(
+                        delegate: SliverChildListDelegate(
+                          const [
+                            _WatchTvWidget(),
+                            _StreamerWidget(),
+                          ],
                         ),
-                ),
-              ],
-            );
-          },
-        ),
+                      )
+                    : SliverGrid(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.92,
+                        ),
+                        delegate: SliverChildListDelegate(
+                          const [
+                            _WatchTvWidget(),
+                            _StreamerWidget(numberOfItems: 8),
+                          ],
+                        ),
+                      ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
