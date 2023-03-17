@@ -201,12 +201,22 @@ class _Body extends ConsumerWidget {
                           children: [
                             Text(context.l10n.yourRating),
                             const SizedBox(width: 5.0),
-                            Text(
-                              puzzleState.glicko!.rating.truncate().toString(),
-                              style: const TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
+                            TweenAnimationBuilder<double>(
+                              tween: Tween<double>(
+                                begin: puzzleState.glicko!.rating,
+                                end: puzzleState.nextContext?.glicko?.rating ??
+                                    puzzleState.glicko!.rating,
                               ),
+                              duration: const Duration(milliseconds: 500),
+                              builder: (context, double rating, _) {
+                                return Text(
+                                  rating.truncate().toString(),
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                );
+                              },
                             ),
                           ],
                         ),
