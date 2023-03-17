@@ -73,7 +73,7 @@ class _Body extends ConsumerWidget {
                         rootNavigator: true,
                         builder: (context) => PuzzlesScreen(
                           theme: theme,
-                          puzzleContext: data,
+                          initialPuzzleContext: data,
                         ),
                       );
                     },

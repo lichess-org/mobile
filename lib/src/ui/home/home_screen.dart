@@ -232,7 +232,7 @@ class _DailyPuzzle extends ConsumerWidget {
               rootNavigator: true,
               builder: (context) => PuzzlesScreen(
                 theme: PuzzleTheme.mix,
-                puzzleContext: PuzzleContext(
+                initialPuzzleContext: PuzzleContext(
                   theme: PuzzleTheme.mix,
                   puzzle: data,
                   userId: session?.user.id,
@@ -277,7 +277,7 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
                     rootNavigator: true,
                     builder: (context) => PuzzlesScreen(
                       theme: PuzzleTheme.mix,
-                      puzzleContext: data,
+                      initialPuzzleContext: data,
                     ),
                   );
                 }
