@@ -131,14 +131,14 @@ class _HomeBody extends ConsumerWidget {
           return defaultTargetPlatform == TargetPlatform.android
               ? ListView(
                   children: [
-                    LeaderboardWidget(),
                     const _DailyPuzzle(),
+                    LeaderboardWidget(),
                   ],
                 )
               : SliverList(
                   delegate: SliverChildListDelegate([
-                    LeaderboardWidget(),
                     const _DailyPuzzle(),
+                    LeaderboardWidget(),
                   ]),
                 );
         } else {
