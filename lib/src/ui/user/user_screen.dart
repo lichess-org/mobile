@@ -133,7 +133,7 @@ class _Profile extends StatelessWidget {
     final title = userFullName;
 
     return Padding(
-      padding: Styles.bodyFirstSectionPadding,
+      padding: Styles.bodySectionBottomPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

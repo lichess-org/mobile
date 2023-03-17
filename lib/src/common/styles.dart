@@ -27,7 +27,7 @@ abstract class Styles {
   static EdgeInsetsGeometry get bodySectionPadding =>
       horizontalBodyPadding.add(sectionBottomPadding).add(sectionTopPadding);
 
-  static EdgeInsetsGeometry get bodyFirstSectionPadding =>
+  static EdgeInsetsGeometry get bodySectionBottomPadding =>
       horizontalBodyPadding.add(sectionBottomPadding);
 }
 
