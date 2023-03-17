@@ -444,7 +444,7 @@ class _SessionItem extends StatelessWidget {
                     ? good
                     : error
                 : next,
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
       ),
       child: attempt?.ratingDiff != null && attempt!.ratingDiff != 0
           ? Padding(
