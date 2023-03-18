@@ -225,16 +225,13 @@ PuzzleDashboard _puzzleDashboardFromPick(RequiredPick pick) => PuzzleDashboard(
       ),
       themes: pick('themes')
           .asMapOrThrow<String, dynamic>()
+          .keys
           .map(
-            (key, value) => MapEntry(
-              key,
-              _puzzleDashboardDataFromPick(
-                pick('themes')(key)('results').required(),
-                pick('themes')(key)('theme').asStringOrThrow(),
-              ),
+            (key) => _puzzleDashboardDataFromPick(
+              pick('themes')(key)('results').required(),
+              pick('themes')(key)('theme').asStringOrThrow(),
             ),
           )
-          .values
           .toIList(),
     );
 

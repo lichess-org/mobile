@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/ui/puzzle/puzzle_dashboard_widget.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -109,6 +110,10 @@ class _Body extends ConsumerWidget {
           },
         ),
       ),
+      Padding(
+        padding: Styles.bodySectionBottomPadding,
+        child: PuzzleDashboardWidget(),
+      )
     ];
 
     return defaultTargetPlatform == TargetPlatform.iOS
