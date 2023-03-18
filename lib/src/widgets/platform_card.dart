@@ -12,21 +12,28 @@ class CustomPlatformCard extends StatelessWidget {
     this.child,
     this.value,
     this.padding,
+    this.opacity,
+    this.statFontSize,
+    this.valueFontSize,
   });
 
   final String stat;
   final Widget? child;
   final String? value;
   final EdgeInsets? padding;
+  final double? opacity;
+  final double? statFontSize;
+  final double? valueFontSize;
 
   @override
   Widget build(BuildContext context) {
     final defaultStatStyle = TextStyle(
-      color: textShade(context, _customOpacity),
-      fontSize: _defaultStatFontSize,
+      color: textShade(context, opacity ?? _customOpacity),
+      fontSize: statFontSize ?? _defaultStatFontSize,
     );
 
-    const defaultValueStyle = TextStyle(fontSize: _defaultValueFontSize);
+    final defaultValueStyle =
+        TextStyle(fontSize: valueFontSize ?? _defaultValueFontSize);
 
     return Padding(
       padding: padding ?? EdgeInsets.zero,
@@ -55,7 +62,7 @@ class CustomPlatformCard extends StatelessWidget {
               else if (child != null)
                 child!
               else
-                const Text('?', style: defaultValueStyle)
+                Text('?', style: defaultValueStyle)
             ],
           ),
         ),
