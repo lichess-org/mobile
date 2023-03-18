@@ -138,3 +138,22 @@ class PuzzlePreview with _$PuzzlePreview {
     );
   }
 }
+
+@freezed
+class PuzzleDashboard with _$PuzzleDashboard {
+  const factory PuzzleDashboard({
+    required PuzzleDashboardData global,
+    required IList<PuzzleDashboardData> themes,
+  }) = _PuzzleDashboard;
+}
+
+@freezed
+class PuzzleDashboardData with _$PuzzleDashboardData {
+  const factory PuzzleDashboardData({
+    required int nb,
+    required int firstWins,
+    required int replayWins,
+    required int performance,
+    String? theme,
+  }) = _PuzzleDashboardData;
+}

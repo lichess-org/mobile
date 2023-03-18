@@ -117,6 +117,18 @@ class PuzzleRepository {
       logger: _log,
     );
   }
+
+  FutureResult<PuzzleDashboard> puzzleDashboard() {
+    return apiClient
+        .get(Uri.parse('$kLichessHost/api/puzzle/dashboard/30'))
+        .flatMap((response) {
+      return readJsonObject(
+        response.body,
+        mapper: _puzzleDashboardFromJson,
+        logger: _log,
+      );
+    });
+  }
 }
 
 @freezed
@@ -132,6 +144,9 @@ class PuzzleBatchResponse with _$PuzzleBatchResponse {
 
 Puzzle _puzzleFromJson(Map<String, dynamic> json) =>
     _puzzleFromPick(pick(json).required());
+
+PuzzleDashboard _puzzleDashboardFromJson(Map<String, dynamic> json) =>
+    _puzzleDashboardFromPick(pick(json).required());
 
 Puzzle _puzzleFromPick(RequiredPick pick) {
   return Puzzle(
@@ -200,3 +215,37 @@ PuzzleGamePlayer _puzzlePlayerFromPick(RequiredPick pick) {
     title: pick('title').asStringOrNull(),
   );
 }
+
+PuzzleDashboard _puzzleDashboardFromPick(RequiredPick pick) => PuzzleDashboard(
+      global: PuzzleDashboardData(
+        nb: pick('global')('nb').asIntOrThrow(),
+        firstWins: pick('global')('firstWins').asIntOrThrow(),
+        replayWins: pick('global')('replayWins').asIntOrThrow(),
+        performance: pick('global')('performance').asIntOrThrow(),
+      ),
+      themes: pick('themes')
+          .asMapOrThrow<String, dynamic>()
+          .map(
+            (key, value) => MapEntry(
+              key,
+              _puzzleDashboardDataFromPick(
+                pick('themes')(key)('results').required(),
+                pick('themes')(key)('theme').asStringOrThrow(),
+              ),
+            ),
+          )
+          .values
+          .toIList(),
+    );
+
+PuzzleDashboardData _puzzleDashboardDataFromPick(
+  RequiredPick results,
+  String theme,
+) =>
+    PuzzleDashboardData(
+      nb: results('nb').asIntOrThrow(),
+      firstWins: results('firstWins').asIntOrThrow(),
+      replayWins: results('replayWins').asIntOrThrow(),
+      performance: results('performance').asIntOrThrow(),
+      theme: theme,
+    );
