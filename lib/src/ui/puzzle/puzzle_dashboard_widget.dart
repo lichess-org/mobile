@@ -31,12 +31,13 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                 value: data.global.nb.toString(),
               ),
               CustomPlatformCard(
-                'First Wins',
-                value: data.global.firstWins.toString(),
+                'Solved',
+                value:
+                    '${((data.global.firstWins / data.global.nb) * 100).toInt()}%',
               ),
               CustomPlatformCard(
-                'Replay Wins',
-                value: data.global.replayWins.toString(),
+                'To Replay',
+                value: (data.global.nb - data.global.firstWins).toString(),
               ),
             ]),
             Column(
