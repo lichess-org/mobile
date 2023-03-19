@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_dashboard_widget.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -60,7 +61,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     const theme = PuzzleTheme.mix;
     final nextPuzzle = ref.watch(nextPuzzleProvider(theme));
-
+    final session = ref.watch(userSessionStateProvider);
     final content = [
       Padding(
         padding: Styles.bodySectionPadding,
@@ -110,7 +111,7 @@ class _Body extends ConsumerWidget {
           },
         ),
       ),
-      PuzzleDashboardWidget(),
+      if (session != null) PuzzleDashboardWidget(),
     ];
 
     return defaultTargetPlatform == TargetPlatform.iOS

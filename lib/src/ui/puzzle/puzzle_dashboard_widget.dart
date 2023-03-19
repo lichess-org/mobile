@@ -85,9 +85,14 @@ class PuzzleChart extends StatelessWidget {
         getTitle: (index, angle) =>
             RadarChartTitle(text: puzzleData[index].theme!),
         titleTextStyle: const TextStyle(fontSize: 10),
-        titlePositionPercentageOffset: 0.02,
+        titlePositionPercentageOffset: 0.06,
         tickCount: 1,
         ticksTextStyle: const TextStyle(fontSize: 10),
+        radarTouchData: RadarTouchData(
+          touchCallback: (FlTouchEvent event, response) {
+            if (!event.isInterestedForInteractions) {}
+          },
+        ),
       ),
     );
   }
