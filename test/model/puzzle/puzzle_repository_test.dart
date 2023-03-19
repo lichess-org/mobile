@@ -76,5 +76,20 @@ void main() {
 
       expect(result.isValue, true);
     });
+
+    test('puzzle dashboard', () async {
+      const response = '''
+      {"days":30,"global":{"nb":196,"firstWins":107,"replayWins":0,"puzzleRatingAvg":1607,"performance":1653},"themes":{"middlegame":{"theme":"Middlegame","results":{"nb":97,"firstWins":51,"replayWins":0,"puzzleRatingAvg":1608,"performance":1634}},"endgame":{"theme":"Endgame","results":{"nb":81,"firstWins":48,"replayWins":0,"puzzleRatingAvg":1604,"performance":1697}}}}
+      ''';
+      when(
+        () => mockClient.get(
+          Uri.parse('$kLichessHost/api/puzzle/dashboard/30'),
+        ),
+      ).thenAnswer((_) => mockResponse(response, 200));
+
+      final result = await repo.puzzleDashboard(30);
+
+      expect(result.isValue, true);
+    });
   });
 }
