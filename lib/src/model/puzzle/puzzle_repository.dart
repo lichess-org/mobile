@@ -238,11 +238,12 @@ PuzzleDashboard _puzzleDashboardFromPick(RequiredPick pick) => PuzzleDashboard(
 PuzzleDashboardData _puzzleDashboardDataFromPick(
   RequiredPick results,
   String theme,
-) =>
-    PuzzleDashboardData(
-      nb: results('nb').asIntOrThrow(),
-      firstWins: results('firstWins').asIntOrThrow(),
-      replayWins: results('replayWins').asIntOrThrow(),
-      performance: results('performance').asIntOrThrow(),
-      theme: theme,
-    );
+) {
+  return PuzzleDashboardData(
+    nb: results('nb').asIntOrThrow(),
+    firstWins: results('firstWins').asIntOrThrow(),
+    replayWins: results('replayWins').asIntOrThrow(),
+    performance: results('performance').asIntOrThrow(),
+    theme: theme,
+  );
+}

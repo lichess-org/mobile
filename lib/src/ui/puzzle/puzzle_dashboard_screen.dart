@@ -110,10 +110,7 @@ class _Body extends ConsumerWidget {
           },
         ),
       ),
-      Padding(
-        padding: Styles.bodySectionBottomPadding,
-        child: PuzzleDashboardWidget(),
-      )
+      PuzzleDashboardWidget(),
     ];
 
     return defaultTargetPlatform == TargetPlatform.iOS

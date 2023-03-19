@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_card.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 
 class PuzzleDashboardWidget extends ConsumerWidget {
   @override
@@ -20,7 +24,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                 value: data.global.performance.toString(),
               ),
               CustomPlatformCard(
-                'Nb',
+                'Played',
                 value: data.global.nb.toString(),
               ),
               CustomPlatformCard(
@@ -32,6 +36,18 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                 value: data.global.replayWins.toString(),
               ),
             ]),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 30),
+                AspectRatio(
+                  aspectRatio: 1.2,
+                  child: PuzzleChart(data.themes.take(7).toIList()),
+                ),
+                const SizedBox(height: 30),
+              ],
+            )
           ],
         );
       },
@@ -42,6 +58,37 @@ class PuzzleDashboardWidget extends ConsumerWidget {
         return const Text('Error');
       },
       loading: () => const CircularProgressIndicator(),
+    );
+  }
+}
+
+class PuzzleChart extends StatelessWidget {
+  const PuzzleChart(this.puzzleData);
+
+  final IList<PuzzleDashboardData> puzzleData;
+
+  @override
+  Widget build(BuildContext context) {
+    return RadarChart(
+      RadarChartData(
+        radarBorderData: const BorderSide(width: 0.5),
+        gridBorderData: const BorderSide(width: 0.5),
+        tickBorderData: const BorderSide(width: 0.5),
+        radarShape: RadarShape.polygon,
+        dataSets: [
+          RadarDataSet(
+            dataEntries: puzzleData
+                .map((theme) => RadarEntry(value: theme.performance.toDouble()))
+                .toList(),
+          ),
+        ],
+        getTitle: (index, angle) =>
+            RadarChartTitle(text: puzzleData[index].theme!),
+        titleTextStyle: const TextStyle(fontSize: 10),
+        titlePositionPercentageOffset: 0.02,
+        tickCount: 1,
+        ticksTextStyle: const TextStyle(fontSize: 10),
+      ),
     );
   }
 }
