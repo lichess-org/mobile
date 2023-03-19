@@ -7,11 +7,14 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_card.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/ui/puzzle/puzzle_dashboard_screen.dart';
 
 class PuzzleDashboardWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzleDashboard = ref.watch(puzzleDashboardProvider);
+    final days = ref.watch(daysProvider);
+    final puzzleDashboard =
+        ref.watch(puzzleDashboardProvider(days.toInteger()));
 
     return puzzleDashboard.when(
       data: (data) {

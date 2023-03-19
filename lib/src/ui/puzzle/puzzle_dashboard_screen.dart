@@ -14,8 +14,11 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 
 import 'puzzle_themes_screen.dart';
+
+final daysProvider = StateProvider<Days>((ref) => Days.month);
 
 class PuzzleDashboardScreen extends StatelessWidget {
   const PuzzleDashboardScreen({super.key});
@@ -30,9 +33,8 @@ class PuzzleDashboardScreen extends StatelessWidget {
 
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.puzzles),
-      ),
+      appBar:
+          AppBar(title: Text(context.l10n.puzzles), actions: [DaysSelector()]),
       body: const Center(child: _Body()),
     );
   }
@@ -43,6 +45,7 @@ class PuzzleDashboardScreen extends StatelessWidget {
         slivers: [
           CupertinoSliverNavigationBar(
             largeTitle: Text(context.l10n.puzzles),
+            trailing: DaysSelector(),
           ),
           const SliverSafeArea(
             top: false,
@@ -142,5 +145,82 @@ class _PuzzleButton extends StatelessWidget {
       subtitle: Text(subtitle ?? puzzleThemeL10n(context, theme).description),
       onTap: onTap,
     );
+  }
+}
+
+class DaysSelector extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(userSessionStateProvider);
+    final day = ref.watch(daysProvider);
+    return session != null
+        ? InkWell(
+            onTap: () => showChoicesPicker(
+              context,
+              choices: Days.values,
+              selectedItem: day,
+              labelBuilder: (t) => Text(t.toString()),
+              onSelectedItemChanged: (newDay) {
+                ref.read(daysProvider.notifier).state = newDay;
+              },
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(day.toString()),
+                const Icon(Icons.arrow_drop_down),
+              ],
+            ),
+          )
+        : const SizedBox.shrink();
+  }
+}
+
+enum Days {
+  oneday,
+  twodays,
+  week,
+  twoweeks,
+  month,
+  twomonths,
+  threemonths;
+
+  @override
+  String toString() {
+    switch (this) {
+      case Days.oneday:
+        return '1 day';
+      case Days.twodays:
+        return '2 days';
+      case Days.week:
+        return '1 week';
+      case Days.twoweeks:
+        return '2 weeks';
+      case Days.month:
+        return '1 month';
+      case Days.twomonths:
+        return '2 months';
+      case Days.threemonths:
+        return '3 months';
+    }
+  }
+
+  int toInteger() {
+    switch (this) {
+      case Days.oneday:
+        return 1;
+      case Days.twodays:
+        return 2;
+      case Days.week:
+        return 7;
+      case Days.twoweeks:
+        return 14;
+      case Days.month:
+        return 30;
+      case Days.twomonths:
+        return 60;
+      case Days.threemonths:
+        return 90;
+    }
   }
 }

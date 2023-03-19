@@ -62,7 +62,7 @@ Future<ISet<PuzzleTheme>> savedThemes(SavedThemesRef ref) {
 }
 
 @riverpod
-Future<PuzzleDashboard> puzzleDashboard(PuzzleDashboardRef ref) {
+Future<PuzzleDashboard> puzzleDashboard(PuzzleDashboardRef ref, int days) {
   final repo = ref.watch(puzzleRepositoryProvider);
-  return Result.release(repo.puzzleDashboard());
+  return Result.release(repo.puzzleDashboard(days));
 }
