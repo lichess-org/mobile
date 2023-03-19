@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/constants.dart';
 
 const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;
@@ -93,6 +94,7 @@ class CustomPlatformCardRow extends StatelessWidget {
   }
 }
 
+@allowedWidgetReturn
 Iterable<Widget> _divideRow(Iterable<Widget> elements) {
   final list = elements.toList();
 

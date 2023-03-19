@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/ui/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
@@ -23,6 +22,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/platform_card.dart';
 
 final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
 
@@ -163,26 +163,26 @@ class _Body extends ConsumerWidget {
               ),
               subStatSpace,
               // The number '12' here is not arbitrary, since the API returns the progression for the last 12 games (as far as I know).
-              _CustomPlatformCard(
+              CustomPlatformCard(
                 context.l10n.progressOverLastXGames('12').replaceAll(':', ''),
                 padding: Styles.horizontalBodyPadding,
                 child: _ProgressionWidget(data.progress),
               ),
-              _CustomPlatformCardRow([
-                _CustomPlatformCard(
+              CustomPlatformCardRow([
+                CustomPlatformCard(
                   context.l10n.rank,
                   value: data.rank == null
                       ? '?'
                       : NumberFormat.decimalPattern(Intl.getCurrentLocale())
                           .format(data.rank),
                 ),
-                _CustomPlatformCard(
+                CustomPlatformCard(
                   context.l10n.ratingDeviation('').replaceAll(': .', ''),
                   value: data.deviation.toStringAsFixed(2),
                 )
               ]),
-              _CustomPlatformCardRow([
-                _CustomPlatformCard(
+              CustomPlatformCardRow([
+                CustomPlatformCard(
                   context.l10n.highestRating('').replaceAll(':', ''),
                   child: _RatingWidget(
                     data.highestRating,
@@ -190,7 +190,7 @@ class _Body extends ConsumerWidget {
                     LichessColors.good,
                   ),
                 ),
-                _CustomPlatformCard(
+                CustomPlatformCard(
                   context.l10n.lowestRating('').replaceAll(':', ''),
                   child: _RatingWidget(
                     data.lowestRating,
@@ -215,8 +215,8 @@ class _Body extends ConsumerWidget {
                 ),
               ),
               subStatSpace,
-              _CustomPlatformCardRow([
-                _CustomPlatformCard(
+              CustomPlatformCardRow([
+                CustomPlatformCard(
                   context.l10n.wins,
                   child: _PercentageValueWidget(
                     data.wonGames,
@@ -224,7 +224,7 @@ class _Body extends ConsumerWidget {
                     color: LichessColors.good,
                   ),
                 ),
-                _CustomPlatformCard(
+                CustomPlatformCard(
                   context.l10n.draws,
                   child: _PercentageValueWidget(
                     data.drawnGames,
@@ -233,7 +233,7 @@ class _Body extends ConsumerWidget {
                     isShaded: true,
                   ),
                 ),
-                _CustomPlatformCard(
+                CustomPlatformCard(
                   context.l10n.losses,
                   child: _PercentageValueWidget(
                     data.lostGames,
@@ -242,22 +242,22 @@ class _Body extends ConsumerWidget {
                   ),
                 ),
               ]),
-              _CustomPlatformCardRow([
-                _CustomPlatformCard(
+              CustomPlatformCardRow([
+                CustomPlatformCard(
                   context.l10n.rated,
                   child: _PercentageValueWidget(
                     data.ratedGames,
                     data.totalGames,
                   ),
                 ),
-                _CustomPlatformCard(
+                CustomPlatformCard(
                   context.l10n.tournament,
                   child: _PercentageValueWidget(
                     data.tournamentGames,
                     data.totalGames,
                   ),
                 ),
-                _CustomPlatformCard(
+                CustomPlatformCard(
                   context.l10n.berserkedGames
                       .replaceAll(' ${context.l10n.games.toLowerCase()}', ''),
                   child: _PercentageValueWidget(
@@ -265,7 +265,7 @@ class _Body extends ConsumerWidget {
                     data.totalGames,
                   ),
                 ),
-                _CustomPlatformCard(
+                CustomPlatformCard(
                   context.l10n.disconnections,
                   child: _PercentageValueWidget(
                     data.disconnections,
@@ -273,20 +273,20 @@ class _Body extends ConsumerWidget {
                   ),
                 ),
               ]),
-              _CustomPlatformCardRow([
-                _CustomPlatformCard(
+              CustomPlatformCardRow([
+                CustomPlatformCard(
                   context.l10n.averageOpponent,
                   value: data.avgOpponent == null
                       ? '?'
                       : data.avgOpponent.toString(),
                 ),
-                _CustomPlatformCard(
+                CustomPlatformCard(
                   context.l10n.timeSpentPlaying,
                   value: data.timePlayed
                       .toDaysHoursMinutes(AppLocalizations.of(context)),
                 ),
               ]),
-              _CustomPlatformCard(
+              CustomPlatformCard(
                 padding: Styles.horizontalBodyPadding,
                 context.l10n.winningStreak,
                 child: _StreakWidget(
@@ -295,7 +295,7 @@ class _Body extends ConsumerWidget {
                   color: LichessColors.good,
                 ),
               ),
-              _CustomPlatformCard(
+              CustomPlatformCard(
                 padding: Styles.horizontalBodyPadding,
                 context.l10n.losingStreak,
                 child: _StreakWidget(
@@ -304,12 +304,12 @@ class _Body extends ConsumerWidget {
                   color: LichessColors.red,
                 ),
               ),
-              _CustomPlatformCard(
+              CustomPlatformCard(
                 padding: Styles.horizontalBodyPadding,
                 context.l10n.gamesInARow,
                 child: _StreakWidget(data.maxPlayStreak, data.curPlayStreak),
               ),
-              _CustomPlatformCard(
+              CustomPlatformCard(
                 padding: Styles.horizontalBodyPadding,
                 context.l10n.maxTimePlaying,
                 child: _StreakWidget(data.maxTimeStreak, data.curTimeStreak),
@@ -347,107 +347,6 @@ class _Body extends ConsumerWidget {
       loading: () => const CenterLoadingIndicator(),
     );
   }
-}
-
-class _CustomPlatformCard extends StatelessWidget {
-  const _CustomPlatformCard(
-    this.stat, {
-    this.child,
-    this.value,
-    this.padding,
-  });
-
-  final String stat;
-  final Widget? child;
-  final String? value;
-  final EdgeInsets? padding;
-
-  @override
-  Widget build(BuildContext context) {
-    final defaultStatStyle = TextStyle(
-      color: textShade(context, _customOpacity),
-      fontSize: _defaultStatFontSize,
-    );
-
-    const defaultValueStyle = TextStyle(fontSize: _defaultValueFontSize);
-
-    return Padding(
-      padding: padding ?? EdgeInsets.zero,
-      child: PlatformCard(
-        margin: const EdgeInsets.symmetric(vertical: 6.0),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              FittedBox(
-                alignment: Alignment.center,
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  stat,
-                  style: defaultStatStyle,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              if (value != null)
-                Text(
-                  value!,
-                  style: defaultValueStyle,
-                  textAlign: TextAlign.center,
-                )
-              else if (child != null)
-                child!
-              else
-                const Text('?', style: defaultValueStyle)
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _CustomPlatformCardRow extends StatelessWidget {
-  final List<_CustomPlatformCard> cards;
-
-  const _CustomPlatformCardRow(this.cards);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: Styles.horizontalBodyPadding,
-      child: IntrinsicHeight(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: _divideRow(cards)
-              .map((e) => Expanded(child: e))
-              .toList(growable: false),
-        ),
-      ),
-    );
-  }
-}
-
-@allowedWidgetReturn
-Iterable<Widget> _divideRow(Iterable<Widget> elements) {
-  final list = elements.toList();
-
-  if (list.isEmpty || list.length == 1) {
-    return list;
-  }
-
-  Widget wrapElement(Widget el) {
-    return Container(
-      margin: const EdgeInsets.only(right: 8),
-      child: el,
-    );
-  }
-
-  return <Widget>[
-    ...list.take(list.length - 1).map(wrapElement),
-    list.last,
-  ];
 }
 
 class _ProgressionWidget extends StatelessWidget {
