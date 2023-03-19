@@ -40,7 +40,6 @@ class PuzzleDashboardWidget extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 30),
                 AspectRatio(
                   aspectRatio: 1.2,
                   child: PuzzleChart(data.themes.take(7).toIList()),
@@ -55,9 +54,9 @@ class PuzzleDashboardWidget extends ConsumerWidget {
         debugPrint(
           'SEVERE: [PuzzleDashboardWidget] could not load puzzle dashboard; $e\n$s',
         );
-        return const Text('Error');
+        return const Text('Error! Could not load Dashboard');
       },
-      loading: () => const CircularProgressIndicator(),
+      loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
 }
@@ -85,14 +84,9 @@ class PuzzleChart extends StatelessWidget {
         getTitle: (index, angle) =>
             RadarChartTitle(text: puzzleData[index].theme!),
         titleTextStyle: const TextStyle(fontSize: 10),
-        titlePositionPercentageOffset: 0.06,
-        tickCount: 1,
-        ticksTextStyle: const TextStyle(fontSize: 10),
-        radarTouchData: RadarTouchData(
-          touchCallback: (FlTouchEvent event, response) {
-            if (!event.isInterestedForInteractions) {}
-          },
-        ),
+        titlePositionPercentageOffset: 0.09,
+        tickCount: 3,
+        ticksTextStyle: const TextStyle(fontSize: 8),
       ),
     );
   }
