@@ -15,9 +15,13 @@ import 'package:lichess_mobile/src/model/tv/featured_position.dart';
 import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 
 class TvScreen extends ConsumerWidget {
-  const TvScreen({super.key});
+  TvScreen({super.key});
+
+  //int _selectedItem;
+  String selectedValue = "";
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,7 +39,7 @@ class TvScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: InkWell(
-          child: const Text('Top Rated 2'),
+          child: const Text('Top Rated'),
           onTap: () {
             showAndroidChoices(
               context,
@@ -56,19 +60,56 @@ class TvScreen extends ConsumerWidget {
     WidgetRef ref,
   ) {
     final tvChannel = ref.watch(tvChannelsProvider);
+    final gameId = ref.watch(gameIdStateProvider);
+    //final wGameId = ref.watch(watchedGameId);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: tvChannel.when(
           data: (data) {
+            String titleText;
+            String choiceString;
+            if (gameId == null) {
+              titleText = "Top Rated";
+              choiceString = "Top Rated";
+            } else {
+              titleText = data.channels.entries
+                  .where((element) => element.value.gameId == gameId)
+                  .first
+                  .key;
+              choiceString = titleText;
+              titleText = titleText +
+                  " | " +
+                  data.channels.entries
+                      .where((element) => element.value.gameId == gameId)
+                      .first
+                      .value
+                      .gameId;
+            }
+            List<String> choices =
+                data.channels.entries.map((e) => e.key).toList();
+            print(choices);
+            print(titleText);
+            print(choices.indexOf(choiceString));
             return InkWell(
-              child: const Text('Top Rated'),
+              child: Text(titleText),
               onTap: () {
-                Future<int?> result = showIosChoices(
+                showIosChoices(
                   context,
-                  data.channels.entries.map((e) => e.key).toList(),
-                );
-                print(result);
-                //setState()
+                  choices,
+                  choices.indexOf(titleText),
+                ).then((val) {
+                  String? tempGameId = data.channels.entries
+                      .where((element) => element.key == selectedValue)
+                      .first
+                      .value
+                      .gameId;
+                  if (selectedValue == "Top Rated") tempGameId = null;
+                  //Navigator.pop(context);
+                  print(tempGameId);
+                  //Provider.of<Counter>(context, listen: false)
+                  //    .incrementCounter();
+                  ref.read(gameIdStateProvider.notifier).state = tempGameId;
+                });
               },
             );
           },
@@ -84,7 +125,52 @@ class TvScreen extends ConsumerWidget {
       child: const _Body(),
     );
   }
+
+  Future<int?> showIosChoices(
+    BuildContext context,
+    List<String> choices,
+    int initialIndex,
+  ) {
+    return showCupertinoModalPopup<int>(
+      context: context,
+      builder: (context) {
+        //int ind = choices.indexWhere((element) => element == "Top Rated");
+        return SizedBox(
+          height: 250,
+          child: CupertinoPicker(
+            backgroundColor: Theme.of(context).canvasColor,
+            useMagnifier: true,
+            magnification: 1.1,
+            itemExtent: 40,
+            scrollController:
+                FixedExtentScrollController(initialItem: initialIndex),
+            children: List<Widget>.generate(choices.length, (index) {
+              return Center(
+                child: Text(
+                  choices[index],
+                  style: const TextStyle(
+                    fontSize: 21,
+                  ),
+                ),
+              );
+            }),
+            onSelectedItemChanged: (int selectedItem) {
+              selectedValue = choices[selectedItem];
+              //selectedIndex = selectedItem; //Navigator.pop(context);
+              //Text text = countries[value];
+              //selectedIndex = text.data.toString();
+              //setState(() {
+
+              //});
+            },
+          ),
+        );
+      },
+    );
+  }
 }
+
+//final watchedGameId = Provider<String>((ref) => "");
 
 class _Body extends ConsumerWidget {
   const _Body();
@@ -92,12 +178,18 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
+    //final wGameId = ref.watch(watchedGameId);
+    final gameId = ref.watch(gameIdStateProvider);
+
     // ensure the stream is closed when offstage
     final tvStream = currentTab == BottomTab.watch
-        ? ref.watch(tvStreamProvider(true))
+        ? ref.watch(
+            tvGameStreamProvider(
+                WatchParameter(withSound: true, gameId: gameId)),
+          )
         : const AsyncLoading<FeaturedPosition>();
     final featuredGame = ref.watch(featuredGameProvider);
-
+    final tvChannel = ref.watch(tvChannelsProvider);
     return SafeArea(
       child: Center(
         child: tvStream.when(
@@ -223,6 +315,8 @@ void showAndroidChoices(BuildContext context, List<String> choices) {
   return;
 }
 
+//final _variationIndex = Provider<int>((ref) => throw UnimplementedError());
+/*
 Future<int?> showIosChoices(BuildContext context, List<String> choices) {
   return showCupertinoModalPopup<int>(
     context: context,
@@ -245,9 +339,11 @@ Future<int?> showIosChoices(BuildContext context, List<String> choices) {
               ),
             );
           }),
-          onSelectedItemChanged: (int selectedItem) {},
+          onSelectedItemChanged: (int selectedItem) {
+            //Navigator.pop(context);
+          },
         ),
       );
     },
   );
-}
+}*/

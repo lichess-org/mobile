@@ -33,7 +33,9 @@ class TvRepository {
     _log.fine('Start streaming a game.');
     yield* resp.stream
         .toStringStream()
+        .expand((e) => e.split('\n'))
         .where((event) => event.isNotEmpty && event != '\n')
+        //.where((event) => event.isNotEmpty && event != '\n')
         .map((event) => jsonDecode(event) as Map<String, dynamic>)
         //.where((json) => json['t'] == 'featured' || json['t'] == 'fen')
         .map((json) => TvEvent.gameFromJson(json))

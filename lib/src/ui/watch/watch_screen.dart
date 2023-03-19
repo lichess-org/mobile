@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/ui/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 
 class WatchScreen extends ConsumerStatefulWidget {
   const WatchScreen({super.key});
@@ -123,7 +124,10 @@ class _WatchTvWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
     final tvStream = currentTab == BottomTab.watch
-        ? ref.watch(tvStreamProvider(false))
+        ? ref.watch(tvGameStreamProvider(WatchParameter(
+            withSound: false,
+            gameId: null,
+          )))
         : const AsyncLoading<FeaturedPosition>();
     final featuredGame = ref.watch(featuredGameProvider);
     return tvStream.when(
@@ -131,7 +135,7 @@ class _WatchTvWidget extends ConsumerWidget {
         return BoardPreview(
           header: Text('Lichess TV', style: Styles.sectionTitle),
           onTap: () => Navigator.of(context).push<void>(
-            MaterialPageRoute(builder: (context) => const TvScreen()),
+            MaterialPageRoute(builder: (context) => TvScreen()),
           ),
           orientation: featuredGame?.orientation.cg ?? Side.white,
           fen: position.fen,

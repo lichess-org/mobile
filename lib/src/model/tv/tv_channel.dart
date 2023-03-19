@@ -32,6 +32,14 @@ class TvChannels with _$TvChannels {
 }
 
 @freezed
+abstract class WatchParameter with _$WatchParameter {
+  factory WatchParameter({
+    required bool withSound,
+    required String? gameId,
+  }) = _WatchParameter;
+}
+
+@freezed
 class TvChannel with _$TvChannel {
   const factory TvChannel({
     required String name,

@@ -63,6 +63,7 @@ Future<Leaderboard> leaderboard(LeaderboardRef ref) {
 
 @riverpod
 Future<TvChannels> tvChannels(TvChannelsRef ref) {
+  ref.cacheFor(const Duration(seconds: 10));
   final repo = ref.watch(userRepositoryProvider);
   return Result.release(repo.getTvChannels());
 }

@@ -80,14 +80,22 @@ class TvEvent with _$TvEvent {
         id: pick('id').asGameIdOrThrow(),
         orientation: Side.white, // FIX
         fen: pick('fen').asStringOrThrow(),
-        white: _featuredPlayerFromPick(pick('players', 'white').required()),
-        black: _featuredPlayerFromPick(pick('players', 'black').required()),
+        white: _featuredGamePlayerFromPick(
+          pick('players', 'white').required(),
+          Side.white,
+        ),
+        black: _featuredGamePlayerFromPick(
+          pick('players', 'black').required(),
+          Side.black,
+        ),
       );
     } else {
+      final Move? lm =
+          pick('lm').letOrNull((it) => Move.fromUci(it.asStringOrThrow())!) ??
+              Move.fromUci("e2e2");
       return TvEvent.fen(
         fen: pick('fen').asStringOrThrow(),
-        lastMove:
-            pick('lm').letOrThrow((it) => Move.fromUci(it.asStringOrThrow())!),
+        lastMove: lm!,
         whiteSeconds: pick('wc').asIntOrThrow(),
         blackSeconds: pick('bc').asIntOrThrow(),
       );
@@ -106,14 +114,16 @@ class TvEvent with _$TvEvent {
     );
   }
 
-  static FeaturedPlayer _featuredGamePlayerFromPick(RequiredPick pick) {
+  static FeaturedPlayer _featuredGamePlayerFromPick(
+    RequiredPick pick,
+    Side side,
+  ) {
     return FeaturedPlayer(
-      side: pick('color').asSideOrThrow(),
+      side: side,
       name: pick('user', 'name').asStringOrThrow(),
       title: pick('user', 'title').asStringOrNull(),
       rating: pick('rating').asIntOrNull(),
-
-      //seconds: pick('seconds').asIntOrNull(),
+      seconds: pick('seconds').asIntOrNull(),
     );
   }
 }
