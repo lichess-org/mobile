@@ -55,7 +55,7 @@ class PuzzlesScreen extends StatelessWidget {
       appBar: AppBar(
         actions: [ToggleSoundButton()],
         title: isDailyPuzzle
-            ? const Text('Daily Puzzle')
+            ? Text(context.l10n.dailyPuzzle)
             : Text(puzzleThemeL10n(context, theme).name),
       ),
       body: initialPuzzleContext != null
@@ -71,7 +71,7 @@ class PuzzlesScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: isDailyPuzzle
-            ? const Text('Daily Puzzle')
+            ? Text(context.l10n.dailyPuzzle)
             : Text(puzzleThemeL10n(context, theme).name),
         trailing: ToggleSoundButton(),
       ),
