@@ -81,7 +81,9 @@ class _Body extends ConsumerWidget {
                       theme: theme,
                       initialPuzzleContext: data,
                     ),
-                  );
+                  ).then((_) {
+                    ref.invalidate(nextPuzzleProvider(theme));
+                  });
                 },
               );
             }

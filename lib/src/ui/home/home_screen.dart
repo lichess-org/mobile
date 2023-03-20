@@ -238,7 +238,9 @@ class _DailyPuzzle extends ConsumerWidget {
                   userId: session?.user.id,
                 ),
               ),
-            );
+            ).then((_) {
+              ref.invalidate(nextPuzzleProvider(PuzzleTheme.mix));
+            });
           },
         );
       },
@@ -278,7 +280,9 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
                       theme: PuzzleTheme.mix,
                       initialPuzzleContext: data,
                     ),
-                  );
+                  ).then((_) {
+                    ref.invalidate(nextPuzzleProvider(PuzzleTheme.mix));
+                  });
                 }
               : null,
         );
