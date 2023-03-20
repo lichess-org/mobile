@@ -73,7 +73,7 @@ class PuzzleScreenModel extends _$PuzzleScreenModel {
           feedback: PuzzleFeedback.bad,
         );
         _sendResult(PuzzleResult.lose);
-        await Future<void>.delayed(const Duration(milliseconds: 500));
+        await Future<void>.delayed(const Duration(milliseconds: 800));
         _setPath(state.currentPath.penultimate);
       }
     }
