@@ -211,13 +211,9 @@ class PuzzleScreenModel extends _$PuzzleScreenModel {
       ),
     );
 
-    final round = next?.rounds?.firstWhereOrNull(
-      (p) => p.id == state.puzzle.puzzle.id,
-    );
-    if (round != null) {
-      ref
-          .read(sessionNotifier)
-          .setRatingDiff(state.puzzle.puzzle.id, round.ratingDiff);
+    final rounds = next?.rounds;
+    if (rounds != null) {
+      ref.read(sessionNotifier).setRatingDiffs(rounds);
     }
 
     // We need to invalidate the next puzzle for the offline puzzle preview on

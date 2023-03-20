@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:collection/collection.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
@@ -7,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/shared_preferences.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 
 part 'puzzle_session.freezed.dart';
@@ -45,21 +47,16 @@ class PuzzleSession extends _$PuzzleSession {
     });
   }
 
-  Future<void> setRatingDiff(PuzzleId id, int ratingDiff) async {
+  Future<void> setRatingDiffs(Iterable<PuzzleRound> rounds) async {
     await _update((d) {
-      final index = d.attempts.indexWhere((p) => p.id == id);
-      if (index == -1) {
-        return d;
-      } else {
-        final newState = d.copyWith(
-          attempts: d.attempts.replace(
-            index,
-            d.attempts[index].copyWith(ratingDiff: ratingDiff),
-          ),
-        );
-        state = newState;
-        return newState;
-      }
+      final newState = d.copyWith(
+        attempts: d.attempts.map((a) {
+          final round = rounds.firstWhereOrNull((r) => r.id == a.id);
+          return round != null ? a.copyWith(ratingDiff: round.ratingDiff) : a;
+        }).toIList(),
+      );
+      state = newState;
+      return newState;
     });
   }
 
