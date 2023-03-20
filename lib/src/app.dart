@@ -78,6 +78,10 @@ class _AppState extends ConsumerState<App> {
         colorSchemeSeed: LichessColors.primary,
         useMaterial3: true,
         brightness: brightness,
+        cardTheme: CardTheme(
+          surfaceTintColor:
+              brightness == Brightness.light ? Colors.black : Colors.white,
+        ),
       ),
       themeMode: themeMode,
       builder: (context, child) {
