@@ -6,19 +6,24 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 part 'brightness.g.dart';
 
 @Riverpod(keepAlive: true)
-Brightness currentBrightness(CurrentBrightnessRef ref) {
-  final themeMode = ref.watch(
-    generalPreferencesProvider.select(
-      (state) => state.themeMode,
-    ),
-  );
+class CurrentBrightness extends _$CurrentBrightness {
+  @override
+  Brightness build() {
+    final themeMode = ref.watch(
+      generalPreferencesProvider.select(
+        (state) => state.themeMode,
+      ),
+    );
+    final window = WidgetsBinding.instance.window;
+    window.onPlatformBrightnessChanged = () {
+      WidgetsBinding.instance.handlePlatformBrightnessChanged();
+      state = window.platformBrightness;
+    };
 
-  switch (themeMode) {
-    case ThemeMode.dark:
-      return Brightness.dark;
-    case ThemeMode.light:
-      return Brightness.light;
-    case ThemeMode.system:
-      return WidgetsBinding.instance.platformDispatcher.platformBrightness;
+    return themeMode == ThemeMode.system
+        ? window.platformBrightness
+        : themeMode == ThemeMode.dark
+            ? Brightness.dark
+            : Brightness.light;
   }
 }
