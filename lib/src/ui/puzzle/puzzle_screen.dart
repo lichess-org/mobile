@@ -190,7 +190,7 @@ class _Body extends ConsumerWidget {
                         ),
                         child: Row(
                           children: [
-                            Text(context.l10n.yourRating),
+                            Text(context.l10n.rating),
                             const SizedBox(width: 5.0),
                             TweenAnimationBuilder<double>(
                               tween: Tween<double>(
