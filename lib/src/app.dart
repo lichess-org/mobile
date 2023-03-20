@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/common/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 
 class LoadApp extends ConsumerWidget {
@@ -70,12 +71,17 @@ class _AppState extends ConsumerState<App> {
       ),
     );
     final brightness = ref.watch(currentBrightnessProvider);
+    final boardTheme = ref.watch(
+      boardPreferencesProvider.select(
+        (state) => state.boardTheme,
+      ),
+    );
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: kSupportedLocales,
       onGenerateTitle: (BuildContext context) => 'lichess.org',
       theme: ThemeData(
-        colorSchemeSeed: LichessColors.primary,
+        colorSchemeSeed: boardTheme.colors.darkSquare,
         useMaterial3: true,
         brightness: brightness,
         cardTheme: CardTheme(
