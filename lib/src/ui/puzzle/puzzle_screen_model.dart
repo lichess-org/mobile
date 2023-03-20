@@ -226,12 +226,11 @@ class PuzzleScreenModel extends _$PuzzleScreenModel {
     final sanMove = newNodeList.last.sanMove;
     final isForward = path.size > state.currentPath.size;
     if (isForward) {
+      final isCheck = sanMove.san.contains('+');
       if (sanMove.san.contains('x')) {
-        ref.read(moveFeedbackServiceProvider).captureFeedback();
-      } else if (sanMove.san.contains('+')) {
-        ref.read(moveFeedbackServiceProvider).checkFeedback();
+        ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
       } else {
-        ref.read(moveFeedbackServiceProvider).moveFeedback();
+        ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
       }
     }
     state = state.copyWith(
