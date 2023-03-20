@@ -244,6 +244,8 @@ class PuzzleScreenModel extends _$PuzzleScreenModel {
     if (isForward) {
       if (sanMove.san.contains('x')) {
         ref.read(moveFeedbackServiceProvider).captureFeedback();
+      } else if (sanMove.san.contains('+')) {
+        ref.read(moveFeedbackServiceProvider).checkFeedback();
       } else {
         ref.read(moveFeedbackServiceProvider).moveFeedback();
       }
