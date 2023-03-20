@@ -16,6 +16,7 @@ class Puzzle with _$Puzzle {
   const factory Puzzle({
     required PuzzleData puzzle,
     required PuzzleGame game,
+    bool? isDailyPuzzle,
   }) = _Puzzle;
 
   factory Puzzle.fromJson(Map<String, dynamic> json) => _$PuzzleFromJson(json);

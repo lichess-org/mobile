@@ -237,7 +237,6 @@ class _DailyPuzzle extends ConsumerWidget {
                   puzzle: data,
                   userId: session?.user.id,
                 ),
-                isDailyPuzzle: true,
               ),
             );
           },

@@ -83,6 +83,10 @@ class PuzzleRepository {
             response.body,
             mapper: _puzzleFromJson,
             logger: _log,
+          ).map(
+            (puzzle) => puzzle.copyWith(
+              isDailyPuzzle: true,
+            ),
           ),
         );
   }
