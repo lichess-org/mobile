@@ -205,14 +205,14 @@ class GameListTile extends StatelessWidget {
     required this.playerTitle,
     this.subtitle,
     this.trailing,
-    required this.onTap,
+    this.onTap,
   });
 
   final IconData icon;
   final Widget playerTitle;
   final Widget? subtitle;
   final Widget? trailing;
-  final GestureTapCallback onTap;
+  final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

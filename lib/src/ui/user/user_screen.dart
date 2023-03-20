@@ -305,17 +305,20 @@ class RecentGames extends ConsumerWidget {
                 : opponent.name;
 
             return GameListTile(
-              onTap: () {
-                pushPlatformRoute(
-                  context,
-                  rootNavigator: true,
-                  builder: (context) => ArchivedGameScreen(
-                    gameData: game,
-                    orientation:
-                        user.id == game.white.id ? Side.white : Side.black,
-                  ),
-                );
-              },
+              onTap: game.variant.isSupported
+                  ? () {
+                      pushPlatformRoute(
+                        context,
+                        rootNavigator: true,
+                        builder: (context) => ArchivedGameScreen(
+                          gameData: game,
+                          orientation: user.id == game.white.id
+                              ? Side.white
+                              : Side.black,
+                        ),
+                      );
+                    }
+                  : null,
               icon: game.perf.icon,
               playerTitle: PlayerTitle(
                 userName: opponentName,
