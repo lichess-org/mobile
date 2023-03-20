@@ -21,7 +21,7 @@ class GeneralPreferences extends _$GeneralPreferences {
             jsonDecode(stored) as Map<String, dynamic>,
           )
         : const GeneralPrefsState(
-            themeMode: ThemeMode.dark,
+            themeMode: ThemeMode.system,
             isSoundEnabled: true,
           );
   }
