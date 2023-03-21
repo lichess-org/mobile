@@ -100,7 +100,7 @@ class PuzzleGame with _$PuzzleGame {
 class PuzzleGamePlayer with _$PuzzleGamePlayer {
   const factory PuzzleGamePlayer({
     required Side side,
-    required String userId,
+    required UserId userId,
     required String name,
     String? title,
   }) = _PuzzleGamePlayer;

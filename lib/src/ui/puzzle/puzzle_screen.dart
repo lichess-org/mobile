@@ -30,8 +30,8 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
 import 'puzzle_screen_model.dart';
 
-class PuzzlesScreen extends StatelessWidget {
-  const PuzzlesScreen({
+class PuzzleScreen extends StatelessWidget {
+  const PuzzleScreen({
     required this.theme,
     this.initialPuzzleContext,
     super.key,
@@ -680,9 +680,12 @@ class _BottomBarButton extends StatelessWidget {
           ),
           child: SizedBox(
             height: 50,
-            child: Tooltip(
-              message: label,
-              triggerMode: TooltipTriggerMode.longPress,
+            child: Semantics(
+              container: true,
+              enabled: true,
+              button: true,
+              label: label,
+              excludeSemantics: true,
               child: CupertinoButton(
                 padding: EdgeInsets.zero,
                 onPressed: onTap,

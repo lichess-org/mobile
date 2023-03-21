@@ -434,12 +434,12 @@ PuzzleBatch _makeUnsolvedPuzzles(List<PuzzleId> ids) {
             rated: true,
             white: PuzzleGamePlayer(
               side: Side.white,
-              userId: 'user1',
+              userId: UserId('user1'),
               name: 'user1',
             ),
             black: PuzzleGamePlayer(
               side: Side.black,
-              userId: 'user2',
+              userId: UserId('user2'),
               name: 'user2',
             ),
             pgn:

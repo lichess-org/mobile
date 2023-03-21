@@ -130,7 +130,6 @@ class CupertinoIconButton extends StatelessWidget {
       label: semanticsLabel,
       excludeSemantics: true,
       child: CupertinoButton(
-        // tooltip: context.l10n.settings,
         padding: EdgeInsets.zero,
         onPressed: onPressed,
         child: icon,
@@ -211,6 +210,8 @@ class ToggleSoundButton extends ConsumerWidget {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return IconButton(
+          // TODO translate
+          tooltip: 'Toggle sound',
           icon: isSoundEnabled
               ? const Icon(Icons.volume_up)
               : const Icon(Icons.volume_off),
@@ -219,9 +220,9 @@ class ToggleSoundButton extends ConsumerWidget {
               .toggleSoundEnabled(),
         );
       case TargetPlatform.iOS:
-        return CupertinoButton(
-          padding: EdgeInsets.zero,
-          child: isSoundEnabled
+        return CupertinoIconButton(
+          semanticsLabel: 'Toggle sound',
+          icon: isSoundEnabled
               ? const Icon(CupertinoIcons.volume_up)
               : const Icon(CupertinoIcons.volume_off),
           onPressed: () => ref

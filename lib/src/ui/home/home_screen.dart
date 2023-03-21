@@ -230,7 +230,7 @@ class _DailyPuzzle extends ConsumerWidget {
             pushPlatformRoute(
               context,
               rootNavigator: true,
-              builder: (context) => PuzzlesScreen(
+              builder: (context) => PuzzleScreen(
                 theme: PuzzleTheme.mix,
                 initialPuzzleContext: PuzzleContext(
                   theme: PuzzleTheme.mix,
@@ -276,7 +276,7 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
                   pushPlatformRoute(
                     context,
                     rootNavigator: true,
-                    builder: (context) => PuzzlesScreen(
+                    builder: (context) => PuzzleScreen(
                       theme: PuzzleTheme.mix,
                       initialPuzzleContext: data,
                     ),

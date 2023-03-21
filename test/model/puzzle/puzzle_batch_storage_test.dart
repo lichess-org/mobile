@@ -101,12 +101,12 @@ final data = PuzzleBatch(
         rated: true,
         white: PuzzleGamePlayer(
           side: Side.white,
-          userId: 'user1',
+          userId: UserId('user1'),
           name: 'user1',
         ),
         black: PuzzleGamePlayer(
           side: Side.black,
-          userId: 'user2',
+          userId: UserId('user2'),
           name: 'user2',
         ),
         pgn: 'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
