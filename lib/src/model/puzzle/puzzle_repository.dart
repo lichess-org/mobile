@@ -77,6 +77,16 @@ class PuzzleRepository {
         .flatMap(_decodeBatchResponse);
   }
 
+  FutureResult<Puzzle> fetch(PuzzleId id) {
+    return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/$id')).flatMap(
+          (response) => readJsonObject(
+            response.body,
+            mapper: _puzzleFromJson,
+            logger: _log,
+          ),
+        );
+  }
+
   FutureResult<Puzzle> daily() {
     return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/daily')).flatMap(
           (response) => readJsonObject(
