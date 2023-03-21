@@ -23,6 +23,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Deploy an internal test version to Google Play
 
+### android alpha
+
+```sh
+[bundle exec] fastlane android alpha
+```
+
+Deploy an closed test version to Google Play
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
