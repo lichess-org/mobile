@@ -4,6 +4,7 @@ import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/ui/auth/sign_in_widget.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import '../../test_utils.dart';
 import '../../test_app.dart';
 
@@ -41,8 +42,8 @@ void main() {
 
       expect(
         tester
-            .widget<TextButton>(
-              find.widgetWithText(TextButton, 'Sign in'),
+            .widget<AppBarTextButton>(
+              find.widgetWithText(AppBarTextButton, 'Sign in'),
             )
             .onPressed,
         isNull,

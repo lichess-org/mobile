@@ -84,6 +84,31 @@ class SecondaryButton extends StatelessWidget {
   }
 }
 
+class AppBarTextButton extends StatelessWidget {
+  const AppBarTextButton({
+    required this.child,
+    required this.onPressed,
+    super.key,
+  });
+
+  final VoidCallback? onPressed;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: onPressed,
+            child: child,
+          )
+        : TextButton(
+            onPressed: onPressed,
+            child: child,
+          );
+  }
+}
+
 /// Cupertino icon button with mandatory semantics label
 class CupertinoIconButton extends StatelessWidget {
   const CupertinoIconButton({
