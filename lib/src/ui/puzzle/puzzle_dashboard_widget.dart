@@ -19,7 +19,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
     return puzzleDashboard.when(
       data: (data) {
         return ListSection(
-          header: const Text('Puzzle Dashboard'),
+          header: Text(context.l10n.puzzleDashboard),
           children: [
             StatCardRow([
               StatCard(
