@@ -12,9 +12,7 @@ import 'package:lichess_mobile/src/common/tree.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 
@@ -211,23 +209,9 @@ class PuzzleScreenModel extends _$PuzzleScreenModel {
       ),
     );
 
-    final round = next?.rounds?.firstWhereOrNull(
-      (p) => p.id == state.puzzle.puzzle.id,
-    );
-    if (round != null) {
-      ref
-          .read(sessionNotifier)
-          .setRatingDiff(state.puzzle.puzzle.id, round.ratingDiff);
-    }
-
-    // We need to invalidate the next puzzle for the offline puzzle preview on
-    // home screen tab and the healthy mix puzzle button on the puzzle screen tab.
-    // Not the best solution because we must ensure to always provide a puzzle
-    // parameter to the puzzle screen (PuzzleScreen must no be watching nextPuzzleProvider).
-    // It would be better to have invalidate the `nextPuzzleProvider` when the
-    // puzzle screen pops.
-    if (context.theme == PuzzleTheme.mix) {
-      ref.invalidate(nextPuzzleProvider(context.theme));
+    final rounds = next?.rounds;
+    if (rounds != null) {
+      ref.read(sessionNotifier).setRatingDiffs(rounds);
     }
 
     // TODO check if next is null and show a message
@@ -242,10 +226,11 @@ class PuzzleScreenModel extends _$PuzzleScreenModel {
     final sanMove = newNodeList.last.sanMove;
     final isForward = path.size > state.currentPath.size;
     if (isForward) {
+      final isCheck = sanMove.san.contains('+');
       if (sanMove.san.contains('x')) {
-        ref.read(moveFeedbackServiceProvider).captureFeedback();
+        ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
       } else {
-        ref.read(moveFeedbackServiceProvider).moveFeedback();
+        ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
       }
     }
     state = state.copyWith(

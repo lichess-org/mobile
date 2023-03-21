@@ -26,3 +26,14 @@ platform :android do
     )
   end
 end
+
+platform :android do
+  desc "Deploy an closed test version to Google Play"
+  lane :alpha do
+    sh "flutter build appbundle -v --dart-define=LICHESS_HOST=https://lichess.org"
+    upload_to_play_store(
+      track: 'alpha',
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+    )
+  end
+end

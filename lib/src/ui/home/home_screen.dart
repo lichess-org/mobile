@@ -230,16 +230,17 @@ class _DailyPuzzle extends ConsumerWidget {
             pushPlatformRoute(
               context,
               rootNavigator: true,
-              builder: (context) => PuzzlesScreen(
+              builder: (context) => PuzzleScreen(
                 theme: PuzzleTheme.mix,
                 initialPuzzleContext: PuzzleContext(
                   theme: PuzzleTheme.mix,
                   puzzle: data,
                   userId: session?.user.id,
                 ),
-                isDailyPuzzle: true,
               ),
-            );
+            ).then((_) {
+              ref.invalidate(nextPuzzleProvider(PuzzleTheme.mix));
+            });
           },
         );
       },
@@ -275,11 +276,13 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
                   pushPlatformRoute(
                     context,
                     rootNavigator: true,
-                    builder: (context) => PuzzlesScreen(
+                    builder: (context) => PuzzleScreen(
                       theme: PuzzleTheme.mix,
                       initialPuzzleContext: data,
                     ),
-                  );
+                  ).then((_) {
+                    ref.invalidate(nextPuzzleProvider(PuzzleTheme.mix));
+                  });
                 }
               : null,
         );

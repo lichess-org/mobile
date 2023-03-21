@@ -16,6 +16,7 @@ class Puzzle with _$Puzzle {
   const factory Puzzle({
     required PuzzleData puzzle,
     required PuzzleGame game,
+    bool? isDailyPuzzle,
   }) = _Puzzle;
 
   factory Puzzle.fromJson(Map<String, dynamic> json) => _$PuzzleFromJson(json);
@@ -99,7 +100,7 @@ class PuzzleGame with _$PuzzleGame {
 class PuzzleGamePlayer with _$PuzzleGamePlayer {
   const factory PuzzleGamePlayer({
     required Side side,
-    required String userId,
+    required UserId userId,
     required String name,
     String? title,
   }) = _PuzzleGamePlayer;

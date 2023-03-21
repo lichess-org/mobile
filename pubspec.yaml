@@ -3,7 +3,7 @@ description: Lichess mobile app V2
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 0.1.0+4
+version: 0.1.0+7
 
 environment:
   sdk: ">=2.18.2 <3.0.0"
@@ -21,7 +21,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0
-  flutter_riverpod: ^2.3.1
+  flutter_riverpod: ^2.3.2
   riverpod_annotation: ^2.0.1
   freezed_annotation: ^2.2.0
   json_annotation: ^4.7.0
@@ -34,15 +34,15 @@ dependencies:
   dartchess:
     git:
       url: https://github.com/lichess-org/dartchess.git
-      ref: 945b8ac08dd5d258031f6588d13b41bcb10c23cb
+      ref: 8ba91719920bf08a39973c6222ad0bf2faa82cf4
   chessground:
     git:
       url: https://github.com/lichess-org/flutter-chessground.git
-      ref: 3c9c25eb621e68d28a0acf4d7f611de7451f757c
+      ref: 3970600e5b2ee972064a90ff52ca1b4981b6187c
   soundpool: ^2.3.0
   meta: ^1.8.0
   tuple: ^2.0.1
-  deep_pick: ^0.10.0
+  deep_pick: ^1.0.0
   timeago: ^3.3.0
   collection: ^1.16.0 # can't upgrade because of flutter_test
   fast_immutable_collections: ^9.0.0
@@ -72,7 +72,7 @@ dev_dependencies:
   lint: ^2.0.1
   mocktail: ^0.3.0
   mockito: ^5.3.2
-  sqflite_common_ffi: ^2.2.1+1
+  sqflite_common_ffi: ^2.2.2
 
 flutter:
   # The following line ensures that the Material Icons font is

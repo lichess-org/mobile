@@ -18,25 +18,27 @@ class MoveFeedbackService {
   final SoundService _soundService;
   final MoveFeedbackServiceRef _ref;
 
-  void moveFeedback() {
+  void moveFeedback({bool check = false}) {
     _soundService.playMove();
 
     if (_ref.read(boardPreferencesProvider).hapticFeedback) {
-      HapticFeedback.lightImpact();
+      if (check) {
+        HapticFeedback.mediumImpact();
+      } else {
+        HapticFeedback.lightImpact();
+      }
     }
   }
 
-  void captureFeedback() {
+  void captureFeedback({bool check = false}) {
     _soundService.playCapture();
 
     if (_ref.read(boardPreferencesProvider).hapticFeedback) {
-      HapticFeedback.lightImpact();
-    }
-  }
-
-  void checkFeedback() {
-    if (_ref.read(boardPreferencesProvider).hapticFeedback) {
-      HapticFeedback.mediumImpact();
+      if (check) {
+        HapticFeedback.mediumImpact();
+      } else {
+        HapticFeedback.lightImpact();
+      }
     }
   }
 }

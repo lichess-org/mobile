@@ -46,7 +46,7 @@ abstract class RootOrNode {
       if (id == null) {
         return null;
       }
-      return node.byId(id);
+      return node.childById(id);
     }
 
     RootOrNode current = this;
@@ -123,7 +123,7 @@ abstract class RootOrNode {
   /// Gets the node at the given path.
   RootOrNode nodeAt(UciPath path) {
     if (path.isEmpty) return this;
-    final child = byId(path.head!);
+    final child = childById(path.head!);
     if (child != null) {
       return child.nodeAt(path.tail);
     } else {
@@ -134,7 +134,7 @@ abstract class RootOrNode {
   /// Gets the node at the given path, or null if it does not exist.
   RootOrNode? nodeAtOrNull(UciPath path) {
     if (path.isEmpty) return this;
-    final child = byId(path.head!);
+    final child = childById(path.head!);
     if (child != null) {
       return child.nodeAtOrNull(path.tail);
     } else {
@@ -142,15 +142,9 @@ abstract class RootOrNode {
     }
   }
 
-  /// Finds the node with that id.
-  Node? byId(UciCharPair id) {
-    final me = this;
-    if (me is Node && me.id == id) return me;
-    for (final child in children) {
-      final node = child.byId(id);
-      if (node != null) return node;
-    }
-    return null;
+  /// Finds the child node with that id.
+  Node? childById(UciCharPair id) {
+    return children.firstWhereOrNull((node) => node.id == id);
   }
 }
 

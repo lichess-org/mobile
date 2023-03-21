@@ -4,6 +4,7 @@ import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/ui/auth/sign_in_widget.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import '../../test_utils.dart';
 import '../../test_app.dart';
 
@@ -15,45 +16,77 @@ void main() {
     return mockResponse(testAccountResponse, 200);
   });
 
-  testWidgets(
-    'SignInWidget',
-    (WidgetTester tester) async {
-      final app = await buildTestApp(
-        tester,
-        home: Scaffold(
-          appBar: AppBar(
-            actions: const [
-              SignInWidget(),
-            ],
+  group('SignInWidget', () {
+    testWidgets(
+      'meets accessibility guidelines',
+      (WidgetTester tester) async {
+        final SemanticsHandle handle = tester.ensureSemantics();
+        final app = await buildTestApp(
+          tester,
+          home: Scaffold(
+            appBar: AppBar(
+              actions: const [
+                SignInWidget(),
+              ],
+            ),
           ),
-        ),
-        overrides: [
-          httpClientProvider.overrideWithValue(mockClient),
-        ],
-      );
+          overrides: [
+            httpClientProvider.overrideWithValue(mockClient),
+          ],
+        );
 
-      await tester.pumpWidget(app);
+        await tester.pumpWidget(app);
+        await tester.pumpWidget(app);
 
-      expect(find.text('Sign in'), findsOneWidget);
+        await meetsTapTargetGuideline(tester);
 
-      await tester.tap(find.text('Sign in'));
-      await tester.pump();
+        await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+        handle.dispose();
+      },
+      variant: kPlatformVariant,
+    );
 
-      expect(
-        tester
-            .widget<TextButton>(
-              find.widgetWithText(TextButton, 'Sign in'),
-            )
-            .onPressed,
-        isNull,
-      );
+    testWidgets(
+      'sign in and sign out',
+      (WidgetTester tester) async {
+        final app = await buildTestApp(
+          tester,
+          home: Scaffold(
+            appBar: AppBar(
+              actions: const [
+                SignInWidget(),
+              ],
+            ),
+          ),
+          overrides: [
+            httpClientProvider.overrideWithValue(mockClient),
+          ],
+        );
 
-      await tester.pump(const Duration(seconds: 1)); // wait for sign in future
+        await tester.pumpWidget(app);
 
-      expect(find.text('Sign in'), findsNothing);
-    },
-    variant: kPlatformVariant,
-  );
+        expect(find.text('Sign in'), findsOneWidget);
+
+        await tester.tap(find.text('Sign in'));
+        await tester.pump();
+
+        expect(
+          tester
+              .widget<AppBarTextButton>(
+                find.widgetWithText(AppBarTextButton, 'Sign in'),
+              )
+              .onPressed,
+          isNull,
+        );
+
+        await tester
+            .pump(const Duration(seconds: 1)); // wait for sign in future
+
+        expect(find.text('Sign in'), findsNothing);
+      },
+      variant: kPlatformVariant,
+    );
+  });
 }
 
 const testAccountResponse = '''

@@ -82,11 +82,13 @@ class _Body extends ConsumerWidget {
                   pushPlatformRoute(
                     context,
                     rootNavigator: true,
-                    builder: (context) => PuzzlesScreen(
+                    builder: (context) => PuzzleScreen(
                       theme: theme,
                       initialPuzzleContext: data,
                     ),
-                  );
+                  ).then((_) {
+                    ref.invalidate(nextPuzzleProvider(theme));
+                  });
                 },
               );
             }

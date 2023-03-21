@@ -160,7 +160,7 @@ class _Category extends ConsumerWidget {
                       pushPlatformRoute(
                         context,
                         rootNavigator: true,
-                        builder: (context) => PuzzlesScreen(
+                        builder: (context) => PuzzleScreen(
                           theme: theme,
                         ),
                       );

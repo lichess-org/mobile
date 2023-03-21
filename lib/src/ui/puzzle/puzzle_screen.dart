@@ -30,17 +30,15 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
 import 'puzzle_screen_model.dart';
 
-class PuzzlesScreen extends StatelessWidget {
-  const PuzzlesScreen({
+class PuzzleScreen extends StatelessWidget {
+  const PuzzleScreen({
     required this.theme,
     this.initialPuzzleContext,
-    this.isDailyPuzzle = false,
     super.key,
   });
 
   final PuzzleTheme theme;
   final PuzzleContext? initialPuzzleContext;
-  final bool isDailyPuzzle;
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +52,11 @@ class PuzzlesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [ToggleSoundButton()],
-        title: isDailyPuzzle
-            ? const Text('Daily Puzzle')
-            : Text(puzzleThemeL10n(context, theme).name),
+        title: Text(puzzleThemeL10n(context, theme).name),
       ),
       body: initialPuzzleContext != null
           ? _Body(
               initialPuzzleContext: initialPuzzleContext!,
-              isDailyPuzzle: isDailyPuzzle,
             )
           : _LoadPuzzle(theme: theme),
     );
@@ -70,15 +65,12 @@ class PuzzlesScreen extends StatelessWidget {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: isDailyPuzzle
-            ? const Text('Daily Puzzle')
-            : Text(puzzleThemeL10n(context, theme).name),
+        middle: Text(puzzleThemeL10n(context, theme).name),
         trailing: ToggleSoundButton(),
       ),
       child: initialPuzzleContext != null
           ? _Body(
               initialPuzzleContext: initialPuzzleContext!,
-              isDailyPuzzle: isDailyPuzzle,
             )
           : _LoadPuzzle(theme: theme),
     );
@@ -112,7 +104,6 @@ class _LoadPuzzle extends ConsumerWidget {
         } else {
           return _Body(
             initialPuzzleContext: data,
-            isDailyPuzzle: false,
           );
         }
       },
@@ -141,11 +132,9 @@ class _LoadPuzzle extends ConsumerWidget {
 class _Body extends ConsumerWidget {
   const _Body({
     required this.initialPuzzleContext,
-    required this.isDailyPuzzle,
   });
 
   final PuzzleContext initialPuzzleContext;
-  final bool isDailyPuzzle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -161,11 +150,13 @@ class _Body extends ConsumerWidget {
               child: TableBoardLayout(
                 boardData: cg.BoardData(
                   orientation: puzzleState.pov.cg,
-                  interactableSide: puzzleState.mode == PuzzleMode.view
-                      ? cg.InteractableSide.both
-                      : puzzleState.pov == Side.white
-                          ? cg.InteractableSide.white
-                          : cg.InteractableSide.black,
+                  interactableSide: puzzleState.position.isGameOver
+                      ? cg.InteractableSide.none
+                      : puzzleState.mode == PuzzleMode.view
+                          ? cg.InteractableSide.both
+                          : puzzleState.pov == Side.white
+                              ? cg.InteractableSide.white
+                              : cg.InteractableSide.black,
                   fen: puzzleState.fen,
                   lastMove: puzzleState.lastMove?.cg,
                   sideToMove: puzzleState.position.turn.cg,
@@ -199,7 +190,7 @@ class _Body extends ConsumerWidget {
                         ),
                         child: Row(
                           children: [
-                            Text(context.l10n.yourRating),
+                            Text(context.l10n.rating),
                             const SizedBox(width: 5.0),
                             TweenAnimationBuilder<double>(
                               tween: Tween<double>(
@@ -233,7 +224,6 @@ class _Body extends ConsumerWidget {
         ),
         _BottomBar(
           initialPuzzleContext: initialPuzzleContext,
-          isDailyPuzzle: isDailyPuzzle,
           screenModelProvider: screenModelProvider,
         ),
       ],
@@ -478,16 +468,15 @@ class _BottomBar extends ConsumerWidget {
   const _BottomBar({
     required this.initialPuzzleContext,
     required this.screenModelProvider,
-    required this.isDailyPuzzle,
   });
 
   final PuzzleContext initialPuzzleContext;
-  final bool isDailyPuzzle;
   final PuzzleScreenModelProvider screenModelProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzleState = ref.watch(screenModelProvider);
+    final isDailyPuzzle = puzzleState.puzzle.isDailyPuzzle == true;
 
     return Container(
       padding: Styles.horizontalBodyPadding,
@@ -691,9 +680,12 @@ class _BottomBarButton extends StatelessWidget {
           ),
           child: SizedBox(
             height: 50,
-            child: Tooltip(
-              message: label,
-              triggerMode: TooltipTriggerMode.longPress,
+            child: Semantics(
+              container: true,
+              enabled: true,
+              button: true,
+              label: label,
+              excludeSemantics: true,
               child: CupertinoButton(
                 padding: EdgeInsets.zero,
                 onPressed: onTap,

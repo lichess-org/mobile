@@ -3,6 +3,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/common/chess.dart';
 
 import 'player.dart';
 
@@ -129,68 +130,6 @@ enum Speed {
   classical,
   correspondence,
   unlimited,
-}
-
-enum Variant {
-  standard,
-  chess960,
-  fromPosition,
-  antichess,
-  kingOfTheHill,
-  threeCheck,
-  atomic,
-  horde,
-  racingKings,
-  crazyhouse;
-
-  /// Returns the initial position for this [Variant].
-  ///
-  /// Will throw an [ArgumentError] if called on [Variant.fromPosition].
-  Position get initialPosition {
-    // TODO implement missing variants
-    switch (this) {
-      case Variant.standard:
-      case Variant.chess960:
-        return Chess.initial;
-      case Variant.fromPosition:
-        throw ArgumentError('Check the variant is not `fromPosition` before!');
-      case Variant.antichess:
-        return Antichess.initial;
-      case Variant.kingOfTheHill:
-        return KingOfTheHill.initial;
-      case Variant.threeCheck:
-        return ThreeCheck.initial;
-      case Variant.atomic:
-        return Atomic.initial;
-      case Variant.crazyhouse:
-        return Crazyhouse.initial;
-      default:
-        throw UnimplementedError();
-    }
-  }
-
-  Rules get rules {
-    switch (this) {
-      case Variant.standard:
-      case Variant.chess960:
-      case Variant.fromPosition:
-        return Rules.chess;
-      case Variant.antichess:
-        return Rules.antichess;
-      case Variant.kingOfTheHill:
-        return Rules.kingofthehill;
-      case Variant.threeCheck:
-        return Rules.threecheck;
-      case Variant.atomic:
-        return Rules.atomic;
-      case Variant.horde:
-        return Rules.horde;
-      case Variant.racingKings:
-        return Rules.racingKings;
-      case Variant.crazyhouse:
-        return Rules.crazyhouse;
-    }
-  }
 }
 
 enum GameStatus {

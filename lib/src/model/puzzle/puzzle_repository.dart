@@ -77,12 +77,26 @@ class PuzzleRepository {
         .flatMap(_decodeBatchResponse);
   }
 
+  FutureResult<Puzzle> fetch(PuzzleId id) {
+    return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/$id')).flatMap(
+          (response) => readJsonObject(
+            response.body,
+            mapper: _puzzleFromJson,
+            logger: _log,
+          ),
+        );
+  }
+
   FutureResult<Puzzle> daily() {
     return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/daily')).flatMap(
           (response) => readJsonObject(
             response.body,
             mapper: _puzzleFromJson,
             logger: _log,
+          ).map(
+            (puzzle) => puzzle.copyWith(
+              isDailyPuzzle: true,
+            ),
           ),
         );
   }
@@ -210,7 +224,7 @@ PuzzleGame _puzzleGameFromPick(RequiredPick pick) {
 PuzzleGamePlayer _puzzlePlayerFromPick(RequiredPick pick) {
   return PuzzleGamePlayer(
     name: pick('name').asStringOrThrow(),
-    userId: pick('userId').asStringOrThrow(),
+    userId: pick('userId').asUserIdOrThrow(),
     side: pick('color').asSideOrThrow(),
     title: pick('title').asStringOrNull(),
   );
