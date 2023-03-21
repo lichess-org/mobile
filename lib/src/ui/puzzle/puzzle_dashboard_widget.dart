@@ -3,41 +3,37 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_card.dart';
+import 'package:lichess_mobile/src/widgets/stat_card.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_dashboard_screen.dart';
 
 class PuzzleDashboardWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final days = ref.watch(daysProvider);
-    final puzzleDashboard =
-        ref.watch(puzzleDashboardProvider(days.toInteger()));
+    final day = ref.watch(daysProvider);
+    final puzzleDashboard = ref.watch(puzzleDashboardProvider(day.days));
 
     return puzzleDashboard.when(
       data: (data) {
         return ListSection(
           header: const Text('Puzzle Dashboard'),
           children: [
-            CustomPlatformCardRow([
-              CustomPlatformCard(
-                'Performance',
+            StatCardRow([
+              StatCard(
+                context.l10n.performance,
                 value: data.global.performance.toString(),
               ),
-              CustomPlatformCard(
-                'Played',
+              StatCard(
+                context.l10n.played,
                 value: data.global.nb.toString(),
               ),
-              CustomPlatformCard(
-                'Solved',
+              StatCard(
+                context.l10n.solved,
                 value:
                     '${((data.global.firstWins / data.global.nb) * 100).toInt()}%',
-              ),
-              CustomPlatformCard(
-                'To Replay',
-                value: (data.global.nb - data.global.firstWins).toString(),
               ),
             ]),
             Column(

@@ -161,7 +161,7 @@ class DaysSelector extends ConsumerWidget {
               context,
               choices: Days.values,
               selectedItem: day,
-              labelBuilder: (t) => Text(t.toString()),
+              labelBuilder: (t) => Text(_daysL10n(context, t)),
               onSelectedItemChanged: (newDay) {
                 ref.read(daysProvider.notifier).state = newDay;
               },
@@ -169,7 +169,7 @@ class DaysSelector extends ConsumerWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(day.toString()),
+                Text(_daysL10n(context, day)),
                 const Icon(Icons.arrow_drop_down),
               ],
             ),
@@ -179,50 +179,33 @@ class DaysSelector extends ConsumerWidget {
 }
 
 enum Days {
-  oneday,
-  twodays,
-  week,
-  twoweeks,
-  month,
-  twomonths,
-  threemonths;
+  oneday(1),
+  twodays(2),
+  week(7),
+  twoweeks(14),
+  month(30),
+  twomonths(60),
+  threemonths(90);
 
-  @override
-  String toString() {
-    switch (this) {
-      case Days.oneday:
-        return '1 day';
-      case Days.twodays:
-        return '2 days';
-      case Days.week:
-        return '1 week';
-      case Days.twoweeks:
-        return '2 weeks';
-      case Days.month:
-        return '1 month';
-      case Days.twomonths:
-        return '2 months';
-      case Days.threemonths:
-        return '3 months';
-    }
-  }
+  const Days(this.days);
+  final int days;
+}
 
-  int toInteger() {
-    switch (this) {
-      case Days.oneday:
-        return 1;
-      case Days.twodays:
-        return 2;
-      case Days.week:
-        return 7;
-      case Days.twoweeks:
-        return 14;
-      case Days.month:
-        return 30;
-      case Days.twomonths:
-        return 60;
-      case Days.threemonths:
-        return 90;
-    }
+String _daysL10n(BuildContext context, Days day) {
+  switch (day) {
+    case Days.oneday:
+      return context.l10n.nbDays(1);
+    case Days.twodays:
+      return context.l10n.nbDays(2);
+    case Days.week:
+      return context.l10n.nbDays(7);
+    case Days.twoweeks:
+      return context.l10n.nbDays(14);
+    case Days.month:
+      return context.l10n.nbDays(30);
+    case Days.twomonths:
+      return context.l10n.nbDays(60);
+    case Days.threemonths:
+      return context.l10n.nbDays(90);
   }
 }

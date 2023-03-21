@@ -7,8 +7,8 @@ const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;
 const _defaultValueFontSize = 18.0;
 
-class CustomPlatformCard extends StatelessWidget {
-  const CustomPlatformCard(
+class StatCard extends StatelessWidget {
+  const StatCard(
     this.stat, {
     this.child,
     this.value,
@@ -72,10 +72,10 @@ class CustomPlatformCard extends StatelessWidget {
   }
 }
 
-class CustomPlatformCardRow extends StatelessWidget {
-  final List<CustomPlatformCard> cards;
+class StatCardRow extends StatelessWidget {
+  final List<StatCard> cards;
 
-  const CustomPlatformCardRow(this.cards);
+  const StatCardRow(this.cards);
 
   @override
   Widget build(BuildContext context) {

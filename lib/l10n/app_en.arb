@@ -507,6 +507,7 @@
   "toStudy": "Study",
   "importGame": "Import game",
   "importGameExplanation": "Paste a game PGN to get a browsable replay,\ncomputer analysis, game chat and shareable URL.",
+  "importGameCaveat": "Variations will be erased. To keep them, import the PGN via a study.",
   "thisIsAChessCaptcha": "This is a chess CAPTCHA.",
   "clickOnTheBoardToMakeYourMove": "Click on the board to make your move, and prove you are human.",
   "captcha_fail": "Please solve the chess captcha.",
@@ -1829,6 +1830,7 @@
       }
     }
   },
+  "played": "Played",
   "puzzleThemes": "Puzzle themes",
   "recommended": "Recommended",
   "phases": "Phases",
@@ -1896,7 +1898,7 @@
   "improvementAreas": "Improvement areas",
   "strengths": "Strengths",
   "history": "Puzzle history",
-  "solved": "solved",
+  "solved": "Solved",
   "failed": "incorrect",
   "streakDescription": "Solve progressively harder puzzles and build a win streak. There is no clock, so take your time. One wrong move, and it's game over! But you can skip one move per session.",
   "yourStreakX": "Your streak: {param}",
