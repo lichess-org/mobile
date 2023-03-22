@@ -216,6 +216,21 @@
   "email": "Email",
   "passwordReset": "Password reset",
   "forgotPassword": "Forgot password?",
+  "error_weakPassword": "This password is extremely common, and too easy to guess.",
+  "error_namePassword": "Please don't use your username as your password.",
+  "blankedPassword": "You have used the same password on another site, and that site has been compromised. To ensure the safety of your Lichess account, we need you to set a new password. Thank you for your understanding.",
+  "youAreLeavingLichess": "You are leaving Lichess",
+  "neverTypeYourPassword": "Never type your Lichess password on another site!",
+  "proceedToX": "Proceed to {param}",
+  "@proceedToX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "passwordSuggestion": "Do not set a password suggested by someone else. They will use it to steal your account.",
+  "emailSuggestion": "Do not set an email address suggested by someone else. They will use it to steal your account.",
   "emailConfirmHelp": "Help with email confirmation",
   "emailConfirmNotReceived": "Didn't receive your confirmation email after signing up?",
   "whatSignupUsername": "What username did you use to sign up?",
@@ -1841,6 +1856,7 @@
     }
   },
   "puzzleOfTheDay": "Puzzle of the day",
+  "dailyPuzzle": "Daily Puzzle",
   "clickToSolve": "Click to solve",
   "goodMove": "Good move",
   "bestMove": "Best move!",
@@ -2026,7 +2042,7 @@
   "knightEndgame": "Knight endgame",
   "knightEndgameDescription": "An endgame with only knights and pawns.",
   "long": "Long puzzle",
-  "longDescription": "Three moves to win.",
+  "longDescription": "Long description",
   "master": "Master games",
   "masterDescription": "Puzzles from games played by titled players.",
   "masterVsMaster": "Master vs Master games",
@@ -2203,5 +2219,105 @@
   "cantOpenSimilarAccount": "You will not be allowed to open a new account with the same name, even if the case is different.",
   "changedMindDoNotCloseAccount": "I changed my mind, don't close my account",
   "closeAccountExplanation": "Are you sure you want to close your account? Closing your account is a permanent decision. You will NEVER be able to log in EVER AGAIN.",
-  "thisAccountIsClosed": "This account is closed."
+  "thisAccountIsClosed": "This account is closed.",
+  "lichessStreamers": "Lichess streamers",
+  "lichessStreamer": "Lichess streamer",
+  "live": "LIVE!",
+  "offline": "OFFLINE",
+  "currentlyStreaming": "Currently streaming: {param}",
+  "@currentlyStreaming": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "lastStream": "Last stream {param}",
+  "@lastStream": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "becomeStreamer": "Become a Lichess streamer",
+  "doYouHaveStream": "Do you have a Twitch or YouTube channel?",
+  "hereWeGo": "Here we go!",
+  "allStreamers": "All streamers",
+  "editPage": "Edit streamer page",
+  "yourPage": "Your streamer page",
+  "downloadKit": "Download streamer kit",
+  "xIsStreaming": "{param} is streaming",
+  "@xIsStreaming": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "rules": "Streaming rules",
+  "rule1": "Include the keyword \"lichess.org\" in your stream title and use the category \"Chess\" when you stream on Lichess.",
+  "rule2": "Remove the keyword when you stream non-Lichess stuff.",
+  "rule3": "Lichess will detect your stream automatically and enable the following perks:",
+  "rule4": "Read our {param} to ensure fair play for everyone during your stream.",
+  "@rule4": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "streamingFairplayFAQ": "streaming Fairplay FAQ",
+  "perks": "Benefits of streaming with the keyword",
+  "perk1": "Get a flaming streamer icon on your Lichess profile.",
+  "perk2": "Get bumped up to the top of the streamers list.",
+  "perk3": "Notify your Lichess followers.",
+  "perk4": "Show your stream in your games, tournaments and studies.",
+  "approved": "Your stream is approved.",
+  "pendingReview": "Your stream is being reviewed by moderators.",
+  "pleaseFillIn": "Please fill in your streamer information, and upload a picture.",
+  "whenReady": "When you are ready to be listed as a Lichess streamer, {param}",
+  "@whenReady": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "requestReview": "request a moderator review",
+  "streamerLanguageSettings": "The Lichess streamer page targets your audience with the language provided by your streaming platform. Set the correct default language for your chess streams in the app or service you use to broadcast.",
+  "twitchUsername": "Your Twitch username or URL",
+  "optionalOrEmpty": "Optional. Leave empty if none",
+  "youtubeChannel": "Your YouTube channel ID or URL",
+  "streamerName": "Your streamer name on Lichess",
+  "visibility": "Visible on the streamers page",
+  "whenApproved": "When approved by moderators",
+  "headline": "Headline",
+  "tellUsAboutTheStream": "Tell us about your stream in one sentence",
+  "xStreamerPicture": "{param} streamer picture",
+  "@xStreamerPicture": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "changePicture": "Change/delete your picture",
+  "uploadPicture": "Upload a picture",
+  "maxSize": "Max size: {param}",
+  "@maxSize": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "keepItShort": "{count, plural, =1{Keep it short: {count} character max} other{Keep it short: {count} characters max}}",
+  "@keepItShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
