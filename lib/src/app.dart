@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -16,10 +17,19 @@ class LoadApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<AsyncValue<AppDependencies>>(
+      appDependenciesProvider,
+      (_, state) {
+        if (state.hasValue) {
+          FlutterNativeSplash.remove();
+        }
+      },
+    );
+
     final appDependencies = ref.watch(appDependenciesProvider);
     return appDependencies.when(
       data: (_) => const App(),
-      // TODO splash screen
+      // loading screen is handled by the native splash screen
       loading: () => const SizedBox.shrink(),
       error: (err, st) {
         debugPrint(
