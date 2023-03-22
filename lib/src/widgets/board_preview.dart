@@ -65,17 +65,21 @@ class _BoardPreviewState extends ConsumerState<BoardPreview> {
 
         final error = widget.errorMessage != null
             ? Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: defaultTargetPlatform == TargetPlatform.iOS
-                        ? CupertinoColors.secondarySystemBackground
-                            .resolveFrom(context)
-                        : Theme.of(context).colorScheme.background,
-                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(widget.errorMessage!),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: defaultTargetPlatform == TargetPlatform.iOS
+                          ? CupertinoColors.secondarySystemBackground
+                              .resolveFrom(context)
+                          : Theme.of(context).colorScheme.background,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(widget.errorMessage!),
+                    ),
                   ),
                 ),
               )

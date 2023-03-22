@@ -244,7 +244,11 @@ class _DailyPuzzle extends ConsumerWidget {
           },
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => BoardPreview(
+        orientation: Side.white.cg,
+        fen: kEmptyFen,
+        header: Text(context.l10n.dailyPuzzle),
+      ),
       error: (error, stack) => Padding(
         padding: Styles.bodySectionPadding,
         child: const Text('Could not load the daily puzzle.'),
@@ -290,7 +294,7 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stack) => Padding(
         padding: Styles.bodySectionPadding,
-        child: const Text('Could not load the daily puzzle.'),
+        child: const Text('Could not load offline puzzles.'),
       ),
     );
   }
