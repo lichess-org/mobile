@@ -195,7 +195,7 @@ class _ConnectivityBanner extends ConsumerWidget {
                 const SizedBox(width: 5),
                 const Flexible(
                   child: Text(
-                    'No internet connection. Enjoy the offline puzzles!',
+                    'Network connectivity unavailable.',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),

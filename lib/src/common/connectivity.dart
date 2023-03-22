@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:stream_transform/stream_transform.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -15,13 +16,34 @@ class ConnectivityStatus with _$ConnectivityStatus {
 }
 
 @riverpod
+Future<ConnectivityStatus> connectivity(ConnectivityRef ref) async {
+  final connectivityResult = await Connectivity().checkConnectivity();
+  return ConnectivityStatus(
+    connectivityResult: connectivityResult,
+    isOnline: await isOnline(),
+  );
+}
+
+@riverpod
 Stream<ConnectivityStatus> connectivityChanges(ConnectivityChangesRef ref) {
-  return Connectivity().onConnectivityChanged.asyncMap(
+  // android needs to check connectivity on start
+  final firstCheck =
+      Stream.fromFuture(Connectivity().checkConnectivity()).asyncMap(
+    (result) async => ConnectivityStatus(
+      connectivityResult: result,
+      isOnline: await isOnline(),
+    ),
+  );
+
+  return Connectivity()
+      .onConnectivityChanged
+      .asyncMap(
         (result) async => ConnectivityStatus(
           connectivityResult: result,
           isOnline: await isOnline(),
         ),
-      );
+      )
+      .startWithStream(firstCheck);
 }
 
 Future<bool> isOnline() async {

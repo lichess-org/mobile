@@ -25,7 +25,7 @@ part 'puzzle_themes_screen.g.dart';
 Future<Tuple2<bool, ISet<PuzzleTheme>>> _savedThemesConnectivity(
   _SavedThemesConnectivityRef ref,
 ) async {
-  final connectivity = await ref.watch(connectivityChangesProvider.future);
+  final connectivity = await ref.watch(connectivityProvider.future);
   final themes = await ref.watch(savedThemesProvider.future);
   return Tuple2(connectivity.isOnline, themes);
 }
