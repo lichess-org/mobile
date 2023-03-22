@@ -1830,7 +1830,6 @@
       }
     }
   },
-  "played": "Played",
   "puzzleThemes": "Puzzle themes",
   "recommended": "Recommended",
   "phases": "Phases",
@@ -1898,7 +1897,7 @@
   "improvementAreas": "Improvement areas",
   "strengths": "Strengths",
   "history": "Puzzle history",
-  "solved": "Solved",
+  "solved": "solved",
   "failed": "incorrect",
   "streakDescription": "Solve progressively harder puzzles and build a win streak. There is no clock, so take your time. One wrong move, and it's game over! But you can skip one move per session.",
   "yourStreakX": "Your streak: {param}",
