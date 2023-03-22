@@ -688,7 +688,6 @@ class _BottomBarButton extends StatelessWidget {
                     ),
                   )
                 : IconButton(
-                    visualDensity: VisualDensity.compact,
                     onPressed: onTap,
                     icon: Icon(icon),
                     tooltip: label,

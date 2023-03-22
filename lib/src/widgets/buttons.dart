@@ -138,6 +138,49 @@ class CupertinoIconButton extends StatelessWidget {
   }
 }
 
+class BottomBarIconButton extends StatelessWidget {
+  const BottomBarIconButton({
+    required this.icon,
+    required this.onPressed,
+    required this.semanticsLabel,
+    super.key,
+  });
+
+  final Widget icon;
+  final VoidCallback? onPressed;
+  final String semanticsLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.iOS:
+        final themeData = CupertinoTheme.of(context);
+        return CupertinoTheme(
+          data: themeData.copyWith(
+            primaryColor: themeData.textTheme.textStyle.color,
+          ),
+          child: CupertinoIconButton(
+            onPressed: onPressed,
+            icon: icon,
+            semanticsLabel: semanticsLabel,
+          ),
+        );
+      case TargetPlatform.android:
+        return Theme(
+          data: Theme.of(context),
+          child: IconButton(
+            tooltip: semanticsLabel,
+            onPressed: onPressed,
+            icon: icon,
+          ),
+        );
+      default:
+        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        return const SizedBox.shrink();
+    }
+  }
+}
+
 /// A button that looks like a ListTile on a Card.
 class CardButton extends StatefulWidget {
   const CardButton({
