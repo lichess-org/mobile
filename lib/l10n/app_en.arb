@@ -507,7 +507,6 @@
   "toStudy": "Study",
   "importGame": "Import game",
   "importGameExplanation": "Paste a game PGN to get a browsable replay,\ncomputer analysis, game chat and shareable URL.",
-  "importGameCaveat": "Variations will be erased. To keep them, import the PGN via a study.",
   "thisIsAChessCaptcha": "This is a chess CAPTCHA.",
   "clickOnTheBoardToMakeYourMove": "Click on the board to make your move, and prove you are human.",
   "captcha_fail": "Please solve the chess captcha.",
