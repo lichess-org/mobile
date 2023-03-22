@@ -4,6 +4,7 @@ import 'package:http/testing.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:chessground/chessground.dart' as cg;
 
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
@@ -57,7 +58,9 @@ void main() {
         expect(find.byType(MoveList), findsNothing);
         expect(
           tester
-              .widget<IconButton>(find.byKey(const ValueKey('cursor-back')))
+              .widget<BottomBarIconButton>(
+                find.byKey(const ValueKey('cursor-back')),
+              )
               .onPressed,
           isNull,
         );
@@ -81,7 +84,9 @@ void main() {
         expect(find.byType(MoveList), findsOneWidget);
         expect(
           tester
-              .widget<IconButton>(find.byKey(const ValueKey('cursor-back')))
+              .widget<BottomBarIconButton>(
+                find.byKey(const ValueKey('cursor-back')),
+              )
               .onPressed,
           isNotNull,
         );
@@ -150,7 +155,7 @@ void main() {
       // cannot go backward anymore
       expect(
         tester
-            .widget<IconButton>(find.byKey(const Key('cursor-back')))
+            .widget<BottomBarIconButton>(find.byKey(const Key('cursor-back')))
             .onPressed,
         isNull,
       );
@@ -163,7 +168,9 @@ void main() {
       // cannot go forward anymore
       expect(
         tester
-            .widget<IconButton>(find.byKey(const Key('cursor-forward')))
+            .widget<BottomBarIconButton>(
+              find.byKey(const Key('cursor-forward')),
+            )
             .onPressed,
         isNull,
       );

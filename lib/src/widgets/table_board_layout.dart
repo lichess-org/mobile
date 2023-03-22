@@ -157,6 +157,7 @@ class TableBoardLayout extends ConsumerWidget {
                 ],
               )
             : Column(
+                mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -167,9 +168,9 @@ class TableBoardLayout extends ConsumerWidget {
                       currentMoveIndex: currentMoveIndex ?? 0,
                       onSelectMove: onSelectMove,
                     ),
-                  topTable,
+                  Expanded(child: topTable),
                   boardOrError,
-                  bottomTable,
+                  Expanded(child: bottomTable),
                 ],
               );
       },

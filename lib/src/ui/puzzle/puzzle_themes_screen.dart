@@ -25,7 +25,7 @@ part 'puzzle_themes_screen.g.dart';
 Future<Tuple2<bool, ISet<PuzzleTheme>>> _savedThemesConnectivity(
   _SavedThemesConnectivityRef ref,
 ) async {
-  final connectivity = await ref.watch(connectivityChangesProvider.future);
+  final connectivity = await ref.watch(connectivityProvider.future);
   final themes = await ref.watch(savedThemesProvider.future);
   return Tuple2(connectivity.isOnline, themes);
 }
@@ -70,39 +70,51 @@ class _Body extends ConsumerWidget {
     final savedThemesConnectivity = ref.watch(_savedThemesConnectivityProvider);
 
     return SafeArea(
-      child: SingleChildScrollView(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final crossAxisCount =
-                math.min(3, (constraints.maxWidth / 300).floor());
-            return savedThemesConnectivity.when(
-              data: (data) {
-                return LayoutGrid(
-                  columnSizes: List.generate(
-                    crossAxisCount,
-                    (_) => 1.fr,
-                  ),
-                  rowSizes: List.generate(
-                    (list.length / crossAxisCount).ceil(),
-                    (_) => auto,
-                  ),
-                  children: [
-                    for (final category in list)
-                      _Category(
-                        category: category,
-                        savedThemes: data.item2,
-                        isOnline: data.item1,
+      child: savedThemesConnectivity.when(
+        data: (data) {
+          return SingleChildScrollView(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final crossAxisCount =
+                    math.min(3, (constraints.maxWidth / 300).floor());
+                return savedThemesConnectivity.when(
+                  data: (data) {
+                    return LayoutGrid(
+                      columnSizes: List.generate(
+                        crossAxisCount,
+                        (_) => 1.fr,
                       ),
-                  ],
+                      rowSizes: List.generate(
+                        (list.length / crossAxisCount).ceil(),
+                        (_) => auto,
+                      ),
+                      children: [
+                        for (final category in list)
+                          _Category(
+                            category: category,
+                            savedThemes: data.item2,
+                            isOnline: data.item1,
+                          ),
+                      ],
+                    );
+                  },
+                  loading: () => Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Center(child: CircularProgressIndicator.adaptive()),
+                    ],
+                  ),
+                  error: (error, stack) =>
+                      const Center(child: Text('Could not load saved themes.')),
                 );
               },
-              loading: () =>
-                  const Center(child: CircularProgressIndicator.adaptive()),
-              error: (error, stack) =>
-                  const Center(child: Text('Could not load saved themes.')),
-            );
-          },
-        ),
+            ),
+          );
+        },
+        loading: () =>
+            const Center(child: CircularProgressIndicator.adaptive()),
+        error: (error, stack) =>
+            const Center(child: Text('Could not load saved themes.')),
       ),
     );
   }
