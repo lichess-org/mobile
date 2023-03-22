@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -27,7 +26,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                 value: data.global.performance.toString(),
               ),
               StatCard(
-                context.l10n.played,
+                'Played',
                 value: data.global.nb.toString(),
               ),
               StatCard(
@@ -42,7 +41,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
               children: [
                 AspectRatio(
                   aspectRatio: 1.2,
-                  child: PuzzleChart(data.themes.take(7).toIList()),
+                  child: PuzzleChart(data.themes.take(9).toList()),
                 ),
                 const SizedBox(height: 30),
               ],
@@ -64,7 +63,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
 class PuzzleChart extends StatelessWidget {
   const PuzzleChart(this.puzzleData);
 
-  final IList<PuzzleDashboardData> puzzleData;
+  final List<PuzzleDashboardData> puzzleData;
 
   @override
   Widget build(BuildContext context) {

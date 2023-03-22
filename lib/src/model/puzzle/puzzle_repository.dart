@@ -246,7 +246,8 @@ PuzzleDashboard _puzzleDashboardFromPick(RequiredPick pick) => PuzzleDashboard(
               pick('themes')(key)('theme').asStringOrThrow(),
             ),
           )
-          .toIList(),
+          .toIList()
+          .sort((a, b) => b.nb.compareObjectTo(a.nb)),
     );
 
 PuzzleDashboardData _puzzleDashboardDataFromPick(
