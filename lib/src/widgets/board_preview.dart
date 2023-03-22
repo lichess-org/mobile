@@ -65,6 +65,7 @@ class _BoardPreviewState extends ConsumerState<BoardPreview> {
 
         final error = widget.errorMessage != null
             ? Center(
+                // ignore: avoid-wrapping-in-padding
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Container(
