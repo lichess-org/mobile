@@ -142,17 +142,17 @@ class _SettingsButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return defaultTargetPlatform == TargetPlatform.iOS
         ? CupertinoIconButton(
-            semanticsLabel: context.l10n.settings,
+            semanticsLabel: context.l10n.settingsSettings,
             onPressed: () => Navigator.of(context).push<void>(
               CupertinoPageRoute(
-                title: context.l10n.settings,
+                title: context.l10n.settingsSettings,
                 builder: (context) => const SettingsScreen(),
               ),
             ),
             icon: const Icon(Icons.settings),
           )
         : IconButton(
-            tooltip: context.l10n.settings,
+            tooltip: context.l10n.settingsSettings,
             icon: const Icon(Icons.settings),
             onPressed: () => Navigator.of(context).push<void>(
               MaterialPageRoute(

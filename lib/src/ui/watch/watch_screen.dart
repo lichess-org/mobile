@@ -173,7 +173,7 @@ class _StreamerWidget extends ConsumerWidget {
           return const SizedBox.shrink();
         }
         return ListSection(
-          header: Text(context.l10n.lichessStreamers),
+          header: Text(context.l10n.streamerLichessStreamers),
           hasLeading: true,
           onHeaderTap: () {
             pushPlatformRoute(

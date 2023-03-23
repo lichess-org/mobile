@@ -224,7 +224,7 @@ class _DailyPuzzle extends ConsumerWidget {
           orientation: preview.orientation.cg,
           fen: preview.initialFen,
           lastMove: preview.initialMove.cg,
-          header: Text(context.l10n.dailyPuzzle),
+          header: Text(context.l10n.puzzleDailyPuzzle),
           onTap: () {
             final session = ref.read(userSessionStateProvider);
             pushPlatformRoute(
@@ -247,7 +247,7 @@ class _DailyPuzzle extends ConsumerWidget {
       loading: () => BoardPreview(
         orientation: Side.white.cg,
         fen: kEmptyFen,
-        header: Text(context.l10n.dailyPuzzle),
+        header: Text(context.l10n.puzzleDailyPuzzle),
       ),
       error: (error, stack) => Padding(
         padding: Styles.bodySectionPadding,

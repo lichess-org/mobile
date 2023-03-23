@@ -101,7 +101,7 @@ class _Body extends ConsumerWidget {
         padding: Styles.bodySectionBottomPadding,
         child: CardButton(
           icon: const Icon(LichessIcons.target, size: 44),
-          title: Text(context.l10n.puzzleThemes),
+          title: Text(context.l10n.puzzlePuzzleThemes),
           subtitle: const Text('Play puzzles from a specific theme.'),
           onTap: () {
             pushPlatformRoute(
