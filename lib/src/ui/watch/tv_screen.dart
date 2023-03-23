@@ -11,9 +11,7 @@ import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-import 'package:lichess_mobile/src/model/tv/featured_position.dart';
-import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
-import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
+import 'package:lichess_mobile/src/model/tv/featured_game.dart';
 
 class TvScreen extends ConsumerWidget {
   const TvScreen({super.key});
@@ -62,48 +60,37 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
-    // ensure the stream is closed when offstage
-    final tvStream = currentTab == BottomTab.watch
-        ? ref.watch(tvStreamProvider(true))
-        : const AsyncLoading<FeaturedPosition>();
-    final featuredGame = ref.watch(featuredGameProvider);
+    final featuredGame = currentTab == BottomTab.watch
+        ? ref.watch(featuredGameProvider(withSound: true))
+        : const AsyncLoading<FeaturedGameState>();
 
     return SafeArea(
       child: Center(
-        child: tvStream.when(
-          data: (position) {
+        child: featuredGame.when(
+          data: (game) {
             final boardData = BoardData(
               interactableSide: InteractableSide.none,
-              orientation: featuredGame?.orientation.cg ?? Side.white,
-              fen: position.fen,
-              lastMove: position.lastMove?.cg,
+              orientation: game.orientation.cg,
+              fen: game.position.position.fen,
+              lastMove: game.position.lastMove?.cg,
             );
-            final topPlayer = featuredGame != null
-                ? featuredGame.orientation == Side.white
-                    ? featuredGame.black
-                    : featuredGame.white
-                : null;
-            final bottomPlayer = featuredGame != null
-                ? featuredGame.orientation == Side.white
-                    ? featuredGame.white
-                    : featuredGame.black
-                : null;
-            final topPlayerWidget = topPlayer != null
-                ? BoardPlayer(
-                    player: topPlayer.asPlayer,
-                    clock: Duration(seconds: topPlayer.seconds ?? 0),
-                    active:
-                        !position.isGameOver && position.turn == topPlayer.side,
-                  )
-                : kEmptyWidget;
-            final bottomPlayerWidget = bottomPlayer != null
-                ? BoardPlayer(
-                    player: bottomPlayer.asPlayer,
-                    clock: Duration(seconds: bottomPlayer.seconds ?? 0),
-                    active: !position.isGameOver &&
-                        position.turn == bottomPlayer.side,
-                  )
-                : kEmptyWidget;
+            final topPlayer =
+                game.orientation == Side.white ? game.black : game.white;
+
+            final bottomPlayer =
+                game.orientation == Side.white ? game.white : game.black;
+            final topPlayerWidget = BoardPlayer(
+              player: topPlayer.asPlayer,
+              clock: Duration(seconds: topPlayer.seconds ?? 0),
+              active: !game.position.position.isGameOver &&
+                  game.position.position.turn == topPlayer.side,
+            );
+            final bottomPlayerWidget = BoardPlayer(
+              player: bottomPlayer.asPlayer,
+              clock: Duration(seconds: bottomPlayer.seconds ?? 0),
+              active: !game.position.position.isGameOver &&
+                  game.position.position.turn == bottomPlayer.side,
+            );
             return TableBoardLayout(
               boardData: boardData,
               boardSettingsOverrides: const BoardSettingsOverrides(

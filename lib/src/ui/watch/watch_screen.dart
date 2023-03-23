@@ -5,10 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
-import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
-import 'package:lichess_mobile/src/model/tv/featured_position.dart';
+import 'package:lichess_mobile/src/model/tv/featured_game.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
-import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -121,21 +119,20 @@ class _WatchTvWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
-    final tvStream = currentTab == BottomTab.watch
-        ? ref.watch(tvStreamProvider(false))
-        : const AsyncLoading<FeaturedPosition>();
-    final featuredGame = ref.watch(featuredGameProvider);
-    return tvStream.when(
-      data: (position) {
+    final featuredGame = currentTab == BottomTab.watch
+        ? ref.watch(featuredGameProvider(withSound: false))
+        : const AsyncLoading<FeaturedGameState>();
+    return featuredGame.when(
+      data: (game) {
         return BoardPreview(
           header: Text('Lichess TV', style: Styles.sectionTitle),
           onTap: () => pushPlatformRoute(
             context,
             builder: (context) => const TvScreen(),
           ),
-          orientation: featuredGame?.orientation.cg ?? Side.white,
-          fen: position.fen,
-          lastMove: position.lastMove?.cg,
+          orientation: game.orientation.cg,
+          fen: game.position.position.fen,
+          lastMove: game.position.lastMove?.cg,
         );
       },
       error: (err, stackTrace) {
