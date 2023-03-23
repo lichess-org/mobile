@@ -698,7 +698,7 @@ class _GameListWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ListSection(
       header: header,
-      hasLeading: true,
+      hasLeading: false,
       children: [
         for (final game in games)
           GameListTile(
@@ -721,7 +721,6 @@ class _GameListWidget extends ConsumerWidget {
                 }
               });
             },
-            icon: perf.icon,
             playerTitle: PlayerTitle(
               userName: game.opponentName ?? '?',
               title: game.opponentTitle,

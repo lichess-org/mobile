@@ -201,14 +201,14 @@ class PlatformListTile extends StatelessWidget {
 /// A list tile that shows game info.
 class GameListTile extends StatelessWidget {
   const GameListTile({
-    required this.icon,
+    this.icon,
     required this.playerTitle,
     this.subtitle,
     this.trailing,
     this.onTap,
   });
 
-  final IconData icon;
+  final IconData? icon;
   final Widget playerTitle;
   final Widget? subtitle;
   final Widget? trailing;
@@ -218,10 +218,12 @@ class GameListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformListTile(
       onTap: onTap,
-      leading: Icon(
-        icon,
-        size: defaultTargetPlatform == TargetPlatform.iOS ? 26.0 : 36.0,
-      ),
+      leading: icon != null
+          ? Icon(
+              icon,
+              size: defaultTargetPlatform == TargetPlatform.iOS ? 26.0 : 36.0,
+            )
+          : null,
       title: playerTitle,
       subtitle: subtitle != null
           ? DefaultTextStyle.merge(
