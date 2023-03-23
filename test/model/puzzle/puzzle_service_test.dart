@@ -80,10 +80,20 @@ void main() {
       expect(data?.unsolved.length, equals(3));
     });
 
-    test('will not download data if local queue is full', () async {
+    test(
+        'if local queue is full, it will not download data but still try to fetch rating',
+        () async {
       final container = await makeTestContainer();
       final storage = container.read(puzzleBatchStorageProvider);
       final service = container.read(puzzleServiceProvider(queueLength: 1));
+
+      Future<http.Response> getReq() => mockClient.get(
+            Uri.parse(
+              '$kLichessHost/api/puzzle/batch/mix?nb=0&difficulty=normal',
+            ),
+          );
+      when(getReq).thenAnswer((_) => mockResponse('{"puzzles":[]}', 200));
+
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
@@ -93,7 +103,7 @@ void main() {
         userId: null,
       );
       expect(next?.puzzle.puzzle.id, equals(const PuzzleId('pId3')));
-      verifyNever(() => mockClient.get(any()));
+      verify(getReq).called(1);
       final data = await storage.fetch(userId: null);
       expect(data?.unsolved.length, equals(1));
     });
@@ -134,6 +144,12 @@ void main() {
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
       );
+      Future<http.Response> getReq() => mockClient.get(
+            Uri.parse(
+              '$kLichessHost/api/puzzle/batch/mix?nb=0&difficulty=normal',
+            ),
+          );
+      when(getReq).thenAnswer((_) => mockResponse('{"puzzles":[]}', 200));
 
       final next = await service.nextPuzzle(
         userId: null,

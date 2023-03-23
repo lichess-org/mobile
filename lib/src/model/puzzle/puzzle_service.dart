@@ -152,57 +152,55 @@ class PuzzleService {
 
     final deficit = max(0, queueLength - unsolved.length);
 
-    if (deficit > 0) {
-      _log.fine('Have a puzzle deficit of $deficit, will sync with lichess');
+    _log.fine('Have a puzzle deficit of $deficit, will sync with lichess');
 
-      final difficulty =
-          _ref.read(puzzlePreferencesProvider(userId)).difficulty;
+    final difficulty = _ref.read(puzzlePreferencesProvider(userId)).difficulty;
 
-      // anonymous users can't solve puzzles so we just download the deficit
-      final batchResponse = solved.isNotEmpty && userId != null
-          ? repository.solveBatch(
-              nb: deficit,
-              solved: solved,
-              angle: angle,
-              difficulty: difficulty,
-            )
-          : repository.selectBatch(
-              nb: deficit,
-              angle: angle,
-              difficulty: difficulty,
-            );
-
-      return batchResponse
-          .fold(
-        (value) => Result.value(
-          Tuple4(
-            PuzzleBatch(
-              solved: IList(const []),
-              unsolved: IList([...unsolved, ...value.puzzles]),
-            ),
-            value.glicko,
-            value.rounds,
-            true,
-          ),
-        ),
-        (_, __) => Result.value(Tuple4(data, null, null, false)),
-      )
-          .flatMap((tuple) async {
-        final newBatch = tuple.item1;
-        final glitcho = tuple.item2;
-        final rounds = tuple.item3;
-        final shouldSave = tuple.item4;
-        if (newBatch != null && shouldSave) {
-          await storage.save(
-            userId: userId,
+    // anonymous users can't solve puzzles so we just download the deficit
+    // we send the request even if the deficit is 0 to get the glicko rating
+    final batchResponse = solved.isNotEmpty && userId != null
+        ? repository.solveBatch(
+            nb: deficit,
+            solved: solved,
             angle: angle,
-            data: newBatch,
+            difficulty: difficulty,
+          )
+        : repository.selectBatch(
+            nb: deficit,
+            angle: angle,
+            difficulty: difficulty,
           );
-        }
-        return Result.value(Tuple3(newBatch, glitcho, rounds));
-      });
-    }
 
-    return Result.value(Tuple3(data, null, null));
+    return batchResponse
+        .fold(
+      (value) => Result.value(
+        Tuple4(
+          PuzzleBatch(
+            solved: IList(const []),
+            unsolved: IList([...unsolved, ...value.puzzles]),
+          ),
+          value.glicko,
+          value.rounds,
+          true, // should save the batch
+        ),
+      ),
+
+      // we don't need to save the batch if the request failed
+      (_, __) => Result.value(Tuple4(data, null, null, false)),
+    )
+        .flatMap((tuple) async {
+      final newBatch = tuple.item1;
+      final glitcho = tuple.item2;
+      final rounds = tuple.item3;
+      final shouldSave = tuple.item4;
+      if (newBatch != null && shouldSave) {
+        await storage.save(
+          userId: userId,
+          angle: angle,
+          data: newBatch,
+        );
+      }
+      return Result.value(Tuple3(newBatch, glitcho, rounds));
+    });
   }
 }
