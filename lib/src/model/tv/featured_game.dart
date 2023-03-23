@@ -15,7 +15,7 @@ part 'featured_game.g.dart';
 
 @riverpod
 class FeaturedGame extends _$FeaturedGame {
-  late final StreamSubscription<TvEvent> _streamSub;
+  StreamSubscription<TvEvent>? _streamSub;
 
   @override
   Future<FeaturedGameState> build({required bool withSound}) async {
@@ -30,7 +30,7 @@ class FeaturedGame extends _$FeaturedGame {
       }
     });
 
-    ref.onDispose(() => _streamSub.cancel());
+    ref.onDispose(() => _streamSub?.cancel());
 
     return stream.firstWhere((event) => event is TvFeaturedEvent).then(
       (event) {
