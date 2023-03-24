@@ -120,8 +120,7 @@ class _BoardBody extends ConsumerWidget {
       ),
       topTable: topPlayer,
       bottomTable: bottomPlayer,
-      moves: const [],
-      currentMoveIndex: 0,
+      showMoveListPlaceholder: true,
     );
 
     return gameCursor.when(
