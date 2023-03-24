@@ -40,12 +40,6 @@ class ArchivedGameScreen extends ConsumerWidget {
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
         actions: [
           ToggleSoundButton(),
         ],
@@ -126,6 +120,8 @@ class _BoardBody extends ConsumerWidget {
       ),
       topTable: topPlayer,
       bottomTable: bottomPlayer,
+      moves: const [],
+      currentMoveIndex: 0,
     );
 
     return gameCursor.when(
