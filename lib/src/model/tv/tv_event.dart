@@ -118,9 +118,16 @@ class TvEvent with _$TvEvent {
     RequiredPick pick,
     Side side,
   ) {
+    int? ai = pick('aiLevel').asIntOrNull();
+    String userName;
+    if (ai != null) {
+      userName = "AI level $ai";
+    } else {
+      userName = pick('user', 'name').asStringOrThrow();
+    }
     return FeaturedPlayer(
       side: side,
-      name: pick('user', 'name').asStringOrThrow(),
+      name: userName,
       title: pick('user', 'title').asStringOrNull(),
       rating: pick('rating').asIntOrNull(),
       seconds: pick('seconds').asIntOrNull(),

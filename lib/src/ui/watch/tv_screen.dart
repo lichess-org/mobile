@@ -17,14 +17,18 @@ import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 
-class TvScreen extends ConsumerWidget {
-  TvScreen({super.key});
+class TvScreen extends ConsumerStatefulWidget {
+  const TvScreen({super.key});
 
-  //int _selectedItem;
+  @override
+  _TvScreenState createState() => _TvScreenState();
+}
+
+class _TvScreenState extends ConsumerState<TvScreen> {
   String selectedValue = "";
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return ConsumerPlatformWidget(
       ref: ref,
       androidBuilder: _androidBuilder,
@@ -61,7 +65,7 @@ class TvScreen extends ConsumerWidget {
   ) {
     final tvChannel = ref.watch(tvChannelsProvider);
     final gameId = ref.watch(gameIdStateProvider);
-    //final wGameId = ref.watch(watchedGameId);
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: tvChannel.when(
@@ -85,29 +89,40 @@ class TvScreen extends ConsumerWidget {
                       .value
                       .gameId;
             }
-            List<String> choices =
+            final List<String> choices =
                 data.channels.entries.map((e) => e.key).toList();
             print(choices);
             print(titleText);
             print(choices.indexOf(choiceString));
             return InkWell(
-              child: Text(titleText),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(titleText),
+                  const Icon(
+                    Icons.arrow_drop_down,
+                    color: Colors.white,
+                    size: 34.0,
+                  ),
+                ],
+              ),
               onTap: () {
                 showIosChoices(
                   context,
                   choices,
-                  choices.indexOf(titleText),
+                  choices.indexOf(choiceString),
                 ).then((val) {
+                  print("This is val");
+                  print(val);
                   String? tempGameId = data.channels.entries
                       .where((element) => element.key == selectedValue)
                       .first
                       .value
                       .gameId;
                   if (selectedValue == "Top Rated") tempGameId = null;
-                  //Navigator.pop(context);
+
                   print(tempGameId);
-                  //Provider.of<Counter>(context, listen: false)
-                  //    .incrementCounter();
+
                   ref.read(gameIdStateProvider.notifier).state = tempGameId;
                 });
               },
