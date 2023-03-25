@@ -149,6 +149,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
 
   void continueWithNextPuzzle(PuzzleContext nextContext) {
     state = _loadNewContext(nextContext).copyWith(
+      streakIndex: state.streakIndex,
       streakHasSkipped: state.streakHasSkipped,
     );
   }
@@ -216,7 +217,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     final service = ref.read(defaultPuzzleServiceProvider);
     final repo = ref.read(puzzleRepositoryProvider);
 
-    final nextStreakIndex = state.streakIndex ?? 0 + 1;
+    final nextStreakIndex = (state.streakIndex ?? 0) + 1;
 
     final next = streak != null
         ? await repo.fetch(streak!.get(nextStreakIndex)).fold(
