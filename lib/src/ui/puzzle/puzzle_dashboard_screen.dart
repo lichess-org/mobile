@@ -117,7 +117,7 @@ class _Body extends ConsumerWidget {
       Padding(
         padding: Styles.bodySectionBottomPadding,
         child: CardButton(
-          icon: const Icon(LichessIcons.target, size: 44),
+          icon: const Icon(LichessIcons.streak, size: 44),
           title: const Text('Puzzle Streak'),
           subtitle: Text(context.l10n.puzzleStreakDescription),
           onTap: connectivity.when(

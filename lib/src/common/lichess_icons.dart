@@ -71,6 +71,8 @@ class LichessIcons {
       IconData(0xe813, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData racing_kings =
       IconData(0xe814, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData streak =
+      IconData(0xe816, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData step_backward =
       IconData(0xf048, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData fast_backward =

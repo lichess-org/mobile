@@ -206,10 +206,12 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     final sessionNotifier =
         puzzleSessionProvider(context.userId, context.theme).notifier;
 
-    ref.read(sessionNotifier).addAttempt(
-          state.puzzle.puzzle.id,
-          win: result == PuzzleResult.win,
-        );
+    if (streak != null) {
+      ref.read(sessionNotifier).addAttempt(
+            state.puzzle.puzzle.id,
+            win: result == PuzzleResult.win,
+          );
+    }
 
     final service = ref.read(defaultPuzzleServiceProvider);
     final repo = ref.read(puzzleRepositoryProvider);

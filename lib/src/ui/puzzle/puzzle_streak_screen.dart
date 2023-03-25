@@ -8,6 +8,8 @@ import 'package:share_plus/share_plus.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -21,7 +23,6 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
 import 'puzzle_view_model.dart';
 import 'puzzle_feedback_widget.dart';
-import 'puzzle_session_widget.dart';
 
 class PuzzleStreakScreen extends StatelessWidget {
   const PuzzleStreakScreen({super.key});
@@ -111,6 +112,9 @@ class _Body extends ConsumerWidget {
     final viewModelProvider =
         puzzleViewModelProvider(initialPuzzleContext, streak: streak);
     final puzzleState = ref.watch(viewModelProvider);
+    final streakColor = defaultTargetPlatform == TargetPlatform.iOS
+        ? LichessColors.brag
+        : Theme.of(context).colorScheme.primary;
     return Column(
       children: [
         Expanded(
@@ -148,45 +152,30 @@ class _Body extends ConsumerWidget {
                     ),
                   ),
                 ),
-                bottomTable: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (puzzleState.glicko != null)
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 10.0,
-                          left: 10.0,
-                          right: 10.0,
-                        ),
-                        child: Row(
-                          children: [
-                            Text(context.l10n.rating),
-                            const SizedBox(width: 5.0),
-                            TweenAnimationBuilder<double>(
-                              tween: Tween<double>(
-                                begin: puzzleState.glicko!.rating,
-                                end: puzzleState.nextContext?.glicko?.rating ??
-                                    puzzleState.glicko!.rating,
-                              ),
-                              duration: const Duration(milliseconds: 500),
-                              builder: (context, double rating, _) {
-                                return Text(
-                                  rating.truncate().toString(),
-                                  style: const TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
+                bottomTable: Padding(
+                  padding: const EdgeInsets.only(
+                    top: 10.0,
+                    left: 10.0,
+                    right: 10.0,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        LichessIcons.streak,
+                        size: 40.0,
+                        color: streakColor,
+                      ),
+                      const SizedBox(width: 8.0),
+                      Text(
+                        (puzzleState.streakIndex ?? 0).toString(),
+                        style: TextStyle(
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.bold,
+                          color: streakColor,
                         ),
                       ),
-                    PuzzleSessionWidget(
-                      initialPuzzleContext: initialPuzzleContext,
-                      viewModelProvider: viewModelProvider,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
