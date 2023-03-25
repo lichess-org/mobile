@@ -87,6 +87,23 @@ class PuzzleRepository {
         );
   }
 
+  FutureResult<PuzzleStreakResponse> streak() {
+    return apiClient
+        .get(Uri.parse('$kLichessHost/api/streak'))
+        .flatMap((response) {
+      return readJsonObject(
+        response.body,
+        mapper: (Map<String, dynamic> json) {
+          return PuzzleStreakResponse(
+            puzzle: _puzzleFromPick(pick(json).required()),
+            streak: pick(json['streak']).asStringOrThrow(),
+          );
+        },
+        logger: _log,
+      );
+    });
+  }
+
   FutureResult<Puzzle> daily() {
     return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/daily')).flatMap(
           (response) => readJsonObject(
@@ -140,6 +157,14 @@ class PuzzleBatchResponse with _$PuzzleBatchResponse {
     PuzzleGlicko? glicko,
     IList<PuzzleRound>? rounds,
   }) = _PuzzleBatchResponse;
+}
+
+@freezed
+class PuzzleStreakResponse with _$PuzzleStreakResponse {
+  const factory PuzzleStreakResponse({
+    required Puzzle puzzle,
+    required String streak,
+  }) = _PuzzleStreakResponse;
 }
 
 // --

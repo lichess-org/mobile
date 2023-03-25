@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -27,15 +26,15 @@ import 'puzzle_view_model.dart';
 import 'puzzle_feedback_widget.dart';
 import 'puzzle_session_widget.dart';
 
-class PuzzleScreen extends StatelessWidget {
-  const PuzzleScreen({
+class PuzzleStreakScreen extends StatelessWidget {
+  const PuzzleStreakScreen({
     required this.theme,
-    this.initialPuzzleContext,
+    required this.initialPuzzleContext,
     super.key,
   });
 
   final PuzzleTheme theme;
-  final PuzzleContext? initialPuzzleContext;
+  final PuzzleContext initialPuzzleContext;
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +50,9 @@ class PuzzleScreen extends StatelessWidget {
         actions: [ToggleSoundButton()],
         title: Text(puzzleThemeL10n(context, theme).name),
       ),
-      body: initialPuzzleContext != null
-          ? _Body(
-              initialPuzzleContext: initialPuzzleContext!,
-            )
-          : _LoadPuzzle(theme: theme),
+      body: _Body(
+        initialPuzzleContext: initialPuzzleContext,
+      ),
     );
   }
 
@@ -65,63 +62,9 @@ class PuzzleScreen extends StatelessWidget {
         middle: Text(puzzleThemeL10n(context, theme).name),
         trailing: ToggleSoundButton(),
       ),
-      child: initialPuzzleContext != null
-          ? _Body(
-              initialPuzzleContext: initialPuzzleContext!,
-            )
-          : _LoadPuzzle(theme: theme),
-    );
-  }
-}
-
-class _LoadPuzzle extends ConsumerWidget {
-  const _LoadPuzzle({required this.theme});
-
-  final PuzzleTheme theme;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final nextPuzzle = ref.watch(nextPuzzleProvider(theme));
-
-    return nextPuzzle.when(
-      data: (data) {
-        if (data == null) {
-          return const Center(
-            child: TableBoardLayout(
-              topTable: kEmptyWidget,
-              bottomTable: kEmptyWidget,
-              boardData: cg.BoardData(
-                fen: kEmptyFen,
-                interactableSide: cg.InteractableSide.none,
-                orientation: cg.Side.white,
-              ),
-              errorMessage: 'No more puzzles. Go online to get more.',
-            ),
-          );
-        } else {
-          return _Body(
-            initialPuzzleContext: data,
-          );
-        }
-      },
-      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-      error: (e, s) {
-        debugPrint(
-          'SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s',
-        );
-        return Center(
-          child: TableBoardLayout(
-            topTable: kEmptyWidget,
-            bottomTable: kEmptyWidget,
-            boardData: const cg.BoardData(
-              fen: kEmptyFen,
-              interactableSide: cg.InteractableSide.none,
-              orientation: cg.Side.white,
-            ),
-            errorMessage: e.toString(),
-          ),
-        );
-      },
+      child: _Body(
+        initialPuzzleContext: initialPuzzleContext,
+      ),
     );
   }
 }

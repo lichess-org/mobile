@@ -16,18 +16,18 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 
-part 'puzzle_screen_model.g.dart';
-part 'puzzle_screen_model.freezed.dart';
+part 'puzzle_view_model.g.dart';
+part 'puzzle_view_model.freezed.dart';
 
 @riverpod
-class PuzzleScreenModel extends _$PuzzleScreenModel {
+class PuzzleViewModel extends _$PuzzleViewModel {
   // ignore: avoid-late-keyword
   late Node _gameTree;
   Timer? _firstMoveTimer;
   Timer? _viewSolutionTimer;
 
   @override
-  PuzzleScreenState build(PuzzleContext context) {
+  PuzzleViewModelState build(PuzzleContext context) {
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
       _viewSolutionTimer?.cancel();
@@ -141,7 +141,7 @@ class PuzzleScreenModel extends _$PuzzleScreenModel {
 
   // --
 
-  PuzzleScreenState _loadNewContext(PuzzleContext context) {
+  PuzzleViewModelState _loadNewContext(PuzzleContext context) {
     final root = Root.fromPgn(context.puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
 
@@ -152,7 +152,7 @@ class PuzzleScreenModel extends _$PuzzleScreenModel {
 
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
 
-    return PuzzleScreenState(
+    return PuzzleViewModelState(
       puzzle: context.puzzle,
       glicko: context.glicko,
       mode: PuzzleMode.play,
@@ -287,10 +287,10 @@ enum PuzzleResult { win, lose }
 enum PuzzleFeedback { good, bad }
 
 @freezed
-class PuzzleScreenState with _$PuzzleScreenState {
-  const PuzzleScreenState._();
+class PuzzleViewModelState with _$PuzzleViewModelState {
+  const PuzzleViewModelState._();
 
-  const factory PuzzleScreenState({
+  const factory PuzzleViewModelState({
     required Puzzle puzzle,
     required PuzzleGlicko? glicko,
     required PuzzleMode mode,
