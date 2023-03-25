@@ -96,7 +96,11 @@ class PuzzleRepository {
         mapper: (Map<String, dynamic> json) {
           return PuzzleStreakResponse(
             puzzle: _puzzleFromPick(pick(json).required()),
-            streak: pick(json['streak']).asStringOrThrow(),
+            streak: IList(
+              pick(json['streak']).asStringOrThrow().split(' ').map(
+                    (e) => PuzzleId(e),
+                  ),
+            ),
           );
         },
         logger: _log,
@@ -163,7 +167,7 @@ class PuzzleBatchResponse with _$PuzzleBatchResponse {
 class PuzzleStreakResponse with _$PuzzleStreakResponse {
   const factory PuzzleStreakResponse({
     required Puzzle puzzle,
-    required String streak,
+    required PuzzleStreak streak,
   }) = _PuzzleStreakResponse;
 }
 

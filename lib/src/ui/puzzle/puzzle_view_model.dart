@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:collection/collection.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
@@ -11,7 +12,9 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/tree.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
@@ -27,7 +30,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   Timer? _viewSolutionTimer;
 
   @override
-  PuzzleViewModelState build(PuzzleContext context) {
+  PuzzleViewModelState build(PuzzleContext context, {PuzzleStreak? streak}) {
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
       _viewSolutionTimer?.cancel();
@@ -198,16 +201,26 @@ class PuzzleViewModel extends _$PuzzleViewModel {
         );
 
     final service = ref.read(defaultPuzzleServiceProvider);
+    final repo = ref.read(puzzleRepositoryProvider);
 
-    final next = await service.solve(
-      userId: context.userId,
-      angle: context.theme,
-      solution: PuzzleSolution(
-        id: state.puzzle.puzzle.id,
-        win: state.result == PuzzleResult.win,
-        rated: context.userId != null,
-      ),
-    );
+    final next = streak != null
+        ? await repo.fetch(streak!.get(state.streakIndex ?? 0)).fold(
+              (puzzle) => PuzzleContext(
+                theme: PuzzleTheme.mix,
+                puzzle: puzzle,
+                userId: null,
+              ),
+              (_, __) => null,
+            )
+        : await service.solve(
+            userId: context.userId,
+            angle: context.theme,
+            solution: PuzzleSolution(
+              id: state.puzzle.puzzle.id,
+              win: state.result == PuzzleResult.win,
+              rated: context.userId != null,
+            ),
+          );
 
     final rounds = next?.rounds;
     if (rounds != null) {
@@ -218,6 +231,8 @@ class PuzzleViewModel extends _$PuzzleViewModel {
 
     state = state.copyWith(
       nextContext: next,
+      streakIndex:
+          streak != null && next != null ? (state.streakIndex ?? 0) + 1 : null,
     );
   }
 
@@ -304,6 +319,7 @@ class PuzzleViewModelState with _$PuzzleViewModelState {
     required bool resultSent,
     required bool isChangingDifficulty,
     PuzzleContext? nextContext,
+    int? streakIndex,
   }) = _PuzzleScreenState;
 
   ViewNode get node => nodeList.last;

@@ -8,16 +8,13 @@ import 'package:share_plus/share_plus.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
-import 'package:lichess_mobile/src/common/connectivity.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -27,14 +24,7 @@ import 'puzzle_feedback_widget.dart';
 import 'puzzle_session_widget.dart';
 
 class PuzzleStreakScreen extends StatelessWidget {
-  const PuzzleStreakScreen({
-    required this.theme,
-    required this.initialPuzzleContext,
-    super.key,
-  });
-
-  final PuzzleTheme theme;
-  final PuzzleContext initialPuzzleContext;
+  const PuzzleStreakScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,23 +38,59 @@ class PuzzleStreakScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [ToggleSoundButton()],
-        title: Text(puzzleThemeL10n(context, theme).name),
+        title: const Text('Puzzle Streak'),
       ),
-      body: _Body(
-        initialPuzzleContext: initialPuzzleContext,
-      ),
+      body: const _Load(),
     );
   }
 
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(puzzleThemeL10n(context, theme).name),
+        middle: const Text('Puzzle Streak'),
         trailing: ToggleSoundButton(),
       ),
-      child: _Body(
-        initialPuzzleContext: initialPuzzleContext,
-      ),
+      child: const _Load(),
+    );
+  }
+}
+
+class _Load extends ConsumerWidget {
+  const _Load();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final streak = ref.watch(streakProvider);
+
+    return streak.when(
+      data: (data) {
+        return _Body(
+          initialPuzzleContext: PuzzleContext(
+            puzzle: data.puzzle,
+            theme: PuzzleTheme.mix,
+            userId: null,
+          ),
+          streak: data.streak,
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      error: (e, s) {
+        debugPrint(
+          'SEVERE: [PuzzleStreakScreen] could not load streak; $e\n$s',
+        );
+        return Center(
+          child: TableBoardLayout(
+            topTable: kEmptyWidget,
+            bottomTable: kEmptyWidget,
+            boardData: const cg.BoardData(
+              fen: kEmptyFen,
+              interactableSide: cg.InteractableSide.none,
+              orientation: cg.Side.white,
+            ),
+            errorMessage: e.toString(),
+          ),
+        );
+      },
     );
   }
 }
@@ -72,15 +98,18 @@ class PuzzleStreakScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   const _Body({
     required this.initialPuzzleContext,
+    required this.streak,
   });
 
   final PuzzleContext initialPuzzleContext;
+  final PuzzleStreak streak;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet =
         ref.watch(boardPreferencesProvider.select((p) => p.pieceSet));
-    final viewModelProvider = puzzleViewModelProvider(initialPuzzleContext);
+    final viewModelProvider =
+        puzzleViewModelProvider(initialPuzzleContext, streak: streak);
     final puzzleState = ref.watch(viewModelProvider);
     return Column(
       children: [
@@ -184,7 +213,6 @@ class _BottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzleState = ref.watch(viewModelProvider);
-    final isDailyPuzzle = puzzleState.puzzle.isDailyPuzzle == true;
 
     return Container(
       padding: Styles.horizontalBodyPadding,
@@ -196,13 +224,6 @@ class _BottomBar extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            if (initialPuzzleContext.userId != null &&
-                !isDailyPuzzle &&
-                puzzleState.mode != PuzzleMode.view)
-              _DifficultySelector(
-                initialPuzzleContext: initialPuzzleContext,
-                viewModelProvider: viewModelProvider,
-              ),
             if (puzzleState.mode == PuzzleMode.view)
               BottomBarButton(
                 onTap: () {
@@ -215,16 +236,6 @@ class _BottomBar extends ConsumerWidget {
                 icon: defaultTargetPlatform == TargetPlatform.iOS
                     ? CupertinoIcons.share
                     : Icons.share,
-              ),
-            if (puzzleState.mode != PuzzleMode.view)
-              BottomBarButton(
-                icon: Icons.help,
-                label: context.l10n.viewTheSolution,
-                shortLabel: context.l10n.solution,
-                showAndroidShortLabel: true,
-                onTap: puzzleState.mode == PuzzleMode.view
-                    ? null
-                    : () => ref.read(viewModelProvider.notifier).viewSolution(),
               ),
             if (puzzleState.mode == PuzzleMode.view)
               BottomBarButton(
@@ -260,73 +271,6 @@ class _BottomBar extends ConsumerWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _DifficultySelector extends ConsumerWidget {
-  const _DifficultySelector({
-    required this.initialPuzzleContext,
-    required this.viewModelProvider,
-  });
-
-  final PuzzleContext initialPuzzleContext;
-  final PuzzleViewModelProvider viewModelProvider;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final difficulty = ref.watch(
-      puzzlePreferencesProvider(initialPuzzleContext.userId)
-          .select((state) => state.difficulty),
-    );
-    final state = ref.watch(viewModelProvider);
-    final connectivity = ref.watch(connectivityChangesProvider);
-    return connectivity.when(
-      data: (data) => StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
-          PuzzleDifficulty selectedDifficulty = difficulty;
-          return BottomBarButton(
-            icon: Icons.tune,
-            label: context.l10n.puzzleDifficultyLevel,
-            shortLabel: puzzleDifficultyL10n(context, difficulty),
-            showAndroidShortLabel: true,
-            onTap: !data.isOnline || state.isChangingDifficulty
-                ? null
-                : () {
-                    showChoicesPicker(
-                      context,
-                      choices: PuzzleDifficulty.values,
-                      selectedItem: difficulty,
-                      labelBuilder: (t) =>
-                          Text(puzzleDifficultyL10n(context, t)),
-                      onSelectedItemChanged: (PuzzleDifficulty? d) {
-                        if (d != null) {
-                          setState(() {
-                            selectedDifficulty = d;
-                          });
-                        }
-                      },
-                    ).then(
-                      (_) async {
-                        if (selectedDifficulty == difficulty) {
-                          return;
-                        }
-                        final nextContext = await ref
-                            .read(viewModelProvider.notifier)
-                            .changeDifficulty(selectedDifficulty);
-                        if (context.mounted && nextContext != null) {
-                          ref
-                              .read(viewModelProvider.notifier)
-                              .continueWithNextPuzzle(nextContext);
-                        }
-                      },
-                    );
-                  },
-          );
-        },
-      ),
-      loading: () => const ButtonLoadingIndicator(),
-      error: (_, __) => const SizedBox.shrink(),
     );
   }
 }

@@ -27,6 +27,12 @@ Future<PuzzleContext?> nextPuzzle(
 }
 
 @riverpod
+Future<PuzzleStreakResponse> streak(StreakRef ref) {
+  final repo = ref.watch(puzzleRepositoryProvider);
+  return Result.release(repo.streak());
+}
+
+@riverpod
 Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
   final repo = ref.watch(puzzleRepositoryProvider);
   return Result.release(repo.daily());

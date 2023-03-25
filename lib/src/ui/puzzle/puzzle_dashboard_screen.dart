@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/common/connectivity.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -11,9 +12,10 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 
+import 'puzzle_screen.dart';
 import 'puzzle_themes_screen.dart';
+import 'puzzle_streak_screen.dart';
 
 class PuzzleDashboardScreen extends StatelessWidget {
   const PuzzleDashboardScreen({super.key});
@@ -59,6 +61,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     const theme = PuzzleTheme.mix;
     final nextPuzzle = ref.watch(nextPuzzleProvider(theme));
+    final connectivity = ref.watch(connectivityChangesProvider);
 
     final content = [
       Padding(
@@ -109,6 +112,26 @@ class _Body extends ConsumerWidget {
               builder: (context) => const PuzzleThemesScreen(),
             );
           },
+        ),
+      ),
+      Padding(
+        padding: Styles.bodySectionBottomPadding,
+        child: CardButton(
+          icon: const Icon(LichessIcons.target, size: 44),
+          title: const Text('Puzzle Streak'),
+          subtitle: Text(context.l10n.puzzleStreakDescription),
+          onTap: connectivity.when(
+            data: (data) => data.isOnline
+                ? () {
+                    pushPlatformRoute(
+                      context,
+                      builder: (context) => const PuzzleStreakScreen(),
+                    );
+                  }
+                : null,
+            loading: () => null,
+            error: (_, __) => null,
+          ),
         ),
       ),
     ];

@@ -57,6 +57,8 @@ class PuzzleData with _$PuzzleData {
       _$PuzzleDataFromJson(json);
 }
 
+typedef PuzzleStreak = IList<PuzzleId>;
+
 @Freezed(fromJson: true, toJson: true)
 class PuzzleGlicko with _$PuzzleGlicko {
   const PuzzleGlicko._();
