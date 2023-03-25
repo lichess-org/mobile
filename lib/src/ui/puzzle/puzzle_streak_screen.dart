@@ -237,6 +237,17 @@ class _BottomBar extends ConsumerWidget {
                     ? CupertinoIcons.share
                     : Icons.share,
               ),
+            if (puzzleState.mode != PuzzleMode.view)
+              BottomBarButton(
+                icon: Icons.skip_next,
+                label: context.l10n.skipThisMove,
+                shortLabel: 'Skip',
+                showAndroidShortLabel: true,
+                onTap: puzzleState.streakHasSkipped == true ||
+                        puzzleState.mode == PuzzleMode.view
+                    ? null
+                    : () => ref.read(viewModelProvider.notifier).skipMove(),
+              ),
             if (puzzleState.mode == PuzzleMode.view)
               BottomBarButton(
                 onTap: puzzleState.canGoBack

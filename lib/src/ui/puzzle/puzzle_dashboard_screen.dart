@@ -125,6 +125,7 @@ class _Body extends ConsumerWidget {
                 ? () {
                     pushPlatformRoute(
                       context,
+                      rootNavigator: true,
                       builder: (context) => const PuzzleStreakScreen(),
                     );
                   }

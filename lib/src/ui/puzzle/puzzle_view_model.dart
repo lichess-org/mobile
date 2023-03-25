@@ -115,6 +115,15 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     });
   }
 
+  void skipMove() {
+    state = state.copyWith(
+      streakHasSkipped: true,
+    );
+    final moveIndex = state.currentPath.size - state.initialPath.size;
+    final solution = state.puzzle.puzzle.solution[moveIndex];
+    playUserMove(Move.fromUci(solution)!);
+  }
+
   Future<PuzzleContext?> changeDifficulty(PuzzleDifficulty difficulty) async {
     state = state.copyWith(
       isChangingDifficulty: true,
@@ -139,7 +148,9 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   }
 
   void continueWithNextPuzzle(PuzzleContext nextContext) {
-    state = _loadNewContext(nextContext);
+    state = _loadNewContext(nextContext).copyWith(
+      streakHasSkipped: state.streakHasSkipped,
+    );
   }
 
   // --
@@ -203,8 +214,10 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     final service = ref.read(defaultPuzzleServiceProvider);
     final repo = ref.read(puzzleRepositoryProvider);
 
+    final nextStreakIndex = state.streakIndex ?? 0 + 1;
+
     final next = streak != null
-        ? await repo.fetch(streak!.get(state.streakIndex ?? 0)).fold(
+        ? await repo.fetch(streak!.get(nextStreakIndex)).fold(
               (puzzle) => PuzzleContext(
                 theme: PuzzleTheme.mix,
                 puzzle: puzzle,
@@ -231,8 +244,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
 
     state = state.copyWith(
       nextContext: next,
-      streakIndex:
-          streak != null && next != null ? (state.streakIndex ?? 0) + 1 : null,
+      streakIndex: streak != null && next != null ? nextStreakIndex : null,
     );
   }
 
@@ -320,6 +332,7 @@ class PuzzleViewModelState with _$PuzzleViewModelState {
     required bool isChangingDifficulty,
     PuzzleContext? nextContext,
     int? streakIndex,
+    bool? streakHasSkipped,
   }) = _PuzzleScreenState;
 
   ViewNode get node => nodeList.last;
