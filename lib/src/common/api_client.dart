@@ -188,7 +188,7 @@ class _AuthClient extends BaseClient {
 
     request.headers['user-agent'] = ApiClient.userAgent(info, session?.user);
 
-    _logger.info('${request.method} ${request.url} ${request.headers}');
+    _logger.info('${request.method} ${request.url}', request.headers);
 
     return _inner.send(request);
   }
