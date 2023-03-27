@@ -5,6 +5,7 @@ import 'package:chessground/chessground.dart';
 
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
@@ -13,13 +14,19 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 
 import 'package:lichess_mobile/src/model/tv/featured_game.dart';
 
-class TvScreen extends ConsumerWidget {
+final _featuredGameWithSoundProvider = featuredGameProvider(withSound: true);
+
+class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ConsumerPlatformWidget(
-      ref: ref,
+  ConsumerState<TvScreen> createState() => _TvScreenState();
+}
+
+class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
+  @override
+  Widget build(BuildContext context) {
+    return PlatformWidget(
       androidBuilder: _androidBuilder,
       iosBuilder: _iosBuilder,
     );
@@ -27,7 +34,6 @@ class TvScreen extends ConsumerWidget {
 
   Widget _androidBuilder(
     BuildContext context,
-    WidgetRef ref,
   ) {
     return Scaffold(
       appBar: AppBar(
@@ -42,7 +48,6 @@ class TvScreen extends ConsumerWidget {
 
   Widget _iosBuilder(
     BuildContext context,
-    WidgetRef ref,
   ) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -51,6 +56,33 @@ class TvScreen extends ConsumerWidget {
       ),
       child: const _Body(),
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null && route is PageRoute) {
+      watchRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    watchRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPushNext() {
+    ref.read(_featuredGameWithSoundProvider.notifier).disconnectStream();
+    super.didPushNext();
+  }
+
+  @override
+  void didPopNext() {
+    ref.read(_featuredGameWithSoundProvider.notifier).connectStream();
+    super.didPopNext();
   }
 }
 
@@ -61,7 +93,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
     final featuredGame = currentTab == BottomTab.watch
-        ? ref.watch(featuredGameProvider(withSound: true))
+        ? ref.watch(_featuredGameWithSoundProvider)
         : const AsyncLoading<FeaturedGameState>();
 
     return SafeArea(
