@@ -10,10 +10,12 @@ import 'src/app.dart';
 void main() {
   if (kDebugMode) {
     Logger.root.onRecord.listen((record) {
-      final time = DateFormat.Hms().format(record.time);
-      debugPrint(
-        '${record.level.name} at $time [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error}' : ''}',
-      );
+      if (record.level >= Level.INFO) {
+        final time = DateFormat.Hms().format(record.time);
+        debugPrint(
+          '${record.level.name} at $time [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error}' : ''}',
+        );
+      }
     });
   }
 
@@ -39,7 +41,7 @@ class ProviderLogger extends ProviderObserver {
     Object? value,
     ProviderContainer container,
   ) {
-    _logger.info(
+    _logger.fine(
       '${provider.name ?? provider.runtimeType} initialized with: $value.',
     );
   }
@@ -49,7 +51,7 @@ class ProviderLogger extends ProviderObserver {
     ProviderBase<Object?> provider,
     ProviderContainer container,
   ) {
-    _logger.info('${provider.name ?? provider.runtimeType} disposed.');
+    _logger.fine('${provider.name ?? provider.runtimeType} disposed.');
   }
 
   @override
