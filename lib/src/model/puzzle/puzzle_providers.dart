@@ -26,7 +26,7 @@ Future<PuzzleContext?> nextPuzzle(
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
   final repo = ref.watch(puzzleRepositoryProvider);
   return Result.release(repo.daily());

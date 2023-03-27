@@ -26,7 +26,7 @@ Future<ConnectivityStatus> connectivity(ConnectivityRef ref) async {
 
 @riverpod
 Stream<ConnectivityStatus> connectivityChanges(ConnectivityChangesRef ref) {
-  // android needs to check connectivity on start
+  // some android devices needs to check connectivity on start
   final firstCheck =
       Stream.fromFuture(Connectivity().checkConnectivity()).asyncMap(
     (result) async => ConnectivityStatus(

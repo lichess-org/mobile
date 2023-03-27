@@ -33,13 +33,20 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
+  bool isOnline = true;
+
   @override
   Widget build(BuildContext context) {
     ref.listen(connectivityChangesProvider, (_, connectivity) {
-      if (!connectivity.isRefreshing &&
-          connectivity.hasValue &&
-          connectivity.value!.isOnline) {
-        _refreshData();
+      // Refresh the data only when the user comes back online
+      if (!connectivity.isRefreshing && connectivity.hasValue) {
+        final newOnlineValue = connectivity.value!.isOnline;
+
+        if (isOnline == false && newOnlineValue == true) {
+          _refreshData();
+        }
+
+        isOnline = newOnlineValue;
       }
     });
 
@@ -95,7 +102,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 }
 
-/// Scaffold with a sticky Create Game button at the bottom
 class _HomeScaffold extends StatelessWidget {
   const _HomeScaffold({
     required this.child,
