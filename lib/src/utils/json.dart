@@ -27,8 +27,9 @@ Result<T> readJsonObject<T>(
     return mapper(obj);
   });
   result.match(
-    onError: (error, st) =>
-        logger?.severe('Could not read json object as $T: $error\n$st'),
+    onError: (error, st) {
+      logger?.severe('Could not read json object as $T: $error\n$st');
+    },
   );
   return result;
 }

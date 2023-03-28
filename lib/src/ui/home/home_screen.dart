@@ -96,9 +96,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> _refreshData() {
-    return ref
-        .refresh(dailyPuzzleProvider.future)
-        .then((_) => ref.refresh(leaderboardProvider));
+    return ref.refresh(top1Provider.future);
   }
 }
 

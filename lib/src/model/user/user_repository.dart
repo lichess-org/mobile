@@ -71,6 +71,18 @@ class UserRepository {
     });
   }
 
+  FutureResult<IMap<Perf, LeaderboardUser>> getTop1() {
+    return apiClient
+        .get(Uri.parse('$kLichessHost/api/player/top/1/standard'))
+        .flatMap((response) {
+      return readJsonObject(
+        response.body,
+        mapper: _top1FromJson,
+        logger: _log,
+      );
+    });
+  }
+
   FutureResult<Leaderboard> getLeaderboard() {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/player'))
@@ -247,5 +259,28 @@ LeaderboardUser _leaderboardUserFromPick(RequiredPick pick) {
           (prefsPick) => prefsPick(prefMap.keys.first, 'progress'),
         )
         .asIntOrThrow(),
+  );
+}
+
+IMap<Perf, LeaderboardUser> _top1FromJson(Map<String, dynamic> json) {
+  final map = pick(json).asMapOrEmpty<String, Map<String, dynamic>>();
+  return IMap({
+    for (final entry in map.entries)
+      if (perfNameMap.containsKey(entry.key))
+        perfNameMap.get(entry.key)!: _top1userFromPick(
+          pick(map[entry.key]).required(),
+          perfNameMap.get(entry.key)!,
+        ),
+  });
+}
+
+LeaderboardUser _top1userFromPick(RequiredPick pick, Perf perf) {
+  return LeaderboardUser(
+    id: pick('id').asUserIdOrThrow(),
+    username: pick('username').asStringOrThrow(),
+    title: pick('title').asStringOrNull(),
+    patron: pick('patron').asBoolOrNull(),
+    rating: pick('perfs', perf.name, 'rating').asIntOrThrow(),
+    progress: pick('perfs', perf.name, 'progress').asIntOrThrow(),
   );
 }
