@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 import './countdown_clock.dart';
 
 /// A widget to display player information above/below the chess board.
@@ -30,38 +32,49 @@ class BoardPlayer extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  if (player.title != null) ...[
-                    Text(
-                      player.title!,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: LichessColors.brag,
+              child: GestureDetector(
+                onTap: player.lightUser != null
+                    ? () {
+                        pushPlatformRoute(
+                          context,
+                          builder: (context) =>
+                              UserScreen(user: player.lightUser!),
+                        );
+                      }
+                    : null,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    if (player.title != null) ...[
+                      Text(
+                        player.title!,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: LichessColors.brag,
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                    ],
+                    Flexible(
+                      child: Text(
+                        player.name,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 5),
+                    const SizedBox(width: 3),
+                    if (player.rating != null)
+                      Text(
+                        player.rating.toString(),
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 13),
+                      ),
                   ],
-                  Flexible(
-                    child: Text(
-                      player.name,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 3),
-                  if (player.rating != null)
-                    Text(
-                      player.rating.toString(),
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 13),
-                    ),
-                ],
+                ),
               ),
             ),
           ),

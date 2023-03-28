@@ -18,6 +18,8 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/ui/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
 
+final _featuredGameNoSoundProvider = featuredGameProvider(withSound: false);
+
 class WatchScreen extends ConsumerStatefulWidget {
   const WatchScreen({super.key});
 
@@ -25,7 +27,7 @@ class WatchScreen extends ConsumerStatefulWidget {
   _WatchScreenState createState() => _WatchScreenState();
 }
 
-class _WatchScreenState extends ConsumerState<WatchScreen> {
+class _WatchScreenState extends ConsumerState<WatchScreen> with RouteAware {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
@@ -111,6 +113,33 @@ class _WatchScreenState extends ConsumerState<WatchScreen> {
       ),
     );
   }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null && route is PageRoute) {
+      watchRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    watchRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPushNext() {
+    ref.read(_featuredGameNoSoundProvider.notifier).disconnectStream();
+    super.didPushNext();
+  }
+
+  @override
+  void didPopNext() {
+    ref.read(_featuredGameNoSoundProvider.notifier).connectStream();
+    super.didPopNext();
+  }
 }
 
 class _WatchTvWidget extends ConsumerWidget {
@@ -120,7 +149,7 @@ class _WatchTvWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
     final featuredGame = currentTab == BottomTab.watch
-        ? ref.watch(featuredGameProvider(withSound: false))
+        ? ref.watch(_featuredGameNoSoundProvider)
         : const AsyncLoading<FeaturedGameState>();
     return featuredGame.when(
       data: (game) {

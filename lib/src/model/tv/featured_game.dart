@@ -19,16 +19,7 @@ class FeaturedGame extends _$FeaturedGame {
 
   @override
   Future<FeaturedGameState> build({required bool withSound}) async {
-    final tvRepository = ref.watch(tvRepositoryProvider);
-    final stream = tvRepository.tvFeed().asBroadcastStream();
-
-    _streamSub = stream.listen((event) {
-      if (event is TvFeaturedEvent) {
-        _onFeaturedEvent(event);
-      } else if (event is TvFenEvent) {
-        _onFenEvent(event);
-      }
-    });
+    final stream = connectStream();
 
     ref.onDispose(() => _streamSub?.cancel());
 
@@ -45,6 +36,25 @@ class FeaturedGame extends _$FeaturedGame {
         );
       },
     );
+  }
+
+  Stream<TvEvent> connectStream() {
+    final tvRepository = ref.watch(tvRepositoryProvider);
+    final stream = tvRepository.tvFeed().asBroadcastStream();
+
+    _streamSub = stream.listen((event) {
+      if (event is TvFeaturedEvent) {
+        _onFeaturedEvent(event);
+      } else if (event is TvFenEvent) {
+        _onFenEvent(event);
+      }
+    });
+
+    return stream;
+  }
+
+  void disconnectStream() {
+    _streamSub?.cancel();
   }
 
   void _onFeaturedEvent(TvFeaturedEvent event) {
