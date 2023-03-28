@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -61,6 +62,11 @@ class App extends ConsumerWidget {
       supportedLocales: kSupportedLocales,
       onGenerateTitle: (BuildContext context) => 'lichess.org',
       theme: ThemeData(
+        textTheme: defaultTargetPlatform == TargetPlatform.iOS
+            ? brightness == Brightness.light
+                ? Typography.blackCupertino
+                : Typography.whiteCupertino
+            : null,
         colorSchemeSeed: boardTheme.colors.darkSquare,
         useMaterial3: true,
         brightness: brightness,
