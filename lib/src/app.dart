@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:lichess_mobile/src/app_dependencies.dart';
@@ -41,39 +40,11 @@ class LoadApp extends ConsumerWidget {
   }
 }
 
-class App extends ConsumerStatefulWidget {
+class App extends ConsumerWidget {
   const App({super.key});
 
   @override
-  ConsumerState<App> createState() => _AppState();
-}
-
-class _AppState extends ConsumerState<App> {
-  @override
-  void initState() {
-    super.initState();
-    BackButtonInterceptor.add(backButtonInterceptor);
-  }
-
-  @override
-  void dispose() {
-    BackButtonInterceptor.remove(backButtonInterceptor);
-    super.dispose();
-  }
-
-  // ignore: avoid_positional_boolean_parameters
-  bool backButtonInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    final navKey = ref.read(currentNavigatorKeyProvider);
-    final navigator = navKey.currentState;
-    if (navigator != null && navigator.canPop()) {
-      navigator.pop();
-      return true;
-    }
-    return false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(
       generalPreferencesProvider.select(
         (state) => state.themeMode,
