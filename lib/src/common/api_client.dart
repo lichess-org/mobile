@@ -59,7 +59,6 @@ class ApiClient {
   }) : _retryClient = RetryClient.withDelays(
           _client,
           retries,
-          whenError: (_, __) => true,
         ) {
     _log.info('Creating new ApiClient.');
   }
@@ -75,7 +74,7 @@ class ApiClient {
   FutureResult<Response> get(
     Uri url, {
     Map<String, String>? headers,
-    bool retry = false,
+    bool retry = true,
   }) =>
       Result.capture(
         (retry ? _retryClient : _client).get(url, headers: headers),
@@ -91,7 +90,7 @@ class ApiClient {
     Map<String, String>? headers,
     Object? body,
     Encoding? encoding,
-    bool retry = false,
+    bool retry = true,
   }) =>
       Result.capture(
         (retry ? _retryClient : _client)
@@ -108,7 +107,7 @@ class ApiClient {
     Map<String, String>? headers,
     Object? body,
     Encoding? encoding,
-    bool retry = false,
+    bool retry = true,
   }) =>
       Result.capture(
         (retry ? _retryClient : _client)

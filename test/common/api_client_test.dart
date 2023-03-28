@@ -92,7 +92,7 @@ void main() {
       }
     });
 
-    test('retry on error when asked', () async {
+    test('retry on error by default', () async {
       final mockClient = MockClient();
       final apiClient = ApiClient(mockLogger, mockClient);
 
@@ -101,12 +101,14 @@ void main() {
       when(() => mockClient.send(any())).thenAnswer((_) async {
         retries--;
         return retries > 0
-            ? throw const SocketException('oops')
+            ? http.StreamedResponse(
+                Stream.fromIterable([utf8.encode('error')]),
+                503,
+              )
             : http.StreamedResponse(_streamBody('ok'), 200);
       });
 
-      final resp =
-          await apiClient.get(Uri.parse('http://api.test/retry'), retry: true);
+      final resp = await apiClient.get(Uri.parse('http://api.test/retry'));
 
       verify(() => mockClient.send(any())).called(3);
       expect(resp, isA<ValueResult<http.Response>>());
