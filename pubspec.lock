@@ -390,10 +390,11 @@ packages:
   fl_chart:
     dependency: "direct main"
     description:
-      name: fl_chart
-      sha256: e97c5b850ad056e9b3a85d3afeb44c239a83aa994a90723940dac82234f2efaf
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: "07c4f15a701a175d3efefc68b4e90b38c76caff3"
+      resolved-ref: "07c4f15a701a175d3efefc68b4e90b38c76caff3"
+      url: "https://github.com/nav-28/fl_chart.git"
+    source: git
     version: "0.61.0"
   flutter:
     dependency: "direct main"

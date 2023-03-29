@@ -101,6 +101,18 @@ class PuzzleRepository {
         );
   }
 
+  FutureResult<PuzzleDashboard> puzzleDashboard(int days) {
+    return apiClient
+        .get(Uri.parse('$kLichessHost/api/puzzle/dashboard/$days'))
+        .flatMap((response) {
+      return readJsonObject(
+        response.body,
+        mapper: _puzzleDashboardFromJson,
+        logger: _log,
+      );
+    });
+  }
+
   Result<PuzzleBatchResponse> _decodeBatchResponse(http.Response response) {
     return readJsonObject(
       response.body,
@@ -130,18 +142,6 @@ class PuzzleRepository {
       },
       logger: _log,
     );
-  }
-
-  FutureResult<PuzzleDashboard> puzzleDashboard(int days) {
-    return apiClient
-        .get(Uri.parse('$kLichessHost/api/puzzle/dashboard/$days'))
-        .flatMap((response) {
-      return readJsonObject(
-        response.body,
-        mapper: _puzzleDashboardFromJson,
-        logger: _log,
-      );
-    });
   }
 }
 
@@ -236,28 +236,28 @@ PuzzleDashboard _puzzleDashboardFromPick(RequiredPick pick) => PuzzleDashboard(
         firstWins: pick('global')('firstWins').asIntOrThrow(),
         replayWins: pick('global')('replayWins').asIntOrThrow(),
         performance: pick('global')('performance').asIntOrThrow(),
+        theme: PuzzleTheme.mix,
       ),
       themes: pick('themes')
-          .asMapOrThrow<String, dynamic>()
+          .asMapOrThrow<String, Map<String, dynamic>>()
           .keys
           .map(
             (key) => _puzzleDashboardDataFromPick(
               pick('themes')(key)('results').required(),
-              pick('themes')(key)('theme').asStringOrThrow(),
+              key,
             ),
           )
-          .toIList()
-          .sort((a, b) => b.nb.compareObjectTo(a.nb)),
+          .toIList(),
     );
 
 PuzzleDashboardData _puzzleDashboardDataFromPick(
   RequiredPick results,
-  String theme,
+  String themeKey,
 ) =>
     PuzzleDashboardData(
       nb: results('nb').asIntOrThrow(),
       firstWins: results('firstWins').asIntOrThrow(),
       replayWins: results('replayWins').asIntOrThrow(),
       performance: results('performance').asIntOrThrow(),
-      theme: theme,
+      theme: puzzleThemeNameMap.get(themeKey) ?? PuzzleTheme.mix,
     );

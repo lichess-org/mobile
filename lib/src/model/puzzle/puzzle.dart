@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/common/tree.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/chess.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 
 part 'puzzle.freezed.dart';
 part 'puzzle.g.dart';
@@ -155,6 +156,6 @@ class PuzzleDashboardData with _$PuzzleDashboardData {
     required int firstWins,
     required int replayWins,
     required int performance,
-    String? theme,
+    required PuzzleTheme theme,
   }) = _PuzzleDashboardData;
 }
