@@ -225,7 +225,7 @@ class BottomBarButton extends StatelessWidget {
                     onPressed: onTap,
                     icon: Icon(icon),
                     tooltip: label,
-                    color: highlighted ? LichessColors.primary : null,
+                    color: highlighted ? themeData.colorScheme.primary : null,
                   ),
           ),
         );

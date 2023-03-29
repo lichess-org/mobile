@@ -145,9 +145,7 @@ class _SessionItem extends StatelessWidget {
           ? LichessColors.error.shade600
           : LichessColors.error.shade400;
 
-  Color get next => brightness == Brightness.light
-      ? LichessColors.primary.shade300
-      : LichessColors.primary.shade600;
+  Color get next => Colors.grey.withOpacity(0.5);
 
   @override
   Widget build(BuildContext context) {

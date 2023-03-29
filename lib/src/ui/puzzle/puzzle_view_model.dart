@@ -30,13 +30,16 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   Timer? _viewSolutionTimer;
 
   @override
-  PuzzleViewModelState build(PuzzleContext context, {PuzzleStreak? streak}) {
+  PuzzleViewModelState build(
+    PuzzleContext initialContext, {
+    PuzzleStreak? streak,
+  }) {
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
       _viewSolutionTimer?.cancel();
     });
 
-    return _loadNewContext(context);
+    return _loadNewContext(initialContext);
   }
 
   Future<void> playUserMove(Move move) async {
@@ -74,8 +77,10 @@ class PuzzleViewModel extends _$PuzzleViewModel {
           feedback: PuzzleFeedback.bad,
         );
         _sendResult(PuzzleResult.lose);
-        await Future<void>.delayed(const Duration(milliseconds: 500));
-        _setPath(state.currentPath.penultimate);
+        if (streak == null) {
+          await Future<void>.delayed(const Duration(milliseconds: 500));
+          _setPath(state.currentPath.penultimate);
+        }
       }
     }
   }
@@ -131,13 +136,13 @@ class PuzzleViewModel extends _$PuzzleViewModel {
 
     await ref
         .read(
-          puzzlePreferencesProvider(context.userId).notifier,
+          puzzlePreferencesProvider(initialContext.userId).notifier,
         )
         .setDifficulty(difficulty);
 
     final nextPuzzle = await ref.read(defaultPuzzleServiceProvider).resetBatch(
-          userId: context.userId,
-          angle: context.theme,
+          userId: initialContext.userId,
+          angle: initialContext.theme,
         );
 
     state = state.copyWith(
@@ -205,36 +210,54 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     );
 
     final sessionNotifier =
-        puzzleSessionProvider(context.userId, context.theme).notifier;
+        puzzleSessionProvider(initialContext.userId, initialContext.theme)
+            .notifier;
+    final service = ref.read(defaultPuzzleServiceProvider);
+    final repo = ref.read(puzzleRepositoryProvider);
+
+    final currentStreakIndex = state.streakIndex ?? 0;
 
     if (streak != null) {
+      // one fail and streak is over
+      if (result == PuzzleResult.lose) {
+        _mergeSolution();
+        final newPath = state.currentPath.penultimate;
+        state = state.copyWith(
+          currentPath: newPath,
+          mode: PuzzleMode.view,
+          nodeList: IList(_gameTree.nodesOn(newPath)),
+        );
+        if (initialContext.userId != null) {
+          repo.postStreakRun(currentStreakIndex);
+        }
+      }
+    } else {
       ref.read(sessionNotifier).addAttempt(
             state.puzzle.puzzle.id,
             win: result == PuzzleResult.win,
           );
     }
 
-    final service = ref.read(defaultPuzzleServiceProvider);
-    final repo = ref.read(puzzleRepositoryProvider);
-
-    final nextStreakIndex = (state.streakIndex ?? 0) + 1;
+    final nextStreakIndex = currentStreakIndex + 1;
 
     final next = streak != null
-        ? await repo.fetch(streak!.get(nextStreakIndex)).fold(
-              (puzzle) => PuzzleContext(
-                theme: PuzzleTheme.mix,
-                puzzle: puzzle,
-                userId: null,
-              ),
-              (_, __) => null,
-            )
+        ? result == PuzzleResult.win
+            ? await repo.fetch(streak!.get(nextStreakIndex)).fold(
+                  (puzzle) => PuzzleContext(
+                    theme: PuzzleTheme.mix,
+                    puzzle: puzzle,
+                    userId: null,
+                  ),
+                  (_, __) => null,
+                )
+            : null
         : await service.solve(
-            userId: context.userId,
-            angle: context.theme,
+            userId: initialContext.userId,
+            angle: initialContext.theme,
             solution: PuzzleSolution(
               id: state.puzzle.puzzle.id,
               win: state.result == PuzzleResult.win,
-              rated: context.userId != null,
+              rated: initialContext.userId != null,
             ),
           );
 
@@ -247,7 +270,11 @@ class PuzzleViewModel extends _$PuzzleViewModel {
 
     state = state.copyWith(
       nextContext: next,
-      streakIndex: streak != null && next != null ? nextStreakIndex : null,
+      streakIndex: streak != null
+          ? next != null
+              ? nextStreakIndex
+              : currentStreakIndex
+          : null,
     );
   }
 

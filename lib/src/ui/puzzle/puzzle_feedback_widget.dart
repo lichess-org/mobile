@@ -14,11 +14,13 @@ class PuzzleFeedbackWidget extends StatelessWidget {
     required this.puzzle,
     required this.state,
     required this.pieceSet,
+    required this.onStreak,
   });
 
   final Puzzle puzzle;
   final PuzzleViewModelState state;
   final cg.PieceSet pieceSet;
+  final bool onStreak;
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +35,23 @@ class PuzzleFeedbackWidget extends StatelessWidget {
             leading: state.result == PuzzleResult.win
                 ? const Icon(Icons.check, size: 36, color: LichessColors.good)
                 : null,
-            title: Text(
-              state.result == PuzzleResult.win
-                  ? context.l10n.puzzlePuzzleSuccess
-                  : context.l10n.puzzlePuzzleComplete,
-            ),
-            subtitle: Text('$puzzleRating. $playedXTimes.'),
+            title: onStreak && state.result == PuzzleResult.lose
+                ? const Text(
+                    'GAME OVER',
+                    style: TextStyle(
+                      fontSize: 24,
+                      letterSpacing: 2.0,
+                    ),
+                    textAlign: TextAlign.center,
+                  )
+                : Text(
+                    state.result == PuzzleResult.win
+                        ? context.l10n.puzzlePuzzleSuccess
+                        : context.l10n.puzzlePuzzleComplete,
+                  ),
+            subtitle: onStreak && state.result == PuzzleResult.lose
+                ? null
+                : Text('$puzzleRating. $playedXTimes.'),
           ),
         );
       case PuzzleMode.play:

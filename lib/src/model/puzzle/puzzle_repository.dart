@@ -108,6 +108,12 @@ class PuzzleRepository {
     });
   }
 
+  FutureResult<void> postStreakRun(int run) {
+    return apiClient.post(
+      Uri.parse('$kLichessHost/api/streak/$run'),
+    );
+  }
+
   FutureResult<Puzzle> daily() {
     return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/daily')).flatMap(
           (response) => readJsonObject(

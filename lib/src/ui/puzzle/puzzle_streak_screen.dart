@@ -114,7 +114,7 @@ class _Body extends ConsumerWidget {
     final puzzleState = ref.watch(viewModelProvider);
     final streakColor = defaultTargetPlatform == TargetPlatform.iOS
         ? LichessColors.brag
-        : Theme.of(context).colorScheme.primary;
+        : Theme.of(context).colorScheme.secondary;
     return Column(
       children: [
         Expanded(
@@ -149,6 +149,7 @@ class _Body extends ConsumerWidget {
                       puzzle: puzzleState.puzzle,
                       state: puzzleState,
                       pieceSet: pieceSet,
+                      onStreak: true,
                     ),
                   ),
                 ),
@@ -256,18 +257,29 @@ class _BottomBar extends ConsumerWidget {
                 icon: CupertinoIcons.chevron_forward,
               ),
             if (puzzleState.mode == PuzzleMode.view)
-              BottomBarButton(
-                onTap: puzzleState.mode == PuzzleMode.view &&
-                        puzzleState.nextContext != null
-                    ? () => ref
-                        .read(viewModelProvider.notifier)
-                        .continueWithNextPuzzle(puzzleState.nextContext!)
-                    : null,
-                highlighted: true,
-                label: context.l10n.puzzleContinueTraining,
-                shortLabel: 'Continue',
-                icon: CupertinoIcons.play_arrow_solid,
-              ),
+              if (puzzleState.result == PuzzleResult.win)
+                BottomBarButton(
+                  onTap: puzzleState.mode == PuzzleMode.view &&
+                          puzzleState.nextContext != null
+                      ? () => ref
+                          .read(viewModelProvider.notifier)
+                          .continueWithNextPuzzle(puzzleState.nextContext!)
+                      : null,
+                  highlighted: true,
+                  label: context.l10n.puzzleContinueTheStreak,
+                  shortLabel: 'Continue',
+                  icon: CupertinoIcons.play_arrow_solid,
+                )
+              else
+                BottomBarButton(
+                  onTap: ref.read(streakProvider).isLoading == false
+                      ? () => ref.invalidate(streakProvider)
+                      : null,
+                  highlighted: true,
+                  label: context.l10n.puzzleNewStreak,
+                  shortLabel: 'New Streak',
+                  icon: CupertinoIcons.play_arrow_solid,
+                ),
           ],
         ),
       ),

@@ -173,6 +173,7 @@ class _Body extends ConsumerWidget {
                       puzzle: puzzleState.puzzle,
                       state: puzzleState,
                       pieceSet: pieceSet,
+                      onStreak: false,
                     ),
                   ),
                 ),
