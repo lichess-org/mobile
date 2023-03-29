@@ -1,7 +1,9 @@
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:tuple/tuple.dart';
 import 'package:soundpool/soundpool.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart'
+    hide Tuple2;
 
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
@@ -17,7 +19,27 @@ SoundService soundService(SoundServiceRef ref) {
   // requireValue is possible because appDependenciesProvider is loaded before
   // anything. See: lib/src/app.dart
   final deps = ref.watch(appDependenciesProvider).requireValue;
-  return SoundService(deps.soundPool, deps.sounds, ref);
+  final pool = deps.soundPool;
+  return SoundService(pool.item1, pool.item2, ref);
+}
+
+@Riverpod(keepAlive: true)
+Future<Tuple2<Soundpool, SoundMap>> soundPool(SoundPoolRef ref) async {
+  final pool = Soundpool.fromOptions(
+    options: const SoundpoolOptions(
+      iosOptions: SoundpoolOptionsIos(
+        enableRate: false,
+        audioSessionCategory: AudioSessionCategory.ambient,
+        audioSessionMode: AudioSessionMode.normal,
+      ),
+    ),
+  );
+
+  ref.onDispose(pool.release);
+
+  final sounds = await loadSounds(pool);
+
+  return Tuple2(pool, sounds);
 }
 
 Future<SoundMap> loadSounds(Soundpool pool) async {
