@@ -393,7 +393,7 @@ packages:
       path: "."
       ref: "07c4f15a701a175d3efefc68b4e90b38c76caff3"
       resolved-ref: "07c4f15a701a175d3efefc68b4e90b38c76caff3"
-      url: "https://github.com/nav-28/fl_chart.git"
+      url: "https://github.com/veloce/fl_chart.git"
     source: git
     version: "0.61.0"
   flutter:

@@ -60,7 +60,7 @@ dependencies:
   share_plus: ^6.3.1
   fl_chart:
     git:
-      url: https://github.com/nav-28/fl_chart.git
+      url: https://github.com/veloce/fl_chart.git
       ref: 07c4f15a701a175d3efefc68b4e90b38c76caff3
   stream_transform: ^2.1.0
   flutter_native_splash: ^2.2.19
