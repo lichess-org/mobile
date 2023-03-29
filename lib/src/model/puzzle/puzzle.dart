@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/common/tree.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/chess.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 
 part 'puzzle.freezed.dart';
 part 'puzzle.g.dart';
@@ -138,4 +139,23 @@ class PuzzlePreview with _$PuzzlePreview {
       initialMove: node.sanMove.move,
     );
   }
+}
+
+@freezed
+class PuzzleDashboard with _$PuzzleDashboard {
+  const factory PuzzleDashboard({
+    required PuzzleDashboardData global,
+    required IList<PuzzleDashboardData> themes,
+  }) = _PuzzleDashboard;
+}
+
+@freezed
+class PuzzleDashboardData with _$PuzzleDashboardData {
+  const factory PuzzleDashboardData({
+    required int nb,
+    required int firstWins,
+    required int replayWins,
+    required int performance,
+    required PuzzleTheme theme,
+  }) = _PuzzleDashboardData;
 }

@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Niets te tonen, speel eerst wat puzzels!",
   "puzzleImprovementAreasDescription": "Train deze om je voortgang te optimaliseren!",
   "puzzleStrengthDescription": "Je presteert het beste in deze thema's",
-  "playedXTimes": "{count, plural, =1{{count} keer gespeeld} other{{count} keer gespeeld}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Eén punt onder je puzzelrating} other{{count} punten onder je puzzelrating}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Eén punt boven je puzzelrating} other{{count} punten boven je puzzelrating}}",
-  "nbPlayed": "{count, plural, =1{{count} gespeeld} other{{count} gespeeld}}",
-  "nbToReplay": "{count, plural, =1{{count} om te herhalen} other{{count} om te herhalen}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{{count} keer gespeeld} other{{count} keer gespeeld}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Eén punt onder je puzzelrating} other{{count} punten onder je puzzelrating}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Eén punt boven je puzzelrating} other{{count} punten boven je puzzelrating}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} gespeeld} other{{count} gespeeld}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} om te herhalen} other{{count} om te herhalen}}",
   "puzzleThemeAdvancedPawn": "Opgerukte pion",
   "puzzleThemeAdvancedPawnDescription": "Een pion die promoveert of dreigt te promoveren is hier cruciaal.",
   "puzzleThemeAdvantage": "Voordeel",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Wijzig/verwijder je foto",
   "streamerUploadPicture": "Upload een foto",
   "streamerMaxSize": "Maximale grootte: {param}",
-  "keepItShort": "{count, plural, =1{Houd het kort: maximaal {count} tekens} other{Houd het kort: maximaal {count} tekens}}"
+  "streamerKeepItShort": "{count, plural, =1{Houd het kort: maximaal {count} tekens} other{Houd het kort: maximaal {count} tekens}}"
 }

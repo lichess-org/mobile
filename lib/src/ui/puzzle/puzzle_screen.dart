@@ -249,7 +249,8 @@ class _Feedback extends StatelessWidget {
       case PuzzleMode.view:
         final puzzleRating =
             context.l10n.puzzleRatingX(puzzle.puzzle.rating.toString());
-        final playedXTimes = context.l10n.playedXTimes(puzzle.puzzle.plays);
+        final playedXTimes =
+            context.l10n.puzzlePlayedXTimes(puzzle.puzzle.plays);
         return PlatformCard(
           child: ListTile(
             leading: state.result == PuzzleResult.win

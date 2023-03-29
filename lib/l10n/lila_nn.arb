@@ -884,11 +884,11 @@
   "puzzleNoPuzzlesToShow": "Ikkje noko å visa, spel nokre oppgåver fyrst!",
   "puzzleImprovementAreasDescription": "Øv på desse for å betra framgongen!",
   "puzzleStrengthDescription": "Du klarar deg best i disse temaa",
-  "playedXTimes": "{count, plural, =1{Spela {count} gong} other{Spela {count} gonger}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Eitt poeng under problemløysar-ratinga di} other{{count} poeng under problemløysar-ratinga di}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Eitt poeng over problemløysar-ratinga di} other{{count} poeng over problemløysar-ratinga di}}",
-  "nbPlayed": "{count, plural, =1{{count} spela} other{{count} spela}}",
-  "nbToReplay": "{count, plural, =1{{count} å spela omatt} other{{count} å spela omatt}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Spela {count} gong} other{Spela {count} gonger}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Eitt poeng under problemløysar-ratinga di} other{{count} poeng under problemløysar-ratinga di}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Eitt poeng over problemløysar-ratinga di} other{{count} poeng over problemløysar-ratinga di}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} spela} other{{count} spela}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} å spela omatt} other{{count} å spela omatt}}",
   "puzzleThemeAdvancedPawn": "Framskoten bonde",
   "puzzleThemeAdvancedPawnDescription": "Ein bonde som blir forvandla eller trugar med å bli forvandla er ein taktisk nøkkel.",
   "puzzleThemeAdvantage": "Fordel",
@@ -1095,5 +1095,5 @@
   "streamerChangePicture": "Endre/slette profilbiletet",
   "streamerUploadPicture": "Last opp eit bilete",
   "streamerMaxSize": "Maks storleik: {param}",
-  "keepItShort": "{count, plural, =1{Maksimum {count} teikn} other{Maksimum {count} teikn}}"
+  "streamerKeepItShort": "{count, plural, =1{Maksimum {count} teikn} other{Maksimum {count} teikn}}"
 }

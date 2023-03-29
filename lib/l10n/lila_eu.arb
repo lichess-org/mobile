@@ -876,11 +876,11 @@
   "puzzleNoPuzzlesToShow": "Ez dago ezer erakusteko, ebatzi ariketa batzuk!",
   "puzzleImprovementAreasDescription": "Entrenatu zure eboluzioa hobetzeko!",
   "puzzleStrengthDescription": "Gai hauetan zabiltza ondoen",
-  "playedXTimes": "{count, plural, =1{Behin jokatuta} other{{count} aldiz jokatuta}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Ariketen zure puntuazioa baino puntu bat beherago} other{Ariketen zure puntuazioa baino {count} puntu beherago}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Ariketen zure puntuazioa baino puntu bat gorago} other{Ariketen zure puntuazioa baino {count} puntu gorago}}",
-  "nbPlayed": "{count, plural, =1{{count} jokatuta} other{{count} jokatuta}}",
-  "nbToReplay": "{count, plural, =1{{count} berriz egiteko} other{{count} berriz egiteko}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Behin jokatuta} other{{count} aldiz jokatuta}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Ariketen zure puntuazioa baino puntu bat beherago} other{Ariketen zure puntuazioa baino {count} puntu beherago}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Ariketen zure puntuazioa baino puntu bat gorago} other{Ariketen zure puntuazioa baino {count} puntu gorago}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} jokatuta} other{{count} jokatuta}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} berriz egiteko} other{{count} berriz egiteko}}",
   "puzzleThemeAdvancedPawn": "Peoi aurreratua",
   "puzzleThemeAdvancedPawnDescription": "Sustatuko den edo sustatze-bidean dagoen peoia da ariketa honen muina.",
   "puzzleThemeAdvantage": "Abantaila",
@@ -1087,5 +1087,5 @@
   "streamerChangePicture": "Zure argazkiak aldatu/ezabatu",
   "streamerUploadPicture": "Argazkia kargatu",
   "streamerMaxSize": "Gehienezko tamaina: {param}",
-  "keepItShort": "{count, plural, =1{Laburra izan dadila: gehienez karaktere {count}} other{Laburra izan dadila: gehienez {count} karaktere}}"
+  "streamerKeepItShort": "{count, plural, =1{Laburra izan dadila: gehienez karaktere {count}} other{Laburra izan dadila: gehienez {count} karaktere}}"
 }

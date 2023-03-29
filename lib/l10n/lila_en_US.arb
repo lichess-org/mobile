@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Nothing to show, go play some puzzles first!",
   "puzzleImprovementAreasDescription": "Train these to optimize your progress!",
   "puzzleStrengthDescription": "You perform the best in these themes",
-  "playedXTimes": "{count, plural, =1{Played {count} time} other{Played {count} times}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{One point below your puzzle rating} other{{count} points below your puzzle rating}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{One point above your puzzle rating} other{{count} points above your puzzle rating}}",
-  "nbPlayed": "{count, plural, =1{{count} played} other{{count} played}}",
-  "nbToReplay": "{count, plural, =1{{count} to replay} other{{count} to replay}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Played {count} time} other{Played {count} times}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{One point below your puzzle rating} other{{count} points below your puzzle rating}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{One point above your puzzle rating} other{{count} points above your puzzle rating}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} played} other{{count} played}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} to replay} other{{count} to replay}}",
   "puzzleThemeAdvancedPawn": "Advanced pawn",
   "puzzleThemeAdvancedPawnDescription": "One of your pawns is deep into the opponent position, maybe threatening to promote.",
   "puzzleThemeAdvantage": "Advantage",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Change/delete your picture",
   "streamerUploadPicture": "Upload a picture",
   "streamerMaxSize": "Max size: {param}",
-  "keepItShort": "{count, plural, =1{Keep it short: {count} character max} other{Keep it short: {count} characters max}}"
+  "streamerKeepItShort": "{count, plural, =1{Keep it short: {count} character max} other{Keep it short: {count} characters max}}"
 }

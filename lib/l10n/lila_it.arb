@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Non c'è niente qui. Prova prima a risolvere qualche problema!",
   "puzzleImprovementAreasDescription": "Addestrali per ottimizzare il tuo progresso!",
   "puzzleStrengthDescription": "Dai il meglio di te in questi temi",
-  "playedXTimes": "{count, plural, =1{Giocato {count} volta} other{Giocato {count} volte}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Un punto al di sotto del tuo punteggio per i problemi} other{{count} punti al di sotto del tuo punteggio per i problemi}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Un punto al di sopra del tuo punteggio per i problemi} other{{count} punti al di sopra del tuo punteggio per i problemi}}",
-  "nbPlayed": "{count, plural, =1{{count} giocato} other{{count} giocati}}",
-  "nbToReplay": "{count, plural, =1{{count} da rigiocare} other{{count} da rigiocare}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Giocato {count} volta} other{Giocato {count} volte}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Un punto al di sotto del tuo punteggio per i problemi} other{{count} punti al di sotto del tuo punteggio per i problemi}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Un punto al di sopra del tuo punteggio per i problemi} other{{count} punti al di sopra del tuo punteggio per i problemi}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} giocato} other{{count} giocati}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} da rigiocare} other{{count} da rigiocare}}",
   "puzzleThemeAdvancedPawn": "Pedone avanzato",
   "puzzleThemeAdvancedPawnDescription": "Un pedone che promuove o che minaccia di promuovere è la chiave della tattica.",
   "puzzleThemeAdvantage": "Vantaggio",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Cambia/elimina la tua immagine",
   "streamerUploadPicture": "Carica una immagine",
   "streamerMaxSize": "Dimensione massima: {param}",
-  "keepItShort": "{count, plural, =1{Mantienilo corto: max caratteri {count}} other{Mantienilo corto: {count} caratteri al massimo}}"
+  "streamerKeepItShort": "{count, plural, =1{Mantienilo corto: max caratteri {count}} other{Mantienilo corto: {count} caratteri al massimo}}"
 }

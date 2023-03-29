@@ -796,7 +796,7 @@
   "puzzleFromMyGamesNone": "N'eus poelladenn ebet tennet diwar ho krogadoù met gant Lichess oc'h karet memestra.\nKontant e vefec'h e vefe savet ur boelladenn diwar unan eus ho partiennoù? C'hoariit krogadoù prim pe glasel evit kaout muioc'h a chañs!",
   "puzzlePuzzleDashboardDescription": "Pleustriñ, dielfennañ, mont war-raok",
   "puzzleImprovementAreasDescription": "Pleustrit war ar re-mañ evit mont war-raok!",
-  "playedXTimes": "{count, plural, =1{C'hoariet {count} wech} =2{C'hoariet {count} wech} few{C'hoariet {count} gwech} many{C'hoariet {count} gwech} other{C'hoariet {count} gwech}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{C'hoariet {count} wech} =2{C'hoariet {count} wech} few{C'hoariet {count} gwech} many{C'hoariet {count} gwech} other{C'hoariet {count} gwech}}",
   "puzzleThemeBodenMate": "Lamm d'ar roue mod Boden",
   "puzzleThemeCastling": "Rokañ",
   "puzzleThemeCastlingDescription": "Gwarezit ho roue ha kasit ho tour d'an emgann.",
@@ -876,5 +876,5 @@
   "streamerChangePicture": "Cheñch/dilemel ho foto",
   "streamerUploadPicture": "Ezkargañ ur foto",
   "streamerMaxSize": "Ment brasañ: {param}",
-  "keepItShort": "{count, plural, =1{E berr gomzoù: {count} arouezenn d'ar muiañ} =2{E berr gomzoù: {count} arouezenn d'ar muiañ} few{E berr gomzoù: {count} arouezenn d'ar muiañ} many{E berr gomzoù: {count} arouezenn d'ar muiañ} other{E berr gomzoù: {count} arouezenn d'ar muiañ}}"
+  "streamerKeepItShort": "{count, plural, =1{E berr gomzoù: {count} arouezenn d'ar muiañ} =2{E berr gomzoù: {count} arouezenn d'ar muiañ} few{E berr gomzoù: {count} arouezenn d'ar muiañ} many{E berr gomzoù: {count} arouezenn d'ar muiañ} other{E berr gomzoù: {count} arouezenn d'ar muiañ}}"
 }

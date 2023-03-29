@@ -883,11 +883,11 @@
   "puzzleNoPuzzlesToShow": "没有什么可以显示的，先去玩一些谜题吧！",
   "puzzleImprovementAreasDescription": "训练这些主题来提升你的表现！",
   "puzzleStrengthDescription": "你擅长这些主题",
-  "playedXTimes": "{count, plural, other{已被尝试 {count} 次}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, other{谜题得分比你低{count}分}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, other{谜题得分比你高{count}分}}",
-  "nbPlayed": "{count, plural, other{玩过 {count}}}",
-  "nbToReplay": "{count, plural, other{{count} 重玩}}",
+  "puzzlePlayedXTimes": "{count, plural, other{已被尝试 {count} 次}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, other{谜题得分比你低{count}分}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, other{谜题得分比你高{count}分}}",
+  "puzzleNbPlayed": "{count, plural, other{玩过 {count}}}",
+  "puzzleNbToReplay": "{count, plural, other{{count} 重玩}}",
   "puzzleThemeAdvancedPawn": "兵升变",
   "puzzleThemeAdvancedPawnDescription": "兵升变或威胁升变是战术的关键。",
   "puzzleThemeAdvantage": "优势",
@@ -1094,5 +1094,5 @@
   "streamerChangePicture": "更改/删除您的图片",
   "streamerUploadPicture": "上传图片",
   "streamerMaxSize": "大小上限：{param}",
-  "keepItShort": "{count, plural, other{不超过 {count} 个字符}}"
+  "streamerKeepItShort": "{count, plural, other{不超过 {count} 个字符}}"
 }

@@ -758,7 +758,7 @@
   "puzzleHistory": "Uppgávusøga",
   "puzzleSolved": "loyst",
   "puzzleFailed": "miseydnaðist",
-  "playedXTimes": "{count, plural, =1{Telvað {count} ferð} other{Telvað {count} ferðir}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Telvað {count} ferð} other{Telvað {count} ferðir}}",
   "puzzleThemeAdvancedPawn": "Frífinna",
   "puzzleThemeAdvancedPawnDescription": "Ein finna, ið umskapast ella hóttir við at umskapast, er lykilin til taktikkin.",
   "puzzleThemeAdvantage": "Fyrimunur",
@@ -929,5 +929,5 @@
   "streamerChangePicture": "Broyt/strika mynd tína",
   "streamerUploadPicture": "Legg eina mynd út",
   "streamerMaxSize": "Hægst loyvda stødd: {param}",
-  "keepItShort": "{count, plural, =1{Halt tað stutt: {count} stavur í mesta lagi} other{Halt tað stutt: {count} stavir í mesta lagi}}"
+  "streamerKeepItShort": "{count, plural, =1{Halt tað stutt: {count} stavur í mesta lagi} other{Halt tað stutt: {count} stavir í mesta lagi}}"
 }

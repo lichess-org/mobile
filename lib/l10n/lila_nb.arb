@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Ingenting å vise, løs noen sjakknøtter først!",
   "puzzleImprovementAreasDescription": "Øv på disse for å optimalisere framgangen din!",
   "puzzleStrengthDescription": "Du gjør det best i disse temaene",
-  "playedXTimes": "{count, plural, =1{Spilt {count} gang} other{Spilt {count} ganger}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Ett poeng under sjakknøttratingen din} other{{count} poeng under sjakknøttratingen din}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Ett poeng over sjakknøttratingen din} other{{count} poeng over sjakknøttratingen din}}",
-  "nbPlayed": "{count, plural, =1{{count} spilt} other{{count} spilt}}",
-  "nbToReplay": "{count, plural, =1{{count} å gjenta} other{{count} å gjenta}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Spilt {count} gang} other{Spilt {count} ganger}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Ett poeng under sjakknøttratingen din} other{{count} poeng under sjakknøttratingen din}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Ett poeng over sjakknøttratingen din} other{{count} poeng over sjakknøttratingen din}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} spilt} other{{count} spilt}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} å gjenta} other{{count} å gjenta}}",
   "puzzleThemeAdvancedPawn": "Framskutt bonde",
   "puzzleThemeAdvancedPawnDescription": "En bonde står dypt inne i motstanderens stilling, muligens med trussel om bondeforvandling.",
   "puzzleThemeAdvantage": "Fordel",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Endre/slette ditt strømmerbilde",
   "streamerUploadPicture": "Last opp et bilde",
   "streamerMaxSize": "Maks størrelse: {param}",
-  "keepItShort": "{count, plural, =1{Hold deg kort; maks {count} tegn} other{Hold deg kort; maks {count} tegn}}"
+  "streamerKeepItShort": "{count, plural, =1{Hold deg kort; maks {count} tegn} other{Hold deg kort; maks {count} tegn}}"
 }

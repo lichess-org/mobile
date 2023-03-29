@@ -38,3 +38,9 @@ Future<ISet<PuzzleTheme>> savedThemes(SavedThemesRef ref) {
   final storage = ref.watch(puzzleBatchStorageProvider);
   return storage.fetchSavedThemes(userId: session?.user.id);
 }
+
+@riverpod
+Future<PuzzleDashboard> puzzleDashboard(PuzzleDashboardRef ref, int days) {
+  final repo = ref.watch(puzzleRepositoryProvider);
+  return Result.release(repo.puzzleDashboard(days));
+}

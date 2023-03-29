@@ -876,11 +876,11 @@
   "puzzleNoPuzzlesToShow": "Níl rud le taispeáint, imirt roinnt fadhb ar dtús!",
   "puzzleImprovementAreasDescription": "Traenáil iad seo chun do fhorbairt a bharrfheabhsú!",
   "puzzleStrengthDescription": "Cruthaigh tú an chuid is fearr sna réimsí seo",
-  "playedXTimes": "{count, plural, =1{Imeartha {count} uair} =2{Imeartha {count} uair} few{Imeartha {count} uair} many{Imeartha {count} uair} other{Imeartha {count} uair}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Pointe amháin faoi bhun do rátáil faidhbe} =2{{count} phointe faoi bhun do rátáil faidhbe} few{{count} bpointe faoi bhun do rátáil faidhbe} many{{count} pointe faoi bhun do rátáil faidhbe} other{{count} pointe faoi bhun do rátáil faidhbe}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Pointe amháin os comhair do rátáil faidhbe} =2{{count} phointe os comhair do rátáil faidhbe} few{{count} bpointe os comhair do rátáil faidhbe} many{{count} pointe os comhair do rátáil faidhbe} other{{count} pointe os comhair do rátáil faidhbe}}",
-  "nbPlayed": "{count, plural, =1{D'imir {count}} =2{D'imir {count}} few{D'imir {count}} many{D'imir {count}} other{D'imir {count}}}",
-  "nbToReplay": "{count, plural, =1{{count} athimirt} =2{{count} athimirt} few{{count} athimirt} many{{count} athimirt} other{{count} athimirt}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Imeartha {count} uair} =2{Imeartha {count} uair} few{Imeartha {count} uair} many{Imeartha {count} uair} other{Imeartha {count} uair}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Pointe amháin faoi bhun do rátáil faidhbe} =2{{count} phointe faoi bhun do rátáil faidhbe} few{{count} bpointe faoi bhun do rátáil faidhbe} many{{count} pointe faoi bhun do rátáil faidhbe} other{{count} pointe faoi bhun do rátáil faidhbe}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Pointe amháin os comhair do rátáil faidhbe} =2{{count} phointe os comhair do rátáil faidhbe} few{{count} bpointe os comhair do rátáil faidhbe} many{{count} pointe os comhair do rátáil faidhbe} other{{count} pointe os comhair do rátáil faidhbe}}",
+  "puzzleNbPlayed": "{count, plural, =1{D'imir {count}} =2{D'imir {count}} few{D'imir {count}} many{D'imir {count}} other{D'imir {count}}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} athimirt} =2{{count} athimirt} few{{count} athimirt} many{{count} athimirt} other{{count} athimirt}}",
   "puzzleThemeAdvancedPawn": "Ceithearnach chun cinn",
   "puzzleThemeAdvancedPawnDescription": "Tá ceithearnach ag ardú nó atá ag bagairt ardú ríthábhachtach don bheartaíocht.",
   "puzzleThemeAdvantage": "Buntáiste",
@@ -1087,5 +1087,5 @@
   "streamerChangePicture": "Athraigh/scrios do phictiúr",
   "streamerUploadPicture": "Uaslódáil pictiúr",
   "streamerMaxSize": "Uasmhéid: {param}",
-  "keepItShort": "{count, plural, =1{Coinnigh gearr é: {count} carachtar uas} =2{Coinnigh gearr é: {count} charachtar uas} few{Coinnigh gearr é: {count} gcarachtar uas} many{Coinnigh gearr é: {count} carachtar uas} other{Coinnigh gearr é: {count} carachtar uas}}"
+  "streamerKeepItShort": "{count, plural, =1{Coinnigh gearr é: {count} carachtar uas} =2{Coinnigh gearr é: {count} charachtar uas} few{Coinnigh gearr é: {count} gcarachtar uas} many{Coinnigh gearr é: {count} carachtar uas} other{Coinnigh gearr é: {count} carachtar uas}}"
 }

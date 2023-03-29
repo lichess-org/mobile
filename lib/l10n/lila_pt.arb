@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Nada para mostrar, jogue alguns quebra-cabeças primeiro!",
   "puzzleImprovementAreasDescription": "Treine estes para optimizar o seu progresso!",
   "puzzleStrengthDescription": "Você tem melhor performance nestes temas",
-  "playedXTimes": "{count, plural, =1{Jogado {count} vez} other{Jogado {count} vezes}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Um ponto abaixo da sua pontuação de problemas} other{{count} pontos abaixo da sua pontuação de problemas}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Um ponto acima da sua pontuação de problemas} other{{count} pontos acima da sua pontuação de problemas}}",
-  "nbPlayed": "{count, plural, =1{{count} problema feito} other{{count} problemas feitos}}",
-  "nbToReplay": "{count, plural, =1{{count} para repetir} other{{count} para repetir}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Jogado {count} vez} other{Jogado {count} vezes}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Um ponto abaixo da sua pontuação de problemas} other{{count} pontos abaixo da sua pontuação de problemas}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Um ponto acima da sua pontuação de problemas} other{{count} pontos acima da sua pontuação de problemas}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} problema feito} other{{count} problemas feitos}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} para repetir} other{{count} para repetir}}",
   "puzzleThemeAdvancedPawn": "Peão avançado",
   "puzzleThemeAdvancedPawnDescription": "A chave do tático é um peão a promover ou a ameaçar promover.",
   "puzzleThemeAdvantage": "Vantagem",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Alterar/apagar a tua imagem",
   "streamerUploadPicture": "Adicionar uma imagem",
   "streamerMaxSize": "Tamanho máximo: {param}",
-  "keepItShort": "{count, plural, =1{Mantem-no curto: {count} carácter no máximo} other{Mantem-no curto: {count} carácteres no máximo}}"
+  "streamerKeepItShort": "{count, plural, =1{Mantem-no curto: {count} carácter no máximo} other{Mantem-no curto: {count} carácteres no máximo}}"
 }

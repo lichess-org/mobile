@@ -884,11 +884,11 @@
   "puzzleNoPuzzlesToShow": "Niste odigrali ni jedan zadatak.",
   "puzzleImprovementAreasDescription": "Vježbaj ove zadatke da bi optimalno napredovao!",
   "puzzleStrengthDescription": "Ove teme ti idu najbolje",
-  "playedXTimes": "{count, plural, =1{Odigrano {count} puta} few{Odigrano {count} puta} other{Odigrano {count} puta}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{{count} bod ispod tvog rejtinga iz zadataka} few{{count} bodova ispod tvog rejtinga iz zadataka} other{{count} bodova ispod tvog rejtinga iz zadataka}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{{count} bod iznad tvog rejtinga iz zadataka} few{{count} bodova iznad tvog rejtinga iz zadataka} other{{count} bodova iznad tvog rejtinga iz zadataka}}",
-  "nbPlayed": "{count, plural, =1{{count} odigran} few{{count} odigrana} other{{count} odigranih}}",
-  "nbToReplay": "{count, plural, =1{{count} za pregledati} few{{count} za pregledati} other{{count} za pregledati}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Odigrano {count} puta} few{Odigrano {count} puta} other{Odigrano {count} puta}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{{count} bod ispod tvog rejtinga iz zadataka} few{{count} bodova ispod tvog rejtinga iz zadataka} other{{count} bodova ispod tvog rejtinga iz zadataka}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{{count} bod iznad tvog rejtinga iz zadataka} few{{count} bodova iznad tvog rejtinga iz zadataka} other{{count} bodova iznad tvog rejtinga iz zadataka}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} odigran} few{{count} odigrana} other{{count} odigranih}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} za pregledati} few{{count} za pregledati} other{{count} za pregledati}}",
   "puzzleThemeAdvancedPawn": "Pješak napreduje",
   "puzzleThemeAdvancedPawnDescription": "Pješak u postupku ili prijetnji promaknućem je ključan za taktiku.",
   "puzzleThemeAdvantage": "Prednost",
@@ -1095,5 +1095,5 @@
   "streamerChangePicture": "Promjenite / izbrišite Vašu sliku",
   "streamerUploadPicture": "Učitajte sliku",
   "streamerMaxSize": "Maksimalna veličina: {param}",
-  "keepItShort": "{count, plural, =1{Neka bude kratko: najviše {count} slovo} few{Neka bude kratko: najviše {count} slova} other{Neka bude kratko: najviše {count} slova}}"
+  "streamerKeepItShort": "{count, plural, =1{Neka bude kratko: najviše {count} slovo} few{Neka bude kratko: najviše {count} slova} other{Neka bude kratko: najviše {count} slova}}"
 }

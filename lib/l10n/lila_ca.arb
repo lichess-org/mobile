@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Encara no hi ha res per mostrar aquí. Resol alguns problemes primer!",
   "puzzleImprovementAreasDescription": "Entreneu aquestes temàtiques per a progressar!",
   "puzzleStrengthDescription": "Aquestes són les temàtiques en que ets millor",
-  "playedXTimes": "{count, plural, =1{Jugat {count} vegades} other{Intentat {count} vegades}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{{count} punts per sota del teu nivell de problemes} other{{count} punts per sota del teu nivell de problemes}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{{count} punt per sobre el teu nivell de problemes} other{{count} punts per sobre el teu nivell de problemes}}",
-  "nbPlayed": "{count, plural, =1{{count} jugat} other{{count} jugats}}",
-  "nbToReplay": "{count, plural, =1{{count} a repetir} other{{count} a repetir}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Jugat {count} vegades} other{Intentat {count} vegades}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{{count} punts per sota del teu nivell de problemes} other{{count} punts per sota del teu nivell de problemes}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{{count} punt per sobre el teu nivell de problemes} other{{count} punts per sobre el teu nivell de problemes}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} jugat} other{{count} jugats}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} a repetir} other{{count} a repetir}}",
   "puzzleThemeAdvancedPawn": "Peó avançat",
   "puzzleThemeAdvancedPawnDescription": "Un peó a punt de coronar o amenaçant la coronació és la tàctica clau.",
   "puzzleThemeAdvantage": "Avantatge",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Canvia/elimina la teva imatge",
   "streamerUploadPicture": "Puja una imatge",
   "streamerMaxSize": "Mida màxim: {param}",
-  "keepItShort": "{count, plural, =1{Mantingues-ho breu: màxim {count} caràcters} other{Mantingues-ho breu: màxim {count} caràcters}}"
+  "streamerKeepItShort": "{count, plural, =1{Mantingues-ho breu: màxim {count} caràcters} other{Mantingues-ho breu: màxim {count} caràcters}}"
 }

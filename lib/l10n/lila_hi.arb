@@ -855,9 +855,9 @@
   "puzzleFromMyGames": "मेरे खेलों से",
   "puzzleFromXGames": "{param} के खेलो की पज़ल​|",
   "puzzleSearchPuzzles": "पज़ल खोजे",
-  "playedXTimes": "{count, plural, =1{{count} समय खेले} other{{count} समय खेले}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{पहीली की गणना मे से एक अंक नीचे} other{पहेली की गणना मे से {count} अंक नीचे}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{पहेली की गणना मे से एक अंक नीचे} other{पहेली की गणना मे से {count} अंक नीचे}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{{count} समय खेले} other{{count} समय खेले}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{पहीली की गणना मे से एक अंक नीचे} other{पहेली की गणना मे से {count} अंक नीचे}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{पहेली की गणना मे से एक अंक नीचे} other{पहेली की गणना मे से {count} अंक नीचे}}",
   "puzzleThemeAdvancedPawn": "उन्नत पैदल",
   "puzzleThemeAdvancedPawnDescription": "प्रचार करने या धमकी देने वाला पैदल रणनीति की कुंजी है।",
   "puzzleThemeAdvantage": "लाभ",
@@ -1059,5 +1059,5 @@
   "streamerChangePicture": "अपनी तस्वीर बदलें / हटाएं",
   "streamerUploadPicture": "तसवीर अपलोड करें",
   "streamerMaxSize": "अधिकतम आकार:{param}",
-  "keepItShort": "{count, plural, =1{इसे छोटा रखें:{count} अक्षर अधिकतम} other{इसे छोटा रखें:{count} अक्षर अधिकतम}}"
+  "streamerKeepItShort": "{count, plural, =1{इसे छोटा रखें:{count} अक्षर अधिकतम} other{इसे छोटा रखें:{count} अक्षर अधिकतम}}"
 }

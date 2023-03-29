@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/model/auth/user_session.dart';
+import 'package:lichess_mobile/src/ui/puzzle/puzzle_dashboard_widget.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -12,8 +14,11 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 
 import 'puzzle_themes_screen.dart';
+
+final daysProvider = StateProvider<Days>((ref) => Days.month);
 
 class PuzzleDashboardScreen extends StatelessWidget {
   const PuzzleDashboardScreen({super.key});
@@ -28,9 +33,8 @@ class PuzzleDashboardScreen extends StatelessWidget {
 
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.puzzles),
-      ),
+      appBar:
+          AppBar(title: Text(context.l10n.puzzles), actions: [DaysSelector()]),
       body: const Center(child: _Body()),
     );
   }
@@ -41,6 +45,7 @@ class PuzzleDashboardScreen extends StatelessWidget {
         slivers: [
           CupertinoSliverNavigationBar(
             largeTitle: Text(context.l10n.puzzles),
+            trailing: DaysSelector(),
           ),
           const SliverSafeArea(
             top: false,
@@ -59,7 +64,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     const theme = PuzzleTheme.mix;
     final nextPuzzle = ref.watch(nextPuzzleProvider(theme));
-
+    final session = ref.watch(userSessionStateProvider);
     final content = [
       Padding(
         padding: Styles.bodySectionPadding,
@@ -111,6 +116,7 @@ class _Body extends ConsumerWidget {
           },
         ),
       ),
+      if (session != null) PuzzleDashboardWidget(),
     ];
 
     return defaultTargetPlatform == TargetPlatform.iOS
@@ -141,5 +147,65 @@ class _PuzzleButton extends StatelessWidget {
       subtitle: Text(subtitle ?? puzzleThemeL10n(context, theme).description),
       onTap: onTap,
     );
+  }
+}
+
+class DaysSelector extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(userSessionStateProvider);
+    final day = ref.watch(daysProvider);
+    return session != null
+        ? InkWell(
+            onTap: () => showChoicesPicker(
+              context,
+              choices: Days.values,
+              selectedItem: day,
+              labelBuilder: (t) => Text(_daysL10n(context, t)),
+              onSelectedItemChanged: (newDay) {
+                ref.read(daysProvider.notifier).state = newDay;
+              },
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(_daysL10n(context, day)),
+                const Icon(Icons.arrow_drop_down),
+              ],
+            ),
+          )
+        : const SizedBox.shrink();
+  }
+}
+
+enum Days {
+  oneday(1),
+  twodays(2),
+  week(7),
+  twoweeks(14),
+  month(30),
+  twomonths(60),
+  threemonths(90);
+
+  const Days(this.days);
+  final int days;
+}
+
+String _daysL10n(BuildContext context, Days day) {
+  switch (day) {
+    case Days.oneday:
+      return context.l10n.nbDays(1);
+    case Days.twodays:
+      return context.l10n.nbDays(2);
+    case Days.week:
+      return context.l10n.nbDays(7);
+    case Days.twoweeks:
+      return context.l10n.nbDays(14);
+    case Days.month:
+      return context.l10n.nbDays(30);
+    case Days.twomonths:
+      return context.l10n.nbDays(60);
+    case Days.threemonths:
+      return context.l10n.nbDays(90);
   }
 }

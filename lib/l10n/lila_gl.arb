@@ -885,11 +885,11 @@
   "puzzleNoPuzzlesToShow": "Nada que amosar, xoga algúns Problemas primeiro!",
   "puzzleImprovementAreasDescription": "Adestra estes para optimizar o teu progreso!",
   "puzzleStrengthDescription": "O teu rendemento é mellor nestes temas",
-  "playedXTimes": "{count, plural, =1{Xogado {count} veces} other{Xogado {count} veces}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{{count} puntos por debaixo da túa puntuación de exercicios} other{{count} puntos por debaixo da túa puntuación de exercicios}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Un punto por riba da túa puntuación de exercicios} other{{count} puntos por riba da túa puntuación de exercicios}}",
-  "nbPlayed": "{count, plural, =1{{count} xogados} other{{count} xogados}}",
-  "nbToReplay": "{count, plural, =1{{count} a repetir} other{{count} a repetir}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Xogado {count} veces} other{Xogado {count} veces}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{{count} puntos por debaixo da túa puntuación de exercicios} other{{count} puntos por debaixo da túa puntuación de exercicios}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Un punto por riba da túa puntuación de exercicios} other{{count} puntos por riba da túa puntuación de exercicios}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} xogados} other{{count} xogados}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} a repetir} other{{count} a repetir}}",
   "puzzleThemeAdvancedPawn": "Peón avanzado",
   "puzzleThemeAdvancedPawnDescription": "Un peón a punto de coroar ou ameazando con promocionarse é clave en táctica.",
   "puzzleThemeAdvantage": "Vantaxe",
@@ -1096,5 +1096,5 @@
   "streamerChangePicture": "Cambia/borra a túa foto",
   "streamerUploadPicture": "Sube unha foto",
   "streamerMaxSize": "Tamaño máximo: {param}",
-  "keepItShort": "{count, plural, =1{Sé breve: máximo {count} carácter} other{Sé breve: máximo {count} caracteres}}"
+  "streamerKeepItShort": "{count, plural, =1{Sé breve: máximo {count} carácter} other{Sé breve: máximo {count} caracteres}}"
 }

@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Intet at vise, løs først nogle opgaver!",
   "puzzleImprovementAreasDescription": "Træn disse for at optimere dine fremskridt!",
   "puzzleStrengthDescription": "Du klarer dig bedst i disse temaer",
-  "playedXTimes": "{count, plural, =1{Spillet {count} gang} other{Spillet {count} gange}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Ét point under din opgave-rating} other{{count} points under din opgave-rating}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Ét point over din opgave-rating} other{{count} points over din opgave-rating}}",
-  "nbPlayed": "{count, plural, =1{{count} spillet} other{{count} spillede}}",
-  "nbToReplay": "{count, plural, =1{{count} at spille igen} other{{count} at spille igen}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Spillet {count} gang} other{Spillet {count} gange}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Ét point under din opgave-rating} other{{count} points under din opgave-rating}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Ét point over din opgave-rating} other{{count} points over din opgave-rating}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} spillet} other{{count} spillede}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} at spille igen} other{{count} at spille igen}}",
   "puzzleThemeAdvancedPawn": "Fremskudt bonde",
   "puzzleThemeAdvancedPawnDescription": "En bonde, der forvandles eller truer med at forvandle, er nøglen til taktikken.",
   "puzzleThemeAdvantage": "Fordel",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Ændr/slet dit billede",
   "streamerUploadPicture": "Upload et billede",
   "streamerMaxSize": "Maks størrelse: {param}",
-  "keepItShort": "{count, plural, =1{Hold det kort: maksimalt {count} tegn} other{Hold det kort: maksimalt {count} tegn}}"
+  "streamerKeepItShort": "{count, plural, =1{Hold det kort: maksimalt {count} tegn} other{Hold det kort: maksimalt {count} tegn}}"
 }
