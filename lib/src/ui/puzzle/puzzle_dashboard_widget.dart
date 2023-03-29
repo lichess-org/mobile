@@ -18,7 +18,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
     return puzzleDashboard.when(
       data: (data) {
         return ListSection(
-          header: Text(context.l10n.puzzleDashboard),
+          header: Text(context.l10n.puzzlePuzzleDashboard),
           children: [
             StatCardRow([
               StatCard(
@@ -30,7 +30,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                 value: data.global.nb.toString(),
               ),
               StatCard(
-                context.l10n.solved,
+                context.l10n.puzzleSolved,
                 value:
                     '${((data.global.firstWins / data.global.nb) * 100).toInt()}%',
               ),

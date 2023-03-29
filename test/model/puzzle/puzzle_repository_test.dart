@@ -83,15 +83,20 @@ void main() {
     });
 
     test('puzzle dashboard', () async {
-      const response = '''
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/puzzle/dashboard/30') {
+          return mockResponse(
+            '''
       {"days":30,"global":{"nb":196,"firstWins":107,"replayWins":0,"puzzleRatingAvg":1607,"performance":1653},"themes":{"middlegame":{"theme":"Middlegame","results":{"nb":97,"firstWins":51,"replayWins":0,"puzzleRatingAvg":1608,"performance":1634}},"endgame":{"theme":"Endgame","results":{"nb":81,"firstWins":48,"replayWins":0,"puzzleRatingAvg":1604,"performance":1697}}}}
-      ''';
-      when(
-        () => mockClient.get(
-          Uri.parse('$kLichessHost/api/puzzle/dashboard/30'),
-        ),
-      ).thenAnswer((_) => mockResponse(response, 200));
+      ''',
+            200,
+          );
+        }
+        return mockResponse('', 404);
+      });
 
+      final container = await makeTestContainer(mockClient);
+      final repo = container.read(puzzleRepositoryProvider);
       final result = await repo.puzzleDashboard(30);
 
       expect(result.isValue, true);
