@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Ничего нет, решите для начала несколько задач!",
   "puzzleImprovementAreasDescription": "Потренируйте эти темы, чтобы улучшить свой прогресс!",
   "puzzleStrengthDescription": "Вы показываете лучшие результаты в этих темах",
-  "playedXTimes": "{count, plural, =1{Решено {count} раз} few{Решено {count} раза} many{Решено {count} раз} other{Решено {count} раз}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Один балл ниже вашего рейтинга в задачах} few{{count} баллов ниже вашего рейтинга в задачах} many{{count} баллов ниже вашего рейтинга в задачах} other{{count} баллов ниже вашего рейтинга в задачах}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Один балл выше вашего рейтинга в пазлах} few{{count} баллов выше вашего рейтинга в задачах} many{{count} баллов выше вашего рейтинга в задачах} other{{count} баллов выше вашего рейтинга в задачах}}",
-  "nbPlayed": "{count, plural, =1{{count} решена} few{{count} решены} many{{count} решены} other{{count} решено}}",
-  "nbToReplay": "{count, plural, =1{{count} повторить} few{{count} повторить} many{{count} повторить} other{{count} повторить}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Решено {count} раз} few{Решено {count} раза} many{Решено {count} раз} other{Решено {count} раз}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Один балл ниже вашего рейтинга в задачах} few{{count} баллов ниже вашего рейтинга в задачах} many{{count} баллов ниже вашего рейтинга в задачах} other{{count} баллов ниже вашего рейтинга в задачах}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Один балл выше вашего рейтинга в пазлах} few{{count} баллов выше вашего рейтинга в задачах} many{{count} баллов выше вашего рейтинга в задачах} other{{count} баллов выше вашего рейтинга в задачах}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} решена} few{{count} решены} many{{count} решены} other{{count} решено}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} повторить} few{{count} повторить} many{{count} повторить} other{{count} повторить}}",
   "puzzleThemeAdvancedPawn": "Продвинутая пешка",
   "puzzleThemeAdvancedPawnDescription": "Одна из Ваших пешек далеко продвинута, есть шанс превращения.",
   "puzzleThemeAdvantage": "Преимущество",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Изменить или удалить ваше изображение",
   "streamerUploadPicture": "Загрузить изображение",
   "streamerMaxSize": "Максимальный размер: {param}",
-  "keepItShort": "{count, plural, =1{Сократите: максимум {count} символ} few{Сократите: максимум {count} символа} many{Сократите: максимум {count} символов} other{Сократите: максимум {count} символов}}"
+  "streamerKeepItShort": "{count, plural, =1{Сократите: максимум {count} символ} few{Сократите: максимум {count} символа} many{Сократите: максимум {count} символов} other{Сократите: максимум {count} символов}}"
 }

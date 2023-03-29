@@ -872,11 +872,11 @@
   "puzzleNoPuzzlesToShow": "Δεν υπάρχει τίποτα εδώ, ακόμα, λύστε μερικούς γρίφους πρώτα!",
   "puzzleImprovementAreasDescription": "Εκπαιδευτείτε σε αυτά για να βελτιώσετε την πρόοδό σας!",
   "puzzleStrengthDescription": "Τα πάτε καλύτερα στις εξής κατηγορίες",
-  "playedXTimes": "{count, plural, =1{Λύθηκε {count} φορά} other{Λύθηκε {count} φορές}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Έναν πόντο κάτω από τη βαθμολογία γρίφων σας} other{{count} πόντους κάτω από τη βαθμολογία γρίφων σας}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Έναν πόντο πάνω από την βαθμολογία γρίφων σας} other{{count} πόντους πάνω από την βαθμολογία γρίφων σας}}",
-  "nbPlayed": "{count, plural, =1{{count} παίχτηκε} other{{count} παίχτηκαν}}",
-  "nbToReplay": "{count, plural, =1{{count} για επανάληψη} other{{count} για επανάληψη}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Λύθηκε {count} φορά} other{Λύθηκε {count} φορές}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Έναν πόντο κάτω από τη βαθμολογία γρίφων σας} other{{count} πόντους κάτω από τη βαθμολογία γρίφων σας}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Έναν πόντο πάνω από την βαθμολογία γρίφων σας} other{{count} πόντους πάνω από την βαθμολογία γρίφων σας}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} παίχτηκε} other{{count} παίχτηκαν}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} για επανάληψη} other{{count} για επανάληψη}}",
   "puzzleThemeAdvancedPawn": "Προωθημένο πιόνι",
   "puzzleThemeAdvancedPawnDescription": "Ένα πιόνι που προάγεται ή απειλεί να προαχθεί είναι κλειδί για αυτή την τακτική.",
   "puzzleThemeAdvantage": "Πλεονέκτημα",
@@ -1081,5 +1081,5 @@
   "streamerChangePicture": "Αλλαγή/διαγραφή της εικόνας σας",
   "streamerUploadPicture": "Μεταφόρτωση εικόνας",
   "streamerMaxSize": "Μέγιστο μέγεθος: {param}",
-  "keepItShort": "{count, plural, =1{Σύντομη περιγραφή: {count} χαρακτήρας το πολύ} other{Σύντομη περιγραφή: {count} χαρακτήρες το πολύ}}"
+  "streamerKeepItShort": "{count, plural, =1{Σύντομη περιγραφή: {count} χαρακτήρας το πολύ} other{Σύντομη περιγραφή: {count} χαρακτήρες το πολύ}}"
 }

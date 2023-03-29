@@ -834,11 +834,11 @@
   "puzzleNoPuzzlesToShow": "沒有什麼可展示的，先去玩一些謎題吧！",
   "puzzleImprovementAreasDescription": "訓練這些類型的謎題來優化你的進步！",
   "puzzleStrengthDescription": "你在這些主題中表現最好",
-  "playedXTimes": "{count, plural, other{已被嘗試{count}次}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, other{低於你的謎題積分{count}點}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, other{高於你的謎題積分{count}點}}",
-  "nbPlayed": "{count, plural, other{{count} 已遊玩}}",
-  "nbToReplay": "{count, plural, other{{count} 重玩}}",
+  "puzzlePlayedXTimes": "{count, plural, other{已被嘗試{count}次}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, other{低於你的謎題積分{count}點}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, other{高於你的謎題積分{count}點}}",
+  "puzzleNbPlayed": "{count, plural, other{{count} 已遊玩}}",
+  "puzzleNbToReplay": "{count, plural, other{{count} 重玩}}",
   "puzzleThemeAdvancedPawn": "升變兵",
   "puzzleThemeAdvancedPawnDescription": "你的其中一個兵已經深入了對方的棋位，或許要威脅升變。",
   "puzzleThemeAdvantage": "擁有優勢",
@@ -997,5 +997,5 @@
   "streamerChangePicture": "更換/刪除您的圖片",
   "streamerUploadPicture": "上傳一張圖片",
   "streamerMaxSize": "檔案大小限制：{param}",
-  "keepItShort": "{count, plural, other{請保持簡短: 最多{count}個字}}"
+  "streamerKeepItShort": "{count, plural, other{請保持簡短: 最多{count}個字}}"
 }

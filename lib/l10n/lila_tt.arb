@@ -731,9 +731,9 @@
   "puzzleStreakSkipExplanation": "Сезнең юлны саклап калу өчен бу хәрәкәтне ташлагыз! Бер тапкыр гына эшли.",
   "puzzleContinueTheStreak": "Сызуны дәвам итегез",
   "puzzleNewStreak": "Яңа сызу",
-  "playedXTimes": "{count, plural, other{Уйналган {count} вакыт}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, other{{count} сезнең башваткыч рейтингтан бер максад}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, other{{count} Сезнең башваткыч рейтингтан бер максад}}",
+  "puzzlePlayedXTimes": "{count, plural, other{Уйналган {count} вакыт}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, other{{count} сезнең башваткыч рейтингтан бер максад}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, other{{count} Сезнең башваткыч рейтингтан бер максад}}",
   "puzzleThemeAdvancedPawn": "Алга киткән җирле",
   "puzzleThemeAdvancedPawnDescription": "Сезнең җәяүлеләрнең берсе көндәш позициясенә тирән керә, бәлки алга җибәрү белән куркытыр.",
   "puzzleThemeAdvantage": "Өстенлек",
@@ -832,5 +832,5 @@
   "streamerChangePicture": "Алыштырырга/бетерергә сезнең рәсемне",
   "streamerUploadPicture": "Кертергә рәсам",
   "streamerMaxSize": "Зурлыкның азагы {param}",
-  "keepItShort": "{count, plural, other{Кыскартып саклагыз: азагында {count} билге}}"
+  "streamerKeepItShort": "{count, plural, other{Кыскартып саклагыз: азагында {count} билге}}"
 }

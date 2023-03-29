@@ -885,9 +885,9 @@
   "puzzleNoPuzzlesToShow": "Nic k zobrazení, jděte nejdříve zkusit nějaké úlohy!",
   "puzzleImprovementAreasDescription": "Tyto procvičujte pro zlepšení!",
   "puzzleStrengthDescription": "V těchto tématech se vám daří nejvíc",
-  "playedXTimes": "{count, plural, =1{Hráno {count}krát} few{Hráno {count}krát} many{Hráno {count}krát} other{Hráno {count}krát}}",
-  "nbPlayed": "{count, plural, =1{{count} zahána} few{{count} zahrány} many{{count} zahráno} other{{count} zahráno}}",
-  "nbToReplay": "{count, plural, =1{{count} k opakování} few{{count} k opakování} many{{count} k opakování} other{{count} k opakování}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Hráno {count}krát} few{Hráno {count}krát} many{Hráno {count}krát} other{Hráno {count}krát}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} zahána} few{{count} zahrány} many{{count} zahráno} other{{count} zahráno}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} k opakování} few{{count} k opakování} many{{count} k opakování} other{{count} k opakování}}",
   "puzzleThemeAdvancedPawn": "Postouplý pěšec",
   "puzzleThemeAdvancedPawnDescription": "Jeden z Vašich pěšců je hluboko v poli protihráče, a možná hrozí proměnou.",
   "puzzleThemeAdvantage": "Výhoda",
@@ -1093,5 +1093,5 @@
   "streamerChangePicture": "Změnit/odstranit obrázek",
   "streamerUploadPicture": "Nahrát obrázek",
   "streamerMaxSize": "Maximální velikost: {param}",
-  "keepItShort": "{count, plural, =1{Krátce: nejvýše {count} znak} few{Krátce: nejvýše {count} znaky} many{Krátce: nejvýše {count} znaků} other{Krátce: nejvýše {count} znaků}}"
+  "streamerKeepItShort": "{count, plural, =1{Krátce: nejvýše {count} znak} few{Krátce: nejvýše {count} znaky} many{Krátce: nejvýše {count} znaků} other{Krátce: nejvýše {count} znaků}}"
 }

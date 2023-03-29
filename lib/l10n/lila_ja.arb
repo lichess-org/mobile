@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "データがありません、まず問題をプレイしてから！",
   "puzzleImprovementAreasDescription": "ここのテーマを練習して前進！",
   "puzzleStrengthDescription": "これらのテーマで好成績でした",
-  "playedXTimes": "{count, plural, other{{count} 回プレイ}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, other{あなたのレーティングより {count} 点下}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, other{あなたのレーティングより {count} 点上}}",
-  "nbPlayed": "{count, plural, other{{count} 問をプレイ}}",
-  "nbToReplay": "{count, plural, other{{count} 再挑戦}}",
+  "puzzlePlayedXTimes": "{count, plural, other{{count} 回プレイ}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, other{あなたのレーティングより {count} 点下}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, other{あなたのレーティングより {count} 点上}}",
+  "puzzleNbPlayed": "{count, plural, other{{count} 問をプレイ}}",
+  "puzzleNbToReplay": "{count, plural, other{{count} 再挑戦}}",
   "puzzleThemeAdvancedPawn": "進んだポーン",
   "puzzleThemeAdvancedPawnDescription": "ポーンの昇格かその狙いがテーマの問題。",
   "puzzleThemeAdvantage": "優位",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "写真の変更／削除",
   "streamerUploadPicture": "写真をアップロード",
   "streamerMaxSize": "最大サイズ：{param}",
-  "keepItShort": "{count, plural, other{短めに、最大 {count} 字まで}}"
+  "streamerKeepItShort": "{count, plural, other{短めに、最大 {count} 字まで}}"
 }

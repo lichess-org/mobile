@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Мәлімет жоқ. Алдымен жұмбақ шешіп көріңіз!",
   "puzzleImprovementAreasDescription": "Жетістігіңізді жақсарту үшін осы жаттығуды көріңіз!",
   "puzzleStrengthDescription": "Осы тақырыпта сізде үздік нәтиже",
-  "playedXTimes": "{count, plural, =1{{count} рет ойналды} other{{count} рет ойналды}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Жұмбақ рейтингіңізден төмен бір ұпай} other{Жұмбақ рейтингіңізден төмен {count} ұпай}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Жұмбақ рейтингіңізден жоғары бір ұпай} other{Жұмбақ рейтингіңізден жоғары {count} ұпай}}",
-  "nbPlayed": "{count, plural, =1{{count} ойнадыңыз} other{{count} ойнадыңыз}}",
-  "nbToReplay": "{count, plural, =1{{count}-н қайта ойнау} other{{count}-н қайта ойнау}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{{count} рет ойналды} other{{count} рет ойналды}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Жұмбақ рейтингіңізден төмен бір ұпай} other{Жұмбақ рейтингіңізден төмен {count} ұпай}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Жұмбақ рейтингіңізден жоғары бір ұпай} other{Жұмбақ рейтингіңізден жоғары {count} ұпай}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} ойнадыңыз} other{{count} ойнадыңыз}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count}-н қайта ойнау} other{{count}-н қайта ойнау}}",
   "puzzleThemeAdvancedPawn": "Әккі сарбаз",
   "puzzleThemeAdvancedPawnDescription": "Айналуға ұмтылған не айналу қаупін төндіретін сарбаз – тактиканың өзегі.",
   "puzzleThemeAdvantage": "Басымдылық",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Суретті өзгерту/жою",
   "streamerUploadPicture": "Суретті жүктеп салу",
   "streamerMaxSize": "Өлшемнің шегі: {param}",
-  "keepItShort": "{count, plural, =1{Қысқа болсын: ең көбі {count} таңба} other{Қысқа болсын: ең көбі {count} таңба}}"
+  "streamerKeepItShort": "{count, plural, =1{Қысқа болсын: ең көбі {count} таңба} other{Қысқа болсын: ең көбі {count} таңба}}"
 }

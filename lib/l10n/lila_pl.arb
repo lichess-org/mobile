@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Nic do pokazania, najpierw rozwiąż kilka zadań!",
   "puzzleImprovementAreasDescription": "Trenuj, aby zoptymalizować swoje postępy!",
   "puzzleStrengthDescription": "Jesteś najlepszy w tych motywach",
-  "playedXTimes": "{count, plural, =1{Rozwiązywane {count} raz} few{Rozwiązywane {count} razy} many{Rozwiązywane {count} razy} other{Rozwiązywane {count} razy}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Jeden punkt poniżej Twojej oceny łamigłówki} few{{count} punkty poniżej Twojego rankingu w rozwiązywaniu zadań} many{{count} punktów poniżej Twojego rankingu w rozwiązywaniu zadań} other{{count} punktów poniżej Twojego rankingu w rozwiązywaniu zadań}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Jeden punkt powyżej Twojej oceny łamigłówki} few{{count} punkty powyżej Twojego rankingu w rozwiązywaniu zadań} many{{count} punktów powyżej Twojego rankingu w rozwiązywaniu zadań} other{{count} punktów powyżej Twojego rankingu w rozwiązywaniu zadań}}",
-  "nbPlayed": "{count, plural, =1{{count} rozwiązywanych} few{{count} rozwiązywanych} many{{count} rozwiązywanych} other{{count} rozwiązywanych}}",
-  "nbToReplay": "{count, plural, =1{{count} do powtórki} few{{count} do powtórki} many{{count} do powtórki} other{{count} do powtórki}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Rozwiązywane {count} raz} few{Rozwiązywane {count} razy} many{Rozwiązywane {count} razy} other{Rozwiązywane {count} razy}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Jeden punkt poniżej Twojej oceny łamigłówki} few{{count} punkty poniżej Twojego rankingu w rozwiązywaniu zadań} many{{count} punktów poniżej Twojego rankingu w rozwiązywaniu zadań} other{{count} punktów poniżej Twojego rankingu w rozwiązywaniu zadań}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Jeden punkt powyżej Twojej oceny łamigłówki} few{{count} punkty powyżej Twojego rankingu w rozwiązywaniu zadań} many{{count} punktów powyżej Twojego rankingu w rozwiązywaniu zadań} other{{count} punktów powyżej Twojego rankingu w rozwiązywaniu zadań}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} rozwiązywanych} few{{count} rozwiązywanych} many{{count} rozwiązywanych} other{{count} rozwiązywanych}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} do powtórki} few{{count} do powtórki} many{{count} do powtórki} other{{count} do powtórki}}",
   "puzzleThemeAdvancedPawn": "Zaawansowany pion",
   "puzzleThemeAdvancedPawnDescription": "Zaawansowany pion lub pion grożący przemianą jest kluczowy w taktyce.",
   "puzzleThemeAdvantage": "Przewaga",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Zmień/usuń swoje zdjęcie",
   "streamerUploadPicture": "Prześlij zdjęcie",
   "streamerMaxSize": "Maksymalny rozmiar: {param}",
-  "keepItShort": "{count, plural, =1{Zachowaj zwięzłość: maksymalnie {count} znak} few{Zachowaj zwięzłość: maksymalnie {count} znaki} many{Zachowaj zwięzłość: maksymalnie {count} znaków} other{Zachowaj zwięzłość: maksymalnie {count} znaków}}"
+  "streamerKeepItShort": "{count, plural, =1{Zachowaj zwięzłość: maksymalnie {count} znak} few{Zachowaj zwięzłość: maksymalnie {count} znaki} many{Zachowaj zwięzłość: maksymalnie {count} znaków} other{Zachowaj zwięzłość: maksymalnie {count} znaków}}"
 }

@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Gösterilecek bir şey yok. Önce biraz bulmaca çöz!",
   "puzzleImprovementAreasDescription": "Gelişiminizi optimize etmek için bunlar üzerine çalışın!",
   "puzzleStrengthDescription": "En iyi performansı bu temalarda gösteriyorsunuz",
-  "playedXTimes": "{count, plural, =1{{count} kez çözüldü} other{{count} kez çözüldü}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Bulmaca puanınızın bir puan altında} other{Bulmaca puanınızın {count} puan altında}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Bulmaca puanınızdan bir puan yüksek} other{Bulmaca puanınızdan {count} puan yüksek}}",
-  "nbPlayed": "{count, plural, =1{{count} bulmaca} other{{count} bulmaca}}",
-  "nbToReplay": "{count, plural, =1{{count} gözden geçirilecek} other{{count} gözden geçirilecek}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{{count} kez çözüldü} other{{count} kez çözüldü}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Bulmaca puanınızın bir puan altında} other{Bulmaca puanınızın {count} puan altında}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Bulmaca puanınızdan bir puan yüksek} other{Bulmaca puanınızdan {count} puan yüksek}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} bulmaca} other{{count} bulmaca}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} gözden geçirilecek} other{{count} gözden geçirilecek}}",
   "puzzleThemeAdvancedPawn": "İlerlemiş piyon",
   "puzzleThemeAdvancedPawnDescription": "Terfi eden veya terfi etmek üzere olan bir piyon taktik bilgisinin olmazsa olmazıdır.",
   "puzzleThemeAdvantage": "Avantaj",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Resmi değiştirin/silin",
   "streamerUploadPicture": "Resim yükle",
   "streamerMaxSize": "Azami boyut: {param}",
-  "keepItShort": "{count, plural, =1{Kısa tutun: En fazla {count} karakter} other{Kısa tutun: En fazla {count} karakter}}"
+  "streamerKeepItShort": "{count, plural, =1{Kısa tutun: En fazla {count} karakter} other{Kısa tutun: En fazla {count} karakter}}"
 }

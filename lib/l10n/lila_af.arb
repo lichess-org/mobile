@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Niks om te wys nie, gaan los eers 'n paar raaisels op!",
   "puzzleImprovementAreasDescription": "Oefen hierdie om jou progressie te optimaliseer!",
   "puzzleStrengthDescription": "Jy presteer die beste in hierdie temas",
-  "playedXTimes": "{count, plural, =1{{count} keer gespeel} other{{count} keer gespeel}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Een punt onder jou raaisel gradering} other{{count} punte onder jou raaisel gradering}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Een punt bo jou raaisel gradering} other{{count} punt bo jou raaisel gradering}}",
-  "nbPlayed": "{count, plural, =1{{count} gespeel} other{{count} gespeel}}",
-  "nbToReplay": "{count, plural, =1{{count} om te herhaal} other{{count} om te herhaal}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{{count} keer gespeel} other{{count} keer gespeel}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Een punt onder jou raaisel gradering} other{{count} punte onder jou raaisel gradering}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Een punt bo jou raaisel gradering} other{{count} punt bo jou raaisel gradering}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} gespeel} other{{count} gespeel}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} om te herhaal} other{{count} om te herhaal}}",
   "puzzleThemeAdvancedPawn": "Gevorderde pion",
   "puzzleThemeAdvancedPawnDescription": "'n Pion wat bevorder of dreig om te bevorder, is die sleutel tot die taktiek.",
   "puzzleThemeAdvantage": "Voordeel",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Verander/verwyder jou prent",
   "streamerUploadPicture": "Laai prent op",
   "streamerMaxSize": "Maksimum grootte: {param}",
-  "keepItShort": "{count, plural, =1{Hou dit kort: {count} karakter maks} other{Hou dit kort: {count} karakters maks}}"
+  "streamerKeepItShort": "{count, plural, =1{Hou dit kort: {count} karakter maks} other{Hou dit kort: {count} karakters maks}}"
 }

@@ -884,11 +884,11 @@
   "puzzleNoPuzzlesToShow": "Nič za pokazati, najprej pojdite igrati uganke!",
   "puzzleImprovementAreasDescription": "Trenirajte jih, da optimizirate svoj napredek!",
   "puzzleStrengthDescription": "V teh temah se najbolje odrežete",
-  "playedXTimes": "{count, plural, =1{Odigrano {count} krat} =2{Odigrano {count} krat} few{Odigrano {count} krat} other{Odigrano {count} krat}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Ena točka pod ratingom uganke} =2{{count} točki pod ratingom uganke} few{{count} točke pod ratingom uganke} other{{count} točk pod ratingom uganke}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Ena točka nad ratingom uganke} =2{{count} točki nad ratingom uganke} few{{count} točke nad ratingom uganke} other{{count} točk nad ratingom uganke}}",
-  "nbPlayed": "{count, plural, =1{{count} igrana} =2{{count} igrani} few{{count} igrani} other{{count} igranih}}",
-  "nbToReplay": "{count, plural, =1{{count} za predvajanje} =2{{count} za predvajanje} few{{count} za predvajanje} other{{count} za predvajanje}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Odigrano {count} krat} =2{Odigrano {count} krat} few{Odigrano {count} krat} other{Odigrano {count} krat}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Ena točka pod ratingom uganke} =2{{count} točki pod ratingom uganke} few{{count} točke pod ratingom uganke} other{{count} točk pod ratingom uganke}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Ena točka nad ratingom uganke} =2{{count} točki nad ratingom uganke} few{{count} točke nad ratingom uganke} other{{count} točk nad ratingom uganke}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} igrana} =2{{count} igrani} few{{count} igrani} other{{count} igranih}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} za predvajanje} =2{{count} za predvajanje} few{{count} za predvajanje} other{{count} za predvajanje}}",
   "puzzleThemeAdvancedPawn": "Promovirani kmet",
   "puzzleThemeAdvancedPawnDescription": "85 / 5000\nTranslation results\nEden od vaših kmetov je globoko na nasprotnikovem področju in ima morda možnost za promocijo.",
   "puzzleThemeAdvantage": "Prednost",
@@ -1067,5 +1067,5 @@
   "streamerChangePicture": "Zamenjajte/izbrišite vašo sliko",
   "streamerUploadPicture": "Naloži fotografijo",
   "streamerMaxSize": "Največja velikost: {param}",
-  "keepItShort": "{count, plural, =1{Naj bo kratko: največ {count} znak} =2{Naj bo kratko: največ {count} znaka} few{Naj bo kratko: največ {count} znaki} other{Naj bo kratko: največ {count} znakov}}"
+  "streamerKeepItShort": "{count, plural, =1{Naj bo kratko: največ {count} znak} =2{Naj bo kratko: največ {count} znaka} few{Naj bo kratko: največ {count} znaki} other{Naj bo kratko: največ {count} znakov}}"
 }

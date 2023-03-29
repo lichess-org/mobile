@@ -813,7 +813,7 @@
   "puzzleHistory": "Puzla historio",
   "puzzleSolved": "solvita",
   "puzzleFailed": "malsukcesis",
-  "playedXTimes": "{count, plural, =1{Ludita {count} foje} other{Ludita {count} foje}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Ludita {count} foje} other{Ludita {count} foje}}",
   "puzzleThemeAdvancedPawn": "Antaŭenigita peono",
   "puzzleThemeAdvancedPawnDescription": "Unu de viaj peonoj estas avancita en kontraŭula pozicio, ĝi eble minacas promocii.",
   "puzzleThemeAdvantage": "Avantaĝo",
@@ -950,5 +950,5 @@
   "streamerChangePicture": "Ŝanĝi/forigi vian bildon",
   "streamerUploadPicture": "Alŝuti bildon",
   "streamerMaxSize": "Maksimuma grandeco: {param}",
-  "keepItShort": "{count, plural, =1{Estu mallonga: maksimume {count} presliteroj} other{Estu mallonga: maksimume {count} presliteroj}}"
+  "streamerKeepItShort": "{count, plural, =1{Estu mallonga: maksimume {count} presliteroj} other{Estu mallonga: maksimume {count} presliteroj}}"
 }

@@ -848,11 +848,11 @@
   "puzzleNoPuzzlesToShow": "Нічога няма, вырашыце некалькі задач спачатку!",
   "puzzleImprovementAreasDescription": "Трэніруйце гэта, каб палепшыць прагрэс!",
   "puzzleStrengthDescription": "Найбольш атрымоўваюцца гэтыя тэмы",
-  "playedXTimes": "{count, plural, =1{Згуляна {count} раз} few{Згуляна {count} разы} many{Згуляна {count} разоў} other{Згуляна {count} разоў}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Адзін бал менш за ваш рэйтынг задач} few{{count} бала менш за ваш рэйтынг задач} many{{count} балаў менш за ваш рэйтынг задач} other{{count} балаў менш за ваш рэйтынг задач}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Адзін бал вышэй за ваш рэйтынг задач} few{{count} бала вышэй за ваш рэйтынг задач} many{{count} балаў вышэй за ваш рэйтынг задач} other{{count} балаў вышэй за ваш рэйтынг задач}}",
-  "nbPlayed": "{count, plural, =1{{count} вырашана} few{{count} вырашаны} many{{count} вырашана} other{{count} вырашана}}",
-  "nbToReplay": "{count, plural, =1{{count} перарашаць} few{{count} перарашаць} many{{count} перарашаць} other{{count} перарашаць}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Згуляна {count} раз} few{Згуляна {count} разы} many{Згуляна {count} разоў} other{Згуляна {count} разоў}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Адзін бал менш за ваш рэйтынг задач} few{{count} бала менш за ваш рэйтынг задач} many{{count} балаў менш за ваш рэйтынг задач} other{{count} балаў менш за ваш рэйтынг задач}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Адзін бал вышэй за ваш рэйтынг задач} few{{count} бала вышэй за ваш рэйтынг задач} many{{count} балаў вышэй за ваш рэйтынг задач} other{{count} балаў вышэй за ваш рэйтынг задач}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} вырашана} few{{count} вырашаны} many{{count} вырашана} other{{count} вырашана}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} перарашаць} few{{count} перарашаць} many{{count} перарашаць} other{{count} перарашаць}}",
   "puzzleThemeAdvancedPawn": "Далёка прасунутая пешка",
   "puzzleThemeAdvancedPawnDescription": "Адна з вашых пешак глыбока ў пазіцыі суперніка, магчыма пагражае ператварэннем.",
   "puzzleThemeAdvantage": "Перавага",
@@ -1057,5 +1057,5 @@
   "streamerChangePicture": "Змяніць/выдаліць вашу выяву",
   "streamerUploadPicture": "Загрузіць выяву",
   "streamerMaxSize": "Максімальны памер: {param}",
-  "keepItShort": "{count, plural, =1{Сцісла: максімальна {count} сімвал} few{Сцісла: максімальна {count} сімвала} many{Сцісла: максімальна {count} сімвалаў} other{Сцісла: максімальна {count} сімвалаў}}"
+  "streamerKeepItShort": "{count, plural, =1{Сцісла: максімальна {count} сімвал} few{Сцісла: максімальна {count} сімвала} many{Сцісла: максімальна {count} сімвалаў} other{Сцісла: максімальна {count} сімвалаў}}"
 }

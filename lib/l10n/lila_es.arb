@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Aún no hay nada que mostrar aquí. ¡Ve y haz algunos ejercicios!",
   "puzzleImprovementAreasDescription": "¡Entrena estas áreas para progresar!",
   "puzzleStrengthDescription": "Estas son las áreas en las que eres más fuerte",
-  "playedXTimes": "{count, plural, =1{Jugado {count} vez} other{Jugado {count} veces}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Un punto por debajo de tu puntuación de ejercicios} other{{count} puntos por debajo de tu puntuación de ejercicios}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Un punto por encima de tu puntuación de ejercicios} other{{count} puntos por encima de tu puntuación de ejercicios}}",
-  "nbPlayed": "{count, plural, =1{{count} ejercicio} other{{count} ejercicios}}",
-  "nbToReplay": "{count, plural, =1{{count} a repetir} other{{count} a repetir}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Jugado {count} vez} other{Jugado {count} veces}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Un punto por debajo de tu puntuación de ejercicios} other{{count} puntos por debajo de tu puntuación de ejercicios}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Un punto por encima de tu puntuación de ejercicios} other{{count} puntos por encima de tu puntuación de ejercicios}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} ejercicio} other{{count} ejercicios}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} a repetir} other{{count} a repetir}}",
   "puzzleThemeAdvancedPawn": "Peón avanzado",
   "puzzleThemeAdvancedPawnDescription": "Uno de tus peones está bien avanzado en territorio enemigo, quizás amenazando promocionar.",
   "puzzleThemeAdvantage": "Ventaja",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Cambia/elimina tu imagen",
   "streamerUploadPicture": "Subir una foto",
   "streamerMaxSize": "Tamaño máximo: {param}",
-  "keepItShort": "{count, plural, =1{Se breve: máximo {count} carácter} other{Se breve: máximo {count} caracteres}}"
+  "streamerKeepItShort": "{count, plural, =1{Se breve: máximo {count} carácter} other{Se breve: máximo {count} caracteres}}"
 }

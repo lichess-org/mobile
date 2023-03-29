@@ -866,11 +866,11 @@
   "puzzleNoPuzzlesToShow": "Tidak ada apa apa, silahkan mainkan taktik terlebih dahulu!",
   "puzzleImprovementAreasDescription": "Latih ini untuk mengoptimisasi kemajuan anda!",
   "puzzleStrengthDescription": "Performa anda baik di tema-tema ini",
-  "playedXTimes": "{count, plural, other{Dimainkan {count} kali}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, other{{count} poin dibawah rating teka-teki Anda}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, other{{count} poin diatas rating teka-teki Anda}}",
-  "nbPlayed": "{count, plural, other{{count} dimainkan}}",
-  "nbToReplay": "{count, plural, other{{count} dapat diulang}}",
+  "puzzlePlayedXTimes": "{count, plural, other{Dimainkan {count} kali}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, other{{count} poin dibawah rating teka-teki Anda}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, other{{count} poin diatas rating teka-teki Anda}}",
+  "puzzleNbPlayed": "{count, plural, other{{count} dimainkan}}",
+  "puzzleNbToReplay": "{count, plural, other{{count} dapat diulang}}",
   "puzzleThemeAdvancedPawn": "Pion terdepan",
   "puzzleThemeAdvancedPawnDescription": "Satu pion anda masuk kedalam posisi lawan, mungkin mengancam untuk promosi.",
   "puzzleThemeAdvantage": "Keuntungan",
@@ -1056,5 +1056,5 @@
   "streamerChangePicture": "Ubah/hapus foto Anda",
   "streamerUploadPicture": "Unggah foto",
   "streamerMaxSize": "Ukuran maksimal: {param}",
-  "keepItShort": "{count, plural, other{Usahakan pendek: maksimal {count} karakter}}"
+  "streamerKeepItShort": "{count, plural, other{Usahakan pendek: maksimal {count} karakter}}"
 }
