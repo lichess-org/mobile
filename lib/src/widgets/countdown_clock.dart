@@ -103,7 +103,6 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
                 FontFeature.tabularFigures(),
               ],
             ),
-            overflow: TextOverflow.fade,
           ),
         ),
       ),

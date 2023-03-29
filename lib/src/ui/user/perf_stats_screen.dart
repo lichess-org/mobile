@@ -86,7 +86,7 @@ class _Title extends StatelessWidget {
         ),
         Flexible(
           child: Text(
-            ' ${context.l10n.perfStats(perf.title)}',
+            ' ${context.l10n.perfStatPerfStats(perf.title)}',
             overflow: TextOverflow.ellipsis,
           ),
         ),
@@ -164,7 +164,9 @@ class _Body extends ConsumerWidget {
               subStatSpace,
               // The number '12' here is not arbitrary, since the API returns the progression for the last 12 games (as far as I know).
               StatCard(
-                context.l10n.progressOverLastXGames('12').replaceAll(':', ''),
+                context.l10n
+                    .perfStatProgressOverLastXGames('12')
+                    .replaceAll(':', ''),
                 padding: Styles.horizontalBodyPadding,
                 child: _ProgressionWidget(data.progress),
               ),
@@ -177,13 +179,15 @@ class _Body extends ConsumerWidget {
                           .format(data.rank),
                 ),
                 StatCard(
-                  context.l10n.ratingDeviation('').replaceAll(': .', ''),
+                  context.l10n
+                      .perfStatRatingDeviation('')
+                      .replaceAll(': .', ''),
                   value: data.deviation.toStringAsFixed(2),
                 )
               ]),
               StatCardRow([
                 StatCard(
-                  context.l10n.highestRating('').replaceAll(':', ''),
+                  context.l10n.perfStatHighestRating('').replaceAll(':', ''),
                   child: _RatingWidget(
                     data.highestRating,
                     data.highestRatingGame,
@@ -191,7 +195,7 @@ class _Body extends ConsumerWidget {
                   ),
                 ),
                 StatCard(
-                  context.l10n.lowestRating('').replaceAll(':', ''),
+                  context.l10n.perfStatLowestRating('').replaceAll(':', ''),
                   child: _RatingWidget(
                     data.lowestRating,
                     data.lowestRatingGame,
@@ -207,7 +211,7 @@ class _Body extends ConsumerWidget {
                   textBaseline: TextBaseline.alphabetic,
                   children: [
                     Text(
-                      '${context.l10n.totalGames} ',
+                      '${context.l10n.perfStatTotalGames} ',
                       style: Styles.sectionTitle,
                     ),
                     Text(data.totalGames.toString(), style: _mainValueStyle),
@@ -258,7 +262,7 @@ class _Body extends ConsumerWidget {
                   ),
                 ),
                 StatCard(
-                  context.l10n.berserkedGames
+                  context.l10n.perfStatBerserkedGames
                       .replaceAll(' ${context.l10n.games.toLowerCase()}', ''),
                   child: _PercentageValueWidget(
                     data.berserkGames,
@@ -266,7 +270,7 @@ class _Body extends ConsumerWidget {
                   ),
                 ),
                 StatCard(
-                  context.l10n.disconnections,
+                  context.l10n.perfStatDisconnections,
                   child: _PercentageValueWidget(
                     data.disconnections,
                     data.totalGames,
@@ -281,14 +285,14 @@ class _Body extends ConsumerWidget {
                       : data.avgOpponent.toString(),
                 ),
                 StatCard(
-                  context.l10n.timeSpentPlaying,
+                  context.l10n.perfStatTimeSpentPlaying,
                   value: data.timePlayed
                       .toDaysHoursMinutes(AppLocalizations.of(context)),
                 ),
               ]),
               StatCard(
                 padding: Styles.horizontalBodyPadding,
-                context.l10n.winningStreak,
+                context.l10n.perfStatWinningStreak,
                 child: _StreakWidget(
                   data.maxWinStreak,
                   data.curWinStreak,
@@ -297,7 +301,7 @@ class _Body extends ConsumerWidget {
               ),
               StatCard(
                 padding: Styles.horizontalBodyPadding,
-                context.l10n.losingStreak,
+                context.l10n.perfStatLosingStreak,
                 child: _StreakWidget(
                   data.maxLossStreak,
                   data.curLossStreak,
@@ -306,12 +310,12 @@ class _Body extends ConsumerWidget {
               ),
               StatCard(
                 padding: Styles.horizontalBodyPadding,
-                context.l10n.gamesInARow,
+                context.l10n.perfStatGamesInARow,
                 child: _StreakWidget(data.maxPlayStreak, data.curPlayStreak),
               ),
               StatCard(
                 padding: Styles.horizontalBodyPadding,
-                context.l10n.maxTimePlaying,
+                context.l10n.perfStatMaxTimePlaying,
                 child: _StreakWidget(data.maxTimeStreak, data.curTimeStreak),
               ),
               if (data.bestWins != null && data.bestWins!.isNotEmpty) ...[
@@ -320,8 +324,10 @@ class _Body extends ConsumerWidget {
                   games: data.bestWins!,
                   perf: perf,
                   user: user,
-                  header:
-                      Text(context.l10n.bestRated, style: Styles.sectionTitle),
+                  header: Text(
+                    context.l10n.perfStatBestRated,
+                    style: Styles.sectionTitle,
+                  ),
                 ),
               ],
               if (data.worstLosses != null && data.worstLosses!.isNotEmpty) ...[
@@ -330,8 +336,10 @@ class _Body extends ConsumerWidget {
                   games: data.worstLosses!,
                   perf: perf,
                   user: user,
-                  header:
-                      Text(context.l10n.worstRated, style: Styles.sectionTitle),
+                  header: Text(
+                    context.l10n.perfStatWorstRated,
+                    style: Styles.sectionTitle,
+                  ),
                 ),
               ],
             ],
@@ -490,8 +498,10 @@ class _StreakWidget extends StatelessWidget {
       color: textShade(context, _customOpacity),
     );
 
-    final longestStreakStr = context.l10n.longestStreak('').replaceAll(':', '');
-    final currentStreakStr = context.l10n.currentStreak('').replaceAll(':', '');
+    final longestStreakStr =
+        context.l10n.perfStatLongestStreak('').replaceAll(':', '');
+    final currentStreakStr =
+        context.l10n.perfStatCurrentStreak('').replaceAll(':', '');
 
     final List<Widget> streakWidgets =
         [maxStreak, curStreak].mapIndexed((index, streak) {
@@ -587,7 +597,7 @@ class _GameListWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ListSection(
       header: header,
-      hasLeading: true,
+      hasLeading: false,
       children: [
         for (final game in games)
           GameListTile(
@@ -610,7 +620,6 @@ class _GameListWidget extends ConsumerWidget {
                 }
               });
             },
-            icon: perf.icon,
             playerTitle: PlayerTitle(
               userName: game.opponentName ?? '?',
               title: game.opponentTitle,

@@ -39,7 +39,7 @@ class SettingsScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.settings),
+        title: Text(context.l10n.settingsSettings),
       ),
       body: _Body(),
     );

@@ -44,7 +44,7 @@ class PuzzleThemesScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.puzzleThemes),
+        title: Text(context.l10n.puzzlePuzzleThemes),
       ),
       body: const _Body(),
     );
@@ -53,7 +53,7 @@ class PuzzleThemesScreen extends StatelessWidget {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(context.l10n.puzzleThemes),
+        middle: Text(context.l10n.puzzlePuzzleThemes),
       ),
       child: const _Body(),
     );

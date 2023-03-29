@@ -72,6 +72,7 @@ class TvEvent with _$TvEvent {
   static FeaturedPlayer _featuredPlayerFromPick(RequiredPick pick) {
     return FeaturedPlayer(
       side: pick('color').asSideOrThrow(),
+      id: pick('user', 'id').asUserIdOrThrow(),
       name: pick('user', 'name').asStringOrThrow(),
       title: pick('user', 'title').asStringOrNull(),
       rating: pick('rating').asIntOrNull(),

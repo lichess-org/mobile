@@ -248,7 +248,7 @@ class _Feedback extends StatelessWidget {
     switch (state.mode) {
       case PuzzleMode.view:
         final puzzleRating =
-            context.l10n.ratingX(puzzle.puzzle.rating.toString());
+            context.l10n.puzzleRatingX(puzzle.puzzle.rating.toString());
         final playedXTimes = context.l10n.playedXTimes(puzzle.puzzle.plays);
         return PlatformCard(
           child: ListTile(
@@ -257,8 +257,8 @@ class _Feedback extends StatelessWidget {
                 : null,
             title: Text(
               state.result == PuzzleResult.win
-                  ? context.l10n.puzzleSuccess
-                  : context.l10n.puzzleComplete,
+                  ? context.l10n.puzzlePuzzleSuccess
+                  : context.l10n.puzzlePuzzleComplete,
             ),
             subtitle: Text('$puzzleRating. $playedXTimes.'),
           ),
@@ -272,8 +272,8 @@ class _Feedback extends StatelessWidget {
                 size: 36,
                 color: LichessColors.error,
               ),
-              title: Text(context.l10n.notTheMove),
-              subtitle: Text(context.l10n.trySomethingElse),
+              title: Text(context.l10n.puzzleNotTheMove),
+              subtitle: Text(context.l10n.puzzleTrySomethingElse),
             ),
           );
         } else if (state.feedback == PuzzleFeedback.good) {
@@ -281,8 +281,8 @@ class _Feedback extends StatelessWidget {
             child: ListTile(
               leading:
                   const Icon(Icons.check, size: 36, color: LichessColors.good),
-              title: Text(context.l10n.bestMove),
-              subtitle: Text(context.l10n.keepGoing),
+              title: Text(context.l10n.puzzleBestMove),
+              subtitle: Text(context.l10n.puzzleKeepGoing),
             ),
           );
         } else {
@@ -297,8 +297,8 @@ class _Feedback extends StatelessWidget {
               title: Text(context.l10n.yourTurn),
               subtitle: Text(
                 state.pov == Side.white
-                    ? context.l10n.findTheBestMoveForWhite
-                    : context.l10n.findTheBestMoveForBlack,
+                    ? context.l10n.puzzleFindTheBestMoveForWhite
+                    : context.l10n.puzzleFindTheBestMoveForBlack,
               ),
             ),
           );
@@ -572,7 +572,7 @@ class _BottomBar extends ConsumerWidget {
                         .continueWithNextPuzzle(puzzleState.nextContext!)
                     : null,
                 highlighted: true,
-                label: context.l10n.continueTraining,
+                label: context.l10n.puzzleContinueTraining,
                 shortLabel: 'Continue',
                 icon: CupertinoIcons.play_arrow_solid,
               ),
@@ -606,7 +606,7 @@ class _DifficultySelector extends ConsumerWidget {
           PuzzleDifficulty selectedDifficulty = difficulty;
           return _BottomBarButton(
             icon: Icons.tune,
-            label: context.l10n.difficultyLevel,
+            label: context.l10n.puzzleDifficultyLevel,
             shortLabel: puzzleDifficultyL10n(context, difficulty),
             showAndroidShortLabel: true,
             onTap: !data.isOnline || state.isChangingDifficulty

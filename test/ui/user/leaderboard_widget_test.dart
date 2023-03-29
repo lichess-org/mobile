@@ -11,8 +11,8 @@ import '../../test_app.dart';
 
 void main() {
   final mockClient = MockClient((request) {
-    if (request.url.path == '/api/player') {
-      return mockResponse(testRes, 200);
+    if (request.url.path == '/api/player/top/1/standard') {
+      return mockResponse(top1Response, 200);
     }
     return mockResponse('', 404);
   });
@@ -33,10 +33,11 @@ void main() {
         await tester.pump(const Duration(milliseconds: 50));
 
         for (final name in [
-          'bulletUser',
-          'blitzUser',
-          'rapidUser',
-          'classicalUser'
+          'Svetlana',
+          'Marcel',
+          'Anthony',
+          'Patoulatchi',
+          'Cerdan',
         ]) {
           expect(
             find.widgetWithText(LeaderboardListTile, name),
@@ -58,18 +59,6 @@ void main() {
   });
 }
 
-const testRes = '''
-{"bullet":[{"id":"bulletuser","username":"bulletUser","perfs":{"bullet":{"rating":1000,"progress":10}}}],
-"blitz":[{"id":"blitzuser","username":"blitzUser","perfs":{"bullet":{"rating":1000,"progress":10}}}],
-"rapid":[{"id":"rapiduser","username":"rapidUser","perfs":{"bullet":{"rating":1000,"progress":10}}}],
-"classical":[{"id":"classicaluser","username":"classicalUser","perfs":{"bullet":{"rating":1000,"progress":10}}}],
-"ultraBullet":[{"id":"ultrauser","username":"ultrabulletUser","perfs":{"bullet":{"rating":1000,"progress":10}}}],
-"crazyhouse":[{"id":"test","username":"test","perfs":{"bullet":{"rating":1000,"progress":10}}}],
-"chess960":[{"id":"test","username":"test","perfs":{"bullet":{"rating":1000,"progress":10}}}],
-"kingOfTheHill":[{"id":"test","username":"test","perfs":{"bullet":{"rating":1000,"progress":10}}}],
-"threeCheck":[{"id":"test","username":"test","perfs":{"bullet":{"rating":1000,"progress":10}}}],
-"antichess":[{"id":"test","username":"test","perfs":{"bullet":{"rating":1000,"progress":10}}}],
-"atomic":[{"id":"test","username":"test","perfs":{"bullet":{"rating":1000,"progress":10}}}],
-"horde":[{"id":"test","username":"test","perfs":{"bullet":{"rating":1000,"progress":10}}}],
-"racingKings":[{"id":"test","username":"test","perfs":{"bullet":{"rating":1000,"progress":10}}}]}
-''';
+const top1Response = '''
+{"bullet":{"id":"svetlana","username":"Svetlana","perfs":{"bullet":{"rating":2340,"progress":0}},"patron":true},"blitz":{"id":"marcel","username":"Marcel","perfs":{"blitz":{"rating":2520,"progress":0}}},"rapid":{"id":"anthony","username":"Anthony","perfs":{"rapid":{"rating":2413,"progress":0}}},"classical":{"id":"patoulatchi","username":"Patoulatchi","perfs":{"classical":{"rating":2521,"progress":0}}},"ultraBullet":{"id":"cerdan","username":"Cerdan","perfs":{"ultraBullet":{"rating":2648,"progress":0}}}}
+      ''';

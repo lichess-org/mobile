@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -17,7 +16,7 @@ import 'leaderboard_screen.dart';
 class LeaderboardWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final leaderboardState = ref.watch(leaderboardProvider);
+    final leaderboardState = ref.watch(top1Provider);
 
     return leaderboardState.when(
       data: (data) {
@@ -29,32 +28,15 @@ class LeaderboardWidget extends ConsumerWidget {
           onHeaderTap: () {
             pushPlatformRoute(
               context,
-              builder: (context) => LeaderboardScreen(
-                leaderboard: data,
-              ),
+              builder: (context) => const LeaderboardScreen(),
             );
           },
           children: [
-            LeaderboardListTile(
-              user: data.bullet.first,
-              perfIcon: LichessIcons.bullet,
-            ),
-            LeaderboardListTile(
-              user: data.blitz.first,
-              perfIcon: LichessIcons.blitz,
-            ),
-            LeaderboardListTile(
-              user: data.rapid.first,
-              perfIcon: LichessIcons.rapid,
-            ),
-            LeaderboardListTile(
-              user: data.classical.first,
-              perfIcon: LichessIcons.classical,
-            ),
-            LeaderboardListTile(
-              user: data.ultrabullet.first,
-              perfIcon: LichessIcons.ultrabullet,
-            ),
+            for (final entry in data.entries)
+              LeaderboardListTile(
+                user: entry.value,
+                perfIcon: entry.key.icon,
+              ),
           ],
         );
       },

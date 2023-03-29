@@ -133,7 +133,7 @@ class _Profile extends StatelessWidget {
     final title = userFullName;
 
     return Padding(
-      padding: Styles.bodySectionBottomPadding,
+      padding: Styles.bodySectionPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -143,7 +143,7 @@ class _Profile extends StatelessWidget {
                   ? const Icon(LichessIcons.patron, size: 40)
                   : null,
               title: title,
-              contentPadding: const EdgeInsets.symmetric(vertical: 10),
+              contentPadding: const EdgeInsets.only(bottom: 10),
             ),
           if (user.profile != null)
             Location(profile: user.profile!)

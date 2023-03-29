@@ -54,13 +54,7 @@ class AuthController extends _$AuthController {
         return const AsyncValue.data(null);
       },
       (e, st) {
-        final errStr = e.toString();
-        // hack to not show error when user cancels sign in
-        if (!errStr.contains('-3')) {
-          return const AsyncValue.data(null);
-        } else {
-          return AsyncValue.error(e, st ?? StackTrace.current);
-        }
+        return AsyncValue.error(e, st ?? StackTrace.current);
       },
     );
   }

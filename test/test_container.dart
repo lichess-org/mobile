@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:logging/logging.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:soundpool/soundpool.dart';
@@ -31,14 +28,14 @@ Future<ProviderContainer> makeContainer({
   SharedPreferences.setMockInitialValues({});
   final sharedPreferences = await SharedPreferences.getInstance();
 
-  Logger.root.onRecord.listen((record) {
-    if (record.level > Level.WARNING) {
-      final time = DateFormat.Hms().format(record.time);
-      debugPrint(
-        '${record.level.name} at $time [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error}' : ''}',
-      );
-    }
-  });
+  // Logger.root.onRecord.listen((record) {
+  //   if (record.level > Level.WARNING) {
+  //     final time = DateFormat.Hms().format(record.time);
+  //     debugPrint(
+  //       '${record.level.name} at $time [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error}' : ''}',
+  //     );
+  //   }
+  // });
 
   final container = ProviderContainer(
     overrides: [

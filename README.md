@@ -34,3 +34,7 @@ Then use flutter run:
 ```
 flutter run
 ```
+
+## Internationalisation
+
+Don't edit the `app_en.arb` file by hand, this file is generated. More information [here](https://github.com/lichess-org/mobile/wiki/About-internationalisation).

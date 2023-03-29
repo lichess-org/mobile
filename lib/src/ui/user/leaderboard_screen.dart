@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -10,12 +11,13 @@ import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+
 import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 
 /// Create a Screen with Top 10 players for each Lichess Variant
 class LeaderboardScreen extends StatelessWidget {
-  const LeaderboardScreen({required this.leaderboard, super.key});
-  final Leaderboard leaderboard;
+  const LeaderboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class LeaderboardScreen extends StatelessWidget {
         previousPageTitle: 'Home',
         middle: Text(context.l10n.leaderboard),
       ),
-      child: _Body(leaderboard: leaderboard),
+      child: const _Body(),
     );
   }
 
@@ -37,86 +39,94 @@ class LeaderboardScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(context.l10n.leaderboard),
       ),
-      body: _Body(leaderboard: leaderboard),
+      body: const _Body(),
     );
   }
 }
 
-class _Body extends StatelessWidget {
-  const _Body({required this.leaderboard});
-  final Leaderboard leaderboard;
+class _Body extends ConsumerWidget {
+  const _Body();
 
   @override
-  Widget build(BuildContext context) {
-    final List<Widget> list = [
-      _Leaderboard(leaderboard.bullet, LichessIcons.bullet, 'BULLET'),
-      _Leaderboard(leaderboard.blitz, LichessIcons.blitz, 'BLITZ'),
-      _Leaderboard(leaderboard.rapid, LichessIcons.rapid, 'RAPID'),
-      _Leaderboard(
-        leaderboard.classical,
-        LichessIcons.classical,
-        'CLASSICAL',
-      ),
-      _Leaderboard(
-        leaderboard.ultrabullet,
-        LichessIcons.ultrabullet,
-        'ULTRA BULLET',
-      ),
-      _Leaderboard(
-        leaderboard.crazyhouse,
-        LichessIcons.h_square,
-        'CRAZYHOUSE',
-      ),
-      _Leaderboard(
-        leaderboard.chess960,
-        LichessIcons.die_six,
-        'CHESS 960',
-      ),
-      _Leaderboard(
-        leaderboard.kingOfThehill,
-        LichessIcons.bullet,
-        'KING OF THE HILL',
-      ),
-      _Leaderboard(
-        leaderboard.threeCheck,
-        LichessIcons.three_check,
-        'THREE CHECK',
-      ),
-      _Leaderboard(leaderboard.atomic, LichessIcons.atom, 'ATOMIC'),
-      _Leaderboard(leaderboard.horde, LichessIcons.horde, 'HORDE'),
-      _Leaderboard(
-        leaderboard.antichess,
-        LichessIcons.antichess,
-        'ANTICHESS',
-      ),
-      _Leaderboard(
-        leaderboard.racingKings,
-        LichessIcons.racing_kings,
-        'RACING KINGS',
-        showDivider: false,
-      ),
-    ];
+  Widget build(BuildContext context, WidgetRef ref) {
+    final leaderboard = ref.watch(leaderboardProvider);
 
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final crossAxisCount =
-                math.min(3, (constraints.maxWidth / 300).floor());
-            return LayoutGrid(
-              columnSizes: List.generate(
-                crossAxisCount,
-                (_) => 1.fr,
-              ),
-              rowSizes: List.generate(
-                (list.length / crossAxisCount).ceil(),
-                (_) => auto,
-              ),
-              children: list,
-            );
-          },
-        ),
-      ),
+    return leaderboard.when(
+      data: (data) {
+        final List<Widget> list = [
+          _Leaderboard(data.bullet, LichessIcons.bullet, 'BULLET'),
+          _Leaderboard(data.blitz, LichessIcons.blitz, 'BLITZ'),
+          _Leaderboard(data.rapid, LichessIcons.rapid, 'RAPID'),
+          _Leaderboard(
+            data.classical,
+            LichessIcons.classical,
+            'CLASSICAL',
+          ),
+          _Leaderboard(
+            data.ultrabullet,
+            LichessIcons.ultrabullet,
+            'ULTRA BULLET',
+          ),
+          _Leaderboard(
+            data.crazyhouse,
+            LichessIcons.h_square,
+            'CRAZYHOUSE',
+          ),
+          _Leaderboard(
+            data.chess960,
+            LichessIcons.die_six,
+            'CHESS 960',
+          ),
+          _Leaderboard(
+            data.kingOfThehill,
+            LichessIcons.bullet,
+            'KING OF THE HILL',
+          ),
+          _Leaderboard(
+            data.threeCheck,
+            LichessIcons.three_check,
+            'THREE CHECK',
+          ),
+          _Leaderboard(data.atomic, LichessIcons.atom, 'ATOMIC'),
+          _Leaderboard(data.horde, LichessIcons.horde, 'HORDE'),
+          _Leaderboard(
+            data.antichess,
+            LichessIcons.antichess,
+            'ANTICHESS',
+          ),
+          _Leaderboard(
+            data.racingKings,
+            LichessIcons.racing_kings,
+            'RACING KINGS',
+            showDivider: false,
+          ),
+        ];
+
+        return SafeArea(
+          child: SingleChildScrollView(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final crossAxisCount =
+                    math.min(3, (constraints.maxWidth / 300).floor());
+                return LayoutGrid(
+                  columnSizes: List.generate(
+                    crossAxisCount,
+                    (_) => 1.fr,
+                  ),
+                  rowSizes: List.generate(
+                    (list.length / crossAxisCount).ceil(),
+                    (_) => auto,
+                  ),
+                  children: list,
+                );
+              },
+            ),
+          ),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      error: (error, stack) =>
+          const Center(child: Text('Could not load leaderboard.')),
     );
   }
 }

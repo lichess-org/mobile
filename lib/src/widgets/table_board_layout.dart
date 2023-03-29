@@ -26,6 +26,7 @@ class TableBoardLayout extends ConsumerWidget {
     this.currentMoveIndex,
     this.onSelectMove,
     this.errorMessage,
+    this.showMoveListPlaceholder = false,
     super.key,
   }) : assert(
           moves == null || currentMoveIndex != null,
@@ -50,6 +51,9 @@ class TableBoardLayout extends ConsumerWidget {
 
   /// Optional error message that will be displayed on top of the board.
   final String? errorMessage;
+
+  /// Whether to show the move list placeholder. Useful when loading.
+  final bool showMoveListPlaceholder;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -167,7 +171,9 @@ class TableBoardLayout extends ConsumerWidget {
                       slicedMoves: slicedMoves,
                       currentMoveIndex: currentMoveIndex ?? 0,
                       onSelectMove: onSelectMove,
-                    ),
+                    )
+                  else if (showMoveListPlaceholder)
+                    const SizedBox(height: 40),
                   Expanded(child: topTable),
                   boardOrError,
                   Expanded(child: bottomTable),

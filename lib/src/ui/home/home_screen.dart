@@ -33,13 +33,20 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
+  bool isOnline = true;
+
   @override
   Widget build(BuildContext context) {
     ref.listen(connectivityChangesProvider, (_, connectivity) {
-      if (!connectivity.isRefreshing &&
-          connectivity.hasValue &&
-          connectivity.value!.isOnline) {
-        _refreshData();
+      // Refresh the data only when the user comes back online
+      if (!connectivity.isRefreshing && connectivity.hasValue) {
+        final newOnlineValue = connectivity.value!.isOnline;
+
+        if (isOnline == false && newOnlineValue == true) {
+          _refreshData();
+        }
+
+        isOnline = newOnlineValue;
       }
     });
 
@@ -89,13 +96,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> _refreshData() {
-    return ref
-        .refresh(dailyPuzzleProvider.future)
-        .then((_) => ref.refresh(leaderboardProvider));
+    return ref.refresh(top1Provider.future);
   }
 }
 
-/// Scaffold with a sticky Create Game button at the bottom
 class _HomeScaffold extends StatelessWidget {
   const _HomeScaffold({
     required this.child,
@@ -224,7 +228,7 @@ class _DailyPuzzle extends ConsumerWidget {
           orientation: preview.orientation.cg,
           fen: preview.initialFen,
           lastMove: preview.initialMove.cg,
-          header: Text(context.l10n.dailyPuzzle),
+          header: Text(context.l10n.puzzleDailyPuzzle),
           onTap: () {
             final session = ref.read(userSessionStateProvider);
             pushPlatformRoute(
@@ -247,7 +251,7 @@ class _DailyPuzzle extends ConsumerWidget {
       loading: () => BoardPreview(
         orientation: Side.white.cg,
         fen: kEmptyFen,
-        header: Text(context.l10n.dailyPuzzle),
+        header: Text(context.l10n.puzzleDailyPuzzle),
       ),
       error: (error, stack) => Padding(
         padding: Styles.bodySectionPadding,

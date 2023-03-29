@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/ui/home/home_screen.dart';
 import 'package:lichess_mobile/src/ui/account/profile_screen.dart';
@@ -34,10 +35,10 @@ final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
   }
 });
 
-final homeNavigatorKey = GlobalKey<NavigatorState>();
-final puzzlesNavigatorKey = GlobalKey<NavigatorState>();
-final watchNavigatorKey = GlobalKey<NavigatorState>();
-final profileNavigatorKey = GlobalKey<NavigatorState>();
+final homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
+final puzzlesNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'puzzles');
+final watchNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'watch');
+final profileNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'profile');
 
 /// Implements a tabbed (iOS style) root layout and behavior structure.
 ///
@@ -76,23 +77,30 @@ class BottomNavScaffold extends ConsumerWidget {
 
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return Scaffold(
-          body: _TabSwitchingView(
-            currentTab: currentTab,
-            tabBuilder: _tabBuilder,
-          ),
-          bottomNavigationBar: NavigationBar(
-            selectedIndex: currentTab.index,
-            destinations: [
-              for (final tab in tabs)
-                NavigationDestination(icon: tab.icon, label: tab.label)
-            ],
-            onDestinationSelected: onItemTapped,
+        return WillPopScope(
+          onWillPop: () async {
+            final navState = ref.read(currentNavigatorKeyProvider).currentState;
+            final popResult = await navState?.maybePop();
+            return popResult != null && !popResult;
+          },
+          child: Scaffold(
+            body: _TabSwitchingView(
+              currentTab: currentTab,
+              tabBuilder: _androidTabBuilder,
+            ),
+            bottomNavigationBar: NavigationBar(
+              selectedIndex: currentTab.index,
+              destinations: [
+                for (final tab in tabs)
+                  NavigationDestination(icon: tab.icon, label: tab.label)
+              ],
+              onDestinationSelected: onItemTapped,
+            ),
           ),
         );
       case TargetPlatform.iOS:
         return CupertinoTabScaffold(
-          tabBuilder: _tabBuilder,
+          tabBuilder: _iOSTabBuilder,
           tabBar: CupertinoTabBar(
             currentIndex: currentTab.index,
             items: [
@@ -108,7 +116,35 @@ class BottomNavScaffold extends ConsumerWidget {
     }
   }
 
-  Widget _tabBuilder(BuildContext context, int index) {
+  Widget _androidTabBuilder(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        return _MaterialTabView(
+          navigatorKey: homeNavigatorKey,
+          builder: (context) => const HomeScreen(),
+        );
+      case 1:
+        return _MaterialTabView(
+          navigatorKey: puzzlesNavigatorKey,
+          builder: (context) => const PuzzleDashboardScreen(),
+        );
+      case 2:
+        return _MaterialTabView(
+          navigatorKey: watchNavigatorKey,
+          builder: (context) => const WatchScreen(),
+        );
+      case 3:
+        return _MaterialTabView(
+          navigatorKey: profileNavigatorKey,
+          builder: (context) => const ProfileScreen(),
+        );
+      default:
+        assert(false, 'Unexpected tab');
+        return const SizedBox.shrink();
+    }
+  }
+
+  Widget _iOSTabBuilder(BuildContext context, int index) {
     switch (index) {
       case 0:
         return CupertinoTabView(
@@ -126,6 +162,7 @@ class BottomNavScaffold extends ConsumerWidget {
         return CupertinoTabView(
           defaultTitle: context.l10n.watch,
           navigatorKey: watchNavigatorKey,
+          navigatorObservers: [watchRouteObserver],
           builder: (context) => const WatchScreen(),
         );
       case 3:
@@ -266,4 +303,134 @@ class _Tab {
 
   final String label;
   final Icon icon;
+}
+
+// Following code copied and adapted from
+// https://github.com/flutter/flutter/blob/2ad6cd72c040113b47ee9055e722606a490ef0da/packages/flutter/lib/src/cupertino/tab_view.dart#L41
+
+class _MaterialTabView extends StatefulWidget {
+  const _MaterialTabView({
+    // ignore: unused_element
+    super.key,
+    this.builder,
+    this.navigatorKey,
+    // ignore: unused_element
+    this.routes,
+    // ignore: unused_element
+    this.onGenerateRoute,
+    // ignore: unused_element
+    this.onUnknownRoute,
+    // ignore: unused_element
+    this.navigatorObservers = const <NavigatorObserver>[],
+    // ignore: unused_element
+    this.restorationScopeId,
+  });
+
+  final WidgetBuilder? builder;
+
+  final GlobalKey<NavigatorState>? navigatorKey;
+
+  final Map<String, WidgetBuilder>? routes;
+
+  final RouteFactory? onGenerateRoute;
+
+  final RouteFactory? onUnknownRoute;
+
+  final List<NavigatorObserver> navigatorObservers;
+
+  final String? restorationScopeId;
+
+  @override
+  State<_MaterialTabView> createState() => _MaterialTabViewState();
+}
+
+class _MaterialTabViewState extends State<_MaterialTabView> {
+  // ignore: avoid-late-keyword
+  late HeroController _heroController;
+  // ignore: avoid-late-keyword
+  late List<NavigatorObserver> _navigatorObservers;
+
+  @override
+  void initState() {
+    super.initState();
+    _heroController = MaterialApp.createMaterialHeroController();
+    _updateObservers();
+  }
+
+  @override
+  void didUpdateWidget(_MaterialTabView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.navigatorKey != oldWidget.navigatorKey ||
+        widget.navigatorObservers != oldWidget.navigatorObservers) {
+      _updateObservers();
+    }
+  }
+
+  void _updateObservers() {
+    _navigatorObservers = List<NavigatorObserver>.of(widget.navigatorObservers)
+      ..add(_heroController);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      key: widget.navigatorKey,
+      onGenerateRoute: _onGenerateRoute,
+      onUnknownRoute: _onUnknownRoute,
+      observers: _navigatorObservers,
+      restorationScopeId: widget.restorationScopeId,
+    );
+  }
+
+  Route<dynamic>? _onGenerateRoute(RouteSettings settings) {
+    final String? name = settings.name;
+    WidgetBuilder? routeBuilder;
+    if (name == Navigator.defaultRouteName && widget.builder != null) {
+      routeBuilder = widget.builder;
+    } else if (widget.routes != null) {
+      routeBuilder = widget.routes![name];
+    }
+    if (routeBuilder != null) {
+      return MaterialPageRoute<dynamic>(
+        builder: routeBuilder,
+        settings: settings,
+      );
+    }
+    if (widget.onGenerateRoute != null) {
+      return widget.onGenerateRoute!(settings);
+    }
+    return null;
+  }
+
+  Route<dynamic>? _onUnknownRoute(RouteSettings settings) {
+    assert(() {
+      if (widget.onUnknownRoute == null) {
+        throw FlutterError(
+          'Could not find a generator for route $settings in the $runtimeType.\n'
+          'Generators for routes are searched for in the following order:\n'
+          ' 1. For the "/" route, the "builder" property, if non-null, is used.\n'
+          ' 2. Otherwise, the "routes" table is used, if it has an entry for '
+          'the route.\n'
+          ' 3. Otherwise, onGenerateRoute is called. It should return a '
+          'non-null value for any valid route not handled by "builder" and "routes".\n'
+          ' 4. Finally if all else fails onUnknownRoute is called.\n'
+          'Unfortunately, onUnknownRoute was not set.',
+        );
+      }
+      return true;
+    }());
+    final Route<dynamic>? result = widget.onUnknownRoute!(settings);
+    assert(() {
+      if (result == null) {
+        throw FlutterError(
+          'The onUnknownRoute callback returned null.\n'
+          'When the $runtimeType requested the route $settings from its '
+          'onUnknownRoute callback, the callback returned null. Such callbacks '
+          'must never return null.',
+        );
+      }
+      return true;
+    }());
+    return result;
+  }
 }

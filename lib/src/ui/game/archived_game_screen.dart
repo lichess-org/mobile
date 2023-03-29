@@ -40,12 +40,6 @@ class ArchivedGameScreen extends ConsumerWidget {
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
         actions: [
           ToggleSoundButton(),
         ],
@@ -62,13 +56,6 @@ class ArchivedGameScreen extends ConsumerWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 16.0),
-        leading: CupertinoButton(
-          padding: EdgeInsets.zero,
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Icon(CupertinoIcons.back),
-        ),
         trailing: ToggleSoundButton(),
       ),
       child: SafeArea(
@@ -126,6 +113,7 @@ class _BoardBody extends ConsumerWidget {
       ),
       topTable: topPlayer,
       bottomTable: bottomPlayer,
+      showMoveListPlaceholder: true,
     );
 
     return gameCursor.when(

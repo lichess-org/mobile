@@ -21,7 +21,7 @@ class PieceSetScreen extends StatelessWidget {
 
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.background)),
+      appBar: AppBar(title: Text(context.l10n.pieceSet)),
       body: _Body(),
     );
   }

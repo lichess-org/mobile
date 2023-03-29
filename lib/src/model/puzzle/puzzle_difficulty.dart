@@ -19,14 +19,14 @@ final IMap<String, PuzzleDifficulty> puzzleDifficultyNameMap =
 String puzzleDifficultyL10n(BuildContext context, PuzzleDifficulty difficulty) {
   switch (difficulty) {
     case PuzzleDifficulty.easiest:
-      return context.l10n.easiest;
+      return context.l10n.puzzleEasiest;
     case PuzzleDifficulty.easier:
-      return context.l10n.easier;
+      return context.l10n.puzzleEasier;
     case PuzzleDifficulty.normal:
       return context.l10n.normal;
     case PuzzleDifficulty.harder:
-      return context.l10n.harder;
+      return context.l10n.puzzleHarder;
     case PuzzleDifficulty.hardest:
-      return context.l10n.hardest;
+      return context.l10n.puzzleHardest;
   }
 }

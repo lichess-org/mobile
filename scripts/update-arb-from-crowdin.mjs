@@ -169,10 +169,9 @@ function unescape(str) {
 
 function fixKey(str, module) {
   const fixed = str.replace(/\./g, '_')
-  // TODO consider prefixing modules later
-  // if (module !== 'site') {
-  //   return module + capitalize(fixed)
-  // }
+  if (module !== 'site') {
+    return module + capitalize(fixed)
+  }
   return fixed
 }
 

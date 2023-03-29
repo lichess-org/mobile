@@ -3,7 +3,7 @@ description: Lichess mobile app V2
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 0.1.0+7
+version: 0.1.0+10
 
 environment:
   sdk: ">=2.18.2 <3.0.0"
@@ -29,7 +29,7 @@ dependencies:
   flutter_appauth: ^4.2.1
   flutter_secure_storage: ^8.0.0
   logging: ^1.1.0
-  shared_preferences: ^2.0.15
+  shared_preferences: ^2.0.20
   cached_network_image: ^3.2.2
   dartchess:
     git:
@@ -38,7 +38,7 @@ dependencies:
   chessground:
     git:
       url: https://github.com/lichess-org/flutter-chessground.git
-      ref: 3970600e5b2ee972064a90ff52ca1b4981b6187c
+      ref: 522e1e404084580ff4d8936963a483481f84de22
   soundpool: ^2.3.0
   meta: ^1.8.0
   tuple: ^2.0.1
@@ -58,7 +58,6 @@ dependencies:
   path: ^1.8.2
   connectivity_plus: ^3.0.3
   share_plus: ^6.3.1
-  back_button_interceptor: ^6.0.2
   fl_chart: ^0.61.0
   stream_transform: ^2.1.0
   flutter_native_splash: ^2.2.19
@@ -66,7 +65,7 @@ dependencies:
 dev_dependencies:
   build_runner: ^2.3.2
   riverpod_generator: ^2.1.0
-  dart_code_metrics: ^5.6.0
+  dart_code_metrics: ^5.7.0
   flutter_test:
     sdk: flutter
   freezed: ^2.2.1
