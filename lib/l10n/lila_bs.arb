@@ -1017,5 +1017,5 @@
   "streamerChangePicture": "Promjenite / izbrišite Vašu sliku",
   "streamerUploadPicture": "Učitajte sliku",
   "streamerMaxSize": "Maksimalna veličina: {param}",
-  "keepItShort": "{count, plural, =1{Neka bude kratko: {count} slovo maksimalno} few{Neka bude kratko: {count} slova maksimalno} other{Neka bude kratko: {count} slova maksimalno}}"
+  "streamerKeepItShort": "{count, plural, =1{Neka bude kratko: {count} slovo maksimalno} few{Neka bude kratko: {count} slova maksimalno} other{Neka bude kratko: {count} slova maksimalno}}"
 }

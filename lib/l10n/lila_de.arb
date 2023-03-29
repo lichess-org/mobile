@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Es gibt nichts zu zeigen, löse zuerst ein paar Aufgaben!",
   "puzzleImprovementAreasDescription": "Übe das, um deinen Fortschritt zu optimieren!",
   "puzzleStrengthDescription": "Bei diesen Themen schneiden Sie am besten ab",
-  "playedXTimes": "{count, plural, =1{{count} mal gespielt} other{{count} mal gespielt}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Ein Punkt unter deiner Aufgaben-Wertung} other{{count} Punkte unter deiner Aufgabenwertung}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Ein Punkt über deiner Aufgabenwertung} other{{count} Punkte über deiner Aufgabenwertung}}",
-  "nbPlayed": "{count, plural, =1{{count} gespielt} other{{count} gespielt}}",
-  "nbToReplay": "{count, plural, =1{{count} zu wiederholen} other{{count} zu wiederholen}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{{count} mal gespielt} other{{count} mal gespielt}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Ein Punkt unter deiner Aufgaben-Wertung} other{{count} Punkte unter deiner Aufgabenwertung}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Ein Punkt über deiner Aufgabenwertung} other{{count} Punkte über deiner Aufgabenwertung}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} gespielt} other{{count} gespielt}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} zu wiederholen} other{{count} zu wiederholen}}",
   "puzzleThemeAdvancedPawn": "Vorgerückter Bauer",
   "puzzleThemeAdvancedPawnDescription": "Einer deiner Bauern ist tief in die gegnerischen Stellung vorgerückt und droht möglicherweise umzuwandeln.",
   "puzzleThemeAdvantage": "Vorteil",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Ändere/Lösche dein Bild",
   "streamerUploadPicture": "Lade ein Bild hoch",
   "streamerMaxSize": "Maximale Größe: {param}",
-  "keepItShort": "{count, plural, =1{Kurz fassen: Maximal {count} Zeichen} other{Kurz halten: Maximal {count} Zeichen}}"
+  "streamerKeepItShort": "{count, plural, =1{Kurz fassen: Maximal {count} Zeichen} other{Kurz halten: Maximal {count} Zeichen}}"
 }

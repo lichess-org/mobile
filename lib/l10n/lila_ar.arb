@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "لا شيء لإظهاره، اذهب والعب بعض الألغاز!",
   "puzzleImprovementAreasDescription": "تدرب بهذه لتحسين تقدمك!",
   "puzzleStrengthDescription": "أنت تقوم بهذه المهارة بأفضل شكل",
-  "playedXTimes": "{count, plural, =0{لعبت {count} مرة} =1{لعبت {count} مرة} =2{لعبت {count} مرة} few{لعبت {count} مرة} many{لعبت {count} مرة} other{لعبت {count} مرة}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =0{نقطة واحدة أقل من تقييمك في الألغاز} =1{نقطة واحدة أقل من تقييمك في الألغاز} =2{{count} نقطة أقل من تقييمك في الألغاز} few{{count} نقطة أقل من تقييمك في الألغاز} many{{count} نقطة أقل من تقييمك في الألغاز} other{{count} نقطة أقل من تقييمك في الألغاز}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =0{نقطة واحدة أعلى من تقييمك في الألغاز} =1{نقطة واحدة أعلى من تقييمك في الألغاز} =2{{count} نقطة أعلى من تقييمك في الألغاز} few{{count} نقطة أعلى من تقييمك في الألغاز} many{{count} نقطة أعلى من تقييمك في الألغاز} other{{count} نقطة أعلى من تقييمك في الألغاز}}",
-  "nbPlayed": "{count, plural, =0{{count} لعبت} =1{{count} لعبت} =2{{count} لعبت} few{{count} لعبت} many{{count} لعبت} other{{count} لعبت}}",
-  "nbToReplay": "{count, plural, =0{{count} لإعادة العرض} =1{{count} لإعادة العرض} =2{{count} لإعادة العرض} few{{count} لإعادة العرض} many{{count} لإعادة العرض} other{{count} لإعادة العرض}}",
+  "puzzlePlayedXTimes": "{count, plural, =0{لعبت {count} مرة} =1{لعبت {count} مرة} =2{لعبت {count} مرة} few{لعبت {count} مرة} many{لعبت {count} مرة} other{لعبت {count} مرة}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =0{نقطة واحدة أقل من تقييمك في الألغاز} =1{نقطة واحدة أقل من تقييمك في الألغاز} =2{{count} نقطة أقل من تقييمك في الألغاز} few{{count} نقطة أقل من تقييمك في الألغاز} many{{count} نقطة أقل من تقييمك في الألغاز} other{{count} نقطة أقل من تقييمك في الألغاز}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =0{نقطة واحدة أعلى من تقييمك في الألغاز} =1{نقطة واحدة أعلى من تقييمك في الألغاز} =2{{count} نقطة أعلى من تقييمك في الألغاز} few{{count} نقطة أعلى من تقييمك في الألغاز} many{{count} نقطة أعلى من تقييمك في الألغاز} other{{count} نقطة أعلى من تقييمك في الألغاز}}",
+  "puzzleNbPlayed": "{count, plural, =0{{count} لعبت} =1{{count} لعبت} =2{{count} لعبت} few{{count} لعبت} many{{count} لعبت} other{{count} لعبت}}",
+  "puzzleNbToReplay": "{count, plural, =0{{count} لإعادة العرض} =1{{count} لإعادة العرض} =2{{count} لإعادة العرض} few{{count} لإعادة العرض} many{{count} لإعادة العرض} other{{count} لإعادة العرض}}",
   "puzzleThemeAdvancedPawn": "الأخذ بالتجاوز",
   "puzzleThemeAdvancedPawnDescription": "و يُعتبر ترقية البيدق أو التهديد بترقيته هو مفتاح التكتيك.",
   "puzzleThemeAdvantage": "أفضلية",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "تغيير/حذف صورتك",
   "streamerUploadPicture": "رفع صورة",
   "streamerMaxSize": "الحجم الأقصى: {param}",
-  "keepItShort": "{count, plural, =0{ابقه قصيرًا: {count} حرف أقصى} =1{ابقه قصيرًا: حرف واحد كحد أقصى} =2{ابقه قصيرًا: حرفان كحد أقصى} few{ابقه قصيرًا: {count} حروف كحد أقصى} many{ابقه قصيرًا: {count} حرف أقصى} other{ابقه قصيرًا: {count} حرف كحد أقصى}}"
+  "streamerKeepItShort": "{count, plural, =0{ابقه قصيرًا: {count} حرف أقصى} =1{ابقه قصيرًا: حرف واحد كحد أقصى} =2{ابقه قصيرًا: حرفان كحد أقصى} few{ابقه قصيرًا: {count} حروف كحد أقصى} many{ابقه قصيرًا: {count} حرف أقصى} other{ابقه قصيرًا: {count} حرف كحد أقصى}}"
 }

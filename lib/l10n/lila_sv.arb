@@ -882,11 +882,11 @@
   "puzzleNoPuzzlesToShow": "Ingenting att visa, gå och lös några problem först!",
   "puzzleImprovementAreasDescription": "Öva på dessa för att optimera dina framsteg!",
   "puzzleStrengthDescription": "Du presterar bäst i dessa teman",
-  "playedXTimes": "{count, plural, =1{Spelat {count} gånger} other{Spelat {count} gånger}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{En poäng under ditt pusselbetyg} other{{count} poäng under ditt pusselbetyg}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{En poäng över ditt pusselbetyg} other{{count} poäng över ditt pusselbetyg}}",
-  "nbPlayed": "{count, plural, =1{{count} spelad} other{{count} spelade}}",
-  "nbToReplay": "{count, plural, =1{{count} att spela om} other{{count} att spela om}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Spelat {count} gånger} other{Spelat {count} gånger}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{En poäng under ditt pusselbetyg} other{{count} poäng under ditt pusselbetyg}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{En poäng över ditt pusselbetyg} other{{count} poäng över ditt pusselbetyg}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} spelad} other{{count} spelade}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} att spela om} other{{count} att spela om}}",
   "puzzleThemeAdvancedPawn": "Avancerande bonde",
   "puzzleThemeAdvancedPawnDescription": "En bonde som promoverar eller hotar att promovera är nyckeln till taktiken.",
   "puzzleThemeAdvantage": "Fördel",
@@ -1093,5 +1093,5 @@
   "streamerChangePicture": "Ändra/ta bort din bild",
   "streamerUploadPicture": "Ladda upp en bild",
   "streamerMaxSize": "Max storlek: {param}",
-  "keepItShort": "{count, plural, =1{Behåll kort: max {count} tecken} other{Behåll kort: max {count} tecken}}"
+  "streamerKeepItShort": "{count, plural, =1{Behåll kort: max {count} tecken} other{Behåll kort: max {count} tecken}}"
 }

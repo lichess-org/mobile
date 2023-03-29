@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Não há nada para mostrar aqui, jogue alguns quebra-cabeças primeiro!",
   "puzzleImprovementAreasDescription": "Treine estes para otimizar o seu progresso!",
   "puzzleStrengthDescription": "Sua perfomance é melhor nesses temas",
-  "playedXTimes": "{count, plural, =1{Jogado {count} vezes} other{Jogado {count} vezes}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Um ponto abaixo da sua classificação de quebra-cabeças} other{{count} pontos abaixo da sua classificação de quebra-cabeças}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Um ponto acima da sua classificação de quebra-cabeças} other{{count} pontos acima da sua classificação de quebra-cabeças}}",
-  "nbPlayed": "{count, plural, =1{{count} jogado} other{{count} jogados}}",
-  "nbToReplay": "{count, plural, =1{{count} a ser repetido} other{{count} a serem repetidos}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Jogado {count} vezes} other{Jogado {count} vezes}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Um ponto abaixo da sua classificação de quebra-cabeças} other{{count} pontos abaixo da sua classificação de quebra-cabeças}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Um ponto acima da sua classificação de quebra-cabeças} other{{count} pontos acima da sua classificação de quebra-cabeças}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} jogado} other{{count} jogados}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} a ser repetido} other{{count} a serem repetidos}}",
   "puzzleThemeAdvancedPawn": "Peão avançado",
   "puzzleThemeAdvancedPawnDescription": "Um peão prestes a ser promovido ou à beira da promoção é um tema tático.",
   "puzzleThemeAdvantage": "Vantagem",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Alterar/excluir sua foto",
   "streamerUploadPicture": "Enviar uma imagem",
   "streamerMaxSize": "Tamanho máximo: {param}",
-  "keepItShort": "{count, plural, =1{Sumarize: máximo de {count} caractere} other{Sumarize: máximo de {count} caracteres}}"
+  "streamerKeepItShort": "{count, plural, =1{Sumarize: máximo de {count} caractere} other{Sumarize: máximo de {count} caracteres}}"
 }

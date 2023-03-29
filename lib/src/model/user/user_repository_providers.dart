@@ -54,6 +54,13 @@ Future<IList<Streamer>> liveStreamers(LiveStreamersRef ref) {
 }
 
 @riverpod
+Future<IMap<Perf, LeaderboardUser>> top1(Top1Ref ref) {
+  ref.cacheFor(const Duration(minutes: 10));
+  final repo = ref.watch(userRepositoryProvider);
+  return Result.release(repo.getTop1());
+}
+
+@riverpod
 Future<Leaderboard> leaderboard(LeaderboardRef ref) {
   ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(userRepositoryProvider);

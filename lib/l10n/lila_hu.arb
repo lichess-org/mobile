@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Oldj meg néhány feladványt a statisztika megjelenítéséhez!",
   "puzzleImprovementAreasDescription": "Gyakorolj ezekben a témákban, hogy erősítsd a tudásod!",
   "puzzleStrengthDescription": "Ezekben a témákban teljesítesz a legjobban",
-  "playedXTimes": "{count, plural, =1{{count} beküldött megfejtés} other{{count} beküldött megfejtés}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Egy ponttal az értékszámod alatt} other{{count} ponttal az értékszámod alatt}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Egy ponttal az értékszámod felett} other{{count} ponttal az értékszámod felett}}",
-  "nbPlayed": "{count, plural, =1{{count} játszott} other{{count} játszott}}",
-  "nbToReplay": "{count, plural, =1{{count} újra} other{{count} újra}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{{count} beküldött megfejtés} other{{count} beküldött megfejtés}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Egy ponttal az értékszámod alatt} other{{count} ponttal az értékszámod alatt}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Egy ponttal az értékszámod felett} other{{count} ponttal az értékszámod felett}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} játszott} other{{count} játszott}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} újra} other{{count} újra}}",
   "puzzleThemeAdvancedPawn": "Előretört gyalog",
   "puzzleThemeAdvancedPawnDescription": "Egy gyalogod előretört az ellenfél térfelére és át is változhat.",
   "puzzleThemeAdvantage": "Előny",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Kép szerkesztése/törlése",
   "streamerUploadPicture": "Kép feltöltése",
   "streamerMaxSize": "Maximális méret: {param}",
-  "keepItShort": "{count, plural, =1{Legyen rövid: legfeljebb {count} karakter} other{Legyen rövid: legfeljebb {count} karakter}}"
+  "streamerKeepItShort": "{count, plural, =1{Legyen rövid: legfeljebb {count} karakter} other{Legyen rövid: legfeljebb {count} karakter}}"
 }

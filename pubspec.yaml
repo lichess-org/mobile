@@ -29,7 +29,7 @@ dependencies:
   flutter_appauth: ^4.2.1
   flutter_secure_storage: ^8.0.0
   logging: ^1.1.0
-  shared_preferences: ^2.0.15
+  shared_preferences: ^2.0.20
   cached_network_image: ^3.2.2
   dartchess:
     git:
@@ -58,14 +58,17 @@ dependencies:
   path: ^1.8.2
   connectivity_plus: ^3.0.3
   share_plus: ^6.3.1
-  back_button_interceptor: ^6.0.2
+  fl_chart:
+    git:
+      url: https://github.com/veloce/fl_chart.git
+      ref: 07c4f15a701a175d3efefc68b4e90b38c76caff3
   stream_transform: ^2.1.0
   flutter_native_splash: ^2.2.19
 
 dev_dependencies:
   build_runner: ^2.3.2
   riverpod_generator: ^2.1.0
-  dart_code_metrics: ^5.6.0
+  dart_code_metrics: ^5.7.0
   flutter_test:
     sdk: flutter
   freezed: ^2.2.1

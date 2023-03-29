@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Chưa có gì cả, hãy giải một vài thế cờ trước đã!",
   "puzzleImprovementAreasDescription": "Luyện tập chúng để tối ưu hóa tiến trình của bạn!",
   "puzzleStrengthDescription": "Bạn thể hiện tốt nhất ở những chiến thuật này",
-  "playedXTimes": "{count, plural, other{Đã chơi {count} lần}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, other{{count} điểm dưới xếp hạng cờ thế của bạn}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, other{{count} điểm trên xếp hạng cờ thế của bạn}}",
-  "nbPlayed": "{count, plural, other{{count} đã giải}}",
-  "nbToReplay": "{count, plural, other{{count} cần giải lại}}",
+  "puzzlePlayedXTimes": "{count, plural, other{Đã chơi {count} lần}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, other{{count} điểm dưới xếp hạng cờ thế của bạn}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, other{{count} điểm trên xếp hạng cờ thế của bạn}}",
+  "puzzleNbPlayed": "{count, plural, other{{count} đã giải}}",
+  "puzzleNbToReplay": "{count, plural, other{{count} cần giải lại}}",
   "puzzleThemeAdvancedPawn": "Tốt thông xa",
   "puzzleThemeAdvancedPawnDescription": "Một quân tốt phong cấp hay đe dọa phong cấp là chìa khóa của chiến thuật.",
   "puzzleThemeAdvantage": "Lợi thế",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Thay đổi/xóa ảnh của bạn",
   "streamerUploadPicture": "Tải lên hình ảnh",
   "streamerMaxSize": "Kích cỡ tối đa: {param}",
-  "keepItShort": "{count, plural, other{Để tên ngắn gọn: tối đa {count} ký tự}}"
+  "streamerKeepItShort": "{count, plural, other{Để tên ngắn gọn: tối đa {count} ký tự}}"
 }

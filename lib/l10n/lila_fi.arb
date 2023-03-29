@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Täällä ei ole vielä mitään nähtävää – tee ensin joitakin tehtäviä!",
   "puzzleImprovementAreasDescription": "Harjoittele näitä tehostaaksesi edistymistäsi!",
   "puzzleStrengthDescription": "Suoriudut parhaiten näissä aiheissa",
-  "playedXTimes": "{count, plural, =1{Pelattu {count} kerran} other{Pelattu {count} kertaa}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Yhden pisteen matalampi tehtävävahvuusluku kuin sinulla} other{{count} pistettä matalampi tehtävävahvuusluku kuin sinulla}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Yhden pisteen korkeampi tehtävävahvuusluku kuin sinulla} other{{count} pistettä korkeampi tehtävävahvuusluku kuin sinulla}}",
-  "nbPlayed": "{count, plural, =1{{count} pelattu} other{{count} pelattu}}",
-  "nbToReplay": "{count, plural, =1{{count} kerrattava} other{{count} kerrattavaa}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Pelattu {count} kerran} other{Pelattu {count} kertaa}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Yhden pisteen matalampi tehtävävahvuusluku kuin sinulla} other{{count} pistettä matalampi tehtävävahvuusluku kuin sinulla}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Yhden pisteen korkeampi tehtävävahvuusluku kuin sinulla} other{{count} pistettä korkeampi tehtävävahvuusluku kuin sinulla}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} pelattu} other{{count} pelattu}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} kerrattava} other{{count} kerrattavaa}}",
   "puzzleThemeAdvancedPawn": "Pitkälle edennyt sotilas",
   "puzzleThemeAdvancedPawnDescription": "Taktiikassa keskeistä on sotilas, joka korottuu tai uhkaa korottua.",
   "puzzleThemeAdvantage": "Etu",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Vaihda/poista kuva",
   "streamerUploadPicture": "Lataa kuva",
   "streamerMaxSize": "Enimmäiskoko: {param}",
-  "keepItShort": "{count, plural, =1{Pidä se lyhyenä: {count} merkki enintään} other{Pidä se lyhyenä: {count} merkkiä enintään}}"
+  "streamerKeepItShort": "{count, plural, =1{Pidä se lyhyenä: {count} merkki enintään} other{Pidä se lyhyenä: {count} merkkiä enintään}}"
 }

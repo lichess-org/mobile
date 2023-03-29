@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Nimic de arătat, joacă mai întâi câteva puzzle-uri!",
   "puzzleImprovementAreasDescription": "Antreneaza-te pentru a-ti optimiza progresul!",
   "puzzleStrengthDescription": "Obțineți cele mai bune rezultate la aceste teme",
-  "playedXTimes": "{count, plural, =1{Jucat {count} dată} few{Jucat de {count} ori} other{Jucat de {count} ori}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Un punct sub ratingul tău de puzzle-uri} few{{count} puncte sub ratingul tău de puzzle-uri} other{{count} de puncte sub ratingul tău de puzzle-uri}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Un punct deasupra ratingului tău de puzzle-uri} few{{count} puncte deasupra ratingului tău de puzzle-uri} other{{count} de puncte deasupra ratingului tău de puzzle-uri}}",
-  "nbPlayed": "{count, plural, =1{{count} jucat} few{{count} jucate} other{{count} jucate}}",
-  "nbToReplay": "{count, plural, =1{{count} de rejucat} few{{count} de rejucat} other{{count} de rejucat}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Jucat {count} dată} few{Jucat de {count} ori} other{Jucat de {count} ori}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Un punct sub ratingul tău de puzzle-uri} few{{count} puncte sub ratingul tău de puzzle-uri} other{{count} de puncte sub ratingul tău de puzzle-uri}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Un punct deasupra ratingului tău de puzzle-uri} few{{count} puncte deasupra ratingului tău de puzzle-uri} other{{count} de puncte deasupra ratingului tău de puzzle-uri}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} jucat} few{{count} jucate} other{{count} jucate}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} de rejucat} few{{count} de rejucat} other{{count} de rejucat}}",
   "puzzleThemeAdvancedPawn": "Pion avansat",
   "puzzleThemeAdvancedPawnDescription": "Unul dintre pionii care este avansat in teritoriul inamic, poate amenință să promoveze.",
   "puzzleThemeAdvantage": "Avantaj",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Schimbă/șterge imaginea",
   "streamerUploadPicture": "Încarcă o imagine",
   "streamerMaxSize": "Dimensiune maximă: {param}",
-  "keepItShort": "{count, plural, =1{Ține-o scurt: maxim {count} caracter} few{Ține-o scurt: maxim {count} caractere} other{Ține-o scurt: maxim {count} caractere}}"
+  "streamerKeepItShort": "{count, plural, =1{Ține-o scurt: maxim {count} caracter} few{Ține-o scurt: maxim {count} caractere} other{Ține-o scurt: maxim {count} caractere}}"
 }

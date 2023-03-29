@@ -885,11 +885,11 @@
   "puzzleNoPuzzlesToShow": "Nėra ką rodyti, pirma išspręskite galvosūkių!",
   "puzzleImprovementAreasDescription": "Treniruokitės su šiomis norėdami pagerinti savo progresą!",
   "puzzleStrengthDescription": "Jums geriausiai sekasi šiose temose",
-  "playedXTimes": "{count, plural, =1{Žaista {count} kartą} few{Žaista {count} kartus} many{Žaista {count} kartą} other{Žaista {count} kartų}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Vienu tašku aukščiau jūsų užduočių reitingo} few{{count} taškais aukščiau jūsų užduočių reitingo} many{{count} taško aukščiau jūsų užduočių reitingo} other{{count} taškų aukščiau jūsų užduočių reitingo}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Vienu tašku aukščiau jūsų užduočių reitingo} few{{count} taškais aukščiau jūsų užduočių reitingo} many{{count} taško aukščiau jūsų užduočių reitingo} other{{count} taškų aukščiau jūsų užduočių reitingo}}",
-  "nbPlayed": "{count, plural, =1{{count} sužaistas} few{{count} sužaisti} many{{count} sužaista} other{{count} sužaista}}",
-  "nbToReplay": "{count, plural, =1{{count} sužaisti} few{{count} sužaisti} many{{count} sužaisti} other{{count} sužaisti}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Žaista {count} kartą} few{Žaista {count} kartus} many{Žaista {count} kartą} other{Žaista {count} kartų}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Vienu tašku aukščiau jūsų užduočių reitingo} few{{count} taškais aukščiau jūsų užduočių reitingo} many{{count} taško aukščiau jūsų užduočių reitingo} other{{count} taškų aukščiau jūsų užduočių reitingo}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Vienu tašku aukščiau jūsų užduočių reitingo} few{{count} taškais aukščiau jūsų užduočių reitingo} many{{count} taško aukščiau jūsų užduočių reitingo} other{{count} taškų aukščiau jūsų užduočių reitingo}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} sužaistas} few{{count} sužaisti} many{{count} sužaista} other{{count} sužaista}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} sužaisti} few{{count} sužaisti} many{{count} sužaisti} other{{count} sužaisti}}",
   "puzzleThemeAdvancedPawn": "Pažengęs pėstininkas",
   "puzzleThemeAdvancedPawnDescription": "Pėstininkas, kuris keičiamas kita figūra, ar tuoj tai darys, čia yra esminė taktika.",
   "puzzleThemeAdvantage": "Pranašumas",
@@ -1096,5 +1096,5 @@
   "streamerChangePicture": "Keisti/trinti savo nuotrauką",
   "streamerUploadPicture": "Įkelti nuotrauką",
   "streamerMaxSize": "Maksimalus dydis: {param}",
-  "keepItShort": "{count, plural, =1{Pasirinkite trumpą: daugiausia {count} ženklas} few{Pasirinkite trumpą: daugiausia {count} žeklai} many{Pasirinkite trumpą: daugiausia {count} ženklo} other{Pasirinkite trumpą: daugiausia {count} ženklų}}"
+  "streamerKeepItShort": "{count, plural, =1{Pasirinkite trumpą: daugiausia {count} ženklas} few{Pasirinkite trumpą: daugiausia {count} žeklai} many{Pasirinkite trumpą: daugiausia {count} ženklo} other{Pasirinkite trumpą: daugiausia {count} ženklų}}"
 }

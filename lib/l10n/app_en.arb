@@ -950,8 +950,10 @@
   "whenCreateSimul": "When you create a Simul, you get to play several players at once.",
   "simulVariantsHint": "If you select several variants, each player gets to choose which one to play.",
   "simulClockHint": "Fischer Clock setup. The more players you take on, the more time you may need.",
-  "simulAddExtraTime": "You may add extra time to your clock to help you cope with the simul.",
-  "simulHostExtraTime": "Host extra clock time",
+  "simulAddExtraTime": "You may add extra initial time to your clock to help you cope with the simul.",
+  "simulHostExtraTime": "Host extra initial clock time",
+  "simulAddExtraTimePerPlayer": "Add initial time to your clock for each player joining the simul.",
+  "simulHostExtraTimePerPlayer": "Host extra clock time per player",
   "lichessTournaments": "Lichess tournaments",
   "tournamentFAQ": "Arena tournament FAQ",
   "timeBeforeTournamentStarts": "Time before tournament starts",
@@ -1948,40 +1950,40 @@
   "puzzleNoPuzzlesToShow": "Nothing to show, go play some puzzles first!",
   "puzzleImprovementAreasDescription": "Train these to optimize your progress!",
   "puzzleStrengthDescription": "You perform the best in these themes",
-  "playedXTimes": "{count, plural, =1{Played {count} time} other{Played {count} times}}",
-  "@playedXTimes": {
+  "puzzlePlayedXTimes": "{count, plural, =1{Played {count} time} other{Played {count} times}}",
+  "@puzzlePlayedXTimes": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{One point below your puzzle rating} other{{count} points below your puzzle rating}}",
-  "@nbPointsBelowYourPuzzleRating": {
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{One point below your puzzle rating} other{{count} points below your puzzle rating}}",
+  "@puzzleNbPointsBelowYourPuzzleRating": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{One point above your puzzle rating} other{{count} points above your puzzle rating}}",
-  "@nbPointsAboveYourPuzzleRating": {
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{One point above your puzzle rating} other{{count} points above your puzzle rating}}",
+  "@puzzleNbPointsAboveYourPuzzleRating": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "nbPlayed": "{count, plural, other{{count} played}}",
-  "@nbPlayed": {
+  "puzzleNbPlayed": "{count, plural, other{{count} played}}",
+  "@puzzleNbPlayed": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "nbToReplay": "{count, plural, other{{count} to replay}}",
-  "@nbToReplay": {
+  "puzzleNbToReplay": "{count, plural, other{{count} to replay}}",
+  "@puzzleNbToReplay": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -2322,8 +2324,8 @@
       }
     }
   },
-  "keepItShort": "{count, plural, =1{Keep it short: {count} character max} other{Keep it short: {count} characters max}}",
-  "@keepItShort": {
+  "streamerKeepItShort": "{count, plural, =1{Keep it short: {count} character max} other{Keep it short: {count} characters max}}",
+  "@streamerKeepItShort": {
     "placeholders": {
       "count": {
         "type": "int"

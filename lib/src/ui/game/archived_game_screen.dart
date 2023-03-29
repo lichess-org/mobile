@@ -56,13 +56,6 @@ class ArchivedGameScreen extends ConsumerWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 16.0),
-        leading: CupertinoButton(
-          padding: EdgeInsets.zero,
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Icon(CupertinoIcons.back),
-        ),
         trailing: ToggleSoundButton(),
       ),
       child: SafeArea(

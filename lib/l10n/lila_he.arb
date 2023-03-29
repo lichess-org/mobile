@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "אין מה להראות, לכו לפתור כמה חידות קודם!",
   "puzzleImprovementAreasDescription": "התאמנו על אלה כדי לשפר את ההתקדמות שלכם!",
   "puzzleStrengthDescription": "את/ה מתפקד/ת הכי טוב בנושאים הבאים",
-  "playedXTimes": "{count, plural, =1{שוחק פעם {count}} =2{שוחק {count} פעמים} many{שוחק {count} פעמים} other{שוחק {count} פעמים}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{נקודה {count} מתחת לדירוג החידות שלך} =2{{count} נקודות מתחת לדירוג החידות שלך} many{{count} נקודות מתחת לדירוג החידות שלך} other{{count} נקודות מתחת לדירוג החידות שלך}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{נקודה {count} מעל לדירוג החידות שלך} =2{נקודה 1 מתחת לדירוג הפזלים שלך} many{{count} נקודות מעל לדירוג החידות שלך} other{{count} נקודות מעל לדירוג החידות שלך}}",
-  "nbPlayed": "{count, plural, =1{{count} שוּחק} =2{{count} שוחקו} many{{count} שוחקו} other{{count} שוחקו}}",
-  "nbToReplay": "{count, plural, =1{{count} שכדאי לפתור שוב} =2{{count} שכדאי לפתור שוב} many{{count} שכדאי לפתור שוב} other{{count} שכדאי לפתור שוב}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{שוחק פעם {count}} =2{שוחק {count} פעמים} many{שוחק {count} פעמים} other{שוחק {count} פעמים}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{נקודה {count} מתחת לדירוג החידות שלך} =2{{count} נקודות מתחת לדירוג החידות שלך} many{{count} נקודות מתחת לדירוג החידות שלך} other{{count} נקודות מתחת לדירוג החידות שלך}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{נקודה {count} מעל לדירוג החידות שלך} =2{נקודה 1 מתחת לדירוג הפזלים שלך} many{{count} נקודות מעל לדירוג החידות שלך} other{{count} נקודות מעל לדירוג החידות שלך}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} שוּחק} =2{{count} שוחקו} many{{count} שוחקו} other{{count} שוחקו}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} שכדאי לפתור שוב} =2{{count} שכדאי לפתור שוב} many{{count} שכדאי לפתור שוב} other{{count} שכדאי לפתור שוב}}",
   "puzzleThemeAdvancedPawn": "רגלי מתקדם",
   "puzzleThemeAdvancedPawnDescription": "אחד מהחיילים שלך עמוק בקווי היריב, אולי מאיים להיות מוכתר.",
   "puzzleThemeAdvantage": "יתרון",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "שינוי/מחיקת התמונה שלך",
   "streamerUploadPicture": "העלאת תמונה",
   "streamerMaxSize": "גודל מרבי: {param}",
-  "keepItShort": "{count, plural, =1{עד תו {count}} =2{עד {count} תווים} many{עד {count} תווים} other{עד {count} תווים}}"
+  "streamerKeepItShort": "{count, plural, =1{עד תו {count}} =2{עד {count} תווים} many{עד {count} תווים} other{עד {count} תווים}}"
 }

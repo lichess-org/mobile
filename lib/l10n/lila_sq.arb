@@ -880,11 +880,11 @@
   "puzzleNoPuzzlesToShow": "S’ka gjë për shfaqje, shkoni e luani ca ushtrime, së pari!",
   "puzzleImprovementAreasDescription": "Stërvituni me këto, që të optimizoni përparimin tuaj!",
   "puzzleStrengthDescription": "Dilni më mirë në këto tema",
-  "playedXTimes": "{count, plural, =1{Luajtur {count} herë} other{Luajtur {count} herë}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{Një pikë nën vlerësimin tuaj në ushtrime} other{{count} pikë nën vlerësimin tuaj në ushtrime}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{Një pikë mbi vlerësimin tuaj në ushtrime} other{{count} pikë mbi vlerësimin tuaj në ushtrime}}",
-  "nbPlayed": "{count, plural, =1{{count} i luajtur} other{{count} të luajtur}}",
-  "nbToReplay": "{count, plural, =1{{count} për t’u riluajtur} other{{count} për t’u riluajtur}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Luajtur {count} herë} other{Luajtur {count} herë}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Një pikë nën vlerësimin tuaj në ushtrime} other{{count} pikë nën vlerësimin tuaj në ushtrime}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Një pikë mbi vlerësimin tuaj në ushtrime} other{{count} pikë mbi vlerësimin tuaj në ushtrime}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} i luajtur} other{{count} të luajtur}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} për t’u riluajtur} other{{count} për t’u riluajtur}}",
   "puzzleThemeAdvancedPawn": "Ushtar i përparuar",
   "puzzleThemeAdvancedPawnDescription": "Një nga ushtarët tuaj ka hyrë thellë në territorin e kundërshtarit, ndoshta duke kërcënuar të gradohet.",
   "puzzleThemeAdvantage": "Avantazh",
@@ -1090,5 +1090,5 @@
   "streamerChangePicture": "Ndryshoni/fshini foton tuaj",
   "streamerUploadPicture": "Ngarko një foto",
   "streamerMaxSize": "Madhësi maks.: {param}",
-  "keepItShort": "{count, plural, =1{Bjerini shkurt: {count} shenjë e shumta} other{Bjerini shkurt: {count} shenja e shumta}}"
+  "streamerKeepItShort": "{count, plural, =1{Bjerini shkurt: {count} shenjë e shumta} other{Bjerini shkurt: {count} shenja e shumta}}"
 }

@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "Nav ko parādīt; vispirms izspēlējiet kādu uzdevumu!",
   "puzzleImprovementAreasDescription": "Apgūstiet šīs tēmas, lai ātrāk uzlabotu prasmes!",
   "puzzleStrengthDescription": "Vislabāk jums padodas šīs prasmes",
-  "playedXTimes": "{count, plural, =0{Spēlēts {count} reizes} =1{Spēlēts {count} reizi} other{Spēlēts {count} reizes}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =0{{count} punktu zem jūsu uzdevumu reitinga} =1{{count} punkts zem jūsu pužļu reitinga} other{{count} punkti zem jūsu uzdevumu reitinga}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =0{{count} punktu virs jūsu uzdevumu reitinga} =1{{count} punkts virs jūsu uzdevumu reitinga} other{{count} punkti virs jūsu uzdevumu reitinga}}",
-  "nbPlayed": "{count, plural, =0{{count} izspēlētas} =1{{count} izspēlēta} other{{count} izspēlētas}}",
-  "nbToReplay": "{count, plural, =0{{count} jāatkārto} =1{{count} jāatkārto} other{{count} jāatkārto}}",
+  "puzzlePlayedXTimes": "{count, plural, =0{Spēlēts {count} reizes} =1{Spēlēts {count} reizi} other{Spēlēts {count} reizes}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =0{{count} punktu zem jūsu uzdevumu reitinga} =1{{count} punkts zem jūsu pužļu reitinga} other{{count} punkti zem jūsu uzdevumu reitinga}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =0{{count} punktu virs jūsu uzdevumu reitinga} =1{{count} punkts virs jūsu uzdevumu reitinga} other{{count} punkti virs jūsu uzdevumu reitinga}}",
+  "puzzleNbPlayed": "{count, plural, =0{{count} izspēlētas} =1{{count} izspēlēta} other{{count} izspēlētas}}",
+  "puzzleNbToReplay": "{count, plural, =0{{count} jāatkārto} =1{{count} jāatkārto} other{{count} jāatkārto}}",
   "puzzleThemeAdvancedPawn": "Brīvbandinieks",
   "puzzleThemeAdvancedPawnDescription": "Kāds no jūsu bandiniekiem nonācis dziļi pretinieka pozīcijā, iespējams draudot ar paaugstināšanu.",
   "puzzleThemeAdvantage": "Pārsvars",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "Mainīt/dzēst savu attēlu",
   "streamerUploadPicture": "Augšupielādēt attēlu",
   "streamerMaxSize": "Maks. izmērs: {param}",
-  "keepItShort": "{count, plural, =0{Ierobežojiet garumu: ne vairāk kā {count} rakstzīmes} =1{Ierobežojiet garumu: ne vairāk kā {count} rakstzīme} other{Ierobežojiet garumu: ne vairāk kā {count} rakstzīmes}}"
+  "streamerKeepItShort": "{count, plural, =0{Ierobežojiet garumu: ne vairāk kā {count} rakstzīmes} =1{Ierobežojiet garumu: ne vairāk kā {count} rakstzīme} other{Ierobežojiet garumu: ne vairāk kā {count} rakstzīmes}}"
 }

@@ -446,6 +446,23 @@ void main() {
     });
   });
 
+  group('UserRepository.getTop1', () {
+    const res = '''
+{"bullet":{"id":"svetlana","username":"Svetlana","perfs":{"bullet":{"rating":2340,"progress":0}},"patron":true},"blitz":{"id":"marcel","username":"Marcel","perfs":{"blitz":{"rating":2520,"progress":0}}},"rapid":{"id":"anthony","username":"Anthony","perfs":{"rapid":{"rating":2413,"progress":0}}},"classical":{"id":"marcel","username":"Marcel","perfs":{"classical":{"rating":2521,"progress":0}}},"ultraBullet":{"id":"marcel","username":"Marcel","perfs":{"ultraBullet":{"rating":2648,"progress":0}}}}
+      ''';
+
+    test('json read, minimal example', () async {
+      when(
+        () => mockApiClient
+            .get(Uri.parse('$kLichessHost/api/player/top/1/standard')),
+      ).thenAnswer((_) async => Result.value(http.Response(res, 200)));
+
+      final result = await repo.getTop1();
+
+      expect(result.isValue, true);
+    });
+  });
+
   group('UserRepository.getLeaderboard', () {
     const testRes = '''
 {"bullet":[{"id":"penguingim1","username":"penguingim1","perfs":{"bullet":{"rating":3302,"progress":10}},"title":"GM","patron":true},{"id":"arm-777777","username":"ARM-777777","perfs":{"bullet":{"rating":3145,"progress":8}},"title":"GM"},{"id":"hooligan64","username":"Hooligan64","perfs":{"bullet":{"rating":3131,"progress":7}},"title":"GM"},{"id":"muisback","username":"muisback","perfs":{"bullet":{"rating":3123,"progress":28}},"title":"GM","patron":true},{"id":"night-king96","username":"Night-King96","perfs":{"bullet":{"rating":3122,"progress":-14}},"title":"GM","patron":true},{"id":"svodmevko","username":"SVODMEVKO","perfs":{"bullet":{"rating":3119,"progress":4}},"title":"GM"},{"id":"shant7777777","username":"Shant7777777","perfs":{"bullet":{"rating":3100,"progress":17}},"title":"GM"},{"id":"sparta299","username":"Sparta299","perfs":{"bullet":{"rating":3085,"progress":21}},"title":"GM"},{"id":"ohanyaneminchess","username":"OhanyanEminChess","perfs":{"bullet":{"rating":3082,"progress":-50}},"title":"IM"},{"id":"watneg","username":"Watneg","perfs":{"bullet":{"rating":3080,"progress":14}},"title":"GM"}],

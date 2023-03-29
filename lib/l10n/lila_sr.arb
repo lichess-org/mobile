@@ -733,7 +733,7 @@
   "puzzleStrengths": "Снага",
   "puzzleSolved": "решено",
   "puzzleFailed": "неуспело",
-  "playedXTimes": "{count, plural, =1{Играно {count} пут} few{Играно {count} пута} other{Играно {count} пута}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{Играно {count} пут} few{Играно {count} пута} other{Играно {count} пута}}",
   "puzzleThemeAdvancedPawn": "Пешак пред промоцијом",
   "puzzleThemeAdvancedPawnDescription": "Један од Ваших пешака је дубоко у противничкој позицији, можда прети да промовише.",
   "puzzleThemeAdvantage": "Предност",

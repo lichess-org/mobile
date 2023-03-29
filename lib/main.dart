@@ -1,4 +1,4 @@
-import 'package:intl/intl.dart';
+import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,10 +10,18 @@ import 'src/app.dart';
 void main() {
   if (kDebugMode) {
     Logger.root.onRecord.listen((record) {
-      final time = DateFormat.Hms().format(record.time);
-      debugPrint(
-        '${record.level.name} at $time [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error}' : ''}',
+      developer.log(
+        record.message,
+        time: record.time,
+        name: record.loggerName,
+        level: record.level.value,
+        error: record.error,
+        stackTrace: record.stackTrace,
       );
+
+      if (record.loggerName == 'AuthClient') {
+        debugPrint(record.message);
+      }
     });
   }
 
@@ -40,7 +48,8 @@ class ProviderLogger extends ProviderObserver {
     ProviderContainer container,
   ) {
     _logger.info(
-      '${provider.name ?? provider.runtimeType} initialized with: $value.',
+      '${provider.name ?? provider.runtimeType} initialized',
+      value,
     );
   }
 
@@ -49,7 +58,7 @@ class ProviderLogger extends ProviderObserver {
     ProviderBase<Object?> provider,
     ProviderContainer container,
   ) {
-    _logger.info('${provider.name ?? provider.runtimeType} disposed.');
+    _logger.info('${provider.name ?? provider.runtimeType} disposed');
   }
 
   @override

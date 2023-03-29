@@ -32,7 +32,7 @@ Future<PuzzleStreakResponse> streak(StreakRef ref) {
   return Result.release(repo.streak());
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
   final repo = ref.watch(puzzleRepositoryProvider);
   return Result.release(repo.daily());
@@ -43,4 +43,10 @@ Future<ISet<PuzzleTheme>> savedThemes(SavedThemesRef ref) {
   final session = ref.watch(userSessionStateProvider);
   final storage = ref.watch(puzzleBatchStorageProvider);
   return storage.fetchSavedThemes(userId: session?.user.id);
+}
+
+@riverpod
+Future<PuzzleDashboard> puzzleDashboard(PuzzleDashboardRef ref, int days) {
+  final repo = ref.watch(puzzleRepositoryProvider);
+  return Result.release(repo.puzzleDashboard(days));
 }

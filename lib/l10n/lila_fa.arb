@@ -886,11 +886,11 @@
   "puzzleNoPuzzlesToShow": "هیچ موردی برای نمایش وجود ندارد، بروید و نخست چند معما حل کنید!",
   "puzzleImprovementAreasDescription": "اینها را یاد بگیرید تا پیش‌رفت خود را بهینه کنید!",
   "puzzleStrengthDescription": "شما در این زمینه‌ها بهترین عملکرد را دارید",
-  "playedXTimes": "{count, plural, =1{{count} بار بازی شده است} other{این جدول{count} بار بازی شده است}}",
-  "nbPointsBelowYourPuzzleRating": "{count, plural, =1{یک امتیاز پایین‌تر از امتیاز شما در معماها} other{{count} امتیاز پایین‌تر از امتیاز شما در معماها}}",
-  "nbPointsAboveYourPuzzleRating": "{count, plural, =1{یک امتیاز بالاتر از امتیاز شما در معماها} other{{count} امتیاز بالاتر از امتیاز شما در معماها}}",
-  "nbPlayed": "{count, plural, =1{{count} نفر بازی کردند} other{{count} نفر بازی کردند}}",
-  "nbToReplay": "{count, plural, =1{{count} مورد برای بازبینی} other{{count} مورد برای بازبینی}}",
+  "puzzlePlayedXTimes": "{count, plural, =1{{count} بار بازی شده است} other{این جدول{count} بار بازی شده است}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{یک امتیاز پایین‌تر از امتیاز شما در معماها} other{{count} امتیاز پایین‌تر از امتیاز شما در معماها}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{یک امتیاز بالاتر از امتیاز شما در معماها} other{{count} امتیاز بالاتر از امتیاز شما در معماها}}",
+  "puzzleNbPlayed": "{count, plural, =1{{count} نفر بازی کردند} other{{count} نفر بازی کردند}}",
+  "puzzleNbToReplay": "{count, plural, =1{{count} مورد برای بازبینی} other{{count} مورد برای بازبینی}}",
   "puzzleThemeAdvancedPawn": "پیاده پیش رفته",
   "puzzleThemeAdvancedPawnDescription": "یکی از پیاده های شما در زمین حریف پیشروی کرده است. شاید خطر ارتقا پیاده وجود داشته باشد.",
   "puzzleThemeAdvantage": "برتری",
@@ -1097,5 +1097,5 @@
   "streamerChangePicture": "تصویر خود را تغییر دهید / حذف کنید",
   "streamerUploadPicture": "بارگذاری تصویر",
   "streamerMaxSize": "بیشترین اندازه یا حجم: {param}",
-  "keepItShort": "{count, plural, =1{کوتاه بنویسید: کمتر از {count} حرف} other{کوتاه بنویسید: کمتر از {count} حرف}}"
+  "streamerKeepItShort": "{count, plural, =1{کوتاه بنویسید: کمتر از {count} حرف} other{کوتاه بنویسید: کمتر از {count} حرف}}"
 }

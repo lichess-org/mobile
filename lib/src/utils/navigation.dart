@@ -2,6 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+final RouteObserver<PageRoute<void>> watchRouteObserver =
+    RouteObserver<PageRoute<void>>();
+
 /// Push a new route using Navigator
 ///
 /// Will use [MaterialPageRoute] on Android and [CupertinoPageRoute] on iOS.
