@@ -112,9 +112,7 @@ class _Body extends ConsumerWidget {
     final viewModelProvider =
         puzzleViewModelProvider(initialPuzzleContext, streak: streak);
     final puzzleState = ref.watch(viewModelProvider);
-    final streakColor = defaultTargetPlatform == TargetPlatform.iOS
-        ? LichessColors.brag
-        : Theme.of(context).colorScheme.secondary;
+    const streakColor = LichessColors.brag;
     return Column(
       children: [
         Expanded(
@@ -160,8 +158,9 @@ class _Body extends ConsumerWidget {
                     right: 10.0,
                   ),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
+                      const Icon(
                         LichessIcons.streak,
                         size: 40.0,
                         color: streakColor,
@@ -169,7 +168,7 @@ class _Body extends ConsumerWidget {
                       const SizedBox(width: 8.0),
                       Text(
                         (puzzleState.streakIndex ?? 0).toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,
                           color: streakColor,

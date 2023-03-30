@@ -181,8 +181,8 @@ class DaysSelector extends ConsumerWidget {
     final session = ref.watch(userSessionStateProvider);
     final day = ref.watch(daysProvider);
     return session != null
-        ? InkWell(
-            onTap: () => showChoicesPicker(
+        ? AppBarTextButton(
+            onPressed: () => showChoicesPicker(
               context,
               choices: Days.values,
               selectedItem: day,
@@ -191,13 +191,7 @@ class DaysSelector extends ConsumerWidget {
                 ref.read(daysProvider.notifier).state = newDay;
               },
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(_daysL10n(context, day)),
-                const Icon(Icons.arrow_drop_down),
-              ],
-            ),
+            child: Text(_daysL10n(context, day)),
           )
         : const SizedBox.shrink();
   }
