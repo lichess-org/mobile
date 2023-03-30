@@ -314,7 +314,7 @@ class _CardButtonState extends State<CardButton> {
         scale: scale,
         duration: const Duration(milliseconds: 100),
         child: Opacity(
-          opacity: widget.onTap == null ? 0.7 : 1.0,
+          opacity: widget.onTap == null ? 0.4 : 1.0,
           child: PlatformCard(
             child: Padding(
               padding: const EdgeInsets.all(6.0),
