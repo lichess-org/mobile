@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/common/connectivity.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
-import 'package:lichess_mobile/src/model/auth/user_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_dashboard_widget.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -67,7 +67,7 @@ class _Body extends ConsumerWidget {
     const theme = PuzzleTheme.mix;
     final nextPuzzle = ref.watch(nextPuzzleProvider(theme));
     final connectivity = ref.watch(connectivityChangesProvider);
-    final session = ref.watch(userSessionStateProvider);
+    final session = ref.watch(authSessionProvider);
 
     final content = [
       Padding(
@@ -178,7 +178,7 @@ class _PuzzleButton extends StatelessWidget {
 class DaysSelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(userSessionStateProvider);
+    final session = ref.watch(authSessionProvider);
     final day = ref.watch(daysProvider);
     return session != null
         ? AppBarTextButton(

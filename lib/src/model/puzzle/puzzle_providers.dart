@@ -5,7 +5,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
 import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/model/auth/user_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
@@ -20,7 +20,7 @@ Future<PuzzleContext?> nextPuzzle(
   NextPuzzleRef ref,
   PuzzleTheme theme,
 ) {
-  final session = ref.watch(userSessionStateProvider);
+  final session = ref.watch(authSessionProvider);
   final puzzleService = ref.watch(defaultPuzzleServiceProvider);
   final userId = session?.user.id;
   return puzzleService.nextPuzzle(
@@ -31,7 +31,7 @@ Future<PuzzleContext?> nextPuzzle(
 
 @riverpod
 Future<Tuple2<UserId?, StreakData>> streak(StreakRef ref) async {
-  final session = ref.watch(userSessionStateProvider);
+  final session = ref.watch(authSessionProvider);
   final userId = session?.user.id;
   final store = ref.watch(streakStoreProvider(userId));
   final savedStreak = await store.get();
@@ -59,7 +59,7 @@ Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
 
 @riverpod
 Future<ISet<PuzzleTheme>> savedThemes(SavedThemesRef ref) {
-  final session = ref.watch(userSessionStateProvider);
+  final session = ref.watch(authSessionProvider);
   final storage = ref.watch(puzzleBatchStorageProvider);
   return storage.fetchSavedThemes(userId: session?.user.id);
 }
