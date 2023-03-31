@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/model/auth/user_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
@@ -230,7 +230,7 @@ class _DailyPuzzle extends ConsumerWidget {
           lastMove: preview.initialMove.cg,
           header: Text(context.l10n.puzzleDailyPuzzle),
           onTap: () {
-            final session = ref.read(userSessionStateProvider);
+            final session = ref.read(authSessionProvider);
             pushPlatformRoute(
               context,
               rootNavigator: true,

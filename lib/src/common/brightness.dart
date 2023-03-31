@@ -14,16 +14,22 @@ class CurrentBrightness extends _$CurrentBrightness {
         (state) => state.themeMode,
       ),
     );
-    final window = WidgetsBinding.instance.window;
-    window.onPlatformBrightnessChanged = () {
+
+    WidgetsBinding.instance.platformDispatcher.onPlatformBrightnessChanged =
+        () {
       WidgetsBinding.instance.handlePlatformBrightnessChanged();
-      state = window.platformBrightness;
+      if (themeMode == ThemeMode.system) {
+        state = WidgetsBinding.instance.platformDispatcher.platformBrightness;
+      }
     };
 
-    return themeMode == ThemeMode.system
-        ? window.platformBrightness
-        : themeMode == ThemeMode.dark
-            ? Brightness.dark
-            : Brightness.light;
+    switch (themeMode) {
+      case ThemeMode.dark:
+        return Brightness.dark;
+      case ThemeMode.light:
+        return Brightness.light;
+      case ThemeMode.system:
+        return WidgetsBinding.instance.platformDispatcher.platformBrightness;
+    }
   }
 }

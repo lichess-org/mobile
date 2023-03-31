@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:collection/collection.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
@@ -11,29 +12,35 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/tree.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 
-part 'puzzle_screen_model.g.dart';
-part 'puzzle_screen_model.freezed.dart';
+part 'puzzle_view_model.g.dart';
+part 'puzzle_view_model.freezed.dart';
 
 @riverpod
-class PuzzleScreenModel extends _$PuzzleScreenModel {
+class PuzzleViewModel extends _$PuzzleViewModel {
   // ignore: avoid-late-keyword
   late Node _gameTree;
   Timer? _firstMoveTimer;
   Timer? _viewSolutionTimer;
 
   @override
-  PuzzleScreenState build(PuzzleContext context) {
+  PuzzleViewModelState build(
+    PuzzleContext initialContext, {
+    StreakData? streakData,
+  }) {
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
       _viewSolutionTimer?.cancel();
     });
 
-    return _loadNewContext(context);
+    return _loadNewContext(initialContext, streakData);
   }
 
   Future<void> playUserMove(Move move) async {
@@ -70,9 +77,11 @@ class PuzzleScreenModel extends _$PuzzleScreenModel {
         state = state.copyWith(
           feedback: PuzzleFeedback.bad,
         );
-        _sendResult(PuzzleResult.lose);
-        await Future<void>.delayed(const Duration(milliseconds: 500));
-        _setPath(state.currentPath.penultimate);
+        _onComplete(PuzzleResult.lose);
+        if (streakData == null) {
+          await Future<void>.delayed(const Duration(milliseconds: 500));
+          _setPath(state.currentPath.penultimate);
+        }
       }
     }
   }
@@ -96,7 +105,7 @@ class PuzzleScreenModel extends _$PuzzleScreenModel {
       nodeList: IList(_gameTree.nodesOn(state.currentPath)),
     );
 
-    _sendResult(PuzzleResult.lose);
+    _onComplete(PuzzleResult.lose);
 
     state = state.copyWith(
       mode: PuzzleMode.view,
@@ -112,6 +121,15 @@ class PuzzleScreenModel extends _$PuzzleScreenModel {
     });
   }
 
+  void skipMove() {
+    state = state.copyWith(
+      streakHasSkipped: true,
+    );
+    final moveIndex = state.currentPath.size - state.initialPath.size;
+    final solution = state.puzzle.puzzle.solution[moveIndex];
+    playUserMove(Move.fromUci(solution)!);
+  }
+
   Future<PuzzleContext?> changeDifficulty(PuzzleDifficulty difficulty) async {
     state = state.copyWith(
       isChangingDifficulty: true,
@@ -119,13 +137,13 @@ class PuzzleScreenModel extends _$PuzzleScreenModel {
 
     await ref
         .read(
-          puzzlePreferencesProvider(context.userId).notifier,
+          puzzlePreferencesProvider(initialContext.userId).notifier,
         )
         .setDifficulty(difficulty);
 
     final nextPuzzle = await ref.read(defaultPuzzleServiceProvider).resetBatch(
-          userId: context.userId,
-          angle: context.theme,
+          userId: initialContext.userId,
+          angle: initialContext.theme,
         );
 
     state = state.copyWith(
@@ -136,12 +154,13 @@ class PuzzleScreenModel extends _$PuzzleScreenModel {
   }
 
   void continueWithNextPuzzle(PuzzleContext nextContext) {
-    state = _loadNewContext(nextContext);
+    state = _loadNewContext(nextContext, null).copyWith(
+      streakIndex: state.streakIndex,
+      streakHasSkipped: state.streakHasSkipped,
+    );
   }
 
-  // --
-
-  PuzzleScreenState _loadNewContext(PuzzleContext context) {
+  PuzzleViewModelState _loadNewContext(PuzzleContext context, StreakData? sd) {
     final root = Root.fromPgn(context.puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
 
@@ -152,7 +171,7 @@ class PuzzleScreenModel extends _$PuzzleScreenModel {
 
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
 
-    return PuzzleScreenState(
+    return PuzzleViewModelState(
       puzzle: context.puzzle,
       glicko: context.glicko,
       mode: PuzzleMode.play,
@@ -162,6 +181,8 @@ class PuzzleScreenModel extends _$PuzzleScreenModel {
       pov: _gameTree.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
       resultSent: false,
       isChangingDifficulty: false,
+      streakIndex: sd?.index,
+      streakHasSkipped: sd?.hasSkipped,
     );
   }
 
@@ -178,10 +199,10 @@ class PuzzleScreenModel extends _$PuzzleScreenModel {
     state = state.copyWith(
       mode: PuzzleMode.view,
     );
-    await _sendResult(state.result ?? PuzzleResult.win);
+    await _onComplete(state.result ?? PuzzleResult.win);
   }
 
-  Future<void> _sendResult(PuzzleResult result) async {
+  Future<void> _onComplete(PuzzleResult result) async {
     if (state.resultSent) return;
 
     state = state.copyWith(
@@ -190,34 +211,82 @@ class PuzzleScreenModel extends _$PuzzleScreenModel {
     );
 
     final sessionNotifier =
-        puzzleSessionProvider(context.userId, context.theme).notifier;
-
-    ref.read(sessionNotifier).addAttempt(
-          state.puzzle.puzzle.id,
-          win: result == PuzzleResult.win,
-        );
-
+        puzzleSessionProvider(initialContext.userId, initialContext.theme)
+            .notifier;
     final service = ref.read(defaultPuzzleServiceProvider);
+    final repo = ref.read(puzzleRepositoryProvider);
+    final streakStore = ref.read(streakStoreProvider(initialContext.userId));
 
-    final next = await service.solve(
-      userId: context.userId,
-      angle: context.theme,
-      solution: PuzzleSolution(
-        id: state.puzzle.puzzle.id,
-        win: state.result == PuzzleResult.win,
-        rated: context.userId != null,
-      ),
-    );
+    final currentStreakIndex = state.streakIndex ?? 0;
+
+    if (streakData != null) {
+      // one fail and streak is over
+      if (result == PuzzleResult.lose) {
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        _setPath(state.currentPath.penultimate);
+        _mergeSolution();
+        state = state.copyWith(
+          mode: PuzzleMode.view,
+          nodeList: IList(_gameTree.nodesOn(state.currentPath)),
+        );
+        streakStore.clear();
+        if (initialContext.userId != null) {
+          repo.postStreakRun(currentStreakIndex);
+        }
+      }
+    } else {
+      ref.read(sessionNotifier).addAttempt(
+            state.puzzle.puzzle.id,
+            win: result == PuzzleResult.win,
+          );
+    }
+
+    final nextStreakIndex = currentStreakIndex + 1;
+
+    final next = streakData != null
+        ? result == PuzzleResult.win
+            ? await repo.fetch(streakData!.streak.get(nextStreakIndex)).fold(
+                  (puzzle) => PuzzleContext(
+                    theme: PuzzleTheme.mix,
+                    puzzle: puzzle,
+                    userId: initialContext.userId,
+                  ),
+                  (_, __) => null,
+                )
+            : null
+        : await service.solve(
+            userId: initialContext.userId,
+            angle: initialContext.theme,
+            solution: PuzzleSolution(
+              id: state.puzzle.puzzle.id,
+              win: state.result == PuzzleResult.win,
+              rated: initialContext.userId != null,
+            ),
+          );
 
     final rounds = next?.rounds;
     if (rounds != null) {
       ref.read(sessionNotifier).setRatingDiffs(rounds);
     }
 
-    // TODO check if next is null and show a message
+    if (streakData != null && next != null) {
+      streakStore.save(
+        StreakData(
+          streak: streakData!.streak,
+          puzzle: next.puzzle,
+          index: nextStreakIndex,
+          hasSkipped: state.streakHasSkipped ?? false,
+        ),
+      );
+    }
 
     state = state.copyWith(
       nextContext: next,
+      streakIndex: streakData != null
+          ? next != null
+              ? nextStreakIndex
+              : currentStreakIndex
+          : null,
     );
   }
 
@@ -287,10 +356,10 @@ enum PuzzleResult { win, lose }
 enum PuzzleFeedback { good, bad }
 
 @freezed
-class PuzzleScreenState with _$PuzzleScreenState {
-  const PuzzleScreenState._();
+class PuzzleViewModelState with _$PuzzleViewModelState {
+  const PuzzleViewModelState._();
 
-  const factory PuzzleScreenState({
+  const factory PuzzleViewModelState({
     required Puzzle puzzle,
     required PuzzleGlicko? glicko,
     required PuzzleMode mode,
@@ -304,6 +373,8 @@ class PuzzleScreenState with _$PuzzleScreenState {
     required bool resultSent,
     required bool isChangingDifficulty,
     PuzzleContext? nextContext,
+    int? streakIndex,
+    bool? streakHasSkipped,
   }) = _PuzzleScreenState;
 
   ViewNode get node => nodeList.last;

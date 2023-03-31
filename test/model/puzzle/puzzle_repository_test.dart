@@ -82,6 +82,26 @@ void main() {
       expect(result.isValue, true);
     });
 
+    test('streak', () async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/streak') {
+          return mockResponse(
+            '''
+{"game":{"id":"3dwjUYP0","perf":{"key":"rapid","name":"Rapid"},"rated":true,"players":[{"userId":"suresh","name":"Suresh (1716)","color":"white"},{"userId":"yulia","name":"Yulia (1765)","color":"black"}],"pgn":"d4 Nf6 Nf3 e6 c4 d5 cxd5 Bb4+ Nc3 Nxd5 Bd2 c6 a3 Bxc3 Bxc3 Nd7 Ne5 Qc7 e3 O-O Bd3 Nxc3 bxc3 Nxe5 dxe5 Qxe5 O-O Qxc3 a4 b6 Rc1 Qf6 Rxc6 Bb7 Rc4 Rad8 Rd4 Qg5 g3 Rxd4 exd4 Qd5 f3 Rd8 Rf2 g6 Be4 Qd7 Bxb7 Qxb7 Kg2 Qd7 Rd2 e5 dxe5","clock":"10+0"},"puzzle":{"id":"9afDa","rating":642,"plays":13675,"initialPly":54,"solution":["d7d2","d1d2","d8d2"],"themes":["endgame","crushing","short"]},"angle":{"key":"mix","name":"Puzzle themes","desc":"A bit of everything. You don't know what to expect, so you remain ready for anything! Just like in real games."},"streak":"9afDa 4V5gW 3mslj 41adQ 2tu7D 9RkvX 0vy7p A4v8U 5ZOBZ 193w0 98fRK CeonU 7yLlT 5RSB1 1tHFC 0Vsh7 7VFdg Dw0Rn EL08H 4dfgu 9ZxSP DUs0d 55MLt 9kmiT 0H0mL 0tBRV 7J6hk 0TjRQ 4G3KC DVlXY 1160r B8UHS 9NmPL 70ujM DJc5M BwkrY 94ynq D9wc6 41QGW 5sDnM 6xRVq 0EkpQ 7nksF 35Umd 0lJjY BrA7Z 8iHjv 5ypqy 4seCY 1bKuj 27svg 6K2S9 5lR21 9WveK DseMX C9m8Q 0K2CK 73mQX Bey7R CFniS 2NMq3 1eKTu 6131w 9m4mG 1H3Oi 9FxX2 4zRod 1C05H 9iEBH 21pIt 95dod 01tg7 47p37 1sK7x 0nSaW BWD8D C6WCD 9h38Q AoWyN CPdp8 ATUTK EFWL2 7GrRe 6W1OR 538Mf CH2cU An8P5 9LrrA 1cIQP B56EI 32pBl 34nq9 1aS2z 3qxyU 4NGY7 9GCq2 C43lx 2W8WA 1bnwL 4I8D1 Dc1u5 BG3VT 3pC4h C5tQJ 3rM5l 6KF3m 6Xnj5 EUX2q 1qiVv 2UTkb 7AtYx CbRCh 5xs9Y BlYuY BGFSj E7AIl 5keIv 1431G 7KYgv 68F2M 16IRi 8cNr9 8g79l BBM7N CmgIo 6zoOr D6Zsx 20mtz"}
+''',
+            200,
+          );
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await makeTestContainer(mockClient);
+      final repo = container.read(puzzleRepositoryProvider);
+      final result = await repo.streak();
+
+      expect(result.isValue, true);
+    });
+
     test('puzzle dashboard', () async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/puzzle/dashboard/30') {

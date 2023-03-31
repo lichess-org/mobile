@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 
@@ -62,7 +61,7 @@ class _Body extends ConsumerWidget {
       ),
     );
     final authController = ref.watch(authControllerProvider);
-    final userSession = ref.watch(userSessionStateProvider);
+    final userSession = ref.watch(authSessionProvider);
     final packageInfo = ref.watch(packageInfoProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
 

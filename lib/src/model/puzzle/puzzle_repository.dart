@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'puzzle.dart';
+import 'puzzle_streak.dart';
 import 'puzzle_theme.dart';
 import 'puzzle_difficulty.dart';
 
@@ -87,6 +88,33 @@ class PuzzleRepository {
         );
   }
 
+  FutureResult<PuzzleStreakResponse> streak() {
+    return apiClient
+        .get(Uri.parse('$kLichessHost/api/streak'))
+        .flatMap((response) {
+      return readJsonObject(
+        response.body,
+        mapper: (Map<String, dynamic> json) {
+          return PuzzleStreakResponse(
+            puzzle: _puzzleFromPick(pick(json).required()),
+            streak: IList(
+              pick(json['streak']).asStringOrThrow().split(' ').map(
+                    (e) => PuzzleId(e),
+                  ),
+            ),
+          );
+        },
+        logger: _log,
+      );
+    });
+  }
+
+  FutureResult<void> postStreakRun(int run) {
+    return apiClient.post(
+      Uri.parse('$kLichessHost/api/streak/$run'),
+    );
+  }
+
   FutureResult<Puzzle> daily() {
     return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/daily')).flatMap(
           (response) => readJsonObject(
@@ -152,6 +180,14 @@ class PuzzleBatchResponse with _$PuzzleBatchResponse {
     PuzzleGlicko? glicko,
     IList<PuzzleRound>? rounds,
   }) = _PuzzleBatchResponse;
+}
+
+@freezed
+class PuzzleStreakResponse with _$PuzzleStreakResponse {
+  const factory PuzzleStreakResponse({
+    required Puzzle puzzle,
+    required PuzzleStreak streak,
+  }) = _PuzzleStreakResponse;
 }
 
 // --

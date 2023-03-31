@@ -181,6 +181,96 @@ class BottomBarIconButton extends StatelessWidget {
   }
 }
 
+/// A bottom bar button that can shows an icon and text on iOS and an icon only
+/// on Android.
+class BottomBarButton extends StatelessWidget {
+  const BottomBarButton({
+    required this.icon,
+    required this.label,
+    required this.shortLabel,
+    required this.onTap,
+    this.highlighted = false,
+    this.showAndroidShortLabel = false,
+  });
+
+  final IconData icon;
+  final String label;
+  final String shortLabel;
+  final VoidCallback? onTap;
+  final bool highlighted;
+  final bool showAndroidShortLabel;
+
+  bool get enabled => onTap != null;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        final themeData = Theme.of(context);
+        return Theme(
+          data: themeData,
+          child: SizedBox(
+            height: 50,
+            child: showAndroidShortLabel
+                ? TextButton.icon(
+                    onPressed: onTap,
+                    icon: Icon(icon),
+                    label: Text(shortLabel),
+                    style: TextButton.styleFrom(
+                      foregroundColor: themeData.colorScheme.onBackground,
+                    ),
+                  )
+                : IconButton(
+                    onPressed: onTap,
+                    icon: Icon(icon),
+                    tooltip: label,
+                    color: highlighted ? themeData.colorScheme.primary : null,
+                  ),
+          ),
+        );
+      case TargetPlatform.iOS:
+        final themeData = CupertinoTheme.of(context);
+        final hightlightedColor = themeData.primaryColor;
+        return CupertinoTheme(
+          data: themeData.copyWith(
+            primaryColor: themeData.textTheme.textStyle.color,
+          ),
+          child: SizedBox(
+            height: 50,
+            child: Semantics(
+              container: true,
+              enabled: true,
+              button: true,
+              label: label,
+              excludeSemantics: true,
+              child: CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: onTap,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(icon, color: highlighted ? hightlightedColor : null),
+                    Text(
+                      shortLabel,
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: highlighted ? hightlightedColor : null,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      default:
+        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        return const SizedBox.shrink();
+    }
+  }
+}
+
 /// A button that looks like a ListTile on a Card.
 class CardButton extends StatefulWidget {
   const CardButton({
@@ -224,7 +314,7 @@ class _CardButtonState extends State<CardButton> {
         scale: scale,
         duration: const Duration(milliseconds: 100),
         child: Opacity(
-          opacity: widget.onTap == null ? 0.7 : 1.0,
+          opacity: widget.onTap == null ? 0.4 : 1.0,
           child: PlatformCard(
             child: Padding(
               padding: const EdgeInsets.all(6.0),

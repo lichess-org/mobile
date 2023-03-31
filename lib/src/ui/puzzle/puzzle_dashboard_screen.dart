@@ -3,9 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/common/connectivity.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
-import 'package:lichess_mobile/src/model/auth/user_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_dashboard_widget.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -13,10 +14,11 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 
+import 'puzzle_screen.dart';
 import 'puzzle_themes_screen.dart';
+import 'puzzle_streak_screen.dart';
 
 final daysProvider = StateProvider<Days>((ref) => Days.month);
 
@@ -64,7 +66,9 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     const theme = PuzzleTheme.mix;
     final nextPuzzle = ref.watch(nextPuzzleProvider(theme));
-    final session = ref.watch(userSessionStateProvider);
+    final connectivity = ref.watch(connectivityChangesProvider);
+    final session = ref.watch(authSessionProvider);
+
     final content = [
       Padding(
         padding: Styles.bodySectionPadding,
@@ -116,6 +120,27 @@ class _Body extends ConsumerWidget {
           },
         ),
       ),
+      Padding(
+        padding: Styles.bodySectionBottomPadding,
+        child: CardButton(
+          icon: const Icon(LichessIcons.streak, size: 44),
+          title: const Text('Puzzle Streak'),
+          subtitle: Text(context.l10n.puzzleStreakDescription),
+          onTap: connectivity.when(
+            data: (data) => data.isOnline
+                ? () {
+                    pushPlatformRoute(
+                      context,
+                      rootNavigator: true,
+                      builder: (context) => const PuzzleStreakScreen(),
+                    );
+                  }
+                : null,
+            loading: () => null,
+            error: (_, __) => null,
+          ),
+        ),
+      ),
       if (session != null) PuzzleDashboardWidget(),
     ];
 
@@ -153,11 +178,11 @@ class _PuzzleButton extends StatelessWidget {
 class DaysSelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(userSessionStateProvider);
+    final session = ref.watch(authSessionProvider);
     final day = ref.watch(daysProvider);
     return session != null
-        ? InkWell(
-            onTap: () => showChoicesPicker(
+        ? AppBarTextButton(
+            onPressed: () => showChoicesPicker(
               context,
               choices: Days.values,
               selectedItem: day,
@@ -166,13 +191,7 @@ class DaysSelector extends ConsumerWidget {
                 ref.read(daysProvider.notifier).state = newDay;
               },
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(_daysL10n(context, day)),
-                const Icon(Icons.arrow_drop_down),
-              ],
-            ),
+            child: Text(_daysL10n(context, day)),
           )
         : const SizedBox.shrink();
   }

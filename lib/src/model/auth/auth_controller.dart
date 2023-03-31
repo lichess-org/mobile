@@ -2,6 +2,7 @@ import 'package:async/async.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
 
+import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/errors.dart';
 import 'package:lichess_mobile/src/common/api_client.dart';
@@ -10,6 +11,7 @@ import 'package:lichess_mobile/src/utils/json.dart';
 
 import 'user_session.dart';
 import 'auth_repository.dart';
+import 'session_storage.dart';
 
 part 'auth_controller.g.dart';
 
@@ -50,7 +52,7 @@ class AuthController extends _$AuthController {
 
     state = result.fold(
       (session) {
-        ref.read(userSessionStateProvider.notifier).update(session);
+        ref.read(authSessionProvider.notifier).update(session);
         return const AsyncValue.data(null);
       },
       (e, st) {
@@ -64,8 +66,32 @@ class AuthController extends _$AuthController {
     await Future<void>.delayed(const Duration(milliseconds: 500));
     final result = await ref.read(authRepositoryProvider).signOut();
     if (result.isValue) {
-      await ref.read(userSessionStateProvider.notifier).delete();
+      await ref.read(authSessionProvider.notifier).delete();
     }
     state = result.asAsyncValue;
+  }
+}
+
+@Riverpod(keepAlive: true)
+class AuthSession extends _$AuthSession {
+  @override
+  UserSession? build() {
+    // requireValue is possible because appDependenciesProvider is loaded before
+    // anything. See: lib/src/app.dart
+    return ref.watch(
+      appDependenciesProvider.select((data) => data.requireValue.userSession),
+    );
+  }
+
+  Future<void> update(UserSession session) async {
+    final sessionStorage = ref.read(sessionStorageProvider);
+    await sessionStorage.write(session);
+    state = session;
+  }
+
+  Future<void> delete() async {
+    final sessionStorage = ref.read(sessionStorageProvider);
+    await sessionStorage.delete();
+    state = null;
   }
 }
