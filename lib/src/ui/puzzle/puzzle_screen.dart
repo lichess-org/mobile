@@ -352,7 +352,7 @@ class _BottomBar extends ConsumerWidget {
                         puzzleState.nextContext != null
                     ? () => ref
                         .read(viewModelProvider.notifier)
-                        .continueWithNextPuzzle(puzzleState.nextContext!)
+                        .loadPuzzle(puzzleState.nextContext!)
                     : null,
                 highlighted: true,
                 label: context.l10n.puzzleContinueTraining,
@@ -419,7 +419,7 @@ class _DifficultySelector extends ConsumerWidget {
                         if (context.mounted && nextContext != null) {
                           ref
                               .read(viewModelProvider.notifier)
-                              .continueWithNextPuzzle(nextContext);
+                              .loadPuzzle(nextContext);
                         }
                       },
                     );

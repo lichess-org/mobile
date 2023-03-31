@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 
@@ -103,6 +105,25 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
                       isCurrent: currentAttempt == null,
                       brightness: brightness,
                       key: lastAttemptKey,
+                      onTap: (id) async {
+                        final provider = puzzleProvider(id);
+                        final puzzle = await ref.read(provider.future);
+                        final nextContext = PuzzleContext(
+                          userId: widget.initialPuzzleContext.userId,
+                          theme: widget.initialPuzzleContext.theme,
+                          puzzle: puzzle,
+                        );
+
+                        if (!ref.read(provider).isLoading) {
+                          ref
+                              .read(
+                                puzzleViewModelProvider(
+                                  widget.initialPuzzleContext,
+                                ).notifier,
+                              )
+                              .loadPuzzle(nextContext);
+                        }
+                      },
                     ),
                 ],
               ),
@@ -119,12 +140,14 @@ class _SessionItem extends StatelessWidget {
     this.attempt,
     required this.isCurrent,
     required this.brightness,
+    this.onTap,
     super.key,
   });
 
   final bool isCurrent;
   final PuzzleAttempt? attempt;
   final Brightness brightness;
+  final void Function(PuzzleId id)? onTap;
 
   Color get good => brightness == Brightness.light
       ? LichessColors.good.shade300
@@ -142,44 +165,47 @@ class _SessionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 38,
-      height: 26,
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      decoration: BoxDecoration(
-        color: isCurrent
-            ? Colors.grey
-            : attempt != null
-                ? attempt!.win
-                    ? good
-                    : error
-                : next,
-        borderRadius: const BorderRadius.all(Radius.circular(5)),
-      ),
-      child: attempt?.ratingDiff != null && attempt!.ratingDiff != 0
-          ? Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: FittedBox(
-                fit: BoxFit.cover,
-                child: Text(
-                  attempt!.ratingDiffString!,
-                  maxLines: 1,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    height: 1,
+    return GestureDetector(
+      onTap: attempt != null ? () => onTap?.call(attempt!.id) : null,
+      child: Container(
+        width: 38,
+        height: 26,
+        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        decoration: BoxDecoration(
+          color: isCurrent
+              ? Colors.grey
+              : attempt != null
+                  ? attempt!.win
+                      ? good
+                      : error
+                  : next,
+          borderRadius: const BorderRadius.all(Radius.circular(5)),
+        ),
+        child: attempt?.ratingDiff != null && attempt!.ratingDiff != 0
+            ? Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: Text(
+                    attempt!.ratingDiffString!,
+                    maxLines: 1,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      height: 1,
+                    ),
                   ),
                 ),
+              )
+            : Icon(
+                attempt != null
+                    ? attempt!.win
+                        ? Icons.check
+                        : Icons.close
+                    : null,
+                color: Colors.white,
+                size: 18,
               ),
-            )
-          : Icon(
-              attempt != null
-                  ? attempt!.win
-                      ? Icons.check
-                      : Icons.close
-                  : null,
-              color: Colors.white,
-              size: 18,
-            ),
+      ),
     );
   }
 }
