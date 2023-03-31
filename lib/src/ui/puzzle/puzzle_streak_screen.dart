@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -67,11 +67,11 @@ class _Load extends ConsumerWidget {
       data: (data) {
         return _Body(
           initialPuzzleContext: PuzzleContext(
-            puzzle: data.puzzle,
+            puzzle: data.item2.puzzle,
             theme: PuzzleTheme.mix,
-            userId: null,
+            userId: data.item1,
           ),
-          streak: data.streak,
+          streakData: data.item2,
         );
       },
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
@@ -99,18 +99,18 @@ class _Load extends ConsumerWidget {
 class _Body extends ConsumerWidget {
   const _Body({
     required this.initialPuzzleContext,
-    required this.streak,
+    required this.streakData,
   });
 
   final PuzzleContext initialPuzzleContext;
-  final PuzzleStreak streak;
+  final StreakData streakData;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet =
         ref.watch(boardPreferencesProvider.select((p) => p.pieceSet));
     final viewModelProvider =
-        puzzleViewModelProvider(initialPuzzleContext, streak: streak);
+        puzzleViewModelProvider(initialPuzzleContext, streakData: streakData);
     final puzzleState = ref.watch(viewModelProvider);
     const streakColor = LichessColors.brag;
     return Column(
