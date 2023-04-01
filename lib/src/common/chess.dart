@@ -9,6 +9,7 @@ const altCastles = {
   'e8h8': 'e8g8',
 };
 
+// crazyhouse is implemented in dartchess, but not supported by the ui yet
 const ISet<Variant> supportedVariants = ISetConst({
   Variant.standard,
   Variant.chess960,
@@ -18,6 +19,7 @@ const ISet<Variant> supportedVariants = ISetConst({
   Variant.threeCheck,
   Variant.atomic,
   Variant.racingKings,
+  Variant.horde,
 });
 
 enum Variant {
@@ -38,7 +40,6 @@ enum Variant {
   ///
   /// Will throw an [ArgumentError] if called on [Variant.fromPosition].
   Position get initialPosition {
-    // TODO implement missing variants
     switch (this) {
       case Variant.standard:
       case Variant.chess960:
@@ -55,8 +56,10 @@ enum Variant {
         return Atomic.initial;
       case Variant.crazyhouse:
         return Crazyhouse.initial;
-      default:
-        throw UnimplementedError();
+      case Variant.horde:
+        return Horde.initial;
+      case Variant.racingKings:
+        return RacingKings.initial;
     }
   }
 
