@@ -6,6 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
+import 'package:lichess_mobile/src/utils/box.dart';
 
 part 'tree.freezed.dart';
 
@@ -26,6 +27,23 @@ abstract class RootOrNode {
 
   /// Prepends a child to this node.
   void prependChild(Node node) => children.insert(0, node);
+
+  /// Replaces a child with another node.
+  ///
+  /// Returns the new node, or null if the old node was not found.
+  Node? replaceChild(Node oldNode, Node newNode) {
+    final index = children.indexWhere((n) => n.id == oldNode.id);
+    if (index == -1) {
+      return null;
+    }
+    children[index] = newNode;
+    return newNode;
+  }
+
+  /// Finds the child node with that id.
+  Node? childById(UciCharPair id) {
+    return children.firstWhereOrNull((node) => node.id == id);
+  }
 
   /// An iterable of all nodes on the mainline.
   Iterable<ViewNode> get mainline sync* {
@@ -61,6 +79,18 @@ abstract class RootOrNode {
 
   /// Gets the path of the mainline.
   UciPath get mainlinePath => UciPath.fromNodeList(mainline);
+
+  /// Updates the node at the given path.
+  ///
+  /// Returns the updated node, or null if the node was not found.
+  Node? updateAt(UciPath path, Node Function(Node node) update) {
+    final node = nodeAtOrNull(path);
+    if (node != null && node is Node) {
+      final parent = nodeAt(path.penultimate);
+      return parent.replaceChild(node, update(node));
+    }
+    return null;
+  }
 
   /// Adds a new node at the given path and returns the new path.
   ///
@@ -141,11 +171,6 @@ abstract class RootOrNode {
       return null;
     }
   }
-
-  /// Finds the child node with that id.
-  Node? childById(UciCharPair id) {
-    return children.firstWhereOrNull((node) => node.id == id);
-  }
 }
 
 class Node extends RootOrNode {
@@ -155,30 +180,30 @@ class Node extends RootOrNode {
     required super.fen,
     required super.position,
     required this.sanMove,
+    this.eval,
   });
 
   final UciCharPair id;
 
   final SanMove sanMove;
+  final ClientEval? eval;
 
   Node copyWith({
-    int? ply,
-    String? fen,
-    SanMove? sanMove,
-    Position? position,
+    Box<ClientEval?>? eval,
   }) {
     return Node(
       id: id,
-      ply: ply ?? this.ply,
-      fen: fen ?? this.fen,
-      sanMove: sanMove ?? this.sanMove,
-      position: position ?? this.position,
+      ply: ply,
+      fen: fen,
+      sanMove: sanMove,
+      position: position,
+      eval: eval != null ? eval.value : this.eval,
     );
   }
 
   @override
   String toString() {
-    return 'Node(id: $id, ply: $ply, fen: $fen)';
+    return 'Node(id: $id, ply: $ply, fen: $fen, sanMove: $sanMove, eval: $eval, children: $children)';
   }
 }
 
@@ -244,4 +269,28 @@ class ViewNode with _$ViewNode {
       children: node.children.map(ViewNode.fromNode).toIList(),
     );
   }
+}
+
+@freezed
+class ClientEval with _$ClientEval {
+  const factory ClientEval({
+    required String fen,
+    required int depth,
+    required int nodes,
+    required IList<PvData> pvs,
+    required int millis,
+    required int maxDepth,
+    required double knps,
+    int? cp,
+    int? mate,
+  }) = _ClientEval;
+}
+
+@freezed
+class PvData with _$PvData {
+  const factory PvData({
+    required IList<String> moves,
+    int? mate,
+    int? cp,
+  }) = _PvData;
 }

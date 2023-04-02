@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'dart:math' as math;
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -5,6 +6,8 @@ import 'package:stockfish/stockfish.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 import 'package:logging/logging.dart';
+
+import 'package:lichess_mobile/src/common/tree.dart';
 
 part 'stockfish_engine.freezed.dart';
 
@@ -19,10 +22,12 @@ class StockfishEngine {
       }
     });
 
-    _stockfish.stdout.listen((String line) {
+    _stdoutSub = _stockfish.stdout.listen((String line) {
       _process(line);
     });
   }
+
+  StreamSubscription<String>? _stdoutSub;
 
   final _log = Logger('StockfishEngine');
   final Stockfish _stockfish = Stockfish();
@@ -38,6 +43,7 @@ class StockfishEngine {
   ValueListenable<StockfishState> get state => _stockfish.state;
 
   void dispose() {
+    _stdoutSub?.cancel();
     _stockfish.dispose();
   }
 
@@ -240,28 +246,4 @@ class Work with _$Work {
     required IList<String> moves,
     required void Function(ClientEval) emit,
   }) = _Work;
-}
-
-@freezed
-class ClientEval with _$ClientEval {
-  const factory ClientEval({
-    required String fen,
-    required int depth,
-    required int nodes,
-    required IList<PvData> pvs,
-    required int millis,
-    required int maxDepth,
-    required double knps,
-    int? cp,
-    int? mate,
-  }) = _ClientEval;
-}
-
-@freezed
-class PvData with _$PvData {
-  const factory PvData({
-    required IList<String> moves,
-    int? mate,
-    int? cp,
-  }) = _PvData;
 }
