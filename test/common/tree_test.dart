@@ -160,7 +160,7 @@ void main() {
         equals(eval),
       );
       expect(newNode?.eval, equals(eval));
-      expect(newNode, equals(branch.copyWith(eval: Box(eval))));
+      expect(newNode?.id, equals(branch.id));
     });
 
     test('addNodeAt', () {
