@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/app_dependencies.dart';
 
 part 'sound_service.g.dart';
 
-enum Sound { move, capture, dong }
+enum Sound { move, capture, dong, error, confirmation }
 
 typedef SoundMap = IMap<Sound, int>;
 
@@ -58,13 +58,13 @@ class SoundService {
   final SoundMap _sounds;
   final SoundServiceRef _ref;
 
-  void playMove() => _play(Sound.move);
+  void playMove() => play(Sound.move);
 
-  void playCapture() => _play(Sound.capture);
+  void playCapture() => play(Sound.capture);
 
-  void playDong() => _play(Sound.dong);
+  void playDong() => play(Sound.dong);
 
-  void _play(Sound sound) {
+  void play(Sound sound) {
     final isEnabled = _ref.read(generalPreferencesProvider).isSoundEnabled;
     final soundId = _sounds[sound];
     if (soundId != null && isEnabled) _pool.play(soundId);

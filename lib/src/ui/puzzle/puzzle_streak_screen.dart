@@ -239,7 +239,26 @@ class _BottomBar extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            if (puzzleState.mode == PuzzleMode.view)
+            if (puzzleState.streakFinished == null)
+              BottomBarButton(
+                icon: Icons.info_outline,
+                label: context.l10n.aboutX('Streak'),
+                shortLabel: context.l10n.about,
+                showAndroidShortLabel: true,
+                onTap: () => _streakInfoDialogBuilder(context),
+              ),
+            if (puzzleState.streakFinished == null)
+              BottomBarButton(
+                icon: Icons.skip_next,
+                label: context.l10n.skipThisMove,
+                shortLabel: 'Skip',
+                showAndroidShortLabel: true,
+                onTap: puzzleState.streakHasSkipped == true ||
+                        puzzleState.mode == PuzzleMode.view
+                    ? null
+                    : () => ref.read(viewModelProvider.notifier).skipMove(),
+              ),
+            if (puzzleState.streakFinished != null)
               BottomBarButton(
                 onTap: () {
                   Share.share(
@@ -252,26 +271,7 @@ class _BottomBar extends ConsumerWidget {
                     ? CupertinoIcons.share
                     : Icons.share,
               ),
-            if (puzzleState.mode != PuzzleMode.view)
-              BottomBarButton(
-                icon: Icons.info_outline,
-                label: context.l10n.aboutX('Streak'),
-                shortLabel: context.l10n.about,
-                showAndroidShortLabel: true,
-                onTap: () => _streakInfoDialogBuilder(context),
-              ),
-            if (puzzleState.mode != PuzzleMode.view)
-              BottomBarButton(
-                icon: Icons.skip_next,
-                label: context.l10n.skipThisMove,
-                shortLabel: 'Skip',
-                showAndroidShortLabel: true,
-                onTap: puzzleState.streakHasSkipped == true ||
-                        puzzleState.mode == PuzzleMode.view
-                    ? null
-                    : () => ref.read(viewModelProvider.notifier).skipMove(),
-              ),
-            if (puzzleState.mode == PuzzleMode.view)
+            if (puzzleState.streakFinished != null)
               BottomBarButton(
                 onTap: puzzleState.canGoBack
                     ? () => ref.read(viewModelProvider.notifier).userPrevious()
@@ -280,7 +280,7 @@ class _BottomBar extends ConsumerWidget {
                 shortLabel: 'Previous',
                 icon: CupertinoIcons.chevron_back,
               ),
-            if (puzzleState.mode == PuzzleMode.view)
+            if (puzzleState.streakFinished != null)
               BottomBarButton(
                 onTap: puzzleState.canGoNext
                     ? () => ref.read(viewModelProvider.notifier).userNext()
@@ -289,30 +289,16 @@ class _BottomBar extends ConsumerWidget {
                 shortLabel: context.l10n.next,
                 icon: CupertinoIcons.chevron_forward,
               ),
-            if (puzzleState.mode == PuzzleMode.view)
-              if (puzzleState.result == PuzzleResult.win)
-                BottomBarButton(
-                  onTap: puzzleState.mode == PuzzleMode.view &&
-                          puzzleState.nextContext != null
-                      ? () => ref
-                          .read(viewModelProvider.notifier)
-                          .continueWithNextPuzzle(puzzleState.nextContext!)
-                      : null,
-                  highlighted: true,
-                  label: context.l10n.puzzleContinueTheStreak,
-                  shortLabel: 'Continue',
-                  icon: CupertinoIcons.play_arrow_solid,
-                )
-              else
-                BottomBarButton(
-                  onTap: ref.read(streakProvider).isLoading == false
-                      ? () => ref.invalidate(streakProvider)
-                      : null,
-                  highlighted: true,
-                  label: context.l10n.puzzleNewStreak,
-                  shortLabel: 'New Streak',
-                  icon: CupertinoIcons.play_arrow_solid,
-                ),
+            if (puzzleState.streakFinished != null)
+              BottomBarButton(
+                onTap: ref.read(streakProvider).isLoading == false
+                    ? () => ref.invalidate(streakProvider)
+                    : null,
+                highlighted: true,
+                label: context.l10n.puzzleNewStreak,
+                shortLabel: 'New Streak',
+                icon: CupertinoIcons.play_arrow_solid,
+              ),
           ],
         ),
       ),

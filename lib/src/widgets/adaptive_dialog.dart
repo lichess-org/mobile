@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 /// A dialog modal that adapts to the platform (Android/iOS).
-///
 Future<T?> showAdaptiveDialog<T>({
   required BuildContext context,
   required WidgetBuilder builder,
