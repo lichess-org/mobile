@@ -295,7 +295,7 @@ class _CardButtonState extends State<CardButton> {
 
   void _onTapDown() {
     if (widget.onTap == null) return;
-    setState(() => scale = 0.98);
+    setState(() => scale = 0.96);
   }
 
   void _onTapCancel() {
@@ -305,29 +305,53 @@ class _CardButtonState extends State<CardButton> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onTap,
-      onTapDown: (_) => _onTapDown(),
-      onTapCancel: _onTapCancel,
-      onTapUp: (_) => _onTapCancel(),
-      child: AnimatedScale(
-        scale: scale,
-        duration: const Duration(milliseconds: 100),
-        child: Opacity(
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return Opacity(
           opacity: widget.onTap == null ? 0.4 : 1.0,
           child: PlatformCard(
-            child: Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: ListTile(
-                leading: widget.icon,
-                title: widget.title,
-                subtitle: widget.subtitle,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(10),
+              onTap: widget.onTap,
+              child: Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: ListTile(
+                  leading: widget.icon,
+                  title: widget.title,
+                  subtitle: widget.subtitle,
+                ),
               ),
             ),
           ),
-        ),
-      ),
-    );
+        );
+      case TargetPlatform.iOS:
+        return GestureDetector(
+          onTap: widget.onTap,
+          onTapDown: (_) => _onTapDown(),
+          onTapCancel: _onTapCancel,
+          onTapUp: (_) => _onTapCancel(),
+          child: AnimatedScale(
+            scale: scale,
+            duration: const Duration(milliseconds: 100),
+            child: Opacity(
+              opacity: widget.onTap == null ? 0.4 : 1.0,
+              child: PlatformCard(
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: ListTile(
+                    leading: widget.icon,
+                    title: widget.title,
+                    subtitle: widget.subtitle,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      default:
+        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        return const SizedBox.shrink();
+    }
   }
 }
 

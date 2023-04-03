@@ -110,6 +110,9 @@ class PlatformCard extends StatelessWidget {
               child: child,
             )
           : Card(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
               semanticContainer: semanticContainer,
               margin: margin,
               child: child,

@@ -124,8 +124,16 @@ class _Body extends ConsumerWidget {
         padding: Styles.bodySectionBottomPadding,
         child: CardButton(
           icon: const Icon(LichessIcons.streak, size: 44),
-          title: const Text('Puzzle Streak'),
-          subtitle: Text(context.l10n.puzzleStreakDescription),
+          title: Text(
+            'Puzzle Streak',
+            style: Styles.sectionTitle,
+          ),
+          subtitle: Text(
+            context.l10n.puzzleStreakDescription.characters
+                    .takeWhile((c) => c != '.')
+                    .toString() +
+                (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
+          ),
           onTap: connectivity.when(
             data: (data) => data.isOnline
                 ? () {
