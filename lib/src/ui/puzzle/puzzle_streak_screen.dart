@@ -14,7 +14,8 @@ import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -63,16 +64,17 @@ class _Load extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final streak = ref.watch(streakProvider);
+    final session = ref.watch(authSessionProvider);
 
     return streak.when(
       data: (data) {
         return _Body(
           initialPuzzleContext: PuzzleContext(
-            puzzle: data.item2.puzzle,
+            puzzle: data.puzzle,
             theme: PuzzleTheme.mix,
-            userId: data.item1,
+            userId: session?.user.id,
           ),
-          streakData: data.item2,
+          streak: data.streak,
         );
       },
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
@@ -100,18 +102,18 @@ class _Load extends ConsumerWidget {
 class _Body extends ConsumerWidget {
   const _Body({
     required this.initialPuzzleContext,
-    required this.streakData,
+    required this.streak,
   });
 
   final PuzzleContext initialPuzzleContext;
-  final StreakData streakData;
+  final PuzzleStreak streak;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet =
         ref.watch(boardPreferencesProvider.select((p) => p.pieceSet));
     final viewModelProvider =
-        puzzleViewModelProvider(initialPuzzleContext, streakData: streakData);
+        puzzleViewModelProvider(initialPuzzleContext, streak: streak);
     final puzzleState = ref.watch(viewModelProvider);
     const streakColor = LichessColors.brag;
     return Column(

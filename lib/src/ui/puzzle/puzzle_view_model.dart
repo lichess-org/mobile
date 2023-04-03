@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/tree.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
@@ -33,14 +32,14 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   @override
   PuzzleViewModelState build(
     PuzzleContext initialContext, {
-    StreakData? streakData,
+    PuzzleStreak? streak,
   }) {
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
       _viewSolutionTimer?.cancel();
     });
 
-    return _loadNewContext(initialContext, streakData);
+    return _loadNewContext(initialContext);
   }
 
   Future<void> playUserMove(Move move) async {
@@ -78,7 +77,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
           feedback: PuzzleFeedback.bad,
         );
         _onComplete(PuzzleResult.lose);
-        if (streakData == null) {
+        if (streak == null) {
           await Future<void>.delayed(const Duration(milliseconds: 500));
           _setPath(state.currentPath.penultimate);
         }
@@ -154,13 +153,13 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   }
 
   void continueWithNextPuzzle(PuzzleContext nextContext) {
-    state = _loadNewContext(nextContext, null).copyWith(
+    state = _loadNewContext(nextContext).copyWith(
       streakIndex: state.streakIndex,
       streakHasSkipped: state.streakHasSkipped,
     );
   }
 
-  PuzzleViewModelState _loadNewContext(PuzzleContext context, StreakData? sd) {
+  PuzzleViewModelState _loadNewContext(PuzzleContext context) {
     final root = Root.fromPgn(context.puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
 
@@ -181,8 +180,6 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       pov: _gameTree.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
       resultSent: false,
       isChangingDifficulty: false,
-      streakIndex: sd?.index,
-      streakHasSkipped: sd?.hasSkipped,
     );
   }
 
@@ -215,11 +212,10 @@ class PuzzleViewModel extends _$PuzzleViewModel {
             .notifier;
     final service = ref.read(defaultPuzzleServiceProvider);
     final repo = ref.read(puzzleRepositoryProvider);
-    final streakStore = ref.read(streakStoreProvider(initialContext.userId));
 
     final currentStreakIndex = state.streakIndex ?? 0;
 
-    if (streakData != null) {
+    if (streak != null) {
       // one fail and streak is over
       if (result == PuzzleResult.lose) {
         await Future<void>.delayed(const Duration(milliseconds: 500));
@@ -229,7 +225,6 @@ class PuzzleViewModel extends _$PuzzleViewModel {
           mode: PuzzleMode.view,
           nodeList: IList(_gameTree.nodesOn(state.currentPath)),
         );
-        streakStore.clear();
         if (initialContext.userId != null) {
           repo.postStreakRun(currentStreakIndex);
         }
@@ -243,9 +238,9 @@ class PuzzleViewModel extends _$PuzzleViewModel {
 
     final nextStreakIndex = currentStreakIndex + 1;
 
-    final next = streakData != null
+    final next = streak != null
         ? result == PuzzleResult.win
-            ? await repo.fetch(streakData!.streak.get(nextStreakIndex)).fold(
+            ? await repo.fetch(streak!.get(nextStreakIndex)).fold(
                   (puzzle) => PuzzleContext(
                     theme: PuzzleTheme.mix,
                     puzzle: puzzle,
@@ -269,20 +264,9 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       ref.read(sessionNotifier).setRatingDiffs(rounds);
     }
 
-    if (streakData != null && next != null) {
-      streakStore.save(
-        StreakData(
-          streak: streakData!.streak,
-          puzzle: next.puzzle,
-          index: nextStreakIndex,
-          hasSkipped: state.streakHasSkipped ?? false,
-        ),
-      );
-    }
-
     state = state.copyWith(
       nextContext: next,
-      streakIndex: streakData != null
+      streakIndex: streak != null
           ? next != null
               ? nextStreakIndex
               : currentStreakIndex
