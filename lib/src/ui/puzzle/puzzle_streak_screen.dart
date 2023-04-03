@@ -116,7 +116,7 @@ class _Body extends ConsumerWidget {
         puzzleViewModelProvider(initialPuzzleContext, streak: streak);
     final puzzleState = ref.watch(viewModelProvider);
     const streakColor = LichessColors.brag;
-    return Column(
+    final content = Column(
       children: [
         Expanded(
           child: Center(
@@ -190,6 +190,29 @@ class _Body extends ConsumerWidget {
         ),
       ],
     );
+
+    return puzzleState.streakIndex == null
+        ? content
+        : WillPopScope(
+            onWillPop: () async {
+              final result = await showAdaptiveDialog<bool>(
+                context: context,
+                builder: (context) => YesNoDialog(
+                  title: const Text('Are you sure?'),
+                  content: const Text(
+                    'You will lose your current streak.',
+                  ),
+                  onYes: () {
+                    ref.read(viewModelProvider.notifier).sendStreakResult();
+                    return Navigator.of(context).pop(true);
+                  },
+                  onNo: () => Navigator.of(context).pop(false),
+                ),
+              );
+              return result ?? false;
+            },
+            child: content,
+          );
   }
 }
 

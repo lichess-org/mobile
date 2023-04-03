@@ -159,6 +159,13 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     );
   }
 
+  void sendStreakResult() {
+    if (initialContext.userId != null) {
+      final repo = ref.read(puzzleRepositoryProvider);
+      repo.postStreakRun(state.streakIndex ?? 0);
+    }
+  }
+
   PuzzleViewModelState _loadNewContext(PuzzleContext context) {
     final root = Root.fromPgn(context.puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
@@ -225,9 +232,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
           mode: PuzzleMode.view,
           nodeList: IList(_gameTree.nodesOn(state.currentPath)),
         );
-        if (initialContext.userId != null) {
-          repo.postStreakRun(currentStreakIndex);
-        }
+        sendStreakResult();
       }
     } else {
       ref.read(sessionNotifier).addAttempt(
