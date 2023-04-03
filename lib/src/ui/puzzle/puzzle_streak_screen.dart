@@ -161,20 +161,29 @@ class _Body extends ConsumerWidget {
                     right: 10.0,
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      const Icon(
-                        LichessIcons.streak,
-                        size: 40.0,
-                        color: streakColor,
+                      Row(
+                        children: [
+                          const Icon(
+                            LichessIcons.streak,
+                            size: 40.0,
+                            color: streakColor,
+                          ),
+                          const SizedBox(width: 8.0),
+                          Text(
+                            (puzzleState.streakIndex ?? 0).toString(),
+                            style: const TextStyle(
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.bold,
+                              color: streakColor,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 8.0),
                       Text(
-                        (puzzleState.streakIndex ?? 0).toString(),
-                        style: const TextStyle(
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                          color: streakColor,
+                        context.l10n.puzzleRatingX(
+                          puzzleState.puzzle.puzzle.rating.toString(),
                         ),
                       ),
                     ],
