@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/common/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -228,6 +229,14 @@ class _BottomBar extends ConsumerWidget {
               ),
             if (puzzleState.mode != PuzzleMode.view)
               BottomBarButton(
+                icon: Icons.info_outline,
+                label: context.l10n.aboutX('Streak'),
+                shortLabel: context.l10n.about,
+                showAndroidShortLabel: true,
+                onTap: () => _streakInfoDialogBuilder(context),
+              ),
+            if (puzzleState.mode != PuzzleMode.view)
+              BottomBarButton(
                 icon: Icons.skip_next,
                 label: context.l10n.skipThisMove,
                 shortLabel: 'Skip',
@@ -282,6 +291,35 @@ class _BottomBar extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _streakInfoDialogBuilder(BuildContext context) {
+    return showAdaptiveDialog(
+      context: context,
+      builder: (context) {
+        return defaultTargetPlatform == TargetPlatform.iOS
+            ? CupertinoAlertDialog(
+                title: Text(context.l10n.aboutX('Puzzle Streak')),
+                content: Text(context.l10n.puzzleStreakDescription),
+                actions: [
+                  CupertinoDialogAction(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('OK'),
+                  ),
+                ],
+              )
+            : AlertDialog(
+                title: Text(context.l10n.aboutX('Puzzle Streak')),
+                content: Text(context.l10n.puzzleStreakDescription),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+      },
     );
   }
 }
