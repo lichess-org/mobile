@@ -311,7 +311,7 @@ class _CardButtonState extends State<CardButton> {
           opacity: widget.onTap == null ? 0.4 : 1.0,
           child: PlatformCard(
             child: InkWell(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
               onTap: widget.onTap,
               child: Padding(
                 padding: const EdgeInsets.all(6.0),
