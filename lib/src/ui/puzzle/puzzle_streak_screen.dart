@@ -209,7 +209,7 @@ class _Body extends ConsumerWidget {
                 builder: (context) => YesNoDialog(
                   title: const Text('Are you sure?'),
                   content: const Text(
-                    'You will lose your current streak.',
+                    'You will lose your current streak and your score will be saved.',
                   ),
                   onYes: () {
                     ref.read(viewModelProvider.notifier).sendStreakResult();
