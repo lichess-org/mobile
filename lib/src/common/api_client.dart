@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:async/async.dart';
 import 'package:logging/logging.dart';
@@ -20,7 +21,6 @@ const defaultRetries = [
   Duration(milliseconds: 300),
   Duration(milliseconds: 500),
   Duration(milliseconds: 800),
-  Duration(milliseconds: 1300),
 ];
 
 @Riverpod(keepAlive: true)
@@ -55,10 +55,15 @@ class ApiClient {
   ApiClient(
     this._log,
     this._client, {
-    List<Duration> retries = defaultRetries,
-  }) : _retryClient = RetryClient.withDelays(
+    List<Duration> retryDelays = defaultRetries,
+  })  : _retryClient = RetryClient.withDelays(
           _client,
-          retries,
+          retryDelays,
+        ),
+        _retryClientOnError = RetryClient.withDelays(
+          _client,
+          retryDelays,
+          whenError: (error, _) async => error is SocketException,
         ) {
     _log.info('Creating new ApiClient.');
   }
@@ -66,6 +71,7 @@ class ApiClient {
   final Logger _log;
   final Client _client;
   final RetryClient _retryClient;
+  final RetryClient _retryClientOnError;
 
   /// Makes app user agent
   static String userAgent(PackageInfo info, LightUser? user) =>
@@ -74,10 +80,11 @@ class ApiClient {
   FutureResult<Response> get(
     Uri url, {
     Map<String, String>? headers,
-    bool retry = true,
+    bool retryOnError = true,
   }) =>
       Result.capture(
-        (retry ? _retryClient : _client).get(url, headers: headers),
+        (retryOnError ? _retryClientOnError : _retryClient)
+            .get(url, headers: headers),
       ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
         return GenericIOException();
@@ -90,10 +97,10 @@ class ApiClient {
     Map<String, String>? headers,
     Object? body,
     Encoding? encoding,
-    bool retry = true,
+    bool retryOnError = true,
   }) =>
       Result.capture(
-        (retry ? _retryClient : _client)
+        (retryOnError ? _retryClientOnError : _retryClient)
             .post(url, headers: headers, body: body, encoding: encoding),
       ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
@@ -107,10 +114,10 @@ class ApiClient {
     Map<String, String>? headers,
     Object? body,
     Encoding? encoding,
-    bool retry = true,
+    bool retryOnError = true,
   }) =>
       Result.capture(
-        (retry ? _retryClient : _client)
+        (retryOnError ? _retryClientOnError : _retryClient)
             .delete(url, headers: headers, body: body, encoding: encoding),
       ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
