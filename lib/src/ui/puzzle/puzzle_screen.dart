@@ -161,7 +161,7 @@ class _Body extends ConsumerWidget {
                   onMove: (move, {isPremove}) {
                     ref
                         .read(viewModelProvider.notifier)
-                        .playUserMove(Move.fromUci(move.uci)!);
+                        .onUserMove(Move.fromUci(move.uci)!);
                   },
                 ),
                 topTable: Center(

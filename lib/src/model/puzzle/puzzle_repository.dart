@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'puzzle.dart';
+import 'puzzle_streak.dart';
 import 'puzzle_theme.dart';
 import 'puzzle_difficulty.dart';
 
@@ -185,7 +186,7 @@ class PuzzleBatchResponse with _$PuzzleBatchResponse {
 class PuzzleStreakResponse with _$PuzzleStreakResponse {
   const factory PuzzleStreakResponse({
     required Puzzle puzzle,
-    required PuzzleStreak streak,
+    required Streak streak,
   }) = _PuzzleStreakResponse;
 }
 
