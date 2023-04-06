@@ -13,6 +13,8 @@ import 'package:lichess_mobile/src/common/sound_service.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/tree.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
+import 'package:lichess_mobile/src/utils/box.dart';
+import 'package:lichess_mobile/src/model/engine/stockfish_engine.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
@@ -29,6 +31,7 @@ part 'puzzle_view_model.freezed.dart';
 class PuzzleViewModel extends _$PuzzleViewModel {
   // ignore: avoid-late-keyword
   late Node _gameTree;
+  StockfishEngine? _engine;
   Timer? _firstMoveTimer;
   Timer? _viewSolutionTimer;
   // on streak, we pre-load the next puzzle to avoid a delay when the user
@@ -43,6 +46,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
       _viewSolutionTimer?.cancel();
+      _engine?.dispose();
     });
 
     return _loadNewContext(initialContext, initialStreak);
@@ -82,7 +86,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
         state = state.copyWith(
           feedback: PuzzleFeedback.bad,
         );
-        _onComplete(PuzzleResult.lose);
+        _onFailOrWin(PuzzleResult.lose);
         if (initialStreak == null) {
           await Future<void>.delayed(const Duration(milliseconds: 500));
           _setPath(state.currentPath.penultimate);
@@ -110,11 +114,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       nodeList: IList(_gameTree.nodesOn(state.currentPath)),
     );
 
-    _onComplete(PuzzleResult.lose);
-
-    state = state.copyWith(
-      mode: PuzzleMode.view,
-    );
+    _completePuzzle(PuzzleResult.lose);
 
     _viewSolutionTimer =
         Timer.periodic(const Duration(milliseconds: 800), (timer) {
@@ -261,14 +261,15 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     _setPath(state.currentPath.penultimate);
   }
 
-  Future<void> _completePuzzle() async {
+  Future<void> _completePuzzle([PuzzleResult? result]) async {
     state = state.copyWith(
       mode: PuzzleMode.view,
     );
-    await _onComplete(state.result ?? PuzzleResult.win);
+    await _onFailOrWin(result ?? state.result ?? PuzzleResult.win);
+    _startEngineEval();
   }
 
-  Future<void> _onComplete(PuzzleResult result) async {
+  Future<void> _onFailOrWin(PuzzleResult result) async {
     if (state.resultSent) return;
 
     state = state.copyWith(
@@ -320,6 +321,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
             finished: true,
           ),
         );
+        _startEngineEval();
         sendStreakResult();
       } else {
         if (_nextPuzzleFuture == null) {
@@ -354,6 +356,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   }
 
   void _setPath(UciPath path) {
+    final pathChange = state.currentPath != path;
     final newNodeList = IList(_gameTree.nodesOn(path));
     final sanMove = newNodeList.last.sanMove;
     final isForward = path.size > state.currentPath.size;
@@ -370,6 +373,52 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       nodeList: newNodeList,
       lastMove: sanMove.move,
     );
+
+    if (pathChange && state.mode == PuzzleMode.view) {
+      _startEngineEval();
+    }
+  }
+
+  void _startEngineEval() {
+    if (state.mode != PuzzleMode.view) return;
+
+    _engine ??= StockfishEngine();
+
+    final w = Work(
+      threads: 3,
+      maxDepth: 22,
+      multiPv: 1,
+      ply: state.node.ply,
+      path: state.currentPath,
+      initialFen: _gameTree.nodeAt(state.initialPath).fen,
+      currentFen: state.node.fen,
+      moves: IList(state.nodeList.map((e) => e.sanMove.move)),
+      emit: (work, eval) {
+        print('eval: $eval');
+        _gameTree.updateAt(
+          work.path,
+          (node) => node.copyWith(eval: Box(eval)),
+        );
+        if (work.path == state.currentPath) {
+          state = state.copyWith(
+            nodeList: IList(_gameTree.nodesOn(state.currentPath)),
+          );
+        }
+      },
+    );
+
+    if (_engine?.isReady == true) {
+      _engine?.compute(w);
+    } else {
+      void computeWhenReady() {
+        if (_engine?.isReady == true) {
+          _engine?.compute(w);
+        }
+        _engine?.state.removeListener(computeWhenReady);
+      }
+
+      _engine?.state.addListener(computeWhenReady);
+    }
   }
 
   void _addMove(Move move) {

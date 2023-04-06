@@ -3,10 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'dart:math' as math;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:stockfish/stockfish.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 import 'package:logging/logging.dart';
 
+import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/common/tree.dart';
 
 part 'stockfish_engine.freezed.dart';
@@ -15,7 +17,9 @@ const minDepth = 6;
 const maxStockfishPlies = 245;
 
 class StockfishEngine {
-  StockfishEngine() {
+  StockfishEngine()
+      : _stockfish = Stockfish(),
+        _options = {} {
     _stockfish.state.addListener(() {
       if (_stockfish.state.value == StockfishState.ready) {
         send('uci');
@@ -30,8 +34,8 @@ class StockfishEngine {
   StreamSubscription<String>? _stdoutSub;
 
   final _log = Logger('StockfishEngine');
-  final Stockfish _stockfish = Stockfish();
-  final Map<String, String> _options = {};
+  final Stockfish _stockfish;
+  final Map<String, String> _options;
 
   String engineName = 'Stockfish';
 
@@ -41,6 +45,7 @@ class StockfishEngine {
   int _expectedPvs = 1;
 
   ValueListenable<StockfishState> get state => _stockfish.state;
+  bool get isReady => _stockfish.state.value == StockfishState.ready;
 
   void dispose() {
     _stdoutSub?.cancel();
@@ -123,7 +128,7 @@ class StockfishEngine {
       engineName = parts.sublist(2).join(' ');
     } else if (parts[0] == 'bestmove') {
       if (_work != null && _currentEval != null) {
-        _work!.emit(_currentEval!);
+        _work!.emit(_work!, _currentEval!);
       }
       _work = null;
       _swapWork();
@@ -211,7 +216,7 @@ class StockfishEngine {
       }
 
       if (multiPv == _expectedPvs && _currentEval != null) {
-        _work!.emit(_currentEval!);
+        _work!.emit(_work!, _currentEval!);
 
         // Depth limits are nice in the user interface, but in clearly decided
         // positions the usual depth limits are reached very quickly due to
@@ -236,14 +241,14 @@ class Work with _$Work {
     required int threads,
     int? hashSize,
     bool? stopRequested,
-    required String path,
+    required UciPath path,
     required int maxDepth,
     required int multiPv,
     required int ply,
     bool? threatMode,
     required String initialFen,
     required String currentFen,
-    required IList<String> moves,
-    required void Function(ClientEval) emit,
+    required IList<Move> moves,
+    required void Function(Work, ClientEval) emit,
   }) = _Work;
 }

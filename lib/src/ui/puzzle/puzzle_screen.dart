@@ -164,18 +164,29 @@ class _Body extends ConsumerWidget {
                         .onUserMove(Move.fromUci(move.uci)!);
                   },
                 ),
-                topTable: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0,
+                topTable: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                      ),
+                      child: PuzzleFeedbackWidget(
+                        puzzle: puzzleState.puzzle,
+                        state: puzzleState,
+                        pieceSet: pieceSet,
+                        onStreak: false,
+                      ),
                     ),
-                    child: PuzzleFeedbackWidget(
-                      puzzle: puzzleState.puzzle,
-                      state: puzzleState,
-                      pieceSet: pieceSet,
-                      onStreak: false,
+                    SizedBox(
+                      height: 25.0,
+                      child: Center(
+                        child: Text(
+                          puzzleState.node.eval?.cp?.toString() ?? '',
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
                 bottomTable: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,

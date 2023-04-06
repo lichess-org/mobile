@@ -257,6 +257,7 @@ class ViewNode with _$ViewNode {
     required Position position,
     required SanMove sanMove,
     required IList<ViewNode> children,
+    ClientEval? eval,
   }) = _ViewNode;
 
   factory ViewNode.fromNode(Node node) {
@@ -266,6 +267,7 @@ class ViewNode with _$ViewNode {
       fen: node.fen,
       position: node.position,
       sanMove: node.sanMove,
+      eval: node.eval,
       children: node.children.map(ViewNode.fromNode).toIList(),
     );
   }
@@ -273,6 +275,8 @@ class ViewNode with _$ViewNode {
 
 @freezed
 class ClientEval with _$ClientEval {
+  const ClientEval._();
+
   const factory ClientEval({
     required String fen,
     required int depth,
@@ -284,12 +288,14 @@ class ClientEval with _$ClientEval {
     int? cp,
     int? mate,
   }) = _ClientEval;
+
+  UCIMove? get bestMove => pvs.firstOrNull?.moves.firstOrNull;
 }
 
 @freezed
 class PvData with _$PvData {
   const factory PvData({
-    required IList<String> moves,
+    required IList<UCIMove> moves,
     int? mate,
     int? cp,
   }) = _PvData;
