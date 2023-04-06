@@ -169,7 +169,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     }
   }
 
-  FutureResult<PuzzleContext?> fetchNextStreakPuzzle(
+  FutureResult<PuzzleContext?> retryFetchNextStreakPuzzle(
     PuzzleStreak streak,
   ) async {
     state = state.copyWith(

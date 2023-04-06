@@ -382,7 +382,7 @@ class _RetryFetchPuzzleDialog extends ConsumerWidget {
     Future<void> retryStreakNext() async {
       final result = await ref
           .read(viewModelProvider.notifier)
-          .fetchNextStreakPuzzle(state.streak!);
+          .retryFetchNextStreakPuzzle(state.streak!);
       result.match(
         onSuccess: (data) {
           if (context.mounted) {
