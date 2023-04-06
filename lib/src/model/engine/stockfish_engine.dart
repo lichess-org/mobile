@@ -9,15 +9,15 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
 import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/common/uci.dart';
-import 'package:lichess_mobile/src/common/tree.dart';
+import 'package:lichess_mobile/src/common/eval.dart';
 
 part 'stockfish_engine.freezed.dart';
 
 const minDepth = 6;
 const maxStockfishPlies = 245;
 
-class StockfishEngine {
-  StockfishEngine()
+class StockfishEvaluation {
+  StockfishEvaluation()
       : _stockfish = Stockfish(),
         _options = {} {
     _stockfish.state.addListener(() {
@@ -33,7 +33,7 @@ class StockfishEngine {
 
   StreamSubscription<String>? _stdoutSub;
 
-  final _log = Logger('StockfishEngine');
+  final _log = Logger('StockfishEvaluation');
   final Stockfish _stockfish;
   final Map<String, String> _options;
 

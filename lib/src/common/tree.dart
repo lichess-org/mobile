@@ -5,6 +5,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
 import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/common/eval.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/utils/box.dart';
 
@@ -271,32 +272,4 @@ class ViewNode with _$ViewNode {
       children: node.children.map(ViewNode.fromNode).toIList(),
     );
   }
-}
-
-@freezed
-class ClientEval with _$ClientEval {
-  const ClientEval._();
-
-  const factory ClientEval({
-    required String fen,
-    required int depth,
-    required int nodes,
-    required IList<PvData> pvs,
-    required int millis,
-    required int maxDepth,
-    required double knps,
-    int? cp,
-    int? mate,
-  }) = _ClientEval;
-
-  UCIMove? get bestMove => pvs.firstOrNull?.moves.firstOrNull;
-}
-
-@freezed
-class PvData with _$PvData {
-  const factory PvData({
-    required IList<UCIMove> moves,
-    int? mate,
-    int? cp,
-  }) = _PvData;
 }

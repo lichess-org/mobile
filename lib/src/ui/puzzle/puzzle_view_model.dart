@@ -31,7 +31,7 @@ part 'puzzle_view_model.freezed.dart';
 class PuzzleViewModel extends _$PuzzleViewModel {
   // ignore: avoid-late-keyword
   late Node _gameTree;
-  StockfishEngine? _engine;
+  StockfishEvaluation? _engine;
   Timer? _firstMoveTimer;
   Timer? _viewSolutionTimer;
   // on streak, we pre-load the next puzzle to avoid a delay when the user
@@ -114,7 +114,11 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       nodeList: IList(_gameTree.nodesOn(state.currentPath)),
     );
 
-    _completePuzzle(PuzzleResult.lose);
+    _onFailOrWin(PuzzleResult.lose);
+
+    state = state.copyWith(
+      mode: PuzzleMode.view,
+    );
 
     _viewSolutionTimer =
         Timer.periodic(const Duration(milliseconds: 800), (timer) {
@@ -261,11 +265,11 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     _setPath(state.currentPath.penultimate);
   }
 
-  Future<void> _completePuzzle([PuzzleResult? result]) async {
+  Future<void> _completePuzzle() async {
     state = state.copyWith(
       mode: PuzzleMode.view,
     );
-    await _onFailOrWin(result ?? state.result ?? PuzzleResult.win);
+    await _onFailOrWin(state.result ?? PuzzleResult.win);
     _startEngineEval();
   }
 
@@ -382,10 +386,10 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   void _startEngineEval() {
     if (state.mode != PuzzleMode.view) return;
 
-    _engine ??= StockfishEngine();
+    _engine ??= StockfishEvaluation();
 
     final w = Work(
-      threads: 3,
+      threads: 6,
       maxDepth: 22,
       multiPv: 1,
       ply: state.node.ply,
@@ -394,7 +398,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       currentFen: state.node.fen,
       moves: IList(state.nodeList.map((e) => e.sanMove.move)),
       emit: (work, eval) {
-        print('eval: $eval');
+        print('eval: ${eval.depth} ${eval.evalString}');
         _gameTree.updateAt(
           work.path,
           (node) => node.copyWith(eval: Box(eval)),

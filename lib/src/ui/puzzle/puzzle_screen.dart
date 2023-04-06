@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/eval_gauge.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -165,27 +166,30 @@ class _Body extends ConsumerWidget {
                   },
                 ),
                 topTable: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0,
-                      ),
-                      child: PuzzleFeedbackWidget(
-                        puzzle: puzzleState.puzzle,
-                        state: puzzleState,
-                        pieceSet: pieceSet,
-                        onStreak: false,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 25.0,
+                    Expanded(
                       child: Center(
-                        child: Text(
-                          puzzleState.node.eval?.cp?.toString() ?? '',
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0,
+                          ),
+                          child: PuzzleFeedbackWidget(
+                            puzzle: puzzleState.puzzle,
+                            state: puzzleState,
+                            pieceSet: pieceSet,
+                            onStreak: false,
+                          ),
                         ),
                       ),
                     ),
+                    if (puzzleState.mode == PuzzleMode.view &&
+                        puzzleState.node.eval != null)
+                      EvalGauge(
+                        eval: puzzleState.node.eval!,
+                      )
+                    else
+                      const SizedBox(height: 20.0),
                   ],
                 ),
                 bottomTable: Column(
