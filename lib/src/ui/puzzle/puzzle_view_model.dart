@@ -219,6 +219,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     // play first move after 1 second
     _firstMoveTimer = Timer(const Duration(seconds: 1), () {
       _setPath(state.initialPath);
+      _startEngineEval();
     });
 
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
@@ -384,19 +385,19 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   }
 
   void _startEngineEval() {
-    if (state.mode != PuzzleMode.view) return;
+    // if (state.mode != PuzzleMode.view) return;
 
     _engine ??= StockfishEvaluation();
 
     final w = Work(
-      threads: 6,
-      maxDepth: 18,
+      threads: 3,
+      maxDepth: 20,
       multiPv: 1,
       ply: state.node.ply,
       path: state.currentPath,
       initialFen: _gameTree.nodeAt(state.initialPath).fen,
       currentFen: state.node.fen,
-      moves: IList(state.nodeList.map((e) => e.sanMove.move)),
+      moves: IList(state.nodeList.map((e) => e.sanMove.move.uci)),
       emit: (work, eval) {
         print(
           'eval: ${eval.depth} ${eval.evalString} ${eval.knps.round()}kn/s',

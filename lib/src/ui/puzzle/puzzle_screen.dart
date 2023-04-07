@@ -183,8 +183,7 @@ class _Body extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    if (puzzleState.mode == PuzzleMode.view &&
-                        puzzleState.node.eval != null)
+                    if (puzzleState.node.eval != null)
                       EvalGauge(
                         eval: puzzleState.node.eval!,
                       )

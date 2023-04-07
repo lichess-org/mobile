@@ -3,11 +3,11 @@ import 'package:flutter/foundation.dart';
 import 'dart:math' as math;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:stockfish/stockfish.dart';
-import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 import 'package:logging/logging.dart';
 
+import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/common/eval.dart';
 
@@ -58,6 +58,7 @@ class StockfishEvaluation {
       _log.warning('Stockfish not ready, ignoring command: $command');
       return;
     }
+    _log.info('<<<<<< $command');
     _stockfish.stdin = command;
   }
 
@@ -90,12 +91,17 @@ class StockfishEvaluation {
       setOption('MultiPV', math.max(1, _work!.multiPv).toString());
 
       send(
-        ['position fen', _work!.initialFen, 'moves', ..._work!.moves].join(' '),
+        [
+          'position fen',
+          _work!.initialFen,
+          'moves',
+          ..._work!.moves,
+        ].join(' '),
       );
       send(
         _work!.maxDepth >= 99
             ? 'go depth $maxStockfishPlies' // 'go infinite' would not finish even if entire tree search completed
-            : 'go movetime 90000',
+            : 'go movetime 60000',
       );
     }
   }
@@ -103,7 +109,7 @@ class StockfishEvaluation {
   void compute(Work? nextWork) {
     _nextWork = nextWork;
     _stop();
-    _swapWork();
+    send('isready');
   }
 
   bool isComputing() {
@@ -111,11 +117,11 @@ class StockfishEvaluation {
   }
 
   void _process(String line) {
+    _log.info(line);
     final parts = line.trim().split(RegExp(r'\s+'));
     if (parts[0] == 'uciok') {
       // Analyse without contempt.
       setOption('UCI_AnalyseMode', 'true');
-      setOption('Analysis Contempt', 'Off');
 
       // Affects notation only. Life would be easier if everyone would always
       // unconditionally use this mode.
@@ -230,7 +236,7 @@ class StockfishEvaluation {
         }
       }
     } else if (!['Stockfish', 'id', 'option', 'info'].contains(parts[0])) {
-      _log.fine('Stockfish: $line');
+      // _log.info(line);
     }
   }
 }
@@ -248,7 +254,7 @@ class Work with _$Work {
     bool? threatMode,
     required String initialFen,
     required String currentFen,
-    required IList<Move> moves,
+    required IList<UCIMove> moves,
     required void Function(Work, ClientEval) emit,
   }) = _Work;
 }
