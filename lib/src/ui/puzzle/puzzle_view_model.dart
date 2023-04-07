@@ -390,7 +390,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
 
     final w = Work(
       threads: 6,
-      maxDepth: 22,
+      maxDepth: 18,
       multiPv: 1,
       ply: state.node.ply,
       path: state.currentPath,
@@ -398,7 +398,9 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       currentFen: state.node.fen,
       moves: IList(state.nodeList.map((e) => e.sanMove.move)),
       emit: (work, eval) {
-        print('eval: ${eval.depth} ${eval.evalString}');
+        print(
+          'eval: ${eval.depth} ${eval.evalString} ${eval.knps.round()}kn/s',
+        );
         _gameTree.updateAt(
           work.path,
           (node) => node.copyWith(eval: Box(eval)),

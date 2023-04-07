@@ -1177,10 +1177,9 @@ packages:
   stockfish:
     dependency: "direct main"
     description:
-      name: stockfish
-      sha256: "0c6b7049e0d6e4a93061d3c42bc8598f5f4d43ee4e287fb4f928b83a83aa638e"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../dart-stockfish"
+      relative: true
+    source: path
     version: "1.2.0"
   stream_channel:
     dependency: transitive

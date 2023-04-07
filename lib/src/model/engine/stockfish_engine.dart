@@ -49,6 +49,7 @@ class StockfishEvaluation {
 
   void dispose() {
     _stdoutSub?.cancel();
+    _stop();
     _stockfish.dispose();
   }
 
@@ -201,7 +202,6 @@ class StockfishEvaluation {
           fen: _work!.currentFen,
           maxDepth: _work!.maxDepth,
           depth: depth,
-          knps: nodes / elapsedMs,
           nodes: nodes,
           cp: isMate ? null : ev,
           mate: isMate ? ev : null,

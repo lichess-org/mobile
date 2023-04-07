@@ -19,10 +19,11 @@ class ClientEval with _$ClientEval {
     required IList<PvData> pvs,
     required int millis,
     required int maxDepth,
-    required double knps,
     int? cp,
     int? mate,
   }) = _ClientEval;
+
+  double get knps => nodes / millis;
 
   UCIMove? get bestMove => pvs.firstOrNull?.moves.firstOrNull;
 
