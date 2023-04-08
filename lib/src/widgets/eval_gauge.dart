@@ -1,11 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/common/brightness.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/eval.dart';
 
-class EvalGauge extends StatefulWidget {
+const double _kEvalGaugeHeight = 20.0;
+const Color _kEvalGaugeBackgroundColor = Color(0xFF444444);
+const Color _kEvalGaugeValueColorDarkBg = Color(0xEEEEEEEE);
+const Color _kEvalGaugeValueColorLightBg = Color(0xFFFFFFFF);
+
+class EvalGauge extends ConsumerStatefulWidget {
   const EvalGauge({
     super.key,
     required this.eval,
@@ -13,62 +20,63 @@ class EvalGauge extends StatefulWidget {
 
   final ClientEval eval;
 
+  double get whiteWinningChances => eval.winningChances(Side.white);
+  double get animationValue => 1 - whiteWinningChances * 0.5;
+
   @override
-  State<EvalGauge> createState() => _EvalGaugeState();
+  ConsumerState<EvalGauge> createState() => _EvalGaugeState();
 }
 
-class _EvalGaugeState extends State<EvalGauge>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 1800),
-      vsync: this,
-    );
-  }
+class _EvalGaugeState extends ConsumerState<EvalGauge> {
+  double fromValue = 0.5;
 
   @override
   void didUpdateWidget(EvalGauge oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (_controller.isAnimating) {
-      _controller.stop();
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+    fromValue = oldWidget.animationValue;
   }
 
   @override
   Widget build(BuildContext context) {
+    final brightness = ref.watch(currentBrightnessProvider);
     final TextDirection textDirection = Directionality.of(context);
 
-    final chances = widget.eval.winningChances(Side.white);
-    final value = 1 - (chances + 1) * 0.5;
-
-    return AnimatedBuilder(
-      animation: _controller.view,
-      builder: (context, Widget? child) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: fromValue, end: widget.animationValue),
+      duration: const Duration(milliseconds: 800),
+      builder: (BuildContext context, double value, Widget? child) {
         return Semantics(
           label: context.l10n.evaluationGauge,
           value: widget.eval.evalString,
           child: Container(
             constraints: const BoxConstraints(
               minWidth: double.infinity,
-              minHeight: 20.0,
+              minHeight: _kEvalGaugeHeight,
             ),
             child: CustomPaint(
               painter: _EvalGaugePainter(
-                backgroundColor: Colors.black,
-                valueColor: Colors.white,
+                backgroundColor: _kEvalGaugeBackgroundColor,
+                valueColor: brightness == Brightness.dark
+                    ? _kEvalGaugeValueColorDarkBg
+                    : _kEvalGaugeValueColorLightBg,
                 value: value,
-                animationValue: _controller.value,
                 textDirection: textDirection,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Text(
+                  widget.eval.evalString,
+                  style: TextStyle(
+                    color: widget.whiteWinningChances >= 0
+                        ? Colors.black
+                        : Colors.white,
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: widget.whiteWinningChances >= 0
+                      ? TextAlign.left
+                      : TextAlign.right,
+                ),
               ),
             ),
           ),
@@ -83,14 +91,12 @@ class _EvalGaugePainter extends CustomPainter {
     required this.backgroundColor,
     required this.valueColor,
     required this.value,
-    required this.animationValue,
     required this.textDirection,
   });
 
   final Color backgroundColor;
   final Color valueColor;
   final double value;
-  final double animationValue;
   final TextDirection textDirection;
 
   @override
@@ -127,7 +133,6 @@ class _EvalGaugePainter extends CustomPainter {
     return oldPainter.backgroundColor != backgroundColor ||
         oldPainter.valueColor != valueColor ||
         oldPainter.value != value ||
-        oldPainter.animationValue != animationValue ||
         oldPainter.textDirection != textDirection;
   }
 }

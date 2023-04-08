@@ -186,9 +186,7 @@ class _Body extends ConsumerWidget {
                     if (puzzleState.node.eval != null)
                       EvalGauge(
                         eval: puzzleState.node.eval!,
-                      )
-                    else
-                      const SizedBox(height: 20.0),
+                      ),
                   ],
                 ),
                 bottomTable: Column(
