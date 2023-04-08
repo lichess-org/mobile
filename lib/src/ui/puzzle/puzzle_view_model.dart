@@ -399,9 +399,6 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       currentFen: state.node.fen,
       moves: IList(state.nodeList.map((e) => e.sanMove.move.uci)),
       emit: (work, eval) {
-        print(
-          'eval: ${eval.depth} ${eval.evalString} ${eval.knps.round()}kn/s',
-        );
         _gameTree.updateAt(
           work.path,
           (node) => node.copyWith(eval: Box(eval)),

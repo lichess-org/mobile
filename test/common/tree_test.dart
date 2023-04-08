@@ -140,7 +140,6 @@ void main() {
       final eval = ClientEval(
         fen: 'fen2',
         maxDepth: 20,
-        knps: 100,
         cp: 100,
         depth: 10,
         nodes: 1000,
