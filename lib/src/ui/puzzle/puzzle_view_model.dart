@@ -13,8 +13,6 @@ import 'package:lichess_mobile/src/common/sound_service.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/tree.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
-import 'package:lichess_mobile/src/utils/box.dart';
-import 'package:lichess_mobile/src/model/engine/stockfish_engine.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
@@ -23,6 +21,8 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
+import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
+import 'package:lichess_mobile/src/model/engine/work.dart';
 
 part 'puzzle_view_model.g.dart';
 part 'puzzle_view_model.freezed.dart';
@@ -31,7 +31,6 @@ part 'puzzle_view_model.freezed.dart';
 class PuzzleViewModel extends _$PuzzleViewModel {
   // ignore: avoid-late-keyword
   late Node _gameTree;
-  StockfishEvaluation? _engine;
   Timer? _firstMoveTimer;
   Timer? _viewSolutionTimer;
   // on streak, we pre-load the next puzzle to avoid a delay when the user
@@ -46,7 +45,6 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
       _viewSolutionTimer?.cancel();
-      _engine?.dispose();
     });
 
     return _loadNewContext(initialContext, initialStreak);
@@ -216,13 +214,12 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     final root = Root.fromPgn(context.puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
 
+    final initialPath = UciPath.fromId(_gameTree.children.first.id);
+
     // play first move after 1 second
     _firstMoveTimer = Timer(const Duration(seconds: 1), () {
-      _setPath(state.initialPath);
-      _startEngineEval();
+      _setPath(initialPath);
     });
-
-    final initialPath = UciPath.fromId(_gameTree.children.first.id);
 
     // preload next streak puzzle
     if (streak != null) {
@@ -234,6 +231,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       glicko: context.glicko,
       mode: PuzzleMode.play,
       initialPath: initialPath,
+      initialFen: _gameTree.fen,
       currentPath: UciPath.empty,
       nodeList: IList([ViewNode.fromNode(_gameTree)]),
       pov: _gameTree.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
@@ -385,44 +383,16 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   }
 
   void _startEngineEval() {
-    // if (state.mode != PuzzleMode.view) return;
-
-    _engine ??= StockfishEvaluation();
-
-    final w = Work(
-      threads: 3,
-      maxDepth: 20,
-      multiPv: 1,
-      ply: state.node.ply,
-      path: state.currentPath,
-      initialFen: _gameTree.nodeAt(state.initialPath).fen,
-      currentFen: state.node.fen,
-      moves: IList(state.nodeList.map((e) => e.sanMove.move.uci)),
-      emit: (work, eval) {
+    ref.read(engineEvaluationProvider(state.initialFen).notifier).start(
+      state.currentPath,
+      state.nodeList.map(Step.fromNode),
+      onEmit: (work, eval) {
         _gameTree.updateAt(
           work.path,
-          (node) => node.copyWith(eval: Box(eval)),
+          (node) => node.copyWith(eval: eval),
         );
-        if (work.path == state.currentPath) {
-          state = state.copyWith(
-            nodeList: IList(_gameTree.nodesOn(state.currentPath)),
-          );
-        }
       },
     );
-
-    if (_engine?.isReady == true) {
-      _engine?.compute(w);
-    } else {
-      void computeWhenReady() {
-        if (_engine?.isReady == true) {
-          _engine?.compute(w);
-        }
-        _engine?.state.removeListener(computeWhenReady);
-      }
-
-      _engine?.state.addListener(computeWhenReady);
-    }
   }
 
   void _addMove(Move move) {
@@ -479,6 +449,7 @@ class PuzzleViewModelState with _$PuzzleViewModelState {
     required Puzzle puzzle,
     required PuzzleGlicko? glicko,
     required PuzzleMode mode,
+    required String initialFen,
     required UciPath initialPath,
     required UciPath currentPath,
     required Side pov,

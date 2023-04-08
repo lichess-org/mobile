@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/eval_gauge.dart';
+import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -183,9 +184,9 @@ class _Body extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    if (puzzleState.node.eval != null)
-                      EvalGauge(
-                        eval: puzzleState.node.eval!,
+                    if (puzzleState.mode == PuzzleMode.view)
+                      _EvalGauge(
+                        puzzleState: puzzleState,
                       ),
                   ],
                 ),
@@ -239,6 +240,29 @@ class _Body extends ConsumerWidget {
         ),
       ],
     );
+  }
+}
+
+class _EvalGauge extends ConsumerWidget {
+  const _EvalGauge({
+    required this.puzzleState,
+  });
+
+  final PuzzleViewModelState puzzleState;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final eval = ref.watch(engineEvaluationProvider(puzzleState.initialFen));
+
+    return eval != null
+        ? EvalGauge(
+            eval: eval,
+          )
+        : puzzleState.node.eval != null
+            ? EvalGauge(
+                eval: puzzleState.node.eval!,
+              )
+            : const SizedBox();
   }
 }
 

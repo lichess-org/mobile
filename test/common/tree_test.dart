@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/common/eval.dart';
 import 'package:lichess_mobile/src/common/tree.dart';
-import 'package:lichess_mobile/src/utils/box.dart';
 
 void main() {
   group('RootOrNode', () {
@@ -151,7 +150,7 @@ void main() {
 
       final newNode = root.updateAt(
         nodePath!,
-        (node) => node.copyWith(eval: Box(eval)),
+        (node) => node.copyWith(eval: eval),
       );
 
       expect(root.nodeAt(fromPath).children.length, equals(2));

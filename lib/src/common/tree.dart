@@ -7,7 +7,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/eval.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
-import 'package:lichess_mobile/src/utils/box.dart';
 
 part 'tree.freezed.dart';
 
@@ -190,7 +189,7 @@ class Node extends RootOrNode {
   final ClientEval? eval;
 
   Node copyWith({
-    Box<ClientEval?>? eval,
+    Object? eval = freezed,
   }) {
     return Node(
       id: id,
@@ -198,7 +197,7 @@ class Node extends RootOrNode {
       fen: fen,
       sanMove: sanMove,
       position: position,
-      eval: eval != null ? eval.value : this.eval,
+      eval: eval == freezed ? this.eval : eval as ClientEval?,
     );
   }
 

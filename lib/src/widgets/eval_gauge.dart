@@ -21,7 +21,7 @@ class EvalGauge extends ConsumerStatefulWidget {
   final ClientEval eval;
 
   double get whiteWinningChances => eval.winningChances(Side.white);
-  double get animationValue => 1 - whiteWinningChances * 0.5;
+  double get animationValue => ((whiteWinningChances + 1) * 0.5).abs();
 
   @override
   ConsumerState<EvalGauge> createState() => _EvalGaugeState();

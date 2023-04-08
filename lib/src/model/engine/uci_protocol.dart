@@ -1,122 +1,72 @@
-import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'dart:math' as math;
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:stockfish/stockfish.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 import 'package:logging/logging.dart';
 
-import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/common/eval.dart';
 
-part 'stockfish_engine.freezed.dart';
+import 'work.dart';
 
 const minDepth = 6;
 const maxStockfishPlies = 245;
 
-class StockfishEvaluation {
-  StockfishEvaluation()
-      : _stockfish = Stockfish(),
-        _options = {} {
-    _stockfish.state.addListener(() {
-      if (_stockfish.state.value == StockfishState.ready) {
-        send('uci');
-      }
-    });
+class UCIProtocol {
+  UCIProtocol()
+      : _options = {
+          'Threads': '1',
+          'Hash': '16',
+          'MultiPV': '1',
+        };
 
-    _stdoutSub = _stockfish.stdout.listen((String line) {
-      _process(line);
-    });
-  }
-
-  StreamSubscription<String>? _stdoutSub;
-
-  final _log = Logger('StockfishEvaluation');
-  final Stockfish _stockfish;
+  final _log = Logger('UCIProtocol');
   final Map<String, String> _options;
 
-  String engineName = 'Stockfish';
+  String? engineName;
 
   Work? _work;
   Work? _nextWork;
+  void Function(String command)? _send;
   ClientEval? _currentEval;
   int _expectedPvs = 1;
 
-  ValueListenable<StockfishState> get state => _stockfish.state;
-  bool get isReady => _stockfish.state.value == StockfishState.ready;
+  void connected(void Function(String command) send) {
+    _send = send;
 
-  void dispose() {
-    _stdoutSub?.cancel();
-    _stop();
-    _stockfish.dispose();
+    _sendAndLog('uci');
   }
 
-  void send(String command) {
-    if (_stockfish.state.value != StockfishState.ready) {
-      _log.warning('Stockfish not ready, ignoring command: $command');
-      return;
+  void disconnected() {
+    if (_work != null && _currentEval != null) {
+      _work!.emit(_work!, _currentEval!);
     }
-    _log.info('<<<<<< $command');
-    _stockfish.stdin = command;
+    _work = null;
+    _send = null;
+  }
+
+  void _sendAndLog(String command) {
+    _send?.call(command);
+    _log.info('<<< $command');
   }
 
   void setOption(String name, String value) {
     if (_options[name] != value) {
-      send('setoption name $name value $value');
+      _sendAndLog('setoption name $name value $value');
       _options[name] = value;
     }
   }
 
-  void _stop() {
-    if (_work != null && _work!.stopRequested != true) {
-      _work = _work!.copyWith(stopRequested: true);
-      send('stop');
-    }
-  }
-
-  void _swapWork() {
-    if (_work != null) return;
-
-    _work = _nextWork;
-    _nextWork = null;
-
-    if (_work != null) {
-      _currentEval = null;
-      _expectedPvs = 1;
-
-      setOption('Threads', _work!.threads.toString());
-      setOption('Hash', (_work!.hashSize ?? 16).toString());
-      setOption('MultiPV', math.max(1, _work!.multiPv).toString());
-
-      send(
-        [
-          'position fen',
-          _work!.initialFen,
-          'moves',
-          ..._work!.moves,
-        ].join(' '),
-      );
-      send(
-        _work!.maxDepth >= 99
-            ? 'go depth $maxStockfishPlies' // 'go infinite' would not finish even if entire tree search completed
-            : 'go movetime 60000',
-      );
-    }
-  }
-
   void compute(Work? nextWork) {
+    print('compute $nextWork');
     _nextWork = nextWork;
     _stop();
-    send('isready');
+    _sendAndLog('isready');
   }
 
   bool isComputing() {
     return _work != null && _work!.stopRequested == false;
   }
 
-  void _process(String line) {
+  void received(String line) {
     _log.info(line);
     final parts = line.trim().split(RegExp(r'\s+'));
     if (parts[0] == 'uciok') {
@@ -127,8 +77,8 @@ class StockfishEvaluation {
       // unconditionally use this mode.
       setOption('UCI_Chess960', 'true');
 
-      send('ucinewgame');
-      send('isready');
+      _sendAndLog('ucinewgame');
+      _sendAndLog('isready');
     } else if (parts[0] == 'readyok') {
       _swapWork();
     } else if (parts[0] == 'id' && parts[1] == 'name') {
@@ -239,22 +189,41 @@ class StockfishEvaluation {
       // _log.info(line);
     }
   }
-}
 
-@freezed
-class Work with _$Work {
-  const factory Work({
-    required int threads,
-    int? hashSize,
-    bool? stopRequested,
-    required UciPath path,
-    required int maxDepth,
-    required int multiPv,
-    required int ply,
-    bool? threatMode,
-    required String initialFen,
-    required String currentFen,
-    required IList<UCIMove> moves,
-    required void Function(Work, ClientEval) emit,
-  }) = _Work;
+  void _stop() {
+    if (_work != null && _work!.stopRequested != true) {
+      _work = _work!.copyWith(stopRequested: true);
+      _sendAndLog('stop');
+    }
+  }
+
+  void _swapWork() {
+    if (_send == null || _work != null) return;
+
+    _work = _nextWork;
+    _nextWork = null;
+
+    if (_work != null) {
+      _currentEval = null;
+      _expectedPvs = 1;
+
+      setOption('Threads', _work!.threads.toString());
+      setOption('Hash', (_work!.hashSize ?? 16).toString());
+      setOption('MultiPV', math.max(1, _work!.multiPv).toString());
+
+      _sendAndLog(
+        [
+          'position fen',
+          _work!.initialFen,
+          'moves',
+          ..._work!.moves,
+        ].join(' '),
+      );
+      _sendAndLog(
+        _work!.maxDepth >= 99
+            ? 'go depth $maxStockfishPlies' // 'go infinite' would not finish even if entire tree search completed
+            : 'go movetime 60000',
+      );
+    }
+  }
 }
