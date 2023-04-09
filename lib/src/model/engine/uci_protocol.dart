@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/common/eval.dart';
 import 'work.dart';
 
 const minDepth = 6;
-const maxStockfishPlies = 245;
+const maxPlies = 245;
 
 class UCIProtocol {
   UCIProtocol()
@@ -68,9 +68,7 @@ class UCIProtocol {
   void received(String line) {
     final parts = line.trim().split(RegExp(r'\s+'));
     if (parts[0] == 'uciok') {
-      // Analyse without contempt.
       setOption('UCI_AnalyseMode', 'true');
-
       // Affects notation only. Life would be easier if everyone would always
       // unconditionally use this mode.
       setOption('UCI_Chess960', 'true');
@@ -219,7 +217,7 @@ class UCIProtocol {
       );
       _sendAndLog(
         _work!.maxDepth >= 99
-            ? 'go depth $maxStockfishPlies' // 'go infinite' would not finish even if entire tree search completed
+            ? 'go depth $maxPlies' // 'go infinite' would not finish even if entire tree search completed
             : 'go movetime 60000',
       );
     }
