@@ -378,6 +378,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     );
 
     if (pathChange && state.mode == PuzzleMode.view) {
+      ref.read(engineEvaluationProvider(state.initialFen).notifier).stop();
       _startEngineEval();
     }
   }
@@ -387,10 +388,9 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       state.currentPath,
       state.nodeList.map(Step.fromNode),
       onEmit: (work, eval) {
-        _gameTree.updateAt(
-          work.path,
-          (node) => node.copyWith(eval: eval),
-        );
+        _gameTree.updateAt(work.path, (node) {
+          node.eval = eval;
+        });
       },
     );
   }

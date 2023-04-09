@@ -136,6 +136,14 @@ void main() {
       final fromPath = UciPath.fromId(UciCharPair.fromUci('e2e4'));
       final nodePath = root.addNodeAt(fromPath, branch);
 
+      expect(
+        root.nodesOn(nodePath!),
+        equals([
+          ViewNode.fromNode(root.children.first),
+          ViewNode.fromNode(branch)
+        ]),
+      );
+
       final eval = ClientEval(
         fen: 'fen2',
         maxDepth: 20,
@@ -148,18 +156,17 @@ void main() {
         ]),
       );
 
-      final newNode = root.updateAt(
-        nodePath!,
-        (node) => node.copyWith(eval: eval),
-      );
+      final newNode = root.updateAt(nodePath, (node) {
+        node.eval = eval;
+      });
 
-      expect(root.nodeAt(fromPath).children.length, equals(2));
       expect(
-        root.nodeAt(fromPath).children[1].eval,
-        equals(eval),
+        root.nodesOn(nodePath),
+        equals([
+          ViewNode.fromNode(root.children.first),
+          ViewNode.fromNode(newNode!)
+        ]),
       );
-      expect(newNode?.eval, equals(eval));
-      expect(newNode?.id, equals(branch.id));
     });
 
     test('addNodeAt', () {

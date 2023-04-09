@@ -56,7 +56,6 @@ class UCIProtocol {
   }
 
   void compute(Work? nextWork) {
-    print('compute $nextWork');
     _nextWork = nextWork;
     _stop();
     _sendAndLog('isready');

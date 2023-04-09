@@ -56,4 +56,8 @@ class EngineEvaluation extends _$EngineEvaluation {
       ),
     );
   }
+
+  void stop() {
+    _engine.stop();
+  }
 }

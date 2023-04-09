@@ -28,18 +28,6 @@ abstract class RootOrNode {
   /// Prepends a child to this node.
   void prependChild(Node node) => children.insert(0, node);
 
-  /// Replaces a child with another node.
-  ///
-  /// Returns the new node, or null if the old node was not found.
-  Node? replaceChild(Node oldNode, Node newNode) {
-    final index = children.indexWhere((n) => n.id == oldNode.id);
-    if (index == -1) {
-      return null;
-    }
-    children[index] = newNode;
-    return newNode;
-  }
-
   /// Finds the child node with that id.
   Node? childById(UciCharPair id) {
     return children.firstWhereOrNull((node) => node.id == id);
@@ -83,11 +71,11 @@ abstract class RootOrNode {
   /// Updates the node at the given path.
   ///
   /// Returns the updated node, or null if the node was not found.
-  Node? updateAt(UciPath path, Node Function(Node node) update) {
+  Node? updateAt(UciPath path, void Function(Node node) update) {
     final node = nodeAtOrNull(path);
     if (node != null && node is Node) {
-      final parent = nodeAt(path.penultimate);
-      return parent.replaceChild(node, update(node));
+      update(node);
+      return node;
     }
     return null;
   }
@@ -186,20 +174,8 @@ class Node extends RootOrNode {
   final UciCharPair id;
 
   final SanMove sanMove;
-  final ClientEval? eval;
 
-  Node copyWith({
-    Object? eval = freezed,
-  }) {
-    return Node(
-      id: id,
-      ply: ply,
-      fen: fen,
-      sanMove: sanMove,
-      position: position,
-      eval: eval == freezed ? this.eval : eval as ClientEval?,
-    );
-  }
+  ClientEval? eval;
 
   @override
   String toString() {
