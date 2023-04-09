@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:math' as math;
+import 'package:tuple/tuple.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 import 'package:logging/logging.dart';
@@ -20,6 +22,10 @@ class UCIProtocol {
 
   final _log = Logger('UCIProtocol');
   final Map<String, String> _options;
+  final _evalController =
+      StreamController<Tuple2<Work, ClientEval>>.broadcast();
+
+  Stream<Tuple2<Work, ClientEval>> get evalStream => _evalController.stream;
 
   String? engineName;
 
@@ -37,10 +43,11 @@ class UCIProtocol {
 
   void disconnected() {
     if (_work != null && _currentEval != null) {
-      _work!.emit(_work!, _currentEval!);
+      _evalController.sink.add(Tuple2(_work!, _currentEval!));
     }
     _work = null;
     _send = null;
+    _evalController.close();
   }
 
   void _sendAndLog(String command) {
@@ -81,7 +88,7 @@ class UCIProtocol {
       engineName = parts.sublist(2).join(' ');
     } else if (parts[0] == 'bestmove') {
       if (_work != null && _currentEval != null) {
-        _work!.emit(_work!, _currentEval!);
+        _evalController.sink.add(Tuple2(_work!, _currentEval!));
       }
       _work = null;
       _swapWork();
@@ -168,7 +175,7 @@ class UCIProtocol {
       }
 
       if (multiPv == _expectedPvs && _currentEval != null) {
-        _work!.emit(_work!, _currentEval!);
+        _evalController.sink.add(Tuple2(_work!, _currentEval!));
 
         // Depth limits are nice in the user interface, but in clearly decided
         // positions the usual depth limits are reached very quickly due to

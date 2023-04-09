@@ -15,12 +15,12 @@ const Color _kEvalGaugeValueColorLightBg = Color(0xFFFFFFFF);
 class EvalGauge extends ConsumerStatefulWidget {
   const EvalGauge({
     super.key,
-    required this.eval,
+    this.eval,
   });
 
-  final ClientEval eval;
+  final ClientEval? eval;
 
-  double get whiteWinningChances => eval.winningChances(Side.white);
+  double get whiteWinningChances => eval?.winningChances(Side.white) ?? 0.0;
   double get animationValue => ((whiteWinningChances + 1) * 0.5).abs();
 
   @override
@@ -44,10 +44,11 @@ class _EvalGaugeState extends ConsumerState<EvalGauge> {
     return TweenAnimationBuilder<double>(
       tween: Tween<double>(begin: fromValue, end: widget.animationValue),
       duration: const Duration(milliseconds: 800),
+      curve: Curves.ease,
       builder: (BuildContext context, double value, Widget? child) {
         return Semantics(
           label: context.l10n.evaluationGauge,
-          value: widget.eval.evalString,
+          value: widget.eval?.evalString ?? context.l10n.loadingEngine,
           child: Container(
             constraints: const BoxConstraints(
               minWidth: double.infinity,
@@ -65,7 +66,7 @@ class _EvalGaugeState extends ConsumerState<EvalGauge> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4.0),
                 child: Text(
-                  widget.eval.evalString,
+                  widget.eval?.evalString ?? '',
                   style: TextStyle(
                     color: widget.whiteWinningChances >= 0
                         ? Colors.black

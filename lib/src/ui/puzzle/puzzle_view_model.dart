@@ -384,15 +384,23 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   }
 
   void _startEngineEval() {
-    ref.read(engineEvaluationProvider(state.initialFen).notifier).start(
-      state.currentPath,
-      state.nodeList.map(Step.fromNode),
-      onEmit: (work, eval) {
-        _gameTree.updateAt(work.path, (node) {
-          node.eval = eval;
+    ref
+        .read(engineEvaluationProvider(state.initialFen).notifier)
+        .start(
+          state.currentPath,
+          state.nodeList.map(Step.fromNode),
+        )
+        .then((stream) {
+      if (stream != null) {
+        stream.forEach((t) {
+          final work = t.item1;
+          final eval = t.item2;
+          _gameTree.updateAt(work.path, (node) {
+            node.eval = eval;
+          });
         });
-      },
-    );
+      }
+    });
   }
 
   void _addMove(Move move) {

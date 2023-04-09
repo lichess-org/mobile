@@ -1,3 +1,5 @@
+import 'package:stream_transform/stream_transform.dart';
+import 'package:tuple/tuple.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
@@ -28,11 +30,10 @@ class EngineEvaluation extends _$EngineEvaluation {
     return null;
   }
 
-  Future<void> start(
+  Future<Stream<Tuple2<Work, ClientEval>>?> start(
     UciPath path,
-    Iterable<Step> steps, {
-    void Function(Work work, ClientEval eval)? onEmit,
-  }) {
+    Iterable<Step> steps,
+  ) async {
     final step = steps.last;
 
     if (step.eval != null && step.eval!.depth >= kMaxDepth) {
@@ -40,7 +41,7 @@ class EngineEvaluation extends _$EngineEvaluation {
       return Future.value();
     }
 
-    return _engine.start(
+    final evalStream = await _engine.start(
       Work(
         threads: 3,
         maxDepth: kMaxDepth,
@@ -50,12 +51,20 @@ class EngineEvaluation extends _$EngineEvaluation {
         initialFen: initialFen,
         currentFen: step.fen,
         moves: IList(steps.map((e) => e.sanMove.move.uci)),
-        emit: (work, eval) {
-          onEmit?.call(work, eval);
-          state = eval;
-        },
       ),
     );
+
+    final throttledEvals = evalStream.throttle(
+      const Duration(milliseconds: 200),
+      trailing: true,
+    );
+
+    throttledEvals.forEach((t) {
+      state = t.item2;
+      print('eval: ${state?.depth} ${state?.cp}');
+    });
+
+    return throttledEvals;
   }
 
   void stop() {

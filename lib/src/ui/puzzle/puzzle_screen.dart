@@ -260,9 +260,9 @@ class _EvalGauge extends ConsumerWidget {
           )
         : puzzleState.node.eval != null
             ? EvalGauge(
-                eval: puzzleState.node.eval!,
+                eval: puzzleState.node.eval,
               )
-            : const SizedBox();
+            : const EvalGauge();
   }
 }
 

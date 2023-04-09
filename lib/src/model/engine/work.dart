@@ -23,7 +23,6 @@ class Work with _$Work {
     required String initialFen,
     required String currentFen,
     required IList<UCIMove> moves,
-    required void Function(Work work, ClientEval eval) emit,
   }) = _Work;
 }
 
