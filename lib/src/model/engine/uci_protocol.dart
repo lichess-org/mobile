@@ -45,7 +45,7 @@ class UCIProtocol {
 
   void _sendAndLog(String command) {
     _send?.call(command);
-    _log.info('<<< $command');
+    if (_send != null) _log.info('<<< $command');
   }
 
   void setOption(String name, String value) {
@@ -66,7 +66,6 @@ class UCIProtocol {
   }
 
   void received(String line) {
-    _log.info(line);
     final parts = line.trim().split(RegExp(r'\s+'));
     if (parts[0] == 'uciok') {
       // Analyse without contempt.
@@ -185,7 +184,7 @@ class UCIProtocol {
         }
       }
     } else if (!['Stockfish', 'id', 'option', 'info'].contains(parts[0])) {
-      // _log.info(line);
+      _log.info(line);
     }
   }
 

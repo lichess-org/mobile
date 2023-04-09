@@ -36,6 +36,7 @@ class EngineEvaluation extends _$EngineEvaluation {
     final step = steps.last;
 
     if (step.eval != null && step.eval!.depth >= kMaxDepth) {
+      state = null;
       return Future.value();
     }
 
