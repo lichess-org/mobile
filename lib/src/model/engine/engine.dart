@@ -40,6 +40,7 @@ class StockfishEngine implements Engine {
 
   @override
   Stream<EvalResult> start(Work work) {
+    print('engine start');
     _protocol.compute(work);
 
     if (_stockfish == null) {
@@ -66,6 +67,7 @@ class StockfishEngine implements Engine {
 
   @override
   void dispose() {
+    print('engine dispose');
     _stdoutSubscription?.cancel();
     _protocol.disconnected();
     _stockfish?.dispose();

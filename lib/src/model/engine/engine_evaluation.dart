@@ -20,24 +20,24 @@ const kMaxDepth = 22;
 
 @riverpod
 class EngineEvaluation extends _$EngineEvaluation {
-  late StockfishEngine _engine;
+  StockfishEngine? _engine;
 
   @override
-  ClientEval? build(String initialFen) {
-    _engine = StockfishEngine();
-
+  ClientEval? build(String id) {
     ref.onDispose(() {
-      print('disposing engine');
-      _engine.dispose();
+      _engine?.dispose();
     });
 
     return null;
   }
 
   Stream<EvalResult>? start(
+    String initialFen,
     UciPath path,
     Iterable<Step> steps,
   ) {
+    _engine ??= StockfishEngine();
+
     final step = steps.last;
 
     if (step.eval != null && step.eval!.depth >= kMaxDepth) {
@@ -45,7 +45,7 @@ class EngineEvaluation extends _$EngineEvaluation {
       return null;
     }
 
-    final evalStream = _engine
+    final evalStream = _engine!
         .start(
           Work(
             threads: 3,
@@ -71,7 +71,7 @@ class EngineEvaluation extends _$EngineEvaluation {
   }
 
   void stop() {
-    _engine.stop();
+    _engine?.stop();
   }
 }
 

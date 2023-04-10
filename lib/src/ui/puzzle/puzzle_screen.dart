@@ -14,8 +14,6 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/eval_gauge.dart';
-import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -24,6 +22,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/ui/engine/engine_gauge.dart';
 
 import 'puzzle_view_model.dart';
 import 'puzzle_feedback_widget.dart';
@@ -184,9 +183,11 @@ class _Body extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    if (puzzleState.mode == PuzzleMode.view)
-                      _EvalGauge(
-                        puzzleState: puzzleState,
+                    if (puzzleState.isEngineEnabled)
+                      EngineGauge(
+                        id: puzzleState.puzzle.puzzle.id.value,
+                        position: puzzleState.position,
+                        savedEval: puzzleState.node.eval,
                       ),
                   ],
                 ),
@@ -243,31 +244,6 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _EvalGauge extends ConsumerWidget {
-  const _EvalGauge({
-    required this.puzzleState,
-  });
-
-  final PuzzleViewModelState puzzleState;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final eval = ref.watch(engineEvaluationProvider(puzzleState.initialFen));
-
-    return eval != null
-        ? EvalGauge(
-            position: puzzleState.position,
-            eval: eval,
-          )
-        : puzzleState.node.eval != null
-            ? EvalGauge(
-                position: puzzleState.position,
-                eval: puzzleState.node.eval,
-              )
-            : EvalGauge(position: puzzleState.position);
-  }
-}
-
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({
     required this.initialPuzzleContext,
@@ -311,6 +287,16 @@ class _BottomBar extends ConsumerWidget {
                 icon: defaultTargetPlatform == TargetPlatform.iOS
                     ? CupertinoIcons.share
                     : Icons.share,
+              ),
+            if (puzzleState.mode == PuzzleMode.view)
+              BottomBarButton(
+                onTap: () {
+                  ref.read(viewModelProvider.notifier).toggleLocalEvaluation();
+                },
+                label: context.l10n.toggleLocalEvaluation,
+                shortLabel: 'Evaluation',
+                icon: CupertinoIcons.gauge,
+                highlighted: puzzleState.isLocalEvalEnabled,
               ),
             if (puzzleState.mode != PuzzleMode.view)
               BottomBarButton(

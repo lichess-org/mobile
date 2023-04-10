@@ -66,6 +66,7 @@ dependencies:
   flutter_native_splash: ^2.2.19
   stockfish:
     path: ../dart-stockfish
+  easy_debounce: ^2.0.3
 
 dev_dependencies:
   build_runner: ^2.3.2

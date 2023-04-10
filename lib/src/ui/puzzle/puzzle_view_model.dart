@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
@@ -230,10 +231,10 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       glicko: context.glicko,
       mode: PuzzleMode.play,
       initialPath: initialPath,
-      initialFen: _gameTree.fen,
       currentPath: UciPath.empty,
       nodeList: IList([ViewNode.fromNode(_gameTree)]),
       pov: _gameTree.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
+      isLocalEvalEnabled: false,
       resultSent: false,
       isChangingDifficulty: false,
       streak: streak,
@@ -268,7 +269,6 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       mode: PuzzleMode.view,
     );
     await _onFailOrWin(state.result ?? PuzzleResult.win);
-    _startEngineEval();
   }
 
   Future<void> _onFailOrWin(PuzzleResult result) async {
@@ -323,7 +323,6 @@ class PuzzleViewModel extends _$PuzzleViewModel {
             finished: true,
           ),
         );
-        _startEngineEval();
         sendStreakResult();
       } else {
         if (_nextPuzzleFuture == null) {
@@ -376,23 +375,38 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       lastMove: sanMove.move,
     );
 
-    if (pathChange && state.mode == PuzzleMode.view) {
+    if (pathChange) {
+      _startEngineEval();
+    }
+  }
+
+  void toggleLocalEvaluation() {
+    state = state.copyWith(
+      isLocalEvalEnabled: !state.isLocalEvalEnabled,
+    );
+    if (state.isLocalEvalEnabled) {
       _startEngineEval();
     }
   }
 
   void _startEngineEval() {
-    ref
-        .read(engineEvaluationProvider(state.initialFen).notifier)
-        .start(
-          state.currentPath,
-          state.nodeList.map(Step.fromNode),
-        )
-        ?.forEach((t) {
-      _gameTree.updateAt(t.item1.path, (node) {
-        node.eval = t.item2;
-      });
-    });
+    if (!state.isEngineEnabled) return;
+    EasyDebounce.debounce(
+      'start-engine-eval',
+      const Duration(milliseconds: 50),
+      () => ref
+          .read(engineEvaluationProvider(state.puzzle.puzzle.id.value).notifier)
+          .start(
+            _gameTree.fen,
+            state.currentPath,
+            state.nodeList.map(Step.fromNode),
+          )
+          ?.forEach((t) {
+        _gameTree.updateAt(t.item1.path, (node) {
+          node.eval = t.item2;
+        });
+      }),
+    );
   }
 
   void _addMove(Move move) {
@@ -449,7 +463,6 @@ class PuzzleViewModelState with _$PuzzleViewModelState {
     required Puzzle puzzle,
     required PuzzleGlicko? glicko,
     required PuzzleMode mode,
-    required String initialFen,
     required UciPath initialPath,
     required UciPath currentPath,
     required Side pov,
@@ -457,6 +470,7 @@ class PuzzleViewModelState with _$PuzzleViewModelState {
     Move? lastMove,
     PuzzleResult? result,
     PuzzleFeedback? feedback,
+    required bool isLocalEvalEnabled,
     required bool resultSent,
     required bool isChangingDifficulty,
     PuzzleContext? nextContext,
@@ -466,6 +480,10 @@ class PuzzleViewModelState with _$PuzzleViewModelState {
     required bool nextPuzzleStreakFetchError,
     required bool nextPuzzleStreakFetchIsRetrying,
   }) = _PuzzleScreenState;
+
+  bool get isEngineEnabled {
+    return mode == PuzzleMode.view && isLocalEvalEnabled;
+  }
 
   ViewNode get node => nodeList.last;
   Position get position => nodeList.last.position;
