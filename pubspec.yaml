@@ -67,7 +67,7 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.3.2
-  riverpod_generator: ^2.1.0
+  riverpod_generator: ^2.1.6
   dart_code_metrics: ^5.7.0
   flutter_test:
     sdk: flutter
