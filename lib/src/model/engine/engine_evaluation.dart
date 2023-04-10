@@ -1,16 +1,19 @@
 import 'package:stream_transform/stream_transform.dart';
-import 'package:tuple/tuple.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
+import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/eval.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
+import 'package:lichess_mobile/src/common/tree.dart';
 
 import 'engine.dart';
 import 'work.dart';
 
 part 'engine_evaluation.g.dart';
+part 'engine_evaluation.freezed.dart';
 
 // TODO: make this configurable
 const kMaxDepth = 22;
@@ -30,18 +33,18 @@ class EngineEvaluation extends _$EngineEvaluation {
     return null;
   }
 
-  Future<Stream<Tuple2<Work, ClientEval>>?> start(
+  Stream<EvalResult>? start(
     UciPath path,
     Iterable<Step> steps,
-  ) async {
+  ) {
     final step = steps.last;
 
     if (step.eval != null && step.eval!.depth >= kMaxDepth) {
       state = null;
-      return Future.value();
+      return null;
     }
 
-    final evalStream = await _engine.start(
+    final evalStream = _engine.start(
       Work(
         threads: 3,
         maxDepth: kMaxDepth,
@@ -61,7 +64,6 @@ class EngineEvaluation extends _$EngineEvaluation {
 
     throttledEvals.forEach((t) {
       state = t.item2;
-      print('eval: ${state?.depth} ${state?.cp}');
     });
 
     return throttledEvals;
@@ -69,5 +71,26 @@ class EngineEvaluation extends _$EngineEvaluation {
 
   void stop() {
     _engine.stop();
+  }
+}
+
+@freezed
+class Step with _$Step {
+  const Step._();
+
+  const factory Step({
+    required int ply,
+    required String fen,
+    required SanMove sanMove,
+    ClientEval? eval,
+  }) = _Step;
+
+  factory Step.fromNode(ViewNode node) {
+    return Step(
+      ply: node.ply,
+      fen: node.fen,
+      sanMove: node.sanMove,
+      eval: node.eval,
+    );
   }
 }

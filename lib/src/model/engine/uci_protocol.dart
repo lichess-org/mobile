@@ -22,10 +22,9 @@ class UCIProtocol {
 
   final _log = Logger('UCIProtocol');
   final Map<String, String> _options;
-  final _evalController =
-      StreamController<Tuple2<Work, ClientEval>>.broadcast();
+  final _evalController = StreamController<EvalResult>.broadcast();
 
-  Stream<Tuple2<Work, ClientEval>> get evalStream => _evalController.stream;
+  Stream<EvalResult> get evalStream => _evalController.stream;
 
   String? engineName;
 

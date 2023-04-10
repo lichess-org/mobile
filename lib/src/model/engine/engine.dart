@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:stockfish/stockfish.dart';
-import 'package:tuple/tuple.dart';
 
-import 'package:lichess_mobile/src/common/eval.dart';
 import 'uci_protocol.dart';
 import 'work.dart';
 
@@ -16,7 +14,7 @@ enum EngineState {
 abstract class Engine {
   EngineState get state;
   String get name;
-  Future<Stream<Tuple2<Work, ClientEval>>> start(Work work);
+  Stream<EvalResult> start(Work work);
   void stop();
   void dispose();
 }
@@ -41,16 +39,18 @@ class StockfishEngine implements Engine {
   String get name => _protocol.engineName ?? 'Stockfish';
 
   @override
-  Future<Stream<Tuple2<Work, ClientEval>>> start(Work work) async {
+  Stream<EvalResult> start(Work work) {
     _protocol.compute(work);
 
     if (_stockfish == null) {
-      _stockfish = await stockfishAsync();
-      _stdoutSubscription = _stockfish?.stdout.listen((line) {
-        _protocol.received(line);
-      });
-      _protocol.connected((String cmd) {
-        _stockfish?.stdin = cmd;
+      stockfishAsync().then((stockfish) {
+        _stockfish = stockfish;
+        _stdoutSubscription = stockfish.stdout.listen((line) {
+          _protocol.received(line);
+        });
+        _protocol.connected((String cmd) {
+          stockfish.stdin = cmd;
+        });
       });
     }
 

@@ -22,7 +22,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
-import 'package:lichess_mobile/src/model/engine/work.dart';
 
 part 'puzzle_view_model.g.dart';
 part 'puzzle_view_model.freezed.dart';
@@ -378,7 +377,6 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     );
 
     if (pathChange && state.mode == PuzzleMode.view) {
-      ref.read(engineEvaluationProvider(state.initialFen).notifier).stop();
       _startEngineEval();
     }
   }
@@ -390,16 +388,10 @@ class PuzzleViewModel extends _$PuzzleViewModel {
           state.currentPath,
           state.nodeList.map(Step.fromNode),
         )
-        .then((stream) {
-      if (stream != null) {
-        stream.forEach((t) {
-          final work = t.item1;
-          final eval = t.item2;
-          _gameTree.updateAt(work.path, (node) {
-            node.eval = eval;
-          });
-        });
-      }
+        ?.forEach((t) {
+      _gameTree.updateAt(t.item1.path, (node) {
+        node.eval = t.item2;
+      });
     });
   }
 
