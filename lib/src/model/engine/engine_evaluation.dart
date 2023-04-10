@@ -27,6 +27,7 @@ class EngineEvaluation extends _$EngineEvaluation {
     _engine = StockfishEngine();
 
     ref.onDispose(() {
+      print('disposing engine');
       _engine.dispose();
     });
 
@@ -44,29 +45,29 @@ class EngineEvaluation extends _$EngineEvaluation {
       return null;
     }
 
-    final evalStream = _engine.start(
-      Work(
-        threads: 3,
-        maxDepth: kMaxDepth,
-        multiPv: 1,
-        ply: step.ply,
-        path: path,
-        initialFen: initialFen,
-        currentFen: step.fen,
-        moves: IList(steps.map((e) => e.sanMove.move.uci)),
-      ),
-    );
+    final evalStream = _engine
+        .start(
+          Work(
+            threads: 3,
+            maxDepth: kMaxDepth,
+            multiPv: 1,
+            ply: step.ply,
+            path: path,
+            initialFen: initialFen,
+            currentFen: step.fen,
+            moves: IList(steps.map((e) => e.sanMove.move.uci)),
+          ),
+        )
+        .throttle(
+          const Duration(milliseconds: 200),
+          trailing: true,
+        );
 
-    final throttledEvals = evalStream.throttle(
-      const Duration(milliseconds: 200),
-      trailing: true,
-    );
-
-    throttledEvals.forEach((t) {
+    evalStream.forEach((t) {
       state = t.item2;
     });
 
-    return throttledEvals;
+    return evalStream;
   }
 
   void stop() {

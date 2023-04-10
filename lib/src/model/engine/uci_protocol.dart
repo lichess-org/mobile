@@ -120,7 +120,9 @@ class UCIProtocol {
           case 'score':
             isMate = parts[++i] == 'mate';
             povEv = int.parse(parts[++i]);
-            if (parts[i + 1] == 'lowerbound' || parts[i + 1] == 'upperbound') {
+            if (i + 1 < parts.length &&
+                (parts[i + 1] == 'lowerbound' ||
+                    parts[i + 1] == 'upperbound')) {
               evalType = parts[++i];
             }
             break;

@@ -256,13 +256,15 @@ class _EvalGauge extends ConsumerWidget {
 
     return eval != null
         ? EvalGauge(
+            position: puzzleState.position,
             eval: eval,
           )
         : puzzleState.node.eval != null
             ? EvalGauge(
+                position: puzzleState.position,
                 eval: puzzleState.node.eval,
               )
-            : const EvalGauge();
+            : EvalGauge(position: puzzleState.position);
   }
 }
 

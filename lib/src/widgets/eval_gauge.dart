@@ -15,9 +15,11 @@ const Color _kEvalGaugeValueColorLightBg = Color(0xFFFFFFFF);
 class EvalGauge extends ConsumerStatefulWidget {
   const EvalGauge({
     super.key,
+    required this.position,
     this.eval,
   });
 
+  final Position position;
   final ClientEval? eval;
 
   double get whiteWinningChances => eval?.winningChances(Side.white) ?? 0.0;
@@ -41,14 +43,32 @@ class _EvalGaugeState extends ConsumerState<EvalGauge> {
     final brightness = ref.watch(currentBrightnessProvider);
     final TextDirection textDirection = Directionality.of(context);
 
+    final evalDisplay = widget.position.outcome != null
+        ? widget.position.outcome!.winner == null
+            ? widget.position.isStalemate
+                ? context.l10n.stalemate
+                : context.l10n.insufficientMaterial
+            : widget.position.isCheckmate
+                ? context.l10n.checkmate
+                : context.l10n.variantEnding
+        : widget.eval?.evalString;
+
+    final toValue = widget.position.outcome != null
+        ? widget.position.outcome!.winner == null
+            ? 0.5
+            : widget.position.outcome!.winner == Side.white
+                ? 1.0
+                : 0.0
+        : widget.animationValue;
+
     return TweenAnimationBuilder<double>(
-      tween: Tween<double>(begin: fromValue, end: widget.animationValue),
+      tween: Tween<double>(begin: fromValue, end: toValue),
       duration: const Duration(milliseconds: 800),
       curve: Curves.ease,
       builder: (BuildContext context, double value, Widget? child) {
         return Semantics(
           label: context.l10n.evaluationGauge,
-          value: widget.eval?.evalString ?? context.l10n.loadingEngine,
+          value: evalDisplay ?? context.l10n.loadingEngine,
           child: Container(
             constraints: const BoxConstraints(
               minWidth: double.infinity,
@@ -66,17 +86,13 @@ class _EvalGaugeState extends ConsumerState<EvalGauge> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4.0),
                 child: Text(
-                  widget.eval?.evalString ?? '',
+                  evalDisplay ?? '',
                   style: TextStyle(
-                    color: widget.whiteWinningChances >= 0
-                        ? Colors.black
-                        : Colors.white,
-                    fontSize: 12.0,
+                    color: toValue >= 0.5 ? Colors.black : Colors.white,
+                    fontSize: 11.0,
                     fontWeight: FontWeight.bold,
                   ),
-                  textAlign: widget.whiteWinningChances >= 0
-                      ? TextAlign.left
-                      : TextAlign.right,
+                  textAlign: toValue >= 0.5 ? TextAlign.left : TextAlign.right,
                 ),
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
+import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
@@ -35,7 +36,8 @@ Future<PuzzleStreakResponse> streak(StreakRef ref) {
 @Riverpod(keepAlive: true)
 Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
   final repo = ref.watch(puzzleRepositoryProvider);
-  return Result.release(repo.daily());
+// http://localhost:9663/training/77lQS
+  return Result.release(repo.fetch(PuzzleId('77lQS')));
 }
 
 @riverpod
