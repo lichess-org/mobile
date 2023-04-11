@@ -6,7 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/common/brightness.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/common/eval.dart';
-import 'package:lichess_mobile/src/ui/engine/current_evaluation.dart';
+import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 
 const double _kEvalGaugeHeight = 20.0;
 const Color _kEvalGaugeBackgroundColor = Color(0xFF444444);
@@ -15,9 +15,12 @@ const Color _kEvalGaugeValueColorLightBg = Color(0xFFFFFFFF);
 
 class EngineGauge extends ConsumerWidget {
   const EngineGauge({
+    required this.evaluationContext,
     required this.position,
     this.savedEval,
   });
+
+  final EvaluationContext evaluationContext;
 
   /// Position to evaluate.
   final Position position;
@@ -27,7 +30,7 @@ class EngineGauge extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final eval = ref.watch(currentEvaluationProvider);
+    final eval = ref.watch(engineEvaluationProvider(evaluationContext));
 
     return eval != null
         ? _EvalGauge(

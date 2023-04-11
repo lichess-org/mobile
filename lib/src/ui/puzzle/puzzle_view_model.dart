@@ -22,8 +22,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
-import 'package:lichess_mobile/src/model/engine/engine_evaluation_controller.dart';
-import 'package:lichess_mobile/src/ui/engine/current_evaluation.dart';
+import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 
 part 'puzzle_view_model.g.dart';
 part 'puzzle_view_model.freezed.dart';
@@ -32,7 +31,6 @@ part 'puzzle_view_model.freezed.dart';
 class PuzzleViewModel extends _$PuzzleViewModel {
   // ignore: avoid-late-keyword
   late Node _gameTree;
-  EngineEvaluationController? _engineEvaluationController;
   Timer? _firstMoveTimer;
   Timer? _viewSolutionTimer;
   // on streak, we pre-load the next puzzle to avoid a delay when the user
@@ -45,7 +43,6 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     PuzzleStreak? initialStreak,
   }) {
     ref.onDispose(() {
-      _disposeEngine();
       _firstMoveTimer?.cancel();
       _viewSolutionTimer?.cancel();
     });
@@ -217,8 +214,6 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     final root = Root.fromPgn(context.puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
 
-    _disposeEngine();
-
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
 
     // play first move after 1 second
@@ -235,6 +230,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       puzzle: context.puzzle,
       glicko: context.glicko,
       mode: PuzzleMode.play,
+      initialFen: _gameTree.fen,
       initialPath: initialPath,
       currentPath: UciPath.empty,
       nodeList: IList([ViewNode.fromNode(_gameTree)]),
@@ -391,40 +387,29 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     );
     if (state.isLocalEvalEnabled) {
       _startEngineEval();
-    } else {
-      _disposeEngine();
     }
-  }
-
-  void _disposeEngine() {
-    _engineEvaluationController?.dispose();
-    _engineEvaluationController = null;
-    ref.read(currentEvaluationProvider.notifier).state = null;
   }
 
   void _startEngineEval() {
     if (!state.isEngineEnabled) return;
-    _engineEvaluationController ??= EngineEvaluationController();
-    EasyDebounce.debounce('start-engine-eval', const Duration(milliseconds: 50),
-        () {
-      final evals = _engineEvaluationController?.start(
-        _gameTree.fen,
-        state.currentPath,
-        state.nodeList.map(Step.fromNode),
-      );
-      if (evals != null) {
-        evals.forEach((t) {
-          _gameTree.updateAt(t.item1.path, (node) {
-            node.eval = t.item2;
-          });
-          if (t.item1.path == state.currentPath) {
-            ref.read(currentEvaluationProvider.notifier).state = t.item2;
-          }
+    EasyDebounce.debounce(
+      'start-engine-eval',
+      const Duration(milliseconds: 50),
+      () => ref
+          .read(
+            engineEvaluationProvider(state.evaluationContext).notifier,
+          )
+          .start(
+            state.currentPath,
+            state.nodeList.map(Step.fromNode),
+            shouldEmit: (work) => work.path == state.currentPath,
+          )
+          ?.forEach((t) {
+        _gameTree.updateAt(t.item1.path, (node) {
+          node.eval = t.item2;
         });
-      } else {
-        ref.read(currentEvaluationProvider.notifier).state = null;
-      }
-    });
+      }),
+    );
   }
 
   void _addMove(Move move) {
@@ -481,6 +466,7 @@ class PuzzleViewModelState with _$PuzzleViewModelState {
     required Puzzle puzzle,
     required PuzzleGlicko? glicko,
     required PuzzleMode mode,
+    required String initialFen,
     required UciPath initialPath,
     required UciPath currentPath,
     required Side pov,
@@ -502,6 +488,11 @@ class PuzzleViewModelState with _$PuzzleViewModelState {
   bool get isEngineEnabled {
     return mode == PuzzleMode.view && isLocalEvalEnabled;
   }
+
+  EvaluationContext get evaluationContext => EvaluationContext(
+        initialFen: initialFen,
+        contextId: puzzle.puzzle.id,
+      );
 
   ViewNode get node => nodeList.last;
   Position get position => nodeList.last.position;

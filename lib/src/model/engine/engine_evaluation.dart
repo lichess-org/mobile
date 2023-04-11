@@ -1,5 +1,6 @@
 import 'package:stream_transform/stream_transform.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
@@ -11,30 +12,51 @@ import 'package:lichess_mobile/src/common/tree.dart';
 import 'engine.dart';
 import 'work.dart';
 
-part 'engine_evaluation_controller.freezed.dart';
+part 'engine_evaluation.g.dart';
+part 'engine_evaluation.freezed.dart';
 
 // TODO: make this configurable
 const kMaxDepth = 22;
 
-class EngineEvaluationController {
+@freezed
+class EvaluationContext with _$EvaluationContext {
+  const factory EvaluationContext({
+    required String initialFen,
+
+    /// Unique ID to ensure engine is properly disposed when no more needed
+    /// and a new engine instance is created per context (puzzle, game, etc).
+    required ID contextId,
+  }) = _EvaluationContext;
+}
+
+@riverpod
+class EngineEvaluation extends _$EngineEvaluation {
   StockfishEngine? _engine;
 
-  EngineEvaluationController();
+  @override
+  ClientEval? build(EvaluationContext context) {
+    ref.onDispose(() {
+      _engine?.dispose();
+    });
+
+    return null;
+  }
 
   Stream<EvalResult>? start(
-    String initialFen,
     UciPath path,
-    Iterable<Step> steps,
-  ) {
+    Iterable<Step> steps, {
+    required bool Function(Work work) shouldEmit,
+  }) {
     _engine ??= StockfishEngine();
 
     final step = steps.last;
 
     if (step.eval != null && step.eval!.depth >= kMaxDepth) {
+      state = null;
       return null;
     }
 
-    return _engine!
+    final evalStream = _engine!
         .start(
           Work(
             threads: 3,
@@ -42,7 +64,7 @@ class EngineEvaluationController {
             multiPv: 1,
             ply: step.ply,
             path: path,
-            initialFen: initialFen,
+            initialFen: context.initialFen,
             currentFen: step.fen,
             moves: IList(steps.map((e) => e.sanMove.move.uci)),
           ),
@@ -51,14 +73,18 @@ class EngineEvaluationController {
           const Duration(milliseconds: 200),
           trailing: true,
         );
+
+    evalStream.forEach((t) {
+      if (shouldEmit(t.item1)) {
+        state = t.item2;
+      }
+    });
+
+    return evalStream;
   }
 
   void stop() {
     _engine?.stop();
-  }
-
-  void dispose() {
-    _engine?.dispose();
   }
 }
 

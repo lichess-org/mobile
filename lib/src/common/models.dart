@@ -117,11 +117,28 @@ enum DefaultGameClock {
   final Perf perf;
 }
 
-@Freezed(fromJson: true, toJson: true, toStringOverride: false)
-class GameAnyId with _$GameAnyId {
-  const GameAnyId._();
+abstract class ID {
+  const ID(this.value);
 
-  const factory GameAnyId(String value) = _GameAnyId;
+  final String value;
+
+  @override
+  String toString() => value;
+
+  Map<String, dynamic> toJson();
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ID && runtimeType == other.runtimeType && value == other.value;
+
+  @override
+  int get hashCode => value.hashCode;
+}
+
+@JsonSerializable()
+class GameAnyId extends ID {
+  const GameAnyId(super.value);
 
   GameId get gameId => GameId(value.substring(0, 8));
   bool get isFullId => value.length == 12;
@@ -131,74 +148,61 @@ class GameAnyId with _$GameAnyId {
       _$GameAnyIdFromJson(json);
 
   @override
-  String toString() => value;
+  Map<String, dynamic> toJson() => _$GameAnyIdToJson(this);
 }
 
-@Freezed(fromJson: true, toJson: true, toStringOverride: false)
-class GameId with _$GameId {
-  const GameId._();
-
-  @Assert('value.length == 8')
-  const factory GameId(String value) = _GameId;
+@JsonSerializable()
+class GameId extends ID {
+  const GameId(super.value) : assert(value.length == 8);
 
   factory GameId.fromJson(Map<String, dynamic> json) => _$GameIdFromJson(json);
 
   @override
-  String toString() => value;
+  Map<String, dynamic> toJson() => _$GameIdToJson(this);
 }
 
-@Freezed(fromJson: true, toJson: true, toStringOverride: false)
-class GameFullId with _$GameFullId {
-  const GameFullId._();
-
-  @Assert('value.length == 12')
-  const factory GameFullId(String value) = _GameFullId;
+@JsonSerializable()
+class GameFullId extends ID {
+  const GameFullId(super.value) : assert(value.length == 12);
 
   factory GameFullId.fromJson(Map<String, dynamic> json) =>
       _$GameFullIdFromJson(json);
 
   @override
-  String toString() => value;
+  Map<String, dynamic> toJson() => _$GameFullIdToJson(this);
 }
 
-@Freezed(fromJson: true, toJson: true, toStringOverride: false)
-class GamePlayerId with _$GamePlayerId {
-  const GamePlayerId._();
-
-  @Assert('value.length == 4')
-  const factory GamePlayerId(String value) = _GamePlayerId;
+@JsonSerializable()
+class GamePlayerId extends ID {
+  const GamePlayerId(super.value) : assert(value.length == 4);
 
   factory GamePlayerId.fromJson(Map<String, dynamic> json) =>
       _$GamePlayerIdFromJson(json);
 
   @override
-  String toString() => value;
+  Map<String, dynamic> toJson() => _$GamePlayerIdToJson(this);
 }
 
-@Freezed(fromJson: true, toJson: true, toStringOverride: false)
-class PuzzleId with _$PuzzleId {
-  const PuzzleId._();
-
-  const factory PuzzleId(String value) = _PuzzleId;
+@JsonSerializable()
+class PuzzleId extends ID {
+  const PuzzleId(super.value);
 
   factory PuzzleId.fromJson(Map<String, dynamic> json) =>
       _$PuzzleIdFromJson(json);
 
   @override
-  String toString() => value;
+  Map<String, dynamic> toJson() => _$PuzzleIdToJson(this);
 }
 
-@Freezed(fromJson: true, toJson: true, toStringOverride: false)
-class UserId with _$UserId {
-  const UserId._();
-
-  const factory UserId(String value) = _UserId;
-
-  factory UserId.fromJson(Map<String, dynamic> json) => _$UserIdFromJson(json);
+@JsonSerializable()
+class UserId extends ID {
+  const UserId(super.value);
 
   factory UserId.fromUserName(String userName) =>
       UserId(userName.toLowerCase());
 
+  factory UserId.fromJson(Map<String, dynamic> json) => _$UserIdFromJson(json);
+
   @override
-  String toString() => value;
+  Map<String, dynamic> toJson() => _$UserIdToJson(this);
 }
