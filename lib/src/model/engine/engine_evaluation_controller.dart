@@ -1,6 +1,5 @@
 import 'package:stream_transform/stream_transform.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
@@ -12,24 +11,15 @@ import 'package:lichess_mobile/src/common/tree.dart';
 import 'engine.dart';
 import 'work.dart';
 
-part 'engine_evaluation.g.dart';
-part 'engine_evaluation.freezed.dart';
+part 'engine_evaluation_controller.freezed.dart';
 
 // TODO: make this configurable
 const kMaxDepth = 22;
 
-@riverpod
-class EngineEvaluation extends _$EngineEvaluation {
+class EngineEvaluationController {
   StockfishEngine? _engine;
 
-  @override
-  ClientEval? build(String id) {
-    ref.onDispose(() {
-      _engine?.dispose();
-    });
-
-    return null;
-  }
+  EngineEvaluationController();
 
   Stream<EvalResult>? start(
     String initialFen,
@@ -41,11 +31,10 @@ class EngineEvaluation extends _$EngineEvaluation {
     final step = steps.last;
 
     if (step.eval != null && step.eval!.depth >= kMaxDepth) {
-      state = null;
       return null;
     }
 
-    final evalStream = _engine!
+    return _engine!
         .start(
           Work(
             threads: 3,
@@ -62,16 +51,14 @@ class EngineEvaluation extends _$EngineEvaluation {
           const Duration(milliseconds: 200),
           trailing: true,
         );
-
-    evalStream.forEach((t) {
-      state = t.item2;
-    });
-
-    return evalStream;
   }
 
   void stop() {
     _engine?.stop();
+  }
+
+  void dispose() {
+    _engine?.dispose();
   }
 }
 

@@ -40,7 +40,7 @@ class StockfishEngine implements Engine {
 
   @override
   Stream<EvalResult> start(Work work) {
-    print('engine start');
+    print('engine start ${work.initialFen} moves ${work.moves.join(' ')}');
     _protocol.compute(work);
 
     if (_stockfish == null) {

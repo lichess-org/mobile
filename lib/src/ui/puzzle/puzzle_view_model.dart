@@ -22,7 +22,8 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
-import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
+import 'package:lichess_mobile/src/model/engine/engine_evaluation_controller.dart';
+import 'package:lichess_mobile/src/ui/engine/current_evaluation.dart';
 
 part 'puzzle_view_model.g.dart';
 part 'puzzle_view_model.freezed.dart';
@@ -31,6 +32,7 @@ part 'puzzle_view_model.freezed.dart';
 class PuzzleViewModel extends _$PuzzleViewModel {
   // ignore: avoid-late-keyword
   late Node _gameTree;
+  EngineEvaluationController? _engineEvaluationController;
   Timer? _firstMoveTimer;
   Timer? _viewSolutionTimer;
   // on streak, we pre-load the next puzzle to avoid a delay when the user
@@ -43,6 +45,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     PuzzleStreak? initialStreak,
   }) {
     ref.onDispose(() {
+      _disposeEngine();
       _firstMoveTimer?.cancel();
       _viewSolutionTimer?.cancel();
     });
@@ -213,6 +216,8 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   ) {
     final root = Root.fromPgn(context.puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
+
+    _disposeEngine();
 
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
 
@@ -386,27 +391,40 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     );
     if (state.isLocalEvalEnabled) {
       _startEngineEval();
+    } else {
+      _disposeEngine();
     }
+  }
+
+  void _disposeEngine() {
+    _engineEvaluationController?.dispose();
+    _engineEvaluationController = null;
+    ref.read(currentEvaluationProvider.notifier).state = null;
   }
 
   void _startEngineEval() {
     if (!state.isEngineEnabled) return;
-    EasyDebounce.debounce(
-      'start-engine-eval',
-      const Duration(milliseconds: 50),
-      () => ref
-          .read(engineEvaluationProvider(state.puzzle.puzzle.id.value).notifier)
-          .start(
-            _gameTree.fen,
-            state.currentPath,
-            state.nodeList.map(Step.fromNode),
-          )
-          ?.forEach((t) {
-        _gameTree.updateAt(t.item1.path, (node) {
-          node.eval = t.item2;
+    _engineEvaluationController ??= EngineEvaluationController();
+    EasyDebounce.debounce('start-engine-eval', const Duration(milliseconds: 50),
+        () {
+      final evals = _engineEvaluationController?.start(
+        _gameTree.fen,
+        state.currentPath,
+        state.nodeList.map(Step.fromNode),
+      );
+      if (evals != null) {
+        evals.forEach((t) {
+          _gameTree.updateAt(t.item1.path, (node) {
+            node.eval = t.item2;
+          });
+          if (t.item1.path == state.currentPath) {
+            ref.read(currentEvaluationProvider.notifier).state = t.item2;
+          }
         });
-      }),
-    );
+      } else {
+        ref.read(currentEvaluationProvider.notifier).state = null;
+      }
+    });
   }
 
   void _addMove(Move move) {

@@ -185,7 +185,6 @@ class _Body extends ConsumerWidget {
                     ),
                     if (puzzleState.isEngineEnabled)
                       EngineGauge(
-                        id: puzzleState.puzzle.puzzle.id.value,
                         position: puzzleState.position,
                         savedEval: puzzleState.node.eval,
                       ),
