@@ -5,7 +5,7 @@ import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/common/brightness.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 
 const double _kEvalGaugeHeight = 20.0;
