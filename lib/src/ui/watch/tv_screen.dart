@@ -90,7 +90,21 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                 showAndroidChoices(
                   context,
                   choices,
-                );
+                  choices.indexOf(choiceString),
+                ).then((val) {
+                  print("This is val");
+                  print(val);
+                  String? tempGameId = data.channels.entries
+                      .where((element) => element.key == selectedValue)
+                      .first
+                      .value
+                      .gameId;
+                  if (selectedValue == "Top Rated") tempGameId = null;
+
+                  print(tempGameId);
+
+                  ref.read(gameIdStateProvider.notifier).state = tempGameId;
+                });
               },
             );
           },
@@ -334,11 +348,13 @@ class _Body extends ConsumerWidget {
 /// This uses a platform-appropriate mechanism to show users multiple choices.
 ///
 /// On Android, it uses a dialog with radio buttons. On iOS, it uses a picker.
-void showAndroidChoices(BuildContext context, List<String> choices) {
-  showDialog<void>(
+Future<int?> showAndroidChoices(
+    BuildContext context, List<String> choices, int initialIndex) {
+  int? choiceIndex = initialIndex;
+  return showDialog<int?>(
     context: context,
     builder: (context) {
-      int? selectedRadio = 1;
+      int? selectedRadio = initialIndex;
       return AlertDialog(
         contentPadding: const EdgeInsets.only(top: 12),
         content: StatefulBuilder(
@@ -352,6 +368,7 @@ void showAndroidChoices(BuildContext context, List<String> choices) {
                   groupValue: selectedRadio,
                   onChanged: (value) {
                     setState(() => selectedRadio = value);
+                    choiceIndex = value;
                   },
                 );
               }),
@@ -361,11 +378,11 @@ void showAndroidChoices(BuildContext context, List<String> choices) {
         actions: [
           TextButton(
             child: const Text('OK'),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.of(context).pop(choiceIndex),
           ),
           TextButton(
             child: const Text('CANCEL'),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.of(context).pop(2),
           ),
         ],
       );
