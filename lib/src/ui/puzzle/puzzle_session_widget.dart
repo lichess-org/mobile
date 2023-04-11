@@ -72,7 +72,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
       child: OrientationBuilder(
         builder: (context, orientation) {
           // some devices don't have much space around the board so let's estimate
-          // how much space we can safely get to disaply 1 or 2 rows of attempts
+          // how much space we can safely get to display 1 or 2 rows of attempts
           final mediaQueryData = MediaQuery.of(context);
           final width = mediaQueryData.size.width;
           final height = mediaQueryData.size.height;

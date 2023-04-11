@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/ui/engine/engine_gauge.dart';
@@ -140,6 +141,14 @@ class _Body extends ConsumerWidget {
         ref.watch(boardPreferencesProvider.select((p) => p.pieceSet));
     final viewModelProvider = puzzleViewModelProvider(initialPuzzleContext);
     final puzzleState = ref.watch(viewModelProvider);
+
+    // TODO show best move on board
+    final evalBestMove = ref.watch(
+      engineEvaluationProvider(puzzleState.evaluationContext)
+          .select((e) => e?.bestMove),
+    );
+    print('evalBestMove: $evalBestMove');
+
     return Column(
       children: [
         Expanded(
