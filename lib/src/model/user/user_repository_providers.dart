@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'user_repository.dart';
 import 'user.dart';

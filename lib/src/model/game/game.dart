@@ -4,6 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 
 import 'player.dart';
 

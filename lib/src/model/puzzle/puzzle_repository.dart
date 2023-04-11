@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/models.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'puzzle.dart';
 import 'puzzle_streak.dart';
 import 'puzzle_theme.dart';
