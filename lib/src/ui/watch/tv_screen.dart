@@ -75,7 +75,17 @@ class _TvScreenState extends ConsumerState<TvScreen> {
             final List<String> choices =
                 data.channels.entries.map((e) => e.key).toList();
             return InkWell(
-              child: const Text('Top Rated'),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(titleText),
+                  const Icon(
+                    Icons.arrow_drop_down,
+                    color: Colors.white,
+                    size: 34.0,
+                  ),
+                ],
+              ),
               onTap: () {
                 showAndroidChoices(
                   context,
