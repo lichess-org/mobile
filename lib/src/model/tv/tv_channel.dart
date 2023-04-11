@@ -24,7 +24,14 @@ class TvChannels with _$TvChannels {
         for (final entry in channelMap.entries)
           if (entry.key != 'Horde' &&
               entry.key != 'Race Kings' &&
-              entry.key != 'Crazyhouse')
+              entry.key != 'Crazyhouse' &&
+              entry.key != 'King of the Hill' &&
+              entry.key != 'Antichess' &&
+              entry.key != 'Computer' &&
+              entry.key != 'Bot' &&
+              entry.key != 'Atomic' &&
+              entry.key != 'Racing Kings' &&
+              entry.key != 'Three-check')
             entry.key: TvChannel.fromJson(entry.value)
       }),
     );

@@ -40,14 +40,48 @@ class _TvScreenState extends ConsumerState<TvScreen> {
     BuildContext context,
     WidgetRef ref,
   ) {
+    final tvChannel = ref.watch(tvChannelsProvider);
+    final gameId = ref.watch(gameIdStateProvider);
     return Scaffold(
       appBar: AppBar(
-        title: InkWell(
-          child: const Text('Top Rated'),
-          onTap: () {
-            showAndroidChoices(
-              context,
-              ['android A', 'android B', 'android C'],
+        title: tvChannel.when(
+          loading: () => const Text('Top Rated'),
+          error: (err, stackTrace) {
+            debugPrint(
+              'SEVERE: [TvScreen] could not load stream; $err\n$stackTrace',
+            );
+          },
+          data: (data) {
+            /* Repeated code. TODO */
+            String titleText;
+            String choiceString;
+            if (gameId == null) {
+              titleText = "Top Rated";
+              choiceString = "Top Rated";
+            } else {
+              titleText = data.channels.entries
+                  .where((element) => element.value.gameId == gameId)
+                  .first
+                  .key;
+              choiceString = titleText;
+              titleText = titleText +
+                  " | " +
+                  data.channels.entries
+                      .where((element) => element.value.gameId == gameId)
+                      .first
+                      .value
+                      .gameId;
+            }
+            final List<String> choices =
+                data.channels.entries.map((e) => e.key).toList();
+            return InkWell(
+              child: const Text('Top Rated'),
+              onTap: () {
+                showAndroidChoices(
+                  context,
+                  choices,
+                );
+              },
             );
           },
         ),
@@ -327,7 +361,7 @@ void showAndroidChoices(BuildContext context, List<String> choices) {
       );
     },
   );
-  return;
+  //return;
 }
 
 //final _variationIndex = Provider<int>((ref) => throw UnimplementedError());
