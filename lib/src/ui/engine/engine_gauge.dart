@@ -117,16 +117,20 @@ class _EvalGaugeState extends ConsumerState<_EvalGauge> {
                 value: value,
                 textDirection: textDirection,
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                child: Text(
-                  evalDisplay ?? '',
-                  style: TextStyle(
-                    color: toValue >= 0.5 ? Colors.black : Colors.white,
-                    fontSize: 11.0,
-                    fontWeight: FontWeight.bold,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  child: Text(
+                    evalDisplay ?? '',
+                    style: TextStyle(
+                      color: toValue >= 0.5 ? Colors.black : Colors.white,
+                      fontSize: 11.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign:
+                        toValue >= 0.5 ? TextAlign.left : TextAlign.right,
                   ),
-                  textAlign: toValue >= 0.5 ? TextAlign.left : TextAlign.right,
                 ),
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/common/brightness.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
@@ -71,15 +72,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
       child: OrientationBuilder(
         builder: (context, orientation) {
-          // some devices don't have much space around the board so let's estimate
-          // how much space we can safely get to display 1 or 2 rows of attempts
-          final mediaQueryData = MediaQuery.of(context);
-          final width = mediaQueryData.size.width;
-          final height = mediaQueryData.size.height;
-          final padding = mediaQueryData.padding;
-          final safeHeight = height - padding.top - padding.bottom;
-          // viewport height - board size - app bar height - bottom bar height
-          final estimatedTableHeight = (safeHeight - width - 50 - 56) / 2;
+          final estimatedTableHeight = estimateTableHeight(context);
           const estimatedRatingWidgetHeight = 33.0;
           final estimatedWidgetHeight =
               estimatedTableHeight - estimatedRatingWidgetHeight;
