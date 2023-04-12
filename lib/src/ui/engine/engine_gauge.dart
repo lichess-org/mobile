@@ -118,7 +118,9 @@ class _EvalGaugeState extends ConsumerState<_EvalGauge> {
                 textDirection: textDirection,
               ),
               child: Align(
-                alignment: Alignment.centerLeft,
+                alignment: toValue >= 0.5
+                    ? Alignment.centerLeft
+                    : Alignment.centerRight,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4.0),
                   child: Text(
@@ -128,8 +130,6 @@ class _EvalGaugeState extends ConsumerState<_EvalGauge> {
                       fontSize: 11.0,
                       fontWeight: FontWeight.bold,
                     ),
-                    textAlign:
-                        toValue >= 0.5 ? TextAlign.left : TextAlign.right,
                   ),
                 ),
               ),
