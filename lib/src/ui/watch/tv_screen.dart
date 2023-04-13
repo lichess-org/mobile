@@ -32,7 +32,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
     return ConsumerPlatformWidget(
       ref: ref,
       androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
+      iosBuilder: _androidBuilder, //_iosBuilder,
     );
   }
 
@@ -92,18 +92,16 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   choices,
                   choices.indexOf(choiceString),
                 ).then((val) {
-                  print("This is val");
-                  print(val);
-                  String? tempGameId = data.channels.entries
-                      .where((element) => element.key == selectedValue)
-                      .first
-                      .value
-                      .gameId;
-                  if (selectedValue == "Top Rated") tempGameId = null;
+                  if (val != null) {
+                    selectedValue = data.channels.entries.elementAt(val).key;
+                    String? tempGameId =
+                        data.channels.entries.elementAt(val!).value.gameId;
+                    if (selectedValue == "Top Rated") tempGameId = null;
 
-                  print(tempGameId);
+                    print(tempGameId);
 
-                  ref.read(gameIdStateProvider.notifier).state = tempGameId;
+                    ref.read(gameIdStateProvider.notifier).state = tempGameId;
+                  }
                 });
               },
             );
@@ -229,12 +227,6 @@ class _TvScreenState extends ConsumerState<TvScreen> {
             }),
             onSelectedItemChanged: (int selectedItem) {
               selectedValue = choices[selectedItem];
-              //selectedIndex = selectedItem; //Navigator.pop(context);
-              //Text text = countries[value];
-              //selectedIndex = text.data.toString();
-              //setState(() {
-
-              //});
             },
           ),
         );
@@ -382,7 +374,7 @@ Future<int?> showAndroidChoices(
           ),
           TextButton(
             child: const Text('CANCEL'),
-            onPressed: () => Navigator.of(context).pop(2),
+            onPressed: () => Navigator.of(context).pop(null),
           ),
         ],
       );
