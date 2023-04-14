@@ -59,6 +59,17 @@ class UserRepository {
         );
   }
 
+  FutureResult<IList<UserActitity>> getUserActivity(UserId id) {
+    return apiClient.get(Uri.parse('$kLichessHost/api/user/$id/activity')).then(
+          (result) => result.flatMap(
+            (response) => readJsonListOfObjects(
+              response.body,
+              mapper: _userActitityFromJson,
+              logger: _log,
+            ),
+          ),
+        );
+      }
   FutureResult<IList<Streamer>> getLiveStreamers() {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/streamer/live'))
@@ -97,7 +108,43 @@ class UserRepository {
 }
 
 // --
+UserActitity _userActitityFromJson(Map<String, dynamic> json) =>
+    _userActitityFromPick(pick(json).required());
 
+UserActitity _userActitityFromPick(RequiredPick pick) {
+  final receivedGamesMap =
+      pick('games').asMapOrEmpty<String, Map<String, dynamic>>();
+
+  return UserActitity(
+    startTime: pick('interval', 'start').asDateTimeFromMillisecondsOrThrow(),
+    endTime: pick('interval', 'end').asDateTimeFromMillisecondsOrThrow(),
+    games: IMap({
+      for (final entry in receivedGamesMap.entries)
+        perfNameMap.get(entry.key)!: UserActitityGameScore.fromJson(entry.value)
+    }),
+    followIn: IList(
+      pick('follows', 'in', 'ids')
+          .asListOrNull((p0) => pick(p0).asStringOrNull()),
+    ),
+    followInNb: pick('follows', 'in', 'nb').asIntOrNull(),
+    followOut: IList(
+      pick('follows', 'out', 'ids')
+          .asListOrNull((p0) => pick(p0).asStringOrNull()),
+    ),
+    followOutNb: pick('follows', 'in', 'nb').asIntOrNull(),
+    tournament: IList(
+      pick('tournaments', 'best')
+          .asListOrNull((p0) => UserActivityTournament.fromPick(p0)),
+    ),
+    tournamentNb: pick('tournaments', 'nb').asIntOrNull(),
+    puzzle: pick('puzzles', 'score').letOrNull(UserActitityGameScore.fromPick),
+    correspondenceEnds: pick('correspondenceEnds', 'score')
+        .letOrNull(UserActitityGameScore.fromPick),
+    correspondenceMovesNb: pick('correspondenceMoves', 'nb').asIntOrNull(),
+  );
+}
+
+// --
 UserPerfStats _userPerfStatsFromJson(Map<String, dynamic> json) =>
     _userPerfStatsFromPick(pick(json).required());
 

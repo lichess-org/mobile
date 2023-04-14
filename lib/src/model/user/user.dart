@@ -158,6 +158,72 @@ class UserStatus with _$UserStatus {
 }
 
 @freezed
+class UserActivityTournament with _$UserActivityTournament {
+  const factory UserActivityTournament({
+    required String id,
+    required String name,
+    required int nbGames,
+    required int score,
+    required int rank,
+    required int rankPercent,
+  }) = _UserActivityTournament;
+
+  factory UserActivityTournament.fromJson(Map<String, dynamic> json) =>
+      UserActivityTournament.fromPick(pick(json).required());
+
+  factory UserActivityTournament.fromPick(RequiredPick pick) =>
+      UserActivityTournament(
+        id: pick('tournament', 'id').asStringOrThrow(),
+        name: pick('tournament', 'name').asStringOrThrow(),
+        nbGames: pick('nbGames').asIntOrThrow(),
+        score: pick('score').asIntOrThrow(),
+        rank: pick('rank').asIntOrThrow(),
+        rankPercent: pick('rankPercent').asIntOrThrow(),
+      );
+}
+
+@freezed
+class UserActitityGameScore with _$UserActitityGameScore {
+  const factory UserActitityGameScore({
+    required int win,
+    required int loss,
+    required int draw,
+    required int rpBefore,
+    required int rpAfter,
+  }) = _UserActitityGameScore;
+
+  factory UserActitityGameScore.fromJson(Map<String, dynamic> json) =>
+      UserActitityGameScore.fromPick(pick(json).required());
+
+  factory UserActitityGameScore.fromPick(RequiredPick pick) =>
+      UserActitityGameScore(
+        win: pick('win').asIntOrThrow(),
+        loss: pick('loss').asIntOrThrow(),
+        draw: pick('draw').asIntOrThrow(),
+        rpBefore: pick('rp', 'before').asIntOrThrow(),
+        rpAfter: pick('rp', 'after').asIntOrThrow(),
+      );
+}
+
+@freezed
+class UserActitity with _$UserActitity {
+  const factory UserActitity({
+    required DateTime startTime,
+    required DateTime endTime,
+    IMap<Perf, UserActitityGameScore>? games,
+    IList<String?>? followIn,
+    int? followInNb,
+    IList<String?>? followOut,
+    int? followOutNb,
+    IList<UserActivityTournament?>? tournament,
+    int? tournamentNb,
+    UserActitityGameScore? puzzle,
+    UserActitityGameScore? correspondenceEnds,
+    int? correspondenceMovesNb,
+  }) = _UserActitity;
+}
+
+@freezed
 class UserPerfStats with _$UserPerfStats {
   const factory UserPerfStats({
     required double rating,

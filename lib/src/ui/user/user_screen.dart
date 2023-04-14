@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/brief_game_results.dart';
 
 class UserScreen extends ConsumerWidget {
   const UserScreen({required this.user, super.key});
@@ -100,6 +101,7 @@ class UserScreenBody extends StatelessWidget {
     final list = [
       _Profile(user: user),
       PerfCards(user: user),
+      Activity(user: user),
       RecentGames(user: user),
     ];
 
@@ -275,6 +277,280 @@ class PerfCards extends StatelessWidget {
         perf: perf,
         loggedInUser: user,
       ),
+    );
+  }
+}
+
+const List<String> _monthName = [
+  '',
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec'
+];
+
+class UserActivityGameEntry {
+  const UserActivityGameEntry({
+    required this.icon,
+    required this.varient,
+    required this.win,
+    required this.draw,
+    required this.loss,
+    required this.cnt,
+    required this.rpBefore,
+    required this.rpAfter,
+  });
+
+  final IconData icon;
+  final String varient;
+  final int win;
+  final int draw;
+  final int loss;
+  final int cnt;
+  final int rpBefore;
+  final int rpAfter;
+}
+
+class Activity extends ConsumerWidget {
+  const Activity({required this.user, super.key});
+
+  final User user;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activity = ref.watch(userActitityProvider(id: user.id));
+
+    return activity.when(
+      data: (data) {
+        return ListSection(
+          // TODO translate
+          header: Text('Activity', style: Styles.sectionTitle),
+          hasLeading: true,
+          children: data.map((entry) {
+            final g = entry.games!.mapTo((key, value) {
+              return UserActivityGameEntry(
+                icon: key.icon,
+                varient: key.title,
+                win: value.win,
+                draw: value.draw,
+                loss: value.loss,
+                cnt: value.win + value.draw + value.loss,
+                rpBefore: value.rpBefore,
+                rpAfter: value.rpAfter,
+              );
+            });
+
+            return Column(
+              children: [
+                PlatformListTile(
+                  visualDensity: const VisualDensity(vertical: -2.5),
+                  title: Text(
+                    "${_monthName[entry.startTime.month].toUpperCase()} ${entry.startTime.day}, ${entry.startTime.year}",
+                    style: const TextStyle(
+                      color: LichessColors.brag,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                for (final e in g)
+                  PlatformListTile(
+                    visualDensity: const VisualDensity(vertical: -2.5),
+                    dense: true,
+                    leading: Icon(
+                      e.icon,
+                      color: LichessColors.brag,
+                    ),
+                    title: Row(
+                      children: [
+                        Text(
+                          context.l10n.activityGames(
+                              e.cnt, e.varient, e.cnt == 1 ? '' : 's'),
+                        ),
+                      ],
+                    ),
+                    subtitle: Row(
+                      children: [
+                        PlayerRating(
+                          deviation: 0,
+                          rating: e.rpAfter,
+                        ),
+                        const SizedBox(width: 3),
+                        if (e.rpAfter - e.rpBefore != 0) ...[
+                          Icon(
+                            e.rpAfter - e.rpBefore > 0
+                                ? LichessIcons.arrow_full_upperright
+                                : LichessIcons.arrow_full_lowerright,
+                            color: e.rpAfter - e.rpBefore > 0
+                                ? LichessColors.good
+                                : LichessColors.red,
+                            size: 12,
+                          ),
+                          Text(
+                            (e.rpAfter - e.rpBefore).abs().toString(),
+                            style: TextStyle(
+                              color: e.rpAfter - e.rpBefore > 0
+                                  ? LichessColors.good
+                                  : LichessColors.red,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    trailing: BriefGameResultBox(
+                      win: e.win,
+                      draw: e.draw,
+                      loss: e.loss,
+                    ),
+                  ),
+                if (entry.puzzle != null)
+                  PlatformListTile(
+                    leading: const Icon(
+                      LichessIcons.target,
+                      color: LichessColors.brag,
+                    ),
+                    title: Text(
+                      context.l10n.activityPuzzles(
+                          entry.puzzle!.win + entry.puzzle!.loss,
+                          entry.puzzle!.win + entry.puzzle!.loss == 1
+                              ? ''
+                              : 's'),
+                    ),
+                    visualDensity: const VisualDensity(vertical: -2.5),
+                    dense: true,
+                    subtitle: Row(
+                      children: [
+                        PlayerRating(
+                          deviation: 0,
+                          rating: entry.puzzle!.rpAfter,
+                        ),
+                        const SizedBox(width: 3),
+                        if (entry.puzzle!.rpAfter - entry.puzzle!.rpBefore !=
+                            0) ...[
+                          Icon(
+                            entry.puzzle!.rpAfter - entry.puzzle!.rpBefore > 0
+                                ? LichessIcons.arrow_full_upperright
+                                : LichessIcons.arrow_full_lowerright,
+                            color:
+                                entry.puzzle!.rpAfter - entry.puzzle!.rpBefore >
+                                        0
+                                    ? LichessColors.good
+                                    : LichessColors.red,
+                            size: 12,
+                          ),
+                          Text(
+                            (entry.puzzle!.rpAfter - entry.puzzle!.rpBefore)
+                                .abs()
+                                .toString(),
+                            style: TextStyle(
+                              color: entry.puzzle!.rpAfter -
+                                          entry.puzzle!.rpBefore >
+                                      0
+                                  ? LichessColors.good
+                                  : LichessColors.red,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    trailing: BriefGameResultBox(
+                      win: entry.puzzle!.win,
+                      draw: 0,
+                      loss: entry.puzzle!.loss,
+                    ),
+                  ),
+                if (entry.correspondenceEnds != null)
+                  PlatformListTile(
+                    leading: const Icon(
+                      LichessIcons.correspondence,
+                      color: LichessColors.brag,
+                    ),
+                    title: Text(
+                      context.l10n.activityCorrespondenceEnds(
+                          entry.correspondenceEnds!.win +
+                              entry.correspondenceEnds!.draw +
+                              entry.correspondenceEnds!.loss,
+                          entry.correspondenceEnds!.win +
+                                      entry.correspondenceEnds!.draw +
+                                      entry.correspondenceEnds!.loss ==
+                                  1
+                              ? ''
+                              : 's'),
+                    ),
+                    trailing: BriefGameResultBox(
+                      win: entry.correspondenceEnds!.win,
+                      draw: entry.correspondenceEnds!.draw,
+                      loss: entry.correspondenceEnds!.loss,
+                    ),
+                    visualDensity: const VisualDensity(vertical: -2.5),
+                    dense: true,
+                  ),
+                if (entry.correspondenceMovesNb != null)
+                  PlatformListTile(
+                    leading: const Icon(
+                      LichessIcons.correspondence,
+                      color: LichessColors.brag,
+                    ),
+                    title: Text(
+                      context.l10n.activityCorrespondenceMoves(
+                          entry.correspondenceMovesNb!.toString(),
+                          entry.correspondenceMovesNb == 1 ? '' : 's'),
+                    ),
+                    visualDensity: const VisualDensity(vertical: -2.5),
+                    dense: true,
+                  ),
+                if (entry.tournamentNb != null)
+                  PlatformListTile(
+                    leading: const Icon(
+                      Icons.emoji_events,
+                      color: LichessColors.brag,
+                    ),
+                    title: Text(
+                      context.l10n.activityTournament(
+                          entry.tournamentNb!.toString(),
+                          entry!.tournamentNb == 1 ? '' : 's'),
+                    ),
+                    visualDensity: const VisualDensity(vertical: -2.5),
+                    dense: true,
+                  ),
+                if (entry.followIn!.isNotEmpty)
+                  PlatformListTile(
+                    leading: const Icon(
+                      Icons.thumb_up,
+                      color: LichessColors.brag,
+                    ),
+                    title: Text(
+                      context.l10n.activityFollow(
+                          (entry.followIn!.length == 15 &&
+                                  entry.followInNb != null)
+                              ? entry.followInNb!.toString()
+                              : entry.followIn!.length.toString(),
+                          entry.followIn!.length == 1 ? '' : 's'),
+                    ),
+                    visualDensity: const VisualDensity(vertical: -2.5),
+                    dense: true,
+                  ),
+              ],
+            );
+          }).toList(),
+        );
+      },
+      error: (error, stackTrace) {
+        debugPrint(
+          'SEVERE: [UserScreen] could not load user activity; $error\n$stackTrace',
+        );
+        return Text(context.l10n.couldNotLoadActivity);
+      },
+      loading: () => const CenterLoadingIndicator(),
     );
   }
 }
