@@ -6,6 +6,8 @@ import 'package:fl_chart/fl_chart.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/common/errors.dart';
+import 'package:lichess_mobile/src/common/styles.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
@@ -65,7 +67,22 @@ class PuzzleDashboardWidget extends ConsumerWidget {
         debugPrint(
           'SEVERE: [PuzzleDashboardWidget] could not load puzzle dashboard; $e\n$s',
         );
-        return const Text('Error! Could not load Dashboard');
+        return Padding(
+          padding: Styles.bodySectionPadding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                context.l10n.puzzlePuzzleDashboard,
+                style: Styles.sectionTitle,
+              ),
+              if (e is NotFoundException)
+                Text(context.l10n.puzzleNoPuzzlesToShow)
+              else
+                const Text('Could not load dashboard.'),
+            ],
+          ),
+        );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
     );
