@@ -118,7 +118,7 @@ class TvEvent with _$TvEvent {
     RequiredPick pick,
     Side side,
   ) {
-    int? ai = pick('aiLevel').asIntOrNull();
+    final int? ai = pick('aiLevel').asIntOrNull();
     String userName;
     if (ai != null) {
       userName = "AI level $ai";

@@ -32,7 +32,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
     return ConsumerPlatformWidget(
       ref: ref,
       androidBuilder: _androidBuilder,
-      iosBuilder: _androidBuilder, //_iosBuilder,
+      iosBuilder: _iosBuilder,
     );
   }
 
@@ -59,21 +59,23 @@ class _TvScreenState extends ConsumerState<TvScreen> {
               titleText = "Top Rated";
               choiceString = "Top Rated";
             } else {
+              // TODO: handle - gameId isn't in entries
               titleText = data.channels.entries
                   .where((element) => element.value.gameId == gameId)
                   .first
                   .key;
               choiceString = titleText;
-              titleText = titleText +
-                  " | " +
-                  data.channels.entries
-                      .where((element) => element.value.gameId == gameId)
-                      .first
-                      .value
-                      .gameId;
+              titleText =
+                  "$titleText | ${data.channels.entries.where((element) => element.value.gameId == gameId).first.value.gameId}";
             }
             final List<String> choices =
                 data.channels.entries.map((e) => e.key).toList();
+
+            print("****** android before title print Choices: $choices");
+            print("****** android before title print TitleText: $titleText");
+            print(
+                "*** android before title print Index into choices ${choices.indexOf(choiceString)}");
+
             return InkWell(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -92,13 +94,14 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   choices,
                   choices.indexOf(choiceString),
                 ).then((val) {
+                  print("****** android then val: $val");
                   if (val != null) {
                     selectedValue = data.channels.entries.elementAt(val).key;
                     String? tempGameId =
-                        data.channels.entries.elementAt(val!).value.gameId;
+                        data.channels.entries.elementAt(val).value.gameId;
                     if (selectedValue == "Top Rated") tempGameId = null;
 
-                    print(tempGameId);
+                    print("****** android tempGameId: $tempGameId");
 
                     ref.read(gameIdStateProvider.notifier).state = tempGameId;
                   }
@@ -137,19 +140,15 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   .first
                   .key;
               choiceString = titleText;
-              titleText = titleText +
-                  " | " +
-                  data.channels.entries
-                      .where((element) => element.value.gameId == gameId)
-                      .first
-                      .value
-                      .gameId;
+              titleText =
+                  "$titleText | ${data.channels.entries.where((element) => element.value.gameId == gameId).first.value.gameId}";
             }
             final List<String> choices =
                 data.channels.entries.map((e) => e.key).toList();
-            print(choices);
-            print(titleText);
-            print(choices.indexOf(choiceString));
+            print("****** iOs before title print Choices: $choices");
+            print("****** iOs before title print TitleText: $titleText");
+            print(
+                "*** iOs before title print Index into choices ${choices.indexOf(choiceString)}");
             return InkWell(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -168,8 +167,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   choices,
                   choices.indexOf(choiceString),
                 ).then((val) {
-                  print("This is val");
-                  print(val);
+                  print("****** iOs then val: $val");
                   String? tempGameId = data.channels.entries
                       .where((element) => element.key == selectedValue)
                       .first
@@ -177,7 +175,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                       .gameId;
                   if (selectedValue == "Top Rated") tempGameId = null;
 
-                  print(tempGameId);
+                  print("****** iOs tempGameId: $tempGameId");
 
                   ref.read(gameIdStateProvider.notifier).state = tempGameId;
                 });
@@ -250,11 +248,12 @@ class _Body extends ConsumerWidget {
     final tvStream = currentTab == BottomTab.watch
         ? ref.watch(
             tvGameStreamProvider(
-                WatchParameter(withSound: true, gameId: gameId)),
+              WatchParameter(withSound: true, gameId: gameId),
+            ),
           )
         : const AsyncLoading<FeaturedPosition>();
     final featuredGame = ref.watch(featuredGameProvider);
-    final tvChannel = ref.watch(tvChannelsProvider);
+    //final tvChannel = ref.watch(tvChannelsProvider);
     return SafeArea(
       child: Center(
         child: tvStream.when(
@@ -341,7 +340,10 @@ class _Body extends ConsumerWidget {
 ///
 /// On Android, it uses a dialog with radio buttons. On iOS, it uses a picker.
 Future<int?> showAndroidChoices(
-    BuildContext context, List<String> choices, int initialIndex) {
+  BuildContext context,
+  List<String> choices,
+  int initialIndex,
+) {
   int? choiceIndex = initialIndex;
   return showDialog<int?>(
     context: context,
