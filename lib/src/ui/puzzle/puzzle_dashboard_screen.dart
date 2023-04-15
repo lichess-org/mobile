@@ -210,7 +210,7 @@ class DaysSelector extends ConsumerWidget {
     final day = ref.watch(daysProvider);
     return session != null
         ? AppBarTextButton(
-            onPressed: () => showChoicesPicker(
+            onPressed: () => showChoicePicker(
               context,
               choices: Days.values,
               selectedItem: day,

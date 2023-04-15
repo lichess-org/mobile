@@ -78,7 +78,7 @@ class _Body extends ConsumerWidget {
                 settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
                 onTap: () {
                   if (defaultTargetPlatform == TargetPlatform.android) {
-                    showChoicesPicker(
+                    showChoicePicker(
                       context,
                       choices: ThemeMode.values,
                       selectedItem: themeMode,

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
-Future<void> showChoicesPicker<T extends Enum>(
+Future<void> showChoicePicker<T extends Enum>(
   BuildContext context, {
   required List<T> choices,
   required T selectedItem,
