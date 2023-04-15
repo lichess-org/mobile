@@ -59,17 +59,18 @@ class UserRepository {
         );
   }
 
-  FutureResult<IList<UserActitity>> getUserActivity(UserId id) {
+  FutureResult<IList<UserActivity>> getUserActivity(UserId id) {
     return apiClient.get(Uri.parse('$kLichessHost/api/user/$id/activity')).then(
           (result) => result.flatMap(
             (response) => readJsonListOfObjects(
               response.body,
-              mapper: _userActitityFromJson,
+              mapper: _userActivityFromJson,
               logger: _log,
             ),
           ),
         );
-      }
+  }
+
   FutureResult<IList<Streamer>> getLiveStreamers() {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/streamer/live'))
@@ -96,19 +97,19 @@ class UserRepository {
 }
 
 // --
-UserActitity _userActitityFromJson(Map<String, dynamic> json) =>
-    _userActitityFromPick(pick(json).required());
+UserActivity _userActivityFromJson(Map<String, dynamic> json) =>
+    _userActivityFromPick(pick(json).required());
 
-UserActitity _userActitityFromPick(RequiredPick pick) {
+UserActivity _userActivityFromPick(RequiredPick pick) {
   final receivedGamesMap =
       pick('games').asMapOrEmpty<String, Map<String, dynamic>>();
 
-  return UserActitity(
+  return UserActivity(
     startTime: pick('interval', 'start').asDateTimeFromMillisecondsOrThrow(),
     endTime: pick('interval', 'end').asDateTimeFromMillisecondsOrThrow(),
     games: IMap({
       for (final entry in receivedGamesMap.entries)
-        perfNameMap.get(entry.key)!: UserActitityGameScore.fromJson(entry.value)
+        perfNameMap.get(entry.key)!: UserActivityGameScore.fromJson(entry.value)
     }),
     followIn: IList(
       pick('follows', 'in', 'ids')
@@ -125,9 +126,9 @@ UserActitity _userActitityFromPick(RequiredPick pick) {
           .asListOrNull((p0) => UserActivityTournament.fromPick(p0)),
     ),
     tournamentNb: pick('tournaments', 'nb').asIntOrNull(),
-    puzzle: pick('puzzles', 'score').letOrNull(UserActitityGameScore.fromPick),
+    puzzle: pick('puzzles', 'score').letOrNull(UserActivityGameScore.fromPick),
     correspondenceEnds: pick('correspondenceEnds', 'score')
-        .letOrNull(UserActitityGameScore.fromPick),
+        .letOrNull(UserActivityGameScore.fromPick),
     correspondenceMovesNb: pick('correspondenceMoves', 'nb').asIntOrNull(),
   );
 }

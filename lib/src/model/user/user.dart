@@ -183,20 +183,20 @@ class UserActivityTournament with _$UserActivityTournament {
 }
 
 @freezed
-class UserActitityGameScore with _$UserActitityGameScore {
-  const factory UserActitityGameScore({
+class UserActivityGameScore with _$UserActivityGameScore {
+  const factory UserActivityGameScore({
     required int win,
     required int loss,
     required int draw,
     required int rpBefore,
     required int rpAfter,
-  }) = _UserActitityGameScore;
+  }) = _UserActivityGameScore;
 
-  factory UserActitityGameScore.fromJson(Map<String, dynamic> json) =>
-      UserActitityGameScore.fromPick(pick(json).required());
+  factory UserActivityGameScore.fromJson(Map<String, dynamic> json) =>
+      UserActivityGameScore.fromPick(pick(json).required());
 
-  factory UserActitityGameScore.fromPick(RequiredPick pick) =>
-      UserActitityGameScore(
+  factory UserActivityGameScore.fromPick(RequiredPick pick) =>
+      UserActivityGameScore(
         win: pick('win').asIntOrThrow(),
         loss: pick('loss').asIntOrThrow(),
         draw: pick('draw').asIntOrThrow(),
@@ -206,21 +206,21 @@ class UserActitityGameScore with _$UserActitityGameScore {
 }
 
 @freezed
-class UserActitity with _$UserActitity {
-  const factory UserActitity({
+class UserActivity with _$UserActivity {
+  const factory UserActivity({
     required DateTime startTime,
     required DateTime endTime,
-    IMap<Perf, UserActitityGameScore>? games,
+    IMap<Perf, UserActivityGameScore>? games,
     IList<String?>? followIn,
     int? followInNb,
     IList<String?>? followOut,
     int? followOutNb,
     IList<UserActivityTournament?>? tournament,
     int? tournamentNb,
-    UserActitityGameScore? puzzle,
-    UserActitityGameScore? correspondenceEnds,
+    UserActivityGameScore? puzzle,
+    UserActivityGameScore? correspondenceEnds,
     int? correspondenceMovesNb,
-  }) = _UserActitity;
+  }) = _UserActivity;
 }
 
 @freezed

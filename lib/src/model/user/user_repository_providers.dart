@@ -38,8 +38,8 @@ Future<UserPerfStats> userPerfStats(
 }
 
 @riverpod
-Future<IList<UserActitity>> userActitity(
-  UserActitityRef ref, {
+Future<IList<UserActivity>> userActivity(
+  UserActivityRef ref, {
   required UserId id,
 }) {
   ref.cacheFor(const Duration(seconds: 30));
