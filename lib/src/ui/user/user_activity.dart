@@ -24,28 +24,6 @@ const List<String> _monthName = [
   'Dec'
 ];
 
-class UserActivityGameEntry {
-  const UserActivityGameEntry({
-    required this.icon,
-    required this.variant,
-    required this.win,
-    required this.draw,
-    required this.loss,
-    required this.cnt,
-    required this.ratingBefore,
-    required this.ratingAfter,
-  });
-
-  final IconData icon;
-  final String variant;
-  final int win;
-  final int draw;
-  final int loss;
-  final int cnt;
-  final int ratingBefore;
-  final int ratingAfter;
-}
-
 class UserActivityEntry extends ConsumerWidget {
   const UserActivityEntry({required this.entry, super.key});
 
@@ -53,19 +31,6 @@ class UserActivityEntry extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final games = entry.games!.mapTo((key, value) {
-      return UserActivityGameEntry(
-        icon: key.icon,
-        variant: key.title,
-        win: value.win,
-        draw: value.draw,
-        loss: value.loss,
-        cnt: value.win + value.draw + value.loss,
-        ratingBefore: value.ratingBefore,
-        ratingAfter: value.ratingAfter,
-      );
-    });
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -84,59 +49,69 @@ class UserActivityEntry extends ConsumerWidget {
             ),
           ),
         ),
-        for (final e in games)
-          PlatformListTile(
-            visualDensity: const VisualDensity(vertical: -2.5),
-            dense: true,
-            leading: Icon(
-              e.icon,
-              color: LichessColors.brag,
-            ),
-            title: Row(
-              children: [
-                Text(
-                  context.l10n.activityPlayedNbGames(
-                    e.cnt,
-                    e.variant,
-                  ),
+        if (entry.games != null)
+          for (final gameEntry in entry.games!.entries)
+            PlatformListTile(
+              visualDensity: const VisualDensity(vertical: -2.5),
+              dense: true,
+              leading: Icon(
+                gameEntry.key.icon,
+                color: LichessColors.brag,
+              ),
+              title: Text(
+                context.l10n.activityPlayedNbGames(
+                  gameEntry.value.win +
+                      gameEntry.value.draw +
+                      gameEntry.value.loss,
+                  gameEntry.key.title,
                 ),
-              ],
-            ),
-            subtitle: Row(
-              children: [
-                PlayerRating(
-                  deviation: 0,
-                  rating: e.ratingAfter,
-                ),
-                const SizedBox(width: 3),
-                if (e.ratingAfter - e.ratingBefore != 0) ...[
-                  Icon(
-                    e.ratingAfter - e.ratingBefore > 0
-                        ? LichessIcons.arrow_full_upperright
-                        : LichessIcons.arrow_full_lowerright,
-                    color: e.ratingAfter - e.ratingBefore > 0
-                        ? LichessColors.good
-                        : LichessColors.red,
-                    size: 12,
+              ),
+              subtitle: Row(
+                children: [
+                  PlayerRating(
+                    deviation: 0,
+                    rating: gameEntry.value.ratingAfter,
                   ),
-                  Text(
-                    (e.ratingAfter - e.ratingBefore).abs().toString(),
-                    style: TextStyle(
-                      color: e.ratingAfter - e.ratingBefore > 0
+                  const SizedBox(width: 3),
+                  if (gameEntry.value.ratingAfter -
+                          gameEntry.value.ratingBefore !=
+                      0) ...[
+                    Icon(
+                      gameEntry.value.ratingAfter -
+                                  gameEntry.value.ratingBefore >
+                              0
+                          ? LichessIcons.arrow_full_upperright
+                          : LichessIcons.arrow_full_lowerright,
+                      color: gameEntry.value.ratingAfter -
+                                  gameEntry.value.ratingBefore >
+                              0
                           ? LichessColors.good
                           : LichessColors.red,
-                      fontSize: 11,
+                      size: 12,
                     ),
-                  ),
+                    Text(
+                      (gameEntry.value.ratingAfter -
+                              gameEntry.value.ratingBefore)
+                          .abs()
+                          .toString(),
+                      style: TextStyle(
+                        color: gameEntry.value.ratingAfter -
+                                    gameEntry.value.ratingBefore >
+                                0
+                            ? LichessColors.good
+                            : LichessColors.red,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
                 ],
-              ],
+              ),
+              trailing: BriefGameResultBox(
+                win: gameEntry.value.win,
+                draw: gameEntry.value.draw,
+                loss: gameEntry.value.loss,
+              ),
             ),
-            trailing: BriefGameResultBox(
-              win: e.win,
-              draw: e.draw,
-              loss: e.loss,
-            ),
-          ),
         if (entry.puzzles != null)
           PlatformListTile(
             leading: const Icon(
@@ -226,6 +201,7 @@ class UserActivityEntry extends ConsumerWidget {
                     entry.correspondenceEnds!.loss,
               ),
             ),
+            subtitle: const SizedBox.shrink(),
             trailing: BriefGameResultBox(
               win: entry.correspondenceEnds!.win,
               draw: entry.correspondenceEnds!.draw,
@@ -245,6 +221,7 @@ class UserActivityEntry extends ConsumerWidget {
                 entry.correspondenceMovesNb!,
               ),
             ),
+            subtitle: const SizedBox.shrink(),
             visualDensity: const VisualDensity(vertical: -2.5),
             dense: true,
           ),
@@ -259,6 +236,17 @@ class UserActivityEntry extends ConsumerWidget {
                 entry.tournamentNb!,
               ),
             ),
+            subtitle: entry.tournament != null && entry.tournament!.isNotEmpty
+                ? Text(
+                    context.l10n.activityRankedInTournament(
+                      entry.tournament!.first!.rank,
+                      entry.tournament!.first!.rankPercent.toString(),
+                      entry.tournament!.first!.nbGames.toString(),
+                      entry.tournament!.first!.name,
+                    ),
+                    maxLines: 2,
+                  )
+                : const SizedBox.shrink(),
             visualDensity: const VisualDensity(vertical: -2.5),
             dense: true,
           ),
@@ -269,8 +257,9 @@ class UserActivityEntry extends ConsumerWidget {
               color: LichessColors.brag,
             ),
             title: Text(
-              context.l10n.activityFollowedNbPlayers(entry.followInNb!),
+              context.l10n.activityGainedNbFollowers(entry.followInNb!),
             ),
+            subtitle: const SizedBox.shrink(),
             visualDensity: const VisualDensity(vertical: -2.5),
             dense: true,
           ),
@@ -298,75 +287,81 @@ class BriefGameResultBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 20,
-      width: (win != 0 ? 1 : 0) * 18 +
-          (draw != 0 ? 1 : 0) * 18 +
-          (loss != 0 ? 1 : 0) * 18 +
-          ((win != 0 ? 1 : 0) + (draw != 0 ? 1 : 0) + (loss != 0 ? 1 : 0) - 1) *
-              3,
-      child: Row(
-        children: [
-          if (win != 0)
-            SizedBox(
-              height: 18,
-              width: 18,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: LichessColors.good,
-                  borderRadius: BorderRadius.circular(3.0),
-                ),
-                child: Center(
-                  child: Text(
-                    win.toString(),
-                    style: gameStatsFontStyle,
+    return Padding(
+      padding: const EdgeInsets.only(left: 5.0),
+      child: SizedBox(
+        height: 20,
+        width: (win != 0 ? 1 : 0) * 18 +
+            (draw != 0 ? 1 : 0) * 18 +
+            (loss != 0 ? 1 : 0) * 18 +
+            ((win != 0 ? 1 : 0) +
+                    (draw != 0 ? 1 : 0) +
+                    (loss != 0 ? 1 : 0) -
+                    1) *
+                3,
+        child: Row(
+          children: [
+            if (win != 0)
+              SizedBox(
+                height: 18,
+                width: 18,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: LichessColors.good,
+                    borderRadius: BorderRadius.circular(3.0),
+                  ),
+                  child: Center(
+                    child: Text(
+                      win.toString(),
+                      style: gameStatsFontStyle,
+                    ),
                   ),
                 ),
               ),
-            ),
-          if (win != 0 && draw != 0)
-            const SizedBox(
-              width: 3,
-            ),
-          if (draw != 0)
-            SizedBox(
-              height: 18,
-              width: 18,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: LichessColors.brag,
-                  borderRadius: BorderRadius.circular(3.0),
-                ),
-                child: Center(
-                  child: Text(
-                    draw.toString(),
-                    style: gameStatsFontStyle,
+            if (win != 0 && draw != 0)
+              const SizedBox(
+                width: 3,
+              ),
+            if (draw != 0)
+              SizedBox(
+                height: 18,
+                width: 18,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: LichessColors.brag,
+                    borderRadius: BorderRadius.circular(3.0),
+                  ),
+                  child: Center(
+                    child: Text(
+                      draw.toString(),
+                      style: gameStatsFontStyle,
+                    ),
                   ),
                 ),
               ),
-            ),
-          if ((draw != 0 && loss != 0) || (win != 0 && loss != 0))
-            const SizedBox(
-              width: 3,
-            ),
-          if (loss != 0)
-            SizedBox(
-              height: 18,
-              width: 18,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: LichessColors.red,
-                  borderRadius: BorderRadius.circular(3.0),
-                ),
-                child: Center(
-                  child: Text(
-                    loss.toString(),
-                    style: gameStatsFontStyle,
+            if ((draw != 0 && loss != 0) || (win != 0 && loss != 0))
+              const SizedBox(
+                width: 3,
+              ),
+            if (loss != 0)
+              SizedBox(
+                height: 18,
+                width: 18,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: LichessColors.red,
+                    borderRadius: BorderRadius.circular(3.0),
+                  ),
+                  child: Center(
+                    child: Text(
+                      loss.toString(),
+                      style: gameStatsFontStyle,
+                    ),
                   ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

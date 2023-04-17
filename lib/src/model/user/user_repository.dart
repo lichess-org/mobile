@@ -109,6 +109,7 @@ class UserRepository {
 }
 
 // --
+
 UserActivity _userActivityFromJson(Map<String, dynamic> json) =>
     _userActivityFromPick(pick(json).required());
 
@@ -116,13 +117,15 @@ UserActivity _userActivityFromPick(RequiredPick pick) {
   final receivedGamesMap =
       pick('games').asMapOrEmpty<String, Map<String, dynamic>>();
 
+  final games = IMap({
+    for (final entry in receivedGamesMap.entries)
+      perfNameMap.get(entry.key)!: UserActivityScore.fromJson(entry.value)
+  });
+
   return UserActivity(
     startTime: pick('interval', 'start').asDateTimeFromMillisecondsOrThrow(),
     endTime: pick('interval', 'end').asDateTimeFromMillisecondsOrThrow(),
-    games: IMap({
-      for (final entry in receivedGamesMap.entries)
-        perfNameMap.get(entry.key)!: UserActivityScore.fromJson(entry.value)
-    }),
+    games: games.isEmpty ? null : games,
     followIn: IList(
       pick('follows', 'in', 'ids')
           .asListOrNull((p0) => pick(p0).asStringOrNull()),
