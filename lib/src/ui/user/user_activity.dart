@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,21 +9,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 
-const List<String> _monthName = [
-  '',
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec'
-];
+final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
 
 class UserActivityEntry extends ConsumerWidget {
   const UserActivityEntry({required this.entry, super.key});
@@ -42,7 +29,7 @@ class UserActivityEntry extends ConsumerWidget {
             bottom: 4.0,
           ),
           child: Text(
-            "${_monthName[entry.startTime.month].toUpperCase()} ${entry.startTime.day}, ${entry.startTime.year}",
+            _dateFormatter.format(entry.startTime),
             style: const TextStyle(
               color: LichessColors.brag,
               fontWeight: FontWeight.bold,
