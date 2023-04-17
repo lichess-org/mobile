@@ -57,7 +57,7 @@ dependencies:
   sqflite: ^2.2.5
   path: ^1.8.2
   connectivity_plus: ^3.0.3
-  share_plus: ^6.3.1
+  share_plus: ^6.3.2
   fl_chart:
     git:
       url: https://github.com/veloce/fl_chart.git
