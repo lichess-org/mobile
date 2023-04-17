@@ -68,7 +68,7 @@ dependencies:
 dev_dependencies:
   build_runner: ^2.3.2
   riverpod_generator: ^2.1.0
-  dart_code_metrics: ^5.7.1
+  dart_code_metrics: ^5.7.2
   flutter_test:
     sdk: flutter
   freezed: ^2.2.1
