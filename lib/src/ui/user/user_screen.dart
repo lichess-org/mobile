@@ -300,7 +300,7 @@ const List<String> _monthName = [
 class UserActivityGameEntry {
   const UserActivityGameEntry({
     required this.icon,
-    required this.varient,
+    required this.variant,
     required this.win,
     required this.draw,
     required this.loss,
@@ -310,7 +310,7 @@ class UserActivityGameEntry {
   });
 
   final IconData icon;
-  final String varient;
+  final String variant;
   final int win;
   final int draw;
   final int loss;
@@ -326,7 +326,7 @@ class Activity extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final activity = ref.watch(userActitityProvider(id: user.id));
+    final activity = ref.watch(userActivityProvider(id: user.id));
 
     return activity.when(
       data: (data) {
@@ -338,7 +338,7 @@ class Activity extends ConsumerWidget {
             final g = entry.games!.mapTo((key, value) {
               return UserActivityGameEntry(
                 icon: key.icon,
-                varient: key.title,
+                variant: key.title,
                 win: value.win,
                 draw: value.draw,
                 loss: value.loss,
@@ -372,7 +372,10 @@ class Activity extends ConsumerWidget {
                       children: [
                         Text(
                           context.l10n.activityGames(
-                              e.cnt, e.varient, e.cnt == 1 ? '' : 's'),
+                            e.cnt,
+                            e.variant,
+                            e.cnt == 1 ? '' : 's',
+                          ),
                         ),
                       ],
                     ),
@@ -419,10 +422,9 @@ class Activity extends ConsumerWidget {
                     ),
                     title: Text(
                       context.l10n.activityPuzzles(
-                          entry.puzzle!.win + entry.puzzle!.loss,
-                          entry.puzzle!.win + entry.puzzle!.loss == 1
-                              ? ''
-                              : 's'),
+                        entry.puzzle!.win + entry.puzzle!.loss,
+                        entry.puzzle!.win + entry.puzzle!.loss == 1 ? '' : 's',
+                      ),
                     ),
                     visualDensity: const VisualDensity(vertical: -2.5),
                     dense: true,
@@ -476,15 +478,16 @@ class Activity extends ConsumerWidget {
                     ),
                     title: Text(
                       context.l10n.activityCorrespondenceEnds(
-                          entry.correspondenceEnds!.win +
-                              entry.correspondenceEnds!.draw +
-                              entry.correspondenceEnds!.loss,
-                          entry.correspondenceEnds!.win +
-                                      entry.correspondenceEnds!.draw +
-                                      entry.correspondenceEnds!.loss ==
-                                  1
-                              ? ''
-                              : 's'),
+                        entry.correspondenceEnds!.win +
+                            entry.correspondenceEnds!.draw +
+                            entry.correspondenceEnds!.loss,
+                        entry.correspondenceEnds!.win +
+                                    entry.correspondenceEnds!.draw +
+                                    entry.correspondenceEnds!.loss ==
+                                1
+                            ? ''
+                            : 's',
+                      ),
                     ),
                     trailing: BriefGameResultBox(
                       win: entry.correspondenceEnds!.win,
@@ -502,8 +505,9 @@ class Activity extends ConsumerWidget {
                     ),
                     title: Text(
                       context.l10n.activityCorrespondenceMoves(
-                          entry.correspondenceMovesNb!.toString(),
-                          entry.correspondenceMovesNb == 1 ? '' : 's'),
+                        entry.correspondenceMovesNb!.toString(),
+                        entry.correspondenceMovesNb == 1 ? '' : 's',
+                      ),
                     ),
                     visualDensity: const VisualDensity(vertical: -2.5),
                     dense: true,
@@ -516,8 +520,9 @@ class Activity extends ConsumerWidget {
                     ),
                     title: Text(
                       context.l10n.activityTournament(
-                          entry.tournamentNb!.toString(),
-                          entry!.tournamentNb == 1 ? '' : 's'),
+                        entry.tournamentNb!.toString(),
+                        entry!.tournamentNb == 1 ? '' : 's',
+                      ),
                     ),
                     visualDensity: const VisualDensity(vertical: -2.5),
                     dense: true,
@@ -530,11 +535,12 @@ class Activity extends ConsumerWidget {
                     ),
                     title: Text(
                       context.l10n.activityFollow(
-                          (entry.followIn!.length == 15 &&
-                                  entry.followInNb != null)
-                              ? entry.followInNb!.toString()
-                              : entry.followIn!.length.toString(),
-                          entry.followIn!.length == 1 ? '' : 's'),
+                        (entry.followIn!.length == 15 &&
+                                entry.followInNb != null)
+                            ? entry.followInNb!.toString()
+                            : entry.followIn!.length.toString(),
+                        entry.followIn!.length == 1 ? '' : 's',
+                      ),
                     ),
                     visualDensity: const VisualDensity(vertical: -2.5),
                     dense: true,
