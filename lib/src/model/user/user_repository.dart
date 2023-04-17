@@ -121,7 +121,7 @@ UserActivity _userActivityFromPick(RequiredPick pick) {
     endTime: pick('interval', 'end').asDateTimeFromMillisecondsOrThrow(),
     games: IMap({
       for (final entry in receivedGamesMap.entries)
-        perfNameMap.get(entry.key)!: UserActivityGameScore.fromJson(entry.value)
+        perfNameMap.get(entry.key)!: UserActivityScore.fromJson(entry.value)
     }),
     followIn: IList(
       pick('follows', 'in', 'ids')
@@ -138,9 +138,10 @@ UserActivity _userActivityFromPick(RequiredPick pick) {
           .asListOrNull((p0) => UserActivityTournament.fromPick(p0)),
     ),
     tournamentNb: pick('tournaments', 'nb').asIntOrNull(),
-    puzzle: pick('puzzles', 'score').letOrNull(UserActivityGameScore.fromPick),
+    puzzles: pick('puzzles', 'score').letOrNull(UserActivityScore.fromPick),
+    streak: pick('streak').letOrNull(UserActivityStreak.fromPick),
     correspondenceEnds: pick('correspondenceEnds', 'score')
-        .letOrNull(UserActivityGameScore.fromPick),
+        .letOrNull(UserActivityScore.fromPick),
     correspondenceMovesNb: pick('correspondenceMoves', 'nb').asIntOrNull(),
   );
 }

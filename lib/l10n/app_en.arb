@@ -2487,5 +2487,93 @@
         "type": "int"
       }
     }
+  },
+  "stormMoveToStart": "Move to start",
+  "stormYouPlayTheWhitePiecesInAllPuzzles": "You play the white pieces in all puzzles",
+  "stormYouPlayTheBlackPiecesInAllPuzzles": "You play the black pieces in all puzzles",
+  "stormPuzzlesSolved": "puzzles solved",
+  "stormNewDailyHighscore": "New daily highscore!",
+  "stormNewWeeklyHighscore": "New weekly highscore!",
+  "stormNewMonthlyHighscore": "New monthly highscore!",
+  "stormNewAllTimeHighscore": "New all-time highscore!",
+  "stormPreviousHighscoreWasX": "Previous highscore was {param}",
+  "@stormPreviousHighscoreWasX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "stormPlayAgain": "Play again",
+  "stormHighscoreX": "Highscore: {param}",
+  "@stormHighscoreX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "stormScore": "Score",
+  "stormMoves": "Moves",
+  "stormAccuracy": "Accuracy",
+  "stormCombo": "Combo",
+  "stormTime": "Time",
+  "stormTimePerMove": "Time per move",
+  "stormHighestSolved": "Highest solved",
+  "stormPuzzlesPlayed": "Puzzles played",
+  "stormNewRun": "New run (hotkey: Space)",
+  "stormEndRun": "End run (hotkey: Enter)",
+  "stormHighscores": "Highscores",
+  "stormViewBestRuns": "View best runs",
+  "stormBestRunOfDay": "Best run of day",
+  "stormRuns": "Runs",
+  "stormGetReady": "Get ready!",
+  "stormWaitingForMorePlayers": "Waiting for more players to join...",
+  "stormRaceComplete": "Race complete!",
+  "stormSpectating": "Spectating",
+  "stormJoinTheRace": "Join the race!",
+  "stormStartTheRace": "Start the race",
+  "stormYourRankX": "Your rank: {param}",
+  "@stormYourRankX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "stormWaitForRematch": "Wait for rematch",
+  "stormNextRace": "Next race",
+  "stormJoinRematch": "Join rematch",
+  "stormWaitingToStart": "Waiting to start",
+  "stormCreateNewGame": "Create a new game",
+  "stormJoinPublicRace": "Join a public race",
+  "stormRaceYourFriends": "Race your friends",
+  "stormSkip": "skip",
+  "stormSkipHelp": "You can skip one move per race:",
+  "stormSkipExplanation": "Skip this move to preserve your combo! Only works once per race.",
+  "stormFailedPuzzles": "Failed puzzles",
+  "stormSlowPuzzles": "Slow puzzles",
+  "stormSkippedPuzzle": "Skipped puzzle",
+  "stormThisWeek": "This week",
+  "stormThisMonth": "This month",
+  "stormAllTime": "All-time",
+  "stormClickToReload": "Click to reload",
+  "stormThisRunHasExpired": "This run has expired!",
+  "stormThisRunWasOpenedInAnotherTab": "This run was opened in another tab!",
+  "stormXRuns": "{count, plural, =1{1 run} other{{count} runs}}",
+  "@stormXRuns": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =1{Played one run of %2$s} other{Played %1$s runs of %2$s}}",
+  "@stormPlayedNbRunsOfPuzzleStorm": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

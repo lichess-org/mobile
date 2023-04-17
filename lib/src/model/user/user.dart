@@ -183,25 +183,40 @@ class UserActivityTournament with _$UserActivityTournament {
 }
 
 @freezed
-class UserActivityGameScore with _$UserActivityGameScore {
-  const factory UserActivityGameScore({
+class UserActivityStreak with _$UserActivityStreak {
+  const factory UserActivityStreak({
+    required int runs,
+    required int score,
+  }) = _UserActivityStreak;
+
+  factory UserActivityStreak.fromJson(Map<String, dynamic> json) =>
+      UserActivityStreak.fromPick(pick(json).required());
+
+  factory UserActivityStreak.fromPick(RequiredPick pick) => UserActivityStreak(
+        runs: pick('runs').asIntOrThrow(),
+        score: pick('score').asIntOrThrow(),
+      );
+}
+
+@freezed
+class UserActivityScore with _$UserActivityScore {
+  const factory UserActivityScore({
     required int win,
     required int loss,
     required int draw,
-    required int rpBefore,
-    required int rpAfter,
-  }) = _UserActivityGameScore;
+    required int ratingBefore,
+    required int ratingAfter,
+  }) = _UserActivityScore;
 
-  factory UserActivityGameScore.fromJson(Map<String, dynamic> json) =>
-      UserActivityGameScore.fromPick(pick(json).required());
+  factory UserActivityScore.fromJson(Map<String, dynamic> json) =>
+      UserActivityScore.fromPick(pick(json).required());
 
-  factory UserActivityGameScore.fromPick(RequiredPick pick) =>
-      UserActivityGameScore(
+  factory UserActivityScore.fromPick(RequiredPick pick) => UserActivityScore(
         win: pick('win').asIntOrThrow(),
         loss: pick('loss').asIntOrThrow(),
         draw: pick('draw').asIntOrThrow(),
-        rpBefore: pick('rp', 'before').asIntOrThrow(),
-        rpAfter: pick('rp', 'after').asIntOrThrow(),
+        ratingBefore: pick('rp', 'before').asIntOrThrow(),
+        ratingAfter: pick('rp', 'after').asIntOrThrow(),
       );
 }
 
@@ -210,15 +225,16 @@ class UserActivity with _$UserActivity {
   const factory UserActivity({
     required DateTime startTime,
     required DateTime endTime,
-    IMap<Perf, UserActivityGameScore>? games,
+    IMap<Perf, UserActivityScore>? games,
     IList<String?>? followIn,
     int? followInNb,
     IList<String?>? followOut,
     int? followOutNb,
     IList<UserActivityTournament?>? tournament,
     int? tournamentNb,
-    UserActivityGameScore? puzzle,
-    UserActivityGameScore? correspondenceEnds,
+    UserActivityScore? puzzles,
+    UserActivityStreak? streak,
+    UserActivityScore? correspondenceEnds,
     int? correspondenceMovesNb,
   }) = _UserActivity;
 }

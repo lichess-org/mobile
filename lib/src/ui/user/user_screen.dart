@@ -305,8 +305,8 @@ class UserActivityGameEntry {
     required this.draw,
     required this.loss,
     required this.cnt,
-    required this.rpBefore,
-    required this.rpAfter,
+    required this.ratingBefore,
+    required this.ratingAfter,
   });
 
   final IconData icon;
@@ -315,8 +315,8 @@ class UserActivityGameEntry {
   final int draw;
   final int loss;
   final int cnt;
-  final int rpBefore;
-  final int rpAfter;
+  final int ratingBefore;
+  final int ratingAfter;
 }
 
 class Activity extends ConsumerWidget {
@@ -343,16 +343,18 @@ class Activity extends ConsumerWidget {
                 draw: value.draw,
                 loss: value.loss,
                 cnt: value.win + value.draw + value.loss,
-                rpBefore: value.rpBefore,
-                rpAfter: value.rpAfter,
+                ratingBefore: value.ratingBefore,
+                ratingAfter: value.ratingAfter,
               );
             });
 
             return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                PlatformListTile(
-                  visualDensity: const VisualDensity(vertical: -2.5),
-                  title: Text(
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 8.0),
+                  child: Text(
                     "${_monthName[entry.startTime.month].toUpperCase()} ${entry.startTime.day}, ${entry.startTime.year}",
                     style: const TextStyle(
                       color: LichessColors.brag,
@@ -381,23 +383,23 @@ class Activity extends ConsumerWidget {
                       children: [
                         PlayerRating(
                           deviation: 0,
-                          rating: e.rpAfter,
+                          rating: e.ratingAfter,
                         ),
                         const SizedBox(width: 3),
-                        if (e.rpAfter - e.rpBefore != 0) ...[
+                        if (e.ratingAfter - e.ratingBefore != 0) ...[
                           Icon(
-                            e.rpAfter - e.rpBefore > 0
+                            e.ratingAfter - e.ratingBefore > 0
                                 ? LichessIcons.arrow_full_upperright
                                 : LichessIcons.arrow_full_lowerright,
-                            color: e.rpAfter - e.rpBefore > 0
+                            color: e.ratingAfter - e.ratingBefore > 0
                                 ? LichessColors.good
                                 : LichessColors.red,
                             size: 12,
                           ),
                           Text(
-                            (e.rpAfter - e.rpBefore).abs().toString(),
+                            (e.ratingAfter - e.ratingBefore).abs().toString(),
                             style: TextStyle(
-                              color: e.rpAfter - e.rpBefore > 0
+                              color: e.ratingAfter - e.ratingBefore > 0
                                   ? LichessColors.good
                                   : LichessColors.red,
                               fontSize: 11,
@@ -412,7 +414,7 @@ class Activity extends ConsumerWidget {
                       loss: e.loss,
                     ),
                   ),
-                if (entry.puzzle != null)
+                if (entry.puzzles != null)
                   PlatformListTile(
                     leading: const Icon(
                       LichessIcons.target,
@@ -420,7 +422,7 @@ class Activity extends ConsumerWidget {
                     ),
                     title: Text(
                       context.l10n.activitySolvedNbPuzzles(
-                        entry.puzzle!.win + entry.puzzle!.loss,
+                        entry.puzzles!.win + entry.puzzles!.loss,
                       ),
                     ),
                     visualDensity: const VisualDensity(vertical: -2.5),
@@ -429,29 +431,33 @@ class Activity extends ConsumerWidget {
                       children: [
                         PlayerRating(
                           deviation: 0,
-                          rating: entry.puzzle!.rpAfter,
+                          rating: entry.puzzles!.ratingAfter,
                         ),
                         const SizedBox(width: 3),
-                        if (entry.puzzle!.rpAfter - entry.puzzle!.rpBefore !=
+                        if (entry.puzzles!.ratingAfter -
+                                entry.puzzles!.ratingBefore !=
                             0) ...[
                           Icon(
-                            entry.puzzle!.rpAfter - entry.puzzle!.rpBefore > 0
+                            entry.puzzles!.ratingAfter -
+                                        entry.puzzles!.ratingBefore >
+                                    0
                                 ? LichessIcons.arrow_full_upperright
                                 : LichessIcons.arrow_full_lowerright,
-                            color:
-                                entry.puzzle!.rpAfter - entry.puzzle!.rpBefore >
-                                        0
-                                    ? LichessColors.good
-                                    : LichessColors.red,
+                            color: entry.puzzles!.ratingAfter -
+                                        entry.puzzles!.ratingBefore >
+                                    0
+                                ? LichessColors.good
+                                : LichessColors.red,
                             size: 12,
                           ),
                           Text(
-                            (entry.puzzle!.rpAfter - entry.puzzle!.rpBefore)
+                            (entry.puzzles!.ratingAfter -
+                                    entry.puzzles!.ratingBefore)
                                 .abs()
                                 .toString(),
                             style: TextStyle(
-                              color: entry.puzzle!.rpAfter -
-                                          entry.puzzle!.rpBefore >
+                              color: entry.puzzles!.ratingAfter -
+                                          entry.puzzles!.ratingBefore >
                                       0
                                   ? LichessColors.good
                                   : LichessColors.red,
@@ -462,9 +468,28 @@ class Activity extends ConsumerWidget {
                       ],
                     ),
                     trailing: BriefGameResultBox(
-                      win: entry.puzzle!.win,
+                      win: entry.puzzles!.win,
                       draw: 0,
-                      loss: entry.puzzle!.loss,
+                      loss: entry.puzzles!.loss,
+                    ),
+                  ),
+                if (entry.streak != null)
+                  PlatformListTile(
+                    leading: const Icon(
+                      LichessIcons.streak,
+                      color: LichessColors.brag,
+                    ),
+                    title: Text(
+                      context.l10n.stormPlayedNbRunsOfPuzzleStorm(
+                        entry.streak!.runs,
+                      ),
+                    ),
+                    visualDensity: const VisualDensity(vertical: -2.5),
+                    dense: true,
+                    trailing: BriefGameResultBox(
+                      win: entry.streak!.score,
+                      draw: 0,
+                      loss: 0,
                     ),
                   ),
                 if (entry.correspondenceEnds != null)
