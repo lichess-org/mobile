@@ -126,15 +126,7 @@ UserActivity _userActivityFromPick(RequiredPick pick) {
     startTime: pick('interval', 'start').asDateTimeFromMillisecondsOrThrow(),
     endTime: pick('interval', 'end').asDateTimeFromMillisecondsOrThrow(),
     games: games.isEmpty ? null : games,
-    followIn: IList(
-      pick('follows', 'in', 'ids')
-          .asListOrNull((p0) => pick(p0).asStringOrNull()),
-    ),
     followInNb: pick('follows', 'in', 'nb').asIntOrNull(),
-    followOut: IList(
-      pick('follows', 'out', 'ids')
-          .asListOrNull((p0) => pick(p0).asStringOrNull()),
-    ),
     followOutNb: pick('follows', 'in', 'nb').asIntOrNull(),
     tournament: IList(
       pick('tournaments', 'best')
