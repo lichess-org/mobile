@@ -777,8 +777,8 @@
   "nbTournamentPoints": "{count, plural, =1{{count} մրցաշարային միավոր} other{{count} մրցաշարային միավոր}}",
   "nbStudies": "{count, plural, =1{{count} ստուդիա} other{{count} ուսուցում}}",
   "moreThanNbRatedGames": "{count, plural, =1{Վարկանիշային խաղերը՝ ≥ {count}} other{Վարկանիշային խաղերը՝ ≥ {count}}}",
-  "moreThanNbPerfRatedGames": "{count, plural, =1{Վարկանիշային խաղ %2$s-ում ≥ %1$s} other{Վարկանիշային խաղ %2$s-ում ≥ %1$s}}",
-  "needNbMorePerfGames": "{count, plural, =1{Դուք պետք է խաղաք ևս %1$s վարկանիշային խաղ %2$s-ում} other{Դուք պետք է խաղաք ևս %1$s վարկանիշային խաղ %2$s-ում}}",
+  "moreThanNbPerfRatedGames": "{count, plural, =1{Վարկանիշային խաղ {param2}-ում ≥ {count}} other{Վարկանիշային խաղ {param2}-ում ≥ {count}}}",
+  "needNbMorePerfGames": "{count, plural, =1{Դուք պետք է խաղաք ևս {count} վարկանիշային խաղ {param2}-ում} other{Դուք պետք է խաղաք ևս {count} վարկանիշային խաղ {param2}-ում}}",
   "needNbMoreGames": "{count, plural, =1{Դուք պետք է խաղաք ևս {count} վարկանիշային խաղ} other{Դուք պետք է խաղաք ևս {count} վարկանիշային խաղ}}",
   "nbImportedGames": "{count, plural, =1{{count} ներմուծված խաղեր} other{{count} ներմուծված խաղեր}}",
   "nbFriendsOnline": "{count, plural, =1{{count} ընկեր առցանց է} other{{count} ընկեր առցանց է}}",
@@ -789,7 +789,7 @@
   "maximumNbCharacters": "{count, plural, =1{Առավելագույնը՝ {count} նշան։} other{Առավելագույնը՝ {count} նշան։}}",
   "blocks": "{count, plural, =1{{count} արգելափակում} other{{count} արգելափակում}}",
   "nbForumPosts": "{count, plural, =1{{count} հաղորդագրություն ֆորումում} other{{count} հաղորդագրություն ֆորումում}}",
-  "nbPerfTypePlayersThisWeek": "{count, plural, =1{%1$s խաղացողը %2$s-ում այս շաբաթ։} other{%1$s խաղացողները %2$s-ում այս շաբաթ։}}",
+  "nbPerfTypePlayersThisWeek": "{count, plural, =1{{count} խաղացողը {param2}-ում այս շաբաթ։} other{{count} խաղացողները {param2}-ում այս շաբաթ։}}",
   "availableInNbLanguages": "{count, plural, =1{Հասանելի՜ է {count} լեզվով} other{Հասանելի՜ է {count} լեզուներով}}",
   "nbSecondsToPlayTheFirstMove": "{count, plural, =1{{count} վայրկյան առաջին քայլի համար} other{{count} վայրկյան առաջին քայլի համար}}",
   "nbSeconds": "{count, plural, =1{{count} վայրկյան} other{{count} վարկյաններ}}",
@@ -1092,5 +1092,5 @@
   "stormThisMonth": "Այս ամիս",
   "stormAllTime": "Ամբողջ ընթացքում",
   "stormXRuns": "{count, plural, =1{1 փորձ} other{{count} փորձ}}",
-  "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =1{Խաղացվել է մեկ շարք %2$s-ում} other{Խաղացվել է %1$s շարք %2$s-ում}}"
+  "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =1{Խաղացվել է մեկ շարք {param2}-ում} other{Խաղացվել է {count} շարք {param2}-ում}}"
 }

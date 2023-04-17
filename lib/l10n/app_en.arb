@@ -13,19 +13,25 @@
     }
   },
   "activitySignedUp": "Signed up to lichess.org",
-  "activitySupportedNbMonths": "{count, plural, =1{Supported lichess.org for %1$s month as a %2$s} other{Supported lichess.org for %1$s months as a %2$s}}",
+  "activitySupportedNbMonths": "{count, plural, =1{Supported lichess.org for {count} month as a {param2}} other{Supported lichess.org for {count} months as a {param2}}}",
   "@activitySupportedNbMonths": {
     "placeholders": {
       "count": {
         "type": "int"
+      },
+      "param2": {
+        "type": "String"
       }
     }
   },
-  "activityPracticedNbPositions": "{count, plural, =1{Practised %1$s position on %2$s} other{Practised %1$s positions on %2$s}}",
+  "activityPracticedNbPositions": "{count, plural, =1{Practised {count} position on {param2}} other{Practised {count} positions on {param2}}}",
   "@activityPracticedNbPositions": {
     "placeholders": {
       "count": {
         "type": "int"
+      },
+      "param2": {
+        "type": "String"
       }
     }
   },
@@ -37,23 +43,29 @@
       }
     }
   },
-  "activityPlayedNbGames": "{count, plural, =1{Played %1$s %2$s game} other{Played %1$s %2$s games}}",
+  "activityPlayedNbGames": "{count, plural, =1{Played {count} {param2} game} other{Played {count} {param2} games}}",
   "@activityPlayedNbGames": {
     "placeholders": {
       "count": {
         "type": "int"
+      },
+      "param2": {
+        "type": "String"
       }
     }
   },
-  "activityPostedNbMessages": "{count, plural, =1{Posted %1$s message in %2$s} other{Posted %1$s messages in %2$s}}",
+  "activityPostedNbMessages": "{count, plural, =1{Posted {count} message in {param2}} other{Posted {count} messages in {param2}}}",
   "@activityPostedNbMessages": {
     "placeholders": {
       "count": {
         "type": "int"
+      },
+      "param2": {
+        "type": "String"
       }
     }
   },
-  "activityPlayedNbMoves": "{count, plural, =1{Played %1$s move} other{Played %1$s moves}}",
+  "activityPlayedNbMoves": "{count, plural, =1{Played {count} move} other{Played {count} moves}}",
   "@activityPlayedNbMoves": {
     "placeholders": {
       "count": {
@@ -61,7 +73,7 @@
       }
     }
   },
-  "activityInNbCorrespondenceGames": "{count, plural, =1{in %1$s correspondence game} other{in %1$s correspondence games}}",
+  "activityInNbCorrespondenceGames": "{count, plural, =1{in {count} correspondence game} other{in {count} correspondence games}}",
   "@activityInNbCorrespondenceGames": {
     "placeholders": {
       "count": {
@@ -125,11 +137,20 @@
       }
     }
   },
-  "activityRankedInTournament": "{count, plural, =1{Ranked #%1$s (top %2$s%%) with %3$s game in %4$s} other{Ranked #%1$s (top %2$s%%) with %3$s games in %4$s}}",
+  "activityRankedInTournament": "{count, plural, =1{Ranked #{count} (top {param2}%%) with {param3} game in {param4}} other{Ranked #{count} (top {param2}%%) with {param3} games in {param4}}}",
   "@activityRankedInTournament": {
     "placeholders": {
       "count": {
         "type": "int"
+      },
+      "param2": {
+        "type": "String"
+      },
+      "param3": {
+        "type": "String"
+      },
+      "param4": {
+        "type": "String"
       }
     }
   },
@@ -1847,19 +1868,25 @@
       }
     }
   },
-  "moreThanNbPerfRatedGames": "{count, plural, =1{≥ %1$s %2$s rated game} other{≥ %1$s %2$s rated games}}",
+  "moreThanNbPerfRatedGames": "{count, plural, =1{≥ {count} {param2} rated game} other{≥ {count} {param2} rated games}}",
   "@moreThanNbPerfRatedGames": {
     "placeholders": {
       "count": {
         "type": "int"
+      },
+      "param2": {
+        "type": "String"
       }
     }
   },
-  "needNbMorePerfGames": "{count, plural, =1{You need to play %1$s more %2$s rated game} other{You need to play %1$s more %2$s rated games}}",
+  "needNbMorePerfGames": "{count, plural, =1{You need to play {count} more {param2} rated game} other{You need to play {count} more {param2} rated games}}",
   "@needNbMorePerfGames": {
     "placeholders": {
       "count": {
         "type": "int"
+      },
+      "param2": {
+        "type": "String"
       }
     }
   },
@@ -1943,11 +1970,14 @@
       }
     }
   },
-  "nbPerfTypePlayersThisWeek": "{count, plural, =1{%1$s %2$s player this week.} other{%1$s %2$s players this week.}}",
+  "nbPerfTypePlayersThisWeek": "{count, plural, =1{{count} {param2} player this week.} other{{count} {param2} players this week.}}",
   "@nbPerfTypePlayersThisWeek": {
     "placeholders": {
       "count": {
         "type": "int"
+      },
+      "param2": {
+        "type": "String"
       }
     }
   },
@@ -2568,11 +2598,14 @@
       }
     }
   },
-  "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =1{Played one run of %2$s} other{Played %1$s runs of %2$s}}",
+  "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =1{Played one run of {param2}} other{Played {count} runs of {param2}}}",
   "@stormPlayedNbRunsOfPuzzleStorm": {
     "placeholders": {
       "count": {
         "type": "int"
+      },
+      "param2": {
+        "type": "String"
       }
     }
   }
