@@ -51,7 +51,7 @@ dependencies:
       url: https://github.com/veloce/result_extensions.git
       ref: b2c283a9554dab416da89e1334b842b87257002d
   async: ^2.10.0
-  package_info_plus: ^3.0.2
+  package_info_plus: ^3.1.0
   url_launcher: ^6.1.9
   flutter_layout_grid: ^2.0.1
   sqflite: ^2.2.5
