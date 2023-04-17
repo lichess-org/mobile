@@ -1,4 +1,9 @@
 {
+  "activityActivity": "Գործունեություն",
+  "activityHostedALiveStream": "Անցկացվել է ուղիղ միացում",
+  "activityCreatedNbStudies": "{count, plural, =1{Ստեղծվել է {count} նոր ստուդիա} other{Ստեղծվել են {count} նոր ստուդիաներ}}",
+  "activityCompetedInNbTournaments": "{count, plural, =1{Ավարտված է {count} «Արենա» մրցաշարը} other{Ավարտված են {count} «Արենա» մրցաշարերը}}",
+  "activityJoinedNbTeams": "{count, plural, =1{Ընդունվել է {count} թիմ} other{Ընդունվել է {count} թիմ}}",
   "playWithAFriend": "Խաղալ ընկերոջ հետ",
   "playWithTheMachine": "Խաղալ համակարգչի հետ",
   "toInviteSomeoneToPlayGiveThisUrl": "Որևէ մեկին խաղի հրավիրելու համար ուղարկեք ստորև տրված հղումը",

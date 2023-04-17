@@ -331,8 +331,8 @@ class Activity extends ConsumerWidget {
     return activity.when(
       data: (data) {
         return ListSection(
-          // TODO translate
-          header: Text('Activity', style: Styles.sectionTitle),
+          header:
+              Text(context.l10n.activityActivity, style: Styles.sectionTitle),
           hasLeading: true,
           children: data.map((entry) {
             final g = entry.games!.mapTo((key, value) {
@@ -371,10 +371,8 @@ class Activity extends ConsumerWidget {
                     title: Row(
                       children: [
                         Text(
-                          context.l10n.activityGames(
+                          context.l10n.activityPlayedNbGames(
                             e.cnt,
-                            e.variant,
-                            e.cnt == 1 ? '' : 's',
                           ),
                         ),
                       ],
@@ -421,9 +419,8 @@ class Activity extends ConsumerWidget {
                       color: LichessColors.brag,
                     ),
                     title: Text(
-                      context.l10n.activityPuzzles(
+                      context.l10n.activitySolvedNbPuzzles(
                         entry.puzzle!.win + entry.puzzle!.loss,
-                        entry.puzzle!.win + entry.puzzle!.loss == 1 ? '' : 's',
                       ),
                     ),
                     visualDensity: const VisualDensity(vertical: -2.5),
@@ -477,16 +474,10 @@ class Activity extends ConsumerWidget {
                       color: LichessColors.brag,
                     ),
                     title: Text(
-                      context.l10n.activityCorrespondenceEnds(
+                      context.l10n.activityCompletedNbGames(
                         entry.correspondenceEnds!.win +
                             entry.correspondenceEnds!.draw +
                             entry.correspondenceEnds!.loss,
-                        entry.correspondenceEnds!.win +
-                                    entry.correspondenceEnds!.draw +
-                                    entry.correspondenceEnds!.loss ==
-                                1
-                            ? ''
-                            : 's',
                       ),
                     ),
                     trailing: BriefGameResultBox(
@@ -504,9 +495,8 @@ class Activity extends ConsumerWidget {
                       color: LichessColors.brag,
                     ),
                     title: Text(
-                      context.l10n.activityCorrespondenceMoves(
-                        entry.correspondenceMovesNb!.toString(),
-                        entry.correspondenceMovesNb == 1 ? '' : 's',
+                      context.l10n.activityInNbCorrespondenceGames(
+                        entry.correspondenceMovesNb!,
                       ),
                     ),
                     visualDensity: const VisualDensity(vertical: -2.5),
@@ -519,28 +509,21 @@ class Activity extends ConsumerWidget {
                       color: LichessColors.brag,
                     ),
                     title: Text(
-                      context.l10n.activityTournament(
-                        entry.tournamentNb!.toString(),
-                        entry!.tournamentNb == 1 ? '' : 's',
+                      context.l10n.activityCompetedInNbTournaments(
+                        entry.tournamentNb!,
                       ),
                     ),
                     visualDensity: const VisualDensity(vertical: -2.5),
                     dense: true,
                   ),
-                if (entry.followIn!.isNotEmpty)
+                if (entry.followInNb != null)
                   PlatformListTile(
                     leading: const Icon(
                       Icons.thumb_up,
                       color: LichessColors.brag,
                     ),
                     title: Text(
-                      context.l10n.activityFollow(
-                        (entry.followIn!.length == 15 &&
-                                entry.followInNb != null)
-                            ? entry.followInNb!.toString()
-                            : entry.followIn!.length.toString(),
-                        entry.followIn!.length == 1 ? '' : 's',
-                      ),
+                      context.l10n.activityFollowedNbPlayers(entry.followInNb!),
                     ),
                     visualDensity: const VisualDensity(vertical: -2.5),
                     dense: true,
@@ -554,7 +537,7 @@ class Activity extends ConsumerWidget {
         debugPrint(
           'SEVERE: [UserScreen] could not load user activity; $error\n$stackTrace',
         );
-        return Text(context.l10n.couldNotLoadActivity);
+        return const Text('Could not load user activity');
       },
       loading: () => const CenterLoadingIndicator(),
     );
