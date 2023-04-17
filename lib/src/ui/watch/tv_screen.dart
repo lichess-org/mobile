@@ -17,6 +17,11 @@ import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 
+import 'package:result_extensions/result_extensions.dart';
+import 'package:lichess_mobile/src/common/api_client.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
+//import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+
 class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({super.key});
 
@@ -41,6 +46,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
     WidgetRef ref,
   ) {
     final tvChannel = ref.watch(tvChannelsProvider);
+    ref.read(tvChannelsProvider);
     final gameId = ref.watch(gameIdStateProvider);
     return Scaffold(
       appBar: AppBar(
@@ -122,46 +128,50 @@ class _TvScreenState extends ConsumerState<TvScreen> {
     BuildContext context,
     WidgetRef ref,
   ) {
+    print("************ ios START chanelsProvider watch");
     final tvChannel = ref.watch(tvChannelsProvider);
+    print("************ ios END chanelsProvider watch");
+
     final gameId = ref.watch(gameIdStateProvider);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: tvChannel.when(
-          data: (data) {
-            String titleText;
-            String choiceString;
-            if (gameId == null) {
-              titleText = "Top Rated";
-              choiceString = "Top Rated";
-            } else {
-              titleText = data.channels.entries
-                  .where((element) => element.value.gameId == gameId)
-                  .first
-                  .key;
-              choiceString = titleText;
-              titleText =
-                  "$titleText | ${data.channels.entries.where((element) => element.value.gameId == gameId).first.value.gameId}";
-            }
-            final List<String> choices =
-                data.channels.entries.map((e) => e.key).toList();
-            print("****** iOs before title print Choices: $choices");
-            print("****** iOs before title print TitleText: $titleText");
-            print(
-                "*** iOs before title print Index into choices ${choices.indexOf(choiceString)}");
-            return InkWell(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(titleText),
-                  const Icon(
-                    Icons.arrow_drop_down,
-                    color: Colors.white,
-                    size: 34.0,
-                  ),
-                ],
+        middle: InkWell(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("test me"),
+              const Icon(
+                Icons.arrow_drop_down,
+                color: Colors.white,
+                size: 34.0,
               ),
-              onTap: () {
+            ],
+          ),
+          onTap: () {
+            final repo = ref.watch(userRepositoryProvider);
+            final FutureResult<TvChannels> FR_data = repo.getTvChannels();
+
+            FR_data.then((res) {
+              if (res.isValue) {
+                TvChannels data = res.asValue!.value;
+                String titleText;
+                String choiceString;
+                if (gameId == null) {
+                  titleText = "Top Rated";
+                  choiceString = "Top Rated";
+                } else {
+                  titleText = data.channels.entries
+                      .where((element) => element.value.gameId == gameId)
+                      .first
+                      .key;
+                  choiceString = titleText;
+                  titleText =
+                      "$titleText | ${data.channels.entries.where((element) => element.value.gameId == gameId).first.value.gameId}";
+                }
+                final List<String> choices =
+                    data.channels.entries.map((e) => e.key).toList();
+
                 showIosChoices(
                   context,
                   choices,
@@ -179,14 +189,8 @@ class _TvScreenState extends ConsumerState<TvScreen> {
 
                   ref.read(gameIdStateProvider.notifier).state = tempGameId;
                 });
-              },
-            );
-          },
-          loading: () => const Text('Top Rated'),
-          error: (err, stackTrace) {
-            debugPrint(
-              'SEVERE: [TvScreen] could not load stream; $err\n$stackTrace',
-            );
+              }
+            }); // End FR_data.then
           },
         ),
         trailing: ToggleSoundButton(),
