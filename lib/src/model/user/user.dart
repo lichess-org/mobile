@@ -222,21 +222,34 @@ class UserActivityScore with _$UserActivityScore {
 
 @freezed
 class UserActivity with _$UserActivity {
+  const UserActivity._();
+
   const factory UserActivity({
     required DateTime startTime,
     required DateTime endTime,
     IMap<Perf, UserActivityScore>? games,
-    IList<String?>? followIn,
     int? followInNb,
-    IList<String?>? followOut,
     int? followOutNb,
-    IList<UserActivityTournament?>? tournament,
+    UserActivityTournament? bestTournament,
     int? tournamentNb,
     UserActivityScore? puzzles,
     UserActivityStreak? streak,
     UserActivityScore? correspondenceEnds,
     int? correspondenceMovesNb,
   }) = _UserActivity;
+
+  bool get isEmpty =>
+      games == null &&
+      followInNb == null &&
+      followOutNb == null &&
+      tournamentNb == null &&
+      bestTournament == null &&
+      puzzles == null &&
+      streak == null &&
+      correspondenceEnds == null &&
+      correspondenceMovesNb == null;
+
+  bool get isNotEmpty => !isEmpty;
 }
 
 @freezed

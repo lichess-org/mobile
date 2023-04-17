@@ -236,13 +236,13 @@ class UserActivityEntry extends ConsumerWidget {
                 entry.tournamentNb!,
               ),
             ),
-            subtitle: entry.tournament != null && entry.tournament!.isNotEmpty
+            subtitle: entry.bestTournament != null
                 ? Text(
                     context.l10n.activityRankedInTournament(
-                      entry.tournament!.first!.rank,
-                      entry.tournament!.first!.rankPercent.toString(),
-                      entry.tournament!.first!.nbGames.toString(),
-                      entry.tournament!.first!.name,
+                      entry.bestTournament!.rank,
+                      entry.bestTournament!.rankPercent.toString(),
+                      entry.bestTournament!.nbGames.toString(),
+                      entry.bestTournament!.name,
                     ),
                     maxLines: 2,
                   )

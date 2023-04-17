@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:deep_pick/deep_pick.dart';
@@ -122,17 +123,17 @@ UserActivity _userActivityFromPick(RequiredPick pick) {
       perfNameMap.get(entry.key)!: UserActivityScore.fromJson(entry.value)
   });
 
+  final bestTour = pick('tournaments', 'best')
+      .asListOrNull((p0) => UserActivityTournament.fromPick(p0));
+
   return UserActivity(
     startTime: pick('interval', 'start').asDateTimeFromMillisecondsOrThrow(),
     endTime: pick('interval', 'end').asDateTimeFromMillisecondsOrThrow(),
     games: games.isEmpty ? null : games,
     followInNb: pick('follows', 'in', 'nb').asIntOrNull(),
     followOutNb: pick('follows', 'in', 'nb').asIntOrNull(),
-    tournament: IList(
-      pick('tournaments', 'best')
-          .asListOrNull((p0) => UserActivityTournament.fromPick(p0)),
-    ),
     tournamentNb: pick('tournaments', 'nb').asIntOrNull(),
+    bestTournament: bestTour?.firstOrNull,
     puzzles: pick('puzzles', 'score').letOrNull(UserActivityScore.fromPick),
     streak: pick('streak').letOrNull(UserActivityStreak.fromPick),
     correspondenceEnds: pick('correspondenceEnds', 'score')

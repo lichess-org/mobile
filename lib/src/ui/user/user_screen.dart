@@ -298,6 +298,7 @@ class Activity extends ConsumerWidget {
               Text(context.l10n.activityActivity, style: Styles.sectionTitle),
           hasLeading: true,
           children: data
+              .where((entry) => entry.isNotEmpty)
               .take(10)
               .map((entry) => UserActivityEntry(entry: entry))
               .toList(),
