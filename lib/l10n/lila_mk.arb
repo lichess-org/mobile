@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{Учествуваше во {count} симултана партија} other{Учествуваше во {count} симултани партији}}",
   "activityCreatedNbStudies": "{count, plural, =1{Создаде {count} нова студија} other{Создаде {count} нови студии}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{Учествуваше во {count} турнир} other{Учествуваше во {count} турнири}}",
-  "activityRankedInTournament": "{count, plural, =1{Рангиран #{count} (топ {param2}%%) со {param3} игра во {param4}} other{Рангиран #{count} (топ {param2}%%) со {param3} игри во {param4}}}",
+  "activityRankedInTournament": "{count, plural, =1{Рангиран #{count} (топ {param2}%) со {param3} игра во {param4}} other{Рангиран #{count} (топ {param2}%) со {param3} игри во {param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Се натпреварувал во {count} швајцарски турнир} other{Се натпреварувал во {count} швајцарски турнири}}",
   "activityJoinedNbTeams": "{count, plural, =1{Се придружи на {count} тим} other{Се придружи на {count} тимови}}",
   "playWithAFriend": "Играј со пријател",

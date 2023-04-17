@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{{count} sinxron seansda iştirak etdi} other{{count} sinxron seansda iştirak etdi}}",
   "activityCreatedNbStudies": "{count, plural, =1{{count} yeni çalışma yaratdı} other{{count} yeni çalışma yaratdı}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{{count} turnirə qatıldı} other{{count} taktiki tapmaca həll etdi}}",
-  "activityRankedInTournament": "{count, plural, =1{{param3} oyun oynayaraq {param4} turnirində {count}. oldu (en yaxşı{param2}%% içində)} other{{param3} oyun oynayaraq {param4} turnirində {count}. oldu (en yaxşı{param2}%% içində)}}",
+  "activityRankedInTournament": "{count, plural, =1{{param3} oyun oynayaraq {param4} turnirində {count}. oldu (en yaxşı{param2}% içində)} other{{param3} oyun oynayaraq {param4} turnirində {count}. oldu (en yaxşı{param2}% içində)}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{{count} İsveçrə sistemli turnirə qatıldı} other{{count} İsveçrə sistemli turnirə qatıldı}}",
   "activityJoinedNbTeams": "{count, plural, =1{{count} komandasına qatıldı} other{{count} komandasına qatıldı}}",
   "playWithAFriend": "Bir dostunla oyna",

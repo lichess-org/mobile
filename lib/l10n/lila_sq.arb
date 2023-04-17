@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{Mori pjesë në {count} ndeshje të njëkohësishme} other{Mori pjesë në {count} ndeshje të njëkohësishme}}",
   "activityCreatedNbStudies": "{count, plural, =1{Krijoi {count} mësim të ri} other{Krijoi {count} mësime të reja}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{Ndeshur në {count} turne Arenë} other{Ndeshur në {count} turne Arenë}}",
-  "activityRankedInTournament": "{count, plural, =1{U rendit i {count} (top {param2}%%) me {param3} lojë në {param4}} other{U rendit i {count} (top {param2}%%) me {param3} lojë në {param4}}}",
+  "activityRankedInTournament": "{count, plural, =1{U rendit i {count} (top {param2}%) me {param3} lojë në {param4}} other{U rendit i {count} (top {param2}%) me {param3} lojë në {param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Ndeshur në {count} turne zviceran} other{Ndeshur në {count} turne zviceranë}}",
   "activityJoinedNbTeams": "{count, plural, =1{U bë pjesë e {count} ekipi} other{U bë pjesë e {count} ekipive}}",
   "playWithAFriend": "Luani me një shok",

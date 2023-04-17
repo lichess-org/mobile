@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{Participou en {count} exhibición simultánea} other{Participou en {count} exhibicións simultáneas}}",
   "activityCreatedNbStudies": "{count, plural, =1{Creou {count} novo estudo} other{Creou {count} novos estudos}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{Competiu nun torneo} other{Competiu en {count} torneos}}",
-  "activityRankedInTournament": "{count, plural, =1{{count}º na clasificación (no {param2}%% mellor) con {param3} partida en {param4}} other{{count}º na clasificación (no {param2}%% mellor) con {param3} partidas en {param4}}}",
+  "activityRankedInTournament": "{count, plural, =1{{count}º na clasificación (no {param2}% mellor) con {param3} partida en {param4}} other{{count}º na clasificación (no {param2}% mellor) con {param3} partidas en {param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Competiu en {count} torneo suízo} other{Competiu en {count} torneos suízos}}",
   "activityJoinedNbTeams": "{count, plural, =1{Uniuse a {count} equipa} other{Uniuse a {count} equipas}}",
   "playWithAFriend": "Xogar cun amigo",

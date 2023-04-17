@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, other{加入了{count}場車輪戰}}",
   "activityCreatedNbStudies": "{count, plural, other{創造了{count}個新的研究}}",
   "activityCompetedInNbTournaments": "{count, plural, other{完成了{count}場錦標賽}}",
-  "activityRankedInTournament": "{count, plural, other{在{param4}錦標賽中下了{param3}盤棋局，排名第{count}(前{param2}%%)}}",
+  "activityRankedInTournament": "{count, plural, other{在{param4}錦標賽中下了{param3}盤棋局，排名第{count}(前{param2}%)}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, other{參與過{count}'場瑞士制錦標賽}}",
   "activityJoinedNbTeams": "{count, plural, other{加入{count}團隊}}",
   "playWithAFriend": "和好友下棋",

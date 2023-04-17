@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{Het in {count} simul(gelyktydige ekshibisie) gespeel} other{Het {count} simuls(gelyktydige ekshibisies) gespeel}}",
   "activityCreatedNbStudies": "{count, plural, =1{Het {count} nuwe studie geskep} other{Het {count} nuwe studies geskep}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{Het aan {count} toernooi deelgeneem} other{Het aan {count} toernooie deelgeneem}}",
-  "activityRankedInTournament": "{count, plural, =1{Het rang van #{count}(top {param2}%%) met {param3} spel in {param4}} other{Het rang van #{count}(top {param2}%%) met {param3} spelle in {param4}}}",
+  "activityRankedInTournament": "{count, plural, =1{Het rang van #{count}(top {param2}%) met {param3} spel in {param4}} other{Het rang van #{count}(top {param2}%) met {param3} spelle in {param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Het aan {count} swiss toernooi deelgeneem} other{Het aan {count} swiss toernooie deelgeneem}}",
   "activityJoinedNbTeams": "{count, plural, =1{Het aangesluit by {count} span} other{Het aangesluit by {count} spanne}}",
   "playWithAFriend": "Speel teen 'n vriend",

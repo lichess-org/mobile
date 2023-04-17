@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{השתתף/ה במשחק סימולטני {count}} =2{השתתף/ה ב־{count} משחקים סימולטניים} many{השתתף/ה ב־{count} משחקים סימולטניים} other{השתתף/ה ב־{count} משחקים סימולטניים}}",
   "activityCreatedNbStudies": "{count, plural, =1{יצר/ה לוח למידה {count} חדש} =2{יצר/ה {count} לוחות למידה חדשים} many{יצר/ה {count} לוחות למידה חדשים} other{יצר/ה {count} לוחות למידה חדשים}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{השתתף/ה בטורניר זירה {count}} =2{השתתף/ה ב-{count} טורנירי זירה} many{השתתף/ה ב-{count} טורנירי זירה} other{השתתף/ה ב-{count} טורנירי זירה}}",
-  "activityRankedInTournament": "{count, plural, =1{סיים/ה במקום #{count} (אחוזון %%{param2}) עם משחק {param3} ב-{param4}} =2{סיים/ה במקום #{count} (אחוזון %%{param2}) עם {param3} משחקים ב{param4}} many{סיים/ה במקום #{count} (אחוזון %%{param2}) עם {param3} משחקים ב{param4}} other{סיים/ה במקום #{count} (אחוזון %%{param2}) עם {param3} משחקים ב{param4}}}",
+  "activityRankedInTournament": "{count, plural, =1{סיים/ה במקום #{count} (אחוזון %{param2}) עם משחק {param3} ב-{param4}} =2{סיים/ה במקום #{count} (אחוזון %{param2}) עם {param3} משחקים ב{param4}} many{סיים/ה במקום #{count} (אחוזון %{param2}) עם {param3} משחקים ב{param4}} other{סיים/ה במקום #{count} (אחוזון %{param2}) עם {param3} משחקים ב{param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{השתתף/ה בטורניר שוויצרי {count}} =2{השתתף/ה ב-{count} טורנירים שוויצריים} many{השתתף/ה ב-{count} טורנירים שוויצריים} other{השתתף/ה ב-{count} טורנירים שוויצריים}}",
   "activityJoinedNbTeams": "{count, plural, =1{הצטרף/ה לקבוצה {count}} =2{הצטרף/ה ל־{count} קבוצות} many{הצטרף/ה ל־{count} קבוצות} other{הצטרף/ה ל־{count} קבוצות}}",
   "playWithAFriend": "שחק/י עם חבר/ה",

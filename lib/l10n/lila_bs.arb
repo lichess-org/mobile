@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{Učestvovao/la u {count} simultanki} few{Učestvovao/la u {count} simultanke} other{Učestvovao/la u {count} simultanki}}",
   "activityCreatedNbStudies": "{count, plural, =1{Kreirao/la {count} novu studiju} few{Kreirao/la {count} nove studije} other{Kreirao/la {count} novih studija}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{Natjecao/la se u {count} turniru} few{Natjecao/la se u {count} turnira} other{Natjecao/la se u {count} turnira}}",
-  "activityRankedInTournament": "{count, plural, =1{Rangiran/a #{count} (prvih {param2}%%) sa {param3} odigranom partijom u turniru {param4}} few{Rangiran/a #{count} (prvih {param2}%%) sa {param3} odigrane partijeu turniru {param4}} other{Rangiran/a #{count} (prvih {param2}%%) sa {param3} odigranih partija u turniru {param4}}}",
+  "activityRankedInTournament": "{count, plural, =1{Rangiran/a #{count} (prvih {param2}%) sa {param3} odigranom partijom u turniru {param4}} few{Rangiran/a #{count} (prvih {param2}%) sa {param3} odigrane partijeu turniru {param4}} other{Rangiran/a #{count} (prvih {param2}%) sa {param3} odigranih partija u turniru {param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Takmičio se u {count} turnirima po švicarskom sistemu} few{Takmičili se u {count} turnirima po švicarskom sistemu} other{Takmičili se u {count} turnirima po švicarskom sistemu}}",
   "activityJoinedNbTeams": "{count, plural, =1{Pridružio/la se {count} timu} few{Pridružio/la se {count} tima} other{Pridružio/la se {count} timova}}",
   "playWithAFriend": "Igrajte protiv prijatelja",

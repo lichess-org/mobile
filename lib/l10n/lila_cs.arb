@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{Zúčastnili jste se {count} simultánky} few{Zúčastnili jste se {count} simultánek} many{Zúčastnili jste se {count} simultánek} other{Zúčastnili jste se {count} simultánek}}",
   "activityCreatedNbStudies": "{count, plural, =1{Vytvořena {count} studie} few{Vytvořeny {count} studie} many{Vytvořeno {count} studií} other{Vytvořeno {count} studií}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{Účast v {count} turnaji} few{Účast ve {count} turnajích} many{Účast v {count} turnajích} other{Účast v {count} turnajích}}",
-  "activityRankedInTournament": "{count, plural, =1{Skončil #{count} (top {param2}%%) s {param3} hrou v {param4}} few{Skončil #{count} (top {param2}%%) s {param3} hrami v {param4}} many{Skončil #{count} (top {param2}%%) s {param3} hrami v {param4}} other{Skončil #{count} (top {param2}%%) s {param3} hrami v {param4}}}",
+  "activityRankedInTournament": "{count, plural, =1{Skončil #{count} (top {param2}%) s {param3} hrou v {param4}} few{Skončil #{count} (top {param2}%) s {param3} hrami v {param4}} many{Skončil #{count} (top {param2}%) s {param3} hrami v {param4}} other{Skončil #{count} (top {param2}%) s {param3} hrami v {param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Účast v {count} švýcarském turnaji} few{Účast ve {count} švýcarských turnajích} many{Účast v {count} švýcarských turnajích} other{Účast v {count} švýcarských turnajích}}",
   "activityJoinedNbTeams": "{count, plural, =1{Přidal se k {count} týmu} few{Přidal se k {count} týmům} many{Přidal se k {count} týmům} other{Přidal se k {count} týmům}}",
   "playWithAFriend": "Vyzvi kamaráda",

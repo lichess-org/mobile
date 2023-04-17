@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, other{{count} 번의 동시대국에 참가함}}",
   "activityCreatedNbStudies": "{count, plural, other{{count} 건의 연구를 작성함}}",
   "activityCompetedInNbTournaments": "{count, plural, other{{count} 번 토너먼트에 참가함}}",
-  "activityRankedInTournament": "{count, plural, other{{count} 위 (상위 {param2}%%)  ({param4} 에서 {param3} 국)}}",
+  "activityRankedInTournament": "{count, plural, other{{count} 위 (상위 {param2}%)  ({param4} 에서 {param3} 국)}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, other{{count} 번 토너먼트에 참가함}}",
   "activityJoinedNbTeams": "{count, plural, other{{count} 팀에 참가함}}",
   "playWithAFriend": "친구와 게임하기",

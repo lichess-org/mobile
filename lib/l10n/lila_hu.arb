@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{{count} szimultán bemutatón vett részt} other{{count} szimultán bemutatón vett részt}}",
   "activityCreatedNbStudies": "{count, plural, =1{{count} új tanulmány} other{{count} új tanulmány}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{{count} versenyen vett részt} other{{count} versenyen vett részt}}",
-  "activityRankedInTournament": "{count, plural, =1{{param4} #{count}. helyezés (felső {param2}%%) {param3} játszmából} other{{param4} #{count}. helyezés (felső {param2}%%) {param3} játszmából}}",
+  "activityRankedInTournament": "{count, plural, =1{{param4} #{count}. helyezés (felső {param2}%) {param3} játszmából} other{{param4} #{count}. helyezés (felső {param2}%) {param3} játszmából}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{{count} svájci rendszerű versenyen vett részt} other{{count} svájci rendszerű versenyen vett részt}}",
   "activityJoinedNbTeams": "{count, plural, =1{{count} csapathoz csatlakozott} other{{count} csapathoz csatlakozott}}",
   "playWithAFriend": "Játék egy ismerőssel",

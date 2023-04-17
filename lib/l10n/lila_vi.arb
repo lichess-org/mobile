@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, other{Tham gia {count} ván cờ đồng loạt}}",
   "activityCreatedNbStudies": "{count, plural, other{Đã tạo {count} nghiên cứu mới}}",
   "activityCompetedInNbTournaments": "{count, plural, other{Hoàn thành {count} giải đấu}}",
-  "activityRankedInTournament": "{count, plural, other{Hạng #{count} (top {param2}%%) với {param3} ván ở {param4}}}",
+  "activityRankedInTournament": "{count, plural, other{Hạng #{count} (top {param2}%) với {param3} ván ở {param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, other{Hoàn thành {count} giải đấu hệ Thụy Sỹ}}",
   "activityJoinedNbTeams": "{count, plural, other{Đã gia nhập {count} đội}}",
   "playWithAFriend": "Chơi với bạn bè",

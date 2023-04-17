@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{Osales {count} simultaanis} other{Osales {count} simultaanis}}",
   "activityCreatedNbStudies": "{count, plural, =1{Lõi {count} uue õppe} other{Lõi {count} uut õpet}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{Võistles {count} turniiril} other{Võistles {count} turniiril}}",
-  "activityRankedInTournament": "{count, plural, =1{Saavutas #{count} koha (parima {param2}%% seas) {param3} mänguga turniiril {param4}} other{Saavutas #{count} koha (parima {param2}%% seas) {param3} mänguga turniiril {param4}}}",
+  "activityRankedInTournament": "{count, plural, =1{Saavutas #{count} koha (parima {param2}% seas) {param3} mänguga turniiril {param4}} other{Saavutas #{count} koha (parima {param2}% seas) {param3} mänguga turniiril {param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Võistles {count} šveitsi turniiril} other{Võistles {count} šveitsi turniiril}}",
   "activityJoinedNbTeams": "{count, plural, =1{Liitus {count} rühmaga} other{Liitus {count} rühmaga}}",
   "playWithAFriend": "Mängi sõbraga",

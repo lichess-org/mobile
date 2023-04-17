@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, other{Berpartisipasi dalam {count} pameran simultan}}",
   "activityCreatedNbStudies": "{count, plural, other{Membuat {count} studi baru}}",
   "activityCompetedInNbTournaments": "{count, plural, other{Sudah mengikuti {count} turnamen}}",
-  "activityRankedInTournament": "{count, plural, other{Peringkat #{count} (atas {param2}%%) dengan {param3} permainan di {param4}}}",
+  "activityRankedInTournament": "{count, plural, other{Peringkat #{count} (atas {param2}%) dengan {param3} permainan di {param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, other{Sudah mengikuti {count} turnamen swiss}}",
   "activityJoinedNbTeams": "{count, plural, other{Bergabung {count} tim}}",
   "playWithAFriend": "Bermain dengan teman",

@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, other{{count} 回の同時対局に参加}}",
   "activityCreatedNbStudies": "{count, plural, other{{count} 件の研究を作成}}",
   "activityCompetedInNbTournaments": "{count, plural, other{{count} 回のトーナメントに参加}}",
-  "activityRankedInTournament": "{count, plural, other{{count} 位（上位 {param2} %%）（{param4} {param3} 局で）}}",
+  "activityRankedInTournament": "{count, plural, other{{count} 位（上位 {param2} %）（{param4} {param3} 局で）}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, other{{count} 回のスイス式トーナメントに参加}}",
   "activityJoinedNbTeams": "{count, plural, other{{count} チームに参加}}",
   "playWithAFriend": "友達と対局する",

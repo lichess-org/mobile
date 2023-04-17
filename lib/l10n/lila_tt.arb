@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, other{Иштирак ителгән {count} бер үк ватыттагы күргәзмәләр}}",
   "activityCreatedNbStudies": "{count, plural, other{Яңа {count} өйрәнеш оештырды}}",
   "activityCompetedInNbTournaments": "{count, plural, other{Тәмам колынды {count} Мәйдан бәйгеләре}}",
-  "activityRankedInTournament": "{count, plural, other{Ранкы #{count} (югары{param2}%%) {param3} уен белән {param4}}}",
+  "activityRankedInTournament": "{count, plural, other{Ранкы #{count} (югары{param2}%) {param3} уен белән {param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, other{Тәмам колындылар {count} швецар бәйгесе}}",
   "activityJoinedNbTeams": "{count, plural, other{{count} җәмәга кушылды}}",
   "playWithAFriend": "Дустың белән уйнарга",

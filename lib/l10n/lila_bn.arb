@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{অংশগ্রহণ করী {count} সমকালীন প্রদর্শনী} other{অংশগ্রহণ করী {count} সমকালীন প্রদর্শনী}}",
   "activityCreatedNbStudies": "{count, plural, =1{তৈরি হয়েছে {count} নতুন গবেষণা} other{তৈরি হয়েছে {count} নতুন গবেষণা}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{প্রতিযোগিতায় {count} সর্ম্পূন হয়েছে} other{প্রতিযোগিতায় {count} সর্ম্পূন হয়েছে}}",
-  "activityRankedInTournament": "{count, plural, =1{অনুপাত #{count} (সর্বোচ্চ {param2}%%) সাথে {param3} খেলায় {param4}} other{অনুপাত #{count} (সর্বোচ্চ {param2}%%) সাথে {param3} খেলায় {param4}}}",
+  "activityRankedInTournament": "{count, plural, =1{অনুপাত #{count} (সর্বোচ্চ {param2}%) সাথে {param3} খেলায় {param4}} other{অনুপাত #{count} (সর্বোচ্চ {param2}%) সাথে {param3} খেলায় {param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{সুইস টুর্নামেন্ট শেষ করেছেন {count} এর ভেতর} other{সুইস টুর্নামেন্ট শেষ করেছেন {count} এর ভেতর}}",
   "activityJoinedNbTeams": "{count, plural, =1{যুক্ত হয়েছে {count} দল} other{যুক্ত হয়েছে {count} দল}}",
   "playWithAFriend": "বন্ধুর সাথে খেলো",

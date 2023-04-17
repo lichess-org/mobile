@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{Huet bei {count} Simultanvirstellung matgemaach} other{Huet bei {count} Simultanvirstellunge matgemaach}}",
   "activityCreatedNbStudies": "{count, plural, =1{Huet {count} Etüd kreéiert} other{Huet {count} Etüde kreéiert}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{Huet bei {count} Arena Turnéier matgemaach} other{Huet bei {count} Arena Turnéiere matgemaach}}",
-  "activityRankedInTournament": "{count, plural, =1{Huet sech als #{count} (iewescht {param2}%%) mat {param3} Parti an {param4} placéiert} other{Huet sech als #{count} (iewescht {param2}%%) mat {param3} Partien an {param4} placéiert}}",
+  "activityRankedInTournament": "{count, plural, =1{Huet sech als #{count} (iewescht {param2}%) mat {param3} Parti an {param4} placéiert} other{Huet sech als #{count} (iewescht {param2}%) mat {param3} Partien an {param4} placéiert}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Huet bei {count} Turnéier nom Schwäizer System matgemaach} other{Huet bei {count} Turnéieren nom Schwäizer System matgemaach}}",
   "activityJoinedNbTeams": "{count, plural, =1{Ass {count} Ekipp bäigetrueden} other{Ass {count} Ekippe bäigetrueden}}",
   "playWithAFriend": "Spill géint e Kolleg",

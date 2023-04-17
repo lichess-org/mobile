@@ -163,8 +163,9 @@ function loadTranslations(dir, locale) {
     )
 }
 
+// in lila strings a percent sign is escaped with a double percent sign
 function unescape(str) {
-  return str.replace(/\\"/g, '"').replace(/\\'/g, '\'')
+  return str.replace(/\\"/g, '"').replace(/\\'/g, '\'').replace(/%%/g, '%')
 }
 
 function fixKey(str, module) {

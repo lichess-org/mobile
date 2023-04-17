@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{در {count} مسابقه هم‌زمان شرکت کرد} other{در {count} مسابقه هم‌زمان شرکت کرد}}",
   "activityCreatedNbStudies": "{count, plural, =1{{count} درس جدید ساخت} other{{count} درس جدید ساخت}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{در {count} مسابقه آرنا رقابت کرد} other{در {count} مسابقه آرنا رقابت کرد}}",
-  "activityRankedInTournament": "{count, plural, =1{رتبه #{count} ({param2} %% برتر) را در {param4} با {param3} بازی به دست آورد} other{رتبه #{count} ({param2} %% برتر) را در {param4} با {param3} بازی به دست آورد}}",
+  "activityRankedInTournament": "{count, plural, =1{رتبه #{count} ({param2} % برتر) را در {param4} با {param3} بازی به دست آورد} other{رتبه #{count} ({param2} % برتر) را در {param4} با {param3} بازی به دست آورد}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{در {count} مسابقه سوئیسی رقابت کرد} other{در {count} مسابقه سوئیسی رقابت کرد}}",
   "activityJoinedNbTeams": "{count, plural, =1{به {count} تیم پیوست} other{به {count} تیم پیوست}}",
   "playWithAFriend": "بازی با دوستان",

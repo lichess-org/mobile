@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =0{Piedalījās {count} simultānseansos} =1{Piedalījās {count} simultānseansā} other{Piedalījās {count} simultānseansos}}",
   "activityCreatedNbStudies": "{count, plural, =0{Izveidoja {count} jaunas izpētes} =1{Izveidoja {count} jaunu izpēti} other{Izveidoja {count} jaunas izpētes}}",
   "activityCompetedInNbTournaments": "{count, plural, =0{Sacentās {count} turnīros} =1{Sacentās {count} turnīrā} other{Sacentās {count} turnīros}}",
-  "activityRankedInTournament": "{count, plural, =0{{count}. vieta (labākajos {param2}%%) spēlējot {param3} spēles {param4}} =1{{count}. vieta (labākajos {param2}%%) spēlējot {param3} spēli {param4}} other{{count}. vieta (labākajos {param2}%%) spēlējot {param3} spēles {param4}}}",
+  "activityRankedInTournament": "{count, plural, =0{{count}. vieta (labākajos {param2}%) spēlējot {param3} spēles {param4}} =1{{count}. vieta (labākajos {param2}%) spēlējot {param3} spēli {param4}} other{{count}. vieta (labākajos {param2}%) spēlējot {param3} spēles {param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =0{Sacentās {count} Šveices turnīros} =1{Sacentās {count} Šveices turnīrā} other{Sacentās {count} Šveices turnīros}}",
   "activityJoinedNbTeams": "{count, plural, =0{Pievienojās {count} komandām} =1{Pievienojās {count} komandai} other{Pievienojās {count} komandām}}",
   "playWithAFriend": "Spēlēt ar draugu",

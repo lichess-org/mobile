@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{Aldibireko saio {count}ean hartu du parte} other{Aldibireko {count} saiotan hartu du parte}}",
   "activityCreatedNbStudies": "{count, plural, =1{Azterlan berri {count} sortu du} other{{count} azterlan berri sortu ditu}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{Txapelketa {count}ean parte hartu du} other{{count} txapelketetan parte hartu du}}",
-  "activityRankedInTournament": "{count, plural, =1{{count}. postua (%% {param2} onenen artean) partida {param3} jokatuta {param4} txapelketan} other{{count}. postua (%% {param2} onenen artean) {param3} partida jokatuta {param4} txapelketan}}",
+  "activityRankedInTournament": "{count, plural, =1{{count}. postua (% {param2} onenen artean) partida {param3} jokatuta {param4} txapelketan} other{{count}. postua (% {param2} onenen artean) {param3} partida jokatuta {param4} txapelketan}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Txapelketa suitzar {count}en hartu du parte} other{{count} txapelketa suitzarretan hartu du parte}}",
   "activityJoinedNbTeams": "{count, plural, =1{Talde {count}era sartu da} other{{count} taldetara sartu da}}",
   "playWithAFriend": "Lagun baten aurka jokatu",

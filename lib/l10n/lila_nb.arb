@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{Har deltatt i {count} simultanoppvisning} other{Har deltatt i {count} simultanoppvisninger}}",
   "activityCreatedNbStudies": "{count, plural, =1{Har laget {count} ny studie} other{Har laget {count} nye studier}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{Har deltatt i {count} arenaturnering} other{Har deltatt i {count} arenaturneringer}}",
-  "activityRankedInTournament": "{count, plural, =1{Ble nummer {count} (øverste {param2}%%) med {param3} parti i {param4}} other{Ble nummer {count} (øverste {param2}%%) med {param3} partier i {param4}}}",
+  "activityRankedInTournament": "{count, plural, =1{Ble nummer {count} (øverste {param2}%) med {param3} parti i {param4}} other{Ble nummer {count} (øverste {param2}%) med {param3} partier i {param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Har deltatt i {count} sveitserturnering} other{Har deltatt i {count} sveitserturneringer}}",
   "activityJoinedNbTeams": "{count, plural, =1{Er medlem av {count} lag} other{Er medlem av {count} lag}}",
   "playWithAFriend": "Spill mot en venn",

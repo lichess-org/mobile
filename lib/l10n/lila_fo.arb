@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{Var við í {count} fjøltalvi} other{Var við í {count} fjøltalvum}}",
   "activityCreatedNbStudies": "{count, plural, =1{Stovnaði {count} nýggja rannsókn} other{Stovnaði {count} nýggjar rannsóknir}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{Kappaðist í {count} kapping} other{Kappaðist í {count} kappingum}}",
-  "activityRankedInTournament": "{count, plural, =1{Styrkismettur #{count} (top {param2}%%) við {param3} talvi í {param4}} other{Styrkismettur #{count} (top {param2}%%) við {param3} talvum í {param4}}}",
+  "activityRankedInTournament": "{count, plural, =1{Styrkismettur #{count} (top {param2}%) við {param3} talvi í {param4}} other{Styrkismettur #{count} (top {param2}%) við {param3} talvum í {param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Kappaðist í {count} swisskapping} other{Kappaðist í {count} swisskappingum}}",
   "activityJoinedNbTeams": "{count, plural, =1{Fór upp í {count} lið} other{Fór upp í {count} lið}}",
   "playWithAFriend": "Telva móti einum vini",

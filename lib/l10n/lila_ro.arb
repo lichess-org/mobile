@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{A participat în {count} simultan de șah} few{A participat în {count} simultane de șah} other{A participat în {count} simultane de șah}}",
   "activityCreatedNbStudies": "{count, plural, =1{A creat {count} studiu nou} few{A creat {count} studii noi} other{A creat {count} studii noi}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{A concurat în {count} competiție} few{A concurat în {count} competiții} other{A concurat în {count} competiții}}",
-  "activityRankedInTournament": "{count, plural, =1{Clasat #{count} (top {param2}%%) cu {param3} meci în {param4}} few{Clasat #{count} (top {param2}%%) cu {param3} meciuri în {param4}} other{Clasat #{count} (top {param2}%%) cu {param3} meciuri în {param4}}}",
+  "activityRankedInTournament": "{count, plural, =1{Clasat #{count} (top {param2}%) cu {param3} meci în {param4}} few{Clasat #{count} (top {param2}%) cu {param3} meciuri în {param4}} other{Clasat #{count} (top {param2}%) cu {param3} meciuri în {param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{A concurat în {count} turneu elvețian} few{A concurat în {count} turnee elvețiene} other{A concurat în {count} turnee elvețiene}}",
   "activityJoinedNbTeams": "{count, plural, =1{S-a alăturat la {count} echipă} few{S-a alăturat la {count} echipe} other{S-a alăturat la {count} echipe}}",
   "playWithAFriend": "Jucaţi cu un prieten",

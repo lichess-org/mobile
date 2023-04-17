@@ -137,7 +137,7 @@
       }
     }
   },
-  "activityRankedInTournament": "{count, plural, =1{Ranked #{count} (top {param2}%%) with {param3} game in {param4}} other{Ranked #{count} (top {param2}%%) with {param3} games in {param4}}}",
+  "activityRankedInTournament": "{count, plural, =1{Ranked #{count} (top {param2}%) with {param3} game in {param4}} other{Ranked #{count} (top {param2}%) with {param3} games in {param4}}}",
   "@activityRankedInTournament": {
     "placeholders": {
       "count": {

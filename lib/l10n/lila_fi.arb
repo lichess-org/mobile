@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, =1{Osallistui {count} simultaaniin} other{Osallistui {count} simultaaniin}}",
   "activityCreatedNbStudies": "{count, plural, =1{Teki {count} uuden tutkielman} other{Teki {count} uutta tutkielmaa}}",
   "activityCompetedInNbTournaments": "{count, plural, =1{Kilpaili {count} turnauksessa} other{Kilpaili {count} turnauksessa}}",
-  "activityRankedInTournament": "{count, plural, =1{Sijoittui {count}. sijalle (parhaaseen {param2}%%) pelattuaan {param3} pelin turnauksessa {param4}} other{Sijoittui {count}. sijalle (parhaaseen {param2}%%) pelattuaan {param3} peliä turnauksessa {param4}}}",
+  "activityRankedInTournament": "{count, plural, =1{Sijoittui {count}. sijalle (parhaaseen {param2}%) pelattuaan {param3} pelin turnauksessa {param4}} other{Sijoittui {count}. sijalle (parhaaseen {param2}%) pelattuaan {param3} peliä turnauksessa {param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Osallistui {count} sveitsiläiseen turnaukseen} other{Osallistui {count} sveitsiläiseen turnaukseen}}",
   "activityJoinedNbTeams": "{count, plural, =1{Liittyi {count} joukkueeseen} other{Liittyi {count} joukkueeseen}}",
   "playWithAFriend": "Pelaa kaveria vastaan",

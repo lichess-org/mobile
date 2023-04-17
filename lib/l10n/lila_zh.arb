@@ -17,7 +17,7 @@
   "activityJoinedNbSimuls": "{count, plural, other{参与了 {count} 场车轮战}}",
   "activityCreatedNbStudies": "{count, plural, other{创建了 {count} 个新的研讨}}",
   "activityCompetedInNbTournaments": "{count, plural, other{参与了 {count} 场锦标赛}}",
-  "activityRankedInTournament": "{count, plural, other{在 {param4} 里下了 {param3} 盘棋，排名 #{count} 位（前 {param2}%% ）}}",
+  "activityRankedInTournament": "{count, plural, other{在 {param4} 里下了 {param3} 盘棋，排名 #{count} 位（前 {param2}% ）}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, other{参加了 {count} 场 swiss 锦标赛}}",
   "activityJoinedNbTeams": "{count, plural, other{加入了 {count} 个团队}}",
   "playWithAFriend": "与好友下棋",
