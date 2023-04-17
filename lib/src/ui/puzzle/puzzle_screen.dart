@@ -351,7 +351,7 @@ class _DifficultySelector extends ConsumerWidget {
             onTap: !data.isOnline || state.isChangingDifficulty
                 ? null
                 : () {
-                    showChoicesPicker(
+                    showChoicePicker(
                       context,
                       choices: PuzzleDifficulty.values,
                       selectedItem: difficulty,
