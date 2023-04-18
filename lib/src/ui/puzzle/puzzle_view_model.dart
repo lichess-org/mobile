@@ -48,6 +48,41 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     return _loadNewContext(initialContext, initialStreak);
   }
 
+  PuzzleViewModelState _loadNewContext(
+    PuzzleContext context,
+    PuzzleStreak? streak,
+  ) {
+    final root = Root.fromPgn(context.puzzle.game.pgn);
+    _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
+
+    // play first move after 1 second
+    _firstMoveTimer = Timer(const Duration(seconds: 1), () {
+      _setPath(state.initialPath);
+    });
+
+    final initialPath = UciPath.fromId(_gameTree.children.first.id);
+
+    // preload next streak puzzle
+    if (streak != null) {
+      _nextPuzzleFuture = _fetchNextStreakPuzzle(streak);
+    }
+
+    return PuzzleViewModelState(
+      puzzle: context.puzzle,
+      glicko: context.glicko,
+      mode: PuzzleMode.play,
+      initialPath: initialPath,
+      currentPath: UciPath.empty,
+      nodeList: IList([ViewNode.fromNode(_gameTree)]),
+      pov: _gameTree.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
+      resultSent: false,
+      isChangingDifficulty: false,
+      streak: streak,
+      nextPuzzleStreakFetchError: false,
+      nextPuzzleStreakFetchIsRetrying: false,
+    );
+  }
+
   Future<void> onUserMove(Move move) async {
     _addMove(move);
 
@@ -205,41 +240,6 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     return result;
   }
 
-  PuzzleViewModelState _loadNewContext(
-    PuzzleContext context,
-    PuzzleStreak? streak,
-  ) {
-    final root = Root.fromPgn(context.puzzle.game.pgn);
-    _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
-
-    // play first move after 1 second
-    _firstMoveTimer = Timer(const Duration(seconds: 1), () {
-      _setPath(state.initialPath);
-    });
-
-    final initialPath = UciPath.fromId(_gameTree.children.first.id);
-
-    // preload next streak puzzle
-    if (streak != null) {
-      _nextPuzzleFuture = _fetchNextStreakPuzzle(streak);
-    }
-
-    return PuzzleViewModelState(
-      puzzle: context.puzzle,
-      glicko: context.glicko,
-      mode: PuzzleMode.play,
-      initialPath: initialPath,
-      currentPath: UciPath.empty,
-      nodeList: IList([ViewNode.fromNode(_gameTree)]),
-      pov: _gameTree.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
-      resultSent: false,
-      isChangingDifficulty: false,
-      streak: streak,
-      nextPuzzleStreakFetchError: false,
-      nextPuzzleStreakFetchIsRetrying: false,
-    );
-  }
-
   FutureResult<PuzzleContext?> _fetchNextStreakPuzzle(PuzzleStreak streak) {
     return streak.nextId != null
         ? ref.read(puzzleRepositoryProvider).fetch(streak.nextId!).map(
@@ -293,11 +293,6 @@ class PuzzleViewModel extends _$PuzzleViewModel {
         ),
       );
 
-      final rounds = next?.rounds;
-      if (rounds != null) {
-        ref.read(sessionNotifier).setRatingDiffs(rounds);
-      }
-
       state = state.copyWith(
         nextContext: next,
       );
@@ -306,6 +301,11 @@ class PuzzleViewModel extends _$PuzzleViewModel {
             state.puzzle.puzzle.id,
             win: result == PuzzleResult.win,
           );
+
+      final rounds = next?.rounds;
+      if (rounds != null) {
+        ref.read(sessionNotifier).setRatingDiffs(rounds);
+      }
     } else {
       // one fail and streak is over
       if (result == PuzzleResult.lose) {
