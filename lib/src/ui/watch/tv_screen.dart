@@ -50,52 +50,63 @@ class _TvScreenState extends ConsumerState<TvScreen> {
     final gameId = ref.watch(gameIdStateProvider);
     return Scaffold(
       appBar: AppBar(
-        title: tvChannel.when(
-          loading: () => const Text('Top Rated'),
-          error: (err, stackTrace) {
-            debugPrint(
-              'SEVERE: [TvScreen] could not load stream; $err\n$stackTrace',
-            );
-          },
-          data: (data) {
-            /* Repeated code. TODO */
-            String titleText;
-            String choiceString;
-            if (gameId == null) {
-              titleText = "Top Rated";
-              choiceString = "Top Rated";
-            } else {
-              // TODO: handle - gameId isn't in entries
-              titleText = data.channels.entries
-                  .where((element) => element.value.gameId == gameId)
-                  .first
-                  .key;
-              choiceString = titleText;
-              titleText =
-                  "$titleText | ${data.channels.entries.where((element) => element.value.gameId == gameId).first.value.gameId}";
-            }
-            final List<String> choices =
-                data.channels.entries.map((e) => e.key).toList();
-
-            print("****** android before title print Choices: $choices");
-            print("****** android before title print TitleText: $titleText");
-            print(
-                "*** android before title print Index into choices ${choices.indexOf(choiceString)}");
-
-            return InkWell(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(titleText),
-                  const Icon(
-                    Icons.arrow_drop_down,
-                    color: Colors.white,
-                    size: 34.0,
-                  ),
-                ],
+        title: InkWell(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(titleText),
+              const Icon(
+                Icons.arrow_drop_down,
+                color: Colors.white,
+                size: 34.0,
               ),
-              onTap: () {
+            ],
+          ),
+          onTap: () {
+            final repo = ref.watch(userRepositoryProvider);
+            final FutureResult<TvChannels> FR_data = repo.getTvChannels();
+
+            FR_data.then((res) {
+              if (res.isValue) {
+                TvChannels data = res.asValue!.value;
+                String titleText;
+                String choiceString;
+                if (gameId == null) {
+                  titleText = "Top Rated";
+                  choiceString = "Top Rated";
+                } else {
+                  titleText = data.channels.entries
+                      .where((element) => element.value.gameId == gameId)
+                      .first
+                      .key;
+                  choiceString = titleText;
+                  titleText =
+                      "$titleText | ${data.channels.entries.where((element) => element.value.gameId == gameId).first.value.gameId}";
+                }
+                final List<String> choices =
+                    data.channels.entries.map((e) => e.key).toList();
+
                 showAndroidChoices(
+                  context,
+                  choices,
+                  choices.indexOf(choiceString),
+                ).then((val) {
+                  print("****** Android then val: $val");
+                  String? tempGameId = data.channels.entries
+                      .where((element) => element.key == selectedValue)
+                      .first
+                      .value
+                      .gameId;
+                  if (selectedValue == "Top Rated") tempGameId = null;
+
+                  print("****** Android tempGameId: $tempGameId");
+
+                  ref.read(gameIdStateProvider.notifier).state = tempGameId;
+                });
+              }
+            }); // End FR_data.then
+
+            /*showAndroidChoices(
                   context,
                   choices,
                   choices.indexOf(choiceString),
@@ -111,9 +122,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
 
                     ref.read(gameIdStateProvider.notifier).state = tempGameId;
                   }
-                });
-              },
-            );
+                });*/
           },
         ),
         actions: [
