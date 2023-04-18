@@ -39,8 +39,6 @@ class UserActivityEntry extends ConsumerWidget {
         if (entry.games != null)
           for (final gameEntry in entry.games!.entries)
             PlatformListTile(
-              visualDensity: const VisualDensity(vertical: -2.5),
-              dense: true,
               leading: Icon(
                 gameEntry.key.icon,
                 color: LichessColors.brag,
@@ -110,8 +108,6 @@ class UserActivityEntry extends ConsumerWidget {
                 entry.puzzles!.win + entry.puzzles!.loss,
               ),
             ),
-            visualDensity: const VisualDensity(vertical: -2.5),
-            dense: true,
             subtitle: Row(
               children: [
                 PlayerRating(
@@ -167,8 +163,6 @@ class UserActivityEntry extends ConsumerWidget {
               ),
             ),
             subtitle: const SizedBox.shrink(),
-            visualDensity: const VisualDensity(vertical: -2.5),
-            dense: true,
             trailing: BriefGameResultBox(
               win: entry.streak!.score,
               draw: 0,
@@ -194,8 +188,6 @@ class UserActivityEntry extends ConsumerWidget {
               draw: entry.correspondenceEnds!.draw,
               loss: entry.correspondenceEnds!.loss,
             ),
-            visualDensity: const VisualDensity(vertical: -2.5),
-            dense: true,
           ),
         if (entry.correspondenceMovesNb != null)
           PlatformListTile(
@@ -209,8 +201,6 @@ class UserActivityEntry extends ConsumerWidget {
               ),
             ),
             subtitle: const SizedBox.shrink(),
-            visualDensity: const VisualDensity(vertical: -2.5),
-            dense: true,
           ),
         if (entry.tournamentNb != null)
           PlatformListTile(
@@ -234,8 +224,6 @@ class UserActivityEntry extends ConsumerWidget {
                     maxLines: 2,
                   )
                 : const SizedBox.shrink(),
-            visualDensity: const VisualDensity(vertical: -2.5),
-            dense: true,
           ),
         if (entry.followInNb != null)
           PlatformListTile(
@@ -247,8 +235,6 @@ class UserActivityEntry extends ConsumerWidget {
               context.l10n.activityGainedNbFollowers(entry.followInNb!),
             ),
             subtitle: const SizedBox.shrink(),
-            visualDensity: const VisualDensity(vertical: -2.5),
-            dense: true,
           ),
       ],
     );
