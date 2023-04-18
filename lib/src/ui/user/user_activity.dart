@@ -254,9 +254,12 @@ class BriefGameResultBox extends StatelessWidget {
 
   static const gameStatsFontStyle = TextStyle(
     color: Colors.white,
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: FontWeight.bold,
   );
+
+  static const _boxSize = 20.0;
+  static const _spaceWidth = 3.0;
 
   @override
   Widget build(BuildContext context) {
@@ -264,20 +267,20 @@ class BriefGameResultBox extends StatelessWidget {
       padding: const EdgeInsets.only(left: 5.0),
       child: SizedBox(
         height: 20,
-        width: (win != 0 ? 1 : 0) * 18 +
-            (draw != 0 ? 1 : 0) * 18 +
-            (loss != 0 ? 1 : 0) * 18 +
+        width: (win != 0 ? 1 : 0) * _boxSize +
+            (draw != 0 ? 1 : 0) * _boxSize +
+            (loss != 0 ? 1 : 0) * _boxSize +
             ((win != 0 ? 1 : 0) +
                     (draw != 0 ? 1 : 0) +
                     (loss != 0 ? 1 : 0) -
                     1) *
-                3,
+                _spaceWidth,
         child: Row(
           children: [
             if (win != 0)
               SizedBox(
-                height: 18,
-                width: 18,
+                height: _boxSize,
+                width: _boxSize,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     color: LichessColors.good,
@@ -293,12 +296,12 @@ class BriefGameResultBox extends StatelessWidget {
               ),
             if (win != 0 && draw != 0)
               const SizedBox(
-                width: 3,
+                width: _spaceWidth,
               ),
             if (draw != 0)
               SizedBox(
-                height: 18,
-                width: 18,
+                height: _boxSize,
+                width: _boxSize,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     color: LichessColors.brag,
@@ -314,12 +317,12 @@ class BriefGameResultBox extends StatelessWidget {
               ),
             if ((draw != 0 && loss != 0) || (win != 0 && loss != 0))
               const SizedBox(
-                width: 3,
+                width: _spaceWidth,
               ),
             if (loss != 0)
               SizedBox(
-                height: 18,
-                width: 18,
+                height: _boxSize,
+                width: _boxSize,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     color: LichessColors.red,
