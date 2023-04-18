@@ -296,6 +296,75 @@ void main() {
       },
       variant: kPlatformVariant,
     );
+
+    testWidgets(
+      'view solution',
+      (tester) async {
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/api/puzzle/batch/mix') {
+            return mockResponse(batchOf1, 200);
+          }
+          return mockResponse('', 404);
+        });
+
+        final app = await buildTestApp(
+          tester,
+          home: PuzzleScreen(
+            theme: PuzzleTheme.mix,
+            initialPuzzleContext: PuzzleContext(
+              puzzle: puzzle2,
+              theme: PuzzleTheme.mix,
+              userId: null,
+            ),
+          ),
+          overrides: [
+            httpClientProvider.overrideWith((ref) {
+              return mockClient;
+            }),
+            puzzleBatchStorageProvider.overrideWith((ref) {
+              return mockBatchStorage;
+            }),
+          ],
+        );
+
+        Future<void> saveDBReq() => mockBatchStorage.save(
+              userId: null,
+              angle: PuzzleTheme.mix,
+              data: any(named: 'data'),
+            );
+        when(saveDBReq).thenAnswer((_) async {});
+        when(() => mockBatchStorage.fetch(userId: null, angle: PuzzleTheme.mix))
+            .thenAnswer((_) async => batch);
+
+        await tester.pumpWidget(app);
+
+        expect(find.byType(cg.Board), findsOneWidget);
+        expect(find.widgetWithText(ListTile, 'Your turn'), findsOneWidget);
+
+        // await for first move to be played
+        await tester.pump(const Duration(milliseconds: 1500));
+
+        expect(find.byKey(const Key('g4-blackRook')), findsOneWidget);
+
+        expect(find.byIcon(Icons.help), findsOneWidget);
+        await tester.tap(find.byIcon(Icons.help));
+
+        // wait for solution replay animation to finish
+        await tester.pump(const Duration(seconds: 3));
+        await tester.pumpAndSettle();
+
+        expect(find.byKey(const Key('h4-blackRook')), findsOneWidget);
+        expect(find.byKey(const Key('h8-whiteQueen')), findsNothing);
+        expect(
+            find.widgetWithText(ListTile, 'Puzzle complete!'), findsOneWidget);
+
+        expect(find.byIcon(CupertinoIcons.play_arrow_solid), findsOneWidget);
+
+        // called once to save solution and once after fetching a new puzzle
+        verify(saveDBReq).called(2);
+      },
+      variant: kPlatformVariant,
+    );
   });
 }
 
