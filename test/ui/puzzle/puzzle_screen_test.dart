@@ -112,7 +112,7 @@ void main() {
     });
 
     testWidgets(
-      'solve a puzzle and loads the next one',
+      'solves a puzzle and loads the next one',
       (tester) async {
         final mockClient = MockClient((request) {
           if (request.url.path == '/api/puzzle/batch/mix') {
@@ -202,6 +202,97 @@ void main() {
 
         expect(find.widgetWithText(ListTile, 'Success!'), findsNothing);
         expect(find.widgetWithText(ListTile, 'Your turn'), findsOneWidget);
+      },
+      variant: kPlatformVariant,
+    );
+
+    testWidgets(
+      'fails a puzzle',
+      (tester) async {
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/api/puzzle/batch/mix') {
+            return mockResponse(batchOf1, 200);
+          }
+          return mockResponse('', 404);
+        });
+
+        final app = await buildTestApp(
+          tester,
+          home: PuzzleScreen(
+            theme: PuzzleTheme.mix,
+            initialPuzzleContext: PuzzleContext(
+              puzzle: puzzle2,
+              theme: PuzzleTheme.mix,
+              userId: null,
+            ),
+          ),
+          overrides: [
+            httpClientProvider.overrideWith((ref) {
+              return mockClient;
+            }),
+            puzzleBatchStorageProvider.overrideWith((ref) {
+              return mockBatchStorage;
+            }),
+          ],
+        );
+
+        Future<void> saveDBReq() => mockBatchStorage.save(
+              userId: null,
+              angle: PuzzleTheme.mix,
+              data: any(named: 'data'),
+            );
+        when(saveDBReq).thenAnswer((_) async {});
+        when(() => mockBatchStorage.fetch(userId: null, angle: PuzzleTheme.mix))
+            .thenAnswer((_) async => batch);
+
+        await tester.pumpWidget(app);
+
+        expect(find.byType(cg.Board), findsOneWidget);
+        expect(find.widgetWithText(ListTile, 'Your turn'), findsOneWidget);
+
+        const orientation = cg.Side.black;
+
+        // await for first move to be played
+        await tester.pump(const Duration(milliseconds: 1500));
+
+        expect(find.byKey(const Key('g4-blackRook')), findsOneWidget);
+
+        final boardRect = tester.getRect(find.byType(cg.Board));
+
+        await playMove(tester, boardRect, 'g4', 'f4', orientation: orientation);
+
+        expect(
+          find.widgetWithText(ListTile, "That's not the move!"),
+          findsOneWidget,
+        );
+
+        // wait for move cancel and animation
+        await tester.pump(const Duration(milliseconds: 500));
+        await tester.pumpAndSettle();
+
+        // can still play the puzzle
+        expect(find.byKey(const Key('g4-blackRook')), findsOneWidget);
+
+        await playMove(tester, boardRect, 'g4', 'h4', orientation: orientation);
+
+        expect(find.byKey(const Key('h4-blackRook')), findsOneWidget);
+        expect(find.widgetWithText(ListTile, 'Best move!'), findsOneWidget);
+
+        // wait for line reply and move animation
+        await tester.pump(const Duration(milliseconds: 500));
+        await tester.pumpAndSettle();
+
+        await playMove(tester, boardRect, 'b4', 'h4', orientation: orientation);
+
+        expect(find.byKey(const Key('h4-blackRook')), findsOneWidget);
+        expect(
+            find.widgetWithText(ListTile, 'Puzzle complete!'), findsOneWidget);
+
+        // wait for move animation
+        await tester.pumpAndSettle();
+
+        // called once to save solution and once after fetching a new puzzle
+        verify(saveDBReq).called(2);
       },
       variant: kPlatformVariant,
     );
