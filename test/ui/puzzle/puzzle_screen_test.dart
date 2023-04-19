@@ -286,7 +286,9 @@ void main() {
 
         expect(find.byKey(const Key('h4-blackRook')), findsOneWidget);
         expect(
-            find.widgetWithText(ListTile, 'Puzzle complete!'), findsOneWidget);
+          find.widgetWithText(ListTile, 'Puzzle complete!'),
+          findsOneWidget,
+        );
 
         // wait for move animation
         await tester.pumpAndSettle();
@@ -356,7 +358,9 @@ void main() {
         expect(find.byKey(const Key('h4-blackRook')), findsOneWidget);
         expect(find.byKey(const Key('h8-whiteQueen')), findsNothing);
         expect(
-            find.widgetWithText(ListTile, 'Puzzle complete!'), findsOneWidget);
+          find.widgetWithText(ListTile, 'Puzzle complete!'),
+          findsOneWidget,
+        );
 
         expect(find.byIcon(CupertinoIcons.play_arrow_solid), findsOneWidget);
 
