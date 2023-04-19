@@ -310,7 +310,8 @@ class Activity extends ConsumerWidget {
         );
         return const Text('Could not load user activity');
       },
-      loading: () => const CenterLoadingIndicator(),
+      // TODO show a shimmer loading effect
+      loading: () => const SizedBox.shrink(),
     );
   }
 }
@@ -383,7 +384,8 @@ class RecentGames extends ConsumerWidget {
         );
         return const Text('Could not load games.');
       },
-      loading: () => const CenterLoadingIndicator(),
+      // TODO show a shimmer loading effect
+      loading: () => const SizedBox.shrink(),
     );
   }
 }
