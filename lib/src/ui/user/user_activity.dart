@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,6 +19,11 @@ class UserActivityEntry extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final leadingIconSize =
+        defaultTargetPlatform == TargetPlatform.iOS ? 26.0 : 36.0;
+    final emptySubtitle = defaultTargetPlatform == TargetPlatform.iOS
+        ? const SizedBox.shrink()
+        : null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -41,7 +47,7 @@ class UserActivityEntry extends ConsumerWidget {
             PlatformListTile(
               leading: Icon(
                 gameEntry.key.icon,
-                color: LichessColors.brag,
+                size: leadingIconSize,
               ),
               title: Text(
                 context.l10n.activityPlayedNbGames(
@@ -99,9 +105,9 @@ class UserActivityEntry extends ConsumerWidget {
             ),
         if (entry.puzzles != null)
           PlatformListTile(
-            leading: const Icon(
+            leading: Icon(
               LichessIcons.target,
-              color: LichessColors.brag,
+              size: leadingIconSize,
             ),
             title: Text(
               context.l10n.activitySolvedNbPuzzles(
@@ -152,9 +158,9 @@ class UserActivityEntry extends ConsumerWidget {
           ),
         if (entry.streak != null)
           PlatformListTile(
-            leading: const Icon(
+            leading: Icon(
               LichessIcons.streak,
-              color: LichessColors.brag,
+              size: leadingIconSize,
             ),
             title: Text(
               context.l10n.stormPlayedNbRunsOfPuzzleStorm(
@@ -162,7 +168,7 @@ class UserActivityEntry extends ConsumerWidget {
                 'Puzzle Streak',
               ),
             ),
-            subtitle: const SizedBox.shrink(),
+            subtitle: emptySubtitle,
             trailing: BriefGameResultBox(
               win: entry.streak!.score,
               draw: 0,
@@ -171,9 +177,9 @@ class UserActivityEntry extends ConsumerWidget {
           ),
         if (entry.correspondenceEnds != null)
           PlatformListTile(
-            leading: const Icon(
+            leading: Icon(
               LichessIcons.correspondence,
-              color: LichessColors.brag,
+              size: leadingIconSize,
             ),
             title: Text(
               context.l10n.activityCompletedNbGames(
@@ -182,7 +188,7 @@ class UserActivityEntry extends ConsumerWidget {
                     entry.correspondenceEnds!.loss,
               ),
             ),
-            subtitle: const SizedBox.shrink(),
+            subtitle: emptySubtitle,
             trailing: BriefGameResultBox(
               win: entry.correspondenceEnds!.win,
               draw: entry.correspondenceEnds!.draw,
@@ -191,22 +197,22 @@ class UserActivityEntry extends ConsumerWidget {
           ),
         if (entry.correspondenceMovesNb != null)
           PlatformListTile(
-            leading: const Icon(
+            leading: Icon(
               LichessIcons.correspondence,
-              color: LichessColors.brag,
+              size: leadingIconSize,
             ),
             title: Text(
               context.l10n.activityInNbCorrespondenceGames(
                 entry.correspondenceMovesNb!,
               ),
             ),
-            subtitle: const SizedBox.shrink(),
+            subtitle: emptySubtitle,
           ),
         if (entry.tournamentNb != null)
           PlatformListTile(
-            leading: const Icon(
+            leading: Icon(
               Icons.emoji_events,
-              color: LichessColors.brag,
+              size: leadingIconSize,
             ),
             title: Text(
               context.l10n.activityCompetedInNbTournaments(
@@ -223,18 +229,18 @@ class UserActivityEntry extends ConsumerWidget {
                     ),
                     maxLines: 2,
                   )
-                : const SizedBox.shrink(),
+                : emptySubtitle,
           ),
         if (entry.followInNb != null)
           PlatformListTile(
-            leading: const Icon(
+            leading: Icon(
               Icons.thumb_up,
-              color: LichessColors.brag,
+              size: leadingIconSize,
             ),
             title: Text(
               context.l10n.activityGainedNbFollowers(entry.followInNb!),
             ),
-            subtitle: const SizedBox.shrink(),
+            subtitle: emptySubtitle,
           ),
       ],
     );
