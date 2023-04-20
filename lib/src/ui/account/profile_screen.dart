@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -128,9 +129,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Future<void> _refreshData(User account) {
-    return ref
-        .refresh(userRecentGamesProvider(userId: account.id).future)
-        .then((_) => ref.refresh(_sessionProfileProvider));
+    return Future.wait([
+      ref.refresh(userRecentGamesProvider(userId: account.id).future),
+      ref.refresh(userActivityProvider(id: account.id).future),
+      ref.refresh(_sessionProfileProvider.future),
+    ]);
   }
 }
 

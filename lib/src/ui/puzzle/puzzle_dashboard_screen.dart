@@ -22,8 +22,16 @@ import 'puzzle_streak_screen.dart';
 
 final daysProvider = StateProvider<Days>((ref) => Days.month);
 
-class PuzzleDashboardScreen extends StatelessWidget {
+class PuzzleDashboardScreen extends ConsumerStatefulWidget {
   const PuzzleDashboardScreen({super.key});
+
+  @override
+  ConsumerState<PuzzleDashboardScreen> createState() =>
+      _PuzzleDashboardScreenState();
+}
+
+class _PuzzleDashboardScreenState extends ConsumerState<PuzzleDashboardScreen> {
+  final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +45,11 @@ class PuzzleDashboardScreen extends StatelessWidget {
     return Scaffold(
       appBar:
           AppBar(title: Text(context.l10n.puzzles), actions: [DaysSelector()]),
-      body: const Center(child: _Body()),
+      body: RefreshIndicator(
+        key: _androidRefreshKey,
+        onRefresh: _refreshData,
+        child: const Center(child: _Body()),
+      ),
     );
   }
 
@@ -49,6 +61,9 @@ class PuzzleDashboardScreen extends StatelessWidget {
             largeTitle: Text(context.l10n.puzzles),
             trailing: DaysSelector(),
           ),
+          CupertinoSliverRefreshControl(
+            onRefresh: _refreshData,
+          ),
           const SliverSafeArea(
             top: false,
             sliver: _Body(),
@@ -56,6 +71,11 @@ class PuzzleDashboardScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _refreshData() {
+    return ref
+        .refresh(puzzleDashboardProvider(ref.read(daysProvider).days).future);
   }
 }
 
@@ -190,7 +210,7 @@ class DaysSelector extends ConsumerWidget {
     final day = ref.watch(daysProvider);
     return session != null
         ? AppBarTextButton(
-            onPressed: () => showChoicesPicker(
+            onPressed: () => showChoicePicker(
               context,
               choices: Days.values,
               selectedItem: day,

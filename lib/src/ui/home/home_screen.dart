@@ -33,20 +33,22 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
-  bool isOnline = true;
+  bool wasOnline = true;
+  bool hasRefreshed = false;
 
   @override
   Widget build(BuildContext context) {
     ref.listen(connectivityChangesProvider, (_, connectivity) {
-      // Refresh the data only when the user comes back online
+      // Refresh the data only once if it was offline and is now online
       if (!connectivity.isRefreshing && connectivity.hasValue) {
-        final newOnlineValue = connectivity.value!.isOnline;
+        final isNowOnline = connectivity.value!.isOnline;
 
-        if (isOnline == false && newOnlineValue == true) {
+        if (!hasRefreshed && !wasOnline && isNowOnline) {
+          hasRefreshed = true;
           _refreshData();
         }
 
-        isOnline = newOnlineValue;
+        wasOnline = isNowOnline;
       }
     });
 

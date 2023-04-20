@@ -1,4 +1,175 @@
 {
+  "activityActivity": "Activity",
+  "activityHostedALiveStream": "Hosted a live stream",
+  "activityRankedInSwissTournament": "Ranked #{param1} in {param2}",
+  "@activityRankedInSwissTournament": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "activitySignedUp": "Signed up to lichess.org",
+  "activitySupportedNbMonths": "{count, plural, =1{Supported lichess.org for {count} month as a {param2}} other{Supported lichess.org for {count} months as a {param2}}}",
+  "@activitySupportedNbMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "activityPracticedNbPositions": "{count, plural, =1{Practised {count} position on {param2}} other{Practised {count} positions on {param2}}}",
+  "@activityPracticedNbPositions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "activitySolvedNbPuzzles": "{count, plural, =1{Solved {count} tactical puzzle} other{Solved {count} tactical puzzles}}",
+  "@activitySolvedNbPuzzles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activityPlayedNbGames": "{count, plural, =1{Played {count} {param2} game} other{Played {count} {param2} games}}",
+  "@activityPlayedNbGames": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "activityPostedNbMessages": "{count, plural, =1{Posted {count} message in {param2}} other{Posted {count} messages in {param2}}}",
+  "@activityPostedNbMessages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "activityPlayedNbMoves": "{count, plural, =1{Played {count} move} other{Played {count} moves}}",
+  "@activityPlayedNbMoves": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activityInNbCorrespondenceGames": "{count, plural, =1{in {count} correspondence game} other{in {count} correspondence games}}",
+  "@activityInNbCorrespondenceGames": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activityCompletedNbGames": "{count, plural, =1{Completed {count} correspondence game} other{Completed {count} correspondence games}}",
+  "@activityCompletedNbGames": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activityFollowedNbPlayers": "{count, plural, =1{Started following {count} player} other{Started following {count} players}}",
+  "@activityFollowedNbPlayers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activityGainedNbFollowers": "{count, plural, =1{Gained {count} new follower} other{Gained {count} new followers}}",
+  "@activityGainedNbFollowers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activityHostedNbSimuls": "{count, plural, =1{Hosted {count} simultaneous exhibition} other{Hosted {count} simultaneous exhibitions}}",
+  "@activityHostedNbSimuls": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activityJoinedNbSimuls": "{count, plural, =1{Participated in {count} simultaneous exhibition} other{Participated in {count} simultaneous exhibitions}}",
+  "@activityJoinedNbSimuls": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activityCreatedNbStudies": "{count, plural, =1{Created {count} new study} other{Created {count} new studies}}",
+  "@activityCreatedNbStudies": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activityCompetedInNbTournaments": "{count, plural, =1{Competed in {count} Arena tournament} other{Competed in {count} Arena tournaments}}",
+  "@activityCompetedInNbTournaments": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activityRankedInTournament": "{count, plural, =1{Ranked #{count} (top {param2}%) with {param3} game in {param4}} other{Ranked #{count} (top {param2}%) with {param3} games in {param4}}}",
+  "@activityRankedInTournament": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "param2": {
+        "type": "String"
+      },
+      "param3": {
+        "type": "String"
+      },
+      "param4": {
+        "type": "String"
+      }
+    }
+  },
+  "activityCompetedInNbSwissTournaments": "{count, plural, =1{Competed in {count} swiss tournament} other{Competed in {count} swiss tournaments}}",
+  "@activityCompetedInNbSwissTournaments": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activityJoinedNbTeams": "{count, plural, =1{Joined {count} team} other{Joined {count} teams}}",
+  "@activityJoinedNbTeams": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "playWithAFriend": "Play with a friend",
   "playWithTheMachine": "Play with the computer",
   "toInviteSomeoneToPlayGiveThisUrl": "To invite someone to play, give this URL",
@@ -1512,6 +1683,7 @@
   "lichessDbExplanation": "Rated games played on Lichess",
   "switchSides": "Switch sides",
   "closingAccountWithdrawAppeal": "Closing your account will withdraw your appeal",
+  "ourEventTips": "Our tips for organising events",
   "opponentLeftCounter": "{count, plural, =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}",
   "@opponentLeftCounter": {
     "placeholders": {
@@ -1696,19 +1868,25 @@
       }
     }
   },
-  "moreThanNbPerfRatedGames": "{count, plural, =1{≥ %1$s %2$s rated game} other{≥ %1$s %2$s rated games}}",
+  "moreThanNbPerfRatedGames": "{count, plural, =1{≥ {count} {param2} rated game} other{≥ {count} {param2} rated games}}",
   "@moreThanNbPerfRatedGames": {
     "placeholders": {
       "count": {
         "type": "int"
+      },
+      "param2": {
+        "type": "String"
       }
     }
   },
-  "needNbMorePerfGames": "{count, plural, =1{You need to play %1$s more %2$s rated game} other{You need to play %1$s more %2$s rated games}}",
+  "needNbMorePerfGames": "{count, plural, =1{You need to play {count} more {param2} rated game} other{You need to play {count} more {param2} rated games}}",
   "@needNbMorePerfGames": {
     "placeholders": {
       "count": {
         "type": "int"
+      },
+      "param2": {
+        "type": "String"
       }
     }
   },
@@ -1792,11 +1970,14 @@
       }
     }
   },
-  "nbPerfTypePlayersThisWeek": "{count, plural, =1{%1$s %2$s player this week.} other{%1$s %2$s players this week.}}",
+  "nbPerfTypePlayersThisWeek": "{count, plural, =1{{count} {param2} player this week.} other{{count} {param2} players this week.}}",
   "@nbPerfTypePlayersThisWeek": {
     "placeholders": {
       "count": {
         "type": "int"
+      },
+      "param2": {
+        "type": "String"
       }
     }
   },
@@ -1867,6 +2048,11 @@
   "puzzleKeepGoing": "Keep going…",
   "puzzlePuzzleSuccess": "Success!",
   "puzzlePuzzleComplete": "Puzzle complete!",
+  "puzzleByOpenings": "By openings",
+  "puzzlePuzzlesByOpenings": "Puzzles by openings",
+  "puzzleOpeningsYouPlayedTheMost": "Openings you played the most in rated games",
+  "puzzleUseFindInPage": "Use \"Find in page\" in the browser menu to find your favourite opening!",
+  "puzzleUseCtrlF": "Use Ctrl+f to find your favourite opening!",
   "puzzleNotTheMove": "That's not the move!",
   "puzzleTrySomethingElse": "Try something else.",
   "puzzleRatingX": "Rating: {param}",
@@ -2329,6 +2515,97 @@
     "placeholders": {
       "count": {
         "type": "int"
+      }
+    }
+  },
+  "stormMoveToStart": "Move to start",
+  "stormYouPlayTheWhitePiecesInAllPuzzles": "You play the white pieces in all puzzles",
+  "stormYouPlayTheBlackPiecesInAllPuzzles": "You play the black pieces in all puzzles",
+  "stormPuzzlesSolved": "puzzles solved",
+  "stormNewDailyHighscore": "New daily highscore!",
+  "stormNewWeeklyHighscore": "New weekly highscore!",
+  "stormNewMonthlyHighscore": "New monthly highscore!",
+  "stormNewAllTimeHighscore": "New all-time highscore!",
+  "stormPreviousHighscoreWasX": "Previous highscore was {param}",
+  "@stormPreviousHighscoreWasX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "stormPlayAgain": "Play again",
+  "stormHighscoreX": "Highscore: {param}",
+  "@stormHighscoreX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "stormScore": "Score",
+  "stormMoves": "Moves",
+  "stormAccuracy": "Accuracy",
+  "stormCombo": "Combo",
+  "stormTime": "Time",
+  "stormTimePerMove": "Time per move",
+  "stormHighestSolved": "Highest solved",
+  "stormPuzzlesPlayed": "Puzzles played",
+  "stormNewRun": "New run (hotkey: Space)",
+  "stormEndRun": "End run (hotkey: Enter)",
+  "stormHighscores": "Highscores",
+  "stormViewBestRuns": "View best runs",
+  "stormBestRunOfDay": "Best run of day",
+  "stormRuns": "Runs",
+  "stormGetReady": "Get ready!",
+  "stormWaitingForMorePlayers": "Waiting for more players to join...",
+  "stormRaceComplete": "Race complete!",
+  "stormSpectating": "Spectating",
+  "stormJoinTheRace": "Join the race!",
+  "stormStartTheRace": "Start the race",
+  "stormYourRankX": "Your rank: {param}",
+  "@stormYourRankX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "stormWaitForRematch": "Wait for rematch",
+  "stormNextRace": "Next race",
+  "stormJoinRematch": "Join rematch",
+  "stormWaitingToStart": "Waiting to start",
+  "stormCreateNewGame": "Create a new game",
+  "stormJoinPublicRace": "Join a public race",
+  "stormRaceYourFriends": "Race your friends",
+  "stormSkip": "skip",
+  "stormSkipHelp": "You can skip one move per race:",
+  "stormSkipExplanation": "Skip this move to preserve your combo! Only works once per race.",
+  "stormFailedPuzzles": "Failed puzzles",
+  "stormSlowPuzzles": "Slow puzzles",
+  "stormSkippedPuzzle": "Skipped puzzle",
+  "stormThisWeek": "This week",
+  "stormThisMonth": "This month",
+  "stormAllTime": "All-time",
+  "stormClickToReload": "Click to reload",
+  "stormThisRunHasExpired": "This run has expired!",
+  "stormThisRunWasOpenedInAnotherTab": "This run was opened in another tab!",
+  "stormXRuns": "{count, plural, =1{1 run} other{{count} runs}}",
+  "@stormXRuns": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =1{Played one run of {param2}} other{Played {count} runs of {param2}}}",
+  "@stormPlayedNbRunsOfPuzzleStorm": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "param2": {
+        "type": "String"
       }
     }
   }
