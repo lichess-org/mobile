@@ -64,7 +64,7 @@ class UserRepository {
     return apiClient.get(Uri.parse('$kLichessHost/api/user/$id/activity')).then(
           (result) => result.flatMap(
             (response) => readJsonListOfObjects(
-              response.body,
+              utf8.decode(response.bodyBytes),
               mapper: _userActivityFromJson,
               logger: _log,
             ),
@@ -139,6 +139,9 @@ UserActivity _userActivityFromPick(RequiredPick pick) {
     correspondenceEnds: pick('correspondenceEnds', 'score')
         .letOrNull(UserActivityScore.fromPick),
     correspondenceMovesNb: pick('correspondenceMoves', 'nb').asIntOrNull(),
+    correspondenceGamesNb: pick('correspondenceMoves', 'games')
+        .asListOrNull((p) => p('id').asStringOrThrow())
+        ?.length,
   );
 }
 

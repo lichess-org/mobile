@@ -195,18 +195,23 @@ class UserActivityEntry extends ConsumerWidget {
               loss: entry.correspondenceEnds!.loss,
             ),
           ),
-        if (entry.correspondenceMovesNb != null)
+        if (entry.correspondenceMovesNb != null &&
+            entry.correspondenceGamesNb != null)
           PlatformListTile(
             leading: Icon(
               LichessIcons.correspondence,
               size: leadingIconSize,
             ),
             title: Text(
-              context.l10n.activityInNbCorrespondenceGames(
+              context.l10n.activityPlayedNbMoves(
                 entry.correspondenceMovesNb!,
               ),
             ),
-            subtitle: emptySubtitle,
+            subtitle: Text(
+              context.l10n.activityInNbCorrespondenceGames(
+                entry.correspondenceGamesNb!,
+              ),
+            ),
           ),
         if (entry.tournamentNb != null)
           PlatformListTile(

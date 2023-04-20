@@ -236,6 +236,7 @@ class UserActivity with _$UserActivity {
     UserActivityStreak? streak,
     UserActivityScore? correspondenceEnds,
     int? correspondenceMovesNb,
+    int? correspondenceGamesNb,
   }) = _UserActivity;
 
   bool get isEmpty =>
@@ -247,7 +248,8 @@ class UserActivity with _$UserActivity {
       puzzles == null &&
       streak == null &&
       correspondenceEnds == null &&
-      correspondenceMovesNb == null;
+      correspondenceMovesNb == null &&
+      correspondenceGamesNb == null;
 
   bool get isNotEmpty => !isEmpty;
 }
