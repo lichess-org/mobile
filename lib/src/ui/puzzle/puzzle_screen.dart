@@ -143,10 +143,11 @@ class _Body extends ConsumerWidget {
     final puzzleState = ref.watch(viewModelProvider);
 
     // TODO show best move on board
-    final evalBestMove = ref.watch(
+    final currentEvalBest = ref.watch(
       engineEvaluationProvider(puzzleState.evaluationContext)
           .select((e) => e?.bestMove),
     );
+    final evalBestMove = currentEvalBest ?? puzzleState.node.eval?.bestMove;
     print('evalBestMove: $evalBestMove');
 
     return Column(

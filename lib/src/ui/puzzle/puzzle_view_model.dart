@@ -439,7 +439,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
           previous.item2.add(
             Node(
               id: UciCharPair.fromMove(move),
-              ply: fromPly + index,
+              ply: fromPly + index + 1,
               fen: newPos.fen,
               position: newPos,
               sanMove: SanMove(newSan, move),
