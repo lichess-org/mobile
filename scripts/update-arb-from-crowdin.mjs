@@ -21,7 +21,7 @@ const lilaTranslationsPath = `${tmpDir}/[lichess-org.lila] master/translation/de
 const unzipMaxBufferSize = 1024 * 1024 * 10 // Set maxbuffer to 10MB to avoid errors when default 1MB used
 
 // selection of lila translation modules to include
-const modules = ['site', 'puzzle', 'puzzleTheme', 'perfStat', 'settings', 'streamer']
+const modules = ['activity', 'site', 'puzzle', 'puzzleTheme', 'perfStat', 'settings', 'streamer', 'storm']
 
 // Order of locales with variants matters: the fallback must always be first
 // eg: 'de-DE' is before 'de-CH'
@@ -163,8 +163,9 @@ function loadTranslations(dir, locale) {
     )
 }
 
+// in lila strings a percent sign is escaped with a double percent sign
 function unescape(str) {
-  return str.replace(/\\"/g, '"').replace(/\\'/g, '\'')
+  return str.replace(/\\"/g, '"').replace(/\\'/g, '\'').replace(/%%/g, '%')
 }
 
 function fixKey(str, module) {
@@ -223,24 +224,45 @@ function transformTranslations(data, locale, module, makeTemplate = false) {
   }
 
   for (const plural of (data.resources.plurals || [])) {
+    const placeholders = {
+      count: { type: 'int' }
+    };
     let pluralString = '{count, plural,'
     plural.item.forEach((child) => {
-      const childString = unescape(child._).replace(/%s/g, '{count}')
+      const string = unescape(child._);
+      let transformedString;
+      if (RegExp('%s', 'g').test(string)) {
+        transformedString = string.replace(/%s/g, '{count}')
+      } else if (/%\d\$s/.test(string)) {
+        transformedString = string.replace(/%1\$s/g, '{count}')
+        const regexp = /%(\d)\$s/g
+        let result
+        const params = []
+        while ((result = regexp.exec(string)) !== null) {
+          if (result[1] == '1') continue;
+          const param = `param${result[1]}`
+          params.push(param)
+          transformedString = transformedString.replace(result[0], `{${param}}`)
+        }
+        if (makeTemplate) {
+          for (const param of params) {
+            placeholders[param] = { type: 'String' }
+          }
+        }
+      } else {
+        transformedString = string;
+      }
       const quantity = child.$.quantity === 'zero' ? '=0' :
-        child.$.quantity === 'one' ? '=1' :
-          child.$.quantity === 'two' ? '=2' :
-            child.$.quantity
-      pluralString += ` ${quantity}{${childString}}`
+      child.$.quantity === 'one' ? '=1' :
+      child.$.quantity === 'two' ? '=2' :
+      child.$.quantity
+      pluralString += ` ${quantity}{${transformedString}}`
     })
     pluralString += '}'
     const transKey = fixKey(plural.$.name, module)
     transformed[transKey] = pluralString
     if (makeTemplate) {
-      transformed[`@${transKey}`] = {
-        placeholders: {
-          count: { type: 'int' }
-        }
-      }
+      transformed[`@${transKey}`] = { placeholders }
     }
   }
 

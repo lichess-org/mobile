@@ -488,4 +488,30 @@ void main() {
       expect(result.isValue, true);
     });
   });
+
+  test('UserRepository.getUserActivity minimal example', () async {
+    when(
+      () => mockApiClient.get(
+        Uri.parse('$kLichessHost/api/user/testUser/activity'),
+      ),
+    ).thenAnswer(
+      (_) async => Result.value(
+        http.Response(
+          userActivityResponse,
+          200,
+          headers: {
+            'content-type': 'application/json; charset=utf-8',
+          },
+        ),
+      ),
+    );
+
+    final result = await repo.getUserActivity(const UserId('testUser'));
+
+    expect(result.isValue, true);
+  });
 }
+
+const userActivityResponse = '''
+[{"interval":{"start":1681948800000,"end":1682035200000},"follows":{"in":{"ids":["jc-peru","supercarro"]}}},{"interval":{"start":1681862400000,"end":1681948800000},"puzzles":{"score":{"win":6,"loss":0,"draw":0,"rp":{"before":2677,"after":2736}}},"follows":{"in":{"ids":["hayden1461","ilyas-basit","senjukuwaragi","deinchayamagmeinetns","chesswgm","wojciechstark","albertlem","zokirov9292","marcosmm11","merinovegor_13-7","umitaliacar","jamespro0221","jacky09","daniel1028","adison98"],"nb":23}}},{"interval":{"start":1681776000000,"end":1681862400000},"follows":{"in":{"ids":["drceltic","dominikk33king","sir-gianortega-13","epergalth57w","hojjat1368","thebarin1","geoff123","betul38","benjaminh12675","sivtsovvanya","darkpattern","osmaneren47","drgregoryhouseee","kayratitiz","nonvincoseperdo"],"nb":18}}},{"interval":{"start":1681689600000,"end":1681776000000},"games":{"ultraBullet":{"win":10,"loss":0,"draw":0,"rp":{"before":2745,"after":2769}},"bullet":{"win":5,"loss":3,"draw":0,"rp":{"before":3081,"after":3074}},"rapid":{"win":1,"loss":0,"draw":0,"rp":{"before":2611,"after":2625}}},"follows":{"in":{"ids":["thefateofall","mario6ajedrez","rajveergrover1232","ykylas2014","se7vthe","muhamed12143","kdmfan","trantuankhachess","admsamohamad","sakurablossoms","freeeeeeeze1","ata201200x","mbmohnish","alex_dchig","alikhan-7"],"nb":18}}},{"interval":{"start":1681603200000,"end":1681689600000},"puzzles":{"score":{"win":24,"loss":10,"draw":0,"rp":{"before":2628,"after":2677}}},"follows":{"in":{"ids":["dalibord","musfik050390","xqliotvgm","momdsamu","radiantranger64","aarohdeshmukhihsdl","baggirou","grandmasterflash95","wo0do","leon_pogosian2009","anandhu_sadurangam","ane_mnda_bng","nek-ngatiem","haider123","j03l5065igu3z"],"nb":19}}},{"interval":{"start":1681516800000,"end":1681603200000},"games":{"bullet":{"win":40,"loss":30,"draw":5,"rp":{"before":3097,"after":3081}},"ultraBullet":{"win":14,"loss":5,"draw":2,"rp":{"before":2717,"after":2745}},"threeCheck":{"win":2,"loss":0,"draw":0,"rp":{"before":2575,"after":2588}}},"tournaments":{"nb":1,"best":[{"tournament":{"id":"apr23lta","name":"Titled Arena April '23"},"nbGames":73,"score":124,"rank":3,"rankPercent":1}]},"follows":{"in":{"ids":["ikoroduboy","noahlz","behnamjafarii","tutam","nikmakval","x73marda","torretalkantar","jurassicpark00","zubera1","lionel2schmidt","abhi73","sakumi_chess","dabolistic2","like2readbooks","ojaykings"],"nb":53}}},{"interval":{"start":1681430400000,"end":1681516800000},"follows":{"in":{"ids":["talabra","mooshroom42","granpandita","imraaaa_li","relaxplayer","qwwerty","ivanchu26","nyrav_chess_beast","newfloki","m0xvtwio","jumanak","rakeshmajumder10","jeanlucpicard7","sparrowtang","iamsickmind"],"nb":27}}}]
+''';
