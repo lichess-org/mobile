@@ -79,7 +79,7 @@ void main() {
         await tester.pumpWidget(app);
 
         expect(find.byType(cg.Board), findsOneWidget);
-        expect(find.widgetWithText(ListTile, 'Your turn'), findsOneWidget);
+        expect(find.text('Your turn'), findsOneWidget);
       },
       variant: kPlatformVariant,
     );
@@ -104,13 +104,13 @@ void main() {
       await tester.pumpWidget(app);
 
       expect(find.byType(cg.Board), findsNothing);
-      expect(find.widgetWithText(ListTile, 'Your turn'), findsNothing);
+      expect(find.text('Your turn'), findsNothing);
 
       // wait for the puzzle to load
       await tester.pump(const Duration(milliseconds: 200));
 
       expect(find.byType(cg.Board), findsOneWidget);
-      expect(find.widgetWithText(ListTile, 'Your turn'), findsOneWidget);
+      expect(find.text('Your turn'), findsOneWidget);
     });
 
     testWidgets(
@@ -155,7 +155,7 @@ void main() {
         await tester.pumpWidget(app);
 
         expect(find.byType(cg.Board), findsOneWidget);
-        expect(find.widgetWithText(ListTile, 'Your turn'), findsOneWidget);
+        expect(find.text('Your turn'), findsOneWidget);
 
         const orientation = cg.Side.black;
 
@@ -175,7 +175,7 @@ void main() {
         await playMove(tester, boardRect, 'g4', 'h4', orientation: orientation);
 
         expect(find.byKey(const Key('h4-blackRook')), findsOneWidget);
-        expect(find.widgetWithText(ListTile, 'Best move!'), findsOneWidget);
+        expect(find.text('Best move!'), findsOneWidget);
 
         // wait for line reply and move animation
         await tester.pump(const Duration(milliseconds: 500));
@@ -186,7 +186,7 @@ void main() {
         await playMove(tester, boardRect, 'b4', 'h4', orientation: orientation);
 
         expect(find.byKey(const Key('h4-blackRook')), findsOneWidget);
-        expect(find.widgetWithText(ListTile, 'Success!'), findsOneWidget);
+        expect(find.text('Success!'), findsOneWidget);
 
         // wait for move animation
         await tester.pumpAndSettle();
@@ -202,8 +202,8 @@ void main() {
         // await for new puzzle load
         await tester.pump(const Duration(milliseconds: 500));
 
-        expect(find.widgetWithText(ListTile, 'Success!'), findsNothing);
-        expect(find.widgetWithText(ListTile, 'Your turn'), findsOneWidget);
+        expect(find.text('Success!'), findsNothing);
+        expect(find.text('Your turn'), findsOneWidget);
       },
       variant: kPlatformVariant,
     );
@@ -250,7 +250,7 @@ void main() {
         await tester.pumpWidget(app);
 
         expect(find.byType(cg.Board), findsOneWidget);
-        expect(find.widgetWithText(ListTile, 'Your turn'), findsOneWidget);
+        expect(find.text('Your turn'), findsOneWidget);
 
         const orientation = cg.Side.black;
 
@@ -264,7 +264,7 @@ void main() {
         await playMove(tester, boardRect, 'g4', 'f4', orientation: orientation);
 
         expect(
-          find.widgetWithText(ListTile, "That's not the move!"),
+          find.text("That's not the move!"),
           findsOneWidget,
         );
 
@@ -278,7 +278,7 @@ void main() {
         await playMove(tester, boardRect, 'g4', 'h4', orientation: orientation);
 
         expect(find.byKey(const Key('h4-blackRook')), findsOneWidget);
-        expect(find.widgetWithText(ListTile, 'Best move!'), findsOneWidget);
+        expect(find.text('Best move!'), findsOneWidget);
 
         // wait for line reply and move animation
         await tester.pump(const Duration(milliseconds: 500));
@@ -288,7 +288,7 @@ void main() {
 
         expect(find.byKey(const Key('h4-blackRook')), findsOneWidget);
         expect(
-          find.widgetWithText(ListTile, 'Puzzle complete!'),
+          find.text('Puzzle complete!'),
           findsOneWidget,
         );
 
@@ -343,7 +343,7 @@ void main() {
         await tester.pumpWidget(app);
 
         expect(find.byType(cg.Board), findsOneWidget);
-        expect(find.widgetWithText(ListTile, 'Your turn'), findsOneWidget);
+        expect(find.text('Your turn'), findsOneWidget);
 
         // await for first move to be played
         await tester.pump(const Duration(milliseconds: 1500));
@@ -360,7 +360,7 @@ void main() {
         expect(find.byKey(const Key('h4-blackRook')), findsOneWidget);
         expect(find.byKey(const Key('h8-whiteQueen')), findsNothing);
         expect(
-          find.widgetWithText(ListTile, 'Puzzle complete!'),
+          find.text('Puzzle complete!'),
           findsOneWidget,
         );
 
