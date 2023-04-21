@@ -30,7 +30,7 @@ class TvScreen extends ConsumerStatefulWidget {
 }
 
 class _TvScreenState extends ConsumerState<TvScreen> {
-  String selectedValue = "";
+  String selectedValue = "Top Rated";
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +45,8 @@ class _TvScreenState extends ConsumerState<TvScreen> {
     BuildContext context,
     WidgetRef ref,
   ) {
-    final tvChannel = ref.watch(tvChannelsProvider);
-    ref.read(tvChannelsProvider);
+    //final tvChannel = ref.watch(tvChannelsProvider);
+    //ref.read(tvChannelsProvider);
     final gameId = ref.watch(gameIdStateProvider);
     return Scaffold(
       appBar: AppBar(
@@ -54,7 +54,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(titleText),
+              Text(selectedValue),
               const Icon(
                 Icons.arrow_drop_down,
                 color: Colors.white,
@@ -92,14 +92,22 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   choices.indexOf(choiceString),
                 ).then((val) {
                   print("****** Android then val: $val");
+                  print("****** Android entries: ${data.channels.entries}");
+                  selectedValue = choices[val!];
+                  print("***** selectedvalue: $selectedValue");
                   String? tempGameId = data.channels.entries
                       .where((element) => element.key == selectedValue)
                       .first
                       .value
                       .gameId;
-                  if (selectedValue == "Top Rated") tempGameId = null;
+                  print("****** Android 1 tempGameId: $tempGameId");
+                  if (selectedValue == "Top Rated") {
+                    tempGameId = null;
+                  } else {
+                    selectedValue = choices[val!];
+                  }
 
-                  print("****** Android tempGameId: $tempGameId");
+                  print("****** Android 2 tempGameId: $tempGameId");
 
                   ref.read(gameIdStateProvider.notifier).state = tempGameId;
                 });
@@ -149,7 +157,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("test me"),
+              Text("Top Rated"),
               const Icon(
                 Icons.arrow_drop_down,
                 color: Colors.white,

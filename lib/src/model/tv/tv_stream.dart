@@ -81,7 +81,7 @@ final tvGameStreamProvider = StreamProvider.autoDispose
   }
 });
 
-final gameIdStateProvider = StateProvider<String?>((ref) {
+final gameIdStateProvider = StateProvider.autoDispose<String?>((ref) {
   return null;
 });
 
