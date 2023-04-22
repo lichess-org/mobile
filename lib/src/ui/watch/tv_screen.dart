@@ -45,9 +45,8 @@ class _TvScreenState extends ConsumerState<TvScreen> {
     BuildContext context,
     WidgetRef ref,
   ) {
-    //final tvChannel = ref.watch(tvChannelsProvider);
-    //ref.read(tvChannelsProvider);
     final gameId = ref.watch(gameIdStateProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: InkWell(
@@ -91,6 +90,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   choices,
                   choices.indexOf(choiceString),
                 ).then((val) {
+                  if (val == null) return;
                   print("****** Android then val: $val");
                   print("****** Android entries: ${data.channels.entries}");
                   selectedValue = choices[val!];
@@ -145,10 +145,6 @@ class _TvScreenState extends ConsumerState<TvScreen> {
     BuildContext context,
     WidgetRef ref,
   ) {
-    print("************ ios START chanelsProvider watch");
-    final tvChannel = ref.watch(tvChannelsProvider);
-    print("************ ios END chanelsProvider watch");
-
     final gameId = ref.watch(gameIdStateProvider);
 
     return CupertinoPageScaffold(
@@ -194,15 +190,24 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   choices,
                   choices.indexOf(choiceString),
                 ).then((val) {
-                  print("****** iOs then val: $val");
+                  if (val == null) return;
+                  print("****** iOS then val: $val");
+                  print("****** iOS entries: ${data.channels.entries}");
+                  selectedValue = choices[val!];
+                  print("***** selectedvalue: $selectedValue");
                   String? tempGameId = data.channels.entries
                       .where((element) => element.key == selectedValue)
                       .first
                       .value
                       .gameId;
-                  if (selectedValue == "Top Rated") tempGameId = null;
+                  print("****** iOS 1 tempGameId: $tempGameId");
+                  if (selectedValue == "Top Rated") {
+                    tempGameId = null;
+                  } else {
+                    selectedValue = choices[val!];
+                  }
 
-                  print("****** iOs tempGameId: $tempGameId");
+                  print("****** iOs 2 tempGameId: $tempGameId");
 
                   ref.read(gameIdStateProvider.notifier).state = tempGameId;
                 });
@@ -221,32 +226,106 @@ class _TvScreenState extends ConsumerState<TvScreen> {
     List<String> choices,
     int initialIndex,
   ) {
+    int selectedIndex = initialIndex;
+
     return showCupertinoModalPopup<int>(
       context: context,
       builder: (context) {
-        //int ind = choices.indexWhere((element) => element == "Top Rated");
         return SizedBox(
           height: 250,
-          child: CupertinoPicker(
-            backgroundColor: Theme.of(context).canvasColor,
-            useMagnifier: true,
-            magnification: 1.1,
-            itemExtent: 40,
-            scrollController:
-                FixedExtentScrollController(initialItem: initialIndex),
-            children: List<Widget>.generate(choices.length, (index) {
-              return Center(
-                child: Text(
-                  choices[index],
-                  style: const TextStyle(
-                    fontSize: 21,
-                  ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              //Container(
+              Expanded(
+                child: CupertinoPicker(
+                  backgroundColor: Theme.of(context).canvasColor,
+                  useMagnifier: true,
+                  magnification: 1.1,
+                  itemExtent: 40,
+                  scrollController:
+                      FixedExtentScrollController(initialItem: initialIndex),
+                  children: List<Widget>.generate(choices.length, (index) {
+                    return Center(
+                      child: Text(
+                        choices[index],
+                        style: const TextStyle(
+                          fontSize: 21,
+                        ),
+                      ),
+                    );
+                  }),
+                  onSelectedItemChanged: (int selectedItem) {
+                    selectedIndex = selectedItem;
+                    selectedValue = choices[selectedItem];
+                  },
                 ),
-              );
-            }),
-            onSelectedItemChanged: (int selectedItem) {
-              selectedValue = choices[selectedItem];
-            },
+              ),
+/*
+              SizedBox(
+                width: double.infinity,
+                child: CupertinoActionSheetAction(
+                  //backgroundColor: Theme.of(context).canvasColor,
+                  child: const Text('Cancel'),
+                  isDefaultAction: true,
+                  onPressed: () {
+                    Navigator.pop(context, null);
+                  },
+                ),
+              ),
+              */
+
+              Row(
+                children: [
+                  CupertinoButton(
+                    child: const Text('Cancel'),
+                    onPressed: () {
+                      Navigator.of(context).pop(null);
+                    },
+                  ),
+                  const Spacer(),
+                  CupertinoButton(
+                    child: const Text('Ok'),
+                    onPressed: () {
+                      Navigator.of(context).pop(selectedIndex);
+                    },
+                  ),
+                ],
+              ),
+
+/*
+              Container(
+                  color: Colors.white,
+                  child: CupertinoActionSheetAction(
+                    //backgroundColor: Theme.of(context).canvasColor,
+                    child: const Text('Cancel'),
+                    isDefaultAction: true,
+                    onPressed: () {
+                      Navigator.pop(context, 'Cancel');
+                    },
+                  )),
+*/
+/*
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  minimumSize: const Size.fromHeight(50), // NEW
+                ),
+                onPressed: () {},
+                child: const Text('Button 2'),
+                //color: Colors.blue,
+              ),
+              */
+
+              //SizedBox(height: 35),
+              /*ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(-2); //pasing value on pop is -2
+                  },
+                  child: Text("Close ")),
+                  */
+              //),
+            ],
           ),
         );
       },
