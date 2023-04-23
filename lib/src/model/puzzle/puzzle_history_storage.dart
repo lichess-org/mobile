@@ -8,7 +8,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/common/database.dart';
+import 'package:lichess_mobile/src/db/database.dart';
 
 import 'puzzle.dart';
 

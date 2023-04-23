@@ -11,19 +11,23 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
     options: OpenDatabaseOptions(
       version: 1,
       onCreate: (db, version) async {
-        await db.execute(
-          '''
+        await db.execute('''
           CREATE TABLE puzzle_batchs(
             userId TEXT NOT NULL,
             angle TEXT NOT NULL,
             data TEXT NOT NULL,
             PRIMARY KEY (userId, angle)
-          );
+          )
+
+            ''');
+
+        await db.execute(
+          '''
             CREATE TABLE puzzle_history(
             userId TEXT NOT NULL,
             data TEXT NOT NULL,
-            solvedDate DATE NOT NULL
-            PRIMARY KEY (userId, solvedDate)
+            solvedDate DATE NOT NULL,
+            PRIMARY KEY (userId, data)
           )
           ''',
         );
