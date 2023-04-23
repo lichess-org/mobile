@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:stockfish/stockfish.dart';
+import 'package:logging/logging.dart';
 
 import 'uci_protocol.dart';
 import 'work.dart';
@@ -25,6 +26,7 @@ class StockfishEngine implements Engine {
   Stockfish? _stockfish;
   StreamSubscription<String>? _stdoutSubscription;
   final UCIProtocol _protocol;
+  final _log = Logger('StockfishEngine');
 
   @override
   EngineState get state => _stockfish == null
@@ -40,7 +42,7 @@ class StockfishEngine implements Engine {
 
   @override
   Stream<EvalResult> start(Work work) {
-    print('engine start at ${work.ply} moves ${work.moves.join(' ')}');
+    _log.info('engine start at ply ${work.ply} moves ${work.moves.join(' ')}');
     _protocol.compute(work);
 
     if (_stockfish == null) {
@@ -67,7 +69,7 @@ class StockfishEngine implements Engine {
 
   @override
   void dispose() {
-    print('engine dispose');
+    _log.info('engine dispose');
     _stdoutSubscription?.cancel();
     _protocol.disconnected();
     _stockfish?.dispose();

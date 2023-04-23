@@ -77,7 +77,6 @@ class EngineEvaluation extends _$EngineEvaluation {
 
     evalStream.forEach((t) {
       if (shouldEmit(t.item1)) {
-        print('eval: ${t.item2.depth} ${t.item2.evalString}');
         state = t.item2;
       }
     });
