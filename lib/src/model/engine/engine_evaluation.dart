@@ -89,6 +89,7 @@ class EngineEvaluation extends _$EngineEvaluation {
   }
 
   void stop() {
+    state = null;
     _engine?.stop();
   }
 }

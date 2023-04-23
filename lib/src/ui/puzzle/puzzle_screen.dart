@@ -170,7 +170,7 @@ class _Body extends ConsumerWidget {
                   lastMove: puzzleState.lastMove?.cg,
                   sideToMove: puzzleState.position.turn.cg,
                   validMoves: puzzleState.validMoves,
-                  shapes: evalBestMove != null
+                  shapes: puzzleState.isEngineEnabled && evalBestMove != null
                       ? ISet([
                           cg.Arrow(
                             color: const Color(0x40003088),

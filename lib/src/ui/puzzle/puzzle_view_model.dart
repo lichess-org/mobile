@@ -387,6 +387,12 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     );
     if (state.isLocalEvalEnabled) {
       _startEngineEval();
+    } else {
+      ref
+          .read(
+            engineEvaluationProvider(state.evaluationContext).notifier,
+          )
+          .stop();
     }
   }
 
