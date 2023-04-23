@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+import 'dart:io';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -18,6 +20,8 @@ part 'engine_evaluation.freezed.dart';
 
 // TODO: make this configurable
 const kMaxDepth = 22;
+
+final maxCores = math.max(1, Platform.numberOfProcessors - 1);
 
 @freezed
 class EvaluationContext with _$EvaluationContext {
@@ -60,7 +64,7 @@ class EngineEvaluation extends _$EngineEvaluation {
     final evalStream = _engine!
         .start(
           Work(
-            threads: 3,
+            threads: maxCores,
             maxDepth: kMaxDepth,
             multiPv: 1,
             ply: step.ply,
