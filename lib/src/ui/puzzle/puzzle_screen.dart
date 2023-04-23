@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart'
+    hide Tuple2;
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
@@ -142,13 +144,12 @@ class _Body extends ConsumerWidget {
     final viewModelProvider = puzzleViewModelProvider(initialPuzzleContext);
     final puzzleState = ref.watch(viewModelProvider);
 
-    // TODO show best move on board
     final currentEvalBest = ref.watch(
       engineEvaluationProvider(puzzleState.evaluationContext)
           .select((e) => e?.bestMove),
     );
-    final evalBestMove = currentEvalBest ?? puzzleState.node.eval?.bestMove;
-    print('evalBestMove: $evalBestMove');
+    final evalBestMove =
+        (currentEvalBest ?? puzzleState.node.eval?.bestMove)?.cg;
 
     return Column(
       children: [
@@ -169,6 +170,15 @@ class _Body extends ConsumerWidget {
                   lastMove: puzzleState.lastMove?.cg,
                   sideToMove: puzzleState.position.turn.cg,
                   validMoves: puzzleState.validMoves,
+                  shapes: evalBestMove != null
+                      ? ISet([
+                          cg.Arrow(
+                            color: const Color(0x40003088),
+                            orig: evalBestMove.from,
+                            dest: evalBestMove.to,
+                          ),
+                        ])
+                      : null,
                   onMove: (move, {isPremove}) {
                     ref
                         .read(viewModelProvider.notifier)

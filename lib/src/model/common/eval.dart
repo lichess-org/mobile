@@ -25,7 +25,11 @@ class ClientEval with _$ClientEval {
 
   double get knps => nodes / millis;
 
-  UCIMove? get bestMove => pvs.firstOrNull?.moves.firstOrNull;
+  Move? get bestMove {
+    final uci = pvs.firstOrNull?.moves.firstOrNull;
+    if (uci == null) return null;
+    return Move.fromUci(uci);
+  }
 
   String get evalString {
     if (cp != null) {
