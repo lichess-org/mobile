@@ -1,4 +1,5 @@
 import 'package:async/async.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_history_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
@@ -58,4 +59,11 @@ Future<ISet<PuzzleTheme>> savedThemes(SavedThemesRef ref) {
 Future<PuzzleDashboard> puzzleDashboard(PuzzleDashboardRef ref, int days) {
   final repo = ref.watch(puzzleRepositoryProvider);
   return Result.release(repo.puzzleDashboard(days));
+}
+
+@Riverpod(keepAlive: true)
+Future<IList<PuzzleHistory>> puzzleHistory(PuzzleHistoryRef ref) {
+  final session = ref.watch(authSessionProvider);
+  final repo = ref.watch(puzzleHistoryStorageProvider);
+  return repo.fetch(userId: session?.user.id);
 }

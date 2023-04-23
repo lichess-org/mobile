@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_dashboard_widget.dart';
+import 'package:lichess_mobile/src/ui/puzzle/puzzle_history_widget.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -181,6 +182,7 @@ class _Body extends ConsumerWidget {
         ),
       ),
       if (session != null) PuzzleDashboardWidget(),
+      PuzzleHistoryWidget(),
     ];
 
     return defaultTargetPlatform == TargetPlatform.iOS
