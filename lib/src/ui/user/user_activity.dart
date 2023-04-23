@@ -293,9 +293,9 @@ class BriefGameResultBox extends StatelessWidget {
                 height: _boxSize,
                 width: _boxSize,
                 child: DecoratedBox(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: LichessColors.good,
-                    borderRadius: BorderRadius.circular(3.0),
+                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
                   ),
                   child: Center(
                     child: Text(
@@ -314,9 +314,9 @@ class BriefGameResultBox extends StatelessWidget {
                 height: _boxSize,
                 width: _boxSize,
                 child: DecoratedBox(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: LichessColors.brag,
-                    borderRadius: BorderRadius.circular(3.0),
+                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
                   ),
                   child: Center(
                     child: Text(
@@ -335,9 +335,9 @@ class BriefGameResultBox extends StatelessWidget {
                 height: _boxSize,
                 width: _boxSize,
                 child: DecoratedBox(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: LichessColors.red,
-                    borderRadius: BorderRadius.circular(3.0),
+                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
                   ),
                   child: Center(
                     child: Text(

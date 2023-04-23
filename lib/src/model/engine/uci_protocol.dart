@@ -73,7 +73,7 @@ class UCIProtocol {
 
   void received(String line) {
     final parts = line.trim().split(RegExp(r'\s+'));
-    if (parts[0] == 'uciok') {
+    if (parts.first == 'uciok') {
       setOption('UCI_AnalyseMode', 'true');
       // Affects notation only. Life would be easier if everyone would always
       // unconditionally use this mode.
@@ -81,11 +81,11 @@ class UCIProtocol {
 
       _sendAndLog('ucinewgame');
       _sendAndLog('isready');
-    } else if (parts[0] == 'readyok') {
+    } else if (parts.first == 'readyok') {
       _swapWork();
-    } else if (parts[0] == 'id' && parts[1] == 'name') {
+    } else if (parts.first == 'id' && parts[1] == 'name') {
       engineName = parts.sublist(2).join(' ');
-    } else if (parts[0] == 'bestmove') {
+    } else if (parts.first == 'bestmove') {
       if (_work != null && _currentEval != null) {
         _evalController.sink.add(Tuple2(_work!, _currentEval!));
       }
@@ -94,7 +94,7 @@ class UCIProtocol {
       return;
     } else if (_work != null &&
         _work!.stopRequested != true &&
-        parts[0] == 'info') {
+        parts.first == 'info') {
       int depth = 0;
       int? nodes;
       int multiPv = 1;
@@ -189,7 +189,7 @@ class UCIProtocol {
           _stop();
         }
       }
-    } else if (!['Stockfish', 'id', 'option', 'info'].contains(parts[0])) {
+    } else if (!['Stockfish', 'id', 'option', 'info'].contains(parts.first)) {
       _log.info(line);
     }
   }
