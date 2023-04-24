@@ -1,4 +1,4 @@
-import 'package:lichess_mobile/src/common/sound_service.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 
 class FakeSoundService implements SoundService {
   @override

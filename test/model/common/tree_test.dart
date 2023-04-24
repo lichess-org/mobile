@@ -2,9 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/uci.dart';
-import 'package:lichess_mobile/src/common/tree.dart';
+import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/tree.dart';
 
 void main() {
   group('RootOrNode', () {
@@ -120,6 +121,52 @@ void main() {
       final branch2 =
           root.nodeAtOrNull(UciPath.fromId(UciCharPair.fromUci('b1c3')));
       expect(branch2, isNull);
+    });
+
+    test('updateAt', () {
+      final root = Root.fromPgn('e4 e5');
+      final branch = Node(
+        id: UciCharPair.fromMove(Move.fromUci('b8c6')!),
+        ply: 2,
+        sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
+        fen: 'fen2',
+        position: Chess.initial,
+      );
+
+      final fromPath = UciPath.fromId(UciCharPair.fromUci('e2e4'));
+      final nodePath = root.addNodeAt(fromPath, branch);
+
+      expect(
+        root.nodesOn(nodePath!),
+        equals([
+          ViewNode.fromNode(root.children.first),
+          ViewNode.fromNode(branch)
+        ]),
+      );
+
+      final eval = ClientEval(
+        fen: 'fen2',
+        maxDepth: 20,
+        cp: 100,
+        depth: 10,
+        nodes: 1000,
+        millis: 1000,
+        pvs: IList([
+          PvData(moves: IList(const ['e2e4']))
+        ]),
+      );
+
+      final newNode = root.updateAt(nodePath, (node) {
+        node.eval = eval;
+      });
+
+      expect(
+        root.nodesOn(nodePath),
+        equals([
+          ViewNode.fromNode(root.children.first),
+          ViewNode.fromNode(newNode!)
+        ]),
+      );
     });
 
     test('addNodeAt', () {

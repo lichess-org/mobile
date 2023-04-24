@@ -4,8 +4,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
-import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/uci.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/uci.dart';
 
 part 'tree.freezed.dart';
 
@@ -26,6 +27,11 @@ abstract class RootOrNode {
 
   /// Prepends a child to this node.
   void prependChild(Node node) => children.insert(0, node);
+
+  /// Finds the child node with that id.
+  Node? childById(UciCharPair id) {
+    return children.firstWhereOrNull((node) => node.id == id);
+  }
 
   /// An iterable of all nodes on the mainline.
   Iterable<ViewNode> get mainline sync* {
@@ -61,6 +67,18 @@ abstract class RootOrNode {
 
   /// Gets the path of the mainline.
   UciPath get mainlinePath => UciPath.fromNodeList(mainline);
+
+  /// Updates the node at the given path.
+  ///
+  /// Returns the updated node, or null if the node was not found.
+  Node? updateAt(UciPath path, void Function(Node node) update) {
+    final node = nodeAtOrNull(path);
+    if (node != null && node is Node) {
+      update(node);
+      return node;
+    }
+    return null;
+  }
 
   /// Adds a new node at the given path and returns the new path.
   ///
@@ -141,11 +159,6 @@ abstract class RootOrNode {
       return null;
     }
   }
-
-  /// Finds the child node with that id.
-  Node? childById(UciCharPair id) {
-    return children.firstWhereOrNull((node) => node.id == id);
-  }
 }
 
 class Node extends RootOrNode {
@@ -155,30 +168,18 @@ class Node extends RootOrNode {
     required super.fen,
     required super.position,
     required this.sanMove,
+    this.eval,
   });
 
   final UciCharPair id;
 
   final SanMove sanMove;
 
-  Node copyWith({
-    int? ply,
-    String? fen,
-    SanMove? sanMove,
-    Position? position,
-  }) {
-    return Node(
-      id: id,
-      ply: ply ?? this.ply,
-      fen: fen ?? this.fen,
-      sanMove: sanMove ?? this.sanMove,
-      position: position ?? this.position,
-    );
-  }
+  ClientEval? eval;
 
   @override
   String toString() {
-    return 'Node(id: $id, ply: $ply, fen: $fen)';
+    return 'Node(id: $id, ply: $ply, fen: $fen, sanMove: $sanMove, eval: $eval, children: $children)';
   }
 }
 
@@ -232,6 +233,7 @@ class ViewNode with _$ViewNode {
     required Position position,
     required SanMove sanMove,
     required IList<ViewNode> children,
+    ClientEval? eval,
   }) = _ViewNode;
 
   factory ViewNode.fromNode(Node node) {
@@ -241,6 +243,7 @@ class ViewNode with _$ViewNode {
       fen: node.fen,
       position: node.position,
       sanMove: node.sanMove,
+      eval: node.eval,
       children: node.children.map(ViewNode.fromNode).toIList(),
     );
   }

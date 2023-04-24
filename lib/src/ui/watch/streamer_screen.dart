@@ -6,8 +6,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/common/lichess_colors.dart';
-import 'package:lichess_mobile/src/common/social_icons.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/social_icons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 class StreamerScreen extends StatelessWidget {

@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/common/lichess_colors.dart';
-import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -293,9 +293,9 @@ class BriefGameResultBox extends StatelessWidget {
                 height: _boxSize,
                 width: _boxSize,
                 child: DecoratedBox(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: LichessColors.good,
-                    borderRadius: BorderRadius.circular(3.0),
+                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
                   ),
                   child: Center(
                     child: Text(
@@ -314,9 +314,9 @@ class BriefGameResultBox extends StatelessWidget {
                 height: _boxSize,
                 width: _boxSize,
                 child: DecoratedBox(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: LichessColors.brag,
-                    borderRadius: BorderRadius.circular(3.0),
+                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
                   ),
                   child: Center(
                     child: Text(
@@ -335,9 +335,9 @@ class BriefGameResultBox extends StatelessWidget {
                 height: _boxSize,
                 width: _boxSize,
                 child: DecoratedBox(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: LichessColors.red,
-                    borderRadius: BorderRadius.circular(3.0),
+                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
                   ),
                   child: Center(
                     child: Text(

@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:chessground/chessground.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'platform.dart';
 
@@ -433,4 +433,15 @@ class StackedMoveItem extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Returns the estimated height of spaces around the board.
+double estimateTableHeight(BuildContext context) {
+  final mediaQueryData = MediaQuery.of(context);
+  final width = mediaQueryData.size.width;
+  final height = mediaQueryData.size.height;
+  final padding = mediaQueryData.padding;
+  final safeHeight = height - padding.top - padding.bottom;
+  // viewport height - board size - app bar height - bottom bar height
+  return (safeHeight - width - 50 - 56) / 2;
 }

@@ -5,12 +5,13 @@ import 'package:mocktail/mocktail.dart';
 import 'package:http/http.dart' as http;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-import 'package:lichess_mobile/src/common/api_client.dart';
-import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
 
-class MockApiClient extends Mock implements ApiClient {}
+class MockAuthClient extends Mock implements AuthClient {}
 
 class MockLogger extends Mock implements Logger {}
 
@@ -18,11 +19,11 @@ const testUserId = UserId('test');
 
 void main() {
   final mockLogger = MockLogger();
-  final mockApiClient = MockApiClient();
-  final repo = UserRepository(apiClient: mockApiClient, logger: mockLogger);
+  final mockAuthClient = MockAuthClient();
+  final repo = UserRepository(apiClient: mockAuthClient, logger: mockLogger);
 
   setUpAll(() {
-    reset(mockApiClient);
+    reset(mockAuthClient);
   });
 
   group('UserRepository.getUserTask', () {
@@ -39,7 +40,7 @@ void main() {
 ''';
       when(
         () =>
-            mockApiClient.get(Uri.parse('$kLichessHost/api/user/$testUserId')),
+            mockAuthClient.get(Uri.parse('$kLichessHost/api/user/$testUserId')),
       ).thenAnswer(
         (_) async => Result.value(http.Response(testUserResponseMinimal, 200)),
       );
@@ -91,7 +92,7 @@ void main() {
 ''';
       when(
         () =>
-            mockApiClient.get(Uri.parse('$kLichessHost/api/user/$testUserId')),
+            mockAuthClient.get(Uri.parse('$kLichessHost/api/user/$testUserId')),
       ).thenAnswer(
         (_) async => Result.value(http.Response(testUserResponse, 200)),
       );
@@ -137,7 +138,7 @@ void main() {
   }
 }
 ''';
-      when(() => mockApiClient.get(Uri.parse(uriString))).thenAnswer(
+      when(() => mockAuthClient.get(Uri.parse(uriString))).thenAnswer(
         (_) async => Result.value(http.Response(responseMinimal, 200)),
       );
 
@@ -384,7 +385,7 @@ void main() {
   }
 }
 ''';
-      when(() => mockApiClient.get(Uri.parse(uriString))).thenAnswer(
+      when(() => mockAuthClient.get(Uri.parse(uriString))).thenAnswer(
         (_) async => Result.value(http.Response(responseFull, 200)),
       );
 
@@ -400,7 +401,7 @@ void main() {
         {const UserId('maia1'), const UserId('maia5'), const UserId('maia9')},
       );
       when(
-        () => mockApiClient.get(
+        () => mockAuthClient.get(
           Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'),
         ),
       ).thenAnswer((_) async => Result.value(http.Response('[]', 200)));
@@ -435,7 +436,7 @@ void main() {
         {const UserId('maia1'), const UserId('maia5'), const UserId('maia9')},
       );
       when(
-        () => mockApiClient.get(
+        () => mockAuthClient.get(
           Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'),
         ),
       ).thenAnswer((_) async => Result.value(http.Response(response, 200)));
@@ -453,7 +454,7 @@ void main() {
 
     test('json read, minimal example', () async {
       when(
-        () => mockApiClient
+        () => mockAuthClient
             .get(Uri.parse('$kLichessHost/api/player/top/1/standard')),
       ).thenAnswer((_) async => Result.value(http.Response(res, 200)));
 
@@ -480,7 +481,7 @@ void main() {
 "racingKings":[{"id":"royalmaniac","username":"RoyalManiac","perfs":{"racingKings":{"rating":2499,"progress":13}},"patron":true},{"id":"cybershredder","username":"CyberShredder","perfs":{"racingKings":{"rating":2408,"progress":20}}},{"id":"queeneatingdragon","username":"QueenEatingDragon","perfs":{"racingKings":{"rating":2388,"progress":-14}}},{"id":"seth_7777777","username":"seth_7777777","perfs":{"racingKings":{"rating":2387,"progress":7}}},{"id":"huangyudong","username":"huangyudong","perfs":{"racingKings":{"rating":2342,"progress":-8}}},{"id":"natso","username":"Natso","perfs":{"racingKings":{"rating":2339,"progress":13}},"patron":true},{"id":"imakemanymistakes","username":"IMakeManyMistakes","perfs":{"racingKings":{"rating":2333,"progress":-7}}},{"id":"peanutbutter12345","username":"Peanutbutter12345","perfs":{"racingKings":{"rating":2321,"progress":-3}},"patron":true},{"id":"walker_22","username":"Walker_22","perfs":{"racingKings":{"rating":2316,"progress":-1}}},{"id":"artem_medvedev-04","username":"Artem_Medvedev-04","perfs":{"racingKings":{"rating":2274,"progress":10}}}]}
 ''';
     test('get leaderboard', () async {
-      when(() => mockApiClient.get(Uri.parse('$kLichessHost/api/player')))
+      when(() => mockAuthClient.get(Uri.parse('$kLichessHost/api/player')))
           .thenAnswer((_) async => Result.value(http.Response(testRes, 200)));
 
       final result = await repo.getLeaderboard();
@@ -491,7 +492,7 @@ void main() {
 
   test('UserRepository.getUserActivity minimal example', () async {
     when(
-      () => mockApiClient.get(
+      () => mockAuthClient.get(
         Uri.parse('$kLichessHost/api/user/testUser/activity'),
       ),
     ).thenAnswer(

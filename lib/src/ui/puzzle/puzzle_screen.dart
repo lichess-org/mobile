@@ -5,10 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart'
+    hide Tuple2;
 
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/common/styles.dart';
-import 'package:lichess_mobile/src/common/connectivity.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -20,8 +22,10 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/ui/engine/engine_gauge.dart';
 
 import 'puzzle_view_model.dart';
 import 'puzzle_feedback_widget.dart';
@@ -139,6 +143,14 @@ class _Body extends ConsumerWidget {
         ref.watch(boardPreferencesProvider.select((p) => p.pieceSet));
     final viewModelProvider = puzzleViewModelProvider(initialPuzzleContext);
     final puzzleState = ref.watch(viewModelProvider);
+
+    final currentEvalBest = ref.watch(
+      engineEvaluationProvider(puzzleState.evaluationContext)
+          .select((e) => e?.bestMove),
+    );
+    final evalBestMove =
+        (currentEvalBest ?? puzzleState.node.eval?.bestMove)?.cg;
+
     return Column(
       children: [
         Expanded(
@@ -158,24 +170,46 @@ class _Body extends ConsumerWidget {
                   lastMove: puzzleState.lastMove?.cg,
                   sideToMove: puzzleState.position.turn.cg,
                   validMoves: puzzleState.validMoves,
+                  shapes: puzzleState.isEngineEnabled && evalBestMove != null
+                      ? ISet([
+                          cg.Arrow(
+                            color: const Color(0x40003088),
+                            orig: evalBestMove.from,
+                            dest: evalBestMove.to,
+                          ),
+                        ])
+                      : null,
                   onMove: (move, {isPremove}) {
                     ref
                         .read(viewModelProvider.notifier)
                         .onUserMove(Move.fromUci(move.uci)!);
                   },
                 ),
-                topTable: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0,
+                topTable: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0,
+                          ),
+                          child: PuzzleFeedbackWidget(
+                            puzzle: puzzleState.puzzle,
+                            state: puzzleState,
+                            pieceSet: pieceSet,
+                            onStreak: false,
+                          ),
+                        ),
+                      ),
                     ),
-                    child: PuzzleFeedbackWidget(
-                      puzzle: puzzleState.puzzle,
-                      state: puzzleState,
-                      pieceSet: pieceSet,
-                      onStreak: false,
-                    ),
-                  ),
+                    if (puzzleState.isEngineEnabled)
+                      EngineGauge(
+                        evaluationContext: puzzleState.evaluationContext,
+                        position: puzzleState.position,
+                        savedEval: puzzleState.node.eval,
+                      ),
+                  ],
                 ),
                 bottomTable: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -273,6 +307,16 @@ class _BottomBar extends ConsumerWidget {
                 icon: defaultTargetPlatform == TargetPlatform.iOS
                     ? CupertinoIcons.share
                     : Icons.share,
+              ),
+            if (puzzleState.mode == PuzzleMode.view)
+              BottomBarButton(
+                onTap: () {
+                  ref.read(viewModelProvider.notifier).toggleLocalEvaluation();
+                },
+                label: context.l10n.toggleLocalEvaluation,
+                shortLabel: 'Evaluation',
+                icon: CupertinoIcons.gauge,
+                highlighted: puzzleState.isLocalEvalEnabled,
               ),
             if (puzzleState.mode != PuzzleMode.view)
               BottomBarButton(

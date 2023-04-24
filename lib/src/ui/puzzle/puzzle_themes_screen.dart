@@ -8,8 +8,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tuple/tuple.dart';
 
-import 'package:lichess_mobile/src/common/connectivity.dart';
-import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';

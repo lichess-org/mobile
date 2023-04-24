@@ -98,7 +98,7 @@
 			</dict>
 		</array>
 		<key>CFBundleVersion</key>
-		<string>27</string>
+		<string>$(FLUTTER_BUILD_NUMBER)</string>
 		<key>ITSAppUsesNonExemptEncryption</key>
 		<false/>
 		<key>LSRequiresIPhoneOS</key>

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:lichess_mobile/src/common/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';

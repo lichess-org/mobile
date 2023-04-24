@@ -5,7 +5,7 @@ import 'package:lichess_mobile/src/ui/user/leaderboard_screen.dart';
 import 'package:lichess_mobile/src/ui/user/leaderboard_widget.dart';
 import 'package:http/testing.dart';
 
-import 'package:lichess_mobile/src/common/api_client.dart';
+import 'package:lichess_mobile/src/http_client.dart';
 import '../../test_utils.dart';
 import '../../test_app.dart';
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:lichess_mobile/src/common/shared_preferences.dart';
+import 'package:lichess_mobile/src/db/shared_preferences.dart';
 
 part 'general_preferences.freezed.dart';
 part 'general_preferences.g.dart';

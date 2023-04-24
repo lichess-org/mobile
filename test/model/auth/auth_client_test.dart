@@ -6,8 +6,8 @@ import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 
-import 'package:lichess_mobile/src/common/errors.dart';
-import 'package:lichess_mobile/src/common/api_client.dart';
+import 'package:lichess_mobile/src/model/common/errors.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 
 class MockLogger extends Mock implements Logger {}
 
@@ -20,9 +20,9 @@ void main() {
     registerFallbackValue(http.Request('GET', Uri.parse('http://api.test')));
   });
 
-  group('ApiClient non stream', () {
+  group('AuthClient non stream', () {
     test('ValueResult responses are returned as success', () async {
-      final apiClient = ApiClient(mockLogger, FakeClient());
+      final apiClient = AuthClient(mockLogger, FakeClient());
 
       for (final method in [apiClient.get, apiClient.post, apiClient.delete]) {
         expect(
@@ -43,7 +43,7 @@ void main() {
     });
 
     test('error responses are returned as error', () async {
-      final apiClient = ApiClient(mockLogger, FakeClient());
+      final apiClient = AuthClient(mockLogger, FakeClient());
 
       for (final method in [apiClient.get, apiClient.post, apiClient.delete]) {
         expect(
@@ -84,7 +84,7 @@ void main() {
     });
 
     test('catches socket error', () async {
-      final apiClient = ApiClient(mockLogger, FakeClient());
+      final apiClient = AuthClient(mockLogger, FakeClient());
       for (final method in [apiClient.get, apiClient.post, apiClient.delete]) {
         final resp = await method
             .call(Uri.parse('http://api.test/will/throw/socket/exception'));
@@ -94,7 +94,7 @@ void main() {
 
     test('retry on error by default', () async {
       final mockClient = MockClient();
-      final apiClient = ApiClient(mockLogger, mockClient);
+      final apiClient = AuthClient(mockLogger, mockClient);
 
       int retries = 3;
 
@@ -115,9 +115,9 @@ void main() {
     });
   });
 
-  group('ApiClient stream', () {
+  group('AuthClient stream', () {
     test('response is returned when ValueResult', () async {
-      final apiClient = ApiClient(mockLogger, FakeClient());
+      final apiClient = AuthClient(mockLogger, FakeClient());
 
       expect(
         await apiClient.stream(Uri.parse('http://api.test/will/return/200')),
@@ -136,7 +136,7 @@ void main() {
     });
 
     test('throws on error', () {
-      final apiClient = ApiClient(mockLogger, FakeClient());
+      final apiClient = AuthClient(mockLogger, FakeClient());
 
       expect(
         () => apiClient.stream(Uri.parse('http://api.test/will/return/401')),
@@ -165,7 +165,7 @@ void main() {
     });
 
     test('socket error is a GenericIOException', () {
-      final apiClient = ApiClient(mockLogger, FakeClient());
+      final apiClient = AuthClient(mockLogger, FakeClient());
 
       expect(
         () => apiClient
