@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_dashboard_widget.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -35,25 +36,28 @@ class _PuzzleDashboardScreenState extends ConsumerState<PuzzleDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final session = ref.watch(authSessionProvider);
     return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
+      androidBuilder: (context) => _androidBuilder(context, session),
+      iosBuilder: (context) => _iosBuilder(context, session),
     );
   }
 
-  Widget _androidBuilder(BuildContext context) {
+  Widget _androidBuilder(BuildContext context, UserSession? userSession) {
     return Scaffold(
       appBar:
           AppBar(title: Text(context.l10n.puzzles), actions: [DaysSelector()]),
-      body: RefreshIndicator(
-        key: _androidRefreshKey,
-        onRefresh: _refreshData,
-        child: const Center(child: _Body()),
-      ),
+      body: userSession != null
+          ? RefreshIndicator(
+              key: _androidRefreshKey,
+              onRefresh: _refreshData,
+              child: Center(child: _Body(userSession)),
+            )
+          : Center(child: _Body(userSession)),
     );
   }
 
-  Widget _iosBuilder(BuildContext context) {
+  Widget _iosBuilder(BuildContext context, UserSession? userSession) {
     return CupertinoPageScaffold(
       child: CustomScrollView(
         slivers: [
@@ -61,12 +65,13 @@ class _PuzzleDashboardScreenState extends ConsumerState<PuzzleDashboardScreen> {
             largeTitle: Text(context.l10n.puzzles),
             trailing: DaysSelector(),
           ),
-          CupertinoSliverRefreshControl(
-            onRefresh: _refreshData,
-          ),
-          const SliverSafeArea(
+          if (userSession != null)
+            CupertinoSliverRefreshControl(
+              onRefresh: _refreshData,
+            ),
+          SliverSafeArea(
             top: false,
-            sliver: _Body(),
+            sliver: _Body(userSession),
           ),
         ],
       ),
@@ -80,14 +85,15 @@ class _PuzzleDashboardScreenState extends ConsumerState<PuzzleDashboardScreen> {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body();
+  const _Body(this.session);
+
+  final UserSession? session;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     const theme = PuzzleTheme.mix;
     final nextPuzzle = ref.watch(nextPuzzleProvider(theme));
     final connectivity = ref.watch(connectivityChangesProvider);
-    final session = ref.watch(authSessionProvider);
 
     final content = [
       Padding(
