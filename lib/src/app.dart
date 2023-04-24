@@ -7,7 +7,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/common/brightness.dart';
+import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
