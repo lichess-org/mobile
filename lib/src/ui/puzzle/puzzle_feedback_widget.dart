@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 
-import 'package:lichess_mobile/src/lichess_colors.dart';
-import 'package:lichess_mobile/src/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
