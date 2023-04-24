@@ -12,7 +12,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';
-import 'package_info.dart';
+import 'package:lichess_mobile/src/utils/package_info.dart';
 
 part 'api_client.g.dart';
 
