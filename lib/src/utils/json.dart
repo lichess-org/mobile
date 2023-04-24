@@ -6,7 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:result_extensions/result_extensions.dart';
 
-import 'package:lichess_mobile/src/common/errors.dart';
+import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';

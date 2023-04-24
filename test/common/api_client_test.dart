@@ -6,7 +6,7 @@ import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 
-import 'package:lichess_mobile/src/common/errors.dart';
+import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/common/api_client.dart';
 
 class MockLogger extends Mock implements Logger {}

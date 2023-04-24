@@ -5,7 +5,7 @@ import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 
-import 'package:lichess_mobile/src/common/errors.dart';
+import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
