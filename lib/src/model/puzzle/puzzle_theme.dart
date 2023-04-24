@@ -4,7 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:lichess_mobile/src/common/l10n.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 part 'puzzle_theme.g.dart';
