@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/lichess_icons.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 /// Represents a lichess rating perf item

@@ -9,7 +9,7 @@ import 'package:result_extensions/result_extensions.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles.dart';
-import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/lichess_icons.dart';
 import 'package:lichess_mobile/src/common/lichess_colors.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
