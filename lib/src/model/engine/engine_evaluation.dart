@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
-import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/common/uci.dart';
 import 'package:lichess_mobile/src/common/tree.dart';

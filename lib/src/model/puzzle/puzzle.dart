@@ -3,8 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/common/tree.dart';
 
-import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';

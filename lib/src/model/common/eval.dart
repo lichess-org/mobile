@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
-import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 
 part 'eval.freezed.dart';
 
