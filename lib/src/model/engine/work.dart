@@ -4,7 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/common/uci.dart';
+import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 
 part 'work.freezed.dart';
