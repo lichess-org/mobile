@@ -9,12 +9,13 @@ import 'package:http/retry.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
 
-part 'api_client.g.dart';
+part 'auth_client.g.dart';
 
 const defaultRetries = [
   Duration(milliseconds: 200),
@@ -22,15 +23,6 @@ const defaultRetries = [
   Duration(milliseconds: 500),
   Duration(milliseconds: 800),
 ];
-
-@Riverpod(keepAlive: true)
-Client httpClient(HttpClientRef ref) {
-  final client = Client();
-  ref.onDispose(() {
-    client.close();
-  });
-  return client;
-}
 
 @Riverpod(keepAlive: true)
 ApiClient apiClient(ApiClientRef ref) {

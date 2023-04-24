@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/common/api_client.dart';
+import 'package:lichess_mobile/src/http_client.dart';
 
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import '../../test_utils.dart';

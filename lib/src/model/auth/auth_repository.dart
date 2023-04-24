@@ -6,7 +6,7 @@ import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 
 import 'package:lichess_mobile/src/model/common/errors.dart';
-import 'package:lichess_mobile/src/common/api_client.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
 part 'auth_repository.g.dart';
