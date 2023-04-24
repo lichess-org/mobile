@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-import 'package:lichess_mobile/src/common/lichess_colors.dart';
+import 'package:lichess_mobile/src/lichess_colors.dart';
 import 'package:lichess_mobile/src/lichess_icons.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/styles.dart';
