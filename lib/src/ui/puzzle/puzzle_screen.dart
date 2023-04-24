@@ -10,7 +10,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/common/styles.dart';
-import 'package:lichess_mobile/src/common/connectivity.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
