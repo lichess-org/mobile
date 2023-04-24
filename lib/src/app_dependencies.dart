@@ -11,7 +11,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/common/database.dart';
+import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/common/api_client.dart';
 import 'package:lichess_mobile/src/common/sound_service.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
