@@ -18,7 +18,7 @@ const oauthScopes = ['puzzle:read', 'puzzle:write'];
 AuthRepository authRepository(AuthRepositoryRef ref) {
   const auth = FlutterAppAuth();
   return AuthRepository(
-    ref.watch(apiClientProvider),
+    ref.watch(authClientProvider),
     auth,
     Logger('AuthRepository'),
   );
@@ -26,14 +26,14 @@ AuthRepository authRepository(AuthRepositoryRef ref) {
 
 class AuthRepository {
   AuthRepository(
-    ApiClient apiClient,
+    AuthClient apiClient,
     FlutterAppAuth appAuth,
     Logger log,
   )   : _apiClient = apiClient,
         _appAuth = appAuth,
         _log = log;
 
-  final ApiClient _apiClient;
+  final AuthClient _apiClient;
   final Logger _log;
   final FlutterAppAuth _appAuth;
 

@@ -37,7 +37,7 @@ Future<AppDependencies> appDependencies(
         Uri.parse('$kLichessHost/api/account'),
         headers: {
           'Authorization': 'Bearer ${storedSession.token}',
-          'user-agent': ApiClient.userAgent(pInfo, storedSession.user),
+          'user-agent': AuthClient.userAgent(pInfo, storedSession.user),
         },
       );
       if (response.statusCode == 401) {

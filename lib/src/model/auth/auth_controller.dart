@@ -29,7 +29,7 @@ class AuthController extends _$AuthController {
         await ref.read(authRepositoryProvider).signIn().flatMap(
       (oAuthResp) {
         if (oAuthResp.accessToken != null) {
-          final apiClient = ref.read(apiClientProvider);
+          final apiClient = ref.read(authClientProvider);
           return apiClient.get(
             Uri.parse('$kLichessHost/api/account'),
             headers: {'Authorization': 'Bearer ${oAuthResp.accessToken}'},

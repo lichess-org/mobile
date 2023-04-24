@@ -13,7 +13,7 @@ part 'account_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 AccountRepository accountRepository(AccountRepositoryRef ref) {
-  final apiClient = ref.watch(apiClientProvider);
+  final apiClient = ref.watch(authClientProvider);
   return AccountRepository(
     logger: Logger('UserRepository'),
     apiClient: apiClient,
@@ -29,12 +29,12 @@ Future<User> account(AccountRef ref) {
 
 class AccountRepository {
   const AccountRepository({
-    required ApiClient apiClient,
+    required AuthClient apiClient,
     required Logger logger,
   })  : _apiClient = apiClient,
         _log = logger;
 
-  final ApiClient _apiClient;
+  final AuthClient _apiClient;
   final Logger _log;
 
   FutureResult<User> getProfile() {

@@ -11,7 +11,7 @@ class TvRepository {
     required this.apiClient,
   }) : _log = log;
 
-  final ApiClient apiClient;
+  final AuthClient apiClient;
   final Logger _log;
 
   Stream<TvEvent> tvFeed() async* {
@@ -32,7 +32,7 @@ class TvRepository {
 }
 
 final tvRepositoryProvider = Provider<TvRepository>((ref) {
-  final apiClient = ref.watch(apiClientProvider);
+  final apiClient = ref.watch(authClientProvider);
   final repo = TvRepository(Logger('TvRepository'), apiClient: apiClient);
   ref.onDispose(() => repo.dispose());
   return repo;

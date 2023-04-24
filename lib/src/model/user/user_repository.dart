@@ -18,7 +18,7 @@ class UserRepository {
   const UserRepository({required this.apiClient, required Logger logger})
       : _log = logger;
 
-  final ApiClient apiClient;
+  final AuthClient apiClient;
   final Logger _log;
 
   FutureResult<User> getUser(UserId id) {

@@ -23,7 +23,7 @@ class GameRepository {
     required this.apiClient,
   }) : _log = log;
 
-  final ApiClient apiClient;
+  final AuthClient apiClient;
   final Logger _log;
 
   FutureResult<ArchivedGame> getGame(GameId id) {

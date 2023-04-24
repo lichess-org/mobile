@@ -24,7 +24,7 @@ part 'puzzle_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 PuzzleRepository puzzleRepository(PuzzleRepositoryRef ref) {
-  final apiClient = ref.watch(apiClientProvider);
+  final apiClient = ref.watch(authClientProvider);
   return PuzzleRepository(Logger('PuzzleRepository'), apiClient: apiClient);
 }
 
@@ -35,7 +35,7 @@ class PuzzleRepository {
     required this.apiClient,
   }) : _log = log;
 
-  final ApiClient apiClient;
+  final AuthClient apiClient;
   final Logger _log;
 
   FutureResult<PuzzleBatchResponse> selectBatch({

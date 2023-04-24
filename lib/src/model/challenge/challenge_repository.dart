@@ -11,7 +11,7 @@ class ChallengeRepository {
     required this.apiClient,
   });
 
-  final ApiClient apiClient;
+  final AuthClient apiClient;
 
   FutureResult<void> challenge(String username, ChallengeRequest req) {
     return apiClient.post(
@@ -33,7 +33,7 @@ class ChallengeRepository {
 }
 
 final challengeRepositoryProvider = Provider<ChallengeRepository>((ref) {
-  final apiClient = ref.watch(apiClientProvider);
+  final apiClient = ref.watch(authClientProvider);
   final repo = ChallengeRepository(apiClient: apiClient);
   ref.onDispose(() => repo.dispose());
   return repo;

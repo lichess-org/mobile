@@ -17,34 +17,35 @@ import 'package:lichess_mobile/src/utils/package_info.dart';
 
 part 'auth_client.g.dart';
 
-const defaultRetries = [
-  Duration(milliseconds: 200),
-  Duration(milliseconds: 300),
-  Duration(milliseconds: 500),
-  Duration(milliseconds: 800),
-];
-
 @Riverpod(keepAlive: true)
-ApiClient apiClient(ApiClientRef ref) {
+AuthClient authClient(AuthClientRef ref) {
   final httpClient = ref.watch(httpClientProvider);
-  final authClient = _AuthClient(
+  final logger = Logger('AuthClient');
+  final insideAuthClient = _AuthClient(
     ref,
     httpClient,
-    Logger('AuthClient'),
+    logger,
   );
-  final apiClient = ApiClient(
-    Logger('ApiClient'),
-    authClient,
+  final authClient = AuthClient(
+    logger,
+    insideAuthClient,
   );
   ref.onDispose(() {
-    apiClient.close();
+    authClient.close();
   });
-  return apiClient;
+  return authClient;
 }
 
-/// Convenient client that captures and returns API errors.
-class ApiClient {
-  ApiClient(
+/// HTTP client to communicate with lichess
+///
+/// This client handles all of the following:
+///   - automatically add the Authorization header when a token has been stored,
+///   - automatically retry requests on failure,
+///   - sends user agent
+///   - capture all errors and return a [Result] instead.
+///   (TODO) - log the user out when a 401 is received,
+class AuthClient {
+  AuthClient(
     this._log,
     this._client, {
     List<Duration> retryDelays = defaultRetries,
@@ -57,7 +58,7 @@ class ApiClient {
           retryDelays,
           whenError: (error, _) async => error is SocketException,
         ) {
-    _log.info('Creating new ApiClient.');
+    _log.info('Creating new AuthClient.');
   }
 
   final Logger _log;
@@ -161,7 +162,7 @@ class ApiClient {
   }
 
   void close() {
-    _log.info('Closing ApiClient.');
+    _log.info('Closing AuthClient.');
     _client.close();
     _retryClient.close();
   }
@@ -171,7 +172,7 @@ class ApiClient {
 class _AuthClient extends BaseClient {
   _AuthClient(this.ref, this._inner, this._logger);
 
-  final ApiClientRef ref;
+  final AuthClientRef ref;
   final Client _inner;
   final Logger _logger;
 
@@ -184,10 +185,17 @@ class _AuthClient extends BaseClient {
       request.headers['Authorization'] = 'Bearer ${session.token}';
     }
 
-    request.headers['user-agent'] = ApiClient.userAgent(info, session?.user);
+    request.headers['user-agent'] = AuthClient.userAgent(info, session?.user);
 
     _logger.info('${request.method} ${request.url}', request.headers);
 
     return _inner.send(request);
   }
 }
+
+const defaultRetries = [
+  Duration(milliseconds: 200),
+  Duration(milliseconds: 300),
+  Duration(milliseconds: 500),
+  Duration(milliseconds: 800),
+];
