@@ -9,7 +9,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';

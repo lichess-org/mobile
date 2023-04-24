@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/styles.dart';
 
 /// A platform agnostic list section.
 ///
