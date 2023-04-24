@@ -12,7 +12,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
 import 'package:lichess_mobile/src/common/move_feedback.dart';
 import 'package:lichess_mobile/src/common/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/common/tree.dart';
+import 'package:lichess_mobile/src/model/common/tree.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
