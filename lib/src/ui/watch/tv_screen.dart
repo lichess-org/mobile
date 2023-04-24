@@ -66,6 +66,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
             final FutureResult<TvChannels> FR_data = repo.getTvChannels();
 
             FR_data.then((res) {
+              print("****** res: $res");
               if (res.isValue) {
                 TvChannels data = res.asValue!.value;
                 String titleText;
@@ -74,13 +75,14 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   titleText = "Top Rated";
                   choiceString = "Top Rated";
                 } else {
+                  print("****** Here.... gameId: $gameId");
                   titleText = data.channels.entries
-                      .where((element) => element.value.gameId == gameId)
+                      .where((element) => element.key == selectedValue)
                       .first
                       .key;
+                  print("****** There");
                   choiceString = titleText;
-                  titleText =
-                      "$titleText | ${data.channels.entries.where((element) => element.value.gameId == gameId).first.value.gameId}";
+                  titleText = "$titleText";
                 }
                 final List<String> choices =
                     data.channels.entries.map((e) => e.key).toList();
@@ -175,12 +177,11 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   choiceString = "Top Rated";
                 } else {
                   titleText = data.channels.entries
-                      .where((element) => element.value.gameId == gameId)
+                      .where((element) => element.key == selectedValue)
                       .first
                       .key;
                   choiceString = titleText;
-                  titleText =
-                      "$titleText | ${data.channels.entries.where((element) => element.value.gameId == gameId).first.value.gameId}";
+                  titleText = "$titleText";
                 }
                 final List<String> choices =
                     data.channels.entries.map((e) => e.key).toList();
