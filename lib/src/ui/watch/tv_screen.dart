@@ -155,7 +155,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Top Rated"),
+              Text(selectedValue),
               const Icon(
                 Icons.arrow_drop_down,
                 color: Colors.white,
