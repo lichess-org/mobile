@@ -1,7 +1,15 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:lichess_mobile/src/common/lichess_colors.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_history_storage.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/board_preview.dart';
+import 'package:flutter_layout_grid/flutter_layout_grid.dart';
+import 'package:chessground/chessground.dart';
 
 class PuzzleHistoryWidget extends ConsumerWidget {
   @override
@@ -9,12 +17,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
     final history = ref.refresh(puzzleHistoryProvider);
     return history.when(
       data: (data) {
-        if (data.isNotEmpty) {
-          return const ListSection(
-            header: Text('Puzzle History'),
-            children: [Text('data')],
-          );
-        }
+        print(data);
         return const SizedBox.shrink();
       },
       error: (e, s) {
@@ -25,5 +28,16 @@ class PuzzleHistoryWidget extends ConsumerWidget {
       },
       loading: () => const Center(child: CircularProgressIndicator()),
     );
+  }
+}
+
+class _HistoryList extends StatelessWidget {
+  const _HistoryList(this.history);
+
+  final IList<PuzzleHistory> history;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.shrink();
   }
 }

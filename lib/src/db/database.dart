@@ -25,9 +25,10 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
           '''
             CREATE TABLE puzzle_history(
             userId TEXT NOT NULL,
+            angle TEXT NOT NULL,
             data TEXT NOT NULL,
             solvedDate DATE NOT NULL,
-            PRIMARY KEY (userId, data)
+            PRIMARY KEY (userId, angle, solvedDate)
           )
           ''',
         );

@@ -292,21 +292,13 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     // ignore: avoid_manual_providers_as_generated_provider_dependency
     final service = ref.read(defaultPuzzleServiceProvider);
     final soundService = ref.read(soundServiceProvider);
-    final historyStorage = ref.read(puzzleHistoryStorageProvider);
-
-    historyStorage.save(
-      userId: initialContext.userId,
-      date: DateTime.now(),
-      data: PuzzleHistory(
-        puzzle: state.puzzle,
-        result: state.result == PuzzleResult.win,
-      ),
-    );
 
     if (state.streak == null) {
       final next = await service.solve(
         userId: initialContext.userId,
         angle: initialContext.theme,
+        solutionPuzzle: initialContext.puzzle,
+        result: state.result == PuzzleResult.win,
         solution: PuzzleSolution(
           id: state.puzzle.puzzle.id,
           win: state.result == PuzzleResult.win,

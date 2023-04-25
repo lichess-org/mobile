@@ -1,4 +1,5 @@
 import 'dart:math' show max;
+import 'package:lichess_mobile/src/model/puzzle/puzzle_history_storage.dart';
 import 'package:logging/logging.dart';
 import 'package:tuple/tuple.dart';
 import 'package:async/async.dart';
@@ -24,6 +25,7 @@ const kPuzzleLocalQueueLength = 50;
 @Riverpod(keepAlive: true)
 PuzzleService puzzleService(PuzzleServiceRef ref, {required int queueLength}) {
   final storage = ref.watch(puzzleBatchStorageProvider);
+  final historyStorage = ref.watch(puzzleHistoryStorageProvider);
   final repository = ref.watch(puzzleRepositoryProvider);
   return PuzzleService(
     ref,
@@ -31,6 +33,7 @@ PuzzleService puzzleService(PuzzleServiceRef ref, {required int queueLength}) {
     storage: storage,
     repository: repository,
     queueLength: queueLength,
+    historyStorage: historyStorage,
   );
 }
 
@@ -61,12 +64,14 @@ class PuzzleService {
     required this.storage,
     required this.repository,
     required this.queueLength,
+    required this.historyStorage,
   });
 
   final PuzzleServiceRef _ref;
   final int queueLength;
   final PuzzleBatchStorage storage;
   final PuzzleRepository repository;
+  final PuzzleHistoryStorage historyStorage;
   final Logger _log;
 
   /// Loads the next puzzle from database and the glicko rating if available.
@@ -99,12 +104,31 @@ class PuzzleService {
   Future<PuzzleContext?> solve({
     required UserId? userId,
     required PuzzleSolution solution,
+    required Puzzle solutionPuzzle,
+    required bool result,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
     final data = await storage.fetch(
       userId: userId,
       angle: angle,
     );
+    final history = await historyStorage.fetch(
+      userId: userId,
+      angle: angle,
+      date: DateTime.now(),
+    );
+    await historyStorage.save(
+      userId: userId,
+      date: DateTime.now(),
+      angle: angle,
+      data: PuzzleHistoryData(
+        puzzles: IList([
+          if (history != null) ...history.puzzles,
+          PuzzleAndResult(puzzle: solutionPuzzle, result: result)
+        ]),
+      ),
+    );
+
     if (data != null) {
       await storage.save(
         userId: userId,
