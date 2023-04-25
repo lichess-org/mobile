@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:intl/intl.dart';
 
 import 'package:lichess_mobile/src/app_dependencies.dart';
 
@@ -10,6 +11,19 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
     path,
     options: OpenDatabaseOptions(
       version: 1,
+      onOpen: (db) async {
+        final tableExists = await db.rawQuery(
+          "SELECT name FROM sqlite_master WHERE type='table' AND name='puzzle_history'",
+        );
+        if (tableExists.isNotEmpty) {
+          final nDaysAgo = DateTime.now().subtract(const Duration(days: 60));
+          await db.delete(
+            'puzzle_history',
+            where: 'solvedDate < ?',
+            whereArgs: [DateFormat('yyyy-MM-dd').format(nDaysAgo)],
+          );
+        }
+      },
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE puzzle_batchs(

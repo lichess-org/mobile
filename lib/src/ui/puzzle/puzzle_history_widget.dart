@@ -48,64 +48,66 @@ class _HistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Padding(
-        padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-        child: DefaultTextStyle.merge(
-          style: Styles.sectionTitle,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(puzzleThemeL10n(context, history.angle).name),
-              Text(
-                timeago.format(DateTime.parse(history.date)),
-                style: const TextStyle(
-                  fontWeight: FontWeight.w300,
-                  color: LichessColors.grey,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      LayoutBuilder(
-        builder: (ctx, constrains) {
-          final boardWidth = constrains.maxWidth > kLargeScreenWidth
-              ? constrains.maxWidth / 3
-              : constrains.maxWidth / 2;
-          final crossAxisCount =
-              math.min(3, (constrains.maxWidth / 300).floor());
-          return LayoutGrid(
-            columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
-            rowSizes: List.generate(
-              (history.puzzles.length / crossAxisCount).ceil(),
-              (_) => auto,
-            ),
-            children: history.puzzles.take(4).map((puzzle) {
-              final preview = PuzzlePreview.fromPuzzle(puzzle.puzzle);
-              return SizedBox(
-                width: boardWidth,
-                height: boardWidth + 30, // + 30 for text Widget
-                child: BoardPreview(
-                  orientation: preview.orientation == Side.white
-                      ? Side.white
-                      : Side
-                          .white, // conflict with dartchess and chessground on Side
-                  fen: preview.initialFen,
-                  footer: Text(
-                    puzzle.result ? 'Solved' : 'Failed',
-                    style: TextStyle(
-                      color: puzzle.result
-                          ? LichessColors.good
-                          : LichessColors.red,
-                    ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+          child: DefaultTextStyle.merge(
+            style: Styles.sectionTitle,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(puzzleThemeL10n(context, history.angle).name),
+                Text(
+                  timeago.format(DateTime.parse(history.date)),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w300,
+                    color: LichessColors.grey,
                   ),
                 ),
-              );
-            }).toList(),
-          );
-        },
-      ),
-    ]);
+              ],
+            ),
+          ),
+        ),
+        LayoutBuilder(
+          builder: (ctx, constrains) {
+            final boardWidth = constrains.maxWidth > kLargeScreenWidth
+                ? constrains.maxWidth / 3
+                : constrains.maxWidth / 2;
+            final crossAxisCount =
+                math.min(3, (constrains.maxWidth / 300).floor());
+            return LayoutGrid(
+              columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
+              rowSizes: List.generate(
+                (history.puzzles.length / crossAxisCount).ceil(),
+                (_) => auto,
+              ),
+              children: history.puzzles.take(4).map((puzzle) {
+                final preview = PuzzlePreview.fromPuzzle(puzzle.puzzle);
+                return SizedBox(
+                  width: boardWidth,
+                  height: boardWidth + 30, // + 30 for text Widget
+                  child: BoardPreview(
+                    orientation: preview.orientation == Side.white
+                        ? Side.white
+                        : Side
+                            .white, // conflict with dartchess and chessground on Side
+                    fen: preview.initialFen,
+                    footer: Text(
+                      puzzle.result ? 'Solved' : 'Failed',
+                      style: TextStyle(
+                        color: puzzle.result
+                            ? LichessColors.good
+                            : LichessColors.red,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            );
+          },
+        ),
+      ],
+    );
   }
 }
