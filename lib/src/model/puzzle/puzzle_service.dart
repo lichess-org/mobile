@@ -104,8 +104,7 @@ class PuzzleService {
   Future<PuzzleContext?> solve({
     required UserId? userId,
     required PuzzleSolution solution,
-    required Puzzle solutionPuzzle,
-    required bool result,
+    required Puzzle puzzle,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
     final data = await storage.fetch(
@@ -124,7 +123,7 @@ class PuzzleService {
       data: PuzzleHistoryData(
         puzzles: IList([
           if (history != null) ...history.puzzles,
-          PuzzleAndResult(puzzle: solutionPuzzle, result: result)
+          PuzzleAndResult(puzzle: puzzle, result: solution.win)
         ]),
       ),
     );

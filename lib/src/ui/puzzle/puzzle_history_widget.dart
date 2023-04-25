@@ -17,7 +17,9 @@ class PuzzleHistoryWidget extends ConsumerWidget {
     final history = ref.refresh(puzzleHistoryProvider);
     return history.when(
       data: (data) {
-        print(data);
+        if (data == null) {
+          return const SizedBox.shrink();
+        }
         return const SizedBox.shrink();
       },
       error: (e, s) {
@@ -34,7 +36,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
 class _HistoryList extends StatelessWidget {
   const _HistoryList(this.history);
 
-  final IList<PuzzleHistory> history;
+  final PuzzleHistory history;
 
   @override
   Widget build(BuildContext context) {

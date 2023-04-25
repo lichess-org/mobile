@@ -22,11 +22,8 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
-<<<<<<< HEAD
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
-=======
 import 'package:lichess_mobile/src/model/puzzle/puzzle_history_storage.dart';
->>>>>>> 028d25c (wip puzzle history storage)
 
 part 'puzzle_view_model.g.dart';
 part 'puzzle_view_model.freezed.dart';
@@ -297,8 +294,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       final next = await service.solve(
         userId: initialContext.userId,
         angle: initialContext.theme,
-        solutionPuzzle: initialContext.puzzle,
-        result: state.result == PuzzleResult.win,
+        puzzle: initialContext.puzzle,
         solution: PuzzleSolution(
           id: state.puzzle.puzzle.id,
           win: state.result == PuzzleResult.win,
