@@ -1,4 +1,5 @@
 import 'dart:math' show max;
+import 'package:lichess_mobile/src/model/puzzle/puzzle_history_storage.dart';
 import 'package:logging/logging.dart';
 import 'package:tuple/tuple.dart';
 import 'package:async/async.dart';

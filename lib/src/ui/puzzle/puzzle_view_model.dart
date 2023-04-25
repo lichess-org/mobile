@@ -22,7 +22,11 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
+<<<<<<< HEAD
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
+=======
+import 'package:lichess_mobile/src/model/puzzle/puzzle_history_storage.dart';
+>>>>>>> 028d25c (wip puzzle history storage)
 
 part 'puzzle_view_model.g.dart';
 part 'puzzle_view_model.freezed.dart';
@@ -288,6 +292,16 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     // ignore: avoid_manual_providers_as_generated_provider_dependency
     final service = ref.read(defaultPuzzleServiceProvider);
     final soundService = ref.read(soundServiceProvider);
+    final historyStorage = ref.read(puzzleHistoryStorageProvider);
+
+    historyStorage.save(
+      userId: initialContext.userId,
+      date: DateTime.now(),
+      data: PuzzleHistory(
+        puzzle: state.puzzle,
+        result: state.result == PuzzleResult.win,
+      ),
+    );
 
     if (state.streak == null) {
       final next = await service.solve(
