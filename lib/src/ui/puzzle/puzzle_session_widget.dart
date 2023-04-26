@@ -29,6 +29,7 @@ class PuzzleSessionWidget extends ConsumerStatefulWidget {
 
 class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
   final lastAttemptKey = GlobalKey();
+  PuzzleId? loadingPuzzleId;
 
   @override
   void initState() {
@@ -96,34 +97,42 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
                   for (final attempt in session.attempts)
                     _SessionItem(
                       isCurrent: attempt.id == puzzleState.puzzle.puzzle.id,
+                      isLoading: loadingPuzzleId == attempt.id,
                       brightness: brightness,
                       attempt: attempt,
+                      onTap: puzzleState.puzzle.puzzle.id != attempt.id &&
+                              loadingPuzzleId == null
+                          ? (id) async {
+                              final provider = puzzleProvider(id);
+                              setState(() {
+                                loadingPuzzleId = id;
+                              });
+                              try {
+                                final puzzle = await ref.read(provider.future);
+                                final nextContext = PuzzleContext(
+                                  userId: widget.initialPuzzleContext.userId,
+                                  theme: widget.initialPuzzleContext.theme,
+                                  puzzle: puzzle,
+                                );
+
+                                ref
+                                    .read(widget.viewModelProvider.notifier)
+                                    .loadPuzzle(nextContext);
+                              } finally {
+                                setState(() {
+                                  loadingPuzzleId = null;
+                                });
+                              }
+                            }
+                          : null,
                     ),
                   if (puzzleState.mode == PuzzleMode.view ||
                       currentAttempt == null)
                     _SessionItem(
                       isCurrent: currentAttempt == null,
+                      isLoading: false,
                       brightness: brightness,
                       key: lastAttemptKey,
-                      onTap: (id) async {
-                        final provider = puzzleProvider(id);
-                        final puzzle = await ref.read(provider.future);
-                        final nextContext = PuzzleContext(
-                          userId: widget.initialPuzzleContext.userId,
-                          theme: widget.initialPuzzleContext.theme,
-                          puzzle: puzzle,
-                        );
-
-                        if (!ref.read(provider).isLoading) {
-                          ref
-                              .read(
-                                puzzleViewModelProvider(
-                                  widget.initialPuzzleContext,
-                                ).notifier,
-                              )
-                              .loadPuzzle(nextContext);
-                        }
-                      },
                     ),
                 ],
               ),
@@ -139,12 +148,14 @@ class _SessionItem extends StatelessWidget {
   const _SessionItem({
     this.attempt,
     required this.isCurrent,
+    required this.isLoading,
     required this.brightness,
     this.onTap,
     super.key,
   });
 
   final bool isCurrent;
+  final bool isLoading;
   final PuzzleAttempt? attempt;
   final Brightness brightness;
   final void Function(PuzzleId id)? onTap;
@@ -181,30 +192,40 @@ class _SessionItem extends StatelessWidget {
                   : next,
           borderRadius: const BorderRadius.all(Radius.circular(5)),
         ),
-        child: attempt?.ratingDiff != null && attempt!.ratingDiff != 0
-            ? Padding(
-                padding: const EdgeInsets.all(2.0),
+        child: isLoading
+            ? const Padding(
+                padding: EdgeInsets.all(2.0),
                 child: FittedBox(
                   fit: BoxFit.cover,
-                  child: Text(
-                    attempt!.ratingDiffString!,
-                    maxLines: 1,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      height: 1,
-                    ),
+                  child: CircularProgressIndicator.adaptive(
+                    backgroundColor: Colors.white,
                   ),
                 ),
               )
-            : Icon(
-                attempt != null
-                    ? attempt!.win
-                        ? Icons.check
-                        : Icons.close
-                    : null,
-                color: Colors.white,
-                size: 18,
-              ),
+            : attempt?.ratingDiff != null && attempt!.ratingDiff != 0
+                ? Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: FittedBox(
+                      fit: BoxFit.cover,
+                      child: Text(
+                        attempt!.ratingDiffString!,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          height: 1,
+                        ),
+                      ),
+                    ),
+                  )
+                : Icon(
+                    attempt != null
+                        ? attempt!.win
+                            ? Icons.check
+                            : Icons.close
+                        : null,
+                    color: Colors.white,
+                    size: 18,
+                  ),
       ),
     );
   }
