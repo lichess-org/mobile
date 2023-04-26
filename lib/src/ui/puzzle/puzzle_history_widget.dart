@@ -98,7 +98,6 @@ class HistoryScreen extends StatelessWidget {
   }
 
   Widget _buildIos(BuildContext context) {
-    final boardWidth = MediaQuery.of(context).size.width / 2;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(context.l10n.puzzleHistory),
@@ -108,7 +107,7 @@ class HistoryScreen extends StatelessWidget {
           child: Column(
             children: history
                 .map(
-                  (e) => _HistoryColumn(e, boardWidth),
+                  (e) => _HistoryColumn(e),
                 )
                 .toList(),
           ),
@@ -118,7 +117,6 @@ class HistoryScreen extends StatelessWidget {
   }
 
   Widget _buildAndroid(BuildContext context) {
-    final boardWidth = MediaQuery.of(context).size.width / 2;
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.puzzleHistory),
@@ -128,7 +126,7 @@ class HistoryScreen extends StatelessWidget {
           child: Column(
             children: history
                 .map(
-                  (e) => _HistoryColumn(e, boardWidth),
+                  (e) => _HistoryColumn(e),
                 )
                 .toList(),
           ),
@@ -139,10 +137,9 @@ class HistoryScreen extends StatelessWidget {
 }
 
 class _HistoryColumn extends ConsumerWidget {
-  const _HistoryColumn(this.history, this.boardWidth);
+  const _HistoryColumn(this.history);
 
   final PuzzleHistory history;
-  final double boardWidth;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
