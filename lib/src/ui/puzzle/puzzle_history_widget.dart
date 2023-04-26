@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
@@ -78,32 +77,29 @@ class _HistoryList extends StatelessWidget {
         LayoutBuilder(
           builder: (ctx, constrains) {
             final boardWidth = constrains.maxWidth / 2;
-            return SizedBox(
-              height: boardWidth * 2 + 50,
-              child: GridView.count(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                crossAxisCount: 2,
-                children: history.puzzles.take(4).map((puzzle) {
-                  final preview = PuzzlePreview.fromPuzzle(puzzle.puzzle);
-                  return SizedBox(
-                    width: boardWidth,
-                    height: boardWidth + 30, // + 30 for text Widget
-                    child: BoardPreview(
-                      orientation: preview.orientation.cg,
-                      fen: preview.initialFen,
-                      footer: Text(
-                        puzzle.result ? 'Solved' : 'Failed',
-                        style: TextStyle(
-                          color: puzzle.result
-                              ? LichessColors.good
-                              : LichessColors.red,
-                        ),
+            return LayoutGrid(
+              columnSizes: [1.fr, 1.fr],
+              rowSizes:
+                  List.generate(history.puzzles.take(4).length, (_) => auto),
+              children: history.puzzles.take(4).map((puzzle) {
+                final preview = PuzzlePreview.fromPuzzle(puzzle.puzzle);
+                return SizedBox(
+                  width: boardWidth,
+                  height: boardWidth + 30, // for text Widget
+                  child: BoardPreview(
+                    orientation: preview.orientation.cg,
+                    fen: preview.initialFen,
+                    footer: Text(
+                      puzzle.result ? 'Solved' : 'Failed',
+                      style: TextStyle(
+                        color: puzzle.result
+                            ? LichessColors.good
+                            : LichessColors.red,
                       ),
                     ),
-                  );
-                }).toList(),
-              ),
+                  ),
+                );
+              }).toList(),
             );
           },
         ),
@@ -132,15 +128,16 @@ class HistoryScreen extends StatelessWidget {
         middle: Text(context.l10n.puzzleHistory),
       ),
       child: SafeArea(
-          child: SingleChildScrollView(
-        child: Column(
-          children: history
-              .map(
-                (e) => HistoryColumn(e!, boardWidth),
-              )
-              .toList(),
+        child: SingleChildScrollView(
+          child: Column(
+            children: history
+                .map(
+                  (e) => HistoryColumn(e!, boardWidth),
+                )
+                .toList(),
+          ),
         ),
-      )),
+      ),
     );
   }
 
@@ -187,29 +184,41 @@ class HistoryColumn extends StatelessWidget {
         ],
       ),
       children: [
-        GridView.count(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          crossAxisCount: 2,
-          children: history.puzzles.map((puzzle) {
-            final preview = PuzzlePreview.fromPuzzle(puzzle.puzzle);
-            return SizedBox(
-              width: boardWidth,
-              height: boardWidth + 30, // + 30 for text Widget
-              child: BoardPreview(
-                orientation: preview.orientation.cg,
-                fen: preview.initialFen,
-                footer: Text(
-                  puzzle.result ? 'Solved' : 'Failed',
-                  style: TextStyle(
-                    color:
-                        puzzle.result ? LichessColors.good : LichessColors.red,
-                  ),
-                ),
+        LayoutBuilder(
+          builder: (ctx, constrains) {
+            final boardWidth = constrains.maxWidth / 2;
+            final crossAxisCount =
+                MediaQuery.of(ctx).size.width > MediaQuery.of(ctx).size.height
+                    ? 4
+                    : 2;
+            return LayoutGrid(
+              columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
+              rowSizes: List.generate(
+                (history.puzzles.length / crossAxisCount).ceil(),
+                (_) => auto,
               ),
+              children: history.puzzles.map((puzzle) {
+                final preview = PuzzlePreview.fromPuzzle(puzzle.puzzle);
+                return SizedBox(
+                  width: boardWidth,
+                  height: boardWidth + 30, // + 30 for text Widget
+                  child: BoardPreview(
+                    orientation: preview.orientation.cg,
+                    fen: preview.initialFen,
+                    footer: Text(
+                      puzzle.result ? 'Solved' : 'Failed',
+                      style: TextStyle(
+                        color: puzzle.result
+                            ? LichessColors.good
+                            : LichessColors.red,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
             );
-          }).toList(),
-        )
+          },
+        ),
       ],
     );
   }
