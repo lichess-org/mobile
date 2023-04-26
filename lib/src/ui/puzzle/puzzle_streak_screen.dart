@@ -389,7 +389,7 @@ class _RetryFetchPuzzleDialog extends ConsumerWidget {
             Navigator.of(context).pop();
           }
           if (data != null) {
-            ref.read(viewModelProvider.notifier).continueWithNextPuzzle(data);
+            ref.read(viewModelProvider.notifier).loadPuzzle(data);
           }
         },
       );

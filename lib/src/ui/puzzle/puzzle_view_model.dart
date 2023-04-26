@@ -197,7 +197,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     return nextPuzzle;
   }
 
-  void continueWithNextPuzzle(PuzzleContext nextContext) {
+  void loadPuzzle(PuzzleContext nextContext) {
     state = _loadNewContext(nextContext, state.streak);
   }
 
@@ -338,7 +338,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
               if (nextContext != null) {
                 await Future<void>.delayed(const Duration(milliseconds: 250));
                 soundService.play(Sound.confirmation);
-                continueWithNextPuzzle(nextContext);
+                loadPuzzle(nextContext);
               } else {
                 // no more puzzle
                 state = state.copyWith.streak!(
