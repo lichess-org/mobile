@@ -1192,10 +1192,11 @@ packages:
   stockfish:
     dependency: "direct main"
     description:
-      name: stockfish
-      sha256: "6cca1dafc2f8d28681e27fe355ce4df7a6e8734533c11c809cfbfa8d35e59d75"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: "274cf52e637e9a663d226ec31cc0b24e639cb615"
+      resolved-ref: "274cf52e637e9a663d226ec31cc0b24e639cb615"
+      url: "https://github.com/lichess-org/dart-stockfish.git"
+    source: git
     version: "1.3.0"
   stream_channel:
     dependency: transitive
