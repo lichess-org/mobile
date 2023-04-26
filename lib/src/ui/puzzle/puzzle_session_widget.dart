@@ -119,9 +119,11 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
                                     .read(widget.viewModelProvider.notifier)
                                     .loadPuzzle(nextContext);
                               } finally {
-                                setState(() {
-                                  loadingPuzzleId = null;
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    loadingPuzzleId = null;
+                                  });
+                                }
                               }
                             }
                           : null,
