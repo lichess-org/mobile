@@ -293,7 +293,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       final next = await service.solve(
         userId: initialContext.userId,
         angle: initialContext.theme,
-        puzzle: initialContext.puzzle,
+        puzzle: state.puzzle,
         solution: PuzzleSolution(
           id: state.puzzle.puzzle.id,
           win: state.result == PuzzleResult.win,

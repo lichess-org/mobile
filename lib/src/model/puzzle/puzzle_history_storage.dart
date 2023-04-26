@@ -59,7 +59,7 @@ class PuzzleHistoryStorage {
     return null;
   }
 
-  Future<IList<PuzzleHistory?>?> fetchall({
+  Future<IList<PuzzleHistory>?> fetchall({
     required UserId? userId,
   }) async {
     final list = await _db.query(
@@ -72,35 +72,27 @@ class PuzzleHistoryStorage {
       ],
     );
 
-    final history = list
-        .map(
-          (entry) {
-            final raw = entry['data'] as String?;
-            final angle = entry['angle'] as String?;
-            final date = entry['solvedDate'] as String?;
-            if (raw != null && angle != null && date != null) {
-              final json = jsonDecode(raw);
-              if (json is! Map<String, dynamic>) {
-                throw const FormatException(
-                  '[PuzzleHistoryStorage] cannot fetch puzzles: expected an object',
-                );
-              }
-              final data = PuzzleHistoryData.fromJson(json);
-              return PuzzleHistory(
-                puzzles: data.puzzles,
-                angle: puzzleThemeNameMap[angle]!,
-                date: date,
-              );
-            }
-          },
-        )
-        .where((e) => e != null)
-        .toIList();
-    if (history.isEmpty) {
-      return null;
-    } else {
-      return history;
-    }
+    final history = list.map(
+      (entry) {
+        final raw = entry['data'] as String?;
+        final angle = entry['angle'] as String?;
+        final date = entry['solvedDate'] as String?;
+        final json = jsonDecode(raw!);
+        if (json is! Map<String, dynamic>) {
+          throw const FormatException(
+            '[PuzzleHistoryStorage] cannot fetch puzzles: expected an object',
+          );
+        }
+        final data = PuzzleHistoryData.fromJson(json);
+        return PuzzleHistory(
+          puzzles: data.puzzles,
+          angle: puzzleThemeNameMap[angle!]!,
+          date: date!,
+        );
+      },
+    ).toIList();
+
+    return history.isEmpty ? null : history;
   }
 
   Future<void> save({
@@ -153,4 +145,9 @@ class PuzzleAndResult with _$PuzzleAndResult {
 
   factory PuzzleAndResult.fromJson(Map<String, dynamic> json) =>
       _$PuzzleAndResultFromJson(json);
+}
+
+PuzzleHistoryData removeDuplicatePuzzles(PuzzleHistoryData data) {
+  final uniquePuzzles = data.puzzles.toList().toSet().toList();
+  return data.copyWith(puzzles: IList(uniquePuzzles));
 }

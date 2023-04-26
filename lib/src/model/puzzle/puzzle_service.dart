@@ -122,7 +122,7 @@ class PuzzleService {
       angle: angle,
       data: PuzzleHistoryData(
         puzzles: IList([
-          if (history != null) ...history.puzzles,
+          if (history != null) ...removeDuplicatePuzzles(history).puzzles,
           PuzzleAndResult(puzzle: puzzle, result: solution.win)
         ]),
       ),

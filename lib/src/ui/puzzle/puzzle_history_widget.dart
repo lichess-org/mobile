@@ -67,8 +67,8 @@ class _HistoryList extends StatelessWidget {
                 Text(
                   timeago.format(DateTime.parse(history.date)),
                   style: const TextStyle(
-                    fontWeight: FontWeight.w300,
-                    color: LichessColors.grey,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.grey,
                   ),
                 ),
               ],
@@ -177,8 +177,8 @@ class HistoryColumn extends StatelessWidget {
       trailingWidget: Text(
         timeago.format(DateTime.parse(history.date)),
         style: const TextStyle(
-          fontWeight: FontWeight.w300,
-          color: LichessColors.grey,
+          fontWeight: FontWeight.w400,
+          color: Colors.grey,
         ),
       ),
       header: Row(
