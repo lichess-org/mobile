@@ -19,6 +19,7 @@ class ListSection extends StatelessWidget {
     this.showDividerBetweenTiles = false,
     this.dense = false,
     this.cupertinoAdditionalDividerMargin,
+    this.trailingWidget,
   });
 
   /// Usually a list of [PlatformListTile] widgets
@@ -30,6 +31,9 @@ class ListSection extends StatelessWidget {
   /// Show a header above the children rows. Typically a [Text] widget.
   final Widget? header;
   final GestureTapCallback? onHeaderTap;
+
+  /// Show a trailing Widget. This widget will only show if onHeaderTap is null
+  final Widget? trailingWidget;
 
   final EdgeInsetsGeometry? margin;
 
@@ -66,7 +70,7 @@ class ListSection extends StatelessWidget {
                           onTap: onHeaderTap,
                           child: const Icon(Icons.more_horiz),
                         )
-                      : null,
+                      : trailingWidget,
                 ),
               if (showDividerBetweenTiles)
                 ...ListTile.divideTiles(
@@ -106,6 +110,8 @@ class ListSection extends StatelessWidget {
                           onTap: onHeaderTap,
                           child: const Icon(CupertinoIcons.ellipsis),
                         ),
+                      if (onHeaderTap == null && trailingWidget != null)
+                        trailingWidget!,
                     ],
                   ),
                 ),

@@ -12,6 +12,7 @@ class BoardPreview extends ConsumerStatefulWidget {
   const BoardPreview({
     required this.orientation,
     required this.fen,
+    this.boardSize,
     this.header,
     this.footer,
     this.margin,
@@ -25,6 +26,9 @@ class BoardPreview extends ConsumerStatefulWidget {
 
   /// FEN string describing the position of the board.
   final String fen;
+
+  /// Size of the board
+  final double? boardSize;
 
   /// Last move played, used to highlight corresponding squares.
   final Move? lastMove;
@@ -65,8 +69,7 @@ class _BoardPreviewState extends ConsumerState<BoardPreview> {
 
     final board = LayoutBuilder(
       builder: (context, constraints) {
-        final boardSize = constraints.biggest.shortestSide;
-
+        final boardSize = widget.boardSize ?? constraints.biggest.shortestSide;
         final error = widget.errorMessage != null
             ? Center(
                 // ignore: avoid-wrapping-in-padding
