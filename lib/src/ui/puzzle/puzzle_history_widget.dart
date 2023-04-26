@@ -35,7 +35,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
           onHeaderTap: () {
             pushPlatformRoute(context, builder: (ctx) => HistoryScreen(data));
           },
-          children: data.take(2).map((e) => _HistoryList(e, ref)).toList(),
+          children: getFirst10(data).map((e) => _HistoryList(e)).toList(),
         );
       },
       error: (e, s) {
@@ -47,16 +47,30 @@ class PuzzleHistoryWidget extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
+
+  IList<PuzzleHistory> getFirst10(IList<PuzzleHistory> history) {
+    final first10 = <PuzzleHistory>[];
+    var totalPuzzles = 0;
+    for (final h in history) {
+      final remaining = 10 - totalPuzzles;
+      if (remaining <= 0) {
+        break;
+      }
+      final puzzles = h.puzzles.take(remaining).toList();
+      totalPuzzles += puzzles.length;
+      first10.add(h.copyWith(puzzles: puzzles.toIList()));
+    }
+    return first10.toIList();
+  }
 }
 
-class _HistoryList extends StatelessWidget {
-  const _HistoryList(this.history, this.ref);
+class _HistoryList extends ConsumerWidget {
+  const _HistoryList(this.history);
 
   final PuzzleHistory history;
-  final WidgetRef ref;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         Padding(
@@ -78,7 +92,7 @@ class _HistoryList extends StatelessWidget {
             ),
           ),
         ),
-        _HistoryBoards(history, showAll: false),
+        _HistoryBoards(history),
       ],
     );
   }
@@ -157,24 +171,19 @@ class _HistoryColumn extends ConsumerWidget {
         ],
       ),
       children: [
-        _HistoryBoards(
-          history,
-          showAll: true,
-        ),
+        _HistoryBoards(history),
       ],
     );
   }
 }
 
 class _HistoryBoards extends ConsumerWidget {
-  const _HistoryBoards(this.history, {required this.showAll});
+  const _HistoryBoards(this.history);
 
   final PuzzleHistory history;
-  final bool showAll;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final numPuzzles = showAll ? history.puzzles.length : 4;
     return LayoutBuilder(
       builder: (ctx, constrains) {
         final boardWidth = constrains.maxWidth / 2;
@@ -185,10 +194,10 @@ class _HistoryBoards extends ConsumerWidget {
         return LayoutGrid(
           columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
           rowSizes: List.generate(
-            (numPuzzles / crossAxisCount).ceil(),
+            (history.puzzles.length / crossAxisCount).ceil(),
             (_) => auto,
           ),
-          children: history.puzzles.take(numPuzzles).map((puzzle) {
+          children: history.puzzles.take(history.puzzles.length).map((puzzle) {
             final preview = PuzzlePreview.fromPuzzle(puzzle.puzzle);
             return SizedBox(
               width: boardWidth,
