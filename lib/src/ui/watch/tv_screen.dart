@@ -41,7 +41,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
     );
   }
 
-  void showDialog(
+  void showChoicesDialog(
       Future<int?> Function(
     BuildContext context,
     List<String> choices,
@@ -126,7 +126,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
             ],
           ),
           onTap: () {
-            showDialog(showAndroidChoices, ref, gameId);
+            showChoicesDialog(showAndroidChoices, ref, gameId);
           },
         ),
         actions: [
@@ -158,7 +158,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
             ],
           ),
           onTap: () {
-            showDialog(showIosChoices, ref, gameId);
+            showChoicesDialog(showIosChoices, ref, gameId);
           },
         ),
         trailing: ToggleSoundButton(),
