@@ -18,8 +18,6 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 
 import 'package:result_extensions/result_extensions.dart';
-import 'package:lichess_mobile/src/common/api_client.dart';
-import 'package:lichess_mobile/src/utils/json.dart';
 //import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 
 class TvScreen extends ConsumerStatefulWidget {
@@ -42,63 +40,50 @@ class _TvScreenState extends ConsumerState<TvScreen> {
   }
 
   void showChoicesDialog(
-      Future<int?> Function(
-    BuildContext context,
-    List<String> choices,
-    int initialIndex,
-  )
-          showD,
-      WidgetRef ref,
-      String? gameId) {
+    Future<int?> Function(
+      BuildContext context,
+      List<String> choices,
+      int initialIndex,
+    )
+        showChoiceDialog,
+    WidgetRef ref,
+    String? gameId,
+  ) {
     final repo = ref.watch(userRepositoryProvider);
-    final FutureResult<TvChannels> FR_data = repo.getTvChannels();
+    final FutureResult<TvChannels> channelResult = repo.getTvChannels();
 
-    FR_data.then((res) {
-      print("****** res: $res");
+    channelResult.then((res) {
       if (res.isValue) {
-        TvChannels data = res.asValue!.value;
-        String titleText;
+        final TvChannels data = res.asValue!.value;
         String choiceString;
         if (gameId == null) {
-          titleText = "Top Rated";
           choiceString = "Top Rated";
         } else {
-          print("****** Here.... gameId: $gameId");
-          titleText = data.channels.entries
+          choiceString = data.channels.entries
               .where((element) => element.key == selectedValue)
               .first
               .key;
-          print("****** There");
-          choiceString = titleText;
-          titleText = "$titleText";
         }
         final List<String> choices =
             data.channels.entries.map((e) => e.key).toList();
 
-        showD(
+        showChoiceDialog(
           context,
           choices,
           choices.indexOf(choiceString),
         ).then((val) {
           if (val == null) return;
-          print("****** Android then val: $val");
-          print("****** Android entries: ${data.channels.entries}");
-          selectedValue = choices[val!];
-          print("***** selectedvalue: $selectedValue");
+          selectedValue = choices[val];
           String? tempGameId = data.channels.entries
               .where((element) => element.key == selectedValue)
               .first
               .value
               .gameId;
-          print("****** Android 1 tempGameId: $tempGameId");
           if (selectedValue == "Top Rated") {
             tempGameId = null;
           } else {
-            selectedValue = choices[val!];
+            selectedValue = choices[val];
           }
-
-          print("****** Android 2 tempGameId: $tempGameId");
-
           ref.read(gameIdStateProvider.notifier).state = tempGameId;
         });
       }
@@ -207,20 +192,6 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   },
                 ),
               ),
-/*
-              SizedBox(
-                width: double.infinity,
-                child: CupertinoActionSheetAction(
-                  //backgroundColor: Theme.of(context).canvasColor,
-                  child: const Text('Cancel'),
-                  isDefaultAction: true,
-                  onPressed: () {
-                    Navigator.pop(context, null);
-                  },
-                ),
-              ),
-              */
-
               Row(
                 children: [
                   CupertinoButton(

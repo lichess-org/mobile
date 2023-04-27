@@ -85,7 +85,6 @@ class UserRepository {
   }
 
   FutureResult<TvChannels> getTvChannels() {
-    print("****** getTvChannels begin");
     return apiClient
         .get(Uri.parse('$kLichessHost/api/tv/channels'))
         .flatMap((response) {
