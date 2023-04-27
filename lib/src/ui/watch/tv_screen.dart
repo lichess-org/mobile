@@ -41,6 +41,70 @@ class _TvScreenState extends ConsumerState<TvScreen> {
     );
   }
 
+  void showDialog(
+      Future<int?> Function(
+    BuildContext context,
+    List<String> choices,
+    int initialIndex,
+  )
+          showD,
+      WidgetRef ref,
+      String? gameId) {
+    final repo = ref.watch(userRepositoryProvider);
+    final FutureResult<TvChannels> FR_data = repo.getTvChannels();
+
+    FR_data.then((res) {
+      print("****** res: $res");
+      if (res.isValue) {
+        TvChannels data = res.asValue!.value;
+        String titleText;
+        String choiceString;
+        if (gameId == null) {
+          titleText = "Top Rated";
+          choiceString = "Top Rated";
+        } else {
+          print("****** Here.... gameId: $gameId");
+          titleText = data.channels.entries
+              .where((element) => element.key == selectedValue)
+              .first
+              .key;
+          print("****** There");
+          choiceString = titleText;
+          titleText = "$titleText";
+        }
+        final List<String> choices =
+            data.channels.entries.map((e) => e.key).toList();
+
+        showD(
+          context,
+          choices,
+          choices.indexOf(choiceString),
+        ).then((val) {
+          if (val == null) return;
+          print("****** Android then val: $val");
+          print("****** Android entries: ${data.channels.entries}");
+          selectedValue = choices[val!];
+          print("***** selectedvalue: $selectedValue");
+          String? tempGameId = data.channels.entries
+              .where((element) => element.key == selectedValue)
+              .first
+              .value
+              .gameId;
+          print("****** Android 1 tempGameId: $tempGameId");
+          if (selectedValue == "Top Rated") {
+            tempGameId = null;
+          } else {
+            selectedValue = choices[val!];
+          }
+
+          print("****** Android 2 tempGameId: $tempGameId");
+
+          ref.read(gameIdStateProvider.notifier).state = tempGameId;
+        });
+      }
+    }); // End FR_data.then
+  }
+
   Widget _androidBuilder(
     BuildContext context,
     WidgetRef ref,
@@ -62,77 +126,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
             ],
           ),
           onTap: () {
-            final repo = ref.watch(userRepositoryProvider);
-            final FutureResult<TvChannels> FR_data = repo.getTvChannels();
-
-            FR_data.then((res) {
-              print("****** res: $res");
-              if (res.isValue) {
-                TvChannels data = res.asValue!.value;
-                String titleText;
-                String choiceString;
-                if (gameId == null) {
-                  titleText = "Top Rated";
-                  choiceString = "Top Rated";
-                } else {
-                  print("****** Here.... gameId: $gameId");
-                  titleText = data.channels.entries
-                      .where((element) => element.key == selectedValue)
-                      .first
-                      .key;
-                  print("****** There");
-                  choiceString = titleText;
-                  titleText = "$titleText";
-                }
-                final List<String> choices =
-                    data.channels.entries.map((e) => e.key).toList();
-
-                showAndroidChoices(
-                  context,
-                  choices,
-                  choices.indexOf(choiceString),
-                ).then((val) {
-                  if (val == null) return;
-                  print("****** Android then val: $val");
-                  print("****** Android entries: ${data.channels.entries}");
-                  selectedValue = choices[val!];
-                  print("***** selectedvalue: $selectedValue");
-                  String? tempGameId = data.channels.entries
-                      .where((element) => element.key == selectedValue)
-                      .first
-                      .value
-                      .gameId;
-                  print("****** Android 1 tempGameId: $tempGameId");
-                  if (selectedValue == "Top Rated") {
-                    tempGameId = null;
-                  } else {
-                    selectedValue = choices[val!];
-                  }
-
-                  print("****** Android 2 tempGameId: $tempGameId");
-
-                  ref.read(gameIdStateProvider.notifier).state = tempGameId;
-                });
-              }
-            }); // End FR_data.then
-
-            /*showAndroidChoices(
-                  context,
-                  choices,
-                  choices.indexOf(choiceString),
-                ).then((val) {
-                  print("****** android then val: $val");
-                  if (val != null) {
-                    selectedValue = data.channels.entries.elementAt(val).key;
-                    String? tempGameId =
-                        data.channels.entries.elementAt(val).value.gameId;
-                    if (selectedValue == "Top Rated") tempGameId = null;
-
-                    print("****** android tempGameId: $tempGameId");
-
-                    ref.read(gameIdStateProvider.notifier).state = tempGameId;
-                  }
-                });*/
+            showDialog(showAndroidChoices, ref, gameId);
           },
         ),
         actions: [
@@ -164,56 +158,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
             ],
           ),
           onTap: () {
-            final repo = ref.watch(userRepositoryProvider);
-            final FutureResult<TvChannels> FR_data = repo.getTvChannels();
-
-            FR_data.then((res) {
-              if (res.isValue) {
-                TvChannels data = res.asValue!.value;
-                String titleText;
-                String choiceString;
-                if (gameId == null) {
-                  titleText = "Top Rated";
-                  choiceString = "Top Rated";
-                } else {
-                  titleText = data.channels.entries
-                      .where((element) => element.key == selectedValue)
-                      .first
-                      .key;
-                  choiceString = titleText;
-                  titleText = "$titleText";
-                }
-                final List<String> choices =
-                    data.channels.entries.map((e) => e.key).toList();
-
-                showIosChoices(
-                  context,
-                  choices,
-                  choices.indexOf(choiceString),
-                ).then((val) {
-                  if (val == null) return;
-                  print("****** iOS then val: $val");
-                  print("****** iOS entries: ${data.channels.entries}");
-                  selectedValue = choices[val!];
-                  print("***** selectedvalue: $selectedValue");
-                  String? tempGameId = data.channels.entries
-                      .where((element) => element.key == selectedValue)
-                      .first
-                      .value
-                      .gameId;
-                  print("****** iOS 1 tempGameId: $tempGameId");
-                  if (selectedValue == "Top Rated") {
-                    tempGameId = null;
-                  } else {
-                    selectedValue = choices[val!];
-                  }
-
-                  print("****** iOs 2 tempGameId: $tempGameId");
-
-                  ref.read(gameIdStateProvider.notifier).state = tempGameId;
-                });
-              }
-            }); // End FR_data.then
+            showDialog(showIosChoices, ref, gameId);
           },
         ),
         trailing: ToggleSoundButton(),
