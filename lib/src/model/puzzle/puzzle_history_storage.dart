@@ -68,9 +68,9 @@ class PuzzleHistoryStorage {
     final list = await _db.query(
       _dbName,
       where: '''
-      userId = ?
-      angle = ?
-      date = ?
+      userId = ? AND
+      angle = ? AND
+      solvedDate = ?
       ''',
       whereArgs: [
         userId?.value ?? _anonUserKey,

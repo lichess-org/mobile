@@ -35,11 +35,21 @@ Future<PuzzleStreakResponse> streak(StreakRef ref) {
   return Result.release(repo.streak());
 }
 
-// TODO when history database is available should first try to fetch from there
 @Riverpod(keepAlive: true)
-Future<Puzzle> puzzle(PuzzleRef ref, PuzzleId id) {
-  final repo = ref.watch(puzzleRepositoryProvider);
-  return Result.release(repo.fetch(id));
+Future<Puzzle?> puzzle(
+  PuzzleRef ref,
+  PuzzleId id,
+  UserId? userId,
+  DateTime date,
+  PuzzleTheme angle,
+) {
+  final repo = ref.watch(puzzleHistoryStorageProvider);
+  return repo.fetchPuzzle(
+    userId: userId,
+    angle: angle,
+    date: date,
+    puzzleId: id,
+  );
 }
 
 @Riverpod(keepAlive: true)

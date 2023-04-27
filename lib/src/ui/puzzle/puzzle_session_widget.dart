@@ -103,7 +103,12 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
                       onTap: puzzleState.puzzle.puzzle.id != attempt.id &&
                               loadingPuzzleId == null
                           ? (id) async {
-                              final provider = puzzleProvider(id);
+                              final provider = puzzleProvider(
+                                id,
+                                widget.initialPuzzleContext.userId,
+                                DateTime.now(),
+                                widget.initialPuzzleContext.theme,
+                              );
                               setState(() {
                                 loadingPuzzleId = id;
                               });
@@ -112,7 +117,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
                                 final nextContext = PuzzleContext(
                                   userId: widget.initialPuzzleContext.userId,
                                   theme: widget.initialPuzzleContext.theme,
-                                  puzzle: puzzle,
+                                  puzzle: puzzle!,
                                 );
 
                                 ref
