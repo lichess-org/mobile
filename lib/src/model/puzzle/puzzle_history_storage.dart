@@ -164,8 +164,8 @@ class PuzzleHistory with _$PuzzleHistory {
       _$PuzzleHistoryFromJson(json);
 }
 
-// only used for parsing PuzzleAndResult from database
-@Freezed(fromJson: true)
+// only used for parsing and saving PuzzleAndResult from database
+@Freezed(fromJson: true, toJson: true)
 class PuzzleHistoryData with _$PuzzleHistoryData {
   const factory PuzzleHistoryData({
     required IList<PuzzleAndResult> puzzles,
