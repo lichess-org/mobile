@@ -27,7 +27,7 @@ class PuzzleHistoryStorage {
   const PuzzleHistoryStorage(this._db);
   final Database _db;
 
-  Future<PuzzleHistoryData?> fetch({
+  Future<IList<PuzzleAndResult>?> fetch({
     required UserId? userId,
     required PuzzleTheme angle,
     required DateTime date,
@@ -54,7 +54,43 @@ class PuzzleHistoryStorage {
           '[PuzzleHistoryStorage] cannot fetch puzzles: expected an object',
         );
       }
-      return PuzzleHistoryData.fromJson(json);
+      return PuzzleHistoryData.fromJson(json).puzzles;
+    }
+    return null;
+  }
+
+  Future<Puzzle?> fetchPuzzle({
+    required UserId? userId,
+    required PuzzleTheme angle,
+    required DateTime date,
+    required PuzzleId puzzleId,
+  }) async {
+    final list = await _db.query(
+      _dbName,
+      where: '''
+      userId = ?
+      angle = ?
+      date = ?
+      ''',
+      whereArgs: [
+        userId?.value ?? _anonUserKey,
+        angle.name,
+        DateFormat('yyyy-MM-dd').format(date),
+      ],
+    );
+
+    final raw = list.firstOrNull?['data'] as String?;
+    if (raw != null) {
+      final json = jsonDecode(raw);
+      if (json is! Map<String, dynamic>) {
+        throw const FormatException(
+          '[PuzzleHistoryStorage] cannot fetch puzzles: expected an object',
+        );
+      }
+      return PuzzleHistoryData.fromJson(json)
+          .puzzles
+          .firstWhereOrNull((e) => e.puzzle.puzzle.id == puzzleId)
+          ?.puzzle;
     }
     return null;
   }
@@ -99,14 +135,16 @@ class PuzzleHistoryStorage {
     required UserId? userId,
     required DateTime date,
     required PuzzleTheme angle,
-    required PuzzleHistoryData data,
+    required IList<PuzzleAndResult> data,
   }) async {
     await _db.insert(
       _dbName,
       {
         'userId': userId?.value ?? _anonUserKey,
         'angle': angle.name,
-        'data': jsonEncode(data.toJson()),
+        'data': jsonEncode(
+          PuzzleHistoryData(puzzles: removeDuplicatePuzzles(data)).toJson(),
+        ),
         'solvedDate': DateFormat('yyyy-MM-dd').format(date)
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
@@ -126,7 +164,8 @@ class PuzzleHistory with _$PuzzleHistory {
       _$PuzzleHistoryFromJson(json);
 }
 
-@Freezed(fromJson: true, toJson: true)
+// only used for parsing PuzzleAndResult from database
+@Freezed(fromJson: true)
 class PuzzleHistoryData with _$PuzzleHistoryData {
   const factory PuzzleHistoryData({
     required IList<PuzzleAndResult> puzzles,
@@ -147,7 +186,5 @@ class PuzzleAndResult with _$PuzzleAndResult {
       _$PuzzleAndResultFromJson(json);
 }
 
-PuzzleHistoryData removeDuplicatePuzzles(PuzzleHistoryData data) {
-  final uniquePuzzles = data.puzzles.toList().toSet().toList();
-  return data.copyWith(puzzles: IList(uniquePuzzles));
-}
+IList<PuzzleAndResult> removeDuplicatePuzzles(IList<PuzzleAndResult> data) =>
+    data.toList().toSet().toIList();

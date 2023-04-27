@@ -120,12 +120,10 @@ class PuzzleService {
       userId: userId,
       date: DateTime.now(),
       angle: angle,
-      data: PuzzleHistoryData(
-        puzzles: IList([
-          if (history != null) ...removeDuplicatePuzzles(history).puzzles,
-          PuzzleAndResult(puzzle: puzzle, result: solution.win)
-        ]),
-      ),
+      data: IList([
+        if (history != null) ...history,
+        PuzzleAndResult(puzzle: puzzle, result: solution.win)
+      ]),
     );
 
     if (data != null) {

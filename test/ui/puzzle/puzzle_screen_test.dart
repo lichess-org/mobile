@@ -33,9 +33,7 @@ void main() {
       ),
     );
     registerFallbackValue(
-      PuzzleHistoryData(
-        puzzles: IList([PuzzleAndResult(puzzle: puzzle, result: true)]),
-      ),
+      IList([PuzzleAndResult(puzzle: puzzle, result: true)]),
     );
     registerFallbackValue(
       DateTime.now(),
