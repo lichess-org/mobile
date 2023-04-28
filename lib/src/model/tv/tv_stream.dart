@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/common/sound_service.dart';
 
-//import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'featured_position.dart';
 import 'tv_repository.dart';
@@ -38,14 +37,11 @@ final tvGameStreamProvider = StreamProvider.autoDispose
     .family<FeaturedPosition, WatchParameter>((ref, watchParameter) {
   final soundService = ref.watch(soundServiceProvider);
   final tvRepository = ref.watch(tvRepositoryProvider);
-  //final tvChannels = ref.watch(tvChannelsProvider);
   final featuredGameNotifier = ref.read(featuredGameProvider.notifier);
   ref.onDispose(() {
     tvRepository.dispose();
   });
 
-  //final TvChannel? channel = tvChannels.value?.channels['Top Rated'];
-  //final String gameId = channel?.gameId ?? "None";
   if (watchParameter.gameId == null || watchParameter.gameId == "") {
     return tvRepository.tvFeed().map((event) {
       return event.map(
@@ -84,16 +80,3 @@ final tvGameStreamProvider = StreamProvider.autoDispose
 final gameIdStateProvider = StateProvider.autoDispose<String?>((ref) {
   return null;
 });
-
-/*
-class Counter extends ChangeNotifier {
-  var _count = 0;
-  int get getCounter {
-    return _count;
-  }
-
-  void incrementCounter() {
-    _count += 1;
-    notifyListeners();
-  }
-}*/

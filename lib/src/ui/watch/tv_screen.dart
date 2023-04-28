@@ -209,39 +209,6 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   ),
                 ],
               ),
-
-/*
-              Container(
-                  color: Colors.white,
-                  child: CupertinoActionSheetAction(
-                    //backgroundColor: Theme.of(context).canvasColor,
-                    child: const Text('Cancel'),
-                    isDefaultAction: true,
-                    onPressed: () {
-                      Navigator.pop(context, 'Cancel');
-                    },
-                  )),
-*/
-/*
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  minimumSize: const Size.fromHeight(50), // NEW
-                ),
-                onPressed: () {},
-                child: const Text('Button 2'),
-                //color: Colors.blue,
-              ),
-              */
-
-              //SizedBox(height: 35),
-              /*ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(-2); //pasing value on pop is -2
-                  },
-                  child: Text("Close ")),
-                  */
-              //),
             ],
           ),
         );

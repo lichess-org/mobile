@@ -70,6 +70,7 @@ class TvEvent with _$TvEvent {
   }
 
   factory TvEvent.gameFromJson(Map<String, dynamic> json) {
+    print("**** $json");
     return TvEvent.gameFromPick(pick(json).required());
   }
 
