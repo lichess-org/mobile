@@ -33,11 +33,12 @@ void main() {
       ),
     );
     registerFallbackValue(
-      IList([PuzzleAndResult(puzzle: puzzle, result: true)]),
+      IList([PuzzleIdAndResult(puzzleId: puzzle.puzzle.id, result: true)]),
     );
     registerFallbackValue(
       DateTime.now(),
     );
+    registerFallbackValue(puzzle);
   });
 
   final mockBatchStorage = MockPuzzleBatchStorage();
@@ -180,7 +181,7 @@ void main() {
             angle: PuzzleTheme.mix,
             date: any(named: 'date'),
             data: any(named: 'data'),
-            puzzle: puzzle,
+            puzzle: any(named: 'puzzle'),
           ),
         ).thenAnswer((_) async {});
 
