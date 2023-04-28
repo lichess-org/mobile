@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -21,7 +21,7 @@ part 'profile_screen.g.dart';
 
 @riverpod
 Future<User?> _sessionProfile(_SessionProfileRef ref) async {
-  final session = ref.watch(userSessionStateProvider);
+  final session = ref.watch(authSessionProvider);
   final accountRepo = ref.watch(accountRepositoryProvider);
   if (session != null) {
     return Result.release(accountRepo.getProfile());
@@ -129,9 +129,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Future<void> _refreshData(User account) {
-    return ref
-        .refresh(userRecentGamesProvider(userId: account.id).future)
-        .then((_) => ref.refresh(_sessionProfileProvider));
+    return Future.wait([
+      ref.refresh(userRecentGamesProvider(userId: account.id).future),
+      ref.refresh(userActivityProvider(id: account.id).future),
+      ref.refresh(_sessionProfileProvider.future),
+    ]);
   }
 }
 
@@ -142,17 +144,17 @@ class _SettingsButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return defaultTargetPlatform == TargetPlatform.iOS
         ? CupertinoIconButton(
-            semanticsLabel: context.l10n.settings,
+            semanticsLabel: context.l10n.settingsSettings,
             onPressed: () => Navigator.of(context).push<void>(
               CupertinoPageRoute(
-                title: context.l10n.settings,
+                title: context.l10n.settingsSettings,
                 builder: (context) => const SettingsScreen(),
               ),
             ),
             icon: const Icon(Icons.settings),
           )
         : IconButton(
-            tooltip: context.l10n.settings,
+            tooltip: context.l10n.settingsSettings,
             icon: const Icon(Icons.settings),
             onPressed: () => Navigator.of(context).push<void>(
               MaterialPageRoute(

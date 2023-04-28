@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
-Future<void> showChoicesPicker<T extends Enum>(
+Future<void> showChoicePicker<T extends Enum>(
   BuildContext context, {
   required List<T> choices,
   required T selectedItem,
@@ -47,26 +47,32 @@ Future<void> showChoicesPicker<T extends Enum>(
       return showCupertinoModalPopup<void>(
         context: context,
         builder: (context) {
-          return SizedBox(
-            height: 250,
-            child: CupertinoPicker(
-              backgroundColor: Theme.of(context).canvasColor,
-              useMagnifier: true,
-              magnification: 1.1,
-              itemExtent: 40,
-              scrollController: FixedExtentScrollController(
-                initialItem: choices.indexWhere((t) => t == selectedItem),
+          return NotificationListener(
+            onNotification: (ScrollEndNotification notification) {
+              if (onSelectedItemChanged != null) {
+                final index =
+                    (notification.metrics as FixedExtentMetrics).itemIndex;
+                onSelectedItemChanged(choices[index]);
+              }
+              return false;
+            },
+            child: SizedBox(
+              height: 250,
+              child: CupertinoPicker(
+                backgroundColor: Theme.of(context).canvasColor,
+                useMagnifier: true,
+                magnification: 1.1,
+                itemExtent: 40,
+                scrollController: FixedExtentScrollController(
+                  initialItem: choices.indexWhere((t) => t == selectedItem),
+                ),
+                children: choices.map((value) {
+                  return Center(
+                    child: labelBuilder(value),
+                  );
+                }).toList(),
+                onSelectedItemChanged: (_) {},
               ),
-              children: choices.map((value) {
-                return Center(
-                  child: labelBuilder(value),
-                );
-              }).toList(),
-              onSelectedItemChanged: (index) {
-                if (onSelectedItemChanged != null) {
-                  onSelectedItemChanged(choices[index]);
-                }
-              },
             ),
           );
         },

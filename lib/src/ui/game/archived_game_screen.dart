@@ -6,7 +6,7 @@ import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
-import 'package:lichess_mobile/src/common/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
@@ -40,12 +40,6 @@ class ArchivedGameScreen extends ConsumerWidget {
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
         actions: [
           ToggleSoundButton(),
         ],
@@ -62,13 +56,6 @@ class ArchivedGameScreen extends ConsumerWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 16.0),
-        leading: CupertinoButton(
-          padding: EdgeInsets.zero,
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Icon(CupertinoIcons.back),
-        ),
         trailing: ToggleSoundButton(),
       ),
       child: SafeArea(
@@ -126,6 +113,7 @@ class _BoardBody extends ConsumerWidget {
       ),
       topTable: topPlayer,
       bottomTable: bottomPlayer,
+      showMoveListPlaceholder: true,
     );
 
     return gameCursor.when(
@@ -190,7 +178,8 @@ class _BottomBar extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        IconButton(
+        BottomBarIconButton(
+          semanticsLabel: context.l10n.menu,
           onPressed: () {
             _showGameMenu(context, ref);
           },
@@ -198,10 +187,9 @@ class _BottomBar extends ConsumerWidget {
         ),
         Row(
           children: [
-            IconButton(
+            BottomBarIconButton(
               key: const ValueKey('cursor-first'),
-              // TODO add translation
-              tooltip: 'First position',
+              semanticsLabel: 'First position',
               onPressed: canGoBackward
                   ? () {
                       ref
@@ -209,13 +197,12 @@ class _BottomBar extends ConsumerWidget {
                           .cursorAt(0);
                     }
                   : null,
-              icon: const Icon(LichessIcons.fast_backward),
-              iconSize: 20,
+              icon: const Icon(LichessIcons.fast_backward, size: 20),
             ),
-            IconButton(
+            BottomBarIconButton(
               key: const ValueKey('cursor-back'),
               // TODO add translation
-              tooltip: 'Backward',
+              semanticsLabel: 'Backward',
               onPressed: canGoBackward
                   ? () {
                       ref
@@ -223,13 +210,12 @@ class _BottomBar extends ConsumerWidget {
                           .cursorBackward();
                     }
                   : null,
-              icon: const Icon(LichessIcons.step_backward),
-              iconSize: 20,
+              icon: const Icon(LichessIcons.step_backward, size: 20),
             ),
-            IconButton(
+            BottomBarIconButton(
               key: const ValueKey('cursor-forward'),
               // TODO add translation
-              tooltip: 'Forward',
+              semanticsLabel: 'Forward',
               onPressed: canGoForward
                   ? () {
                       ref
@@ -237,13 +223,12 @@ class _BottomBar extends ConsumerWidget {
                           .cursorForward();
                     }
                   : null,
-              icon: const Icon(LichessIcons.step_forward),
-              iconSize: 20,
+              icon: const Icon(LichessIcons.step_forward, size: 20),
             ),
-            IconButton(
+            BottomBarIconButton(
               key: const ValueKey('cursor-last'),
               // TODO add translation
-              tooltip: 'Last position',
+              semanticsLabel: 'Last position',
               onPressed: canGoForward
                   ? () {
                       ref
@@ -251,8 +236,7 @@ class _BottomBar extends ConsumerWidget {
                           .cursorLast();
                     }
                   : null,
-              icon: const Icon(LichessIcons.fast_forward),
-              iconSize: 20,
+              icon: const Icon(LichessIcons.fast_forward, size: 20),
             ),
           ],
         ),

@@ -5,41 +5,41 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart'
+    hide Tuple2;
 
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/lichess_colors.dart';
-import 'package:lichess_mobile/src/common/styles.dart';
-import 'package:lichess_mobile/src/common/connectivity.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/ui/engine/engine_gauge.dart';
 
 import 'puzzle_view_model.dart';
+import 'puzzle_feedback_widget.dart';
+import 'puzzle_session_widget.dart';
 
-class PuzzlesScreen extends StatelessWidget {
-  const PuzzlesScreen({
+class PuzzleScreen extends StatelessWidget {
+  const PuzzleScreen({
     required this.theme,
-    this.userId,
-    this.puzzle,
-    this.isDailyPuzzle = false,
+    this.initialPuzzleContext,
     super.key,
   });
 
-  final UserId? userId;
-  final Puzzle? puzzle;
   final PuzzleTheme theme;
-  final bool isDailyPuzzle;
+  final PuzzleContext? initialPuzzleContext;
 
   @override
   Widget build(BuildContext context) {
@@ -53,16 +53,11 @@ class PuzzlesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [ToggleSoundButton()],
-        title: isDailyPuzzle
-            ? const Text('Daily Puzzle')
-            : Text(puzzleThemeL10n(context, theme).name),
+        title: Text(puzzleThemeL10n(context, theme).name),
       ),
-      body: puzzle != null
+      body: initialPuzzleContext != null
           ? _Body(
-              userId: userId,
-              puzzle: puzzle!,
-              theme: theme,
-              isDailyPuzzle: isDailyPuzzle,
+              initialPuzzleContext: initialPuzzleContext!,
             )
           : _LoadPuzzle(theme: theme),
     );
@@ -71,17 +66,12 @@ class PuzzlesScreen extends StatelessWidget {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: isDailyPuzzle
-            ? const Text('Daily Puzzle')
-            : Text(puzzleThemeL10n(context, theme).name),
+        middle: Text(puzzleThemeL10n(context, theme).name),
         trailing: ToggleSoundButton(),
       ),
-      child: puzzle != null
+      child: initialPuzzleContext != null
           ? _Body(
-              userId: userId,
-              puzzle: puzzle!,
-              theme: theme,
-              isDailyPuzzle: isDailyPuzzle,
+              initialPuzzleContext: initialPuzzleContext!,
             )
           : _LoadPuzzle(theme: theme),
     );
@@ -99,7 +89,7 @@ class _LoadPuzzle extends ConsumerWidget {
 
     return nextPuzzle.when(
       data: (data) {
-        if (data.item2 == null) {
+        if (data == null) {
           return const Center(
             child: TableBoardLayout(
               topTable: kEmptyWidget,
@@ -114,10 +104,7 @@ class _LoadPuzzle extends ConsumerWidget {
           );
         } else {
           return _Body(
-            puzzle: data.item2!,
-            userId: data.item1,
-            theme: theme,
-            isDailyPuzzle: false,
+            initialPuzzleContext: data,
           );
         }
       },
@@ -145,23 +132,25 @@ class _LoadPuzzle extends ConsumerWidget {
 
 class _Body extends ConsumerWidget {
   const _Body({
-    required this.puzzle,
-    required this.userId,
-    required this.theme,
-    required this.isDailyPuzzle,
+    required this.initialPuzzleContext,
   });
 
-  final Puzzle puzzle;
-  final PuzzleTheme theme;
-  final UserId? userId;
-  final bool isDailyPuzzle;
+  final PuzzleContext initialPuzzleContext;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet =
-        ref.watch(boardPrefsStateProvider.select((p) => p.pieceSet));
-    final vmProvider = puzzleViewModelProvider(userId, theme, puzzle);
-    final puzzleState = ref.watch(vmProvider);
+        ref.watch(boardPreferencesProvider.select((p) => p.pieceSet));
+    final viewModelProvider = puzzleViewModelProvider(initialPuzzleContext);
+    final puzzleState = ref.watch(viewModelProvider);
+
+    final currentEvalBest = ref.watch(
+      engineEvaluationProvider(puzzleState.evaluationContext)
+          .select((e) => e?.bestMove),
+    );
+    final evalBestMove =
+        (currentEvalBest ?? puzzleState.node.eval?.bestMove)?.cg;
+
     return Column(
       children: [
         Expanded(
@@ -170,157 +159,124 @@ class _Body extends ConsumerWidget {
               child: TableBoardLayout(
                 boardData: cg.BoardData(
                   orientation: puzzleState.pov.cg,
-                  interactableSide: puzzleState.mode == PuzzleMode.view
-                      ? cg.InteractableSide.both
-                      : puzzleState.pov == Side.white
-                          ? cg.InteractableSide.white
-                          : cg.InteractableSide.black,
+                  interactableSide: puzzleState.position.isGameOver
+                      ? cg.InteractableSide.none
+                      : puzzleState.mode == PuzzleMode.view
+                          ? cg.InteractableSide.both
+                          : puzzleState.pov == Side.white
+                              ? cg.InteractableSide.white
+                              : cg.InteractableSide.black,
                   fen: puzzleState.fen,
                   lastMove: puzzleState.lastMove?.cg,
                   sideToMove: puzzleState.position.turn.cg,
                   validMoves: puzzleState.validMoves,
+                  shapes: puzzleState.isEngineEnabled && evalBestMove != null
+                      ? ISet([
+                          cg.Arrow(
+                            color: const Color(0x40003088),
+                            orig: evalBestMove.from,
+                            dest: evalBestMove.to,
+                          ),
+                        ])
+                      : null,
                   onMove: (move, {isPremove}) {
                     ref
-                        .read(vmProvider.notifier)
-                        .playUserMove(Move.fromUci(move.uci)!);
+                        .read(viewModelProvider.notifier)
+                        .onUserMove(Move.fromUci(move.uci)!);
                   },
                 ),
-                topTable: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: _Feedback(
-                    puzzle: puzzle,
-                    state: puzzleState,
-                    pieceSet: pieceSet,
-                  ),
+                topTable: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0,
+                          ),
+                          child: PuzzleFeedbackWidget(
+                            puzzle: puzzleState.puzzle,
+                            state: puzzleState,
+                            pieceSet: pieceSet,
+                            onStreak: false,
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (puzzleState.isEngineEnabled)
+                      EngineGauge(
+                        evaluationContext: puzzleState.evaluationContext,
+                        position: puzzleState.position,
+                        savedEval: puzzleState.node.eval,
+                      ),
+                  ],
                 ),
-                bottomTable: const SizedBox.shrink(),
+                bottomTable: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (puzzleState.glicko != null)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 10.0,
+                          left: 10.0,
+                          right: 10.0,
+                        ),
+                        child: Row(
+                          children: [
+                            Text(context.l10n.rating),
+                            const SizedBox(width: 5.0),
+                            TweenAnimationBuilder<double>(
+                              tween: Tween<double>(
+                                begin: puzzleState.glicko!.rating,
+                                end: puzzleState.nextContext?.glicko?.rating ??
+                                    puzzleState.glicko!.rating,
+                              ),
+                              duration: const Duration(milliseconds: 500),
+                              builder: (context, double rating, _) {
+                                return Text(
+                                  rating.truncate().toString(),
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    PuzzleSessionWidget(
+                      initialPuzzleContext: initialPuzzleContext,
+                      viewModelProvider: viewModelProvider,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
         _BottomBar(
-          puzzle: puzzle,
-          userId: userId,
-          theme: theme,
-          isDailyPuzzle: isDailyPuzzle,
-          vmProvider: vmProvider,
+          initialPuzzleContext: initialPuzzleContext,
+          viewModelProvider: viewModelProvider,
         ),
       ],
     );
   }
 }
 
-class _Feedback extends StatelessWidget {
-  const _Feedback({
-    required this.puzzle,
-    required this.state,
-    required this.pieceSet,
-  });
-
-  final Puzzle puzzle;
-  final PuzzleScreenState state;
-  final cg.PieceSet pieceSet;
-
-  @override
-  Widget build(BuildContext context) {
-    switch (state.mode) {
-      case PuzzleMode.view:
-        final puzzleRating =
-            context.l10n.ratingX(puzzle.puzzle.rating.toString());
-        final playedXTimes = context.l10n.playedXTimes(puzzle.puzzle.plays);
-        return PlatformCard(
-          child: ListTile(
-            leading: state.result == PuzzleResult.win
-                ? const Icon(Icons.check, size: 36, color: LichessColors.good)
-                : null,
-            title: Text(
-              state.result == PuzzleResult.win
-                  ? context.l10n.puzzleSuccess
-                  : context.l10n.puzzleComplete,
-            ),
-            subtitle: Text('$puzzleRating. $playedXTimes.'),
-          ),
-        );
-      case PuzzleMode.play:
-        if (state.feedback == PuzzleFeedback.bad) {
-          return PlatformCard(
-            child: ListTile(
-              leading: const Icon(
-                Icons.close,
-                size: 36,
-                color: LichessColors.error,
-              ),
-              title: Text(context.l10n.notTheMove),
-              subtitle: Text(context.l10n.trySomethingElse),
-            ),
-          );
-        } else if (state.feedback == PuzzleFeedback.good) {
-          return PlatformCard(
-            child: ListTile(
-              leading:
-                  const Icon(Icons.check, size: 36, color: LichessColors.good),
-              title: Text(context.l10n.bestMove),
-              subtitle: Text(context.l10n.keepGoing),
-            ),
-          );
-        } else {
-          return PlatformCard(
-            child: ListTile(
-              leading: Image(
-                image: pieceSet.assets[state.pov == Side.white
-                    ? cg.PieceKind.whiteKing
-                    : cg.PieceKind.blackKing]!,
-                height: 56,
-              ),
-              title: Text(context.l10n.yourTurn),
-              subtitle: Text(
-                state.pov == Side.white
-                    ? context.l10n.findTheBestMoveForWhite
-                    : context.l10n.findTheBestMoveForBlack,
-              ),
-            ),
-          );
-        }
-    }
-  }
-}
-
-void _goToNextPuzzle(
-  BuildContext context,
-  WidgetRef ref,
-  PuzzleTheme theme,
-  UserId? userId,
-  Puzzle nextPuzzle,
-) {
-  Navigator.of(context).pushReplacement(
-    MaterialPageRoute<void>(
-      builder: (context) => PuzzlesScreen(
-        theme: theme,
-        userId: userId,
-        puzzle: nextPuzzle,
-      ),
-    ),
-  );
-}
-
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({
-    required this.puzzle,
-    required this.theme,
-    required this.userId,
-    required this.vmProvider,
-    required this.isDailyPuzzle,
+    required this.initialPuzzleContext,
+    required this.viewModelProvider,
   });
 
-  final Puzzle puzzle;
-  final PuzzleTheme theme;
-  final UserId? userId;
-  final bool isDailyPuzzle;
-  final PuzzleViewModelProvider vmProvider;
+  final PuzzleContext initialPuzzleContext;
+  final PuzzleViewModelProvider viewModelProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzleState = ref.watch(vmProvider);
+    final puzzleState = ref.watch(viewModelProvider);
+    final isDailyPuzzle = puzzleState.puzzle.isDailyPuzzle == true;
 
     return Container(
       padding: Styles.horizontalBodyPadding,
@@ -332,18 +288,19 @@ class _BottomBar extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            if (userId != null &&
+            if (initialPuzzleContext.userId != null &&
                 !isDailyPuzzle &&
                 puzzleState.mode != PuzzleMode.view)
               _DifficultySelector(
-                theme: theme,
-                userId: userId,
-                vmProvider: vmProvider,
+                initialPuzzleContext: initialPuzzleContext,
+                viewModelProvider: viewModelProvider,
               ),
             if (puzzleState.mode == PuzzleMode.view)
-              _BottomBarButton(
+              BottomBarButton(
                 onTap: () {
-                  Share.share('$kLichessHost/training/${puzzle.puzzle.id}');
+                  Share.share(
+                    '$kLichessHost/training/${puzzleState.puzzle.puzzle.id}',
+                  );
                 },
                 label: 'Share this puzzle',
                 shortLabel: 'Share',
@@ -352,51 +309,55 @@ class _BottomBar extends ConsumerWidget {
                     : Icons.share,
               ),
             if (puzzleState.mode == PuzzleMode.view)
-              _BottomBarButton(
-                onTap: puzzleState.mode == PuzzleMode.view &&
-                        puzzleState.nextPuzzle != null
-                    ? () {
-                        _goToNextPuzzle(
-                          context,
-                          ref,
-                          theme,
-                          userId,
-                          puzzleState.nextPuzzle!,
-                        );
-                      }
-                    : null,
-                highlighted: puzzleState.mode == PuzzleMode.view,
-                label: context.l10n.continueTraining,
-                shortLabel: 'Continue',
-                icon: CupertinoIcons.play_arrow_solid,
+              BottomBarButton(
+                onTap: () {
+                  ref.read(viewModelProvider.notifier).toggleLocalEvaluation();
+                },
+                label: context.l10n.toggleLocalEvaluation,
+                shortLabel: 'Evaluation',
+                icon: CupertinoIcons.gauge,
+                highlighted: puzzleState.isLocalEvalEnabled,
               ),
             if (puzzleState.mode != PuzzleMode.view)
-              _BottomBarButton(
+              BottomBarButton(
                 icon: Icons.help,
                 label: context.l10n.viewTheSolution,
                 shortLabel: context.l10n.solution,
                 showAndroidShortLabel: true,
                 onTap: puzzleState.mode == PuzzleMode.view
                     ? null
-                    : () => ref.read(vmProvider.notifier).viewSolution(),
+                    : () => ref.read(viewModelProvider.notifier).viewSolution(),
               ),
             if (puzzleState.mode == PuzzleMode.view)
-              _BottomBarButton(
+              BottomBarButton(
                 onTap: puzzleState.canGoBack
-                    ? () => ref.read(vmProvider.notifier).userPrevious()
+                    ? () => ref.read(viewModelProvider.notifier).userPrevious()
                     : null,
                 label: 'Previous',
                 shortLabel: 'Previous',
                 icon: CupertinoIcons.chevron_back,
               ),
             if (puzzleState.mode == PuzzleMode.view)
-              _BottomBarButton(
+              BottomBarButton(
                 onTap: puzzleState.canGoNext
-                    ? () => ref.read(vmProvider.notifier).userNext()
+                    ? () => ref.read(viewModelProvider.notifier).userNext()
                     : null,
                 label: context.l10n.next,
                 shortLabel: context.l10n.next,
                 icon: CupertinoIcons.chevron_forward,
+              ),
+            if (puzzleState.mode == PuzzleMode.view)
+              BottomBarButton(
+                onTap: puzzleState.mode == PuzzleMode.view &&
+                        puzzleState.nextContext != null
+                    ? () => ref
+                        .read(viewModelProvider.notifier)
+                        .loadPuzzle(puzzleState.nextContext!)
+                    : null,
+                highlighted: true,
+                label: context.l10n.puzzleContinueTraining,
+                shortLabel: 'Continue',
+                icon: CupertinoIcons.play_arrow_solid,
               ),
           ],
         ),
@@ -407,35 +368,34 @@ class _BottomBar extends ConsumerWidget {
 
 class _DifficultySelector extends ConsumerWidget {
   const _DifficultySelector({
-    required this.userId,
-    required this.theme,
-    required this.vmProvider,
+    required this.initialPuzzleContext,
+    required this.viewModelProvider,
   });
 
-  final UserId? userId;
-  final PuzzleViewModelProvider vmProvider;
-  final PuzzleTheme theme;
+  final PuzzleContext initialPuzzleContext;
+  final PuzzleViewModelProvider viewModelProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final difficulty = ref.watch(
-      puzzlePreferencesProvider(userId).select((state) => state.difficulty),
+      puzzlePreferencesProvider(initialPuzzleContext.userId)
+          .select((state) => state.difficulty),
     );
-    final state = ref.watch(vmProvider);
+    final state = ref.watch(viewModelProvider);
     final connectivity = ref.watch(connectivityChangesProvider);
     return connectivity.when(
       data: (data) => StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
           PuzzleDifficulty selectedDifficulty = difficulty;
-          return _BottomBarButton(
+          return BottomBarButton(
             icon: Icons.tune,
-            label: context.l10n.difficultyLevel,
+            label: context.l10n.puzzleDifficultyLevel,
             shortLabel: puzzleDifficultyL10n(context, difficulty),
             showAndroidShortLabel: true,
             onTap: !data.isOnline || state.isChangingDifficulty
                 ? null
                 : () {
-                    showChoicesPicker(
+                    showChoicePicker(
                       context,
                       choices: PuzzleDifficulty.values,
                       selectedItem: difficulty,
@@ -453,17 +413,13 @@ class _DifficultySelector extends ConsumerWidget {
                         if (selectedDifficulty == difficulty) {
                           return;
                         }
-                        final nextPuzzle = await ref
-                            .read(vmProvider.notifier)
+                        final nextContext = await ref
+                            .read(viewModelProvider.notifier)
                             .changeDifficulty(selectedDifficulty);
-                        if (context.mounted && nextPuzzle != null) {
-                          _goToNextPuzzle(
-                            context,
-                            ref,
-                            theme,
-                            userId,
-                            nextPuzzle,
-                          );
+                        if (context.mounted && nextContext != null) {
+                          ref
+                              .read(viewModelProvider.notifier)
+                              .loadPuzzle(nextContext);
                         }
                       },
                     );
@@ -474,90 +430,5 @@ class _DifficultySelector extends ConsumerWidget {
       loading: () => const ButtonLoadingIndicator(),
       error: (_, __) => const SizedBox.shrink(),
     );
-  }
-}
-
-class _BottomBarButton extends StatelessWidget {
-  const _BottomBarButton({
-    required this.icon,
-    required this.label,
-    required this.shortLabel,
-    required this.onTap,
-    this.highlighted = false,
-    this.showAndroidShortLabel = false,
-  });
-
-  final IconData icon;
-  final String label;
-  final String shortLabel;
-  final VoidCallback? onTap;
-  final bool highlighted;
-  final bool showAndroidShortLabel;
-
-  bool get enabled => onTap != null;
-
-  @override
-  Widget build(BuildContext context) {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-        final themeData = Theme.of(context);
-        return Theme(
-          data: themeData,
-          child: SizedBox(
-            height: 50,
-            child: showAndroidShortLabel
-                ? TextButton.icon(
-                    onPressed: onTap,
-                    icon: Icon(icon),
-                    label: Text(shortLabel),
-                    style: TextButton.styleFrom(
-                      foregroundColor: themeData.colorScheme.onBackground,
-                    ),
-                  )
-                : IconButton(
-                    visualDensity: VisualDensity.compact,
-                    onPressed: onTap,
-                    icon: Icon(icon),
-                    tooltip: label,
-                  ),
-          ),
-        );
-      case TargetPlatform.iOS:
-        final themeData = CupertinoTheme.of(context);
-        final hightlightedColor = themeData.primaryColor;
-        return CupertinoTheme(
-          data: themeData.copyWith(
-            primaryColor: themeData.textTheme.textStyle.color,
-          ),
-          child: SizedBox(
-            height: 50,
-            child: Tooltip(
-              message: label,
-              triggerMode: TooltipTriggerMode.longPress,
-              child: CupertinoButton(
-                padding: EdgeInsets.zero,
-                onPressed: onTap,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(icon, color: highlighted ? hightlightedColor : null),
-                    Text(
-                      shortLabel,
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: highlighted ? hightlightedColor : null,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      default:
-        assert(false, 'Unexpected platform $defaultTargetPlatform');
-        return const SizedBox.shrink();
-    }
   }
 }

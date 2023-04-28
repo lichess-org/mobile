@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dartchess/dartchess.dart';
 
-import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'featured_player.dart';
 
@@ -108,6 +108,7 @@ class TvEvent with _$TvEvent {
   static FeaturedPlayer _featuredPlayerFromPick(RequiredPick pick) {
     return FeaturedPlayer(
       side: pick('color').asSideOrThrow(),
+      id: pick('user', 'id').asUserIdOrThrow(),
       name: pick('user', 'name').asStringOrThrow(),
       title: pick('user', 'title').asStringOrNull(),
       rating: pick('rating').asIntOrNull(),
@@ -128,6 +129,7 @@ class TvEvent with _$TvEvent {
     }
     return FeaturedPlayer(
       side: side,
+      id: pick('user', 'id').asUserIdOrThrow(),
       name: userName,
       title: pick('user', 'title').asStringOrNull(),
       rating: pick('rating').asIntOrNull(),

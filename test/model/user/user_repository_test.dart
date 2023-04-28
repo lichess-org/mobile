@@ -5,12 +5,13 @@ import 'package:mocktail/mocktail.dart';
 import 'package:http/http.dart' as http;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-import 'package:lichess_mobile/src/common/api_client.dart';
-import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
 
-class MockApiClient extends Mock implements ApiClient {}
+class MockAuthClient extends Mock implements AuthClient {}
 
 class MockLogger extends Mock implements Logger {}
 
@@ -18,11 +19,11 @@ const testUserId = UserId('test');
 
 void main() {
   final mockLogger = MockLogger();
-  final mockApiClient = MockApiClient();
-  final repo = UserRepository(apiClient: mockApiClient, logger: mockLogger);
+  final mockAuthClient = MockAuthClient();
+  final repo = UserRepository(apiClient: mockAuthClient, logger: mockLogger);
 
   setUpAll(() {
-    reset(mockApiClient);
+    reset(mockAuthClient);
   });
 
   group('UserRepository.getUserTask', () {
@@ -39,7 +40,7 @@ void main() {
 ''';
       when(
         () =>
-            mockApiClient.get(Uri.parse('$kLichessHost/api/user/$testUserId')),
+            mockAuthClient.get(Uri.parse('$kLichessHost/api/user/$testUserId')),
       ).thenAnswer(
         (_) async => Result.value(http.Response(testUserResponseMinimal, 200)),
       );
@@ -91,7 +92,7 @@ void main() {
 ''';
       when(
         () =>
-            mockApiClient.get(Uri.parse('$kLichessHost/api/user/$testUserId')),
+            mockAuthClient.get(Uri.parse('$kLichessHost/api/user/$testUserId')),
       ).thenAnswer(
         (_) async => Result.value(http.Response(testUserResponse, 200)),
       );
@@ -137,7 +138,7 @@ void main() {
   }
 }
 ''';
-      when(() => mockApiClient.get(Uri.parse(uriString))).thenAnswer(
+      when(() => mockAuthClient.get(Uri.parse(uriString))).thenAnswer(
         (_) async => Result.value(http.Response(responseMinimal, 200)),
       );
 
@@ -384,7 +385,7 @@ void main() {
   }
 }
 ''';
-      when(() => mockApiClient.get(Uri.parse(uriString))).thenAnswer(
+      when(() => mockAuthClient.get(Uri.parse(uriString))).thenAnswer(
         (_) async => Result.value(http.Response(responseFull, 200)),
       );
 
@@ -400,7 +401,7 @@ void main() {
         {const UserId('maia1'), const UserId('maia5'), const UserId('maia9')},
       );
       when(
-        () => mockApiClient.get(
+        () => mockAuthClient.get(
           Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'),
         ),
       ).thenAnswer((_) async => Result.value(http.Response('[]', 200)));
@@ -435,12 +436,29 @@ void main() {
         {const UserId('maia1'), const UserId('maia5'), const UserId('maia9')},
       );
       when(
-        () => mockApiClient.get(
+        () => mockAuthClient.get(
           Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'),
         ),
       ).thenAnswer((_) async => Result.value(http.Response(response, 200)));
 
       final result = await repo.getUsersStatuses(ids);
+
+      expect(result.isValue, true);
+    });
+  });
+
+  group('UserRepository.getTop1', () {
+    const res = '''
+{"bullet":{"id":"svetlana","username":"Svetlana","perfs":{"bullet":{"rating":2340,"progress":0}},"patron":true},"blitz":{"id":"marcel","username":"Marcel","perfs":{"blitz":{"rating":2520,"progress":0}}},"rapid":{"id":"anthony","username":"Anthony","perfs":{"rapid":{"rating":2413,"progress":0}}},"classical":{"id":"marcel","username":"Marcel","perfs":{"classical":{"rating":2521,"progress":0}}},"ultraBullet":{"id":"marcel","username":"Marcel","perfs":{"ultraBullet":{"rating":2648,"progress":0}}}}
+      ''';
+
+    test('json read, minimal example', () async {
+      when(
+        () => mockAuthClient
+            .get(Uri.parse('$kLichessHost/api/player/top/1/standard')),
+      ).thenAnswer((_) async => Result.value(http.Response(res, 200)));
+
+      final result = await repo.getTop1();
 
       expect(result.isValue, true);
     });
@@ -463,7 +481,7 @@ void main() {
 "racingKings":[{"id":"royalmaniac","username":"RoyalManiac","perfs":{"racingKings":{"rating":2499,"progress":13}},"patron":true},{"id":"cybershredder","username":"CyberShredder","perfs":{"racingKings":{"rating":2408,"progress":20}}},{"id":"queeneatingdragon","username":"QueenEatingDragon","perfs":{"racingKings":{"rating":2388,"progress":-14}}},{"id":"seth_7777777","username":"seth_7777777","perfs":{"racingKings":{"rating":2387,"progress":7}}},{"id":"huangyudong","username":"huangyudong","perfs":{"racingKings":{"rating":2342,"progress":-8}}},{"id":"natso","username":"Natso","perfs":{"racingKings":{"rating":2339,"progress":13}},"patron":true},{"id":"imakemanymistakes","username":"IMakeManyMistakes","perfs":{"racingKings":{"rating":2333,"progress":-7}}},{"id":"peanutbutter12345","username":"Peanutbutter12345","perfs":{"racingKings":{"rating":2321,"progress":-3}},"patron":true},{"id":"walker_22","username":"Walker_22","perfs":{"racingKings":{"rating":2316,"progress":-1}}},{"id":"artem_medvedev-04","username":"Artem_Medvedev-04","perfs":{"racingKings":{"rating":2274,"progress":10}}}]}
 ''';
     test('get leaderboard', () async {
-      when(() => mockApiClient.get(Uri.parse('$kLichessHost/api/player')))
+      when(() => mockAuthClient.get(Uri.parse('$kLichessHost/api/player')))
           .thenAnswer((_) async => Result.value(http.Response(testRes, 200)));
 
       final result = await repo.getLeaderboard();
@@ -471,4 +489,30 @@ void main() {
       expect(result.isValue, true);
     });
   });
+
+  test('UserRepository.getUserActivity minimal example', () async {
+    when(
+      () => mockAuthClient.get(
+        Uri.parse('$kLichessHost/api/user/testUser/activity'),
+      ),
+    ).thenAnswer(
+      (_) async => Result.value(
+        http.Response(
+          userActivityResponse,
+          200,
+          headers: {
+            'content-type': 'application/json; charset=utf-8',
+          },
+        ),
+      ),
+    );
+
+    final result = await repo.getUserActivity(const UserId('testUser'));
+
+    expect(result.isValue, true);
+  });
 }
+
+const userActivityResponse = '''
+[{"interval":{"start":1681948800000,"end":1682035200000},"follows":{"in":{"ids":["jc-peru","supercarro"]}}},{"interval":{"start":1681862400000,"end":1681948800000},"puzzles":{"score":{"win":6,"loss":0,"draw":0,"rp":{"before":2677,"after":2736}}},"follows":{"in":{"ids":["hayden1461","ilyas-basit","senjukuwaragi","deinchayamagmeinetns","chesswgm","wojciechstark","albertlem","zokirov9292","marcosmm11","merinovegor_13-7","umitaliacar","jamespro0221","jacky09","daniel1028","adison98"],"nb":23}}},{"interval":{"start":1681776000000,"end":1681862400000},"follows":{"in":{"ids":["drceltic","dominikk33king","sir-gianortega-13","epergalth57w","hojjat1368","thebarin1","geoff123","betul38","benjaminh12675","sivtsovvanya","darkpattern","osmaneren47","drgregoryhouseee","kayratitiz","nonvincoseperdo"],"nb":18}}},{"interval":{"start":1681689600000,"end":1681776000000},"games":{"ultraBullet":{"win":10,"loss":0,"draw":0,"rp":{"before":2745,"after":2769}},"bullet":{"win":5,"loss":3,"draw":0,"rp":{"before":3081,"after":3074}},"rapid":{"win":1,"loss":0,"draw":0,"rp":{"before":2611,"after":2625}}},"follows":{"in":{"ids":["thefateofall","mario6ajedrez","rajveergrover1232","ykylas2014","se7vthe","muhamed12143","kdmfan","trantuankhachess","admsamohamad","sakurablossoms","freeeeeeeze1","ata201200x","mbmohnish","alex_dchig","alikhan-7"],"nb":18}}},{"interval":{"start":1681603200000,"end":1681689600000},"puzzles":{"score":{"win":24,"loss":10,"draw":0,"rp":{"before":2628,"after":2677}}},"follows":{"in":{"ids":["dalibord","musfik050390","xqliotvgm","momdsamu","radiantranger64","aarohdeshmukhihsdl","baggirou","grandmasterflash95","wo0do","leon_pogosian2009","anandhu_sadurangam","ane_mnda_bng","nek-ngatiem","haider123","j03l5065igu3z"],"nb":19}}},{"interval":{"start":1681516800000,"end":1681603200000},"games":{"bullet":{"win":40,"loss":30,"draw":5,"rp":{"before":3097,"after":3081}},"ultraBullet":{"win":14,"loss":5,"draw":2,"rp":{"before":2717,"after":2745}},"threeCheck":{"win":2,"loss":0,"draw":0,"rp":{"before":2575,"after":2588}}},"tournaments":{"nb":1,"best":[{"tournament":{"id":"apr23lta","name":"Titled Arena April '23"},"nbGames":73,"score":124,"rank":3,"rankPercent":1}]},"follows":{"in":{"ids":["ikoroduboy","noahlz","behnamjafarii","tutam","nikmakval","x73marda","torretalkantar","jurassicpark00","zubera1","lionel2schmidt","abhi73","sakumi_chess","dabolistic2","like2readbooks","ojaykings"],"nb":53}}},{"interval":{"start":1681430400000,"end":1681516800000},"follows":{"in":{"ids":["talabra","mooshroom42","granpandita","imraaaa_li","relaxplayer","qwwerty","ivanchu26","nyrav_chess_beast","newfloki","m0xvtwio","jumanak","rakeshmajumder10","jeanlucpicard7","sparrowtang","iamsickmind"],"nb":27}}}]
+''';

@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 
-import 'package:lichess_mobile/src/common/api_client.dart';
-import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import '../../model/user/user_repository_test.dart';
 import '../../test_utils.dart';
 import '../../test_app.dart';
 
@@ -16,13 +17,15 @@ void main() {
       return mockResponse(userGameResponse, 200);
     } else if (request.url.path == '/api/user/$testUserId') {
       return mockResponse(testUserResponse, 200);
+    } else if (request.url.path == '/api/user/$testUserId/activity') {
+      return mockResponse(userActivityResponse, 200);
     }
     return mockResponse('', 404);
   });
 
   group('UserScreen', () {
     testWidgets(
-      'should see recent games',
+      'should see activity and recent games',
       (WidgetTester tester) async {
         final app = await buildTestApp(
           tester,
@@ -43,8 +46,19 @@ void main() {
           findsOneWidget,
         );
 
-        // wait for recent games
+        // wait for recent games and activity
         await tester.pump(const Duration(milliseconds: 50));
+
+        expect(find.text('Activity'), findsOneWidget);
+
+        await tester.scrollUntilVisible(
+          find.widgetWithText(PlatformListTile, 'maia1 (1410)'),
+          500,
+          // need to take first scrollable there is the perf cards ListView inside the main list
+          scrollable: find.byType(Scrollable).first,
+        );
+
+        expect(find.text('Recent games'), findsOneWidget);
 
         // opponent in recent games
         expect(

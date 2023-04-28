@@ -8,11 +8,12 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tuple/tuple.dart';
 
-import 'package:lichess_mobile/src/common/connectivity.dart';
-import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 
@@ -24,7 +25,7 @@ part 'puzzle_themes_screen.g.dart';
 Future<Tuple2<bool, ISet<PuzzleTheme>>> _savedThemesConnectivity(
   _SavedThemesConnectivityRef ref,
 ) async {
-  final connectivity = await ref.watch(connectivityChangesProvider.future);
+  final connectivity = await ref.watch(connectivityProvider.future);
   final themes = await ref.watch(savedThemesProvider.future);
   return Tuple2(connectivity.isOnline, themes);
 }
@@ -43,7 +44,7 @@ class PuzzleThemesScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.puzzleThemes),
+        title: Text(context.l10n.puzzlePuzzleThemes),
       ),
       body: const _Body(),
     );
@@ -52,7 +53,7 @@ class PuzzleThemesScreen extends StatelessWidget {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(context.l10n.puzzleThemes),
+        middle: Text(context.l10n.puzzlePuzzleThemes),
       ),
       child: const _Body(),
     );
@@ -69,39 +70,51 @@ class _Body extends ConsumerWidget {
     final savedThemesConnectivity = ref.watch(_savedThemesConnectivityProvider);
 
     return SafeArea(
-      child: SingleChildScrollView(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final crossAxisCount =
-                math.min(3, (constraints.maxWidth / 300).floor());
-            return savedThemesConnectivity.when(
-              data: (data) {
-                return LayoutGrid(
-                  columnSizes: List.generate(
-                    crossAxisCount,
-                    (_) => 1.fr,
-                  ),
-                  rowSizes: List.generate(
-                    (list.length / crossAxisCount).ceil(),
-                    (_) => auto,
-                  ),
-                  children: [
-                    for (final category in list)
-                      _Category(
-                        category: category,
-                        savedThemes: data.item2,
-                        isOnline: data.item1,
+      child: savedThemesConnectivity.when(
+        data: (data) {
+          return SingleChildScrollView(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final crossAxisCount =
+                    math.min(3, (constraints.maxWidth / 300).floor());
+                return savedThemesConnectivity.when(
+                  data: (data) {
+                    return LayoutGrid(
+                      columnSizes: List.generate(
+                        crossAxisCount,
+                        (_) => 1.fr,
                       ),
-                  ],
+                      rowSizes: List.generate(
+                        (list.length / crossAxisCount).ceil(),
+                        (_) => auto,
+                      ),
+                      children: [
+                        for (final category in list)
+                          _Category(
+                            category: category,
+                            savedThemes: data.item2,
+                            isOnline: data.item1,
+                          ),
+                      ],
+                    );
+                  },
+                  loading: () => Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Center(child: CircularProgressIndicator.adaptive()),
+                    ],
+                  ),
+                  error: (error, stack) =>
+                      const Center(child: Text('Could not load saved themes.')),
                 );
               },
-              loading: () =>
-                  const Center(child: CircularProgressIndicator.adaptive()),
-              error: (error, stack) =>
-                  const Center(child: Text('Could not load saved themes.')),
-            );
-          },
-        ),
+            ),
+          );
+        },
+        loading: () =>
+            const Center(child: CircularProgressIndicator.adaptive()),
+        error: (error, stack) =>
+            const Center(child: Text('Could not load saved themes.')),
       ),
     );
   }
@@ -156,9 +169,11 @@ class _Category extends ConsumerWidget {
                   puzzleThemeL10n(context, theme).description.length > 60,
               onTap: isOnline || savedThemes.contains(theme)
                   ? () {
-                      Navigator.of(context, rootNavigator: true).push<void>(
-                        MaterialPageRoute(
-                          builder: (context) => PuzzlesScreen(theme: theme),
+                      pushPlatformRoute(
+                        context,
+                        rootNavigator: true,
+                        builder: (context) => PuzzleScreen(
+                          theme: theme,
                         ),
                       );
                     }

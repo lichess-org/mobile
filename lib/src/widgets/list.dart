@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 
 /// A platform agnostic list section.
 ///
@@ -18,6 +18,7 @@ class ListSection extends StatelessWidget {
     this.showDivider = false,
     this.showDividerBetweenTiles = false,
     this.dense = false,
+    this.cupertinoAdditionalDividerMargin,
   });
 
   /// Usually a list of [PlatformListTile] widgets
@@ -40,6 +41,9 @@ class ListSection extends StatelessWidget {
 
   /// Use it to set [ListTileTheme.dense] property. Only on Android.
   final bool dense;
+
+  /// See [CupertinoListSection.additionalDividerMargin].
+  final double? cupertinoAdditionalDividerMargin;
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +112,7 @@ class ListSection extends StatelessWidget {
               CupertinoListSection.insetGrouped(
                 margin: EdgeInsets.zero,
                 hasLeading: hasLeading,
+                additionalDividerMargin: cupertinoAdditionalDividerMargin,
                 children: children,
               ),
             ],
@@ -134,6 +139,7 @@ class PlatformListTile extends StatelessWidget {
     this.onTap,
     this.selected = false,
     this.isThreeLine = false,
+    this.visualDensity,
   });
 
   final Widget? leading;
@@ -152,6 +158,9 @@ class PlatformListTile extends StatelessWidget {
 
   // only on android
   final bool isThreeLine;
+
+  /// Only on android.
+  final VisualDensity? visualDensity;
 
   final GestureTapCallback? onTap;
 
@@ -172,6 +181,7 @@ class PlatformListTile extends StatelessWidget {
               : null,
           trailing: trailing,
           dense: dense,
+          visualDensity: visualDensity,
           onTap: onTap,
           selected: selected,
           isThreeLine: isThreeLine,
@@ -201,27 +211,29 @@ class PlatformListTile extends StatelessWidget {
 /// A list tile that shows game info.
 class GameListTile extends StatelessWidget {
   const GameListTile({
-    required this.icon,
+    this.icon,
     required this.playerTitle,
     this.subtitle,
     this.trailing,
-    required this.onTap,
+    this.onTap,
   });
 
-  final IconData icon;
+  final IconData? icon;
   final Widget playerTitle;
   final Widget? subtitle;
   final Widget? trailing;
-  final GestureTapCallback onTap;
+  final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return PlatformListTile(
       onTap: onTap,
-      leading: Icon(
-        icon,
-        size: defaultTargetPlatform == TargetPlatform.iOS ? 26.0 : 36.0,
-      ),
+      leading: icon != null
+          ? Icon(
+              icon,
+              size: defaultTargetPlatform == TargetPlatform.iOS ? 26.0 : 36.0,
+            )
+          : null,
       title: playerTitle,
       subtitle: subtitle != null
           ? DefaultTextStyle.merge(

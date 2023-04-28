@@ -8,11 +8,11 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/api_client.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 
-class MockApiClient extends Mock implements ApiClient {}
+class MockAuthClient extends Mock implements AuthClient {}
 
 class MockLogger extends Mock implements Logger {}
 
@@ -20,11 +20,11 @@ const gameIdTest = GameId('5IrD6Gzz');
 
 void main() {
   final mockLogger = MockLogger();
-  final mockApiClient = MockApiClient();
-  final repo = GameRepository(mockLogger, apiClient: mockApiClient);
+  final mockAuthClient = MockAuthClient();
+  final repo = GameRepository(mockLogger, apiClient: mockAuthClient);
 
   setUpAll(() {
-    reset(mockApiClient);
+    reset(mockAuthClient);
   });
 
   group('GameRepository.getUserGames', () {
@@ -36,7 +36,7 @@ void main() {
 ''';
 
       when(
-        () => mockApiClient.get(
+        () => mockAuthClient.get(
           Uri.parse(
             '$kLichessHost/api/games/user/testUser?max=10&moves=false&lastFen=true',
           ),
@@ -65,7 +65,7 @@ void main() {
       });
 
       when(
-        () => mockApiClient.post(
+        () => mockAuthClient.post(
           Uri.parse(
             '$kLichessHost/api/games/export/_ids?moves=false&lastFen=true',
           ),
@@ -87,7 +87,7 @@ void main() {
 ''';
 
       when(
-        () => mockApiClient.get(
+        () => mockAuthClient.get(
           Uri.parse('$kLichessHost/game/export/qVChCOTc'),
           headers: {'Accept': 'application/json'},
         ),
@@ -106,7 +106,7 @@ void main() {
 ''';
 
       when(
-        () => mockApiClient.get(
+        () => mockAuthClient.get(
           Uri.parse('$kLichessHost/game/export/3zfAoBZs'),
           headers: {'Accept': 'application/json'},
         ),
@@ -125,7 +125,7 @@ void main() {
 ''';
 
       when(
-        () => mockApiClient.get(
+        () => mockAuthClient.get(
           Uri.parse('$kLichessHost/game/export/1vdsvmxp'),
           headers: {'Accept': 'application/json'},
         ),

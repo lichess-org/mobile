@@ -2,7 +2,8 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
 part 'user.freezed.dart';
@@ -155,6 +156,103 @@ class UserStatus with _$UserStatus {
         online: pick('online').asBoolOrNull(),
         playing: pick('playing').asBoolOrNull(),
       );
+}
+
+@freezed
+class UserActivityTournament with _$UserActivityTournament {
+  const factory UserActivityTournament({
+    required String id,
+    required String name,
+    required int nbGames,
+    required int score,
+    required int rank,
+    required int rankPercent,
+  }) = _UserActivityTournament;
+
+  factory UserActivityTournament.fromJson(Map<String, dynamic> json) =>
+      UserActivityTournament.fromPick(pick(json).required());
+
+  factory UserActivityTournament.fromPick(RequiredPick pick) =>
+      UserActivityTournament(
+        id: pick('tournament', 'id').asStringOrThrow(),
+        name: pick('tournament', 'name').asStringOrThrow(),
+        nbGames: pick('nbGames').asIntOrThrow(),
+        score: pick('score').asIntOrThrow(),
+        rank: pick('rank').asIntOrThrow(),
+        rankPercent: pick('rankPercent').asIntOrThrow(),
+      );
+}
+
+@freezed
+class UserActivityStreak with _$UserActivityStreak {
+  const factory UserActivityStreak({
+    required int runs,
+    required int score,
+  }) = _UserActivityStreak;
+
+  factory UserActivityStreak.fromJson(Map<String, dynamic> json) =>
+      UserActivityStreak.fromPick(pick(json).required());
+
+  factory UserActivityStreak.fromPick(RequiredPick pick) => UserActivityStreak(
+        runs: pick('runs').asIntOrThrow(),
+        score: pick('score').asIntOrThrow(),
+      );
+}
+
+@freezed
+class UserActivityScore with _$UserActivityScore {
+  const factory UserActivityScore({
+    required int win,
+    required int loss,
+    required int draw,
+    required int ratingBefore,
+    required int ratingAfter,
+  }) = _UserActivityScore;
+
+  factory UserActivityScore.fromJson(Map<String, dynamic> json) =>
+      UserActivityScore.fromPick(pick(json).required());
+
+  factory UserActivityScore.fromPick(RequiredPick pick) => UserActivityScore(
+        win: pick('win').asIntOrThrow(),
+        loss: pick('loss').asIntOrThrow(),
+        draw: pick('draw').asIntOrThrow(),
+        ratingBefore: pick('rp', 'before').asIntOrThrow(),
+        ratingAfter: pick('rp', 'after').asIntOrThrow(),
+      );
+}
+
+@freezed
+class UserActivity with _$UserActivity {
+  const UserActivity._();
+
+  const factory UserActivity({
+    required DateTime startTime,
+    required DateTime endTime,
+    IMap<Perf, UserActivityScore>? games,
+    int? followInNb,
+    int? followOutNb,
+    UserActivityTournament? bestTournament,
+    int? tournamentNb,
+    UserActivityScore? puzzles,
+    UserActivityStreak? streak,
+    UserActivityScore? correspondenceEnds,
+    int? correspondenceMovesNb,
+    int? correspondenceGamesNb,
+  }) = _UserActivity;
+
+  bool get isEmpty =>
+      games == null &&
+      followInNb == null &&
+      followOutNb == null &&
+      tournamentNb == null &&
+      bestTournament == null &&
+      puzzles == null &&
+      streak == null &&
+      correspondenceEnds == null &&
+      correspondenceMovesNb == null &&
+      correspondenceGamesNb == null;
+
+  bool get isNotEmpty => !isEmpty;
 }
 
 @freezed

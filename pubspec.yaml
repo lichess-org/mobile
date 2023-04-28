@@ -3,7 +3,7 @@ description: Lichess mobile app V2
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 0.1.0+4
+version: 0.1.0+16
 
 environment:
   sdk: ">=2.18.2 <3.0.0"
@@ -21,7 +21,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0
-  flutter_riverpod: ^2.3.1
+  flutter_riverpod: ^2.3.4
   riverpod_annotation: ^2.0.1
   freezed_annotation: ^2.2.0
   json_annotation: ^4.7.0
@@ -29,20 +29,20 @@ dependencies:
   flutter_appauth: ^4.2.1
   flutter_secure_storage: ^8.0.0
   logging: ^1.1.0
-  shared_preferences: ^2.0.15
+  shared_preferences: ^2.1.0
   cached_network_image: ^3.2.2
   dartchess:
     git:
       url: https://github.com/lichess-org/dartchess.git
-      ref: 945b8ac08dd5d258031f6588d13b41bcb10c23cb
+      ref: 9b0d50cf0416a78ef8510220eefc302b3c613b19
   chessground:
     git:
       url: https://github.com/lichess-org/flutter-chessground.git
-      ref: 3c9c25eb621e68d28a0acf4d7f611de7451f757c
+      ref: dafe8e5becd45109c2a9684e0d7d270a231ea0b2
   soundpool: ^2.3.0
   meta: ^1.8.0
   tuple: ^2.0.1
-  deep_pick: ^0.10.0
+  deep_pick: ^1.0.0
   timeago: ^3.3.0
   collection: ^1.16.0 # can't upgrade because of flutter_test
   fast_immutable_collections: ^9.0.0
@@ -51,26 +51,34 @@ dependencies:
       url: https://github.com/veloce/result_extensions.git
       ref: b2c283a9554dab416da89e1334b842b87257002d
   async: ^2.10.0
-  package_info_plus: ^3.0.2
+  package_info_plus: ^3.1.0
   url_launcher: ^6.1.9
   flutter_layout_grid: ^2.0.1
   sqflite: ^2.2.5
   path: ^1.8.2
   connectivity_plus: ^3.0.3
-  share_plus: ^6.3.1
+  share_plus: ^6.3.2
+  fl_chart: ^0.62.0
+  stream_transform: ^2.1.0
+  flutter_native_splash: ^2.2.19
+  stockfish:
+    git:
+      url: https://github.com/lichess-org/dart-stockfish.git
+      ref: 274cf52e637e9a663d226ec31cc0b24e639cb615
+  easy_debounce: ^2.0.3
 
 dev_dependencies:
   build_runner: ^2.3.2
   riverpod_generator: ^2.1.0
-  dart_code_metrics: ^5.6.0
+  dart_code_metrics: ^5.7.2
   flutter_test:
     sdk: flutter
   freezed: ^2.2.1
   json_serializable: ^6.5.4
   lint: ^2.0.1
   mocktail: ^0.3.0
-  mockito: ^5.3.2
-  sqflite_common_ffi: ^2.2.1+1
+  mockito: ^5.4.0
+  sqflite_common_ffi: ^2.2.3
 
 flutter:
   # The following line ensures that the Material Icons font is
@@ -81,6 +89,7 @@ flutter:
   assets:
     - assets/sounds/
     - assets/board-thumbnails/
+    - assets/images/
 
   fonts:
     - family: LichessIcons
@@ -92,3 +101,18 @@ flutter:
 
   # Enable generation of localized Strings from arb files.
   generate: true
+
+flutter_native_splash:
+  color: '#ffffff'
+  image: assets/images/logo-black.png
+
+  color_dark: '#000000'
+  image_dark: assets/images/logo-white.png
+
+  android_12:
+    color: '#ffffff'
+    image: assets/images/android12logo-black.png
+
+    color_dark: '#000000'
+    image_dark: assets/images/android12logo-white.png
+

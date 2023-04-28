@@ -3,8 +3,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:logging/logging.dart';
 
-import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/api_client.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'game.dart';
 import 'game_repository.dart';
@@ -13,7 +13,7 @@ part 'game_repository_providers.g.dart';
 
 @Riverpod(keepAlive: true)
 GameRepository gameRepository(GameRepositoryRef ref) {
-  final apiClient = ref.watch(apiClientProvider);
+  final apiClient = ref.watch(authClientProvider);
   return GameRepository(Logger('GameRepository'), apiClient: apiClient);
 }
 

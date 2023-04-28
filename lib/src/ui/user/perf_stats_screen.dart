@@ -7,21 +7,22 @@ import 'package:intl/intl.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-import 'package:lichess_mobile/src/common/lichess_colors.dart';
-import 'package:lichess_mobile/src/common/lichess_icons.dart';
-import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/styles.dart';
-import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/ui/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/stat_card.dart';
 
 final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
 
@@ -85,7 +86,7 @@ class _Title extends StatelessWidget {
         ),
         Flexible(
           child: Text(
-            ' ${context.l10n.perfStats(perf.title)}',
+            ' ${context.l10n.perfStatPerfStats(perf.title)}',
             overflow: TextOverflow.ellipsis,
           ),
         ),
@@ -162,35 +163,39 @@ class _Body extends ConsumerWidget {
               ),
               subStatSpace,
               // The number '12' here is not arbitrary, since the API returns the progression for the last 12 games (as far as I know).
-              _CustomPlatformCard(
-                context.l10n.progressOverLastXGames('12').replaceAll(':', ''),
+              StatCard(
+                context.l10n
+                    .perfStatProgressOverLastXGames('12')
+                    .replaceAll(':', ''),
                 padding: Styles.horizontalBodyPadding,
                 child: _ProgressionWidget(data.progress),
               ),
-              _CustomPlatformCardRow([
-                _CustomPlatformCard(
+              StatCardRow([
+                StatCard(
                   context.l10n.rank,
                   value: data.rank == null
                       ? '?'
                       : NumberFormat.decimalPattern(Intl.getCurrentLocale())
                           .format(data.rank),
                 ),
-                _CustomPlatformCard(
-                  context.l10n.ratingDeviation('').replaceAll(': .', ''),
+                StatCard(
+                  context.l10n
+                      .perfStatRatingDeviation('')
+                      .replaceAll(': .', ''),
                   value: data.deviation.toStringAsFixed(2),
                 )
               ]),
-              _CustomPlatformCardRow([
-                _CustomPlatformCard(
-                  context.l10n.highestRating('').replaceAll(':', ''),
+              StatCardRow([
+                StatCard(
+                  context.l10n.perfStatHighestRating('').replaceAll(':', ''),
                   child: _RatingWidget(
                     data.highestRating,
                     data.highestRatingGame,
                     LichessColors.good,
                   ),
                 ),
-                _CustomPlatformCard(
-                  context.l10n.lowestRating('').replaceAll(':', ''),
+                StatCard(
+                  context.l10n.perfStatLowestRating('').replaceAll(':', ''),
                   child: _RatingWidget(
                     data.lowestRating,
                     data.lowestRatingGame,
@@ -206,7 +211,7 @@ class _Body extends ConsumerWidget {
                   textBaseline: TextBaseline.alphabetic,
                   children: [
                     Text(
-                      '${context.l10n.totalGames} ',
+                      '${context.l10n.perfStatTotalGames} ',
                       style: Styles.sectionTitle,
                     ),
                     Text(data.totalGames.toString(), style: _mainValueStyle),
@@ -214,8 +219,8 @@ class _Body extends ConsumerWidget {
                 ),
               ),
               subStatSpace,
-              _CustomPlatformCardRow([
-                _CustomPlatformCard(
+              StatCardRow([
+                StatCard(
                   context.l10n.wins,
                   child: _PercentageValueWidget(
                     data.wonGames,
@@ -223,7 +228,7 @@ class _Body extends ConsumerWidget {
                     color: LichessColors.good,
                   ),
                 ),
-                _CustomPlatformCard(
+                StatCard(
                   context.l10n.draws,
                   child: _PercentageValueWidget(
                     data.drawnGames,
@@ -232,7 +237,7 @@ class _Body extends ConsumerWidget {
                     isShaded: true,
                   ),
                 ),
-                _CustomPlatformCard(
+                StatCard(
                   context.l10n.losses,
                   child: _PercentageValueWidget(
                     data.lostGames,
@@ -241,76 +246,76 @@ class _Body extends ConsumerWidget {
                   ),
                 ),
               ]),
-              _CustomPlatformCardRow([
-                _CustomPlatformCard(
+              StatCardRow([
+                StatCard(
                   context.l10n.rated,
                   child: _PercentageValueWidget(
                     data.ratedGames,
                     data.totalGames,
                   ),
                 ),
-                _CustomPlatformCard(
+                StatCard(
                   context.l10n.tournament,
                   child: _PercentageValueWidget(
                     data.tournamentGames,
                     data.totalGames,
                   ),
                 ),
-                _CustomPlatformCard(
-                  context.l10n.berserkedGames
+                StatCard(
+                  context.l10n.perfStatBerserkedGames
                       .replaceAll(' ${context.l10n.games.toLowerCase()}', ''),
                   child: _PercentageValueWidget(
                     data.berserkGames,
                     data.totalGames,
                   ),
                 ),
-                _CustomPlatformCard(
-                  context.l10n.disconnections,
+                StatCard(
+                  context.l10n.perfStatDisconnections,
                   child: _PercentageValueWidget(
                     data.disconnections,
                     data.totalGames,
                   ),
                 ),
               ]),
-              _CustomPlatformCardRow([
-                _CustomPlatformCard(
+              StatCardRow([
+                StatCard(
                   context.l10n.averageOpponent,
                   value: data.avgOpponent == null
                       ? '?'
                       : data.avgOpponent.toString(),
                 ),
-                _CustomPlatformCard(
-                  context.l10n.timeSpentPlaying,
+                StatCard(
+                  context.l10n.perfStatTimeSpentPlaying,
                   value: data.timePlayed
                       .toDaysHoursMinutes(AppLocalizations.of(context)),
                 ),
               ]),
-              _CustomPlatformCard(
+              StatCard(
                 padding: Styles.horizontalBodyPadding,
-                context.l10n.winningStreak,
+                context.l10n.perfStatWinningStreak,
                 child: _StreakWidget(
                   data.maxWinStreak,
                   data.curWinStreak,
                   color: LichessColors.good,
                 ),
               ),
-              _CustomPlatformCard(
+              StatCard(
                 padding: Styles.horizontalBodyPadding,
-                context.l10n.losingStreak,
+                context.l10n.perfStatLosingStreak,
                 child: _StreakWidget(
                   data.maxLossStreak,
                   data.curLossStreak,
                   color: LichessColors.red,
                 ),
               ),
-              _CustomPlatformCard(
+              StatCard(
                 padding: Styles.horizontalBodyPadding,
-                context.l10n.gamesInARow,
+                context.l10n.perfStatGamesInARow,
                 child: _StreakWidget(data.maxPlayStreak, data.curPlayStreak),
               ),
-              _CustomPlatformCard(
+              StatCard(
                 padding: Styles.horizontalBodyPadding,
-                context.l10n.maxTimePlaying,
+                context.l10n.perfStatMaxTimePlaying,
                 child: _StreakWidget(data.maxTimeStreak, data.curTimeStreak),
               ),
               if (data.bestWins != null && data.bestWins!.isNotEmpty) ...[
@@ -319,8 +324,10 @@ class _Body extends ConsumerWidget {
                   games: data.bestWins!,
                   perf: perf,
                   user: user,
-                  header:
-                      Text(context.l10n.bestRated, style: Styles.sectionTitle),
+                  header: Text(
+                    context.l10n.perfStatBestRated,
+                    style: Styles.sectionTitle,
+                  ),
                 ),
               ],
               if (data.worstLosses != null && data.worstLosses!.isNotEmpty) ...[
@@ -329,8 +336,10 @@ class _Body extends ConsumerWidget {
                   games: data.worstLosses!,
                   perf: perf,
                   user: user,
-                  header:
-                      Text(context.l10n.worstRated, style: Styles.sectionTitle),
+                  header: Text(
+                    context.l10n.perfStatWorstRated,
+                    style: Styles.sectionTitle,
+                  ),
                 ),
               ],
             ],
@@ -346,107 +355,6 @@ class _Body extends ConsumerWidget {
       loading: () => const CenterLoadingIndicator(),
     );
   }
-}
-
-class _CustomPlatformCard extends StatelessWidget {
-  const _CustomPlatformCard(
-    this.stat, {
-    this.child,
-    this.value,
-    this.padding,
-  });
-
-  final String stat;
-  final Widget? child;
-  final String? value;
-  final EdgeInsets? padding;
-
-  @override
-  Widget build(BuildContext context) {
-    final defaultStatStyle = TextStyle(
-      color: textShade(context, _customOpacity),
-      fontSize: _defaultStatFontSize,
-    );
-
-    const defaultValueStyle = TextStyle(fontSize: _defaultValueFontSize);
-
-    return Padding(
-      padding: padding ?? EdgeInsets.zero,
-      child: PlatformCard(
-        margin: const EdgeInsets.symmetric(vertical: 6.0),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              FittedBox(
-                alignment: Alignment.center,
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  stat,
-                  style: defaultStatStyle,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              if (value != null)
-                Text(
-                  value!,
-                  style: defaultValueStyle,
-                  textAlign: TextAlign.center,
-                )
-              else if (child != null)
-                child!
-              else
-                const Text('?', style: defaultValueStyle)
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _CustomPlatformCardRow extends StatelessWidget {
-  final List<_CustomPlatformCard> cards;
-
-  const _CustomPlatformCardRow(this.cards);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: Styles.horizontalBodyPadding,
-      child: IntrinsicHeight(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: _divideRow(cards)
-              .map((e) => Expanded(child: e))
-              .toList(growable: false),
-        ),
-      ),
-    );
-  }
-}
-
-@allowedWidgetReturn
-Iterable<Widget> _divideRow(Iterable<Widget> elements) {
-  final list = elements.toList();
-
-  if (list.isEmpty || list.length == 1) {
-    return list;
-  }
-
-  Widget wrapElement(Widget el) {
-    return Container(
-      margin: const EdgeInsets.only(right: 8),
-      child: el,
-    );
-  }
-
-  return <Widget>[
-    ...list.take(list.length - 1).map(wrapElement),
-    list.last,
-  ];
 }
 
 class _ProgressionWidget extends StatelessWidget {
@@ -590,8 +498,10 @@ class _StreakWidget extends StatelessWidget {
       color: textShade(context, _customOpacity),
     );
 
-    final longestStreakStr = context.l10n.longestStreak('').replaceAll(':', '');
-    final currentStreakStr = context.l10n.currentStreak('').replaceAll(':', '');
+    final longestStreakStr =
+        context.l10n.perfStatLongestStreak('').replaceAll(':', '');
+    final currentStreakStr =
+        context.l10n.perfStatCurrentStreak('').replaceAll(':', '');
 
     final List<Widget> streakWidgets =
         [maxStreak, curStreak].mapIndexed((index, streak) {
@@ -687,7 +597,7 @@ class _GameListWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ListSection(
       header: header,
-      hasLeading: true,
+      hasLeading: false,
       children: [
         for (final game in games)
           GameListTile(
@@ -696,21 +606,20 @@ class _GameListWidget extends ConsumerWidget {
               ref.read(gamesByIdProvider(ids: gameIds).future).then((list) {
                 final gameData =
                     list.firstWhereOrNull((g) => g.id == game.gameId);
-                if (gameData != null) {
-                  Navigator.of(context, rootNavigator: true).push<void>(
-                    MaterialPageRoute(
-                      builder: (context) => ArchivedGameScreen(
-                        gameData: gameData,
-                        orientation: user.id == gameData.white.id
-                            ? Side.white
-                            : Side.black,
-                      ),
+                if (gameData != null && gameData.variant.isSupported) {
+                  pushPlatformRoute(
+                    context,
+                    rootNavigator: true,
+                    builder: (context) => ArchivedGameScreen(
+                      gameData: gameData,
+                      orientation: user.id == gameData.white.id
+                          ? Side.white
+                          : Side.black,
                     ),
                   );
                 }
               });
             },
-            icon: perf.icon,
             playerTitle: PlayerTitle(
               userName: game.opponentName ?? '?',
               title: game.opponentTitle,

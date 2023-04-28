@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:chessground/chessground.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'platform.dart';
 
@@ -26,6 +26,7 @@ class TableBoardLayout extends ConsumerWidget {
     this.currentMoveIndex,
     this.onSelectMove,
     this.errorMessage,
+    this.showMoveListPlaceholder = false,
     super.key,
   }) : assert(
           moves == null || currentMoveIndex != null,
@@ -51,9 +52,12 @@ class TableBoardLayout extends ConsumerWidget {
   /// Optional error message that will be displayed on top of the board.
   final String? errorMessage;
 
+  /// Whether to show the move list placeholder. Useful when loading.
+  final bool showMoveListPlaceholder;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final boardPrefs = ref.watch(boardPrefsStateProvider);
+    final boardPrefs = ref.watch(boardPreferencesProvider);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -113,8 +117,7 @@ class TableBoardLayout extends ConsumerWidget {
               )
             : board;
 
-        final List<List<MapEntry<int, String>>>? slicedMoves =
-            moves?.asMap().entries.slices(2).toList(growable: false);
+        final slicedMoves = moves?.asMap().entries.slices(2);
 
         return aspectRatio > 1
             ? Row(
@@ -158,7 +161,9 @@ class TableBoardLayout extends ConsumerWidget {
                 ],
               )
             : Column(
+                mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   if (slicedMoves != null)
                     MoveList(
@@ -166,10 +171,12 @@ class TableBoardLayout extends ConsumerWidget {
                       slicedMoves: slicedMoves,
                       currentMoveIndex: currentMoveIndex ?? 0,
                       onSelectMove: onSelectMove,
-                    ),
-                  topTable,
+                    )
+                  else if (showMoveListPlaceholder)
+                    const SizedBox(height: 40),
+                  Expanded(child: topTable),
                   boardOrError,
-                  bottomTable,
+                  Expanded(child: bottomTable),
                 ],
               );
       },
@@ -197,7 +204,7 @@ class MoveList extends StatefulWidget {
 
   final MoveListType type;
 
-  final List<List<MapEntry<int, String>>> slicedMoves;
+  final Iterable<List<MapEntry<int, String>>> slicedMoves;
 
   final int currentMoveIndex;
   final void Function(int moveIndex)? onSelectMove;
@@ -426,4 +433,15 @@ class StackedMoveItem extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Returns the estimated height of spaces around the board.
+double estimateTableHeight(BuildContext context) {
+  final mediaQueryData = MediaQuery.of(context);
+  final width = mediaQueryData.size.width;
+  final height = mediaQueryData.size.height;
+  final padding = mediaQueryData.padding;
+  final safeHeight = height - padding.top - padding.bottom;
+  // viewport height - board size - app bar height - bottom bar height
+  return (safeHeight - width - 50 - 56) / 2;
 }

@@ -5,8 +5,8 @@ import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 
-import 'package:lichess_mobile/src/common/errors.dart';
-import 'package:lichess_mobile/src/common/api_client.dart';
+import 'package:lichess_mobile/src/model/common/errors.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
 part 'auth_repository.g.dart';
@@ -18,7 +18,7 @@ const oauthScopes = ['puzzle:read', 'puzzle:write'];
 AuthRepository authRepository(AuthRepositoryRef ref) {
   const auth = FlutterAppAuth();
   return AuthRepository(
-    ref.watch(apiClientProvider),
+    ref.watch(authClientProvider),
     auth,
     Logger('AuthRepository'),
   );
@@ -26,14 +26,14 @@ AuthRepository authRepository(AuthRepositoryRef ref) {
 
 class AuthRepository {
   AuthRepository(
-    ApiClient apiClient,
+    AuthClient apiClient,
     FlutterAppAuth appAuth,
     Logger log,
   )   : _apiClient = apiClient,
         _appAuth = appAuth,
         _log = log;
 
-  final ApiClient _apiClient;
+  final AuthClient _apiClient;
   final Logger _log;
   final FlutterAppAuth _appAuth;
 

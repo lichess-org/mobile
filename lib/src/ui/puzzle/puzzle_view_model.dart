@@ -1,21 +1,28 @@
 import 'dart:async';
+import 'package:async/async.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
-import 'package:lichess_mobile/src/common/move_feedback.dart';
 
-import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/tree.dart';
-import 'package:lichess_mobile/src/common/uci.dart';
+import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/tree.dart';
+import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
+import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 
 part 'puzzle_view_model.g.dart';
 part 'puzzle_view_model.freezed.dart';
@@ -24,38 +31,70 @@ part 'puzzle_view_model.freezed.dart';
 class PuzzleViewModel extends _$PuzzleViewModel {
   // ignore: avoid-late-keyword
   late Node _gameTree;
+  Timer? _firstMoveTimer;
   Timer? _viewSolutionTimer;
+  // on streak, we pre-load the next puzzle to avoid a delay when the user
+  // completes the current one
+  FutureResult<PuzzleContext?>? _nextPuzzleFuture;
 
   @override
-  PuzzleScreenState build(UserId? userId, PuzzleTheme theme, Puzzle puzzle) {
-    final root = Root.fromPgn(puzzle.game.pgn);
+  PuzzleViewModelState build(
+    PuzzleContext initialContext, {
+    PuzzleStreak? initialStreak,
+  }) {
+    ref.onDispose(() {
+      _firstMoveTimer?.cancel();
+      _viewSolutionTimer?.cancel();
+    });
+
+    return _loadNewContext(initialContext, initialStreak);
+  }
+
+  PuzzleViewModelState _loadNewContext(
+    PuzzleContext context,
+    PuzzleStreak? streak,
+  ) {
+    final root = Root.fromPgn(context.puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
 
     // play first move after 1 second
-    Future<void>.delayed(const Duration(seconds: 1))
-        .then((_) => _setPath(state.initialPath));
+    _firstMoveTimer = Timer(const Duration(seconds: 1), () {
+      _setPath(state.initialPath);
+    });
 
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
 
-    return PuzzleScreenState(
+    // preload next streak puzzle
+    if (streak != null) {
+      _nextPuzzleFuture = _fetchNextStreakPuzzle(streak);
+    }
+
+    return PuzzleViewModelState(
+      puzzle: context.puzzle,
+      glicko: context.glicko,
       mode: PuzzleMode.play,
+      initialFen: _gameTree.fen,
       initialPath: initialPath,
       currentPath: UciPath.empty,
       nodeList: IList([ViewNode.fromNode(_gameTree)]),
       pov: _gameTree.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
       resultSent: false,
       isChangingDifficulty: false,
+      isLocalEvalEnabled: false,
+      streak: streak,
+      nextPuzzleStreakFetchError: false,
+      nextPuzzleStreakFetchIsRetrying: false,
     );
   }
 
-  Future<void> playUserMove(Move move) async {
+  Future<void> onUserMove(Move move) async {
     _addMove(move);
 
     if (state.mode == PuzzleMode.play) {
       final movesToTest =
           state.nodeList.sublist(state.initialPath.size).map((e) => e.sanMove);
 
-      final isGoodMove = puzzle.testSolution(movesToTest);
+      final isGoodMove = state.puzzle.testSolution(movesToTest);
 
       if (isGoodMove) {
         state = state.copyWith(
@@ -63,7 +102,8 @@ class PuzzleViewModel extends _$PuzzleViewModel {
         );
 
         final isCheckmate = movesToTest.last.san.endsWith('#');
-        final nextUci = puzzle.puzzle.solution.getOrNull(movesToTest.length);
+        final nextUci =
+            state.puzzle.puzzle.solution.getOrNull(movesToTest.length);
         // checkmate is always a win
         if (isCheckmate) {
           _completePuzzle();
@@ -81,9 +121,11 @@ class PuzzleViewModel extends _$PuzzleViewModel {
         state = state.copyWith(
           feedback: PuzzleFeedback.bad,
         );
-        _sendResult(PuzzleResult.lose);
-        await Future<void>.delayed(const Duration(milliseconds: 500));
-        _setPath(state.currentPath.penultimate);
+        _onFailOrWin(PuzzleResult.lose);
+        if (initialStreak == null) {
+          await Future<void>.delayed(const Duration(milliseconds: 500));
+          _setPath(state.currentPath.penultimate);
+        }
       }
     }
   }
@@ -107,7 +149,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       nodeList: IList(_gameTree.nodesOn(state.currentPath)),
     );
 
-    _sendResult(PuzzleResult.lose);
+    _onFailOrWin(PuzzleResult.lose);
 
     state = state.copyWith(
       mode: PuzzleMode.view,
@@ -123,20 +165,29 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     });
   }
 
-  Future<Puzzle?> changeDifficulty(PuzzleDifficulty difficulty) async {
+  void skipMove() {
+    if (state.streak != null) {
+      state = state.copyWith.streak!(hasSkipped: true);
+      final moveIndex = state.currentPath.size - state.initialPath.size;
+      final solution = state.puzzle.puzzle.solution[moveIndex];
+      onUserMove(Move.fromUci(solution)!);
+    }
+  }
+
+  Future<PuzzleContext?> changeDifficulty(PuzzleDifficulty difficulty) async {
     state = state.copyWith(
       isChangingDifficulty: true,
     );
 
     await ref
         .read(
-          puzzlePreferencesProvider(userId).notifier,
+          puzzlePreferencesProvider(initialContext.userId).notifier,
         )
         .setDifficulty(difficulty);
 
     final nextPuzzle = await ref.read(defaultPuzzleServiceProvider).resetBatch(
-          userId: userId,
-          angle: theme,
+          userId: initialContext.userId,
+          angle: initialContext.theme,
         );
 
     state = state.copyWith(
@@ -146,7 +197,64 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     return nextPuzzle;
   }
 
-  // --
+  void loadPuzzle(PuzzleContext nextContext) {
+    state = _loadNewContext(nextContext, state.streak);
+  }
+
+  void sendStreakResult() {
+    if (initialContext.userId != null) {
+      final repo = ref.read(puzzleRepositoryProvider);
+      repo.postStreakRun(state.streak?.index ?? 0);
+    }
+  }
+
+  FutureResult<PuzzleContext?> retryFetchNextStreakPuzzle(
+    PuzzleStreak streak,
+  ) async {
+    state = state.copyWith(
+      nextPuzzleStreakFetchIsRetrying: true,
+    );
+
+    final result = await _fetchNextStreakPuzzle(streak);
+
+    state = state.copyWith(
+      nextPuzzleStreakFetchIsRetrying: false,
+    );
+
+    result.match(
+      onSuccess: (nextContext) {
+        if (nextContext != null) {
+          state = state.copyWith(
+            streak: streak.copyWith(
+              index: streak.index + 1,
+            ),
+          );
+        } else {
+          // no more puzzle
+          state = state.copyWith(
+            streak: streak.copyWith(
+              index: streak.index + 1,
+              finished: true,
+            ),
+          );
+        }
+      },
+    );
+
+    return result;
+  }
+
+  FutureResult<PuzzleContext?> _fetchNextStreakPuzzle(PuzzleStreak streak) {
+    return streak.nextId != null
+        ? ref.read(puzzleRepositoryProvider).fetch(streak.nextId!).map(
+              (puzzle) => PuzzleContext(
+                theme: PuzzleTheme.mix,
+                puzzle: puzzle,
+                userId: initialContext.userId,
+              ),
+            )
+        : Future.value(Result.value(null));
+  }
 
   void _goToNextNode() {
     if (state.node.children.isEmpty) return;
@@ -161,10 +269,10 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     state = state.copyWith(
       mode: PuzzleMode.view,
     );
-    await _sendResult(state.result ?? PuzzleResult.win);
+    await _onFailOrWin(state.result ?? PuzzleResult.win);
   }
 
-  Future<void> _sendResult(PuzzleResult result) async {
+  Future<void> _onFailOrWin(PuzzleResult result) async {
     if (state.resultSent) return;
 
     state = state.copyWith(
@@ -172,50 +280,141 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       resultSent: true,
     );
 
+    final sessionNotifier =
+        puzzleSessionProvider(initialContext.userId, initialContext.theme)
+            .notifier;
     final service = ref.read(defaultPuzzleServiceProvider);
+    final soundService = ref.read(soundServiceProvider);
 
-    final next = await service.solve(
-      userId: userId,
-      angle: theme,
-      solution: PuzzleSolution(
-        id: puzzle.puzzle.id,
-        win: state.result == PuzzleResult.win,
-        rated: userId != null,
-      ),
-    );
+    if (state.streak == null) {
+      final next = await service.solve(
+        userId: initialContext.userId,
+        angle: initialContext.theme,
+        solution: PuzzleSolution(
+          id: state.puzzle.puzzle.id,
+          win: state.result == PuzzleResult.win,
+          rated: initialContext.userId != null,
+        ),
+      );
 
-    // We need to invalidate the next puzzle for the offline puzzle preview on
-    // home screen tab and the healthy mix puzzle button on the puzzle screen tab.
-    // Not the best solution because we must ensure to always provide a puzzle
-    // parameter to the puzzle screen (PuzzleScreen must no be watching nextPuzzleProvider).
-    // It would be better to have invalidate the `nextPuzzleProvider` when the
-    // puzzle screen pops.
-    if (theme == PuzzleTheme.mix) {
-      ref.invalidate(nextPuzzleProvider(theme));
+      state = state.copyWith(
+        nextContext: next,
+      );
+
+      ref.read(sessionNotifier).addAttempt(
+            state.puzzle.puzzle.id,
+            win: result == PuzzleResult.win,
+          );
+
+      final rounds = next?.rounds;
+      if (rounds != null) {
+        ref.read(sessionNotifier).setRatingDiffs(rounds);
+      }
+    } else {
+      // one fail and streak is over
+      if (result == PuzzleResult.lose) {
+        soundService.play(Sound.error);
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        _setPath(state.currentPath.penultimate);
+        _mergeSolution();
+        state = state.copyWith(
+          mode: PuzzleMode.view,
+          nodeList: IList(_gameTree.nodesOn(state.currentPath)),
+          streak: state.streak!.copyWith(
+            finished: true,
+          ),
+        );
+        sendStreakResult();
+      } else {
+        if (_nextPuzzleFuture == null) {
+          assert(false, 'next puzzle future cannot be null with streak');
+        } else {
+          final result = await _nextPuzzleFuture!;
+          result.match(
+            onSuccess: (nextContext) async {
+              state = state.copyWith.streak!(
+                index: state.streak!.index + 1,
+              );
+              if (nextContext != null) {
+                await Future<void>.delayed(const Duration(milliseconds: 250));
+                soundService.play(Sound.confirmation);
+                loadPuzzle(nextContext);
+              } else {
+                // no more puzzle
+                state = state.copyWith.streak!(
+                  finished: true,
+                );
+              }
+            },
+            onError: (error, _) {
+              state = state.copyWith(
+                nextPuzzleStreakFetchError: true,
+              );
+            },
+          );
+        }
+      }
     }
-
-    // TODO check if next is null and show a message
-
-    state = state.copyWith(
-      nextPuzzle: next,
-    );
   }
 
   void _setPath(UciPath path) {
+    final pathChange = state.currentPath != path;
     final newNodeList = IList(_gameTree.nodesOn(path));
     final sanMove = newNodeList.last.sanMove;
     final isForward = path.size > state.currentPath.size;
     if (isForward) {
+      final isCheck = sanMove.san.contains('+');
       if (sanMove.san.contains('x')) {
-        ref.read(moveFeedbackServiceProvider).captureFeedback();
+        ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
       } else {
-        ref.read(moveFeedbackServiceProvider).moveFeedback();
+        ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
       }
     }
     state = state.copyWith(
       currentPath: path,
       nodeList: newNodeList,
       lastMove: sanMove.move,
+    );
+
+    if (pathChange) {
+      _startEngineEval();
+    }
+  }
+
+  void toggleLocalEvaluation() {
+    state = state.copyWith(
+      isLocalEvalEnabled: !state.isLocalEvalEnabled,
+    );
+    if (state.isLocalEvalEnabled) {
+      _startEngineEval();
+    } else {
+      ref
+          .read(
+            engineEvaluationProvider(state.evaluationContext).notifier,
+          )
+          .stop();
+    }
+  }
+
+  void _startEngineEval() {
+    if (!state.isEngineEnabled) return;
+    EasyDebounce.debounce(
+      'start-engine-eval',
+      const Duration(milliseconds: 50),
+      () => ref
+          .read(
+            engineEvaluationProvider(state.evaluationContext).notifier,
+          )
+          .start(
+            state.currentPath,
+            state.nodeList.map(Step.fromNode),
+            shouldEmit: (work) => work.path == state.currentPath,
+          )
+          ?.forEach((t) {
+        _gameTree.updateAt(t.item1.path, (node) {
+          node.eval = t.item2;
+        });
+      }),
     );
   }
 
@@ -234,7 +433,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   void _mergeSolution() {
     final initialNode = _gameTree.nodeAt(state.initialPath);
     final fromPly = initialNode.ply;
-    final posAndNodes = puzzle.puzzle.solution.foldIndexed(
+    final posAndNodes = state.puzzle.puzzle.solution.foldIndexed(
       Tuple2(initialNode.position, IList<Node>(const [])),
       (index, previous, uci) {
         final move = Move.fromUci(uci);
@@ -246,7 +445,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
           previous.item2.add(
             Node(
               id: UciCharPair.fromMove(move),
-              ply: fromPly + index,
+              ply: fromPly + index + 1,
               fen: newPos.fen,
               position: newPos,
               sanMove: SanMove(newSan, move),
@@ -266,11 +465,14 @@ enum PuzzleResult { win, lose }
 enum PuzzleFeedback { good, bad }
 
 @freezed
-class PuzzleScreenState with _$PuzzleScreenState {
-  const PuzzleScreenState._();
+class PuzzleViewModelState with _$PuzzleViewModelState {
+  const PuzzleViewModelState._();
 
-  const factory PuzzleScreenState({
+  const factory PuzzleViewModelState({
+    required Puzzle puzzle,
+    required PuzzleGlicko? glicko,
     required PuzzleMode mode,
+    required String initialFen,
     required UciPath initialPath,
     required UciPath currentPath,
     required Side pov,
@@ -278,10 +480,25 @@ class PuzzleScreenState with _$PuzzleScreenState {
     Move? lastMove,
     PuzzleResult? result,
     PuzzleFeedback? feedback,
+    required bool isLocalEvalEnabled,
     required bool resultSent,
     required bool isChangingDifficulty,
-    Puzzle? nextPuzzle,
+    PuzzleContext? nextContext,
+    PuzzleStreak? streak,
+    // if the automatic attempt to fetch the next puzzle in the streak fails
+    // we will make the user retry
+    required bool nextPuzzleStreakFetchError,
+    required bool nextPuzzleStreakFetchIsRetrying,
   }) = _PuzzleScreenState;
+
+  bool get isEngineEnabled {
+    return mode == PuzzleMode.view && isLocalEvalEnabled;
+  }
+
+  EvaluationContext get evaluationContext => EvaluationContext(
+        initialFen: initialFen,
+        contextId: puzzle.puzzle.id,
+      );
 
   ViewNode get node => nodeList.last;
   Position get position => nodeList.last.position;

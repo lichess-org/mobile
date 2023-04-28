@@ -67,6 +67,19 @@ Offset squareOffset(
   );
 }
 
+Future<void> playMove(
+  WidgetTester tester,
+  Rect boardRect,
+  String from,
+  String to, {
+  cg.Side orientation = cg.Side.white,
+}) async {
+  await tester.tapAt(squareOffset(from, boardRect, orientation: orientation));
+  await tester.pump();
+  await tester.tapAt(squareOffset(to, boardRect, orientation: orientation));
+  await tester.pump();
+}
+
 // --
 
 class _SameRequest extends Matcher {

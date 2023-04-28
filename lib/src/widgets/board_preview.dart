@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:chessground/chessground.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/common/styles.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 
 /// A simple board preview widget that is not interactable.
@@ -57,7 +57,7 @@ class _BoardPreviewState extends ConsumerState<BoardPreview> {
 
   @override
   Widget build(BuildContext context) {
-    final boardPrefs = ref.watch(boardPrefsStateProvider);
+    final boardPrefs = ref.watch(boardPreferencesProvider);
 
     final board = LayoutBuilder(
       builder: (context, constraints) {
@@ -65,17 +65,22 @@ class _BoardPreviewState extends ConsumerState<BoardPreview> {
 
         final error = widget.errorMessage != null
             ? Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: defaultTargetPlatform == TargetPlatform.iOS
-                        ? CupertinoColors.secondarySystemBackground
-                            .resolveFrom(context)
-                        : Theme.of(context).colorScheme.background,
-                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(widget.errorMessage!),
+                // ignore: avoid-wrapping-in-padding
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: defaultTargetPlatform == TargetPlatform.iOS
+                          ? CupertinoColors.secondarySystemBackground
+                              .resolveFrom(context)
+                          : Theme.of(context).colorScheme.background,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(widget.errorMessage!),
+                    ),
                   ),
                 ),
               )

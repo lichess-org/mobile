@@ -4,12 +4,15 @@ import 'package:http/testing.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:chessground/chessground.dart' as cg;
 
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
-import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/api_client.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/ui/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import '../../test_utils.dart';
@@ -56,7 +59,9 @@ void main() {
         expect(find.byType(MoveList), findsNothing);
         expect(
           tester
-              .widget<IconButton>(find.byKey(const ValueKey('cursor-back')))
+              .widget<BottomBarIconButton>(
+                find.byKey(const ValueKey('cursor-back')),
+              )
               .onPressed,
           isNull,
         );
@@ -80,7 +85,9 @@ void main() {
         expect(find.byType(MoveList), findsOneWidget);
         expect(
           tester
-              .widget<IconButton>(find.byKey(const ValueKey('cursor-back')))
+              .widget<BottomBarIconButton>(
+                find.byKey(const ValueKey('cursor-back')),
+              )
               .onPressed,
           isNotNull,
         );
@@ -149,7 +156,7 @@ void main() {
       // cannot go backward anymore
       expect(
         tester
-            .widget<IconButton>(find.byKey(const Key('cursor-back')))
+            .widget<BottomBarIconButton>(find.byKey(const Key('cursor-back')))
             .onPressed,
         isNull,
       );
@@ -162,7 +169,9 @@ void main() {
       // cannot go forward anymore
       expect(
         tester
-            .widget<IconButton>(find.byKey(const Key('cursor-forward')))
+            .widget<BottomBarIconButton>(
+              find.byKey(const Key('cursor-forward')),
+            )
             .onPressed,
         isNull,
       );

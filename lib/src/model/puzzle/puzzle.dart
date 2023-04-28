@@ -1,10 +1,13 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:lichess_mobile/src/common/tree.dart';
+import 'package:lichess_mobile/src/model/common/tree.dart';
 
-import 'package:lichess_mobile/src/common/models.dart';
-import 'package:lichess_mobile/src/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 
 part 'puzzle.freezed.dart';
 part 'puzzle.g.dart';
@@ -16,6 +19,7 @@ class Puzzle with _$Puzzle {
   const factory Puzzle({
     required PuzzleData puzzle,
     required PuzzleGame game,
+    bool? isDailyPuzzle,
   }) = _Puzzle;
 
   factory Puzzle.fromJson(Map<String, dynamic> json) => _$PuzzleFromJson(json);
@@ -57,6 +61,29 @@ class PuzzleData with _$PuzzleData {
 }
 
 @Freezed(fromJson: true, toJson: true)
+class PuzzleGlicko with _$PuzzleGlicko {
+  const PuzzleGlicko._();
+
+  const factory PuzzleGlicko({
+    required double rating,
+    required double deviation,
+    bool? provisional,
+  }) = _PuzzleGlicko;
+
+  factory PuzzleGlicko.fromJson(Map<String, dynamic> json) =>
+      _$PuzzleGlickoFromJson(json);
+}
+
+@freezed
+class PuzzleRound with _$PuzzleRound {
+  const factory PuzzleRound({
+    required PuzzleId id,
+    required int ratingDiff,
+    required bool win,
+  }) = _PuzzleRound;
+}
+
+@Freezed(fromJson: true, toJson: true)
 class PuzzleGame with _$PuzzleGame {
   const factory PuzzleGame({
     required GameId id,
@@ -76,7 +103,7 @@ class PuzzleGame with _$PuzzleGame {
 class PuzzleGamePlayer with _$PuzzleGamePlayer {
   const factory PuzzleGamePlayer({
     required Side side,
-    required String userId,
+    required UserId userId,
     required String name,
     String? title,
   }) = _PuzzleGamePlayer;
@@ -114,4 +141,23 @@ class PuzzlePreview with _$PuzzlePreview {
       initialMove: node.sanMove.move,
     );
   }
+}
+
+@freezed
+class PuzzleDashboard with _$PuzzleDashboard {
+  const factory PuzzleDashboard({
+    required PuzzleDashboardData global,
+    required IList<PuzzleDashboardData> themes,
+  }) = _PuzzleDashboard;
+}
+
+@freezed
+class PuzzleDashboardData with _$PuzzleDashboardData {
+  const factory PuzzleDashboardData({
+    required int nb,
+    required int firstWins,
+    required int replayWins,
+    required int performance,
+    required PuzzleTheme theme,
+  }) = _PuzzleDashboardData;
 }

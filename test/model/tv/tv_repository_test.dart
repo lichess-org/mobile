@@ -5,26 +5,26 @@ import 'package:mocktail/mocktail.dart';
 import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/common/api_client.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/tv/tv_event.dart';
 
-class MockApiClient extends Mock implements ApiClient {}
+class MockAuthClient extends Mock implements AuthClient {}
 
 class MockLogger extends Mock implements Logger {}
 
 void main() {
   final mockLogger = MockLogger();
-  final mockApiClient = MockApiClient();
-  final repo = TvRepository(mockLogger, apiClient: mockApiClient);
+  final mockAuthClient = MockAuthClient();
+  final repo = TvRepository(mockLogger, apiClient: mockAuthClient);
 
   setUpAll(() {
-    reset(mockApiClient);
+    reset(mockAuthClient);
   });
 
   group('TvRepository.tvFeed', () {
     test('can read all supported types of events', () async {
-      when(() => mockApiClient.stream(Uri.parse('$kLichessHost/api/tv/feed')))
+      when(() => mockAuthClient.stream(Uri.parse('$kLichessHost/api/tv/feed')))
           .thenAnswer((_) async {
         return http.StreamedResponse(
           Stream.fromIterable([
@@ -55,7 +55,7 @@ void main() {
     });
 
     test('filter out unsupported types of events', () async {
-      when(() => mockApiClient.stream(Uri.parse('$kLichessHost/api/tv/feed')))
+      when(() => mockAuthClient.stream(Uri.parse('$kLichessHost/api/tv/feed')))
           .thenAnswer((_) async {
         return http.StreamedResponse(
           Stream.fromIterable([

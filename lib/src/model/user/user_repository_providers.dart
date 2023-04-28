@@ -3,9 +3,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:logging/logging.dart';
 
-import 'package:lichess_mobile/src/common/api_client.dart';
-import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'user_repository.dart';
@@ -16,7 +17,7 @@ part 'user_repository_providers.g.dart';
 
 @Riverpod(keepAlive: true)
 UserRepository userRepository(UserRepositoryRef ref) {
-  final apiClient = ref.watch(apiClientProvider);
+  final apiClient = ref.watch(authClientProvider);
   return UserRepository(logger: Logger('UserRepository'), apiClient: apiClient);
 }
 
@@ -39,6 +40,16 @@ Future<UserPerfStats> userPerfStats(
 }
 
 @riverpod
+Future<IList<UserActivity>> userActivity(
+  UserActivityRef ref, {
+  required UserId id,
+}) {
+  ref.cacheFor(const Duration(minutes: 2));
+  final repo = ref.watch(userRepositoryProvider);
+  return Result.release(repo.getUserActivity(id));
+}
+
+@riverpod
 Future<IList<UserStatus>> userStatuses(
   UserStatusesRef ref, {
   required ISet<UserId> ids,
@@ -52,6 +63,13 @@ Future<IList<UserStatus>> userStatuses(
 Future<IList<Streamer>> liveStreamers(LiveStreamersRef ref) {
   final repo = ref.watch(userRepositoryProvider);
   return Result.release(repo.getLiveStreamers());
+}
+
+@riverpod
+Future<IMap<Perf, LeaderboardUser>> top1(Top1Ref ref) {
+  ref.cacheFor(const Duration(minutes: 10));
+  final repo = ref.watch(userRepositoryProvider);
+  return Result.release(repo.getTop1());
 }
 
 @riverpod

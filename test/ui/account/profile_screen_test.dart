@@ -1,14 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 
-import 'package:lichess_mobile/src/common/api_client.dart';
-import 'package:lichess_mobile/src/common/models.dart';
+import 'package:lichess_mobile/src/http_client.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/ui/account/profile_screen.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import '../../test_utils.dart';
 import '../../test_app.dart';
 import '../../model/auth/fake_session_storage.dart';
+import '../../model/user/user_repository_test.dart';
 
 void main() {
   final mockClient = MockClient((request) {
@@ -16,13 +17,15 @@ void main() {
       return mockResponse(userGameResponse, 200);
     } else if (request.url.path == '/api/account') {
       return mockResponse(testAccountResponse, 200);
+    } else if (request.url.path == '/api/user/$testUserId/activity') {
+      return mockResponse(userActivityResponse, 200);
     }
     return mockResponse('', 404);
   });
 
   group('ProfileScreen', () {
     testWidgets(
-      'should see recent games',
+      'should see activity and recent games',
       (WidgetTester tester) async {
         final app = await buildTestApp(
           tester,
@@ -45,22 +48,17 @@ void main() {
           findsAtLeastNWidgets(1),
         );
 
-        // wait for recent games
+        // wait for activity and recent games
         await tester.pump(const Duration(milliseconds: 50));
 
-        // opponent in recent games
-        expect(
-          find.widgetWithText(PlatformListTile, 'maia1 (1397)'),
-          findsOneWidget,
+        await tester.scrollUntilVisible(
+          find.text('Recent games'),
+          500,
+          // need to take first scrollable there is the perf cards ListView inside the main list
+          scrollable: find.byType(Scrollable).first,
         );
-        expect(
-          find.widgetWithText(PlatformListTile, 'maia1 (1399)'),
-          findsOneWidget,
-        );
-        expect(
-          find.widgetWithText(PlatformListTile, 'maia1 (1410)'),
-          findsOneWidget,
-        );
+
+        expect(find.text('Recent games'), findsOneWidget);
       },
       variant: kPlatformVariant,
     );

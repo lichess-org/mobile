@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/utils/async_value.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/auth/user_session.dart';
 
 class SignInWidget extends ConsumerWidget {
   const SignInWidget({super.key});
@@ -12,14 +12,14 @@ class SignInWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authController = ref.watch(authControllerProvider);
-    final session = ref.watch(userSessionStateProvider);
+    final session = ref.watch(authSessionProvider);
 
     ref.listen<AsyncValue<void>>(
       authControllerProvider,
       (_, state) => state.showSnackbarOnError(context),
     );
 
-    final button = TextButton(
+    final button = AppBarTextButton(
       onPressed: authController.isLoading
           ? null
           : () => ref.read(authControllerProvider.notifier).signIn(),

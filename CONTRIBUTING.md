@@ -9,6 +9,7 @@
 The [`good first issue`](https://github.com/lichess-org/mobile/labels/good%20first%20issue)
 and [`help wanted`](https://github.com/lichess-org/mobile/labels/help%20wanted)
 tags are useful;
+- don't edit manually the `app_en.arb` file! See [about internationalization](https://github.com/lichess-org/mobile/wiki/About-internationalisation) in the wiki.
 - Communicate with other devs on [Discord](https://discord.gg/lichess).
 
 ## I want to report a bug or a problem about Lichess Mobile

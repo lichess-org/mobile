@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/ui/watch/streamer_screen.dart';
 
 class StreamerWidget extends ConsumerWidget {
@@ -15,10 +16,9 @@ class StreamerWidget extends ConsumerWidget {
       data: (data) {
         return ListSection(
           onHeaderTap: () {
-            Navigator.of(context).push<void>(
-              MaterialPageRoute(
-                builder: (context) => StreamerScreen(streamers: data),
-              ),
+            pushPlatformRoute(
+              context,
+              builder: (context) => StreamerScreen(streamers: data),
             );
           },
           hasLeading: true,

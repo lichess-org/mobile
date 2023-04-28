@@ -4,13 +4,12 @@ import 'package:chessground/chessground.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/common/styles.dart';
-import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
-import 'package:lichess_mobile/src/model/tv/featured_position.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/model/tv/featured_game.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
-import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
@@ -20,6 +19,8 @@ import 'package:lichess_mobile/src/ui/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 
+final _featuredGameNoSoundProvider = featuredGameProvider(withSound: false);
+
 class WatchScreen extends ConsumerStatefulWidget {
   const WatchScreen({super.key});
 
@@ -27,7 +28,7 @@ class WatchScreen extends ConsumerStatefulWidget {
   _WatchScreenState createState() => _WatchScreenState();
 }
 
-class _WatchScreenState extends ConsumerState<WatchScreen> {
+class _WatchScreenState extends ConsumerState<WatchScreen> with RouteAware {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
@@ -74,46 +75,71 @@ class _WatchScreenState extends ConsumerState<WatchScreen> {
 
   Widget _buildIos(BuildContext context, WidgetRef ref) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: SafeArea(
-        child: OrientationBuilder(
-          builder: (context, orientation) {
-            return CustomScrollView(
-              slivers: [
-                CupertinoSliverRefreshControl(
-                  onRefresh: () => ref.refresh(liveStreamersProvider.future),
-                ),
-                SliverSafeArea(
-                  top: false,
-                  sliver: orientation == Orientation.portrait
-                      ? SliverList(
-                          delegate: SliverChildListDelegate(
-                            const [
-                              _WatchTvWidget(),
-                              _StreamerWidget(),
-                            ],
-                          ),
-                        )
-                      : SliverGrid(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.92,
-                          ),
-                          delegate: SliverChildListDelegate(
-                            const [
-                              _WatchTvWidget(),
-                              _StreamerWidget(numberOfItems: 8),
-                            ],
-                          ),
+      child: OrientationBuilder(
+        builder: (context, orientation) {
+          return CustomScrollView(
+            slivers: [
+              const CupertinoSliverNavigationBar(),
+              CupertinoSliverRefreshControl(
+                onRefresh: () => ref.refresh(liveStreamersProvider.future),
+              ),
+              SliverSafeArea(
+                top: false,
+                sliver: orientation == Orientation.portrait
+                    ? SliverList(
+                        delegate: SliverChildListDelegate(
+                          const [
+                            _WatchTvWidget(),
+                            _StreamerWidget(),
+                          ],
                         ),
-                ),
-              ],
-            );
-          },
-        ),
+                      )
+                    : SliverGrid(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.92,
+                        ),
+                        delegate: SliverChildListDelegate(
+                          const [
+                            _WatchTvWidget(),
+                            _StreamerWidget(numberOfItems: 8),
+                          ],
+                        ),
+                      ),
+              ),
+            ],
+          );
+        },
       ),
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null && route is PageRoute) {
+      watchRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    watchRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPushNext() {
+    ref.read(_featuredGameNoSoundProvider.notifier).disconnectStream();
+    super.didPushNext();
+  }
+
+  @override
+  void didPopNext() {
+    ref.read(_featuredGameNoSoundProvider.notifier).connectStream();
+    super.didPopNext();
   }
 }
 
@@ -123,6 +149,7 @@ class _WatchTvWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
+/*
     final tvStream = currentTab == BottomTab.watch
         ? ref.watch(
             tvGameStreamProvider(
@@ -136,14 +163,21 @@ class _WatchTvWidget extends ConsumerWidget {
     final featuredGame = ref.watch(featuredGameProvider);
     return tvStream.when(
       data: (position) {
+*/
+    final featuredGame = currentTab == BottomTab.watch
+        ? ref.watch(_featuredGameNoSoundProvider)
+        : const AsyncLoading<FeaturedGameState>();
+    return featuredGame.when(
+      data: (game) {
         return BoardPreview(
           header: Text('Lichess TV', style: Styles.sectionTitle),
-          onTap: () => Navigator.of(context).push<void>(
-            MaterialPageRoute(builder: (context) => const TvScreen()),
+          onTap: () => pushPlatformRoute(
+            context,
+            builder: (context) => const TvScreen(),
           ),
-          orientation: featuredGame?.orientation.cg ?? Side.white,
-          fen: position.fen,
-          lastMove: position.lastMove?.cg,
+          orientation: game.orientation.cg,
+          fen: game.position.position.fen,
+          lastMove: game.position.lastMove?.cg,
         );
       },
       error: (err, stackTrace) {
@@ -181,13 +215,12 @@ class _StreamerWidget extends ConsumerWidget {
           return const SizedBox.shrink();
         }
         return ListSection(
-          header: Text(context.l10n.lichessStreamers),
+          header: Text(context.l10n.streamerLichessStreamers),
           hasLeading: true,
           onHeaderTap: () {
-            Navigator.of(context).push<void>(
-              MaterialPageRoute(
-                builder: (context) => StreamerScreen(streamers: data),
-              ),
+            pushPlatformRoute(
+              context,
+              builder: (context) => StreamerScreen(streamers: data),
             );
           },
           children: [
