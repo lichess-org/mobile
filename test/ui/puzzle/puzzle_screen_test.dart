@@ -180,6 +180,7 @@ void main() {
             angle: PuzzleTheme.mix,
             date: any(named: 'date'),
             data: any(named: 'data'),
+            puzzle: puzzle,
           ),
         ).thenAnswer((_) async {});
 

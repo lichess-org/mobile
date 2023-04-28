@@ -21,19 +21,20 @@ PuzzleHistoryStorage puzzleHistoryStorage(PuzzleHistoryStorageRef ref) {
 }
 
 const _anonUserKey = '**anon**';
-const _dbName = 'puzzle_history';
+const _dbHistory = 'puzzle_history';
+const _dbPuzzle = 'puzzle';
 
 class PuzzleHistoryStorage {
   const PuzzleHistoryStorage(this._db);
   final Database _db;
 
-  Future<IList<PuzzleAndResult>?> fetch({
+  Future<IList<PuzzleIdAndResult>?> fetch({
     required UserId? userId,
     required PuzzleTheme angle,
     required DateTime date,
   }) async {
     final list = await _db.query(
-      _dbName,
+      _dbHistory,
       where: '''
       userId = ? AND
       angle = ? AND
@@ -60,23 +61,14 @@ class PuzzleHistoryStorage {
   }
 
   Future<Puzzle?> fetchPuzzle({
-    required UserId? userId,
-    required PuzzleTheme angle,
-    required DateTime date,
     required PuzzleId puzzleId,
   }) async {
     final list = await _db.query(
-      _dbName,
+      _dbPuzzle,
       where: '''
-      userId = ? AND
-      angle = ? AND
-      solvedDate = ?
+      puzzleId = ?
       ''',
-      whereArgs: [
-        userId?.value ?? _anonUserKey,
-        angle.name,
-        DateFormat('yyyy-MM-dd').format(date),
-      ],
+      whereArgs: [puzzleId],
     );
 
     final raw = list.firstOrNull?['data'] as String?;
@@ -87,10 +79,7 @@ class PuzzleHistoryStorage {
           '[PuzzleHistoryStorage] cannot fetch puzzles: expected an object',
         );
       }
-      return PuzzleHistoryData.fromJson(json)
-          .puzzles
-          .firstWhereOrNull((e) => e.puzzle.puzzle.id == puzzleId)
-          ?.puzzle;
+      return Puzzle.fromJson(json);
     }
     return null;
   }
@@ -99,7 +88,7 @@ class PuzzleHistoryStorage {
     required UserId? userId,
   }) async {
     final list = await _db.query(
-      _dbName,
+      _dbHistory,
       where: '''
       userId = ?
       ''',
@@ -108,22 +97,54 @@ class PuzzleHistoryStorage {
       ],
     );
 
+    final puzzleList = await _db.query(
+      _dbPuzzle,
+    );
+
+    final puzzles = puzzleList.map((e) {
+      final raw = e['data'] as String?;
+      final json = jsonDecode(raw!);
+      if (json is! Map<String, dynamic>) {
+        throw const FormatException(
+          '[PuzzleHistoryStorage] cannot fetch puzzles from $_dbPuzzle: expected an object',
+        );
+      }
+      return Puzzle.fromJson(json);
+    });
+
+    if (puzzles.isEmpty) return null;
     final history = list.map(
       (entry) {
         final raw = entry['data'] as String?;
         final angle = entry['angle'] as String?;
         final date = entry['solvedDate'] as String?;
-        final json = jsonDecode(raw!);
+        if (raw == null || angle == null || date == null) {
+          throw const FormatException(
+            'PuzzleHistoryStorage: connot fetch puzzles: expected an object',
+          );
+        }
+        final json = jsonDecode(raw);
         if (json is! Map<String, dynamic>) {
           throw const FormatException(
             '[PuzzleHistoryStorage] cannot fetch puzzles: expected an object',
           );
         }
         final data = PuzzleHistoryData.fromJson(json);
+        final puzzleAndResult = data.puzzles.map((entry) {
+          return PuzzleAndResult(
+            puzzle: puzzles.firstWhere(
+              (p) => p.puzzle.id == entry.puzzleId,
+              orElse: () => throw FormatException(
+                '[PuzzleHistoryStorage] Cannot find puzzle ${entry.puzzleId}',
+              ),
+            ),
+            result: entry.result,
+          );
+        }).toIList();
         return PuzzleHistory(
-          puzzles: data.puzzles,
-          angle: puzzleThemeNameMap[angle!]!,
-          date: date!,
+          puzzles: puzzleAndResult,
+          angle: puzzleThemeNameMap[angle]!,
+          date: date,
         );
       },
     ).toIList();
@@ -135,17 +156,27 @@ class PuzzleHistoryStorage {
     required UserId? userId,
     required DateTime date,
     required PuzzleTheme angle,
-    required IList<PuzzleAndResult> data,
+    required IList<PuzzleIdAndResult> data,
+    required Puzzle puzzle,
   }) async {
     await _db.insert(
-      _dbName,
+      _dbHistory,
       {
         'userId': userId?.value ?? _anonUserKey,
         'angle': angle.name,
+        'solvedDate': DateFormat('yyyy-MM-dd').format(date),
         'data': jsonEncode(
-          PuzzleHistoryData(puzzles: removeDuplicatePuzzles(data)).toJson(),
+          PuzzleHistoryData(puzzles: data.toISet().toIList()).toJson(),
         ),
-        'solvedDate': DateFormat('yyyy-MM-dd').format(date)
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    await _db.insert(
+      _dbPuzzle,
+      {
+        'puzzleId': puzzle.puzzle.id.toString(),
+        'lastModified': DateFormat('yyyy-MM-dd').format(date),
+        'data': jsonEncode(puzzle.toJson()),
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -164,15 +195,26 @@ class PuzzleHistory with _$PuzzleHistory {
       _$PuzzleHistoryFromJson(json);
 }
 
-// only used for parsing and saving PuzzleAndResult from database
+// only used for parsing and saving PuzzleIdAndResult from database
 @Freezed(fromJson: true, toJson: true)
 class PuzzleHistoryData with _$PuzzleHistoryData {
   const factory PuzzleHistoryData({
-    required IList<PuzzleAndResult> puzzles,
+    required IList<PuzzleIdAndResult> puzzles,
   }) = _PuzzleHistoryData;
 
   factory PuzzleHistoryData.fromJson(Map<String, dynamic> json) =>
       _$PuzzleHistoryDataFromJson(json);
+}
+
+@Freezed(fromJson: true, toJson: true)
+class PuzzleIdAndResult with _$PuzzleIdAndResult {
+  const factory PuzzleIdAndResult({
+    required PuzzleId puzzleId,
+    required bool result,
+  }) = _PuzzleIdAndResult;
+
+  factory PuzzleIdAndResult.fromJson(Map<String, dynamic> json) =>
+      _$PuzzleIdAndResultFromJson(json);
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -185,6 +227,3 @@ class PuzzleAndResult with _$PuzzleAndResult {
   factory PuzzleAndResult.fromJson(Map<String, dynamic> json) =>
       _$PuzzleAndResultFromJson(json);
 }
-
-IList<PuzzleAndResult> removeDuplicatePuzzles(IList<PuzzleAndResult> data) =>
-    data.toISet().toIList();

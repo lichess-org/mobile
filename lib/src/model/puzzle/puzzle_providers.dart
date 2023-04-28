@@ -45,9 +45,6 @@ Future<Puzzle?> puzzle(
 ) {
   final repo = ref.watch(puzzleHistoryStorageProvider);
   return repo.fetchPuzzle(
-    userId: userId,
-    angle: angle,
-    date: date,
     puzzleId: id,
   );
 }

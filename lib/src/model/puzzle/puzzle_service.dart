@@ -122,8 +122,9 @@ class PuzzleService {
       angle: angle,
       data: IList([
         if (history != null) ...history,
-        PuzzleAndResult(puzzle: puzzle, result: solution.win)
+        PuzzleIdAndResult(puzzleId: puzzle.puzzle.id, result: solution.win)
       ]),
+      puzzle: puzzle,
     );
 
     if (data != null) {

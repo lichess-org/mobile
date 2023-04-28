@@ -6,6 +6,8 @@ import 'package:lichess_mobile/src/app_dependencies.dart';
 
 part 'database.g.dart';
 
+const puzzleHistoryLimit = 30;
+
 Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
   return dbFactory.openDatabase(
     path,
@@ -16,10 +18,17 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
           "SELECT name FROM sqlite_master WHERE type='table' AND name='puzzle_history'",
         );
         if (tableExists.isNotEmpty) {
-          final nDaysAgo = DateTime.now().subtract(const Duration(days: 60));
+          final nDaysAgo =
+              DateTime.now().subtract(const Duration(days: puzzleHistoryLimit));
           await db.delete(
             'puzzle_history',
             where: 'solvedDate < ?',
+            whereArgs: [DateFormat('yyyy-MM-dd').format(nDaysAgo)],
+          );
+
+          await db.delete(
+            'puzzle',
+            where: 'lastModified < ?',
             whereArgs: [DateFormat('yyyy-MM-dd').format(nDaysAgo)],
           );
         }
@@ -32,7 +41,6 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
             data TEXT NOT NULL,
             PRIMARY KEY (userId, angle)
           )
-
             ''');
 
         await db.execute(
@@ -40,12 +48,21 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
             CREATE TABLE puzzle_history(
             userId TEXT NOT NULL,
             angle TEXT NOT NULL,
-            data TEXT NOT NULL,
             solvedDate DATE NOT NULL,
+            data TEXT NOT NULL,
             PRIMARY KEY (userId, angle, solvedDate)
           )
           ''',
         );
+
+        await db.execute('''
+          CREATE TABLE puzzle(
+          puzzleId TEXT NOT NULL,
+          lastModified DATE NOT NULL,
+          data TEXT NOT NULL,
+          PRIMARY KEY (puzzleId)
+        )
+          ''');
       },
     ),
   );
