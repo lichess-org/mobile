@@ -41,7 +41,7 @@ class AccountRepository {
     return _apiClient.get(Uri.parse('$kLichessHost/api/account')).then(
           (result) => result.flatMap(
             (response) => readJsonObject(
-              response.body,
+              response,
               mapper: User.fromJson,
               logger: _log,
             ),

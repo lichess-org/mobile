@@ -34,8 +34,7 @@ class AuthController extends _$AuthController {
             Uri.parse('$kLichessHost/api/account'),
             headers: {'Authorization': 'Bearer ${oAuthResp.accessToken}'},
           ).flatMap((response) {
-            return readJsonObject(response.body, mapper: User.fromJson)
-                .map((user) {
+            return readJsonObject(response, mapper: User.fromJson).map((user) {
               return UserSession(
                 token: oAuthResp.accessToken!,
                 user: user.lightUser,

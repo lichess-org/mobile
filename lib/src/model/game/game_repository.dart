@@ -32,7 +32,7 @@ class GameRepository {
       headers: {'Accept': 'application/json'},
     ).flatMap((response) {
       return readJsonObject(
-        response.body,
+        response,
         mapper: _makeArchivedGameFromJson,
         logger: _log,
       );

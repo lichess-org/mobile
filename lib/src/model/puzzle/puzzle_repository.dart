@@ -84,7 +84,7 @@ class PuzzleRepository {
   FutureResult<Puzzle> fetch(PuzzleId id) {
     return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/$id')).flatMap(
           (response) => readJsonObject(
-            response.body,
+            response,
             mapper: _puzzleFromJson,
             logger: _log,
           ),
@@ -96,7 +96,7 @@ class PuzzleRepository {
         .get(Uri.parse('$kLichessHost/api/streak'))
         .flatMap((response) {
       return readJsonObject(
-        response.body,
+        response,
         mapper: (Map<String, dynamic> json) {
           return PuzzleStreakResponse(
             puzzle: _puzzleFromPick(pick(json).required()),
@@ -121,7 +121,7 @@ class PuzzleRepository {
   FutureResult<Puzzle> daily() {
     return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/daily')).flatMap(
           (response) => readJsonObject(
-            response.body,
+            response,
             mapper: _puzzleFromJson,
             logger: _log,
           ).map(
@@ -137,7 +137,7 @@ class PuzzleRepository {
         .get(Uri.parse('$kLichessHost/api/puzzle/dashboard/$days'))
         .flatMap((response) {
       return readJsonObject(
-        response.body,
+        response,
         mapper: _puzzleDashboardFromJson,
         logger: _log,
       );
@@ -146,7 +146,7 @@ class PuzzleRepository {
 
   Result<PuzzleBatchResponse> _decodeBatchResponse(http.Response response) {
     return readJsonObject(
-      response.body,
+      response,
       mapper: (Map<String, dynamic> json) {
         final puzzles = json['puzzles'];
         if (puzzles is! List<dynamic>) {
