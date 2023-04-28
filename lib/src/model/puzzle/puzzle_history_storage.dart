@@ -187,4 +187,4 @@ class PuzzleAndResult with _$PuzzleAndResult {
 }
 
 IList<PuzzleAndResult> removeDuplicatePuzzles(IList<PuzzleAndResult> data) =>
-    data.toList().toSet().toIList();
+    data.toISet().toIList();

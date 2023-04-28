@@ -24,7 +24,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 class PuzzleHistoryWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final history = ref.refresh(puzzleHistoryProvider);
+    final history = ref.read(puzzleHistoryProvider);
     return history.when(
       data: (data) {
         if (data == null) {
@@ -184,56 +184,51 @@ class _HistoryBoards extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return LayoutBuilder(
-      builder: (ctx, constrains) {
-        final boardWidth = constrains.maxWidth / 2;
-        final crossAxisCount =
-            MediaQuery.of(ctx).size.width > MediaQuery.of(ctx).size.height
-                ? 4
-                : 2;
-        return LayoutGrid(
-          columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
-          rowSizes: List.generate(
-            (history.puzzles.length / crossAxisCount).ceil(),
-            (_) => auto,
-          ),
-          children: history.puzzles.take(history.puzzles.length).map((puzzle) {
-            final preview = PuzzlePreview.fromPuzzle(puzzle.puzzle);
-            return SizedBox(
-              width: boardWidth,
-              height: boardWidth + 30, // + 30 for text Widget
-              child: BoardPreview(
-                orientation: preview.orientation.cg,
-                fen: preview.initialFen,
-                footer: Text(
-                  puzzle.result ? 'Solved' : 'Failed',
-                  style: TextStyle(
-                    color:
-                        puzzle.result ? LichessColors.good : LichessColors.red,
+    final crossAxisCount =
+        MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
+            ? 4
+            : 2;
+    final boardWidth = MediaQuery.of(context).size.width / crossAxisCount;
+    return LayoutGrid(
+      columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
+      rowSizes: List.generate(
+        (history.puzzles.length / crossAxisCount).ceil(),
+        (_) => auto,
+      ),
+      children: history.puzzles.take(history.puzzles.length).map((puzzle) {
+        final preview = PuzzlePreview.fromPuzzle(puzzle.puzzle);
+        return SizedBox(
+          width: boardWidth,
+          height: boardWidth + 30, // + 30 for text Widget
+          child: BoardPreview(
+            orientation: preview.orientation.cg,
+            fen: preview.initialFen,
+            footer: Text(
+              puzzle.result ? 'Solved' : 'Failed',
+              style: TextStyle(
+                color: puzzle.result ? LichessColors.good : LichessColors.red,
+              ),
+            ),
+            onTap: () {
+              final session = ref.read(authSessionProvider);
+              pushPlatformRoute(
+                context,
+                rootNavigator: true,
+                builder: (ctx) => PuzzleScreen(
+                  theme: history.angle,
+                  initialPuzzleContext: PuzzleContext(
+                    theme: history.angle,
+                    puzzle: puzzle.puzzle,
+                    userId: session?.user.id,
                   ),
                 ),
-                onTap: () {
-                  final session = ref.read(authSessionProvider);
-                  pushPlatformRoute(
-                    context,
-                    rootNavigator: true,
-                    builder: (ctx) => PuzzleScreen(
-                      theme: history.angle,
-                      initialPuzzleContext: PuzzleContext(
-                        theme: history.angle,
-                        puzzle: puzzle.puzzle,
-                        userId: session?.user.id,
-                      ),
-                    ),
-                  ).then(
-                    (_) => ref.invalidate(nextPuzzleProvider(history.angle)),
-                  );
-                },
-              ),
-            );
-          }).toList(),
+              ).then(
+                (_) => ref.invalidate(nextPuzzleProvider(history.angle)),
+              );
+            },
+          ),
         );
-      },
+      }).toList(),
     );
   }
 }
