@@ -24,7 +24,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 class PuzzleHistoryWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final history = ref.read(puzzleHistoryProvider);
+    final history = ref.watch(puzzleHistoryProvider);
     return history.when(
       data: (data) {
         if (data == null) {

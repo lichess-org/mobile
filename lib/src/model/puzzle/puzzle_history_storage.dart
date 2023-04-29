@@ -68,7 +68,7 @@ class PuzzleHistoryStorage {
       where: '''
       puzzleId = ?
       ''',
-      whereArgs: [puzzleId],
+      whereArgs: [puzzleId.toString()],
     );
 
     final raw = list.firstOrNull?['data'] as String?;

@@ -39,9 +39,6 @@ Future<PuzzleStreakResponse> streak(StreakRef ref) {
 Future<Puzzle?> puzzle(
   PuzzleRef ref,
   PuzzleId id,
-  UserId? userId,
-  DateTime date,
-  PuzzleTheme angle,
 ) {
   final repo = ref.watch(puzzleHistoryStorageProvider);
   return repo.fetchPuzzle(

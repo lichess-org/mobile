@@ -103,12 +103,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
                       onTap: puzzleState.puzzle.puzzle.id != attempt.id &&
                               loadingPuzzleId == null
                           ? (id) async {
-                              final provider = puzzleProvider(
-                                id,
-                                widget.initialPuzzleContext.userId,
-                                DateTime.now(),
-                                widget.initialPuzzleContext.theme,
-                              );
+                              final provider = puzzleProvider(id);
                               setState(() {
                                 loadingPuzzleId = id;
                               });
