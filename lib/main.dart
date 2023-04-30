@@ -1,13 +1,15 @@
 import 'dart:developer' as developer;
+import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
+import 'src/constants.dart';
 import 'src/app.dart';
 
-void main() {
+void main() async {
   if (kDebugMode) {
     Logger.root.onRecord.listen((record) {
       developer.log(
@@ -27,6 +29,15 @@ void main() {
 
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    final data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
+    if (data.size.shortestSide < kTabletThreshold) {
+      await SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp],
+      );
+    }
+  }
 
   runApp(
     ProviderScope(
