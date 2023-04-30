@@ -65,6 +65,9 @@ class ArchivedGame with _$ArchivedGame {
   Move? moveAt(int cursor) =>
       steps.isNotEmpty ? Move.fromUci(steps[cursor].uci) : null;
 
+  Position? positionAt(int cursor) =>
+      steps.isNotEmpty ? steps[cursor].position : null;
+
   Duration? whiteClockAt(int cursor) =>
       steps.isNotEmpty ? steps[cursor].whiteClock : null;
 

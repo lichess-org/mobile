@@ -153,6 +153,7 @@ class _Body extends ConsumerWidget {
                               ? cg.InteractableSide.white
                               : cg.InteractableSide.black,
                   fen: puzzleState.fen,
+                  isCheck: puzzleState.position.isCheck,
                   lastMove: puzzleState.lastMove?.cg,
                   sideToMove: puzzleState.position.turn.cg,
                   validMoves: puzzleState.validMoves,

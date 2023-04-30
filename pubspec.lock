@@ -173,8 +173,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: dafe8e5becd45109c2a9684e0d7d270a231ea0b2
-      resolved-ref: dafe8e5becd45109c2a9684e0d7d270a231ea0b2
+      ref: "717e93b0597b30dfacf6d67c2088c8d2a45351da"
+      resolved-ref: "717e93b0597b30dfacf6d67c2088c8d2a45351da"
       url: "https://github.com/lichess-org/flutter-chessground.git"
     source: git
     version: "0.1.0"
