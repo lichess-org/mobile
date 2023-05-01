@@ -105,6 +105,7 @@ class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
             selectedValue = choices[val];
           }
           ref.read(gameIdStateProvider.notifier).state = tempGameId;
+          ref.read(_featuredGameWithSoundProvider.notifier).gameId = tempGameId;
         });
       }
     }); // End FR_data.then
@@ -272,6 +273,7 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
+    //final gameId = ref.watch(gameIdStateProvider);
 /*
     //final wGameId = ref.watch(watchedGameId);
     final gameId = ref.watch(gameIdStateProvider);
@@ -287,6 +289,13 @@ class _Body extends ConsumerWidget {
     final featuredGame = ref.watch(featuredGameProvider);
     //final tvChannel = ref.watch(tvChannelsProvider);
 */
+/*
+  final tvStream = ref.watch(
+            tvGameStreamProvider(
+              WatchParameter(withSound: true, gameId: gameId),
+            ),
+          )
+          */
     final featuredGame = currentTab == BottomTab.watch
         ? ref.watch(_featuredGameWithSoundProvider)
         : const AsyncLoading<FeaturedGameState>();

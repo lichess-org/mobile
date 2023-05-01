@@ -17,6 +17,8 @@ part 'featured_game.g.dart';
 class FeaturedGame extends _$FeaturedGame {
   StreamSubscription<TvEvent>? _streamSub;
 
+  String? _gameId;
+
   @override
   Future<FeaturedGameState> build({required bool withSound}) async {
     final stream = connectStream();
@@ -38,9 +40,27 @@ class FeaturedGame extends _$FeaturedGame {
     );
   }
 
+  set gameId(String? value) {
+    if (_gameId != value) {
+      _gameId = value;
+      disconnectStream();
+      connectStream();
+    }
+  }
+
+  String? get gameId => _gameId;
+
+/*
+  String? get getGameId => gameId;
+*/
   Stream<TvEvent> connectStream() {
     final tvRepository = ref.watch(tvRepositoryProvider);
-    final stream = tvRepository.tvFeed().asBroadcastStream();
+    final Stream<TvEvent> stream;
+    if (gameId == null) {
+      stream = tvRepository.tvFeed().asBroadcastStream();
+    } else {
+      stream = tvRepository.tvGameFeed(_gameId!).asBroadcastStream();
+    }
 
     _streamSub = stream.listen((event) {
       if (event is TvFeaturedEvent) {
