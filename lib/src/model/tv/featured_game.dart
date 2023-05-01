@@ -50,9 +50,6 @@ class FeaturedGame extends _$FeaturedGame {
 
   String? get gameId => _gameId;
 
-/*
-  String? get getGameId => gameId;
-*/
   Stream<TvEvent> connectStream() {
     final tvRepository = ref.watch(tvRepositoryProvider);
     final Stream<TvEvent> stream;

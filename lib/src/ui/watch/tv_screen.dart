@@ -12,9 +12,6 @@ import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-//import 'package:lichess_mobile/src/model/tv/featured_position.dart';
-//import 'package:lichess_mobile/src/model/tv/tv_stream.dart';
-//import 'package:lichess_mobile/src/model/tv/featured_game_notifier.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 
@@ -32,18 +29,6 @@ class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({super.key});
 
   @override
-/*
-  _TvScreenState createState() => _TvScreenState();
-}
-
-class _TvScreenState extends ConsumerState<TvScreen> {
-  String selectedValue = "Top Rated";
-
-  @override
-  Widget build(BuildContext context) {
-    return ConsumerPlatformWidget(
-      ref: ref,
-*/
   ConsumerState<TvScreen> createState() => _TvScreenState();
 }
 
@@ -273,29 +258,6 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
-    //final gameId = ref.watch(gameIdStateProvider);
-/*
-    //final wGameId = ref.watch(watchedGameId);
-    final gameId = ref.watch(gameIdStateProvider);
-
-    // ensure the stream is closed when offstage
-    final tvStream = currentTab == BottomTab.watch
-        ? ref.watch(
-            tvGameStreamProvider(
-              WatchParameter(withSound: true, gameId: gameId),
-            ),
-          )
-        : const AsyncLoading<FeaturedPosition>();
-    final featuredGame = ref.watch(featuredGameProvider);
-    //final tvChannel = ref.watch(tvChannelsProvider);
-*/
-/*
-  final tvStream = ref.watch(
-            tvGameStreamProvider(
-              WatchParameter(withSound: true, gameId: gameId),
-            ),
-          )
-          */
     final featuredGame = currentTab == BottomTab.watch
         ? ref.watch(_featuredGameWithSoundProvider)
         : const AsyncLoading<FeaturedGameState>();
@@ -419,38 +381,4 @@ Future<int?> showAndroidChoices(
       );
     },
   );
-  //return;
 }
-
-//final _variationIndex = Provider<int>((ref) => throw UnimplementedError());
-/*
-Future<int?> showIosChoices(BuildContext context, List<String> choices) {
-  return showCupertinoModalPopup<int>(
-    context: context,
-    builder: (context) {
-      return SizedBox(
-        height: 250,
-        child: CupertinoPicker(
-          backgroundColor: Theme.of(context).canvasColor,
-          useMagnifier: true,
-          magnification: 1.1,
-          itemExtent: 40,
-          scrollController: FixedExtentScrollController(initialItem: 1),
-          children: List<Widget>.generate(choices.length, (index) {
-            return Center(
-              child: Text(
-                choices[index],
-                style: const TextStyle(
-                  fontSize: 21,
-                ),
-              ),
-            );
-          }),
-          onSelectedItemChanged: (int selectedItem) {
-            //Navigator.pop(context);
-          },
-        ),
-      );
-    },
-  );
-}*/
