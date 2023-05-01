@@ -333,12 +333,14 @@ class RecentGames extends ConsumerWidget {
           children: data.map((game) {
             final mySide = game.white.id == user.id ? Side.white : Side.black;
             final opponent = game.white.id == user.id ? game.black : game.white;
-            final opponentName = opponent.name == 'Stockfish'
+            final opponentName = opponent.aiLevel != null
                 ? context.l10n.aiNameLevelAiLevel(
                     opponent.name,
                     opponent.aiLevel.toString(),
                   )
-                : opponent.name;
+                : opponent.name == 'Stockfish'
+                    ? context.l10n.anonymous
+                    : opponent.name;
 
             return GameListTile(
               onTap: game.variant.isSupported
