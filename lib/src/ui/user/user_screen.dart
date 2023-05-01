@@ -327,8 +327,7 @@ class RecentGames extends ConsumerWidget {
     return recentGames.when(
       data: (data) {
         return ListSection(
-          // TODO translate
-          header: Text('Recent games', style: Styles.sectionTitle),
+          header: Text(context.l10n.recentGames, style: Styles.sectionTitle),
           hasLeading: true,
           children: data.map((game) {
             final mySide = game.white.id == user.id ? Side.white : Side.black;
