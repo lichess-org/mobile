@@ -420,10 +420,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_appauth
-      sha256: bd35afb0b9d1ab3ffd511d622eb52adf1020a5c6d479eac271bfd1a9bb4b8ccb
+      sha256: e2f48b18420d98b579822f1a0cac167179ca9dc3da1b0144399d0ccc7be192c8
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.1+1"
+    version: "5.0.0"
   flutter_appauth_platform_interface:
     dependency: transitive
     description:
