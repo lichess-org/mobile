@@ -189,7 +189,7 @@ class _Body extends ConsumerWidget {
               await ref.read(authControllerProvider.notifier).signOut();
 
               ref.read(currentBottomTabProvider.notifier).state =
-                  BottomTab.play;
+                  BottomTab.home;
             },
           ),
         ],
@@ -220,7 +220,7 @@ class _Body extends ConsumerWidget {
                   await ref.read(authControllerProvider.notifier).signOut();
 
                   ref.read(currentBottomTabProvider.notifier).state =
-                      BottomTab.play;
+                      BottomTab.home;
                 },
               ),
             ],

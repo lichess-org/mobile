@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 
 import 'puzzle_screen.dart';
@@ -60,6 +61,7 @@ class _PuzzleDashboardScreenState extends ConsumerState<PuzzleDashboardScreen> {
   Widget _iosBuilder(BuildContext context, UserSession? userSession) {
     return CupertinoPageScaffold(
       child: CustomScrollView(
+        controller: puzzlesScrollController,
         slivers: [
           CupertinoSliverNavigationBar(
             largeTitle: Text(context.l10n.puzzles),
@@ -180,7 +182,10 @@ class _Body extends ConsumerWidget {
 
     return defaultTargetPlatform == TargetPlatform.iOS
         ? SliverList(delegate: SliverChildListDelegate(content))
-        : ListView(children: content);
+        : ListView(
+            controller: puzzlesScrollController,
+            children: content,
+          );
   }
 }
 

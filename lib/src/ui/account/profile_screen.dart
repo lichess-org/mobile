@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 
 part 'profile_screen.g.dart';
 
@@ -65,7 +66,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 body: RefreshIndicator(
                   key: _androidRefreshKey,
                   onRefresh: () => _refreshData(account),
-                  child: UserScreenBody(user: account),
+                  child: ListView(
+                    controller: profileScrollController,
+                    children: buildUserScreenList(account),
+                  ),
                 ),
               )
             : Scaffold(
@@ -92,6 +96,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         return account != null
             ? CupertinoPageScaffold(
                 child: CustomScrollView(
+                  controller: profileScrollController,
                   slivers: [
                     CupertinoSliverNavigationBar(
                       largeTitle: PlayerTitle(
@@ -105,9 +110,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                     SliverSafeArea(
                       top: false,
-                      sliver: UserScreenBody(
-                        user: account,
-                        inCustomScrollView: true,
+                      sliver: SliverList(
+                        delegate: SliverChildListDelegate(
+                          buildUserScreenList(account),
+                        ),
                       ),
                     ),
                   ],

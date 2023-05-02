@@ -48,7 +48,7 @@ class UserScreen extends ConsumerWidget {
       ),
       body: asyncUser.when(
         data: (user) {
-          return UserScreenBody(user: user);
+          return ListView(children: buildUserScreenList(user));
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: _handleFetchUserError,
@@ -63,7 +63,9 @@ class UserScreen extends ConsumerWidget {
         middle: PlayerTitle(userName: user.name, title: user.title),
       ),
       child: asyncUser.when(
-        data: (user) => SafeArea(child: UserScreenBody(user: user)),
+        data: (user) => SafeArea(
+          child: ListView(children: buildUserScreenList(user)),
+        ),
         loading: () =>
             const Center(child: CircularProgressIndicator.adaptive()),
         error: _handleFetchUserError,
@@ -79,40 +81,15 @@ class UserScreen extends ConsumerWidget {
   }
 }
 
-/// Common widget for [UserScreen] and [ProfileScreen].
-///
-/// Use `inCustomScrollView` parameter to return a [SliverPadding] widget needed
-/// by [ProfileScreen].
-class UserScreenBody extends StatelessWidget {
-  const UserScreenBody({
-    required this.user,
-    this.inCustomScrollView = false,
-    super.key,
-  });
-
-  final User user;
-
-  /// If set to `true` this widget will return a [SliverPadding] instead of a
-  /// [ListView].
-  final bool inCustomScrollView;
-
-  @override
-  Widget build(BuildContext context) {
-    final list = [
-      _Profile(user: user),
-      PerfCards(user: user),
-      Activity(user: user),
-      RecentGames(user: user),
-    ];
-
-    return inCustomScrollView
-        ? SliverList(
-            delegate: SliverChildListDelegate(list),
-          )
-        : ListView(
-            children: list,
-          );
-  }
+// ignore: avoid-returning-widgets
+/// Common content for [UserScreen] and [ProfileScreen].
+List<Widget> buildUserScreenList(User user) {
+  return [
+    _Profile(user: user),
+    PerfCards(user: user),
+    Activity(user: user),
+    RecentGames(user: user),
+  ];
 }
 
 const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);

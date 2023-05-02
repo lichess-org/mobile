@@ -52,9 +52,11 @@ class _WatchScreenState extends ConsumerState<WatchScreen> with RouteAware {
             builder: (context, orientation) {
               return orientation == Orientation.portrait
                   ? ListView(
+                      controller: watchScrollController,
                       children: const [_WatchTvWidget(), _StreamerWidget()],
                     )
                   : GridView(
+                      controller: watchScrollController,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
@@ -77,6 +79,7 @@ class _WatchScreenState extends ConsumerState<WatchScreen> with RouteAware {
       child: OrientationBuilder(
         builder: (context, orientation) {
           return CustomScrollView(
+            controller: watchScrollController,
             slivers: [
               const CupertinoSliverNavigationBar(),
               CupertinoSliverRefreshControl(

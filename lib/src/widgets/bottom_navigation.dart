@@ -12,19 +12,19 @@ import 'package:lichess_mobile/src/ui/watch/watch_screen.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_dashboard_screen.dart';
 
 enum BottomTab {
-  play,
+  home,
   puzzles,
   watch,
   profile;
 }
 
 final currentBottomTabProvider =
-    StateProvider<BottomTab>((ref) => BottomTab.play);
+    StateProvider<BottomTab>((ref) => BottomTab.home);
 
 final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
   final currentTab = ref.watch(currentBottomTabProvider);
   switch (currentTab) {
-    case BottomTab.play:
+    case BottomTab.home:
       return homeNavigatorKey;
     case BottomTab.puzzles:
       return puzzlesNavigatorKey;
@@ -35,10 +35,29 @@ final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
   }
 });
 
+final currentRootScrollControllerProvider = Provider<ScrollController>((ref) {
+  final currentTab = ref.watch(currentBottomTabProvider);
+  switch (currentTab) {
+    case BottomTab.home:
+      return homeScrollController;
+    case BottomTab.puzzles:
+      return puzzlesScrollController;
+    case BottomTab.watch:
+      return watchScrollController;
+    case BottomTab.profile:
+      return profileScrollController;
+  }
+});
+
 final homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
 final puzzlesNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'puzzles');
 final watchNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'watch');
 final profileNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'profile');
+
+final homeScrollController = ScrollController(debugLabel: 'HomeScroll');
+final puzzlesScrollController = ScrollController(debugLabel: 'PuzzlesScroll');
+final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
+final profileScrollController = ScrollController(debugLabel: 'ProfileScroll');
 
 /// Implements a tabbed (iOS style) root layout and behavior structure.
 ///
@@ -75,7 +94,19 @@ class BottomNavScaffold extends ConsumerWidget {
       final tappedTab = BottomTab.values[index];
       if (tappedTab == curTab) {
         final navState = ref.read(currentNavigatorKeyProvider).currentState;
-        navState?.popUntil((route) => route.isFirst);
+        if (navState?.canPop() == true) {
+          navState?.popUntil((route) => route.isFirst);
+        } else {
+          final scrollController =
+              ref.read(currentRootScrollControllerProvider);
+          if (scrollController.hasClients) {
+            scrollController.animateTo(
+              0,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            );
+          }
+        }
       } else {
         ref.read(currentBottomTabProvider.notifier).state = tappedTab;
       }
