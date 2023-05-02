@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:deep_pick/deep_pick.dart';
 
 /// Represents a lichess rating perf item
 enum Perf {
@@ -29,3 +30,29 @@ enum Perf {
 }
 
 final IMap<String, Perf> perfNameMap = IMap(Perf.values.asNameMap());
+
+extension PerfExtension on Pick {
+  Perf asPerfOrThrow() {
+    final value = this.required().value;
+    if (value is Perf) {
+      return value;
+    }
+    if (value is String) {
+      if (perfNameMap.containsKey(value)) {
+        return perfNameMap[value]!;
+      }
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to Perf",
+    );
+  }
+
+  Perf? asPerfOrNull() {
+    if (value == null) return null;
+    try {
+      return asPerfOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+}

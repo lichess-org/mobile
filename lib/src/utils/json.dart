@@ -9,7 +9,6 @@ import 'package:result_extensions/result_extensions.dart';
 
 import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 
@@ -138,29 +137,6 @@ extension GameExtension on Pick {
     if (value == null) return null;
     try {
       return asSpeedOrThrow();
-    } catch (_) {
-      return null;
-    }
-  }
-
-  Perf asPerfOrThrow() {
-    final value = required().value;
-    if (value is Perf) {
-      return value;
-    }
-    if (value is String) {
-      return Perf.values
-          .firstWhere((v) => v.title == value, orElse: () => Perf.blitz);
-    }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to Perf",
-    );
-  }
-
-  Perf? asPerfOrNull() {
-    if (value == null) return null;
-    try {
-      return asPerfOrThrow();
     } catch (_) {
       return null;
     }
