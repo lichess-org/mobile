@@ -87,13 +87,13 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(
 
   return IList([
     Tuple2(
-      l10n.puzzleRecommended,
+      l10n.strings.puzzleRecommended,
       [
         PuzzleTheme.mix,
       ],
     ),
     Tuple2(
-      l10n.puzzlePhases,
+      l10n.strings.puzzlePhases,
       [
         PuzzleTheme.opening,
         PuzzleTheme.middlegame,
@@ -107,7 +107,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(
       ],
     ),
     Tuple2(
-      l10n.puzzleMotifs,
+      l10n.strings.puzzleMotifs,
       [
         PuzzleTheme.advancedPawn,
         PuzzleTheme.attackingF2F7,
@@ -126,7 +126,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(
       ],
     ),
     Tuple2(
-      l10n.puzzleAdvanced,
+      l10n.strings.puzzleAdvanced,
       [
         PuzzleTheme.attraction,
         PuzzleTheme.clearance,
@@ -140,7 +140,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(
       ],
     ),
     Tuple2(
-      l10n.puzzleMates,
+      l10n.strings.puzzleMates,
       [
         PuzzleTheme.mate,
         PuzzleTheme.mateIn1,
@@ -159,7 +159,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(
       ],
     ),
     Tuple2(
-      l10n.puzzleSpecialMoves,
+      l10n.strings.puzzleSpecialMoves,
       [
         PuzzleTheme.castling,
         PuzzleTheme.enPassant,
@@ -168,7 +168,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(
       ],
     ),
     Tuple2(
-      l10n.puzzleGoals,
+      l10n.strings.puzzleGoals,
       [
         PuzzleTheme.equality,
         PuzzleTheme.advantage,
@@ -177,7 +177,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(
       ],
     ),
     Tuple2(
-      l10n.puzzleLengths,
+      l10n.strings.puzzleLengths,
       [
         PuzzleTheme.oneMove,
         PuzzleTheme.long,
@@ -186,7 +186,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(
       ],
     ),
     Tuple2(
-      l10n.puzzleOrigin,
+      l10n.strings.puzzleOrigin,
       [
         PuzzleTheme.master,
         PuzzleTheme.masterVsMaster,

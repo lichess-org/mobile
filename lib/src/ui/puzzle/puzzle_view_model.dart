@@ -185,6 +185,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
         )
         .setDifficulty(difficulty);
 
+    // ignore: avoid_manual_providers_as_generated_provider_dependency
     final nextPuzzle = await ref.read(defaultPuzzleServiceProvider).resetBatch(
           userId: initialContext.userId,
           angle: initialContext.theme,
@@ -283,6 +284,8 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     final sessionNotifier =
         puzzleSessionProvider(initialContext.userId, initialContext.theme)
             .notifier;
+
+    // ignore: avoid_manual_providers_as_generated_provider_dependency
     final service = ref.read(defaultPuzzleServiceProvider);
     final soundService = ref.read(soundServiceProvider);
 
@@ -301,6 +304,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
         nextContext: next,
       );
 
+      // ignore: avoid_manual_providers_as_generated_provider_dependency
       ref.read(sessionNotifier).addAttempt(
             state.puzzle.puzzle.id,
             win: result == PuzzleResult.win,
@@ -308,6 +312,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
 
       final rounds = next?.rounds;
       if (rounds != null) {
+        // ignore: avoid_manual_providers_as_generated_provider_dependency
         ref.read(sessionNotifier).setRatingDiffs(rounds);
       }
     } else {

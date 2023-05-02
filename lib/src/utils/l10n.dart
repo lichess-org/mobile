@@ -1,23 +1,46 @@
-import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
+import 'package:flutter/material.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 
-/// provider used to access the AppLocalizations object for the current locale
-final l10nProvider = Provider<AppLocalizations>((ref) {
-  ref.state = lookupAppLocalizations(ui.window.locale);
+part 'l10n.freezed.dart';
+part 'l10n.g.dart';
 
-  final observer = _LocaleObserver((locales) {
-    ref.state = lookupAppLocalizations(ui.window.locale);
-  });
+@freezed
+class L10nState with _$L10nState {
+  const factory L10nState({
+    required Locale locale,
+    required AppLocalizations strings,
+  }) = _L10nState;
+}
 
-  final binding = WidgetsBinding.instance;
-  binding.addObserver(observer);
-  ref.onDispose(() => binding.removeObserver(observer));
+@Riverpod(keepAlive: true)
+class L10n extends _$L10n {
+  @override
+  L10nState build() {
+    final observer = _LocaleObserver((locales) {
+      _update();
+    });
+    final binding = WidgetsBinding.instance;
+    binding.addObserver(observer);
+    ref.onDispose(() => binding.removeObserver(observer));
 
-  return ref.state;
-});
+    return _getLocale();
+  }
+
+  void _update() {
+    state = _getLocale();
+  }
+
+  L10nState _getLocale() {
+    return L10nState(
+      locale: ui.window.locale,
+      strings: lookupAppLocalizations(ui.window.locale),
+    );
+  }
+}
 
 /// observer used to notify the caller when the locale changes
 class _LocaleObserver extends WidgetsBindingObserver {

@@ -19,6 +19,7 @@ Future<PuzzleContext?> nextPuzzle(
   PuzzleTheme theme,
 ) {
   final session = ref.watch(authSessionProvider);
+  // ignore: avoid_manual_providers_as_generated_provider_dependency
   final puzzleService = ref.watch(defaultPuzzleServiceProvider);
   final userId = session?.user.id;
   return puzzleService.nextPuzzle(

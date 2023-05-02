@@ -57,10 +57,15 @@ Future<Widget> buildTestApp(
 
   return ProviderScope(
     overrides: [
+      // ignore: scoped_providers_should_specify_dependencies
       soundServiceProvider.overrideWithValue(FakeSoundService()),
+      // ignore: scoped_providers_should_specify_dependencies
       sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+      // ignore: scoped_providers_should_specify_dependencies
       authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
+      // ignore: scoped_providers_should_specify_dependencies
       sessionStorageProvider.overrideWithValue(FakeSessionStorage(userSession)),
+      // ignore: scoped_providers_should_specify_dependencies
       appDependenciesProvider.overrideWith((ref) {
         return AppDependencies(
           packageInfo: PackageInfo(
