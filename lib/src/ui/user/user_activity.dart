@@ -252,6 +252,47 @@ class UserActivityEntry extends ConsumerWidget {
   }
 }
 
+const _boxSize = 20.0;
+const _spaceWidth = 3.0;
+
+const _gameStatsFontStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 11,
+  fontWeight: FontWeight.bold,
+);
+
+class _ResultBox extends StatelessWidget {
+  const _ResultBox({
+    required this.number,
+    required this.color,
+  });
+
+  final int number;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: _boxSize,
+      width: _boxSize,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(1.0),
+        child: FittedBox(
+          fit: BoxFit.contain,
+          child: Text(
+            number.toString(),
+            style: _gameStatsFontStyle,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class BriefGameResultBox extends StatelessWidget {
   const BriefGameResultBox({
     required this.win,
@@ -262,15 +303,6 @@ class BriefGameResultBox extends StatelessWidget {
   final int win;
   final int draw;
   final int loss;
-
-  static const gameStatsFontStyle = TextStyle(
-    color: Colors.white,
-    fontSize: 11,
-    fontWeight: FontWeight.bold,
-  );
-
-  static const _boxSize = 20.0;
-  static const _spaceWidth = 3.0;
 
   @override
   Widget build(BuildContext context) {
@@ -289,63 +321,27 @@ class BriefGameResultBox extends StatelessWidget {
         child: Row(
           children: [
             if (win != 0)
-              SizedBox(
-                height: _boxSize,
-                width: _boxSize,
-                child: DecoratedBox(
-                  decoration: const BoxDecoration(
-                    color: LichessColors.good,
-                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                  ),
-                  child: Center(
-                    child: Text(
-                      win.toString(),
-                      style: gameStatsFontStyle,
-                    ),
-                  ),
-                ),
+              _ResultBox(
+                number: win,
+                color: LichessColors.good,
               ),
             if (win != 0 && draw != 0)
               const SizedBox(
                 width: _spaceWidth,
               ),
             if (draw != 0)
-              SizedBox(
-                height: _boxSize,
-                width: _boxSize,
-                child: DecoratedBox(
-                  decoration: const BoxDecoration(
-                    color: LichessColors.brag,
-                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                  ),
-                  child: Center(
-                    child: Text(
-                      draw.toString(),
-                      style: gameStatsFontStyle,
-                    ),
-                  ),
-                ),
+              _ResultBox(
+                number: draw,
+                color: LichessColors.warn,
               ),
             if ((draw != 0 && loss != 0) || (win != 0 && loss != 0))
               const SizedBox(
                 width: _spaceWidth,
               ),
             if (loss != 0)
-              SizedBox(
-                height: _boxSize,
-                width: _boxSize,
-                child: DecoratedBox(
-                  decoration: const BoxDecoration(
-                    color: LichessColors.red,
-                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                  ),
-                  child: Center(
-                    child: Text(
-                      loss.toString(),
-                      style: gameStatsFontStyle,
-                    ),
-                  ),
-                ),
+              _ResultBox(
+                number: loss,
+                color: LichessColors.red,
               ),
           ],
         ),
