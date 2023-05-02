@@ -71,8 +71,14 @@ class BottomNavScaffold extends ConsumerWidget {
     ];
 
     void onItemTapped(int index) {
-      ref.read(currentBottomTabProvider.notifier).state =
-          BottomTab.values[index];
+      final curTab = ref.read(currentBottomTabProvider);
+      final tappedTab = BottomTab.values[index];
+      if (tappedTab == curTab) {
+        final navState = ref.read(currentNavigatorKeyProvider).currentState;
+        navState?.popUntil((route) => route.isFirst);
+      } else {
+        ref.read(currentBottomTabProvider.notifier).state = tappedTab;
+      }
     }
 
     switch (defaultTargetPlatform) {
