@@ -3,14 +3,10 @@ import 'package:async/async.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
 import 'package:deep_pick/deep_pick.dart';
-import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:result_extensions/result_extensions.dart';
 
 import 'package:lichess_mobile/src/model/common/errors.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
 
 typedef Mapper<T> = T Function(Map<String, dynamic>);
 
@@ -63,132 +59,6 @@ Result<IList<T>> readJsonListOfObjects<T>(
   return result;
 }
 
-// -- pick extensions
-
-extension Dartchess on Pick {
-  Move asUciMoveOrThrow() {
-    final value = required().value;
-    if (value is Move) {
-      return value;
-    }
-    if (value is String) {
-      final move = Move.fromUci(value);
-      if (move != null) {
-        return move;
-      } else {
-        throw PickException(
-          "value $value at $debugParsingExit can't be casted to Move: invalid UCI string.",
-        );
-      }
-    }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to Move",
-    );
-  }
-
-  Move? asUciMoveOrNull() {
-    if (value == null) return null;
-    try {
-      return asUciMoveOrThrow();
-    } catch (_) {
-      return null;
-    }
-  }
-
-  Side asSideOrThrow() {
-    final value = required().value;
-    if (value is Side) {
-      return value;
-    }
-    if (value is String) {
-      return value == 'white' ? Side.white : Side.black;
-    }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to Side",
-    );
-  }
-
-  Side? asSideOrNull() {
-    if (value == null) return null;
-    try {
-      return asSideOrThrow();
-    } catch (_) {
-      return null;
-    }
-  }
-}
-
-extension GameExtension on Pick {
-  Speed asSpeedOrThrow() {
-    final value = required().value;
-    if (value is Speed) {
-      return value;
-    }
-    if (value is String) {
-      return Speed.values
-          .firstWhere((v) => v.name == value, orElse: () => Speed.blitz);
-    }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to Speed",
-    );
-  }
-
-  Speed? asSpeedOrNull() {
-    if (value == null) return null;
-    try {
-      return asSpeedOrThrow();
-    } catch (_) {
-      return null;
-    }
-  }
-
-  GameStatus asGameStatusOrThrow() {
-    final value = required().value;
-    if (value is GameStatus) {
-      return value;
-    }
-    if (value is String) {
-      return GameStatus.values
-          .firstWhere((e) => e.name == value, orElse: () => GameStatus.unknown);
-    }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to GameStatus",
-    );
-  }
-
-  GameStatus? asGameStatusOrNull() {
-    if (value == null) return null;
-    try {
-      return asGameStatusOrThrow();
-    } catch (_) {
-      return null;
-    }
-  }
-
-  Variant asVariantOrThrow() {
-    final value = required().value;
-    if (value is Variant) {
-      return value;
-    }
-    if (value is String) {
-      return Variant.values
-          .firstWhere((e) => e.name == value, orElse: () => Variant.standard);
-    }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to GameStatus",
-    );
-  }
-
-  Variant? asVariantOrNull() {
-    if (value == null) return null;
-    try {
-      return asVariantOrNull();
-    } catch (_) {
-      return null;
-    }
-  }
-}
-
 extension TimeExtension on Pick {
   /// Matches a DateTime from milliseconds since unix epoch.
   DateTime asDateTimeFromMillisecondsOrThrow() {
@@ -233,96 +103,6 @@ extension TimeExtension on Pick {
     if (value == null) return null;
     try {
       return asDurationFromSecondsOrThrow();
-    } catch (_) {
-      return null;
-    }
-  }
-}
-
-extension ModelsPick on Pick {
-  UserId asUserIdOrThrow() {
-    final value = required().value;
-    if (value is UserId) {
-      return value;
-    }
-    if (value is String) {
-      return UserId(value);
-    }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to UserId",
-    );
-  }
-
-  UserId? asUserIdOrNull() {
-    if (value == null) return null;
-    try {
-      return asUserIdOrThrow();
-    } catch (_) {
-      return null;
-    }
-  }
-
-  GameId asGameIdOrThrow() {
-    final value = required().value;
-    if (value is GameId) {
-      return value;
-    }
-    if (value is String) {
-      return GameId(value);
-    }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to GameId",
-    );
-  }
-
-  GameId? asGameIdOrNull() {
-    if (value == null) return null;
-    try {
-      return asGameIdOrThrow();
-    } catch (_) {
-      return null;
-    }
-  }
-
-  GameFullId asGameFullIdOrThrow() {
-    final value = required().value;
-    if (value is GameFullId) {
-      return value;
-    }
-    if (value is String) {
-      return GameFullId(value);
-    }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to GameId",
-    );
-  }
-
-  GameFullId? asGameFullIdOrNull() {
-    if (value == null) return null;
-    try {
-      return asGameFullIdOrThrow();
-    } catch (_) {
-      return null;
-    }
-  }
-
-  PuzzleId asPuzzleIdOrThrow() {
-    final value = required().value;
-    if (value is PuzzleId) {
-      return value;
-    }
-    if (value is String) {
-      return PuzzleId(value);
-    }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to PuzzleId",
-    );
-  }
-
-  PuzzleId? asPuzzleIdOrNull() {
-    if (value == null) return null;
-    try {
-      return asPuzzleIdOrThrow();
     } catch (_) {
       return null;
     }

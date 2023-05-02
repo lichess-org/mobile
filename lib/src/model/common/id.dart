@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:deep_pick/deep_pick.dart';
 
 part 'id.g.dart';
 
@@ -90,4 +91,94 @@ class UserId extends ID {
 
   @override
   Map<String, dynamic> toJson() => _$UserIdToJson(this);
+}
+
+extension IDPick on Pick {
+  UserId asUserIdOrThrow() {
+    final value = required().value;
+    if (value is UserId) {
+      return value;
+    }
+    if (value is String) {
+      return UserId(value);
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to UserId",
+    );
+  }
+
+  UserId? asUserIdOrNull() {
+    if (value == null) return null;
+    try {
+      return asUserIdOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  GameId asGameIdOrThrow() {
+    final value = required().value;
+    if (value is GameId) {
+      return value;
+    }
+    if (value is String) {
+      return GameId(value);
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to GameId",
+    );
+  }
+
+  GameId? asGameIdOrNull() {
+    if (value == null) return null;
+    try {
+      return asGameIdOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  GameFullId asGameFullIdOrThrow() {
+    final value = required().value;
+    if (value is GameFullId) {
+      return value;
+    }
+    if (value is String) {
+      return GameFullId(value);
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to GameId",
+    );
+  }
+
+  GameFullId? asGameFullIdOrNull() {
+    if (value == null) return null;
+    try {
+      return asGameFullIdOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  PuzzleId asPuzzleIdOrThrow() {
+    final value = required().value;
+    if (value is PuzzleId) {
+      return value;
+    }
+    if (value is String) {
+      return PuzzleId(value);
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to PuzzleId",
+    );
+  }
+
+  PuzzleId? asPuzzleIdOrNull() {
+    if (value == null) return null;
+    try {
+      return asPuzzleIdOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
 }

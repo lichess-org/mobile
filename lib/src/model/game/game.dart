@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:deep_pick/deep_pick.dart';
 
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -154,4 +155,52 @@ enum GameStatus {
 
   const GameStatus(this.value);
   final int value;
+}
+
+extension GameExtension on Pick {
+  Speed asSpeedOrThrow() {
+    final value = this.required().value;
+    if (value is Speed) {
+      return value;
+    }
+    if (value is String) {
+      return Speed.values
+          .firstWhere((v) => v.name == value, orElse: () => Speed.blitz);
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to Speed",
+    );
+  }
+
+  Speed? asSpeedOrNull() {
+    if (value == null) return null;
+    try {
+      return asSpeedOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  GameStatus asGameStatusOrThrow() {
+    final value = this.required().value;
+    if (value is GameStatus) {
+      return value;
+    }
+    if (value is String) {
+      return GameStatus.values
+          .firstWhere((e) => e.name == value, orElse: () => GameStatus.unknown);
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to GameStatus",
+    );
+  }
+
+  GameStatus? asGameStatusOrNull() {
+    if (value == null) return null;
+    try {
+      return asGameStatusOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
 }
