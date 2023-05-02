@@ -111,7 +111,7 @@ class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
               Text(selectedValue),
               const Icon(
                 Icons.arrow_drop_down,
-                color: Colors.white,
+                color: Colors.black,
                 size: 34.0,
               ),
             ],
@@ -143,7 +143,7 @@ class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
               Text(selectedValue),
               const Icon(
                 Icons.arrow_drop_down,
-                color: Colors.white,
+                color: Colors.black,
                 size: 34.0,
               ),
             ],
@@ -173,7 +173,31 @@ class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              //Container(
+              ColoredBox(
+                color: Theme.of(context).canvasColor,
+                child: Row(
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(null);
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    const Spacer(),
+                    const Text(
+                      "Variant",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(selectedIndex);
+                      },
+                      child: const Text('Ok'),
+                    ),
+                  ],
+                ),
+              ),
               Expanded(
                 child: CupertinoPicker(
                   backgroundColor: Theme.of(context).canvasColor,
@@ -197,23 +221,6 @@ class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
                     selectedValue = choices[selectedItem];
                   },
                 ),
-              ),
-              Row(
-                children: [
-                  CupertinoButton(
-                    child: const Text('Cancel'),
-                    onPressed: () {
-                      Navigator.of(context).pop(null);
-                    },
-                  ),
-                  const Spacer(),
-                  CupertinoButton(
-                    child: const Text('Ok'),
-                    onPressed: () {
-                      Navigator.of(context).pop(selectedIndex);
-                    },
-                  ),
-                ],
               ),
             ],
           ),
