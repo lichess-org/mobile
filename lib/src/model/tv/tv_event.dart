@@ -4,7 +4,6 @@ import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/utils/json.dart';
 import 'featured_player.dart';
 
 part 'tv_event.freezed.dart';
