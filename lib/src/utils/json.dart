@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/errors.dart';
 
 typedef Mapper<T> = T Function(Map<String, dynamic>);
 
+/// Reads a [T] object from a [Response] returning a JSON object.
 Result<T> readJsonObject<T>(
   Response response, {
   required Mapper<T> mapper,
@@ -31,6 +32,7 @@ Result<T> readJsonObject<T>(
   return result;
 }
 
+/// Reads a list of [T] objects from a [Response] returning a JSON array.
 Result<IList<T>> readJsonListOfObjects<T>(
   Response response, {
   required Mapper<T> mapper,
@@ -55,6 +57,34 @@ Result<IList<T>> readJsonListOfObjects<T>(
   result.match(
     onError: (error, st) =>
         logger?.severe('Could not read json as list of $T: $error\n$st'),
+  );
+  return result;
+}
+
+/// Reads a list of [T] objects from a newline-delimited json [Response].
+Result<IList<T>> readNdJsonList<T>(
+  Response response, {
+  required Mapper<T> mapper,
+  Logger? logger,
+}) {
+  final result = Result(() {
+    final utf8Body = utf8.decode(response.bodyBytes);
+    final lines = utf8Body.split('\n');
+    return IList(
+      lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
+        final json = jsonDecode(e);
+        if (json is! Map<String, dynamic>) {
+          logger
+              ?.severe('Could not read json object as $T: expected an object.');
+          throw DataFormatException();
+        }
+        return mapper(json);
+      }),
+    );
+  });
+  result.match(
+    onError: (error, st) =>
+        logger?.severe('Could not read ndjson as list of $T: $error\n$st'),
   );
   return result;
 }

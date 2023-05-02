@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'package:async/async.dart';
-import 'package:http/http.dart' as http;
 import 'package:result_extensions/result_extensions.dart';
 import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
@@ -10,7 +7,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
@@ -47,7 +43,13 @@ class GameRepository {
         '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true',
       ),
       headers: {'Accept': 'application/x-ndjson'},
-    ).flatMap(_decodeNdJsonGames);
+    ).flatMap(
+      (r) => readNdJsonList(
+        r,
+        mapper: _makeArchivedGameDataFromJson,
+        logger: _log,
+      ),
+    );
   }
 
   FutureResult<IList<ArchivedGameData>> getGamesByIds(ISet<GameId> ids) {
@@ -59,22 +61,13 @@ class GameRepository {
           headers: {'Accept': 'application/x-ndjson'},
           body: ids.join(','),
         )
-        .flatMap(_decodeNdJsonGames);
-  }
-
-  Result<IList<ArchivedGameData>> _decodeNdJsonGames(http.Response response) {
-    return Result(() {
-      final lines = response.body.split('\n');
-      return IList(
-        lines.where((e) => e.isNotEmpty && e != '\n').map((e) {
-          final json = jsonDecode(e) as Map<String, dynamic>;
-          return _makeArchivedGameDataFromJson(json);
-        }),
-      );
-    }).mapError((error, _) {
-      _log.severe('Could not read json object as ArchivedGame: $error');
-      return DataFormatException();
-    });
+        .flatMap(
+          (r) => readNdJsonList(
+            r,
+            mapper: _makeArchivedGameDataFromJson,
+            logger: _log,
+          ),
+        );
   }
 }
 

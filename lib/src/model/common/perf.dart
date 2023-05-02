@@ -11,6 +11,7 @@ enum Perf {
   rapid('Rapid', 'Rapid', LichessIcons.rapid),
   classical('Classical', 'Classical', LichessIcons.classical),
   correspondence('Correspondence', 'Corresp.', LichessIcons.correspondence),
+  fromPosition('From Position', 'From Pos.', LichessIcons.feather),
   chess960('Chess 960', '960', LichessIcons.die_six),
   antichess('Antichess', 'Antichess', LichessIcons.antichess),
   kingOfTheHill('King Of The Hill', 'KotH', LichessIcons.flag),
