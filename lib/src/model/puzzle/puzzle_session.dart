@@ -17,7 +17,7 @@ part 'puzzle_session.g.dart';
 @riverpod
 class PuzzleSession extends _$PuzzleSession {
   static const maxAge = Duration(hours: 1);
-  static const maxSize = 50;
+  static const maxSize = 150;
 
   @override
   PuzzleSessionData build(UserId? userId, PuzzleTheme theme) {
