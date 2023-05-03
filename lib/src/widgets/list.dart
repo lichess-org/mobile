@@ -12,7 +12,7 @@ class ListSection extends StatelessWidget {
     super.key,
     required this.children,
     this.header,
-    this.onHeaderTap,
+    this.headerTrailing,
     this.margin,
     this.hasLeading = false,
     this.showDivider = false,
@@ -29,7 +29,9 @@ class ListSection extends StatelessWidget {
 
   /// Show a header above the children rows. Typically a [Text] widget.
   final Widget? header;
-  final GestureTapCallback? onHeaderTap;
+
+  /// A widget to show at the end of the header.
+  final Widget? headerTrailing;
 
   final EdgeInsetsGeometry? margin;
 
@@ -61,12 +63,7 @@ class ListSection extends StatelessWidget {
                     style: Styles.sectionTitle,
                     child: header!,
                   ),
-                  trailing: (onHeaderTap != null)
-                      ? GestureDetector(
-                          onTap: onHeaderTap,
-                          child: const Icon(Icons.more_horiz),
-                        )
-                      : null,
+                  trailing: headerTrailing,
                 ),
               if (showDividerBetweenTiles)
                 ...ListTile.divideTiles(
@@ -101,11 +98,7 @@ class ListSection extends StatelessWidget {
                             .merge(Styles.sectionTitle),
                         child: header!,
                       ),
-                      if (onHeaderTap != null)
-                        GestureDetector(
-                          onTap: onHeaderTap,
-                          child: const Icon(CupertinoIcons.ellipsis),
-                        ),
+                      if (headerTrailing != null) headerTrailing!,
                     ],
                   ),
                 ),

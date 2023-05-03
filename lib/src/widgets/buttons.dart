@@ -109,6 +109,36 @@ class AppBarTextButton extends StatelessWidget {
   }
 }
 
+class NoPaddingTextButton extends StatelessWidget {
+  const NoPaddingTextButton({
+    required this.child,
+    required this.onPressed,
+    super.key,
+  });
+
+  final VoidCallback? onPressed;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: onPressed,
+            child: child,
+          )
+        : TextButton(
+            onPressed: onPressed,
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            child: child,
+          );
+  }
+}
+
 /// Cupertino icon button with mandatory semantics label
 class CupertinoIconButton extends StatelessWidget {
   const CupertinoIconButton({
