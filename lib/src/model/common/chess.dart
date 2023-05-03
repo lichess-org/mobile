@@ -62,12 +62,12 @@ enum Variant {
 
   /// Returns the initial position for this [Variant].
   ///
-  /// Will throw an [ArgumentError] if called on [Variant.fromPosition].
+  /// Will throw an [ArgumentError] if called on [Variant.chess960] or [Variant.fromPosition].
   Position get initialPosition {
     switch (this) {
       case Variant.standard:
       case Variant.chess960:
-        return Chess.initial;
+        throw ArgumentError('Check the variant is not `chess960` before!');
       case Variant.fromPosition:
         throw ArgumentError('Check the variant is not `fromPosition` before!');
       case Variant.antichess:

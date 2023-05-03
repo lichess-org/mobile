@@ -88,8 +88,9 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
     steps: pick('moves').letOrThrow((it) {
       final moves = it.asStringOrThrow().split(' ');
       final List<GameStep> steps = [];
-      // assume lichess always send initialFen with fromPosition
-      Position position = data.variant == Variant.fromPosition
+      // assume lichess always send initialFen with fromPosition and chess960
+      Position position = (data.variant == Variant.fromPosition ||
+              data.variant == Variant.chess960)
           ? Chess.fromSetup(Setup.parseFen(data.initialFen!))
           : data.variant.initialPosition;
       int ply = 0;
