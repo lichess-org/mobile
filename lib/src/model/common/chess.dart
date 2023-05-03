@@ -66,10 +66,10 @@ enum Variant {
   Position get initialPosition {
     switch (this) {
       case Variant.standard:
+        return Chess.initial;
       case Variant.chess960:
-        throw ArgumentError('Check the variant is not `chess960` before!');
       case Variant.fromPosition:
-        throw ArgumentError('Check the variant is not `fromPosition` before!');
+        throw ArgumentError('This variant has no defined initial position!');
       case Variant.antichess:
         return Antichess.initial;
       case Variant.kingOfTheHill:
