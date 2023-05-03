@@ -40,6 +40,7 @@ Future<Puzzle?> puzzle(
   PuzzleRef ref,
   PuzzleId id,
 ) {
+  // ignore: avoid_manual_providers_as_generated_provider_dependency
   final repo = ref.watch(puzzleHistoryStorageProvider);
   return repo.fetchPuzzle(
     puzzleId: id,
