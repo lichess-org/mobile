@@ -94,25 +94,27 @@ class PuzzleDashboardWidget extends ConsumerWidget {
               padding: Styles.bodySectionBottomPadding,
               child: Column(
                 children: [
+                  // ignore: avoid-wrapping-in-padding
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Container(
                       width: double.infinity,
                       height: 25,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.black,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.all(Radius.circular(16)),
                       ),
                     ),
                   ),
+                  // ignore: avoid-wrapping-in-padding
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Container(
                       width: double.infinity,
                       height: loaderHeight,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.black,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                     ),
                   ),

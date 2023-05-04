@@ -75,26 +75,28 @@ class ListSection extends StatelessWidget {
                 child: Column(
                   children: [
                     if (header != null)
+                      // ignore: avoid-wrapping-in-padding
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Container(
                           width: double.infinity,
                           height: 25,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Colors.black,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
                           ),
                         ),
                       ),
                     for (int i = 0; i < children.length; i++)
+                      // ignore: avoid-wrapping-in-padding
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Container(
                           width: double.infinity,
                           height: 50,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Colors.black,
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
                         ),
                       ),
@@ -137,23 +139,24 @@ class ListSection extends StatelessWidget {
                 child: Column(
                   children: [
                     if (header != null)
+                      // ignore: avoid-wrapping-in-padding
                       Padding(
                         padding: const EdgeInsets.only(top: 10.0, bottom: 16.0),
                         child: Container(
                           width: double.infinity,
                           height: 24,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Colors.black,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
                           ),
                         ),
                       ),
                     Container(
                       width: double.infinity,
                       height: children.length * 54,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.black,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                     ),
                   ],
