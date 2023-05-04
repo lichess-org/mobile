@@ -88,7 +88,7 @@ List<Widget> buildUserScreenList(User user) {
   return [
     _Profile(user: user),
     PerfCards(user: user),
-    Activity(user: user),
+    UserActivityWidget(user: user),
     RecentGames(user: user),
   ];
 }
@@ -254,50 +254,6 @@ class PerfCards extends StatelessWidget {
         user: user,
         perf: perf,
         loggedInUser: user,
-      ),
-    );
-  }
-}
-
-class Activity extends ConsumerWidget {
-  const Activity({required this.user, super.key});
-
-  final User user;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final activity = ref.watch(userActivityProvider(id: user.id));
-
-    return activity.when(
-      data: (data) {
-        final nonEmptyActivities = data.where((entry) => entry.isNotEmpty);
-        if (nonEmptyActivities.isEmpty) {
-          return const SizedBox.shrink();
-        }
-        return ListSection(
-          header:
-              Text(context.l10n.activityActivity, style: Styles.sectionTitle),
-          hasLeading: true,
-          children: nonEmptyActivities
-              .take(10)
-              .map((entry) => UserActivityEntry(entry: entry))
-              .toList(),
-        );
-      },
-      error: (error, stackTrace) {
-        debugPrint(
-          'SEVERE: [UserScreen] could not load user activity; $error\n$stackTrace',
-        );
-        return const Text('Could not load user activity');
-      },
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: ListSection.loading(
-            itemsNumber: 10,
-            header: true,
-          ),
-        ),
       ),
     );
   }
