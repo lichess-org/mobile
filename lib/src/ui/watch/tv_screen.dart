@@ -111,7 +111,6 @@ class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
               Text(selectedValue),
               const Icon(
                 Icons.arrow_drop_down,
-                color: Colors.black,
                 size: 34.0,
               ),
             ],
@@ -143,7 +142,6 @@ class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
               Text(selectedValue),
               const Icon(
                 Icons.arrow_drop_down,
-                color: Colors.black,
                 size: 34.0,
               ),
             ],
@@ -256,8 +254,6 @@ class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
     super.didPopNext();
   }
 }
-
-//final watchedGameId = Provider<String>((ref) => "");
 
 class _Body extends ConsumerWidget {
   const _Body();
