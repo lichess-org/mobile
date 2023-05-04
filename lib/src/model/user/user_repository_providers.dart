@@ -1,6 +1,7 @@
 import 'package:async/async.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
@@ -22,9 +23,12 @@ UserRepository userRepository(UserRepositoryRef ref) {
 
 @riverpod
 Future<User> user(UserRef ref, {required UserId id}) {
-  ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(userRepositoryProvider);
-  return Result.release(repo.getUser(id));
+  final result = repo.getUser(id);
+  result.match(
+    onSuccess: (_) => ref.cacheFor(const Duration(minutes: 5)),
+  );
+  return Result.release(result);
 }
 
 @riverpod
@@ -33,9 +37,12 @@ Future<UserPerfStats> userPerfStats(
   required UserId id,
   required Perf perf,
 }) {
-  ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(userRepositoryProvider);
-  return Result.release(repo.getUserPerfStats(id, perf));
+  final result = repo.getUserPerfStats(id, perf);
+  result.match(
+    onSuccess: (_) => ref.cacheFor(const Duration(minutes: 5)),
+  );
+  return Result.release(result);
 }
 
 @riverpod
@@ -43,9 +50,12 @@ Future<IList<UserActivity>> userActivity(
   UserActivityRef ref, {
   required UserId id,
 }) {
-  ref.cacheFor(const Duration(minutes: 2));
   final repo = ref.watch(userRepositoryProvider);
-  return Result.release(repo.getUserActivity(id));
+  final result = repo.getUserActivity(id);
+  result.match(
+    onSuccess: (_) => ref.cacheFor(const Duration(minutes: 5)),
+  );
+  return Result.release(result);
 }
 
 @riverpod
@@ -53,27 +63,40 @@ Future<IList<UserStatus>> userStatuses(
   UserStatusesRef ref, {
   required ISet<UserId> ids,
 }) {
-  ref.cacheFor(const Duration(seconds: 30));
   final repo = ref.watch(userRepositoryProvider);
-  return Result.release(repo.getUsersStatuses(ids));
+  final result = repo.getUsersStatuses(ids);
+  result.match(
+    onSuccess: (_) => ref.cacheFor(const Duration(seconds: 30)),
+  );
+  return Result.release(result);
 }
 
 @riverpod
 Future<IList<Streamer>> liveStreamers(LiveStreamersRef ref) {
   final repo = ref.watch(userRepositoryProvider);
-  return Result.release(repo.getLiveStreamers());
+  final result = repo.getLiveStreamers();
+  result.match(
+    onSuccess: (_) => ref.cacheFor(const Duration(minutes: 5)),
+  );
+  return Result.release(result);
 }
 
 @riverpod
 Future<IMap<Perf, LeaderboardUser>> top1(Top1Ref ref) {
-  ref.cacheFor(const Duration(minutes: 10));
   final repo = ref.watch(userRepositoryProvider);
-  return Result.release(repo.getTop1());
+  final result = repo.getTop1();
+  result.match(
+    onSuccess: (_) => ref.cacheFor(const Duration(minutes: 10)),
+  );
+  return Result.release(result);
 }
 
 @riverpod
 Future<Leaderboard> leaderboard(LeaderboardRef ref) {
-  ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(userRepositoryProvider);
-  return Result.release(repo.getLeaderboard());
+  final result = repo.getLeaderboard();
+  result.match(
+    onSuccess: (_) => ref.cacheFor(const Duration(minutes: 5)),
+  );
+  return Result.release(result);
 }

@@ -22,9 +22,12 @@ AccountRepository accountRepository(AccountRepositoryRef ref) {
 
 @riverpod
 Future<User> account(AccountRef ref) {
-  ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(accountRepositoryProvider);
-  return Result.release(repo.getProfile());
+  final result = repo.getProfile();
+  result.match(
+    onSuccess: (_) => ref.cacheFor(const Duration(minutes: 5)),
+  );
+  return Result.release(result);
 }
 
 class AccountRepository {
