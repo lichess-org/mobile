@@ -12,14 +12,13 @@ class ListSection extends StatelessWidget {
     super.key,
     required this.children,
     this.header,
-    this.onHeaderTap,
+    this.headerTrailing,
     this.margin,
     this.hasLeading = false,
     this.showDivider = false,
     this.showDividerBetweenTiles = false,
     this.dense = false,
     this.cupertinoAdditionalDividerMargin,
-    this.trailingWidget,
   });
 
   /// Usually a list of [PlatformListTile] widgets
@@ -30,10 +29,9 @@ class ListSection extends StatelessWidget {
 
   /// Show a header above the children rows. Typically a [Text] widget.
   final Widget? header;
-  final GestureTapCallback? onHeaderTap;
 
-  /// Show a trailing Widget. This widget will only show if onHeaderTap is null
-  final Widget? trailingWidget;
+  /// A widget to show at the end of the header.
+  final Widget? headerTrailing;
 
   final EdgeInsetsGeometry? margin;
 
@@ -65,12 +63,7 @@ class ListSection extends StatelessWidget {
                     style: Styles.sectionTitle,
                     child: header!,
                   ),
-                  trailing: (onHeaderTap != null)
-                      ? GestureDetector(
-                          onTap: onHeaderTap,
-                          child: const Icon(Icons.more_horiz),
-                        )
-                      : trailingWidget,
+                  trailing: headerTrailing,
                 ),
               if (showDividerBetweenTiles)
                 ...ListTile.divideTiles(
@@ -105,13 +98,7 @@ class ListSection extends StatelessWidget {
                             .merge(Styles.sectionTitle),
                         child: header!,
                       ),
-                      if (onHeaderTap != null)
-                        GestureDetector(
-                          onTap: onHeaderTap,
-                          child: const Icon(CupertinoIcons.ellipsis),
-                        ),
-                      if (onHeaderTap == null && trailingWidget != null)
-                        trailingWidget!,
+                      if (headerTrailing != null) headerTrailing!,
                     ],
                   ),
                 ),

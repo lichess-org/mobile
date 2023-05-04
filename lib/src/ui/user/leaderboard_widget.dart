@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -25,12 +26,17 @@ class LeaderboardWidget extends ConsumerWidget {
           header: Text(
             context.l10n.leaderboard,
           ),
-          onHeaderTap: () {
-            pushPlatformRoute(
-              context,
-              builder: (context) => const LeaderboardScreen(),
-            );
-          },
+          headerTrailing: NoPaddingTextButton(
+            onPressed: () {
+              pushPlatformRoute(
+                context,
+                builder: (context) => const LeaderboardScreen(),
+              );
+            },
+            child: Text(
+              context.l10n.more,
+            ),
+          ),
           children: [
             for (final entry in data.entries)
               LeaderboardListTile(

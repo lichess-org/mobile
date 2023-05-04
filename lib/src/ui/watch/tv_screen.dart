@@ -6,13 +6,12 @@ import 'package:chessground/chessground.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-
 import 'package:lichess_mobile/src/model/tv/featured_game.dart';
+import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 
 final _featuredGameWithSoundProvider = featuredGameProvider(withSound: true);
 
@@ -23,7 +22,8 @@ class TvScreen extends ConsumerStatefulWidget {
   ConsumerState<TvScreen> createState() => _TvScreenState();
 }
 
-class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
+class _TvScreenState extends ConsumerState<TvScreen>
+    with RouteAware, WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(
@@ -59,6 +59,21 @@ class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      ref.read(_featuredGameWithSoundProvider.notifier).connectStream();
+    } else {
+      ref.read(_featuredGameWithSoundProvider.notifier).disconnectStream();
+    }
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
@@ -69,6 +84,7 @@ class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     watchRouteObserver.unsubscribe(this);
     super.dispose();
   }

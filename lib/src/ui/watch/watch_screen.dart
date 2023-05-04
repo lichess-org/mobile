@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
@@ -27,7 +28,8 @@ class WatchScreen extends ConsumerStatefulWidget {
   _WatchScreenState createState() => _WatchScreenState();
 }
 
-class _WatchScreenState extends ConsumerState<WatchScreen> with RouteAware {
+class _WatchScreenState extends ConsumerState<WatchScreen>
+    with RouteAware, WidgetsBindingObserver {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
@@ -118,6 +120,21 @@ class _WatchScreenState extends ConsumerState<WatchScreen> with RouteAware {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      ref.read(_featuredGameNoSoundProvider.notifier).connectStream();
+    } else {
+      ref.read(_featuredGameNoSoundProvider.notifier).disconnectStream();
+    }
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
@@ -128,6 +145,7 @@ class _WatchScreenState extends ConsumerState<WatchScreen> with RouteAware {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     watchRouteObserver.unsubscribe(this);
     super.dispose();
   }
@@ -204,12 +222,15 @@ class _StreamerWidget extends ConsumerWidget {
         return ListSection(
           header: Text(context.l10n.streamerLichessStreamers),
           hasLeading: true,
-          onHeaderTap: () {
-            pushPlatformRoute(
+          headerTrailing: NoPaddingTextButton(
+            onPressed: () => pushPlatformRoute(
               context,
               builder: (context) => StreamerScreen(streamers: data),
-            );
-          },
+            ),
+            child: Text(
+              context.l10n.more,
+            ),
+          ),
           children: [
             ...data
                 .take(numberOfItems)

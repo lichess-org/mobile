@@ -42,6 +42,7 @@ class FeaturedGame extends _$FeaturedGame {
     final tvRepository = ref.watch(tvRepositoryProvider);
     final stream = tvRepository.tvFeed().asBroadcastStream();
 
+    _streamSub?.cancel();
     _streamSub = stream.listen((event) {
       if (event is TvFeaturedEvent) {
         _onFeaturedEvent(event);
