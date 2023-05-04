@@ -5,12 +5,59 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
+
+class UserActivityWidget extends ConsumerWidget {
+  const UserActivityWidget({required this.user, super.key});
+
+  final User user;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activity = ref.watch(userActivityProvider(id: user.id));
+
+    return activity.when(
+      data: (data) {
+        final nonEmptyActivities = data.where((entry) => entry.isNotEmpty);
+        if (nonEmptyActivities.isEmpty) {
+          return const SizedBox.shrink();
+        }
+        return ListSection(
+          header:
+              Text(context.l10n.activityActivity, style: Styles.sectionTitle),
+          hasLeading: true,
+          children: nonEmptyActivities
+              .take(10)
+              .map((entry) => UserActivityEntry(entry: entry))
+              .toList(),
+        );
+      },
+      error: (error, stackTrace) {
+        debugPrint(
+          'SEVERE: [UserScreen] could not load user activity; $error\n$stackTrace',
+        );
+        return const Text('Could not load user activity');
+      },
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(
+            itemsNumber: 10,
+            header: true,
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class UserActivityEntry extends ConsumerWidget {
   const UserActivityEntry({required this.entry, super.key});

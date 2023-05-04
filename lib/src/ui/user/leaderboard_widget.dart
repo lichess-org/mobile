@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
@@ -55,7 +55,15 @@ class LeaderboardWidget extends ConsumerWidget {
           child: const Text('Could not load leaderboard.'),
         );
       },
-      loading: () => const CenterLoadingIndicator(),
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(
+            itemsNumber: 5,
+            header: true,
+          ),
+        ),
+      ),
     );
   }
 }

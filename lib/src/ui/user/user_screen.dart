@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 import 'user_activity.dart';
 
@@ -87,7 +88,7 @@ List<Widget> buildUserScreenList(User user) {
   return [
     _Profile(user: user),
     PerfCards(user: user),
-    Activity(user: user),
+    UserActivityWidget(user: user),
     RecentGames(user: user),
   ];
 }
@@ -258,40 +259,6 @@ class PerfCards extends StatelessWidget {
   }
 }
 
-class Activity extends ConsumerWidget {
-  const Activity({required this.user, super.key});
-
-  final User user;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final activity = ref.watch(userActivityProvider(id: user.id));
-
-    return activity.when(
-      data: (data) {
-        return ListSection(
-          header:
-              Text(context.l10n.activityActivity, style: Styles.sectionTitle),
-          hasLeading: true,
-          children: data
-              .where((entry) => entry.isNotEmpty)
-              .take(10)
-              .map((entry) => UserActivityEntry(entry: entry))
-              .toList(),
-        );
-      },
-      error: (error, stackTrace) {
-        debugPrint(
-          'SEVERE: [UserScreen] could not load user activity; $error\n$stackTrace',
-        );
-        return const Text('Could not load user activity');
-      },
-      // TODO show a shimmer loading effect
-      loading: () => const SizedBox.shrink(),
-    );
-  }
-}
-
 class RecentGames extends ConsumerWidget {
   const RecentGames({required this.user, super.key});
 
@@ -361,8 +328,15 @@ class RecentGames extends ConsumerWidget {
         );
         return const Text('Could not load games.');
       },
-      // TODO show a shimmer loading effect
-      loading: () => const SizedBox.shrink(),
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(
+            itemsNumber: 10,
+            header: true,
+          ),
+        ),
+      ),
     );
   }
 }
