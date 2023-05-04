@@ -88,12 +88,29 @@ class ClockData with _$ClockData {
 }
 
 @freezed
+class MaterialDiffSide with _$MaterialDiffSide {
+  const factory MaterialDiffSide({
+    required Map<Role, int> pieces,
+    required int score,
+  }) = _MaterialDiffSide;
+}
+
+@freezed
+class MaterialDiff with _$MaterialDiff {
+  const factory MaterialDiff({
+    required MaterialDiffSide black,
+    required MaterialDiffSide white,
+  }) = _MaterialDiff;
+}
+
+@freezed
 class GameStep with _$GameStep {
   const factory GameStep({
     required int ply,
     required String san,
     required String uci,
     required Position position,
+    required MaterialDiff diff,
     Duration? whiteClock,
     Duration? blackClock,
   }) = _GameStep;
