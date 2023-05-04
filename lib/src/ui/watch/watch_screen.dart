@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/ui/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
 
@@ -247,7 +247,15 @@ class _StreamerWidget extends ConsumerWidget {
           child: const Text('Could not load live streamers'),
         );
       },
-      loading: () => const CenterLoadingIndicator(),
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(
+            itemsNumber: numberOfItems,
+            header: true,
+          ),
+        ),
+      ),
     );
   }
 }

@@ -19,7 +19,23 @@ class ListSection extends StatelessWidget {
     this.showDividerBetweenTiles = false,
     this.dense = false,
     this.cupertinoAdditionalDividerMargin,
-  });
+  }) : _isLoading = false;
+
+  ListSection.loading({
+    required int itemsNumber,
+    bool header = false,
+    this.margin,
+  })  : children = [
+          for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink()
+        ],
+        headerTrailing = null,
+        header = header ? const SizedBox.shrink() : null,
+        hasLeading = false,
+        showDivider = false,
+        showDividerBetweenTiles = false,
+        dense = false,
+        cupertinoAdditionalDividerMargin = null,
+        _isLoading = true;
 
   /// Usually a list of [PlatformListTile] widgets
   final List<Widget> children;
@@ -47,70 +63,132 @@ class ListSection extends StatelessWidget {
   /// See [CupertinoListSection.additionalDividerMargin].
   final double? cupertinoAdditionalDividerMargin;
 
+  final bool _isLoading;
+
   @override
   Widget build(BuildContext context) {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return Padding(
-          padding: margin ?? Styles.sectionBottomPadding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (header != null)
-                ListTile(
-                  dense: true,
-                  title: DefaultTextStyle.merge(
-                    style: Styles.sectionTitle,
-                    child: header!,
-                  ),
-                  trailing: headerTrailing,
-                ),
-              if (showDividerBetweenTiles)
-                ...ListTile.divideTiles(
-                  context: context,
-                  tiles: children,
-                )
-              else
-                ...children,
-              if (showDivider)
-                const Padding(
-                  padding: EdgeInsets.only(top: 10.0),
-                  child: Divider(thickness: 0),
-                ),
-            ],
-          ),
-        );
-      case TargetPlatform.iOS:
-        return Padding(
-          padding: margin ?? Styles.bodySectionPadding,
-          child: Column(
-            children: [
-              if (header != null)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 6.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      DefaultTextStyle(
-                        style: CupertinoTheme.of(context)
-                            .textTheme
-                            .textStyle
-                            .merge(Styles.sectionTitle),
-                        child: header!,
+        return _isLoading
+            ? Padding(
+                padding: margin ?? Styles.bodySectionBottomPadding,
+                child: Column(
+                  children: [
+                    if (header != null)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Container(
+                          width: double.infinity,
+                          height: 25,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
                       ),
-                      if (headerTrailing != null) headerTrailing!,
-                    ],
-                  ),
+                    for (int i = 0; i < children.length; i++)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Container(
+                          width: double.infinity,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-              CupertinoListSection.insetGrouped(
-                margin: EdgeInsets.zero,
-                hasLeading: hasLeading,
-                additionalDividerMargin: cupertinoAdditionalDividerMargin,
-                children: children,
-              ),
-            ],
-          ),
-        );
+              )
+            : Padding(
+                padding: margin ?? Styles.sectionBottomPadding,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (header != null)
+                      ListTile(
+                        dense: true,
+                        title: DefaultTextStyle.merge(
+                          style: Styles.sectionTitle,
+                          child: header!,
+                        ),
+                        trailing: headerTrailing,
+                      ),
+                    if (showDividerBetweenTiles)
+                      ...ListTile.divideTiles(
+                        context: context,
+                        tiles: children,
+                      )
+                    else
+                      ...children,
+                    if (showDivider)
+                      const Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: Divider(thickness: 0),
+                      ),
+                  ],
+                ),
+              );
+      case TargetPlatform.iOS:
+        return _isLoading
+            ? Padding(
+                padding: margin ?? Styles.bodySectionPadding,
+                child: Column(
+                  children: [
+                    if (header != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0, bottom: 16.0),
+                        child: Container(
+                          width: double.infinity,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                      ),
+                    Container(
+                      width: double.infinity,
+                      height: children.length * 54,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : Padding(
+                padding: margin ?? Styles.bodySectionPadding,
+                child: Column(
+                  children: [
+                    if (header != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 6.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            DefaultTextStyle(
+                              style: CupertinoTheme.of(context)
+                                  .textTheme
+                                  .textStyle
+                                  .merge(Styles.sectionTitle),
+                              child: header!,
+                            ),
+                            if (headerTrailing != null) headerTrailing!,
+                          ],
+                        ),
+                      ),
+                    CupertinoListSection.insetGrouped(
+                      margin: EdgeInsets.zero,
+                      hasLeading: hasLeading,
+                      additionalDividerMargin: cupertinoAdditionalDividerMargin,
+                      children: children,
+                    ),
+                  ],
+                ),
+              );
       default:
         assert(false, 'Unexpected platform $defaultTargetPlatform');
         return const SizedBox.shrink();
