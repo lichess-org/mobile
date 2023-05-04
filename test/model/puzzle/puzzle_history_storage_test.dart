@@ -65,9 +65,9 @@ void main() {
   });
 }
 
-final fetchAllResult = PuzzleHistory(
+final fetchAllResult = PuzzleHistoryDay(
   puzzles: IList([PuzzleAndResult(puzzle: puzzle, result: true)]),
-  date: DateTime.now(),
+  day: DateTime.now(),
   angle: PuzzleTheme.mix,
 );
 

@@ -83,7 +83,7 @@ class PuzzleHistoryStorage {
     return null;
   }
 
-  Future<IList<PuzzleHistory>?> fetchall({
+  Future<IList<PuzzleHistoryDay>?> fetchall({
     required UserId? userId,
   }) async {
     final list = await _db.query(
@@ -140,10 +140,10 @@ class PuzzleHistoryStorage {
             result: entry.result,
           );
         }).toIList();
-        return PuzzleHistory(
+        return PuzzleHistoryDay(
           puzzles: puzzleAndResult,
           angle: puzzleThemeNameMap[angle]!,
-          date: DateTime.parse(date),
+          day: DateTime.parse(date),
         );
       },
     ).toIList();
@@ -216,15 +216,15 @@ class PuzzleHistoryStorage {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PuzzleHistory with _$PuzzleHistory {
-  const factory PuzzleHistory({
+class PuzzleHistoryDay with _$PuzzleHistoryDay {
+  const factory PuzzleHistoryDay({
     required IList<PuzzleAndResult> puzzles,
-    required DateTime date,
+    required DateTime day,
     required PuzzleTheme angle,
-  }) = _PuzzleHistory;
+  }) = _PuzzleHistoryDay;
 
-  factory PuzzleHistory.fromJson(Map<String, dynamic> json) =>
-      _$PuzzleHistoryFromJson(json);
+  factory PuzzleHistoryDay.fromJson(Map<String, dynamic> json) =>
+      _$PuzzleHistoryDayFromJson(json);
 }
 
 // only used for parsing and saving PuzzleIdAndResult from database

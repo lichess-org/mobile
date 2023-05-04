@@ -48,8 +48,8 @@ class PuzzleHistoryWidget extends ConsumerWidget {
     );
   }
 
-  IList<PuzzleHistory> getFirst10(IList<PuzzleHistory> history) {
-    final first10 = <PuzzleHistory>[];
+  IList<PuzzleHistoryDay> getFirst10(IList<PuzzleHistoryDay> history) {
+    final first10 = <PuzzleHistoryDay>[];
     var totalPuzzles = 0;
     for (final h in history) {
       final remaining = 10 - totalPuzzles;
@@ -67,7 +67,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
 class _HistoryList extends ConsumerWidget {
   const _HistoryList(this.history);
 
-  final PuzzleHistory history;
+  final PuzzleHistoryDay history;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -82,7 +82,7 @@ class _HistoryList extends ConsumerWidget {
               children: [
                 Text(puzzleThemeL10n(context, history.angle).name),
                 Text(
-                  timeago.format(history.date),
+                  timeago.format(history.day),
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     color: Colors.grey,
@@ -101,7 +101,7 @@ class _HistoryList extends ConsumerWidget {
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen(this.history);
 
-  final IList<PuzzleHistory> history;
+  final IList<PuzzleHistoryDay> history;
 
   @override
   Widget build(BuildContext context) {
@@ -153,13 +153,13 @@ class HistoryScreen extends StatelessWidget {
 class _HistoryColumn extends ConsumerWidget {
   const _HistoryColumn(this.history);
 
-  final PuzzleHistory history;
+  final PuzzleHistoryDay history;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListSection(
       trailingWidget: Text(
-        timeago.format(history.date),
+        timeago.format(history.day),
         style: const TextStyle(
           fontWeight: FontWeight.w400,
           color: Colors.grey,
@@ -180,7 +180,7 @@ class _HistoryColumn extends ConsumerWidget {
 class _HistoryBoards extends ConsumerWidget {
   const _HistoryBoards(this.history);
 
-  final PuzzleHistory history;
+  final PuzzleHistoryDay history;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
