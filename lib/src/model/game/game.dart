@@ -60,6 +60,9 @@ class ArchivedGame with _$ArchivedGame {
     ClockData? clock,
   }) = _ArchivedGame;
 
+  MaterialDiffSide? materialDiffAt(int cursor, Side side) =>
+      steps.isNotEmpty ? steps[cursor].diff.bySide(side) : null;
+
   String? fenAt(int cursor) =>
       steps.isNotEmpty ? steps[cursor].position.fen : null;
 
@@ -97,10 +100,62 @@ class MaterialDiffSide with _$MaterialDiffSide {
 
 @freezed
 class MaterialDiff with _$MaterialDiff {
+  const MaterialDiff._();
+
   const factory MaterialDiff({
     required MaterialDiffSide black,
     required MaterialDiffSide white,
   }) = _MaterialDiff;
+
+  factory MaterialDiff.fromBoard(Board board) {
+    final Map<Role, int> pieceScores = {
+      Role.king: 0,
+      Role.queen: 9,
+      Role.rook: 5,
+      Role.bishop: 3,
+      Role.knight: 3,
+      Role.pawn: 1,
+    };
+
+    final Map<Role, int> baseCount = {
+      Role.king: 0,
+      Role.queen: 0,
+      Role.rook: 0,
+      Role.bishop: 0,
+      Role.knight: 0,
+      Role.pawn: 0,
+    };
+
+    int score = 0;
+    final IMap<Role, int> whiteCount = board.materialCount(Side.white);
+    final IMap<Role, int> blackCount = board.materialCount(Side.black);
+    Map<Role, int> count = baseCount;
+
+    whiteCount.forEach((role, cnt) {
+      count[role] = cnt - blackCount[role]!;
+      count[role] = cnt - blackCount[role]!;
+
+      score += pieceScores[role]! * count[role]!;
+    });
+
+    Map<Role, int> black = baseCount;
+    Map<Role, int> white = baseCount;
+
+    count.forEach((role, cnt) {
+      if (cnt > 0) {
+        white[role] = cnt;
+      } else if (cnt < 0) {
+        black[role] = -cnt;
+      }
+    });
+
+    return MaterialDiff(
+      black: MaterialDiffSide(pieces: black, score: -score),
+      white: MaterialDiffSide(pieces: white, score: score),
+    );
+  }
+
+  MaterialDiffSide bySide(Side side) => side == Side.black ? black : white;
 }
 
 @freezed

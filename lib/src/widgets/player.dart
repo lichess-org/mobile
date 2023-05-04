@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 import './countdown_clock.dart';
@@ -15,12 +17,14 @@ class BoardPlayer extends StatelessWidget {
     required this.player,
     this.active,
     this.clock,
+    this.diff,
     super.key,
   });
 
   final Player player;
   final Duration? clock;
   final bool? active;
+  final MaterialDiffSide? diff;
 
   @override
   Widget build(BuildContext context) {
@@ -42,37 +46,49 @@ class BoardPlayer extends StatelessWidget {
                         );
                       }
                     : null,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (player.title != null) ...[
-                      Text(
-                        player.title!,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: LichessColors.brag,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        if (player.title != null) ...[
+                          Text(
+                            player.title!,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: LichessColors.brag,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                        ],
+                        Flexible(
+                          child: Text(
+                            player.name,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 5),
-                    ],
-                    Flexible(
-                      child: Text(
-                        player.name,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      ],
                     ),
-                    const SizedBox(width: 3),
-                    if (player.rating != null)
-                      Text(
-                        player.rating.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 13),
-                      ),
+                    Row(
+                      children: [
+                        if (player.rating != null)
+                          Text(
+                            player.rating.toString(),
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 13),
+                          ),
+                        const SizedBox(width: 3),
+                        Text(diff != null && diff!.score > 0
+                            ? "+${diff!.score.toString()}"
+                            : '')
+                      ],
+                    ),
                   ],
                 ),
               ),
