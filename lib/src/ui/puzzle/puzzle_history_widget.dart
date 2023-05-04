@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -32,9 +33,17 @@ class PuzzleHistoryWidget extends ConsumerWidget {
         }
         return ListSection(
           header: Text(context.l10n.puzzleHistory),
-          onHeaderTap: () {
-            pushPlatformRoute(context, builder: (ctx) => HistoryScreen(data));
-          },
+          headerTrailing: NoPaddingTextButton(
+            onPressed: () {
+              pushPlatformRoute(
+                context,
+                builder: (ctx) => HistoryScreen(data),
+              );
+            },
+            child: Text(
+              context.l10n.more,
+            ),
+          ),
           children: getFirst10(data).map((e) => _HistoryList(e)).toList(),
         );
       },
@@ -158,7 +167,7 @@ class _HistoryColumn extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListSection(
-      trailingWidget: Text(
+      headerTrailing: Text(
         timeago.format(history.day),
         style: const TextStyle(
           fontWeight: FontWeight.w400,
