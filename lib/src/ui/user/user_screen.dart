@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 import 'user_activity.dart';
 
@@ -286,8 +287,15 @@ class Activity extends ConsumerWidget {
         );
         return const Text('Could not load user activity');
       },
-      // TODO show a shimmer loading effect
-      loading: () => const SizedBox.shrink(),
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(
+            itemsNumber: 10,
+            header: true,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -361,8 +369,15 @@ class RecentGames extends ConsumerWidget {
         );
         return const Text('Could not load games.');
       },
-      // TODO show a shimmer loading effect
-      loading: () => const SizedBox.shrink(),
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(
+            itemsNumber: 10,
+            header: true,
+          ),
+        ),
+      ),
     );
   }
 }
