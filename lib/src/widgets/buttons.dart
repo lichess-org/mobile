@@ -69,7 +69,7 @@ class SecondaryButton extends StatelessWidget {
           ? CupertinoButton(
               onPressed: onPressed,
               color: CupertinoColors.secondarySystemFill,
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
               child: DefaultTextStyle.merge(
                 style: TextStyle(
                   color: cupertinoBrightness == Brightness.light
