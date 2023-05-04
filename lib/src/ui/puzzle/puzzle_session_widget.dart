@@ -112,7 +112,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
                                 final nextContext = PuzzleContext(
                                   userId: widget.initialPuzzleContext.userId,
                                   theme: widget.initialPuzzleContext.theme,
-                                  puzzle: puzzle!,
+                                  puzzle: puzzle,
                                 );
 
                                 ref

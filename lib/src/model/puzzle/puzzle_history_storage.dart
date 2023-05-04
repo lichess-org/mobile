@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -21,8 +20,8 @@ PuzzleHistoryStorage puzzleHistoryStorage(PuzzleHistoryStorageRef ref) {
 }
 
 const _anonUserKey = '**anon**';
-const _dbHistory = 'puzzle_history';
-const _dbPuzzle = 'puzzle';
+const _historyTable = 'puzzle_history';
+const _puzzleTable = 'puzzle';
 
 class PuzzleHistoryStorage {
   const PuzzleHistoryStorage(this._db);
@@ -34,7 +33,7 @@ class PuzzleHistoryStorage {
     required DateTime date,
   }) async {
     final list = await _db.query(
-      _dbHistory,
+      _historyTable,
       where: '''
       userId = ? AND
       angle = ? AND
@@ -43,7 +42,7 @@ class PuzzleHistoryStorage {
       whereArgs: [
         userId?.value ?? _anonUserKey,
         angle.name,
-        DateFormat('yyyy-MM-dd').format(date),
+        date.toIso8601String(),
       ],
     );
 
@@ -55,7 +54,7 @@ class PuzzleHistoryStorage {
           '[PuzzleHistoryStorage] cannot fetch puzzles: expected an object',
         );
       }
-      return PuzzleHistoryData.fromJson(json).puzzles;
+      return _PuzzleHistoryData.fromJson(json).puzzles;
     }
     return null;
   }
@@ -64,7 +63,7 @@ class PuzzleHistoryStorage {
     required PuzzleId puzzleId,
   }) async {
     final list = await _db.query(
-      _dbPuzzle,
+      _puzzleTable,
       where: '''
       puzzleId = ?
       ''',
@@ -88,7 +87,7 @@ class PuzzleHistoryStorage {
     required UserId? userId,
   }) async {
     final list = await _db.query(
-      _dbHistory,
+      _historyTable,
       where: '''
       userId = ?
       ''',
@@ -98,7 +97,7 @@ class PuzzleHistoryStorage {
     );
 
     final puzzleList = await _db.query(
-      _dbPuzzle,
+      _puzzleTable,
     );
 
     final puzzles = puzzleList.map((e) {
@@ -106,7 +105,7 @@ class PuzzleHistoryStorage {
       final json = jsonDecode(raw!);
       if (json is! Map<String, dynamic>) {
         throw const FormatException(
-          '[PuzzleHistoryStorage] cannot fetch puzzles from $_dbPuzzle: expected an object',
+          '[PuzzleHistoryStorage] cannot fetch puzzles from $_puzzleTable: expected an object',
         );
       }
       return Puzzle.fromJson(json);
@@ -129,7 +128,7 @@ class PuzzleHistoryStorage {
             '[PuzzleHistoryStorage] cannot fetch puzzles: expected an object',
           );
         }
-        final data = PuzzleHistoryData.fromJson(json);
+        final data = _PuzzleHistoryData.fromJson(json);
         final puzzleAndResult = data.puzzles.map((entry) {
           return PuzzleAndResult(
             puzzle: puzzles.firstWhere(
@@ -144,7 +143,7 @@ class PuzzleHistoryStorage {
         return PuzzleHistory(
           puzzles: puzzleAndResult,
           angle: puzzleThemeNameMap[angle]!,
-          date: date,
+          date: DateTime.parse(date),
         );
       },
     ).toIList();
@@ -154,28 +153,61 @@ class PuzzleHistoryStorage {
 
   Future<void> save({
     required UserId? userId,
-    required DateTime date,
     required PuzzleTheme angle,
-    required IList<PuzzleIdAndResult> data,
+    required PuzzleIdAndResult data,
     required Puzzle puzzle,
   }) async {
+    final now = DateTime.now();
+    final dateOnly = DateTime(now.year, now.month, now.day);
+
+    final list = await _db.query(
+      _historyTable,
+      where: '''
+      userId = ? AND
+      angle = ? AND
+      solvedDate = ?
+      ''',
+      whereArgs: [
+        userId?.value ?? _anonUserKey,
+        angle.name,
+        dateOnly.toIso8601String(),
+      ],
+    );
+
+    var savedPuzzles = IList<PuzzleIdAndResult>();
+    final raw = list.firstOrNull?['data'] as String?;
+    if (raw != null) {
+      final json = jsonDecode(raw);
+      if (json is! Map<String, dynamic>) {
+        throw const FormatException(
+          '[PuzzleHistoryStorage] cannot fetch puzzles: expected an object',
+        );
+      }
+      savedPuzzles = _PuzzleHistoryData.fromJson(json).puzzles;
+    }
+
     await _db.insert(
-      _dbHistory,
+      _historyTable,
       {
         'userId': userId?.value ?? _anonUserKey,
         'angle': angle.name,
-        'solvedDate': DateFormat('yyyy-MM-dd').format(date),
+        'solvedDate': dateOnly.toIso8601String(),
         'data': jsonEncode(
-          PuzzleHistoryData(puzzles: data.toISet().toIList()).toJson(),
+          _PuzzleHistoryData(
+            puzzles: IList(
+              [if (savedPuzzles.isNotEmpty) ...savedPuzzles, data],
+            ).toISet().toIList(),
+          ).toJson(),
         ),
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+
     await _db.insert(
-      _dbPuzzle,
+      _puzzleTable,
       {
         'puzzleId': puzzle.puzzle.id.toString(),
-        'lastModified': DateFormat('yyyy-MM-dd').format(date),
+        'lastModified': dateOnly.toIso8601String(),
         'data': jsonEncode(puzzle.toJson()),
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
@@ -187,7 +219,7 @@ class PuzzleHistoryStorage {
 class PuzzleHistory with _$PuzzleHistory {
   const factory PuzzleHistory({
     required IList<PuzzleAndResult> puzzles,
-    required String date,
+    required DateTime date,
     required PuzzleTheme angle,
   }) = _PuzzleHistory;
 
@@ -197,13 +229,13 @@ class PuzzleHistory with _$PuzzleHistory {
 
 // only used for parsing and saving PuzzleIdAndResult from database
 @Freezed(fromJson: true, toJson: true)
-class PuzzleHistoryData with _$PuzzleHistoryData {
-  const factory PuzzleHistoryData({
+class _PuzzleHistoryData with _$_PuzzleHistoryData {
+  const factory _PuzzleHistoryData({
     required IList<PuzzleIdAndResult> puzzles,
-  }) = _PuzzleHistoryData;
+  }) = __PuzzleHistoryData;
 
-  factory PuzzleHistoryData.fromJson(Map<String, dynamic> json) =>
-      _$PuzzleHistoryDataFromJson(json);
+  factory _PuzzleHistoryData.fromJson(Map<String, dynamic> json) =>
+      _$_PuzzleHistoryDataFromJson(json);
 }
 
 @Freezed(fromJson: true, toJson: true)

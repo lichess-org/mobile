@@ -33,10 +33,7 @@ void main() {
       ),
     );
     registerFallbackValue(
-      IList([PuzzleIdAndResult(puzzleId: puzzle.puzzle.id, result: true)]),
-    );
-    registerFallbackValue(
-      DateTime.now(),
+      PuzzleIdAndResult(puzzleId: puzzle.puzzle.id, result: true),
     );
     registerFallbackValue(puzzle);
   });
@@ -179,7 +176,6 @@ void main() {
           () => mockHistoryStorage.save(
             userId: null,
             angle: PuzzleTheme.mix,
-            date: any(named: 'date'),
             data: any(named: 'data'),
             puzzle: any(named: 'puzzle'),
           ),

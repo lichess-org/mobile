@@ -111,19 +111,10 @@ class PuzzleService {
       userId: userId,
       angle: angle,
     );
-    final history = await historyStorage.fetch(
-      userId: userId,
-      angle: angle,
-      date: DateTime.now(),
-    );
     await historyStorage.save(
       userId: userId,
-      date: DateTime.now(),
       angle: angle,
-      data: IList([
-        if (history != null) ...history,
-        PuzzleIdAndResult(puzzleId: puzzle.puzzle.id, result: solution.win)
-      ]),
+      data: PuzzleIdAndResult(puzzleId: puzzle.puzzle.id, result: solution.win),
       puzzle: puzzle,
     );
 

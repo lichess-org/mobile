@@ -82,9 +82,10 @@ class _PuzzleDashboardScreenState extends ConsumerState<PuzzleDashboardScreen> {
   }
 
   Future<void> _refreshData() {
-    ref.invalidate(puzzleHistoryProvider);
-    return ref
-        .refresh(puzzleDashboardProvider(ref.read(daysProvider).days).future);
+    return Future.wait([
+      ref.refresh(puzzleHistoryProvider.future),
+      ref.refresh(puzzleDashboardProvider(ref.read(daysProvider).days).future),
+    ]);
   }
 }
 

@@ -36,15 +36,21 @@ Future<PuzzleStreakResponse> streak(StreakRef ref) {
 }
 
 @Riverpod(keepAlive: true)
-Future<Puzzle?> puzzle(
+Future<Puzzle> puzzle(
   PuzzleRef ref,
   PuzzleId id,
-) {
+) async {
   // ignore: avoid_manual_providers_as_generated_provider_dependency
-  final repo = ref.watch(puzzleHistoryStorageProvider);
-  return repo.fetchPuzzle(
+  final historyRepo = ref.watch(puzzleHistoryStorageProvider);
+  final puzzle = await historyRepo.fetchPuzzle(
     puzzleId: id,
   );
+
+  if (puzzle != null) {
+    return puzzle;
+  }
+  final puzzleRepo = ref.watch(puzzleRepositoryProvider);
+  return Result.release(puzzleRepo.fetch(id));
 }
 
 @Riverpod(keepAlive: true)

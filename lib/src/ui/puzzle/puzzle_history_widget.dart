@@ -82,7 +82,7 @@ class _HistoryList extends ConsumerWidget {
               children: [
                 Text(puzzleThemeL10n(context, history.angle).name),
                 Text(
-                  timeago.format(DateTime.parse(history.date)),
+                  timeago.format(history.date),
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     color: Colors.grey,
@@ -159,7 +159,7 @@ class _HistoryColumn extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ListSection(
       trailingWidget: Text(
-        timeago.format(DateTime.parse(history.date)),
+        timeago.format(history.date),
         style: const TextStyle(
           fontWeight: FontWeight.w400,
           color: Colors.grey,
