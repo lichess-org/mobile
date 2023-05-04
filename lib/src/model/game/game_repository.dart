@@ -73,6 +73,54 @@ class GameRepository {
 
 // --
 
+MaterialDiff getDiff(Position position) {
+  final Map<Role, int> pieceScores = {
+    Role.king: 0,
+    Role.queen: 9,
+    Role.rook: 5,
+    Role.bishop: 3,
+    Role.knight: 3,
+    Role.pawn: 1,
+  };
+
+  final Map<Role, int> baseCount = {
+    Role.king: 0,
+    Role.queen: 0,
+    Role.rook: 0,
+    Role.bishop: 0,
+    Role.knight: 0,
+    Role.pawn: 0,
+  };
+
+  int score = 0;
+  final IMap<Role, int> whiteCount = position.board.materialCount(Side.white);
+  final IMap<Role, int> blackCount = position.board.materialCount(Side.black);
+  Map<Role, int> count = baseCount;
+
+  whiteCount.forEach((role, cnt) {
+    count[role] = cnt - blackCount[role]!;
+    count[role] = cnt - blackCount[role]!;
+
+    score += pieceScores[role]! * count[role]!;
+  });
+
+  Map<Role, int> black = baseCount;
+  Map<Role, int> white = baseCount;
+
+  count.forEach((role, cnt) {
+    if (cnt > 0) {
+      white[role] = cnt;
+    } else if (cnt < 0) {
+      black[role] = -cnt;
+    }
+  });
+
+  return MaterialDiff(
+    black: MaterialDiffSide(pieces: black, score: -score),
+    white: MaterialDiffSide(pieces: white, score: score),
+  );
+}
+
 ArchivedGame _makeArchivedGameFromJson(Map<String, dynamic> json) =>
     _archivedGameFromPick(pick(json).required());
 
@@ -107,6 +155,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
             san: san,
             uci: move.uci,
             position: position,
+            diff: getDiff(position),
             whiteClock: ply.isOdd ? stepClock : clock,
             blackClock: ply.isEven ? stepClock : clock,
           ),
