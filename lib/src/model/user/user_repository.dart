@@ -120,7 +120,8 @@ UserActivity _userActivityFromPick(RequiredPick pick) {
 
   final games = IMap({
     for (final entry in receivedGamesMap.entries)
-      perfNameMap.get(entry.key)!: UserActivityScore.fromJson(entry.value)
+      if (perfNameMap.containsKey(entry.key))
+        perfNameMap.get(entry.key)!: UserActivityScore.fromJson(entry.value)
   });
 
   final bestTour = pick('tournaments', 'best')

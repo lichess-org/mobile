@@ -270,12 +270,15 @@ class Activity extends ConsumerWidget {
 
     return activity.when(
       data: (data) {
+        final nonEmptyActivities = data.where((entry) => entry.isNotEmpty);
+        if (nonEmptyActivities.isEmpty) {
+          return const SizedBox.shrink();
+        }
         return ListSection(
           header:
               Text(context.l10n.activityActivity, style: Styles.sectionTitle),
           hasLeading: true,
-          children: data
-              .where((entry) => entry.isNotEmpty)
+          children: nonEmptyActivities
               .take(10)
               .map((entry) => UserActivityEntry(entry: entry))
               .toList(),
