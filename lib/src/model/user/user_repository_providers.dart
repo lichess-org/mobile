@@ -1,7 +1,5 @@
-import 'package:async/async.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
@@ -22,13 +20,14 @@ UserRepository userRepository(UserRepositoryRef ref) {
 }
 
 @riverpod
-Future<User> user(UserRef ref, {required UserId id}) {
+Future<User> user(UserRef ref, {required UserId id}) async {
+  final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(userRepositoryProvider);
-  final result = repo.getUser(id);
-  result.match(
-    onSuccess: (_) => ref.cacheFor(const Duration(minutes: 5)),
-  );
-  return Result.release(result);
+  final result = await repo.getUser(id);
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
 @riverpod
@@ -36,67 +35,73 @@ Future<UserPerfStats> userPerfStats(
   UserPerfStatsRef ref, {
   required UserId id,
   required Perf perf,
-}) {
+}) async {
+  final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(userRepositoryProvider);
-  final result = repo.getUserPerfStats(id, perf);
-  result.match(
-    onSuccess: (_) => ref.cacheFor(const Duration(minutes: 5)),
-  );
-  return Result.release(result);
+  final result = await repo.getUserPerfStats(id, perf);
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
 @riverpod
 Future<IList<UserActivity>> userActivity(
   UserActivityRef ref, {
   required UserId id,
-}) {
+}) async {
+  final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(userRepositoryProvider);
-  final result = repo.getUserActivity(id);
-  result.match(
-    onSuccess: (_) => ref.cacheFor(const Duration(minutes: 5)),
-  );
-  return Result.release(result);
+  final result = await repo.getUserActivity(id);
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
 @riverpod
 Future<IList<UserStatus>> userStatuses(
   UserStatusesRef ref, {
   required ISet<UserId> ids,
-}) {
+}) async {
+  final link = ref.cacheFor(const Duration(seconds: 30));
   final repo = ref.watch(userRepositoryProvider);
-  final result = repo.getUsersStatuses(ids);
-  result.match(
-    onSuccess: (_) => ref.cacheFor(const Duration(seconds: 30)),
-  );
-  return Result.release(result);
+  final result = await repo.getUsersStatuses(ids);
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
 @riverpod
-Future<IList<Streamer>> liveStreamers(LiveStreamersRef ref) {
+Future<IList<Streamer>> liveStreamers(LiveStreamersRef ref) async {
+  final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(userRepositoryProvider);
-  final result = repo.getLiveStreamers();
-  result.match(
-    onSuccess: (_) => ref.cacheFor(const Duration(minutes: 5)),
-  );
-  return Result.release(result);
+  final result = await repo.getLiveStreamers();
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
 @riverpod
-Future<IMap<Perf, LeaderboardUser>> top1(Top1Ref ref) {
+Future<IMap<Perf, LeaderboardUser>> top1(Top1Ref ref) async {
+  final link = ref.cacheFor(const Duration(minutes: 10));
   final repo = ref.watch(userRepositoryProvider);
-  final result = repo.getTop1();
-  result.match(
-    onSuccess: (_) => ref.cacheFor(const Duration(minutes: 10)),
-  );
-  return Result.release(result);
+  final result = await repo.getTop1();
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
 @riverpod
-Future<Leaderboard> leaderboard(LeaderboardRef ref) {
+Future<Leaderboard> leaderboard(LeaderboardRef ref) async {
+  final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(userRepositoryProvider);
-  final result = repo.getLeaderboard();
-  result.match(
-    onSuccess: (_) => ref.cacheFor(const Duration(minutes: 5)),
-  );
-  return Result.release(result);
+  final result = await repo.getLeaderboard();
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }

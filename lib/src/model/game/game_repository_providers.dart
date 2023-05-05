@@ -2,7 +2,6 @@ import 'package:async/async.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:logging/logging.dart';
-import 'package:result_extensions/result_extensions.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
@@ -31,13 +30,14 @@ Future<ArchivedGame> archivedGame(
 Future<IList<ArchivedGameData>> userRecentGames(
   UserRecentGamesRef ref, {
   required UserId userId,
-}) {
+}) async {
+  final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(gameRepositoryProvider);
-  final result = repo.getUserGames(userId);
-  result.match(
-    onSuccess: (_) => ref.cacheFor(const Duration(minutes: 5)),
-  );
-  return Result.release(result);
+  final result = await repo.getUserGames(userId);
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
 @Riverpod(keepAlive: true)

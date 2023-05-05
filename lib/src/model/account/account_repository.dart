@@ -1,4 +1,3 @@
-import 'package:async/async.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -21,13 +20,14 @@ AccountRepository accountRepository(AccountRepositoryRef ref) {
 }
 
 @riverpod
-Future<User> account(AccountRef ref) {
+Future<User> account(AccountRef ref) async {
+  final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(accountRepositoryProvider);
-  final result = repo.getProfile();
-  result.match(
-    onSuccess: (_) => ref.cacheFor(const Duration(minutes: 5)),
-  );
-  return Result.release(result);
+  final result = await repo.getProfile();
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
 class AccountRepository {
