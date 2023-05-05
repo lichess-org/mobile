@@ -15,7 +15,7 @@ class FeaturedPosition with _$FeaturedPosition {
     Move? lastMove,
     required Side turn,
     required Chess position,
-    MaterialDiff? diff,
+    required MaterialDiff diff,
   }) = _FeaturedPosition;
 
   factory FeaturedPosition.fromTvEvent(TvEvent event) {

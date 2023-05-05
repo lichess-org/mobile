@@ -117,7 +117,15 @@ class MaterialDiff with _$MaterialDiff {
       Role.pawn: 1,
     };
 
-    final Map<Role, int> baseCount = {
+    int score = 0;
+    final IMap<Role, int> blackCount = board.materialCount(Side.black);
+    final IMap<Role, int> whiteCount = board.materialCount(Side.white);
+
+    Map<Role, int> count;
+    Map<Role, int> black;
+    Map<Role, int> white;
+
+    count = {
       Role.king: 0,
       Role.queen: 0,
       Role.rook: 0,
@@ -126,20 +134,28 @@ class MaterialDiff with _$MaterialDiff {
       Role.pawn: 0,
     };
 
-    int score = 0;
-    final IMap<Role, int> whiteCount = board.materialCount(Side.white);
-    final IMap<Role, int> blackCount = board.materialCount(Side.black);
-    Map<Role, int> count = baseCount;
+    black = {
+      Role.king: 0,
+      Role.queen: 0,
+      Role.rook: 0,
+      Role.bishop: 0,
+      Role.knight: 0,
+      Role.pawn: 0,
+    };
+
+    white = {
+      Role.king: 0,
+      Role.queen: 0,
+      Role.rook: 0,
+      Role.bishop: 0,
+      Role.knight: 0,
+      Role.pawn: 0,
+    };
 
     whiteCount.forEach((role, cnt) {
       count[role] = cnt - blackCount[role]!;
-      count[role] = cnt - blackCount[role]!;
-
       score += pieceScores[role]! * count[role]!;
     });
-
-    Map<Role, int> black = baseCount;
-    Map<Role, int> white = baseCount;
 
     count.forEach((role, cnt) {
       if (cnt > 0) {
