@@ -18,6 +18,7 @@ analyzer:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
     - lib/src/styles/lichess_icons.dart
+    - lib/firebase_options.dart
   errors:
     invalid_annotation_target: ignore
   plugins:

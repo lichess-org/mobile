@@ -8,8 +8,10 @@ import 'package:result_extensions/result_extensions.dart';
 import 'package:http/retry.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'package:lichess_mobile/src/http_client.dart';
+import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';
@@ -20,6 +22,7 @@ part 'auth_client.g.dart';
 @Riverpod(keepAlive: true)
 AuthClient authClient(AuthClientRef ref) {
   final httpClient = ref.watch(httpClientProvider);
+  final crashlytics = ref.watch(crashlyticsProvider);
   final logger = Logger('AuthClient');
   final insideAuthClient = _AuthClient(
     ref,
@@ -29,6 +32,7 @@ AuthClient authClient(AuthClientRef ref) {
   final authClient = AuthClient(
     logger,
     insideAuthClient,
+    crashlytics,
   );
   ref.onDispose(() {
     authClient.close();
@@ -47,7 +51,8 @@ AuthClient authClient(AuthClientRef ref) {
 class AuthClient {
   AuthClient(
     this._log,
-    this._client, {
+    this._client,
+    this._crashlytics, {
     List<Duration> retryDelays = defaultRetries,
   })  : _retryClient = RetryClient.withDelays(
           _client,
@@ -65,6 +70,7 @@ class AuthClient {
   final Client _client;
   final RetryClient _retryClient;
   final RetryClient _retryClientOnError;
+  final FirebaseCrashlytics _crashlytics;
 
   /// Makes app user agent
   static String userAgent(PackageInfo info, LightUser? user) =>
@@ -80,6 +86,11 @@ class AuthClient {
             .get(url, headers: headers),
       ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
+        _crashlytics.recordError(
+          error,
+          stackTrace,
+          reason: 'a non-fatal http request error',
+        );
         return GenericIOException();
       }).flatMap(
         (response) => _validateResponseStatusResult('GET', url, response),
@@ -97,6 +108,11 @@ class AuthClient {
             .post(url, headers: headers, body: body, encoding: encoding),
       ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
+        _crashlytics.recordError(
+          error,
+          stackTrace,
+          reason: 'a non-fatal http request error',
+        );
         return GenericIOException();
       }).flatMap(
         (response) => _validateResponseStatusResult('POST', url, response),
