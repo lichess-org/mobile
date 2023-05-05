@@ -186,9 +186,9 @@ const iOSLightShimmerGradient = LinearGradient(
 
 const iOSDarkShimmerGradient = LinearGradient(
   colors: [
-    Color.fromARGB(255, 44, 44, 46),
-    Color(0xFF3D3D3F),
-    Color.fromARGB(255, 44, 44, 46),
+    Color(0xFF111111),
+    Color(0xFF222222),
+    Color(0xFF111111),
   ],
   stops: [
     0.1,
