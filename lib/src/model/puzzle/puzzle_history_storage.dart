@@ -83,10 +83,10 @@ class PuzzleHistoryStorage {
     return null;
   }
 
-  Future<IList<PuzzleHistoryDay>?> fetchall({
+  Future<IList<PuzzleHistoryDay>?> fetchRecent({
     required UserId? userId,
   }) async {
-    final list = await _db.query(
+    final historyList = await _db.query(
       _historyTable,
       where: '''
       userId = ?
@@ -94,6 +94,7 @@ class PuzzleHistoryStorage {
       whereArgs: [
         userId?.value ?? _anonUserKey,
       ],
+      limit: 5,
     );
 
     final puzzleList = await _db.query(
@@ -112,43 +113,54 @@ class PuzzleHistoryStorage {
     });
 
     if (puzzles.isEmpty) return null;
-    final history = list.map(
-      (entry) {
-        final raw = entry['data'] as String?;
-        final angle = entry['angle'] as String?;
-        final date = entry['solvedDate'] as String?;
-        if (raw == null || angle == null || date == null) {
-          throw const FormatException(
-            'PuzzleHistoryStorage: connot fetch puzzles: expected an object',
-          );
-        }
-        final json = jsonDecode(raw);
-        if (json is! Map<String, dynamic>) {
-          throw const FormatException(
-            '[PuzzleHistoryStorage] cannot fetch puzzles: expected an object',
-          );
-        }
-        final data = _PuzzleHistoryData.fromJson(json);
-        final puzzleAndResult = data.puzzles.map((entry) {
-          return PuzzleAndResult(
-            puzzle: puzzles.firstWhere(
-              (p) => p.puzzle.id == entry.puzzleId,
-              orElse: () => throw FormatException(
-                '[PuzzleHistoryStorage] Cannot find puzzle ${entry.puzzleId}',
-              ),
-            ),
-            result: entry.result,
-          );
-        }).toIList();
-        return PuzzleHistoryDay(
-          puzzles: puzzleAndResult,
-          angle: puzzleThemeNameMap[angle]!,
-          day: DateTime.parse(date),
-        );
-      },
-    ).toIList();
+    var totalPuzzles = 0;
+    final first10 = <PuzzleHistoryDay>[];
 
-    return history.isEmpty ? null : history;
+    for (final entry in historyList) {
+      final remaining = 10 - totalPuzzles;
+      if (remaining <= 0) {
+        break;
+      }
+      final raw = entry['data'] as String?;
+      final angle = entry['angle'] as String?;
+      final date = entry['solvedDate'] as String?;
+      if (raw == null || angle == null || date == null) {
+        throw const FormatException(
+          'PuzzleHistoryStorage: connot fetch puzzles: expected an object',
+        );
+      }
+      final json = jsonDecode(raw);
+      if (json is! Map<String, dynamic>) {
+        throw const FormatException(
+          '[PuzzleHistoryStorage] cannot fetch puzzles: expected an object',
+        );
+      }
+      final data = _PuzzleHistoryData.fromJson(json);
+      final allPuzzles = data.puzzles.map((entry) {
+        return PuzzleAndResult(
+          puzzle: puzzles.firstWhere(
+            (p) => p.puzzle.id == entry.puzzleId,
+            orElse: () => throw FormatException(
+              '[PuzzleHistoryStorage] Cannot find puzzle ${entry.puzzleId}',
+            ),
+          ),
+          result: entry.result,
+        );
+      }).toIList();
+
+      final puzzleAndResult = allPuzzles.take(remaining).toIList();
+      totalPuzzles += puzzleAndResult.length;
+
+      first10.add(
+        PuzzleHistoryDay(
+          puzzles: puzzleAndResult.take(remaining).toIList(),
+          day: DateTime.parse(date),
+          angle: puzzleThemeNameMap[angle]!,
+        ),
+      );
+    }
+
+    return first10.isEmpty ? null : first10.toIList();
   }
 
   Future<void> save({

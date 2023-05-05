@@ -73,8 +73,10 @@ Future<PuzzleDashboard> puzzleDashboard(PuzzleDashboardRef ref, int days) {
 }
 
 @Riverpod(keepAlive: true)
-Future<IList<PuzzleHistoryDay>?> puzzleHistory(PuzzleHistoryRef ref) {
+Future<IList<PuzzleHistoryDay>?> recentPuzzleHistory(
+  RecentPuzzleHistoryRef ref,
+) {
   final session = ref.watch(authSessionProvider);
   final repo = ref.watch(puzzleHistoryStorageProvider);
-  return repo.fetchall(userId: session?.user.id);
+  return repo.fetchRecent(userId: session?.user.id);
 }

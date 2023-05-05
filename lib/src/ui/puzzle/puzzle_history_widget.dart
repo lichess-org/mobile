@@ -25,7 +25,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 class PuzzleHistoryWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final history = ref.watch(puzzleHistoryProvider);
+    final history = ref.watch(recentPuzzleHistoryProvider);
     return history.when(
       data: (data) {
         if (data == null) {
@@ -44,7 +44,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
               context.l10n.more,
             ),
           ),
-          children: getFirst10(data).map((e) => _HistoryList(e)).toList(),
+          children: data.map((e) => _HistoryList(e)).toList(),
         );
       },
       error: (e, s) {
@@ -55,21 +55,6 @@ class PuzzleHistoryWidget extends ConsumerWidget {
       },
       loading: () => const Center(child: CircularProgressIndicator()),
     );
-  }
-
-  IList<PuzzleHistoryDay> getFirst10(IList<PuzzleHistoryDay> history) {
-    final first10 = <PuzzleHistoryDay>[];
-    var totalPuzzles = 0;
-    for (final h in history) {
-      final remaining = 10 - totalPuzzles;
-      if (remaining <= 0) {
-        break;
-      }
-      final puzzles = h.puzzles.take(remaining).toList();
-      totalPuzzles += puzzles.length;
-      first10.add(h.copyWith(puzzles: puzzles.toIList()));
-    }
-    return first10.toIList();
   }
 }
 

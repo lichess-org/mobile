@@ -83,7 +83,7 @@ class _PuzzleDashboardScreenState extends ConsumerState<PuzzleDashboardScreen> {
 
   Future<void> _refreshData() {
     return Future.wait([
-      ref.refresh(puzzleHistoryProvider.future),
+      ref.refresh(recentPuzzleHistoryProvider.future),
       ref.refresh(puzzleDashboardProvider(ref.read(daysProvider).days).future),
     ]);
   }
