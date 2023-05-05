@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/ui/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
@@ -52,7 +53,11 @@ class UserScreen extends ConsumerWidget {
           return ListView(children: buildUserScreenList(user));
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: _handleFetchUserError,
+        error: (error, _) {
+          return FullScreenRetryRequest(
+            onRetry: () => ref.invalidate(userProvider(id: user.id)),
+          );
+        },
       ),
     );
   }
@@ -69,16 +74,13 @@ class UserScreen extends ConsumerWidget {
         ),
         loading: () =>
             const Center(child: CircularProgressIndicator.adaptive()),
-        error: _handleFetchUserError,
+        error: (error, _) {
+          return FullScreenRetryRequest(
+            onRetry: () => ref.invalidate(userProvider(id: user.id)),
+          );
+        },
       ),
     );
-  }
-
-  Widget _handleFetchUserError(Object error, StackTrace stackTrace) {
-    debugPrint(
-      'SEVERE: [UserScreen] could not fetch user; $error\n$stackTrace',
-    );
-    return const Center(child: Text('Could not load user data.'));
   }
 }
 
