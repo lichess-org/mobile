@@ -1,3 +1,5 @@
+import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 
@@ -28,6 +30,24 @@ class BoardPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final IList<Role> roleList = {
+      Role.king,
+      Role.queen,
+      Role.rook,
+      Role.bishop,
+      Role.knight,
+      Role.pawn,
+    }.toIList();
+
+    final Map<Role, IconData> iconByRole = {
+      Role.king: LichessIcons.chess_king,
+      Role.queen: LichessIcons.chess_queen,
+      Role.rook: LichessIcons.chess_rook,
+      Role.bishop: LichessIcons.chess_bishop,
+      Role.knight: LichessIcons.chess_knight,
+      Role.pawn: LichessIcons.chess_pawn,
+    };
+
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Row(
@@ -84,9 +104,22 @@ class BoardPlayer extends StatelessWidget {
                             style: const TextStyle(fontSize: 13),
                           ),
                         const SizedBox(width: 3),
-                        Text(diff != null && diff!.score > 0
-                            ? "+${diff!.score.toString()}"
-                            : '')
+                        if (diff != null)
+                          for (final role in roleList)
+                            for (int i = 0; i < diff!.pieces[role]!; i++)
+                              Icon(
+                                iconByRole[role],
+                                size: 13,
+                                color: Colors.grey,
+                              ),
+                        const SizedBox(width: 3),
+                        Text(
+                          style:
+                              const TextStyle(fontSize: 13, color: Colors.grey),
+                          diff != null && diff!.score > 0
+                              ? "+${diff!.score}"
+                              : '',
+                        )
                       ],
                     ),
                   ],
