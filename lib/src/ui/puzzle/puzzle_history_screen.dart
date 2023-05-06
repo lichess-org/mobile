@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 class HistoryScreen extends StatelessWidget {
@@ -144,9 +145,7 @@ class _HistoryScrollViewState extends ConsumerState<_HistoryScrollView> {
         if (_isLoading)
           const Padding(
             padding: EdgeInsets.only(top: 10, bottom: 40),
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
+            child: CenterLoadingIndicator(),
           ),
       ],
     );

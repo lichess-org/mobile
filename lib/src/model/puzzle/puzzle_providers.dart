@@ -88,5 +88,5 @@ Future<IList<PuzzleHistoryDay>?> puzzleHistoryPage(
 ) {
   final session = ref.watch(authSessionProvider);
   final storage = ref.watch(puzzleHistoryStorageProvider);
-  return storage.fetchHistory(userId: session?.user.id, page: page);
+  return storage.fetchPuzzleHistoryPage(userId: session?.user.id, page: page);
 }

@@ -27,38 +27,6 @@ class PuzzleHistoryStorage {
   const PuzzleHistoryStorage(this._db);
   final Database _db;
 
-  Future<IList<PuzzleIdAndResult>?> fetch({
-    required UserId? userId,
-    required PuzzleTheme angle,
-    required DateTime date,
-  }) async {
-    final list = await _db.query(
-      _historyTable,
-      where: '''
-      userId = ? AND
-      angle = ? AND
-      solvedDate = ?
-      ''',
-      whereArgs: [
-        userId?.value ?? _anonUserKey,
-        angle.name,
-        date.toIso8601String(),
-      ],
-    );
-
-    final raw = list.firstOrNull?['data'] as String?;
-    if (raw != null) {
-      final json = jsonDecode(raw);
-      if (json is! Map<String, dynamic>) {
-        throw const FormatException(
-          '[PuzzleHistoryStorage] cannot fetch puzzles: expected an object',
-        );
-      }
-      return _PuzzleHistoryData.fromJson(json).puzzles;
-    }
-    return null;
-  }
-
   Future<Puzzle?> fetchPuzzle({
     required PuzzleId puzzleId,
   }) async {
@@ -83,18 +51,14 @@ class PuzzleHistoryStorage {
     return null;
   }
 
-  Future<IList<PuzzleHistoryDay>?> fetchHistory({
+  Future<IList<PuzzleHistoryDay>?> fetchPuzzleHistoryPage({
     required UserId? userId,
     required int page,
   }) async {
     final historyList = await _db.query(
       _historyTable,
-      where: '''
-      userId = ?
-      ''',
-      whereArgs: [
-        userId?.value ?? _anonUserKey,
-      ],
+      where: 'userId = ?',
+      whereArgs: [userId?.value ?? _anonUserKey],
       orderBy: 'solvedDate DESC',
       limit: 10,
       offset: page * 10,
@@ -104,21 +68,11 @@ class PuzzleHistoryStorage {
       _puzzleTable,
     );
 
-    final puzzles = puzzleList.map((e) {
-      final raw = e['data'] as String?;
-      final json = jsonDecode(raw!);
-      if (json is! Map<String, dynamic>) {
-        throw const FormatException(
-          '[PuzzleHistoryStorage] cannot fetch puzzles from $_puzzleTable: expected an object',
-        );
-      }
-      return Puzzle.fromJson(json);
-    });
+    final puzzles = getPuzzleList(puzzleList);
 
     if (puzzles.isEmpty) return null;
-    final first10 = <PuzzleHistoryDay>[];
 
-    for (final entry in historyList) {
+    final puzzleHistory = historyList.map((entry) {
       final raw = entry['data'] as String?;
       final angle = entry['angle'] as String?;
       final date = entry['solvedDate'] as String?;
@@ -145,16 +99,13 @@ class PuzzleHistoryStorage {
           result: entry.result,
         );
       }).toIList();
-
-      first10.add(
-        PuzzleHistoryDay(
-          puzzles: allPuzzles,
-          day: DateTime.parse(date),
-          angle: puzzleThemeNameMap[angle]!,
-        ),
+      return PuzzleHistoryDay(
+        puzzles: allPuzzles,
+        day: DateTime.parse(date),
+        angle: puzzleThemeNameMap[angle]!,
       );
-    }
-    return first10.isEmpty ? null : first10.toIList();
+    }).toIList();
+    return puzzleHistory;
   }
 
   Future<IList<PuzzleHistoryDay>?> fetchRecent({
@@ -162,32 +113,14 @@ class PuzzleHistoryStorage {
   }) async {
     final historyList = await _db.query(
       _historyTable,
-      where: '''
-      userId = ?
-      ''',
-      whereArgs: [
-        userId?.value ?? _anonUserKey,
-      ],
+      where: 'userId = ?',
+      whereArgs: [userId?.value ?? _anonUserKey],
       orderBy: 'solvedDate DESC',
       limit: 10,
     );
-
-    final puzzleList = await _db.query(
-      _puzzleTable,
-    );
-
-    final puzzles = puzzleList.map((e) {
-      final raw = e['data'] as String?;
-      final json = jsonDecode(raw!);
-      if (json is! Map<String, dynamic>) {
-        throw const FormatException(
-          '[PuzzleHistoryStorage] cannot fetch puzzles from $_puzzleTable: expected an object',
-        );
-      }
-      return Puzzle.fromJson(json);
-    });
-
+    final puzzles = getPuzzleList(await _db.query(_puzzleTable));
     if (puzzles.isEmpty) return null;
+
     var totalPuzzles = 0;
     final first10 = <PuzzleHistoryDay>[];
 
@@ -228,14 +161,14 @@ class PuzzleHistoryStorage {
 
       first10.add(
         PuzzleHistoryDay(
-          puzzles: puzzleAndResult.take(remaining).toIList(),
+          puzzles: puzzleAndResult,
           day: DateTime.parse(date),
           angle: puzzleThemeNameMap[angle]!,
         ),
       );
     }
 
-    return first10.isEmpty ? null : first10.toIList();
+    return first10.toIList();
   }
 
   Future<void> save({
@@ -299,6 +232,19 @@ class PuzzleHistoryStorage {
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  IList<Puzzle> getPuzzleList(List<Map<String, Object?>> puzzleList) {
+    return puzzleList.map((e) {
+      final raw = e['data'] as String?;
+      final json = jsonDecode(raw!);
+      if (json is! Map<String, dynamic>) {
+        throw const FormatException(
+          '[PuzzleHistoryStorage] cannot fetch puzzles from $_puzzleTable: expected an object',
+        );
+      }
+      return Puzzle.fromJson(json);
+    }).toIList();
   }
 }
 
