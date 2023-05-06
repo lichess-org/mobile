@@ -39,3 +39,19 @@ Color? dividerColor(BuildContext context) =>
     defaultTargetPlatform == TargetPlatform.iOS
         ? CupertinoColors.separator.resolveFrom(context)
         : null;
+
+/// Retrieve the text height according to the device's font scale factor
+double getTextHeight(BuildContext context, String text, TextStyle style) {
+  final textSpan = TextSpan(
+    text: text,
+    style: style.copyWith(
+      fontSize: style.fontSize! * MediaQuery.textScaleFactorOf(context),
+    ),
+  );
+  final textPainter = TextPainter(
+    text: textSpan,
+    textDirection: TextDirection.ltr,
+  );
+  textPainter.layout(maxWidth: MediaQuery.of(context).size.width);
+  return textPainter.height;
+}

@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -191,6 +192,7 @@ class HistoryBoards extends ConsumerWidget {
             ? 4
             : 2;
     final boardWidth = MediaQuery.of(context).size.width / crossAxisCount;
+    final textHeight = getTextHeight(context, 'Solved', Styles.sectionTitle);
     return LayoutGrid(
       columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
       rowSizes: List.generate(
@@ -201,7 +203,7 @@ class HistoryBoards extends ConsumerWidget {
         final preview = PuzzlePreview.fromPuzzle(puzzle.puzzle);
         return SizedBox(
           width: boardWidth,
-          height: boardWidth + 30, // + 30 for text Widget
+          height: boardWidth + textHeight + 15,
           child: BoardPreview(
             orientation: preview.orientation.cg,
             fen: preview.initialFen,
