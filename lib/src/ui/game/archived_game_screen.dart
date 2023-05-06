@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 
 import 'archived_game_screen_providers.dart';
 
@@ -135,13 +136,17 @@ class _BoardBody extends ConsumerWidget {
         final topPlayer = orientation == Side.white ? black : white;
         final bottomPlayer = orientation == Side.white ? white : black;
 
+        final position = game.positionAt(cursor);
+
         return TableBoardLayout(
           boardData: cg.BoardData(
             interactableSide: cg.InteractableSide.none,
             orientation:
                 (isBoardTurned ? orientation.opposite : orientation).cg,
-            fen: game.fenAt(cursor) ?? gameData.lastFen ?? kInitialBoardFEN,
+            fen: position?.fen ?? gameData.lastFen ?? kInitialBoardFEN,
             lastMove: game.moveAt(cursor)?.cg,
+            sideToMove: position?.turn.cg ?? Side.white.cg,
+            isCheck: position?.isCheck ?? false,
           ),
           topTable: topPlayer,
           bottomTable: bottomPlayer,

@@ -3,7 +3,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'featured_player.dart';
 
 part 'tv_event.freezed.dart';

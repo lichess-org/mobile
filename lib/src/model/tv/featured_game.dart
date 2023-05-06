@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'featured_position.dart';
 import 'featured_player.dart';
 import 'tv_event.dart';
-import 'tv_repository.dart';
+import 'tv_repository_providers.dart';
 
 part 'featured_game.freezed.dart';
 part 'featured_game.g.dart';
@@ -59,6 +59,7 @@ class FeaturedGame extends _$FeaturedGame {
       stream = tvRepository.tvGameFeed(_gameId!).asBroadcastStream();
     }
 
+    _streamSub?.cancel();
     _streamSub = stream.listen((event) {
       if (event is TvFeaturedEvent) {
         _onFeaturedEvent(event);

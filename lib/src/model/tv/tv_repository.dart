@@ -1,15 +1,15 @@
 import 'dart:convert';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import './tv_event.dart';
+import 'package:result_extensions/result_extensions.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
+import './tv_channel.dart';
 
 class TvRepository {
-  const TvRepository(
-    Logger log, {
-    required this.apiClient,
-  }) : _log = log;
+  const TvRepository({required this.apiClient, required Logger logger})
+      : _log = logger;
 
   final AuthClient apiClient;
   final Logger _log;
@@ -39,14 +39,19 @@ class TvRepository {
         .handleError((Object error) => _log.warning(error));
   }
 
+  FutureResult<TvChannels> getTvChannels() {
+    return apiClient
+        .get(Uri.parse('$kLichessHost/api/tv/channels'))
+        .flatMap((response) {
+      return readJsonObject(
+        response,
+        mapper: TvChannels.fromJson,
+        logger: _log,
+      );
+    });
+  }
+
   void dispose() {
     apiClient.close();
   }
 }
-
-final tvRepositoryProvider = Provider<TvRepository>((ref) {
-  final apiClient = ref.watch(authClientProvider);
-  final repo = TvRepository(Logger('TvRepository'), apiClient: apiClient);
-  ref.onDispose(() => repo.dispose());
-  return repo;
-});

@@ -16,7 +16,7 @@ class MockLogger extends Mock implements Logger {}
 void main() {
   final mockLogger = MockLogger();
   final mockAuthClient = MockAuthClient();
-  final repo = TvRepository(mockLogger, apiClient: mockAuthClient);
+  final repo = TvRepository(apiClient: mockAuthClient, logger: mockLogger);
 
   setUpAll(() {
     reset(mockAuthClient);

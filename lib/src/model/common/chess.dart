@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 part 'chess.freezed.dart';
@@ -61,14 +62,14 @@ enum Variant {
 
   /// Returns the initial position for this [Variant].
   ///
-  /// Will throw an [ArgumentError] if called on [Variant.fromPosition].
+  /// Will throw an [ArgumentError] if called on [Variant.chess960] or [Variant.fromPosition].
   Position get initialPosition {
     switch (this) {
       case Variant.standard:
-      case Variant.chess960:
         return Chess.initial;
+      case Variant.chess960:
       case Variant.fromPosition:
-        throw ArgumentError('Check the variant is not `fromPosition` before!');
+        throw ArgumentError('This variant has no defined initial position!');
       case Variant.antichess:
         return Antichess.initial;
       case Variant.kingOfTheHill:
@@ -106,6 +107,82 @@ enum Variant {
         return Rules.racingKings;
       case Variant.crazyhouse:
         return Rules.crazyhouse;
+    }
+  }
+}
+
+extension ChessExtension on Pick {
+  Move asUciMoveOrThrow() {
+    final value = this.required().value;
+    if (value is Move) {
+      return value;
+    }
+    if (value is String) {
+      final move = Move.fromUci(value);
+      if (move != null) {
+        return move;
+      } else {
+        throw PickException(
+          "value $value at $debugParsingExit can't be casted to Move: invalid UCI string.",
+        );
+      }
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to Move",
+    );
+  }
+
+  Move? asUciMoveOrNull() {
+    if (value == null) return null;
+    try {
+      return asUciMoveOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Side asSideOrThrow() {
+    final value = this.required().value;
+    if (value is Side) {
+      return value;
+    }
+    if (value is String) {
+      return value == 'white' ? Side.white : Side.black;
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to Side",
+    );
+  }
+
+  Side? asSideOrNull() {
+    if (value == null) return null;
+    try {
+      return asSideOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Variant asVariantOrThrow() {
+    final value = this.required().value;
+    if (value is Variant) {
+      return value;
+    }
+    if (value is String) {
+      return Variant.values
+          .firstWhere((e) => e.name == value, orElse: () => Variant.standard);
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to GameStatus",
+    );
+  }
+
+  Variant? asVariantOrNull() {
+    if (value == null) return null;
+    try {
+      return asVariantOrNull();
+    } catch (_) {
+      return null;
     }
   }
 }

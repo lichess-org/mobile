@@ -83,4 +83,6 @@ class LichessColors {
 
   // good: green
   static const good = secondary;
+
+  static const warn = brag;
 }

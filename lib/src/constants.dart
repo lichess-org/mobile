@@ -14,7 +14,7 @@ const kProvisionalDeviation = 110;
 const kClueLessDeviation = 230;
 
 // UI
-const kLargeScreenWidth = 600;
+const kTabletThreshold = 600;
 const kCardTextScaleFactor = 1.64;
 const kEmptyWidget = SizedBox.shrink();
 const kEmptyFen = '8/8/8/8/8/8/8/8 w - - 0 1';

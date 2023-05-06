@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 
 import 'puzzle_view_model.dart';
 import 'puzzle_feedback_widget.dart';
@@ -153,6 +154,7 @@ class _Body extends ConsumerWidget {
                               ? cg.InteractableSide.white
                               : cg.InteractableSide.black,
                   fen: puzzleState.fen,
+                  isCheck: puzzleState.position.isCheck,
                   lastMove: puzzleState.lastMove?.cg,
                   sideToMove: puzzleState.position.turn.cg,
                   validMoves: puzzleState.validMoves,

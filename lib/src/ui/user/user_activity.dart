@@ -5,12 +5,59 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
+
+class UserActivityWidget extends ConsumerWidget {
+  const UserActivityWidget({required this.user, super.key});
+
+  final User user;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activity = ref.watch(userActivityProvider(id: user.id));
+
+    return activity.when(
+      data: (data) {
+        final nonEmptyActivities = data.where((entry) => entry.isNotEmpty);
+        if (nonEmptyActivities.isEmpty) {
+          return const SizedBox.shrink();
+        }
+        return ListSection(
+          header:
+              Text(context.l10n.activityActivity, style: Styles.sectionTitle),
+          hasLeading: true,
+          children: nonEmptyActivities
+              .take(10)
+              .map((entry) => UserActivityEntry(entry: entry))
+              .toList(),
+        );
+      },
+      error: (error, stackTrace) {
+        debugPrint(
+          'SEVERE: [UserScreen] could not load user activity; $error\n$stackTrace',
+        );
+        return const Text('Could not load user activity');
+      },
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(
+            itemsNumber: 10,
+            header: true,
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class UserActivityEntry extends ConsumerWidget {
   const UserActivityEntry({required this.entry, super.key});
@@ -252,6 +299,47 @@ class UserActivityEntry extends ConsumerWidget {
   }
 }
 
+const _boxSize = 20.0;
+const _spaceWidth = 3.0;
+
+const _gameStatsFontStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 11,
+  fontWeight: FontWeight.bold,
+);
+
+class _ResultBox extends StatelessWidget {
+  const _ResultBox({
+    required this.number,
+    required this.color,
+  });
+
+  final int number;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: _boxSize,
+      width: _boxSize,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(1.0),
+        child: FittedBox(
+          fit: BoxFit.contain,
+          child: Text(
+            number.toString(),
+            style: _gameStatsFontStyle,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class BriefGameResultBox extends StatelessWidget {
   const BriefGameResultBox({
     required this.win,
@@ -262,15 +350,6 @@ class BriefGameResultBox extends StatelessWidget {
   final int win;
   final int draw;
   final int loss;
-
-  static const gameStatsFontStyle = TextStyle(
-    color: Colors.white,
-    fontSize: 11,
-    fontWeight: FontWeight.bold,
-  );
-
-  static const _boxSize = 20.0;
-  static const _spaceWidth = 3.0;
 
   @override
   Widget build(BuildContext context) {
@@ -289,63 +368,27 @@ class BriefGameResultBox extends StatelessWidget {
         child: Row(
           children: [
             if (win != 0)
-              SizedBox(
-                height: _boxSize,
-                width: _boxSize,
-                child: DecoratedBox(
-                  decoration: const BoxDecoration(
-                    color: LichessColors.good,
-                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                  ),
-                  child: Center(
-                    child: Text(
-                      win.toString(),
-                      style: gameStatsFontStyle,
-                    ),
-                  ),
-                ),
+              _ResultBox(
+                number: win,
+                color: LichessColors.good,
               ),
             if (win != 0 && draw != 0)
               const SizedBox(
                 width: _spaceWidth,
               ),
             if (draw != 0)
-              SizedBox(
-                height: _boxSize,
-                width: _boxSize,
-                child: DecoratedBox(
-                  decoration: const BoxDecoration(
-                    color: LichessColors.brag,
-                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                  ),
-                  child: Center(
-                    child: Text(
-                      draw.toString(),
-                      style: gameStatsFontStyle,
-                    ),
-                  ),
-                ),
+              _ResultBox(
+                number: draw,
+                color: LichessColors.warn,
               ),
             if ((draw != 0 && loss != 0) || (win != 0 && loss != 0))
               const SizedBox(
                 width: _spaceWidth,
               ),
             if (loss != 0)
-              SizedBox(
-                height: _boxSize,
-                width: _boxSize,
-                child: DecoratedBox(
-                  decoration: const BoxDecoration(
-                    color: LichessColors.red,
-                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                  ),
-                  child: Center(
-                    child: Text(
-                      loss.toString(),
-                      style: gameStatsFontStyle,
-                    ),
-                  ),
-                ),
+              _ResultBox(
+                number: loss,
+                color: LichessColors.red,
               ),
           ],
         ),

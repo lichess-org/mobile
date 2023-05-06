@@ -20,9 +20,11 @@ import 'package:lichess_mobile/src/ui/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 import 'user_activity.dart';
 
@@ -48,10 +50,14 @@ class UserScreen extends ConsumerWidget {
       ),
       body: asyncUser.when(
         data: (user) {
-          return UserScreenBody(user: user);
+          return ListView(children: buildUserScreenList(user));
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: _handleFetchUserError,
+        error: (error, _) {
+          return FullScreenRetryRequest(
+            onRetry: () => ref.invalidate(userProvider(id: user.id)),
+          );
+        },
       ),
     );
   }
@@ -63,56 +69,30 @@ class UserScreen extends ConsumerWidget {
         middle: PlayerTitle(userName: user.name, title: user.title),
       ),
       child: asyncUser.when(
-        data: (user) => SafeArea(child: UserScreenBody(user: user)),
+        data: (user) => SafeArea(
+          child: ListView(children: buildUserScreenList(user)),
+        ),
         loading: () =>
             const Center(child: CircularProgressIndicator.adaptive()),
-        error: _handleFetchUserError,
+        error: (error, _) {
+          return FullScreenRetryRequest(
+            onRetry: () => ref.invalidate(userProvider(id: user.id)),
+          );
+        },
       ),
     );
   }
-
-  Widget _handleFetchUserError(Object error, StackTrace stackTrace) {
-    debugPrint(
-      'SEVERE: [UserScreen] could not fetch user; $error\n$stackTrace',
-    );
-    return const Center(child: Text('Could not load user data.'));
-  }
 }
 
-/// Common widget for [UserScreen] and [ProfileScreen].
-///
-/// Use `inCustomScrollView` parameter to return a [SliverPadding] widget needed
-/// by [ProfileScreen].
-class UserScreenBody extends StatelessWidget {
-  const UserScreenBody({
-    required this.user,
-    this.inCustomScrollView = false,
-    super.key,
-  });
-
-  final User user;
-
-  /// If set to `true` this widget will return a [SliverPadding] instead of a
-  /// [ListView].
-  final bool inCustomScrollView;
-
-  @override
-  Widget build(BuildContext context) {
-    final list = [
-      _Profile(user: user),
-      PerfCards(user: user),
-      Activity(user: user),
-      RecentGames(user: user),
-    ];
-
-    return inCustomScrollView
-        ? SliverList(
-            delegate: SliverChildListDelegate(list),
-          )
-        : ListView(
-            children: list,
-          );
-  }
+// ignore: avoid-returning-widgets
+/// Common content for [UserScreen] and [ProfileScreen].
+List<Widget> buildUserScreenList(User user) {
+  return [
+    _Profile(user: user),
+    PerfCards(user: user),
+    UserActivityWidget(user: user),
+    RecentGames(user: user),
+  ];
 }
 
 const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
@@ -281,40 +261,6 @@ class PerfCards extends StatelessWidget {
   }
 }
 
-class Activity extends ConsumerWidget {
-  const Activity({required this.user, super.key});
-
-  final User user;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final activity = ref.watch(userActivityProvider(id: user.id));
-
-    return activity.when(
-      data: (data) {
-        return ListSection(
-          header:
-              Text(context.l10n.activityActivity, style: Styles.sectionTitle),
-          hasLeading: true,
-          children: data
-              .where((entry) => entry.isNotEmpty)
-              .take(10)
-              .map((entry) => UserActivityEntry(entry: entry))
-              .toList(),
-        );
-      },
-      error: (error, stackTrace) {
-        debugPrint(
-          'SEVERE: [UserScreen] could not load user activity; $error\n$stackTrace',
-        );
-        return const Text('Could not load user activity');
-      },
-      // TODO show a shimmer loading effect
-      loading: () => const SizedBox.shrink(),
-    );
-  }
-}
-
 class RecentGames extends ConsumerWidget {
   const RecentGames({required this.user, super.key});
 
@@ -327,18 +273,19 @@ class RecentGames extends ConsumerWidget {
     return recentGames.when(
       data: (data) {
         return ListSection(
-          // TODO translate
-          header: Text('Recent games', style: Styles.sectionTitle),
+          header: Text(context.l10n.recentGames, style: Styles.sectionTitle),
           hasLeading: true,
           children: data.map((game) {
             final mySide = game.white.id == user.id ? Side.white : Side.black;
             final opponent = game.white.id == user.id ? game.black : game.white;
-            final opponentName = opponent.name == 'Stockfish'
+            final opponentName = opponent.aiLevel != null
                 ? context.l10n.aiNameLevelAiLevel(
                     opponent.name,
                     opponent.aiLevel.toString(),
                   )
-                : opponent.name;
+                : opponent.name == 'Stockfish'
+                    ? context.l10n.anonymous
+                    : opponent.name;
 
             return GameListTile(
               onTap: game.variant.isSupported
@@ -383,8 +330,15 @@ class RecentGames extends ConsumerWidget {
         );
         return const Text('Could not load games.');
       },
-      // TODO show a shimmer loading effect
-      loading: () => const SizedBox.shrink(),
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(
+            itemsNumber: 10,
+            header: true,
+          ),
+        ),
+      ),
     );
   }
 }
