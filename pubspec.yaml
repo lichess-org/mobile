@@ -38,7 +38,7 @@ dependencies:
   chessground:
     git:
       url: https://github.com/lichess-org/flutter-chessground.git
-      ref: 717e93b0597b30dfacf6d67c2088c8d2a45351da
+      ref: f3799929a2bc79fa27152fd73fd4d95bf79c7fec
   soundpool: ^2.3.0
   meta: ^1.8.0
   tuple: ^2.0.1
