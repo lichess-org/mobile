@@ -42,7 +42,10 @@ class HistoryScreen extends StatelessWidget {
         middle: Text(context.l10n.puzzleHistory),
       ),
       child: SafeArea(
-        child: _HistoryScrollView(history: history, session: session,),
+        child: _HistoryScrollView(
+          history: history,
+          session: session,
+        ),
       ),
     );
   }
@@ -75,10 +78,8 @@ class _HistoryScrollViewState extends ConsumerState<_HistoryScrollView> {
   bool _isLoading = false;
   bool _hasMoreItems = true;
   final List<_HistoryColumn> _items = [];
-  late PuzzleHistoryStorage historyStorage;
   @override
   void initState() {
-    historyStorage = ref.read(puzzleHistoryStorageProvider);
     _scrollController.addListener(_scrollListener);
     _items.addAll(widget.history.map((e) => _HistoryColumn(e)));
     super.initState();
@@ -98,16 +99,20 @@ class _HistoryScrollViewState extends ConsumerState<_HistoryScrollView> {
       });
       final data = await _fetchItems();
       if (data != null && data.isNotEmpty) {
-        setState(() {
-          _pageNumber++;
-          _isLoading = false;
-          _items.addAll(data);
-        });
+        if (mounted) {
+          setState(() {
+            _pageNumber++;
+            _isLoading = false;
+            _items.addAll(data);
+          });
+        }
       } else {
-        setState(() {
-          _isLoading = false;
-          _hasMoreItems = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+            _hasMoreItems = false;
+          });
+        }
       }
     }
   }
@@ -119,11 +124,7 @@ class _HistoryScrollViewState extends ConsumerState<_HistoryScrollView> {
   }
 
   Future<List<_HistoryColumn>?> _fetchItems() async {
-    final data = await historyStorage.fetchHistory(
-      userId: widget.session?.user.id,
-      page: _pageNumber,
-    );
-
+    final data = await ref.watch(puzzleHistoryPageProvider(_pageNumber).future);
     if (data == null) {
       return null;
     }

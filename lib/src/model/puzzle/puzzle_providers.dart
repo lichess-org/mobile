@@ -77,6 +77,16 @@ Future<IList<PuzzleHistoryDay>?> recentPuzzleHistory(
   RecentPuzzleHistoryRef ref,
 ) {
   final session = ref.watch(authSessionProvider);
-  final repo = ref.watch(puzzleHistoryStorageProvider);
-  return repo.fetchRecent(userId: session?.user.id);
+  final storage = ref.watch(puzzleHistoryStorageProvider);
+  return storage.fetchRecent(userId: session?.user.id);
+}
+
+@riverpod
+Future<IList<PuzzleHistoryDay>?> puzzleHistoryPage(
+  PuzzleHistoryPageRef ref,
+  int page,
+) {
+  final session = ref.watch(authSessionProvider);
+  final storage = ref.watch(puzzleHistoryStorageProvider);
+  return storage.fetchHistory(userId: session?.user.id, page: page);
 }
