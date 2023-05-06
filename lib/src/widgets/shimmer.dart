@@ -171,7 +171,7 @@ class _ShimmerLoadingState extends State<ShimmerLoading> {
 const iOSLightShimmerGradient = LinearGradient(
   colors: [
     Color(0xFFE3E3E6),
-    Color(0xFFF5F5F6),
+    Color(0xFFECECEE),
     Color(0xFFE3E3E6),
   ],
   stops: [
@@ -187,7 +187,7 @@ const iOSLightShimmerGradient = LinearGradient(
 const iOSDarkShimmerGradient = LinearGradient(
   colors: [
     Color(0xFF111111),
-    Color(0xFF222222),
+    Color(0xFF1a1a1a),
     Color(0xFF111111),
   ],
   stops: [
@@ -203,7 +203,7 @@ const iOSDarkShimmerGradient = LinearGradient(
 const androidLightShimmerGradient = LinearGradient(
   colors: [
     Color(0xFFE6E6E6),
-    Color(0xFFF7F7F7),
+    Color(0xFFEFEFEF),
     Color(0xFFE6E6E6),
   ],
   stops: [
@@ -219,7 +219,7 @@ const androidLightShimmerGradient = LinearGradient(
 const androidDarkShimmerGradient = LinearGradient(
   colors: [
     Color(0xFF333333),
-    Color(0xFF444444),
+    Color(0xFF3c3c3c),
     Color(0xFF333333),
   ],
   stops: [
