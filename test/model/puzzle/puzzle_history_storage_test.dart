@@ -65,12 +65,6 @@ void main() {
   });
 }
 
-final fetchAllResult = PuzzleHistoryDay(
-  puzzles: IList([PuzzleAndResult(puzzle: puzzle, result: true)]),
-  day: DateTime.now(),
-  angle: PuzzleTheme.mix,
-);
-
 const idAndResult = PuzzleIdAndResult(puzzleId: PuzzleId('pId3'), result: true);
 final puzzle = Puzzle(
   puzzle: PuzzleData(

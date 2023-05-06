@@ -83,6 +83,80 @@ class PuzzleHistoryStorage {
     return null;
   }
 
+  Future<IList<PuzzleHistoryDay>?> fetchHistory({
+    required UserId? userId,
+    required int page,
+  }) async {
+    final historyList = await _db.query(
+      _historyTable,
+      where: '''
+      userId = ?
+      ''',
+      whereArgs: [
+        userId?.value ?? _anonUserKey,
+      ],
+      orderBy: 'solvedDate DESC',
+      limit: 10,
+      offset: page * 10,
+    );
+
+    final puzzleList = await _db.query(
+      _puzzleTable,
+    );
+
+    final puzzles = puzzleList.map((e) {
+      final raw = e['data'] as String?;
+      final json = jsonDecode(raw!);
+      if (json is! Map<String, dynamic>) {
+        throw const FormatException(
+          '[PuzzleHistoryStorage] cannot fetch puzzles from $_puzzleTable: expected an object',
+        );
+      }
+      return Puzzle.fromJson(json);
+    });
+
+    if (puzzles.isEmpty) return null;
+    final first10 = <PuzzleHistoryDay>[];
+
+    for (final entry in historyList) {
+      final raw = entry['data'] as String?;
+      final angle = entry['angle'] as String?;
+      final date = entry['solvedDate'] as String?;
+      if (raw == null || angle == null || date == null) {
+        throw const FormatException(
+          'PuzzleHistoryStorage: connot fetch puzzles: expected an object',
+        );
+      }
+      final json = jsonDecode(raw);
+      if (json is! Map<String, dynamic>) {
+        throw const FormatException(
+          '[PuzzleHistoryStorage] cannot fetch puzzles: expected an object',
+        );
+      }
+      final data = _PuzzleHistoryData.fromJson(json);
+      final allPuzzles = data.puzzles.map((entry) {
+        return _PuzzleAndResult(
+          puzzle: puzzles.firstWhere(
+            (p) => p.puzzle.id == entry.puzzleId,
+            orElse: () => throw FormatException(
+              '[PuzzleHistoryStorage] Cannot find puzzle ${entry.puzzleId}',
+            ),
+          ),
+          result: entry.result,
+        );
+      }).toIList();
+
+      first10.add(
+        PuzzleHistoryDay(
+          puzzles: allPuzzles,
+          day: DateTime.parse(date),
+          angle: puzzleThemeNameMap[angle]!,
+        ),
+      );
+    }
+    return first10.isEmpty ? null : first10.toIList();
+  }
+
   Future<IList<PuzzleHistoryDay>?> fetchRecent({
     required UserId? userId,
   }) async {
@@ -94,7 +168,8 @@ class PuzzleHistoryStorage {
       whereArgs: [
         userId?.value ?? _anonUserKey,
       ],
-      limit: 5,
+      orderBy: 'solvedDate DESC',
+      limit: 10,
     );
 
     final puzzleList = await _db.query(
@@ -137,7 +212,7 @@ class PuzzleHistoryStorage {
       }
       final data = _PuzzleHistoryData.fromJson(json);
       final allPuzzles = data.puzzles.map((entry) {
-        return PuzzleAndResult(
+        return _PuzzleAndResult(
           puzzle: puzzles.firstWhere(
             (p) => p.puzzle.id == entry.puzzleId,
             orElse: () => throw FormatException(
@@ -230,7 +305,7 @@ class PuzzleHistoryStorage {
 @Freezed(fromJson: true, toJson: true)
 class PuzzleHistoryDay with _$PuzzleHistoryDay {
   const factory PuzzleHistoryDay({
-    required IList<PuzzleAndResult> puzzles,
+    required IList<_PuzzleAndResult> puzzles,
     required DateTime day,
     required PuzzleTheme angle,
   }) = _PuzzleHistoryDay;
@@ -262,12 +337,12 @@ class PuzzleIdAndResult with _$PuzzleIdAndResult {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PuzzleAndResult with _$PuzzleAndResult {
-  const factory PuzzleAndResult({
+class _PuzzleAndResult with _$_PuzzleAndResult {
+  const factory _PuzzleAndResult({
     required Puzzle puzzle,
     required bool result,
-  }) = _PuzzleAndResult;
+  }) = __PuzzleAndResult;
 
-  factory PuzzleAndResult.fromJson(Map<String, dynamic> json) =>
-      _$PuzzleAndResultFromJson(json);
+  factory _PuzzleAndResult.fromJson(Map<String, dynamic> json) =>
+      _$_PuzzleAndResultFromJson(json);
 }

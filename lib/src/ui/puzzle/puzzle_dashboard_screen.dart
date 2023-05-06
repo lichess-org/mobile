@@ -184,7 +184,7 @@ class _Body extends ConsumerWidget {
         ),
       ),
       if (session != null) PuzzleDashboardWidget(),
-      PuzzleHistoryWidget(),
+      PuzzleHistoryWidget(session),
     ];
 
     return defaultTargetPlatform == TargetPlatform.iOS
