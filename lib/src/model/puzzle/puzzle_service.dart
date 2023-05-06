@@ -114,7 +114,7 @@ class PuzzleService {
     await historyStorage.save(
       userId: userId,
       angle: angle,
-      data: PuzzleIdAndResult(puzzleId: puzzle.puzzle.id, result: solution.win),
+      result: solution.win,
       puzzle: puzzle,
     );
 

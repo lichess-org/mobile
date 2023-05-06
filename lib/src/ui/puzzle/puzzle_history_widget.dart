@@ -24,7 +24,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
     final history = ref.watch(recentPuzzleHistoryProvider);
     return history.when(
       data: (data) {
-        if (data == null) {
+        if (data == null || data.isEmpty) {
           return const SizedBox.shrink();
         }
         return ListSection(

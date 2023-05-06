@@ -72,7 +72,7 @@ class PuzzleHistoryStorage {
 
     if (puzzles.isEmpty) return null;
 
-    final puzzleHistory = historyList.map((entry) {
+    return historyList.map((entry) {
       final raw = entry['data'] as String?;
       final angle = entry['angle'] as String?;
       final date = entry['solvedDate'] as String?;
@@ -105,7 +105,6 @@ class PuzzleHistoryStorage {
         angle: puzzleThemeNameMap[angle]!,
       );
     }).toIList();
-    return puzzleHistory;
   }
 
   Future<IList<PuzzleHistoryDay>?> fetchRecent({
@@ -174,7 +173,7 @@ class PuzzleHistoryStorage {
   Future<void> save({
     required UserId? userId,
     required PuzzleTheme angle,
-    required PuzzleIdAndResult data,
+    required bool result,
     required Puzzle puzzle,
   }) async {
     final now = DateTime.now();
@@ -194,7 +193,7 @@ class PuzzleHistoryStorage {
       ],
     );
 
-    var savedPuzzles = IList<PuzzleIdAndResult>();
+    var savedPuzzlesIds = IList<_PuzzleIdAndResult>();
     final raw = list.firstOrNull?['data'] as String?;
     if (raw != null) {
       final json = jsonDecode(raw);
@@ -203,7 +202,7 @@ class PuzzleHistoryStorage {
           '[PuzzleHistoryStorage] cannot fetch puzzles: expected an object',
         );
       }
-      savedPuzzles = _PuzzleHistoryData.fromJson(json).puzzles;
+      savedPuzzlesIds = _PuzzleHistoryData.fromJson(json).puzzles;
     }
 
     await _db.insert(
@@ -215,7 +214,10 @@ class PuzzleHistoryStorage {
         'data': jsonEncode(
           _PuzzleHistoryData(
             puzzles: IList(
-              [if (savedPuzzles.isNotEmpty) ...savedPuzzles, data],
+              [
+                if (savedPuzzlesIds.isNotEmpty) ...savedPuzzlesIds,
+                _PuzzleIdAndResult(puzzleId: puzzle.puzzle.id, result: result)
+              ],
             ).toISet().toIList(),
           ).toJson(),
         ),
@@ -251,7 +253,7 @@ class PuzzleHistoryStorage {
 @Freezed(fromJson: true, toJson: true)
 class PuzzleHistoryDay with _$PuzzleHistoryDay {
   const factory PuzzleHistoryDay({
-    required IList<_PuzzleAndResult> puzzles,
+    required IList<PuzzleAndResult> puzzles,
     required DateTime day,
     required PuzzleTheme angle,
   }) = _PuzzleHistoryDay;
@@ -264,7 +266,7 @@ class PuzzleHistoryDay with _$PuzzleHistoryDay {
 @Freezed(fromJson: true, toJson: true)
 class _PuzzleHistoryData with _$_PuzzleHistoryData {
   const factory _PuzzleHistoryData({
-    required IList<PuzzleIdAndResult> puzzles,
+    required IList<_PuzzleIdAndResult> puzzles,
   }) = __PuzzleHistoryData;
 
   factory _PuzzleHistoryData.fromJson(Map<String, dynamic> json) =>
@@ -272,23 +274,23 @@ class _PuzzleHistoryData with _$_PuzzleHistoryData {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PuzzleIdAndResult with _$PuzzleIdAndResult {
-  const factory PuzzleIdAndResult({
+class _PuzzleIdAndResult with _$_PuzzleIdAndResult {
+  const factory _PuzzleIdAndResult({
     required PuzzleId puzzleId,
     required bool result,
-  }) = _PuzzleIdAndResult;
+  }) = __PuzzleIdAndResult;
 
-  factory PuzzleIdAndResult.fromJson(Map<String, dynamic> json) =>
-      _$PuzzleIdAndResultFromJson(json);
+  factory _PuzzleIdAndResult.fromJson(Map<String, dynamic> json) =>
+      _$_PuzzleIdAndResultFromJson(json);
 }
 
 @Freezed(fromJson: true, toJson: true)
-class _PuzzleAndResult with _$_PuzzleAndResult {
-  const factory _PuzzleAndResult({
+class PuzzleAndResult with _$PuzzleAndResult {
+  const factory PuzzleAndResult({
     required Puzzle puzzle,
     required bool result,
-  }) = __PuzzleAndResult;
+  }) = _PuzzleAndResult;
 
-  factory _PuzzleAndResult.fromJson(Map<String, dynamic> json) =>
-      _$_PuzzleAndResultFromJson(json);
+  factory PuzzleAndResult.fromJson(Map<String, dynamic> json) =>
+      _$PuzzleAndResultFromJson(json);
 }

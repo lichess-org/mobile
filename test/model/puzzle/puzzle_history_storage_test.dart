@@ -33,20 +33,16 @@ void main() {
       await storage.save(
         userId: null,
         angle: PuzzleTheme.mix,
-        data: idAndResult,
+        result: true,
         puzzle: puzzle,
       );
-      // final now = DateTime.now();
-      // final dayOnly = DateTime(now.year, now.month, now.day);
-
-      // expect(
-      //   storage.fetch(
-      //     userId: null,
-      //     angle: PuzzleTheme.mix,
-      //     date: dayOnly,
-      //   ),
-      //   completion(equals(const [idAndResult])),
-      // );
+      expect(
+        storage.fetchPuzzleHistoryPage(
+          userId: null,
+          page: 0,
+        ),
+        completion(equals([historyDay])),
+      );
 
       expect(
         storage.fetchPuzzle(
@@ -55,17 +51,25 @@ void main() {
         completion(equals(puzzle)),
       );
 
-      // expect(
-      //  storage.fetchall(userId: null),
-      //  completion(
-      //    equals([fetchAllResult]),
-      //  ),
-      // );
+      expect(
+        storage.fetchRecent(userId: null),
+        completion(
+          equals([historyDay]),
+        ),
+      );
     });
   });
 }
 
-const idAndResult = PuzzleIdAndResult(puzzleId: PuzzleId('pId3'), result: true);
+final now = DateTime.now();
+final dayOnly = DateTime(now.year, now.month, now.day);
+
+final historyDay = PuzzleHistoryDay(
+  puzzles: IList([PuzzleAndResult(puzzle: puzzle, result: true)]),
+  angle: PuzzleTheme.mix,
+  day: dayOnly,
+);
+
 final puzzle = Puzzle(
   puzzle: PuzzleData(
     id: const PuzzleId('pId3'),

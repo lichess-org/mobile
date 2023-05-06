@@ -24,6 +24,9 @@ class MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
 
 class MockPuzzleHistoryStorage extends Mock implements PuzzleHistoryStorage {}
 
+final now = DateTime.now();
+final dayOnly = DateTime(now.year, now.month, now.day);
+
 void main() {
   setUpAll(() {
     registerFallbackValue(
@@ -32,10 +35,8 @@ void main() {
         unsolved: IList([puzzle]),
       ),
     );
-    registerFallbackValue(
-      PuzzleIdAndResult(puzzleId: puzzle.puzzle.id, result: true),
-    );
     registerFallbackValue(puzzle);
+    registerFallbackValue(true);
   });
 
   final mockBatchStorage = MockPuzzleBatchStorage();
@@ -166,18 +167,16 @@ void main() {
         when(() => mockBatchStorage.fetch(userId: null, angle: PuzzleTheme.mix))
             .thenAnswer((_) async => batch);
         when(
-          () => mockHistoryStorage.fetch(
+          () => mockHistoryStorage.fetchRecent(
             userId: null,
-            angle: PuzzleTheme.mix,
-            date: any(named: 'date'),
           ),
         ).thenAnswer((_) async => null);
         when(
           () => mockHistoryStorage.save(
             userId: null,
-            angle: PuzzleTheme.mix,
-            data: any(named: 'data'),
             puzzle: any(named: 'puzzle'),
+            angle: PuzzleTheme.mix,
+            result: any(named: 'result'),
           ),
         ).thenAnswer((_) async {});
 
