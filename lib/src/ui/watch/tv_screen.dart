@@ -18,11 +18,12 @@ import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:result_extensions/result_extensions.dart';
 
 import 'package:lichess_mobile/src/model/tv/featured_game.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 
 final _featuredGameWithSoundProvider = featuredGameProvider(withSound: true);
 
-final gameIdStateProvider = StateProvider.autoDispose<String?>((ref) {
-  return null;
+final variantStateProvider = StateProvider.autoDispose<ChannelVariant>((ref) {
+  return ChannelVariant.topRated;
 });
 
 class TvScreen extends ConsumerStatefulWidget {
@@ -33,8 +34,6 @@ class TvScreen extends ConsumerStatefulWidget {
 }
 
 class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
-  String selectedValue = "Top Rated";
-
   @override
   Widget build(BuildContext context) {
     return ConsumerPlatformWidget(
@@ -44,53 +43,35 @@ class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
     );
   }
 
-  void showChoicesDialog(
-    Future<int?> Function(
-      BuildContext context,
-      List<String> choices,
-      int initialIndex,
-    )
-        showChoiceDialog,
-    WidgetRef ref,
-    String? gameId,
-  ) {
+  void showChoicesDialog(WidgetRef ref) {
+    ChannelVariant selectedVariant = ref.watch(variantStateProvider);
+
     final repo = ref.watch(userRepositoryProvider);
     final FutureResult<TvChannels> channelResult = repo.getTvChannels();
 
     channelResult.then((res) {
       if (res.isValue) {
         final TvChannels data = res.asValue!.value;
-        String choiceString;
-        if (gameId == null) {
-          choiceString = "Top Rated";
-        } else {
-          choiceString = data.channels.entries
-              .where((element) => element.key == selectedValue)
-              .first
-              .key;
-        }
-        final List<String> choices =
-            data.channels.entries.map((e) => e.key).toList();
-
-        showChoiceDialog(
+        showChoicePicker(
           context,
-          choices,
-          choices.indexOf(choiceString),
-        ).then((val) {
-          if (val == null) return;
-          selectedValue = choices[val];
-          String? tempGameId = data.channels.entries
-              .where((element) => element.key == selectedValue)
+          choices: ChannelVariant.values,
+          selectedItem: selectedVariant,
+          labelBuilder: (t) => Text(t.title),
+          onSelectedItemChanged: (ChannelVariant? d) {
+            if (d != null) {
+              selectedVariant = d;
+            }
+          },
+        ).then((_) {
+          String? newGameId = data.channels.entries
+              .where((element) => element.key == selectedVariant.title)
               .first
               .value
               .gameId;
-          if (selectedValue == "Top Rated") {
-            tempGameId = null;
-          } else {
-            selectedValue = choices[val];
-          }
-          ref.read(gameIdStateProvider.notifier).state = tempGameId;
-          ref.read(_featuredGameWithSoundProvider.notifier).gameId = tempGameId;
+          if (selectedVariant.title == "Top Rated") newGameId = null;
+
+          ref.read(variantStateProvider.notifier).state = selectedVariant;
+          ref.read(_featuredGameWithSoundProvider.notifier).gameId = newGameId;
         });
       }
     }); // End FR_data.then
@@ -100,15 +81,14 @@ class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
     BuildContext context,
     WidgetRef ref,
   ) {
-    final gameId = ref.watch(gameIdStateProvider);
-
+    final ChannelVariant selectedVariant = ref.watch(variantStateProvider);
     return Scaffold(
       appBar: AppBar(
         title: InkWell(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(selectedValue),
+              Text(selectedVariant.title),
               const Icon(
                 Icons.arrow_drop_down,
                 size: 34.0,
@@ -116,7 +96,7 @@ class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
             ],
           ),
           onTap: () {
-            showChoicesDialog(showAndroidChoices, ref, gameId);
+            showChoicesDialog(ref);
           },
         ),
         actions: [
@@ -131,15 +111,14 @@ class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
     BuildContext context,
     WidgetRef ref,
   ) {
-    final gameId = ref.watch(gameIdStateProvider);
-
+    final ChannelVariant selectedVariant = ref.watch(variantStateProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: InkWell(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(selectedValue),
+              Text(selectedVariant.title),
               const Icon(
                 Icons.arrow_drop_down,
                 size: 34.0,
@@ -147,83 +126,12 @@ class _TvScreenState extends ConsumerState<TvScreen> with RouteAware {
             ],
           ),
           onTap: () {
-            showChoicesDialog(showIosChoices, ref, gameId);
+            showChoicesDialog(ref);
           },
         ),
         trailing: ToggleSoundButton(),
       ),
       child: const _Body(),
-    );
-  }
-
-  Future<int?> showIosChoices(
-    BuildContext context,
-    List<String> choices,
-    int initialIndex,
-  ) {
-    int selectedIndex = initialIndex;
-
-    return showCupertinoModalPopup<int>(
-      context: context,
-      builder: (context) {
-        return SizedBox(
-          height: 250,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ColoredBox(
-                color: Theme.of(context).canvasColor,
-                child: Row(
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(null);
-                      },
-                      child: const Text('Cancel'),
-                    ),
-                    const Spacer(),
-                    const Text(
-                      "Variant",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    const Spacer(),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(selectedIndex);
-                      },
-                      child: const Text('Ok'),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: CupertinoPicker(
-                  backgroundColor: Theme.of(context).canvasColor,
-                  useMagnifier: true,
-                  magnification: 1.1,
-                  itemExtent: 40,
-                  scrollController:
-                      FixedExtentScrollController(initialItem: initialIndex),
-                  children: List<Widget>.generate(choices.length, (index) {
-                    return Center(
-                      child: Text(
-                        choices[index],
-                        style: const TextStyle(
-                          fontSize: 21,
-                        ),
-                      ),
-                    );
-                  }),
-                  onSelectedItemChanged: (int selectedItem) {
-                    selectedIndex = selectedItem;
-                    selectedValue = choices[selectedItem];
-                  },
-                ),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 
@@ -329,59 +237,4 @@ class _Body extends ConsumerWidget {
       ),
     );
   }
-}
-
-// ===========================================================================
-// Non-shared code below because different interfaces are shown to prompt
-// for a multiple-choice answer.
-//
-// This is a design choice and you may want to do something different in your
-// app.
-// ===========================================================================
-/// This uses a platform-appropriate mechanism to show users multiple choices.
-///
-/// On Android, it uses a dialog with radio buttons. On iOS, it uses a picker.
-Future<int?> showAndroidChoices(
-  BuildContext context,
-  List<String> choices,
-  int initialIndex,
-) {
-  int? choiceIndex = initialIndex;
-  return showDialog<int?>(
-    context: context,
-    builder: (context) {
-      int? selectedRadio = initialIndex;
-      return AlertDialog(
-        contentPadding: const EdgeInsets.only(top: 12),
-        content: StatefulBuilder(
-          builder: (context, setState) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: List<Widget>.generate(choices.length, (index) {
-                return RadioListTile<int?>(
-                  title: Text(choices[index]),
-                  value: index,
-                  groupValue: selectedRadio,
-                  onChanged: (value) {
-                    setState(() => selectedRadio = value);
-                    choiceIndex = value;
-                  },
-                );
-              }),
-            );
-          },
-        ),
-        actions: [
-          TextButton(
-            child: const Text('OK'),
-            onPressed: () => Navigator.of(context).pop(choiceIndex),
-          ),
-          TextButton(
-            child: const Text('CANCEL'),
-            onPressed: () => Navigator.of(context).pop(null),
-          ),
-        ],
-      );
-    },
-  );
 }

@@ -7,6 +7,22 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 
 part 'tv_channel.freezed.dart';
 
+enum ChannelVariant {
+  classical('Classical'),
+  bullet('Bullet'),
+  blitz('Blitz'),
+  rapid('Rapid'),
+  topRated('Top Rated');
+
+  const ChannelVariant(this.title);
+
+  final String title;
+}
+
+final IMap<String, ChannelVariant> channelVariantNameMap =
+    IMap({for (var value in ChannelVariant.values) value.title: value});
+//IMap(ChannelVariant.values.asNameMap());
+
 @freezed
 class TvChannels with _$TvChannels {
   const factory TvChannels({
@@ -22,16 +38,7 @@ class TvChannels with _$TvChannels {
     return TvChannels(
       channels: IMap({
         for (final entry in channelMap.entries)
-          if (entry.key != 'Horde' &&
-              entry.key != 'Race Kings' &&
-              entry.key != 'Crazyhouse' &&
-              entry.key != 'King of the Hill' &&
-              entry.key != 'Antichess' &&
-              entry.key != 'Computer' &&
-              entry.key != 'Bot' &&
-              entry.key != 'Atomic' &&
-              entry.key != 'Racing Kings' &&
-              entry.key != 'Three-check')
+          if (channelVariantNameMap.containsKey(entry.key))
             entry.key: TvChannel.fromJson(entry.value)
       }),
     );
