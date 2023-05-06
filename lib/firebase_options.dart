@@ -63,7 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '974101866555',
     projectId: 'lichessv2',
     storageBucket: 'lichessv2.appspot.com',
-    iosClientId: '974101866555-8ag66ua0p0pn1ab7u982i58a9iubhbod.apps.googleusercontent.com',
+    iosClientId:
+        '974101866555-8ag66ua0p0pn1ab7u982i58a9iubhbod.apps.googleusercontent.com',
     iosBundleId: 'org.lichess.mobileV2',
   );
 }
