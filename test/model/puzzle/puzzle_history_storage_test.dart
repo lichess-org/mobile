@@ -62,7 +62,7 @@ void main() {
 }
 
 final now = DateTime.now();
-final dayOnly = DateTime(now.year, now.month, now.day);
+final dayOnly = DateTime(now.year, now.month, now.day, now.hour);
 
 final historyDay = PuzzleHistoryDay(
   puzzles: IList([PuzzleAndResult(puzzle: puzzle, result: true)]),
