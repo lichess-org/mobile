@@ -123,7 +123,7 @@ class _Body extends ConsumerWidget {
                     ),
                   ).then((_) {
                     ref.invalidate(nextPuzzleProvider(theme));
-                    return ref.invalidate(
+                    ref.invalidate(
                       puzzleDashboardProvider(ref.read(daysProvider).days),
                     );
                   });

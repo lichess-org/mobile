@@ -31,7 +31,7 @@ jobs:
         run: flutter pub run build_runner build
 
       - name: Verify formatting
-        run: flutter format --output=none --set-exit-if-changed .
+        run: dart format --output=none --set-exit-if-changed .
 
       - name: Analyze project source
         run: flutter analyze

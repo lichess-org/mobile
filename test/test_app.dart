@@ -14,6 +14,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -23,6 +24,7 @@ import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import './common/fake_sound_service.dart';
 import './model/auth/fake_auth_repository.dart';
 import './model/auth/fake_session_storage.dart';
+import './fake_crashlytics.dart';
 
 class MockSoundPool extends Mock implements Soundpool {}
 
@@ -57,6 +59,8 @@ Future<Widget> buildTestApp(
 
   return ProviderScope(
     overrides: [
+      // ignore: scoped_providers_should_specify_dependencies
+      crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       // ignore: scoped_providers_should_specify_dependencies
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       // ignore: scoped_providers_should_specify_dependencies

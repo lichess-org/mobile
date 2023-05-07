@@ -9,6 +9,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "58.0.0"
+  _flutterfire_internals:
+    dependency: transitive
+    description:
+      name: _flutterfire_internals
+      sha256: "867b77e2367bc502dcd4d5a66302615409f04eb20ed82ba1c0ba073f9107e018"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   analyzer:
     dependency: transitive
     description:
@@ -173,8 +181,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "717e93b0597b30dfacf6d67c2088c8d2a45351da"
-      resolved-ref: "717e93b0597b30dfacf6d67c2088c8d2a45351da"
+      ref: f3799929a2bc79fa27152fd73fd4d95bf79c7fec
+      resolved-ref: f3799929a2bc79fa27152fd73fd4d95bf79c7fec
       url: "https://github.com/lichess-org/flutter-chessground.git"
     source: git
     version: "0.1.0"
@@ -403,6 +411,46 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.4"
+  firebase_core:
+    dependency: "direct main"
+    description:
+      name: firebase_core
+      sha256: dcf54c170c5371ad0e79229d0fb372c58262ae0968b7de222bf28e51dd236be0
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.11.0"
+  firebase_core_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_core_platform_interface
+      sha256: ae79f335f6c7f2dadb00c98c429da2ca905d265e0225fb5e7dfa62ac3accad48
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.7.0"
+  firebase_core_web:
+    dependency: transitive
+    description:
+      name: firebase_core_web
+      sha256: e57ef862257a0d977c1308d02e2fbb9b68525e6d85711b08f3df8cec836fb444
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.0"
+  firebase_crashlytics:
+    dependency: "direct main"
+    description:
+      name: firebase_crashlytics
+      sha256: e8424f75c0fd466a6ae4d069b313ec84133ef275c00a5a3a416b75b99fb3e831
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.0"
+  firebase_crashlytics_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_crashlytics_platform_interface
+      sha256: "381e28f33d5255a698ac7755c3c4fdff42382be0154f375564e6852aa46f9d8f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.5.0"
   fixnum:
     dependency: transitive
     description:

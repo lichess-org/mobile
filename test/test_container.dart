@@ -9,6 +9,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -18,6 +19,7 @@ import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import './common/fake_sound_service.dart';
 import './model/auth/fake_auth_repository.dart';
 import './model/auth/fake_session_storage.dart';
+import './fake_crashlytics.dart';
 
 class MockSoundPool extends Mock implements Soundpool {}
 
@@ -41,6 +43,7 @@ Future<ProviderContainer> makeContainer({
 
   final container = ProviderContainer(
     overrides: [
+      crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       sharedPreferencesProvider.overrideWithValue(sharedPreferences),
       authRepositoryProvider.overrideWithValue(FakeAuthRepository()),

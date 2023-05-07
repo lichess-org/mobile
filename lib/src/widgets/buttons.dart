@@ -57,27 +57,37 @@ class SecondaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cupertinoBrightness =
+        CupertinoTheme.maybeBrightnessOf(context) ?? Brightness.light;
     return Semantics(
       container: true,
       enabled: true,
       button: true,
       label: semanticsLabel,
       excludeSemantics: true,
-      child: OutlinedButton(
-        onPressed: onPressed,
-        style: OutlinedButton.styleFrom(
-          textStyle: textStyle,
-          padding: defaultTargetPlatform == TargetPlatform.iOS
-              ? const EdgeInsets.all(10.0)
-              : null,
-          shape: defaultTargetPlatform == TargetPlatform.iOS
-              ? const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                )
-              : null,
-        ),
-        child: child,
-      ),
+      child: defaultTargetPlatform == TargetPlatform.iOS
+          ? CupertinoButton(
+              onPressed: onPressed,
+              color: CupertinoColors.secondarySystemFill,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+              child: DefaultTextStyle.merge(
+                style: TextStyle(
+                  color: cupertinoBrightness == Brightness.light
+                      ? Colors.black
+                      : Colors.white,
+                  // fontSize: 17,
+                  fontWeight: FontWeight.w500,
+                ),
+                child: child,
+              ),
+            )
+          : OutlinedButton(
+              onPressed: onPressed,
+              style: OutlinedButton.styleFrom(
+                textStyle: textStyle,
+              ),
+              child: child,
+            ),
     );
   }
 }

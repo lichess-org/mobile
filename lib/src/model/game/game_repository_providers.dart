@@ -30,10 +30,14 @@ Future<ArchivedGame> archivedGame(
 Future<IList<ArchivedGameData>> userRecentGames(
   UserRecentGamesRef ref, {
   required UserId userId,
-}) {
-  ref.cacheFor(const Duration(minutes: 1));
+}) async {
+  final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(gameRepositoryProvider);
-  return Result.release(repo.getUserGames(userId));
+  final result = await repo.getUserGames(userId);
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
 @Riverpod(keepAlive: true)

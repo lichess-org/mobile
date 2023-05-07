@@ -1,4 +1,3 @@
-import 'package:async/async.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:logging/logging.dart';
@@ -21,10 +20,14 @@ UserRepository userRepository(UserRepositoryRef ref) {
 }
 
 @riverpod
-Future<User> user(UserRef ref, {required UserId id}) {
-  ref.cacheFor(const Duration(minutes: 5));
+Future<User> user(UserRef ref, {required UserId id}) async {
+  final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(userRepositoryProvider);
-  return Result.release(repo.getUser(id));
+  final result = await repo.getUser(id);
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
 @riverpod
@@ -32,48 +35,73 @@ Future<UserPerfStats> userPerfStats(
   UserPerfStatsRef ref, {
   required UserId id,
   required Perf perf,
-}) {
-  ref.cacheFor(const Duration(minutes: 5));
+}) async {
+  final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(userRepositoryProvider);
-  return Result.release(repo.getUserPerfStats(id, perf));
+  final result = await repo.getUserPerfStats(id, perf);
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
 @riverpod
 Future<IList<UserActivity>> userActivity(
   UserActivityRef ref, {
   required UserId id,
-}) {
-  ref.cacheFor(const Duration(minutes: 2));
+}) async {
+  final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(userRepositoryProvider);
-  return Result.release(repo.getUserActivity(id));
+  final result = await repo.getUserActivity(id);
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
 @riverpod
 Future<IList<UserStatus>> userStatuses(
   UserStatusesRef ref, {
   required ISet<UserId> ids,
-}) {
-  ref.cacheFor(const Duration(seconds: 30));
+}) async {
+  final link = ref.cacheFor(const Duration(seconds: 30));
   final repo = ref.watch(userRepositoryProvider);
-  return Result.release(repo.getUsersStatuses(ids));
+  final result = await repo.getUsersStatuses(ids);
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
 @riverpod
-Future<IList<Streamer>> liveStreamers(LiveStreamersRef ref) {
+Future<IList<Streamer>> liveStreamers(LiveStreamersRef ref) async {
+  final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(userRepositoryProvider);
-  return Result.release(repo.getLiveStreamers());
+  final result = await repo.getLiveStreamers();
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
 @riverpod
-Future<IMap<Perf, LeaderboardUser>> top1(Top1Ref ref) {
-  ref.cacheFor(const Duration(minutes: 10));
+Future<IMap<Perf, LeaderboardUser>> top1(Top1Ref ref) async {
+  final link = ref.cacheFor(const Duration(minutes: 10));
   final repo = ref.watch(userRepositoryProvider);
-  return Result.release(repo.getTop1());
+  final result = await repo.getTop1();
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
 @riverpod
-Future<Leaderboard> leaderboard(LeaderboardRef ref) {
-  ref.cacheFor(const Duration(minutes: 5));
+Future<Leaderboard> leaderboard(LeaderboardRef ref) async {
+  final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(userRepositoryProvider);
-  return Result.release(repo.getLeaderboard());
+  final result = await repo.getLeaderboard();
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }

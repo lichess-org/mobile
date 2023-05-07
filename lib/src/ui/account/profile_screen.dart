@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/ui/user/user_screen.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
@@ -84,7 +85,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, _) {
-        return const Center(child: Text('Could not load profile.'));
+        return Scaffold(
+          appBar: AppBar(
+            actions: const [
+              _SettingsButton(),
+            ],
+          ),
+          body: FullScreenRetryRequest(
+            onRetry: () => ref.invalidate(_sessionProfileProvider),
+          ),
+        );
       },
     );
   }
@@ -129,7 +139,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       },
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
       error: (error, _) {
-        return const Center(child: Text('Could not load profile.'));
+        return CupertinoPageScaffold(
+          navigationBar: const CupertinoNavigationBar(
+            middle: SizedBox.shrink(),
+            trailing: _SettingsButton(),
+          ),
+          child: FullScreenRetryRequest(
+            onRetry: () => ref.invalidate(_sessionProfileProvider),
+          ),
+        );
       },
     );
   }

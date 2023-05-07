@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+
 /// A adaptive circular progress indicator which size is constrained so it can fit
 /// in buttons.
 class ButtonLoadingIndicator extends StatelessWidget {
@@ -26,6 +30,39 @@ class CenterLoadingIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: CircularProgressIndicator.adaptive(),
+    );
+  }
+}
+
+class FullScreenRetryRequest extends StatelessWidget {
+  const FullScreenRetryRequest({
+    super.key,
+    required this.onRetry,
+  });
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // TODO translate
+          Text(
+            'Something went wrong.',
+            style: Styles.sectionTitle,
+          ),
+          const SizedBox(height: 10),
+          SecondaryButton(
+            onPressed: onRetry,
+            semanticsLabel: context.l10n.retry,
+            child: Text(context.l10n.retry),
+          ),
+        ],
+      ),
     );
   }
 }
