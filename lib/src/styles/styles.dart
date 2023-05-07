@@ -41,12 +41,17 @@ Color? dividerColor(BuildContext context) =>
         : null;
 
 /// Retrieve the text height according to the device's font scale factor
-double getTextHeight(BuildContext context, String text, TextStyle style) {
+double getTextHeight(BuildContext context, String text, {TextStyle? style}) {
   final textSpan = TextSpan(
     text: text,
-    style: style.copyWith(
-      fontSize: style.fontSize! * MediaQuery.textScaleFactorOf(context),
-    ),
+    style: style != null
+        ? style.copyWith(
+            fontSize:
+                style.fontSize ?? 1 * MediaQuery.textScaleFactorOf(context),
+          )
+        : TextStyle(
+            fontSize: MediaQuery.textScaleFactorOf(context),
+          ),
   );
   final textPainter = TextPainter(
     text: textSpan,

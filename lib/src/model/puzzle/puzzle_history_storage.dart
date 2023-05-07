@@ -32,9 +32,7 @@ class PuzzleHistoryStorage {
   }) async {
     final list = await _db.query(
       _puzzleTable,
-      where: '''
-      puzzleId = ?
-      ''',
+      where: "puzzleId = ?",
       whereArgs: [puzzleId.toString()],
     );
 
@@ -68,7 +66,7 @@ class PuzzleHistoryStorage {
       _puzzleTable,
     );
 
-    final puzzles = getPuzzleList(puzzleList);
+    final puzzles = _getPuzzleList(puzzleList);
 
     if (puzzles.isEmpty) return null;
 
@@ -89,7 +87,7 @@ class PuzzleHistoryStorage {
       }
       final data = _PuzzleHistoryData.fromJson(json);
       final allPuzzles = data.puzzles.map((entry) {
-        return _PuzzleAndResult(
+        return PuzzleAndResult(
           puzzle: puzzles.firstWhere(
             (p) => p.puzzle.id == entry.puzzleId,
             orElse: () => throw FormatException(
@@ -117,7 +115,7 @@ class PuzzleHistoryStorage {
       orderBy: 'solvedDate DESC',
       limit: 10,
     );
-    final puzzles = getPuzzleList(await _db.query(_puzzleTable));
+    final puzzles = _getPuzzleList(await _db.query(_puzzleTable));
     if (puzzles.isEmpty) return null;
 
     var totalPuzzles = 0;
@@ -144,7 +142,7 @@ class PuzzleHistoryStorage {
       }
       final data = _PuzzleHistoryData.fromJson(json);
       final allPuzzles = data.puzzles.map((entry) {
-        return _PuzzleAndResult(
+        return PuzzleAndResult(
           puzzle: puzzles.firstWhere(
             (p) => p.puzzle.id == entry.puzzleId,
             orElse: () => throw FormatException(
@@ -177,7 +175,7 @@ class PuzzleHistoryStorage {
     required Puzzle puzzle,
   }) async {
     final now = DateTime.now();
-    final dateOnly = DateTime(now.year, now.month, now.day);
+    final dateOnly = DateTime(now.year, now.month, now.day, now.hour);
 
     final list = await _db.query(
       _historyTable,
@@ -236,7 +234,7 @@ class PuzzleHistoryStorage {
     );
   }
 
-  IList<Puzzle> getPuzzleList(List<Map<String, Object?>> puzzleList) {
+  IList<Puzzle> _getPuzzleList(List<Map<String, Object?>> puzzleList) {
     return puzzleList.map((e) {
       final raw = e['data'] as String?;
       final json = jsonDecode(raw!);
@@ -262,6 +260,17 @@ class PuzzleHistoryDay with _$PuzzleHistoryDay {
       _$PuzzleHistoryDayFromJson(json);
 }
 
+@Freezed(fromJson: true, toJson: true)
+class PuzzleAndResult with _$PuzzleAndResult {
+  const factory PuzzleAndResult({
+    required Puzzle puzzle,
+    required bool result,
+  }) = _PuzzleAndResult;
+
+  factory PuzzleAndResult.fromJson(Map<String, dynamic> json) =>
+      _$PuzzleAndResultFromJson(json);
+}
+
 // only used for parsing and saving PuzzleIdAndResult from database
 @Freezed(fromJson: true, toJson: true)
 class _PuzzleHistoryData with _$_PuzzleHistoryData {
@@ -282,15 +291,4 @@ class _PuzzleIdAndResult with _$_PuzzleIdAndResult {
 
   factory _PuzzleIdAndResult.fromJson(Map<String, dynamic> json) =>
       _$_PuzzleIdAndResultFromJson(json);
-}
-
-@Freezed(fromJson: true, toJson: true)
-class PuzzleAndResult with _$PuzzleAndResult {
-  const factory PuzzleAndResult({
-    required Puzzle puzzle,
-    required bool result,
-  }) = _PuzzleAndResult;
-
-  factory PuzzleAndResult.fromJson(Map<String, dynamic> json) =>
-      _$PuzzleAndResultFromJson(json);
 }

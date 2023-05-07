@@ -79,11 +79,11 @@ class _HistoryScrollViewState extends ConsumerState<_HistoryScrollView> {
   int _pageNumber = 1;
   bool _isLoading = false;
   bool _hasMoreItems = true;
-  final List<_HistoryColumn> _items = [];
+  final List<HistoryColumn> _items = [];
   @override
   void initState() {
     _scrollController.addListener(_scrollListener);
-    _items.addAll(widget.history.map((e) => _HistoryColumn(e)));
+    _items.addAll(widget.history.map((e) => HistoryColumn(e)));
     super.initState();
   }
 
@@ -100,7 +100,7 @@ class _HistoryScrollViewState extends ConsumerState<_HistoryScrollView> {
         _isLoading = true;
       });
       final data = await _fetchItems();
-      if (data != null && data.isNotEmpty) {
+      if (data != null) {
         if (mounted) {
           setState(() {
             _pageNumber++;
@@ -125,12 +125,12 @@ class _HistoryScrollViewState extends ConsumerState<_HistoryScrollView> {
     super.dispose();
   }
 
-  Future<List<_HistoryColumn>?> _fetchItems() async {
+  Future<List<HistoryColumn>?> _fetchItems() async {
     final data = await ref.watch(puzzleHistoryPageProvider(_pageNumber).future);
-    if (data == null) {
+    if (data == null || data.isEmpty) {
       return null;
     }
-    return data.map((e) => _HistoryColumn(e)).toList();
+    return data.map((e) => HistoryColumn(e)).toList();
   }
 
   @override
@@ -153,14 +153,16 @@ class _HistoryScrollViewState extends ConsumerState<_HistoryScrollView> {
   }
 }
 
-class _HistoryColumn extends StatelessWidget {
-  const _HistoryColumn(this.history);
+class HistoryColumn extends StatelessWidget {
+  const HistoryColumn(this.history, {this.sectionMargin});
 
   final PuzzleHistoryDay history;
+  final EdgeInsetsGeometry? sectionMargin;
 
   @override
   Widget build(BuildContext context) {
     return ListSection(
+      margin: sectionMargin,
       headerTrailing: Text(
         timeago.format(history.day),
         style: const TextStyle(
@@ -168,11 +170,7 @@ class _HistoryColumn extends StatelessWidget {
           color: Colors.grey,
         ),
       ),
-      header: Row(
-        children: [
-          Text(puzzleThemeL10n(context, history.angle).name),
-        ],
-      ),
+      header: Text(puzzleThemeL10n(context, history.angle).name),
       children: [
         HistoryBoards(history),
       ],
@@ -192,18 +190,18 @@ class HistoryBoards extends ConsumerWidget {
             ? 4
             : 2;
     final boardWidth = MediaQuery.of(context).size.width / crossAxisCount;
-    final textHeight = getTextHeight(context, 'Solved', Styles.sectionTitle);
+    final textHeight = getTextHeight(context, 'Solved');
     return LayoutGrid(
       columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
       rowSizes: List.generate(
         (history.puzzles.length / crossAxisCount).ceil(),
         (_) => auto,
       ),
-      children: history.puzzles.take(history.puzzles.length).map((puzzle) {
+      children: history.puzzles.map((puzzle) {
         final preview = PuzzlePreview.fromPuzzle(puzzle.puzzle);
         return SizedBox(
           width: boardWidth,
-          height: boardWidth + textHeight + 15,
+          height: boardWidth + textHeight + 20,
           child: BoardPreview(
             orientation: preview.orientation.cg,
             fen: preview.initialFen,

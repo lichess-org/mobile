@@ -159,33 +159,15 @@ class _BoardPreviewState extends ConsumerState<BoardPreview> {
           )
         : null;
 
-    final footerWidget = widget.footer != null
-        ? Padding(
-            padding: const EdgeInsets.only(bottom: 6.0),
-            child: defaultTargetPlatform == TargetPlatform.android
-                ? DefaultTextStyle.merge(
-                    style: Styles.sectionTitle,
-                    child: widget.footer!,
-                  )
-                : DefaultTextStyle(
-                    style: CupertinoTheme.of(context)
-                        .textTheme
-                        .textStyle
-                        .merge(Styles.sectionTitle),
-                    child: widget.footer!,
-                  ),
-          )
-        : null;
-
     return Padding(
       padding: widget.margin ?? Styles.bodySectionPadding,
-      child: headerWidget != null || footerWidget != null
+      child: headerWidget != null || widget.footer != null
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (headerWidget != null) headerWidget,
                 maybeTappableBoard,
-                if (footerWidget != null) footerWidget,
+                if (widget.footer != null) widget.footer!,
               ],
             )
           : maybeTappableBoard,
