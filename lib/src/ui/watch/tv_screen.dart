@@ -70,7 +70,9 @@ class _TvScreenState extends ConsumerState<TvScreen>
           if (selectedVariant.title == "Top Rated") newGameId = null;
 
           ref.read(variantStateProvider.notifier).state = selectedVariant;
-          ref.read(_featuredGameWithSoundProvider.notifier).gameId = newGameId;
+          ref
+              .read(_featuredGameWithSoundProvider.notifier)
+              .setGameId(newGameId);
         });
       }
     }); // End FR_data.then

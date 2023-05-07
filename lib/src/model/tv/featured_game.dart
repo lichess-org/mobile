@@ -40,7 +40,7 @@ class FeaturedGame extends _$FeaturedGame {
     );
   }
 
-  set gameId(String? value) {
+  void setGameId(String? value) {
     if (_gameId != value) {
       _gameId = value;
       disconnectStream();
@@ -48,12 +48,10 @@ class FeaturedGame extends _$FeaturedGame {
     }
   }
 
-  String? get gameId => _gameId;
-
   Stream<TvEvent> connectStream() {
     final tvRepository = ref.watch(tvRepositoryProvider);
     final Stream<TvEvent> stream;
-    if (gameId == null) {
+    if (_gameId == null) {
       stream = tvRepository.tvFeed().asBroadcastStream();
     } else {
       stream = tvRepository.tvGameFeed(_gameId!).asBroadcastStream();
