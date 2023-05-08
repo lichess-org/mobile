@@ -61,7 +61,11 @@ class AuthClient {
         _retryClientOnError = RetryClient.withDelays(
           _client,
           retryDelays,
-          whenError: (error, _) async => error is SocketException,
+          whenError: (error, _) async =>
+              error is SocketException ||
+              error.toString().contains(
+                    'Connection closed before full header was received',
+                  ),
         ) {
     _log.info('Creating new AuthClient.');
   }
