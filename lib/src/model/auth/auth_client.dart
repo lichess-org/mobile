@@ -210,7 +210,6 @@ class _AuthClient extends BaseClient {
 }
 
 const defaultRetries = [
-  Duration(milliseconds: 200),
   Duration(milliseconds: 300),
   Duration(milliseconds: 500),
   Duration(milliseconds: 800),
