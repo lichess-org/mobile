@@ -90,6 +90,10 @@ class AuthClient {
           error,
           stackTrace,
           reason: 'a non-fatal http request error',
+          information: [
+            'url: $url',
+            'headers: $headers',
+          ],
         );
         return GenericIOException();
       }).flatMap(
@@ -112,6 +116,10 @@ class AuthClient {
           error,
           stackTrace,
           reason: 'a non-fatal http request error',
+          information: [
+            'url: $url',
+            'headers: $headers',
+          ],
         );
         return GenericIOException();
       }).flatMap(
@@ -130,6 +138,15 @@ class AuthClient {
             .delete(url, headers: headers, body: body, encoding: encoding),
       ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
+        _crashlytics.recordError(
+          error,
+          stackTrace,
+          reason: 'a non-fatal http request error',
+          information: [
+            'url: $url',
+            'headers: $headers',
+          ],
+        );
         return GenericIOException();
       }).flatMap(
         (response) => _validateResponseStatusResult('DELETE', url, response),
@@ -157,12 +174,19 @@ class AuthClient {
     Uri url,
     T response,
   ) {
-    if (response.statusCode >= 500) {
-      _log.severe('$method $url responded with status ${response.statusCode}');
-    } else if (response.statusCode >= 400) {
+    if (response.statusCode >= 400) {
       final body = response is Response ? response.body : '';
       _log.warning(
         '$method $url responded with status ${response.statusCode}\n$body',
+      );
+      _crashlytics.recordError(
+        'Server error: $body (${response.statusCode})',
+        null,
+        reason: 'server error',
+        information: [
+          'url: $url',
+          'method: $method',
+        ],
       );
     }
 
@@ -174,7 +198,12 @@ class AuthClient {
                 ? Result.error(UnauthorizedException())
                 : response.statusCode == 403
                     ? Result.error(ForbiddenException())
-                    : Result.error(ApiRequestException());
+                    : Result.error(
+                        ApiRequestException(
+                          response.statusCode,
+                          response is Response ? response.body : '',
+                        ),
+                      );
   }
 
   void close() {

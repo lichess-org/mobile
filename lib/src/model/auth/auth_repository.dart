@@ -63,7 +63,7 @@ class AuthRepository {
 
     return Result.capture(future).mapError((error, trace) {
       _log.severe('signIn error', error, trace);
-      return ApiRequestException();
+      return const ApiRequestException(500, 'Failed to get access token.');
     });
   }
 
