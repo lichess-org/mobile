@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/utils/package_info.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/sound.dart';
 
 import './theme_mode_screen.dart';
 import './piece_set_screen.dart';
@@ -92,6 +93,33 @@ class _Body extends ConsumerWidget {
                     pushPlatformRoute(
                       context,
                       title: context.l10n.background,
+                      builder: (context) => const ThemeModeScreen(),
+                    );
+                  }
+                },
+              ),
+              /*****
+               * SOUND CODE
+               */
+              SettingsListTile(
+                icon: const Icon(Icons.brightness_medium),
+                settingsLabel: context.l10n.sound,
+                settingsValue: boardPrefs.soundSet.label,
+                onTap: () {
+                  if (defaultTargetPlatform == TargetPlatform.android) {
+                    showChoicePicker(
+                      context,
+                      choices: SoundSet.values,
+                      selectedItem: SoundSet.normal,
+                      labelBuilder: (t) => Text(t.label),
+                      onSelectedItemChanged: (SoundSet? value) => ref
+                          .read(boardPreferencesProvider.notifier)
+                          .setSoundSet(value ?? SoundSet.normal),
+                    );
+                  } else {
+                    pushPlatformRoute(
+                      context,
+                      title: context.l10n.sound,
                       builder: (context) => const ThemeModeScreen(),
                     );
                   }
