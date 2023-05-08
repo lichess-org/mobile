@@ -206,7 +206,9 @@ class HistoryBoards extends ConsumerWidget {
             orientation: preview.orientation.cg,
             fen: preview.initialFen,
             footer: Text(
-              puzzle.result ? 'Solved' : 'Failed',
+              puzzle.result
+                  ? context.l10n.puzzleSolved
+                  : context.l10n.puzzleFailed,
               style: TextStyle(
                 color: puzzle.result ? LichessColors.good : LichessColors.red,
               ),

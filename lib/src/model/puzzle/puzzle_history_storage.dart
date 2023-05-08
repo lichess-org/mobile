@@ -22,6 +22,7 @@ PuzzleHistoryStorage puzzleHistoryStorage(PuzzleHistoryStorageRef ref) {
 const _anonUserKey = '**anon**';
 const _historyTable = 'puzzle_history';
 const _puzzleTable = 'puzzle';
+const _pageLimit = 10;
 
 class PuzzleHistoryStorage {
   const PuzzleHistoryStorage(this._db);
@@ -58,8 +59,8 @@ class PuzzleHistoryStorage {
       where: 'userId = ?',
       whereArgs: [userId?.value ?? _anonUserKey],
       orderBy: 'solvedDate DESC',
-      limit: 10,
-      offset: page * 10,
+      limit: _pageLimit,
+      offset: page * _pageLimit,
     );
 
     final puzzleList = await _db.query(
@@ -113,7 +114,7 @@ class PuzzleHistoryStorage {
       where: 'userId = ?',
       whereArgs: [userId?.value ?? _anonUserKey],
       orderBy: 'solvedDate DESC',
-      limit: 10,
+      limit: _pageLimit,
     );
     final puzzles = _getPuzzleList(await _db.query(_puzzleTable));
     if (puzzles.isEmpty) return null;
