@@ -260,11 +260,15 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
     final DisplayMode active = await FlutterDisplayMode.active;
 
     final List<DisplayMode> sameResolution = supported
-        .where((DisplayMode m) =>
-            m.width == active.width && m.height == active.height,)
+        .where(
+          (DisplayMode m) =>
+              m.width == active.width && m.height == active.height,
+        )
         .toList()
-      ..sort((DisplayMode a, DisplayMode b) =>
-          b.refreshRate.compareTo(a.refreshRate),);
+      ..sort(
+        (DisplayMode a, DisplayMode b) =>
+            b.refreshRate.compareTo(a.refreshRate),
+      );
 
     final DisplayMode mostOptimalMode =
         sameResolution.isNotEmpty ? sameResolution.first : active;
@@ -407,6 +411,7 @@ class _MaterialTabView extends StatefulWidget {
 class _MaterialTabViewState extends State<_MaterialTabView> {
   // ignore: avoid-late-keyword
   late HeroController _heroController;
+
   // ignore: avoid-late-keyword
   late List<NavigatorObserver> _navigatorObservers;
 
