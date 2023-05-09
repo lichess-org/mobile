@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 
 class SoundSettingsScreen extends StatelessWidget {
   const SoundSettingsScreen({super.key});
@@ -48,20 +48,24 @@ class SoundSettingsScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final soundSet = ref.watch(
-      boardPreferencesProvider.select((state) => state.soundSet),
-    );
+    //final soundTheme = ref.watch(
+    //  generalPreferencesProvider.select(
+    //    (state) => state.soundTheme,
+    //  ),
+    //);
 
-    void onChanged(SoundSet? value) => ref
-        .read(boardPreferencesProvider.notifier)
-        .setSoundSet(value ?? SoundSet.normal);
+    //void onChanged(SoundTheme? value) => ref
+    //    .read(generalPreferencesProvider.notifier)
+    //    .setSoundTheme(value ?? SoundTheme.normal);
+
+    void onChanged(SoundTheme? value) => {};
 
     return SafeArea(
       child: ListView(
         children: [
           ChoicePicker(
-            choices: SoundSet.values,
-            selectedItem: soundSet,
+            choices: SoundTheme.values,
+            selectedItem: SoundTheme.nes, //soundTheme,
             titleBuilder: (t) => Text(t.label),
             onSelectedItemChanged: onChanged,
           )

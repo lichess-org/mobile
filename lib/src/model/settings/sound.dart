@@ -1,9 +1,9 @@
-enum SoundSet {
+enum SoundTheme {
   normal('Normal'),
   nes('NES'),
   piano('Piano');
 
   final String label;
 
-  const SoundSet(this.label);
+  const SoundTheme(this.label);
 }

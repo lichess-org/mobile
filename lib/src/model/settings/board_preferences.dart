@@ -4,7 +4,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:chessground/chessground.dart';
 
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/sound.dart';
 
 part 'board_preferences.freezed.dart';
 part 'board_preferences.g.dart';
@@ -22,16 +21,11 @@ class BoardPreferences extends _$BoardPreferences {
             jsonDecode(stored) as Map<String, dynamic>,
           )
         : const BoardPrefs(
-            soundSet: SoundSet.normal,
             pieceSet: PieceSet.staunty,
             boardTheme: BoardTheme.brown,
             hapticFeedback: true,
             showLegalMoves: true,
           );
-  }
-
-  Future<void> setSoundSet(SoundSet soundSet) {
-    return _save(state.copyWith(soundSet: soundSet));
   }
 
   Future<void> setPieceSet(PieceSet pieceSet) {
@@ -63,7 +57,6 @@ class BoardPreferences extends _$BoardPreferences {
 @Freezed(fromJson: true, toJson: true)
 class BoardPrefs with _$BoardPrefs {
   const factory BoardPrefs({
-    required SoundSet soundSet,
     required PieceSet pieceSet,
     required BoardTheme boardTheme,
     required bool hapticFeedback,

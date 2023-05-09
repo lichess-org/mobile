@@ -7,6 +7,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart'
 
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
+import 'package:lichess_mobile/src/model/settings/sound.dart';
 
 part 'sound_service.g.dart';
 
@@ -19,6 +20,7 @@ SoundService soundService(SoundServiceRef ref) {
   // requireValue is possible because appDependenciesProvider is loaded before
   // anything. See: lib/src/app.dart
   final deps = ref.watch(appDependenciesProvider).requireValue;
+
   final pool = deps.soundPool;
   return SoundService(pool.item1, pool.item2, ref);
 }
@@ -35,18 +37,24 @@ Future<Tuple2<Soundpool, SoundMap>> soundPool(SoundPoolRef ref) async {
     ),
   );
 
+  final soundTheme = ref.watch(
+    generalPreferencesProvider.select(
+      (state) => state.soundTheme,
+    ),
+  );
+
   ref.onDispose(pool.release);
 
-  final sounds = await loadSounds(pool);
+  final sounds = await loadSounds(pool, soundTheme);
 
   return Tuple2(pool, sounds);
 }
 
-Future<SoundMap> loadSounds(Soundpool pool) async {
+Future<SoundMap> loadSounds(Soundpool pool, SoundTheme soundTheme) async {
   return IMap({
     for (final sound in Sound.values)
       sound: await rootBundle
-          .load('assets/sounds/${sound.name}.mp3')
+          .load('assets/sounds/${soundTheme.name}/${sound.name}.mp3')
           .then((soundData) => pool.load(soundData)),
   });
 }

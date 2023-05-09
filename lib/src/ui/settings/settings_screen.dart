@@ -61,6 +61,13 @@ class _Body extends ConsumerWidget {
         (state) => state.themeMode,
       ),
     );
+
+    final soundTheme = ref.watch(
+      generalPreferencesProvider.select(
+        (state) => state.soundTheme,
+      ),
+    );
+
     final authController = ref.watch(authControllerProvider);
     final userSession = ref.watch(authSessionProvider);
     final packageInfo = ref.watch(packageInfoProvider);
@@ -104,17 +111,17 @@ class _Body extends ConsumerWidget {
               SettingsListTile(
                 icon: const Icon(Icons.brightness_medium),
                 settingsLabel: context.l10n.sound,
-                settingsValue: boardPrefs.soundSet.label,
+                settingsValue: soundTheme.label,
                 onTap: () {
                   if (defaultTargetPlatform == TargetPlatform.android) {
                     showChoicePicker(
                       context,
-                      choices: SoundSet.values,
-                      selectedItem: SoundSet.normal,
+                      choices: SoundTheme.values,
+                      selectedItem: soundTheme,
                       labelBuilder: (t) => Text(t.label),
-                      onSelectedItemChanged: (SoundSet? value) => ref
-                          .read(boardPreferencesProvider.notifier)
-                          .setSoundSet(value ?? SoundSet.normal),
+                      onSelectedItemChanged: (SoundTheme? value) => ref
+                          .read(generalPreferencesProvider.notifier)
+                          .setSoundTheme(value ?? SoundTheme.normal),
                     );
                   } else {
                     pushPlatformRoute(
