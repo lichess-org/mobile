@@ -261,10 +261,10 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
 
     final List<DisplayMode> sameResolution = supported
         .where((DisplayMode m) =>
-            m.width == active.width && m.height == active.height)
+            m.width == active.width && m.height == active.height,)
         .toList()
       ..sort((DisplayMode a, DisplayMode b) =>
-          b.refreshRate.compareTo(a.refreshRate));
+          b.refreshRate.compareTo(a.refreshRate),);
 
     final DisplayMode mostOptimalMode =
         sameResolution.isNotEmpty ? sameResolution.first : active;
