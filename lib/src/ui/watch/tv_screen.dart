@@ -36,71 +36,16 @@ class _TvScreenState extends ConsumerState<TvScreen>
     with RouteAware, WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
-    return ConsumerPlatformWidget(
-      ref: ref,
+    return PlatformWidget(
       androidBuilder: _androidBuilder,
       iosBuilder: _iosBuilder,
     );
   }
 
-  void showChoicesDialog(WidgetRef ref) {
-    ChannelVariant selectedVariant = ref.watch(variantStateProvider);
-
-    final repo = ref.read(tvRepositoryProvider);
-    final FutureResult<TvChannels> channelResult = repo.getTvChannels();
-
-    channelResult.then((res) {
-      if (res.isValue) {
-        final TvChannels data = res.asValue!.value;
-        showChoicePicker(
-          context,
-          choices: ChannelVariant.values,
-          selectedItem: selectedVariant,
-          labelBuilder: (t) => Text(t.title),
-          onSelectedItemChanged: (ChannelVariant? d) {
-            if (d != null) {
-              selectedVariant = d;
-            }
-          },
-        ).then((_) {
-          String? newGameId = data.channels.entries
-              .where((element) => element.key == selectedVariant.title)
-              .first
-              .value
-              .gameId;
-          if (selectedVariant.title == "Top Rated") newGameId = null;
-
-          ref.read(variantStateProvider.notifier).state = selectedVariant;
-          ref
-              .read(_featuredGameWithSoundProvider.notifier)
-              .setGameId(newGameId);
-        });
-      }
-    }); // End FR_data.then
-  }
-
-  Widget _androidBuilder(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
-    final ChannelVariant selectedVariant = ref.watch(variantStateProvider);
+  Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: AppBarTextButton(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(selectedVariant.title),
-              const Icon(
-                Icons.arrow_drop_down,
-                size: 34.0,
-              ),
-            ],
-          ),
-          onPressed: () {
-            showChoicesDialog(ref);
-          },
-        ),
+        title: const ChannelSelector(),
         actions: [
           ToggleSoundButton(),
         ],
@@ -109,28 +54,10 @@ class _TvScreenState extends ConsumerState<TvScreen>
     );
   }
 
-  Widget _iosBuilder(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
-    final ChannelVariant selectedVariant = ref.watch(variantStateProvider);
+  Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: AppBarTextButton(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(selectedVariant.title),
-              const Icon(
-                Icons.arrow_drop_down,
-                size: 34.0,
-              ),
-            ],
-          ),
-          onPressed: () {
-            showChoicesDialog(ref);
-          },
-        ),
+        middle: const ChannelSelector(),
         trailing: ToggleSoundButton(),
       ),
       child: const _Body(),
@@ -254,5 +181,102 @@ class _Body extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+class ChannelSelector extends ConsumerStatefulWidget {
+  const ChannelSelector({super.key});
+
+  @override
+  ConsumerState<ChannelSelector> createState() => _ChannelSelectorState();
+}
+
+class _ChannelSelectorState extends ConsumerState<ChannelSelector> {
+  // TODO: Remove variantStateProvider code
+  ChannelVariant _selectedVariant = ChannelVariant.topRated;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformWidget(
+      androidBuilder: _androidBuilder,
+      iosBuilder: _iosBuilder,
+    );
+  }
+
+  Widget _androidBuilder(BuildContext context) {
+    return AppBarTextButton(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(_selectedVariant.title),
+          const Icon(
+            Icons.arrow_drop_down,
+            size: 34.0,
+          ),
+        ],
+      ),
+      onPressed: () {
+        showChoicesDialog(ref);
+      },
+    );
+  }
+
+  Widget _iosBuilder(BuildContext context) {
+    return AppBarTextButton(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(_selectedVariant.title),
+          const Icon(
+            Icons.arrow_drop_down,
+            size: 34.0,
+          ),
+        ],
+      ),
+      onPressed: () {
+        showChoicesDialog(ref);
+      },
+    );
+  }
+
+  void showChoicesDialog(WidgetRef ref) {
+    //ChannelVariant selectedVariant = ref.read(variantStateProvider);
+
+    final repo = ref.read(tvRepositoryProvider);
+    final FutureResult<TvChannels> channelResult = repo.getTvChannels();
+
+    channelResult.then((res) {
+      ChannelVariant newlySelectedVariant = ChannelVariant.topRated;
+      if (res.isValue) {
+        final TvChannels data = res.asValue!.value;
+        showChoicePicker(
+          context,
+          choices: ChannelVariant.values,
+          selectedItem: _selectedVariant,
+          labelBuilder: (t) => Text(t.title),
+          onSelectedItemChanged: (ChannelVariant? d) {
+            if (d != null) {
+              newlySelectedVariant = d;
+            }
+          },
+        ).then((_) {
+          String? newGameId = data.channels.entries
+              .where((element) => element.key == newlySelectedVariant.title)
+              .first
+              .value
+              .gameId;
+          if (newlySelectedVariant.title == "Top Rated") newGameId = null;
+
+          setState(() {
+            _selectedVariant = newlySelectedVariant;
+          });
+
+          //ref.read(variantStateProvider.notifier).state = selectedVariant;
+          ref
+              .read(_featuredGameWithSoundProvider.notifier)
+              .setGameId(newGameId);
+        });
+      }
+    }); // End FR_data.then
   }
 }
