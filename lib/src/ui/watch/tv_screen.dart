@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/tv/featured_game.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 import 'package:lichess_mobile/src/model/tv/tv_repository_providers.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -85,7 +86,7 @@ class _TvScreenState extends ConsumerState<TvScreen>
     final ChannelVariant selectedVariant = ref.watch(variantStateProvider);
     return Scaffold(
       appBar: AppBar(
-        title: InkWell(
+        title: AppBarTextButton(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -96,7 +97,7 @@ class _TvScreenState extends ConsumerState<TvScreen>
               ),
             ],
           ),
-          onTap: () {
+          onPressed: () {
             showChoicesDialog(ref);
           },
         ),
@@ -115,7 +116,7 @@ class _TvScreenState extends ConsumerState<TvScreen>
     final ChannelVariant selectedVariant = ref.watch(variantStateProvider);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: InkWell(
+        middle: AppBarTextButton(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -126,7 +127,7 @@ class _TvScreenState extends ConsumerState<TvScreen>
               ),
             ],
           ),
-          onTap: () {
+          onPressed: () {
             showChoicesDialog(ref);
           },
         ),
