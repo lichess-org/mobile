@@ -96,7 +96,6 @@ Future<Widget> buildTestApp(
               width: _kTestScreenWidth,
               height: _kTestScreenHeight,
               child: MaterialApp(
-                useInheritedMediaQuery: true,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 home: home,
                 builder: (context, child) {

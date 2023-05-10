@@ -47,7 +47,8 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   if (defaultTargetPlatform == TargetPlatform.android) {
-    final data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
+    final view = widgetsBinding.platformDispatcher.views.first;
+    final data = MediaQueryData.fromView(view);
     if (data.size.shortestSide < kTabletThreshold) {
       await SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp],

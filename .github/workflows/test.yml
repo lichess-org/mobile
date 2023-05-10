@@ -28,7 +28,7 @@ jobs:
         run: flutter pub get
 
       - name: Code generation
-        run: flutter pub run build_runner build
+        run: dart run build_runner build
 
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
@@ -37,10 +37,10 @@ jobs:
         run: flutter analyze
 
       - name: Run riverpod lint
-        run: flutter pub run custom_lint
+        run: dart run custom_lint
 
       - name: Run DCM checks
-        run: flutter pub run dart_code_metrics:metrics analyze lib --no-fatal-style
+        run: dart run dart_code_metrics:metrics analyze lib --no-fatal-style
 
       - name: Run unit tests
         run: flutter test
