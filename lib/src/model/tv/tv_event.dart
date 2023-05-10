@@ -100,8 +100,6 @@ class TvEvent with _$TvEvent {
         blackSeconds: pick('bc').asIntOrThrow(),
       );
     }
-    //default:
-    //  throw UnsupportedError('Unsupported event type $type');
   }
 
   static FeaturedPlayer _featuredPlayerFromPick(RequiredPick pick) {

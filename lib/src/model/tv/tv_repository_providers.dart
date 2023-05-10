@@ -7,15 +7,6 @@ import 'tv_repository.dart';
 
 part 'tv_repository_providers.g.dart';
 
-/*
-@Riverpod(keepAlive: true)
-TvRepository tvRepository(TvRepositoryRef ref) {
-  final apiClient = ref.watch(authClientProvider);
-  final repo = TvRepository(Logger('TvRepository'), apiClient: apiClient);
-  ref.onDispose(() => repo.dispose());
-  return repo;
-}*/
-
 @Riverpod(keepAlive: true)
 TvRepository tvRepository(TvRepositoryRef ref) {
   final apiClient = ref.watch(authClientProvider);

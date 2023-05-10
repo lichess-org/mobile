@@ -45,7 +45,7 @@ class _TvScreenState extends ConsumerState<TvScreen>
   void showChoicesDialog(WidgetRef ref) {
     ChannelVariant selectedVariant = ref.watch(variantStateProvider);
 
-    final repo = ref.watch(tvRepositoryProvider);
+    final repo = ref.read(tvRepositoryProvider);
     final FutureResult<TvChannels> channelResult = repo.getTvChannels();
 
     channelResult.then((res) {
