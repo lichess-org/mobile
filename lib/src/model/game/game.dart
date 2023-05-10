@@ -93,10 +93,19 @@ class ClockData with _$ClockData {
 @freezed
 class MaterialDiffSide with _$MaterialDiffSide {
   const factory MaterialDiffSide({
-    required Map<Role, int> pieces,
+    required IMap<Role, int> pieces,
     required int score,
   }) = _MaterialDiffSide;
 }
+
+const IMap<Role, int> pieceScores = IMapConst({
+  Role.king: 0,
+  Role.queen: 9,
+  Role.rook: 5,
+  Role.bishop: 3,
+  Role.knight: 3,
+  Role.pawn: 1,
+});
 
 @freezed
 class MaterialDiff with _$MaterialDiff {
@@ -108,15 +117,6 @@ class MaterialDiff with _$MaterialDiff {
   }) = _MaterialDiff;
 
   factory MaterialDiff.fromBoard(Board board) {
-    final Map<Role, int> pieceScores = {
-      Role.king: 0,
-      Role.queen: 9,
-      Role.rook: 5,
-      Role.bishop: 3,
-      Role.knight: 3,
-      Role.pawn: 1,
-    };
-
     int score = 0;
     final IMap<Role, int> blackCount = board.materialCount(Side.black);
     final IMap<Role, int> whiteCount = board.materialCount(Side.white);
@@ -166,8 +166,8 @@ class MaterialDiff with _$MaterialDiff {
     });
 
     return MaterialDiff(
-      black: MaterialDiffSide(pieces: black, score: -score),
-      white: MaterialDiffSide(pieces: white, score: score),
+      black: MaterialDiffSide(pieces: black.toIMap(), score: -score),
+      white: MaterialDiffSide(pieces: white.toIMap(), score: score),
     );
   }
 

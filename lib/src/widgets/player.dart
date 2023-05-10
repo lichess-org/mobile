@@ -14,6 +14,16 @@ import './countdown_clock.dart';
 /// A widget to display player information above/below the chess board.
 ///
 /// It shows the full player name with title and rating and the clock if relevant.
+
+const Map<Role, IconData> iconByRole = {
+  Role.king: LichessIcons.chess_king,
+  Role.queen: LichessIcons.chess_queen,
+  Role.rook: LichessIcons.chess_rook,
+  Role.bishop: LichessIcons.chess_bishop,
+  Role.knight: LichessIcons.chess_knight,
+  Role.pawn: LichessIcons.chess_pawn,
+};
+
 class BoardPlayer extends StatelessWidget {
   const BoardPlayer({
     required this.player,
@@ -30,24 +40,6 @@ class BoardPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final IList<Role> roleList = {
-      Role.king,
-      Role.queen,
-      Role.rook,
-      Role.bishop,
-      Role.knight,
-      Role.pawn,
-    }.toIList();
-
-    final Map<Role, IconData> iconByRole = {
-      Role.king: LichessIcons.chess_king,
-      Role.queen: LichessIcons.chess_queen,
-      Role.rook: LichessIcons.chess_rook,
-      Role.bishop: LichessIcons.chess_bishop,
-      Role.knight: LichessIcons.chess_knight,
-      Role.pawn: LichessIcons.chess_pawn,
-    };
-
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Row(
@@ -105,7 +97,7 @@ class BoardPlayer extends StatelessWidget {
                           ),
                         const SizedBox(width: 3),
                         if (diff != null)
-                          for (final role in roleList)
+                          for (final role in Role.values)
                             for (int i = 0; i < diff!.pieces[role]!; i++)
                               Icon(
                                 iconByRole[role],
