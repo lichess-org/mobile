@@ -5,7 +5,6 @@ import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:easy_debounce/easy_debounce.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
 
@@ -23,6 +22,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
+import 'package:lichess_mobile/src/utils/debounce.dart';
 
 part 'puzzle_view_model.g.dart';
 part 'puzzle_view_model.freezed.dart';
@@ -401,11 +401,12 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     }
   }
 
+  static final _engineEvalDebounce =
+      Debounce(const Duration(milliseconds: 100));
+
   void _startEngineEval() {
     if (!state.isEngineEnabled) return;
-    EasyDebounce.debounce(
-      'start-engine-eval',
-      const Duration(milliseconds: 50),
+    _engineEvalDebounce(
       () => ref
           .read(
             engineEvaluationProvider(state.evaluationContext).notifier,
