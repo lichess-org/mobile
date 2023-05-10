@@ -18,9 +18,8 @@ enum ChannelVariant {
   final String title;
 }
 
-final IMap<String, ChannelVariant> channelVariantNameMap =
+final IMap<String, ChannelVariant> channelVariantTitleMap =
     IMap({for (var value in ChannelVariant.values) value.title: value});
-//IMap(ChannelVariant.values.asNameMap());
 
 @freezed
 class TvChannels with _$TvChannels {
@@ -37,7 +36,7 @@ class TvChannels with _$TvChannels {
     return TvChannels(
       channels: IMap({
         for (final entry in channelMap.entries)
-          if (channelVariantNameMap.containsKey(entry.key))
+          if (channelVariantTitleMap.containsKey(entry.key))
             entry.key: TvChannel.fromJson(entry.value)
       }),
     );
