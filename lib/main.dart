@@ -24,7 +24,8 @@ void main() async {
         stackTrace: record.stackTrace,
       );
 
-      if (record.loggerName == 'AuthClient') {
+      if (record.loggerName == 'AuthClient' ||
+          record.loggerName == 'AuthSocket') {
         debugPrint(record.message);
       }
     });
