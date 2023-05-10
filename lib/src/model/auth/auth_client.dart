@@ -54,11 +54,7 @@ class AuthClient {
     this._client,
     this._crashlytics, {
     List<Duration> retryDelays = defaultRetries,
-  })  : _retryClient = RetryClient.withDelays(
-          _client,
-          retryDelays,
-        ),
-        _retryClientOnError = RetryClient.withDelays(
+  }) : _retryClient = RetryClient.withDelays(
           _client,
           retryDelays,
           whenError: (error, _) async =>
@@ -73,7 +69,6 @@ class AuthClient {
   final Logger _log;
   final Client _client;
   final RetryClient _retryClient;
-  final RetryClient _retryClientOnError;
   final FirebaseCrashlytics _crashlytics;
 
   /// Makes app user agent
@@ -86,8 +81,7 @@ class AuthClient {
     bool retryOnError = true,
   }) =>
       Result.capture(
-        (retryOnError ? _retryClientOnError : _retryClient)
-            .get(url, headers: headers),
+        (retryOnError ? _retryClient : _client).get(url, headers: headers),
       ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
         _crashlytics.recordError(
@@ -112,7 +106,7 @@ class AuthClient {
     bool retryOnError = true,
   }) =>
       Result.capture(
-        (retryOnError ? _retryClientOnError : _retryClient)
+        (retryOnError ? _retryClient : _client)
             .post(url, headers: headers, body: body, encoding: encoding),
       ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
@@ -138,7 +132,7 @@ class AuthClient {
     bool retryOnError = true,
   }) =>
       Result.capture(
-        (retryOnError ? _retryClientOnError : _retryClient)
+        (retryOnError ? _retryClient : _client)
             .delete(url, headers: headers, body: body, encoding: encoding),
       ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
@@ -184,7 +178,7 @@ class AuthClient {
         '$method $url responded with status ${response.statusCode}\n$body',
       );
       _crashlytics.recordError(
-        'Server error: $body (${response.statusCode})',
+        'Server error: ${response.statusCode}',
         null,
         reason: 'server error',
         information: [
@@ -213,7 +207,6 @@ class AuthClient {
   void close() {
     _log.info('Closing AuthClient.');
     _client.close();
-    _retryClient.close();
   }
 }
 
