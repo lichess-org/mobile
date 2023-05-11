@@ -128,13 +128,10 @@ class PuzzleRepository {
           mapper: (Map<String, dynamic> json) {
             return PuzzleStormResponse(
               puzzles: IList(
-                pick(json['puzzles']).required().asListOrNull(
-                      (puzzle) => LitePuzzle.fromJson(puzzle.asMapOrThrow()),
-                    ),
+                pick(json['puzzles']).asListOrThrow(_litePuzzleFromPick),
               ),
-              highscore: pick(json["high"]).letOrNull(
-                (pick) => PuzzleStormHighScore.fromJson(pick.asMapOrThrow()),
-              ),
+              highscore: pick(json['high']).letOrNull(_stormHighScoreFromPick),
+              key: pick(json["key"]).asStringOrNull(),
             );
           },
         );
@@ -221,6 +218,7 @@ class PuzzleStreakResponse with _$PuzzleStreakResponse {
 class PuzzleStormResponse with _$PuzzleStormResponse {
   const factory PuzzleStormResponse({
     required IList<LitePuzzle> puzzles,
+    required String? key,
     required PuzzleStormHighScore? highscore,
   }) = _PuzzleStormResponse;
 }
@@ -237,6 +235,24 @@ Puzzle _puzzleFromPick(RequiredPick pick) {
   return Puzzle(
     puzzle: pick('puzzle').letOrThrow(_puzzleDatafromPick),
     game: pick('game').letOrThrow(_puzzleGameFromPick),
+  );
+}
+
+LitePuzzle _litePuzzleFromPick(RequiredPick pick) {
+  return LitePuzzle(
+    id: pick('id').asPuzzleIdOrThrow(),
+    fen: pick('fen').asStringOrThrow(),
+    solution: pick('line').asStringOrThrow().split(' '),
+    rating: pick('rating').asIntOrThrow(),
+  );
+}
+
+PuzzleStormHighScore _stormHighScoreFromPick(RequiredPick pick) {
+  return PuzzleStormHighScore(
+    allTime: pick('allTime').asIntOrThrow(),
+    day: pick("day").asIntOrThrow(),
+    month: pick("month").asIntOrThrow(),
+    week: pick("week").asIntOrThrow(),
   );
 }
 

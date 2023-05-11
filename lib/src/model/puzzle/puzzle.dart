@@ -156,17 +156,14 @@ class LitePuzzle with _$LitePuzzle {
       _$LitePuzzleFromJson(json);
 }
 
-@Freezed(fromJson: true)
+@freezed
 class PuzzleStormHighScore with _$PuzzleStormHighScore {
   const factory PuzzleStormHighScore({
-    required PuzzleId id,
-    required String fen,
-    required List<UCIMove> solution,
-    required int rating,
+    required int allTime,
+    required int day,
+    required int month,
+    required int week,
   }) = _PuzzleStormHighScore;
-
-  factory PuzzleStormHighScore.fromJson(Map<String, dynamic> json) =>
-      _$PuzzleStormHighScoreFromJson(json);
 }
 
 @freezed

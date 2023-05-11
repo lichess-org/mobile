@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/ui/puzzle/puzzle_storm.dart';
 
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -175,6 +176,31 @@ class _Body extends ConsumerWidget {
                       context,
                       rootNavigator: true,
                       builder: (context) => const PuzzleStreakScreen(),
+                    );
+                  }
+                : null,
+            loading: () => null,
+            error: (_, __) => null,
+          ),
+        ),
+      ),
+      Padding(
+        padding: Styles.bodySectionBottomPadding,
+        child: CardButton(
+          icon: const Icon(LichessIcons.storm, size: 44),
+          title: Text(
+            'Puzzle Storm',
+            style: Styles.sectionTitle,
+          ),
+          subtitle:
+              const Text("Solve as many puzzles as possible in 3 minutes"),
+          onTap: connectivity.when(
+            data: (data) => data.isOnline
+                ? () {
+                    pushPlatformRoute(
+                      context,
+                      rootNavigator: true,
+                      builder: (context) => const PuzzleStormScreen(),
                     );
                   }
                 : null,
