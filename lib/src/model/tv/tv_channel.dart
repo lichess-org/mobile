@@ -21,27 +21,7 @@ enum ChannelVariant {
 final IMap<String, ChannelVariant> channelVariantTitleMap =
     IMap({for (var value in ChannelVariant.values) value.title: value});
 
-@freezed
-class TvChannels with _$TvChannels {
-  const factory TvChannels({
-    required IMap<String, TvChannel> channels,
-  }) = _TvChannels;
-
-  factory TvChannels.fromJson(Map<String, dynamic> json) =>
-      TvChannels.fromPick(pick(json).required());
-
-  factory TvChannels.fromPick(RequiredPick pick) {
-    final channelMap = pick.asMapOrEmpty<String, Map<String, dynamic>>();
-
-    return TvChannels(
-      channels: IMap({
-        for (final entry in channelMap.entries)
-          if (channelVariantTitleMap.containsKey(entry.key))
-            entry.key: TvChannel.fromJson(entry.value)
-      }),
-    );
-  }
-}
+typedef TvChannels = IMap<ChannelVariant, TvChannel>;
 
 @freezed
 abstract class WatchParameter with _$WatchParameter {

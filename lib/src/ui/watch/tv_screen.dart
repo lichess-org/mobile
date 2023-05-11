@@ -21,10 +21,6 @@ import 'package:result_extensions/result_extensions.dart';
 
 final _featuredGameWithSoundProvider = featuredGameProvider(withSound: true);
 
-final variantStateProvider = StateProvider.autoDispose<ChannelVariant>((ref) {
-  return ChannelVariant.topRated;
-});
-
 class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({super.key});
 
@@ -192,7 +188,6 @@ class ChannelSelector extends ConsumerStatefulWidget {
 }
 
 class _ChannelSelectorState extends ConsumerState<ChannelSelector> {
-  // TODO: Remove variantStateProvider code
   ChannelVariant _selectedVariant = ChannelVariant.topRated;
 
   @override
@@ -240,8 +235,6 @@ class _ChannelSelectorState extends ConsumerState<ChannelSelector> {
   }
 
   void showChoicesDialog(WidgetRef ref) {
-    //ChannelVariant selectedVariant = ref.read(variantStateProvider);
-
     final repo = ref.read(tvRepositoryProvider);
     final FutureResult<TvChannels> channelResult = repo.getTvChannels();
 
@@ -260,8 +253,10 @@ class _ChannelSelectorState extends ConsumerState<ChannelSelector> {
             }
           },
         ).then((_) {
-          String? newGameId = data.channels.entries
-              .where((element) => element.key == newlySelectedVariant.title)
+          String? newGameId = data.entries
+              .where(
+                (element) => element.key.title == newlySelectedVariant.title,
+              )
               .first
               .value
               .gameId;
@@ -271,7 +266,6 @@ class _ChannelSelectorState extends ConsumerState<ChannelSelector> {
             _selectedVariant = newlySelectedVariant;
           });
 
-          //ref.read(variantStateProvider.notifier).state = selectedVariant;
           ref
               .read(_featuredGameWithSoundProvider.notifier)
               .setGameId(newGameId);

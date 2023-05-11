@@ -5,6 +5,8 @@ import 'package:lichess_mobile/src/constants.dart';
 import './tv_event.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:deep_pick/deep_pick.dart';
 import './tv_channel.dart';
 
 class TvRepository {
@@ -45,7 +47,7 @@ class TvRepository {
         .flatMap((response) {
       return readJsonObject(
         response,
-        mapper: TvChannels.fromJson,
+        mapper: tvChannelsFromJson,
         logger: _log,
       );
     });
@@ -54,4 +56,13 @@ class TvRepository {
   void dispose() {
     apiClient.close();
   }
+}
+
+IMap<ChannelVariant, TvChannel> tvChannelsFromJson(Map<String, dynamic> json) {
+  final map = pick(json).asMapOrEmpty<String, Map<String, dynamic>>();
+  return IMap({
+    for (final entry in map.entries)
+      if (channelVariantTitleMap.containsKey(entry.key))
+        channelVariantTitleMap.get(entry.key)!: TvChannel.fromJson(entry.value),
+  });
 }
