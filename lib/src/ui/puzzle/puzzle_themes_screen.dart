@@ -98,9 +98,9 @@ class _Body extends ConsumerWidget {
                       ],
                     );
                   },
-                  loading: () => Column(
+                  loading: () => const Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Center(child: CircularProgressIndicator.adaptive()),
                     ],
                   ),

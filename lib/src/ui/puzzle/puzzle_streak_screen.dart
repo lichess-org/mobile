@@ -195,7 +195,7 @@ class _Body extends ConsumerWidget {
                           ),
                           const SizedBox(width: 8.0),
                           Text(
-                            (puzzleState.streak!.index).toString(),
+                            puzzleState.streak!.index.toString(),
                             style: const TextStyle(
                               fontSize: 30.0,
                               fontWeight: FontWeight.bold,

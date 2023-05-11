@@ -1,8 +1,5 @@
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 
-// ignore: unused_import
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
-
 extension DurationExtensions on Duration {
   String toDaysHoursMinutes(AppLocalizations l10n) {
     final days = inDays;

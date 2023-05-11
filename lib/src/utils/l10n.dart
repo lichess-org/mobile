@@ -35,9 +35,10 @@ class L10n extends _$L10n {
   }
 
   L10nState _getLocale() {
+    final locale = WidgetsBinding.instance.platformDispatcher.locale;
     return L10nState(
-      locale: ui.window.locale,
-      strings: lookupAppLocalizations(ui.window.locale),
+      locale: locale,
+      strings: lookupAppLocalizations(locale),
     );
   }
 }
