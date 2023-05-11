@@ -169,7 +169,6 @@ class _WatchTvWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
-
     final featuredGame = currentTab == BottomTab.watch
         ? ref.watch(_featuredGameNoSoundProvider)
         : const AsyncLoading<FeaturedGameState>();

@@ -78,7 +78,7 @@ class TvEvent with _$TvEvent {
     if (type != null) {
       return TvEvent.featured(
         id: pick('id').asGameIdOrThrow(),
-        orientation: Side.white, // FIX
+        orientation: Side.white,
         fen: pick('fen').asStringOrThrow(),
         white: _featuredGamePlayerFromPick(
           pick('players', 'white').required(),
