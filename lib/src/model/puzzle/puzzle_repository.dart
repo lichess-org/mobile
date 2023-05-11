@@ -120,6 +120,28 @@ class PuzzleRepository {
     );
   }
 
+  FutureResult<PuzzleStormResponse> storm() {
+    return apiClient.get(Uri.parse('$kLichessHost/api/storm')).flatMap(
+      (response) {
+        return readJsonObject(
+          response,
+          mapper: (Map<String, dynamic> json) {
+            return PuzzleStormResponse(
+              puzzles: IList(
+                pick(json['puzzles']).required().asListOrNull(
+                      (puzzle) => LitePuzzle.fromJson(puzzle.asMapOrThrow()),
+                    ),
+              ),
+              highscore: pick(json["high"]).letOrNull(
+                (pick) => PuzzleStormHighScore.fromJson(pick.asMapOrThrow()),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   FutureResult<Puzzle> daily() {
     return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/daily')).flatMap(
           (response) => readJsonObject(
@@ -193,6 +215,14 @@ class PuzzleStreakResponse with _$PuzzleStreakResponse {
     required Puzzle puzzle,
     required Streak streak,
   }) = _PuzzleStreakResponse;
+}
+
+@freezed
+class PuzzleStormResponse with _$PuzzleStormResponse {
+  const factory PuzzleStormResponse({
+    required IList<LitePuzzle> puzzles,
+    required PuzzleStormHighScore? highscore,
+  }) = _PuzzleStormResponse;
 }
 
 // --

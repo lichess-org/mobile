@@ -143,6 +143,32 @@ class PuzzlePreview with _$PuzzlePreview {
   }
 }
 
+@Freezed(fromJson: true)
+class LitePuzzle with _$LitePuzzle {
+  const factory LitePuzzle({
+    required PuzzleId id,
+    required String fen,
+    required List<UCIMove> solution,
+    required int rating,
+  }) = _LitePuzzle;
+
+  factory LitePuzzle.fromJson(Map<String, dynamic> json) =>
+      _$LitePuzzleFromJson(json);
+}
+
+@Freezed(fromJson: true)
+class PuzzleStormHighScore with _$PuzzleStormHighScore {
+  const factory PuzzleStormHighScore({
+    required PuzzleId id,
+    required String fen,
+    required List<UCIMove> solution,
+    required int rating,
+  }) = _PuzzleStormHighScore;
+
+  factory PuzzleStormHighScore.fromJson(Map<String, dynamic> json) =>
+      _$PuzzleStormHighScoreFromJson(json);
+}
+
 @freezed
 class PuzzleDashboard with _$PuzzleDashboard {
   const factory PuzzleDashboard({
