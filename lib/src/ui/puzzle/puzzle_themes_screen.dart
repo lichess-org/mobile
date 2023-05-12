@@ -165,8 +165,7 @@ class _Category extends ConsumerWidget {
                   ),
                 ),
               ),
-              isThreeLine:
-                  puzzleThemeL10n(context, theme).description.length > 60,
+              isThreeLine: true,
               onTap: isOnline || savedThemes.contains(theme)
                   ? () {
                       pushPlatformRoute(
