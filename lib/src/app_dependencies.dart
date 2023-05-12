@@ -3,12 +3,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tuple/tuple.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:path/path.dart' as p;
-import 'package:fast_immutable_collections/fast_immutable_collections.dart'
-    hide Tuple2;
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/http_client.dart';
@@ -65,7 +63,7 @@ class AppDependencies with _$AppDependencies {
   const factory AppDependencies({
     required PackageInfo packageInfo,
     required SharedPreferences sharedPreferences,
-    required Tuple2<Soundpool, IMap<Sound, int>> soundPool,
+    required (Soundpool, IMap<Sound, int>) soundPool,
     required UserSession? userSession,
     required Database database,
   }) = _AppDependencies;
