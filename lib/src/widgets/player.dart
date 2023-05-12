@@ -14,15 +14,6 @@ import './countdown_clock.dart';
 ///
 /// It shows the full player name with title and rating and the clock if relevant.
 
-const Map<Role, IconData> iconByRole = {
-  Role.king: LichessIcons.chess_king,
-  Role.queen: LichessIcons.chess_queen,
-  Role.rook: LichessIcons.chess_rook,
-  Role.bishop: LichessIcons.chess_bishop,
-  Role.knight: LichessIcons.chess_knight,
-  Role.pawn: LichessIcons.chess_pawn,
-};
-
 class BoardPlayer extends StatelessWidget {
   const BoardPlayer({
     required this.player,
@@ -40,7 +31,7 @@ class BoardPlayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -79,40 +70,42 @@ class BoardPlayer extends StatelessWidget {
                             player.name,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    Row(
-                      children: [
+                        const SizedBox(width: 5),
                         if (player.rating != null)
                           Text(
-                            player.rating.toString(),
+                            '(${player.rating})',
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 13),
+                            style: const TextStyle(fontSize: 14),
                           ),
-                        const SizedBox(width: 3),
-                        if (diff != null)
+                      ],
+                    ),
+                    if (diff != null)
+                      Row(
+                        children: [
                           for (final role in Role.values)
                             for (int i = 0; i < diff!.pieces[role]!; i++)
                               Icon(
-                                iconByRole[role],
+                                _iconByRole[role],
                                 size: 13,
                                 color: Colors.grey,
                               ),
-                        const SizedBox(width: 3),
-                        Text(
-                          style:
-                              const TextStyle(fontSize: 13, color: Colors.grey),
-                          diff != null && diff!.score > 0
-                              ? "+${diff!.score}"
-                              : '',
-                        )
-                      ],
-                    ),
+                          const SizedBox(width: 3),
+                          Text(
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey,
+                            ),
+                            diff != null && diff!.score > 0
+                                ? '+${diff!.score}'
+                                : '',
+                          )
+                        ],
+                      ),
                   ],
                 ),
               ),
@@ -198,3 +191,12 @@ class PlayerTitle extends StatelessWidget {
     );
   }
 }
+
+const Map<Role, IconData> _iconByRole = {
+  Role.king: LichessIcons.chess_king,
+  Role.queen: LichessIcons.chess_queen,
+  Role.rook: LichessIcons.chess_rook,
+  Role.bishop: LichessIcons.chess_bishop,
+  Role.knight: LichessIcons.chess_knight,
+  Role.pawn: LichessIcons.chess_pawn,
+};
