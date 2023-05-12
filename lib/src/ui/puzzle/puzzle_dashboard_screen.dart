@@ -103,12 +103,12 @@ class _Body extends ConsumerWidget {
         child: nextPuzzle.when(
           data: (data) {
             if (data == null) {
-              return const _PuzzleButton(
+              return const _ThemedPuzzleButton(
                 theme: theme,
                 subtitle: 'Could not find any puzzle! Go online to get more.',
               );
             } else {
-              return _PuzzleButton(
+              return _ThemedPuzzleButton(
                 theme: theme,
                 onTap: () {
                   pushPlatformRoute(
@@ -128,21 +128,21 @@ class _Body extends ConsumerWidget {
               );
             }
           },
-          loading: () => const _PuzzleButton(theme: theme),
+          loading: () => const _ThemedPuzzleButton(theme: theme),
           error: (e, s) {
             debugPrint(
               'SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s',
             );
-            return const _PuzzleButton(theme: theme);
+            return const _ThemedPuzzleButton(theme: theme);
           },
         ),
       ),
       Padding(
         padding: Styles.bodySectionBottomPadding,
-        child: CardButton(
-          icon: const Icon(LichessIcons.target, size: 44),
-          title: Text(context.l10n.puzzlePuzzleThemes),
-          subtitle: const Text('Play puzzles from a specific theme.'),
+        child: _PuzzleButton(
+          iconData: LichessIcons.target,
+          title: context.l10n.puzzlePuzzleThemes,
+          subtitle: 'Play puzzles from a specific theme.',
           onTap: () {
             pushPlatformRoute(
               context,
@@ -153,18 +153,13 @@ class _Body extends ConsumerWidget {
       ),
       Padding(
         padding: Styles.bodySectionBottomPadding,
-        child: CardButton(
-          icon: const Icon(LichessIcons.streak, size: 44),
-          title: Text(
-            'Puzzle Streak',
-            style: Styles.sectionTitle,
-          ),
-          subtitle: Text(
-            context.l10n.puzzleStreakDescription.characters
-                    .takeWhile((c) => c != '.')
-                    .toString() +
-                (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
-          ),
+        child: _PuzzleButton(
+          iconData: LichessIcons.streak,
+          title: 'Puzzle Streak',
+          subtitle: context.l10n.puzzleStreakDescription.characters
+                  .takeWhile((c) => c != '.')
+                  .toString() +
+              (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
           onTap: connectivity.when(
             data: (data) => data.isOnline
                 ? () {
@@ -192,8 +187,8 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _PuzzleButton extends StatelessWidget {
-  const _PuzzleButton({
+class _ThemedPuzzleButton extends StatelessWidget {
+  const _ThemedPuzzleButton({
     required this.theme,
     this.onTap,
     this.subtitle,
@@ -205,13 +200,37 @@ class _PuzzleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return _PuzzleButton(
+      iconData: LichessIcons.target,
+      title: puzzleThemeL10n(context, theme).name,
+      subtitle: subtitle ?? puzzleThemeL10n(context, theme).description,
+      onTap: onTap,
+    );
+  }
+}
+
+class _PuzzleButton extends StatelessWidget {
+  const _PuzzleButton({
+    required this.iconData,
+    required this.title,
+    required this.subtitle,
+    this.onTap,
+  });
+
+  final IconData iconData;
+  final String title;
+  final String subtitle;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
     return CardButton(
-      icon: const Icon(LichessIcons.target, size: 44),
+      icon: Icon(iconData, size: 44),
       title: Text(
-        puzzleThemeL10n(context, theme).name,
+        title,
         style: Styles.sectionTitle,
       ),
-      subtitle: Text(subtitle ?? puzzleThemeL10n(context, theme).description),
+      subtitle: Text(subtitle),
       onTap: onTap,
     );
   }
