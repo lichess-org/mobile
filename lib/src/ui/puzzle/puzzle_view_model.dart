@@ -439,16 +439,15 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   void _mergeSolution() {
     final initialNode = _gameTree.nodeAt(state.initialPath);
     final fromPly = initialNode.ply;
-    final posAndNodes = state.puzzle.puzzle.solution.foldIndexed(
-      Tuple2(initialNode.position, IList<Node>(const [])),
+    final (_, newNodes) = state.puzzle.puzzle.solution.foldIndexed(
+      (initialNode.position, IList<Node>(const [])),
       (index, previous, uci) {
         final move = Move.fromUci(uci);
-        final tuple = previous.item1.playToSan(move!);
-        final newPos = tuple.item1;
-        final newSan = tuple.item2;
-        return Tuple2(
+        final (pos, nodes) = previous;
+        final (newPos, newSan) = pos.playToSan(move!);
+        return (
           newPos,
-          previous.item2.add(
+          nodes.add(
             Node(
               id: UciCharPair.fromMove(move),
               ply: fromPly + index + 1,
@@ -460,7 +459,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
         );
       },
     );
-    _gameTree.addNodesAt(state.initialPath, posAndNodes.item2, prepend: true);
+    _gameTree.addNodesAt(state.initialPath, newNodes, prepend: true);
   }
 }
 

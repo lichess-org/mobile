@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:tuple/tuple.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'
     hide Tuple2;
@@ -125,12 +126,11 @@ abstract class RootOrNode {
     bool prepend = false,
   }) {
     final pos = nodeAt(path).position;
-    final newPosSan = pos.playToSan(move);
-    final newPos = newPosSan.item1;
+    final (newPos, newSan) = pos.playToSan(move);
     final newNode = Node(
       id: UciCharPair.fromMove(move),
       ply: 2 * (newPos.fullmoves - 1) + (newPos.turn == Side.white ? 0 : 1),
-      sanMove: SanMove(newPosSan.item2, move),
+      sanMove: SanMove(newSan, move),
       fen: newPos.fen,
       position: newPos,
     );

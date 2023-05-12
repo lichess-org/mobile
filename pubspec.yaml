@@ -6,7 +6,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 0.1.1+18
 
 environment:
-  sdk: ">=2.18.2 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -34,7 +34,7 @@ dependencies:
   dartchess:
     git:
       url: https://github.com/lichess-org/dartchess.git
-      ref: a1a9bc9137be8ea7534d7772057604ebeebcf41d
+      ref: 82788ac630672f7da3d7ecbc01c456143a61b6f1
   chessground:
     git:
       url: https://github.com/lichess-org/flutter-chessground.git
