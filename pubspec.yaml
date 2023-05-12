@@ -67,6 +67,7 @@ dependencies:
       ref: 274cf52e637e9a663d226ec31cc0b24e639cb615
   firebase_crashlytics: ^3.2.0
   firebase_core: ^2.11.0
+  flutter_displaymode: ^0.6.0
   web_socket_channel: ^2.4.0
 
 dev_dependencies:
