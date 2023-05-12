@@ -37,15 +37,9 @@ Future<Tuple2<Soundpool, SoundMap>> soundPool(SoundPoolRef ref) async {
     ),
   );
 
-  final soundTheme = ref.watch(
-    generalPreferencesProvider.select(
-      (state) => state.soundTheme,
-    ),
-  );
-
   ref.onDispose(pool.release);
-
-  final sounds = await loadSounds(pool, soundTheme);
+  final sounds =
+      await loadSounds(pool, SoundTheme.nes); // TODO: Get it from prefs
 
   return Tuple2(pool, sounds);
 }
@@ -63,7 +57,7 @@ class SoundService {
   SoundService(this._pool, this._sounds, this._ref);
 
   final Soundpool _pool;
-  final SoundMap _sounds;
+  SoundMap _sounds;
   final SoundServiceRef _ref;
 
   void playMove() => play(Sound.move);
@@ -76,5 +70,9 @@ class SoundService {
     final isEnabled = _ref.read(generalPreferencesProvider).isSoundEnabled;
     final soundId = _sounds[sound];
     if (soundId != null && isEnabled) _pool.play(soundId);
+  }
+
+  Future<void> changeTheme(SoundTheme theme) async {
+    _sounds = await loadSounds(_pool, theme);
   }
 }

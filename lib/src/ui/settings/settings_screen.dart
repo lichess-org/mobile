@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -114,15 +115,19 @@ class _Body extends ConsumerWidget {
                 settingsValue: soundTheme.label,
                 onTap: () {
                   if (defaultTargetPlatform == TargetPlatform.android) {
-                    showChoicePicker(
-                      context,
-                      choices: SoundTheme.values,
-                      selectedItem: soundTheme,
-                      labelBuilder: (t) => Text(t.label),
-                      onSelectedItemChanged: (SoundTheme? value) => ref
-                          .read(generalPreferencesProvider.notifier)
-                          .setSoundTheme(value ?? SoundTheme.normal),
-                    );
+                    showChoicePicker(context,
+                        choices: SoundTheme.values,
+                        selectedItem: soundTheme,
+                        labelBuilder: (t) => Text(t.label),
+                        onSelectedItemChanged: (SoundTheme? value) {
+                          ref
+                              .read(generalPreferencesProvider.notifier)
+                              .setSoundTheme(value ?? SoundTheme.normal);
+                          ref
+                              .read(soundServiceProvider)
+                              .changeTheme(value ?? SoundTheme.normal);
+                          //ref.read(soundPoolProvider.notifier).
+                        });
                   } else {
                     pushPlatformRoute(
                       context,
