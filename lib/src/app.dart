@@ -103,7 +103,9 @@ class _AppState extends ConsumerState<App> {
 
   @override
   void initState() {
-    setOptimalDisplayMode();
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      setOptimalDisplayMode();
+    }
     super.initState();
   }
 
