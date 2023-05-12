@@ -19,6 +19,7 @@ class StormCtrl extends _$StormCtrl {
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
       state.clock.reset();
+      state.clock.dispose();
     });
     final pov = Chess.fromSetup(Setup.parseFen(puzzles[0].fen));
     final newState = StormCtrlState(
@@ -37,9 +38,10 @@ class StormCtrl extends _$StormCtrl {
 
   Future<void> onUserMove(Move move) async {
     final expected = state.expectedMove;
+    state.clock.start();
     _addMove(move);
-    if (move == expected) {
-      if (state.isOver) {
+    if (state.position.isGameOver || move == expected) {
+      if (state.position.isGameOver || state.isOver) {
         await _loadNextPuzzle();
         return;
       }
@@ -76,7 +78,7 @@ class StormCtrlState with _$StormCtrlState {
   const factory StormCtrlState({
     required LitePuzzle puzzle,
     required Side pov,
-    required Position position,
+    required Position<Chess> position,
     required int moveIndex,
     required int moves,
     required StormClock clock,
@@ -100,10 +102,16 @@ class StormHistory {
 
 class StormClock {
   Timer? _timer;
+  final StreamController<Duration> _timeStreamController =
+      StreamController<Duration>.broadcast();
   Duration _currentDuration = const Duration(minutes: 3);
+  bool isActive = false;
+
+  Stream<Duration> get timeStream => _timeStreamController.stream;
 
   void addTime(Duration duration) {
     _currentDuration += duration;
+    _timeStreamController.add(_currentDuration);
   }
 
   void subtractTime(Duration duration) {
@@ -111,13 +119,16 @@ class StormClock {
     if (_currentDuration.isNegative) {
       _currentDuration = Duration.zero;
     }
+    _timeStreamController.add(_currentDuration);
   }
 
   void start() {
     if (_timer == null || !_timer!.isActive) {
+      isActive = true;
       _timer = Timer.periodic(const Duration(seconds: 1), (_) {
         if (_currentDuration.inSeconds > 0) {
           _currentDuration -= const Duration(seconds: 1);
+          _timeStreamController.add(_currentDuration);
         } else {
           _timer!.cancel();
         }
@@ -128,11 +139,20 @@ class StormClock {
   void reset() {
     _timer?.cancel();
     _currentDuration = const Duration(minutes: 3);
+    _timeStreamController.add(_currentDuration);
+    isActive = false;
   }
 
   void stop() {
     _timer?.cancel();
+    isActive = false;
   }
 
   Duration get timeLeft => _currentDuration;
+
+  void dispose() {
+    isActive = false;
+    _timer?.cancel();
+    _timeStreamController.close();
+  }
 }

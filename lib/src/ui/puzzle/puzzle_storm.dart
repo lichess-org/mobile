@@ -116,6 +116,7 @@ class _Body extends ConsumerWidget {
                 topTable: _TopBar(
                   pieceSet: pieceSet,
                   pov: puzzleState.pov,
+                  clock: puzzleState.clock,
                 ),
                 bottomTable: const SizedBox.shrink(),
               ),
@@ -131,10 +132,12 @@ class _TopBar extends StatelessWidget {
   const _TopBar({
     required this.pieceSet,
     required this.pov,
+    required this.clock,
   });
 
   final cg.PieceSet pieceSet;
   final Side pov;
+  final StormClock clock;
 
   @override
   Widget build(BuildContext context) {
@@ -155,6 +158,17 @@ class _TopBar extends StatelessWidget {
                   ? context.l10n.puzzleFindTheBestMoveForWhite
                   : context.l10n.puzzleFindTheBestMoveForBlack,
             ),
+          ),
+          StreamBuilder<Duration>(
+            stream: clock.timeStream,
+            builder: (context, snapshot) {
+              final time = snapshot.data ?? const Duration(minutes: 3);
+              final minutes =
+                  time.inMinutes.remainder(60).toString().padLeft(2, '0');
+              final seconds =
+                  time.inSeconds.remainder(60).toString().padLeft(2, '0');
+              return Text('$minutes:$seconds');
+            },
           ),
         ],
       ),
