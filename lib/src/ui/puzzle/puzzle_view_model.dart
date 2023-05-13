@@ -425,12 +425,11 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   }
 
   void _addMove(Move move) {
-    final tuple = _gameTree.addMoveAt(
+    final (newPath, _) = _gameTree.addMoveAt(
       state.currentPath,
       move,
       prepend: state.mode == PuzzleMode.play,
     );
-    final newPath = tuple.item1;
     if (newPath != null) {
       _setPath(newPath);
     }

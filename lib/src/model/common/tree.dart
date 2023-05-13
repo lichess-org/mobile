@@ -1,9 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:tuple/tuple.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart'
-    hide Tuple2;
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -120,7 +118,7 @@ abstract class RootOrNode {
   ///
   /// Returns the new path and the new node.
   /// If the node already exists, it is not added again.
-  Tuple2<UciPath?, Node?> addMoveAt(
+  (UciPath?, Node?) addMoveAt(
     UciPath path,
     Move move, {
     bool prepend = false,
@@ -135,7 +133,7 @@ abstract class RootOrNode {
       position: newPos,
     );
     final newPath = addNodeAt(path, newNode, prepend: prepend);
-    return Tuple2(newPath, newPath != null ? newNode : null);
+    return (newPath, newPath != null ? newNode : null);
   }
 
   /// Gets the node at the given path.
