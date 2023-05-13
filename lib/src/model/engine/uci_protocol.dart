@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'package:tuple/tuple.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart'
-    hide Tuple2;
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -42,7 +40,7 @@ class UCIProtocol {
 
   void disconnected() {
     if (_work != null && _currentEval != null) {
-      _evalController.sink.add(Tuple2(_work!, _currentEval!));
+      _evalController.sink.add((_work!, _currentEval!));
     }
     _work = null;
     _send = null;
@@ -87,7 +85,7 @@ class UCIProtocol {
       engineName = parts.sublist(2).join(' ');
     } else if (parts.first == 'bestmove') {
       if (_work != null && _currentEval != null) {
-        _evalController.sink.add(Tuple2(_work!, _currentEval!));
+        _evalController.sink.add((_work!, _currentEval!));
       }
       _work = null;
       _swapWork();
@@ -176,7 +174,7 @@ class UCIProtocol {
       }
 
       if (multiPv == _expectedPvs && _currentEval != null) {
-        _evalController.sink.add(Tuple2(_work!, _currentEval!));
+        _evalController.sink.add((_work!, _currentEval!));
 
         // Depth limits are nice in the user interface, but in clearly decided
         // positions the usual depth limits are reached very quickly due to

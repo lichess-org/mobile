@@ -58,7 +58,7 @@ class StockfishEngine implements Engine {
     }
 
     return _protocol.evalStream.where((tuple) {
-      return tuple.item1 == work;
+      return tuple.$1 == work;
     });
   }
 

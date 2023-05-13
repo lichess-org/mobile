@@ -5,8 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart'
-    hide Tuple2;
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -417,8 +416,9 @@ class PuzzleViewModel extends _$PuzzleViewModel {
             shouldEmit: (work) => work.path == state.currentPath,
           )
           ?.forEach((t) {
-        _gameTree.updateAt(t.item1.path, (node) {
-          node.eval = t.item2;
+        final (work, eval) = t;
+        _gameTree.updateAt(work.path, (node) {
+          node.eval = eval;
         });
       }),
     );
