@@ -1,7 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:tuple/tuple.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart'
-    hide Tuple2;
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:lichess_mobile/src/utils/l10n.dart';
@@ -77,7 +75,7 @@ enum PuzzleTheme {
 final IMap<String, PuzzleTheme> puzzleThemeNameMap =
     IMap(PuzzleTheme.values.asNameMap());
 
-typedef PuzzleThemeCategory = Tuple2<String, List<PuzzleTheme>>;
+typedef PuzzleThemeCategory = (String, List<PuzzleTheme>);
 
 @Riverpod(keepAlive: true)
 IList<PuzzleThemeCategory> puzzleThemeCategories(
@@ -86,13 +84,13 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(
   final l10n = ref.watch(l10nProvider);
 
   return IList([
-    Tuple2(
+    (
       l10n.strings.puzzleRecommended,
       [
         PuzzleTheme.mix,
       ],
     ),
-    Tuple2(
+    (
       l10n.strings.puzzlePhases,
       [
         PuzzleTheme.opening,
@@ -106,7 +104,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(
         PuzzleTheme.queenRookEndgame,
       ],
     ),
-    Tuple2(
+    (
       l10n.strings.puzzleMotifs,
       [
         PuzzleTheme.advancedPawn,
@@ -125,7 +123,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(
         PuzzleTheme.trappedPiece,
       ],
     ),
-    Tuple2(
+    (
       l10n.strings.puzzleAdvanced,
       [
         PuzzleTheme.attraction,
@@ -139,7 +137,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(
         PuzzleTheme.zugzwang,
       ],
     ),
-    Tuple2(
+    (
       l10n.strings.puzzleMates,
       [
         PuzzleTheme.mate,
@@ -158,7 +156,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(
         PuzzleTheme.smotheredMate,
       ],
     ),
-    Tuple2(
+    (
       l10n.strings.puzzleSpecialMoves,
       [
         PuzzleTheme.castling,
@@ -167,7 +165,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(
         PuzzleTheme.underPromotion,
       ],
     ),
-    Tuple2(
+    (
       l10n.strings.puzzleGoals,
       [
         PuzzleTheme.equality,
@@ -176,7 +174,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(
         PuzzleTheme.mate,
       ],
     ),
-    Tuple2(
+    (
       l10n.strings.puzzleLengths,
       [
         PuzzleTheme.oneMove,
@@ -185,7 +183,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(
         PuzzleTheme.veryLong,
       ],
     ),
-    Tuple2(
+    (
       l10n.strings.puzzleOrigin,
       [
         PuzzleTheme.master,

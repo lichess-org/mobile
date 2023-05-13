@@ -342,8 +342,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: a1a9bc9137be8ea7534d7772057604ebeebcf41d
-      resolved-ref: a1a9bc9137be8ea7534d7772057604ebeebcf41d
+      ref: "057e114e18d61431dc3f817d672792f51b84747f"
+      resolved-ref: "057e114e18d61431dc3f817d672792f51b84747f"
       url: "https://github.com/lichess-org/dartchess.git"
     source: git
     version: "0.1.0"
@@ -1359,7 +1359,7 @@ packages:
     source: hosted
     version: "1.0.1"
   tuple:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: tuple
       sha256: "0ea99cd2f9352b2586583ab2ce6489d1f95a5f6de6fb9492faaf97ae2060f0aa"
@@ -1527,5 +1527,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.0.0-134.0.dev <4.0.0"
+  dart: ">=3.0.0 <4.0.0"
   flutter: ">=3.3.0"

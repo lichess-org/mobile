@@ -5,8 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart'
-    hide Tuple2;
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -417,20 +416,20 @@ class PuzzleViewModel extends _$PuzzleViewModel {
             shouldEmit: (work) => work.path == state.currentPath,
           )
           ?.forEach((t) {
-        _gameTree.updateAt(t.item1.path, (node) {
-          node.eval = t.item2;
+        final (work, eval) = t;
+        _gameTree.updateAt(work.path, (node) {
+          node.eval = eval;
         });
       }),
     );
   }
 
   void _addMove(Move move) {
-    final tuple = _gameTree.addMoveAt(
+    final (newPath, _) = _gameTree.addMoveAt(
       state.currentPath,
       move,
       prepend: state.mode == PuzzleMode.play,
     );
-    final newPath = tuple.item1;
     if (newPath != null) {
       _setPath(newPath);
     }
@@ -439,16 +438,15 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   void _mergeSolution() {
     final initialNode = _gameTree.nodeAt(state.initialPath);
     final fromPly = initialNode.ply;
-    final posAndNodes = state.puzzle.puzzle.solution.foldIndexed(
-      Tuple2(initialNode.position, IList<Node>(const [])),
+    final (_, newNodes) = state.puzzle.puzzle.solution.foldIndexed(
+      (initialNode.position, IList<Node>(const [])),
       (index, previous, uci) {
         final move = Move.fromUci(uci);
-        final tuple = previous.item1.playToSan(move!);
-        final newPos = tuple.item1;
-        final newSan = tuple.item2;
-        return Tuple2(
+        final (pos, nodes) = previous;
+        final (newPos, newSan) = pos.playToSan(move!);
+        return (
           newPos,
-          previous.item2.add(
+          nodes.add(
             Node(
               id: UciCharPair.fromMove(move),
               ply: fromPly + index + 1,
@@ -460,7 +458,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
         );
       },
     );
-    _gameTree.addNodesAt(state.initialPath, posAndNodes.item2, prepend: true);
+    _gameTree.addNodesAt(state.initialPath, newNodes, prepend: true);
   }
 }
 

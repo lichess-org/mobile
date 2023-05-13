@@ -112,8 +112,7 @@ class _BoardBody extends ConsumerWidget {
 
     return gameCursor.when(
       data: (data) {
-        final game = data.item1;
-        final cursor = data.item2;
+        final (game, cursor) = data;
         final black = BoardPlayer(
           key: const ValueKey('black-player'),
           player: gameData.black,

@@ -6,7 +6,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 0.1.1+18
 
 environment:
-  sdk: ">=2.18.2 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -34,14 +34,13 @@ dependencies:
   dartchess:
     git:
       url: https://github.com/lichess-org/dartchess.git
-      ref: a1a9bc9137be8ea7534d7772057604ebeebcf41d
+      ref: 057e114e18d61431dc3f817d672792f51b84747f
   chessground:
     git:
       url: https://github.com/lichess-org/flutter-chessground.git
       ref: f3799929a2bc79fa27152fd73fd4d95bf79c7fec
   soundpool: ^2.3.0
   meta: ^1.8.0
-  tuple: ^2.0.1
   deep_pick: ^1.0.0
   timeago: ^3.3.0
   collection: ^1.16.0 # can't upgrade because of flutter_test

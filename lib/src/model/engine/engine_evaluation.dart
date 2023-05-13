@@ -3,8 +3,7 @@ import 'dart:io';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart'
-    hide Tuple2;
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -80,8 +79,9 @@ class EngineEvaluation extends _$EngineEvaluation {
         );
 
     evalStream.forEach((t) {
-      if (shouldEmit(t.item1)) {
-        state = t.item2;
+      final (work, eval) = t;
+      if (shouldEmit(work)) {
+        state = eval;
       }
     });
 
