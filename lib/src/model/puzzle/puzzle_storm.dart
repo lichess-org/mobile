@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:core';
+import 'dart:math' as math;
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -12,7 +14,12 @@ part 'puzzle_storm.freezed.dart';
 @riverpod
 class StormCtrl extends _$StormCtrl {
   int _currentPuzzleIndex = 0;
+  int _moves = 0;
+  int _errors = 0;
+  List<(LitePuzzle, bool)> _history = [];
   Timer? _firstMoveTimer;
+
+  static const malus = Duration(seconds: 10);
 
   @override
   StormCtrlState build(IList<LitePuzzle> puzzles) {
@@ -29,6 +36,7 @@ class StormCtrl extends _$StormCtrl {
       moveIndex: -1,
       moves: 0,
       clock: StormClock(),
+      combo: StormCombo(),
     );
     _currentPuzzleIndex += 1;
     _firstMoveTimer =
@@ -37,26 +45,39 @@ class StormCtrl extends _$StormCtrl {
   }
 
   Future<void> onUserMove(Move move) async {
-    final expected = state.expectedMove;
-    state.clock.start();
     _addMove(move);
+    state.clock.start();
+    final expected = state.expectedMove;
+    _moves += 1;
     if (state.position.isGameOver || move == expected) {
+      state.combo.inc();
+      final bonus = state.combo.bonus();
+      if (bonus != null) {
+        state.clock.addTime(bonus);
+      }
       if (state.position.isGameOver || state.isOver) {
+        _pushToHistory(true);
+        await Future<void>.delayed(const Duration(milliseconds: 200));
         await _loadNextPuzzle();
         return;
       }
       await Future<void>.delayed(const Duration(milliseconds: 500));
       _addMove(state.expectedMove!);
+    } else {
+      _errors += 1;
+      state.combo.reset();
+      state.clock.subtractTime(malus);
+      _pushToHistory(false);
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+      await _loadNextPuzzle();
     }
   }
 
   Future<void> _loadNextPuzzle() async {
-    final pov =
-        Chess.fromSetup(Setup.parseFen(puzzles[_currentPuzzleIndex].fen));
     state = state.copyWith(
       puzzle: puzzles[_currentPuzzleIndex],
-      position: pov,
-      pov: pov.turn.opposite,
+      position:
+          Chess.fromSetup(Setup.parseFen(puzzles[_currentPuzzleIndex].fen)),
       moveIndex: -1,
     );
     _currentPuzzleIndex += 1;
@@ -70,6 +91,10 @@ class StormCtrl extends _$StormCtrl {
       moveIndex: state.moveIndex + 1,
     );
   }
+
+  void _pushToHistory(bool result) {
+    _history.add((state.puzzle, result));
+  }
 }
 
 @freezed
@@ -82,6 +107,7 @@ class StormCtrlState with _$StormCtrlState {
     required int moveIndex,
     required int moves,
     required StormClock clock,
+    required StormCombo combo,
   }) = _StormCtrlState;
 
   Move? get expectedMove => Move.fromUci(puzzle.solution[moveIndex + 1]);
@@ -94,10 +120,50 @@ class StormCtrlState with _$StormCtrlState {
   IMap<String, ISet<String>> get validMoves => algebraicLegalMoves(position);
 }
 
-class StormHistory {
-  LitePuzzle puzzle;
-  bool result;
-  StormHistory(this.puzzle, this.result);
+class StormCombo {
+  int current = 0;
+  int best = 0;
+
+  static const levels = [
+    [0, 0],
+    [5, 3],
+    [12, 5],
+    [20, 7],
+    [30, 10]
+  ];
+
+  void inc() {
+    current += 1;
+    best = math.max(current, best);
+  }
+
+  void reset() => current = 0;
+
+  int level() {
+    final lvl = levels.indexWhere((element) => element[0] > current);
+    return lvl >= 0 ? lvl - 1 : levels.length - 1;
+  }
+
+  int percent() {
+    final lvl = level();
+    final lastLevel = levels[levels.length - 1];
+    if (lvl >= levels.length - 1) {
+      final range = lastLevel[0] - levels[levels.length - 2][0];
+      return ((((current - lastLevel[0]) / range) * 100) % 100).toInt();
+    }
+    final bounds = [levels[lvl][0], levels[lvl + 1][0]];
+    return (((current - bounds[0]) / (bounds[1] - bounds[0])) * 100).floor();
+  }
+
+  Duration? bonus() {
+    if (percent() == 0) {
+      final lvl = level();
+      if (lvl > 0) {
+        return Duration(seconds: levels[lvl][1]);
+      }
+    }
+    return null;
+  }
 }
 
 class StormClock {
