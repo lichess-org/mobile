@@ -1,12 +1,10 @@
 import 'dart:math' show max;
 import 'package:logging/logging.dart';
-import 'package:tuple/tuple.dart';
 import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart'
-    hide Tuple2;
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'puzzle_batch_storage.dart';
@@ -79,13 +77,13 @@ class PuzzleService {
   }) {
     return Result.release(
       _syncAndLoadData(userId, angle).map(
-        (data) => data.item1 != null && data.item1!.unsolved.isNotEmpty
+        (data) => data.$1 != null && data.$1!.unsolved.isNotEmpty
             ? PuzzleContext(
-                puzzle: data.item1!.unsolved[0],
+                puzzle: data.$1!.unsolved[0],
                 theme: angle,
                 userId: userId,
-                glicko: data.item2,
-                rounds: data.item3,
+                glicko: data.$2,
+                rounds: data.$3,
               )
             : null,
       ),
@@ -137,7 +135,7 @@ class PuzzleService {
   ///
   /// This method should never fail, as if the network is down it will fallback
   /// to the local database.
-  FutureResult<Tuple3<PuzzleBatch?, PuzzleGlicko?, IList<PuzzleRound>?>>
+  FutureResult<(PuzzleBatch?, PuzzleGlicko?, IList<PuzzleRound>?)>
       _syncAndLoadData(
     UserId? userId,
     PuzzleTheme angle,
@@ -174,7 +172,7 @@ class PuzzleService {
     return batchResponse
         .fold(
       (value) => Result.value(
-        Tuple4(
+        (
           PuzzleBatch(
             solved: IList(const []),
             unsolved: IList([...unsolved, ...value.puzzles]),
@@ -186,13 +184,10 @@ class PuzzleService {
       ),
 
       // we don't need to save the batch if the request failed
-      (_, __) => Result.value(Tuple4(data, null, null, false)),
+      (_, __) => Result.value((data, null, null, false)),
     )
         .flatMap((tuple) async {
-      final newBatch = tuple.item1;
-      final glitcho = tuple.item2;
-      final rounds = tuple.item3;
-      final shouldSave = tuple.item4;
+      final (newBatch, glicko, rounds, shouldSave) = tuple;
       if (newBatch != null && shouldSave) {
         await storage.save(
           userId: userId,
@@ -200,7 +195,7 @@ class PuzzleService {
           data: newBatch,
         );
       }
-      return Result.value(Tuple3(newBatch, glitcho, rounds));
+      return Result.value((newBatch, glicko, rounds));
     });
   }
 }
