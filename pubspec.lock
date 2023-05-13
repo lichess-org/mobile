@@ -342,8 +342,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "8183547916e39b2b42baba76f622fda8a3d1c7f8"
-      resolved-ref: "8183547916e39b2b42baba76f622fda8a3d1c7f8"
+      ref: "057e114e18d61431dc3f817d672792f51b84747f"
+      resolved-ref: "057e114e18d61431dc3f817d672792f51b84747f"
       url: "https://github.com/lichess-org/dartchess.git"
     source: git
     version: "0.1.0"
