@@ -34,7 +34,7 @@ dependencies:
   dartchess:
     git:
       url: https://github.com/lichess-org/dartchess.git
-      ref: 82788ac630672f7da3d7ecbc01c456143a61b6f1
+      ref: 8183547916e39b2b42baba76f622fda8a3d1c7f8
   chessground:
     git:
       url: https://github.com/lichess-org/flutter-chessground.git
