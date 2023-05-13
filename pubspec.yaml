@@ -41,7 +41,6 @@ dependencies:
       ref: f3799929a2bc79fa27152fd73fd4d95bf79c7fec
   soundpool: ^2.3.0
   meta: ^1.8.0
-  tuple: ^2.0.1
   deep_pick: ^1.0.0
   timeago: ^3.3.0
   collection: ^1.16.0 # can't upgrade because of flutter_test
