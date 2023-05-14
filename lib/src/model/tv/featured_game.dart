@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -49,7 +50,12 @@ class FeaturedGame extends _$FeaturedGame {
 
   Stream<TvEvent> _connectStream() {
     final tvRepository = ref.watch(tvRepositoryProvider);
-    final stream = tvRepository.tvFeed().asBroadcastStream();
+    // ignore: avoid_manual_providers_as_generated_provider_dependency
+    final currentTvChannel = ref.watch(currentTvChannelProvider);
+
+    final stream = currentTvChannel == TvChannel.topRated
+        ? tvRepository.tvFeed().asBroadcastStream()
+        : tvRepository.tvFeedChannel(currentTvChannel).asBroadcastStream();
 
     _streamSub?.cancel();
     _streamSub = stream.listen((event) {
