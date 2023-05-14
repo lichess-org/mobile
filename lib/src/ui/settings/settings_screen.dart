@@ -115,19 +115,21 @@ class _Body extends ConsumerWidget {
                 settingsValue: soundTheme.label,
                 onTap: () {
                   if (defaultTargetPlatform == TargetPlatform.android) {
-                    showChoicePicker(context,
-                        choices: SoundTheme.values,
-                        selectedItem: soundTheme,
-                        labelBuilder: (t) => Text(t.label),
-                        onSelectedItemChanged: (SoundTheme? value) {
-                          ref
-                              .read(generalPreferencesProvider.notifier)
-                              .setSoundTheme(value ?? SoundTheme.normal);
-                          ref
-                              .read(soundServiceProvider)
-                              .changeTheme(value ?? SoundTheme.normal);
-                          //ref.read(soundPoolProvider.notifier).
-                        });
+                    showChoicePicker(
+                      context,
+                      choices: SoundTheme.values,
+                      selectedItem: soundTheme,
+                      labelBuilder: (t) => Text(t.label),
+                      onSelectedItemChanged: (SoundTheme? value) {
+                        ref
+                            .read(generalPreferencesProvider.notifier)
+                            .setSoundTheme(value ?? SoundTheme.normal);
+                        ref
+                            .read(soundServiceProvider)
+                            .changeTheme(value ?? SoundTheme.normal);
+                        //ref.read(soundPoolProvider.notifier).
+                      },
+                    );
                   } else {
                     pushPlatformRoute(
                       context,

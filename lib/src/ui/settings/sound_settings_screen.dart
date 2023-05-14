@@ -6,8 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-
 class SoundSettingsScreen extends StatelessWidget {
   const SoundSettingsScreen({super.key});
 

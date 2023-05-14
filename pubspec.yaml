@@ -91,9 +91,12 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/sounds/futuristic/
+    - assets/sounds/lisp/
     - assets/sounds/nes/
     - assets/sounds/piano/
     - assets/sounds/normal/
+    - assets/sounds/sfx/
     - assets/board-thumbnails/
     - assets/images/
 
