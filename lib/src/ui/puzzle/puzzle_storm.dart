@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,7 +9,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storm.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -88,8 +89,6 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pieceSet =
-        ref.watch(boardPreferencesProvider.select((p) => p.pieceSet));
     final stormCtrlProvier = StormCtrlProvider(data.puzzles);
     final puzzleState = ref.watch(stormCtrlProvier);
     final content = Column(
@@ -116,14 +115,11 @@ class _Body extends ConsumerWidget {
                   validMoves: puzzleState.validMoves,
                 ),
                 topTable: _TopBar(
-                  pieceSet: pieceSet,
                   pov: puzzleState.pov,
                   clock: puzzleState.clock,
                 ),
                 bottomTable: _BottomBar(
-                  puzzleState.combo.current,
-                  puzzleState.combo.level(),
-                  puzzleState.combo.percent(),
+                  stormCtrlProvier,
                 ),
               ),
             ),
@@ -159,12 +155,10 @@ class _Body extends ConsumerWidget {
 
 class _TopBar extends StatelessWidget {
   const _TopBar({
-    required this.pieceSet,
     required this.pov,
     required this.clock,
   });
 
-  final cg.PieceSet pieceSet;
   final Side pov;
   final StormClock clock;
 
@@ -188,15 +182,24 @@ class _TopBar extends StatelessWidget {
                   : context.l10n.puzzleFindTheBestMoveForBlack,
             ),
           ),
+          const Spacer(),
           StreamBuilder<(Duration, int?)>(
             stream: clock.timeStream,
             builder: (context, snapshot) {
-              final data = snapshot.data ?? const (Duration(minutes: 3), null);
+              final (time, _) =
+                  snapshot.data ?? const (Duration(minutes: 3), null);
               final minutes =
-                  data.$1.inMinutes.remainder(60).toString().padLeft(2, '0');
+                  time.inMinutes.remainder(60).toString().padLeft(2, '0');
               final seconds =
-                  data.$1.inSeconds.remainder(60).toString().padLeft(2, '0');
-              return Text('$minutes:$seconds');
+                  time.inSeconds.remainder(60).toString().padLeft(2, '0');
+              return Text(
+                '$minutes:$seconds',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: time.inSeconds < 20 ? LichessColors.red : null,
+                ),
+              );
             },
           ),
         ],
@@ -205,17 +208,17 @@ class _TopBar extends StatelessWidget {
   }
 }
 
-class _BottomBar extends StatelessWidget {
-  const _BottomBar(this.combo, this.lvl, this.percent);
+class _BottomBar extends ConsumerWidget {
+  const _BottomBar(this.ctrl);
 
-  final int lvl;
-  final int combo;
-  final double percent;
+  final StormCtrlProvider ctrl;
 
-  static const levels = [3, 5, 6, 7, 10];
+  static const levels = [3, 5, 7, 10];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final puzzleState = ref.watch(ctrl);
+    final lvl = puzzleState.combo.level();
     return AnimatedContainer(
       width: 50,
       duration: const Duration(milliseconds: 500),
@@ -229,9 +232,11 @@ class _BottomBar extends StatelessWidget {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: combo.toString(),
+                    text: puzzleState.combo.current.toString(),
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const TextSpan(text: '\nCombo')
                 ],
@@ -246,7 +251,7 @@ class _BottomBar extends StatelessWidget {
                   SizedBox(
                     height: 30,
                     child: LinearProgressIndicator(
-                      value: percent / 100,
+                      value: puzzleState.combo.percent() / 100,
                       valueColor:
                           const AlwaysStoppedAnimation<Color>(Colors.blue),
                     ),
@@ -254,27 +259,24 @@ class _BottomBar extends StatelessWidget {
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      for (int level in levels) _buildLevelIndicator(level, lvl)
-                    ],
+                    children: levels.mapIndexed((index, level) {
+                      final isCurrentLevel = index < lvl;
+                      return Text(
+                        '${level}s',
+                        style: TextStyle(
+                          color: isCurrentLevel ? Colors.blue : Colors.grey,
+                          fontWeight: isCurrentLevel
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        ),
+                      );
+                    }).toList(),
                   )
                 ],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  // ignore: avoid-returning-widget
-  Widget _buildLevelIndicator(int level, int currentLvl) {
-    final isCurrentLevel = level <= currentLvl;
-    return Text(
-      '${level}s',
-      style: TextStyle(
-        color: isCurrentLevel ? Colors.blue : Colors.grey,
-        fontWeight: isCurrentLevel ? FontWeight.bold : FontWeight.normal,
       ),
     );
   }
