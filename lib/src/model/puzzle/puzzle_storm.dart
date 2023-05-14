@@ -16,7 +16,7 @@ class StormCtrl extends _$StormCtrl {
   int _currentPuzzleIndex = 0;
   int _moves = 0;
   int _errors = 0;
-  List<(LitePuzzle, bool)> _history = [];
+  final List<(LitePuzzle, bool)> _history = [];
   Timer? _firstMoveTimer;
 
   static const malus = Duration(seconds: 10);
@@ -37,6 +37,7 @@ class StormCtrl extends _$StormCtrl {
       moves: 0,
       clock: StormClock(),
       combo: StormCombo(),
+      stats: null,
     );
     _currentPuzzleIndex += 1;
     _firstMoveTimer =
@@ -45,9 +46,9 @@ class StormCtrl extends _$StormCtrl {
   }
 
   Future<void> onUserMove(Move move) async {
-    _addMove(move);
     state.clock.start();
     final expected = state.expectedMove;
+    _addMove(move);
     _moves += 1;
     if (state.position.isGameOver || move == expected) {
       state.combo.inc();
@@ -57,8 +58,16 @@ class StormCtrl extends _$StormCtrl {
       }
       if (state.position.isGameOver || state.isOver) {
         _pushToHistory(true);
+        if (!_nextPuzzle()) {
+          end();
+          return;
+        }
         await Future<void>.delayed(const Duration(milliseconds: 200));
         await _loadNextPuzzle();
+        return;
+      }
+      if (!_nextPuzzle()) {
+        end();
         return;
       }
       await Future<void>.delayed(const Duration(milliseconds: 500));
@@ -67,10 +76,20 @@ class StormCtrl extends _$StormCtrl {
       _errors += 1;
       state.combo.reset();
       state.clock.subtractTime(malus);
+      if (!_nextPuzzle()) {
+        end();
+        return;
+      }
       _pushToHistory(false);
       await Future<void>.delayed(const Duration(milliseconds: 200));
+
       await _loadNextPuzzle();
     }
+  }
+
+  void end() {
+    state.clock.reset();
+    state = state.copyWith(stats: _getStats());
   }
 
   Future<void> _loadNextPuzzle() async {
@@ -92,8 +111,27 @@ class StormCtrl extends _$StormCtrl {
     );
   }
 
+  StormRunStats _getStats() {
+    final wins = _history.where((e) => e.$2 == true);
+    return StormRunStats(
+      moves: _moves,
+      errors: _errors,
+      score: wins.length,
+      comboBest: state.combo.best,
+      time: state.clock.endAt!,
+      highest: wins.map((e) => e.$1.rating).reduce(
+            (maxRating, rating) => rating > maxRating ? rating : maxRating,
+          ),
+      history: _history,
+    );
+  }
+
   void _pushToHistory(bool result) {
     _history.add((state.puzzle, result));
+  }
+
+  bool _nextPuzzle() {
+    return _currentPuzzleIndex < puzzles.length;
   }
 }
 
@@ -108,6 +146,7 @@ class StormCtrlState with _$StormCtrlState {
     required int moves,
     required StormClock clock,
     required StormCombo combo,
+    required StormRunStats? stats,
   }) = _StormCtrlState;
 
   Move? get expectedMove => Move.fromUci(puzzle.solution[moveIndex + 1]);
@@ -118,6 +157,19 @@ class StormCtrlState with _$StormCtrlState {
   bool get isOver => moveIndex >= puzzle.solution.length - 1;
 
   IMap<String, ISet<String>> get validMoves => algebraicLegalMoves(position);
+}
+
+@freezed
+class StormRunStats with _$StormRunStats {
+  const factory StormRunStats({
+    required int moves,
+    required int errors,
+    required int score,
+    required int comboBest,
+    required Duration time,
+    required int highest,
+    required List<(LitePuzzle, bool)> history,
+  }) = _StormRunStats;
 }
 
 class StormCombo {
@@ -144,19 +196,19 @@ class StormCombo {
     return lvl >= 0 ? lvl - 1 : levels.length - 1;
   }
 
-  int percent() {
+  double percent() {
     final lvl = level();
     final lastLevel = levels[levels.length - 1];
     if (lvl >= levels.length - 1) {
       final range = lastLevel[0] - levels[levels.length - 2][0];
-      return ((((current - lastLevel[0]) / range) * 100) % 100).toInt();
+      return (((current - lastLevel[0]) / range) * 100) % 100;
     }
     final bounds = [levels[lvl][0], levels[lvl + 1][0]];
-    return (((current - bounds[0]) / (bounds[1] - bounds[0])) * 100).floor();
+    return ((current - bounds[0]) / (bounds[1] - bounds[0])) * 100;
   }
 
   Duration? bonus() {
-    if (percent() == 0) {
+    if (percent().floor() == 0) {
       final lvl = level();
       if (lvl > 0) {
         return Duration(seconds: levels[lvl][1]);
@@ -168,16 +220,18 @@ class StormCombo {
 
 class StormClock {
   Timer? _timer;
-  final StreamController<Duration> _timeStreamController =
-      StreamController<Duration>.broadcast();
+  final StreamController<(Duration, int?)> _timeStreamController =
+      StreamController<(Duration, int?)>.broadcast();
   Duration _currentDuration = const Duration(minutes: 3);
+  DateTime? startAt;
+  Duration? endAt;
   bool isActive = false;
 
-  Stream<Duration> get timeStream => _timeStreamController.stream;
+  Stream<(Duration, int?)> get timeStream => _timeStreamController.stream;
 
   void addTime(Duration duration) {
     _currentDuration += duration;
-    _timeStreamController.add(_currentDuration);
+    _timeStreamController.add((_currentDuration, duration.inSeconds));
   }
 
   void subtractTime(Duration duration) {
@@ -185,33 +239,36 @@ class StormClock {
     if (_currentDuration.isNegative) {
       _currentDuration = Duration.zero;
     }
-    _timeStreamController.add(_currentDuration);
+    _timeStreamController.add((_currentDuration, -duration.inSeconds));
   }
 
   void start() {
     if (_timer == null || !_timer!.isActive) {
       isActive = true;
+      startAt = DateTime.now();
+      endAt = null;
       _timer = Timer.periodic(const Duration(seconds: 1), (_) {
         if (_currentDuration.inSeconds > 0) {
           _currentDuration -= const Duration(seconds: 1);
-          _timeStreamController.add(_currentDuration);
+          _timeStreamController.add((_currentDuration, null));
         } else {
-          _timer!.cancel();
+          reset();
         }
       });
     }
   }
 
-  void reset() {
-    _timer?.cancel();
-    _currentDuration = const Duration(minutes: 3);
-    _timeStreamController.add(_currentDuration);
-    isActive = false;
-  }
+  bool flag() => _currentDuration.inSeconds == 0;
 
-  void stop() {
-    _timer?.cancel();
-    isActive = false;
+  void reset() {
+    if (isActive) {
+      _timer?.cancel();
+      _currentDuration = const Duration(minutes: 3);
+      _timeStreamController.add((_currentDuration, null));
+      endAt = DateTime.now().difference(startAt!);
+      isActive = false;
+      startAt = null;
+    }
   }
 
   Duration get timeLeft => _currentDuration;

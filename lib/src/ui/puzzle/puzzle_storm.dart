@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storm.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import "package:lichess_mobile/src/utils/l10n_context.dart";
@@ -82,6 +83,7 @@ class _Load extends ConsumerWidget {
 }
 
 class _Body extends ConsumerWidget {
+  static const levels = [0, 3, 5, 6, 7, 10];
   const _Body({required this.data});
   final PuzzleStormResponse data;
 
@@ -91,7 +93,7 @@ class _Body extends ConsumerWidget {
         ref.watch(boardPreferencesProvider.select((p) => p.pieceSet));
     final stormCtrlProvier = StormCtrlProvider(data.puzzles);
     final puzzleState = ref.watch(stormCtrlProvier);
-    return Column(
+    final content = Column(
       children: [
         Expanded(
           child: Center(
@@ -102,7 +104,8 @@ class _Body extends ConsumerWidget {
                       .read(stormCtrlProvier.notifier)
                       .onUserMove(Move.fromUci(move.uci)!),
                   orientation: puzzleState.pov.cg,
-                  interactableSide: puzzleState.position.isGameOver
+                  interactableSide: puzzleState.clock.endAt != null ||
+                          puzzleState.position.isGameOver
                       ? cg.InteractableSide.none
                       : puzzleState.pov == Side.white
                           ? cg.InteractableSide.white
@@ -118,12 +121,98 @@ class _Body extends ConsumerWidget {
                   pov: puzzleState.pov,
                   clock: puzzleState.clock,
                 ),
-                bottomTable: const SizedBox.shrink(),
+                bottomTable: AnimatedContainer(
+                  duration: const Duration(milliseconds: 500),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(
+                        height: 30,
+                        child: LinearProgressIndicator(
+                          value: puzzleState.combo.percent() / 100,
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                            Colors.blue,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          for (int level in levels)
+                            _buildLevelIndicator(
+                              level,
+                              puzzleState.combo.level(),
+                            )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
         ),
       ],
+    );
+
+    return !puzzleState.clock.isActive
+        ? content
+        : WillPopScope(
+            child: content,
+            onWillPop: () async {
+              final result = await showAdaptiveDialog<bool>(
+                context: context,
+                builder: (context) => YesNoDialog(
+                  title: const Text('Are you sure?'),
+                  content: const Text(
+                    'Do you want to end this run?',
+                  ),
+                  onYes: () {
+                    ref.read(stormCtrlProvier.notifier).end();
+                    return Navigator.of(context).pop(true);
+                  },
+                  onNo: () => Navigator.of(context).pop(false),
+                ),
+              );
+              return result ?? false;
+            },
+          );
+  }
+
+  Widget _buildProgressbar(int lvl, double percent) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 500),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
+            height: 30,
+            child: LinearProgressIndicator(
+              value: percent / 100,
+              valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              for (int level in levels) _buildLevelIndicator(level, lvl)
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLevelIndicator(int level, int currentLvl) {
+    final isCurrentLevel = level <= currentLvl;
+    return Text(
+      level.toString(),
+      style: TextStyle(
+        color: isCurrentLevel ? Colors.blue : Colors.grey,
+        fontWeight: isCurrentLevel ? FontWeight.bold : FontWeight.normal,
+      ),
     );
   }
 }
@@ -159,14 +248,14 @@ class _TopBar extends StatelessWidget {
                   : context.l10n.puzzleFindTheBestMoveForBlack,
             ),
           ),
-          StreamBuilder<Duration>(
+          StreamBuilder<(Duration, int?)>(
             stream: clock.timeStream,
             builder: (context, snapshot) {
-              final time = snapshot.data ?? const Duration(minutes: 3);
+              final data = snapshot.data ?? const (Duration(minutes: 3), null);
               final minutes =
-                  time.inMinutes.remainder(60).toString().padLeft(2, '0');
+                  data.$1.inMinutes.remainder(60).toString().padLeft(2, '0');
               final seconds =
-                  time.inSeconds.remainder(60).toString().padLeft(2, '0');
+                  data.$1.inSeconds.remainder(60).toString().padLeft(2, '0');
               return Text('$minutes:$seconds');
             },
           ),
