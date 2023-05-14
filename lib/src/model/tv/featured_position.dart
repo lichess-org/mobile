@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 
 import 'tv_event.dart';
 
@@ -14,19 +15,23 @@ class FeaturedPosition with _$FeaturedPosition {
     Move? lastMove,
     required Side turn,
     required Chess position,
+    required MaterialDiff diff,
   }) = _FeaturedPosition;
 
   factory FeaturedPosition.fromTvEvent(TvEvent event) {
+    final position = Chess.fromSetup(
+      Setup.parseFen(event.fen),
+      ignoreImpossibleCheck: true,
+    );
+
     return FeaturedPosition(
       fen: event.fen,
       turn: event.fen.substring(event.fen.length - 1) == 'w'
           ? Side.white
           : Side.black,
-      position: Chess.fromSetup(
-        Setup.parseFen(event.fen),
-        ignoreImpossibleCheck: true,
-      ),
+      position: position,
       lastMove: event is TvFenEvent ? event.lastMove : null,
+      diff: MaterialDiff.fromBoard(position.board),
     );
   }
 

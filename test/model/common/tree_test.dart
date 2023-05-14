@@ -43,7 +43,7 @@ void main() {
     test('nodesOn, with variation', () {
       final root = Root.fromPgn('e4 e5 Nf3');
       final move = Move.fromUci('b1c3')!;
-      final tuple = root.addMoveAt(
+      final (newPath, newNode) = root.addMoveAt(
         UciPath.fromIds(
           [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,
         ),
@@ -57,10 +57,9 @@ void main() {
         equals(ViewNode.fromNode(root.nodeAt(root.mainlinePath) as Node)),
       );
 
-      final path = tuple.item1!;
-      final nodeList = root.nodesOn(path);
+      final nodeList = root.nodesOn(newPath!);
       expect(nodeList.length, equals(3));
-      expect(nodeList.last, equals(ViewNode.fromNode(tuple.item2!)));
+      expect(nodeList.last, equals(ViewNode.fromNode(newNode!)));
     });
 
     test('mainline', () {
@@ -257,15 +256,15 @@ void main() {
         [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,
       );
       final currentPath = root.mainlinePath;
-      final tuple = root.addMoveAt(path, move);
+      final (newPath, newNode) = root.addMoveAt(path, move);
       expect(
-        tuple.item1,
+        newPath,
         equals(currentPath + UciCharPair.fromMove(move)),
       );
-      expect(tuple.item2?.ply, equals(3));
-      expect(tuple.item2?.sanMove, equals(SanMove('Nc3', move)));
+      expect(newNode?.ply, equals(3));
+      expect(newNode?.sanMove, equals(SanMove('Nc3', move)));
       expect(
-        tuple.item2?.fen,
+        newNode?.fen,
         equals(
           'rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2',
         ),

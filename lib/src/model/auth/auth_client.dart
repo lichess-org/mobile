@@ -54,11 +54,7 @@ class AuthClient {
     this._client,
     this._crashlytics, {
     List<Duration> retryDelays = defaultRetries,
-  })  : _retryClient = RetryClient.withDelays(
-          _client,
-          retryDelays,
-        ),
-        _retryClientOnError = RetryClient.withDelays(
+  }) : _retryClient = RetryClient.withDelays(
           _client,
           retryDelays,
           whenError: (error, _) async =>
@@ -73,7 +69,6 @@ class AuthClient {
   final Logger _log;
   final Client _client;
   final RetryClient _retryClient;
-  final RetryClient _retryClientOnError;
   final FirebaseCrashlytics _crashlytics;
 
   /// Makes app user agent
@@ -86,19 +81,20 @@ class AuthClient {
     bool retryOnError = true,
   }) =>
       Result.capture(
-        (retryOnError ? _retryClientOnError : _retryClient)
-            .get(url, headers: headers),
+        (retryOnError ? _retryClient : _client).get(url, headers: headers),
       ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
-        _crashlytics.recordError(
-          error,
-          stackTrace,
-          reason: 'a non-fatal http request error',
-          information: [
-            'url: $url',
-            'headers: $headers',
-          ],
-        );
+        if (kReleaseMode) {
+          _crashlytics.recordError(
+            error,
+            stackTrace,
+            reason: 'a non-fatal http request error',
+            information: [
+              'url: $url',
+              'headers: $headers',
+            ],
+          );
+        }
         return GenericIOException();
       }).flatMap(
         (response) => _validateResponseStatusResult('GET', url, response),
@@ -112,19 +108,21 @@ class AuthClient {
     bool retryOnError = true,
   }) =>
       Result.capture(
-        (retryOnError ? _retryClientOnError : _retryClient)
+        (retryOnError ? _retryClient : _client)
             .post(url, headers: headers, body: body, encoding: encoding),
       ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
-        _crashlytics.recordError(
-          error,
-          stackTrace,
-          reason: 'a non-fatal http request error',
-          information: [
-            'url: $url',
-            'headers: $headers',
-          ],
-        );
+        if (kReleaseMode) {
+          _crashlytics.recordError(
+            error,
+            stackTrace,
+            reason: 'a non-fatal http request error',
+            information: [
+              'url: $url',
+              'headers: $headers',
+            ],
+          );
+        }
         return GenericIOException();
       }).flatMap(
         (response) => _validateResponseStatusResult('POST', url, response),
@@ -138,19 +136,21 @@ class AuthClient {
     bool retryOnError = true,
   }) =>
       Result.capture(
-        (retryOnError ? _retryClientOnError : _retryClient)
+        (retryOnError ? _retryClient : _client)
             .delete(url, headers: headers, body: body, encoding: encoding),
       ).mapError((error, stackTrace) {
         _log.severe('Request error', error, stackTrace);
-        _crashlytics.recordError(
-          error,
-          stackTrace,
-          reason: 'a non-fatal http request error',
-          information: [
-            'url: $url',
-            'headers: $headers',
-          ],
-        );
+        if (kReleaseMode) {
+          _crashlytics.recordError(
+            error,
+            stackTrace,
+            reason: 'a non-fatal http request error',
+            information: [
+              'url: $url',
+              'headers: $headers',
+            ],
+          );
+        }
         return GenericIOException();
       }).flatMap(
         (response) => _validateResponseStatusResult('DELETE', url, response),
@@ -183,15 +183,17 @@ class AuthClient {
       _log.warning(
         '$method $url responded with status ${response.statusCode}\n$body',
       );
-      _crashlytics.recordError(
-        'Server error: $body (${response.statusCode})',
-        null,
-        reason: 'server error',
-        information: [
-          'url: $url',
-          'method: $method',
-        ],
-      );
+      if (kReleaseMode) {
+        _crashlytics.recordError(
+          'Server error: ${response.statusCode}',
+          null,
+          reason: 'server error',
+          information: [
+            'url: $url',
+            'method: $method',
+          ],
+        );
+      }
     }
 
     return response.statusCode < 400
@@ -213,7 +215,6 @@ class AuthClient {
   void close() {
     _log.info('Closing AuthClient.');
     _client.close();
-    _retryClient.close();
   }
 }
 

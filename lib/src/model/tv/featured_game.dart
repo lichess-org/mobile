@@ -5,6 +5,7 @@ import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'featured_position.dart';
 import 'featured_player.dart';
 import 'tv_event.dart';
@@ -19,9 +20,10 @@ class FeaturedGame extends _$FeaturedGame {
 
   @override
   Future<FeaturedGameState> build({required bool withSound}) async {
-    final stream = connectStream();
-
+    ref.cacheFor(const Duration(seconds: 30));
     ref.onDispose(() => _streamSub?.cancel());
+
+    final stream = connectStream();
 
     return stream.firstWhere((event) => event is TvFeaturedEvent).then(
       (event) {

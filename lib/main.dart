@@ -24,7 +24,8 @@ void main() async {
         stackTrace: record.stackTrace,
       );
 
-      if (record.loggerName == 'AuthClient') {
+      if (record.loggerName == 'AuthClient' ||
+          record.loggerName == 'AuthSocket') {
         debugPrint(record.message);
       }
     });
@@ -36,17 +37,20 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
-  PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    return true;
-  };
+  if (kReleaseMode) {
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+    // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+  }
 
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   if (defaultTargetPlatform == TargetPlatform.android) {
-    final data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
+    final view = widgetsBinding.platformDispatcher.views.first;
+    final data = MediaQueryData.fromView(view);
     if (data.size.shortestSide < kTabletThreshold) {
       await SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp],

@@ -107,6 +107,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
             san: san,
             uci: move.uci,
             position: position,
+            diff: MaterialDiff.fromBoard(position.board),
             whiteClock: ply.isOdd ? stepClock : clock,
             blackClock: ply.isEven ? stepClock : clock,
           ),

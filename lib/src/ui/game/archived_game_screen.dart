@@ -112,19 +112,20 @@ class _BoardBody extends ConsumerWidget {
 
     return gameCursor.when(
       data: (data) {
-        final game = data.item1;
-        final cursor = data.item2;
+        final (game, cursor) = data;
         final black = BoardPlayer(
           key: const ValueKey('black-player'),
           player: gameData.black,
           active: false,
           clock: game.blackClockAt(cursor),
+          diff: game.materialDiffAt(cursor, Side.black),
         );
         final white = BoardPlayer(
           key: const ValueKey('white-player'),
           player: gameData.white,
           active: false,
           clock: game.whiteClockAt(cursor),
+          diff: game.materialDiffAt(cursor, Side.white),
         );
         final topPlayer = orientation == Side.white ? black : white;
         final bottomPlayer = orientation == Side.white ? white : black;

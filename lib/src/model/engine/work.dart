@@ -1,7 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:tuple/tuple.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart'
-    hide Tuple2;
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
@@ -9,7 +7,7 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 
 part 'work.freezed.dart';
 
-typedef EvalResult = Tuple2<Work, ClientEval>;
+typedef EvalResult = (Work, ClientEval);
 
 @freezed
 class Work with _$Work {

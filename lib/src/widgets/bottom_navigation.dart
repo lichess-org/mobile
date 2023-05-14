@@ -384,6 +384,7 @@ class _MaterialTabView extends StatefulWidget {
 class _MaterialTabViewState extends State<_MaterialTabView> {
   // ignore: avoid-late-keyword
   late HeroController _heroController;
+
   // ignore: avoid-late-keyword
   late List<NavigatorObserver> _navigatorObservers;
 

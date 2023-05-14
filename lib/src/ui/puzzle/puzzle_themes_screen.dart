@@ -3,10 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart'
-    hide Tuple2;
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tuple/tuple.dart';
 
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -22,12 +20,12 @@ import 'puzzle_screen.dart';
 part 'puzzle_themes_screen.g.dart';
 
 @riverpod
-Future<Tuple2<bool, ISet<PuzzleTheme>>> _savedThemesConnectivity(
+Future<(bool, ISet<PuzzleTheme>)> _savedThemesConnectivity(
   _SavedThemesConnectivityRef ref,
 ) async {
   final connectivity = await ref.watch(connectivityProvider.future);
   final themes = await ref.watch(savedThemesProvider.future);
-  return Tuple2(connectivity.isOnline, themes);
+  return (connectivity.isOnline, themes);
 }
 
 class PuzzleThemesScreen extends StatelessWidget {
@@ -92,15 +90,15 @@ class _Body extends ConsumerWidget {
                         for (final category in list)
                           _Category(
                             category: category,
-                            savedThemes: data.item2,
-                            isOnline: data.item1,
+                            savedThemes: data.$2,
+                            isOnline: data.$1,
                           ),
                       ],
                     );
                   },
-                  loading: () => Column(
+                  loading: () => const Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Center(child: CircularProgressIndicator.adaptive()),
                     ],
                   ),
@@ -133,11 +131,12 @@ class _Category extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final (categoryTitle, themes) = category;
     return ListSection(
-      header: Text(category.item1, style: Styles.sectionTitle),
+      header: Text(categoryTitle, style: Styles.sectionTitle),
       showDivider: true,
       children: [
-        for (final theme in category.item2)
+        for (final theme in themes)
           Tooltip(
             message: puzzleThemeL10n(context, theme).description,
             triggerMode: TooltipTriggerMode.longPress,
@@ -165,8 +164,7 @@ class _Category extends ConsumerWidget {
                   ),
                 ),
               ),
-              isThreeLine:
-                  puzzleThemeL10n(context, theme).description.length > 60,
+              isThreeLine: true,
               onTap: isOnline || savedThemes.contains(theme)
                   ? () {
                       pushPlatformRoute(
