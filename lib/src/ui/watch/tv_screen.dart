@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/ui/watch/tv_channel_selector.dart';
 
 final _featuredGameWithSoundProvider = featuredGameProvider(withSound: true);
 
@@ -38,7 +39,7 @@ class _TvScreenState extends ConsumerState<TvScreen>
   ) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Top Rated'),
+        title: const TvChannelSelector(),
         actions: [
           ToggleSoundButton(),
         ],
@@ -52,7 +53,7 @@ class _TvScreenState extends ConsumerState<TvScreen>
   ) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: const Text('Top Rated'),
+        middle: const TvChannelSelector(),
         trailing: ToggleSoundButton(),
       ),
       child: const _Body(),
