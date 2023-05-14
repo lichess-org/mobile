@@ -83,7 +83,6 @@ class _Load extends ConsumerWidget {
 }
 
 class _Body extends ConsumerWidget {
-  static const levels = [0, 3, 5, 6, 7, 10];
   const _Body({required this.data});
   final PuzzleStormResponse data;
 
@@ -121,33 +120,10 @@ class _Body extends ConsumerWidget {
                   pov: puzzleState.pov,
                   clock: puzzleState.clock,
                 ),
-                bottomTable: AnimatedContainer(
-                  duration: const Duration(milliseconds: 500),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(
-                        height: 30,
-                        child: LinearProgressIndicator(
-                          value: puzzleState.combo.percent() / 100,
-                          valueColor: const AlwaysStoppedAnimation<Color>(
-                            Colors.blue,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          for (int level in levels)
-                            _buildLevelIndicator(
-                              level,
-                              puzzleState.combo.level(),
-                            )
-                        ],
-                      )
-                    ],
-                  ),
+                bottomTable: _BottomBar(
+                  puzzleState.combo.current,
+                  puzzleState.combo.level(),
+                  puzzleState.combo.percent(),
                 ),
               ),
             ),
@@ -169,7 +145,7 @@ class _Body extends ConsumerWidget {
                     'Do you want to end this run?',
                   ),
                   onYes: () {
-                    ref.read(stormCtrlProvier.notifier).end();
+                    ref.read(stormCtrlProvier.notifier).endNow();
                     return Navigator.of(context).pop(true);
                   },
                   onNo: () => Navigator.of(context).pop(false),
@@ -178,42 +154,6 @@ class _Body extends ConsumerWidget {
               return result ?? false;
             },
           );
-  }
-
-  Widget _buildProgressbar(int lvl, double percent) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 500),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SizedBox(
-            height: 30,
-            child: LinearProgressIndicator(
-              value: percent / 100,
-              valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              for (int level in levels) _buildLevelIndicator(level, lvl)
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLevelIndicator(int level, int currentLvl) {
-    final isCurrentLevel = level <= currentLvl;
-    return Text(
-      level.toString(),
-      style: TextStyle(
-        color: isCurrentLevel ? Colors.blue : Colors.grey,
-        fontWeight: isCurrentLevel ? FontWeight.bold : FontWeight.normal,
-      ),
-    );
   }
 }
 
@@ -260,6 +200,81 @@ class _TopBar extends StatelessWidget {
             },
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _BottomBar extends StatelessWidget {
+  const _BottomBar(this.combo, this.lvl, this.percent);
+
+  final int lvl;
+  final int combo;
+  final double percent;
+
+  static const levels = [3, 5, 6, 7, 10];
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      width: 50,
+      duration: const Duration(milliseconds: 500),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: combo.toString(),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const TextSpan(text: '\nCombo')
+                ],
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.55,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    height: 30,
+                    child: LinearProgressIndicator(
+                      value: percent / 100,
+                      valueColor:
+                          const AlwaysStoppedAnimation<Color>(Colors.blue),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      for (int level in levels) _buildLevelIndicator(level, lvl)
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ignore: avoid-returning-widget
+  Widget _buildLevelIndicator(int level, int currentLvl) {
+    final isCurrentLevel = level <= currentLvl;
+    return Text(
+      '${level}s',
+      style: TextStyle(
+        color: isCurrentLevel ? Colors.blue : Colors.grey,
+        fontWeight: isCurrentLevel ? FontWeight.bold : FontWeight.normal,
       ),
     );
   }

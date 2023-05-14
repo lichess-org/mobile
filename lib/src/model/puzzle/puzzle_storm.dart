@@ -4,6 +4,8 @@ import 'dart:math' as math;
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'puzzle.dart';
@@ -20,7 +22,7 @@ class StormCtrl extends _$StormCtrl {
   Timer? _firstMoveTimer;
 
   static const malus = Duration(seconds: 10);
-
+  static const moveDelay = Duration(milliseconds: 500);
   @override
   StormCtrlState build(IList<LitePuzzle> puzzles) {
     ref.onDispose(() {
@@ -49,6 +51,7 @@ class StormCtrl extends _$StormCtrl {
     state.clock.start();
     final expected = state.expectedMove;
     _addMove(move);
+    final soundService = ref.read(soundServiceProvider);
     _moves += 1;
     if (state.position.isGameOver || move == expected) {
       state.combo.inc();
@@ -62,7 +65,8 @@ class StormCtrl extends _$StormCtrl {
           end();
           return;
         }
-        await Future<void>.delayed(const Duration(milliseconds: 200));
+        await Future<void>.delayed(moveDelay);
+        soundService.play(Sound.confirmation);
         await _loadNextPuzzle();
         return;
       }
@@ -70,7 +74,7 @@ class StormCtrl extends _$StormCtrl {
         end();
         return;
       }
-      await Future<void>.delayed(const Duration(milliseconds: 500));
+      await Future<void>.delayed(moveDelay);
       _addMove(state.expectedMove!);
     } else {
       _errors += 1;
@@ -81,8 +85,8 @@ class StormCtrl extends _$StormCtrl {
         return;
       }
       _pushToHistory(false);
-      await Future<void>.delayed(const Duration(milliseconds: 200));
-
+      await Future<void>.delayed(moveDelay);
+      soundService.play(Sound.error);
       await _loadNextPuzzle();
     }
   }
@@ -90,6 +94,10 @@ class StormCtrl extends _$StormCtrl {
   void end() {
     state.clock.reset();
     state = state.copyWith(stats: _getStats());
+  }
+
+  void endNow() {
+    state.clock.reset();
   }
 
   Future<void> _loadNextPuzzle() async {
@@ -100,13 +108,20 @@ class StormCtrl extends _$StormCtrl {
       moveIndex: -1,
     );
     _currentPuzzleIndex += 1;
-    await Future<void>.delayed(const Duration(milliseconds: 500));
+    await Future<void>.delayed(moveDelay);
     _addMove(state.expectedMove!);
   }
 
   void _addMove(Move move) {
+    final (pos, san) = state.position.playToSan(move);
+    final isCheck = san.contains('+');
+    if (san.contains('x')) {
+      ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+    } else {
+      ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
+    }
     state = state.copyWith(
-      position: state.position.play(move),
+      position: pos,
       moveIndex: state.moveIndex + 1,
     );
   }
