@@ -26,7 +26,7 @@ dependencies:
   freezed_annotation: ^2.2.0
   json_annotation: ^4.7.0
   http: ^0.13.5
-  flutter_appauth: ^5.0.0
+  flutter_appauth: ^6.0.0
   flutter_secure_storage: ^8.0.0
   logging: ^1.1.0
   shared_preferences: ^2.1.0

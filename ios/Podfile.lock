@@ -1,9 +1,9 @@
 PODS:
-  - AppAuth (1.6.0):
-    - AppAuth/Core (= 1.6.0)
-    - AppAuth/ExternalUserAgent (= 1.6.0)
-  - AppAuth/Core (1.6.0)
-  - AppAuth/ExternalUserAgent (1.6.0):
+  - AppAuth (1.6.2):
+    - AppAuth/Core (= 1.6.2)
+    - AppAuth/ExternalUserAgent (= 1.6.2)
+  - AppAuth/Core (1.6.2)
+  - AppAuth/ExternalUserAgent (1.6.2):
     - AppAuth/Core
   - connectivity_plus (0.0.1):
     - Flutter
@@ -13,10 +13,10 @@ PODS:
   - Firebase/Crashlytics (10.7.0):
     - Firebase/CoreOnly
     - FirebaseCrashlytics (~> 10.7.0)
-  - firebase_core (2.11.0):
+  - firebase_core (2.12.0):
     - Firebase/CoreOnly (= 10.7.0)
     - Flutter
-  - firebase_crashlytics (3.2.0):
+  - firebase_crashlytics (3.3.0):
     - Firebase/Crashlytics (= 10.7.0)
     - firebase_core
     - Flutter
@@ -26,7 +26,7 @@ PODS:
     - GoogleUtilities/Logger (~> 7.8)
   - FirebaseCoreExtension (10.9.0):
     - FirebaseCore (~> 10.0)
-  - FirebaseCoreInternal (10.7.0):
+  - FirebaseCoreInternal (10.9.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
   - FirebaseCrashlytics (10.7.0):
     - FirebaseCore (~> 10.5)
@@ -36,7 +36,7 @@ PODS:
     - GoogleUtilities/Environment (~> 7.8)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (~> 2.1)
-  - FirebaseInstallations (10.7.0):
+  - FirebaseInstallations (10.9.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
@@ -51,7 +51,7 @@ PODS:
     - PromisesSwift (~> 2.1)
   - Flutter (1.0.0)
   - flutter_appauth (0.0.1):
-    - AppAuth (= 1.6.0)
+    - AppAuth (= 1.6.2)
     - Flutter
   - flutter_native_splash (0.0.1):
     - Flutter
@@ -60,7 +60,7 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - GoogleDataTransport (9.2.2):
+  - GoogleDataTransport (9.2.3):
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
@@ -168,23 +168,23 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  AppAuth: 8fca6b5563a5baef2c04bee27538025e4ceb2add
+  AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   Firebase: 0219acf760880eeec8ce479895bd7767466d9f81
-  firebase_core: dee76ded6c693fdb38b8ea39aef7129e32e587a3
-  firebase_crashlytics: 450dc80dcb167d04714c147336dd04a7230d20e4
+  firebase_core: 312d0d81b346ec20540822c8498e626d6918ef48
+  firebase_crashlytics: 869c43dd16f650004bb312ff9eff8d068406b939
   FirebaseCore: e317665b9d744727a97e623edbbed009320afdd7
   FirebaseCoreExtension: d3e9bba2930a8033042112397cd9f006a1bb203d
-  FirebaseCoreInternal: 8845798510aae74703467480f71ac613788d0696
+  FirebaseCoreInternal: d2b4acb827908e72eca47a9fd896767c3053921e
   FirebaseCrashlytics: 35fdd1a433b31e28adcf5c8933f4c526691a1e0b
-  FirebaseInstallations: 59c0e4c7a816a0f76710d83f77e5369b3e45eb96
+  FirebaseInstallations: c58489c9caacdbf27d1da60891a87318e20218e0
   FirebaseSessions: 44a6782502eb279a214d4adca20891353278760c
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_appauth: 525652bda90e43ca5eb7ed748ecc106b79d1f5a1
+  flutter_appauth: cf9b928962105b2a64a9802585d1c8adaf3e0f46
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  GoogleDataTransport: 8378d1fa8ac49753ea6ce70d65a7cb70ce5f66e6
+  GoogleDataTransport: f0308f5905a745f94fb91fea9c6cbaf3831cb1bd
   GoogleUtilities: 9aa0ad5a7bc171f8bae016300bfcfa3fb8425749
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
@@ -199,6 +199,6 @@ SPEC CHECKSUMS:
   stockfish: 36a4ed5afabb635801aeeb1fbb331bbc7bd0cad7
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
 
-PODFILE CHECKSUM: bfec603aa68852dbab22622d886a3468fe9959ee
+PODFILE CHECKSUM: 76a583f8d75b3a8c6e4bdc97ae8783ef36cc7984
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1

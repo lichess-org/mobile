@@ -468,18 +468,18 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_appauth
-      sha256: e2f48b18420d98b579822f1a0cac167179ca9dc3da1b0144399d0ccc7be192c8
+      sha256: a047019b525ab0e260776d1b0da1000b7416b45b9e8dd02d124c9da571fc1918
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0"
+    version: "6.0.0"
   flutter_appauth_platform_interface:
     dependency: transitive
     description:
       name: flutter_appauth_platform_interface
-      sha256: "4f1a706990457c9b28cfd0432baf6595297199a340d36d669b5b5f53950866a6"
+      sha256: "44feaa7058191b5d3cd7c9ff195262725773643121bcada172d49c2ddcff71cb"
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.0+1"
+    version: "6.0.0"
   flutter_blurhash:
     dependency: transitive
     description:
