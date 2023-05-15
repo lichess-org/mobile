@@ -199,6 +199,25 @@ class PuzzleRepository {
     });
   }
 
+  FutureResult<IList<PuzzleAndResult>> puzzleActivity(
+    int max,
+    DateTime before,
+  ) {
+    return apiClient
+        .get(
+      Uri.parse(
+        '$kLichessHost/api/puzzle/activity?max=$max&before=${before.millisecondsSinceEpoch}',
+      ),
+    )
+        .flatMap((res) {
+      return readJsonListOfObjects(
+        res,
+        mapper: _puzzleActivityFromJson,
+        logger: _log,
+      );
+    });
+  }
+
   Result<PuzzleBatchResponse> _decodeBatchResponse(http.Response response) {
     return readJsonObject(
       response,
@@ -257,7 +276,18 @@ class PuzzleStormResponse with _$PuzzleStormResponse {
   }) = _PuzzleStormResponse;
 }
 
+class PuzzleAndResult with _$PuzzleAndResult {
+  const factory PuzzleAndResult({
+    required Puzzle puzzle,
+    required bool result,
+    required DateTime date,
+  }) = _PuzzleAndResult;
+}
+
 // --
+
+PuzzleAndResult _puzzleActivityFromJson(Map<String, dynamic> json) =>
+    _puzzleActivityFromPick(pick(json).required());
 
 Puzzle _puzzleFromJson(Map<String, dynamic> json) =>
     _puzzleFromPick(pick(json).required());
@@ -348,6 +378,14 @@ PuzzleGamePlayer _puzzlePlayerFromPick(RequiredPick pick) {
     userId: pick('userId').asUserIdOrThrow(),
     side: pick('color').asSideOrThrow(),
     title: pick('title').asStringOrNull(),
+  );
+}
+
+PuzzleAndResult _puzzleActivityFromPick(RequiredPick pick) {
+  return PuzzleAndResult(
+    puzzle: _puzzleFromPick(pick),
+    result: pick('result').asBoolOrThrow(),
+    date: pick('date').asDateTimeFromMillisecondsOrThrow(),
   );
 }
 
