@@ -1,11 +1,12 @@
 import 'package:flutter/widgets.dart';
 
-import 'perf.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 
 /// A pair of time and increment used as game clock
 @immutable
 class TimeIncrement {
-  const TimeIncrement(this.time, this.increment);
+  const TimeIncrement(this.time, this.increment)
+      : assert(time >= 0 && increment >= 0);
 
   /// Clock initial time in minutes
   final int time;
@@ -31,6 +32,10 @@ class TimeIncrement {
         'increment': increment,
       };
 
+  int get totalSeconds => time * 60 + increment;
+
+  Speed get speed => Speed.fromTimeIncrement(this);
+
   String get display => '$time + $increment';
 
   @override
@@ -46,21 +51,4 @@ class TimeIncrement {
 
   @override
   String toString() => '$time+$increment';
-}
-
-/// Default game clock choice of lichess
-enum DefaultGameClock {
-  blitz3_0(TimeIncrement(3, 0), Perf.blitz),
-  blitz3_2(TimeIncrement(3, 2), Perf.blitz),
-  blitz5_0(TimeIncrement(5, 0), Perf.blitz),
-  blitz5_3(TimeIncrement(5, 3), Perf.blitz),
-  rapid10_0(TimeIncrement(10, 0), Perf.rapid),
-  rapid10_5(TimeIncrement(10, 5), Perf.rapid),
-  rapid15_10(TimeIncrement(15, 10), Perf.rapid),
-  classical30_0(TimeIncrement(30, 0), Perf.classical),
-  classical30_20(TimeIncrement(30, 20), Perf.classical);
-
-  const DefaultGameClock(this.value, this.perf);
-  final TimeIncrement value;
-  final Perf perf;
 }
