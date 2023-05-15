@@ -1,4 +1,5 @@
 import 'dart:math' show max;
+import 'package:lichess_mobile/src/model/puzzle/puzzle_history_storage.dart';
 import 'package:logging/logging.dart';
 import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -23,10 +24,12 @@ const kPuzzleLocalQueueLength = 50;
 PuzzleService puzzleService(PuzzleServiceRef ref, {required int queueLength}) {
   final storage = ref.watch(puzzleBatchStorageProvider);
   final repository = ref.watch(puzzleRepositoryProvider);
+  final history = ref.watch(puzzleHistoryStorageProvider);
   return PuzzleService(
     ref,
     Logger('PuzzleService'),
     storage: storage,
+    historyStorage: history,
     repository: repository,
     queueLength: queueLength,
   );
@@ -57,6 +60,7 @@ class PuzzleService {
     this._ref,
     this._log, {
     required this.storage,
+    required this.historyStorage,
     required this.repository,
     required this.queueLength,
   });
@@ -64,6 +68,7 @@ class PuzzleService {
   final PuzzleServiceRef _ref;
   final int queueLength;
   final PuzzleBatchStorage storage;
+  final PuzzleHistoryStorage historyStorage;
   final PuzzleRepository repository;
   final Logger _log;
 
@@ -97,8 +102,10 @@ class PuzzleService {
   Future<PuzzleContext?> solve({
     required UserId? userId,
     required PuzzleSolution solution,
+    required Puzzle puzzle,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
+    await historyStorage.save(puzzle: puzzle);
     final data = await storage.fetch(
       userId: userId,
       angle: angle,
