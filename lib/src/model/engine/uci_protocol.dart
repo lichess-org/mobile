@@ -105,16 +105,12 @@ class UCIProtocol {
         switch (parts[i]) {
           case 'depth':
             depth = int.parse(parts[++i]);
-            break;
           case 'nodes':
             nodes = int.parse(parts[++i]);
-            break;
           case 'multipv':
             multiPv = int.parse(parts[++i]);
-            break;
           case 'time':
             elapsedMs = int.parse(parts[++i]);
-            break;
           case 'score':
             isMate = parts[++i] == 'mate';
             povEv = int.parse(parts[++i]);
@@ -123,11 +119,9 @@ class UCIProtocol {
                     parts[i + 1] == 'upperbound')) {
               evalType = parts[++i];
             }
-            break;
           case 'pv':
             moves = parts.sublist(++i);
             i = parts.length;
-            break;
         }
       }
 

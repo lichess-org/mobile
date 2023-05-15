@@ -16,8 +16,6 @@ class MockAuthClient extends Mock implements AuthClient {}
 
 class MockLogger extends Mock implements Logger {}
 
-const gameIdTest = GameId('5IrD6Gzz');
-
 void main() {
   final mockLogger = MockLogger();
   final mockAuthClient = MockAuthClient();

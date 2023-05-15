@@ -80,7 +80,7 @@ void main() {
 
       container.listen<AsyncValue<void>>(
         authControllerProvider,
-        listener,
+        listener.call,
         fireImmediately: true,
       );
 
@@ -125,7 +125,7 @@ void main() {
 
       container.listen<AsyncValue<void>>(
         authControllerProvider,
-        listener,
+        listener.call,
         fireImmediately: true,
       );
 
