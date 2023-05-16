@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,7 +12,9 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storm.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import "package:lichess_mobile/src/utils/l10n_context.dart";
@@ -19,6 +22,9 @@ import "package:lichess_mobile/src/utils/l10n_context.dart";
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
+
+// TODO: bottom bar  with end and abort run
+// TODO: Doalog with puzzle end result
 
 class PuzzleStormScreen extends StatelessWidget {
   const PuzzleStormScreen({super.key});
@@ -115,16 +121,16 @@ class _Body extends ConsumerWidget {
                   validMoves: puzzleState.validMoves,
                 ),
                 topTable: _TopBar(
-                  pov: puzzleState.pov,
-                  clock: puzzleState.clock,
+                  pov: ref.read(stormCtrlProvier.select((state) => state.pov)),
+                  clock:
+                      ref.read(stormCtrlProvier.select((state) => state.clock)),
                 ),
-                bottomTable: _BottomBar(
-                  stormCtrlProvier,
-                ),
+                bottomTable: _Combo(stormCtrlProvier),
               ),
             ),
           ),
         ),
+        _BottomBar(stormCtrlProvier),
       ],
     );
 
@@ -153,7 +159,7 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _TopBar extends StatelessWidget {
+class _TopBar extends ConsumerWidget {
   const _TopBar({
     required this.pov,
     required this.clock,
@@ -163,7 +169,7 @@ class _TopBar extends StatelessWidget {
   final StormClock clock;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final defaultFontSize = DefaultTextStyle.of(context).style.fontSize;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -186,8 +192,7 @@ class _TopBar extends StatelessWidget {
           StreamBuilder<(Duration, int?)>(
             stream: clock.timeStream,
             builder: (context, snapshot) {
-              final (time, bonus) =
-                  snapshot.data ?? const (Duration(minutes: 3), null);
+              final (time, _) = snapshot.data ?? (clock.timeLeft, null);
               final minutes =
                   time.inMinutes.remainder(60).toString().padLeft(2, '0');
               final seconds =
@@ -208,8 +213,8 @@ class _TopBar extends StatelessWidget {
   }
 }
 
-class _BottomBar extends ConsumerWidget {
-  const _BottomBar(this.ctrl);
+class _Combo extends ConsumerWidget {
+  const _Combo(this.ctrl);
 
   final StormCtrlProvider ctrl;
 
@@ -287,6 +292,51 @@ class _BottomBar extends ConsumerWidget {
                   )
                 ],
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BottomBar extends ConsumerWidget {
+  const _BottomBar(this.ctrl);
+
+  final StormCtrlProvider ctrl;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final puzzleState = ref.watch(ctrl);
+    return Container(
+      padding: Styles.horizontalBodyPadding,
+      color: defaultTargetPlatform == TargetPlatform.iOS
+          ? CupertinoTheme.of(context).barBackgroundColor
+          : Theme.of(context).bottomAppBarTheme.color,
+      child: SafeArea(
+        top: false,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            BottomBarButton(
+              icon: LichessIcons.cancel,
+              label: context.l10n.stormNewRun,
+              shortLabel: 'New Run',
+              highlighted: puzzleState.clock.startAt != null,
+              showAndroidShortLabel: true,
+              onTap: () => ref.invalidate(stormProvider),
+            ),
+            BottomBarButton(
+              icon: LichessIcons.flag,
+              label: context.l10n.stormEndRun,
+              highlighted: puzzleState.clock.startAt != null,
+              shortLabel: 'End Run',
+              showAndroidShortLabel: true,
+              onTap: () {
+                if (puzzleState.clock.startAt != null) {
+                  ref.read(ctrl.notifier).end();
+                }
+              },
             ),
           ],
         ),

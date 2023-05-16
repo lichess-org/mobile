@@ -13,6 +13,14 @@ import 'puzzle.dart';
 part 'puzzle_storm.g.dart';
 part 'puzzle_storm.freezed.dart';
 
+const malus = Duration(seconds: 10);
+const moveDelay = Duration(milliseconds: 200);
+const startTime = Duration(minutes: 1);
+
+// TODO: fix end condition
+// TODO: add time to history
+// TODO: Play again state
+
 @riverpod
 class StormCtrl extends _$StormCtrl {
   int _currentPuzzleIndex = 0;
@@ -21,8 +29,6 @@ class StormCtrl extends _$StormCtrl {
   final _history = <(LitePuzzle, bool)>[];
   Timer? _firstMoveTimer;
 
-  static const malus = Duration(seconds: 10);
-  static const moveDelay = Duration(milliseconds: 200);
   @override
   StormCtrlState build(IList<LitePuzzle> puzzles) {
     ref.onDispose(() {
@@ -43,11 +49,14 @@ class StormCtrl extends _$StormCtrl {
     _currentPuzzleIndex += 1;
     _firstMoveTimer =
         Timer(const Duration(seconds: 1), () => _addMove(state.expectedMove!));
+    newState.clock.timeStream.listen((event) {
+      if (event.$1.inSeconds == 0) end();
+    });
     return newState;
   }
 
   Future<void> onUserMove(Move move) async {
-    if (state.clock.endAt == null) return;
+    if (state.clock.endAt != null) return;
     state.clock.start();
     final expected = state.expectedMove;
     final pos = state.position;
@@ -97,7 +106,9 @@ class StormCtrl extends _$StormCtrl {
 
   void end() {
     state.clock.reset();
-    state = state.copyWith(stats: _getStats());
+    final stats = _getStats();
+    print(stats);
+    state = state.copyWith(stats: stats);
   }
 
   void endNow() {
@@ -234,7 +245,7 @@ class StormClock {
   Timer? _timer;
   final StreamController<(Duration, int?)> _timeStreamController =
       StreamController<(Duration, int?)>.broadcast();
-  Duration _currentDuration = const Duration(minutes: 3);
+  Duration _currentDuration = startTime;
   DateTime? startAt;
   Duration? endAt;
   bool isActive = false;
@@ -275,7 +286,7 @@ class StormClock {
   void reset() {
     if (isActive) {
       _timer?.cancel();
-      _currentDuration = const Duration(minutes: 3);
+      _currentDuration = startTime;
       _timeStreamController.add((_currentDuration, null));
       endAt = DateTime.now().difference(startAt!);
       isActive = false;
