@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import "package:lichess_mobile/src/utils/l10n_context.dart";
+import 'package:lichess_mobile/src/widgets/list.dart';
 
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
@@ -91,11 +92,20 @@ class _Load extends ConsumerWidget {
 class _Body extends ConsumerWidget {
   const _Body({required this.data});
   final PuzzleStormResponse data;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final stormCtrlProvier = StormCtrlProvider(data.puzzles);
     final puzzleState = ref.watch(stormCtrlProvier);
+
+    puzzleState.clock.timeStream.listen((e) async {
+      if (e.$1.inSeconds == 0 && puzzleState.clock.endAt == null) {
+        ref.read(stormCtrlProvier.notifier).end();
+        showDialog<void>(
+          context: context,
+          builder: (context) => _RunStats(ref.watch(stormCtrlProvier).stats!),
+        );
+      }
+    });
     final content = Column(
       children: [
         Expanded(
@@ -339,6 +349,108 @@ class _BottomBar extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _RunStats extends StatelessWidget {
+  const _RunStats(this.stats);
+  final StormRunStats stats;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListSection(
+              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              header: const Text('Run Result'),
+              headerTrailing: IconButton(
+                padding: EdgeInsets.zero,
+                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(Icons.close),
+              ),
+              children: [
+                RowData(
+                  '${stats.history.length} Puzzles Solved',
+                  null,
+                ),
+                RowData('Moves:', stats.moves.toString()),
+                RowData(
+                  'Accuracy:',
+                  (stats.errors ~/ stats.moves).toString(),
+                ),
+                RowData('Combo:', stats.comboBest.toString()),
+                RowData('Time:', stats.time.inSeconds.toString()),
+                RowData('Highest Solved:', stats.highest.toString()),
+              ],
+            ),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () {
+                // Handle 'Play Again' button tap
+              },
+              child: const Text('Play Again'),
+            ),
+            const SizedBox(height: 16.0),
+            ListView(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                ListTile(title: Text('Item 1')),
+                ListTile(title: Text('Item 2')),
+                ListTile(title: Text('Item 3')),
+                ListTile(title: Text('Item 4')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+                ListTile(title: Text('Item 5')),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class RowData extends StatelessWidget {
+  final String label;
+  final String? value;
+
+  const RowData(this.label, this.value);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label),
+          if (value != null) Text(value!),
+        ],
       ),
     );
   }

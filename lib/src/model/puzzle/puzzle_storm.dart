@@ -17,16 +17,15 @@ const malus = Duration(seconds: 10);
 const moveDelay = Duration(milliseconds: 200);
 const startTime = Duration(minutes: 1);
 
-// TODO: fix end condition
-// TODO: add time to history
 // TODO: Play again state
+// TODO: Send Storm Result
 
 @riverpod
 class StormCtrl extends _$StormCtrl {
   int _currentPuzzleIndex = 0;
   int _moves = 0;
   int _errors = 0;
-  final _history = <(LitePuzzle, bool)>[];
+  final _history = <(LitePuzzle, bool, Duration)>[];
   Timer? _firstMoveTimer;
 
   @override
@@ -45,13 +44,11 @@ class StormCtrl extends _$StormCtrl {
       clock: StormClock(),
       combo: StormCombo(),
       stats: null,
+      lastSolvedTime: null,
     );
     _currentPuzzleIndex += 1;
     _firstMoveTimer =
         Timer(const Duration(seconds: 1), () => _addMove(state.expectedMove!));
-    newState.clock.timeStream.listen((event) {
-      if (event.$1.inSeconds == 0) end();
-    });
     return newState;
   }
 
@@ -92,10 +89,10 @@ class StormCtrl extends _$StormCtrl {
       _addMove(state.expectedMove!);
     } else {
       _errors += 1;
-      state.combo.reset();
       state.clock.subtractTime(malus);
+      state.combo.reset();
       if (state.clock.flag() || !_nextPuzzle()) {
-        end();
+        state.clock.timeStreamController.add((Duration.zero, null));
         return;
       }
       _pushToHistory(false);
@@ -107,7 +104,6 @@ class StormCtrl extends _$StormCtrl {
   void end() {
     state.clock.reset();
     final stats = _getStats();
-    print(stats);
     state = state.copyWith(stats: stats);
   }
 
@@ -150,7 +146,10 @@ class StormCtrl extends _$StormCtrl {
   }
 
   void _pushToHistory(bool result) {
-    _history.add((state.puzzle, result));
+    final timeTaken = state.lastSolvedTime != null
+        ? DateTime.now().difference(state.lastSolvedTime!)
+        : DateTime.now().difference(state.clock.startAt!);
+    _history.add((state.puzzle, result, timeTaken));
   }
 
   bool _nextPuzzle() {
@@ -170,6 +169,7 @@ class StormCtrlState with _$StormCtrlState {
     required StormClock clock,
     required StormCombo combo,
     required StormRunStats? stats,
+    required DateTime? lastSolvedTime,
   }) = _StormCtrlState;
 
   Move? get expectedMove => Move.fromUci(puzzle.solution[moveIndex + 1]);
@@ -191,7 +191,7 @@ class StormRunStats with _$StormRunStats {
     required int comboBest,
     required Duration time,
     required int highest,
-    required List<(LitePuzzle, bool)> history,
+    required List<(LitePuzzle, bool, Duration)> history,
   }) = _StormRunStats;
 }
 
@@ -243,18 +243,18 @@ class StormCombo {
 
 class StormClock {
   Timer? _timer;
-  final StreamController<(Duration, int?)> _timeStreamController =
+  final StreamController<(Duration, int?)> timeStreamController =
       StreamController<(Duration, int?)>.broadcast();
   Duration _currentDuration = startTime;
   DateTime? startAt;
   Duration? endAt;
   bool isActive = false;
 
-  Stream<(Duration, int?)> get timeStream => _timeStreamController.stream;
+  Stream<(Duration, int?)> get timeStream => timeStreamController.stream;
 
   void addTime(Duration duration) {
     _currentDuration += duration;
-    _timeStreamController.add((_currentDuration, duration.inSeconds));
+    timeStreamController.add((_currentDuration, duration.inSeconds));
   }
 
   void subtractTime(Duration duration) {
@@ -262,7 +262,7 @@ class StormClock {
     if (_currentDuration.isNegative) {
       _currentDuration = Duration.zero;
     }
-    _timeStreamController.add((_currentDuration, -duration.inSeconds));
+    timeStreamController.add((_currentDuration, -duration.inSeconds));
   }
 
   void start() {
@@ -273,7 +273,7 @@ class StormClock {
       _timer = Timer.periodic(const Duration(seconds: 1), (_) {
         if (_currentDuration.inSeconds > 0) {
           _currentDuration -= const Duration(seconds: 1);
-          _timeStreamController.add((_currentDuration, null));
+          timeStreamController.add((_currentDuration, null));
         } else {
           reset();
         }
@@ -287,7 +287,7 @@ class StormClock {
     if (isActive) {
       _timer?.cancel();
       _currentDuration = startTime;
-      _timeStreamController.add((_currentDuration, null));
+      timeStreamController.add((_currentDuration, null));
       endAt = DateTime.now().difference(startAt!);
       isActive = false;
       startAt = null;
@@ -299,6 +299,6 @@ class StormClock {
   void dispose() {
     isActive = false;
     _timer?.cancel();
-    _timeStreamController.close();
+    timeStreamController.close();
   }
 }
