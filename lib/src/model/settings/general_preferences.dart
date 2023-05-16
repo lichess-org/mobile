@@ -15,9 +15,16 @@ const _prefKey = 'preferences.general';
 class GeneralPreferences extends _$GeneralPreferences {
   @override
   GeneralPrefsState build() {
-    // TODO: Handle case that stored preferences does have new, added prefs
     final prefs = ref.watch(sharedPreferencesProvider);
-    final stored = prefs.getString(_prefKey);
+    String? stored = prefs.getString(_prefKey);
+
+    if (stored != null) {
+      final jsonResponse = jsonDecode(stored) as Map<String, dynamic>;
+      if (jsonResponse.containsKey("soundTheme") != true) {
+        jsonResponse['soundTheme'] = SoundTheme.normal.name;
+        stored = jsonEncode(jsonResponse);
+      }
+    }
     return stored != null
         ? GeneralPrefsState.fromJson(
             jsonDecode(stored) as Map<String, dynamic>,
