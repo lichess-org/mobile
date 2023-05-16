@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/sound.dart';
 
 import './theme_mode_screen.dart';
+import './sound_settings_screen.dart';
 import './piece_set_screen.dart';
 import './board_theme_screen.dart';
 import './board_settings_screen.dart';
@@ -106,9 +107,6 @@ class _Body extends ConsumerWidget {
                   }
                 },
               ),
-              /*****
-               * SOUND CODE
-               */
               SettingsListTile(
                 icon: const Icon(Icons.brightness_medium),
                 settingsLabel: context.l10n.sound,
@@ -127,14 +125,13 @@ class _Body extends ConsumerWidget {
                         ref
                             .read(soundServiceProvider)
                             .changeTheme(value ?? SoundTheme.normal);
-                        //ref.read(soundPoolProvider.notifier).
                       },
                     );
                   } else {
                     pushPlatformRoute(
                       context,
                       title: context.l10n.sound,
-                      builder: (context) => const ThemeModeScreen(),
+                      builder: (context) => const SoundSettingsScreen(),
                     );
                   }
                 },
