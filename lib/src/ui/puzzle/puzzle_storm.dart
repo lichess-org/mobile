@@ -23,8 +23,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 
-// TODO: bottom bar  with end and abort run
-// TODO: Doalog with puzzle end result
+// TODO: Dialog with puzzle end result
 
 class PuzzleStormScreen extends StatelessWidget {
   const PuzzleStormScreen({super.key});
@@ -222,11 +221,10 @@ class _Combo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzleState = ref.watch(ctrl);
-    final lvl = puzzleState.combo.level();
+    final combo = ref.watch(ctrl.select((state) => state.combo));
+    final lvl = combo.level();
     return AnimatedContainer(
-      width: 50,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 1000),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
@@ -237,7 +235,7 @@ class _Combo extends ConsumerWidget {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: puzzleState.combo.current.toString(),
+                    text: combo.current.toString(),
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -258,9 +256,9 @@ class _Combo extends ConsumerWidget {
                     child: ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
                       child: LinearProgressIndicator(
-                        value: puzzleState.combo.percent() / 100,
-                        valueColor: const AlwaysStoppedAnimation<Color>(
-                          LichessColors.brag,
+                        value: combo.percent() / 100,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).indicatorColor,
                         ),
                       ),
                     ),
@@ -275,14 +273,15 @@ class _Combo extends ConsumerWidget {
                         style: TextStyle(
                           shadows: isCurrentLevel
                               ? [
-                                  const Shadow(
-                                    color: LichessColors.brag,
+                                  Shadow(
+                                    color: Theme.of(context).indicatorColor,
                                     blurRadius: 10.0,
                                   )
                                 ]
                               : null,
-                          color:
-                              isCurrentLevel ? LichessColors.brag : Colors.grey,
+                          color: isCurrentLevel
+                              ? Theme.of(context).indicatorColor
+                              : Colors.grey,
                           fontWeight: isCurrentLevel
                               ? FontWeight.bold
                               : FontWeight.normal,
