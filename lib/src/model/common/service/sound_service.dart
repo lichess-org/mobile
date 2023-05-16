@@ -35,8 +35,7 @@ Future<(Soundpool, SoundMap)> soundPool(SoundPoolRef ref) async {
   );
 
   ref.onDispose(pool.release);
-  final sounds =
-      await loadSounds(pool, SoundTheme.nes); // TODO: Get it from prefs
+  final sounds = await loadSounds(pool, SoundTheme.normal);
 
   return (pool, sounds);
 }
