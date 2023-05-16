@@ -32,17 +32,6 @@ class SoundSettingsScreen extends StatelessWidget {
       child: _Body(),
     );
   }
-
-  static String themeTitle(BuildContext context, ThemeMode theme) {
-    switch (theme) {
-      case ThemeMode.system:
-        return context.l10n.deviceTheme;
-      case ThemeMode.dark:
-        return context.l10n.dark;
-      case ThemeMode.light:
-        return context.l10n.light;
-    }
-  }
 }
 
 class _Body extends ConsumerWidget {
@@ -58,7 +47,10 @@ class _Body extends ConsumerWidget {
       ref
           .read(generalPreferencesProvider.notifier)
           .setSoundTheme(value ?? SoundTheme.normal);
-      ref.read(soundServiceProvider).changeTheme(value ?? SoundTheme.normal);
+      ref.read(soundServiceProvider).changeTheme(
+            value ?? SoundTheme.normal,
+            playSound: true,
+          );
     }
 
     return SafeArea(

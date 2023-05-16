@@ -5,6 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/sound.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 
 part 'general_preferences.freezed.dart';
 part 'general_preferences.g.dart';
@@ -25,7 +26,8 @@ class GeneralPreferences extends _$GeneralPreferences {
         stored = jsonEncode(jsonResponse);
       }
     }
-    return stored != null
+
+    final generalPrefState = stored != null
         ? GeneralPrefsState.fromJson(
             jsonDecode(stored) as Map<String, dynamic>,
           )
@@ -34,6 +36,10 @@ class GeneralPreferences extends _$GeneralPreferences {
             isSoundEnabled: true,
             soundTheme: SoundTheme.normal,
           );
+
+    ref.read(soundServiceProvider).changeTheme(generalPrefState.soundTheme);
+
+    return generalPrefState;
   }
 
   Future<void> setThemeMode(ThemeMode themeMode) {

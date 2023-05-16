@@ -122,9 +122,10 @@ class _Body extends ConsumerWidget {
                         ref
                             .read(generalPreferencesProvider.notifier)
                             .setSoundTheme(value ?? SoundTheme.normal);
-                        ref
-                            .read(soundServiceProvider)
-                            .changeTheme(value ?? SoundTheme.normal);
+                        ref.read(soundServiceProvider).changeTheme(
+                              value ?? SoundTheme.normal,
+                              playSound: true,
+                            );
                       },
                     );
                   } else {

@@ -69,8 +69,10 @@ class SoundService {
     if (soundId != null && isEnabled) _pool.play(soundId);
   }
 
-  Future<void> changeTheme(SoundTheme theme) async {
+  Future<void> changeTheme(SoundTheme theme, {bool playSound = false}) async {
     _sounds = await loadSounds(_pool, theme);
-    playMove();
+    if (playSound) {
+      playMove();
+    }
   }
 }
