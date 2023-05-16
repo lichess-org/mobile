@@ -145,6 +145,7 @@ class PuzzlePreview with _$PuzzlePreview {
 
 @Freezed(fromJson: true)
 class LitePuzzle with _$LitePuzzle {
+  const LitePuzzle._();
   const factory LitePuzzle({
     required PuzzleId id,
     required String fen,
@@ -154,6 +155,12 @@ class LitePuzzle with _$LitePuzzle {
 
   factory LitePuzzle.fromJson(Map<String, dynamic> json) =>
       _$LitePuzzleFromJson(json);
+
+  (Side, String) preview() {
+    final pos1 = Chess.fromSetup(Setup.parseFen(fen));
+    final pos = pos1.play(Move.fromUci(solution[0])!);
+    return (pos.turn, pos.fen);
+  }
 }
 
 @freezed

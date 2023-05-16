@@ -7,6 +7,7 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storm.dart';
@@ -14,6 +15,7 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
+import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -354,12 +356,12 @@ class _BottomBar extends ConsumerWidget {
   }
 }
 
-class _RunStats extends StatelessWidget {
+class _RunStats extends ConsumerWidget {
   const _RunStats(this.stats);
   final StormRunStats stats;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -369,7 +371,7 @@ class _RunStats extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListSection(
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               header: const Text('Run Result'),
               headerTrailing: IconButton(
                 padding: EdgeInsets.zero,
@@ -377,56 +379,37 @@ class _RunStats extends StatelessWidget {
                 icon: const Icon(Icons.close),
               ),
               children: [
-                RowData(
+                _RowData(
                   '${stats.history.length} Puzzles Solved',
                   null,
                 ),
-                RowData('Moves:', stats.moves.toString()),
-                RowData(
+                _RowData('Moves:', stats.moves.toString()),
+                _RowData(
                   'Accuracy:',
-                  (stats.errors ~/ stats.moves).toString(),
+                  '${(((stats.moves - stats.errors) / stats.moves) * 100).toStringAsFixed(2)}%',
                 ),
-                RowData('Combo:', stats.comboBest.toString()),
-                RowData('Time:', stats.time.inSeconds.toString()),
-                RowData('Highest Solved:', stats.highest.toString()),
+                _RowData('Combo:', stats.comboBest.toString()),
+                _RowData('Time:', '${stats.time.inSeconds}s'),
+                _RowData('Highest Solved:', stats.highest.toString()),
               ],
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () {
-                // Handle 'Play Again' button tap
-              },
-              child: const Text('Play Again'),
+              onPressed: () => ref.invalidate(stormProvider),
+              child: Text(context.l10n.stormPlayAgain),
             ),
             const SizedBox(height: 16.0),
+            Text(
+              context.l10n.stormPuzzlesPlayed,
+              style: Styles.sectionTitle,
+            ),
             ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              children: [
-                ListTile(title: Text('Item 1')),
-                ListTile(title: Text('Item 2')),
-                ListTile(title: Text('Item 3')),
-                ListTile(title: Text('Item 4')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-                ListTile(title: Text('Item 5')),
-              ],
+              children: stats.history
+                  .map((e) => _ResultBoard(e.$1, e.$2, e.$3))
+                  .toList(),
             ),
           ],
         ),
@@ -435,11 +418,11 @@ class _RunStats extends StatelessWidget {
   }
 }
 
-class RowData extends StatelessWidget {
+class _RowData extends StatelessWidget {
   final String label;
   final String? value;
 
-  const RowData(this.label, this.value);
+  const _RowData(this.label, this.value);
 
   @override
   Widget build(BuildContext context) {
@@ -452,6 +435,28 @@ class RowData extends StatelessWidget {
           if (value != null) Text(value!),
         ],
       ),
+    );
+  }
+}
+
+class _ResultBoard extends StatelessWidget {
+  const _ResultBoard(this.puzzle, this.win, this.time);
+  final LitePuzzle puzzle;
+  final bool win;
+  final Duration time;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constrains) {
+        final boardWidth = constrains.maxWidth / 2;
+        final (side, fen) = puzzle.preview();
+        return SizedBox(
+          width: boardWidth,
+          height: boardWidth,
+          child: BoardPreview(orientation: side.cg, fen: fen),
+        );
+      },
     );
   }
 }
