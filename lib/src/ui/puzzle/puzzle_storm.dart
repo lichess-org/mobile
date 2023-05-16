@@ -186,7 +186,7 @@ class _TopBar extends StatelessWidget {
           StreamBuilder<(Duration, int?)>(
             stream: clock.timeStream,
             builder: (context, snapshot) {
-              final (time, _) =
+              final (time, bonus) =
                   snapshot.data ?? const (Duration(minutes: 3), null);
               final minutes =
                   time.inMinutes.remainder(60).toString().padLeft(2, '0');
@@ -249,11 +249,15 @@ class _BottomBar extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(
-                    height: 30,
-                    child: LinearProgressIndicator(
-                      value: puzzleState.combo.percent() / 100,
-                      valueColor:
-                          const AlwaysStoppedAnimation<Color>(Colors.blue),
+                    height: 25,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      child: LinearProgressIndicator(
+                        value: puzzleState.combo.percent() / 100,
+                        valueColor: const AlwaysStoppedAnimation<Color>(
+                          LichessColors.brag,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -264,7 +268,16 @@ class _BottomBar extends ConsumerWidget {
                       return Text(
                         '${level}s',
                         style: TextStyle(
-                          color: isCurrentLevel ? Colors.blue : Colors.grey,
+                          shadows: isCurrentLevel
+                              ? [
+                                  const Shadow(
+                                    color: LichessColors.brag,
+                                    blurRadius: 10.0,
+                                  )
+                                ]
+                              : null,
+                          color:
+                              isCurrentLevel ? LichessColors.brag : Colors.grey,
                           fontWeight: isCurrentLevel
                               ? FontWeight.bold
                               : FontWeight.normal,

@@ -18,16 +18,15 @@ class StormCtrl extends _$StormCtrl {
   int _currentPuzzleIndex = 0;
   int _moves = 0;
   int _errors = 0;
-  final List<(LitePuzzle, bool)> _history = [];
+  final _history = <(LitePuzzle, bool)>[];
   Timer? _firstMoveTimer;
 
   static const malus = Duration(seconds: 10);
-  static const moveDelay = Duration(milliseconds: 500);
+  static const moveDelay = Duration(milliseconds: 200);
   @override
   StormCtrlState build(IList<LitePuzzle> puzzles) {
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
-      state.clock.reset();
       state.clock.dispose();
     });
     final pov = Chess.fromSetup(Setup.parseFen(puzzles[0].fen));
@@ -48,10 +47,11 @@ class StormCtrl extends _$StormCtrl {
   }
 
   Future<void> onUserMove(Move move) async {
+    if (state.clock.endAt == null) return;
     state.clock.start();
     final expected = state.expectedMove;
+    final pos = state.position;
     _addMove(move);
-    final soundService = ref.read(soundServiceProvider);
     _moves += 1;
     if (state.position.isGameOver || move == expected) {
       state.combo.inc();
@@ -65,14 +65,19 @@ class StormCtrl extends _$StormCtrl {
           end();
           return;
         }
-        await Future<void>.delayed(moveDelay);
-        soundService.play(Sound.confirmation);
+        ref.read(soundServiceProvider).play(Sound.confirmation);
         await _loadNextPuzzle();
         return;
       }
-      if (!_nextPuzzle()) {
-        end();
-        return;
+
+      if (pos.board.pieceAt(move.to) != null) {
+        ref
+            .read(moveFeedbackServiceProvider)
+            .captureFeedback(check: state.position.isCheck);
+      } else {
+        ref
+            .read(moveFeedbackServiceProvider)
+            .moveFeedback(check: state.position.isCheck);
       }
       await Future<void>.delayed(moveDelay);
       _addMove(state.expectedMove!);
@@ -80,13 +85,12 @@ class StormCtrl extends _$StormCtrl {
       _errors += 1;
       state.combo.reset();
       state.clock.subtractTime(malus);
-      if (!_nextPuzzle()) {
+      if (state.clock.flag() || !_nextPuzzle()) {
         end();
         return;
       }
       _pushToHistory(false);
-      await Future<void>.delayed(moveDelay);
-      soundService.play(Sound.error);
+      ref.read(soundServiceProvider).play(Sound.error);
       await _loadNextPuzzle();
     }
   }
@@ -113,15 +117,8 @@ class StormCtrl extends _$StormCtrl {
   }
 
   void _addMove(Move move) {
-    final (pos, san) = state.position.playToSan(move);
-    final isCheck = san.contains('+');
-    if (san.contains('x')) {
-      ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
-    } else {
-      ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
-    }
     state = state.copyWith(
-      position: pos,
+      position: state.position.play(move),
       moveIndex: state.moveIndex + 1,
     );
   }
