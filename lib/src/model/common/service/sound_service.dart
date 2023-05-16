@@ -71,5 +71,6 @@ class SoundService {
 
   Future<void> changeTheme(SoundTheme theme) async {
     _sounds = await loadSounds(_pool, theme);
+    playMove();
   }
 }

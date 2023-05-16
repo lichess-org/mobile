@@ -4,10 +4,7 @@ enum SoundTheme {
   nes('NES'),
   sfx('SFX'),
   futuristic('Futuristic'),
-  lisp('lisp');
-  //robot('Robot'),
-  //music('Pentatonic'),
-  //speech('Speech');
+  lisp('Lisp');
 
   final String label;
 
