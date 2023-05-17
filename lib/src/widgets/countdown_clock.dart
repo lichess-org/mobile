@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:vector_math/vector_math_64.dart' as vector;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
@@ -102,6 +103,113 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
               fontFeatures: const [
                 FontFeature.tabularFigures(),
               ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class StormClockWidget extends ConsumerStatefulWidget {
+  const StormClockWidget({
+    required this.minutes,
+    required this.seconds,
+    required this.time,
+    required this.bonus,
+    required this.isActive,
+  });
+
+  final String minutes;
+  final String seconds;
+  final Duration time;
+  final bool isActive;
+  final int? bonus;
+
+  @override
+  _ClockState createState() => _ClockState();
+}
+
+class _ClockState extends ConsumerState<StormClockWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  // ignore: avoid-late-keyword
+  late Animation<double> animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    )..addListener(() => setState(() {}));
+
+    animation = Tween<double>(begin: 0.0, end: 120.0).animate(_controller);
+  }
+
+  @override
+  void didUpdateWidget(covariant StormClockWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.bonus == null && widget.bonus != null && widget.bonus! < 0) {
+      _controller.forward(from: 0);
+    }
+  }
+
+  vector.Vector3 _shake() {
+    return vector.Vector3(
+      math.sin(_controller.value * math.pi * 5.0) * 10,
+      0.0,
+      0.0,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext build) {
+    final brightness = ref.watch(currentBrightnessProvider);
+    final clockStyle = brightness == Brightness.dark
+        ? ClockStyle.darkThemeStyle
+        : ClockStyle.lightThemeStyle;
+    final MediaQueryData mediaQueryData = MediaQuery.of(context);
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        color: widget.isActive
+            ? clockStyle.activeBackgroundColor
+            : clockStyle.backgroundColor,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
+        child: MediaQuery(
+          data: mediaQueryData.copyWith(
+            textScaleFactor: math.min(
+              mediaQueryData.textScaleFactor,
+              _kMaxClockTextScaleFactor,
+            ),
+          ),
+          child: ClipRect(
+            child: Transform(
+              transform: Matrix4.translation(_shake()),
+              child: Text(
+                '${widget.minutes}:${widget.seconds}',
+                style: TextStyle(
+                  color: widget.isActive
+                      ? (widget.bonus != null && widget.bonus! < 0)
+                          ? Colors.red
+                          : clockStyle.activeTextColor
+                      : clockStyle.textColor,
+                  fontSize: 30,
+                  fontFeatures: const [
+                    FontFeature.tabularFigures(),
+                  ],
+                ),
+              ),
             ),
           ),
         ),

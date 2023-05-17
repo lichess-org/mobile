@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,8 +26,6 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
-
-// TODO: Animatino for Clock when bonus happens
 
 class PuzzleStormScreen extends StatelessWidget {
   const PuzzleStormScreen({super.key});
@@ -185,7 +184,7 @@ class _TopBar extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         children: [
-          Flexible(
+          Expanded(
             child: DefaultTextStyle.merge(
               style: TextStyle(
                 fontSize:
@@ -201,7 +200,6 @@ class _TopBar extends ConsumerWidget {
               ),
             ),
           ),
-          const Spacer(),
           StreamBuilder<(Duration, int?)>(
             stream: clock.timeStream,
             builder: (context, snapshot) {
@@ -210,29 +208,16 @@ class _TopBar extends ConsumerWidget {
                   time.inMinutes.remainder(60).toString().padLeft(2, '0');
               final seconds =
                   time.inSeconds.remainder(60).toString().padLeft(2, '0');
-
-              return Text(
-                '$minutes:$seconds',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: time.inSeconds < 20 ? LichessColors.red : null,
-                ),
+              return StormClockWidget(
+                minutes: minutes,
+                seconds: seconds,
+                bonus: bonus,
+                time: time,
+                isActive: clock.isActive,
               );
             },
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildText(String minutes, String seconds, Duration time) {
-    return Text(
-      '$minutes:$seconds',
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 20,
-        color: time.inSeconds < 20 ? Colors.red : null,
       ),
     );
   }
@@ -250,7 +235,7 @@ class _Combo extends ConsumerStatefulWidget {
 class _ComboState extends ConsumerState<_Combo>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late StormCombo combo;
+  StormCombo combo = StormCombo();
 
   static const levels = [3, 5, 7, 10];
   @override
