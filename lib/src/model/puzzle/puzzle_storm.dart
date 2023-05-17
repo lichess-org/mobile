@@ -91,7 +91,7 @@ class StormCtrl extends _$StormCtrl {
       state.clock.subtractTime(malus);
       state.combo.reset();
       if (state.clock.flag() || !_nextPuzzle()) {
-        state.clock.timeStreamController.add((Duration.zero, null));
+        state.clock.sendEnd();
         return;
       }
       ref.read(soundServiceProvider).play(Sound.error);
@@ -102,12 +102,7 @@ class StormCtrl extends _$StormCtrl {
 
   void end() {
     state.clock.reset();
-    final stats = _getStats();
-    state = state.copyWith(stats: stats);
-  }
-
-  void endNow() {
-    state.clock.reset();
+    state = state.copyWith(stats: _getStats());
   }
 
   Future<void> _loadNextPuzzle() async {
@@ -131,16 +126,18 @@ class StormCtrl extends _$StormCtrl {
   }
 
   StormRunStats _getStats() {
-    final wins = _history.where((e) => e.$2 == true);
+    final wins = _history.where((e) => e.$2 == true).toList();
     return StormRunStats(
       moves: _moves,
       errors: _errors,
       score: wins.length,
       comboBest: state.combo.best,
       time: state.clock.endAt!,
-      highest: wins.map((e) => e.$1.rating).reduce(
-            (maxRating, rating) => rating > maxRating ? rating : maxRating,
-          ),
+      highest: wins.isNotEmpty
+          ? wins.map((e) => e.$1.rating).reduce(
+                (maxRating, rating) => rating > maxRating ? rating : maxRating,
+              )
+          : 0,
       history: _history,
     );
   }
@@ -280,6 +277,8 @@ class StormClock {
       });
     }
   }
+
+  void sendEnd() => timeStreamController.add((Duration.zero, null));
 
   bool flag() => _currentDuration.inSeconds == 0;
 

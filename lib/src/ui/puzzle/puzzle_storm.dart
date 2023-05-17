@@ -101,7 +101,7 @@ class _Body extends ConsumerWidget {
     final puzzleState = ref.watch(stormCtrlProvier);
 
     puzzleState.clock.timeStream.listen((e) async {
-      if (e.$1.inSeconds == 0 && puzzleState.clock.endAt == null) {
+      if (e.$1 == Duration.zero && puzzleState.clock.endAt == null) {
         ref.read(stormCtrlProvier.notifier).end();
         showDialog<void>(
           context: context,
@@ -159,7 +159,6 @@ class _Body extends ConsumerWidget {
                     'Do you want to end this run?',
                   ),
                   onYes: () {
-                    ref.read(stormCtrlProvier.notifier).endNow();
                     return Navigator.of(context).pop(true);
                   },
                   onNo: () => Navigator.of(context).pop(false),
@@ -360,7 +359,7 @@ class _BottomBar extends ConsumerWidget {
               showAndroidShortLabel: true,
               onTap: () {
                 if (puzzleState.clock.startAt != null) {
-                  ref.read(ctrl.notifier).end();
+                  puzzleState.clock.sendEnd();
                 }
               },
             ),
