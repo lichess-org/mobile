@@ -100,7 +100,7 @@ class _Body extends ConsumerWidget {
     final stormCtrlProvier = StormCtrlProvider(data.puzzles);
     final puzzleState = ref.watch(stormCtrlProvier);
 
-    puzzleState.clock.timeStream.listen((e) async {
+    puzzleState.clock.timeStream.listen((e) {
       if (e.$1 == Duration.zero && puzzleState.clock.endAt == null) {
         ref.read(stormCtrlProvier.notifier).end();
         showDialog<void>(
@@ -381,8 +381,8 @@ class _RunStats extends StatelessWidget {
             child: CupertinoPageScaffold(child: _DialogBody(stats)),
           )
         : Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
             child: Scaffold(body: _DialogBody(stats)),
           );

@@ -212,19 +212,19 @@ class StormCombo {
   void reset() => current = 0;
 
   int level() {
-    final lvl = levels.indexWhere((element) => element[0] > current);
+    final lvl = levels.indexWhere((element) => element.first > current);
     return lvl >= 0 ? lvl - 1 : levels.length - 1;
   }
 
   double percent() {
     final lvl = level();
-    final lastLevel = levels[levels.length - 1];
+    final lastLevel = levels.last;
     if (lvl >= levels.length - 1) {
-      final range = lastLevel[0] - levels[levels.length - 2][0];
-      return (((current - lastLevel[0]) / range) * 100) % 100;
+      final range = lastLevel.first - levels[levels.length - 2].first;
+      return (((current - lastLevel.first) / range) * 100) % 100;
     }
-    final bounds = [levels[lvl][0], levels[lvl + 1][0]];
-    return ((current - bounds[0]) / (bounds[1] - bounds[0])) * 100;
+    final bounds = [levels[lvl].first, levels[lvl + 1].first];
+    return ((current - bounds.first) / (bounds[1] - bounds.first)) * 100;
   }
 
   Duration? bonus() {
