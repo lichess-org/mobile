@@ -26,7 +26,6 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 
-// TODO: Animation for Progress bar
 // TODO: Animatino for Clock when bonus happens
 
 class PuzzleStormScreen extends StatelessWidget {
@@ -186,28 +185,32 @@ class _TopBar extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         children: [
-          const Icon(LichessIcons.chess_king, size: 36, color: Colors.grey),
-          const SizedBox(width: 18),
-          DefaultTextStyle.merge(
-            style: TextStyle(
-              fontSize: defaultFontSize != null ? defaultFontSize * 1.2 : null,
-              fontWeight: FontWeight.bold,
-            ),
-            child: Text(
-              pov == Side.white
-                  ? context.l10n.puzzleFindTheBestMoveForWhite
-                  : context.l10n.puzzleFindTheBestMoveForBlack,
+          Flexible(
+            child: DefaultTextStyle.merge(
+              style: TextStyle(
+                fontSize:
+                    defaultFontSize != null ? defaultFontSize * 1.2 : null,
+                fontWeight: FontWeight.bold,
+              ),
+              child: Text(
+                maxLines: 2,
+                pov == Side.white
+                    ? context.l10n.stormYouPlayTheWhitePiecesInAllPuzzles
+                    : context.l10n.stormYouPlayTheBlackPiecesInAllPuzzles,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
           const Spacer(),
           StreamBuilder<(Duration, int?)>(
             stream: clock.timeStream,
             builder: (context, snapshot) {
-              final (time, _) = snapshot.data ?? (clock.timeLeft, null);
+              final (time, bonus) = snapshot.data ?? (clock.timeLeft, null);
               final minutes =
                   time.inMinutes.remainder(60).toString().padLeft(2, '0');
               final seconds =
                   time.inSeconds.remainder(60).toString().padLeft(2, '0');
+
               return Text(
                 '$minutes:$seconds',
                 style: TextStyle(
@@ -222,25 +225,66 @@ class _TopBar extends ConsumerWidget {
       ),
     );
   }
+
+  Widget _buildText(String minutes, String seconds, Duration time) {
+    return Text(
+      '$minutes:$seconds',
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 20,
+        color: time.inSeconds < 20 ? Colors.red : null,
+      ),
+    );
+  }
 }
 
-class _Combo extends ConsumerWidget {
+class _Combo extends ConsumerStatefulWidget {
   const _Combo(this.ctrl);
 
   final StormCtrlProvider ctrl;
 
+  @override
+  ConsumerState<_Combo> createState() => _ComboState();
+}
+
+class _ComboState extends ConsumerState<_Combo>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late StormCombo combo;
+
   static const levels = [3, 5, 7, 10];
+  @override
+  void initState() {
+    super.initState();
+    combo = ref.read(widget.ctrl.select((value) => value.combo));
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+      value: combo.percent() / 100,
+    );
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final combo = ref.watch(ctrl.select((state) => state.combo));
+  void didUpdateWidget(covariant _Combo oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _controller.animateTo(combo.percent() / 100, curve: Curves.easeInOut);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final lvl = combo.level();
     final indicatorColor = defaultTargetPlatform == TargetPlatform.iOS
         ? CupertinoTheme.of(context).primaryColor
         : Theme.of(context).indicatorColor;
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 1000),
-      child: Padding(
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) => Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -285,7 +329,7 @@ class _Combo extends ConsumerWidget {
                             defaultTargetPlatform == TargetPlatform.iOS
                                 ? CupertinoTheme.of(context).barBackgroundColor
                                 : null,
-                        value: combo.percent() / 100,
+                        value: _controller.value,
                         valueColor:
                             AlwaysStoppedAnimation<Color>(indicatorColor),
                       ),

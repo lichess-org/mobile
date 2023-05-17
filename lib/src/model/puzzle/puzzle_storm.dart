@@ -21,7 +21,7 @@ const startTime = Duration(minutes: 1);
 
 @riverpod
 class StormCtrl extends _$StormCtrl {
-  int _currentPuzzleIndex = 0;
+  int _nextPuzzleIndex = 0;
   int _moves = 0;
   int _errors = 0;
   final _history = <(LitePuzzle, bool, Duration)>[];
@@ -35,7 +35,7 @@ class StormCtrl extends _$StormCtrl {
     });
     final pov = Chess.fromSetup(Setup.parseFen(puzzles[0].fen));
     final newState = StormCtrlState(
-      puzzle: puzzles[_currentPuzzleIndex],
+      puzzle: puzzles[_nextPuzzleIndex],
       position: pov,
       pov: pov.turn.opposite,
       moveIndex: -1,
@@ -45,7 +45,7 @@ class StormCtrl extends _$StormCtrl {
       stats: null,
       lastSolvedTime: null,
     );
-    _currentPuzzleIndex += 1;
+    _nextPuzzleIndex += 1;
     _firstMoveTimer =
         Timer(const Duration(seconds: 1), () => _addMove(state.expectedMove!));
     return newState;
@@ -107,13 +107,12 @@ class StormCtrl extends _$StormCtrl {
 
   Future<void> _loadNextPuzzle() async {
     state = state.copyWith(
-      puzzle: puzzles[_currentPuzzleIndex],
-      position:
-          Chess.fromSetup(Setup.parseFen(puzzles[_currentPuzzleIndex].fen)),
+      puzzle: puzzles[_nextPuzzleIndex],
+      position: Chess.fromSetup(Setup.parseFen(puzzles[_nextPuzzleIndex].fen)),
       moveIndex: -1,
       lastSolvedTime: DateTime.now(),
     );
-    _currentPuzzleIndex += 1;
+    _nextPuzzleIndex += 1;
     await Future<void>.delayed(moveDelay);
     _addMove(state.expectedMove!);
   }
@@ -150,7 +149,7 @@ class StormCtrl extends _$StormCtrl {
   }
 
   bool _nextPuzzle() {
-    return _currentPuzzleIndex < puzzles.length;
+    return _nextPuzzleIndex < puzzles.length;
   }
 }
 
