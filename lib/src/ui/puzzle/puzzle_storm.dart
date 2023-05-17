@@ -264,7 +264,7 @@ class _Combo extends ConsumerWidget {
                     style: TextStyle(
                       color: defaultTargetPlatform == TargetPlatform.iOS
                           ? CupertinoTheme.of(context).textTheme.textStyle.color
-                          : null,
+                          : Theme.of(context).textTheme.bodySmall?.color,
                     ),
                   )
                 ],
@@ -284,7 +284,7 @@ class _Combo extends ConsumerWidget {
                         backgroundColor:
                             defaultTargetPlatform == TargetPlatform.iOS
                                 ? CupertinoTheme.of(context).barBackgroundColor
-                                : Theme.of(context).dialogBackgroundColor,
+                                : null,
                         value: combo.percent() / 100,
                         valueColor:
                             AlwaysStoppedAnimation<Color>(indicatorColor),

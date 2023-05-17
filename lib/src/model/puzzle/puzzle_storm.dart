@@ -87,6 +87,7 @@ class StormCtrl extends _$StormCtrl {
       await Future<void>.delayed(moveDelay);
       _addMove(state.expectedMove!);
     } else {
+      ref.read(soundServiceProvider).play(Sound.error);
       _errors += 1;
       state.clock.subtractTime(malus);
       state.combo.reset();
@@ -94,7 +95,6 @@ class StormCtrl extends _$StormCtrl {
         state.clock.sendEnd();
         return;
       }
-      ref.read(soundServiceProvider).play(Sound.error);
       _pushToHistory(false);
       await _loadNextPuzzle();
     }
