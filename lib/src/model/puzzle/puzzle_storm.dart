@@ -17,7 +17,6 @@ const malus = Duration(seconds: 10);
 const moveDelay = Duration(milliseconds: 200);
 const startTime = Duration(minutes: 1);
 
-// TODO: Play again state
 // TODO: Send Storm Result
 
 @riverpod
@@ -66,12 +65,12 @@ class StormCtrl extends _$StormCtrl {
         state.clock.addTime(bonus);
       }
       if (state.position.isGameOver || state.isOver) {
-        _pushToHistory(true);
         if (!_nextPuzzle()) {
           end();
           return;
         }
         ref.read(soundServiceProvider).play(Sound.confirmation);
+        _pushToHistory(true);
         await _loadNextPuzzle();
         return;
       }
@@ -95,8 +94,8 @@ class StormCtrl extends _$StormCtrl {
         state.clock.timeStreamController.add((Duration.zero, null));
         return;
       }
-      _pushToHistory(false);
       ref.read(soundServiceProvider).play(Sound.error);
+      _pushToHistory(false);
       await _loadNextPuzzle();
     }
   }
@@ -117,6 +116,7 @@ class StormCtrl extends _$StormCtrl {
       position:
           Chess.fromSetup(Setup.parseFen(puzzles[_currentPuzzleIndex].fen)),
       moveIndex: -1,
+      lastSolvedTime: DateTime.now(),
     );
     _currentPuzzleIndex += 1;
     await Future<void>.delayed(moveDelay);

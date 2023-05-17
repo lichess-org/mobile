@@ -156,10 +156,11 @@ class LitePuzzle with _$LitePuzzle {
   factory LitePuzzle.fromJson(Map<String, dynamic> json) =>
       _$LitePuzzleFromJson(json);
 
-  (Side, String) preview() {
+  (Side, String, Move) preview() {
     final pos1 = Chess.fromSetup(Setup.parseFen(fen));
-    final pos = pos1.play(Move.fromUci(solution[0])!);
-    return (pos.turn, pos.fen);
+    final move = Move.fromUci(solution.first);
+    final pos = pos1.play(move!);
+    return (pos.turn, pos.fen, move);
   }
 }
 

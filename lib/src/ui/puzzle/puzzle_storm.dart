@@ -2,12 +2,12 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storm.dart';
@@ -26,7 +26,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 
-// TODO: Dialog with puzzle end result
+// TODO: Animation for Progress bar
+// TODO: Animatino for Clock when bonus happens
 
 class PuzzleStormScreen extends StatelessWidget {
   const PuzzleStormScreen({super.key});
@@ -235,6 +236,9 @@ class _Combo extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final combo = ref.watch(ctrl.select((state) => state.combo));
     final lvl = combo.level();
+    final indicatorColor = defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoTheme.of(context).primaryColor
+        : Theme.of(context).indicatorColor;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 1000),
       child: Padding(
@@ -248,12 +252,22 @@ class _Combo extends ConsumerWidget {
                 children: [
                   TextSpan(
                     text: combo.current.toString(),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
+                      color: defaultTargetPlatform == TargetPlatform.iOS
+                          ? CupertinoTheme.of(context).textTheme.textStyle.color
+                          : Theme.of(context).textTheme.bodySmall?.color,
                     ),
                   ),
-                  const TextSpan(text: '\nCombo')
+                  TextSpan(
+                    text: '\nCombo',
+                    style: TextStyle(
+                      color: defaultTargetPlatform == TargetPlatform.iOS
+                          ? CupertinoTheme.of(context).textTheme.textStyle.color
+                          : null,
+                    ),
+                  )
                 ],
               ),
               textAlign: TextAlign.center,
@@ -268,10 +282,13 @@ class _Combo extends ConsumerWidget {
                     child: ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
                       child: LinearProgressIndicator(
+                        backgroundColor:
+                            defaultTargetPlatform == TargetPlatform.iOS
+                                ? CupertinoTheme.of(context).barBackgroundColor
+                                : Theme.of(context).dialogBackgroundColor,
                         value: combo.percent() / 100,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Theme.of(context).indicatorColor,
-                        ),
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(indicatorColor),
                       ),
                     ),
                   ),
@@ -286,14 +303,12 @@ class _Combo extends ConsumerWidget {
                           shadows: isCurrentLevel
                               ? [
                                   Shadow(
-                                    color: Theme.of(context).indicatorColor,
-                                    blurRadius: 10.0,
+                                    color: indicatorColor,
+                                    blurRadius: 13.0,
                                   )
                                 ]
                               : null,
-                          color: isCurrentLevel
-                              ? Theme.of(context).indicatorColor
-                              : Colors.grey,
+                          color: isCurrentLevel ? indicatorColor : Colors.grey,
                           fontWeight: isCurrentLevel
                               ? FontWeight.bold
                               : FontWeight.normal,
@@ -356,65 +371,151 @@ class _BottomBar extends ConsumerWidget {
   }
 }
 
-class _RunStats extends ConsumerWidget {
+class _RunStats extends StatelessWidget {
   const _RunStats(this.stats);
   final StormRunStats stats;
 
   @override
+  Widget build(BuildContext context) {
+    return defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoPopupSurface(
+            child: CupertinoPageScaffold(child: _DialogBody(stats)),
+          )
+        : Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Scaffold(body: _DialogBody(stats)),
+          );
+  }
+}
+
+class _DialogBody extends ConsumerWidget {
+  const _DialogBody(this.stats);
+
+  final StormRunStats stats;
+  @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListSection(
-              margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              header: const Text('Run Result'),
-              headerTrailing: IconButton(
-                padding: EdgeInsets.zero,
-                onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(Icons.close),
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListSection(
+            header: const Text('Run Result'),
+            headerTrailing: IconButton(
+              padding: EdgeInsets.zero,
+              onPressed: () => Navigator.of(context).pop(),
+              icon: const Icon(Icons.close),
+            ),
+            children: [
+              _RowData(
+                '${stats.history.length} Puzzles Solved',
+                null,
               ),
-              children: [
-                _RowData(
-                  '${stats.history.length} Puzzles Solved',
-                  null,
-                ),
-                _RowData('Moves:', stats.moves.toString()),
-                _RowData(
-                  'Accuracy:',
-                  '${(((stats.moves - stats.errors) / stats.moves) * 100).toStringAsFixed(2)}%',
-                ),
-                _RowData('Combo:', stats.comboBest.toString()),
-                _RowData('Time:', '${stats.time.inSeconds}s'),
-                _RowData('Highest Solved:', stats.highest.toString()),
-              ],
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () => ref.invalidate(stormProvider),
-              child: Text(context.l10n.stormPlayAgain),
-            ),
-            const SizedBox(height: 16.0),
-            Text(
-              context.l10n.stormPuzzlesPlayed,
-              style: Styles.sectionTitle,
-            ),
-            ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: stats.history
-                  .map((e) => _ResultBoard(e.$1, e.$2, e.$3))
-                  .toList(),
-            ),
-          ],
-        ),
+              _RowData('Moves:', stats.moves.toString()),
+              _RowData(
+                'Accuracy:',
+                '${(((stats.moves - stats.errors) / stats.moves) * 100).toStringAsFixed(2)}%',
+              ),
+              _RowData('Combo:', stats.comboBest.toString()),
+              _RowData('Time:', '${stats.time.inSeconds}s'),
+              _RowData('Highest Solved:', stats.highest.toString()),
+            ],
+          ),
+          const SizedBox(height: 16.0),
+          FatButton(
+            semanticsLabel: "Play Again",
+            onPressed: () {
+              ref.invalidate(stormProvider);
+              Navigator.of(context).pop();
+            },
+            child: Text(context.l10n.stormPlayAgain),
+          ),
+          ListSection(
+            header: Text(context.l10n.stormPuzzlesPlayed),
+            children: [
+              LayoutBuilder(
+                builder: (context, constrains) {
+                  final boardWidth = constrains.maxWidth / 2;
+                  final footerHeight = calculateFooterHeight(context);
+                  return LayoutGrid(
+                    columnSizes: List.generate(2, (_) => 1.fr),
+                    rowSizes: List.generate(
+                      (stats.history.length / 2).ceil(),
+                      (_) => auto,
+                    ),
+                    children: stats.history.map((e) {
+                      final (side, fen, lastMove) = e.$1.preview();
+                      return SizedBox(
+                        width: boardWidth,
+                        height: boardWidth + footerHeight,
+                        child: BoardPreview(
+                          orientation: side.cg,
+                          fen: fen,
+                          lastMove: lastMove.cg,
+                          footer: Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: Row(
+                              children: [
+                                ColoredBox(
+                                  color: e.$2
+                                      ? LichessColors.good
+                                      : LichessColors.red,
+                                  child: Row(
+                                    children: [
+                                      if (e.$2)
+                                        const Icon(
+                                          color: Colors.white,
+                                          Icons.done,
+                                          size: 20,
+                                        )
+                                      else
+                                        const Icon(
+                                          Icons.close,
+                                          color: Colors.white,
+                                          size: 20,
+                                        ),
+                                      Text(
+                                        '${e.$3.inSeconds}s',
+                                        overflow: TextOverflow.fade,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 3),
+                                Text(e.$1.rating.toString()),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  );
+                },
+              ),
+            ],
+          ),
+        ],
       ),
     );
+  }
+
+  double calculateFooterHeight(BuildContext context) {
+    final textStyle = TextStyle(
+      fontSize: Theme.of(context).textTheme.bodySmall?.fontSize ?? 14.0,
+    ); // Adjust the font size as needed
+    final timeTextPainter = TextPainter(
+      text: TextSpan(text: "100s", style: textStyle),
+      textDirection: TextDirection.ltr,
+    );
+    timeTextPainter.layout();
+
+    // Calculate the total height needed for the footer content
+    return (timeTextPainter.height) * MediaQuery.of(context).textScaleFactor +
+        17.0;
   }
 }
 
@@ -435,28 +536,6 @@ class _RowData extends StatelessWidget {
           if (value != null) Text(value!),
         ],
       ),
-    );
-  }
-}
-
-class _ResultBoard extends StatelessWidget {
-  const _ResultBoard(this.puzzle, this.win, this.time);
-  final LitePuzzle puzzle;
-  final bool win;
-  final Duration time;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constrains) {
-        final boardWidth = constrains.maxWidth / 2;
-        final (side, fen) = puzzle.preview();
-        return SizedBox(
-          width: boardWidth,
-          height: boardWidth,
-          child: BoardPreview(orientation: side.cg, fen: fen),
-        );
-      },
     );
   }
 }
