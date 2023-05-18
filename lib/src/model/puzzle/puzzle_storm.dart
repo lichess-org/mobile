@@ -39,7 +39,7 @@ class StormCtrl extends _$StormCtrl {
       position: pov,
       pov: pov.turn.opposite,
       moveIndex: -1,
-      moves: 0,
+      numSolved: 0,
       clock: StormClock(),
       combo: StormCombo(),
       stats: null,
@@ -66,12 +66,12 @@ class StormCtrl extends _$StormCtrl {
       }
       if (state.position.isGameOver || state.isOver) {
         if (!_nextPuzzle()) {
-          end();
+          state.clock.sendEnd();
           return;
         }
         ref.read(soundServiceProvider).play(Sound.confirmation);
         _pushToHistory(true);
-        await _loadNextPuzzle();
+        await _loadNextPuzzle(true);
         return;
       }
 
@@ -96,7 +96,7 @@ class StormCtrl extends _$StormCtrl {
         return;
       }
       _pushToHistory(false);
-      await _loadNextPuzzle();
+      await _loadNextPuzzle(false);
     }
   }
 
@@ -106,11 +106,12 @@ class StormCtrl extends _$StormCtrl {
     state = state.copyWith(stats: _getStats());
   }
 
-  Future<void> _loadNextPuzzle() async {
+  Future<void> _loadNextPuzzle(bool result) async {
     state = state.copyWith(
       puzzle: puzzles[_nextPuzzleIndex],
       position: Chess.fromSetup(Setup.parseFen(puzzles[_nextPuzzleIndex].fen)),
       moveIndex: -1,
+      numSolved: result ? state.numSolved + 1 : state.numSolved,
       lastSolvedTime: DateTime.now(),
     );
     _nextPuzzleIndex += 1;
@@ -133,6 +134,7 @@ class StormCtrl extends _$StormCtrl {
       score: wins.length,
       comboBest: state.combo.best,
       time: state.clock.endAt!,
+      timePerMove: _history.sumBy((e) => e.$3.inSeconds) / _history.length,
       highest: wins.isNotEmpty
           ? wins.map((e) => e.$1.rating).reduce(
                 (maxRating, rating) => rating > maxRating ? rating : maxRating,
@@ -162,7 +164,7 @@ class StormCtrlState with _$StormCtrlState {
     required Side pov,
     required Position<Chess> position,
     required int moveIndex,
-    required int moves,
+    required int numSolved,
     required StormClock clock,
     required StormCombo combo,
     required StormRunStats? stats,
@@ -187,6 +189,7 @@ class StormRunStats with _$StormRunStats {
     required int score,
     required int comboBest,
     required Duration time,
+    required double timePerMove,
     required int highest,
     required List<(LitePuzzle, bool, Duration)> history,
   }) = _StormRunStats;

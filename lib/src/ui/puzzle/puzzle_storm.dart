@@ -131,9 +131,7 @@ class _Body extends ConsumerWidget {
                   validMoves: puzzleState.validMoves,
                 ),
                 topTable: _TopBar(
-                  pov: ref.read(stormCtrlProvier.select((state) => state.pov)),
-                  clock:
-                      ref.read(stormCtrlProvier.select((state) => state.clock)),
+                  ctrl: stormCtrlProvier,
                 ),
                 bottomTable: _Combo(stormCtrlProvier),
               ),
@@ -170,40 +168,58 @@ class _Body extends ConsumerWidget {
 
 class _TopBar extends ConsumerWidget {
   const _TopBar({
-    required this.pov,
-    required this.clock,
+    required this.ctrl,
   });
 
-  final Side pov;
-  final StormClock clock;
+  final StormCtrlProvider ctrl;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final defaultFontSize = DefaultTextStyle.of(context).style.fontSize;
+    final puzzleState = ref.watch(ctrl);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         children: [
-          Expanded(
-            child: DefaultTextStyle.merge(
-              style: TextStyle(
-                fontSize:
-                    defaultFontSize != null ? defaultFontSize * 1.2 : null,
+          const Icon(
+            LichessIcons.storm,
+            size: 40.0,
+            color: LichessColors.brag,
+          ),
+          if (puzzleState.clock.startAt == null)
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.l10n.stormMoveToStart,
+                  style: TextStyle(
+                    fontSize:
+                        defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
+                    fontWeight: FontWeight.bold,
+                    color: LichessColors.brag,
+                  ),
+                ),
+                Text(
+                  context.l10n.stormYouPlayTheWhitePiecesInAllPuzzles,
+                  style: const TextStyle(color: LichessColors.brag),
+                ),
+              ],
+            )
+          else
+            Text(
+              puzzleState.numSolved.toString(),
+              style: const TextStyle(
+                fontSize: 30.0,
                 fontWeight: FontWeight.bold,
-              ),
-              child: Text(
-                maxLines: 2,
-                pov == Side.white
-                    ? context.l10n.stormYouPlayTheWhitePiecesInAllPuzzles
-                    : context.l10n.stormYouPlayTheBlackPiecesInAllPuzzles,
-                overflow: TextOverflow.ellipsis,
+                color: LichessColors.brag,
               ),
             ),
-          ),
+          const Spacer(),
           StreamBuilder<(Duration, int?)>(
-            stream: clock.timeStream,
+            stream: puzzleState.clock.timeStream,
             builder: (context, snapshot) {
-              final (time, bonus) = snapshot.data ?? (clock.timeLeft, null);
+              final (time, bonus) =
+                  snapshot.data ?? (puzzleState.clock.timeLeft, null);
               final minutes =
                   time.inMinutes.remainder(60).toString().padLeft(2, '0');
               final seconds =
@@ -213,7 +229,7 @@ class _TopBar extends ConsumerWidget {
                 seconds: seconds,
                 bonus: bonus,
                 time: time,
-                isActive: clock.isActive,
+                isActive: puzzleState.clock.isActive,
               );
             },
           ),
@@ -260,8 +276,13 @@ class _ComboState extends ConsumerState<_Combo>
       // next lvl reached
       if (_controller.value > newVal && combo.current != 0) {
         _controller.animateTo(1.0, curve: Curves.easeInOut).then(
-              (value) => _controller.value = 0,
-            );
+          (_) async {
+            await Future<void>.delayed(const Duration(milliseconds: 300));
+            if (mounted) {
+              _controller.value = 0;
+            }
+          },
+        );
         return;
       }
       _controller.animateTo(newVal, curve: Curves.easeInOut);
@@ -314,22 +335,39 @@ class _ComboState extends ConsumerState<_Combo>
               textAlign: TextAlign.center,
             ),
             SizedBox(
-              width: MediaQuery.of(context).size.width * 0.55,
+              width: MediaQuery.of(context).size.width * 0.70,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  // combo progress bar
+                  // it glows when bar reaches 100
                   SizedBox(
                     height: 25,
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(5)),
-                      child: LinearProgressIndicator(
-                        backgroundColor:
-                            defaultTargetPlatform == TargetPlatform.iOS
-                                ? CupertinoTheme.of(context).barBackgroundColor
-                                : null,
-                        value: _controller.value,
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(indicatorColor),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      decoration: BoxDecoration(
+                        boxShadow: _controller.value == 1.0
+                            ? [
+                                BoxShadow(
+                                  color: indicatorColor.withOpacity(0.3),
+                                  blurRadius: 10.0,
+                                  spreadRadius: 2.0,
+                                ),
+                              ]
+                            : [],
+                      ),
+                      child: ClipRRect(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(3.0)),
+                        child: LinearProgressIndicator(
+                          backgroundColor: defaultTargetPlatform ==
+                                  TargetPlatform.iOS
+                              ? CupertinoTheme.of(context).barBackgroundColor
+                              : null,
+                          value: _controller.value,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(indicatorColor),
+                        ),
                       ),
                     ),
                   ),
@@ -386,7 +424,7 @@ class _BottomBar extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             BottomBarButton(
-              icon: LichessIcons.cancel,
+              icon: Icons.delete,
               label: context.l10n.stormNewRun,
               shortLabel: 'New Run',
               highlighted: puzzleState.clock.startAt != null,
@@ -465,6 +503,10 @@ class _DialogBody extends ConsumerWidget {
               ),
               _RowData(context.l10n.stormCombo, stats.comboBest.toString()),
               _RowData(context.l10n.stormTime, '${stats.time.inSeconds}s'),
+              _RowData(
+                context.l10n.stormTimePerMove,
+                '${stats.timePerMove.toStringAsFixed(1)}s',
+              ),
               _RowData(
                 context.l10n.stormHighestSolved,
                 stats.highest.toString(),
