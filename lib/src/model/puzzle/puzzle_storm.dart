@@ -33,7 +33,7 @@ class StormCtrl extends _$StormCtrl {
       _firstMoveTimer?.cancel();
       state.clock.dispose();
     });
-    final pov = Chess.fromSetup(Setup.parseFen(puzzles[0].fen));
+    final pov = Chess.fromSetup(Setup.parseFen(puzzles.first.fen));
     final newState = StormCtrlState(
       puzzle: puzzles[_nextPuzzleIndex],
       position: pov,
@@ -102,6 +102,7 @@ class StormCtrl extends _$StormCtrl {
 
   void end() {
     state.clock.reset();
+    _pushToHistory(false);
     state = state.copyWith(stats: _getStats());
   }
 

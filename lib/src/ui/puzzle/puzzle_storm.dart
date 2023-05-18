@@ -244,7 +244,7 @@ class _ComboState extends ConsumerState<_Combo>
     combo = ref.read(widget.ctrl.select((value) => value.combo));
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 800),
       value: combo.percent() / 100,
     );
   }
@@ -252,7 +252,20 @@ class _ComboState extends ConsumerState<_Combo>
   @override
   void didUpdateWidget(covariant _Combo oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _controller.animateTo(combo.percent() / 100, curve: Curves.easeInOut);
+    if (oldWidget.ctrl != widget.ctrl) {
+      combo = StormCombo();
+    }
+    final newVal = combo.percent() / 100;
+    if (_controller.value != newVal) {
+      // next lvl reached
+      if (_controller.value > newVal && combo.current != 0) {
+        _controller.animateTo(1.0, curve: Curves.easeInOut).then(
+              (value) => _controller.value = 0,
+            );
+        return;
+      }
+      _controller.animateTo(newVal, curve: Curves.easeInOut);
+    }
   }
 
   @override
@@ -266,7 +279,7 @@ class _ComboState extends ConsumerState<_Combo>
     final lvl = combo.level();
     final indicatorColor = defaultTargetPlatform == TargetPlatform.iOS
         ? CupertinoTheme.of(context).primaryColor
-        : Theme.of(context).indicatorColor;
+        : Theme.of(context).colorScheme.secondary;
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) => Padding(
@@ -410,8 +423,13 @@ class _RunStats extends StatelessWidget {
             child: CupertinoPageScaffold(child: _DialogBody(stats)),
           )
         : Dialog(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.background,
+                width: 4.0,
+                strokeAlign: 0.6,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             ),
             child: Scaffold(body: _DialogBody(stats)),
           );
@@ -429,7 +447,7 @@ class _DialogBody extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           ListSection(
-            header: const Text('Run Result'),
+            header: Text(context.l10n.stormRaceComplete),
             headerTrailing: IconButton(
               padding: EdgeInsets.zero,
               onPressed: () => Navigator.of(context).pop(),
@@ -437,17 +455,20 @@ class _DialogBody extends ConsumerWidget {
             ),
             children: [
               _RowData(
-                '${stats.history.length} Puzzles Solved',
+                '${stats.history.length} ${context.l10n.stormPuzzlesSolved}',
                 null,
               ),
-              _RowData('Moves:', stats.moves.toString()),
+              _RowData(context.l10n.stormRuns, stats.moves.toString()),
               _RowData(
-                'Accuracy:',
+                context.l10n.accuracy,
                 '${(((stats.moves - stats.errors) / stats.moves) * 100).toStringAsFixed(2)}%',
               ),
-              _RowData('Combo:', stats.comboBest.toString()),
-              _RowData('Time:', '${stats.time.inSeconds}s'),
-              _RowData('Highest Solved:', stats.highest.toString()),
+              _RowData(context.l10n.stormCombo, stats.comboBest.toString()),
+              _RowData(context.l10n.stormTime, '${stats.time.inSeconds}s'),
+              _RowData(
+                context.l10n.stormHighestSolved,
+                stats.highest.toString(),
+              ),
             ],
           ),
           const SizedBox(height: 16.0),
