@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -200,8 +201,10 @@ class _ClockState extends ConsumerState<StormClockWidget>
                 '${widget.minutes}:${widget.seconds}',
                 style: TextStyle(
                   color: widget.isActive
-                      ? (widget.bonus != null && widget.bonus! < 0)
-                          ? Colors.red
+                      ? (widget.bonus != null)
+                          ? (widget.bonus! > 0)
+                              ? LichessColors.good
+                              : Colors.red
                           : clockStyle.activeTextColor
                       : clockStyle.textColor,
                   fontSize: 30,

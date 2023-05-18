@@ -182,28 +182,34 @@ class _TopBar extends ConsumerWidget {
         children: [
           const Icon(
             LichessIcons.storm,
-            size: 40.0,
+            size: 50.0,
             color: LichessColors.brag,
           ),
+          const SizedBox(width: 8),
           if (puzzleState.clock.startAt == null)
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  context.l10n.stormMoveToStart,
-                  style: TextStyle(
-                    fontSize:
-                        defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
-                    fontWeight: FontWeight.bold,
-                    color: LichessColors.brag,
+            Expanded(
+              flex: 5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    context.l10n.stormMoveToStart,
+                    style: TextStyle(
+                      fontSize:
+                          defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
+                      fontWeight: FontWeight.bold,
+                      color: LichessColors.brag,
+                    ),
                   ),
-                ),
-                Text(
-                  context.l10n.stormYouPlayTheWhitePiecesInAllPuzzles,
-                  style: const TextStyle(color: LichessColors.brag),
-                ),
-              ],
+                  Text(
+                    puzzleState.pov == Side.white
+                        ? context.l10n.stormYouPlayTheWhitePiecesInAllPuzzles
+                        : context.l10n.stormYouPlayTheBlackPiecesInAllPuzzles,
+                    style: const TextStyle(color: LichessColors.brag),
+                  ),
+                ],
+              ),
             )
           else
             Text(
@@ -315,7 +321,7 @@ class _ComboState extends ConsumerState<_Combo>
                   TextSpan(
                     text: combo.current.toString(),
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold,
                       color: defaultTargetPlatform == TargetPlatform.iOS
                           ? CupertinoTheme.of(context).textTheme.textStyle.color
@@ -496,7 +502,7 @@ class _DialogBody extends ConsumerWidget {
                 '${stats.history.length} ${context.l10n.stormPuzzlesSolved}',
                 null,
               ),
-              _RowData(context.l10n.stormRuns, stats.moves.toString()),
+              _RowData(context.l10n.stormMoves, stats.moves.toString()),
               _RowData(
                 context.l10n.accuracy,
                 '${(((stats.moves - stats.errors) / stats.moves) * 100).toStringAsFixed(2)}%',
