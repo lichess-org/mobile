@@ -221,24 +221,7 @@ class _TopBar extends ConsumerWidget {
               ),
             ),
           const Spacer(),
-          StreamBuilder<(Duration, int?)>(
-            stream: puzzleState.clock.timeStream,
-            builder: (context, snapshot) {
-              final (time, bonus) =
-                  snapshot.data ?? (puzzleState.clock.timeLeft, null);
-              final minutes =
-                  time.inMinutes.remainder(60).toString().padLeft(2, '0');
-              final seconds =
-                  time.inSeconds.remainder(60).toString().padLeft(2, '0');
-              return StormClockWidget(
-                minutes: minutes,
-                seconds: seconds,
-                bonus: bonus,
-                time: time,
-                isActive: puzzleState.clock.isActive,
-              );
-            },
-          ),
+          StormClockWidget(ctrl: ctrl),
         ],
       ),
     );
