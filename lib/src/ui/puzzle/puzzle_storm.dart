@@ -186,7 +186,7 @@ class _TopBar extends ConsumerWidget {
             color: LichessColors.brag,
           ),
           const SizedBox(width: 8),
-          if (puzzleState.clock.startAt == null)
+          if (puzzleState.clock.startAt == null && puzzleState.stats == null)
             Expanded(
               flex: 5,
               child: Column(
@@ -266,7 +266,7 @@ class _ComboState extends ConsumerState<_Combo>
     combo = ref.read(widget.ctrl.select((value) => value.combo));
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 1000),
       value: combo.percent() / 100,
     );
   }
@@ -291,7 +291,7 @@ class _ComboState extends ConsumerState<_Combo>
         );
         return;
       }
-      _controller.animateTo(newVal, curve: Curves.easeInOut);
+      _controller.animateTo(newVal, curve: Curves.easeIn);
     }
   }
 
@@ -313,7 +313,7 @@ class _ComboState extends ConsumerState<_Combo>
         padding: const EdgeInsets.all(16.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             RichText(
               text: TextSpan(
@@ -343,7 +343,8 @@ class _ComboState extends ConsumerState<_Combo>
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.70,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // combo progress bar
                   // it glows when bar reaches 100
@@ -379,26 +380,46 @@ class _ComboState extends ConsumerState<_Combo>
                   ),
                   const SizedBox(height: 8),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: levels.mapIndexed((index, level) {
                       final isCurrentLevel = index < lvl;
-                      return Text(
-                        '${level}s',
-                        style: TextStyle(
-                          shadows: isCurrentLevel
-                              ? [
-                                  Shadow(
-                                    color: indicatorColor,
-                                    blurRadius: 13.0,
-                                  )
-                                ]
-                              : null,
-                          color: isCurrentLevel ? indicatorColor : Colors.grey,
-                          fontWeight: isCurrentLevel
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                        ),
-                      );
+                      return isCurrentLevel
+                          ? AnimatedContainer(
+                              alignment: Alignment.center,
+                              curve: Curves.easeIn,
+                              duration: const Duration(milliseconds: 1000),
+                              width:
+                                  25 * MediaQuery.of(context).textScaleFactor,
+                              height:
+                                  20 * MediaQuery.of(context).textScaleFactor,
+                              transform: Matrix4.skewX(-0.2),
+                              decoration: BoxDecoration(
+                                color: indicatorColor,
+                                borderRadius: BorderRadius.circular(3.0),
+                              ),
+                              child: Text(
+                                '${level}s',
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSecondary,
+                                ),
+                              ),
+                            )
+                          : Container(
+                              alignment: Alignment.center,
+                              transform: Matrix4.skewX(-0.2),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(3.0),
+                              ),
+                              child: Text(
+                                '${level}s',
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            );
                     }).toList(),
                   )
                 ],
@@ -433,22 +454,35 @@ class _BottomBar extends ConsumerWidget {
               icon: Icons.delete,
               label: context.l10n.stormNewRun,
               shortLabel: 'New Run',
-              highlighted: puzzleState.clock.startAt != null,
+              highlighted: true,
               showAndroidShortLabel: true,
               onTap: () => ref.invalidate(stormProvider),
             ),
-            BottomBarButton(
-              icon: LichessIcons.flag,
-              label: context.l10n.stormEndRun,
-              highlighted: puzzleState.clock.startAt != null,
-              shortLabel: 'End Run',
-              showAndroidShortLabel: true,
-              onTap: () {
-                if (puzzleState.clock.startAt != null) {
-                  puzzleState.clock.sendEnd();
-                }
-              },
-            ),
+            if (puzzleState.clock.endAt == null)
+              BottomBarButton(
+                icon: LichessIcons.flag,
+                label: context.l10n.stormEndRun,
+                highlighted: puzzleState.clock.startAt != null,
+                shortLabel: 'End Run',
+                showAndroidShortLabel: true,
+                onTap: () {
+                  if (puzzleState.clock.startAt != null) {
+                    puzzleState.clock.sendEnd();
+                  }
+                },
+              ),
+            if (puzzleState.stats != null)
+              BottomBarButton(
+                icon: Icons.open_in_new,
+                label: 'Result',
+                highlighted: true,
+                shortLabel: 'Result',
+                showAndroidShortLabel: true,
+                onTap: () => showDialog<void>(
+                  context: context,
+                  builder: (_) => _RunStats(puzzleState.stats!),
+                ),
+              ),
           ],
         ),
       ),
@@ -462,21 +496,11 @@ class _RunStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return defaultTargetPlatform == TargetPlatform.iOS
-        ? CupertinoPopupSurface(
-            child: CupertinoPageScaffold(child: _DialogBody(stats)),
-          )
-        : Dialog(
-            shape: RoundedRectangleBorder(
-              side: BorderSide(
-                color: Theme.of(context).colorScheme.background,
-                width: 4.0,
-                strokeAlign: 0.6,
-              ),
-              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-            ),
-            child: Scaffold(body: _DialogBody(stats)),
-          );
+    return CupertinoPopupSurface(
+      child: defaultTargetPlatform == TargetPlatform.iOS
+          ? CupertinoPageScaffold(child: _DialogBody(stats))
+          : Scaffold(body: _DialogBody(stats)),
+    );
   }
 }
 
@@ -499,8 +523,8 @@ class _DialogBody extends ConsumerWidget {
             ),
             children: [
               _RowData(
-                '${stats.history.length} ${context.l10n.stormPuzzlesSolved}',
-                null,
+                context.l10n.stormPuzzlesSolved,
+                stats.score.toString(),
               ),
               _RowData(context.l10n.stormMoves, stats.moves.toString()),
               _RowData(
