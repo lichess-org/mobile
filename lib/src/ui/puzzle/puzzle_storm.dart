@@ -287,9 +287,7 @@ class _ComboState extends ConsumerState<_Combo>
   @override
   Widget build(BuildContext context) {
     final lvl = combo.level();
-    final indicatorColor = defaultTargetPlatform == TargetPlatform.iOS
-        ? CupertinoTheme.of(context).primaryColor
-        : Theme.of(context).colorScheme.secondary;
+    final indicatorColor = Theme.of(context).colorScheme.secondary;
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) => Padding(
@@ -304,7 +302,7 @@ class _ComboState extends ConsumerState<_Combo>
                   TextSpan(
                     text: combo.current.toString(),
                     style: TextStyle(
-                      fontSize: 30,
+                      fontSize: 50,
                       fontWeight: FontWeight.bold,
                       color: defaultTargetPlatform == TargetPlatform.iOS
                           ? CupertinoTheme.of(context).textTheme.textStyle.color
@@ -329,8 +327,6 @@ class _ComboState extends ConsumerState<_Combo>
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // combo progress bar
-                  // it glows when bar reaches 100
                   SizedBox(
                     height: 25,
                     child: AnimatedContainer(
@@ -350,10 +346,6 @@ class _ComboState extends ConsumerState<_Combo>
                         borderRadius:
                             const BorderRadius.all(Radius.circular(3.0)),
                         child: LinearProgressIndicator(
-                          backgroundColor: defaultTargetPlatform ==
-                                  TargetPlatform.iOS
-                              ? CupertinoTheme.of(context).barBackgroundColor
-                              : null,
                           value: _controller.value,
                           valueColor:
                               AlwaysStoppedAnimation<Color>(indicatorColor),
@@ -379,7 +371,9 @@ class _ComboState extends ConsumerState<_Combo>
                               transform: Matrix4.skewX(-0.2),
                               decoration: BoxDecoration(
                                 color: indicatorColor,
-                                borderRadius: BorderRadius.circular(3.0),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(3.0),
+                                ),
                               ),
                               child: Text(
                                 '${level}s',
@@ -392,8 +386,9 @@ class _ComboState extends ConsumerState<_Combo>
                           : Container(
                               alignment: Alignment.center,
                               transform: Matrix4.skewX(-0.2),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(3.0),
+                              decoration: const BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(3.0)),
                               ),
                               child: Text(
                                 '${level}s',
@@ -540,12 +535,14 @@ class _DialogBody extends ConsumerWidget {
             children: [
               LayoutBuilder(
                 builder: (context, constrains) {
-                  final boardWidth = constrains.maxWidth / 2;
+                  final crossAxisCount =
+                      constrains.maxWidth > kTabletThreshold ? 4 : 2;
+                  final boardWidth = constrains.maxWidth / crossAxisCount;
                   final footerHeight = calculateFooterHeight(context);
                   return LayoutGrid(
-                    columnSizes: List.generate(2, (_) => 1.fr),
+                    columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
                     rowSizes: List.generate(
-                      (stats.history.length / 2).ceil(),
+                      (stats.history.length / crossAxisCount).ceil(),
                       (_) => auto,
                     ),
                     children: stats.history.map((e) {

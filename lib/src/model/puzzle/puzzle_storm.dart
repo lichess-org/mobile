@@ -15,7 +15,7 @@ part 'puzzle_storm.freezed.dart';
 
 const malus = Duration(seconds: 10);
 const moveDelay = Duration(milliseconds: 200);
-const startTime = Duration(minutes: 3);
+const startTime = Duration(minutes: 1);
 
 // TODO: Send Storm Result
 

@@ -126,13 +126,18 @@ class StormClockWidget extends ConsumerStatefulWidget {
 
 class _ClockState extends ConsumerState<StormClockWidget>
     with SingleTickerProviderStateMixin {
+  // ignore: avoid-late-keyword
   late AnimationController _controller;
   // ignore: avoid-late-keyword
   late Animation<double> animation;
+  // ignore: avoid-late-keyword
   late Animation<double> fadeAnimation;
+  // ignore: avoid-late-keyword
   late Animation<Offset> slideAnimation;
 
+  // ignore: avoid-late-keyword
   late StormClock clock;
+
   StreamSubscription<(Duration, int?)>? streamSubscription;
 
   String minutes = '03';
@@ -150,7 +155,8 @@ class _ClockState extends ConsumerState<StormClockWidget>
     )..addListener(() => setState(() {}));
 
     clock = ref.read(widget.ctrl.select((value) => value.clock));
-
+    minutes = clock.timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0');
+    seconds = clock.timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
     animation = Tween<double>(begin: 0.0, end: 120.0).animate(_controller);
     fadeAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(_controller);
     slideAnimation = Tween<Offset>(
