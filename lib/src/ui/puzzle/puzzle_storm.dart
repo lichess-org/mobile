@@ -1,6 +1,14 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/settings/brightness.dart';
+import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
@@ -22,6 +30,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import "package:lichess_mobile/src/utils/l10n_context.dart";
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
@@ -100,6 +109,7 @@ class _Body extends ConsumerWidget {
 
     puzzleState.clock.timeStream.listen((e) {
       if (e.$1 == Duration.zero && puzzleState.clock.endAt == null) {
+        // end function is always called from here
         ref.read(stormCtrlProvier.notifier).end();
         showDialog<void>(
           context: context,
@@ -243,6 +253,7 @@ class _ComboState extends ConsumerState<_Combo>
   StormCombo combo = StormCombo();
 
   static const levels = [3, 5, 7, 10];
+
   @override
   void initState() {
     super.initState();
@@ -264,6 +275,9 @@ class _ComboState extends ConsumerState<_Combo>
     if (_controller.value != newVal) {
       // next lvl reached
       if (_controller.value > newVal && combo.current != 0) {
+        if (ref.read(boardPreferencesProvider).hapticFeedback) {
+          HapticFeedback.heavyImpact();
+        }
         _controller.animateTo(1.0, curve: Curves.easeInOut).then(
           (_) async {
             await Future<void>.delayed(const Duration(milliseconds: 300));
@@ -288,12 +302,17 @@ class _ComboState extends ConsumerState<_Combo>
   Widget build(BuildContext context) {
     final lvl = combo.level();
     final indicatorColor = Theme.of(context).colorScheme.secondary;
+
+    final shades = generateShades(
+      indicatorColor,
+      ref.watch(currentBrightnessProvider) == Brightness.light,
+    );
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) => Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             RichText(
@@ -302,7 +321,7 @@ class _ComboState extends ConsumerState<_Combo>
                   TextSpan(
                     text: combo.current.toString(),
                     style: TextStyle(
-                      fontSize: 50,
+                      fontSize: 35,
                       fontWeight: FontWeight.bold,
                       color: defaultTargetPlatform == TargetPlatform.iOS
                           ? CupertinoTheme.of(context).textTheme.textStyle.color
@@ -322,7 +341,7 @@ class _ComboState extends ConsumerState<_Combo>
               textAlign: TextAlign.center,
             ),
             SizedBox(
-              width: MediaQuery.of(context).size.width * 0.70,
+              width: MediaQuery.of(context).size.width * 0.60,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -363,14 +382,13 @@ class _ComboState extends ConsumerState<_Combo>
                           ? AnimatedContainer(
                               alignment: Alignment.center,
                               curve: Curves.easeIn,
-                              duration: const Duration(milliseconds: 1000),
+                              duration: const Duration(milliseconds: 500),
                               width:
-                                  25 * MediaQuery.of(context).textScaleFactor,
+                                  28 * MediaQuery.of(context).textScaleFactor,
                               height:
-                                  20 * MediaQuery.of(context).textScaleFactor,
-                              transform: Matrix4.skewX(-0.2),
+                                  24 * MediaQuery.of(context).textScaleFactor,
                               decoration: BoxDecoration(
-                                color: indicatorColor,
+                                color: shades[index],
                                 borderRadius: const BorderRadius.all(
                                   Radius.circular(3.0),
                                 ),
@@ -385,7 +403,6 @@ class _ComboState extends ConsumerState<_Combo>
                             )
                           : Container(
                               alignment: Alignment.center,
-                              transform: Matrix4.skewX(-0.2),
                               decoration: const BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(3.0)),
@@ -407,6 +424,38 @@ class _ComboState extends ConsumerState<_Combo>
         ),
       ),
     );
+  }
+
+  List<Color> generateShades(Color baseColor, bool light) {
+    final shades = <Color>[];
+
+    final int r = baseColor.red;
+    final int g = baseColor.green;
+    final int b = baseColor.blue;
+
+    const int step = 20;
+
+    // Generate darker shades
+    for (int i = 4; i >= 2; i = i - 2) {
+      final int newR = (r - i * step).clamp(0, 255);
+      final int newG = (g - i * step).clamp(0, 255);
+      final int newB = (b - i * step).clamp(0, 255);
+      shades.add(Color.fromARGB(baseColor.alpha, newR, newG, newB));
+    }
+
+    // Generate lighter shades
+    for (int i = 2; i <= 3; i++) {
+      final int newR = (r + i * step).clamp(0, 255);
+      final int newG = (g + i * step).clamp(0, 255);
+      final int newB = (b + i * step).clamp(0, 255);
+      shades.add(Color.fromARGB(baseColor.alpha, newR, newG, newB));
+    }
+
+    if (light) {
+      return shades.reversed.toList();
+    }
+
+    return shades;
   }
 }
 
@@ -500,22 +549,25 @@ class _DialogBody extends ConsumerWidget {
               icon: const Icon(Icons.close),
             ),
             children: [
-              _RowData(
+              _StatsRowData(
                 context.l10n.stormPuzzlesSolved,
                 stats.score.toString(),
               ),
-              _RowData(context.l10n.stormMoves, stats.moves.toString()),
-              _RowData(
+              _StatsRowData(context.l10n.stormMoves, stats.moves.toString()),
+              _StatsRowData(
                 context.l10n.accuracy,
                 '${(((stats.moves - stats.errors) / stats.moves) * 100).toStringAsFixed(2)}%',
               ),
-              _RowData(context.l10n.stormCombo, stats.comboBest.toString()),
-              _RowData(context.l10n.stormTime, '${stats.time.inSeconds}s'),
-              _RowData(
+              _StatsRowData(
+                context.l10n.stormCombo,
+                stats.comboBest.toString(),
+              ),
+              _StatsRowData(context.l10n.stormTime, '${stats.time.inSeconds}s'),
+              _StatsRowData(
                 context.l10n.stormTimePerMove,
                 '${stats.timePerMove.toStringAsFixed(1)}s',
               ),
-              _RowData(
+              _StatsRowData(
                 context.l10n.stormHighestSolved,
                 stats.highest.toString(),
               ),
@@ -551,6 +603,30 @@ class _DialogBody extends ConsumerWidget {
                         width: boardWidth,
                         height: boardWidth + footerHeight,
                         child: BoardPreview(
+                          onTap: () async {
+                            final session = ref.read(authSessionProvider);
+                            Puzzle? puzzle;
+                            try {
+                              puzzle = await ref
+                                  .read(puzzleProvider(e.$1.id).future);
+                            } catch (e) {
+                              showPlatformSnackbar(context, e.toString());
+                            } finally {
+                              if (puzzle != null) {
+                                pushPlatformRoute(
+                                  context,
+                                  builder: (_) => PuzzleScreen(
+                                    theme: PuzzleTheme.mix,
+                                    initialPuzzleContext: PuzzleContext(
+                                      theme: PuzzleTheme.mix,
+                                      puzzle: puzzle!,
+                                      userId: session?.user.id,
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+                          },
                           orientation: side.cg,
                           fen: fen,
                           lastMove: lastMove.cg,
@@ -620,11 +696,11 @@ class _DialogBody extends ConsumerWidget {
   }
 }
 
-class _RowData extends StatelessWidget {
+class _StatsRowData extends StatelessWidget {
   final String label;
   final String? value;
 
-  const _RowData(this.label, this.value);
+  const _StatsRowData(this.label, this.value);
 
   @override
   Widget build(BuildContext context) {

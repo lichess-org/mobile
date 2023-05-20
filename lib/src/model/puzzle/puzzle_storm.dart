@@ -65,7 +65,7 @@ class StormCtrl extends _$StormCtrl {
         state.clock.addTime(bonus);
       }
       if (state.position.isGameOver || state.isOver) {
-        if (!_nextPuzzle()) {
+        if (!_isNextPuzzleAvailable()) {
           state.clock.sendEnd();
           return;
         }
@@ -87,11 +87,11 @@ class StormCtrl extends _$StormCtrl {
       await Future<void>.delayed(moveDelay);
       _addMove(state.expectedMove!);
     } else {
-      ref.read(soundServiceProvider).play(Sound.error);
       _errors += 1;
+      ref.read(soundServiceProvider).play(Sound.error);
       state.clock.subtractTime(malus);
       state.combo.reset();
-      if (state.clock.flag() || !_nextPuzzle()) {
+      if (state.clock.flag() || !_isNextPuzzleAvailable()) {
         state.clock.sendEnd();
         return;
       }
@@ -151,7 +151,7 @@ class StormCtrl extends _$StormCtrl {
     _history.add((state.puzzle, result, timeTaken));
   }
 
-  bool _nextPuzzle() {
+  bool _isNextPuzzleAvailable() {
     return _nextPuzzleIndex < puzzles.length;
   }
 }
@@ -159,6 +159,7 @@ class StormCtrl extends _$StormCtrl {
 @freezed
 class StormCtrlState with _$StormCtrlState {
   const StormCtrlState._();
+  // moveIndex starts at -1 for new puzzles
   const factory StormCtrlState({
     required LitePuzzle puzzle,
     required Side pov,
@@ -242,9 +243,10 @@ class StormCombo {
 }
 
 class StormClock {
-  Timer? _timer;
   final StreamController<(Duration, int?)> timeStreamController =
       StreamController<(Duration, int?)>.broadcast();
+
+  Timer? _timer;
   Duration _currentDuration = startTime;
   DateTime? startAt;
   Duration? endAt;
