@@ -128,8 +128,7 @@ class _Body extends ConsumerWidget {
                       .read(stormCtrlProvier.notifier)
                       .onUserMove(Move.fromUci(move.uci)!),
                   orientation: puzzleState.pov.cg,
-                  interactableSide: puzzleState.clock.endAt != null ||
-                          puzzleState.position.isGameOver
+                  interactableSide: puzzleState.position.isGameOver
                       ? cg.InteractableSide.none
                       : puzzleState.pov == Side.white
                           ? cg.InteractableSide.white
@@ -196,7 +195,7 @@ class _TopBar extends ConsumerWidget {
             color: LichessColors.brag,
           ),
           const SizedBox(width: 8),
-          if (puzzleState.clock.startAt == null && puzzleState.stats == null)
+          if (!puzzleState.clock.isActive && puzzleState.stats == null)
             Expanded(
               flex: 5,
               child: Column(
@@ -205,9 +204,8 @@ class _TopBar extends ConsumerWidget {
                 children: [
                   Text(
                     context.l10n.stormMoveToStart,
-                    style: TextStyle(
-                      fontSize:
-                          defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
+                    style: const TextStyle(
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: LichessColors.brag,
                     ),
@@ -303,7 +301,7 @@ class _ComboState extends ConsumerState<_Combo>
     final lvl = combo.level();
     final indicatorColor = Theme.of(context).colorScheme.secondary;
 
-    final shades = generateShades(
+    final comboShades = generateShades(
       indicatorColor,
       ref.watch(currentBrightnessProvider) == Brightness.light,
     );
@@ -325,7 +323,7 @@ class _ComboState extends ConsumerState<_Combo>
                       fontWeight: FontWeight.bold,
                       color: defaultTargetPlatform == TargetPlatform.iOS
                           ? CupertinoTheme.of(context).textTheme.textStyle.color
-                          : Theme.of(context).textTheme.bodySmall?.color,
+                          : null,
                     ),
                   ),
                   TextSpan(
@@ -333,7 +331,7 @@ class _ComboState extends ConsumerState<_Combo>
                     style: TextStyle(
                       color: defaultTargetPlatform == TargetPlatform.iOS
                           ? CupertinoTheme.of(context).textTheme.textStyle.color
-                          : Theme.of(context).textTheme.bodySmall?.color,
+                          : null,
                     ),
                   )
                 ],
@@ -348,8 +346,7 @@ class _ComboState extends ConsumerState<_Combo>
                 children: [
                   SizedBox(
                     height: 25,
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
+                    child: Container(
                       decoration: BoxDecoration(
                         boxShadow: _controller.value == 1.0
                             ? [
@@ -378,45 +375,31 @@ class _ComboState extends ConsumerState<_Combo>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: levels.mapIndexed((index, level) {
                       final isCurrentLevel = index < lvl;
-                      return isCurrentLevel
-                          ? AnimatedContainer(
-                              alignment: Alignment.center,
-                              curve: Curves.easeIn,
-                              duration: const Duration(milliseconds: 500),
-                              width:
-                                  28 * MediaQuery.of(context).textScaleFactor,
-                              height:
-                                  24 * MediaQuery.of(context).textScaleFactor,
-                              decoration: BoxDecoration(
-                                color: shades[index],
+                      return AnimatedContainer(
+                        alignment: Alignment.center,
+                        curve: Curves.easeIn,
+                        duration: const Duration(milliseconds: 1000),
+                        width: 28 * MediaQuery.of(context).textScaleFactor,
+                        height: 24 * MediaQuery.of(context).textScaleFactor,
+                        decoration: isCurrentLevel
+                            ? BoxDecoration(
+                                color: comboShades[index],
                                 borderRadius: const BorderRadius.all(
                                   Radius.circular(3.0),
                                 ),
-                              ),
-                              child: Text(
-                                '${level}s',
-                                style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSecondary,
-                                ),
-                              ),
-                            )
-                          : Container(
-                              alignment: Alignment.center,
-                              decoration: const BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(3.0)),
-                              ),
-                              child: Text(
-                                '${level}s',
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                            );
+                              )
+                            : null,
+                        child: Text(
+                          '${level}s',
+                          style: TextStyle(
+                            color: isCurrentLevel
+                                ? Theme.of(context).colorScheme.onSecondary
+                                : null,
+                          ),
+                        ),
+                      );
                     }).toList(),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -549,25 +532,25 @@ class _DialogBody extends ConsumerWidget {
               icon: const Icon(Icons.close),
             ),
             children: [
-              _StatsRowData(
+              _StatsRow(
                 context.l10n.stormPuzzlesSolved,
                 stats.score.toString(),
               ),
-              _StatsRowData(context.l10n.stormMoves, stats.moves.toString()),
-              _StatsRowData(
+              _StatsRow(context.l10n.stormMoves, stats.moves.toString()),
+              _StatsRow(
                 context.l10n.accuracy,
                 '${(((stats.moves - stats.errors) / stats.moves) * 100).toStringAsFixed(2)}%',
               ),
-              _StatsRowData(
+              _StatsRow(
                 context.l10n.stormCombo,
                 stats.comboBest.toString(),
               ),
-              _StatsRowData(context.l10n.stormTime, '${stats.time.inSeconds}s'),
-              _StatsRowData(
+              _StatsRow(context.l10n.stormTime, '${stats.time.inSeconds}s'),
+              _StatsRow(
                 context.l10n.stormTimePerMove,
                 '${stats.timePerMove.toStringAsFixed(1)}s',
               ),
-              _StatsRowData(
+              _StatsRow(
                 context.l10n.stormHighestSolved,
                 stats.highest.toString(),
               ),
@@ -683,24 +666,23 @@ class _DialogBody extends ConsumerWidget {
   double calculateFooterHeight(BuildContext context) {
     final textStyle = TextStyle(
       fontSize: Theme.of(context).textTheme.bodySmall?.fontSize ?? 14.0,
-    ); // Adjust the font size as needed
+    );
     final timeTextPainter = TextPainter(
       text: TextSpan(text: "100s", style: textStyle),
       textDirection: TextDirection.ltr,
     );
     timeTextPainter.layout();
 
-    // Calculate the total height needed for the footer content
     return (timeTextPainter.height) * MediaQuery.of(context).textScaleFactor +
         17.0;
   }
 }
 
-class _StatsRowData extends StatelessWidget {
+class _StatsRow extends StatelessWidget {
   final String label;
   final String? value;
 
-  const _StatsRowData(this.label, this.value);
+  const _StatsRow(this.label, this.value);
 
   @override
   Widget build(BuildContext context) {
