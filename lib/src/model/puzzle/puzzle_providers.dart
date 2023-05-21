@@ -73,13 +73,3 @@ Future<PuzzleDashboard> puzzleDashboard(
   }
   return result.asFuture;
 }
-
-@riverpod
-Future<IList<PuzzleAndResult>> puzzleActivity(
-  PuzzleActivityRef ref,
-  int max,
-  DateTime before,
-) {
-  final repo = ref.watch(puzzleRepositoryProvider);
-  return Result.release(repo.puzzleActivity(max, before));
-}

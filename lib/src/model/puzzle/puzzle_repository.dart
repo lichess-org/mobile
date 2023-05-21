@@ -199,23 +199,22 @@ class PuzzleRepository {
     });
   }
 
-  FutureResult<IList<PuzzleAndResult>> puzzleActivity(
+  Stream<PuzzleAndResult> puzzleActivity(
     int max,
     DateTime before,
-  ) {
-    return apiClient
-        .get(
+  ) async* {
+    final resp = await apiClient.stream(
       Uri.parse(
         '$kLichessHost/api/puzzle/activity?max=$max&before=${before.millisecondsSinceEpoch}',
       ),
-    )
-        .flatMap((res) {
-      return readJsonListOfObjects(
-        res,
-        mapper: _puzzleActivityFromJson,
-        logger: _log,
-      );
-    });
+    );
+    _log.fine('Streaming Activity');
+    yield* resp.stream
+        .toStringStream()
+        .where((event) => event.isNotEmpty && event != '\n')
+        .map((event) => jsonDecode(event) as Map<String, dynamic>)
+        .map((json) => _puzzleActivityFromJson(json))
+        .handleError((Object error) => print(error));
   }
 
   Result<PuzzleBatchResponse> _decodeBatchResponse(http.Response response) {
@@ -383,9 +382,20 @@ PuzzleGamePlayer _puzzlePlayerFromPick(RequiredPick pick) {
 
 PuzzleAndResult _puzzleActivityFromPick(RequiredPick pick) {
   return PuzzleAndResult(
-    puzzle: _puzzleFromPick(pick),
-    result: pick('result').asBoolOrThrow(),
-    date: pick('date').asDateTimeFromMillisecondsOrThrow(),
+    win: pick('win').asBoolOrThrow(),
+    puzzle: _historyPuzzleFromPick(pick('puzzle').required()),
+  );
+}
+
+HistoryPuzzle _historyPuzzleFromPick(RequiredPick pick) {
+  return HistoryPuzzle(
+    id: pick('id').asPuzzleIdOrThrow(),
+    plays: pick('plays').asIntOrThrow(),
+    rating: pick('rating').asIntOrThrow(),
+    fen: pick('fen').asStringOrThrow(),
+    solution: pick('solution').asListOrThrow((p0) => p0.asStringOrThrow()).lock,
+    themes:
+        pick('themes').asListOrThrow((p0) => p0.asStringOrThrow()).toSet().lock,
   );
 }
 

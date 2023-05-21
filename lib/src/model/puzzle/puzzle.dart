@@ -183,3 +183,23 @@ class PuzzleDashboardData with _$PuzzleDashboardData {
     required PuzzleTheme theme,
   }) = _PuzzleDashboardData;
 }
+
+@freezed
+class HistoryPuzzle with _$HistoryPuzzle {
+  const factory HistoryPuzzle({
+    required PuzzleId id,
+    required int rating,
+    required int plays,
+    required IList<UCIMove> solution,
+    required ISet<String> themes,
+    required String fen,
+  }) = _HistoryPuzzle;
+}
+
+@freezed
+class PuzzleAndResult with _$PuzzleAndResult {
+  const factory PuzzleAndResult({
+    required HistoryPuzzle puzzle,
+    required bool win,
+  }) = _PuzzleAndResult;
+}
