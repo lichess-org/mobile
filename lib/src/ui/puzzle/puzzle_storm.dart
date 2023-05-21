@@ -188,6 +188,7 @@ class _TopBar extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Icon(
             LichessIcons.storm,
@@ -527,7 +528,8 @@ class _DialogBody extends ConsumerWidget {
           ListSection(
             header: Text(context.l10n.stormRaceComplete),
             headerTrailing: IconButton(
-              padding: EdgeInsets.zero,
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(left: 50),
               onPressed: () => Navigator.of(context).pop(),
               icon: const Icon(Icons.close),
             ),
