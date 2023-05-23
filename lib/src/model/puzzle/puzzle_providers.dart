@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:async/async.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
@@ -12,6 +16,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 
 part 'puzzle_providers.g.dart';
+part 'puzzle_providers.freezed.dart';
 
 @riverpod
 Future<PuzzleContext?> nextPuzzle(
@@ -72,4 +77,47 @@ Future<PuzzleDashboard> puzzleDashboard(
     link.close();
   }
   return result.asFuture;
+}
+
+@riverpod
+class PuzzleHistory extends _$PuzzleHistory {
+  StreamSubscription<PuzzleAndResult>? _streamSub;
+
+  @override
+  Future<PuzzleHistoryState> build() {
+    ref.cacheFor(const Duration(seconds: 30));
+    ref.onDispose(() => _streamSub?.cancel());
+
+    final stream = connectStream();
+
+    return stream.first
+        .then((value) => PuzzleHistoryState(historyList: [value]));
+  }
+
+  Stream<PuzzleAndResult> connectStream() {
+    final repo = ref.watch(puzzleRepositoryProvider);
+    final stream = repo.puzzleActivity(10, DateTime.now());
+
+    _streamSub?.cancel();
+    _streamSub = stream.listen((event) {
+      PuzzleHistoryState? prev;
+      if (state.hasValue) {
+        prev = state.requireValue;
+      }
+      state = AsyncData(
+        PuzzleHistoryState(
+          historyList: [if (prev != null) ...prev.historyList, event],
+        ),
+      );
+    });
+
+    return stream;
+  }
+}
+
+@freezed
+class PuzzleHistoryState with _$PuzzleHistoryState {
+  const factory PuzzleHistoryState({
+    required List<PuzzleAndResult> historyList,
+  }) = _PuzzleHistoryState;
 }

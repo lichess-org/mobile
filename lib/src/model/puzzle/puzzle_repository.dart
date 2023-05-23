@@ -211,10 +211,12 @@ class PuzzleRepository {
     _log.fine('Streaming Activity');
     yield* resp.stream
         .toStringStream()
-        .where((event) => event.isNotEmpty && event != '\n')
+        .expand((event) => event.split('\n'))
+        .where((event) => event.isNotEmpty)
         .map((event) => jsonDecode(event) as Map<String, dynamic>)
+        .where((json) => json.containsKey('win'))
         .map((json) => _puzzleActivityFromJson(json))
-        .handleError((Object error) => print(error));
+        .handleError((Object error) => _log.warning(error.toString()));
   }
 
   Result<PuzzleBatchResponse> _decodeBatchResponse(http.Response response) {
@@ -381,9 +383,11 @@ PuzzleGamePlayer _puzzlePlayerFromPick(RequiredPick pick) {
 }
 
 PuzzleAndResult _puzzleActivityFromPick(RequiredPick pick) {
+  final date = pick('date').asIntOrThrow();
   return PuzzleAndResult(
     win: pick('win').asBoolOrThrow(),
     puzzle: _historyPuzzleFromPick(pick('puzzle').required()),
+    date: DateTime.fromMillisecondsSinceEpoch(date, isUtc: true),
   );
 }
 

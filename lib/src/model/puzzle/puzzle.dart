@@ -186,6 +186,7 @@ class PuzzleDashboardData with _$PuzzleDashboardData {
 
 @freezed
 class HistoryPuzzle with _$HistoryPuzzle {
+  const HistoryPuzzle._();
   const factory HistoryPuzzle({
     required PuzzleId id,
     required int rating,
@@ -194,6 +195,12 @@ class HistoryPuzzle with _$HistoryPuzzle {
     required ISet<String> themes,
     required String fen,
   }) = _HistoryPuzzle;
+
+  (String, Side, Move?) preview() {
+    final pos = Chess.fromSetup(Setup.parseFen(fen));
+
+    return (fen, pos.turn, null);
+  }
 }
 
 @freezed
@@ -201,5 +208,6 @@ class PuzzleAndResult with _$PuzzleAndResult {
   const factory PuzzleAndResult({
     required HistoryPuzzle puzzle,
     required bool win,
+    required DateTime date,
   }) = _PuzzleAndResult;
 }
