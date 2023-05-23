@@ -31,7 +31,10 @@ jobs:
         run: dart run build_runner build
 
       - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed .
+        run: |
+          dart format --output=none --set-exit-if-changed $(find lib -name "*.dart" -not \( -name "*.*freezed.dart" -o -name "*.*g.dart" \) )
+          dart format --output=none --set-exit-if-changed $(find test -name "*.dart" -not \( -name "*.*freezed.dart" -o -name "*.*g.dart" \) )
+        # run: dart format --output=none --set-exit-if-changed .
 
       - name: Analyze project source
         run: flutter analyze
