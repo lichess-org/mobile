@@ -8,8 +8,8 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
+import 'package:lichess_mobile/src/ui/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -463,8 +463,8 @@ class _BottomBar extends ConsumerWidget {
           children: [
             BottomBarButton(
               icon: Icons.delete,
-              label: context.l10n.stormNewRun,
-              shortLabel: 'New Run',
+              label: context.l10n.stormNewRun.split(' ').take(2).join(' '),
+              shortLabel: context.l10n.stormNewRun.split(' ').take(2).join(' '),
               highlighted: true,
               showAndroidShortLabel: true,
               onTap: () => ref.invalidate(stormProvider),
@@ -472,9 +472,10 @@ class _BottomBar extends ConsumerWidget {
             if (puzzleState.clock.endAt == null)
               BottomBarButton(
                 icon: LichessIcons.flag,
-                label: context.l10n.stormEndRun,
+                label: context.l10n.stormEndRun.split(' ').take(2).join(' '),
                 highlighted: puzzleState.clock.startAt != null,
-                shortLabel: 'End Run',
+                shortLabel:
+                    context.l10n.stormEndRun.split(' ').take(2).join(' '),
                 showAndroidShortLabel: true,
                 onTap: () {
                   if (puzzleState.clock.startAt != null) {
@@ -515,12 +516,20 @@ class _RunStats extends StatelessWidget {
   }
 }
 
-class _DialogBody extends ConsumerWidget {
+class _DialogBody extends ConsumerStatefulWidget {
   const _DialogBody(this.stats);
 
   final StormRunStats stats;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState createState() => _DialogBodyState();
+}
+
+class _DialogBodyState extends ConsumerState<_DialogBody> {
+  bool isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -536,35 +545,40 @@ class _DialogBody extends ConsumerWidget {
             children: [
               _StatsRow(
                 context.l10n.stormPuzzlesSolved,
-                stats.score.toString(),
+                widget.stats.score.toString(),
               ),
-              _StatsRow(context.l10n.stormMoves, stats.moves.toString()),
+              _StatsRow(context.l10n.stormMoves, widget.stats.moves.toString()),
               _StatsRow(
                 context.l10n.accuracy,
-                '${(((stats.moves - stats.errors) / stats.moves) * 100).toStringAsFixed(2)}%',
+                '${(((widget.stats.moves - widget.stats.errors) / widget.stats.moves) * 100).toStringAsFixed(2)}%',
               ),
               _StatsRow(
                 context.l10n.stormCombo,
-                stats.comboBest.toString(),
+                widget.stats.comboBest.toString(),
               ),
-              _StatsRow(context.l10n.stormTime, '${stats.time.inSeconds}s'),
+              _StatsRow(
+                context.l10n.stormTime,
+                '${widget.stats.time.inSeconds}s',
+              ),
               _StatsRow(
                 context.l10n.stormTimePerMove,
-                '${stats.timePerMove.toStringAsFixed(1)}s',
+                '${widget.stats.timePerMove.toStringAsFixed(1)}s',
               ),
               _StatsRow(
                 context.l10n.stormHighestSolved,
-                stats.highest.toString(),
+                widget.stats.highest.toString(),
               ),
             ],
           ),
           const SizedBox(height: 16.0),
           FatButton(
             semanticsLabel: "Play Again",
-            onPressed: () {
-              ref.invalidate(stormProvider);
-              Navigator.of(context).pop();
-            },
+            onPressed: isLoading
+                ? null
+                : () {
+                    ref.invalidate(stormProvider);
+                    Navigator.of(context).pop();
+                  },
             child: Text(context.l10n.stormPlayAgain),
           ),
           ListSection(
@@ -579,39 +593,43 @@ class _DialogBody extends ConsumerWidget {
                   return LayoutGrid(
                     columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
                     rowSizes: List.generate(
-                      (stats.history.length / crossAxisCount).ceil(),
+                      (widget.stats.history.length / crossAxisCount).ceil(),
                       (_) => auto,
                     ),
-                    children: stats.history.map((e) {
+                    children: widget.stats.history.map((e) {
                       final (side, fen, lastMove) = e.$1.preview();
                       return SizedBox(
                         width: boardWidth,
                         height: boardWidth + footerHeight,
                         child: BoardPreview(
-                          onTap: () async {
-                            final session = ref.read(authSessionProvider);
-                            Puzzle? puzzle;
-                            try {
-                              puzzle = await ref
-                                  .read(puzzleProvider(e.$1.id).future);
-                            } catch (e) {
-                              showPlatformSnackbar(context, e.toString());
-                            } finally {
-                              if (puzzle != null) {
-                                pushPlatformRoute(
-                                  context,
-                                  builder: (_) => PuzzleScreen(
-                                    theme: PuzzleTheme.mix,
-                                    initialPuzzleContext: PuzzleContext(
-                                      theme: PuzzleTheme.mix,
-                                      puzzle: puzzle!,
-                                      userId: session?.user.id,
-                                    ),
-                                  ),
-                                );
-                              }
-                            }
-                          },
+                          onTap: isLoading
+                              ? null
+                              : () async {
+                                  final session = ref.read(authSessionProvider);
+                                  Puzzle? puzzle;
+                                  try {
+                                    setState(() => isLoading = true);
+                                    puzzle = await ref
+                                        .read(puzzleProvider(e.$1.id).future);
+                                  } catch (e) {
+                                    showPlatformSnackbar(context, e.toString());
+                                  } finally {
+                                    if (mounted && puzzle != null) {
+                                      setState(() => isLoading = false);
+                                      pushPlatformRoute(
+                                        context,
+                                        builder: (_) => PuzzleScreen(
+                                          theme: PuzzleTheme.mix,
+                                          initialPuzzleContext: PuzzleContext(
+                                            theme: PuzzleTheme.mix,
+                                            puzzle: puzzle!,
+                                            userId: session?.user.id,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                },
                           orientation: side.cg,
                           fen: fen,
                           lastMove: lastMove.cg,
