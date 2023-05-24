@@ -84,7 +84,7 @@ class PuzzleHistory extends _$PuzzleHistory {
   StreamSubscription<PuzzleAndResult>? _streamSub;
 
   @override
-  Future<PuzzleHistoryState> build() {
+  Future<PuzzleHistoryState> build(int max, DateTime before) {
     ref.cacheFor(const Duration(seconds: 30));
     ref.onDispose(() => _streamSub?.cancel());
 
@@ -96,7 +96,7 @@ class PuzzleHistory extends _$PuzzleHistory {
 
   Stream<PuzzleAndResult> connectStream() {
     final repo = ref.watch(puzzleRepositoryProvider);
-    final stream = repo.puzzleActivity(10, DateTime.now());
+    final stream = repo.puzzleActivity(max, before);
 
     _streamSub?.cancel();
     _streamSub = stream.listen((event) {
