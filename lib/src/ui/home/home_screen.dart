@@ -125,7 +125,7 @@ class _HomeScaffold extends StatelessWidget {
           Expanded(
             child: child,
           ),
-          Container(
+          SizedBox(
             height: 80,
             // color: CupertinoTheme.of(context).barBackgroundColor,
             child: Padding(

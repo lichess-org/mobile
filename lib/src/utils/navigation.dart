@@ -18,7 +18,10 @@ Future<void> pushPlatformRoute(
   return Navigator.of(context, rootNavigator: rootNavigator).push<void>(
     defaultTargetPlatform == TargetPlatform.iOS
         ? CupertinoPageRoute(
-            builder: builder, title: title, fullscreenDialog: fullscreenDialog)
+            builder: builder,
+            title: title,
+            fullscreenDialog: fullscreenDialog,
+          )
         : MaterialPageRoute(
             builder: builder,
             fullscreenDialog: fullscreenDialog,

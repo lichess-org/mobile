@@ -44,9 +44,6 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timeControlPref = ref
-        .watch(playPreferencesProvider.select((prefs) => prefs.timeIncrement));
-
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.max,
