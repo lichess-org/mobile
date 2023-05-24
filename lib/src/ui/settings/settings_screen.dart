@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/ui/settings/user_screen_settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
@@ -139,17 +138,6 @@ class _Body extends ConsumerWidget {
                     context,
                     title: 'Board',
                     builder: (context) => const BoardSettingsScreen(),
-                  );
-                },
-              ),
-              PlatformListTile(
-                leading: const Icon(Icons.account_box),
-                title: const Text('User Screen'),
-                onTap: () {
-                  pushPlatformRoute(
-                    context,
-                    title: 'User Screen',
-                    builder: (context) => const UserScreenSettingsScreen(),
                   );
                 },
               ),

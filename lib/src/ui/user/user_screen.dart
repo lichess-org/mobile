@@ -5,7 +5,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/model/settings/user_screen_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -154,15 +153,14 @@ class _Profile extends StatelessWidget {
   }
 }
 
-class PerfCards extends ConsumerWidget {
+class PerfCards extends StatelessWidget {
   const PerfCards({required this.user, super.key});
 
   final User user;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final perfOrder = ref.watch(userScreenPreferencesProvider).perfOrder;
-    final List<Perf> userPerfs = perfOrder.where((element) {
+  Widget build(BuildContext context) {
+    final List<Perf> userPerfs = Perf.values.where((element) {
       final p = user.perfs[element];
       return p != null &&
           p.numberOfGames > 0 &&
