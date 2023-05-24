@@ -90,8 +90,9 @@ class PuzzleHistory extends _$PuzzleHistory {
 
     final stream = connectStream(10, DateTime.now());
 
-    return stream.first
-        .then((value) => PuzzleHistoryState(historyList: [value]));
+    return stream.first.then(
+      (value) => PuzzleHistoryState(historyList: [value], historyListFull: []),
+    );
   }
 
   Stream<PuzzleAndResult> connectStream(int max, DateTime before) {
@@ -107,6 +108,7 @@ class PuzzleHistory extends _$PuzzleHistory {
       state = AsyncData(
         PuzzleHistoryState(
           historyList: [if (prev != null) ...prev.historyList, event],
+          historyListFull: [],
         ),
       );
     });
@@ -124,5 +126,6 @@ class PuzzleHistory extends _$PuzzleHistory {
 class PuzzleHistoryState with _$PuzzleHistoryState {
   const factory PuzzleHistoryState({
     required List<PuzzleAndResult> historyList,
+    required List<PuzzleAndResult> historyListFull,
   }) = _PuzzleHistoryState;
 }

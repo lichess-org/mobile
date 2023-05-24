@@ -44,39 +44,13 @@ class PuzzleHistoryWidget extends ConsumerWidget {
               Row(
                 children: data.historyList
                     .getRange(
-                  i,
-                  min(i + crossAxisCount, data.historyList.length),
-                )
+                      i,
+                      min(i + crossAxisCount, data.historyList.length),
+                    )
                     .map(
-                  (e) {
-                    final (fen, turn, _) = e.puzzle.preview();
-                    return SizedBox(
-                      width: boardWidth,
-                      height: boardWidth + 33,
-                      child: BoardPreview(
-                        orientation: turn.cg,
-                        fen: fen,
-                        footer: Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: Row(
-                            children: [
-                              ColoredBox(
-                                color: e.win
-                                    ? LichessColors.good
-                                    : LichessColors.red,
-                                child: Icon(
-                                  color: Colors.white,
-                                  (e.win) ? Icons.done : Icons.close,
-                                ),
-                              ),
-                              Text(e.puzzle.rating.toString()),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ).toList(),
+                      (e) => _HistoryBoard(e, boardWidth),
+                    )
+                    .toList(),
               ),
           ],
         );
@@ -192,41 +166,52 @@ class _BodyState extends ConsumerState<_Body> {
           return Row(
             children: _historyList
                 .getRange(
-              index,
-              min(index + crossAxisCount, _historyList.length),
-            )
+                  index,
+                  min(index + crossAxisCount, _historyList.length),
+                )
                 .map(
-              (e) {
-                final (fen, turn, _) = e.puzzle.preview();
-                return SizedBox(
-                  width: boardWidth,
-                  height: boardWidth + 33,
-                  child: BoardPreview(
-                    orientation: turn.cg,
-                    fen: fen,
-                    footer: Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Row(
-                        children: [
-                          ColoredBox(
-                            color:
-                                e.win ? LichessColors.good : LichessColors.red,
-                            child: Icon(
-                              color: Colors.white,
-                              (e.win) ? Icons.done : Icons.close,
-                            ),
-                          ),
-                          Text(e.puzzle.rating.toString()),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ).toList(),
+                  (e) => _HistoryBoard(e, boardWidth),
+                )
+                .toList(),
           );
         }
       },
+    );
+  }
+}
+
+class _HistoryBoard extends ConsumerWidget {
+  const _HistoryBoard(this.puzzle, this.boardWidth);
+
+  final PuzzleAndResult puzzle;
+  final double boardWidth;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final (fen, turn, _) = puzzle.puzzle.preview();
+    return SizedBox(
+      width: boardWidth,
+      height: boardWidth + 33,
+      child: BoardPreview(
+        orientation: turn.cg,
+        fen: fen,
+        footer: Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Row(
+            children: [
+              ColoredBox(
+                color: puzzle.win ? LichessColors.good : LichessColors.red,
+                child: Icon(
+                  color: Colors.white,
+                  (puzzle.win) ? Icons.done : Icons.close,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(puzzle.puzzle.rating.toString()),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
