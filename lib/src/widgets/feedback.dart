@@ -74,16 +74,13 @@ void showPlatformSnackbar(BuildContext context, String message) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(message)),
       );
-      break;
     case TargetPlatform.iOS:
       showCupertinoErrorSnackBar(
         context: context,
         message: message,
       );
-      break;
     default:
       assert(false, 'Unexpected platform $defaultTargetPlatform');
-      break;
   }
 }
 

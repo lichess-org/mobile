@@ -35,6 +35,7 @@ class StormCtrl extends _$StormCtrl {
     });
     final pov = Chess.fromSetup(Setup.parseFen(puzzles.first.fen));
     final newState = StormCtrlState(
+      runOver: false,
       puzzle: puzzles[_nextPuzzleIndex],
       position: pov,
       pov: pov.turn.opposite,
@@ -50,6 +51,11 @@ class StormCtrl extends _$StormCtrl {
       const Duration(seconds: 1),
       () => _addMove(state.expectedMove!, ComboState.noChange),
     );
+    newState.clock.timeStream.listen((e) {
+      if (e.$1 == Duration.zero && state.clock.endAt == null) {
+        end();
+      }
+    });
     return newState;
   }
 
@@ -103,7 +109,7 @@ class StormCtrl extends _$StormCtrl {
   void end() {
     state.clock.reset();
     _pushToHistory(false);
-    state = state.copyWith(stats: _getStats());
+    state = state.copyWith(stats: _getStats(), runOver: true);
   }
 
   Future<void> _loadNextPuzzle(bool result, ComboState comboChange) async {
@@ -197,6 +203,7 @@ class StormCtrlState with _$StormCtrlState {
     required StormCombo combo,
     required StormRunStats? stats,
     required DateTime? lastSolvedTime,
+    required bool runOver,
   }) = _StormCtrlState;
 
   Move? get expectedMove => Move.fromUci(puzzle.solution[moveIndex + 1]);

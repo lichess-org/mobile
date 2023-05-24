@@ -102,21 +102,21 @@ class _Load extends ConsumerWidget {
 class _Body extends ConsumerWidget {
   const _Body({required this.data});
   final PuzzleStormResponse data;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = stormCtrlProvider(data.puzzles);
     final puzzleState = ref.watch(ctrlProvider);
 
-    puzzleState.clock.timeStream.listen((e) {
-      if (e.$1 == Duration.zero && puzzleState.clock.endAt == null) {
-        // end function is always called from here
-        ref.read(ctrlProvider.notifier).end();
+    ref.listen(ctrlProvider.select((state) => state.runOver), (_, next) {
+      if (next) {
         showDialog<void>(
           context: context,
-          builder: (context) => _RunStats(ref.watch(ctrlProvider).stats!),
+          builder: (ctx) => _RunStats(ref.read(ctrlProvider).stats!),
         );
       }
     });
+
     final content = Column(
       children: [
         Expanded(
@@ -249,6 +249,7 @@ class _Combo extends ConsumerStatefulWidget {
 class _ComboState extends ConsumerState<_Combo>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  // ignore: avoid-late-keyword
   late StormCombo combo;
 
   static const levels = [3, 5, 7, 10];
