@@ -25,6 +25,7 @@ class TableBoardLayout extends ConsumerWidget {
     this.moves,
     this.currentMoveIndex,
     this.onSelectMove,
+    this.boardOverlay,
     this.errorMessage,
     this.showMoveListPlaceholder = false,
     super.key,
@@ -51,6 +52,9 @@ class TableBoardLayout extends ConsumerWidget {
 
   /// Optional error message that will be displayed on top of the board.
   final String? errorMessage;
+
+  /// Optional widget that will be displayed on top of the board.
+  final Widget? boardOverlay;
 
   /// Whether to show the move list placeholder. Useful when loading.
   final bool showMoveListPlaceholder;
@@ -105,17 +109,38 @@ class TableBoardLayout extends ConsumerWidget {
         final board =
             Board(size: boardSize, data: boardData, settings: settings);
 
-        final boardOrError = error != null
-            ? SizedBox.square(
-                dimension: boardSize,
-                child: Stack(
-                  children: [
-                    board,
-                    error,
-                  ],
+        Widget boardWidget = board;
+
+        if (boardOverlay != null) {
+          boardWidget = SizedBox.square(
+            dimension: boardSize,
+            child: Stack(
+              children: [
+                board,
+                SizedBox.square(
+                  dimension: boardSize,
+                  child: Center(
+                    child: SizedBox(
+                      width: (boardSize / 8) * 6,
+                      height: (boardSize / 8) * 4,
+                      child: boardOverlay,
+                    ),
+                  ),
                 ),
-              )
-            : board;
+              ],
+            ),
+          );
+        } else if (error != null) {
+          boardWidget = SizedBox.square(
+            dimension: boardSize,
+            child: Stack(
+              children: [
+                board,
+                error,
+              ],
+            ),
+          );
+        }
 
         final slicedMoves = moves?.asMap().entries.slices(2);
 
@@ -124,7 +149,7 @@ class TableBoardLayout extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  boardOrError,
+                  boardWidget,
                   Flexible(
                     fit: FlexFit.loose,
                     child: Padding(
@@ -175,7 +200,7 @@ class TableBoardLayout extends ConsumerWidget {
                   else if (showMoveListPlaceholder)
                     const SizedBox(height: 40),
                   Expanded(child: topTable),
-                  boardOrError,
+                  boardWidget,
                   Expanded(child: bottomTable),
                 ],
               );

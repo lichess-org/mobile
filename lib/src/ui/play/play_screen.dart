@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
+import 'package:lichess_mobile/src/ui/game/online_game_screen.dart';
 
 import './time_control_modal.dart';
 
@@ -60,7 +61,13 @@ class _Body extends ConsumerWidget {
             child: FatButton(
               semanticsLabel: context.l10n.createAGame,
               onPressed: () {
-                // Navigator.of(context).pushNamed('/play/ai');
+                pushPlatformRoute(
+                  context,
+                  rootNavigator: true,
+                  builder: (BuildContext context) {
+                    return const OnlineGameScreen();
+                  },
+                );
               },
               child: Text(context.l10n.createAGame),
             ),
