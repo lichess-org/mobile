@@ -135,6 +135,24 @@ void main() {
 
       expect(find.text('Race complete!'), findsOneWidget);
     });
+
+    testWidgets('play wrong move', (tester) async {
+      final app = await buildTestApp(
+        tester,
+        home: const PuzzleStormScreen(),
+        overrides: [stormProvider.overrideWith((ref) => mockStromRun)],
+      );
+
+      await tester.pumpWidget(app);
+
+      await tester.pump(const Duration(seconds: 1));
+      final boardRect = tester.getRect(find.byType(cg.Board));
+
+      await playMove(tester, boardRect, 'h5', 'h6');
+
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.byKey(const Key('h6-blackKing')), findsOneWidget);
+    });
   });
 }
 
