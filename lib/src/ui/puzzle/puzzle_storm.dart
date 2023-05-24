@@ -104,16 +104,16 @@ class _Body extends ConsumerWidget {
   final PuzzleStormResponse data;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stormCtrlProvier = StormCtrlProvider(data.puzzles);
-    final puzzleState = ref.watch(stormCtrlProvier);
+    final ctrlProvider = stormCtrlProvider(data.puzzles);
+    final puzzleState = ref.watch(ctrlProvider);
 
     puzzleState.clock.timeStream.listen((e) {
       if (e.$1 == Duration.zero && puzzleState.clock.endAt == null) {
         // end function is always called from here
-        ref.read(stormCtrlProvier.notifier).end();
+        ref.read(ctrlProvider.notifier).end();
         showDialog<void>(
           context: context,
-          builder: (context) => _RunStats(ref.watch(stormCtrlProvier).stats!),
+          builder: (context) => _RunStats(ref.watch(ctrlProvider).stats!),
         );
       }
     });
@@ -125,7 +125,7 @@ class _Body extends ConsumerWidget {
               child: TableBoardLayout(
                 boardData: cg.BoardData(
                   onMove: (move, {isPremove}) => ref
-                      .read(stormCtrlProvier.notifier)
+                      .read(ctrlProvider.notifier)
                       .onUserMove(Move.fromUci(move.uci)!),
                   orientation: puzzleState.pov.cg,
                   interactableSide: puzzleState.position.isGameOver
@@ -140,14 +140,14 @@ class _Body extends ConsumerWidget {
                   validMoves: puzzleState.validMoves,
                 ),
                 topTable: _TopBar(
-                  ctrl: stormCtrlProvier,
+                  ctrl: ctrlProvider,
                 ),
-                bottomTable: _Combo(stormCtrlProvier),
+                bottomTable: _Combo(ctrlProvider),
               ),
             ),
           ),
         ),
-        _BottomBar(stormCtrlProvier),
+        _BottomBar(ctrlProvider),
       ],
     );
 
@@ -249,7 +249,7 @@ class _Combo extends ConsumerStatefulWidget {
 class _ComboState extends ConsumerState<_Combo>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  StormCombo combo = StormCombo();
+  late StormCombo combo;
 
   static const levels = [3, 5, 7, 10];
 
@@ -260,17 +260,16 @@ class _ComboState extends ConsumerState<_Combo>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
-      value: combo.percent() / 100,
+      value: combo.percent(getNext: false) / 100,
     );
   }
 
   @override
   void didUpdateWidget(covariant _Combo oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.ctrl != widget.ctrl) {
-      combo = StormCombo();
-    }
-    final newVal = combo.percent() / 100;
+
+    combo = ref.read(widget.ctrl.select((value) => value.combo));
+    final newVal = combo.percent(getNext: false) / 100;
     if (_controller.value != newVal) {
       // next lvl reached
       if (_controller.value > newVal && combo.current != 0) {
@@ -299,7 +298,7 @@ class _ComboState extends ConsumerState<_Combo>
 
   @override
   Widget build(BuildContext context) {
-    final lvl = combo.level();
+    final lvl = combo.currentLevel();
     final indicatorColor = Theme.of(context).colorScheme.secondary;
 
     final comboShades = generateShades(

@@ -149,7 +149,7 @@ class LitePuzzle with _$LitePuzzle {
   const factory LitePuzzle({
     required PuzzleId id,
     required String fen,
-    required List<UCIMove> solution,
+    required IList<UCIMove> solution,
     required int rating,
   }) = _LitePuzzle;
 

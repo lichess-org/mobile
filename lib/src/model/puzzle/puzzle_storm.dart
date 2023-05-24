@@ -41,13 +41,15 @@ class StormCtrl extends _$StormCtrl {
       moveIndex: -1,
       numSolved: 0,
       clock: StormClock(),
-      combo: StormCombo(),
+      combo: const StormCombo(current: 0, best: 0),
       stats: null,
       lastSolvedTime: null,
     );
     _nextPuzzleIndex += 1;
-    _firstMoveTimer =
-        Timer(const Duration(seconds: 1), () => _addMove(state.expectedMove!));
+    _firstMoveTimer = Timer(
+      const Duration(seconds: 1),
+      () => _addMove(state.expectedMove!, ComboState.noChange),
+    );
     return newState;
   }
 
@@ -56,11 +58,10 @@ class StormCtrl extends _$StormCtrl {
     state.clock.start();
     final expected = state.expectedMove;
     final pos = state.position;
-    _addMove(move);
+    _addMove(move, ComboState.noChange);
     _moves += 1;
     if (state.position.isGameOver || move == expected) {
-      state.combo.inc();
-      final bonus = state.combo.bonus();
+      final bonus = state.combo.bonus(getNext: true);
       if (bonus != null) {
         state.clock.addTime(bonus);
       }
@@ -71,7 +72,7 @@ class StormCtrl extends _$StormCtrl {
         }
         ref.read(soundServiceProvider).play(Sound.confirmation);
         _pushToHistory(true);
-        await _loadNextPuzzle(true);
+        await _loadNextPuzzle(true, ComboState.increase);
         return;
       }
 
@@ -85,18 +86,17 @@ class StormCtrl extends _$StormCtrl {
             .moveFeedback(check: state.position.isCheck);
       }
       await Future<void>.delayed(moveDelay);
-      _addMove(state.expectedMove!);
+      _addMove(state.expectedMove!, ComboState.increase);
     } else {
       _errors += 1;
       ref.read(soundServiceProvider).play(Sound.error);
       state.clock.subtractTime(malus);
-      state.combo.reset();
       if (state.clock.flag() || !_isNextPuzzleAvailable()) {
         state.clock.sendEnd();
         return;
       }
       _pushToHistory(false);
-      await _loadNextPuzzle(false);
+      await _loadNextPuzzle(false, ComboState.reset);
     }
   }
 
@@ -106,23 +106,50 @@ class StormCtrl extends _$StormCtrl {
     state = state.copyWith(stats: _getStats());
   }
 
-  Future<void> _loadNextPuzzle(bool result) async {
+  Future<void> _loadNextPuzzle(bool result, ComboState comboChange) async {
+    int newComboCurrent;
+    switch (comboChange) {
+      case ComboState.increase:
+        newComboCurrent = state.combo.current + 1;
+      case ComboState.reset:
+        newComboCurrent = 0;
+      case ComboState.noChange:
+        newComboCurrent = state.combo.current;
+    }
+
     state = state.copyWith(
       puzzle: puzzles[_nextPuzzleIndex],
       position: Chess.fromSetup(Setup.parseFen(puzzles[_nextPuzzleIndex].fen)),
       moveIndex: -1,
       numSolved: result ? state.numSolved + 1 : state.numSolved,
       lastSolvedTime: DateTime.now(),
+      combo: StormCombo(
+        current: newComboCurrent,
+        best: math.max(state.combo.best, state.combo.current + 1),
+      ),
     );
     _nextPuzzleIndex += 1;
     await Future<void>.delayed(moveDelay);
-    _addMove(state.expectedMove!);
+    _addMove(state.expectedMove!, ComboState.noChange);
   }
 
-  void _addMove(Move move) {
+  void _addMove(Move move, ComboState comboChange) {
+    int newComboCurrent;
+    switch (comboChange) {
+      case ComboState.increase:
+        newComboCurrent = state.combo.current + 1;
+      case ComboState.reset:
+        newComboCurrent = 0;
+      case ComboState.noChange:
+        newComboCurrent = state.combo.current;
+    }
     state = state.copyWith(
       position: state.position.play(move),
       moveIndex: state.moveIndex + 1,
+      combo: StormCombo(
+        current: newComboCurrent,
+        best: math.max(state.combo.best, state.combo.current + 1),
+      ),
     );
   }
 
@@ -196,9 +223,20 @@ class StormRunStats with _$StormRunStats {
   }) = _StormRunStats;
 }
 
-class StormCombo {
-  int current = 0;
-  int best = 0;
+enum ComboState {
+  increase,
+  reset,
+  noChange,
+}
+
+@freezed
+class StormCombo with _$StormCombo {
+  const StormCombo._();
+
+  const factory StormCombo({
+    required int current,
+    required int best,
+  }) = _StormCombo;
 
   static const levels = [
     [0, 0],
@@ -208,20 +246,18 @@ class StormCombo {
     [30, 10]
   ];
 
-  void inc() {
-    current += 1;
-    best = math.max(current, best);
-  }
-
-  void reset() => current = 0;
-
-  int level() {
+  int currentLevel() {
     final lvl = levels.indexWhere((element) => element.first > current);
     return lvl >= 0 ? lvl - 1 : levels.length - 1;
   }
 
-  double percent() {
-    final lvl = level();
+  int nextLevel() {
+    final lvl = levels.indexWhere((element) => element.first > current + 1);
+    return lvl >= 0 ? lvl - 1 : levels.length - 1;
+  }
+
+  double percent({required bool getNext}) {
+    final lvl = getNext ? nextLevel() : currentLevel();
     final lastLevel = levels.last;
     if (lvl >= levels.length - 1) {
       final range = lastLevel.first - levels[levels.length - 2].first;
@@ -231,9 +267,9 @@ class StormCombo {
     return ((current - bounds.first) / (bounds[1] - bounds.first)) * 100;
   }
 
-  Duration? bonus() {
-    if (percent().floor() == 0) {
-      final lvl = level();
+  Duration? bonus({required bool getNext}) {
+    if (percent(getNext: getNext).floor() == 0) {
+      final lvl = getNext ? nextLevel() : currentLevel();
       if (lvl > 0) {
         return Duration(seconds: levels[lvl][1]);
       }

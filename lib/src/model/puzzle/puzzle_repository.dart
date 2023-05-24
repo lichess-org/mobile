@@ -242,7 +242,7 @@ LitePuzzle _litePuzzleFromPick(RequiredPick pick) {
   return LitePuzzle(
     id: pick('id').asPuzzleIdOrThrow(),
     fen: pick('fen').asStringOrThrow(),
-    solution: pick('line').asStringOrThrow().split(' '),
+    solution: pick('line').asStringOrThrow().split(' ').toIList(),
     rating: pick('rating').asIntOrThrow(),
   );
 }
