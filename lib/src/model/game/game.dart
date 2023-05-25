@@ -6,6 +6,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 
 import 'player.dart';
 
@@ -17,17 +18,18 @@ class PlayableGame with _$PlayableGame {
 
   const factory PlayableGame({
     required GameId id,
+    required GameFullId fullId,
     required bool rated,
     required Speed speed,
+    required Perf perf,
     required String initialFen,
     required Side orientation,
-    required Player white,
-    required Player black,
+    required GameStatus status,
+    Move? lastMove,
+    Duration? timeLeft,
+    required Player opponent,
     required Variant variant,
   }) = _PlayableGame;
-
-  Player get player => orientation == Side.white ? white : black;
-  Player get opponent => orientation == Side.white ? black : white;
 }
 
 @freezed
@@ -215,16 +217,6 @@ class AnalysisJudgment with _$AnalysisJudgment {
   }) = _AnalysisJugdment;
 }
 
-enum Speed {
-  ultraBullet,
-  bullet,
-  blitz,
-  rapid,
-  classical,
-  correspondence,
-  unlimited,
-}
-
 enum GameStatus {
   unknown(-1),
   created(10),
@@ -245,38 +237,20 @@ enum GameStatus {
   final int value;
 }
 
+final IMap<String, GameStatus> gameStatusNameMap =
+    IMap(GameStatus.values.asNameMap());
+
 extension GameExtension on Pick {
-  Speed asSpeedOrThrow() {
-    final value = this.required().value;
-    if (value is Speed) {
-      return value;
-    }
-    if (value is String) {
-      return Speed.values
-          .firstWhere((v) => v.name == value, orElse: () => Speed.blitz);
-    }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to Speed",
-    );
-  }
-
-  Speed? asSpeedOrNull() {
-    if (value == null) return null;
-    try {
-      return asSpeedOrThrow();
-    } catch (_) {
-      return null;
-    }
-  }
-
   GameStatus asGameStatusOrThrow() {
     final value = this.required().value;
     if (value is GameStatus) {
       return value;
     }
     if (value is String) {
-      return GameStatus.values
-          .firstWhere((e) => e.name == value, orElse: () => GameStatus.unknown);
+      final gameStatus = gameStatusNameMap[value];
+      if (gameStatus != null) {
+        return gameStatus;
+      }
     }
     throw PickException(
       "value $value at $debugParsingExit can't be casted to GameStatus",

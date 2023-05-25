@@ -167,6 +167,17 @@ class AuthClient {
     return Result.capture(_client.send(request))
         .mapError((error, stackTrace) {
           _log.severe('Request error', error, stackTrace);
+          if (kReleaseMode) {
+            _crashlytics.recordError(
+              error,
+              stackTrace,
+              reason: 'a non-fatal http request error',
+              information: [
+                'url: $url',
+                'headers: $headers',
+              ],
+            );
+          }
           return GenericIOException();
         })
         .flatMap((r) => _validateResponseStatusResult('GET', url, r))

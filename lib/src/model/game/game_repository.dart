@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
@@ -7,12 +8,14 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
 import 'game.dart';
 import 'player.dart';
+import 'lobby_event.dart';
 
 class GameRepository {
   const GameRepository(
@@ -68,6 +71,21 @@ class GameRepository {
             logger: _log,
           ),
         );
+  }
+
+  Stream<LobbyEvent> lobbyEvents() async* {
+    final resp =
+        await apiClient.stream(Uri.parse('$kLichessHost/api/stream/event'));
+    _log.fine('Start streaming lobby events.');
+    yield* resp.stream
+        .toStringStream()
+        .where((event) => event.isNotEmpty && event != '\n')
+        .map((event) => jsonDecode(event) as Map<String, dynamic>)
+        .where(
+          (json) => json['type'] == 'gameStart' || json['type'] == 'gameFinish',
+        )
+        .map((json) => LobbyEvent.fromJson(json))
+        .handleError((Object error) => _log.warning(error));
   }
 }
 
