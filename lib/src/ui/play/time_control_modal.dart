@@ -26,13 +26,11 @@ class TimeControlModal extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(context.l10n.timeControl),
-        actions: [
-          IconButton(
-            tooltip: context.l10n.close,
-            icon: const Icon(Icons.close),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
+        leading: IconButton(
+          tooltip: context.l10n.close,
+          icon: const Icon(Icons.close),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: _Body(),
     );
