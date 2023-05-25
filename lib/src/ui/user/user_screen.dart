@@ -167,8 +167,10 @@ class PerfCards extends StatelessWidget {
           p.ratingDeviation < kClueLessDeviation;
     }).toList(growable: false);
 
-    userPerfs.sort((p1, p2) =>
-        user.perfs[p1]!.numberOfGames.compareTo(user.perfs[p2]!.numberOfGames));
+    userPerfs.sort(
+      (p1, p2) => user.perfs[p1]!.numberOfGames
+          .compareTo(user.perfs[p2]!.numberOfGames),
+    );
     userPerfs = userPerfs.reversed.toList();
 
     if (userPerfs.isEmpty) {
