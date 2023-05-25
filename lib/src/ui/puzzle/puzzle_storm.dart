@@ -108,8 +108,8 @@ class _Body extends ConsumerWidget {
     final ctrlProvider = stormCtrlProvider(data.puzzles);
     final puzzleState = ref.watch(ctrlProvider);
 
-    ref.listen(ctrlProvider.select((state) => state.runOver), (_, next) {
-      if (next) {
+    ref.listen(ctrlProvider.select((state) => state.runOver), (_, s) {
+      if (s) {
         showDialog<void>(
           context: context,
           builder: (ctx) => _RunStats(ref.read(ctrlProvider).stats!),
@@ -151,7 +151,7 @@ class _Body extends ConsumerWidget {
       ],
     );
 
-    return !puzzleState.clock.isActive
+    return !puzzleState.runActive
         ? content
         : WillPopScope(
             child: content,
@@ -196,7 +196,7 @@ class _TopBar extends ConsumerWidget {
             color: LichessColors.brag,
           ),
           const SizedBox(width: 8),
-          if (!puzzleState.clock.isActive && puzzleState.stats == null)
+          if (!puzzleState.runActive || !puzzleState.runOver)
             Expanded(
               flex: 5,
               child: Column(
@@ -469,7 +469,7 @@ class _BottomBar extends ConsumerWidget {
               showAndroidShortLabel: true,
               onTap: () => ref.invalidate(stormProvider),
             ),
-            if (puzzleState.clock.endAt == null)
+            if (puzzleState.runActive)
               BottomBarButton(
                 icon: LichessIcons.flag,
                 label: context.l10n.stormEndRun.split(' ').take(2).join(' '),
@@ -483,7 +483,7 @@ class _BottomBar extends ConsumerWidget {
                   }
                 },
               ),
-            if (puzzleState.stats != null)
+            if (puzzleState.runOver)
               BottomBarButton(
                 icon: Icons.open_in_new,
                 label: 'Result',
@@ -572,7 +572,7 @@ class _DialogBodyState extends ConsumerState<_DialogBody> {
           ),
           const SizedBox(height: 16.0),
           FatButton(
-            semanticsLabel: "Play Again",
+            semanticsLabel: context.l10n.stormPlayAgain,
             onPressed: isLoading
                 ? null
                 : () {

@@ -62,9 +62,7 @@ class _ClockState extends ConsumerState<StormClockWidget>
     ).animate(_controller);
 
     streamSubscription = clock.timeStream.listen((data) {
-      // Update the widget state with the received data
       setState(() {
-        // Assign the data values to the corresponding widget properties
         minutes = data.$1.inMinutes.remainder(60).toString().padLeft(2, '0');
         seconds = data.$1.inSeconds.remainder(60).toString().padLeft(2, '0');
         time = data.$1;
