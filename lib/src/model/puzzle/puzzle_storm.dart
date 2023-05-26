@@ -36,7 +36,7 @@ class StormCtrl extends _$StormCtrl {
     final pov = Chess.fromSetup(Setup.parseFen(puzzles.first.fen));
     final newState = StormCtrlState(
       runOver: false,
-      runActive: false,
+      runStarted: false,
       puzzle: puzzles[_nextPuzzleIndex],
       position: pov,
       pov: pov.turn.opposite,
@@ -50,7 +50,8 @@ class StormCtrl extends _$StormCtrl {
     _nextPuzzleIndex += 1;
     _firstMoveTimer = Timer(
       const Duration(seconds: 1),
-      () => _addMove(state.expectedMove!, ComboState.noChange),
+      () =>
+          _addMove(state.expectedMove!, ComboState.noChange, runStarted: false),
     );
     newState.clock.timeStream.listen((e) {
       if (e.$1 == Duration.zero && state.clock.endAt == null) {
@@ -65,7 +66,7 @@ class StormCtrl extends _$StormCtrl {
     state.clock.start();
     final expected = state.expectedMove;
     final pos = state.position;
-    _addMove(move, ComboState.noChange);
+    _addMove(move, ComboState.noChange, runStarted: true);
     _moves += 1;
     if (state.position.isGameOver || move == expected) {
       final bonus = state.combo.bonus(getNext: true);
@@ -78,7 +79,7 @@ class StormCtrl extends _$StormCtrl {
           return;
         }
         ref.read(soundServiceProvider).play(Sound.confirmation);
-        _pushToHistory(true);
+        _pushToHistory(success: true);
         await _loadNextPuzzle(true, ComboState.increase);
         return;
       }
@@ -93,7 +94,7 @@ class StormCtrl extends _$StormCtrl {
             .moveFeedback(check: state.position.isCheck);
       }
       await Future<void>.delayed(moveDelay);
-      _addMove(state.expectedMove!, ComboState.increase);
+      _addMove(state.expectedMove!, ComboState.increase, runStarted: true);
     } else {
       _errors += 1;
       ref.read(soundServiceProvider).play(Sound.error);
@@ -102,15 +103,15 @@ class StormCtrl extends _$StormCtrl {
         state.clock.sendEnd();
         return;
       }
-      _pushToHistory(false);
+      _pushToHistory(success: false);
       await _loadNextPuzzle(false, ComboState.reset);
     }
   }
 
   void end() {
     state.clock.reset();
-    _pushToHistory(false);
-    state = state.copyWith(stats: _getStats(), runOver: true, runActive: false);
+    _pushToHistory(success: false);
+    state = state.copyWith(stats: _getStats(), runOver: true);
   }
 
   Future<void> _loadNextPuzzle(bool result, ComboState comboChange) async {
@@ -137,10 +138,10 @@ class StormCtrl extends _$StormCtrl {
     );
     _nextPuzzleIndex += 1;
     await Future<void>.delayed(moveDelay);
-    _addMove(state.expectedMove!, ComboState.noChange);
+    _addMove(state.expectedMove!, ComboState.noChange, runStarted: true);
   }
 
-  void _addMove(Move move, ComboState comboChange) {
+  void _addMove(Move move, ComboState comboChange, {required bool runStarted}) {
     int newComboCurrent;
     switch (comboChange) {
       case ComboState.increase:
@@ -151,7 +152,7 @@ class StormCtrl extends _$StormCtrl {
         newComboCurrent = state.combo.current;
     }
     state = state.copyWith(
-      runActive: true,
+      runStarted: runStarted,
       position: state.position.play(move),
       moveIndex: state.moveIndex + 1,
       combo: StormCombo(
@@ -175,15 +176,15 @@ class StormCtrl extends _$StormCtrl {
                 (maxRating, rating) => rating > maxRating ? rating : maxRating,
               )
           : 0,
-      history: _history,
+      history: _history.toIList(),
     );
   }
 
-  void _pushToHistory(bool result) {
+  void _pushToHistory({required bool success}) {
     final timeTaken = state.lastSolvedTime != null
         ? DateTime.now().difference(state.lastSolvedTime!)
         : DateTime.now().difference(state.clock.startAt!);
-    _history.add((state.puzzle, result, timeTaken));
+    _history.add((state.puzzle, success, timeTaken));
   }
 
   bool _isNextPuzzleAvailable() {
@@ -196,17 +197,38 @@ class StormCtrlState with _$StormCtrlState {
   const StormCtrlState._();
   // moveIndex starts at -1 for new puzzles
   const factory StormCtrlState({
+    /// Current puzzle being played
     required LitePuzzle puzzle,
+
+    /// Side of the run. This stays the same throughout the run
     required Side pov,
-    required Position<Chess> position,
+
+    /// Index of the move based on [puzzle.solution]. For a new puzzle it is at -1
     required int moveIndex,
+
+    /// Position of the current puzzle based on moveIndex
+    required Position<Chess> position,
+
+    /// Number of puzzles solved
     required int numSolved,
+
+    /// A clock object which stays the same throughout the run
     required StormClock clock,
+
+    /// A combo object which has the current and best combo
     required StormCombo combo,
+
+    /// Stats of the storm run. Only initialisd after the run ends
     required StormRunStats? stats,
+
+    /// Last solved time for the puzzle
     required DateTime? lastSolvedTime,
+
+    /// bool to indicate that the run has concluded. Useful for UI updates
     required bool runOver,
-    required bool runActive,
+
+    /// bool to indicate run has started
+    required bool runStarted,
   }) = _StormCtrlState;
 
   Move? get expectedMove => Move.fromUci(puzzle.solution[moveIndex + 1]);
@@ -229,7 +251,7 @@ class StormRunStats with _$StormRunStats {
     required Duration time,
     required double timePerMove,
     required int highest,
-    required List<(LitePuzzle, bool, Duration)> history,
+    required IList<(LitePuzzle, bool, Duration)> history,
   }) = _StormRunStats;
 }
 
@@ -239,6 +261,7 @@ enum ComboState {
   noChange,
 }
 
+/// A `StormCombo` object represents the current and best combo of a storm run
 @freezed
 class StormCombo with _$StormCombo {
   const StormCombo._();
@@ -248,40 +271,52 @@ class StormCombo with _$StormCombo {
     required int best,
   }) = _StormCombo;
 
-  static const levels = [
-    [0, 0],
-    [5, 3],
-    [12, 5],
-    [20, 7],
-    [30, 10]
+  /// List representing the bonus awared at each level
+  static const levelBonus = [3, 5, 6, 10];
+
+  /// List of pair of level and the bonus
+  static const levelsAndBonus = [
+    (level: 0, bonus: 0),
+    (level: 5, bonus: 3),
+    (level: 12, bonus: 5),
+    (level: 20, bonus: 7),
+    (level: 30, bonus: 10),
   ];
 
   int currentLevel() {
-    final lvl = levels.indexWhere((element) => element.first > current);
-    return lvl >= 0 ? lvl - 1 : levels.length - 1;
+    final lvl = levelsAndBonus.indexWhere((element) => element.level > current);
+    return lvl >= 0 ? lvl - 1 : levelsAndBonus.length - 1;
   }
 
+  /// Returns the level of the `current + 1` combo count
   int nextLevel() {
-    final lvl = levels.indexWhere((element) => element.first > current + 1);
-    return lvl >= 0 ? lvl - 1 : levels.length - 1;
+    final lvl =
+        levelsAndBonus.indexWhere((element) => element.level > current + 1);
+    return lvl >= 0 ? lvl - 1 : levelsAndBonus.length - 1;
   }
 
+  /// Returns the percentage completion of the `current` combo count.
+  /// If [getNext] is true it returns the percentage of `current + 1` combo count.
+  /// This is helpful for calculating the progress bar value.
   double percent({required bool getNext}) {
     final lvl = getNext ? nextLevel() : currentLevel();
-    final lastLevel = levels.last;
-    if (lvl >= levels.length - 1) {
-      final range = lastLevel.first - levels[levels.length - 2].first;
-      return (((current - lastLevel.first) / range) * 100) % 100;
+    final lastLevel = levelsAndBonus.last;
+    if (lvl >= levelsAndBonus.length - 1) {
+      final range =
+          lastLevel.level - levelsAndBonus[levelsAndBonus.length - 2].level;
+      return (((current - lastLevel.level) / range) * 100) % 100;
     }
-    final bounds = [levels[lvl].first, levels[lvl + 1].first];
+    final bounds = [levelsAndBonus[lvl].level, levelsAndBonus[lvl + 1].level];
     return ((current - bounds.first) / (bounds[1] - bounds.first)) * 100;
   }
 
+  /// Returns the bonus time if a new level is reached.
+  /// If [getNext] is true it indicates if the bonus will be reached on the next combo.
   Duration? bonus({required bool getNext}) {
     if (percent(getNext: getNext).floor() == 0) {
       final lvl = getNext ? nextLevel() : currentLevel();
       if (lvl > 0) {
-        return Duration(seconds: levels[lvl][1]);
+        return Duration(seconds: levelsAndBonus[lvl].bonus);
       }
     }
     return null;

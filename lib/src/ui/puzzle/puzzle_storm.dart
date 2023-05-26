@@ -139,10 +139,10 @@ class _Body extends ConsumerWidget {
                   sideToMove: puzzleState.position.turn.cg,
                   validMoves: puzzleState.validMoves,
                 ),
-                topTable: _TopBar(
+                topTable: _TopTable(
                   ctrl: ctrlProvider,
                 ),
-                bottomTable: _Combo(ctrlProvider),
+                bottomTable: _Combo(puzzleState.combo),
               ),
             ),
           ),
@@ -151,7 +151,7 @@ class _Body extends ConsumerWidget {
       ],
     );
 
-    return !puzzleState.runActive
+    return !puzzleState.clock.isActive
         ? content
         : WillPopScope(
             child: content,
@@ -175,8 +175,8 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _TopBar extends ConsumerWidget {
-  const _TopBar({
+class _TopTable extends ConsumerWidget {
+  const _TopTable({
     required this.ctrl,
   });
 
@@ -196,7 +196,7 @@ class _TopBar extends ConsumerWidget {
             color: LichessColors.brag,
           ),
           const SizedBox(width: 8),
-          if (!puzzleState.runActive || !puzzleState.runOver)
+          if (!puzzleState.runStarted)
             Expanded(
               flex: 5,
               child: Column(
@@ -230,7 +230,7 @@ class _TopBar extends ConsumerWidget {
               ),
             ),
           const Spacer(),
-          StormClockWidget(ctrl: ctrl),
+          StormClockWidget(clock: puzzleState.clock),
         ],
       ),
     );
@@ -238,9 +238,9 @@ class _TopBar extends ConsumerWidget {
 }
 
 class _Combo extends ConsumerStatefulWidget {
-  const _Combo(this.ctrl);
+  const _Combo(this.combo);
 
-  final StormCtrlProvider ctrl;
+  final StormCombo combo;
 
   @override
   ConsumerState<_Combo> createState() => _ComboState();
@@ -249,19 +249,14 @@ class _Combo extends ConsumerStatefulWidget {
 class _ComboState extends ConsumerState<_Combo>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  // ignore: avoid-late-keyword
-  late StormCombo combo;
-
-  static const levels = [3, 5, 7, 10];
 
   @override
   void initState() {
     super.initState();
-    combo = ref.read(widget.ctrl.select((value) => value.combo));
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
-      value: combo.percent(getNext: false) / 100,
+      value: widget.combo.percent(getNext: false) / 100,
     );
   }
 
@@ -269,11 +264,10 @@ class _ComboState extends ConsumerState<_Combo>
   void didUpdateWidget(covariant _Combo oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    combo = ref.read(widget.ctrl.select((value) => value.combo));
-    final newVal = combo.percent(getNext: false) / 100;
+    final newVal = widget.combo.percent(getNext: false) / 100;
     if (_controller.value != newVal) {
       // next lvl reached
-      if (_controller.value > newVal && combo.current != 0) {
+      if (_controller.value > newVal && widget.combo.current != 0) {
         if (ref.read(boardPreferencesProvider).hapticFeedback) {
           HapticFeedback.heavyImpact();
         }
@@ -299,7 +293,7 @@ class _ComboState extends ConsumerState<_Combo>
 
   @override
   Widget build(BuildContext context) {
-    final lvl = combo.currentLevel();
+    final lvl = widget.combo.currentLevel();
     final indicatorColor = Theme.of(context).colorScheme.secondary;
 
     final comboShades = generateShades(
@@ -318,7 +312,7 @@ class _ComboState extends ConsumerState<_Combo>
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: combo.current.toString(),
+                    text: widget.combo.current.toString(),
                     style: TextStyle(
                       fontSize: 35,
                       fontWeight: FontWeight.bold,
@@ -374,7 +368,7 @@ class _ComboState extends ConsumerState<_Combo>
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: levels.mapIndexed((index, level) {
+                    children: StormCombo.levelBonus.mapIndexed((index, level) {
                       final isCurrentLevel = index < lvl;
                       return AnimatedContainer(
                         alignment: Alignment.center,
@@ -469,7 +463,7 @@ class _BottomBar extends ConsumerWidget {
               showAndroidShortLabel: true,
               onTap: () => ref.invalidate(stormProvider),
             ),
-            if (puzzleState.runActive)
+            if (puzzleState.runStarted && !puzzleState.runOver)
               BottomBarButton(
                 icon: LichessIcons.flag,
                 label: context.l10n.stormEndRun.split(' ').take(2).join(' '),
@@ -510,22 +504,22 @@ class _RunStats extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoPopupSurface(
       child: defaultTargetPlatform == TargetPlatform.iOS
-          ? CupertinoPageScaffold(child: _DialogBody(stats))
-          : Scaffold(body: _DialogBody(stats)),
+          ? CupertinoPageScaffold(child: _RunStatsPopup(stats))
+          : Scaffold(body: _RunStatsPopup(stats)),
     );
   }
 }
 
-class _DialogBody extends ConsumerStatefulWidget {
-  const _DialogBody(this.stats);
+class _RunStatsPopup extends ConsumerStatefulWidget {
+  const _RunStatsPopup(this.stats);
 
   final StormRunStats stats;
 
   @override
-  ConsumerState createState() => _DialogBodyState();
+  ConsumerState createState() => _RunStatsPopupState();
 }
 
-class _DialogBodyState extends ConsumerState<_DialogBody> {
+class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
   bool isLoading = false;
 
   @override

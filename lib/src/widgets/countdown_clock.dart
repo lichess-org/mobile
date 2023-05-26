@@ -5,8 +5,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
-
-const kMaxClockTextScaleFactor = 1.94;
+import 'package:lichess_mobile/src/constants.dart';
 
 /// A simple countdown clock.
 ///

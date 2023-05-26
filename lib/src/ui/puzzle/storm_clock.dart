@@ -9,13 +9,12 @@ import 'dart:ui';
 
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
+import 'package:lichess_mobile/src/constants.dart';
 
 class StormClockWidget extends ConsumerStatefulWidget {
-  const StormClockWidget({
-    required this.ctrl,
-  });
+  const StormClockWidget({required this.clock});
 
-  final StormCtrlProvider ctrl;
+  final StormClock clock;
 
   @override
   _ClockState createState() => _ClockState();
@@ -31,9 +30,6 @@ class _ClockState extends ConsumerState<StormClockWidget>
   late Animation<double> fadeAnimation;
   // ignore: avoid-late-keyword
   late Animation<Offset> slideAnimation;
-
-  // ignore: avoid-late-keyword
-  late StormClock clock;
 
   StreamSubscription<(Duration, int?)>? streamSubscription;
 
@@ -51,9 +47,14 @@ class _ClockState extends ConsumerState<StormClockWidget>
       duration: const Duration(milliseconds: 500),
     )..addListener(() => setState(() {}));
 
-    clock = ref.read(widget.ctrl.select((value) => value.clock));
-    minutes = clock.timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0');
-    seconds = clock.timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
+    minutes = widget.clock.timeLeft.inMinutes
+        .remainder(60)
+        .toString()
+        .padLeft(2, '0');
+    seconds = widget.clock.timeLeft.inSeconds
+        .remainder(60)
+        .toString()
+        .padLeft(2, '0');
     animation = Tween<double>(begin: 0.0, end: 120.0).animate(_controller);
     fadeAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(_controller);
     slideAnimation = Tween<Offset>(
@@ -61,13 +62,13 @@ class _ClockState extends ConsumerState<StormClockWidget>
       end: const Offset(0.7, -1.0),
     ).animate(_controller);
 
-    streamSubscription = clock.timeStream.listen((data) {
+    streamSubscription = widget.clock.timeStream.listen((data) {
       setState(() {
         minutes = data.$1.inMinutes.remainder(60).toString().padLeft(2, '0');
         seconds = data.$1.inSeconds.remainder(60).toString().padLeft(2, '0');
         time = data.$1;
         bonus = data.$2;
-        isActive = clock.isActive;
+        isActive = widget.clock.isActive;
         if (bonus != null) {
           _controller.forward(from: 0);
         }
