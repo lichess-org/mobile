@@ -109,6 +109,7 @@ class StormCtrl extends _$StormCtrl {
   }
 
   void end() {
+    ref.read(soundServiceProvider).play(Sound.puzzleStormEnd);
     state.clock.reset();
     _pushToHistory(success: false);
     state = state.copyWith(stats: _getStats(), runOver: true);

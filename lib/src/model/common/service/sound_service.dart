@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/app_dependencies.dart';
 
 part 'sound_service.g.dart';
 
-enum Sound { move, capture, dong, error, confirmation }
+enum Sound { move, capture, dong, error, confirmation, puzzleStormEnd }
 
 typedef SoundMap = IMap<Sound, int>;
 
