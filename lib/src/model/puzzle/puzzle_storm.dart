@@ -196,7 +196,6 @@ class StormCtrl extends _$StormCtrl {
 @freezed
 class StormCtrlState with _$StormCtrlState {
   const StormCtrlState._();
-  // moveIndex starts at -1 for new puzzles
   const factory StormCtrlState({
     /// Current puzzle being played
     required LitePuzzle puzzle,

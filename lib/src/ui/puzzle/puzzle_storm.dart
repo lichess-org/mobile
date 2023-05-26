@@ -322,7 +322,7 @@ class _ComboState extends ConsumerState<_Combo>
                     ),
                   ),
                   TextSpan(
-                    text: '\nCombo',
+                    text: '\n${context.l10n.stormCombo}',
                     style: TextStyle(
                       color: defaultTargetPlatform == TargetPlatform.iOS
                           ? CupertinoTheme.of(context).textTheme.textStyle.color
@@ -462,7 +462,7 @@ class _BottomBar extends ConsumerWidget {
               showAndroidShortLabel: true,
               onTap: () => ref.invalidate(stormProvider),
             ),
-            if (puzzleState.runStarted && !puzzleState.runOver)
+            if (puzzleState.clock.isActive)
               BottomBarButton(
                 icon: LichessIcons.flag,
                 label: context.l10n.stormEndRun.split(' ').take(2).join(' '),
