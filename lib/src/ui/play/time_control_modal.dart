@@ -43,7 +43,7 @@ class TimeControlModal extends StatelessWidget {
         padding: EdgeInsetsDirectional.zero,
         automaticallyImplyLeading: false,
         middle: Text(context.l10n.timeControl),
-        trailing: CupertinoButton(
+        leading: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () => Navigator.of(context).pop(),
           child: const Icon(CupertinoIcons.clear),
