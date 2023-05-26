@@ -314,7 +314,7 @@ class _ComboState extends ConsumerState<_Combo>
                   TextSpan(
                     text: widget.combo.current.toString(),
                     style: TextStyle(
-                      fontSize: 35,
+                      fontSize: 40,
                       fontWeight: FontWeight.bold,
                       color: defaultTargetPlatform == TargetPlatform.iOS
                           ? CupertinoTheme.of(context).textTheme.textStyle.color
@@ -337,7 +337,6 @@ class _ComboState extends ConsumerState<_Combo>
               width: MediaQuery.of(context).size.width * 0.60,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
                     height: 25,
@@ -364,7 +363,7 @@ class _ComboState extends ConsumerState<_Combo>
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 9.5),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -467,7 +466,7 @@ class _BottomBar extends ConsumerWidget {
               BottomBarButton(
                 icon: LichessIcons.flag,
                 label: context.l10n.stormEndRun.split(' ').take(2).join(' '),
-                highlighted: puzzleState.clock.startAt != null,
+                highlighted: true,
                 shortLabel:
                     context.l10n.stormEndRun.split(' ').take(2).join(' '),
                 showAndroidShortLabel: true,

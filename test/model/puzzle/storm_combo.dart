@@ -15,30 +15,30 @@ void main() {
 
     test('percent returns correct percentage', () {
       const combo = StormCombo(current: 7, best: 20);
-      expect(combo.percent(getNext: false), 40.0);
+      expect(combo.percent(getNext: false), 28.57142857142857);
     });
 
     test('percent getNext returns correct percentage', () {
       const combo = StormCombo(current: 7, best: 20);
-      expect(combo.percent(getNext: true), 60.0);
+      expect(combo.percent(getNext: true), 42.857142857142854);
     });
 
-    test('bonus returns correct bonus duration', () {
+    test('bonus current: 5', () {
       const combo = StormCombo(current: 5, best: 20);
       expect(combo.bonus(getNext: false), const Duration(seconds: 3));
     });
 
-    test('bonus returns null when no bonus is applicable', () {
+    test('bonus current: 6', () {
       const combo = StormCombo(current: 6, best: 20);
       expect(combo.bonus(getNext: false), null);
     });
 
-    test('bonus getNext returns correct bonus duration', () {
+    test('bonus current: 4 getNext', () {
       const combo = StormCombo(current: 4, best: 20);
       expect(combo.bonus(getNext: true), const Duration(seconds: 3));
     });
 
-    test('bonus getNext returns null when no bonus is applicable', () {
+    test('bonus current 5 getNext', () {
       const combo = StormCombo(current: 5, best: 20);
       expect(combo.bonus(getNext: true), null);
     });

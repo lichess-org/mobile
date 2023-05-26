@@ -300,15 +300,16 @@ class StormCombo with _$StormCombo {
   /// If [getNext] is true it returns the percentage of `current + 1` combo count.
   /// This is helpful for calculating the progress bar value.
   double percent({required bool getNext}) {
+    final currentCombo = getNext ? current + 1 : current;
     final lvl = getNext ? nextLevel() : currentLevel();
     final lastLevel = levelsAndBonus.last;
     if (lvl >= levelsAndBonus.length - 1) {
       final range =
           lastLevel.level - levelsAndBonus[levelsAndBonus.length - 2].level;
-      return (((current - lastLevel.level) / range) * 100) % 100;
+      return (((currentCombo - lastLevel.level) / range) * 100) % 100;
     }
     final bounds = [levelsAndBonus[lvl].level, levelsAndBonus[lvl + 1].level];
-    return ((current - bounds.first) / (bounds[1] - bounds.first)) * 100;
+    return ((currentCombo - bounds.first) / (bounds[1] - bounds.first)) * 100;
   }
 
   /// Returns the bonus time if a new level is reached.
