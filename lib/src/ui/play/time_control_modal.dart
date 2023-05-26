@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -72,8 +73,23 @@ class _Body extends ConsumerWidget {
             _SectionChoices(
               timeControlPref,
               choices: const [
-                TimeIncrement(1, 0),
-                TimeIncrement(2, 1),
+                TimeIncrement(0, 1),
+                TimeIncrement(15, 0),
+              ],
+              title: const _SectionTitle(
+                title: 'Ultrabullet',
+                icon: LichessIcons.ultrabullet,
+              ),
+              onSelected: onSelected,
+            ),
+            const SizedBox(height: 20.0),
+            _SectionChoices(
+              timeControlPref,
+              choices: const [
+                TimeIncrement(30, 0),
+                TimeIncrement(60, 0),
+                TimeIncrement(60, 1),
+                TimeIncrement(120, 1),
               ],
               title: const _SectionTitle(
                 title: 'Bullet',
@@ -85,10 +101,10 @@ class _Body extends ConsumerWidget {
             _SectionChoices(
               timeControlPref,
               choices: const [
-                TimeIncrement(3, 0),
-                TimeIncrement(3, 2),
-                TimeIncrement(5, 0),
-                TimeIncrement(5, 3),
+                TimeIncrement(180, 0),
+                TimeIncrement(180, 2),
+                TimeIncrement(300, 0),
+                TimeIncrement(300, 3),
               ],
               title: const _SectionTitle(
                 title: 'Blitz',
@@ -100,9 +116,10 @@ class _Body extends ConsumerWidget {
             _SectionChoices(
               timeControlPref,
               choices: const [
-                TimeIncrement(10, 0),
-                TimeIncrement(10, 5),
-                TimeIncrement(15, 10),
+                TimeIncrement(600, 0),
+                TimeIncrement(600, 5),
+                TimeIncrement(900, 0),
+                TimeIncrement(900, 10),
               ],
               title: const _SectionTitle(
                 title: 'Rapid',
@@ -114,8 +131,10 @@ class _Body extends ConsumerWidget {
             _SectionChoices(
               timeControlPref,
               choices: const [
-                TimeIncrement(30, 0),
-                TimeIncrement(30, 20),
+                TimeIncrement(1500, 0),
+                TimeIncrement(1800, 0),
+                TimeIncrement(1800, 20),
+                TimeIncrement(3600, 0),
               ],
               title: const _SectionTitle(
                 title: 'Classical',
@@ -145,24 +164,44 @@ class _SectionChoices extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final choiceWidgets = choices
+        .mapIndexed((index, choice) {
+          return [
+            Expanded(
+              child: _ChoiceChip(
+                key: ValueKey(choice),
+                label: Text(choice.display, style: Styles.bold),
+                selected: selected == choice,
+                onSelected: (bool selected) {
+                  if (selected) onSelected(choice);
+                },
+              ),
+            ),
+            if (index < choices.length - 1) const SizedBox(width: 10),
+          ];
+        })
+        .flattened
+        .toList();
+
+    if (choices.length < 4) {
+      final placeHolders = [
+        const [SizedBox(width: 10)],
+        for (int i = choices.length; i < 4; i++)
+          [
+            const Expanded(child: SizedBox(width: 10)),
+            if (i < 3) const SizedBox(width: 10),
+          ],
+      ];
+      choiceWidgets.addAll(placeHolders.flattened);
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         title,
         const SizedBox(height: 10),
-        Wrap(
-          spacing: 10.0,
-          runSpacing: 10.0,
-          children: choices.map((choice) {
-            return _ChoiceChip(
-              key: ValueKey(choice),
-              label: Text(choice.display),
-              selected: selected == choice,
-              onSelected: (bool selected) {
-                if (selected) onSelected(choice);
-              },
-            );
-          }).toList(),
+        Row(
+          children: choiceWidgets,
         ),
       ],
     );
@@ -214,9 +253,8 @@ class _ChoiceChip extends StatelessWidget {
                     ),
             ),
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              child: label,
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Center(child: label),
             ),
           ),
         );
@@ -252,4 +290,4 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
-const TextStyle _titleStyle = TextStyle(fontSize: 18);
+const TextStyle _titleStyle = TextStyle(fontSize: 16);

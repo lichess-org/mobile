@@ -19,7 +19,7 @@ enum Speed {
   final IconData icon;
 
   factory Speed.fromTimeIncrement(TimeIncrement t) {
-    switch (t.totalSeconds) {
+    switch (t.duration.inSeconds) {
       case >= 1 && <= 29:
         return Speed.ultraBullet;
       case >= 30 && <= 179:
@@ -28,7 +28,7 @@ enum Speed {
         return Speed.blitz;
       case >= 480 && <= 1499:
         return Speed.rapid;
-      case >= 1599 && <= 21599:
+      case >= 1500 && <= 21599:
         return Speed.classical;
       default:
         return Speed.correspondence;

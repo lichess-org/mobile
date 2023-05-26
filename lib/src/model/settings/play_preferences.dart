@@ -21,7 +21,7 @@ class PlayPreferences extends _$PlayPreferences {
             jsonDecode(stored) as Map<String, dynamic>,
           )
         : const PlayPrefs(
-            timeIncrement: TimeIncrement(5, 0),
+            timeIncrement: TimeIncrement(180, 0),
           );
   }
 

@@ -2,26 +2,19 @@ import 'package:flutter/widgets.dart';
 
 import 'package:lichess_mobile/src/model/common/speed.dart';
 
-/// A pair of time and increment used as game clock
+/// A pair of time and increment in seconds used as game clock
+///
+/// If both time and increment are 0, the clock is infinite.
 @immutable
 class TimeIncrement {
   const TimeIncrement(this.time, this.increment)
       : assert(time >= 0 && increment >= 0);
 
-  /// Clock initial time in minutes
+  /// Clock initial time in seconds
   final int time;
 
   /// Clock increment in seconds
   final int increment;
-
-  static TimeIncrement? fromString(String str) {
-    try {
-      final nums = str.split('+').map(int.parse).toList();
-      return TimeIncrement(nums.first, nums[1]);
-    } catch (_) {
-      return null;
-    }
-  }
 
   TimeIncrement.fromJson(Map<String, dynamic> json)
       : time = json['time'] as int,
@@ -32,11 +25,30 @@ class TimeIncrement {
         'increment': increment,
       };
 
-  int get totalSeconds => time * 60 + increment;
+  Duration get duration => Duration(seconds: time + increment);
 
   Speed get speed => Speed.fromTimeIncrement(this);
 
-  String get display => '$time + $increment';
+  String get display {
+    String displayTime = '';
+    switch (time) {
+      case 0:
+        if (increment == 0) {
+          displayTime = '∞';
+        } else {
+          displayTime = '0 + $increment';
+        }
+      case 45:
+        displayTime = '¾ + $increment';
+      case 30:
+        displayTime = '½ + $increment';
+      case 15:
+        displayTime = '¼ + $increment';
+      default:
+        displayTime = '${(time / 60).floor()} + $increment';
+    }
+    return displayTime;
+  }
 
   @override
   bool operator ==(Object other) =>
@@ -50,5 +62,5 @@ class TimeIncrement {
   int get hashCode => Object.hash(time, increment);
 
   @override
-  String toString() => '$time+$increment';
+  String toString() => 'TimeIncrement($time+$increment)';
 }

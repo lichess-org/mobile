@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'puzzle.dart';
 import 'puzzle_streak.dart';
 import 'puzzle_theme.dart';
@@ -254,11 +253,6 @@ PuzzleGame _puzzleGameFromPick(RequiredPick pick) {
           .firstWhere((p) => p.side == Side.black),
     ),
     pgn: pick('pgn').asStringOrThrow(),
-    clock: pick('clock').letOrNull(
-      (p) =>
-          TimeIncrement.fromString(p.asStringOrThrow()) ??
-          const TimeIncrement(0, 0),
-    ),
   );
 }
 

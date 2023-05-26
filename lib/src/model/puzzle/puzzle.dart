@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/model/common/tree.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 
 part 'puzzle.freezed.dart';
@@ -92,7 +91,6 @@ class PuzzleGame with _$PuzzleGame {
     required PuzzleGamePlayer white,
     required PuzzleGamePlayer black,
     required String pgn,
-    TimeIncrement? clock,
   }) = _PuzzleGame;
 
   factory PuzzleGame.fromJson(Map<String, dynamic> json) =>
