@@ -13,6 +13,8 @@ part 'auth_socket.g.dart';
 const kDefaultPingInterval = Duration(seconds: 10);
 const kDefaultConnectTimeout = Duration(seconds: 5);
 
+const kWebSocketPath = '/socket/v5';
+
 @Riverpod(keepAlive: true)
 AuthSocket authSocket(AuthSocketRef ref) {
   final authSocket = AuthSocket(ref, Logger('AuthSocket'));
@@ -24,6 +26,7 @@ AuthSocket authSocket(AuthSocketRef ref) {
 
 /// WebSocket channel wrapper to authenticate with lichess
 ///
+/// It automatically generate a new SRI for each connection.
 /// It adds the following headers on connect:
 ///   - Authorization header when a token has been stored,
 ///   - User-Agent header
@@ -33,21 +36,25 @@ class AuthSocket {
   final Logger _log;
   final AuthSocketRef _ref;
 
-  IOWebSocketChannel? _channel;
+  /// The current WebSocket channel and SRI.
+  (String, IOWebSocketChannel)? _connection;
 
   /// Creates a new WebSocket channel.
   ///
-  /// Will close the previous channel if it exists.
-  IOWebSocketChannel connect(
-    String path, {
+  /// Will not do anything if the channel is already connected.
+  (String, IOWebSocketChannel) connect({
     Duration pingInterval = kDefaultPingInterval,
     Duration connectTimeout = kDefaultConnectTimeout,
   }) {
-    _channel?.sink.close();
+    if (_connection != null && _connection!.$2.closeCode == null) {
+      _log.fine('WebSocket connection already established.');
+      return _connection!;
+    }
 
     final session = _ref.read(authSessionProvider);
     final info = _ref.read(packageInfoProvider);
-    final uri = Uri.parse('$kLichessWSHost$path?sri=${genRandomString(12)}');
+    final sri = genRandomString(12);
+    final uri = Uri.parse('$kLichessWSHost$kWebSocketPath?sri=$sri');
     final headers = session != null
         ? {
             'Authorization': 'Bearer ${session.token}',
@@ -56,24 +63,30 @@ class AuthSocket {
         : {
             'User-Agent': AuthClient.userAgent(info, null),
           };
-    _log.info('Connecting to $uri');
-    _channel = IOWebSocketChannel.connect(
-      uri,
-      pingInterval: pingInterval,
-      connectTimeout: connectTimeout,
-      headers: headers,
+    _log.info('Connecting WebSocket to $uri');
+    _connection = (
+      sri,
+      IOWebSocketChannel.connect(
+        uri,
+        pingInterval: pingInterval,
+        connectTimeout: connectTimeout,
+        headers: headers,
+      )
     );
-    return _channel!;
+    return _connection!;
   }
 
-  /// Gets the current WebSocket channel.
-  IOWebSocketChannel? get channel => _channel;
+  /// Gets the current WebSocket channel
+  IOWebSocketChannel? get channel => _connection?.$2;
+
+  /// Gets the current SRI
+  String? get sri => _connection?.$1;
 
   /// Closes the WebSocket connection.
   void close() {
-    if (_channel?.closeCode == null) {
-      _log.info('Closing WebSocket connection');
+    if (_connection?.$2.closeCode == null) {
+      _log.info('Closing WebSocket connection.');
     }
-    _channel?.sink.close();
+    _connection?.$2.sink.close();
   }
 }
