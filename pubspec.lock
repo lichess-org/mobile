@@ -383,10 +383,10 @@ packages:
     dependency: "direct main"
     description:
       name: fast_immutable_collections
-      sha256: d1b97845a823572e5390383b93f23b7e8afb87234e03fed4c115a776fc72331f
+      sha256: "01459e87af7ba86ddbf6379b4c43c2bbaba61842d8ac5a0b4c52ab6eaca7070d"
       url: "https://pub.dev"
     source: hosted
-    version: "9.1.1"
+    version: "9.1.2"
   ffi:
     dependency: transitive
     description:

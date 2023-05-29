@@ -44,7 +44,7 @@ dependencies:
   deep_pick: ^1.0.0
   timeago: ^3.3.0
   collection: ^1.16.0 # can't upgrade because of flutter_test
-  fast_immutable_collections: ^9.0.0
+  fast_immutable_collections: ^9.1.2
   result_extensions:
     git:
       url: https://github.com/veloce/result_extensions.git
