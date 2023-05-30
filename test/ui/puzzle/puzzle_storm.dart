@@ -5,7 +5,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
-import 'package:lichess_mobile/src/ui/puzzle/puzzle_storm.dart';
+import 'package:lichess_mobile/src/ui/puzzle/storm_screen.dart';
 import 'package:chessground/chessground.dart' as cg;
 
 import '../../test_utils.dart';
@@ -20,7 +20,7 @@ void main() {
 
         final app = await buildTestApp(
           tester,
-          home: const PuzzleStormScreen(),
+          home: const StormScreen(),
           overrides: [stormProvider.overrideWith((ref) => mockStromRun)],
         );
 
@@ -37,7 +37,7 @@ void main() {
       (tester) async {
         final app = await buildTestApp(
           tester,
-          home: const PuzzleStormScreen(),
+          home: const StormScreen(),
           overrides: [stormProvider.overrideWith((ref) => mockStromRun)],
         );
 
@@ -57,7 +57,7 @@ void main() {
       (tester) async {
         final app = await buildTestApp(
           tester,
-          home: const PuzzleStormScreen(),
+          home: const StormScreen(),
           overrides: [stormProvider.overrideWith((ref) => mockStromRun)],
         );
 
@@ -101,7 +101,7 @@ void main() {
     testWidgets('shows end run result', (tester) async {
       final app = await buildTestApp(
         tester,
-        home: const PuzzleStormScreen(),
+        home: const StormScreen(),
         overrides: [stormProvider.overrideWith((ref) => mockStromRun)],
       );
 
@@ -139,7 +139,7 @@ void main() {
     testWidgets('play wrong move', (tester) async {
       final app = await buildTestApp(
         tester,
-        home: const PuzzleStormScreen(),
+        home: const StormScreen(),
         overrides: [stormProvider.overrideWith((ref) => mockStromRun)],
       );
 

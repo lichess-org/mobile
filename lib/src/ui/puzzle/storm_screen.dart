@@ -36,8 +36,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 
-class PuzzleStormScreen extends StatelessWidget {
-  const PuzzleStormScreen({super.key});
+class StormScreen extends StatelessWidget {
+  const StormScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

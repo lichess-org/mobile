@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/ui/puzzle/puzzle_storm.dart';
 
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -19,6 +18,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 
+import 'storm_screen.dart';
 import 'puzzle_screen.dart';
 import 'puzzle_themes_screen.dart';
 import 'puzzle_streak_screen.dart';
@@ -200,7 +200,7 @@ class _Body extends ConsumerWidget {
                     pushPlatformRoute(
                       context,
                       rootNavigator: true,
-                      builder: (context) => const PuzzleStormScreen(),
+                      builder: (context) => const StormScreen(),
                     );
                   }
                 : null,
