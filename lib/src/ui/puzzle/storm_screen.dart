@@ -372,10 +372,6 @@ class _ComboState extends ConsumerState<_Combo>
                       borderRadius:
                           const BorderRadius.all(Radius.circular(3.0)),
                       child: LinearProgressIndicator(
-                        // backgroundColor:
-                        //     defaultTargetPlatform == TargetPlatform.iOS
-                        //         ? LichessColors.brag.withOpacity(0.2)
-                        //         : null,
                         value: _controller.value,
                         valueColor:
                             AlwaysStoppedAnimation<Color>(indicatorColor),

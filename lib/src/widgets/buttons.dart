@@ -376,10 +376,16 @@ class _CardButtonState extends State<CardButton> {
               child: PlatformCard(
                 child: Padding(
                   padding: const EdgeInsets.all(6.0),
-                  child: ListTile(
-                    leading: widget.icon,
-                    title: widget.title,
-                    subtitle: widget.subtitle,
+                  child: ListTileTheme(
+                    data: ListTileThemeData(
+                      iconColor:
+                          CupertinoColors.systemGrey.resolveFrom(context),
+                    ),
+                    child: ListTile(
+                      leading: widget.icon,
+                      title: widget.title,
+                      subtitle: widget.subtitle,
+                    ),
                   ),
                 ),
               ),
