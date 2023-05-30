@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart' as cg;
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -19,22 +20,20 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 class PuzzleHistoryWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(puzzleHistoryProvider);
-
-    return state.when(
+    final historyState = ref.watch(puzzleHistoryProvider);
+    return historyState.when(
       data: (data) {
         final crossAxisCount =
             MediaQuery.of(context).size.width > kTabletThreshold ? 4 : 2;
-        final boardWidth = MediaQuery.of(context).size.width / crossAxisCount;
+        final boardWidth =
+            (MediaQuery.of(context).size.width / crossAxisCount) * 0.90;
         return ListSection(
           header: Text(context.l10n.puzzleHistory),
           headerTrailing: NoPaddingTextButton(
-            onPressed: () {
-              pushPlatformRoute(
-                context,
-                builder: (context) => PuzzleHistoryScreen(data.historyList),
-              );
-            },
+            onPressed: () => pushPlatformRoute(
+              context,
+              builder: (context) => PuzzleHistoryScreen(data.historyList),
+            ),
             child: Text(
               context.l10n.more,
             ),
@@ -42,10 +41,13 @@ class PuzzleHistoryWidget extends ConsumerWidget {
           children: [
             for (var i = 0; i < data.historyList.length; i += crossAxisCount)
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: data.historyList
                     .getRange(
                       i,
-                      min(i + crossAxisCount, data.historyList.length),
+                      i + crossAxisCount <= data.historyList.length
+                          ? i + crossAxisCount
+                          : data.historyList.length,
                     )
                     .map(
                       (e) => _HistoryBoard(e, boardWidth),
@@ -56,14 +58,18 @@ class PuzzleHistoryWidget extends ConsumerWidget {
         );
       },
       error: (e, s) {
-        debugPrint('SEVERE: [PuzzleHistoryWidget] could not load dashboard');
+        debugPrint(
+          'SEVERE: [PuzzleHistoryWidget] could not load dashboard',
+        );
         return const Center(child: Text('Could not load Puzzle History'));
       },
-      loading: () => ShimmerLoading(
-        isLoading: true,
-        child: ListSection.loading(
-          itemsNumber: 10,
-          header: true,
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(
+            itemsNumber: 5,
+            header: true,
+          ),
         ),
       ),
     );
@@ -126,25 +132,23 @@ class _BodyState extends ConsumerState<_Body> {
 
   void _scrollListener() {
     if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
+            _scrollController.position.maxScrollExtent &&
+        _historyList.length < 500) {
       _loadMore();
     }
   }
 
   Future<void> _loadMore() async {
     if (_isLoading) return;
-    _isLoading = true;
-    try {
-      await ref.read(puzzleHistoryProvider.notifier).getNext();
-      final newState = ref.read(puzzleHistoryProvider);
-      if (newState.hasValue) {
-        _historyList.addAll(newState.requireValue.historyList);
-      }
-    } catch (e) {
-      // Handle error
-      print('Error loading more puzzles: $e');
-    } finally {
-      _isLoading = false;
+    setState(() {
+      _isLoading = true;
+    });
+    final newList = await ref.read(puzzleHistoryProvider.notifier).getNext();
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+        _historyList.addAll(newList);
+      });
     }
   }
 
@@ -153,28 +157,24 @@ class _BodyState extends ConsumerState<_Body> {
     final crossAxisCount =
         MediaQuery.of(context).size.width > kTabletThreshold ? 4 : 2;
     final boardWidth = MediaQuery.of(context).size.width / crossAxisCount;
-
     return ListView.builder(
       controller: _scrollController,
-      itemCount: _isLoading
-          ? (_historyList.length + 1) ~/ crossAxisCount
-          : _historyList.length ~/ crossAxisCount,
+      itemCount: _historyList.length ~/ crossAxisCount + (_isLoading ? 1 : 0),
       itemBuilder: (context, index) {
-        if (index >= _historyList.length) {
-          return const CircularProgressIndicator();
-        } else {
-          return Row(
-            children: _historyList
-                .getRange(
-                  index,
-                  min(index + crossAxisCount, _historyList.length),
-                )
-                .map(
-                  (e) => _HistoryBoard(e, boardWidth),
-                )
-                .toList(),
-          );
+        if (_isLoading && index == _historyList.length ~/ crossAxisCount) {
+          return const CenterLoadingIndicator();
         }
+        final rowStartIndex = index * crossAxisCount;
+        final rowEndIndex =
+            min(rowStartIndex + crossAxisCount, _historyList.length);
+        return Row(
+          children: _historyList
+              .getRange(rowStartIndex, rowEndIndex)
+              .map(
+                (e) => _HistoryBoard(e, boardWidth),
+              )
+              .toList(),
+        );
       },
     );
   }

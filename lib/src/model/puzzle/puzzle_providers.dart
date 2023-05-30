@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -82,43 +81,56 @@ Future<PuzzleDashboard> puzzleDashboard(
 @riverpod
 class PuzzleHistory extends _$PuzzleHistory {
   StreamSubscription<PuzzleAndResult>? _streamSub;
+  final List<PuzzleAndResult> _list = [];
+  DateTime _lastDate = DateTime.now();
 
   @override
-  Future<PuzzleHistoryState> build() {
+  Future<PuzzleHistoryState> build() async {
     ref.cacheFor(const Duration(seconds: 30));
     ref.onDispose(() => _streamSub?.cancel());
+    final stream = connectStream();
 
-    final stream = connectStream(10, DateTime.now());
-
-    return stream.first.then(
-      (value) => PuzzleHistoryState(historyList: [value], historyListFull: []),
-    );
+    return stream.first
+        .then((value) => PuzzleHistoryState(historyList: [value]));
   }
 
-  Stream<PuzzleAndResult> connectStream(int max, DateTime before) {
+  Stream<PuzzleAndResult> connectStream() {
     final repo = ref.watch(puzzleRepositoryProvider);
-    final stream = repo.puzzleActivity(max, before);
+    final stream = repo.puzzleActivity(10, _lastDate).asBroadcastStream();
 
     _streamSub?.cancel();
-    _streamSub = stream.listen((event) {
-      PuzzleHistoryState? prev;
-      if (state.hasValue) {
-        prev = state.requireValue;
-      }
-      state = AsyncData(
-        PuzzleHistoryState(
-          historyList: [if (prev != null) ...prev.historyList, event],
-          historyListFull: [],
-        ),
-      );
-    });
-
+    _streamSub = stream.listen(
+      (event) {
+        _list.add(event);
+      },
+      onDone: () {
+        state = AsyncData(PuzzleHistoryState(historyList: _list.toList()));
+        _lastDate = _list.last.date;
+        _list.clear();
+        _streamSub?.cancel();
+      },
+    );
     return stream;
   }
 
-  Future<void> getNext() async {
-    await _streamSub?.cancel();
-    connectStream(50, state.requireValue.historyList.last.date);
+  Future<List<PuzzleAndResult>> getNext() async {
+    final repo = ref.watch(puzzleRepositoryProvider);
+    final stream = repo.puzzleActivity(50, DateTime.now());
+    final completer = Completer<List<PuzzleAndResult>>();
+
+    _streamSub = stream.listen(
+      (event) {
+        _list.add(event);
+      },
+      onDone: () {
+        completer.complete(_list.toList());
+        _lastDate = _list.last.date;
+        _list.clear();
+        _streamSub?.cancel();
+      },
+    );
+
+    return completer.future;
   }
 }
 
@@ -126,6 +138,5 @@ class PuzzleHistory extends _$PuzzleHistory {
 class PuzzleHistoryState with _$PuzzleHistoryState {
   const factory PuzzleHistoryState({
     required List<PuzzleAndResult> historyList,
-    required List<PuzzleAndResult> historyListFull,
   }) = _PuzzleHistoryState;
 }
