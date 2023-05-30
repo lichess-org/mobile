@@ -305,9 +305,7 @@ class _ComboState extends ConsumerState<_Combo>
   @override
   Widget build(BuildContext context) {
     final lvl = widget.combo.currentLevel();
-    final indicatorColor = defaultTargetPlatform == TargetPlatform.iOS
-        ? LichessColors.brag
-        : Theme.of(context).colorScheme.secondary;
+    final indicatorColor = Theme.of(context).colorScheme.secondary;
 
     final comboShades = generateShades(
       indicatorColor,
@@ -368,10 +366,10 @@ class _ComboState extends ConsumerState<_Combo>
                       borderRadius:
                           const BorderRadius.all(Radius.circular(3.0)),
                       child: LinearProgressIndicator(
-                        backgroundColor:
-                            defaultTargetPlatform == TargetPlatform.iOS
-                                ? LichessColors.brag.withOpacity(0.2)
-                                : null,
+                        // backgroundColor:
+                        //     defaultTargetPlatform == TargetPlatform.iOS
+                        //         ? LichessColors.brag.withOpacity(0.2)
+                        //         : null,
                         value: _controller.value,
                         valueColor:
                             AlwaysStoppedAnimation<Color>(indicatorColor),
@@ -403,9 +401,7 @@ class _ComboState extends ConsumerState<_Combo>
                         '${level}s',
                         style: TextStyle(
                           color: isCurrentLevel
-                              ? defaultTargetPlatform == TargetPlatform.iOS
-                                  ? Colors.white
-                                  : Theme.of(context).colorScheme.onSecondary
+                              ? Theme.of(context).colorScheme.onSecondary
                               : null,
                         ),
                       ),
