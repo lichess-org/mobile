@@ -485,21 +485,27 @@ class _BottomBar extends ConsumerWidget {
                   }
                 },
               ),
-            if (puzzleState.runOver)
+            if (puzzleState.runOver && puzzleState.stats != null)
               BottomBarButton(
                 icon: Icons.open_in_new,
                 label: 'Result',
                 highlighted: true,
                 shortLabel: 'Result',
                 showAndroidShortLabel: true,
-                onTap: () => showDialog<void>(
-                  context: context,
-                  builder: (_) => _RunStats(puzzleState.stats!),
-                ),
+                onTap: () => _showStats(context, puzzleState.stats!),
               ),
           ],
         ),
       ),
+    );
+  }
+
+  void _showStats(BuildContext context, StormRunStats stats) {
+    pushPlatformRoute(
+      context,
+      rootNavigator: true,
+      fullscreenDialog: true,
+      builder: (_) => _RunStats(stats),
     );
   }
 }
@@ -510,11 +516,28 @@ class _RunStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPopupSurface(
-      child: defaultTargetPlatform == TargetPlatform.iOS
-          ? CupertinoPageScaffold(child: _RunStatsPopup(stats))
-          : Scaffold(body: _RunStatsPopup(stats)),
-    );
+    return defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              middle: Text(context.l10n.stormRaceComplete),
+              leading: CupertinoButton(
+                padding: EdgeInsets.zero,
+                child: const Icon(CupertinoIcons.clear),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
+            child: _RunStatsPopup(stats),
+          )
+        : Scaffold(
+            body: _RunStatsPopup(stats),
+            appBar: AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              title: Text(context.l10n.stormRaceComplete),
+            ),
+          );
   }
 }
 
@@ -532,155 +555,157 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListSection(
-            header: Text(context.l10n.stormRaceComplete),
-            headerTrailing: IconButton(
-              alignment: Alignment.centerRight,
-              padding: const EdgeInsets.only(left: 50),
-              onPressed: () => Navigator.of(context).pop(),
-              icon: const Icon(Icons.close),
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListSection(
+              header: Text(
+                '${widget.stats.score} ${context.l10n.stormPuzzlesSolved}',
+              ),
+              children: [
+                _StatsRow(
+                  context.l10n.stormMoves,
+                  widget.stats.moves.toString(),
+                ),
+                _StatsRow(
+                  context.l10n.accuracy,
+                  '${(((widget.stats.moves - widget.stats.errors) / widget.stats.moves) * 100).toStringAsFixed(2)}%',
+                ),
+                _StatsRow(
+                  context.l10n.stormCombo,
+                  widget.stats.comboBest.toString(),
+                ),
+                _StatsRow(
+                  context.l10n.stormTime,
+                  '${widget.stats.time.inSeconds}s',
+                ),
+                _StatsRow(
+                  context.l10n.stormTimePerMove,
+                  '${widget.stats.timePerMove.toStringAsFixed(1)}s',
+                ),
+                _StatsRow(
+                  context.l10n.stormHighestSolved,
+                  widget.stats.highest.toString(),
+                ),
+              ],
             ),
-            children: [
-              _StatsRow(
-                context.l10n.stormPuzzlesSolved,
-                widget.stats.score.toString(),
-              ),
-              _StatsRow(context.l10n.stormMoves, widget.stats.moves.toString()),
-              _StatsRow(
-                context.l10n.accuracy,
-                '${(((widget.stats.moves - widget.stats.errors) / widget.stats.moves) * 100).toStringAsFixed(2)}%',
-              ),
-              _StatsRow(
-                context.l10n.stormCombo,
-                widget.stats.comboBest.toString(),
-              ),
-              _StatsRow(
-                context.l10n.stormTime,
-                '${widget.stats.time.inSeconds}s',
-              ),
-              _StatsRow(
-                context.l10n.stormTimePerMove,
-                '${widget.stats.timePerMove.toStringAsFixed(1)}s',
-              ),
-              _StatsRow(
-                context.l10n.stormHighestSolved,
-                widget.stats.highest.toString(),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16.0),
-          FatButton(
-            semanticsLabel: context.l10n.stormPlayAgain,
-            onPressed: isLoading
-                ? null
-                : () {
-                    ref.invalidate(stormProvider);
-                    Navigator.of(context).pop();
-                  },
-            child: Text(context.l10n.stormPlayAgain),
-          ),
-          ListSection(
-            header: Text(context.l10n.stormPuzzlesPlayed),
-            children: [
-              LayoutBuilder(
-                builder: (context, constrains) {
-                  final crossAxisCount =
-                      constrains.maxWidth > kTabletThreshold ? 4 : 2;
-                  final boardWidth = constrains.maxWidth / crossAxisCount;
-                  final footerHeight = calculateFooterHeight(context);
-                  return LayoutGrid(
-                    columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
-                    rowSizes: List.generate(
-                      (widget.stats.history.length / crossAxisCount).ceil(),
-                      (_) => auto,
-                    ),
-                    children: widget.stats.history.map((e) {
-                      final (side, fen, lastMove) = e.$1.preview();
-                      return SizedBox(
-                        width: boardWidth,
-                        height: boardWidth + footerHeight,
-                        child: BoardPreview(
-                          onTap: isLoading
-                              ? null
-                              : () async {
-                                  final session = ref.read(authSessionProvider);
-                                  Puzzle? puzzle;
-                                  try {
-                                    setState(() => isLoading = true);
-                                    puzzle = await ref
-                                        .read(puzzleProvider(e.$1.id).future);
-                                  } catch (e) {
-                                    showPlatformSnackbar(context, e.toString());
-                                  } finally {
-                                    if (mounted && puzzle != null) {
-                                      setState(() => isLoading = false);
-                                      pushPlatformRoute(
+            const SizedBox(height: 10.0),
+            FatButton(
+              semanticsLabel: context.l10n.stormPlayAgain,
+              onPressed: isLoading
+                  ? null
+                  : () {
+                      ref.invalidate(stormProvider);
+                      Navigator.of(context).pop();
+                    },
+              child: Text(context.l10n.stormPlayAgain),
+            ),
+            const SizedBox(height: 10.0),
+            ListSection(
+              header: Text(context.l10n.stormPuzzlesPlayed),
+              children: [
+                LayoutBuilder(
+                  builder: (context, constrains) {
+                    final crossAxisCount =
+                        constrains.maxWidth > kTabletThreshold ? 4 : 2;
+                    final boardWidth = constrains.maxWidth / crossAxisCount;
+                    final footerHeight = calculateFooterHeight(context);
+                    return LayoutGrid(
+                      columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
+                      rowSizes: List.generate(
+                        (widget.stats.history.length / crossAxisCount).ceil(),
+                        (_) => auto,
+                      ),
+                      children: widget.stats.history.map((e) {
+                        final (side, fen, lastMove) = e.$1.preview();
+                        return SizedBox(
+                          width: boardWidth,
+                          height: boardWidth + footerHeight,
+                          child: BoardPreview(
+                            onTap: isLoading
+                                ? null
+                                : () async {
+                                    final session =
+                                        ref.read(authSessionProvider);
+                                    Puzzle? puzzle;
+                                    try {
+                                      setState(() => isLoading = true);
+                                      puzzle = await ref
+                                          .read(puzzleProvider(e.$1.id).future);
+                                    } catch (e) {
+                                      showPlatformSnackbar(
                                         context,
-                                        builder: (_) => PuzzleScreen(
-                                          theme: PuzzleTheme.mix,
-                                          initialPuzzleContext: PuzzleContext(
+                                        e.toString(),
+                                      );
+                                    } finally {
+                                      if (mounted && puzzle != null) {
+                                        setState(() => isLoading = false);
+                                        pushPlatformRoute(
+                                          context,
+                                          builder: (_) => PuzzleScreen(
                                             theme: PuzzleTheme.mix,
-                                            puzzle: puzzle!,
-                                            userId: session?.user.id,
+                                            initialPuzzleContext: PuzzleContext(
+                                              theme: PuzzleTheme.mix,
+                                              puzzle: puzzle!,
+                                              userId: session?.user.id,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  },
+                            orientation: side.cg,
+                            fen: fen,
+                            lastMove: lastMove.cg,
+                            footer: Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Row(
+                                children: [
+                                  ColoredBox(
+                                    color: e.$2
+                                        ? LichessColors.good
+                                        : LichessColors.red,
+                                    child: Row(
+                                      children: [
+                                        if (e.$2)
+                                          const Icon(
+                                            color: Colors.white,
+                                            Icons.done,
+                                            size: 20,
+                                          )
+                                        else
+                                          const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
+                                        Text(
+                                          '${e.$3.inSeconds}s',
+                                          overflow: TextOverflow.fade,
+                                          style: const TextStyle(
+                                            color: Colors.white,
                                           ),
                                         ),
-                                      );
-                                    }
-                                  }
-                                },
-                          orientation: side.cg,
-                          fen: fen,
-                          lastMove: lastMove.cg,
-                          footer: Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Row(
-                              children: [
-                                ColoredBox(
-                                  color: e.$2
-                                      ? LichessColors.good
-                                      : LichessColors.red,
-                                  child: Row(
-                                    children: [
-                                      if (e.$2)
-                                        const Icon(
-                                          color: Colors.white,
-                                          Icons.done,
-                                          size: 20,
-                                        )
-                                      else
-                                        const Icon(
-                                          Icons.close,
-                                          color: Colors.white,
-                                          size: 20,
-                                        ),
-                                      Text(
-                                        '${e.$3.inSeconds}s',
-                                        overflow: TextOverflow.fade,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 3),
-                                Text(e.$1.rating.toString()),
-                              ],
+                                  const SizedBox(width: 3),
+                                  Text(e.$1.rating.toString()),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    }).toList(),
-                  );
-                },
-              ),
-            ],
-          ),
-        ],
+                        );
+                      }).toList(),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
