@@ -161,12 +161,18 @@ class PerfCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Perf> userPerfs = Perf.values.where((element) {
+    List<Perf> userPerfs = Perf.values.where((element) {
       final p = user.perfs[element];
       return p != null &&
           p.numberOfGames > 0 &&
           p.ratingDeviation < kClueLessDeviation;
     }).toList(growable: false);
+
+    userPerfs.sort(
+      (p1, p2) => user.perfs[p1]!.numberOfGames
+          .compareTo(user.perfs[p2]!.numberOfGames),
+    );
+    userPerfs = userPerfs.reversed.toList();
 
     if (userPerfs.isEmpty) {
       return const SizedBox.shrink();
