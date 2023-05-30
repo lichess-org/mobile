@@ -110,10 +110,7 @@ class _Body extends ConsumerWidget {
 
     ref.listen(ctrlProvider.select((state) => state.runOver), (_, s) {
       if (s) {
-        showDialog<void>(
-          context: context,
-          builder: (ctx) => _RunStats(ref.read(ctrlProvider).stats!),
-        );
+        _showStats(context, ref.read(ctrlProvider).stats!);
       }
     });
 
@@ -129,11 +126,12 @@ class _Body extends ConsumerWidget {
                       .read(ctrlProvider.notifier)
                       .onUserMove(Move.fromUci(move.uci)!),
                   orientation: puzzleState.pov.cg,
-                  interactableSide: puzzleState.position.isGameOver
-                      ? cg.InteractableSide.none
-                      : puzzleState.pov == Side.white
-                          ? cg.InteractableSide.white
-                          : cg.InteractableSide.black,
+                  interactableSide:
+                      puzzleState.runOver || puzzleState.position.isGameOver
+                          ? cg.InteractableSide.none
+                          : puzzleState.pov == Side.white
+                              ? cg.InteractableSide.white
+                              : cg.InteractableSide.black,
                   fen: puzzleState.position.fen,
                   isCheck: puzzleState.position.isCheck,
                   lastMove: puzzleState.lastMove?.cg,
@@ -174,6 +172,15 @@ class _Body extends ConsumerWidget {
             },
           );
   }
+}
+
+void _showStats(BuildContext context, StormRunStats stats) {
+  pushPlatformRoute(
+    context,
+    rootNavigator: true,
+    fullscreenDialog: true,
+    builder: (_) => _RunStats(stats),
+  );
 }
 
 class _TopTable extends ConsumerWidget {
@@ -396,7 +403,9 @@ class _ComboState extends ConsumerState<_Combo>
                         '${level}s',
                         style: TextStyle(
                           color: isCurrentLevel
-                              ? Theme.of(context).colorScheme.onSecondary
+                              ? defaultTargetPlatform == TargetPlatform.iOS
+                                  ? Colors.white
+                                  : Theme.of(context).colorScheme.onSecondary
                               : null,
                         ),
                       ),
@@ -499,15 +508,6 @@ class _BottomBar extends ConsumerWidget {
       ),
     );
   }
-
-  void _showStats(BuildContext context, StormRunStats stats) {
-    pushPlatformRoute(
-      context,
-      rootNavigator: true,
-      fullscreenDialog: true,
-      builder: (_) => _RunStats(stats),
-    );
-  }
 }
 
 class _RunStats extends StatelessWidget {
@@ -561,6 +561,7 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListSection(
+              cupertinoAdditionalDividerMargin: 6,
               header: Text(
                 '${widget.stats.score} ${context.l10n.stormPuzzlesSolved}',
               ),
