@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -10,7 +11,6 @@ import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/ui/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
@@ -122,6 +122,7 @@ class _Body extends ConsumerWidget {
         Expanded(
           child: Center(
             child: SafeArea(
+              bottom: false,
               child: TableBoardLayout(
                 boardData: cg.BoardData(
                   onMove: (move, {isPremove}) => ref
@@ -206,7 +207,7 @@ class _TopTable extends ConsumerWidget {
                   Text(
                     context.l10n.stormMoveToStart,
                     style: const TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: LichessColors.brag,
                     ),
@@ -215,7 +216,10 @@ class _TopTable extends ConsumerWidget {
                     puzzleState.pov == Side.white
                         ? context.l10n.stormYouPlayTheWhitePiecesInAllPuzzles
                         : context.l10n.stormYouPlayTheBlackPiecesInAllPuzzles,
-                    style: const TextStyle(color: LichessColors.brag),
+                    style: const TextStyle(
+                      color: LichessColors.brag,
+                      fontSize: 12,
+                    ),
                   ),
                 ],
               ),
@@ -224,7 +228,7 @@ class _TopTable extends ConsumerWidget {
             Text(
               puzzleState.numSolved.toString(),
               style: const TextStyle(
-                fontSize: 30.0,
+                fontSize: 38.0,
                 fontWeight: FontWeight.bold,
                 color: LichessColors.brag,
               ),
@@ -294,7 +298,9 @@ class _ComboState extends ConsumerState<_Combo>
   @override
   Widget build(BuildContext context) {
     final lvl = widget.combo.currentLevel();
-    final indicatorColor = Theme.of(context).colorScheme.secondary;
+    final indicatorColor = defaultTargetPlatform == TargetPlatform.iOS
+        ? LichessColors.brag
+        : Theme.of(context).colorScheme.secondary;
 
     final comboShades = generateShades(
       indicatorColor,
@@ -302,103 +308,106 @@ class _ComboState extends ConsumerState<_Combo>
     );
     return AnimatedBuilder(
       animation: _controller,
-      builder: (context, child) => Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: widget.combo.current.toString(),
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: defaultTargetPlatform == TargetPlatform.iOS
-                          ? CupertinoTheme.of(context).textTheme.textStyle.color
-                          : null,
-                    ),
+      builder: (context, child) => Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  widget.combo.current.toString(),
+                  style: TextStyle(
+                    fontSize: 30,
+                    height: 1.0,
+                    fontWeight: FontWeight.bold,
+                    color: defaultTargetPlatform == TargetPlatform.iOS
+                        ? CupertinoTheme.of(context).textTheme.textStyle.color
+                        : null,
                   ),
-                  TextSpan(
-                    text: '\n${context.l10n.stormCombo}',
-                    style: TextStyle(
-                      color: defaultTargetPlatform == TargetPlatform.iOS
-                          ? CupertinoTheme.of(context).textTheme.textStyle.color
-                          : null,
-                    ),
-                  )
-                ],
-              ),
-              textAlign: TextAlign.center,
+                ),
+                Text(
+                  context.l10n.stormCombo,
+                  style: TextStyle(
+                    color: defaultTargetPlatform == TargetPlatform.iOS
+                        ? CupertinoTheme.of(context).textTheme.textStyle.color
+                        : null,
+                  ),
+                )
+              ],
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.60,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 25,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        boxShadow: _controller.value == 1.0
-                            ? [
-                                BoxShadow(
-                                  color: indicatorColor.withOpacity(0.3),
-                                  blurRadius: 10.0,
-                                  spreadRadius: 2.0,
-                                ),
-                              ]
-                            : [],
-                      ),
-                      child: ClipRRect(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(3.0)),
-                        child: LinearProgressIndicator(
-                          value: _controller.value,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(indicatorColor),
-                        ),
-                      ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.65,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 25,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      boxShadow: _controller.value == 1.0
+                          ? [
+                              BoxShadow(
+                                color: indicatorColor.withOpacity(0.3),
+                                blurRadius: 10.0,
+                                spreadRadius: 2.0,
+                              ),
+                            ]
+                          : [],
                     ),
-                  ),
-                  const SizedBox(height: 9.5),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: StormCombo.levelBonus.mapIndexed((index, level) {
-                      final isCurrentLevel = index < lvl;
-                      return AnimatedContainer(
-                        alignment: Alignment.center,
-                        curve: Curves.easeIn,
-                        duration: const Duration(milliseconds: 1000),
-                        width: 28 * MediaQuery.of(context).textScaleFactor,
-                        height: 24 * MediaQuery.of(context).textScaleFactor,
-                        decoration: isCurrentLevel
-                            ? BoxDecoration(
-                                color: comboShades[index],
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(3.0),
-                                ),
-                              )
-                            : null,
-                        child: Text(
-                          '${level}s',
-                          style: TextStyle(
-                            color: isCurrentLevel
-                                ? Theme.of(context).colorScheme.onSecondary
+                    child: ClipRRect(
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(3.0)),
+                      child: LinearProgressIndicator(
+                        backgroundColor:
+                            defaultTargetPlatform == TargetPlatform.iOS
+                                ? LichessColors.brag.withOpacity(0.2)
                                 : null,
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                        value: _controller.value,
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(indicatorColor),
+                      ),
+                    ),
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: StormCombo.levelBonus.mapIndexed((index, level) {
+                    final isCurrentLevel = index < lvl;
+                    return AnimatedContainer(
+                      alignment: Alignment.center,
+                      curve: Curves.easeIn,
+                      duration: const Duration(milliseconds: 1000),
+                      width: 28 * MediaQuery.of(context).textScaleFactor,
+                      height: 24 * MediaQuery.of(context).textScaleFactor,
+                      decoration: isCurrentLevel
+                          ? BoxDecoration(
+                              color: comboShades[index],
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(3.0),
+                              ),
+                            )
+                          : null,
+                      child: Text(
+                        '${level}s',
+                        style: TextStyle(
+                          color: isCurrentLevel
+                              ? Theme.of(context).colorScheme.onSecondary
+                              : null,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          const SizedBox(width: 10.0),
+        ],
       ),
     );
   }
