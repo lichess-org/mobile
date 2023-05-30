@@ -28,8 +28,8 @@ import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 import 'puzzle_view_model.dart';
 import 'puzzle_feedback_widget.dart';
 
-class PuzzleStreakScreen extends StatelessWidget {
-  const PuzzleStreakScreen({super.key});
+class StreakScreen extends StatelessWidget {
+  const StreakScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +87,7 @@ class _Load extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
       error: (e, s) {
         debugPrint(
-          'SEVERE: [PuzzleStreakScreen] could not load streak; $e\n$s',
+          'SEVERE: [StreakScreen] could not load streak; $e\n$s',
         );
         return Center(
           child: TableBoardLayout(

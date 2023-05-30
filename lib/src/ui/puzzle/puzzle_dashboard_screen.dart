@@ -21,7 +21,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'storm_screen.dart';
 import 'puzzle_screen.dart';
 import 'puzzle_themes_screen.dart';
-import 'puzzle_streak_screen.dart';
+import 'streak_screen.dart';
 
 final daysProvider = StateProvider<Days>((ref) => Days.month);
 
@@ -175,7 +175,7 @@ class _Body extends ConsumerWidget {
                     pushPlatformRoute(
                       context,
                       rootNavigator: true,
-                      builder: (context) => const PuzzleStreakScreen(),
+                      builder: (context) => const StreakScreen(),
                     );
                   }
                 : null,
