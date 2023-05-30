@@ -196,6 +196,7 @@ class _TopTable extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Icon(
@@ -206,29 +207,35 @@ class _TopTable extends ConsumerWidget {
           const SizedBox(width: 8),
           if (!puzzleState.runStarted)
             Expanded(
-              flex: 5,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    context.l10n.stormMoveToStart,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: LichessColors.brag,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.l10n.stormMoveToStart,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: LichessColors.brag,
+                      ),
                     ),
-                  ),
-                  Text(
-                    puzzleState.pov == Side.white
-                        ? context.l10n.stormYouPlayTheWhitePiecesInAllPuzzles
-                        : context.l10n.stormYouPlayTheBlackPiecesInAllPuzzles,
-                    style: const TextStyle(
-                      color: LichessColors.brag,
-                      fontSize: 12,
+                    Text(
+                      puzzleState.pov == Side.white
+                          ? context.l10n.stormYouPlayTheWhitePiecesInAllPuzzles
+                          : context.l10n.stormYouPlayTheBlackPiecesInAllPuzzles,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: LichessColors.brag,
+                        fontSize: 11,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           else
@@ -240,7 +247,6 @@ class _TopTable extends ConsumerWidget {
                 color: LichessColors.brag,
               ),
             ),
-          const Spacer(),
           StormClockWidget(clock: puzzleState.clock),
         ],
       ),
