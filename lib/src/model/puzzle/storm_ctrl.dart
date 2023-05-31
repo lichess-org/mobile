@@ -2,13 +2,15 @@ import 'dart:async';
 import 'dart:core';
 import 'dart:math' as math;
 import 'package:dartchess/dartchess.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'puzzle.dart';
+import 'puzzle_repository.dart';
 import 'storm.dart';
 
 part 'storm_ctrl.g.dart';
@@ -17,8 +19,6 @@ part 'storm_ctrl.freezed.dart';
 const malus = Duration(seconds: 10);
 const moveDelay = Duration(milliseconds: 200);
 const startTime = Duration(minutes: 3);
-
-// TODO: Send Storm Result
 
 @riverpod
 class StormCtrl extends _$StormCtrl {
@@ -111,9 +111,14 @@ class StormCtrl extends _$StormCtrl {
 
   void end() {
     ref.read(soundServiceProvider).play(Sound.puzzleStormEnd);
+
     state.clock.reset();
     _pushToHistory(success: false);
-    state = state.copyWith(stats: _getStats(), runOver: true);
+
+    final stats = _getStats();
+    ref.read(puzzleRepositoryProvider).postStormRun(stats);
+
+    state = state.copyWith(stats: stats, runOver: true);
   }
 
   Future<void> _loadNextPuzzle(bool result, ComboState comboChange) async {

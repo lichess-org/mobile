@@ -140,6 +140,25 @@ class PuzzleRepository {
     );
   }
 
+  FutureResult<void> postStormRun(StormRunStats stats) {
+    final Map<String, String> body = {
+      'puzzles': stats.history.length.toString(),
+      'score': stats.score.toString(),
+      'moves': stats.moves.toString(),
+      'errors': stats.errors.toString(),
+      'combo': stats.comboBest.toString(),
+      'time': stats.time.inSeconds.toString(),
+      'highest': stats.highest.toString(),
+      'notAnExploit':
+          "Yes, we know that you can send whatever score you like. That's why there's no leaderboards and no competition.",
+    };
+
+    return apiClient.post(
+      Uri.parse('$kLichessHost/storm'),
+      body: body,
+    );
+  }
+
   FutureResult<Puzzle> daily() {
     return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/daily')).flatMap(
           (response) => readJsonObject(
