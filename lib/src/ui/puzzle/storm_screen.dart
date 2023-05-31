@@ -519,7 +519,6 @@ class _RunStats extends StatelessWidget {
     return defaultTargetPlatform == TargetPlatform.iOS
         ? CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: Text(context.l10n.stormRaceComplete),
               leading: CupertinoButton(
                 padding: EdgeInsets.zero,
                 child: const Icon(CupertinoIcons.clear),
@@ -535,7 +534,6 @@ class _RunStats extends StatelessWidget {
                 icon: const Icon(Icons.close),
                 onPressed: () => Navigator.of(context).pop(),
               ),
-              title: Text(context.l10n.stormRaceComplete),
             ),
           );
   }
@@ -663,36 +661,43 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                             footer: Padding(
                               padding: const EdgeInsets.only(top: 8),
                               child: Row(
+                                mainAxisSize: MainAxisSize.max,
                                 children: [
                                   ColoredBox(
                                     color: e.$2
                                         ? LichessColors.good
                                         : LichessColors.red,
-                                    child: Row(
-                                      children: [
-                                        if (e.$2)
-                                          const Icon(
-                                            color: Colors.white,
-                                            Icons.done,
-                                            size: 20,
-                                          )
-                                        else
-                                          const Icon(
-                                            Icons.close,
-                                            color: Colors.white,
-                                            size: 20,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 1,
+                                        horizontal: 3,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          if (e.$2)
+                                            const Icon(
+                                              color: Colors.white,
+                                              Icons.done,
+                                              size: 20,
+                                            )
+                                          else
+                                            const Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                          Text(
+                                            '${e.$3.inSeconds}s',
+                                            overflow: TextOverflow.fade,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                            ),
                                           ),
-                                        Text(
-                                          '${e.$3.inSeconds}s',
-                                          overflow: TextOverflow.fade,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(width: 3),
+                                  const SizedBox(width: 6),
                                   Text(e.$1.rating.toString()),
                                 ],
                               ),
