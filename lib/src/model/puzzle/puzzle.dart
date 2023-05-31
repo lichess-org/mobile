@@ -194,13 +194,11 @@ class HistoryPuzzle with _$HistoryPuzzle {
     required IList<UCIMove> solution,
     required ISet<String> themes,
     required String fen,
+    required Move lastMove,
   }) = _HistoryPuzzle;
 
-  (String, Side, Move?) preview() {
-    final pos = Chess.fromSetup(Setup.parseFen(fen));
-
-    return (fen, pos.turn, null);
-  }
+  (String, Side, Move) preview() =>
+      (fen, Chess.fromSetup(Setup.parseFen(fen)).turn, lastMove);
 }
 
 @freezed

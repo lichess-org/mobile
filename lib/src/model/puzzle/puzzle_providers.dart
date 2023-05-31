@@ -83,42 +83,35 @@ Future<PuzzleDashboard> puzzleDashboard(
 
 @riverpod
 class PuzzleHistory extends _$PuzzleHistory {
-  StreamSubscription<PuzzleAndResult>? _streamSub;
   final List<PuzzleAndResult> _list = [];
+  StreamSubscription<PuzzleAndResult>? _streamSub;
+  PuzzleRepository? repo;
   DateTime _lastDate = DateTime.now();
 
   @override
   Future<PuzzleHistoryState> build() async {
     ref.cacheFor(const Duration(seconds: 30));
     ref.onDispose(() => _streamSub?.cancel());
-    final stream = connectStream();
 
-    return stream.first
-        .then((value) => PuzzleHistoryState(historyList: [value]));
-  }
-
-  Stream<PuzzleAndResult> connectStream() {
-    final repo = ref.watch(puzzleRepositoryProvider);
-    final stream = repo.puzzleActivity(10, _lastDate).asBroadcastStream();
-
-    _streamSub?.cancel();
+    repo = ref.watch(puzzleRepositoryProvider);
+    final stream = repo!.puzzleActivity(10, DateTime.now()).asBroadcastStream();
     _streamSub = stream.listen(
       (event) {
         _list.add(event);
       },
       onDone: () {
-        state = AsyncData(PuzzleHistoryState(historyList: _list.toList()));
+        state = AsyncData(PuzzleHistoryState(historyList: _list.toIList()));
         _lastDate = _list.last.date;
         _list.clear();
-        _streamSub?.cancel();
       },
     );
-    return stream;
+
+    return stream.first
+        .then((value) => PuzzleHistoryState(historyList: [value].toIList()));
   }
 
   Future<List<PuzzleAndResult>> getNext() async {
-    final repo = ref.watch(puzzleRepositoryProvider);
-    final stream = repo.puzzleActivity(50, DateTime.now());
+    final stream = repo!.puzzleActivity(50, _lastDate);
     final completer = Completer<List<PuzzleAndResult>>();
 
     _streamSub = stream.listen(
@@ -129,7 +122,6 @@ class PuzzleHistory extends _$PuzzleHistory {
         completer.complete(_list.toList());
         _lastDate = _list.last.date;
         _list.clear();
-        _streamSub?.cancel();
       },
     );
 
@@ -140,6 +132,6 @@ class PuzzleHistory extends _$PuzzleHistory {
 @freezed
 class PuzzleHistoryState with _$PuzzleHistoryState {
   const factory PuzzleHistoryState({
-    required List<PuzzleAndResult> historyList,
+    required IList<PuzzleAndResult> historyList,
   }) = _PuzzleHistoryState;
 }

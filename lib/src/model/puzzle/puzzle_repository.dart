@@ -400,6 +400,7 @@ HistoryPuzzle _historyPuzzleFromPick(RequiredPick pick) {
     solution: pick('solution').asListOrThrow((p0) => p0.asStringOrThrow()).lock,
     themes:
         pick('themes').asListOrThrow((p0) => p0.asStringOrThrow()).toSet().lock,
+    lastMove: pick('lastMove').asUciMoveOrThrow(),
   );
 }
 

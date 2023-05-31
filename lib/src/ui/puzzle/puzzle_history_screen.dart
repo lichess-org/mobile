@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -83,7 +84,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
 class PuzzleHistoryScreen extends StatelessWidget {
   const PuzzleHistoryScreen(this.historyList);
 
-  final List<PuzzleAndResult> historyList;
+  final IList<PuzzleAndResult> historyList;
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +110,7 @@ class PuzzleHistoryScreen extends StatelessWidget {
 
 class _Body extends ConsumerStatefulWidget {
   const _Body(this.historyList);
-  final List<PuzzleAndResult> historyList;
+  final IList<PuzzleAndResult> historyList;
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
@@ -152,6 +153,7 @@ class _BodyState extends ConsumerState<_Body> {
       setState(() {
         _isLoading = false;
         _historyList.addAll(newList);
+        _historyList = _historyList.toSet().toList();
       });
     }
   }
@@ -173,7 +175,7 @@ class _BodyState extends ConsumerState<_Body> {
             min(rowStartIndex + crossAxisCount, _historyList.length);
         return Row(
           children: _historyList
-              .getRange(rowStartIndex, rowEndIndex)
+              .getRange(index * crossAxisCount, rowEndIndex)
               .map(
                 (e) => _HistoryBoard(e, boardWidth),
               )
@@ -192,7 +194,7 @@ class _HistoryBoard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (fen, turn, _) = puzzle.puzzle.preview();
+    final (fen, turn, lastMove) = puzzle.puzzle.preview();
     return SizedBox(
       width: boardWidth,
       height: boardWidth + 33,
@@ -222,6 +224,7 @@ class _HistoryBoard extends ConsumerWidget {
         },
         orientation: turn.cg,
         fen: fen,
+        lastMove: lastMove.cg,
         footer: Padding(
           padding: const EdgeInsets.only(top: 8),
           child: Row(
