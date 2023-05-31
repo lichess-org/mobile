@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -22,6 +23,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
+final _puzzleLoadingProvider = StateProvider<bool>((ref) => false);
+
 class PuzzleHistoryWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,8 +33,9 @@ class PuzzleHistoryWidget extends ConsumerWidget {
       data: (data) {
         final crossAxisCount =
             MediaQuery.of(context).size.width > kTabletThreshold ? 4 : 2;
-        final boardWidth =
-            (MediaQuery.of(context).size.width / crossAxisCount) * 0.90;
+        final boardWidth = (defaultTargetPlatform == TargetPlatform.iOS)
+            ? (MediaQuery.of(context).size.width) * 0.91 / crossAxisCount
+            : MediaQuery.of(context).size.width / crossAxisCount;
         return ListSection(
           header: Text(context.l10n.puzzleHistory),
           headerTrailing: NoPaddingTextButton(
@@ -195,33 +199,39 @@ class _HistoryBoard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final (fen, turn, lastMove) = puzzle.puzzle.preview();
+    final isLoading = ref.watch(_puzzleLoadingProvider);
     return SizedBox(
       width: boardWidth,
-      height: boardWidth + 33,
+      height: boardWidth + MediaQuery.of(context).textScaleFactor * 14 + 16.5,
       child: BoardPreview(
-        onTap: () async {
-          Puzzle? puzzleData;
-          try {
-            puzzleData =
-                await ref.read(puzzleProvider(puzzle.puzzle.id).future);
-          } catch (e) {
-            // show error
-          } finally {
-            final session = ref.read(authSessionProvider);
-            pushPlatformRoute(
-              context,
-              rootNavigator: true,
-              builder: (ctx) => PuzzleScreen(
-                theme: PuzzleTheme.mix,
-                initialPuzzleContext: PuzzleContext(
-                  puzzle: puzzleData!,
-                  theme: PuzzleTheme.mix,
-                  userId: session?.user.id,
-                ),
-              ),
-            );
-          }
-        },
+        onTap: isLoading
+            ? null
+            : () async {
+                Puzzle? puzzleData;
+                ref
+                    .read(_puzzleLoadingProvider.notifier)
+                    .update((state) => true);
+                puzzleData =
+                    await ref.read(puzzleProvider(puzzle.puzzle.id).future);
+                ref
+                    .read(_puzzleLoadingProvider.notifier)
+                    .update((state) => false);
+                final session = ref.read(authSessionProvider);
+                if (context.mounted) {
+                  pushPlatformRoute(
+                    context,
+                    rootNavigator: true,
+                    builder: (ctx) => PuzzleScreen(
+                      theme: PuzzleTheme.mix,
+                      initialPuzzleContext: PuzzleContext(
+                        puzzle: puzzleData!,
+                        theme: PuzzleTheme.mix,
+                        userId: session?.user.id,
+                      ),
+                    ),
+                  );
+                }
+              },
         orientation: turn.cg,
         fen: fen,
         lastMove: lastMove.cg,
@@ -232,6 +242,7 @@ class _HistoryBoard extends ConsumerWidget {
               ColoredBox(
                 color: puzzle.win ? LichessColors.good : LichessColors.red,
                 child: Icon(
+                  size: 20,
                   color: Colors.white,
                   (puzzle.win) ? Icons.done : Icons.close,
                 ),

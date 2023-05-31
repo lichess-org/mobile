@@ -49,7 +49,7 @@ class PuzzleHistoryStorage {
     await _db.insert(
       _dbName,
       {
-        'puzzleId': puzzle.puzzle.id,
+        'puzzleId': puzzle.puzzle.id.toString(),
         'lastModified': DateTime.now().toIso8601String(),
         'data': jsonEncode(puzzle.toJson()),
       },
