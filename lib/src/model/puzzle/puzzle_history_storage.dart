@@ -20,7 +20,7 @@ class PuzzleHistoryStorage {
   const PuzzleHistoryStorage(this._db);
   final Database _db;
 
-  Future<Puzzle?> fetch({
+  Future<Puzzle?> fetchPuzzle({
     required PuzzleId puzzleId,
   }) async {
     final list = await _db.query(

@@ -48,7 +48,7 @@ Future<PuzzleStormResponse> storm(StormRef ref) {
 @Riverpod(keepAlive: true)
 Future<Puzzle> puzzle(PuzzleRef ref, PuzzleId id) async {
   final historyRepo = ref.watch(puzzleHistoryStorageProvider);
-  final puzzle = await historyRepo.fetch(puzzleId: id);
+  final puzzle = await historyRepo.fetchPuzzle(puzzleId: id);
   if (puzzle != null) return puzzle;
   final repo = ref.watch(puzzleRepositoryProvider);
   return Result.release(repo.fetch(id));
@@ -85,7 +85,7 @@ Future<PuzzleDashboard> puzzleDashboard(
 class PuzzleHistory extends _$PuzzleHistory {
   final List<PuzzleAndResult> _list = [];
   StreamSubscription<PuzzleAndResult>? _streamSub;
-  PuzzleRepository? repo;
+  PuzzleRepository? _repo;
   DateTime _lastDate = DateTime.now();
 
   @override
@@ -93,8 +93,9 @@ class PuzzleHistory extends _$PuzzleHistory {
     ref.cacheFor(const Duration(seconds: 30));
     ref.onDispose(() => _streamSub?.cancel());
 
-    repo = ref.watch(puzzleRepositoryProvider);
-    final stream = repo!.puzzleActivity(10, DateTime.now()).asBroadcastStream();
+    _repo = ref.watch(puzzleRepositoryProvider);
+    final stream =
+        _repo!.puzzleActivity(10, DateTime.now()).asBroadcastStream();
     _streamSub = stream.listen(
       (event) {
         _list.add(event);
@@ -111,7 +112,7 @@ class PuzzleHistory extends _$PuzzleHistory {
   }
 
   Future<List<PuzzleAndResult>> getNext() async {
-    final stream = repo!.puzzleActivity(50, _lastDate);
+    final stream = _repo!.puzzleActivity(50, _lastDate);
     final completer = Completer<List<PuzzleAndResult>>();
 
     _streamSub = stream.listen(
