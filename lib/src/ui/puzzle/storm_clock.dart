@@ -1,12 +1,12 @@
 import 'dart:math' as math;
-import 'package:lichess_mobile/src/model/puzzle/puzzle_storm.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'dart:async';
+import 'dart:ui';
 import 'package:vector_math/vector_math_64.dart' as vector;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:async';
-import 'dart:ui';
 
+import 'package:lichess_mobile/src/model/puzzle/storm_ctrl.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/constants.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_storm.dart';
+import 'package:lichess_mobile/src/model/puzzle/storm_ctrl.dart';
 
 void main() {
   group('StormCombo', () {

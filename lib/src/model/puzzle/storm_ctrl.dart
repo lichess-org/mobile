@@ -10,8 +10,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'puzzle.dart';
 
-part 'puzzle_storm.g.dart';
-part 'puzzle_storm.freezed.dart';
+part 'storm_ctrl.g.dart';
+part 'storm_ctrl.freezed.dart';
 
 const malus = Duration(seconds: 10);
 const moveDelay = Duration(milliseconds: 200);
