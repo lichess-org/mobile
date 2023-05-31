@@ -174,6 +174,99 @@ class _Body extends ConsumerWidget {
   }
 }
 
+Future<void> _stormInfoDialogBuilder(BuildContext context) {
+  return showAdaptiveDialog(
+    context: context,
+    builder: (context) {
+      final content = SingleChildScrollView(
+        child: RichText(
+          text: TextSpan(
+            style: DefaultTextStyle.of(context).style,
+            children: const [
+              TextSpan(
+                text: '\n',
+              ),
+              TextSpan(
+                text:
+                    'Each puzzle grants one point. The goal is to get as many points as you can before the time runs out.',
+              ),
+              TextSpan(
+                text: '\n\n',
+              ),
+              TextSpan(
+                text: 'Combo bar\n',
+                style: TextStyle(fontSize: 18),
+              ),
+              TextSpan(
+                text: 'Each correct ',
+                children: [
+                  TextSpan(
+                    text: 'move',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(
+                    text:
+                        ' fills the combo bar. When the bar is full, you get a time bonus, and you increase the value of the next bonus.',
+                  ),
+                ],
+              ),
+              TextSpan(
+                text: '\n\n',
+              ),
+              TextSpan(
+                text: 'Bonus values:\n',
+              ),
+              TextSpan(
+                text: '• 5 moves: +3s\n',
+              ),
+              TextSpan(
+                text: '• 12 moves: +5s\n',
+              ),
+              TextSpan(
+                text: '• 20 moves: +7s\n',
+              ),
+              TextSpan(
+                text: '• 30 moves: +10s\n',
+              ),
+              TextSpan(
+                text: '• Then +10s every 10 other moves.\n',
+              ),
+              TextSpan(
+                text: '\n',
+              ),
+              TextSpan(
+                text:
+                    'When you play a wrong move, the combo bar is depleted, and you lose 10 seconds.',
+              ),
+            ],
+          ),
+        ),
+      );
+      return defaultTargetPlatform == TargetPlatform.iOS
+          ? CupertinoAlertDialog(
+              title: Text(context.l10n.aboutX('Puzzle Storm')),
+              content: content,
+              actions: [
+                CupertinoDialogAction(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            )
+          : AlertDialog(
+              title: Text(context.l10n.aboutX('Puzzle Storm')),
+              content: content,
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+    },
+  );
+}
+
 void _showStats(BuildContext context, StormRunStats stats) {
   pushPlatformRoute(
     context,
@@ -199,12 +292,6 @@ class _TopTable extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Icon(
-            LichessIcons.storm,
-            size: 50.0,
-            color: LichessColors.brag,
-          ),
-          const SizedBox(width: 8),
           if (!puzzleState.runStarted)
             Expanded(
               child: Padding(
@@ -239,6 +326,12 @@ class _TopTable extends ConsumerWidget {
               ),
             )
           else ...[
+            const Icon(
+              LichessIcons.storm,
+              size: 50.0,
+              color: LichessColors.brag,
+            ),
+            const SizedBox(width: 8),
             Text(
               puzzleState.numSolved.toString(),
               style: const TextStyle(
@@ -472,11 +565,18 @@ class _BottomBar extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            if (!puzzleState.clock.isActive && !puzzleState.runOver)
+              BottomBarButton(
+                icon: Icons.info_outline,
+                label: context.l10n.aboutX('Storm'),
+                shortLabel: context.l10n.about,
+                showAndroidShortLabel: true,
+                onTap: () => _stormInfoDialogBuilder(context),
+              ),
             BottomBarButton(
               icon: Icons.delete,
               label: context.l10n.stormNewRun.split(' ').take(2).join(' '),
               shortLabel: context.l10n.stormNewRun.split(' ').take(2).join(' '),
-              highlighted: true,
               showAndroidShortLabel: true,
               onTap: () => ref.invalidate(stormProvider),
             ),
@@ -484,7 +584,6 @@ class _BottomBar extends ConsumerWidget {
               BottomBarButton(
                 icon: LichessIcons.flag,
                 label: context.l10n.stormEndRun.split(' ').take(2).join(' '),
-                highlighted: true,
                 shortLabel:
                     context.l10n.stormEndRun.split(' ').take(2).join(' '),
                 showAndroidShortLabel: true,
@@ -498,7 +597,6 @@ class _BottomBar extends ConsumerWidget {
               BottomBarButton(
                 icon: Icons.open_in_new,
                 label: 'Result',
-                highlighted: true,
                 shortLabel: 'Result',
                 showAndroidShortLabel: true,
                 onTap: () => _showStats(context, puzzleState.stats!),
