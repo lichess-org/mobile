@@ -83,8 +83,8 @@ Future<PuzzleDashboard> puzzleDashboard(
 
 @riverpod
 class PuzzleHistory extends _$PuzzleHistory {
-  final List<PuzzleAndResult> _list = [];
-  StreamSubscription<PuzzleAndResult>? _streamSub;
+  final List<HistoryPuzzle> _list = [];
+  StreamSubscription<HistoryPuzzle>? _streamSub;
   PuzzleRepository? _repo;
   DateTime _lastDate = DateTime.now();
 
@@ -111,9 +111,9 @@ class PuzzleHistory extends _$PuzzleHistory {
         .then((value) => PuzzleHistoryState(historyList: [value].toIList()));
   }
 
-  Future<List<PuzzleAndResult>> getNext() {
+  Future<List<HistoryPuzzle>> getNext() {
     final stream = _repo!.puzzleActivity(50, _lastDate);
-    final completer = Completer<List<PuzzleAndResult>>();
+    final completer = Completer<List<HistoryPuzzle>>();
 
     _streamSub = stream.listen(
       (event) {
@@ -133,6 +133,6 @@ class PuzzleHistory extends _$PuzzleHistory {
 @freezed
 class PuzzleHistoryState with _$PuzzleHistoryState {
   const factory PuzzleHistoryState({
-    required IList<PuzzleAndResult> historyList,
+    required IList<HistoryPuzzle> historyList,
   }) = _PuzzleHistoryState;
 }

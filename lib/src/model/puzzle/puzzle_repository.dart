@@ -199,7 +199,7 @@ class PuzzleRepository {
     });
   }
 
-  Stream<PuzzleAndResult> puzzleActivity(
+  Stream<HistoryPuzzle> puzzleActivity(
     int max,
     DateTime before,
   ) async* {
@@ -214,7 +214,6 @@ class PuzzleRepository {
         .expand((event) => event.split('\n'))
         .where((event) => event.isNotEmpty)
         .map((event) => jsonDecode(event) as Map<String, dynamic>)
-        .where((json) => json.containsKey('win'))
         .map((json) => _puzzleActivityFromJson(json))
         .handleError((Object error) => _log.warning(error.toString()));
   }
@@ -287,8 +286,8 @@ class PuzzleAndResult with _$PuzzleAndResult {
 
 // --
 
-PuzzleAndResult _puzzleActivityFromJson(Map<String, dynamic> json) =>
-    _puzzleActivityFromPick(pick(json).required());
+HistoryPuzzle _puzzleActivityFromJson(Map<String, dynamic> json) =>
+    _historyPuzzleFromPick(pick(json).required());
 
 Puzzle _puzzleFromJson(Map<String, dynamic> json) =>
     _puzzleFromPick(pick(json).required());
@@ -382,25 +381,22 @@ PuzzleGamePlayer _puzzlePlayerFromPick(RequiredPick pick) {
   );
 }
 
-PuzzleAndResult _puzzleActivityFromPick(RequiredPick pick) {
-  final date = pick('date').asIntOrThrow();
-  return PuzzleAndResult(
-    win: pick('win').asBoolOrThrow(),
-    puzzle: _historyPuzzleFromPick(pick('puzzle').required()),
-    date: DateTime.fromMillisecondsSinceEpoch(date, isUtc: true),
-  );
-}
-
 HistoryPuzzle _historyPuzzleFromPick(RequiredPick pick) {
   return HistoryPuzzle(
-    id: pick('id').asPuzzleIdOrThrow(),
-    plays: pick('plays').asIntOrThrow(),
-    rating: pick('rating').asIntOrThrow(),
-    fen: pick('fen').asStringOrThrow(),
-    solution: pick('solution').asListOrThrow((p0) => p0.asStringOrThrow()).lock,
-    themes:
-        pick('themes').asListOrThrow((p0) => p0.asStringOrThrow()).toSet().lock,
-    lastMove: pick('lastMove').asUciMoveOrThrow(),
+    win: pick('win').asBoolOrThrow(),
+    date: pick('date').asDateTimeFromMillisecondsOrThrow(),
+    id: pick('puzzle', 'id').asPuzzleIdOrThrow(),
+    plays: pick('puzzle', 'plays').asIntOrThrow(),
+    rating: pick('puzzle', 'rating').asIntOrThrow(),
+    fen: pick('puzzle', 'fen').asStringOrThrow(),
+    solution: pick('puzzle', 'solution')
+        .asListOrThrow((p0) => p0.asStringOrThrow())
+        .lock,
+    themes: pick('puzzle', 'themes')
+        .asListOrThrow((p0) => p0.asStringOrThrow())
+        .toSet()
+        .lock,
+    lastMove: pick('puzzle', 'lastMove').asUciMoveOrThrow(),
   );
 }
 

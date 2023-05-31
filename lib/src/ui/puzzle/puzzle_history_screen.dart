@@ -88,7 +88,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
 class PuzzleHistoryScreen extends StatelessWidget {
   const PuzzleHistoryScreen(this.historyList);
 
-  final IList<PuzzleAndResult> historyList;
+  final IList<HistoryPuzzle> historyList;
 
   @override
   Widget build(BuildContext context) {
@@ -114,14 +114,14 @@ class PuzzleHistoryScreen extends StatelessWidget {
 
 class _Body extends ConsumerStatefulWidget {
   const _Body(this.historyList);
-  final IList<PuzzleAndResult> historyList;
+  final IList<HistoryPuzzle> historyList;
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
 class _BodyState extends ConsumerState<_Body> {
   final ScrollController _scrollController = ScrollController();
-  List<PuzzleAndResult> _historyList = [];
+  List<HistoryPuzzle> _historyList = [];
   bool _isLoading = false;
 
   @override
@@ -192,12 +192,12 @@ class _BodyState extends ConsumerState<_Body> {
 class _HistoryBoard extends ConsumerWidget {
   const _HistoryBoard(this.puzzle, this.boardWidth);
 
-  final PuzzleAndResult puzzle;
+  final HistoryPuzzle puzzle;
   final double boardWidth;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (fen, turn, lastMove) = puzzle.puzzle.preview();
+    final (fen, turn, lastMove) = puzzle.preview();
     final isLoading = ref.watch(_puzzleLoadingProvider);
     return SizedBox(
       width: boardWidth,
@@ -210,8 +210,7 @@ class _HistoryBoard extends ConsumerWidget {
                 ref
                     .read(_puzzleLoadingProvider.notifier)
                     .update((state) => true);
-                puzzleData =
-                    await ref.read(puzzleProvider(puzzle.puzzle.id).future);
+                puzzleData = await ref.read(puzzleProvider(puzzle.id).future);
                 ref
                     .read(_puzzleLoadingProvider.notifier)
                     .update((state) => false);
@@ -247,7 +246,7 @@ class _HistoryBoard extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              Text(puzzle.puzzle.rating.toString()),
+              Text(puzzle.rating.toString()),
             ],
           ),
         ),

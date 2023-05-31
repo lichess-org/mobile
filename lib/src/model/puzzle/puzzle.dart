@@ -188,6 +188,8 @@ class PuzzleDashboardData with _$PuzzleDashboardData {
 class HistoryPuzzle with _$HistoryPuzzle {
   const HistoryPuzzle._();
   const factory HistoryPuzzle({
+    required bool win,
+    required DateTime date,
     required PuzzleId id,
     required int rating,
     required int plays,
@@ -199,13 +201,4 @@ class HistoryPuzzle with _$HistoryPuzzle {
 
   (String, Side, Move) preview() =>
       (fen, Chess.fromSetup(Setup.parseFen(fen)).turn, lastMove);
-}
-
-@freezed
-class PuzzleAndResult with _$PuzzleAndResult {
-  const factory PuzzleAndResult({
-    required HistoryPuzzle puzzle,
-    required bool win,
-    required DateTime date,
-  }) = _PuzzleAndResult;
 }
