@@ -21,21 +21,20 @@ import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm_ctrl.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import "package:lichess_mobile/src/utils/l10n_context.dart";
-import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
-import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 
 class StormScreen extends StatelessWidget {
   const StormScreen({super.key});

@@ -131,7 +131,7 @@ void main() {
 
       await tester.pump(const Duration(milliseconds: 500));
       await tester.tap(find.text('End run'));
-      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pumpAndSettle();
 
       expect(find.text('Race complete!'), findsOneWidget);
     });
