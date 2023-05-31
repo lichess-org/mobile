@@ -12,7 +12,7 @@ import '../../test_utils.dart';
 import '../../test_app.dart';
 
 void main() {
-  group('Puzzle Storm', () {
+  group('StormScreen', () {
     testWidgets(
       'meets accessibility guidelines',
       (tester) async {
