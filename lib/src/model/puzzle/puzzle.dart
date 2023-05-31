@@ -165,16 +165,6 @@ class LitePuzzle with _$LitePuzzle {
 }
 
 @freezed
-class PuzzleStormHighScore with _$PuzzleStormHighScore {
-  const factory PuzzleStormHighScore({
-    required int allTime,
-    required int day,
-    required int month,
-    required int week,
-  }) = _PuzzleStormHighScore;
-}
-
-@freezed
 class PuzzleDashboard with _$PuzzleDashboard {
   const factory PuzzleDashboard({
     required PuzzleDashboardData global,

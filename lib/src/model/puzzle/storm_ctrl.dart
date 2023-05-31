@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'puzzle.dart';
+import 'storm.dart';
 
 part 'storm_ctrl.g.dart';
 part 'storm_ctrl.freezed.dart';
@@ -239,20 +240,6 @@ class StormCtrlState with _$StormCtrlState {
   bool get isOver => moveIndex >= puzzle.solution.length - 1;
 
   IMap<String, ISet<String>> get validMoves => algebraicLegalMoves(position);
-}
-
-@freezed
-class StormRunStats with _$StormRunStats {
-  const factory StormRunStats({
-    required int moves,
-    required int errors,
-    required int score,
-    required int comboBest,
-    required Duration time,
-    required double timePerMove,
-    required int highest,
-    required IList<(LitePuzzle, bool, Duration)> history,
-  }) = _StormRunStats;
 }
 
 enum ComboState {

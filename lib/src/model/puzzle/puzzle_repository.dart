@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'puzzle.dart';
+import 'storm.dart';
 import 'puzzle_streak.dart';
 import 'puzzle_theme.dart';
 import 'puzzle_difficulty.dart';
