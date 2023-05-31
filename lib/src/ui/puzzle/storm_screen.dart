@@ -238,7 +238,7 @@ class _TopTable extends ConsumerWidget {
                 ),
               ),
             )
-          else
+          else ...[
             Text(
               puzzleState.numSolved.toString(),
               style: const TextStyle(
@@ -247,6 +247,8 @@ class _TopTable extends ConsumerWidget {
                 color: LichessColors.brag,
               ),
             ),
+            const Spacer(),
+          ],
           StormClockWidget(clock: puzzleState.clock),
         ],
       ),
