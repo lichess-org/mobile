@@ -4,8 +4,6 @@ import 'package:lichess_mobile/src/ui/user/leaderboard_screen.dart';
 import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/http_client.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import '../../test_utils.dart';
 import '../../test_app.dart';
 
@@ -65,27 +63,3 @@ const leaderboardResponse = '''
 "horde":[{"id":"rayholt","username":"RayHolt","perfs":{"horde":{"rating":2810,"progress":9}}},{"id":"stubenfisch","username":"Stubenfisch","perfs":{"horde":{"rating":2756,"progress":2}},"patron":true},{"id":"blazinq","username":"Blazinq","perfs":{"horde":{"rating":2602,"progress":33}},"title":"FM","patron":true},{"id":"sinamon73","username":"Sinamon73","perfs":{"horde":{"rating":2594,"progress":-3}},"patron":true},{"id":"hod-konem96","username":"hod-konem96","perfs":{"horde":{"rating":2571,"progress":0}}},{"id":"golden-horde","username":"Golden-Horde","perfs":{"horde":{"rating":2571,"progress":6}}},{"id":"shreyas_adimulam","username":"Shreyas_Adimulam","perfs":{"horde":{"rating":2564,"progress":-12}},"online":true},{"id":"aar_77on","username":"Aar_77on","perfs":{"horde":{"rating":2527,"progress":10}}},{"id":"roadtofm-l","username":"RoadToFM-L","perfs":{"horde":{"rating":2526,"progress":-13}}},{"id":"ragehunter","username":"Ragehunter","perfs":{"horde":{"rating":2522,"progress":-11}},"title":"FM"}],
 "racingKings":[{"id":"royalmaniac","username":"RoyalManiac","perfs":{"racingKings":{"rating":2499,"progress":13}},"patron":true},{"id":"cybershredder","username":"CyberShredder","perfs":{"racingKings":{"rating":2408,"progress":20}}},{"id":"queeneatingdragon","username":"QueenEatingDragon","perfs":{"racingKings":{"rating":2388,"progress":-14}}},{"id":"seth_7777777","username":"seth_7777777","perfs":{"racingKings":{"rating":2387,"progress":7}}},{"id":"huangyudong","username":"huangyudong","perfs":{"racingKings":{"rating":2342,"progress":-8}}},{"id":"natso","username":"Natso","perfs":{"racingKings":{"rating":2339,"progress":13}},"patron":true},{"id":"imakemanymistakes","username":"IMakeManyMistakes","perfs":{"racingKings":{"rating":2333,"progress":-7}}},{"id":"peanutbutter12345","username":"Peanutbutter12345","perfs":{"racingKings":{"rating":2321,"progress":-3}},"patron":true},{"id":"walker_22","username":"Walker_22","perfs":{"racingKings":{"rating":2316,"progress":-1}}},{"id":"artem_medvedev-04","username":"Artem_Medvedev-04","perfs":{"racingKings":{"rating":2274,"progress":10}}}]}
 ''';
-final testLeaderboard = Leaderboard(
-  bullet: _fakeList,
-  blitz: _fakeList,
-  rapid: _fakeList,
-  classical: _fakeList,
-  ultrabullet: _fakeList,
-  crazyhouse: _fakeList,
-  chess960: _fakeList,
-  kingOfThehill: _fakeList,
-  threeCheck: _fakeList,
-  antichess: _fakeList,
-  atomic: _fakeList,
-  horde: _fakeList,
-  racingKings: _fakeList,
-);
-
-final _fakeList = [
-  const LeaderboardUser(
-    id: UserId('test'),
-    username: 'test',
-    rating: 1000,
-    progress: 10,
-  )
-];

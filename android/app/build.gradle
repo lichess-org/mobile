@@ -79,6 +79,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    namespace 'org.lichess.mobileV2'
 }
 
 flutter {

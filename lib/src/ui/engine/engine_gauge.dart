@@ -172,10 +172,8 @@ class _EvalGaugePainter extends CustomPainter {
       switch (textDirection) {
         case TextDirection.rtl:
           left = size.width - width - x;
-          break;
         case TextDirection.ltr:
           left = x;
-          break;
       }
       canvas.drawRect(Offset(left, 0.0) & Size(width, size.height), paint);
     }

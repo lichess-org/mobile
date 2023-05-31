@@ -5,6 +5,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -160,12 +161,18 @@ class PerfCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Perf> userPerfs = Perf.values.where((element) {
+    List<Perf> userPerfs = Perf.values.where((element) {
       final p = user.perfs[element];
       return p != null &&
           p.numberOfGames > 0 &&
           p.ratingDeviation < kClueLessDeviation;
     }).toList(growable: false);
+
+    userPerfs.sort(
+      (p1, p2) => user.perfs[p1]!.numberOfGames
+          .compareTo(user.perfs[p2]!.numberOfGames),
+    );
+    userPerfs = userPerfs.reversed.toList();
 
     if (userPerfs.isEmpty) {
       return const SizedBox.shrink();
@@ -270,6 +277,38 @@ class RecentGames extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final recentGames = ref.watch(userRecentGamesProvider(userId: user.id));
 
+    Widget getResultIcon(ArchivedGameData game, Side mySide) {
+      if (game.status == GameStatus.draw ||
+          game.status == GameStatus.stalemate) {
+        return const Icon(
+          CupertinoIcons.equal_square_fill,
+          color: LichessColors.brag,
+        );
+      } else if (game.status == GameStatus.aborted ||
+          game.status == GameStatus.noStart) {
+        return const Icon(
+          CupertinoIcons.xmark_square_fill,
+          color: LichessColors.grey,
+        );
+      } else if (game.status == GameStatus.unknown ||
+          game.status == GameStatus.unknownFinish) {
+        return const Icon(
+          CupertinoIcons.question_square_fill,
+          color: LichessColors.grey,
+        );
+      } else {
+        return game.winner == mySide
+            ? const Icon(
+                CupertinoIcons.plus_square_fill,
+                color: LichessColors.good,
+              )
+            : const Icon(
+                CupertinoIcons.minus_square_fill,
+                color: LichessColors.red,
+              );
+      }
+    }
+
     return recentGames.when(
       data: (data) {
         return ListSection(
@@ -311,15 +350,7 @@ class RecentGames extends ConsumerWidget {
               subtitle: Text(
                 timeago.format(game.lastMoveAt),
               ),
-              trailing: game.winner == mySide
-                  ? const Icon(
-                      CupertinoIcons.plus_square_fill,
-                      color: LichessColors.good,
-                    )
-                  : const Icon(
-                      CupertinoIcons.minus_square_fill,
-                      color: LichessColors.red,
-                    ),
+              trailing: getResultIcon(game, mySide),
             );
           }).toList(),
         );
