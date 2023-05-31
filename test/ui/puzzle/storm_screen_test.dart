@@ -1,17 +1,27 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:chessground/chessground.dart' as cg;
+import 'package:http/testing.dart';
+
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/ui/puzzle/storm_screen.dart';
-import 'package:chessground/chessground.dart' as cg;
+import 'package:lichess_mobile/src/http_client.dart';
 
 import '../../test_utils.dart';
 import '../../test_app.dart';
 
 void main() {
+  final mockClient = MockClient((request) {
+    if (request.url.path == '/storm') {
+      return mockResponse('', 200);
+    }
+    return mockResponse('', 404);
+  });
+
   group('StormScreen', () {
     testWidgets(
       'meets accessibility guidelines',
@@ -21,7 +31,10 @@ void main() {
         final app = await buildTestApp(
           tester,
           home: const StormScreen(),
-          overrides: [stormProvider.overrideWith((ref) => mockStromRun)],
+          overrides: [
+            stormProvider.overrideWith((ref) => mockStromRun),
+            httpClientProvider.overrideWithValue(mockClient),
+          ],
         );
 
         await tester.pumpWidget(app);
@@ -38,7 +51,10 @@ void main() {
         final app = await buildTestApp(
           tester,
           home: const StormScreen(),
-          overrides: [stormProvider.overrideWith((ref) => mockStromRun)],
+          overrides: [
+            stormProvider.overrideWith((ref) => mockStromRun),
+            httpClientProvider.overrideWithValue(mockClient),
+          ],
         );
 
         await tester.pumpWidget(app);
@@ -58,7 +74,10 @@ void main() {
         final app = await buildTestApp(
           tester,
           home: const StormScreen(),
-          overrides: [stormProvider.overrideWith((ref) => mockStromRun)],
+          overrides: [
+            stormProvider.overrideWith((ref) => mockStromRun),
+            httpClientProvider.overrideWithValue(mockClient),
+          ],
         );
 
         await tester.pumpWidget(app);
@@ -102,7 +121,10 @@ void main() {
       final app = await buildTestApp(
         tester,
         home: const StormScreen(),
-        overrides: [stormProvider.overrideWith((ref) => mockStromRun)],
+        overrides: [
+          stormProvider.overrideWith((ref) => mockStromRun),
+          httpClientProvider.overrideWithValue(mockClient),
+        ],
       );
 
       await tester.pumpWidget(app);
@@ -130,17 +152,23 @@ void main() {
       );
 
       await tester.pump(const Duration(milliseconds: 500));
+      // should have loaded next puzzle
+      expect(find.byKey(const Key('h6-blackKing')), findsOneWidget);
+
       await tester.tap(find.text('End run'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Race complete!'), findsOneWidget);
+      expect(find.text('1 puzzles solved'), findsOneWidget);
     });
 
     testWidgets('play wrong move', (tester) async {
       final app = await buildTestApp(
         tester,
         home: const StormScreen(),
-        overrides: [stormProvider.overrideWith((ref) => mockStromRun)],
+        overrides: [
+          stormProvider.overrideWith((ref) => mockStromRun),
+          httpClientProvider.overrideWithValue(mockClient),
+        ],
       );
 
       await tester.pumpWidget(app);
