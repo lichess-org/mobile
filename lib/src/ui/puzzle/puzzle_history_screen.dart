@@ -120,15 +120,14 @@ class _Body extends ConsumerStatefulWidget {
 }
 
 class _BodyState extends ConsumerState<_Body> {
-  late ScrollController _scrollController;
-  late List<PuzzleAndResult> _historyList;
+  final ScrollController _scrollController = ScrollController();
+  List<PuzzleAndResult> _historyList = [];
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _historyList = [...widget.historyList];
-    _scrollController = ScrollController();
+    _historyList.addAll(widget.historyList);
     _scrollController.addListener(_scrollListener);
   }
 

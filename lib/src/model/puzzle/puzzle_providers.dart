@@ -111,7 +111,7 @@ class PuzzleHistory extends _$PuzzleHistory {
         .then((value) => PuzzleHistoryState(historyList: [value].toIList()));
   }
 
-  Future<List<PuzzleAndResult>> getNext() async {
+  Future<List<PuzzleAndResult>> getNext() {
     final stream = _repo!.puzzleActivity(50, _lastDate);
     final completer = Completer<List<PuzzleAndResult>>();
 
