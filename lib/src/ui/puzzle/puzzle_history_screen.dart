@@ -4,9 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart' as cg;
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
@@ -193,6 +197,29 @@ class _HistoryBoard extends ConsumerWidget {
       width: boardWidth,
       height: boardWidth + 33,
       child: BoardPreview(
+        onTap: () async {
+          Puzzle? puzzleData;
+          try {
+            puzzleData =
+                await ref.read(puzzleProvider(puzzle.puzzle.id).future);
+          } catch (e) {
+            // show error
+          } finally {
+            final session = ref.read(authSessionProvider);
+            pushPlatformRoute(
+              context,
+              rootNavigator: true,
+              builder: (ctx) => PuzzleScreen(
+                theme: PuzzleTheme.mix,
+                initialPuzzleContext: PuzzleContext(
+                  puzzle: puzzleData!,
+                  theme: PuzzleTheme.mix,
+                  userId: session?.user.id,
+                ),
+              ),
+            );
+          }
+        },
         orientation: turn.cg,
         fen: fen,
         footer: Padding(

@@ -105,7 +105,7 @@ class PuzzleService {
     required Puzzle puzzle,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
-    await historyStorage.save(puzzle: puzzle);
+    historyStorage.save(puzzle: puzzle);
     final data = await storage.fetch(
       userId: userId,
       angle: angle,
