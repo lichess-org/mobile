@@ -20,9 +20,21 @@ class StormClockWidget extends ConsumerStatefulWidget {
 
 class _ClockState extends ConsumerState<StormClockWidget>
     with SingleTickerProviderStateMixin {
+  // ignore: avoid-late-keyword
   late AnimationController _controller;
-  late Animation<double> _bonusFadeAnimation;
-  late Animation<Offset> _bonusSlideAnimation;
+
+  // ignore: avoid-late-keyword
+  late final Animation<double> _bonusFadeAnimation =
+      Tween<double>(begin: 1.0, end: 0.0).animate(
+    CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+  );
+  // ignore: avoid-late-keyword
+  late final Animation<Offset> _bonusSlideAnimation = Tween<Offset>(
+    begin: const Offset(0.7, 0.0),
+    end: const Offset(0.7, -1.0),
+  ).animate(
+    CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+  );
 
   StreamSubscription<(Duration, int?)>? streamSubscription;
 
@@ -34,6 +46,8 @@ class _ClockState extends ConsumerState<StormClockWidget>
   void initState() {
     super.initState();
 
+    // declaring as late final causes an error because the widget is being disposed
+    // after the clock start
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
@@ -44,16 +58,6 @@ class _ClockState extends ConsumerState<StormClockWidget>
           });
         }
       });
-
-    _bonusFadeAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
-    _bonusSlideAnimation = Tween<Offset>(
-      begin: const Offset(0.7, 0.0),
-      end: const Offset(0.7, -1.0),
-    ).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
 
     time = widget.clock.timeLeft;
 
