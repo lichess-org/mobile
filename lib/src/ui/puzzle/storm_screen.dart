@@ -307,7 +307,6 @@ class _TopTable extends ConsumerWidget {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: LichessColors.brag,
                       ),
                     ),
                     Text(
@@ -317,8 +316,7 @@ class _TopTable extends ConsumerWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        color: LichessColors.brag,
-                        fontSize: 11,
+                        fontSize: 12,
                       ),
                     ),
                   ],

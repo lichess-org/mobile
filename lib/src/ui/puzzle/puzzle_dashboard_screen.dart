@@ -173,12 +173,12 @@ class _Body extends ConsumerWidget {
         ),
       ),
       Padding(
-        padding: Styles.bodySectionBottomPadding,
+        padding: Styles.horizontalBodyPadding,
         child: CardButton(
           icon: const Icon(
             LichessIcons.storm,
             size: 44,
-            color: LichessColors.accent,
+            color: LichessColors.purple,
           ),
           title: Text(
             'Puzzle Storm',
@@ -201,22 +201,36 @@ class _Body extends ConsumerWidget {
           ),
         ),
       ),
-      Padding(
-        padding: Styles.bodySectionBottomPadding,
-        child: CardButton(
-          icon: const Icon(LichessIcons.target, size: 36),
+      Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
           title: Text(
-            context.l10n.puzzlePuzzleThemes,
+            context.l10n.more,
           ),
-          subtitle: const Text(
-            'Play puzzles from a specific theme.',
-          ),
-          onTap: () {
-            pushPlatformRoute(
-              context,
-              builder: (context) => const PuzzleThemesScreen(),
-            );
-          },
+          iconColor: Theme.of(context).iconTheme.color,
+          collapsedIconColor: Theme.of(context).iconTheme.color,
+          controlAffinity: ListTileControlAffinity.leading,
+          children: [
+            Padding(
+              padding: Styles.bodySectionBottomPadding,
+              child: CardButton(
+                icon: const Icon(LichessIcons.target, size: 44),
+                title: Text(
+                  context.l10n.puzzlePuzzleThemes,
+                  style: Styles.sectionTitle,
+                ),
+                subtitle: const Text(
+                  'Choose puzzles by theme.',
+                ),
+                onTap: () {
+                  pushPlatformRoute(
+                    context,
+                    builder: (context) => const PuzzleThemesScreen(),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
       if (session != null) PuzzleDashboardWidget(),
