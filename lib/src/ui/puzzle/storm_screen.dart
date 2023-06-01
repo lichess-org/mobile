@@ -425,7 +425,7 @@ class _ComboState extends ConsumerState<_Combo>
                 Text(
                   widget.combo.current.toString(),
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 26,
                     height: 1.0,
                     fontWeight: FontWeight.bold,
                     color: defaultTargetPlatform == TargetPlatform.iOS
