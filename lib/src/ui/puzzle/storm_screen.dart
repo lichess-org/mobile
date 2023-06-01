@@ -859,7 +859,7 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
     timeTextPainter.layout();
 
     return (timeTextPainter.height) * MediaQuery.of(context).textScaleFactor +
-        17.0;
+        18.5;
   }
 }
 
