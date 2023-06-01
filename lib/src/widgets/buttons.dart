@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -181,12 +183,14 @@ class BottomBarIconButton extends StatelessWidget {
     required this.icon,
     required this.onPressed,
     required this.semanticsLabel,
+    this.hasTooltip = false,
     super.key,
   });
 
   final Widget icon;
   final VoidCallback? onPressed;
   final String semanticsLabel;
+  final bool hasTooltip;
 
   @override
   Widget build(BuildContext context) {
@@ -207,7 +211,7 @@ class BottomBarIconButton extends StatelessWidget {
         return Theme(
           data: Theme.of(context),
           child: IconButton(
-            tooltip: semanticsLabel,
+            tooltip: hasTooltip ? semanticsLabel : null,
             onPressed: onPressed,
             icon: icon,
           ),
@@ -390,5 +394,87 @@ class _CardButtonState extends State<CardButton> {
         assert(false, 'Unexpected platform $defaultTargetPlatform');
         return const SizedBox.shrink();
     }
+  }
+}
+
+/// Button to add onTap on long pressing
+///
+/// ### Note
+/// Widgets with `tooltip` don't handle onLongPress
+/// Child's onTap will have priority
+class LongPressButton extends StatefulWidget {
+  const LongPressButton({
+    required this.callback,
+    required this.child,
+    this.longDelay = const Duration(milliseconds: 600),
+    this.middleDelay = const Duration(milliseconds: 400),
+    this.minDelay = const Duration(milliseconds: 250),
+    this.holdDelay = const Duration(milliseconds: 200),
+  });
+
+  final Widget child;
+
+  /// function called on Hold
+  final VoidCallback? callback;
+
+  /// Delay between first callbacks
+  final Duration longDelay;
+
+  /// Delay between second callbacks
+  final Duration middleDelay;
+
+  /// Delay between thrid callbacks
+  final Duration minDelay;
+
+  /// Delay between callbacks
+  final Duration holdDelay;
+
+  @override
+  _LongPressButtonState createState() => _LongPressButtonState();
+}
+
+class _LongPressButtonState extends State<LongPressButton> {
+  bool _isPressed = false;
+  Timer? _timer;
+  List<Duration> _delayTime = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _delayTime = [widget.longDelay, widget.middleDelay, widget.minDelay];
+  }
+
+  Future<void> _onPress() async {
+    _isPressed = true;
+
+    widget.callback?.call();
+    for (final time in _delayTime) {
+      await Future.delayed(time, () {});
+      if (!_isPressed) return;
+      widget.callback?.call();
+    }
+
+    _timer = Timer.periodic(widget.holdDelay, (_) {
+      if (_isPressed) {
+        widget.callback?.call();
+      }
+    });
+  }
+
+  void _onPressEnd() {
+    _isPressed = false;
+    _timer?.cancel();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onLongPress: _onPress,
+      onLongPressCancel: _onPressEnd,
+      onLongPressUp: _onPressEnd,
+      onTap: () => widget.callback?.call(),
+      child: widget.child,
+    );
   }
 }
