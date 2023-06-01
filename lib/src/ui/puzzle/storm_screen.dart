@@ -616,13 +616,7 @@ class _RunStats extends StatelessWidget {
   Widget build(BuildContext context) {
     return defaultTargetPlatform == TargetPlatform.iOS
         ? CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              leading: CupertinoButton(
-                padding: EdgeInsets.zero,
-                child: const Icon(CupertinoIcons.clear),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ),
+            navigationBar: const CupertinoNavigationBar(),
             child: _RunStatsPopup(stats),
           )
         : Scaffold(
@@ -649,13 +643,55 @@ class _RunStatsPopup extends ConsumerStatefulWidget {
 class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
   bool isLoading = false;
 
+  String newHighTitle(BuildContext context, StormNewHigh newHigh) {
+    switch (newHigh.key) {
+      case StormNewHighType.day:
+        return context.l10n.stormNewDailyHighscore;
+      case StormNewHighType.week:
+        return context.l10n.stormNewWeeklyHighscore;
+      case StormNewHighType.month:
+        return context.l10n.stormNewMonthlyHighscore;
+      case StormNewHighType.allTime:
+        return context.l10n.stormNewAllTimeHighscore;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final highScoreWidgets = widget.stats.newHigh != null
+        ? [
+            const SizedBox(height: 16),
+            ListTile(
+              leading: const Icon(
+                LichessIcons.storm,
+                size: 46,
+                color: LichessColors.brag,
+              ),
+              title: Text(
+                newHighTitle(context, widget.stats.newHigh!),
+                style: Styles.sectionTitle.copyWith(
+                  color: LichessColors.brag,
+                ),
+              ),
+              subtitle: Text(
+                context.l10n.stormPreviousHighscoreWasX(
+                  widget.stats.newHigh!.prev.toString(),
+                ),
+                style: const TextStyle(
+                  color: LichessColors.brag,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+          ]
+        : null;
+
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (highScoreWidgets != null) ...highScoreWidgets,
             ListSection(
               cupertinoAdditionalDividerMargin: 6,
               header: Text(

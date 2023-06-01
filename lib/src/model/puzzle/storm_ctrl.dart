@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:core';
 import 'dart:math' as math;
+import 'package:result_extensions/result_extensions.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -109,16 +110,36 @@ class StormCtrl extends _$StormCtrl {
     }
   }
 
-  void end() {
+  Future<void> end() async {
     ref.read(soundServiceProvider).play(Sound.puzzleStormEnd);
 
     state.clock.reset();
     _pushToHistory(success: false);
 
     final stats = _getStats();
-    ref.read(puzzleRepositoryProvider).postStormRun(stats);
 
-    state = state.copyWith(stats: stats, runOver: true);
+    final res = await ref
+        .read(puzzleRepositoryProvider)
+        .postStormRun(stats)
+        .timeout(const Duration(seconds: 2));
+
+    final newState = state.copyWith(
+      stats: stats,
+      runOver: true,
+    );
+
+    res.match(
+      onSuccess: (newHigh) {
+        if (newHigh != null) {
+          state = newState.copyWith(stats: stats.copyWith(newHigh: newHigh));
+        } else {
+          state = newState;
+        }
+      },
+      onError: (_, __) {
+        state = newState;
+      },
+    );
   }
 
   Future<void> _loadNextPuzzle(bool result, ComboState comboChange) async {

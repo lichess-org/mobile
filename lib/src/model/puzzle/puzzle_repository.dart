@@ -140,7 +140,7 @@ class PuzzleRepository {
     );
   }
 
-  FutureResult<void> postStormRun(StormRunStats stats) {
+  FutureResult<StormNewHigh?> postStormRun(StormRunStats stats) {
     final Map<String, String> body = {
       'puzzles': stats.history.length.toString(),
       'score': stats.score.toString(),
@@ -153,10 +153,24 @@ class PuzzleRepository {
           "Yes, we know that you can send whatever score you like. That's why there's no leaderboards and no competition.",
     };
 
-    return apiClient.post(
+    return apiClient
+        .post(
       Uri.parse('$kLichessHost/storm'),
       body: body,
-    );
+    )
+        .flatMap((response) {
+      return readJsonObject(
+        response,
+        mapper: (Map<String, dynamic> json) {
+          return pick(json['newHigh']).letOrNull(
+            (p) => StormNewHigh(
+              key: p('key').asStormNewHighTypeOrThrow(),
+              prev: p('prev').asIntOrThrow(),
+            ),
+          );
+        },
+      );
+    });
   }
 
   FutureResult<Puzzle> daily() {
