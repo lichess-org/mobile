@@ -86,7 +86,7 @@ class PuzzleHistory extends _$PuzzleHistory {
   final List<HistoryPuzzle> _list = [];
   StreamSubscription<HistoryPuzzle>? _streamSub;
   PuzzleRepository? _repo;
-  DateTime _lastDate = DateTime.now();
+  DateTime? _lastDate;
 
   @override
   Future<PuzzleHistoryState> build() async {
@@ -101,18 +101,24 @@ class PuzzleHistory extends _$PuzzleHistory {
         _list.add(event);
       },
       onDone: () {
-        state = AsyncData(PuzzleHistoryState(historyList: _list.toIList()));
-        _lastDate = _list.last.date;
-        _list.clear();
+        state = AsyncData(
+          PuzzleHistoryState(historyList: _list.toIList(), isLoading: false),
+        );
+        if (_list.isNotEmpty) {
+          _lastDate = _list.last.date;
+          _list.clear();
+        }
       },
     );
 
-    return stream.first
-        .then((value) => PuzzleHistoryState(historyList: [value].toIList()));
+    return PuzzleHistoryState(historyList: IList(const []), isLoading: true);
   }
 
   Future<List<HistoryPuzzle>> getNext() {
-    final stream = _repo!.puzzleActivity(50, _lastDate);
+    if (_lastDate == null) {
+      return Future.value(<HistoryPuzzle>[]);
+    }
+    final stream = _repo!.puzzleActivity(50, _lastDate!);
     final completer = Completer<List<HistoryPuzzle>>();
 
     _streamSub = stream.listen(
@@ -121,8 +127,12 @@ class PuzzleHistory extends _$PuzzleHistory {
       },
       onDone: () {
         completer.complete(_list.toList());
-        _lastDate = _list.last.date;
-        _list.clear();
+        if (_list.isNotEmpty) {
+          _lastDate = _list.last.date;
+          _list.clear();
+        } else {
+          _lastDate = null;
+        }
       },
     );
 
@@ -134,5 +144,6 @@ class PuzzleHistory extends _$PuzzleHistory {
 class PuzzleHistoryState with _$PuzzleHistoryState {
   const factory PuzzleHistoryState({
     required IList<HistoryPuzzle> historyList,
+    required bool isLoading,
   }) = _PuzzleHistoryState;
 }

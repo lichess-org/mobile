@@ -79,7 +79,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                 style: Styles.sectionTitle,
               ),
               if (e is NotFoundException)
-                Text(context.l10n.puzzleNoPuzzlesToShow)
+                Center(child: Text(context.l10n.puzzleNoPuzzlesToShow))
               else
                 const Text('Could not load dashboard.'),
             ],

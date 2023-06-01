@@ -31,6 +31,27 @@ class PuzzleHistoryWidget extends ConsumerWidget {
     final historyState = ref.watch(puzzleHistoryProvider);
     return historyState.when(
       data: (data) {
+        if (data.isLoading) {
+          return Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: ListSection.loading(
+                itemsNumber: 5,
+                header: true,
+              ),
+            ),
+          );
+        }
+        if (!data.isLoading && data.historyList.isEmpty) {
+          return ListSection(
+            header: Text(context.l10n.puzzleHistory),
+            children: [
+              Center(
+                child: Text(context.l10n.puzzleNoPuzzlesToShow),
+              )
+            ],
+          );
+        }
         final crossAxisCount =
             MediaQuery.of(context).size.width > kTabletThreshold ? 4 : 2;
         final boardWidth = (defaultTargetPlatform == TargetPlatform.iOS)
@@ -38,15 +59,17 @@ class PuzzleHistoryWidget extends ConsumerWidget {
             : MediaQuery.of(context).size.width / crossAxisCount;
         return ListSection(
           header: Text(context.l10n.puzzleHistory),
-          headerTrailing: NoPaddingTextButton(
-            onPressed: () => pushPlatformRoute(
-              context,
-              builder: (context) => PuzzleHistoryScreen(data.historyList),
-            ),
-            child: Text(
-              context.l10n.more,
-            ),
-          ),
+          headerTrailing: (data.historyList.length == 10)
+              ? NoPaddingTextButton(
+                  onPressed: () => pushPlatformRoute(
+                    context,
+                    builder: (context) => PuzzleHistoryScreen(data.historyList),
+                  ),
+                  child: Text(
+                    context.l10n.more,
+                  ),
+                )
+              : null,
           children: [
             for (var i = 0; i < data.historyList.length; i += crossAxisCount)
               Row(
@@ -123,6 +146,7 @@ class _BodyState extends ConsumerState<_Body> {
   final ScrollController _scrollController = ScrollController();
   List<HistoryPuzzle> _historyList = [];
   bool _isLoading = false;
+  bool _hasMore = true;
 
   @override
   void initState() {
@@ -148,10 +172,18 @@ class _BodyState extends ConsumerState<_Body> {
 
   Future<void> _loadMore() async {
     if (_isLoading) return;
+    if (!_hasMore) return;
     setState(() {
       _isLoading = true;
     });
     final newList = await ref.read(puzzleHistoryProvider.notifier).getNext();
+    if (newList.isEmpty) {
+      setState(() {
+        _hasMore = false;
+        _isLoading = false;
+      });
+      return;
+    }
     if (mounted) {
       setState(() {
         _isLoading = false;
