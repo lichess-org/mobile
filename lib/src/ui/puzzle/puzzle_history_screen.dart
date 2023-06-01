@@ -198,25 +198,31 @@ class _BodyState extends ConsumerState<_Body> {
     final crossAxisCount =
         MediaQuery.of(context).size.width > kTabletThreshold ? 4 : 2;
     final boardWidth = MediaQuery.of(context).size.width / crossAxisCount;
-    return ListView.builder(
-      controller: _scrollController,
-      itemCount: _historyList.length ~/ crossAxisCount + (_isLoading ? 1 : 0),
-      itemBuilder: (context, index) {
-        if (_isLoading && index == _historyList.length ~/ crossAxisCount) {
-          return const CenterLoadingIndicator();
-        }
-        final rowStartIndex = index * crossAxisCount;
-        final rowEndIndex =
-            min(rowStartIndex + crossAxisCount, _historyList.length);
-        return Row(
-          children: _historyList
-              .getRange(index * crossAxisCount, rowEndIndex)
-              .map(
-                (e) => _HistoryBoard(e, boardWidth),
-              )
-              .toList(),
-        );
+    return WillPopScope(
+      onWillPop: () {
+        ref.watch(puzzleHistoryProvider.notifier).setLastDate();
+        return Future.value(true);
       },
+      child: ListView.builder(
+        controller: _scrollController,
+        itemCount: _historyList.length ~/ crossAxisCount + (_isLoading ? 1 : 0),
+        itemBuilder: (context, index) {
+          if (_isLoading && index == _historyList.length ~/ crossAxisCount) {
+            return const CenterLoadingIndicator();
+          }
+          final rowStartIndex = index * crossAxisCount;
+          final rowEndIndex =
+              min(rowStartIndex + crossAxisCount, _historyList.length);
+          return Row(
+            children: _historyList
+                .getRange(index * crossAxisCount, rowEndIndex)
+                .map(
+                  (e) => _HistoryBoard(e, boardWidth),
+                )
+                .toList(),
+          );
+        },
+      ),
     );
   }
 }

@@ -86,6 +86,7 @@ class PuzzleHistory extends _$PuzzleHistory {
   final List<HistoryPuzzle> _list = [];
   StreamSubscription<HistoryPuzzle>? _streamSub;
   PuzzleRepository? _repo;
+  DateTime? _lastDateAfterFirstFetch;
   DateTime? _lastDate;
 
   @override
@@ -106,6 +107,7 @@ class PuzzleHistory extends _$PuzzleHistory {
         );
         if (_list.isNotEmpty) {
           _lastDate = _list.last.date;
+          _lastDateAfterFirstFetch = _list.last.date;
           _list.clear();
         }
       },
@@ -113,6 +115,8 @@ class PuzzleHistory extends _$PuzzleHistory {
 
     return PuzzleHistoryState(historyList: IList(const []), isLoading: true);
   }
+
+  void setLastDate() => _lastDate = _lastDateAfterFirstFetch;
 
   Future<List<HistoryPuzzle>> getNext() {
     if (_lastDate == null) {
