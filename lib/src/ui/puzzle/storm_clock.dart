@@ -1,14 +1,12 @@
 import 'dart:math' as math;
 import 'dart:async';
 import 'dart:ui';
-import 'package:vector_math/vector_math_64.dart' as vector;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/model/puzzle/storm_ctrl.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
-import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
 class StormClockWidget extends ConsumerStatefulWidget {
@@ -22,57 +20,57 @@ class StormClockWidget extends ConsumerStatefulWidget {
 
 class _ClockState extends ConsumerState<StormClockWidget>
     with SingleTickerProviderStateMixin {
-  // ignore: avoid-late-keyword
   late AnimationController _controller;
-  // ignore: avoid-late-keyword
-  late Animation<double> animation;
-  // ignore: avoid-late-keyword
-  late Animation<double> fadeAnimation;
-  // ignore: avoid-late-keyword
-  late Animation<Offset> slideAnimation;
+  late Animation<double> _bonusFadeAnimation;
+  late Animation<Offset> _bonusSlideAnimation;
 
   StreamSubscription<(Duration, int?)>? streamSubscription;
 
-  String minutes = '03';
-  String seconds = '00';
-  int? bonus;
+  int? currentBonusSeconds;
   Duration time = Duration.zero;
   bool isActive = false;
 
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
-    )..addListener(() => setState(() {}));
-
-    minutes = widget.clock.timeLeft.inMinutes
-        .remainder(60)
-        .toString()
-        .padLeft(2, '0');
-    seconds = widget.clock.timeLeft.inSeconds
-        .remainder(60)
-        .toString()
-        .padLeft(2, '0');
-    animation = Tween<double>(begin: 0.0, end: 120.0).animate(_controller);
-    fadeAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(_controller);
-    slideAnimation = Tween<Offset>(
-      begin: const Offset(0.7, 0.0),
-      end: const Offset(0.7, -1.0),
-    ).animate(_controller);
-
-    streamSubscription = widget.clock.timeStream.listen((data) {
-      setState(() {
-        minutes = data.$1.inMinutes.remainder(60).toString().padLeft(2, '0');
-        seconds = data.$1.inSeconds.remainder(60).toString().padLeft(2, '0');
-        time = data.$1;
-        bonus = data.$2;
-        isActive = widget.clock.isActive;
-        if (bonus != null) {
-          _controller.forward(from: 0);
+      duration: const Duration(seconds: 2),
+    )..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          setState(() {
+            currentBonusSeconds = null;
+          });
         }
       });
+
+    _bonusFadeAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+    _bonusSlideAnimation = Tween<Offset>(
+      begin: const Offset(0.7, 0.0),
+      end: const Offset(0.7, -1.0),
+    ).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+
+    time = widget.clock.timeLeft;
+
+    streamSubscription = widget.clock.timeStream.listen((data) {
+      final (newTime, bonusSeconds) = data;
+
+      setState(() {
+        time = newTime;
+        isActive = widget.clock.isActive;
+      });
+
+      if (bonusSeconds != null) {
+        setState(() {
+          currentBonusSeconds = bonusSeconds;
+        });
+        _controller.forward(from: 0.0);
+      }
     });
   }
 
@@ -83,28 +81,21 @@ class _ClockState extends ConsumerState<StormClockWidget>
     super.dispose();
   }
 
-  vector.Vector3 _shake() {
-    return vector.Vector3(
-      math.sin(_controller.value * math.pi * 5.0) * 10,
-      0.0,
-      0.0,
-    );
-  }
-
   @override
   Widget build(BuildContext build) {
     final brightness = ref.watch(currentBrightnessProvider);
     final clockStyle = brightness == Brightness.dark
-        ? ClockStyle.darkThemeStyle
-        : ClockStyle.lightThemeStyle;
+        ? _ClockStyle.darkThemeStyle
+        : _ClockStyle.lightThemeStyle;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
+
+    final minutes = time.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final seconds = time.inSeconds.remainder(60).toString().padLeft(2, '0');
 
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-        color: isActive
-            ? clockStyle.activeBackgroundColor
-            : clockStyle.backgroundColor,
+        color: clockStyle.backgroundColor,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
@@ -117,44 +108,96 @@ class _ClockState extends ConsumerState<StormClockWidget>
           ),
           child: Stack(
             children: [
-              if (bonus != null)
+              if (currentBonusSeconds != null)
                 Positioned.fill(
                   child: FadeTransition(
-                    opacity: fadeAnimation,
+                    opacity: _bonusFadeAnimation,
                     child: SlideTransition(
-                      position: slideAnimation,
+                      position: _bonusSlideAnimation,
                       child: Text(
-                        bonus.toString(),
+                        '${currentBonusSeconds! > 0 ? '+' : ''}$currentBonusSeconds',
                         style: TextStyle(
-                          color: bonus! < 0 ? Colors.red : LichessColors.good,
-                          fontSize: 20,
+                          color: currentBonusSeconds! < 0
+                              ? Colors.red
+                              : LichessColors.good,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
                           fontFeatures: const [FontFeature.tabularFigures()],
                         ),
                       ),
                     ),
                   ),
                 ),
-              ClipRect(
-                child: Transform(
-                  transform: Matrix4.translation(_shake()),
-                  child: Text(
-                    '$minutes:$seconds',
-                    style: TextStyle(
-                      color: isActive
-                          ? clockStyle.activeTextColor
-                          : clockStyle.textColor,
-                      fontSize: 30,
-                      fontFeatures: const [
-                        FontFeature.tabularFigures(),
-                      ],
-                    ),
+              if (currentBonusSeconds != null)
+                TweenAnimationBuilder(
+                  tween: Tween<Duration>(
+                    begin: time - Duration(seconds: currentBonusSeconds!),
+                    end: time,
+                  ),
+                  duration: const Duration(milliseconds: 500),
+                  builder: (context, Duration value, _) {
+                    final minutes = value.inMinutes
+                        .remainder(60)
+                        .toString()
+                        .padLeft(2, '0');
+                    final seconds = value.inSeconds
+                        .remainder(60)
+                        .toString()
+                        .padLeft(2, '0');
+                    return Text(
+                      '$minutes:$seconds',
+                      style: TextStyle(
+                        color: currentBonusSeconds! < 0
+                            ? Colors.red
+                            : LichessColors.good,
+                        fontSize: 30,
+                        fontFeatures: const [
+                          FontFeature.tabularFigures(),
+                        ],
+                      ),
+                    );
+                  },
+                )
+              else
+                Text(
+                  '$minutes:$seconds',
+                  style: TextStyle(
+                    color: isActive
+                        ? clockStyle.activeTextColor
+                        : clockStyle.textColor,
+                    fontSize: 30,
+                    fontFeatures: const [
+                      FontFeature.tabularFigures(),
+                    ],
                   ),
                 ),
-              ),
             ],
           ),
         ),
       ),
     );
   }
+}
+
+enum _ClockStyle {
+  darkThemeStyle(
+    textColor: Colors.grey,
+    activeTextColor: Colors.white,
+    backgroundColor: Color(0xFF333333),
+  ),
+  lightThemeStyle(
+    textColor: Colors.grey,
+    activeTextColor: Colors.black,
+    backgroundColor: Colors.white,
+  );
+
+  const _ClockStyle({
+    required this.textColor,
+    required this.activeTextColor,
+    required this.backgroundColor,
+  });
+
+  final Color textColor;
+  final Color activeTextColor;
+  final Color backgroundColor;
 }
