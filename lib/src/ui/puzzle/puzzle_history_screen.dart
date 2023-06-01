@@ -177,14 +177,15 @@ class _BodyState extends ConsumerState<_Body> {
       _isLoading = true;
     });
     final newList = await ref.read(puzzleHistoryProvider.notifier).getNext();
-    if (newList.isEmpty) {
-      setState(() {
-        _hasMore = false;
-        _isLoading = false;
-      });
-      return;
-    }
+
     if (mounted) {
+      if (newList.isEmpty) {
+        setState(() {
+          _isLoading = false;
+          _hasMore = false;
+        });
+        return;
+      }
       setState(() {
         _isLoading = false;
         _historyList.addAll(newList);
