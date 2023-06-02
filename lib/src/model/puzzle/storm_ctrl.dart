@@ -84,7 +84,7 @@ class StormCtrl extends _$StormCtrl {
           state.clock.sendEnd();
           return;
         }
-        ref.read(soundServiceProvider).play(Sound.confirmation);
+        ref.read(soundServiceProvider).play(Sound.puzzleStormGood);
         _pushToHistory(success: true);
         await _loadNextPuzzle(true, ComboState.increase);
         return;
@@ -99,7 +99,7 @@ class StormCtrl extends _$StormCtrl {
       );
     } else {
       _errors += 1;
-      ref.read(soundServiceProvider).play(Sound.error);
+      ref.read(soundServiceProvider).play(Sound.puzzleStormBad);
       HapticFeedback.heavyImpact();
       state.clock.subtractTime(malus);
       if (state.clock.flag() || !_isNextPuzzleAvailable()) {
