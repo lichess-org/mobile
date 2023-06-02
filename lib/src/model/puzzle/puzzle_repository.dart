@@ -276,13 +276,7 @@ class PuzzleStormResponse with _$PuzzleStormResponse {
   }) = _PuzzleStormResponse;
 }
 
-class PuzzleAndResult with _$PuzzleAndResult {
-  const factory PuzzleAndResult({
-    required Puzzle puzzle,
-    required bool result,
-    required DateTime date,
-  }) = _PuzzleAndResult;
-}
+
 
 // --
 
