@@ -83,6 +83,36 @@ class _Body extends ConsumerWidget {
             showDivider: true,
             children: [
               SettingsListTile(
+                icon: const Icon(Icons.music_note),
+                settingsLabel: context.l10n.sound,
+                settingsValue: soundThemeL10n(context, soundTheme),
+                onTap: () {
+                  if (defaultTargetPlatform == TargetPlatform.android) {
+                    showChoicePicker(
+                      context,
+                      choices: SoundTheme.values,
+                      selectedItem: soundTheme,
+                      labelBuilder: (t) => Text(soundThemeL10n(context, t)),
+                      onSelectedItemChanged: (SoundTheme? value) {
+                        ref
+                            .read(generalPreferencesProvider.notifier)
+                            .setSoundTheme(value ?? SoundTheme.standard);
+                        ref.read(soundServiceProvider).changeTheme(
+                              value ?? SoundTheme.standard,
+                              playSound: true,
+                            );
+                      },
+                    );
+                  } else {
+                    pushPlatformRoute(
+                      context,
+                      title: context.l10n.sound,
+                      builder: (context) => const SoundSettingsScreen(),
+                    );
+                  }
+                },
+              ),
+              SettingsListTile(
                 icon: const Icon(Icons.brightness_medium),
                 settingsLabel: context.l10n.background,
                 settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
@@ -103,36 +133,6 @@ class _Body extends ConsumerWidget {
                       context,
                       title: context.l10n.background,
                       builder: (context) => const ThemeModeScreen(),
-                    );
-                  }
-                },
-              ),
-              SettingsListTile(
-                icon: const Icon(Icons.brightness_medium),
-                settingsLabel: context.l10n.sound,
-                settingsValue: soundTheme.label,
-                onTap: () {
-                  if (defaultTargetPlatform == TargetPlatform.android) {
-                    showChoicePicker(
-                      context,
-                      choices: SoundTheme.values,
-                      selectedItem: soundTheme,
-                      labelBuilder: (t) => Text(t.label),
-                      onSelectedItemChanged: (SoundTheme? value) {
-                        ref
-                            .read(generalPreferencesProvider.notifier)
-                            .setSoundTheme(value ?? SoundTheme.standard);
-                        ref.read(soundServiceProvider).changeTheme(
-                              value ?? SoundTheme.standard,
-                              playSound: true,
-                            );
-                      },
-                    );
-                  } else {
-                    pushPlatformRoute(
-                      context,
-                      title: context.l10n.sound,
-                      builder: (context) => const SoundSettingsScreen(),
                     );
                   }
                 },

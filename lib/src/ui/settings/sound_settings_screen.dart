@@ -34,6 +34,9 @@ class SoundSettingsScreen extends StatelessWidget {
   }
 }
 
+String soundThemeL10n(BuildContext context, SoundTheme theme) =>
+    theme == SoundTheme.standard ? context.l10n.standard : theme.label;
+
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -59,7 +62,7 @@ class _Body extends ConsumerWidget {
           ChoicePicker(
             choices: SoundTheme.values,
             selectedItem: soundTheme,
-            titleBuilder: (t) => Text(t.label),
+            titleBuilder: (t) => Text(soundThemeL10n(context, t)),
             onSelectedItemChanged: onChanged,
           )
         ],
