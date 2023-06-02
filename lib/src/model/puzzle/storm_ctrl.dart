@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:core';
 import 'dart:math' as math;
-import 'package:flutter/services.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 
 import 'puzzle.dart';
@@ -66,7 +66,6 @@ class StormCtrl extends _$StormCtrl {
   Future<void> onUserMove(Move move) async {
     if (state.clock.endAt != null) return;
     state.clock.start();
-    final soundService = ref.read(soundServiceProvider);
     final expected = state.expectedMove;
     final pos = state.position;
     _addMove(move, ComboState.noChange, runStarted: true);
@@ -75,30 +74,32 @@ class StormCtrl extends _$StormCtrl {
       final bonus = state.combo.bonus(getNext: true);
       if (bonus != null) {
         state.clock.addTime(bonus);
-        HapticFeedback.mediumImpact();
       }
       if (state.position.isGameOver || state.isOver) {
         if (!_isNextPuzzleAvailable()) {
           state.clock.sendEnd();
           return;
         }
-        soundService.play(Sound.confirmation);
+        ref.read(soundServiceProvider).play(Sound.confirmation);
         _pushToHistory(success: true);
         await _loadNextPuzzle(true, ComboState.increase);
         return;
       }
 
       if (pos.board.pieceAt(move.to) != null) {
-        soundService.play(Sound.capture);
+        ref
+            .read(moveFeedbackServiceProvider)
+            .captureFeedback(check: state.position.isCheck);
       } else {
-        soundService.play(Sound.move);
+        ref
+            .read(moveFeedbackServiceProvider)
+            .moveFeedback(check: state.position.isCheck);
       }
       await Future<void>.delayed(moveDelay);
       _addMove(state.expectedMove!, ComboState.increase, runStarted: true);
     } else {
       _errors += 1;
-      soundService.play(Sound.error);
-      HapticFeedback.heavyImpact();
+      ref.read(soundServiceProvider).play(Sound.error);
       state.clock.subtractTime(malus);
       if (state.clock.flag() || !_isNextPuzzleAvailable()) {
         state.clock.sendEnd();
