@@ -3,9 +3,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
-import 'package:lichess_mobile/src/model/settings/sound.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
 
 part 'sound_service.g.dart';
 
@@ -23,7 +23,10 @@ SoundService soundService(SoundServiceRef ref) {
 }
 
 @Riverpod(keepAlive: true)
-Future<(Soundpool, SoundMap)> soundPool(SoundPoolRef ref) async {
+Future<(Soundpool, SoundMap)> soundPool(
+  SoundPoolRef ref,
+  SoundTheme theme,
+) async {
   final pool = Soundpool.fromOptions(
     options: const SoundpoolOptions(
       iosOptions: SoundpoolOptionsIos(
@@ -35,7 +38,7 @@ Future<(Soundpool, SoundMap)> soundPool(SoundPoolRef ref) async {
   );
 
   ref.onDispose(pool.release);
-  final sounds = await loadSounds(pool, SoundTheme.normal);
+  final sounds = await loadSounds(pool, theme);
 
   return (pool, sounds);
 }
@@ -45,6 +48,9 @@ Future<SoundMap> loadSounds(Soundpool pool, SoundTheme soundTheme) async {
     for (final sound in Sound.values)
       sound: await rootBundle
           .load('assets/sounds/${soundTheme.name}/${sound.name}.mp3')
+          .catchError(
+            (_) => rootBundle.load('assets/sounds/standard/${sound.name}.mp3'),
+          )
           .then((soundData) => pool.load(soundData)),
   });
 }

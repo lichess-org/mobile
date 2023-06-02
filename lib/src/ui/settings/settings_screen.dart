@@ -19,7 +19,7 @@ import 'package:lichess_mobile/src/utils/package_info.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/sound.dart';
+import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
 
 import './theme_mode_screen.dart';
 import './sound_settings_screen.dart';
@@ -121,9 +121,9 @@ class _Body extends ConsumerWidget {
                       onSelectedItemChanged: (SoundTheme? value) {
                         ref
                             .read(generalPreferencesProvider.notifier)
-                            .setSoundTheme(value ?? SoundTheme.normal);
+                            .setSoundTheme(value ?? SoundTheme.standard);
                         ref.read(soundServiceProvider).changeTheme(
-                              value ?? SoundTheme.normal,
+                              value ?? SoundTheme.standard,
                               playSound: true,
                             );
                       },

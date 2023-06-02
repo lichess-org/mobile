@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/model/settings/sound.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 
@@ -46,9 +46,9 @@ class _Body extends ConsumerWidget {
     void onChanged(SoundTheme? value) {
       ref
           .read(generalPreferencesProvider.notifier)
-          .setSoundTheme(value ?? SoundTheme.normal);
+          .setSoundTheme(value ?? SoundTheme.standard);
       ref.read(soundServiceProvider).changeTheme(
-            value ?? SoundTheme.normal,
+            value ?? SoundTheme.standard,
             playSound: true,
           );
     }

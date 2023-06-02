@@ -1,5 +1,5 @@
 enum SoundTheme {
-  normal('Normal'),
+  standard('Standard'),
   piano('Piano'),
   nes('NES'),
   sfx('SFX'),
