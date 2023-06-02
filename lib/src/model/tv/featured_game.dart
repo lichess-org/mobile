@@ -75,7 +75,7 @@ class FeaturedGame extends _$FeaturedGame {
 
   void _onFenEvent(TvFenEvent event) {
     if (withSound) {
-      ref.read(soundServiceProvider).playMove();
+      ref.read(soundServiceProvider).play(Sound.move);
     }
     // TvFeaturedEvent is always emitted first so we can safely assume that
     // at this point the state is loaded.

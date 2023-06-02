@@ -3,12 +3,23 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
 
 part 'sound_service.g.dart';
 
-enum Sound { move, capture, dong, error, confirmation, puzzleStormEnd }
+// Must match name of files in assets/sounds/standard
+enum Sound {
+  move,
+  capture,
+  dong,
+  error,
+  confirmation,
+  puzzleStormEnd,
+  puzzleStormGood,
+  puzzleStormBad
+}
 
 typedef SoundMap = IMap<Sound, int>;
 
@@ -22,7 +33,10 @@ SoundService soundService(SoundServiceRef ref) {
 }
 
 @Riverpod(keepAlive: true)
-Future<(Soundpool, SoundMap)> soundPool(SoundPoolRef ref) async {
+Future<(Soundpool, SoundMap)> soundPool(
+  SoundPoolRef ref,
+  SoundTheme theme,
+) async {
   final pool = Soundpool.fromOptions(
     options: const SoundpoolOptions(
       iosOptions: SoundpoolOptionsIos(
@@ -34,17 +48,19 @@ Future<(Soundpool, SoundMap)> soundPool(SoundPoolRef ref) async {
   );
 
   ref.onDispose(pool.release);
-
-  final sounds = await loadSounds(pool);
+  final sounds = await loadSounds(pool, theme);
 
   return (pool, sounds);
 }
 
-Future<SoundMap> loadSounds(Soundpool pool) async {
+Future<SoundMap> loadSounds(Soundpool pool, SoundTheme soundTheme) async {
   return IMap({
     for (final sound in Sound.values)
       sound: await rootBundle
-          .load('assets/sounds/${sound.name}.mp3')
+          .load('assets/sounds/${soundTheme.name}/${sound.name}.mp3')
+          .catchError(
+            (_) => rootBundle.load('assets/sounds/standard/${sound.name}.mp3'),
+          )
           .then((soundData) => pool.load(soundData)),
   });
 }
@@ -53,18 +69,19 @@ class SoundService {
   SoundService(this._pool, this._sounds, this._ref);
 
   final Soundpool _pool;
-  final SoundMap _sounds;
+  SoundMap _sounds;
   final SoundServiceRef _ref;
-
-  void playMove() => play(Sound.move);
-
-  void playCapture() => play(Sound.capture);
-
-  void playDong() => play(Sound.dong);
 
   void play(Sound sound) {
     final isEnabled = _ref.read(generalPreferencesProvider).isSoundEnabled;
     final soundId = _sounds[sound];
     if (soundId != null && isEnabled) _pool.play(soundId);
+  }
+
+  Future<void> changeTheme(SoundTheme theme, {bool playSound = false}) async {
+    _sounds = await loadSounds(_pool, theme);
+    if (playSound) {
+      play(Sound.move);
+    }
   }
 }

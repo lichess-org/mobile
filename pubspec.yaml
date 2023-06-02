@@ -91,9 +91,14 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/sounds/
-    - assets/board-thumbnails/
     - assets/images/
+    - assets/sounds/futuristic/
+    - assets/sounds/lisp/
+    - assets/sounds/nes/
+    - assets/sounds/piano/
+    - assets/sounds/standard/
+    - assets/sounds/sfx/
+    - assets/board-thumbnails/
 
   fonts:
     - family: LichessIcons
