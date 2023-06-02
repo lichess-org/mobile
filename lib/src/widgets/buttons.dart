@@ -183,14 +183,14 @@ class BottomBarIconButton extends StatelessWidget {
     required this.icon,
     required this.onPressed,
     required this.semanticsLabel,
-    this.hasTooltip = false,
+    this.showTooltip = true,
     super.key,
   });
 
   final Widget icon;
   final VoidCallback? onPressed;
   final String semanticsLabel;
-  final bool hasTooltip;
+  final bool showTooltip;
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +211,7 @@ class BottomBarIconButton extends StatelessWidget {
         return Theme(
           data: Theme.of(context),
           child: IconButton(
-            tooltip: hasTooltip ? semanticsLabel : null,
+            tooltip: showTooltip ? semanticsLabel : null,
             onPressed: onPressed,
             icon: icon,
           ),

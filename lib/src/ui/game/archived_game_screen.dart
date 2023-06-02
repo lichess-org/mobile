@@ -208,7 +208,7 @@ class _BottomBar extends ConsumerWidget {
                 key: const ValueKey('cursor-back'),
                 // TODO add translation
                 semanticsLabel: 'Backward',
-                hasTooltip: false,
+                showTooltip: false,
                 onPressed: canGoBackward
                     ? () => ref
                         .read(gameCursorProvider(gameData.id).notifier)
@@ -227,7 +227,7 @@ class _BottomBar extends ConsumerWidget {
                 key: const ValueKey('cursor-forward'),
                 // TODO add translation
                 semanticsLabel: 'Forward',
-                hasTooltip: false,
+                showTooltip: false,
                 onPressed: canGoForward
                     ? () {
                         ref
