@@ -115,6 +115,7 @@ class _Body extends ConsumerWidget {
                 onTap: () {
                   pushPlatformRoute(
                     context,
+                    title: 'Puzzle training',
                     rootNavigator: true,
                     builder: (context) => PuzzleScreen(
                       theme: theme,

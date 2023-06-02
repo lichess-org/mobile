@@ -53,7 +53,7 @@ class PuzzleScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [ToggleSoundButton()],
-        title: Text(puzzleThemeL10n(context, theme).name),
+        title: const Text('Puzzle training'),
       ),
       body: initialPuzzleContext != null
           ? _Body(
@@ -66,7 +66,6 @@ class PuzzleScreen extends StatelessWidget {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(puzzleThemeL10n(context, theme).name),
         trailing: ToggleSoundButton(),
       ),
       child: initialPuzzleContext != null
