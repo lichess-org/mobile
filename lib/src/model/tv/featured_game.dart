@@ -20,7 +20,8 @@ class FeaturedGame extends _$FeaturedGame {
 
   @override
   Future<FeaturedGameState> build({required bool withSound}) async {
-    ref.cacheFor(const Duration(seconds: 30));
+    // cache for 1 second to prevent calling the API too often
+    ref.cacheFor(const Duration(seconds: 1));
     ref.onDispose(() => _streamSub?.cancel());
 
     final stream = connectStream();
