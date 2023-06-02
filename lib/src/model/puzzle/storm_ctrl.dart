@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:core';
 import 'dart:math' as math;
+import 'package:flutter/services.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -100,6 +101,7 @@ class StormCtrl extends _$StormCtrl {
     } else {
       _errors += 1;
       ref.read(soundServiceProvider).play(Sound.error);
+      HapticFeedback.heavyImpact();
       state.clock.subtractTime(malus);
       if (state.clock.flag() || !_isNextPuzzleAvailable()) {
         state.clock.sendEnd();
