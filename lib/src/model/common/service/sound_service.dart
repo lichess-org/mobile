@@ -62,12 +62,6 @@ class SoundService {
   SoundMap _sounds;
   final SoundServiceRef _ref;
 
-  void playMove() => play(Sound.move);
-
-  void playCapture() => play(Sound.capture);
-
-  void playDong() => play(Sound.dong);
-
   void play(Sound sound) {
     final isEnabled = _ref.read(generalPreferencesProvider).isSoundEnabled;
     final soundId = _sounds[sound];
@@ -77,7 +71,7 @@ class SoundService {
   Future<void> changeTheme(SoundTheme theme, {bool playSound = false}) async {
     _sounds = await loadSounds(_pool, theme);
     if (playSound) {
-      playMove();
+      play(Sound.move);
     }
   }
 }
