@@ -117,6 +117,8 @@ class AppBarTextButton extends StatelessWidget {
   }
 }
 
+/// Button that explicitly reduce padding, thus does not conform to accessibility
+/// guidelines. So use sparingly.
 class NoPaddingTextButton extends StatelessWidget {
   const NoPaddingTextButton({
     required this.child,
@@ -133,6 +135,7 @@ class NoPaddingTextButton extends StatelessWidget {
         ? CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: onPressed,
+            minSize: 23,
             child: child,
           )
         : TextButton(
@@ -376,10 +379,16 @@ class _CardButtonState extends State<CardButton> {
               child: PlatformCard(
                 child: Padding(
                   padding: const EdgeInsets.all(6.0),
-                  child: ListTile(
-                    leading: widget.icon,
-                    title: widget.title,
-                    subtitle: widget.subtitle,
+                  child: ListTileTheme(
+                    data: ListTileThemeData(
+                      iconColor:
+                          CupertinoColors.systemGrey.resolveFrom(context),
+                    ),
+                    child: ListTile(
+                      leading: widget.icon,
+                      title: widget.title,
+                      subtitle: widget.subtitle,
+                    ),
                   ),
                 ),
               ),

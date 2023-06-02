@@ -235,6 +235,7 @@ class UserActivity with _$UserActivity {
     int? tournamentNb,
     UserActivityScore? puzzles,
     UserActivityStreak? streak,
+    UserActivityStreak? storm,
     UserActivityScore? correspondenceEnds,
     int? correspondenceMovesNb,
     int? correspondenceGamesNb,

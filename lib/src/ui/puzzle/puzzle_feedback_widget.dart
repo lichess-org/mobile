@@ -5,9 +5,8 @@ import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_ctrl.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-
-import 'puzzle_view_model.dart';
 
 class PuzzleFeedbackWidget extends StatelessWidget {
   const PuzzleFeedbackWidget({
@@ -18,7 +17,7 @@ class PuzzleFeedbackWidget extends StatelessWidget {
   });
 
   final Puzzle puzzle;
-  final PuzzleViewModelState state;
+  final PuzzleCtrlState state;
   final cg.PieceSet pieceSet;
   final bool onStreak;
 
