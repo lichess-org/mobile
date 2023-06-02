@@ -295,7 +295,7 @@ class _TopTable extends ConsumerWidget {
           if (!puzzleState.runStarted)
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(right: 8.0),
+                padding: const EdgeInsets.only(right: 16.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,

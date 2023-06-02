@@ -53,8 +53,12 @@ class StormCtrl extends _$StormCtrl {
     _nextPuzzleIndex += 1;
     _firstMoveTimer = Timer(
       const Duration(seconds: 1),
-      () =>
-          _addMove(state.expectedMove!, ComboState.noChange, runStarted: false),
+      () => _addMove(
+        state.expectedMove!,
+        ComboState.noChange,
+        runStarted: false,
+        userMove: false,
+      ),
     );
     newState.clock.timeStream.listen((e) {
       if (e.$1 == Duration.zero && state.clock.endAt == null) {
@@ -68,8 +72,7 @@ class StormCtrl extends _$StormCtrl {
     if (state.clock.endAt != null) return;
     state.clock.start();
     final expected = state.expectedMove;
-    final pos = state.position;
-    _addMove(move, ComboState.noChange, runStarted: true);
+    _addMove(move, ComboState.noChange, runStarted: true, userMove: true);
     _moves += 1;
     if (state.position.isGameOver || move == expected) {
       final bonus = state.combo.bonus(getNext: true);
@@ -87,17 +90,13 @@ class StormCtrl extends _$StormCtrl {
         return;
       }
 
-      if (pos.board.pieceAt(move.to) != null) {
-        ref
-            .read(moveFeedbackServiceProvider)
-            .captureFeedback(check: state.position.isCheck);
-      } else {
-        ref
-            .read(moveFeedbackServiceProvider)
-            .moveFeedback(check: state.position.isCheck);
-      }
       await Future<void>.delayed(moveDelay);
-      _addMove(state.expectedMove!, ComboState.increase, runStarted: true);
+      _addMove(
+        state.expectedMove!,
+        ComboState.increase,
+        runStarted: true,
+        userMove: false,
+      );
     } else {
       _errors += 1;
       ref.read(soundServiceProvider).play(Sound.error);
@@ -168,10 +167,20 @@ class StormCtrl extends _$StormCtrl {
     );
     _nextPuzzleIndex += 1;
     await Future<void>.delayed(moveDelay);
-    _addMove(state.expectedMove!, ComboState.noChange, runStarted: true);
+    _addMove(
+      state.expectedMove!,
+      ComboState.noChange,
+      runStarted: true,
+      userMove: false,
+    );
   }
 
-  void _addMove(Move move, ComboState comboChange, {required bool runStarted}) {
+  void _addMove(
+    Move move,
+    ComboState comboChange, {
+    required bool runStarted,
+    required bool userMove,
+  }) {
     int newComboCurrent;
     switch (comboChange) {
       case ComboState.increase:
@@ -181,6 +190,7 @@ class StormCtrl extends _$StormCtrl {
       case ComboState.noChange:
         newComboCurrent = state.combo.current;
     }
+    final pos = state.position;
     state = state.copyWith(
       runStarted: runStarted,
       position: state.position.play(move),
@@ -190,6 +200,18 @@ class StormCtrl extends _$StormCtrl {
         best: math.max(state.combo.best, state.combo.current + 1),
       ),
     );
+    Future<void>.delayed(
+        userMove ? Duration.zero : const Duration(milliseconds: 250), () {
+      if (pos.board.pieceAt(move.to) != null) {
+        ref
+            .read(moveFeedbackServiceProvider)
+            .captureFeedback(check: state.position.isCheck);
+      } else {
+        ref
+            .read(moveFeedbackServiceProvider)
+            .moveFeedback(check: state.position.isCheck);
+      }
+    });
   }
 
   StormRunStats _getStats() {

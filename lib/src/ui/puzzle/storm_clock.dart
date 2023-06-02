@@ -9,6 +9,8 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
+const _kClockFontSize = 26.0;
+
 class StormClockWidget extends ConsumerStatefulWidget {
   const StormClockWidget({required this.clock});
 
@@ -50,7 +52,7 @@ class _ClockState extends ConsumerState<StormClockWidget>
     // after the clock start
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(milliseconds: 1500),
     )..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           setState(() {
@@ -96,87 +98,77 @@ class _ClockState extends ConsumerState<StormClockWidget>
     final minutes = time.inMinutes.remainder(60).toString().padLeft(2, '0');
     final seconds = time.inSeconds.remainder(60).toString().padLeft(2, '0');
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-        color: clockStyle.backgroundColor,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
-        child: MediaQuery(
-          data: mediaQueryData.copyWith(
-            textScaleFactor: math.min(
-              mediaQueryData.textScaleFactor,
-              kMaxClockTextScaleFactor,
-            ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
+      child: MediaQuery(
+        data: mediaQueryData.copyWith(
+          textScaleFactor: math.min(
+            mediaQueryData.textScaleFactor,
+            kMaxClockTextScaleFactor,
           ),
-          child: Stack(
-            children: [
-              if (currentBonusSeconds != null)
-                Positioned.fill(
-                  child: FadeTransition(
-                    opacity: _bonusFadeAnimation,
-                    child: SlideTransition(
-                      position: _bonusSlideAnimation,
-                      child: Text(
-                        '${currentBonusSeconds! > 0 ? '+' : ''}$currentBonusSeconds',
-                        style: TextStyle(
-                          color: currentBonusSeconds! < 0
-                              ? Colors.red
-                              : LichessColors.good,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
-                          fontFeatures: const [FontFeature.tabularFigures()],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              if (currentBonusSeconds != null)
-                TweenAnimationBuilder(
-                  tween: Tween<Duration>(
-                    begin: time - Duration(seconds: currentBonusSeconds!),
-                    end: time,
-                  ),
-                  duration: const Duration(milliseconds: 500),
-                  builder: (context, Duration value, _) {
-                    final minutes = value.inMinutes
-                        .remainder(60)
-                        .toString()
-                        .padLeft(2, '0');
-                    final seconds = value.inSeconds
-                        .remainder(60)
-                        .toString()
-                        .padLeft(2, '0');
-                    return Text(
-                      '$minutes:$seconds',
+        ),
+        child: Stack(
+          children: [
+            if (currentBonusSeconds != null)
+              Positioned.fill(
+                child: FadeTransition(
+                  opacity: _bonusFadeAnimation,
+                  child: SlideTransition(
+                    position: _bonusSlideAnimation,
+                    child: Text(
+                      '${currentBonusSeconds! > 0 ? '+' : ''}$currentBonusSeconds',
                       style: TextStyle(
                         color: currentBonusSeconds! < 0
                             ? Colors.red
                             : LichessColors.good,
-                        fontSize: 30,
-                        fontFeatures: const [
-                          FontFeature.tabularFigures(),
-                        ],
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        fontFeatures: const [FontFeature.tabularFigures()],
                       ),
-                    );
-                  },
-                )
-              else
-                Text(
-                  '$minutes:$seconds',
-                  style: TextStyle(
-                    color: isActive
-                        ? clockStyle.activeTextColor
-                        : clockStyle.textColor,
-                    fontSize: 30,
-                    fontFeatures: const [
-                      FontFeature.tabularFigures(),
-                    ],
+                    ),
                   ),
                 ),
-            ],
-          ),
+              ),
+            if (currentBonusSeconds != null)
+              TweenAnimationBuilder(
+                tween: Tween<Duration>(
+                  begin: time - Duration(seconds: currentBonusSeconds!),
+                  end: time,
+                ),
+                duration: const Duration(milliseconds: 500),
+                builder: (context, Duration value, _) {
+                  final minutes =
+                      value.inMinutes.remainder(60).toString().padLeft(2, '0');
+                  final seconds =
+                      value.inSeconds.remainder(60).toString().padLeft(2, '0');
+                  return Text(
+                    '$minutes:$seconds',
+                    style: TextStyle(
+                      color: currentBonusSeconds! < 0
+                          ? Colors.red
+                          : LichessColors.good,
+                      fontSize: _kClockFontSize,
+                      fontFeatures: const [
+                        FontFeature.tabularFigures(),
+                      ],
+                    ),
+                  );
+                },
+              )
+            else
+              Text(
+                '$minutes:$seconds',
+                style: TextStyle(
+                  color: isActive
+                      ? clockStyle.activeTextColor
+                      : clockStyle.textColor,
+                  fontSize: _kClockFontSize,
+                  fontFeatures: const [
+                    FontFeature.tabularFigures(),
+                  ],
+                ),
+              ),
+          ],
         ),
       ),
     );
@@ -187,21 +179,17 @@ enum _ClockStyle {
   darkThemeStyle(
     textColor: Colors.grey,
     activeTextColor: Colors.white,
-    backgroundColor: Color(0xFF333333),
   ),
   lightThemeStyle(
     textColor: Colors.grey,
     activeTextColor: Colors.black,
-    backgroundColor: Colors.white,
   );
 
   const _ClockStyle({
     required this.textColor,
     required this.activeTextColor,
-    required this.backgroundColor,
   });
 
   final Color textColor;
   final Color activeTextColor;
-  final Color backgroundColor;
 }
