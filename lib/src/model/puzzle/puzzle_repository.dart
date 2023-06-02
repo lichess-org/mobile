@@ -276,8 +276,6 @@ class PuzzleStormResponse with _$PuzzleStormResponse {
   }) = _PuzzleStormResponse;
 }
 
-
-
 // --
 
 HistoryPuzzle _puzzleActivityFromJson(Map<String, dynamic> json) =>
