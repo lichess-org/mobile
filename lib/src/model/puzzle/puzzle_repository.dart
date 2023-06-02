@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'puzzle.dart';
+import 'storm.dart';
 import 'puzzle_streak.dart';
 import 'puzzle_theme.dart';
 import 'puzzle_difficulty.dart';
@@ -120,6 +121,58 @@ class PuzzleRepository {
     );
   }
 
+  FutureResult<PuzzleStormResponse> storm() {
+    return apiClient.get(Uri.parse('$kLichessHost/api/storm')).flatMap(
+      (response) {
+        return readJsonObject(
+          response,
+          mapper: (Map<String, dynamic> json) {
+            return PuzzleStormResponse(
+              puzzles: IList(
+                pick(json['puzzles']).asListOrThrow(_litePuzzleFromPick),
+              ),
+              highscore: pick(json['high']).letOrNull(_stormHighScoreFromPick),
+              key: pick(json["key"]).asStringOrNull(),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  FutureResult<StormNewHigh?> postStormRun(StormRunStats stats) {
+    final Map<String, String> body = {
+      'puzzles': stats.history.length.toString(),
+      'score': stats.score.toString(),
+      'moves': stats.moves.toString(),
+      'errors': stats.errors.toString(),
+      'combo': stats.comboBest.toString(),
+      'time': stats.time.inSeconds.toString(),
+      'highest': stats.highest.toString(),
+      'notAnExploit':
+          "Yes, we know that you can send whatever score you like. That's why there's no leaderboards and no competition.",
+    };
+
+    return apiClient
+        .post(
+      Uri.parse('$kLichessHost/storm'),
+      body: body,
+    )
+        .flatMap((response) {
+      return readJsonObject(
+        response,
+        mapper: (Map<String, dynamic> json) {
+          return pick(json['newHigh']).letOrNull(
+            (p) => StormNewHigh(
+              key: p('key').asStormNewHighTypeOrThrow(),
+              prev: p('prev').asIntOrThrow(),
+            ),
+          );
+        },
+      );
+    });
+  }
+
   FutureResult<Puzzle> daily() {
     return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/daily')).flatMap(
           (response) => readJsonObject(
@@ -195,6 +248,15 @@ class PuzzleStreakResponse with _$PuzzleStreakResponse {
   }) = _PuzzleStreakResponse;
 }
 
+@freezed
+class PuzzleStormResponse with _$PuzzleStormResponse {
+  const factory PuzzleStormResponse({
+    required IList<LitePuzzle> puzzles,
+    required String? key,
+    required PuzzleStormHighScore? highscore,
+  }) = _PuzzleStormResponse;
+}
+
 // --
 
 Puzzle _puzzleFromJson(Map<String, dynamic> json) =>
@@ -207,6 +269,24 @@ Puzzle _puzzleFromPick(RequiredPick pick) {
   return Puzzle(
     puzzle: pick('puzzle').letOrThrow(_puzzleDatafromPick),
     game: pick('game').letOrThrow(_puzzleGameFromPick),
+  );
+}
+
+LitePuzzle _litePuzzleFromPick(RequiredPick pick) {
+  return LitePuzzle(
+    id: pick('id').asPuzzleIdOrThrow(),
+    fen: pick('fen').asStringOrThrow(),
+    solution: pick('line').asStringOrThrow().split(' ').toIList(),
+    rating: pick('rating').asIntOrThrow(),
+  );
+}
+
+PuzzleStormHighScore _stormHighScoreFromPick(RequiredPick pick) {
+  return PuzzleStormHighScore(
+    allTime: pick('allTime').asIntOrThrow(),
+    day: pick("day").asIntOrThrow(),
+    month: pick("month").asIntOrThrow(),
+    week: pick("week").asIntOrThrow(),
   );
 }
 

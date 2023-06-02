@@ -5,8 +5,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
-
-const _kMaxClockTextScaleFactor = 1.94;
+import 'package:lichess_mobile/src/constants.dart';
 
 /// A simple countdown clock.
 ///
@@ -89,7 +88,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
           data: mediaQueryData.copyWith(
             textScaleFactor: math.min(
               mediaQueryData.textScaleFactor,
-              _kMaxClockTextScaleFactor,
+              kMaxClockTextScaleFactor,
             ),
           ),
           child: Text(

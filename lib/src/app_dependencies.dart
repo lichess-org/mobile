@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 
 part 'app_dependencies.freezed.dart';
 part 'app_dependencies.g.dart';
@@ -27,7 +28,8 @@ Future<AppDependencies> appDependencies(
   final pInfo = await PackageInfo.fromPlatform();
   final prefs = await SharedPreferences.getInstance();
   final storedSession = await sessionStorage.read();
-  final soundPool = await ref.watch(soundPoolProvider.future);
+  final soundTheme = GeneralPreferences.fetchFromStorage(prefs).soundTheme;
+  final soundPool = await ref.watch(soundPoolProvider(soundTheme).future);
   final client = ref.read(httpClientProvider);
   if (storedSession != null) {
     try {
