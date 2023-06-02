@@ -314,6 +314,12 @@ class PuzzleViewModel extends _$PuzzleViewModel {
         // ignore: avoid_manual_providers_as_generated_provider_dependency
         ref.read(sessionNotifier).setRatingDiffs(rounds);
       }
+
+      if (next != null && result == PuzzleResult.win) {
+        await Future<void>.delayed(const Duration(milliseconds: 250));
+        soundService.play(Sound.confirmation);
+        loadPuzzle(next);
+      }
     } else {
       // one fail and streak is over
       if (result == PuzzleResult.lose) {
