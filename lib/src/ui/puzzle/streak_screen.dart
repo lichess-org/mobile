@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_ctrl.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
@@ -25,7 +26,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 
-import 'puzzle_view_model.dart';
 import 'puzzle_feedback_widget.dart';
 
 class StreakScreen extends StatelessWidget {
@@ -121,18 +121,17 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet =
         ref.watch(boardPreferencesProvider.select((p) => p.pieceSet));
-    final viewModelProvider =
-        puzzleViewModelProvider(initialPuzzleContext, initialStreak: streak);
-    final puzzleState = ref.watch(viewModelProvider);
+    final ctrlProvider =
+        puzzleCtrlProvider(initialPuzzleContext, initialStreak: streak);
+    final puzzleState = ref.watch(ctrlProvider);
 
-    ref.listen<bool>(
-        viewModelProvider.select((s) => s.nextPuzzleStreakFetchError),
+    ref.listen<bool>(ctrlProvider.select((s) => s.nextPuzzleStreakFetchError),
         (_, shouldShowDialog) {
       if (shouldShowDialog) {
         showAdaptiveDialog<void>(
           context: context,
           builder: (context) => _RetryFetchPuzzleDialog(
-            viewModelProvider: viewModelProvider,
+            ctrlProvider: ctrlProvider,
           ),
         );
       }
@@ -160,7 +159,7 @@ class _Body extends ConsumerWidget {
                   validMoves: puzzleState.validMoves,
                   onMove: (move, {isPremove}) {
                     ref
-                        .read(viewModelProvider.notifier)
+                        .read(ctrlProvider.notifier)
                         .onUserMove(Move.fromUci(move.uci)!);
                   },
                 ),
@@ -218,7 +217,7 @@ class _Body extends ConsumerWidget {
         ),
         _BottomBar(
           initialPuzzleContext: initialPuzzleContext,
-          viewModelProvider: viewModelProvider,
+          ctrlProvider: ctrlProvider,
         ),
       ],
     );
@@ -235,7 +234,7 @@ class _Body extends ConsumerWidget {
                     'You will lose your current streak and your score will be saved.',
                   ),
                   onYes: () {
-                    ref.read(viewModelProvider.notifier).sendStreakResult();
+                    ref.read(ctrlProvider.notifier).sendStreakResult();
                     return Navigator.of(context).pop(true);
                   },
                   onNo: () => Navigator.of(context).pop(false),
@@ -251,15 +250,15 @@ class _Body extends ConsumerWidget {
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({
     required this.initialPuzzleContext,
-    required this.viewModelProvider,
+    required this.ctrlProvider,
   });
 
   final PuzzleContext initialPuzzleContext;
-  final PuzzleViewModelProvider viewModelProvider;
+  final PuzzleCtrlProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzleState = ref.watch(viewModelProvider);
+    final puzzleState = ref.watch(ctrlProvider);
 
     return Container(
       padding: Styles.horizontalBodyPadding,
@@ -288,7 +287,7 @@ class _BottomBar extends ConsumerWidget {
                 onTap: puzzleState.streak!.hasSkipped ||
                         puzzleState.mode == PuzzleMode.view
                     ? null
-                    : () => ref.read(viewModelProvider.notifier).skipMove(),
+                    : () => ref.read(ctrlProvider.notifier).skipMove(),
               ),
             if (puzzleState.streak!.finished)
               BottomBarButton(
@@ -306,7 +305,7 @@ class _BottomBar extends ConsumerWidget {
             if (puzzleState.streak!.finished)
               BottomBarButton(
                 onTap: puzzleState.canGoBack
-                    ? () => ref.read(viewModelProvider.notifier).userPrevious()
+                    ? () => ref.read(ctrlProvider.notifier).userPrevious()
                     : null,
                 label: 'Previous',
                 shortLabel: 'Previous',
@@ -315,7 +314,7 @@ class _BottomBar extends ConsumerWidget {
             if (puzzleState.streak!.finished)
               BottomBarButton(
                 onTap: puzzleState.canGoNext
-                    ? () => ref.read(viewModelProvider.notifier).userNext()
+                    ? () => ref.read(ctrlProvider.notifier).userNext()
                     : null,
                 label: context.l10n.next,
                 shortLabel: context.l10n.next,
@@ -369,21 +368,21 @@ class _BottomBar extends ConsumerWidget {
 
 class _RetryFetchPuzzleDialog extends ConsumerWidget {
   const _RetryFetchPuzzleDialog({
-    required this.viewModelProvider,
+    required this.ctrlProvider,
   });
 
-  final PuzzleViewModelProvider viewModelProvider;
+  final PuzzleCtrlProvider ctrlProvider;
 
   static const title = 'Could not fetch the puzzle';
   static const content = 'Please check your internet connection and try again.';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(viewModelProvider);
+    final state = ref.watch(ctrlProvider);
 
     Future<void> retryStreakNext() async {
       final result = await ref
-          .read(viewModelProvider.notifier)
+          .read(ctrlProvider.notifier)
           .retryFetchNextStreakPuzzle(state.streak!);
       result.match(
         onSuccess: (data) {
@@ -391,7 +390,7 @@ class _RetryFetchPuzzleDialog extends ConsumerWidget {
             Navigator.of(context).pop();
           }
           if (data != null) {
-            ref.read(viewModelProvider.notifier).loadPuzzle(data);
+            ref.read(ctrlProvider.notifier).loadPuzzle(data);
           }
         },
       );

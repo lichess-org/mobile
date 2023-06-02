@@ -23,11 +23,11 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/utils/debounce.dart';
 
-part 'puzzle_view_model.g.dart';
-part 'puzzle_view_model.freezed.dart';
+part 'puzzle_ctrl.g.dart';
+part 'puzzle_ctrl.freezed.dart';
 
 @riverpod
-class PuzzleViewModel extends _$PuzzleViewModel {
+class PuzzleCtrl extends _$PuzzleCtrl {
   // ignore: avoid-late-keyword
   late Node _gameTree;
   Timer? _firstMoveTimer;
@@ -37,7 +37,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   FutureResult<PuzzleContext?>? _nextPuzzleFuture;
 
   @override
-  PuzzleViewModelState build(
+  PuzzleCtrlState build(
     PuzzleContext initialContext, {
     PuzzleStreak? initialStreak,
   }) {
@@ -49,7 +49,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     return _loadNewContext(initialContext, initialStreak);
   }
 
-  PuzzleViewModelState _loadNewContext(
+  PuzzleCtrlState _loadNewContext(
     PuzzleContext context,
     PuzzleStreak? streak,
   ) {
@@ -68,7 +68,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       _nextPuzzleFuture = _fetchNextStreakPuzzle(streak);
     }
 
-    return PuzzleViewModelState(
+    return PuzzleCtrlState(
       puzzle: context.puzzle,
       glicko: context.glicko,
       mode: PuzzleMode.play,
@@ -469,10 +469,10 @@ enum PuzzleResult { win, lose }
 enum PuzzleFeedback { good, bad }
 
 @freezed
-class PuzzleViewModelState with _$PuzzleViewModelState {
-  const PuzzleViewModelState._();
+class PuzzleCtrlState with _$PuzzleCtrlState {
+  const PuzzleCtrlState._();
 
-  const factory PuzzleViewModelState({
+  const factory PuzzleCtrlState({
     required Puzzle puzzle,
     required PuzzleGlicko? glicko,
     required PuzzleMode mode,
