@@ -99,6 +99,10 @@ class _Body extends ConsumerWidget {
     final nextPuzzle = ref.watch(nextPuzzleProvider(theme));
     final connectivity = ref.watch(connectivityChangesProvider);
 
+    final expansionTileColor = defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoColors.secondaryLabel.resolveFrom(context)
+        : null;
+
     final content = [
       Padding(
         padding: Styles.bodySectionPadding,
@@ -179,7 +183,7 @@ class _Body extends ConsumerWidget {
           icon: const Icon(
             LichessIcons.storm,
             size: 44,
-            color: LichessColors.purple,
+            color: LichessColors.brag,
           ),
           title: Text(
             'Puzzle Storm',
@@ -208,8 +212,10 @@ class _Body extends ConsumerWidget {
           title: Text(
             context.l10n.more,
           ),
-          iconColor: Theme.of(context).iconTheme.color,
-          collapsedIconColor: Theme.of(context).iconTheme.color,
+          iconColor: expansionTileColor,
+          collapsedIconColor: expansionTileColor,
+          textColor: expansionTileColor,
+          collapsedTextColor: expansionTileColor,
           controlAffinity: ListTileControlAffinity.leading,
           children: [
             Padding(
