@@ -397,66 +397,71 @@ class _CardButtonState extends State<CardButton> {
   }
 }
 
-/// Button to add onTap on long pressing
+/// Button to repeatedly call a funtion, triggered after a long press
+///
+/// This widget is just a wrapper, the visuals are delegated to the child widget
 ///
 /// ### Note
 /// Widgets with `tooltip` don't handle onLongPress
-/// Child's onTap will have priority
-class LongPressButton extends StatefulWidget {
-  const LongPressButton({
-    required this.callback,
+class RepeatButton extends StatefulWidget {
+  const RepeatButton({
+    required this.longPressCallback,
     required this.child,
-    this.longDelay = const Duration(milliseconds: 600),
-    this.middleDelay = const Duration(milliseconds: 400),
-    this.minDelay = const Duration(milliseconds: 250),
+    this.handleOnTap = false,
+    this.triggerDelays = const [
+      Duration(milliseconds: 600),
+      Duration(milliseconds: 400),
+      Duration(milliseconds: 250)
+    ],
     this.holdDelay = const Duration(milliseconds: 200),
-  });
+  }) : assert(
+          triggerDelays.length <= 3,
+        );
 
   final Widget child;
 
-  /// function called on Hold
-  final VoidCallback? callback;
+  /// function called on long press
+  final VoidCallback? longPressCallback;
 
-  /// Delay between first callbacks
-  final Duration longDelay;
-
-  /// Delay between second callbacks
-  final Duration middleDelay;
-
-  /// Delay between thrid callbacks
-  final Duration minDelay;
+  /// Delays between callbacks at the beginning. Leave default to get an acceleration effect.
+  /// The maximum length of the list is 3
+  final List<Duration> triggerDelays;
 
   /// Delay between callbacks
   final Duration holdDelay;
 
+  /// The widget will handle onTap if set true with the same callback as [longPressCallback]
+  /// ### Note
+  /// if the child has an [onTap] then it will be given priority
+  final bool handleOnTap;
+
   @override
-  _LongPressButtonState createState() => _LongPressButtonState();
+  _RepeatButtonState createState() => _RepeatButtonState();
 }
 
-class _LongPressButtonState extends State<LongPressButton> {
+class _RepeatButtonState extends State<RepeatButton> {
   bool _isPressed = false;
   Timer? _timer;
-  List<Duration> _delayTime = [];
 
   @override
-  void initState() {
-    super.initState();
-    _delayTime = [widget.longDelay, widget.middleDelay, widget.minDelay];
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   Future<void> _onPress() async {
     _isPressed = true;
 
-    widget.callback?.call();
-    for (final time in _delayTime) {
+    widget.longPressCallback?.call();
+    for (final time in widget.triggerDelays) {
       await Future.delayed(time, () {});
       if (!_isPressed) return;
-      widget.callback?.call();
+      widget.longPressCallback?.call();
     }
 
     _timer = Timer.periodic(widget.holdDelay, (_) {
       if (_isPressed) {
-        widget.callback?.call();
+        widget.longPressCallback?.call();
       }
     });
   }
@@ -473,7 +478,7 @@ class _LongPressButtonState extends State<LongPressButton> {
       onLongPress: _onPress,
       onLongPressCancel: _onPressEnd,
       onLongPressUp: _onPressEnd,
-      onTap: () => widget.callback?.call(),
+      onTap: widget.handleOnTap ? () => widget.longPressCallback?.call() : null,
       child: widget.child,
     );
   }

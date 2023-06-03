@@ -198,8 +198,8 @@ class _BottomBar extends ConsumerWidget {
                   : null,
               icon: const Icon(LichessIcons.fast_backward, size: 20),
             ),
-            LongPressButton(
-              callback: canGoBackward
+            RepeatButton(
+              longPressCallback: canGoBackward
                   ? () => ref
                       .read(gameCursorProvider(gameData.id).notifier)
                       .cursorBackward()
@@ -214,11 +214,12 @@ class _BottomBar extends ConsumerWidget {
                         .read(gameCursorProvider(gameData.id).notifier)
                         .cursorBackward()
                     : null,
+
                 icon: const Icon(LichessIcons.step_backward, size: 20),
               ),
             ),
-            LongPressButton(
-              callback: canGoForward
+            RepeatButton(
+              longPressCallback: canGoForward
                   ? () => ref
                       .read(gameCursorProvider(gameData.id).notifier)
                       .cursorForward()
@@ -229,11 +230,9 @@ class _BottomBar extends ConsumerWidget {
                 semanticsLabel: 'Forward',
                 showTooltip: false,
                 onPressed: canGoForward
-                    ? () {
-                        ref
-                            .read(gameCursorProvider(gameData.id).notifier)
-                            .cursorForward();
-                      }
+                    ? () => ref
+                        .read(gameCursorProvider(gameData.id).notifier)
+                        .cursorForward()
                     : null,
                 icon: const Icon(LichessIcons.step_forward, size: 20),
               ),
