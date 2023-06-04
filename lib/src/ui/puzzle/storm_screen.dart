@@ -27,7 +27,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
-import 'package:lichess_mobile/src/widgets/board_preview.dart';
+import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
@@ -629,17 +629,10 @@ class _RunStats extends StatelessWidget {
   }
 }
 
-class _RunStatsPopup extends ConsumerStatefulWidget {
+class _RunStatsPopup extends ConsumerWidget {
   const _RunStatsPopup(this.stats);
 
   final StormRunStats stats;
-
-  @override
-  ConsumerState createState() => _RunStatsPopupState();
-}
-
-class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
-  bool isLoading = false;
 
   String newHighTitle(BuildContext context, StormNewHigh newHigh) {
     switch (newHigh.key) {
@@ -655,8 +648,8 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final highScoreWidgets = widget.stats.newHigh != null
+  Widget build(BuildContext context, WidgetRef ref) {
+    final highScoreWidgets = stats.newHigh != null
         ? [
             const SizedBox(height: 16),
             ListTile(
@@ -666,14 +659,14 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                 color: LichessColors.brag,
               ),
               title: Text(
-                newHighTitle(context, widget.stats.newHigh!),
+                newHighTitle(context, stats.newHigh!),
                 style: Styles.sectionTitle.copyWith(
                   color: LichessColors.brag,
                 ),
               ),
               subtitle: Text(
                 context.l10n.stormPreviousHighscoreWasX(
-                  widget.stats.newHigh!.prev.toString(),
+                  stats.newHigh!.prev.toString(),
                 ),
                 style: const TextStyle(
                   color: LichessColors.brag,
@@ -685,181 +678,186 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
         : null;
 
     return SafeArea(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (highScoreWidgets != null) ...highScoreWidgets,
-            ListSection(
-              cupertinoAdditionalDividerMargin: 6,
-              header: Text(
-                '${widget.stats.score} ${context.l10n.stormPuzzlesSolved}',
-              ),
-              children: [
-                _StatsRow(
-                  context.l10n.stormMoves,
-                  widget.stats.moves.toString(),
-                ),
-                _StatsRow(
-                  context.l10n.accuracy,
-                  '${(((widget.stats.moves - widget.stats.errors) / widget.stats.moves) * 100).toStringAsFixed(2)}%',
-                ),
-                _StatsRow(
-                  context.l10n.stormCombo,
-                  widget.stats.comboBest.toString(),
-                ),
-                _StatsRow(
-                  context.l10n.stormTime,
-                  '${widget.stats.time.inSeconds}s',
-                ),
-                _StatsRow(
-                  context.l10n.stormTimePerMove,
-                  '${widget.stats.timePerMove.toStringAsFixed(1)}s',
-                ),
-                _StatsRow(
-                  context.l10n.stormHighestSolved,
-                  widget.stats.highest.toString(),
-                ),
-              ],
+      child: ListView(
+        children: [
+          if (highScoreWidgets != null) ...highScoreWidgets,
+          ListSection(
+            cupertinoAdditionalDividerMargin: 6,
+            header: Text(
+              '${stats.score} ${context.l10n.stormPuzzlesSolved}',
             ),
-            const SizedBox(height: 10.0),
-            FatButton(
+            children: [
+              _StatsRow(
+                context.l10n.stormMoves,
+                stats.moves.toString(),
+              ),
+              _StatsRow(
+                context.l10n.accuracy,
+                '${(((stats.moves - stats.errors) / stats.moves) * 100).toStringAsFixed(2)}%',
+              ),
+              _StatsRow(
+                context.l10n.stormCombo,
+                stats.comboBest.toString(),
+              ),
+              _StatsRow(
+                context.l10n.stormTime,
+                '${stats.time.inSeconds}s',
+              ),
+              _StatsRow(
+                context.l10n.stormTimePerMove,
+                '${stats.timePerMove.toStringAsFixed(1)}s',
+              ),
+              _StatsRow(
+                context.l10n.stormHighestSolved,
+                stats.highest.toString(),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10.0),
+          Padding(
+            padding: Styles.horizontalBodyPadding,
+            child: FatButton(
               semanticsLabel: context.l10n.stormPlayAgain,
-              onPressed: isLoading
-                  ? null
-                  : () {
-                      ref.invalidate(stormProvider);
-                      Navigator.of(context).pop();
-                    },
+              onPressed: () {
+                ref.invalidate(stormProvider);
+                Navigator.of(context).pop();
+              },
               child: Text(context.l10n.stormPlayAgain),
             ),
-            const SizedBox(height: 10.0),
-            ListSection(
-              header: Text(context.l10n.stormPuzzlesPlayed),
+          ),
+          const SizedBox(height: 10.0),
+          Padding(
+            padding: Styles.bodySectionPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                LayoutBuilder(
-                  builder: (context, constrains) {
-                    final crossAxisCount =
-                        constrains.maxWidth > kTabletThreshold ? 4 : 2;
-                    final boardWidth = constrains.maxWidth / crossAxisCount;
-                    final footerHeight = calculateFooterHeight(context);
-                    return LayoutGrid(
-                      columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
-                      rowSizes: List.generate(
-                        (widget.stats.history.length / crossAxisCount).ceil(),
-                        (_) => auto,
-                      ),
-                      children: widget.stats.history.map((e) {
-                        final (side, fen, lastMove) = e.$1.preview();
-                        return SizedBox(
-                          width: boardWidth,
-                          height: boardWidth + footerHeight,
-                          child: BoardPreview(
-                            onTap: isLoading
-                                ? null
-                                : () async {
-                                    final session =
-                                        ref.read(authSessionProvider);
-                                    Puzzle? puzzle;
-                                    try {
-                                      setState(() => isLoading = true);
-                                      puzzle = await ref
-                                          .read(puzzleProvider(e.$1.id).future);
-                                    } catch (e) {
-                                      showPlatformSnackbar(
-                                        context,
-                                        e.toString(),
-                                      );
-                                    } finally {
-                                      if (mounted && puzzle != null) {
-                                        setState(() => isLoading = false);
-                                        pushPlatformRoute(
-                                          context,
-                                          builder: (_) => PuzzleScreen(
-                                            theme: PuzzleTheme.mix,
-                                            initialPuzzleContext: PuzzleContext(
-                                              theme: PuzzleTheme.mix,
-                                              puzzle: puzzle!,
-                                              userId: session?.user.id,
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                    }
-                                  },
-                            orientation: side.cg,
-                            fen: fen,
-                            lastMove: lastMove.cg,
-                            footer: Padding(
-                              padding: const EdgeInsets.only(top: 8),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  ColoredBox(
-                                    color: e.$2
-                                        ? LichessColors.good
-                                        : LichessColors.red,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 1,
-                                        horizontal: 3,
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          if (e.$2)
-                                            const Icon(
-                                              color: Colors.white,
-                                              Icons.done,
-                                              size: 20,
-                                            )
-                                          else
-                                            const Icon(
-                                              Icons.close,
-                                              color: Colors.white,
-                                              size: 20,
-                                            ),
-                                          Text(
-                                            '${e.$3.inSeconds}s',
-                                            overflow: TextOverflow.fade,
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Text(e.$1.rating.toString()),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  },
+                Text(
+                  context.l10n.stormPuzzlesPlayed,
+                  style: Styles.sectionTitle,
                 ),
+                const SizedBox(height: 3.0),
+                _PuzzleHistory(stats),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+}
 
-  double calculateFooterHeight(BuildContext context) {
-    final textStyle = TextStyle(
-      fontSize: Theme.of(context).textTheme.bodySmall?.fontSize ?? 14.0,
-    );
-    final timeTextPainter = TextPainter(
-      text: TextSpan(text: "100s", style: textStyle),
-      textDirection: TextDirection.ltr,
-    );
-    timeTextPainter.layout();
+class _PuzzleHistory extends ConsumerStatefulWidget {
+  const _PuzzleHistory(this.stats);
 
-    return (timeTextPainter.height) * MediaQuery.of(context).textScaleFactor +
-        18.5;
+  final StormRunStats stats;
+
+  @override
+  ConsumerState createState() => _PuzzleHistoryState();
+}
+
+class _PuzzleHistoryState extends ConsumerState<_PuzzleHistory> {
+  bool isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constrains) {
+        final crossAxisCount = constrains.maxWidth > kTabletThreshold ? 4 : 2;
+        const columnGap = 12.0;
+        final boardWidth = (constrains.maxWidth / crossAxisCount) -
+            (columnGap / crossAxisCount);
+        return LayoutGrid(
+          columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
+          rowSizes: List.generate(
+            (widget.stats.history.length / crossAxisCount).ceil(),
+            (_) => auto,
+          ),
+          rowGap: 16.0,
+          columnGap: columnGap,
+          children: widget.stats.history.map((e) {
+            final (side, fen, lastMove) = e.$1.preview;
+            return BoardThumbnail(
+              size: boardWidth,
+              onTap: isLoading
+                  ? null
+                  : () async {
+                      final session = ref.read(authSessionProvider);
+                      Puzzle? puzzle;
+                      try {
+                        setState(() => isLoading = true);
+                        puzzle = await ref.read(puzzleProvider(e.$1.id).future);
+                      } catch (e) {
+                        showPlatformSnackbar(
+                          context,
+                          e.toString(),
+                        );
+                      } finally {
+                        if (mounted && puzzle != null) {
+                          setState(() => isLoading = false);
+                          pushPlatformRoute(
+                            context,
+                            builder: (_) => PuzzleScreen(
+                              theme: PuzzleTheme.mix,
+                              initialPuzzleContext: PuzzleContext(
+                                theme: PuzzleTheme.mix,
+                                puzzle: puzzle!,
+                                userId: session?.user.id,
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                    },
+              orientation: side.cg,
+              fen: fen,
+              lastMove: lastMove.cg,
+              footer: Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    ColoredBox(
+                      color: e.$2 ? LichessColors.good : LichessColors.red,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 1,
+                          horizontal: 3,
+                        ),
+                        child: Row(
+                          children: [
+                            if (e.$2)
+                              const Icon(
+                                color: Colors.white,
+                                Icons.done,
+                                size: 20,
+                              )
+                            else
+                              const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            Text(
+                              '${e.$3.inSeconds}s',
+                              overflow: TextOverflow.fade,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(e.$1.rating.toString()),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
+        );
+      },
+    );
   }
 }
 
