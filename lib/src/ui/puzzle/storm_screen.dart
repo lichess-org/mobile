@@ -333,7 +333,7 @@ class _TopTable extends ConsumerWidget {
             Text(
               puzzleState.numSolved.toString(),
               style: const TextStyle(
-                fontSize: 38.0,
+                fontSize: 30.0,
                 fontWeight: FontWeight.bold,
                 color: LichessColors.brag,
               ),
