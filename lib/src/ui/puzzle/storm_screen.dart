@@ -34,6 +34,7 @@ import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import "package:lichess_mobile/src/utils/l10n_context.dart";
+import "package:lichess_mobile/src/utils/immersive_mode.dart";
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 
 class StormScreen extends StatelessWidget {
@@ -107,23 +108,7 @@ class _Body extends ConsumerStatefulWidget {
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
-  @override
-  void initState() {
-    super.initState();
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    }
-  }
-
-  @override
-  void dispose() {
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    }
-    super.dispose();
-  }
-
+class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
   @override
   Widget build(BuildContext context) {
     final ctrlProvider = stormCtrlProvider(widget.data.puzzles);

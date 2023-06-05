@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
@@ -106,7 +107,7 @@ class _Load extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
+class _Body extends ConsumerStatefulWidget {
   const _Body({
     required this.initialPuzzleContext,
     required this.streak,
@@ -118,11 +119,18 @@ class _Body extends ConsumerWidget {
   static const streakColor = LichessColors.brag;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
+  @override
+  Widget build(BuildContext context) {
     final pieceSet =
         ref.watch(boardPreferencesProvider.select((p) => p.pieceSet));
-    final ctrlProvider =
-        puzzleCtrlProvider(initialPuzzleContext, initialStreak: streak);
+    final ctrlProvider = puzzleCtrlProvider(
+      widget.initialPuzzleContext,
+      initialStreak: widget.streak,
+    );
     final puzzleState = ref.watch(ctrlProvider);
 
     ref.listen<bool>(ctrlProvider.select((s) => s.nextPuzzleStreakFetchError),
@@ -190,7 +198,7 @@ class _Body extends ConsumerWidget {
                           const Icon(
                             LichessIcons.streak,
                             size: 40.0,
-                            color: streakColor,
+                            color: _Body.streakColor,
                           ),
                           const SizedBox(width: 8.0),
                           Text(
@@ -198,7 +206,7 @@ class _Body extends ConsumerWidget {
                             style: const TextStyle(
                               fontSize: 30.0,
                               fontWeight: FontWeight.bold,
-                              color: streakColor,
+                              color: _Body.streakColor,
                             ),
                           ),
                         ],
@@ -216,7 +224,7 @@ class _Body extends ConsumerWidget {
           ),
         ),
         _BottomBar(
-          initialPuzzleContext: initialPuzzleContext,
+          initialPuzzleContext: widget.initialPuzzleContext,
           ctrlProvider: ctrlProvider,
         ),
       ],

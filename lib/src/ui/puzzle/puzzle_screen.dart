@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/ui/engine/engine_gauge.dart';
@@ -129,7 +130,7 @@ class _LoadPuzzle extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
+class _Body extends ConsumerStatefulWidget {
   const _Body({
     required this.initialPuzzleContext,
   });
@@ -137,10 +138,15 @@ class _Body extends ConsumerWidget {
   final PuzzleContext initialPuzzleContext;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
+  @override
+  Widget build(BuildContext context) {
     final pieceSet =
         ref.watch(boardPreferencesProvider.select((p) => p.pieceSet));
-    final ctrlProvider = puzzleCtrlProvider(initialPuzzleContext);
+    final ctrlProvider = puzzleCtrlProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
 
     final currentEvalBest = ref.watch(
@@ -246,7 +252,7 @@ class _Body extends ConsumerWidget {
                         ),
                       ),
                     PuzzleSessionWidget(
-                      initialPuzzleContext: initialPuzzleContext,
+                      initialPuzzleContext: widget.initialPuzzleContext,
                       ctrlProvider: ctrlProvider,
                     ),
                   ],
@@ -256,7 +262,7 @@ class _Body extends ConsumerWidget {
           ),
         ),
         _BottomBar(
-          initialPuzzleContext: initialPuzzleContext,
+          initialPuzzleContext: widget.initialPuzzleContext,
           ctrlProvider: ctrlProvider,
         ),
       ],
