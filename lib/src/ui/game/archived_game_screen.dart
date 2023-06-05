@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
+import 'package:lichess_mobile/src/model/common/id.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -199,41 +200,26 @@ class _BottomBar extends ConsumerWidget {
               icon: const Icon(LichessIcons.fast_backward, size: 20),
             ),
             RepeatButton(
-              longPressCallback: canGoBackward
-                  ? () => ref
-                      .read(gameCursorProvider(gameData.id).notifier)
-                      .cursorBackward()
-                  : null,
+              longPressCallback:
+                  canGoBackward ? () => _cursorBackward(ref) : null,
               child: BottomBarIconButton(
                 key: const ValueKey('cursor-back'),
                 // TODO add translation
                 semanticsLabel: 'Backward',
                 showTooltip: false,
-                onPressed: canGoBackward
-                    ? () => ref
-                        .read(gameCursorProvider(gameData.id).notifier)
-                        .cursorBackward()
-                    : null,
-
+                onPressed: canGoBackward ? () => _cursorBackward(ref) : null,
                 icon: const Icon(LichessIcons.step_backward, size: 20),
               ),
             ),
             RepeatButton(
-              longPressCallback: canGoForward
-                  ? () => ref
-                      .read(gameCursorProvider(gameData.id).notifier)
-                      .cursorForward()
-                  : null,
+              longPressCallback:
+                  canGoForward ? () => _cursorForward(ref) : null,
               child: BottomBarIconButton(
                 key: const ValueKey('cursor-forward'),
                 // TODO add translation
                 semanticsLabel: 'Forward',
                 showTooltip: false,
-                onPressed: canGoForward
-                    ? () => ref
-                        .read(gameCursorProvider(gameData.id).notifier)
-                        .cursorForward()
-                    : null,
+                onPressed: canGoForward ? () => _cursorForward(ref) : null,
                 icon: const Icon(LichessIcons.step_forward, size: 20),
               ),
             ),
@@ -254,6 +240,14 @@ class _BottomBar extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  void _cursorForward(WidgetRef ref) {
+    ref.read(gameCursorProvider(gameData.id).notifier).cursorForward();
+  }
+
+  void _cursorBackward(WidgetRef ref) {
+    ref.read(gameCursorProvider(gameData.id).notifier).cursorBackward();
   }
 
   Future<void> _showGameMenu(BuildContext context, WidgetRef ref) {

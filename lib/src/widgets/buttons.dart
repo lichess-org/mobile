@@ -403,11 +403,11 @@ class _CardButtonState extends State<CardButton> {
 ///
 /// ### Note
 /// Widgets with `tooltip` don't handle onLongPress
+/// If child also has `onTap` then the child's callback will have priority
 class RepeatButton extends StatefulWidget {
   const RepeatButton({
     required this.longPressCallback,
     required this.child,
-    this.handleOnTap = false,
     this.triggerDelays = const [
       Duration(milliseconds: 600),
       Duration(milliseconds: 400),
@@ -429,11 +429,6 @@ class RepeatButton extends StatefulWidget {
 
   /// Delay between callbacks
   final Duration holdDelay;
-
-  /// The widget will handle onTap if set true with the same callback as [longPressCallback]
-  /// ### Note
-  /// if the child has an [onTap] then it will be given priority
-  final bool handleOnTap;
 
   @override
   _RepeatButtonState createState() => _RepeatButtonState();
@@ -478,7 +473,7 @@ class _RepeatButtonState extends State<RepeatButton> {
       onLongPress: _onPress,
       onLongPressCancel: _onPressEnd,
       onLongPressUp: _onPressEnd,
-      onTap: widget.handleOnTap ? () => widget.longPressCallback?.call() : null,
+      onTap: () => widget.longPressCallback?.call(),
       child: widget.child,
     );
   }
