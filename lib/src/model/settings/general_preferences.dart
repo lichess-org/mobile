@@ -20,11 +20,7 @@ class GeneralPreferences extends _$GeneralPreferences {
         ? GeneralPrefsState.fromJson(
             jsonDecode(stored) as Map<String, dynamic>,
           )
-        : const GeneralPrefsState(
-            themeMode: ThemeMode.system,
-            isSoundEnabled: true,
-            soundTheme: SoundTheme.standard,
-          );
+        : GeneralPrefsState.defaults;
   }
 
   @override
@@ -63,6 +59,17 @@ class GeneralPrefsState with _$GeneralPrefsState {
     required SoundTheme soundTheme,
   }) = _GeneralPrefsState;
 
-  factory GeneralPrefsState.fromJson(Map<String, dynamic> json) =>
-      _$GeneralPrefsStateFromJson(json);
+  static const defaults = GeneralPrefsState(
+    themeMode: ThemeMode.system,
+    isSoundEnabled: true,
+    soundTheme: SoundTheme.standard,
+  );
+
+  factory GeneralPrefsState.fromJson(Map<String, dynamic> json) {
+    try {
+      return _$GeneralPrefsStateFromJson(json);
+    } catch (_) {
+      return defaults;
+    }
+  }
 }
