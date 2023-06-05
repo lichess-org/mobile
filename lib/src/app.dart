@@ -71,7 +71,7 @@ class _AppState extends ConsumerState<App> {
       onGenerateTitle: (BuildContext context) => 'lichess.org',
       theme: ThemeData(
         navigationBarTheme: NavigationBarTheme.of(context).copyWith(
-          height: screenHeight < 700 ? 60 : null,
+          height: screenHeight < kSmallHeightScreenThreshold ? 60 : null,
         ),
         textTheme: defaultTargetPlatform == TargetPlatform.iOS
             ? brightness == Brightness.light

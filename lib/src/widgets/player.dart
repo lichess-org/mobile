@@ -30,10 +30,15 @@ class BoardPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final playerFontSize =
+        screenHeight < kSmallHeightScreenThreshold ? 14.0 : 16.0;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             child: Padding(
@@ -57,8 +62,8 @@ class BoardPlayer extends StatelessWidget {
                         if (player.title != null) ...[
                           Text(
                             player.title!,
-                            style: const TextStyle(
-                              fontSize: 18,
+                            style: TextStyle(
+                              fontSize: playerFontSize,
                               fontWeight: FontWeight.bold,
                               color: LichessColors.brag,
                             ),
@@ -69,8 +74,8 @@ class BoardPlayer extends StatelessWidget {
                           child: Text(
                             player.name,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 16,
+                            style: TextStyle(
+                              fontSize: playerFontSize,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
