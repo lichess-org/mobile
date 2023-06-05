@@ -10,6 +10,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 
 import 'puzzle.dart';
 import 'puzzle_repository.dart';
@@ -119,28 +120,36 @@ class StormCtrl extends _$StormCtrl {
 
     final stats = _getStats();
 
-    final res = await ref
-        .read(puzzleRepositoryProvider)
-        .postStormRun(stats)
-        .timeout(const Duration(seconds: 2));
+    final session = ref.read(authSessionProvider);
+    if (session != null) {
+      final res = await ref
+          .read(puzzleRepositoryProvider)
+          .postStormRun(stats)
+          .timeout(const Duration(seconds: 2));
 
-    final newState = state.copyWith(
-      stats: stats,
-      runOver: true,
-    );
+      final newState = state.copyWith(
+        stats: stats,
+        runOver: true,
+      );
 
-    res.match(
-      onSuccess: (newHigh) {
-        if (newHigh != null) {
-          state = newState.copyWith(stats: stats.copyWith(newHigh: newHigh));
-        } else {
+      res.match(
+        onSuccess: (newHigh) {
+          if (newHigh != null) {
+            state = newState.copyWith(stats: stats.copyWith(newHigh: newHigh));
+          } else {
+            state = newState;
+          }
+        },
+        onError: (_, __) {
           state = newState;
-        }
-      },
-      onError: (_, __) {
-        state = newState;
-      },
-    );
+        },
+      );
+    } else {
+      state = state.copyWith(
+        stats: stats,
+        runOver: true,
+      );
+    }
   }
 
   Future<void> _loadNextPuzzle(bool result, ComboState comboChange) async {
