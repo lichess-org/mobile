@@ -99,18 +99,41 @@ class _Load extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
+class _Body extends ConsumerStatefulWidget {
   const _Body({required this.data});
   final PuzzleStormResponse data;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = stormCtrlProvider(data.puzzles);
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> {
+  @override
+  void initState() {
+    super.initState();
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    }
+  }
+
+  @override
+  void dispose() {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ctrlProvider = stormCtrlProvider(widget.data.puzzles);
     final puzzleState = ref.watch(ctrlProvider);
 
     ref.listen(ctrlProvider.select((state) => state.runOver), (_, s) {
       if (s) {
-        _showStats(context, ref.read(ctrlProvider).stats!);
+        Future.delayed(const Duration(milliseconds: 200), () {
+          _showStats(context, ref.read(ctrlProvider).stats!);
+        });
       }
     });
 
