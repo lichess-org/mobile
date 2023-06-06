@@ -1,8 +1,10 @@
+import 'package:flutter/services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 
 part 'archived_game_screen_providers.g.dart';
 
@@ -55,10 +57,15 @@ class GameCursor extends _$GameCursor {
     }
   }
 
-  void cursorForward() {
+  void cursorForward({bool hapticFeedback = true}) {
     if (state.hasValue) {
       final (game, cursor) = state.value!;
       state = AsyncValue.data((game, cursor + 1));
+      final san = game.stepAt(cursor + 1)?.san;
+      if (san != null) {
+        _playMoveSound(san);
+        if (hapticFeedback) HapticFeedback.lightImpact();
+      }
     }
   }
 
@@ -66,6 +73,10 @@ class GameCursor extends _$GameCursor {
     if (state.hasValue) {
       final (game, cursor) = state.value!;
       state = AsyncValue.data((game, cursor - 1));
+      final san = game.stepAt(cursor - 1)?.san;
+      if (san != null) {
+        _playMoveSound(san);
+      }
     }
   }
 
@@ -73,6 +84,17 @@ class GameCursor extends _$GameCursor {
     if (state.hasValue) {
       final (game, _) = state.value!;
       state = AsyncValue.data((game, game.steps.length - 1));
+    }
+  }
+
+  void _playMoveSound(String san) {
+    final soundService = ref.read(soundServiceProvider);
+    if (san.contains('x')) {
+      soundService.stopCurrent();
+      soundService.play(Sound.capture);
+    } else {
+      soundService.stopCurrent();
+      soundService.play(Sound.move);
     }
   }
 }

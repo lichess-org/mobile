@@ -63,6 +63,8 @@ class ArchivedGame with _$ArchivedGame {
   MaterialDiffSide? materialDiffAt(int cursor, Side side) =>
       steps.isNotEmpty ? steps[cursor].diff.bySide(side) : null;
 
+  GameStep? stepAt(int cursor) => steps.isNotEmpty ? steps[cursor] : null;
+
   String? fenAt(int cursor) =>
       steps.isNotEmpty ? steps[cursor].position.fen : null;
 

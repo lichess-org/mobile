@@ -158,11 +158,17 @@ class CupertinoIconButton extends StatelessWidget {
     required this.onPressed,
     required this.semanticsLabel,
     required this.icon,
+    this.padding,
     super.key,
   });
   final VoidCallback? onPressed;
   final Widget icon;
   final String semanticsLabel;
+
+  /// The amount of space to surround the child inside the bounds of the button.
+  ///
+  /// Defaults to 16.0 pixels.
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +179,7 @@ class CupertinoIconButton extends StatelessWidget {
       label: semanticsLabel,
       excludeSemantics: true,
       child: CupertinoButton(
-        padding: EdgeInsets.zero,
+        padding: padding,
         onPressed: onPressed,
         child: icon,
       ),
@@ -186,6 +192,7 @@ class BottomBarIconButton extends StatelessWidget {
     required this.icon,
     required this.onPressed,
     required this.semanticsLabel,
+    this.padding,
     this.showTooltip = true,
     super.key,
   });
@@ -194,6 +201,12 @@ class BottomBarIconButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String semanticsLabel;
   final bool showTooltip;
+
+  /// The padding around the button's icon. The entire padded icon will react
+  /// to input gestures.
+  ///
+  /// If null, it defaults to 8.0 padding on all sides on Android and 16.0 on iOS.
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -215,6 +228,7 @@ class BottomBarIconButton extends StatelessWidget {
           data: Theme.of(context),
           child: IconButton(
             tooltip: showTooltip ? semanticsLabel : null,
+            padding: padding,
             onPressed: onPressed,
             icon: icon,
           ),
@@ -406,13 +420,14 @@ class _CardButtonState extends State<CardButton> {
   }
 }
 
-/// Button to repeatedly call a funtion, triggered after a long press
+/// Button to repeatedly call a funtion, triggered after a long press.
 ///
-/// This widget is just a wrapper, the visuals are delegated to the child widget
+/// This widget is just a wrapper, the visuals are delegated to the child widget.
 ///
-/// ### Note
-/// Widgets with `tooltip` don't handle onLongPress
-/// If child also has `onTap` then the child's callback will have priority
+/// ### Notes
+/// Child widgets with a `tooltip` already have an `onLongPress` callback that will
+/// conflict.
+/// `onTap` callback should be handled by the child widget.
 class RepeatButton extends StatefulWidget {
   const RepeatButton({
     required this.longPressCallback,
@@ -420,12 +435,14 @@ class RepeatButton extends StatefulWidget {
     this.triggerDelays = const [
       Duration(milliseconds: 600),
       Duration(milliseconds: 400),
-      Duration(milliseconds: 250)
+      Duration(milliseconds: 250),
+      Duration(milliseconds: 200),
+      Duration(milliseconds: 150),
+      Duration(milliseconds: 100),
+      Duration(milliseconds: 80),
     ],
-    this.holdDelay = const Duration(milliseconds: 200),
-  }) : assert(
-          triggerDelays.length <= 3,
-        );
+    this.holdDelay = const Duration(milliseconds: 50),
+  });
 
   final Widget child;
 
