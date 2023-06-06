@@ -317,7 +317,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     } else {
       // one fail and streak is over
       if (result == PuzzleResult.lose) {
-        soundService.play(Sound.puzzleStormBad);
+        soundService.play(Sound.error);
         await Future<void>.delayed(const Duration(milliseconds: 500));
         _setPath(state.currentPath.penultimate);
         _mergeSolution();

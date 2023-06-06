@@ -18,7 +18,6 @@ enum Sound {
   confirmation,
   puzzleStormEnd,
   puzzleStormGood,
-  puzzleStormBad
 }
 
 typedef SoundMap = IMap<Sound, int>;

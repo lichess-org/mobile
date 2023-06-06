@@ -100,7 +100,7 @@ class StormCtrl extends _$StormCtrl {
       );
     } else {
       _errors += 1;
-      ref.read(soundServiceProvider).play(Sound.puzzleStormBad);
+      ref.read(soundServiceProvider).play(Sound.error);
       HapticFeedback.heavyImpact();
       state.clock.subtractTime(malus);
       if (state.clock.flag() || !_isNextPuzzleAvailable()) {
