@@ -10,17 +10,16 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
-
-import 'puzzle_view_model.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_ctrl.dart';
 
 class PuzzleSessionWidget extends ConsumerStatefulWidget {
   const PuzzleSessionWidget({
     required this.initialPuzzleContext,
-    required this.viewModelProvider,
+    required this.ctrlProvider,
   });
 
   final PuzzleContext initialPuzzleContext;
-  final PuzzleViewModelProvider viewModelProvider;
+  final PuzzleCtrlProvider ctrlProvider;
 
   @override
   ConsumerState<PuzzleSessionWidget> createState() =>
@@ -65,7 +64,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
         widget.initialPuzzleContext.theme,
       ),
     );
-    final puzzleState = ref.watch(widget.viewModelProvider);
+    final puzzleState = ref.watch(widget.ctrlProvider);
     final brightness = ref.watch(currentBrightnessProvider);
     final currentAttempt = session.attempts.firstWhereOrNull(
       (a) => a.id == puzzleState.puzzle.puzzle.id,
@@ -116,7 +115,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
                                 );
 
                                 ref
-                                    .read(widget.viewModelProvider.notifier)
+                                    .read(widget.ctrlProvider.notifier)
                                     .loadPuzzle(nextContext);
                               } finally {
                                 if (mounted) {

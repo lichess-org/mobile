@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/services.dart';
 import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:collection/collection.dart';
@@ -23,11 +24,11 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/utils/debounce.dart';
 
-part 'puzzle_view_model.g.dart';
-part 'puzzle_view_model.freezed.dart';
+part 'puzzle_ctrl.g.dart';
+part 'puzzle_ctrl.freezed.dart';
 
 @riverpod
-class PuzzleViewModel extends _$PuzzleViewModel {
+class PuzzleCtrl extends _$PuzzleCtrl {
   // ignore: avoid-late-keyword
   late Node _gameTree;
   Timer? _firstMoveTimer;
@@ -37,7 +38,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
   FutureResult<PuzzleContext?>? _nextPuzzleFuture;
 
   @override
-  PuzzleViewModelState build(
+  PuzzleCtrlState build(
     PuzzleContext initialContext, {
     PuzzleStreak? initialStreak,
   }) {
@@ -49,7 +50,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     return _loadNewContext(initialContext, initialStreak);
   }
 
-  PuzzleViewModelState _loadNewContext(
+  PuzzleCtrlState _loadNewContext(
     PuzzleContext context,
     PuzzleStreak? streak,
   ) {
@@ -68,7 +69,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
       _nextPuzzleFuture = _fetchNextStreakPuzzle(streak);
     }
 
-    return PuzzleViewModelState(
+    return PuzzleCtrlState(
       puzzle: context.puzzle,
       glicko: context.glicko,
       mode: PuzzleMode.play,
@@ -129,14 +130,15 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     }
   }
 
-  void userNext() {
+  void userNext({bool hapticFeedback = true}) {
     _viewSolutionTimer?.cancel();
-    _goToNextNode();
+    _goToNextNode(replaying: true);
+    if (hapticFeedback) HapticFeedback.lightImpact();
   }
 
   void userPrevious() {
     _viewSolutionTimer?.cancel();
-    _goToPreviousNode();
+    _goToPreviousNode(replaying: true);
   }
 
   void viewSolution() {
@@ -256,13 +258,16 @@ class PuzzleViewModel extends _$PuzzleViewModel {
         : Future.value(Result.value(null));
   }
 
-  void _goToNextNode() {
+  void _goToNextNode({bool replaying = false}) {
     if (state.node.children.isEmpty) return;
-    _setPath(state.currentPath + state.node.children.first.id);
+    _setPath(
+      state.currentPath + state.node.children.first.id,
+      replaying: replaying,
+    );
   }
 
-  void _goToPreviousNode() {
-    _setPath(state.currentPath.penultimate);
+  void _goToPreviousNode({bool replaying = false}) {
+    _setPath(state.currentPath.penultimate, replaying: replaying);
   }
 
   Future<void> _completePuzzle() async {
@@ -341,7 +346,7 @@ class PuzzleViewModel extends _$PuzzleViewModel {
               );
               if (nextContext != null) {
                 await Future<void>.delayed(const Duration(milliseconds: 250));
-                soundService.play(Sound.confirmation);
+                soundService.play(Sound.puzzleStormGood);
                 loadPuzzle(nextContext);
               } else {
                 // no more puzzle
@@ -361,17 +366,26 @@ class PuzzleViewModel extends _$PuzzleViewModel {
     }
   }
 
-  void _setPath(UciPath path) {
+  void _setPath(UciPath path, {bool replaying = false}) {
     final pathChange = state.currentPath != path;
     final newNodeList = IList(_gameTree.nodesOn(path));
     final sanMove = newNodeList.last.sanMove;
-    final isForward = path.size > state.currentPath.size;
-    if (isForward) {
+    if (!replaying) {
       final isCheck = sanMove.san.contains('+');
       if (sanMove.san.contains('x')) {
         ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
       } else {
         ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
+      }
+    } else {
+      // when replaying moves fast we don't want haptic feedback
+      final soundService = ref.read(soundServiceProvider);
+      if (sanMove.san.contains('x')) {
+        soundService.stopCurrent();
+        soundService.play(Sound.capture);
+      } else {
+        soundService.stopCurrent();
+        soundService.play(Sound.move);
       }
     }
     state = state.copyWith(
@@ -469,10 +483,10 @@ enum PuzzleResult { win, lose }
 enum PuzzleFeedback { good, bad }
 
 @freezed
-class PuzzleViewModelState with _$PuzzleViewModelState {
-  const PuzzleViewModelState._();
+class PuzzleCtrlState with _$PuzzleCtrlState {
+  const PuzzleCtrlState._();
 
-  const factory PuzzleViewModelState({
+  const factory PuzzleCtrlState({
     required Puzzle puzzle,
     required PuzzleGlicko? glicko,
     required PuzzleMode mode,

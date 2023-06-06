@@ -38,7 +38,7 @@ dependencies:
   chessground:
     git:
       url: https://github.com/lichess-org/flutter-chessground.git
-      ref: f3799929a2bc79fa27152fd73fd4d95bf79c7fec
+      ref: 27d2e16bcc47aed259904f8cd178c91fb42aee8f
   soundpool: ^2.3.0
   meta: ^1.8.0
   deep_pick: ^1.0.0
@@ -68,6 +68,7 @@ dependencies:
   firebase_core: ^2.11.0
   flutter_displaymode: ^0.6.0
   web_socket_channel: ^2.4.0
+  device_info_plus: ^9.0.2
 
 dev_dependencies:
   build_runner: ^2.3.2
@@ -91,9 +92,14 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/sounds/
-    - assets/board-thumbnails/
     - assets/images/
+    - assets/sounds/futuristic/
+    - assets/sounds/lisp/
+    - assets/sounds/nes/
+    - assets/sounds/piano/
+    - assets/sounds/standard/
+    - assets/sounds/sfx/
+    - assets/board-thumbnails/
 
   fonts:
     - family: LichessIcons

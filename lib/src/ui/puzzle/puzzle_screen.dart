@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_ctrl.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -22,12 +23,12 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/ui/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 
-import 'puzzle_view_model.dart';
 import 'puzzle_feedback_widget.dart';
 import 'puzzle_session_widget.dart';
 
@@ -53,7 +54,7 @@ class PuzzleScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [ToggleSoundButton()],
-        title: Text(puzzleThemeL10n(context, theme).name),
+        title: const Text('Puzzle training'),
       ),
       body: initialPuzzleContext != null
           ? _Body(
@@ -66,7 +67,6 @@ class PuzzleScreen extends StatelessWidget {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(puzzleThemeL10n(context, theme).name),
         trailing: ToggleSoundButton(),
       ),
       child: initialPuzzleContext != null
@@ -130,7 +130,7 @@ class _LoadPuzzle extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
+class _Body extends ConsumerStatefulWidget {
   const _Body({
     required this.initialPuzzleContext,
   });
@@ -138,11 +138,16 @@ class _Body extends ConsumerWidget {
   final PuzzleContext initialPuzzleContext;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
+  @override
+  Widget build(BuildContext context) {
     final pieceSet =
         ref.watch(boardPreferencesProvider.select((p) => p.pieceSet));
-    final viewModelProvider = puzzleViewModelProvider(initialPuzzleContext);
-    final puzzleState = ref.watch(viewModelProvider);
+    final ctrlProvider = puzzleCtrlProvider(widget.initialPuzzleContext);
+    final puzzleState = ref.watch(ctrlProvider);
 
     final currentEvalBest = ref.watch(
       engineEvaluationProvider(puzzleState.evaluationContext)
@@ -182,7 +187,7 @@ class _Body extends ConsumerWidget {
                       : null,
                   onMove: (move, {isPremove}) {
                     ref
-                        .read(viewModelProvider.notifier)
+                        .read(ctrlProvider.notifier)
                         .onUserMove(Move.fromUci(move.uci)!);
                   },
                 ),
@@ -247,8 +252,8 @@ class _Body extends ConsumerWidget {
                         ),
                       ),
                     PuzzleSessionWidget(
-                      initialPuzzleContext: initialPuzzleContext,
-                      viewModelProvider: viewModelProvider,
+                      initialPuzzleContext: widget.initialPuzzleContext,
+                      ctrlProvider: ctrlProvider,
                     ),
                   ],
                 ),
@@ -257,8 +262,8 @@ class _Body extends ConsumerWidget {
           ),
         ),
         _BottomBar(
-          initialPuzzleContext: initialPuzzleContext,
-          viewModelProvider: viewModelProvider,
+          initialPuzzleContext: widget.initialPuzzleContext,
+          ctrlProvider: ctrlProvider,
         ),
       ],
     );
@@ -268,15 +273,21 @@ class _Body extends ConsumerWidget {
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({
     required this.initialPuzzleContext,
-    required this.viewModelProvider,
+    required this.ctrlProvider,
   });
 
   final PuzzleContext initialPuzzleContext;
-  final PuzzleViewModelProvider viewModelProvider;
+  final PuzzleCtrlProvider ctrlProvider;
+
+  static const _repeatTriggerDelays = [
+    Duration(milliseconds: 500),
+    Duration(milliseconds: 250),
+    Duration(milliseconds: 100),
+  ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzleState = ref.watch(viewModelProvider);
+    final puzzleState = ref.watch(ctrlProvider);
     final isDailyPuzzle = puzzleState.puzzle.isDailyPuzzle == true;
 
     return Container(
@@ -294,7 +305,7 @@ class _BottomBar extends ConsumerWidget {
                 puzzleState.mode != PuzzleMode.view)
               _DifficultySelector(
                 initialPuzzleContext: initialPuzzleContext,
-                viewModelProvider: viewModelProvider,
+                ctrlProvider: ctrlProvider,
               ),
             if (puzzleState.mode == PuzzleMode.view)
               BottomBarButton(
@@ -312,7 +323,7 @@ class _BottomBar extends ConsumerWidget {
             if (puzzleState.mode == PuzzleMode.view)
               BottomBarButton(
                 onTap: () {
-                  ref.read(viewModelProvider.notifier).toggleLocalEvaluation();
+                  ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
                 },
                 label: context.l10n.toggleLocalEvaluation,
                 shortLabel: 'Evaluation',
@@ -327,32 +338,40 @@ class _BottomBar extends ConsumerWidget {
                 showAndroidShortLabel: true,
                 onTap: puzzleState.mode == PuzzleMode.view
                     ? null
-                    : () => ref.read(viewModelProvider.notifier).viewSolution(),
+                    : () => ref.read(ctrlProvider.notifier).viewSolution(),
               ),
             if (puzzleState.mode == PuzzleMode.view)
-              BottomBarButton(
-                onTap: puzzleState.canGoBack
-                    ? () => ref.read(viewModelProvider.notifier).userPrevious()
-                    : null,
-                label: 'Previous',
-                shortLabel: 'Previous',
-                icon: CupertinoIcons.chevron_back,
+              RepeatButton(
+                triggerDelays: _repeatTriggerDelays,
+                onLongPress:
+                    puzzleState.canGoBack ? () => _moveBackward(ref) : null,
+                child: BottomBarButton(
+                  onTap:
+                      puzzleState.canGoBack ? () => _moveBackward(ref) : null,
+                  label: 'Previous',
+                  shortLabel: 'Previous',
+                  icon: CupertinoIcons.chevron_back,
+                ),
               ),
             if (puzzleState.mode == PuzzleMode.view)
-              BottomBarButton(
-                onTap: puzzleState.canGoNext
-                    ? () => ref.read(viewModelProvider.notifier).userNext()
+              RepeatButton(
+                triggerDelays: _repeatTriggerDelays,
+                onLongPress: puzzleState.canGoNext
+                    ? () => _moveForward(ref, hapticFeedback: false)
                     : null,
-                label: context.l10n.next,
-                shortLabel: context.l10n.next,
-                icon: CupertinoIcons.chevron_forward,
+                child: BottomBarButton(
+                  onTap: puzzleState.canGoNext ? () => _moveForward(ref) : null,
+                  label: context.l10n.next,
+                  shortLabel: context.l10n.next,
+                  icon: CupertinoIcons.chevron_forward,
+                ),
               ),
             if (puzzleState.mode == PuzzleMode.view)
               BottomBarButton(
                 onTap: puzzleState.mode == PuzzleMode.view &&
                         puzzleState.nextContext != null
                     ? () => ref
-                        .read(viewModelProvider.notifier)
+                        .read(ctrlProvider.notifier)
                         .loadPuzzle(puzzleState.nextContext!)
                     : null,
                 highlighted: true,
@@ -365,16 +384,24 @@ class _BottomBar extends ConsumerWidget {
       ),
     );
   }
+
+  void _moveForward(WidgetRef ref, {bool hapticFeedback = true}) {
+    ref.read(ctrlProvider.notifier).userNext(hapticFeedback: hapticFeedback);
+  }
+
+  void _moveBackward(WidgetRef ref) {
+    ref.read(ctrlProvider.notifier).userPrevious();
+  }
 }
 
 class _DifficultySelector extends ConsumerWidget {
   const _DifficultySelector({
     required this.initialPuzzleContext,
-    required this.viewModelProvider,
+    required this.ctrlProvider,
   });
 
   final PuzzleContext initialPuzzleContext;
-  final PuzzleViewModelProvider viewModelProvider;
+  final PuzzleCtrlProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -382,7 +409,7 @@ class _DifficultySelector extends ConsumerWidget {
       puzzlePreferencesProvider(initialPuzzleContext.userId)
           .select((state) => state.difficulty),
     );
-    final state = ref.watch(viewModelProvider);
+    final state = ref.watch(ctrlProvider);
     final connectivity = ref.watch(connectivityChangesProvider);
     return connectivity.when(
       data: (data) => StatefulBuilder(
@@ -415,11 +442,11 @@ class _DifficultySelector extends ConsumerWidget {
                           return;
                         }
                         final nextContext = await ref
-                            .read(viewModelProvider.notifier)
+                            .read(ctrlProvider.notifier)
                             .changeDifficulty(selectedDifficulty);
                         if (context.mounted && nextContext != null) {
                           ref
-                              .read(viewModelProvider.notifier)
+                              .read(ctrlProvider.notifier)
                               .loadPuzzle(nextContext);
                         }
                       },

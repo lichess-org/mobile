@@ -263,6 +263,7 @@ class _DailyPuzzle extends ConsumerWidget {
             pushPlatformRoute(
               context,
               rootNavigator: true,
+              title: context.l10n.puzzleDailyPuzzle,
               builder: (context) => PuzzleScreen(
                 theme: PuzzleTheme.mix,
                 initialPuzzleContext: PuzzleContext(

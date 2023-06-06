@@ -13,6 +13,7 @@ class BoardPreview extends ConsumerStatefulWidget {
     required this.orientation,
     required this.fen,
     this.header,
+    this.footer,
     this.margin,
     this.lastMove,
     this.errorMessage,
@@ -33,6 +34,9 @@ class BoardPreview extends ConsumerStatefulWidget {
 
   /// Show a header above the board. Typically a [Text] widget.
   final Widget? header;
+
+  /// Show a footer above the board. Typically a [Text] widget.
+  final Widget? footer;
 
   final EdgeInsetsGeometry? margin;
 
@@ -158,12 +162,13 @@ class _BoardPreviewState extends ConsumerState<BoardPreview> {
 
     return Padding(
       padding: widget.margin ?? Styles.bodySectionPadding,
-      child: headerWidget != null
+      child: headerWidget != null || widget.footer != null
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                headerWidget,
+                if (headerWidget != null) headerWidget,
                 maybeTappableBoard,
+                if (widget.footer != null) widget.footer!,
               ],
             )
           : maybeTappableBoard,

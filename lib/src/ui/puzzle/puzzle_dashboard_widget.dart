@@ -24,6 +24,8 @@ class PuzzleDashboardWidget extends ConsumerWidget {
 
     return puzzleDashboard.when(
       data: (data) {
+        final chartData =
+            data.themes.take(9).sortedBy((e) => e.theme.name).toList();
         return ListSection(
           header: Text(context.l10n.puzzlePuzzleDashboard),
           // hack to make the divider take full length or row
@@ -48,19 +50,18 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                     '${((data.global.firstWins / data.global.nb) * 100).round()}%',
               ),
             ]),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AspectRatio(
-                  aspectRatio: 1.2,
-                  child: PuzzleChart(
-                    data.themes.take(9).sortedBy((e) => e.theme.name).toList(),
+            if (chartData.length >= 3)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AspectRatio(
+                    aspectRatio: 1.2,
+                    child: PuzzleChart(chartData),
                   ),
-                ),
-                const SizedBox(height: 30),
-              ],
-            )
+                  const SizedBox(height: 30),
+                ],
+              )
           ],
         );
       },

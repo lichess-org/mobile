@@ -5,7 +5,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
@@ -174,73 +173,61 @@ class _BottomBar extends ConsumerWidget {
     final canGoForward = ref.watch(canGoForwardProvider(gameData.id));
     final canGoBackward = ref.watch(canGoBackwardProvider(gameData.id));
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        BottomBarIconButton(
-          semanticsLabel: context.l10n.menu,
-          onPressed: () {
-            _showGameMenu(context, ref);
-          },
-          icon: const Icon(Icons.menu),
-        ),
-        Row(
-          children: [
-            BottomBarIconButton(
-              key: const ValueKey('cursor-first'),
-              semanticsLabel: 'First position',
-              onPressed: canGoBackward
-                  ? () {
-                      ref
-                          .read(gameCursorProvider(gameData.id).notifier)
-                          .cursorAt(0);
-                    }
-                  : null,
-              icon: const Icon(LichessIcons.fast_backward, size: 20),
-            ),
-            BottomBarIconButton(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          BottomBarIconButton(
+            semanticsLabel: context.l10n.menu,
+            onPressed: () {
+              _showGameMenu(context, ref);
+            },
+            icon: const Icon(Icons.menu),
+          ),
+          const SizedBox(
+            width: 44.0,
+          ),
+          const SizedBox(
+            width: 44.0,
+          ),
+          RepeatButton(
+            onLongPress: canGoBackward ? () => _cursorBackward(ref) : null,
+            child: BottomBarIconButton(
               key: const ValueKey('cursor-back'),
               // TODO add translation
               semanticsLabel: 'Backward',
-              onPressed: canGoBackward
-                  ? () {
-                      ref
-                          .read(gameCursorProvider(gameData.id).notifier)
-                          .cursorBackward();
-                    }
-                  : null,
-              icon: const Icon(LichessIcons.step_backward, size: 20),
+              showTooltip: false,
+              onPressed: canGoBackward ? () => _cursorBackward(ref) : null,
+              icon: const Icon(CupertinoIcons.chevron_back),
             ),
-            BottomBarIconButton(
+          ),
+          RepeatButton(
+            onLongPress: canGoForward
+                ? () => _cursorForward(ref, hapticFeedback: false)
+                : null,
+            child: BottomBarIconButton(
               key: const ValueKey('cursor-forward'),
               // TODO add translation
               semanticsLabel: 'Forward',
-              onPressed: canGoForward
-                  ? () {
-                      ref
-                          .read(gameCursorProvider(gameData.id).notifier)
-                          .cursorForward();
-                    }
-                  : null,
-              icon: const Icon(LichessIcons.step_forward, size: 20),
+              showTooltip: false,
+              onPressed: canGoForward ? () => _cursorForward(ref) : null,
+              icon: const Icon(CupertinoIcons.chevron_forward),
             ),
-            BottomBarIconButton(
-              key: const ValueKey('cursor-last'),
-              // TODO add translation
-              semanticsLabel: 'Last position',
-              onPressed: canGoForward
-                  ? () {
-                      ref
-                          .read(gameCursorProvider(gameData.id).notifier)
-                          .cursorLast();
-                    }
-                  : null,
-              icon: const Icon(LichessIcons.fast_forward, size: 20),
-            ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
+  }
+
+  void _cursorForward(WidgetRef ref, {bool hapticFeedback = true}) {
+    ref.read(gameCursorProvider(gameData.id).notifier).cursorForward(
+          hapticFeedback: hapticFeedback,
+        );
+  }
+
+  void _cursorBackward(WidgetRef ref) {
+    ref.read(gameCursorProvider(gameData.id).notifier).cursorBackward();
   }
 
   Future<void> _showGameMenu(BuildContext context, WidgetRef ref) {

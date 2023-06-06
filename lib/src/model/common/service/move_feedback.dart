@@ -19,7 +19,7 @@ class MoveFeedbackService {
   final MoveFeedbackServiceRef _ref;
 
   void moveFeedback({bool check = false}) {
-    _soundService.playMove();
+    _soundService.play(Sound.move);
 
     if (_ref.read(boardPreferencesProvider).hapticFeedback) {
       if (check) {
@@ -31,7 +31,7 @@ class MoveFeedbackService {
   }
 
   void captureFeedback({bool check = false}) {
-    _soundService.playCapture();
+    _soundService.play(Sound.capture);
 
     if (_ref.read(boardPreferencesProvider).hapticFeedback) {
       if (check) {

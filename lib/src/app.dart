@@ -63,11 +63,16 @@ class _AppState extends ConsumerState<App> {
         (state) => state.boardTheme,
       ),
     );
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: kSupportedLocales,
       onGenerateTitle: (BuildContext context) => 'lichess.org',
       theme: ThemeData(
+        navigationBarTheme: NavigationBarTheme.of(context).copyWith(
+          height: screenHeight < kSmallHeightScreenThreshold ? 60 : null,
+        ),
         textTheme: defaultTargetPlatform == TargetPlatform.iOS
             ? brightness == Brightness.light
                 ? Typography.blackCupertino

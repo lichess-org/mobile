@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -64,6 +65,22 @@ class FullScreenRetryRequest extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+void showPlatformSnackbar(BuildContext context, String message) {
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.android:
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    case TargetPlatform.iOS:
+      showCupertinoErrorSnackBar(
+        context: context,
+        message: message,
+      );
+    default:
+      assert(false, 'Unexpected platform $defaultTargetPlatform');
   }
 }
 

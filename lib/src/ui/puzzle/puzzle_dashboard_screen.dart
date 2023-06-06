@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
@@ -18,9 +19,10 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 
+import 'storm_screen.dart';
 import 'puzzle_screen.dart';
 import 'puzzle_themes_screen.dart';
-import 'puzzle_streak_screen.dart';
+import 'streak_screen.dart';
 
 final daysProvider = StateProvider<Days>((ref) => Days.month);
 
@@ -97,6 +99,10 @@ class _Body extends ConsumerWidget {
     final nextPuzzle = ref.watch(nextPuzzleProvider(theme));
     final connectivity = ref.watch(connectivityChangesProvider);
 
+    final expansionTileColor = defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoColors.secondaryLabel.resolveFrom(context)
+        : null;
+
     final content = [
       Padding(
         padding: Styles.bodySectionPadding,
@@ -113,6 +119,7 @@ class _Body extends ConsumerWidget {
                 onTap: () {
                   pushPlatformRoute(
                     context,
+                    title: 'Puzzle training',
                     rootNavigator: true,
                     builder: (context) => PuzzleScreen(
                       theme: theme,
@@ -140,24 +147,11 @@ class _Body extends ConsumerWidget {
       Padding(
         padding: Styles.bodySectionBottomPadding,
         child: CardButton(
-          icon: const Icon(LichessIcons.target, size: 44),
-          title: Text(
-            context.l10n.puzzlePuzzleThemes,
-            style: Styles.sectionTitle,
+          icon: const Icon(
+            LichessIcons.streak,
+            size: 44,
+            color: LichessColors.brag,
           ),
-          subtitle: const Text('Play puzzles from a specific theme.'),
-          onTap: () {
-            pushPlatformRoute(
-              context,
-              builder: (context) => const PuzzleThemesScreen(),
-            );
-          },
-        ),
-      ),
-      Padding(
-        padding: Styles.bodySectionBottomPadding,
-        child: CardButton(
-          icon: const Icon(LichessIcons.streak, size: 44),
           title: Text(
             'Puzzle Streak',
             style: Styles.sectionTitle,
@@ -174,13 +168,76 @@ class _Body extends ConsumerWidget {
                     pushPlatformRoute(
                       context,
                       rootNavigator: true,
-                      builder: (context) => const PuzzleStreakScreen(),
+                      builder: (context) => const StreakScreen(),
                     );
                   }
                 : null,
             loading: () => null,
             error: (_, __) => null,
           ),
+        ),
+      ),
+      Padding(
+        padding: Styles.horizontalBodyPadding,
+        child: CardButton(
+          icon: const Icon(
+            LichessIcons.storm,
+            size: 44,
+            color: LichessColors.brag,
+          ),
+          title: Text(
+            'Puzzle Storm',
+            style: Styles.sectionTitle,
+          ),
+          subtitle:
+              const Text('Solve as many puzzles as possible in 3 minutes.'),
+          onTap: connectivity.when(
+            data: (data) => data.isOnline
+                ? () {
+                    pushPlatformRoute(
+                      context,
+                      rootNavigator: true,
+                      builder: (context) => const StormScreen(),
+                    );
+                  }
+                : null,
+            loading: () => null,
+            error: (_, __) => null,
+          ),
+        ),
+      ),
+      Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          title: Text(
+            context.l10n.more,
+          ),
+          iconColor: expansionTileColor,
+          collapsedIconColor: expansionTileColor,
+          textColor: expansionTileColor,
+          collapsedTextColor: expansionTileColor,
+          controlAffinity: ListTileControlAffinity.leading,
+          children: [
+            Padding(
+              padding: Styles.bodySectionBottomPadding,
+              child: CardButton(
+                icon: const Icon(LichessIcons.target, size: 44),
+                title: Text(
+                  context.l10n.puzzlePuzzleThemes,
+                  style: Styles.sectionTitle,
+                ),
+                subtitle: const Text(
+                  'Choose puzzles by theme.',
+                ),
+                onTap: () {
+                  pushPlatformRoute(
+                    context,
+                    builder: (context) => const PuzzleThemesScreen(),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
       if (session != null) PuzzleDashboardWidget(),
@@ -209,12 +266,18 @@ class _PuzzleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CardButton(
-      icon: const Icon(LichessIcons.target, size: 44),
+      icon: const Icon(
+        LichessIcons.target,
+        size: 44,
+        color: LichessColors.secondary,
+      ),
       title: Text(
-        puzzleThemeL10n(context, theme).name,
+        'Puzzle training',
         style: Styles.sectionTitle,
       ),
-      subtitle: Text(subtitle ?? puzzleThemeL10n(context, theme).description),
+      subtitle: Text(
+        subtitle ?? 'Personalized tactical training with no time limit.',
+      ),
       onTap: onTap,
     );
   }

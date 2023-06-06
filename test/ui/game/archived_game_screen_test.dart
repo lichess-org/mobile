@@ -133,6 +133,16 @@ void main() {
         isTrue,
       );
 
+      // cannot go forward
+      expect(
+        tester
+            .widget<BottomBarIconButton>(
+              find.byKey(const Key('cursor-forward')),
+            )
+            .onPressed,
+        isNull,
+      );
+
       for (var i = 0; i < movesAfterE4.length; i++) {
         // go back in history
         await tester.tap(find.byKey(const Key('cursor-back')));
@@ -160,29 +170,6 @@ void main() {
             .widget<BottomBarIconButton>(find.byKey(const Key('cursor-back')))
             .onPressed,
         isNull,
-      );
-
-      // go to last
-      await tester.tap(find.byKey(const Key('cursor-last')));
-      // wait for animation to finish
-      await tester.pumpAndSettle();
-
-      // cannot go forward anymore
-      expect(
-        tester
-            .widget<BottomBarIconButton>(
-              find.byKey(const Key('cursor-forward')),
-            )
-            .onPressed,
-        isNull,
-      );
-      expect(
-        tester
-            .widget<InlineMoveItem>(
-              find.widgetWithText(InlineMoveItem, 'Qe1#'),
-            )
-            .current,
-        isTrue,
       );
     });
   });

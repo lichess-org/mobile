@@ -168,6 +168,7 @@ class _SettingsButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return defaultTargetPlatform == TargetPlatform.iOS
         ? CupertinoIconButton(
+            padding: EdgeInsets.zero,
             semanticsLabel: context.l10n.settingsSettings,
             onPressed: () => Navigator.of(context).push<void>(
               CupertinoPageRoute(
