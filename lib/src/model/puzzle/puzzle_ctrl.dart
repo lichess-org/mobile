@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/services.dart';
 import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:collection/collection.dart';
@@ -129,14 +130,15 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     }
   }
 
-  void userNext() {
+  void userNext({bool hapticFeedback = true}) {
     _viewSolutionTimer?.cancel();
-    _goToNextNode();
+    _goToNextNode(replaying: true);
+    if (hapticFeedback) HapticFeedback.lightImpact();
   }
 
   void userPrevious() {
     _viewSolutionTimer?.cancel();
-    _goToPreviousNode();
+    _goToPreviousNode(replaying: true);
   }
 
   void viewSolution() {
@@ -256,13 +258,16 @@ class PuzzleCtrl extends _$PuzzleCtrl {
         : Future.value(Result.value(null));
   }
 
-  void _goToNextNode() {
+  void _goToNextNode({bool replaying = false}) {
     if (state.node.children.isEmpty) return;
-    _setPath(state.currentPath + state.node.children.first.id);
+    _setPath(
+      state.currentPath + state.node.children.first.id,
+      replaying: replaying,
+    );
   }
 
-  void _goToPreviousNode() {
-    _setPath(state.currentPath.penultimate);
+  void _goToPreviousNode({bool replaying = false}) {
+    _setPath(state.currentPath.penultimate, replaying: replaying);
   }
 
   Future<void> _completePuzzle() async {
@@ -361,17 +366,26 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     }
   }
 
-  void _setPath(UciPath path) {
+  void _setPath(UciPath path, {bool replaying = false}) {
     final pathChange = state.currentPath != path;
     final newNodeList = IList(_gameTree.nodesOn(path));
     final sanMove = newNodeList.last.sanMove;
-    final isForward = path.size > state.currentPath.size;
-    if (isForward) {
+    if (!replaying) {
       final isCheck = sanMove.san.contains('+');
       if (sanMove.san.contains('x')) {
         ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
       } else {
         ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
+      }
+    } else {
+      // when replaying moves fast we don't want haptic feedback
+      final soundService = ref.read(soundServiceProvider);
+      if (sanMove.san.contains('x')) {
+        soundService.stopCurrent();
+        soundService.play(Sound.capture);
+      } else {
+        soundService.stopCurrent();
+        soundService.play(Sound.move);
       }
     }
     state = state.copyWith(

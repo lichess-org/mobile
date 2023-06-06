@@ -279,6 +279,12 @@ class _BottomBar extends ConsumerWidget {
   final PuzzleContext initialPuzzleContext;
   final PuzzleCtrlProvider ctrlProvider;
 
+  static const _repeatTriggerDelays = [
+    Duration(milliseconds: 500),
+    Duration(milliseconds: 250),
+    Duration(milliseconds: 100),
+  ];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzleState = ref.watch(ctrlProvider);
@@ -335,22 +341,30 @@ class _BottomBar extends ConsumerWidget {
                     : () => ref.read(ctrlProvider.notifier).viewSolution(),
               ),
             if (puzzleState.mode == PuzzleMode.view)
-              BottomBarButton(
-                onTap: puzzleState.canGoBack
-                    ? () => ref.read(ctrlProvider.notifier).userPrevious()
-                    : null,
-                label: 'Previous',
-                shortLabel: 'Previous',
-                icon: CupertinoIcons.chevron_back,
+              RepeatButton(
+                triggerDelays: _repeatTriggerDelays,
+                onLongPress:
+                    puzzleState.canGoBack ? () => _moveBackward(ref) : null,
+                child: BottomBarButton(
+                  onTap:
+                      puzzleState.canGoBack ? () => _moveBackward(ref) : null,
+                  label: 'Previous',
+                  shortLabel: 'Previous',
+                  icon: CupertinoIcons.chevron_back,
+                ),
               ),
             if (puzzleState.mode == PuzzleMode.view)
-              BottomBarButton(
-                onTap: puzzleState.canGoNext
-                    ? () => ref.read(ctrlProvider.notifier).userNext()
+              RepeatButton(
+                triggerDelays: _repeatTriggerDelays,
+                onLongPress: puzzleState.canGoNext
+                    ? () => _moveForward(ref, hapticFeedback: false)
                     : null,
-                label: context.l10n.next,
-                shortLabel: context.l10n.next,
-                icon: CupertinoIcons.chevron_forward,
+                child: BottomBarButton(
+                  onTap: puzzleState.canGoNext ? () => _moveForward(ref) : null,
+                  label: context.l10n.next,
+                  shortLabel: context.l10n.next,
+                  icon: CupertinoIcons.chevron_forward,
+                ),
               ),
             if (puzzleState.mode == PuzzleMode.view)
               BottomBarButton(
@@ -369,6 +383,14 @@ class _BottomBar extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  void _moveForward(WidgetRef ref, {bool hapticFeedback = true}) {
+    ref.read(ctrlProvider.notifier).userNext(hapticFeedback: hapticFeedback);
+  }
+
+  void _moveBackward(WidgetRef ref) {
+    ref.read(ctrlProvider.notifier).userPrevious();
   }
 }
 

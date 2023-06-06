@@ -193,19 +193,18 @@ class _BottomBar extends ConsumerWidget {
             width: 44.0,
           ),
           RepeatButton(
-            longPressCallback:
-                canGoBackward ? () => _cursorBackward(ref) : null,
+            onLongPress: canGoBackward ? () => _cursorBackward(ref) : null,
             child: BottomBarIconButton(
               key: const ValueKey('cursor-back'),
               // TODO add translation
               semanticsLabel: 'Backward',
               showTooltip: false,
               onPressed: canGoBackward ? () => _cursorBackward(ref) : null,
-              icon: const Icon(CupertinoIcons.back),
+              icon: const Icon(CupertinoIcons.chevron_back),
             ),
           ),
           RepeatButton(
-            longPressCallback: canGoForward
+            onLongPress: canGoForward
                 ? () => _cursorForward(ref, hapticFeedback: false)
                 : null,
             child: BottomBarIconButton(
@@ -214,7 +213,7 @@ class _BottomBar extends ConsumerWidget {
               semanticsLabel: 'Forward',
               showTooltip: false,
               onPressed: canGoForward ? () => _cursorForward(ref) : null,
-              icon: const Icon(CupertinoIcons.forward),
+              icon: const Icon(CupertinoIcons.chevron_forward),
             ),
           ),
         ],

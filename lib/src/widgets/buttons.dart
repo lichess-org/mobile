@@ -430,7 +430,7 @@ class _CardButtonState extends State<CardButton> {
 /// `onTap` callback should be handled by the child widget.
 class RepeatButton extends StatefulWidget {
   const RepeatButton({
-    required this.longPressCallback,
+    required this.onLongPress,
     required this.child,
     this.triggerDelays = const [
       Duration(milliseconds: 600),
@@ -447,7 +447,7 @@ class RepeatButton extends StatefulWidget {
   final Widget child;
 
   /// function called on long press
-  final VoidCallback? longPressCallback;
+  final VoidCallback? onLongPress;
 
   /// Delays between callbacks at the beginning. Leave default to get an acceleration effect.
   /// The maximum length of the list is 3
@@ -473,16 +473,16 @@ class _RepeatButtonState extends State<RepeatButton> {
   Future<void> _onPress() async {
     _isPressed = true;
 
-    widget.longPressCallback?.call();
+    widget.onLongPress?.call();
     for (final time in widget.triggerDelays) {
       await Future.delayed(time, () {});
       if (!_isPressed) return;
-      widget.longPressCallback?.call();
+      widget.onLongPress?.call();
     }
 
     _timer = Timer.periodic(widget.holdDelay, (_) {
       if (_isPressed) {
-        widget.longPressCallback?.call();
+        widget.onLongPress?.call();
       }
     });
   }
@@ -499,7 +499,6 @@ class _RepeatButtonState extends State<RepeatButton> {
       onLongPress: _onPress,
       onLongPressCancel: _onPressEnd,
       onLongPressUp: _onPressEnd,
-      onTap: () => widget.longPressCallback?.call(),
       child: widget.child,
     );
   }
