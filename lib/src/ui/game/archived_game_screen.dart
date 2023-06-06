@@ -198,31 +198,29 @@ class _BottomBar extends ConsumerWidget {
                   : null,
               icon: const Icon(LichessIcons.fast_backward, size: 20),
             ),
-            BottomBarIconButton(
-              key: const ValueKey('cursor-back'),
-              // TODO add translation
-              semanticsLabel: 'Backward',
-              onPressed: canGoBackward
-                  ? () {
-                      ref
-                          .read(gameCursorProvider(gameData.id).notifier)
-                          .cursorBackward();
-                    }
-                  : null,
-              icon: const Icon(LichessIcons.step_backward, size: 20),
+            RepeatButton(
+              longPressCallback:
+                  canGoBackward ? () => _cursorBackward(ref) : null,
+              child: BottomBarIconButton(
+                key: const ValueKey('cursor-back'),
+                // TODO add translation
+                semanticsLabel: 'Backward',
+                showTooltip: false,
+                onPressed: canGoBackward ? () => _cursorBackward(ref) : null,
+                icon: const Icon(LichessIcons.step_backward, size: 20),
+              ),
             ),
-            BottomBarIconButton(
-              key: const ValueKey('cursor-forward'),
-              // TODO add translation
-              semanticsLabel: 'Forward',
-              onPressed: canGoForward
-                  ? () {
-                      ref
-                          .read(gameCursorProvider(gameData.id).notifier)
-                          .cursorForward();
-                    }
-                  : null,
-              icon: const Icon(LichessIcons.step_forward, size: 20),
+            RepeatButton(
+              longPressCallback:
+                  canGoForward ? () => _cursorForward(ref) : null,
+              child: BottomBarIconButton(
+                key: const ValueKey('cursor-forward'),
+                // TODO add translation
+                semanticsLabel: 'Forward',
+                showTooltip: false,
+                onPressed: canGoForward ? () => _cursorForward(ref) : null,
+                icon: const Icon(LichessIcons.step_forward, size: 20),
+              ),
             ),
             BottomBarIconButton(
               key: const ValueKey('cursor-last'),
@@ -241,6 +239,14 @@ class _BottomBar extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  void _cursorForward(WidgetRef ref) {
+    ref.read(gameCursorProvider(gameData.id).notifier).cursorForward();
+  }
+
+  void _cursorBackward(WidgetRef ref) {
+    ref.read(gameCursorProvider(gameData.id).notifier).cursorBackward();
   }
 
   Future<void> _showGameMenu(BuildContext context, WidgetRef ref) {

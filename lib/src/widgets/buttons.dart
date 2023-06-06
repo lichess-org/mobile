@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -184,12 +186,14 @@ class BottomBarIconButton extends StatelessWidget {
     required this.icon,
     required this.onPressed,
     required this.semanticsLabel,
+    this.showTooltip = true,
     super.key,
   });
 
   final Widget icon;
   final VoidCallback? onPressed;
   final String semanticsLabel;
+  final bool showTooltip;
 
   @override
   Widget build(BuildContext context) {
@@ -210,7 +214,7 @@ class BottomBarIconButton extends StatelessWidget {
         return Theme(
           data: Theme.of(context),
           child: IconButton(
-            tooltip: semanticsLabel,
+            tooltip: showTooltip ? semanticsLabel : null,
             onPressed: onPressed,
             icon: icon,
           ),
@@ -399,5 +403,87 @@ class _CardButtonState extends State<CardButton> {
         assert(false, 'Unexpected platform $defaultTargetPlatform');
         return const SizedBox.shrink();
     }
+  }
+}
+
+/// Button to repeatedly call a funtion, triggered after a long press
+///
+/// This widget is just a wrapper, the visuals are delegated to the child widget
+///
+/// ### Note
+/// Widgets with `tooltip` don't handle onLongPress
+/// If child also has `onTap` then the child's callback will have priority
+class RepeatButton extends StatefulWidget {
+  const RepeatButton({
+    required this.longPressCallback,
+    required this.child,
+    this.triggerDelays = const [
+      Duration(milliseconds: 600),
+      Duration(milliseconds: 400),
+      Duration(milliseconds: 250)
+    ],
+    this.holdDelay = const Duration(milliseconds: 200),
+  }) : assert(
+          triggerDelays.length <= 3,
+        );
+
+  final Widget child;
+
+  /// function called on long press
+  final VoidCallback? longPressCallback;
+
+  /// Delays between callbacks at the beginning. Leave default to get an acceleration effect.
+  /// The maximum length of the list is 3
+  final List<Duration> triggerDelays;
+
+  /// Delay between callbacks
+  final Duration holdDelay;
+
+  @override
+  _RepeatButtonState createState() => _RepeatButtonState();
+}
+
+class _RepeatButtonState extends State<RepeatButton> {
+  bool _isPressed = false;
+  Timer? _timer;
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _onPress() async {
+    _isPressed = true;
+
+    widget.longPressCallback?.call();
+    for (final time in widget.triggerDelays) {
+      await Future.delayed(time, () {});
+      if (!_isPressed) return;
+      widget.longPressCallback?.call();
+    }
+
+    _timer = Timer.periodic(widget.holdDelay, (_) {
+      if (_isPressed) {
+        widget.longPressCallback?.call();
+      }
+    });
+  }
+
+  void _onPressEnd() {
+    _isPressed = false;
+    _timer?.cancel();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onLongPress: _onPress,
+      onLongPressCancel: _onPressEnd,
+      onLongPressUp: _onPressEnd,
+      onTap: () => widget.longPressCallback?.call(),
+      child: widget.child,
+    );
   }
 }
