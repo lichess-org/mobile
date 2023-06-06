@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:path/path.dart' as p;
@@ -27,10 +28,21 @@ Future<AppDependencies> appDependencies(
   final sessionStorage = ref.watch(sessionStorageProvider);
   final pInfo = await PackageInfo.fromPlatform();
   final prefs = await SharedPreferences.getInstance();
-  final storedSession = await sessionStorage.read();
   final soundTheme = GeneralPreferences.fetchFromStorage(prefs).soundTheme;
   final soundPool = await ref.watch(soundPoolProvider(soundTheme).future);
   final client = ref.read(httpClientProvider);
+
+  // Clear secure storage on first run because it is not deleted on app uninstall
+  if (prefs.getBool('first_run') ?? true) {
+    const storage = FlutterSecureStorage();
+
+    await storage.deleteAll();
+
+    await prefs.setBool('first_run', false);
+  }
+
+  final storedSession = await sessionStorage.read();
+
   if (storedSession != null) {
     try {
       final response = await client.get(
@@ -39,7 +51,7 @@ Future<AppDependencies> appDependencies(
           'Authorization': 'Bearer ${storedSession.token}',
           'user-agent': AuthClient.userAgent(pInfo, storedSession.user),
         },
-      );
+      ).timeout(const Duration(seconds: 3));
       if (response.statusCode == 401) {
         await sessionStorage.delete();
       }
