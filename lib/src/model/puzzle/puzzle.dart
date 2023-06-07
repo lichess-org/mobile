@@ -185,20 +185,17 @@ class PuzzleDashboardData with _$PuzzleDashboardData {
 }
 
 @freezed
-class HistoryPuzzle with _$HistoryPuzzle {
-  const HistoryPuzzle._();
-  const factory HistoryPuzzle({
+class PuzzleHistoryEntry with _$PuzzleHistoryEntry {
+  const PuzzleHistoryEntry._();
+  const factory PuzzleHistoryEntry({
     required bool win,
     required DateTime date,
     required PuzzleId id,
     required int rating,
-    required int plays,
-    required IList<UCIMove> solution,
-    required ISet<String> themes,
     required String fen,
     required Move lastMove,
-  }) = _HistoryPuzzle;
+  }) = _PuzzleHistoryEntry;
 
-  (String, Side, Move) preview() =>
+  (String, Side, Move) get preview =>
       (fen, Chess.fromSetup(Setup.parseFen(fen)).turn, lastMove);
 }

@@ -1,5 +1,5 @@
 import 'dart:math' show max;
-import 'package:lichess_mobile/src/model/puzzle/puzzle_history_storage.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:logging/logging.dart';
 import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -22,14 +22,14 @@ const kPuzzleLocalQueueLength = 50;
 
 @Riverpod(keepAlive: true)
 PuzzleService puzzleService(PuzzleServiceRef ref, {required int queueLength}) {
-  final storage = ref.watch(puzzleBatchStorageProvider);
+  final batchStorage = ref.watch(puzzleBatchStorageProvider);
   final repository = ref.watch(puzzleRepositoryProvider);
-  final history = ref.watch(puzzleHistoryStorageProvider);
+  final puzzleStorage = ref.watch(puzzleStorageProvider);
   return PuzzleService(
     ref,
     Logger('PuzzleService'),
-    storage: storage,
-    historyStorage: history,
+    batchStorage: batchStorage,
+    puzzleStorage: puzzleStorage,
     repository: repository,
     queueLength: queueLength,
   );
@@ -59,16 +59,16 @@ class PuzzleService {
   const PuzzleService(
     this._ref,
     this._log, {
-    required this.storage,
-    required this.historyStorage,
+    required this.batchStorage,
+    required this.puzzleStorage,
     required this.repository,
     required this.queueLength,
   });
 
   final PuzzleServiceRef _ref;
   final int queueLength;
-  final PuzzleBatchStorage storage;
-  final PuzzleHistoryStorage historyStorage;
+  final PuzzleBatchStorage batchStorage;
+  final PuzzleStorage puzzleStorage;
   final PuzzleRepository repository;
   final Logger _log;
 
@@ -105,13 +105,13 @@ class PuzzleService {
     required Puzzle puzzle,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
-    historyStorage.save(puzzle: puzzle);
-    final data = await storage.fetch(
+    puzzleStorage.save(puzzle: puzzle);
+    final data = await batchStorage.fetch(
       userId: userId,
       angle: angle,
     );
     if (data != null) {
-      await storage.save(
+      await batchStorage.save(
         userId: userId,
         angle: angle,
         data: PuzzleBatch(
@@ -130,7 +130,7 @@ class PuzzleService {
     required UserId? userId,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
-    await storage.delete(userId: userId, angle: angle);
+    await batchStorage.delete(userId: userId, angle: angle);
     return nextPuzzle(userId: userId, angle: angle);
   }
 
@@ -147,7 +147,7 @@ class PuzzleService {
     UserId? userId,
     PuzzleTheme angle,
   ) async {
-    final data = await storage.fetch(
+    final data = await batchStorage.fetch(
       userId: userId,
       angle: angle,
     );
@@ -196,7 +196,7 @@ class PuzzleService {
         .flatMap((tuple) async {
       final (newBatch, glicko, rounds, shouldSave) = tuple;
       if (newBatch != null && shouldSave) {
-        await storage.save(
+        await batchStorage.save(
           userId: userId,
           angle: angle,
           data: newBatch,

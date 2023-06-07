@@ -40,7 +40,7 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
         await db.execute('''
           CREATE TABLE puzzle(
           puzzleId TEXT NOT NULL,
-          lastModified DATE NOT NULL,
+          lastModified TEXT NOT NULL,
           data TEXT NOT NULL,
           PRIMARY KEY (puzzleId)
         )

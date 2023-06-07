@@ -1,8 +1,7 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_history_storage.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
@@ -16,7 +15,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 
 part 'puzzle_providers.g.dart';
-part 'puzzle_providers.freezed.dart';
 
 @riverpod
 Future<PuzzleContext?> nextPuzzle(
@@ -47,8 +45,8 @@ Future<PuzzleStormResponse> storm(StormRef ref) {
 
 @Riverpod(keepAlive: true)
 Future<Puzzle> puzzle(PuzzleRef ref, PuzzleId id) async {
-  final historyRepo = ref.watch(puzzleHistoryStorageProvider);
-  final puzzle = await historyRepo.fetchPuzzle(puzzleId: id);
+  final historyRepo = ref.watch(puzzleStorageProvider);
+  final puzzle = await historyRepo.fetch(puzzleId: id);
   if (puzzle != null) return puzzle;
   final repo = ref.watch(puzzleRepositoryProvider);
   return Result.release(repo.fetch(id));
@@ -82,72 +80,20 @@ Future<PuzzleDashboard> puzzleDashboard(
 }
 
 @riverpod
-class PuzzleHistory extends _$PuzzleHistory {
-  final List<HistoryPuzzle> _list = [];
-  StreamSubscription<HistoryPuzzle>? _streamSub;
-  PuzzleRepository? _repo;
-  DateTime? _lastDateAfterFirstFetch;
-  DateTime? _lastDate;
-
-  @override
-  Future<PuzzleHistoryState> build() async {
-    ref.cacheFor(const Duration(seconds: 30));
-    ref.onDispose(() => _streamSub?.cancel());
-
-    _repo = ref.watch(puzzleRepositoryProvider);
-    final stream =
-        _repo!.puzzleActivity(10, DateTime.now()).asBroadcastStream();
-    _streamSub = stream.listen(
-      (event) {
-        _list.add(event);
-      },
-      onDone: () {
-        state = AsyncData(
-          PuzzleHistoryState(historyList: _list.toIList(), isLoading: false),
-        );
-        if (_list.isNotEmpty) {
-          _lastDate = _list.last.date;
-          _lastDateAfterFirstFetch = _list.last.date;
-          _list.clear();
-        }
-      },
-    );
-
-    return PuzzleHistoryState(historyList: IList(const []), isLoading: true);
-  }
-
-  void setLastDate() => _lastDate = _lastDateAfterFirstFetch;
-
-  Future<List<HistoryPuzzle>> getNext() {
-    if (_lastDate == null) {
-      return Future.value(<HistoryPuzzle>[]);
-    }
-    final stream = _repo!.puzzleActivity(50, _lastDate!);
-    final completer = Completer<List<HistoryPuzzle>>();
-
-    _streamSub = stream.listen(
-      (event) {
-        _list.add(event);
-      },
-      onDone: () {
-        completer.complete(_list.toList());
-        if (_list.isNotEmpty) {
-          _lastDate = _list.last.date;
-          _list.clear();
-        } else {
-          _lastDate = null;
-        }
-      },
-    );
-
-    return completer.future;
-  }
+Future<IList<PuzzleHistoryEntry>> puzzleRecentActivity(
+  PuzzleRecentActivityRef ref,
+) {
+  ref.cacheFor(const Duration(minutes: 10));
+  final repo = ref.watch(puzzleRepositoryProvider);
+  return repo.puzzleActivity(10, DateTime.now());
 }
 
-@freezed
-class PuzzleHistoryState with _$PuzzleHistoryState {
-  const factory PuzzleHistoryState({
-    required IList<HistoryPuzzle> historyList,
-    required bool isLoading,
-  }) = _PuzzleHistoryState;
+@riverpod
+Future<IList<PuzzleHistoryEntry>> puzzleActivity(
+  PuzzleActivityRef ref,
+  int max,
+  DateTime before,
+) {
+  final repo = ref.watch(puzzleRepositoryProvider);
+  return repo.puzzleActivity(max, before);
 }

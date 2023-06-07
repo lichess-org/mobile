@@ -6,7 +6,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_history_storage.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import '../../test_container.dart';
 
@@ -27,13 +27,13 @@ void main() {
         ],
       );
 
-      final storage = container.read(puzzleHistoryStorageProvider);
+      final storage = container.read(puzzleStorageProvider);
 
       await storage.save(
         puzzle: puzzle,
       );
       expect(
-        storage.fetchPuzzle(
+        storage.fetch(
           puzzleId: const PuzzleId('pId3'),
         ),
         completion(equals(puzzle)),

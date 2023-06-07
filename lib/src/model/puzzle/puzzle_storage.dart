@@ -6,21 +6,21 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'puzzle_history_storage.g.dart';
+part 'puzzle_storage.g.dart';
 
 @Riverpod(keepAlive: true)
-PuzzleHistoryStorage puzzleHistoryStorage(PuzzleHistoryStorageRef ref) {
+PuzzleStorage puzzleStorage(PuzzleStorageRef ref) {
   final db = ref.watch(databaseProvider);
-  return PuzzleHistoryStorage(db);
+  return PuzzleStorage(db);
 }
 
 const _dbName = 'puzzle';
 
-class PuzzleHistoryStorage {
-  const PuzzleHistoryStorage(this._db);
+class PuzzleStorage {
+  const PuzzleStorage(this._db);
   final Database _db;
 
-  Future<Puzzle?> fetchPuzzle({
+  Future<Puzzle?> fetch({
     required PuzzleId puzzleId,
   }) async {
     final list = await _db.query(

@@ -199,23 +199,26 @@ class PuzzleRepository {
     });
   }
 
-  Stream<HistoryPuzzle> puzzleActivity(
+  Future<IList<PuzzleHistoryEntry>> puzzleActivity(
     int max,
     DateTime before,
-  ) async* {
+  ) async {
     final resp = await apiClient.stream(
       Uri.parse(
         '$kLichessHost/api/puzzle/activity?max=$max&before=${before.millisecondsSinceEpoch}',
       ),
     );
     _log.fine('Streaming Activity');
-    yield* resp.stream
+    final result = await resp.stream
         .toStringStream()
         .expand((event) => event.split('\n'))
         .where((event) => event.isNotEmpty)
         .map((event) => jsonDecode(event) as Map<String, dynamic>)
         .map((json) => _puzzleActivityFromJson(json))
-        .handleError((Object error) => _log.warning(error.toString()));
+        .handleError((Object error) => _log.warning(error.toString()))
+        .toList();
+
+    return result.toIList();
   }
 
   Result<PuzzleBatchResponse> _decodeBatchResponse(http.Response response) {
@@ -278,7 +281,7 @@ class PuzzleStormResponse with _$PuzzleStormResponse {
 
 // --
 
-HistoryPuzzle _puzzleActivityFromJson(Map<String, dynamic> json) =>
+PuzzleHistoryEntry _puzzleActivityFromJson(Map<String, dynamic> json) =>
     _historyPuzzleFromPick(pick(json).required());
 
 Puzzle _puzzleFromJson(Map<String, dynamic> json) =>
@@ -373,21 +376,13 @@ PuzzleGamePlayer _puzzlePlayerFromPick(RequiredPick pick) {
   );
 }
 
-HistoryPuzzle _historyPuzzleFromPick(RequiredPick pick) {
-  return HistoryPuzzle(
+PuzzleHistoryEntry _historyPuzzleFromPick(RequiredPick pick) {
+  return PuzzleHistoryEntry(
     win: pick('win').asBoolOrThrow(),
     date: pick('date').asDateTimeFromMillisecondsOrThrow(),
-    id: pick('puzzle', 'id').asPuzzleIdOrThrow(),
-    plays: pick('puzzle', 'plays').asIntOrThrow(),
     rating: pick('puzzle', 'rating').asIntOrThrow(),
+    id: pick('puzzle', 'id').asPuzzleIdOrThrow(),
     fen: pick('puzzle', 'fen').asStringOrThrow(),
-    solution: pick('puzzle', 'solution')
-        .asListOrThrow((p0) => p0.asStringOrThrow())
-        .lock,
-    themes: pick('puzzle', 'themes')
-        .asListOrThrow((p0) => p0.asStringOrThrow())
-        .toSet()
-        .lock,
     lastMove: pick('puzzle', 'lastMove').asUciMoveOrThrow(),
   );
 }
