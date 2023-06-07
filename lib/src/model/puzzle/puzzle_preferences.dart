@@ -19,11 +19,23 @@ class PuzzlePreferences extends _$PuzzlePreferences {
     final stored = prefs.getString(_makeKey(id));
     return stored != null
         ? PuzzlePrefState.fromJson(jsonDecode(stored) as Map<String, dynamic>)
-        : PuzzlePrefState(id: id, difficulty: PuzzleDifficulty.normal);
+        : PuzzlePrefState(
+            id: id,
+            difficulty: PuzzleDifficulty.normal,
+            nextPuzzleImmediately: false,
+          );
   }
 
   Future<void> setDifficulty(PuzzleDifficulty difficulty) async {
     final newState = state.copyWith(difficulty: difficulty);
+    final prefs = ref.read(sharedPreferencesProvider);
+    await prefs.setString(_makeKey(id), jsonEncode(newState.toJson()));
+    state = newState;
+  }
+
+  Future<void> toggleNextPuzzleImmediately() async {
+    final newState =
+        state.copyWith(nextPuzzleImmediately: !state.nextPuzzleImmediately);
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(_makeKey(id), jsonEncode(newState.toJson()));
     state = newState;
@@ -37,6 +49,7 @@ class PuzzlePrefState with _$PuzzlePrefState {
   const factory PuzzlePrefState({
     required UserId? id,
     required PuzzleDifficulty difficulty,
+    required bool nextPuzzleImmediately,
   }) = _PuzzlePrefState;
 
   factory PuzzlePrefState.fromJson(Map<String, dynamic> json) =>

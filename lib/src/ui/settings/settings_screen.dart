@@ -26,6 +26,7 @@ import './sound_settings_screen.dart';
 import './piece_set_screen.dart';
 import './board_theme_screen.dart';
 import './board_settings_screen.dart';
+import './puzzle_settings_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -178,6 +179,26 @@ class _Body extends ConsumerWidget {
                     context,
                     title: 'Board',
                     builder: (context) => const BoardSettingsScreen(),
+                  );
+                },
+              ),
+            ],
+          ),
+          ListSection(
+            hasLeading: true,
+            showDivider: true,
+            children: [
+              PlatformListTile(
+                leading: const Icon(LichessIcons.target),
+                title: const Text('Puzzles'),
+                trailing: defaultTargetPlatform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                onTap: () {
+                  pushPlatformRoute(
+                    context,
+                    title: 'Board',
+                    builder: (context) => const PuzzleSettingsScreen(),
                   );
                 },
               ),

@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/utils/debounce.dart';
+//import 'package:lichess_mobile/src/model/settings/puzzle_preferences.dart';
 
 part 'puzzle_ctrl.g.dart';
 part 'puzzle_ctrl.freezed.dart';
@@ -287,6 +288,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     // ignore: avoid_manual_providers_as_generated_provider_dependency
     final service = ref.read(defaultPuzzleServiceProvider);
     final soundService = ref.read(soundServiceProvider);
+    //final puzzlePrefs = ref.read(puzzlePreferencesProvider);
 
     if (state.streak == null) {
       final next = await service.solve(
