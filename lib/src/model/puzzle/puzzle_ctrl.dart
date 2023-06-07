@@ -288,7 +288,9 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     // ignore: avoid_manual_providers_as_generated_provider_dependency
     final service = ref.read(defaultPuzzleServiceProvider);
     final soundService = ref.read(soundServiceProvider);
-    //final puzzlePrefs = ref.read(puzzlePreferencesProvider);
+    final nextPuzzleImmediately = ref
+        .read(puzzlePreferencesProvider(initialContext.userId))
+        .nextPuzzleImmediately;
 
     if (state.streak == null) {
       final next = await service.solve(
@@ -317,7 +319,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
         ref.read(sessionNotifier).setRatingDiffs(rounds);
       }
 
-      if (next != null && result == PuzzleResult.win) {
+      if (nextPuzzleImmediately && next != null && result == PuzzleResult.win) {
         await Future<void>.delayed(const Duration(milliseconds: 250));
         soundService.play(Sound.confirmation);
         loadPuzzle(next);

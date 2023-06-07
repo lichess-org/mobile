@@ -6,7 +6,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/model/settings/puzzle_preferences.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 
 class PuzzleSettingsScreen extends StatelessWidget {
   const PuzzleSettingsScreen({super.key});
@@ -37,7 +38,8 @@ class PuzzleSettingsScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzlePrefs = ref.watch(puzzlePreferencesProvider);
+    final session = ref.read(authSessionProvider);
+    final puzzlePrefs = ref.watch(puzzlePreferencesProvider(session?.user.id));
     return SafeArea(
       child: ListView(
         children: [
@@ -50,7 +52,8 @@ class _Body extends ConsumerWidget {
                 value: puzzlePrefs.nextPuzzleImmediately,
                 onChanged: (value) {
                   ref
-                      .read(puzzlePreferencesProvider.notifier)
+                      .read(
+                          puzzlePreferencesProvider(session?.user.id).notifier)
                       .toggleNextPuzzleImmediately();
                 },
               ),
