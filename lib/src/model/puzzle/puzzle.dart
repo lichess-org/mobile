@@ -194,7 +194,25 @@ class PuzzleHistoryEntry with _$PuzzleHistoryEntry {
     required int rating,
     required String fen,
     required Move lastMove,
+    Duration? duration,
   }) = _PuzzleHistoryEntry;
+
+  factory PuzzleHistoryEntry.fromLitePuzzle(
+    LitePuzzle puzzle,
+    bool win,
+    Duration duration,
+  ) {
+    final (_, fen, move) = puzzle.preview;
+    return PuzzleHistoryEntry(
+      date: DateTime.now(),
+      win: win,
+      id: puzzle.id,
+      rating: puzzle.rating,
+      fen: fen,
+      lastMove: move,
+      duration: duration,
+    );
+  }
 
   (String, Side, Move) get preview =>
       (fen, Chess.fromSetup(Setup.parseFen(fen)).turn, lastMove);
