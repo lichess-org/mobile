@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
+import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/utils/debounce.dart';
 
 part 'puzzle_ctrl.g.dart';
@@ -514,6 +515,7 @@ class PuzzleCtrlState with _$PuzzleCtrlState {
   }
 
   EvaluationContext get evaluationContext => EvaluationContext(
+        variant: Variant.standard,
         initialFen: initialFen,
         contextId: puzzle.puzzle.id,
       );

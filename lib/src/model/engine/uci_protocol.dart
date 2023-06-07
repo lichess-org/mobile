@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:logging/logging.dart';
 
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 
 import 'work.dart';
@@ -212,7 +213,11 @@ class UCIProtocol {
           'position fen',
           _work!.initialFen,
           'moves',
-          ..._work!.moves,
+          ..._work!.steps.map(
+            (s) => _work!.variant == Variant.chess960
+                ? s.sanMove.move.uci
+                : s.castleSafeUCI,
+          ),
         ].join(' '),
       );
       _sendAndLog(

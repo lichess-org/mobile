@@ -42,7 +42,9 @@ class StockfishEngine implements Engine {
 
   @override
   Stream<EvalResult> start(Work work) {
-    _log.info('engine start at ply ${work.ply} moves ${work.moves.join(' ')}');
+    _log.info(
+      'engine start at ply ${work.ply} and path ${work.path}',
+    );
     _protocol.compute(work);
 
     if (_stockfish == null) {

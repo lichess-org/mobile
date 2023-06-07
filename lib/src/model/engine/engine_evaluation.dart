@@ -8,7 +8,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/common/tree.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 
 import 'engine.dart';
@@ -25,6 +24,7 @@ final maxCores = math.max(1, Platform.numberOfProcessors - 1);
 @freezed
 class EvaluationContext with _$EvaluationContext {
   const factory EvaluationContext({
+    required Variant variant,
     required String initialFen,
 
     /// Unique ID to ensure engine is properly disposed when no more needed
@@ -63,6 +63,7 @@ class EngineEvaluation extends _$EngineEvaluation {
     final evalStream = _engine!
         .start(
           Work(
+            variant: context.variant,
             threads: maxCores,
             maxDepth: kMaxDepth,
             multiPv: 1,
@@ -70,7 +71,7 @@ class EngineEvaluation extends _$EngineEvaluation {
             path: path,
             initialFen: context.initialFen,
             currentFen: step.fen,
-            moves: IList(steps.map((e) => e.sanMove.move.uci)),
+            steps: IList(steps),
           ),
         )
         .throttle(
@@ -91,26 +92,5 @@ class EngineEvaluation extends _$EngineEvaluation {
   void stop() {
     state = null;
     _engine?.stop();
-  }
-}
-
-@freezed
-class Step with _$Step {
-  const Step._();
-
-  const factory Step({
-    required int ply,
-    required String fen,
-    required SanMove sanMove,
-    ClientEval? eval,
-  }) = _Step;
-
-  factory Step.fromNode(ViewNode node) {
-    return Step(
-      ply: node.ply,
-      fen: node.fen,
-      sanMove: node.sanMove,
-      eval: node.eval,
-    );
   }
 }
