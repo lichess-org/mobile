@@ -622,7 +622,15 @@ class _RunStats extends StatelessWidget {
   Widget build(BuildContext context) {
     return defaultTargetPlatform == TargetPlatform.iOS
         ? CupertinoPageScaffold(
-            navigationBar: const CupertinoNavigationBar(),
+            navigationBar: CupertinoNavigationBar(
+              leading: CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(context.l10n.close),
+              ),
+            ),
             child: _RunStatsPopup(stats),
           )
         : Scaffold(
