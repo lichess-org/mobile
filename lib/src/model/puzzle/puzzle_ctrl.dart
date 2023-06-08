@@ -22,7 +22,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/utils/debounce.dart';
-//import 'package:lichess_mobile/src/model/settings/puzzle_preferences.dart';
 
 part 'puzzle_ctrl.g.dart';
 part 'puzzle_ctrl.freezed.dart';
