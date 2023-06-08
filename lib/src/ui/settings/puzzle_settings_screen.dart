@@ -8,6 +8,8 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 
 class PuzzleSettingsScreen extends StatelessWidget {
   const PuzzleSettingsScreen({super.key});
@@ -22,7 +24,7 @@ class PuzzleSettingsScreen extends StatelessWidget {
 
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.background)),
+      appBar: AppBar(title: const Text("Puzzle settings")),
       body: _Body(),
     );
   }
@@ -44,17 +46,42 @@ class _Body extends ConsumerWidget {
       child: ListView(
         children: [
           ListSection(
-            hasLeading: false,
+            hasLeading: true,
             showDivider: true,
             children: [
               SwitchSettingTile(
-                title: const Text('Jump to next puzzle immediately'),
+                title: const Text('Immediately start next puzzle'),
                 value: puzzlePrefs.nextPuzzleImmediately,
                 onChanged: (value) {
                   ref
                       .read(
-                          puzzlePreferencesProvider(session?.user.id).notifier)
+                        puzzlePreferencesProvider(session?.user.id).notifier,
+                      )
                       .toggleNextPuzzleImmediately();
+                },
+              ),
+              SettingsListTile(
+                icon: const Icon(Icons.tune),
+                settingsLabel: context.l10n.puzzleDifficultyLevel,
+                settingsValue:
+                    puzzleDifficultyL10n(context, puzzlePrefs.difficulty),
+                onTap: () {
+                  showChoicePicker(
+                    context,
+                    choices: PuzzleDifficulty.values,
+                    selectedItem: puzzlePrefs.difficulty,
+                    labelBuilder: (t) => Text(puzzleDifficultyL10n(context, t)),
+                    onSelectedItemChanged: (PuzzleDifficulty? d) {
+                      if (d != null) {
+                        ref
+                            .read(
+                              puzzlePreferencesProvider(session?.user.id)
+                                  .notifier,
+                            )
+                            .setDifficulty(d);
+                      }
+                    },
+                  );
                 },
               ),
             ],
