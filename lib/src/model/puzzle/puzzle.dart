@@ -194,7 +194,7 @@ class PuzzleHistoryEntry with _$PuzzleHistoryEntry {
     required int rating,
     required String fen,
     required Move lastMove,
-    Duration? duration,
+    Duration? solvingTime,
   }) = _PuzzleHistoryEntry;
 
   factory PuzzleHistoryEntry.fromLitePuzzle(
@@ -210,7 +210,7 @@ class PuzzleHistoryEntry with _$PuzzleHistoryEntry {
       rating: puzzle.rating,
       fen: fen,
       lastMove: move,
-      duration: duration,
+      solvingTime: duration,
     );
   }
 

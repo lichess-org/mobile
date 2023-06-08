@@ -106,9 +106,9 @@ class _PuzzleHistoryState extends ConsumerState<PuzzleHistoryBoards> {
                                 color: Colors.white,
                                 size: 20,
                               ),
-                            if (e.duration != null)
+                            if (e.solvingTime != null)
                               Text(
-                                '${e.duration!.inSeconds}s',
+                                '${e.solvingTime!.inSeconds}s',
                                 overflow: TextOverflow.fade,
                                 style: const TextStyle(
                                   color: Colors.white,

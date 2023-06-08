@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -16,7 +15,7 @@ import 'package:lichess_mobile/src/ui/puzzle/history_boards.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart' as cg;
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/widgets/board_preview.dart';
+import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -48,7 +47,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
           headerTrailing: NoPaddingTextButton(
             onPressed: () => pushPlatformRoute(
               context,
-              builder: (context) => PuzzleHistoryScreen(data),
+              builder: (context) => PuzzleHistoryScreen(),
             ),
             child: Text(
               context.l10n.more,
@@ -82,10 +81,6 @@ class PuzzleHistoryWidget extends ConsumerWidget {
 }
 
 class PuzzleHistoryScreen extends StatelessWidget {
-  const PuzzleHistoryScreen(this.historyList);
-
-  final IList<PuzzleHistoryEntry> historyList;
-
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
@@ -96,21 +91,19 @@ class PuzzleHistoryScreen extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         middle: Text(context.l10n.puzzleHistory),
       ),
-      child: _Body(historyList),
+      child: _Body(),
     );
   }
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.puzzleHistory)),
-      body: _Body(historyList),
+      body: _Body(),
     );
   }
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body(this.historyList);
-  final IList<PuzzleHistoryEntry> historyList;
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
@@ -124,7 +117,9 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   void initState() {
     super.initState();
-    _historyList.addAll(widget.historyList);
+    ref
+        .read(puzzleRecentActivityProvider)
+        .whenData((value) => _historyList.addAll(value));
     _scrollController.addListener(_scrollListener);
   }
 
@@ -172,7 +167,9 @@ class _BodyState extends ConsumerState<_Body> {
   Widget build(BuildContext context) {
     final crossAxisCount =
         MediaQuery.of(context).size.width > kTabletThreshold ? 4 : 2;
-    final boardWidth = MediaQuery.of(context).size.width / crossAxisCount;
+    const columnGap = 32.0;
+    final boardWidth = (MediaQuery.of(context).size.width / crossAxisCount) -
+        (columnGap / crossAxisCount);
     return ListView.builder(
       controller: _scrollController,
       itemCount: _historyList.length ~/ crossAxisCount + (_isLoading ? 1 : 0),
@@ -206,10 +203,10 @@ class _HistoryBoard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final (fen, turn, lastMove) = puzzle.preview;
     final isLoading = ref.watch(_puzzleLoadingProvider);
-    return SizedBox(
-      width: boardWidth,
-      height: boardWidth + MediaQuery.of(context).textScaleFactor * 14 + 16.5,
-      child: BoardPreview(
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: BoardThumbnail(
+        size: boardWidth,
         onTap: isLoading
             ? null
             : () async {

@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/ui/puzzle/puzzle_history_screen.dart';
+import 'package:lichess_mobile/src/ui/puzzle/history_screen.dart';
 
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';

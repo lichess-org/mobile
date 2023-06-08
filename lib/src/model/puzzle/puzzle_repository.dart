@@ -199,26 +199,23 @@ class PuzzleRepository {
     });
   }
 
-  Future<IList<PuzzleHistoryEntry>> puzzleActivity(
-    int max,
-    DateTime before,
-  ) async {
-    final resp = await apiClient.stream(
-      Uri.parse(
-        '$kLichessHost/api/puzzle/activity?max=$max&before=${before.millisecondsSinceEpoch}',
-      ),
-    );
-    _log.fine('Streaming Activity');
-    final result = await resp.stream
-        .toStringStream()
-        .expand((event) => event.split('\n'))
-        .where((event) => event.isNotEmpty)
-        .map((event) => jsonDecode(event) as Map<String, dynamic>)
-        .map((json) => _puzzleActivityFromJson(json))
-        .handleError((Object error) => _log.warning(error.toString()))
-        .toList();
-
-    return result.toIList();
+  FutureResult<IList<PuzzleHistoryEntry>> puzzleActivity(
+    int max, {
+    DateTime? before,
+  }) async {
+    final beforeQuery =
+        before != null ? '&before=${before.millisecondsSinceEpoch}' : '';
+    return apiClient
+        .get(
+          Uri.parse('$kLichessHost/api/puzzle/activity?max=$max$beforeQuery'),
+        )
+        .flatMap(
+          (response) => readNdJsonList(
+            response,
+            mapper: _puzzleActivityFromJson,
+            logger: _log,
+          ),
+        );
   }
 
   Result<PuzzleBatchResponse> _decodeBatchResponse(http.Response response) {

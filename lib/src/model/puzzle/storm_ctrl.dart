@@ -232,7 +232,7 @@ class StormCtrl extends _$StormCtrl {
       comboBest: state.combo.best,
       time: state.clock.endAt!,
       timePerMove:
-          _history.sumBy((e) => e.duration!.inSeconds) / _history.length,
+          _history.sumBy((e) => e.solvingTime!.inSeconds) / _history.length,
       highest: wins.isNotEmpty
           ? wins.map((e) => e.rating).reduce(
                 (maxRating, rating) => rating > maxRating ? rating : maxRating,
