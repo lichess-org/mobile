@@ -42,6 +42,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.read(authSessionProvider);
     final puzzlePrefs = ref.watch(puzzlePreferencesProvider(session?.user.id));
+    final userId = session?.user.id;
     return SafeArea(
       child: ListView(
         children: [
@@ -55,35 +56,37 @@ class _Body extends ConsumerWidget {
                 onChanged: (value) {
                   ref
                       .read(
-                        puzzlePreferencesProvider(session?.user.id).notifier,
+                        puzzlePreferencesProvider(userId).notifier,
                       )
                       .toggleNextPuzzleImmediately();
                 },
               ),
-              SettingsListTile(
-                icon: const Icon(Icons.tune),
-                settingsLabel: context.l10n.puzzleDifficultyLevel,
-                settingsValue:
-                    puzzleDifficultyL10n(context, puzzlePrefs.difficulty),
-                onTap: () {
-                  showChoicePicker(
-                    context,
-                    choices: PuzzleDifficulty.values,
-                    selectedItem: puzzlePrefs.difficulty,
-                    labelBuilder: (t) => Text(puzzleDifficultyL10n(context, t)),
-                    onSelectedItemChanged: (PuzzleDifficulty? d) {
-                      if (d != null) {
-                        ref
-                            .read(
-                              puzzlePreferencesProvider(session?.user.id)
-                                  .notifier,
-                            )
-                            .setDifficulty(d);
-                      }
-                    },
-                  );
-                },
-              ),
+              if (userId != null)
+                SettingsListTile(
+                  icon: const Icon(Icons.tune),
+                  settingsLabel: context.l10n.puzzleDifficultyLevel,
+                  settingsValue:
+                      puzzleDifficultyL10n(context, puzzlePrefs.difficulty),
+                  onTap: () {
+                    showChoicePicker(
+                      context,
+                      choices: PuzzleDifficulty.values,
+                      selectedItem: puzzlePrefs.difficulty,
+                      labelBuilder: (t) =>
+                          Text(puzzleDifficultyL10n(context, t)),
+                      onSelectedItemChanged: (PuzzleDifficulty? d) {
+                        if (d != null) {
+                          ref
+                              .read(
+                                puzzlePreferencesProvider(session?.user.id)
+                                    .notifier,
+                              )
+                              .setDifficulty(d);
+                        }
+                      },
+                    );
+                  },
+                ),
             ],
           ),
         ],
