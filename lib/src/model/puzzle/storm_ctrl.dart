@@ -85,7 +85,7 @@ class StormCtrl extends _$StormCtrl {
           state.clock.sendEnd();
           return;
         }
-        ref.read(soundServiceProvider).play(Sound.puzzleStormGood);
+        ref.read(soundServiceProvider).play(Sound.confirmation);
         _pushToHistory(success: true);
         await _loadNextPuzzle(true, ComboState.increase);
         return;

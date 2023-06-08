@@ -20,7 +20,7 @@ mixin AndroidImmersiveMode<T extends StatefulWidget> on State<T> {
   @override
   void dispose() {
     super.dispose();
-    _setEdgeToEdgeMode();
+    _disableImmersiveMode();
   }
 
   Future<void> _setImmersiveMode() async {
@@ -32,11 +32,17 @@ mixin AndroidImmersiveMode<T extends StatefulWidget> on State<T> {
     }
   }
 
-  Future<void> _setEdgeToEdgeMode() async {
+  Future<void> _disableImmersiveMode() async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       final androidInfo = await _deviceInfoPlugin.androidInfo;
       if (androidInfo.version.sdkInt >= 29) {
-        SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+        SystemChrome.setEnabledSystemUIMode(
+          SystemUiMode.manual,
+          overlays: [
+            SystemUiOverlay.top,
+            SystemUiOverlay.bottom,
+          ],
+        );
       }
     }
   }
