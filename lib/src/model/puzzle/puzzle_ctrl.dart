@@ -372,11 +372,14 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     final newNodeList = IList(_gameTree.nodesOn(path));
     final sanMove = newNodeList.last.sanMove;
     if (!replaying) {
-      final isCheck = sanMove.san.contains('+');
-      if (sanMove.san.contains('x')) {
-        ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
-      } else {
-        ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
+      final isForward = path.size > state.currentPath.size;
+      if (isForward) {
+        final isCheck = sanMove.san.contains('+');
+        if (sanMove.san.contains('x')) {
+          ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+        } else {
+          ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
+        }
       }
     } else {
       // when replaying moves fast we don't want haptic feedback
