@@ -50,17 +50,6 @@ class _Body extends ConsumerWidget {
             hasLeading: true,
             showDivider: true,
             children: [
-              SwitchSettingTile(
-                title: const Text('Immediately start next puzzle'),
-                value: puzzlePrefs.nextPuzzleImmediately,
-                onChanged: (value) {
-                  ref
-                      .read(
-                        puzzlePreferencesProvider(userId).notifier,
-                      )
-                      .toggleNextPuzzleImmediately();
-                },
-              ),
               if (userId != null)
                 SettingsListTile(
                   icon: const Icon(Icons.tune),
@@ -87,6 +76,17 @@ class _Body extends ConsumerWidget {
                     );
                   },
                 ),
+              SwitchSettingTile(
+                title: const Text('Immediately start next puzzle'),
+                value: puzzlePrefs.nextPuzzleImmediately,
+                onChanged: (value) {
+                  ref
+                      .read(
+                        puzzlePreferencesProvider(userId).notifier,
+                      )
+                      .toggleNextPuzzleImmediately();
+                },
+              ),
             ],
           ),
         ],
