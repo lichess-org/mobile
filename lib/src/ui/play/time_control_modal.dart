@@ -40,13 +40,12 @@ class TimeControlModal extends StatelessWidget {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        padding: EdgeInsetsDirectional.zero,
         automaticallyImplyLeading: false,
         middle: Text(context.l10n.timeControl),
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () => Navigator.of(context).pop(),
-          child: const Icon(CupertinoIcons.clear),
+          child: Text(context.l10n.close),
         ),
       ),
       child: _Body(),

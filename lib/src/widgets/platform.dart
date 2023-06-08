@@ -71,11 +71,14 @@ class PlatformCard extends StatelessWidget {
     this.margin,
     this.semanticContainer = true,
     this.borderRadius,
+    this.elevation,
   });
 
   final Widget child;
   final bool semanticContainer;
   final BorderRadius? borderRadius;
+
+  final double? elevation;
 
   /// The empty space that surrounds the card.
   ///
@@ -100,7 +103,7 @@ class PlatformCard extends StatelessWidget {
       child: defaultTargetPlatform == TargetPlatform.iOS
           ? Card(
               margin: margin ?? EdgeInsets.zero,
-              elevation: 0,
+              elevation: elevation ?? 0,
               color: cupertinoBrightness == Brightness.light
                   ? CupertinoColors.systemBackground
                   : CupertinoColors.secondarySystemBackground
@@ -124,6 +127,7 @@ class PlatformCard extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),
               semanticContainer: semanticContainer,
+              elevation: elevation,
               margin: margin,
               child: child,
             ),

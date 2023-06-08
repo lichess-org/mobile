@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 
 class OnlineGameScreen extends ConsumerWidget {
   const OnlineGameScreen({
@@ -69,32 +70,18 @@ class OnlineGameScreen extends ConsumerWidget {
   }
 
   Future<void> _showExitConfirmDialog(BuildContext context) {
-    return showDialog<void>(
+    return showAdaptiveDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
+        return YesNoDialog(
           title: const Text('Exit.'),
           content: const Text('Are you sure you want to quit?'),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: Text(context.l10n.cancel),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: Text(context.l10n.accept),
-              onPressed: () {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              },
-            ),
-          ],
+          onYes: () {
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          },
+          onNo: () {
+            Navigator.of(context).pop();
+          },
         );
       },
     );
@@ -119,6 +106,7 @@ class _GameLoader extends ConsumerWidget {
       bottomTable: const SizedBox.shrink(),
       showMoveListPlaceholder: true,
       boardOverlay: PlatformCard(
+        elevation: 2.0,
         borderRadius: BorderRadius.zero,
         child: Center(
           child: Column(
