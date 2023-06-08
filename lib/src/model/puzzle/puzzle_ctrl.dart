@@ -347,7 +347,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
               );
               if (nextContext != null) {
                 await Future<void>.delayed(const Duration(milliseconds: 250));
-                soundService.play(Sound.puzzleStormGood);
+                soundService.play(Sound.confirmation);
                 loadPuzzle(nextContext);
               } else {
                 // no more puzzle
