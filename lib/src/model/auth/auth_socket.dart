@@ -42,13 +42,12 @@ class AuthSocket {
   /// Creates a new WebSocket channel.
   ///
   /// Will not do anything if the channel is already connected.
-  (String, IOWebSocketChannel) connect({
+  IOWebSocketChannel connect({
     Duration pingInterval = kDefaultPingInterval,
     Duration connectTimeout = kDefaultConnectTimeout,
   }) {
     if (_connection != null && _connection!.$2.closeCode == null) {
-      _log.fine('WebSocket connection already established.');
-      return _connection!;
+      return _connection!.$2;
     }
 
     final session = _ref.read(authSessionProvider);
@@ -63,7 +62,7 @@ class AuthSocket {
         : {
             'User-Agent': AuthClient.userAgent(info, null),
           };
-    _log.info('Connecting WebSocket to $uri');
+    _log.info('Creating WebSocket connection to $uri');
     _connection = (
       sri,
       IOWebSocketChannel.connect(
@@ -73,7 +72,7 @@ class AuthSocket {
         headers: headers,
       )
     );
-    return _connection!;
+    return _connection!.$2;
   }
 
   /// Gets the current WebSocket channel

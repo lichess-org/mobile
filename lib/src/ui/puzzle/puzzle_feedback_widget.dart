@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -12,13 +11,11 @@ class PuzzleFeedbackWidget extends StatelessWidget {
   const PuzzleFeedbackWidget({
     required this.puzzle,
     required this.state,
-    required this.pieceSet,
     required this.onStreak,
   });
 
   final Puzzle puzzle;
   final PuzzleCtrlState state;
-  final cg.PieceSet pieceSet;
   final bool onStreak;
 
   @override

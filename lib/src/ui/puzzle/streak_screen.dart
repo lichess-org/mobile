@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -125,8 +124,6 @@ class _Body extends ConsumerStatefulWidget {
 class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
   @override
   Widget build(BuildContext context) {
-    final pieceSet =
-        ref.watch(boardPreferencesProvider.select((p) => p.pieceSet));
     final ctrlProvider = puzzleCtrlProvider(
       widget.initialPuzzleContext,
       initialStreak: widget.streak,
@@ -179,7 +176,6 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                     child: PuzzleFeedbackWidget(
                       puzzle: puzzleState.puzzle,
                       state: puzzleState,
-                      pieceSet: pieceSet,
                       onStreak: true,
                     ),
                   ),

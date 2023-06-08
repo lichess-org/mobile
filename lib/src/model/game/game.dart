@@ -18,18 +18,37 @@ class PlayableGame with _$PlayableGame {
 
   const factory PlayableGame({
     required GameId id,
-    required GameFullId fullId,
     required bool rated,
+    required Variant variant,
     required Speed speed,
     required Perf perf,
     required String initialFen,
     required Side orientation,
     required GameStatus status,
     Move? lastMove,
-    Duration? timeLeft,
-    required Player opponent,
-    required Variant variant,
+    int? turns,
+    required Player white,
+    required Player black,
+    String? pgn,
+    PlayableClockData? clock,
   }) = _PlayableGame;
+}
+
+@freezed
+class PlayableClockData with _$PlayableClockData {
+  const factory PlayableClockData({
+    required Duration initial,
+    required Duration increment,
+    required bool running,
+    required Duration white,
+    required Duration black,
+
+    /// Remaining time threshold to switch the clock to "emergency" mode.
+    Duration? emergency,
+
+    /// Time added to the clock by the "add more time" button.
+    Duration? moreTime,
+  }) = _PlayableClockData;
 }
 
 @freezed
