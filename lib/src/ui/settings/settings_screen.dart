@@ -197,7 +197,7 @@ class _Body extends ConsumerWidget {
                 onTap: () {
                   pushPlatformRoute(
                     context,
-                    title: 'Board',
+                    title: 'Puzzle settings',
                     builder: (context) => const PuzzleSettingsScreen(),
                   );
                 },
