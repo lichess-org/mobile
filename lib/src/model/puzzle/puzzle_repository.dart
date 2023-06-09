@@ -202,7 +202,7 @@ class PuzzleRepository {
   FutureResult<IList<PuzzleHistoryEntry>> puzzleActivity(
     int max, {
     DateTime? before,
-  }) async {
+  }) {
     final beforeQuery =
         before != null ? '&before=${before.millisecondsSinceEpoch}' : '';
     return apiClient
