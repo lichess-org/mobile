@@ -78,22 +78,3 @@ Future<PuzzleDashboard> puzzleDashboard(
   }
   return result.asFuture;
 }
-
-@riverpod
-Future<IList<PuzzleHistoryEntry>> puzzleRecentActivity(
-  PuzzleRecentActivityRef ref,
-) {
-  ref.cacheFor(const Duration(minutes: 10));
-  final repo = ref.watch(puzzleRepositoryProvider);
-  return Result.release(repo.puzzleActivity(10));
-}
-
-@riverpod
-Future<IList<PuzzleHistoryEntry>> puzzleActivity(
-  PuzzleActivityRef ref,
-  int max,
-  DateTime before,
-) {
-  final repo = ref.watch(puzzleRepositoryProvider);
-  return Result.release(repo.puzzleActivity(max, before: before));
-}

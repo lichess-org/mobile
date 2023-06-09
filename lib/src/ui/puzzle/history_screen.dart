@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/history_provider.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
@@ -110,16 +111,12 @@ class _Body extends ConsumerStatefulWidget {
 
 class _BodyState extends ConsumerState<_Body> {
   final ScrollController _scrollController = ScrollController();
-  List<PuzzleHistoryEntry> _historyList = [];
-  bool _isLoading = false;
   bool _hasMore = true;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    ref
-        .read(puzzleRecentActivityProvider)
-        .whenData((value) => _historyList.addAll(value));
     _scrollController.addListener(_scrollListener);
   }
 
@@ -132,63 +129,57 @@ class _BodyState extends ConsumerState<_Body> {
 
   void _scrollListener() {
     if (_scrollController.position.pixels ==
-            _scrollController.position.maxScrollExtent &&
-        _historyList.length < 500) {
-      _loadMore();
-    }
-  }
-
-  Future<void> _loadMore() async {
-    if (_isLoading) return;
-    if (!_hasMore) return;
-    setState(() {
-      _isLoading = true;
-    });
-    final newList = await ref
-        .read(puzzleActivityProvider(50, _historyList.last.date).future);
-
-    if (mounted) {
-      if (newList.isEmpty) {
-        setState(() {
-          _isLoading = false;
-          _hasMore = false;
-        });
-        return;
+        _scrollController.position.maxScrollExtent) {
+      if (_hasMore && !_isLoading) {
+        ref.read(puzzleActivityProvider.notifier).getNext();
       }
-      setState(() {
-        _isLoading = false;
-        _historyList.addAll(newList);
-        _historyList = _historyList.toSet().toList();
-      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final crossAxisCount =
-        MediaQuery.of(context).size.width > kTabletThreshold ? 4 : 2;
-    const columnGap = 32.0;
-    final boardWidth = (MediaQuery.of(context).size.width / crossAxisCount) -
-        (columnGap / crossAxisCount);
-    return ListView.builder(
-      controller: _scrollController,
-      itemCount: _historyList.length ~/ crossAxisCount + (_isLoading ? 1 : 0),
-      itemBuilder: (context, index) {
-        if (_isLoading && index == _historyList.length ~/ crossAxisCount) {
-          return const CenterLoadingIndicator();
-        }
-        final rowStartIndex = index * crossAxisCount;
-        final rowEndIndex =
-            min(rowStartIndex + crossAxisCount, _historyList.length);
-        return Row(
-          children: _historyList
-              .getRange(index * crossAxisCount, rowEndIndex)
-              .map(
-                (e) => _HistoryBoard(e, boardWidth),
-              )
-              .toList(),
+    final historyState = ref.watch(puzzleActivityProvider);
+
+    return historyState.when(
+      data: (state) {
+        _hasMore = state.hasMore;
+        _isLoading = state.isLoading;
+        final crossAxisCount =
+            MediaQuery.of(context).size.width > kTabletThreshold ? 4 : 2;
+        const columnGap = 32.0;
+        final boardWidth =
+            (MediaQuery.of(context).size.width / crossAxisCount) -
+                (columnGap / crossAxisCount);
+        return ListView.builder(
+          controller: _scrollController,
+          itemCount:
+              state.list.length ~/ crossAxisCount + (state.isLoading ? 1 : 0),
+          itemBuilder: (context, index) {
+            if (state.isLoading &&
+                index == state.list.length ~/ crossAxisCount) {
+              return const CenterLoadingIndicator();
+            }
+            final rowStartIndex = index * crossAxisCount;
+            final rowEndIndex =
+                min(rowStartIndex + crossAxisCount, state.list.length);
+            return Row(
+              children: state.list
+                  .getRange(index * crossAxisCount, rowEndIndex)
+                  .map(
+                    (e) => _HistoryBoard(e, boardWidth),
+                  )
+                  .toList(),
+            );
+          },
         );
       },
+      error: (e, s) => Text(e.toString()),
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(itemsNumber: 5),
+        ),
+      ),
     );
   }
 }
