@@ -28,7 +28,7 @@ class StormCtrl extends _$StormCtrl {
   int _nextPuzzleIndex = 0;
   int _moves = 0;
   int _errors = 0;
-  final _history = <(LitePuzzle, bool, Duration)>[];
+  final _history = <PuzzleHistoryEntry>[];
   Timer? _firstMoveTimer;
 
   @override
@@ -224,16 +224,17 @@ class StormCtrl extends _$StormCtrl {
   }
 
   StormRunStats _getStats() {
-    final wins = _history.where((e) => e.$2 == true).toList();
+    final wins = _history.where((e) => e.win == true).toList();
     return StormRunStats(
       moves: _moves,
       errors: _errors,
       score: wins.length,
       comboBest: state.combo.best,
       time: state.clock.endAt!,
-      timePerMove: _history.sumBy((e) => e.$3.inSeconds) / _history.length,
+      timePerMove:
+          _history.sumBy((e) => e.solvingTime!.inSeconds) / _history.length,
       highest: wins.isNotEmpty
-          ? wins.map((e) => e.$1.rating).reduce(
+          ? wins.map((e) => e.rating).reduce(
                 (maxRating, rating) => rating > maxRating ? rating : maxRating,
               )
           : 0,
@@ -245,7 +246,9 @@ class StormCtrl extends _$StormCtrl {
     final timeTaken = state.lastSolvedTime != null
         ? DateTime.now().difference(state.lastSolvedTime!)
         : DateTime.now().difference(state.clock.startAt!);
-    _history.add((state.puzzle, success, timeTaken));
+    _history.add(
+      PuzzleHistoryEntry.fromLitePuzzle(state.puzzle, success, timeTaken),
+    );
   }
 
   bool _isNextPuzzleAvailable() {

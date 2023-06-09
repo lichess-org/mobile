@@ -26,7 +26,7 @@ class StormRunStats with _$StormRunStats {
     required Duration time,
     required double timePerMove,
     required int highest,
-    required IList<(LitePuzzle, bool, Duration)> history,
+    required IList<PuzzleHistoryEntry> history,
     StormNewHigh? newHigh,
   }) = _StormRunStats;
 }

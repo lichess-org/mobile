@@ -183,3 +183,37 @@ class PuzzleDashboardData with _$PuzzleDashboardData {
     required PuzzleTheme theme,
   }) = _PuzzleDashboardData;
 }
+
+@freezed
+class PuzzleHistoryEntry with _$PuzzleHistoryEntry {
+  const PuzzleHistoryEntry._();
+  const factory PuzzleHistoryEntry({
+    required bool win,
+    required DateTime date,
+    required PuzzleId id,
+    required int rating,
+    required String fen,
+    required Move lastMove,
+    Duration? solvingTime,
+  }) = _PuzzleHistoryEntry;
+
+  factory PuzzleHistoryEntry.fromLitePuzzle(
+    LitePuzzle puzzle,
+    bool win,
+    Duration duration,
+  ) {
+    final (_, fen, move) = puzzle.preview;
+    return PuzzleHistoryEntry(
+      date: DateTime.now(),
+      win: win,
+      id: puzzle.id,
+      rating: puzzle.rating,
+      fen: fen,
+      lastMove: move,
+      solvingTime: duration,
+    );
+  }
+
+  (String, Side, Move) get preview =>
+      (fen, Chess.fromSetup(Setup.parseFen(fen)).turn, lastMove);
+}

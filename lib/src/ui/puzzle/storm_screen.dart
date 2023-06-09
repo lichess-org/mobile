@@ -3,15 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
-import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/ui/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
@@ -27,7 +21,6 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
-import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
@@ -36,6 +29,8 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import "package:lichess_mobile/src/utils/l10n_context.dart";
 import "package:lichess_mobile/src/utils/immersive_mode.dart";
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
+
+import 'history_boards.dart';
 
 class StormScreen extends StatelessWidget {
   const StormScreen({super.key});
@@ -752,127 +747,12 @@ class _RunStatsPopup extends ConsumerWidget {
                   style: Styles.sectionTitle,
                 ),
                 const SizedBox(height: 3.0),
-                _PuzzleHistory(stats),
+                PuzzleHistoryBoards(stats.history),
               ],
             ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class _PuzzleHistory extends ConsumerStatefulWidget {
-  const _PuzzleHistory(this.stats);
-
-  final StormRunStats stats;
-
-  @override
-  ConsumerState createState() => _PuzzleHistoryState();
-}
-
-class _PuzzleHistoryState extends ConsumerState<_PuzzleHistory> {
-  bool isLoading = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constrains) {
-        final crossAxisCount = constrains.maxWidth > kTabletThreshold ? 4 : 2;
-        const columnGap = 12.0;
-        final boardWidth = (constrains.maxWidth / crossAxisCount) -
-            (columnGap / crossAxisCount);
-        return LayoutGrid(
-          columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
-          rowSizes: List.generate(
-            (widget.stats.history.length / crossAxisCount).ceil(),
-            (_) => auto,
-          ),
-          rowGap: 16.0,
-          columnGap: columnGap,
-          children: widget.stats.history.map((e) {
-            final (side, fen, lastMove) = e.$1.preview;
-            return BoardThumbnail(
-              size: boardWidth,
-              onTap: isLoading
-                  ? null
-                  : () async {
-                      final session = ref.read(authSessionProvider);
-                      Puzzle? puzzle;
-                      try {
-                        setState(() => isLoading = true);
-                        puzzle = await ref.read(puzzleProvider(e.$1.id).future);
-                      } catch (e) {
-                        showPlatformSnackbar(
-                          context,
-                          e.toString(),
-                        );
-                      } finally {
-                        if (mounted && puzzle != null) {
-                          setState(() => isLoading = false);
-                          pushPlatformRoute(
-                            context,
-                            builder: (_) => PuzzleScreen(
-                              theme: PuzzleTheme.mix,
-                              initialPuzzleContext: PuzzleContext(
-                                theme: PuzzleTheme.mix,
-                                puzzle: puzzle!,
-                                userId: session?.user.id,
-                              ),
-                            ),
-                          );
-                        }
-                      }
-                    },
-              orientation: side.cg,
-              fen: fen,
-              lastMove: lastMove.cg,
-              footer: Padding(
-                padding: const EdgeInsets.only(top: 4.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    ColoredBox(
-                      color: e.$2 ? LichessColors.good : LichessColors.red,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 1,
-                          horizontal: 3,
-                        ),
-                        child: Row(
-                          children: [
-                            if (e.$2)
-                              const Icon(
-                                color: Colors.white,
-                                Icons.done,
-                                size: 20,
-                              )
-                            else
-                              const Icon(
-                                Icons.close,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                            Text(
-                              '${e.$3.inSeconds}s',
-                              overflow: TextOverflow.fade,
-                              style: const TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Text(e.$1.rating.toString()),
-                  ],
-                ),
-              ),
-            );
-          }).toList(),
-        );
-      },
     );
   }
 }
