@@ -64,7 +64,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
       },
       error: (e, s) {
         debugPrint(
-          'SEVERE: [PuzzleHistoryWidget] could not load dashboard',
+          'SEVERE: [PuzzleHistoryWidget] could not load puzzle history',
         );
         return const Center(child: Text('Could not load Puzzle History'));
       },
@@ -173,7 +173,12 @@ class _BodyState extends ConsumerState<_Body> {
           },
         );
       },
-      error: (e, s) => Text(e.toString()),
+      error: (e, s) {
+        debugPrint(
+          'SEVERE: [PuzzleHistoryScreen] could not load puzzle history',
+        );
+        return const Center(child: Text('Could not load Puzzle History'));
+      },
       loading: () => Shimmer(
         child: ShimmerLoading(
           isLoading: true,
