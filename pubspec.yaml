@@ -54,10 +54,7 @@ dependencies:
   fl_chart: ^0.62.0
   stream_transform: ^2.1.0
   flutter_native_splash: ^2.2.19
-  stockfish:
-    git:
-      url: https://github.com/lichess-org/dart-stockfish.git
-      ref: 274cf52e637e9a663d226ec31cc0b24e639cb615
+  stockfish: ^1.4.0
   firebase_crashlytics: ^3.2.0
   firebase_core: ^2.11.0
   flutter_displaymode: ^0.6.0
