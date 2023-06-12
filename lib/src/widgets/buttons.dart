@@ -503,3 +503,56 @@ class _RepeatButtonState extends State<RepeatButton> {
     );
   }
 }
+
+/// Platform agnostic icon button
+///
+/// Optionally provide a bool to highlight the button
+/// Will use [IconButton] on Android and [CupertinoIconButton] on iOS.
+class PlatformIconButton extends StatelessWidget {
+  const PlatformIconButton({
+    required this.icon,
+    required this.semanticsLabel,
+    required this.onTap,
+    this.highlighted = true,
+  });
+
+  final IconData icon;
+  final String semanticsLabel;
+  final VoidCallback? onTap;
+  final bool highlighted;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        final themeData = Theme.of(context);
+        return Theme(
+          data: themeData,
+          child: IconButton(
+            onPressed: onTap,
+            icon: Icon(icon),
+            tooltip: semanticsLabel,
+            color: highlighted ? themeData.colorScheme.primary : null,
+          ),
+        );
+      case TargetPlatform.iOS:
+        final themeData = CupertinoTheme.of(context);
+        return CupertinoTheme(
+          data: themeData.copyWith(
+            primaryColor: themeData.textTheme.textStyle.color,
+          ),
+          child: CupertinoIconButton(
+            onPressed: onTap,
+            semanticsLabel: semanticsLabel,
+            icon: Icon(
+              icon,
+              color: highlighted ? themeData.primaryColor : null,
+            ),
+          ),
+        );
+      default:
+        assert(false, 'Unexpected Platform $defaultTargetPlatform');
+        return const SizedBox.shrink();
+    }
+  }
+}

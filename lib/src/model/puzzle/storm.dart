@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 
 import 'puzzle.dart';
 
@@ -18,6 +19,7 @@ class PuzzleStormHighScore with _$PuzzleStormHighScore {
 
 @freezed
 class StormRunStats with _$StormRunStats {
+  const StormRunStats._();
   const factory StormRunStats({
     required int moves,
     required int errors,
@@ -27,8 +29,31 @@ class StormRunStats with _$StormRunStats {
     required double timePerMove,
     required int highest,
     required IList<PuzzleHistoryEntry> history,
+    required IList<PuzzleId> slowPuzzleIds,
     StormNewHigh? newHigh,
   }) = _StormRunStats;
+
+  IList<PuzzleHistoryEntry> historyFilter(StormFilter filter) {
+    return history
+        .where(
+          (e) => (filter.slow && filter.failed)
+              ? (!e.win && slowPuzzleIds.any((id) => id == e.id))
+              : (filter.slow
+                  ? slowPuzzleIds.any((id) => id == e.id)
+                  : (!filter.failed || !e.win)),
+        )
+        .toIList();
+  }
+}
+
+@immutable
+class StormFilter {
+  const StormFilter({required this.slow, required this.failed});
+  final bool slow;
+  final bool failed;
+
+  StormFilter copyWith({bool? slow, bool? failed}) =>
+      StormFilter(slow: slow ?? this.slow, failed: failed ?? this.failed);
 }
 
 enum StormNewHighType {

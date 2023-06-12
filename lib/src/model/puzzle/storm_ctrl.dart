@@ -225,20 +225,26 @@ class StormCtrl extends _$StormCtrl {
 
   StormRunStats _getStats() {
     final wins = _history.where((e) => e.win == true).toList();
+    final mean =
+        _history.sumBy((e) => e.solvingTime!.inSeconds) / _history.length;
+    final threshold = mean * 1.5;
     return StormRunStats(
       moves: _moves,
       errors: _errors,
       score: wins.length,
       comboBest: state.combo.best,
       time: state.clock.endAt!,
-      timePerMove:
-          _history.sumBy((e) => e.solvingTime!.inSeconds) / _history.length,
+      timePerMove: mean,
       highest: wins.isNotEmpty
           ? wins.map((e) => e.rating).reduce(
                 (maxRating, rating) => rating > maxRating ? rating : maxRating,
               )
           : 0,
       history: _history.toIList(),
+      slowPuzzleIds: _history
+          .where((e) => e.solvingTime!.inSeconds > threshold)
+          .map((e) => e.id)
+          .toIList(),
     );
   }
 
