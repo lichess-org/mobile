@@ -207,7 +207,10 @@ class PuzzleCtrl extends _$PuzzleCtrl {
   void sendStreakResult() {
     if (initialContext.userId != null) {
       final repo = ref.read(puzzleRepositoryProvider);
-      repo.postStreakRun(state.streak?.index ?? 0);
+      final streak = state.streak?.index;
+      if (streak != null && streak > 0) {
+        repo.postStreakRun(streak);
+      }
     }
   }
 
