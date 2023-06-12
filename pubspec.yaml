@@ -73,7 +73,7 @@ dev_dependencies:
   json_serializable: ^6.5.4
   lint: ^2.0.1
   mocktail: ^0.3.0
-  mockito: ^5.4.0
+  mockito: ^5.4.2
   sqflite_common_ffi: ^2.2.3
 
 flutter:
