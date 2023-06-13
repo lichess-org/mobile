@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:lichess_mobile/src/utils/rate_limit.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -18,13 +19,14 @@ part 'featured_game.g.dart';
 class FeaturedGame extends _$FeaturedGame {
   StreamSubscription<TvEvent>? _streamSub;
 
+  final _debounceConnect = Debouncer(const Duration(seconds: 1));
+
   @override
   Future<FeaturedGameState> build({required bool withSound}) async {
-    // cache for 1 second to prevent calling the API too often
-    ref.cacheFor(const Duration(seconds: 1));
     ref.onDispose(() => _streamSub?.cancel());
+    ref.debounce(const Duration(seconds: 1));
 
-    final stream = connectStream();
+    final stream = _connectStream();
 
     return stream.firstWhere((event) => event is TvFeaturedEvent).then(
       (event) {
@@ -41,7 +43,11 @@ class FeaturedGame extends _$FeaturedGame {
     );
   }
 
-  Stream<TvEvent> connectStream() {
+  void connectStream() {
+    _debounceConnect(_connectStream);
+  }
+
+  Stream<TvEvent> _connectStream() {
     final tvRepository = ref.watch(tvRepositoryProvider);
     final stream = tvRepository.tvFeed().asBroadcastStream();
 

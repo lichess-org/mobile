@@ -97,7 +97,7 @@ PODS:
   - sqflite (0.0.3):
     - Flutter
     - FMDB (>= 2.7.5)
-  - stockfish (1.3.0):
+  - stockfish (1.4.0):
     - Flutter
   - url_launcher_ios (0.0.1):
     - Flutter
@@ -202,7 +202,7 @@ SPEC CHECKSUMS:
   shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
   soundpool: c7f4422ca206e77f8900ed3c4ee6a6ff5a0e38a9
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
-  stockfish: 36a4ed5afabb635801aeeb1fbb331bbc7bd0cad7
+  stockfish: 614d240ac2cd05a462dad552c7b5937bb14604fd
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
 
 PODFILE CHECKSUM: 76a583f8d75b3a8c6e4bdc97ae8783ef36cc7984
