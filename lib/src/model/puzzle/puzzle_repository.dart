@@ -218,6 +218,15 @@ class PuzzleRepository {
         );
   }
 
+  FutureResult<StormDashboard> stormDashbaord(String userId) {
+    return apiClient
+        .get(Uri.parse('$kLichessHost/api/storm/dashboard/$userId'))
+        .flatMap(
+          (response) => readJsonObject(response,
+              mapper: _stormDashboardFromJson, logger: _log),
+        );
+  }
+
   Result<PuzzleBatchResponse> _decodeBatchResponse(http.Response response) {
     return readJsonObject(
       response,
@@ -293,6 +302,30 @@ Puzzle _puzzleFromPick(RequiredPick pick) {
     game: pick('game').letOrThrow(_puzzleGameFromPick),
   );
 }
+
+StormDashboard _stormDashboardFromJson(Map<String, dynamic> json) =>
+    _stormDashboardFromPick(pick(json).required());
+
+StormDashboard _stormDashboardFromPick(RequiredPick pick) {
+  return StormDashboard(
+    highScore: PuzzleStormHighScore(
+      day: pick('high', 'day').asIntOrThrow(),
+      allTime: pick('high', 'month').asIntOrThrow(),
+      month: pick('high', 'day').asIntOrThrow(),
+      week: pick('high', 'day').asIntOrThrow(),
+    ),
+    dayHighscores:
+        pick('days').asListOrThrow((p0) => _stormDayFromPick(p0)).toIList(),
+  );
+}
+
+StormDay _stormDayFromPick(RequiredPick pick) => StormDay(
+      day: pick('_id').asDateTimeOrThrow(),
+      runs: pick('day').asIntOrThrow(),
+      score: pick('score').asIntOrThrow(),
+      time: pick('time').asIntOrThrow(),
+      highest: pick('highest').asIntOrThrow(),
+    );
 
 LitePuzzle _litePuzzleFromPick(RequiredPick pick) {
   return LitePuzzle(
