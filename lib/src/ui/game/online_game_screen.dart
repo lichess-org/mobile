@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
+// import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 
 part 'online_game_screen.g.dart';
@@ -70,23 +70,23 @@ class OnlineGameScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _showExitConfirmDialog(BuildContext context) {
-    return showAdaptiveDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return YesNoDialog(
-          title: const Text('Exit.'),
-          content: const Text('Are you sure you want to quit?'),
-          onYes: () {
-            Navigator.of(context).popUntil((route) => route.isFirst);
-          },
-          onNo: () {
-            Navigator.of(context).pop();
-          },
-        );
-      },
-    );
-  }
+  // Future<void> _showExitConfirmDialog(BuildContext context) {
+  //   return showAdaptiveDialog<void>(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return YesNoDialog(
+  //         title: const Text('Exit.'),
+  //         content: const Text('Are you sure you want to quit?'),
+  //         onYes: () {
+  //           Navigator.of(context).popUntil((route) => route.isFirst);
+  //         },
+  //         onNo: () {
+  //           Navigator.of(context).pop();
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
 }
 
 class _WaitForGame extends ConsumerWidget {

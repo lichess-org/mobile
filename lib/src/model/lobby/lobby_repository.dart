@@ -22,7 +22,6 @@ class LobbyRepository {
   final AuthClient authClient;
 
   FutureResult<void> createSeek(GameSeek seek) {
-    print('createSeek: ${seek.requestBody}');
     return authClient.post(
       Uri.parse(
         '$kLichessHost/api/board/seek',

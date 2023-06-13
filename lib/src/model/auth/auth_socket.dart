@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:logging/logging.dart';
 
@@ -36,17 +37,17 @@ class AuthSocket {
   final Logger _log;
   final AuthSocketRef _ref;
 
-  /// The current WebSocket channel and SRI.
-  (String, IOWebSocketChannel)? _connection;
+  /// The current WebSocket SRI, Stream and channel.
+  (String, Stream<dynamic>, IOWebSocketChannel)? _connection;
 
   /// Creates a new WebSocket channel.
   ///
   /// Will not do anything if the channel is already connected.
-  IOWebSocketChannel connect({
+  Stream<dynamic> connect({
     Duration pingInterval = kDefaultPingInterval,
     Duration connectTimeout = kDefaultConnectTimeout,
   }) {
-    if (_connection != null && _connection!.$2.closeCode == null) {
+    if (_connection != null && _connection!.$3.closeCode == null) {
       return _connection!.$2;
     }
 
@@ -63,29 +64,40 @@ class AuthSocket {
             'User-Agent': AuthClient.userAgent(info, null),
           };
     _log.info('Creating WebSocket connection to $uri');
+    final channel = IOWebSocketChannel.connect(
+      uri,
+      pingInterval: pingInterval,
+      connectTimeout: connectTimeout,
+      headers: headers,
+    );
+    final stream = channel.stream.asBroadcastStream();
     _connection = (
       sri,
-      IOWebSocketChannel.connect(
-        uri,
-        pingInterval: pingInterval,
-        connectTimeout: connectTimeout,
-        headers: headers,
-      )
+      stream,
+      channel,
     );
     return _connection!.$2;
   }
 
-  /// Gets the current WebSocket channel
-  IOWebSocketChannel? get channel => _connection?.$2;
+  /// Switches the current WebSocket connection to a new route.
+  ///
+  /// Will not do anything if the channel is not connected.
+  void switchRoute(Uri route) {
+    _log.info('Switching route to $route');
+    sink?.add("{ t: 'switch', d: '${route.path}' }");
+  }
+
+  /// Gets the current WebSocket sink
+  WebSocketSink? get sink => _connection?.$3.sink;
 
   /// Gets the current SRI
   String? get sri => _connection?.$1;
 
-  /// Closes the WebSocket connection.
+  /// Closes the WebSocket connection, if open.
   void close() {
-    if (_connection?.$2.closeCode == null) {
+    if (_connection?.$3.closeCode == null) {
       _log.info('Closing WebSocket connection.');
     }
-    _connection?.$2.sink.close();
+    sink?.close();
   }
 }

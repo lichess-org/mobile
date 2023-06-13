@@ -2,13 +2,8 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:result_extensions/result_extensions.dart';
 
-import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
-import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
@@ -36,11 +31,11 @@ class CreateGameService {
 
     final completer = Completer<PlayableGame>();
 
-    final socketChannel = socket.connect();
-
-    _socketSubscription = socketChannel.stream.listen((event) {
+    final stream = socket.connect();
+    _socketSubscription = stream.listen((event) {
       _log.info('event: $event');
     });
+    socket.switchRoute(Uri(path: '/lobby'));
 
     await Result.release(
       lobbyRepo.createSeek(
