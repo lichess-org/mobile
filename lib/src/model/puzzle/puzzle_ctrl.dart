@@ -23,7 +23,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
-import 'package:lichess_mobile/src/utils/debounce.dart';
+import 'package:lichess_mobile/src/utils/rate_limit.dart';
 
 part 'puzzle_ctrl.g.dart';
 part 'puzzle_ctrl.freezed.dart';
@@ -38,6 +38,8 @@ class PuzzleCtrl extends _$PuzzleCtrl {
   // completes the current one
   FutureResult<PuzzleContext?>? _nextPuzzleFuture;
 
+  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 100));
+
   @override
   PuzzleCtrlState build(
     PuzzleContext initialContext, {
@@ -46,6 +48,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
       _viewSolutionTimer?.cancel();
+      _engineEvalDebounce.dispose();
     });
 
     return _loadNewContext(initialContext, initialStreak);
@@ -207,7 +210,10 @@ class PuzzleCtrl extends _$PuzzleCtrl {
   void sendStreakResult() {
     if (initialContext.userId != null) {
       final repo = ref.read(puzzleRepositoryProvider);
-      repo.postStreakRun(state.streak?.index ?? 0);
+      final streak = state.streak?.index;
+      if (streak != null && streak > 0) {
+        repo.postStreakRun(streak);
+      }
     }
   }
 
@@ -372,11 +378,14 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     final newNodeList = IList(_gameTree.nodesOn(path));
     final sanMove = newNodeList.last.sanMove;
     if (!replaying) {
-      final isCheck = sanMove.san.contains('+');
-      if (sanMove.san.contains('x')) {
-        ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
-      } else {
-        ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
+      final isForward = path.size > state.currentPath.size;
+      if (isForward) {
+        final isCheck = sanMove.san.contains('+');
+        if (sanMove.san.contains('x')) {
+          ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+        } else {
+          ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
+        }
       }
     } else {
       // when replaying moves fast we don't want haptic feedback
@@ -414,9 +423,6 @@ class PuzzleCtrl extends _$PuzzleCtrl {
           .stop();
     }
   }
-
-  static final _engineEvalDebounce =
-      Debounce(const Duration(milliseconds: 100));
 
   void _startEngineEval() {
     if (!state.isEngineEnabled) return;

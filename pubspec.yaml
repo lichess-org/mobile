@@ -3,7 +3,7 @@ description: Lichess mobile app V2
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 0.2.0+19
+version: 0.2.0+20
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -32,7 +32,7 @@ dependencies:
   chessground:
     git:
       url: https://github.com/lichess-org/flutter-chessground.git
-      ref: 27d2e16bcc47aed259904f8cd178c91fb42aee8f
+      ref: f4176e7ebe39781d6168bf126d506df4fec30556
   soundpool: ^2.3.0
   meta: ^1.8.0
   deep_pick: ^1.0.0
@@ -51,13 +51,10 @@ dependencies:
   path: ^1.8.2
   connectivity_plus: ^4.0.0
   share_plus: ^7.0.0
-  fl_chart: ^0.62.0
+  fl_chart: ^0.63.0
   stream_transform: ^2.1.0
   flutter_native_splash: ^2.2.19
-  stockfish:
-    git:
-      url: https://github.com/lichess-org/dart-stockfish.git
-      ref: 274cf52e637e9a663d226ec31cc0b24e639cb615
+  stockfish: ^1.4.0
   firebase_crashlytics: ^3.2.0
   firebase_core: ^2.11.0
   flutter_displaymode: ^0.6.0
