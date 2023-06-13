@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/ui/puzzle/storm_clock.dart';
+import 'package:lichess_mobile/src/ui/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
@@ -46,7 +47,7 @@ class StormScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [ToggleSoundButton()],
+        actions: [_StormDashboardButton(), ToggleSoundButton()],
         title: const Text('Puzzle Storm'),
       ),
       body: const _Load(),
@@ -57,11 +58,44 @@ class StormScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: const Text('Puzzle Storm'),
-        trailing: ToggleSoundButton(),
+        trailing: Row(children: [_StormDashboardButton(), ToggleSoundButton()]),
       ),
       child: const _Load(),
     );
   }
+}
+
+class _StormDashboardButton extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+    if (session != null) {
+      switch (defaultTargetPlatform) {
+        case TargetPlatform.iOS:
+          return CupertinoIconButton(
+            onPressed: () => _showDashboard(context),
+            semanticsLabel: context.l10n.puzzlePuzzleDashboard,
+            icon: const Icon(Icons.history),
+          );
+        case TargetPlatform.android:
+          return IconButton(
+            onPressed: () => _showDashboard(context),
+            icon: const Icon(Icons.history),
+          );
+        default:
+          assert(false, 'Unexpected platform $defaultTargetPlatform');
+          return const SizedBox.shrink();
+      }
+    }
+    return const SizedBox.shrink();
+  }
+
+  void _showDashboard(BuildContext context) => pushPlatformRoute(
+        context,
+        rootNavigator: true,
+        fullscreenDialog: true,
+        builder: (_) => StormDashboardModel(),
+      );
 }
 
 class _Load extends ConsumerWidget {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:async/async.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:deep_pick/deep_pick.dart';
@@ -218,12 +219,15 @@ class PuzzleRepository {
         );
   }
 
-  FutureResult<StormDashboard> stormDashbaord(String userId) {
+  FutureResult<StormDashboard> stormDashbaord(UserId userId) {
     return apiClient
-        .get(Uri.parse('$kLichessHost/api/storm/dashboard/$userId'))
+        .get(Uri.parse('$kLichessHost/api/storm/dashboard/${userId.value}'))
         .flatMap(
-          (response) => readJsonObject(response,
-              mapper: _stormDashboardFromJson, logger: _log),
+          (response) => readJsonObject(
+            response,
+            mapper: _stormDashboardFromJson,
+            logger: _log,
+          ),
         );
   }
 
@@ -307,24 +311,26 @@ StormDashboard _stormDashboardFromJson(Map<String, dynamic> json) =>
     _stormDashboardFromPick(pick(json).required());
 
 StormDashboard _stormDashboardFromPick(RequiredPick pick) {
+  final dateFormat = DateFormat('yyyy/M/d');
   return StormDashboard(
     highScore: PuzzleStormHighScore(
       day: pick('high', 'day').asIntOrThrow(),
-      allTime: pick('high', 'month').asIntOrThrow(),
-      month: pick('high', 'day').asIntOrThrow(),
-      week: pick('high', 'day').asIntOrThrow(),
+      allTime: pick('high', 'allTime').asIntOrThrow(),
+      month: pick('high', 'month').asIntOrThrow(),
+      week: pick('high', 'week').asIntOrThrow(),
     ),
-    dayHighscores:
-        pick('days').asListOrThrow((p0) => _stormDayFromPick(p0)).toIList(),
+    dayHighscores: pick('days')
+        .asListOrThrow((p0) => _stormDayFromPick(p0, dateFormat))
+        .toIList(),
   );
 }
 
-StormDay _stormDayFromPick(RequiredPick pick) => StormDay(
-      day: pick('_id').asDateTimeOrThrow(),
-      runs: pick('day').asIntOrThrow(),
+StormDay _stormDayFromPick(RequiredPick pick, DateFormat format) => StormDay(
+      runs: pick('runs').asIntOrThrow(),
       score: pick('score').asIntOrThrow(),
       time: pick('time').asIntOrThrow(),
       highest: pick('highest').asIntOrThrow(),
+      day: format.parse(pick('_id').asStringOrThrow()),
     );
 
 LitePuzzle _litePuzzleFromPick(RequiredPick pick) {
