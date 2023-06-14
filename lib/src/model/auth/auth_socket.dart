@@ -83,8 +83,9 @@ class AuthSocket {
   ///
   /// Will not do anything if the channel is not connected.
   void switchRoute(Uri route) {
-    _log.info('Switching route to $route');
-    sink?.add("{ t: 'switch', d: '${route.path}' }");
+    final msg = "{ t: 'switch', d: { uri: '${route.path}' }}";
+    print('switch route: $msg');
+    sink?.add(msg);
   }
 
   /// Gets the current WebSocket sink

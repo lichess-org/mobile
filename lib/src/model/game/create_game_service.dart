@@ -33,20 +33,22 @@ class CreateGameService {
 
     final stream = socket.connect();
     _socketSubscription = stream.listen((event) {
-      _log.info('event: $event');
+      print('event: $event');
     });
-    socket.switchRoute(Uri(path: '/lobby'));
+    socket.sink?.add('null');
 
-    await Result.release(
-      lobbyRepo.createSeek(
-        GameSeek(
-          time: Duration(seconds: playPref.timeIncrement.time),
-          increment: Duration(seconds: playPref.timeIncrement.increment),
-          // TODO add rated choice
-          rated: true,
-        ),
-      ),
-    );
+    socket.switchRoute(Uri(path: '/lobby/socket'));
+
+    // await Result.release(
+    //   lobbyRepo.createSeek(
+    //     GameSeek(
+    //       time: Duration(seconds: playPref.timeIncrement.time),
+    //       increment: Duration(seconds: playPref.timeIncrement.increment),
+    //       // TODO add rated choice
+    //       rated: true,
+    //     ),
+    //   ),
+    // );
 
     return completer.future;
   }
