@@ -325,7 +325,8 @@ StormDashboard _stormDashboardFromPick(RequiredPick pick) {
   );
 }
 
-StormDay _stormDayFromPick(RequiredPick pick, DateFormat format) => StormDay(
+StormDayScore _stormDayFromPick(RequiredPick pick, DateFormat format) =>
+    StormDayScore(
       runs: pick('runs').asIntOrThrow(),
       score: pick('score').asIntOrThrow(),
       time: pick('time').asIntOrThrow(),

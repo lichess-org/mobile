@@ -219,6 +219,7 @@ class _Loading extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
+                    // ignore: avoid-wrapping-in-padding
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Container(
@@ -248,6 +249,7 @@ class _Loading extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
+                    // ignore: avoid-wrapping-in-padding
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Container(
