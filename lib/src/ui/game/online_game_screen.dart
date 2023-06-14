@@ -18,7 +18,7 @@ import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 part 'online_game_screen.g.dart';
 
 @riverpod
-Future<PlayableGame> _playableGame(_PlayableGameRef ref) async {
+Future<PlayableGame> _playableGame(_PlayableGameRef ref) {
   final service = ref.watch(createGameServiceProvider);
   ref.onDispose(service.dispose);
   return service.newOnlineGame();

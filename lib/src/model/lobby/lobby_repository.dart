@@ -21,10 +21,10 @@ class LobbyRepository {
 
   final AuthClient authClient;
 
-  FutureResult<void> createSeek(GameSeek seek) {
+  FutureResult<void> createSeek(GameSeek seek, {required String sri}) {
     return authClient.post(
       Uri.parse(
-        '$kLichessHost/api/board/seek',
+        '$kLichessHost/api/board/seek?sri=$sri',
       ),
       body: seek.requestBody,
     );

@@ -35,7 +35,8 @@ AuthClient authClient(AuthClientRef ref) {
     crashlytics,
   );
   ref.onDispose(() {
-    authClient.close();
+    logger.info('Disposing AuthClient.');
+    httpClient.close();
   });
   return authClient;
 }
@@ -83,18 +84,7 @@ class AuthClient {
       Result.capture(
         (retryOnError ? _retryClient : _client).get(url, headers: headers),
       ).mapError((error, stackTrace) {
-        _log.severe('Request error', error, stackTrace);
-        if (kReleaseMode) {
-          _crashlytics.recordError(
-            error,
-            stackTrace,
-            reason: 'a non-fatal http request error',
-            information: [
-              'url: $url',
-              'headers: $headers',
-            ],
-          );
-        }
+        _recordError('GET', error, stackTrace, url, headers);
         return GenericIOException();
       }).flatMap(
         (response) => _validateResponseStatusResult('GET', url, response),
@@ -111,18 +101,7 @@ class AuthClient {
         (retryOnError ? _retryClient : _client)
             .post(url, headers: headers, body: body, encoding: encoding),
       ).mapError((error, stackTrace) {
-        _log.severe('Request error', error, stackTrace);
-        if (kReleaseMode) {
-          _crashlytics.recordError(
-            error,
-            stackTrace,
-            reason: 'a non-fatal http request error',
-            information: [
-              'url: $url',
-              'headers: $headers',
-            ],
-          );
-        }
+        _recordError('POST', error, stackTrace, url, headers);
         return GenericIOException();
       }).flatMap(
         (response) => _validateResponseStatusResult('POST', url, response),
@@ -139,18 +118,7 @@ class AuthClient {
         (retryOnError ? _retryClient : _client)
             .delete(url, headers: headers, body: body, encoding: encoding),
       ).mapError((error, stackTrace) {
-        _log.severe('Request error', error, stackTrace);
-        if (kReleaseMode) {
-          _crashlytics.recordError(
-            error,
-            stackTrace,
-            reason: 'a non-fatal http request error',
-            information: [
-              'url: $url',
-              'headers: $headers',
-            ],
-          );
-        }
+        _recordError('DELETE', error, stackTrace, url, headers);
         return GenericIOException();
       }).flatMap(
         (response) => _validateResponseStatusResult('DELETE', url, response),
@@ -166,18 +134,7 @@ class AuthClient {
     }
     return Result.capture(_client.send(request))
         .mapError((error, stackTrace) {
-          _log.severe('Request error', error, stackTrace);
-          if (kReleaseMode) {
-            _crashlytics.recordError(
-              error,
-              stackTrace,
-              reason: 'a non-fatal http request error',
-              information: [
-                'url: $url',
-                'headers: $headers',
-              ],
-            );
-          }
+          _recordError('GET', error, stackTrace, url, headers);
           return GenericIOException();
         })
         .flatMap((r) => _validateResponseStatusResult('GET', url, r))
@@ -223,8 +180,34 @@ class AuthClient {
                       );
   }
 
+  void _recordError(
+    String method,
+    Object error,
+    StackTrace? stackTrace,
+    Uri url,
+    Map<String, String>? headers,
+  ) {
+    // Ignore canceling seek requests
+    if (error is ClientException && url.path.contains('api/board/seek')) {
+      return;
+    }
+    _log.severe('Request error', error, stackTrace);
+    if (kReleaseMode) {
+      _crashlytics.recordError(
+        error,
+        stackTrace,
+        reason: 'a non-fatal http request error',
+        information: [
+          'method: $method',
+          'url: $url',
+          'headers: $headers',
+        ],
+      );
+    }
+  }
+
   void close() {
-    _log.info('Closing AuthClient.');
+    _retryClient.close();
     _client.close();
   }
 }

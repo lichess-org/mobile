@@ -240,15 +240,19 @@ class _ChoiceChip extends StatelessWidget {
                   ? CupertinoColors.systemBackground
                   : CupertinoColors.secondarySystemBackground
                       .resolveFrom(context),
-              borderRadius: BorderRadius.circular(5.0),
+              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
               border: selected
-                  ? Border.all(
-                      color: CupertinoColors.activeBlue.resolveFrom(context),
-                      width: 2.0,
+                  ? Border.fromBorderSide(
+                      BorderSide(
+                        color: CupertinoColors.activeBlue.resolveFrom(context),
+                        width: 2.0,
+                      ),
                     )
-                  : Border.all(
-                      color: Colors.transparent,
-                      width: 2.0,
+                  : const Border.fromBorderSide(
+                      BorderSide(
+                        color: Colors.transparent,
+                        width: 2.0,
+                      ),
                     ),
             ),
             child: Padding(

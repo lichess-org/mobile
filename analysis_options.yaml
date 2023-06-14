@@ -44,7 +44,6 @@ dart_code_metrics:
     - avoid-unnecessary-type-assertions
     - avoid-unnecessary-type-casts
     - avoid-unrelated-type-assertions
-    - prefer-iterable-of
     - prefer-first
     - prefer-immediate-return
     - prefer-iterable-of
@@ -61,7 +60,6 @@ dart_code_metrics:
     - avoid-shrink-wrap-in-lists
     - avoid-unnecessary-setstate
     - avoid-expanded-as-spacer
-    - avoid-wrapping-in-padding
     - check-for-equals-in-render-object-setters
     - consistent-update-render-object
     - prefer-const-border-radius

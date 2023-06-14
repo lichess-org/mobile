@@ -1,3 +1,5 @@
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
@@ -24,6 +26,8 @@ AuthSocket authSocket(AuthSocketRef ref) {
   });
   return authSocket;
 }
+
+final hmacSha1 = Hmac(sha1, utf8.encode(kLichessWSSecret));
 
 /// WebSocket channel wrapper to authenticate with lichess
 ///
@@ -55,9 +59,12 @@ class AuthSocket {
     final info = _ref.read(packageInfoProvider);
     final sri = genRandomString(12);
     final uri = Uri.parse('$kLichessWSHost$kWebSocketPath?sri=$sri');
+    final bearer = session != null
+        ? '${session.token}:${hmacSha1.convert(utf8.encode(session.token))}'
+        : '';
     final headers = session != null
         ? {
-            'Authorization': 'Bearer ${session.token}',
+            'Authorization': 'Bearer $bearer',
             'User-Agent': AuthClient.userAgent(info, session.user),
           }
         : {
@@ -83,9 +90,14 @@ class AuthSocket {
   ///
   /// Will not do anything if the channel is not connected.
   void switchRoute(Uri route) {
-    final msg = "{ t: 'switch', d: { uri: '${route.path}' }}";
-    print('switch route: $msg');
-    sink?.add(msg);
+    sink?.add(
+      jsonEncode({
+        't': 'switch',
+        'd': {
+          'uri': '${route.path}?sri=$sri',
+        },
+      }),
+    );
   }
 
   /// Gets the current WebSocket sink
