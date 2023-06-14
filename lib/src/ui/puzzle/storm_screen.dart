@@ -58,44 +58,15 @@ class StormScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: const Text('Puzzle Storm'),
-        trailing: Row(children: [_StormDashboardButton(), ToggleSoundButton()]),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [_StormDashboardButton(), ToggleSoundButton()],
+        ),
       ),
       child: const _Load(),
     );
   }
-}
-
-class _StormDashboardButton extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
-    if (session != null) {
-      switch (defaultTargetPlatform) {
-        case TargetPlatform.iOS:
-          return CupertinoIconButton(
-            onPressed: () => _showDashboard(context),
-            semanticsLabel: context.l10n.puzzlePuzzleDashboard,
-            icon: const Icon(Icons.history),
-          );
-        case TargetPlatform.android:
-          return IconButton(
-            onPressed: () => _showDashboard(context),
-            icon: const Icon(Icons.history),
-          );
-        default:
-          assert(false, 'Unexpected platform $defaultTargetPlatform');
-          return const SizedBox.shrink();
-      }
-    }
-    return const SizedBox.shrink();
-  }
-
-  void _showDashboard(BuildContext context) => pushPlatformRoute(
-        context,
-        rootNavigator: true,
-        fullscreenDialog: true,
-        builder: (_) => StormDashboardModel(),
-      );
 }
 
 class _Load extends ConsumerWidget {
@@ -110,7 +81,7 @@ class _Load extends ConsumerWidget {
       loading: () => const CenterLoadingIndicator(),
       error: (e, s) {
         debugPrint(
-          'SEVERE: [PuzzleStreakScreen] could not load streak; $e\n$s',
+          'SEVERE: [PuzzleStormScreen] could not load streak; $e\n$s',
         );
         return Center(
           child: TableBoardLayout(
@@ -810,4 +781,39 @@ class _StatsRow extends StatelessWidget {
       ),
     );
   }
+}
+
+class _StormDashboardButton extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+    if (session != null) {
+      switch (defaultTargetPlatform) {
+        case TargetPlatform.iOS:
+          return CupertinoIconButton(
+            padding: EdgeInsets.zero,
+            onPressed: () => _showDashboard(context),
+            semanticsLabel: 'Storm History',
+            icon: const Icon(Icons.history),
+          );
+        case TargetPlatform.android:
+          return IconButton(
+            tooltip: 'Storm History',
+            onPressed: () => _showDashboard(context),
+            icon: const Icon(Icons.history),
+          );
+        default:
+          assert(false, 'Unexpected platform $defaultTargetPlatform');
+          return const SizedBox.shrink();
+      }
+    }
+    return const SizedBox.shrink();
+  }
+
+  void _showDashboard(BuildContext context) => pushPlatformRoute(
+        context,
+        rootNavigator: true,
+        fullscreenDialog: true,
+        builder: (_) => StormDashboardModel(),
+      );
 }

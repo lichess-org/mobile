@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -42,66 +45,150 @@ class _Body extends ConsumerWidget {
     final stormDashboard = ref.watch(stormDashboardProvider);
     return stormDashboard.when(
       data: (data) {
-        return SingleChildScrollView(
+        final dateFormat = DateFormat("MMMM d, yyyy");
+        return SafeArea(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              StatCardRow(
-                [
-                  StatCard(
-                    context.l10n.stormAllTime,
-                    value: data.highScore.allTime.toString(),
-                  ),
-                  StatCard(
-                    context.l10n.stormThisMonth,
-                    value: data.highScore.month.toString(),
-                  )
-                ],
+              Padding(
+                padding: Styles.sectionTopPadding,
+                child: StatCardRow(
+                  [
+                    StatCard(
+                      context.l10n.stormAllTime,
+                      value: data.highScore.allTime.toString(),
+                    ),
+                    StatCard(
+                      context.l10n.stormThisMonth,
+                      value: data.highScore.month.toString(),
+                    )
+                  ],
+                ),
               ),
-              StatCardRow(
-                [
-                  StatCard(
-                    context.l10n.stormThisWeek,
-                    value: data.highScore.week.toString(),
-                  ),
-                  StatCard(
-                    context.l10n.today,
-                    value: data.highScore.day.toString(),
-                  )
-                ],
+              Padding(
+                padding: Styles.sectionTopPadding,
+                child: StatCardRow(
+                  [
+                    StatCard(
+                      context.l10n.stormThisWeek,
+                      value: data.highScore.week.toString(),
+                    ),
+                    StatCard(
+                      context.l10n.today,
+                      value: data.highScore.day.toString(),
+                    ),
+                  ],
+                ),
               ),
-              Table(
-                border: TableBorder.all(),
-                children: [
-                  TableRow(
+              if (data.dayHighscores.isNotEmpty) ...[
+                Padding(
+                  padding: Styles.bodySectionPadding,
+                  child: Text(
+                    context.l10n.stormBestRunOfDay,
+                    style: Styles.sectionTitle,
+                  ),
+                ),
+                Padding(
+                  padding: Styles.horizontalBodyPadding,
+                  child: Table(
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                     children: [
-                      TableCell(child: Text(context.l10n.stormScore)),
-                      TableCell(child: Text(context.l10n.stormTime)),
-                      TableCell(child: Text(context.l10n.stormHighestSolved)),
-                      TableCell(child: Text(context.l10n.stormRuns)),
+                      TableRow(
+                        children: [
+                          Text(
+                            textAlign: TextAlign.center,
+                            context.l10n.stormScore,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            textAlign: TextAlign.center,
+                            context.l10n.stormTime,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            textAlign: TextAlign.center,
+                            context.l10n.stormHighestSolved,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            textAlign: TextAlign.center,
+                            context.l10n.stormRuns,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                  for (var entry in data.dayHighscores) ...[
-                    TableRow(
-                      children: [
-                        TableCell(
-                          child: Text(entry.day.toString()),
-                        ),
-                        const TableCell(child: SizedBox.shrink()),
-                        const TableCell(child: SizedBox.shrink()),
-                        const TableCell(child: SizedBox.shrink()),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        TableCell(child: Text(entry.score.toString())),
-                        TableCell(child: Text(entry.time.toString())),
-                        TableCell(child: Text(entry.highest.toString())),
-                        TableCell(child: Text(entry.runs.toString())),
-                      ],
-                    ),
-                  ]
-                ],
-              ),
+                ),
+                Flexible(
+                  child: ListView.builder(
+                    itemCount: data.dayHighscores.length * 2,
+                    itemBuilder: (context, index) {
+                      if (index.isEven) {
+                        // Date row
+                        final entryIndex = index ~/ 2;
+                        return ColoredBox(
+                          color: LichessColors.grey.withOpacity(0.25),
+                          child: Padding(
+                            padding: Styles.horizontalBodyPadding,
+                            child: Text(
+                              dateFormat
+                                  .format(data.dayHighscores[entryIndex].day),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        );
+                      } else {
+                        // Data row
+                        final entryIndex = (index - 1) ~/ 2;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 10,
+                          ),
+                          child: Table(
+                            defaultVerticalAlignment:
+                                TableCellVerticalAlignment.middle,
+                            children: [
+                              TableRow(
+                                children: [
+                                  Text(
+                                    textAlign: TextAlign.center,
+                                    data.dayHighscores[entryIndex].score
+                                        .toString(),
+                                    style: const TextStyle(
+                                      color: LichessColors.brag,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    textAlign: TextAlign.center,
+                                    '${data.dayHighscores[entryIndex].time}s',
+                                  ),
+                                  Text(
+                                    textAlign: TextAlign.center,
+                                    data.dayHighscores[entryIndex].highest
+                                        .toString(),
+                                  ),
+                                  Text(
+                                    textAlign: TextAlign.center,
+                                    data.dayHighscores[entryIndex].runs
+                                        .toString(),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ] else
+                const Center(
+                  child: Text('Nothing to show. Play some runs of storm'),
+                )
             ],
           ),
         );
@@ -110,12 +197,87 @@ class _Body extends ConsumerWidget {
         debugPrint(
           'SEVERE: [StormDashboardModel] could not load storm dashboard; $e\n$s',
         );
-        return const Text('Could not load dashboard');
+        return const SafeArea(child: Text('Could not load dashboard'));
       },
-      loading: () => Shimmer(
+      loading: () => _Loading(),
+    );
+  }
+}
+
+class _Loading extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final containerHeigth = MediaQuery.of(context).size.width / 2 * 0.8;
+    return SafeArea(
+      child: Shimmer(
         child: ShimmerLoading(
           isLoading: true,
-          child: ListSection.loading(itemsNumber: 5),
+          child: Padding(
+            padding: Styles.bodySectionPadding,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: Container(
+                        width: containerHeigth,
+                        height: 60,
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    // ignore: avoid-wrapping-in-padding
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: Container(
+                        width: containerHeigth,
+                        height: 60,
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: Container(
+                        width: containerHeigth,
+                        height: 60,
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    // ignore: avoid-wrapping-in-padding
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: Container(
+                        width: containerHeigth,
+                        height: 60,
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                ListSection.loading(itemsNumber: 5),
+              ],
+            ),
+          ),
         ),
       ),
     );
