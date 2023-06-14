@@ -1,5 +1,6 @@
-import 'dart:math';
-
+import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,6 +25,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
+final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
 final _puzzleLoadingProvider = StateProvider<bool>((ref) => false);
 
 class PuzzleHistoryWidget extends ConsumerWidget {
@@ -109,6 +111,8 @@ class _Body extends ConsumerStatefulWidget {
   ConsumerState<_Body> createState() => _BodyState();
 }
 
+const _kPuzzlePadding = 10.0;
+
 class _BodyState extends ConsumerState<_Body> {
   final ScrollController _scrollController = ScrollController();
   bool _hasMore = true;
@@ -149,30 +153,50 @@ class _BodyState extends ConsumerState<_Body> {
         }
         final crossAxisCount =
             MediaQuery.of(context).size.width > kTabletThreshold ? 4 : 2;
-        const columnGap = 32.0;
+        final columnsGap = _kPuzzlePadding * crossAxisCount + _kPuzzlePadding;
         final boardWidth =
-            (MediaQuery.of(context).size.width / crossAxisCount) -
-                (columnGap / crossAxisCount);
+            (MediaQuery.of(context).size.width - columnsGap) / crossAxisCount;
+
+        final list = state.makeList(crossAxisCount);
+
         return ListView.builder(
           controller: _scrollController,
-          itemCount:
-              state.list.length ~/ crossAxisCount + (state.isLoading ? 1 : 0),
+          itemCount: list.length + (state.isLoading ? 1 : 0),
           itemBuilder: (context, index) {
-            if (state.isLoading &&
-                index == state.list.length ~/ crossAxisCount) {
-              return const CenterLoadingIndicator();
+            if (state.isLoading && index == list.length) {
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 32.0),
+                child: CenterLoadingIndicator(),
+              );
             }
-            final rowStartIndex = index * crossAxisCount;
-            final rowEndIndex =
-                min(rowStartIndex + crossAxisCount, state.list.length);
-            return Row(
-              children: state.list
-                  .getRange(index * crossAxisCount, rowEndIndex)
-                  .map(
-                    (e) => _HistoryBoard(e, boardWidth),
-                  )
-                  .toList(),
-            );
+            final element = list[index];
+            if (element is List) {
+              return Padding(
+                padding: const EdgeInsets.only(right: _kPuzzlePadding),
+                child: Row(
+                  children: element
+                      .mapIndexed(
+                        (i, e) =>
+                            _HistoryBoard(e as PuzzleHistoryEntry, boardWidth),
+                      )
+                      .toList(),
+                ),
+              );
+            } else if (element is DateTime) {
+              final title = DateTime.now().difference(element).inDays >= 15
+                  ? _dateFormatter.format(element)
+                  : timeago.format(element);
+              return Padding(
+                padding: const EdgeInsets.only(left: _kPuzzlePadding)
+                    .add(Styles.sectionTopPadding),
+                child: Text(
+                  title,
+                  style: Styles.sectionTitle,
+                ),
+              );
+            } else {
+              return const SizedBox();
+            }
           },
         );
       },
@@ -182,12 +206,7 @@ class _BodyState extends ConsumerState<_Body> {
         );
         return const Center(child: Text('Could not load Puzzle History'));
       },
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: ListSection.loading(itemsNumber: 5),
-        ),
-      ),
+      loading: () => const CenterLoadingIndicator(),
     );
   }
 }
@@ -203,7 +222,11 @@ class _HistoryBoard extends ConsumerWidget {
     final (fen, turn, lastMove) = puzzle.preview;
     final isLoading = ref.watch(_puzzleLoadingProvider);
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(
+        left: _kPuzzlePadding,
+        top: _kPuzzlePadding,
+        bottom: _kPuzzlePadding,
+      ),
       child: BoardThumbnail(
         size: boardWidth,
         onTap: isLoading

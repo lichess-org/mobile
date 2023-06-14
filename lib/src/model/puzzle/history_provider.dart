@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:collection/collection.dart';
 import 'package:async/async.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -25,25 +25,46 @@ Future<IList<PuzzleHistoryEntry>> puzzleRecentActivity(
 
 @riverpod
 class PuzzleActivity extends _$PuzzleActivity {
-  PuzzleRepository? _repo;
+  final _list = <PuzzleHistoryEntry>[];
+
   @override
   Future<PuzzleActivityState> build() async {
     ref.cacheFor(const Duration(minutes: 10));
-    _repo = ref.read(puzzleRepositoryProvider);
-    final value = await ref.read(puzzleRecentActivityProvider.future);
+    ref.onDispose(() {
+      _list.clear();
+    });
+    _list.addAll(await ref.read(puzzleRecentActivityProvider.future));
     return PuzzleActivityState(
-      list: value,
+      historyByDay: _groupByDay(_list),
       isLoading: false,
       hasMore: true,
       hasError: false,
     );
   }
 
+  Map<DateTime, IList<PuzzleHistoryEntry>> _groupByDay(
+    Iterable<PuzzleHistoryEntry> list,
+  ) {
+    final map = <DateTime, IList<PuzzleHistoryEntry>>{};
+    for (final entry in list) {
+      final date = DateTime(entry.date.year, entry.date.month, entry.date.day);
+      if (map.containsKey(date)) {
+        map[date] = map[date]!.add(entry);
+      } else {
+        map[date] = IList([entry]);
+      }
+    }
+    return map;
+  }
+
   void getNext() {
     final currentVal = state.requireValue;
-    if (currentVal.list.length < _maxPuzzles) {
+    if (_list.length < _maxPuzzles) {
       state = AsyncData(currentVal.copyWith(isLoading: true));
-      _repo!.puzzleActivity(50, before: currentVal.list.last.date).fold(
+      ref
+          .read(puzzleRepositoryProvider)
+          .puzzleActivity(50, before: _list.last.date)
+          .fold(
         (value) {
           if (value.isEmpty) {
             state = AsyncData(
@@ -51,9 +72,10 @@ class PuzzleActivity extends _$PuzzleActivity {
             );
             return;
           }
+          _list.addAll(value);
           state = AsyncData(
             PuzzleActivityState(
-              list: IList([...currentVal.list, ...value]),
+              historyByDay: _groupByDay(_list),
               isLoading: false,
               hasMore: true,
               hasError: false,
@@ -63,11 +85,6 @@ class PuzzleActivity extends _$PuzzleActivity {
         (error, stackTrace) {
           state =
               AsyncData(currentVal.copyWith(isLoading: false, hasError: true));
-          Timer.periodic(const Duration(seconds: 1), (_) {
-            state = AsyncData(
-              currentVal.copyWith(isLoading: false, hasError: false),
-            );
-          });
         },
       );
     }
@@ -76,10 +93,27 @@ class PuzzleActivity extends _$PuzzleActivity {
 
 @freezed
 class PuzzleActivityState with _$PuzzleActivityState {
+  const PuzzleActivityState._();
+
   const factory PuzzleActivityState({
-    required IList<PuzzleHistoryEntry> list,
+    required Map<DateTime, IList<PuzzleHistoryEntry>> historyByDay,
     required bool isLoading,
     required bool hasMore,
     required bool hasError,
   }) = _PuzzleActivityState;
+
+  /// Returns the list of puzzles to show in the list view.
+  ///
+  /// It includes the date headers, and puzzles are sliced into rows of `numPerRow` length.
+  /// So one element can be either:
+  ///  - a DateTime to show a date header.
+  ///  - a List<PuzzleHistoryEntry> to show a puzzles row.
+  List<dynamic> makeList(int numPerRow) {
+    final list = <dynamic>[];
+    for (final entry in historyByDay.entries) {
+      list.add(entry.key);
+      list.addAll(entry.value.slices(numPerRow));
+    }
+    return list;
+  }
 }
