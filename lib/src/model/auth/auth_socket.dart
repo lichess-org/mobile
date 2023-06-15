@@ -1,4 +1,3 @@
-import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -10,6 +9,7 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:lichess_mobile/src/model/auth/bearer.dart';
 
 part 'auth_socket.g.dart';
 
@@ -26,8 +26,6 @@ AuthSocket authSocket(AuthSocketRef ref) {
   });
   return authSocket;
 }
-
-final hmacSha1 = Hmac(sha1, utf8.encode(kLichessWSSecret));
 
 /// WebSocket channel wrapper to authenticate with lichess
 ///
@@ -59,9 +57,7 @@ class AuthSocket {
     final info = _ref.read(packageInfoProvider);
     final sri = genRandomString(12);
     final uri = Uri.parse('$kLichessWSHost$kWebSocketPath?sri=$sri');
-    final bearer = session != null
-        ? '${session.token}:${hmacSha1.convert(utf8.encode(session.token))}'
-        : '';
+    final bearer = session != null ? signBearerToken(session.token) : '';
     final headers = session != null
         ? {
             'Authorization': 'Bearer $bearer',

@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/utils/json.dart';
 import 'user_session.dart';
 import 'auth_repository.dart';
 import 'session_storage.dart';
+import 'bearer.dart';
 
 part 'auth_controller.g.dart';
 
@@ -32,7 +33,10 @@ class AuthController extends _$AuthController {
           final apiClient = ref.read(authClientProvider);
           return apiClient.get(
             Uri.parse('$kLichessHost/api/account'),
-            headers: {'Authorization': 'Bearer ${oAuthResp.accessToken}'},
+            headers: {
+              'Authorization':
+                  'Bearer ${signBearerToken(oAuthResp.accessToken!)}'
+            },
           ).flatMap((response) {
             return readJsonObject(response, mapper: User.fromJson).map((user) {
               return UserSession(

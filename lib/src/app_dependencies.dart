@@ -12,8 +12,9 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/db/database.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
@@ -48,7 +49,7 @@ Future<AppDependencies> appDependencies(
       final response = await client.get(
         Uri.parse('$kLichessHost/api/account'),
         headers: {
-          'Authorization': 'Bearer ${storedSession.token}',
+          'Authorization': 'Bearer ${signBearerToken(storedSession.token)}',
           'user-agent': AuthClient.userAgent(pInfo, storedSession.user),
         },
       ).timeout(const Duration(seconds: 3));

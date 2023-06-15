@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:async/async.dart';
 import 'package:logging/logging.dart';
@@ -13,6 +12,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
@@ -58,11 +58,6 @@ class AuthClient {
   }) : _retryClient = RetryClient.withDelays(
           _client,
           retryDelays,
-          whenError: (error, _) async =>
-              error is SocketException ||
-              error.toString().contains(
-                    'Connection closed before full header was received',
-                  ),
         ) {
     _log.info('Creating new AuthClient.');
   }
@@ -226,7 +221,8 @@ class _AuthClient extends BaseClient {
     final info = ref.read(packageInfoProvider);
 
     if (session != null && !request.headers.containsKey('Authorization')) {
-      request.headers['Authorization'] = 'Bearer ${session.token}';
+      final bearer = signBearerToken(session.token);
+      request.headers['Authorization'] = 'Bearer $bearer';
     }
 
     request.headers['user-agent'] = AuthClient.userAgent(info, session?.user);
