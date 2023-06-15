@@ -289,14 +289,17 @@ class _MoveListState extends State<MoveList> {
                           children: [
                             InlineMoveCount(count: index + 1),
                             ...moves.map(
-                              (move) => InlineMoveItem(
-                                key: widget.currentMoveIndex == move.key
-                                    ? currentMoveKey
-                                    : null,
-                                move: move,
-                                current: widget.currentMoveIndex == move.key,
-                                onSelectMove: widget.onSelectMove,
-                              ),
+                              (move) {
+                                // cursor index starts at 0, move index starts at 1
+                                final isCurrentMove =
+                                    widget.currentMoveIndex == move.key + 1;
+                                return InlineMoveItem(
+                                  key: isCurrentMove ? currentMoveKey : null,
+                                  move: move,
+                                  current: isCurrentMove,
+                                  onSelectMove: widget.onSelectMove,
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -322,17 +325,22 @@ class _MoveListState extends State<MoveList> {
                               child: Row(
                                 children: [
                                   ...moves.map(
-                                    (move) => Expanded(
-                                      child: StackedMoveItem(
-                                        key: widget.currentMoveIndex == move.key
-                                            ? currentMoveKey
-                                            : null,
-                                        move: move,
-                                        current:
-                                            widget.currentMoveIndex == move.key,
-                                        onSelectMove: widget.onSelectMove,
-                                      ),
-                                    ),
+                                    (move) {
+                                      // cursor index starts at 0, move index starts at 1
+                                      final isCurrentMove =
+                                          widget.currentMoveIndex ==
+                                              move.key + 1;
+                                      return Expanded(
+                                        child: StackedMoveItem(
+                                          key: isCurrentMove
+                                              ? currentMoveKey
+                                              : null,
+                                          move: move,
+                                          current: isCurrentMove,
+                                          onSelectMove: widget.onSelectMove,
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ],
                               ),

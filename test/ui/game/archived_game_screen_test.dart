@@ -144,7 +144,7 @@ void main() {
         isNull,
       );
 
-      for (var i = 0; i < movesAfterE4.length; i++) {
+      for (var i = 0; i <= movesAfterE4.length; i++) {
         // go back in history
         await tester.tap(find.byKey(const Key('cursor-back')));
         // wait for animation to finish

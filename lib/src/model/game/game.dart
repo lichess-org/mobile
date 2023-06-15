@@ -14,33 +14,36 @@ import 'material_diff.dart';
 part 'game.freezed.dart';
 
 abstract mixin class BaseGame {
+  /// Game steps, cannot be empty.
   IList<GameStep> get steps;
 }
 
 /// A mixin that provides methods to access game data at a specific step.
 mixin IndexableSteps on BaseGame {
   MaterialDiffSide? materialDiffAt(int cursor, Side side) =>
-      steps.isNotEmpty ? steps[cursor].diff.bySide(side) : null;
+      steps[cursor].diff?.bySide(side);
 
-  GameStep? stepAt(int cursor) => steps.isNotEmpty ? steps[cursor] : null;
+  GameStep stepAt(int cursor) => steps[cursor];
 
-  String? fenAt(int cursor) =>
-      steps.isNotEmpty ? steps[cursor].position.fen : null;
+  String fenAt(int cursor) => steps[cursor].position.fen;
 
-  Move? moveAt(int cursor) =>
-      steps.isNotEmpty ? Move.fromUci(steps[cursor].uci) : null;
+  Move? moveAt(int cursor) {
+    final uci = steps[cursor].uci;
+    return uci != null ? Move.fromUci(uci) : null;
+  }
 
-  Position? positionAt(int cursor) =>
-      steps.isNotEmpty ? steps[cursor].position : null;
+  Position positionAt(int cursor) => steps[cursor].position;
 
-  Duration? whiteClockAt(int cursor) =>
-      steps.isNotEmpty ? steps[cursor].whiteClock : null;
+  Duration? whiteClockAt(int cursor) => steps[cursor].whiteClock;
 
-  Duration? blackClockAt(int cursor) =>
-      steps.isNotEmpty ? steps[cursor].blackClock : null;
+  Duration? blackClockAt(int cursor) => steps[cursor].blackClock;
 
-  Move? get lastMove => steps.isNotEmpty ? Move.fromUci(steps.last.uci) : null;
-  Position? get lastPosition => steps.isNotEmpty ? steps.last.position : null;
+  Move? get lastMove {
+    final uci = steps.last.uci;
+    return uci != null ? Move.fromUci(uci) : null;
+  }
+
+  Position get lastPosition => steps.last.position;
 }
 
 @freezed
@@ -133,10 +136,10 @@ class ClockData with _$ClockData {
 class GameStep with _$GameStep {
   const factory GameStep({
     required int ply,
-    required String san,
-    required String uci,
     required Position position,
-    required MaterialDiff diff,
+    String? san,
+    String? uci,
+    MaterialDiff? diff,
 
     /// The remaining white clock time at this step. Only for archived game.
     Duration? whiteClock,

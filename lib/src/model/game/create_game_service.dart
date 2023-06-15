@@ -98,13 +98,13 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
     data: data,
     steps: pick('pgn').letOrThrow((it) {
       final moves = it.asStringOrThrow().split(' ');
-      final List<GameStep> steps = [];
       // assume lichess always send initialFen with fromPosition and chess960
       Position position = (data.variant == Variant.fromPosition ||
               data.variant == Variant.chess960)
           ? Chess.fromSetup(Setup.parseFen(data.initialFen!))
           : data.variant.initialPosition;
       int ply = 0;
+      final List<GameStep> steps = [GameStep(ply: ply, position: position)];
       for (final san in moves) {
         ply++;
         final move = position.parseSan(san);
