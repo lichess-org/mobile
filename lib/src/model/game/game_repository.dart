@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
 import 'game.dart';
+import 'game_status.dart';
 import 'player.dart';
 
 class GameRepository {

@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:deep_pick/deep_pick.dart';
 
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -9,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 
 import 'player.dart';
+import 'game_status.dart';
 
 part 'game.freezed.dart';
 
@@ -233,54 +233,4 @@ class AnalysisJudgment with _$AnalysisJudgment {
     required String name,
     required String comment,
   }) = _AnalysisJugdment;
-}
-
-enum GameStatus {
-  unknown(-1),
-  created(10),
-  started(20),
-  aborted(25),
-  mate(30),
-  resign(31),
-  stalemate(32),
-  timeout(33),
-  draw(34),
-  outoftime(35),
-  cheat(36),
-  noStart(37),
-  unknownFinish(38),
-  variantEnd(60);
-
-  const GameStatus(this.value);
-  final int value;
-}
-
-final IMap<String, GameStatus> gameStatusNameMap =
-    IMap(GameStatus.values.asNameMap());
-
-extension GameExtension on Pick {
-  GameStatus asGameStatusOrThrow() {
-    final value = this.required().value;
-    if (value is GameStatus) {
-      return value;
-    }
-    if (value is String) {
-      final gameStatus = gameStatusNameMap[value];
-      if (gameStatus != null) {
-        return gameStatus;
-      }
-    }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to GameStatus",
-    );
-  }
-
-  GameStatus? asGameStatusOrNull() {
-    if (value == null) return null;
-    try {
-      return asGameStatusOrThrow();
-    } catch (_) {
-      return null;
-    }
-  }
 }
