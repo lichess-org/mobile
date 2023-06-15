@@ -8,6 +8,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
+import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -18,7 +19,6 @@ import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 
@@ -83,7 +83,9 @@ class CreateGameService {
   }
 
   void dispose() {
-    ref.invalidate(authClientProvider);
+    // close client connection to cancel seek
+    // cf: https://lichess.org/api#tag/Board/operation/apiBoardSeek
+    ref.invalidate(httpClientProvider);
     _socketSubscription?.cancel();
   }
 }

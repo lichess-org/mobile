@@ -34,10 +34,6 @@ AuthClient authClient(AuthClientRef ref) {
     insideAuthClient,
     crashlytics,
   );
-  ref.onDispose(() {
-    logger.info('Disposing AuthClient.');
-    httpClient.close();
-  });
   return authClient;
 }
 
