@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/utils/json.dart';
 import 'game.dart';
 import 'game_status.dart';
 import 'player.dart';
+import 'material_diff.dart';
 
 class GameRepository {
   const GameRepository(
