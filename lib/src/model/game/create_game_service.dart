@@ -38,6 +38,10 @@ class CreateGameService {
   StreamSubscription<dynamic>? _socketSubscription;
 
   Future<PlayableGame> newOnlineGame() async {
+    if (_socketSubscription != null) {
+      throw Exception('Already creating a game');
+    }
+
     final socket = ref.read(authSocketProvider);
     final playPref = ref.read(playPreferencesProvider);
     final lobbyRepo = ref.read(lobbyRepositoryProvider);
@@ -53,7 +57,7 @@ class CreateGameService {
         case 'redirect':
           // ignore: avoid_dynamic_calls
           final gameId = msg['d']['id'] as String;
-          socket.switchRoute(Uri(path: '/play/$gameId'));
+          socket.switchRoute(Uri(path: '/play/$gameId/v6'));
 
         case 'full':
           final game =
@@ -87,6 +91,7 @@ class CreateGameService {
     // cf: https://lichess.org/api#tag/Board/operation/apiBoardSeek
     ref.invalidate(httpClientProvider);
     _socketSubscription?.cancel();
+    _socketSubscription = null;
   }
 }
 
@@ -134,8 +139,8 @@ PlayableGameData _playableGameDataFromPick(RequiredPick pick) {
     speed: pick('speed').asSpeedOrThrow(),
     perf: pick('perf').asPerfOrThrow(),
     status: pick('status').asGameStatusOrThrow(),
-    white: pick('players', 'white').letOrThrow(_playerFromUserGamePick),
-    black: pick('players', 'black').letOrThrow(_playerFromUserGamePick),
+    white: pick('white').letOrThrow(_playerFromUserGamePick),
+    black: pick('black').letOrThrow(_playerFromUserGamePick),
     variant: pick('variant').asVariantOrThrow(),
     initialFen: pick('initialFen').asStringOrNull(),
   );

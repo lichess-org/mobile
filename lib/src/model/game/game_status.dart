@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:deep_pick/deep_pick.dart';
 
@@ -32,6 +33,11 @@ extension GameExtension on Pick {
     }
     if (value is String) {
       final gameStatus = gameStatusNameMap[value];
+      if (gameStatus != null) {
+        return gameStatus;
+      }
+    } else if (value is Map<String, dynamic>) {
+      final gameStatus = gameStatusNameMap[value['name'] as String];
       if (gameStatus != null) {
         return gameStatus;
       }
