@@ -93,12 +93,10 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
     rated: pick('rated').asBoolOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),
     perf: pick('perf').asPerfOrThrow(),
-    player: pick('player').asSideOrThrow(),
     status: pick('status').asGameStatusOrThrow(),
     white: pick('players', 'white').letOrThrow(_playerFromUserGamePick),
     black: pick('players', 'black').letOrThrow(_playerFromUserGamePick),
     variant: pick('variant').asVariantOrThrow(),
-    fen: pick('fen').asStringOrThrow(),
     initialFen: pick('initialFen').asStringOrNull(),
   );
 }
