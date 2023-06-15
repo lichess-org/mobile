@@ -13,11 +13,52 @@ import 'material_diff.dart';
 
 part 'game.freezed.dart';
 
+abstract mixin class BaseGame {
+  IList<GameStep> get steps;
+}
+
+/// A mixin that provides methods to access game data at a specific step.
+mixin IndexableSteps on BaseGame {
+  MaterialDiffSide? materialDiffAt(int cursor, Side side) =>
+      steps.isNotEmpty ? steps[cursor].diff.bySide(side) : null;
+
+  GameStep? stepAt(int cursor) => steps.isNotEmpty ? steps[cursor] : null;
+
+  String? fenAt(int cursor) =>
+      steps.isNotEmpty ? steps[cursor].position.fen : null;
+
+  Move? moveAt(int cursor) =>
+      steps.isNotEmpty ? Move.fromUci(steps[cursor].uci) : null;
+
+  Position? positionAt(int cursor) =>
+      steps.isNotEmpty ? steps[cursor].position : null;
+
+  Duration? whiteClockAt(int cursor) =>
+      steps.isNotEmpty ? steps[cursor].whiteClock : null;
+
+  Duration? blackClockAt(int cursor) =>
+      steps.isNotEmpty ? steps[cursor].blackClock : null;
+
+  Move? get lastMove => steps.isNotEmpty ? Move.fromUci(steps.last.uci) : null;
+  Position? get lastPosition => steps.isNotEmpty ? steps.last.position : null;
+}
+
 @freezed
-class PlayableGame with _$PlayableGame {
+class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
   const PlayableGame._();
 
   const factory PlayableGame({
+    required PlayableGameData data,
+    required IList<GameStep> steps,
+    ClockData? clock,
+  }) = _PlayableGame;
+}
+
+@freezed
+class PlayableGameData with _$PlayableGameData {
+  const PlayableGameData._();
+
+  const factory PlayableGameData({
     required GameId id,
     required bool rated,
     required Variant variant,
@@ -29,7 +70,7 @@ class PlayableGame with _$PlayableGame {
     required Player black,
     String? pgn,
     PlayableClockData? clock,
-  }) = _PlayableGame;
+  }) = _PlayableGameData;
 }
 
 @freezed
@@ -69,7 +110,7 @@ class ArchivedGameData with _$ArchivedGameData {
 }
 
 @freezed
-class ArchivedGame with _$ArchivedGame {
+class ArchivedGame with _$ArchivedGame, BaseGame, IndexableSteps {
   const ArchivedGame._();
 
   const factory ArchivedGame({
@@ -78,29 +119,6 @@ class ArchivedGame with _$ArchivedGame {
     // IList<MoveAnalysis>? analysis,
     ClockData? clock,
   }) = _ArchivedGame;
-
-  MaterialDiffSide? materialDiffAt(int cursor, Side side) =>
-      steps.isNotEmpty ? steps[cursor].diff.bySide(side) : null;
-
-  GameStep? stepAt(int cursor) => steps.isNotEmpty ? steps[cursor] : null;
-
-  String? fenAt(int cursor) =>
-      steps.isNotEmpty ? steps[cursor].position.fen : null;
-
-  Move? moveAt(int cursor) =>
-      steps.isNotEmpty ? Move.fromUci(steps[cursor].uci) : null;
-
-  Position? positionAt(int cursor) =>
-      steps.isNotEmpty ? steps[cursor].position : null;
-
-  Duration? whiteClockAt(int cursor) =>
-      steps.isNotEmpty ? steps[cursor].whiteClock : null;
-
-  Duration? blackClockAt(int cursor) =>
-      steps.isNotEmpty ? steps[cursor].blackClock : null;
-
-  Move? get lastMove => steps.isNotEmpty ? Move.fromUci(steps.last.uci) : null;
-  Position? get lastPosition => steps.isNotEmpty ? steps.last.position : null;
 }
 
 @freezed
@@ -119,7 +137,11 @@ class GameStep with _$GameStep {
     required String uci,
     required Position position,
     required MaterialDiff diff,
+
+    /// The remaining white clock time at this step. Only for archived game.
     Duration? whiteClock,
+
+    /// The remaining black clock time at this step. Only for archived game.
     Duration? blackClock,
   }) = _GameStep;
 }
