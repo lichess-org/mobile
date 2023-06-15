@@ -50,7 +50,8 @@ mixin IndexableSteps on BaseGame {
 class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
   const PlayableGame._();
 
-  const factory PlayableGame({
+  @Assert('steps.isNotEmpty')
+  factory PlayableGame({
     required PlayableGameData data,
     required IList<GameStep> steps,
     ClockData? clock,
@@ -116,7 +117,8 @@ class ArchivedGameData with _$ArchivedGameData {
 class ArchivedGame with _$ArchivedGame, BaseGame, IndexableSteps {
   const ArchivedGame._();
 
-  const factory ArchivedGame({
+  @Assert('steps.isNotEmpty')
+  factory ArchivedGame({
     required ArchivedGameData data,
     required IList<GameStep> steps,
     // IList<MoveAnalysis>? analysis,
