@@ -2,19 +2,9 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:deep_pick/deep_pick.dart';
-import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/http_client.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:lichess_mobile/src/model/game/game_status.dart';
-import 'package:lichess_mobile/src/model/game/player.dart';
-import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
@@ -58,7 +48,7 @@ class CreateGameService {
         case 'full':
           final game =
               // ignore: avoid_dynamic_calls
-              _playableGameFromJson(msg['d']['game'] as Map<String, dynamic>);
+              PlayableGame.fromWebSocketJson(msg['d'] as Map<String, dynamic>);
           completer.complete(game);
       }
     });
@@ -89,67 +79,4 @@ class CreateGameService {
     _socketSubscription?.cancel();
     _socketSubscription = null;
   }
-}
-
-PlayableGame _playableGameFromJson(Map<String, dynamic> json) =>
-    _playableGameFromPick(pick(json).required());
-
-PlayableGame _playableGameFromPick(RequiredPick pick) {
-  final data = _playableGameDataFromPick(pick);
-
-  return PlayableGame(
-    data: data,
-    steps: pick('pgn').letOrThrow((it) {
-      final moves = it.asStringOrThrow().split(' ');
-      // assume lichess always send initialFen with fromPosition and chess960
-      Position position = (data.variant == Variant.fromPosition ||
-              data.variant == Variant.chess960)
-          ? Chess.fromSetup(Setup.parseFen(data.initialFen!))
-          : data.variant.initialPosition;
-      int ply = 0;
-      final List<GameStep> steps = [GameStep(ply: ply, position: position)];
-      for (final san in moves) {
-        ply++;
-        final move = position.parseSan(san);
-        // assume lichess only sends correct moves
-        position = position.playUnchecked(move!);
-        steps.add(
-          GameStep(
-            ply: ply,
-            san: san,
-            uci: move.uci,
-            position: position,
-            diff: MaterialDiff.fromBoard(position.board),
-          ),
-        );
-      }
-      return IList(steps);
-    }),
-  );
-}
-
-PlayableGameData _playableGameDataFromPick(RequiredPick pick) {
-  return PlayableGameData(
-    id: pick('id').asGameIdOrThrow(),
-    rated: pick('rated').asBoolOrThrow(),
-    speed: pick('speed').asSpeedOrThrow(),
-    perf: pick('perf').asPerfOrThrow(),
-    status: pick('status').asGameStatusOrThrow(),
-    white: pick('white').letOrThrow(_playerFromUserGamePick),
-    black: pick('black').letOrThrow(_playerFromUserGamePick),
-    variant: pick('variant').asVariantOrThrow(),
-    initialFen: pick('initialFen').asStringOrNull(),
-  );
-}
-
-Player _playerFromUserGamePick(RequiredPick pick) {
-  return Player(
-    id: pick('user', 'id').asUserIdOrNull(),
-    name: pick('user', 'name').asStringOrNull() ?? 'Stockfish',
-    patron: pick('user', 'patron').asBoolOrNull(),
-    title: pick('user', 'title').asStringOrNull(),
-    rating: pick('rating').asIntOrNull(),
-    ratingDiff: pick('ratingDiff').asIntOrNull(),
-    aiLevel: pick('aiLevel').asIntOrNull(),
-  );
 }

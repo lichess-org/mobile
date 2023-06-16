@@ -1,11 +1,13 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:deep_pick/deep_pick.dart';
 
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
 
 import 'player.dart';
 import 'game_status.dart';
@@ -54,8 +56,93 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
   factory PlayableGame({
     required PlayableGameData data,
     required IList<GameStep> steps,
-    ClockData? clock,
+    required Player white,
+    required Player black,
+    required int socketVersion,
+    Side? youAre,
+    PlayableClockData? clock,
   }) = _PlayableGame;
+
+  factory PlayableGame.fromWebSocketJson(Map<String, dynamic> json) =>
+      _playableGameFromPick(pick(json).required());
+}
+
+PlayableGame _playableGameFromPick(RequiredPick pick) {
+  final data = _playableGameDataFromPick(pick('game').required());
+
+  // assume lichess always send initialFen with fromPosition and chess960
+  Position position =
+      (data.variant == Variant.fromPosition || data.variant == Variant.chess960)
+          ? Chess.fromSetup(Setup.parseFen(data.initialFen!))
+          : data.variant.initialPosition;
+
+  int ply = 0;
+  final steps = [GameStep(ply: ply, position: position)];
+  final moves =
+      pick('game', 'pgn').letOrNull((it) => it.asStringOrThrow().split(' '));
+  if (moves != null) {
+    for (final san in moves) {
+      ply++;
+      final move = position.parseSan(san);
+      // assume lichess only sends correct moves
+      position = position.playUnchecked(move!);
+      steps.add(
+        GameStep(
+          ply: ply,
+          san: san,
+          uci: move.uci,
+          position: position,
+          diff: MaterialDiff.fromBoard(position.board),
+        ),
+      );
+    }
+  }
+
+  return PlayableGame(
+    data: data,
+    steps: steps.toIList(),
+    white: pick('white').letOrThrow(_playerFromUserGamePick),
+    black: pick('black').letOrThrow(_playerFromUserGamePick),
+    socketVersion: pick('socket').asIntOrThrow(),
+    clock: pick('clock').letOrNull(_playableClockDataFromPick),
+    youAre: pick('youAre').asSideOrNull(),
+  );
+}
+
+PlayableGameData _playableGameDataFromPick(RequiredPick pick) {
+  return PlayableGameData(
+    id: pick('id').asGameIdOrThrow(),
+    rated: pick('rated').asBoolOrThrow(),
+    speed: pick('speed').asSpeedOrThrow(),
+    perf: pick('perf').asPerfOrThrow(),
+    status: pick('status').asGameStatusOrThrow(),
+    variant: pick('variant').asVariantOrThrow(),
+    initialFen: pick('initialFen').asStringOrNull(),
+  );
+}
+
+Player _playerFromUserGamePick(RequiredPick pick) {
+  return Player(
+    id: pick('user', 'id').asUserIdOrNull(),
+    name: pick('user', 'name').asStringOrNull() ?? 'Stockfish',
+    patron: pick('user', 'patron').asBoolOrNull(),
+    title: pick('user', 'title').asStringOrNull(),
+    rating: pick('rating').asIntOrNull(),
+    ratingDiff: pick('ratingDiff').asIntOrNull(),
+    aiLevel: pick('aiLevel').asIntOrNull(),
+  );
+}
+
+PlayableClockData _playableClockDataFromPick(RequiredPick pick) {
+  return PlayableClockData(
+    initial: pick('initial').asDurationFromSecondsOrThrow(),
+    increment: pick('increment').asDurationFromSecondsOrThrow(),
+    running: pick('running').asBoolOrThrow(),
+    white: pick('white').asDurationFromSecondsOrThrow(),
+    black: pick('black').asDurationFromSecondsOrThrow(),
+    emergency: pick('emerg').asDurationFromSecondsOrNull(),
+    moreTime: pick('moretime').asDurationFromSecondsOrNull(),
+  );
 }
 
 @freezed
@@ -70,10 +157,6 @@ class PlayableGameData with _$PlayableGameData {
     required Perf perf,
     String? initialFen,
     required GameStatus status,
-    required Player white,
-    required Player black,
-    String? pgn,
-    PlayableClockData? clock,
   }) = _PlayableGameData;
 }
 

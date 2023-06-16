@@ -122,6 +122,8 @@ extension TimeExtension on Pick {
     }
     if (value is int) {
       return Duration(seconds: value);
+    } else if (value is double) {
+      return Duration(milliseconds: (value * 1000).toInt());
     }
     throw PickException(
       "value $value at $debugParsingExit can't be casted to Duration",

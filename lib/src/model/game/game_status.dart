@@ -17,12 +17,11 @@ enum GameStatus {
   unknownFinish(38),
   variantEnd(60);
 
+  static final nameMap = IMap(GameStatus.values.asNameMap());
+
   const GameStatus(this.value);
   final int value;
 }
-
-final IMap<String, GameStatus> gameStatusNameMap =
-    IMap(GameStatus.values.asNameMap());
 
 extension GameExtension on Pick {
   GameStatus asGameStatusOrThrow() {
@@ -31,12 +30,12 @@ extension GameExtension on Pick {
       return value;
     }
     if (value is String) {
-      final gameStatus = gameStatusNameMap[value];
+      final gameStatus = GameStatus.nameMap[value];
       if (gameStatus != null) {
         return gameStatus;
       }
     } else if (value is Map<String, dynamic>) {
-      final gameStatus = gameStatusNameMap[value['name'] as String];
+      final gameStatus = GameStatus.nameMap[value['name'] as String];
       if (gameStatus != null) {
         return gameStatus;
       }
