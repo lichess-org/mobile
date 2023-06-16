@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:async/async.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -50,9 +48,7 @@ class CreateGameService {
 
     final stream = socket.connect();
 
-    _socketSubscription = stream.listen((event) {
-      debugPrint('event: $event');
-      final msg = jsonDecode(event as String) as Map<String, dynamic>;
+    _socketSubscription = stream.listen((msg) {
       switch (msg['t'] as String) {
         case 'redirect':
           // ignore: avoid_dynamic_calls

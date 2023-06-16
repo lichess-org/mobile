@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -13,7 +14,8 @@ import 'package:lichess_mobile/src/model/auth/bearer.dart';
 
 part 'auth_socket.g.dart';
 
-const kDefaultPingInterval = Duration(seconds: 10);
+/// The native ping interval. This is different from the ping protocol of lichess.
+const kNativePingInterval = Duration(seconds: 10);
 const kDefaultConnectTimeout = Duration(seconds: 5);
 
 const kWebSocketPath = '/socket/v5';
@@ -39,19 +41,31 @@ class AuthSocket {
   final Logger _log;
   final AuthSocketRef _ref;
 
-  /// The current WebSocket SRI, Stream and channel.
-  (String, Stream<dynamic>, IOWebSocketChannel)? _connection;
+  Timer? _pingTimer;
+  int _pongCount = 0;
+  DateTime? _lastPing;
+  Duration _averageLag = Duration.zero;
+
+  /// The current connection.
+  ({
+    String sri,
+    Stream<Map<String, dynamic>> stream,
+    IOWebSocketChannel channel,
+  })? _connection;
 
   /// Creates a new WebSocket channel.
   ///
   /// Will not do anything if the channel is already connected.
-  Stream<dynamic> connect({
-    Duration pingInterval = kDefaultPingInterval,
-    Duration connectTimeout = kDefaultConnectTimeout,
+  Stream<Map<String, dynamic>> connect({
+    /// The delay between the next ping after receiving a pong.
+    Duration pingDelay = const Duration(seconds: 3),
   }) {
-    if (_connection != null && _connection!.$3.closeCode == null) {
-      return _connection!.$2;
+    if (_connection != null && _connection!.channel.closeCode == null) {
+      return _connection!.stream;
     }
+
+    _pongCount = 0;
+    _averageLag = Duration.zero;
 
     final session = _ref.read(authSessionProvider);
     final info = _ref.read(packageInfoProvider);
@@ -66,20 +80,40 @@ class AuthSocket {
         : {
             'User-Agent': AuthClient.userAgent(info, null),
           };
+
     _log.info('Creating WebSocket connection to $uri');
+
     final channel = IOWebSocketChannel.connect(
       uri,
-      pingInterval: pingInterval,
-      connectTimeout: connectTimeout,
+      pingInterval: kNativePingInterval,
+      connectTimeout: kDefaultConnectTimeout,
       headers: headers,
     );
-    final stream = channel.stream.asBroadcastStream();
+
+    bool connected = false;
+
+    final stream = channel.stream.asBroadcastStream().map((event) {
+      // _log.info('[WS IN]: $event');
+      final data = jsonDecode(event as String) as Map<String, dynamic>;
+      if (data['t'] == 'n') {
+        if (!connected) {
+          connected = true;
+          _log.info('WebSocket connection established.');
+        }
+        _handlePong(pingDelay);
+      }
+      return data;
+    });
+
+    _schedulePing(pingDelay);
+
     _connection = (
-      sri,
-      stream,
-      channel,
+      sri: sri,
+      stream: stream,
+      channel: channel,
     );
-    return _connection!.$2;
+
+    return _connection!.stream;
   }
 
   /// Switches the current WebSocket connection to a new route.
@@ -96,17 +130,45 @@ class AuthSocket {
     );
   }
 
+  void _schedulePing(Duration delay) {
+    _pingTimer?.cancel();
+    _pingTimer = Timer(delay, _sendPing);
+  }
+
+  /// Sends a ping to the server.
+  void _sendPing() {
+    _pingTimer?.cancel();
+    sink?.add(
+      jsonEncode({
+        't': 'p',
+        if (_pongCount % 10 == 0) 'l': _averageLag.inMilliseconds,
+      }),
+    );
+    _lastPing = DateTime.now();
+  }
+
+  void _handlePong(Duration pingDelay) {
+    _schedulePing(pingDelay);
+    _pongCount++;
+    final currentLag = DateTime.now().difference(_lastPing!);
+
+    // Average first 4 pings, then switch to decaying average.
+    final mix = _pongCount > 4 ? 0.1 : 1 / _pongCount;
+    _averageLag += (currentLag - _averageLag) * mix;
+  }
+
   /// Gets the current WebSocket sink
-  WebSocketSink? get sink => _connection?.$3.sink;
+  WebSocketSink? get sink => _connection?.channel.sink;
 
   /// Gets the current SRI
-  String? get sri => _connection?.$1;
+  String? get sri => _connection?.sri;
 
   /// Closes the WebSocket connection, if open.
   void close() {
-    if (_connection?.$3.closeCode == null) {
+    if (_connection?.channel.closeCode == null) {
       _log.info('Closing WebSocket connection.');
     }
     sink?.close();
+    _connection = null;
   }
 }
