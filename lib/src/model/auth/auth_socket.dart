@@ -139,10 +139,12 @@ class AuthSocket {
   void _sendPing() {
     _pingTimer?.cancel();
     sink?.add(
-      jsonEncode({
-        't': 'p',
-        if (_pongCount % 10 == 0) 'l': _averageLag.inMilliseconds,
-      }),
+      _pongCount % 10 == 0
+          ? jsonEncode({
+              't': 'p',
+              'l': _averageLag.inMilliseconds,
+            })
+          : 'p',
     );
     _lastPing = DateTime.now();
   }
