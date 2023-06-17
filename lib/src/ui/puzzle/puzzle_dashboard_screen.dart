@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/ui/puzzle/history_screen.dart';
 
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -10,16 +9,20 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/user_session.dart';
-import 'package:lichess_mobile/src/ui/puzzle/puzzle_dashboard_widget.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/history_provider.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/ui/puzzle/puzzle_dashboard_widget.dart';
+import 'package:lichess_mobile/src/ui/puzzle/history_boards.dart';
+import 'package:lichess_mobile/src/ui/puzzle/puzzle_history_screen.dart';
 
 import 'storm_screen.dart';
 import 'puzzle_screen.dart';
@@ -253,6 +256,61 @@ class _Body extends ConsumerWidget {
             controller: puzzlesScrollController,
             children: content,
           );
+  }
+}
+
+class PuzzleHistoryWidget extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final history = ref.watch(puzzleRecentActivityProvider);
+    return history.when(
+      data: (data) {
+        if (data.isEmpty) {
+          return ListSection(
+            header: Text(context.l10n.puzzleHistory),
+            children: [
+              Center(
+                child: Text(context.l10n.puzzleNoPuzzlesToShow),
+              )
+            ],
+          );
+        }
+
+        return ListSection(
+          header: Text(context.l10n.puzzleHistory),
+          headerTrailing: NoPaddingTextButton(
+            onPressed: () => pushPlatformRoute(
+              context,
+              builder: (context) => PuzzleHistoryScreen(),
+            ),
+            child: Text(
+              context.l10n.more,
+            ),
+          ),
+          children: [
+            Padding(
+              padding: Styles.bodySectionPadding,
+              child: PuzzleHistoryBoards(data),
+            ),
+          ],
+        );
+      },
+      error: (e, s) {
+        debugPrint(
+          'SEVERE: [PuzzleHistoryWidget] could not load puzzle history',
+        );
+        return const Center(child: Text('Could not load Puzzle History'));
+      },
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(
+            itemsNumber: 5,
+            header: true,
+          ),
+        ),
+      ),
+    );
   }
 }
 

@@ -13,75 +13,16 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/ui/puzzle/history_boards.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart' as cg;
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
 final _puzzleLoadingProvider = StateProvider<bool>((ref) => false);
-
-class PuzzleHistoryWidget extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final history = ref.watch(puzzleRecentActivityProvider);
-    return history.when(
-      data: (data) {
-        if (data.isEmpty) {
-          return ListSection(
-            header: Text(context.l10n.puzzleHistory),
-            children: [
-              Center(
-                child: Text(context.l10n.puzzleNoPuzzlesToShow),
-              )
-            ],
-          );
-        }
-
-        return ListSection(
-          header: Text(context.l10n.puzzleHistory),
-          headerTrailing: NoPaddingTextButton(
-            onPressed: () => pushPlatformRoute(
-              context,
-              builder: (context) => PuzzleHistoryScreen(),
-            ),
-            child: Text(
-              context.l10n.more,
-            ),
-          ),
-          children: [
-            Padding(
-              padding: Styles.bodySectionPadding,
-              child: PuzzleHistoryBoards(data),
-            ),
-          ],
-        );
-      },
-      error: (e, s) {
-        debugPrint(
-          'SEVERE: [PuzzleHistoryWidget] could not load puzzle history',
-        );
-        return const Center(child: Text('Could not load Puzzle History'));
-      },
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: ListSection.loading(
-            itemsNumber: 5,
-            header: true,
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class PuzzleHistoryScreen extends StatelessWidget {
   @override
