@@ -11,7 +11,7 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 1,
+      version: 2,
       onOpen: (db) async {
         final nDaysAgo = DateTime.now().subtract(puzzleHistoryTTL);
         final tableExists = await db.rawQuery(
@@ -26,28 +26,42 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
         }
       },
       onCreate: (db, version) async {
-        await db.execute(
-          '''
-          CREATE TABLE puzzle_batchs(
-            userId TEXT NOT NULL,
-            angle TEXT NOT NULL,
-            data TEXT NOT NULL,
-            PRIMARY KEY (userId, angle)
-          )
-          ''',
-        );
-
-        await db.execute('''
-          CREATE TABLE puzzle(
-          puzzleId TEXT NOT NULL,
-          lastModified TEXT NOT NULL,
-          data TEXT NOT NULL,
-          PRIMARY KEY (puzzleId)
-        )
-          ''');
+        final batch = db.batch();
+        _createPuzzleBatchTableV1(batch);
+        _createPuzzleTableV2(batch);
+        await batch.commit();
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        final batch = db.batch();
+        if (oldVersion == 1) {
+          _createPuzzleTableV2(batch);
+        }
+        await batch.commit();
       },
     ),
   );
+}
+
+void _createPuzzleBatchTableV1(Batch batch) {
+  batch.execute('''
+    CREATE TABLE puzzle_batchs(
+      userId TEXT NOT NULL,
+      angle TEXT NOT NULL,
+      data TEXT NOT NULL,
+      PRIMARY KEY (userId, angle)
+    )
+    ''');
+}
+
+void _createPuzzleTableV2(Batch batch) {
+  batch.execute('''
+    CREATE TABLE puzzle(
+    puzzleId TEXT NOT NULL,
+    lastModified TEXT NOT NULL,
+    data TEXT NOT NULL,
+    PRIMARY KEY (puzzleId)
+  )
+    ''');
 }
 
 @Riverpod(keepAlive: true)
