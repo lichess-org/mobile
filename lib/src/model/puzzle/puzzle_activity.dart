@@ -9,8 +9,8 @@ import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 
-part 'history_provider.g.dart';
-part 'history_provider.freezed.dart';
+part 'puzzle_activity.g.dart';
+part 'puzzle_activity.freezed.dart';
 
 const _maxPuzzles = 500;
 
