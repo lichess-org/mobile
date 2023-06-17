@@ -1,6 +1,5 @@
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -116,8 +115,8 @@ class _BodyState extends ConsumerState<_Body> {
                 padding: const EdgeInsets.only(right: _kPuzzlePadding),
                 child: Row(
                   children: element
-                      .mapIndexed(
-                        (i, e) =>
+                      .map(
+                        (e) =>
                             _HistoryBoard(e as PuzzleHistoryEntry, boardWidth),
                       )
                       .toList(),
