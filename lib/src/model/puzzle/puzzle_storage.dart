@@ -14,7 +14,7 @@ PuzzleStorage puzzleStorage(PuzzleStorageRef ref) {
   return PuzzleStorage(db);
 }
 
-const _dbName = 'puzzle';
+const _tableName = 'puzzle';
 
 class PuzzleStorage {
   const PuzzleStorage(this._db);
@@ -24,7 +24,7 @@ class PuzzleStorage {
     required PuzzleId puzzleId,
   }) async {
     final list = await _db.query(
-      _dbName,
+      _tableName,
       where: 'puzzleId = ?',
       whereArgs: [puzzleId.toString()],
     );
@@ -47,7 +47,7 @@ class PuzzleStorage {
     required Puzzle puzzle,
   }) async {
     await _db.insert(
-      _dbName,
+      _tableName,
       {
         'puzzleId': puzzle.puzzle.id.toString(),
         'lastModified': DateTime.now().toIso8601String(),
