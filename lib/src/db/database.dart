@@ -5,7 +5,18 @@ import 'package:lichess_mobile/src/app_dependencies.dart';
 
 part 'database.g.dart';
 
-const puzzleHistoryTTL = Duration(days: 60);
+const puzzleStorageTTL = Duration(days: 60);
+
+@Riverpod(keepAlive: true)
+Database database(DatabaseRef ref) {
+  // requireValue is possible because appDependenciesProvider is loaded before
+  // anything. See: lib/src/app.dart
+  final db = ref.watch(
+    appDependenciesProvider.select((data) => data.requireValue.database),
+  );
+  ref.onDispose(db.close);
+  return db;
+}
 
 Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
   return dbFactory.openDatabase(
@@ -13,7 +24,7 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
     options: OpenDatabaseOptions(
       version: 2,
       onOpen: (db) async {
-        final nDaysAgo = DateTime.now().subtract(puzzleHistoryTTL);
+        final nDaysAgo = DateTime.now().subtract(puzzleStorageTTL);
         final tableExists = await db.rawQuery(
           "SELECT name FROM sqlite_master WHERE type='table' AND name='puzzle'",
         );
@@ -62,15 +73,4 @@ void _createPuzzleTableV2(Batch batch) {
     PRIMARY KEY (puzzleId)
   )
     ''');
-}
-
-@Riverpod(keepAlive: true)
-Database database(DatabaseRef ref) {
-  // requireValue is possible because appDependenciesProvider is loaded before
-  // anything. See: lib/src/app.dart
-  final db = ref.watch(
-    appDependenciesProvider.select((data) => data.requireValue.database),
-  );
-  ref.onDispose(db.close);
-  return db;
 }
