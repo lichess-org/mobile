@@ -6,7 +6,6 @@ import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
@@ -15,6 +14,9 @@ import 'package:lichess_mobile/src/model/tv/featured_game.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 
 final _featuredGameWithSoundProvider = featuredGameProvider(withSound: true);
+
+final RouteObserver<PageRoute<void>> tvRouteObserver =
+    RouteObserver<PageRoute<void>>();
 
 class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({super.key});
@@ -79,14 +81,14 @@ class _TvScreenState extends ConsumerState<TvScreen>
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      watchRouteObserver.subscribe(this, route);
+      tvRouteObserver.subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    watchRouteObserver.unsubscribe(this);
+    tvRouteObserver.unsubscribe(this);
     super.dispose();
   }
 

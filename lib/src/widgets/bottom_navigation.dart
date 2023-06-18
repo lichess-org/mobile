@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/ui/home/home_screen.dart';
 import 'package:lichess_mobile/src/ui/account/profile_screen.dart';
 import 'package:lichess_mobile/src/ui/watch/watch_screen.dart';
+import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_dashboard_screen.dart';
 
 enum BottomTab {
@@ -199,7 +199,7 @@ class BottomNavScaffold extends ConsumerWidget {
         return CupertinoTabView(
           defaultTitle: context.l10n.watch,
           navigatorKey: watchNavigatorKey,
-          navigatorObservers: [watchRouteObserver],
+          navigatorObservers: [tvRouteObserver],
           builder: (context) => const WatchScreen(),
         );
       case 3:
