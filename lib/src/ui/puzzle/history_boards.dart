@@ -16,9 +16,10 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 class PuzzleHistoryBoards extends ConsumerStatefulWidget {
-  const PuzzleHistoryBoards(this.history);
+  const PuzzleHistoryBoards(this.history, {this.maxRows, super.key});
 
   final IList<PuzzleHistoryEntry> history;
+  final int? maxRows;
 
   @override
   ConsumerState createState() => _PuzzleHistoryState();
@@ -30,11 +31,12 @@ class _PuzzleHistoryState extends ConsumerState<PuzzleHistoryBoards> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (context, constrains) {
-        final crossAxisCount = constrains.maxWidth > kTabletThreshold ? 4 : 2;
+      builder: (context, constraints) {
+        final crossAxisCount = constraints.maxWidth > kTabletThreshold ? 4 : 2;
         const columnGap = 12.0;
-        final boardWidth = (constrains.maxWidth / crossAxisCount) -
-            (columnGap / crossAxisCount);
+        final boardWidth =
+            (constraints.maxWidth - (columnGap * crossAxisCount - columnGap)) /
+                crossAxisCount;
         return LayoutGrid(
           columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
           rowSizes: List.generate(

@@ -11,15 +11,16 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 part 'puzzle_activity.g.dart';
 part 'puzzle_activity.freezed.dart';
 
+const _nbPerPage = 50;
 const _maxPuzzles = 500;
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<IList<PuzzleHistoryEntry>> puzzleRecentActivity(
   PuzzleRecentActivityRef ref,
 ) {
-  ref.cacheFor(const Duration(minutes: 10));
   final repo = ref.watch(puzzleRepositoryProvider);
-  return Result.release(repo.puzzleActivity(10));
+  // we need to fetch enough puzzles to fill the history screen
+  return Result.release(repo.puzzleActivity(20));
 }
 
 @riverpod
@@ -28,11 +29,11 @@ class PuzzleActivity extends _$PuzzleActivity {
 
   @override
   Future<PuzzleActivityState> build() async {
-    ref.cacheFor(const Duration(minutes: 10));
+    ref.cacheFor(const Duration(minutes: 30));
     ref.onDispose(() {
       _list.clear();
     });
-    _list.addAll(await ref.read(puzzleRecentActivityProvider.future));
+    _list.addAll(await ref.watch(puzzleRecentActivityProvider.future));
     return PuzzleActivityState(
       historyByDay: _groupByDay(_list),
       isLoading: false,
@@ -62,7 +63,7 @@ class PuzzleActivity extends _$PuzzleActivity {
       state = AsyncData(currentVal.copyWith(isLoading: true));
       ref
           .read(puzzleRepositoryProvider)
-          .puzzleActivity(50, before: _list.last.date)
+          .puzzleActivity(_nbPerPage, before: _list.last.date)
           .fold(
         (value) {
           if (value.isEmpty) {
