@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:collection/collection.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +98,16 @@ class _BodyState extends ConsumerState<_Body> {
         final boardWidth =
             (MediaQuery.of(context).size.width - columnsGap) / crossAxisCount;
 
-        final list = state.makeList(crossAxisCount);
+        // List prepared for the ListView.builder.
+        // It includes the date headers, and puzzles are sliced into rows of `crossAxisCount` length.
+        // So one element can be either:
+        //  - a DateTime to show a date header.
+        //  - a List<PuzzleHistoryEntry> to show a row of puzzles.
+        final list = <dynamic>[];
+        for (final entry in state.historyByDay.entries) {
+          list.add(entry.key);
+          list.addAll(entry.value.slices(crossAxisCount));
+        }
 
         return ListView.builder(
           controller: _scrollController,

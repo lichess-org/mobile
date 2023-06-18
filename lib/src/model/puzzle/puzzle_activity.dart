@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:collection/collection.dart';
 import 'package:async/async.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -93,27 +92,10 @@ class PuzzleActivity extends _$PuzzleActivity {
 
 @freezed
 class PuzzleActivityState with _$PuzzleActivityState {
-  const PuzzleActivityState._();
-
   const factory PuzzleActivityState({
     required Map<DateTime, IList<PuzzleHistoryEntry>> historyByDay,
     required bool isLoading,
     required bool hasMore,
     required bool hasError,
   }) = _PuzzleActivityState;
-
-  /// Returns the list of puzzles to show in the list view.
-  ///
-  /// It includes the date headers, and puzzles are sliced into rows of `numPerRow` length.
-  /// So one element can be either:
-  ///  - a DateTime to show a date header.
-  ///  - a List<PuzzleHistoryEntry> to show a puzzles row.
-  List<dynamic> makeList(int numPerRow) {
-    final list = <dynamic>[];
-    for (final entry in historyByDay.entries) {
-      list.add(entry.key);
-      list.addAll(entry.value.slices(numPerRow));
-    }
-    return list;
-  }
 }
