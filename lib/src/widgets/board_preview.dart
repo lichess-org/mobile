@@ -35,7 +35,7 @@ class BoardPreview extends ConsumerStatefulWidget {
   /// Show a header above the board. Typically a [Text] widget.
   final Widget? header;
 
-  /// Show a footer above the board. Typically a [Text] widget.
+  /// Show a footer below the board. Typically a [Text] widget.
   final Widget? footer;
 
   final EdgeInsetsGeometry? margin;

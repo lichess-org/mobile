@@ -21,7 +21,7 @@ PuzzleBatchStorage puzzleBatchStorage(PuzzleBatchStorageRef ref) {
 }
 
 const _anonUserKey = '**anon**';
-const _dbName = 'puzzle_batchs';
+const _tableName = 'puzzle_batchs';
 
 /// Local storage for puzzles.
 class PuzzleBatchStorage {
@@ -34,7 +34,7 @@ class PuzzleBatchStorage {
     PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
     final list = await _db.query(
-      _dbName,
+      _tableName,
       where: '''
       userId = ? AND
       angle = ?
@@ -65,7 +65,7 @@ class PuzzleBatchStorage {
     PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
     await _db.insert(
-      _dbName,
+      _tableName,
       {
         'userId': userId?.value ?? _anonUserKey,
         'angle': angle.name,
@@ -80,7 +80,7 @@ class PuzzleBatchStorage {
     PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
     await _db.delete(
-      _dbName,
+      _tableName,
       where: '''
       userId = ? AND
       angle = ?
@@ -96,7 +96,7 @@ class PuzzleBatchStorage {
     required UserId? userId,
   }) async {
     final list = await _db.query(
-      _dbName,
+      _tableName,
       where: 'userId = ?',
       whereArgs: [
         userId?.value ?? _anonUserKey,

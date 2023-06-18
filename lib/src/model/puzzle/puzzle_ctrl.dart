@@ -304,6 +304,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
       final next = await service.solve(
         userId: initialContext.userId,
         angle: initialContext.theme,
+        puzzle: state.puzzle,
         solution: PuzzleSolution(
           id: state.puzzle.puzzle.id,
           win: state.result == PuzzleResult.win,

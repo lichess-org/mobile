@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:async/async.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
@@ -40,9 +43,11 @@ Future<PuzzleStormResponse> storm(StormRef ref) {
   return Result.release(repo.storm());
 }
 
-// TODO when history database is available should first try to fetch from there
 @Riverpod(keepAlive: true)
-Future<Puzzle> puzzle(PuzzleRef ref, PuzzleId id) {
+Future<Puzzle> puzzle(PuzzleRef ref, PuzzleId id) async {
+  final puzzleStorage = ref.watch(puzzleStorageProvider);
+  final puzzle = await puzzleStorage.fetch(puzzleId: id);
+  if (puzzle != null) return puzzle;
   final repo = ref.watch(puzzleRepositoryProvider);
   return Result.release(repo.fetch(id));
 }
