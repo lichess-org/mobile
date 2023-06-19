@@ -85,5 +85,5 @@ Future<StormDashboard> stormDashboard(StormDashboardRef ref) {
   ref.cacheFor(const Duration(minutes: 5));
   final session = ref.watch(authSessionProvider);
   final repo = ref.watch(puzzleRepositoryProvider);
-  return Result.release(repo.stormDashbaord(session!.user.id));
+  return Result.release(repo.stormDashboard(session!.user.id));
 }

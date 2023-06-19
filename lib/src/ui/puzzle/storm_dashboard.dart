@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 
-class StormDashboardModel extends StatelessWidget {
+class StormDashboardModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return defaultTargetPlatform == TargetPlatform.iOS

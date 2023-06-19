@@ -815,6 +815,6 @@ class _StormDashboardButton extends ConsumerWidget {
         context,
         rootNavigator: true,
         fullscreenDialog: true,
-        builder: (_) => StormDashboardModel(),
+        builder: (_) => StormDashboardModal(),
       );
 }

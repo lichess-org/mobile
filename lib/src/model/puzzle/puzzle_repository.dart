@@ -219,7 +219,7 @@ class PuzzleRepository {
         );
   }
 
-  FutureResult<StormDashboard> stormDashbaord(UserId userId) {
+  FutureResult<StormDashboard> stormDashboard(UserId userId) {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/storm/dashboard/${userId.value}'))
         .flatMap(
