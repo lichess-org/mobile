@@ -61,7 +61,7 @@ class GameCursor extends _$GameCursor {
     if (state.hasValue) {
       final (game, cursor) = state.value!;
       state = AsyncValue.data((game, cursor + 1));
-      final san = game.stepAt(cursor + 1)?.san;
+      final san = game.stepAt(cursor + 1).san;
       if (san != null) {
         _playMoveSound(san);
         if (hapticFeedback) HapticFeedback.lightImpact();
@@ -73,7 +73,7 @@ class GameCursor extends _$GameCursor {
     if (state.hasValue) {
       final (game, cursor) = state.value!;
       state = AsyncValue.data((game, cursor - 1));
-      final san = game.stepAt(cursor - 1)?.san;
+      final san = game.stepAt(cursor - 1).san;
       if (san != null) {
         _playMoveSound(san);
       }

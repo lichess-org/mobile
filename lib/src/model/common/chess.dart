@@ -60,6 +60,8 @@ enum Variant {
 
   bool get isSupported => supportedVariants.contains(this);
 
+  static final IMap<String, Variant> nameMap = IMap(values.asNameMap());
+
   /// Returns the initial position for this [Variant].
   ///
   /// Will throw an [ArgumentError] if called on [Variant.chess960] or [Variant.fromPosition].
@@ -169,11 +171,18 @@ extension ChessExtension on Pick {
       return value;
     }
     if (value is String) {
-      return Variant.values
-          .firstWhere((e) => e.name == value, orElse: () => Variant.standard);
+      final variant = Variant.nameMap[value];
+      if (variant != null) {
+        return variant;
+      }
+    } else if (value is Map<String, dynamic>) {
+      final variant = Variant.nameMap[value['key'] as String];
+      if (variant != null) {
+        return variant;
+      }
     }
     throw PickException(
-      "value $value at $debugParsingExit can't be casted to GameStatus",
+      "value $value at $debugParsingExit can't be casted to Variant",
     );
   }
 

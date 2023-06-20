@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:async/async.dart';
 import 'package:logging/logging.dart';
@@ -13,6 +12,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
@@ -34,9 +34,6 @@ AuthClient authClient(AuthClientRef ref) {
     insideAuthClient,
     crashlytics,
   );
-  ref.onDispose(() {
-    authClient.close();
-  });
   return authClient;
 }
 
@@ -57,11 +54,6 @@ class AuthClient {
   }) : _retryClient = RetryClient.withDelays(
           _client,
           retryDelays,
-          whenError: (error, _) async =>
-              error is SocketException ||
-              error.toString().contains(
-                    'Connection closed before full header was received',
-                  ),
         ) {
     _log.info('Creating new AuthClient.');
   }
@@ -83,18 +75,7 @@ class AuthClient {
       Result.capture(
         (retryOnError ? _retryClient : _client).get(url, headers: headers),
       ).mapError((error, stackTrace) {
-        _log.severe('Request error', error, stackTrace);
-        if (kReleaseMode) {
-          _crashlytics.recordError(
-            error,
-            stackTrace,
-            reason: 'a non-fatal http request error',
-            information: [
-              'url: $url',
-              'headers: $headers',
-            ],
-          );
-        }
+        _recordError('GET', error, stackTrace, url, headers);
         return GenericIOException();
       }).flatMap(
         (response) => _validateResponseStatusResult('GET', url, response),
@@ -111,18 +92,7 @@ class AuthClient {
         (retryOnError ? _retryClient : _client)
             .post(url, headers: headers, body: body, encoding: encoding),
       ).mapError((error, stackTrace) {
-        _log.severe('Request error', error, stackTrace);
-        if (kReleaseMode) {
-          _crashlytics.recordError(
-            error,
-            stackTrace,
-            reason: 'a non-fatal http request error',
-            information: [
-              'url: $url',
-              'headers: $headers',
-            ],
-          );
-        }
+        _recordError('POST', error, stackTrace, url, headers);
         return GenericIOException();
       }).flatMap(
         (response) => _validateResponseStatusResult('POST', url, response),
@@ -139,18 +109,7 @@ class AuthClient {
         (retryOnError ? _retryClient : _client)
             .delete(url, headers: headers, body: body, encoding: encoding),
       ).mapError((error, stackTrace) {
-        _log.severe('Request error', error, stackTrace);
-        if (kReleaseMode) {
-          _crashlytics.recordError(
-            error,
-            stackTrace,
-            reason: 'a non-fatal http request error',
-            information: [
-              'url: $url',
-              'headers: $headers',
-            ],
-          );
-        }
+        _recordError('DELETE', error, stackTrace, url, headers);
         return GenericIOException();
       }).flatMap(
         (response) => _validateResponseStatusResult('DELETE', url, response),
@@ -166,7 +125,7 @@ class AuthClient {
     }
     return Result.capture(_client.send(request))
         .mapError((error, stackTrace) {
-          _log.severe('Request error', error, stackTrace);
+          _recordError('GET', error, stackTrace, url, headers);
           return GenericIOException();
         })
         .flatMap((r) => _validateResponseStatusResult('GET', url, r))
@@ -212,8 +171,34 @@ class AuthClient {
                       );
   }
 
+  void _recordError(
+    String method,
+    Object error,
+    StackTrace? stackTrace,
+    Uri url,
+    Map<String, String>? headers,
+  ) {
+    // Ignore canceling seek requests
+    if (error is ClientException && url.path.contains('api/board/seek')) {
+      return;
+    }
+    _log.severe('Request error', error, stackTrace);
+    if (kReleaseMode) {
+      _crashlytics.recordError(
+        error,
+        stackTrace,
+        reason: 'a non-fatal http request error',
+        information: [
+          'method: $method',
+          'url: $url',
+          'headers: $headers',
+        ],
+      );
+    }
+  }
+
   void close() {
-    _log.info('Closing AuthClient.');
+    _retryClient.close();
     _client.close();
   }
 }
@@ -232,7 +217,8 @@ class _AuthClient extends BaseClient {
     final info = ref.read(packageInfoProvider);
 
     if (session != null && !request.headers.containsKey('Authorization')) {
-      request.headers['Authorization'] = 'Bearer ${session.token}';
+      final bearer = signBearerToken(session.token);
+      request.headers['Authorization'] = 'Bearer $bearer';
     }
 
     request.headers['user-agent'] = AuthClient.userAgent(info, session?.user);

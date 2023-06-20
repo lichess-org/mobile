@@ -25,6 +25,7 @@ class TableBoardLayout extends ConsumerWidget {
     this.moves,
     this.currentMoveIndex,
     this.onSelectMove,
+    this.boardOverlay,
     this.errorMessage,
     this.showMoveListPlaceholder = false,
     super.key,
@@ -52,6 +53,9 @@ class TableBoardLayout extends ConsumerWidget {
   /// Optional error message that will be displayed on top of the board.
   final String? errorMessage;
 
+  /// Optional widget that will be displayed on top of the board.
+  final Widget? boardOverlay;
+
   /// Whether to show the move list placeholder. Useful when loading.
   final bool showMoveListPlaceholder;
 
@@ -72,18 +76,21 @@ class TableBoardLayout extends ConsumerWidget {
             ? SizedBox.square(
                 dimension: boardSize,
                 child: Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: defaultTargetPlatform == TargetPlatform.iOS
-                          ? CupertinoColors.secondarySystemBackground
-                              .resolveFrom(context)
-                          : Theme.of(context).colorScheme.background,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(10.0)),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Text(errorMessage!),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: defaultTargetPlatform == TargetPlatform.iOS
+                            ? CupertinoColors.secondarySystemBackground
+                                .resolveFrom(context)
+                            : Theme.of(context).colorScheme.background,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(errorMessage!),
+                      ),
                     ),
                   ),
                 ),
@@ -105,17 +112,38 @@ class TableBoardLayout extends ConsumerWidget {
         final board =
             Board(size: boardSize, data: boardData, settings: settings);
 
-        final boardOrError = error != null
-            ? SizedBox.square(
-                dimension: boardSize,
-                child: Stack(
-                  children: [
-                    board,
-                    error,
-                  ],
+        Widget boardWidget = board;
+
+        if (boardOverlay != null) {
+          boardWidget = SizedBox.square(
+            dimension: boardSize,
+            child: Stack(
+              children: [
+                board,
+                SizedBox.square(
+                  dimension: boardSize,
+                  child: Center(
+                    child: SizedBox(
+                      width: (boardSize / 8) * 6,
+                      height: (boardSize / 8) * 4,
+                      child: boardOverlay,
+                    ),
+                  ),
                 ),
-              )
-            : board;
+              ],
+            ),
+          );
+        } else if (error != null) {
+          boardWidget = SizedBox.square(
+            dimension: boardSize,
+            child: Stack(
+              children: [
+                board,
+                error,
+              ],
+            ),
+          );
+        }
 
         final slicedMoves = moves?.asMap().entries.slices(2);
 
@@ -124,7 +152,7 @@ class TableBoardLayout extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  boardOrError,
+                  boardWidget,
                   Flexible(
                     fit: FlexFit.loose,
                     child: Padding(
@@ -175,7 +203,7 @@ class TableBoardLayout extends ConsumerWidget {
                   else if (showMoveListPlaceholder)
                     const SizedBox(height: 40),
                   Expanded(child: topTable),
-                  boardOrError,
+                  boardWidget,
                   Expanded(child: bottomTable),
                 ],
               );
@@ -261,14 +289,17 @@ class _MoveListState extends State<MoveList> {
                           children: [
                             InlineMoveCount(count: index + 1),
                             ...moves.map(
-                              (move) => InlineMoveItem(
-                                key: widget.currentMoveIndex == move.key
-                                    ? currentMoveKey
-                                    : null,
-                                move: move,
-                                current: widget.currentMoveIndex == move.key,
-                                onSelectMove: widget.onSelectMove,
-                              ),
+                              (move) {
+                                // cursor index starts at 0, move index starts at 1
+                                final isCurrentMove =
+                                    widget.currentMoveIndex == move.key + 1;
+                                return InlineMoveItem(
+                                  key: isCurrentMove ? currentMoveKey : null,
+                                  move: move,
+                                  current: isCurrentMove,
+                                  onSelectMove: widget.onSelectMove,
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -294,17 +325,22 @@ class _MoveListState extends State<MoveList> {
                               child: Row(
                                 children: [
                                   ...moves.map(
-                                    (move) => Expanded(
-                                      child: StackedMoveItem(
-                                        key: widget.currentMoveIndex == move.key
-                                            ? currentMoveKey
-                                            : null,
-                                        move: move,
-                                        current:
-                                            widget.currentMoveIndex == move.key,
-                                        onSelectMove: widget.onSelectMove,
-                                      ),
-                                    ),
+                                    (move) {
+                                      // cursor index starts at 0, move index starts at 1
+                                      final isCurrentMove =
+                                          widget.currentMoveIndex ==
+                                              move.key + 1;
+                                      return Expanded(
+                                        child: StackedMoveItem(
+                                          key: isCurrentMove
+                                              ? currentMoveKey
+                                              : null,
+                                          move: move,
+                                          current: isCurrentMove,
+                                          onSelectMove: widget.onSelectMove,
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ],
                               ),

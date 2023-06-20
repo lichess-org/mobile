@@ -8,6 +8,11 @@ const kLichessWSHost = String.fromEnvironment(
   defaultValue: 'wss://socket.lichess.org',
 );
 
+const kLichessWSSecret = String.fromEnvironment(
+  'LICHESS_WS_SECRET',
+  defaultValue: 'somethingElseInProd',
+);
+
 const kLichessDevUser =
     String.fromEnvironment('LICHESS_DEV_USER', defaultValue: 'lichess');
 const kLichessDevPassword = String.fromEnvironment('LICHESS_DEV_PASSWORD');

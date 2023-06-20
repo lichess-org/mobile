@@ -7,12 +7,15 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
 import 'game.dart';
+import 'game_status.dart';
 import 'player.dart';
+import 'material_diff.dart';
 
 class GameRepository {
   const GameRepository(
@@ -87,29 +90,29 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
     data: data,
     steps: pick('moves').letOrThrow((it) {
       final moves = it.asStringOrThrow().split(' ');
-      final List<GameStep> steps = [];
       // assume lichess always send initialFen with fromPosition and chess960
       Position position = (data.variant == Variant.fromPosition ||
               data.variant == Variant.chess960)
           ? Chess.fromSetup(Setup.parseFen(data.initialFen!))
           : data.variant.initialPosition;
-      int ply = 0;
+      int index = 0;
+      final List<GameStep> steps = [GameStep(ply: index, position: position)];
       Duration? clock = clockData?.initial;
       for (final san in moves) {
-        final stepClock = clocks?[ply];
-        ply++;
+        final stepClock = clocks?[index];
+        index++;
         final move = position.parseSan(san);
         // assume lichess only sends correct moves
         position = position.playUnchecked(move!);
         steps.add(
           GameStep(
-            ply: ply,
+            ply: index,
             san: san,
             uci: move.uci,
             position: position,
             diff: MaterialDiff.fromBoard(position.board),
-            whiteClock: ply.isOdd ? stepClock : clock,
-            blackClock: ply.isEven ? stepClock : clock,
+            whiteClock: index.isOdd ? stepClock : clock,
+            blackClock: index.isEven ? stepClock : clock,
           ),
         );
         clock = stepClock;

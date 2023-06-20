@@ -70,10 +70,15 @@ class PlatformCard extends StatelessWidget {
     required this.child,
     this.margin,
     this.semanticContainer = true,
+    this.borderRadius,
+    this.elevation,
   });
 
   final Widget child;
   final bool semanticContainer;
+  final BorderRadius? borderRadius;
+
+  final double? elevation;
 
   /// The empty space that surrounds the card.
   ///
@@ -98,22 +103,31 @@ class PlatformCard extends StatelessWidget {
       child: defaultTargetPlatform == TargetPlatform.iOS
           ? Card(
               margin: margin ?? EdgeInsets.zero,
-              elevation: 0,
+              elevation: elevation ?? 0,
               color: cupertinoBrightness == Brightness.light
                   ? CupertinoColors.systemBackground
                   : CupertinoColors.secondarySystemBackground
                       .resolveFrom(context),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              ),
+              shape: borderRadius != null
+                  ? RoundedRectangleBorder(
+                      borderRadius: borderRadius!,
+                    )
+                  : const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
               semanticContainer: semanticContainer,
               child: child,
             )
           : Card(
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              ),
+              shape: borderRadius != null
+                  ? RoundedRectangleBorder(
+                      borderRadius: borderRadius!,
+                    )
+                  : const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
               semanticContainer: semanticContainer,
+              elevation: elevation,
               margin: margin,
               child: child,
             ),

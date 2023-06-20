@@ -136,14 +136,14 @@ class _BoardBody extends ConsumerWidget {
             interactableSide: cg.InteractableSide.none,
             orientation:
                 (isBoardTurned ? orientation.opposite : orientation).cg,
-            fen: position?.fen ?? gameData.lastFen ?? kInitialBoardFEN,
+            fen: position.fen,
             lastMove: game.moveAt(cursor)?.cg,
-            sideToMove: position?.turn.cg ?? Side.white.cg,
-            isCheck: position?.isCheck ?? false,
+            sideToMove: position.turn.cg,
+            isCheck: position.isCheck,
           ),
           topTable: topPlayer,
           bottomTable: bottomPlayer,
-          moves: game.steps.map((e) => e.san).toList(growable: false),
+          moves: game.steps.skip(1).map((e) => e.san!).toList(growable: false),
           currentMoveIndex: cursor,
           onSelectMove: (moveIndex) {
             ref

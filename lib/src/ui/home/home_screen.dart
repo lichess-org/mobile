@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
+// import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
@@ -23,6 +24,7 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/ui/auth/sign_in_widget.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/ui/user/leaderboard_widget.dart';
+// import 'package:lichess_mobile/src/ui/play/play_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -79,22 +81,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
-      child: CustomScrollView(
-        controller: homeScrollController,
-        slivers: [
-          const CupertinoSliverNavigationBar(
-            largeTitle: Text('Home'),
-            trailing: SignInWidget(),
-          ),
-          CupertinoSliverRefreshControl(
-            onRefresh: _refreshData,
-          ),
-          const SliverToBoxAdapter(child: _ConnectivityBanner()),
-          const SliverSafeArea(
-            top: false,
-            sliver: _HomeBody(),
-          ),
-        ],
+      child: _HomeScaffold(
+        child: CustomScrollView(
+          controller: homeScrollController,
+          slivers: [
+            const CupertinoSliverNavigationBar(
+              largeTitle: Text('Home'),
+              trailing: SignInWidget(),
+            ),
+            CupertinoSliverRefreshControl(
+              onRefresh: _refreshData,
+            ),
+            const SliverToBoxAdapter(child: _ConnectivityBanner()),
+            const SliverSafeArea(
+              top: false,
+              sliver: _HomeBody(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -104,6 +108,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 }
 
+/// Scaffold with a sticky Create Game button at the bottom
 class _HomeScaffold extends StatelessWidget {
   const _HomeScaffold({
     required this.child,
@@ -117,10 +122,28 @@ class _HomeScaffold extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const _ConnectivityBanner(),
           Expanded(
             child: child,
           ),
+          // SizedBox(
+          //   height: 80,
+          //   // color: CupertinoTheme.of(context).barBackgroundColor,
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(vertical: 15.0)
+          //         .add(Styles.horizontalBodyPadding),
+          //     child: FatButton(
+          //       semanticsLabel: context.l10n.play,
+          //       child: Text(context.l10n.play),
+          //       onPressed: () {
+          //         Navigator.of(context).push<void>(
+          //           MaterialPageRoute(
+          //             builder: (context) => const PlayScreen(),
+          //           ),
+          //         );
+          //       },
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
