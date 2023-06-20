@@ -96,7 +96,6 @@ class AuthSocket {
         _handlePong(pingDelay);
         return SocketEvent.pong;
       }
-      // _log.info('[WS IN]: $raw');
       final event = SocketEvent.fromJson(
         jsonDecode(raw as String) as Map<String, dynamic>,
       );

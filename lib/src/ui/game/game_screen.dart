@@ -23,7 +23,7 @@ part 'game_screen.g.dart';
 @riverpod
 Future<GameFullId> _createGame(_CreateGameRef ref) {
   final service = ref.watch(createGameServiceProvider);
-  ref.onDispose(service.dispose);
+  ref.onDispose(service.cancel);
   return service.newOnlineGame();
 }
 

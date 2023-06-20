@@ -25,27 +25,31 @@ class CreateGameService {
   final CreateGameServiceRef ref;
   final Logger _log;
 
-  StreamSubscription<dynamic>? _socketSubscription;
+  bool _isCreatingGame = false;
 
+  /// Create a new online game seek based on saved preferences.
   Future<GameFullId> newOnlineGame() async {
-    if (_socketSubscription != null) {
-      throw Exception('Already creating a game');
+    if (_isCreatingGame) {
+      throw StateError('Bad state: already creating a game.');
     }
+
+    _isCreatingGame = true;
 
     final socket = ref.read(authSocketProvider);
     final playPref = ref.read(playPreferencesProvider);
     final lobbyRepo = ref.read(lobbyRepositoryProvider);
 
-    final completer = Completer<GameFullId>();
-
     final stream = socket.connect();
 
-    _socketSubscription = stream.listen((event) {
-      if (event.type == SocketEventType.redirect) {
-        final data = event.data as Map<String, dynamic>;
-        final gameId = pick(data['id']).asGameFullIdOrThrow();
-        completer.complete(gameId);
-      }
+    final futureGameId = stream
+        .firstWhere((e) => e.type == SocketEventType.redirect)
+        .then((event) {
+      _isCreatingGame = false;
+      final data = event.data as Map<String, dynamic>;
+      return pick(data['id']).asGameFullIdOrThrow();
+    }).catchError((Object e) {
+      _isCreatingGame = false;
+      throw e;
     });
 
     socket.switchRoute(Uri(path: '/lobby/socket/v5'));
@@ -64,14 +68,16 @@ class CreateGameService {
       ),
     );
 
-    return completer.future;
+    return futureGameId;
   }
 
-  void dispose() {
-    // close client connection to cancel seek
-    // cf: https://lichess.org/api#tag/Board/operation/apiBoardSeek
-    ref.invalidate(httpClientProvider);
-    _socketSubscription?.cancel();
-    _socketSubscription = null;
+  /// Cancel the current game creation.
+  void cancel() {
+    if (_isCreatingGame) {
+      // close client connection to cancel seek
+      // cf: https://lichess.org/api#tag/Board/operation/apiBoardSeek
+      ref.invalidate(httpClientProvider);
+    }
+    _isCreatingGame = false;
   }
 }
