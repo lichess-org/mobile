@@ -78,9 +78,9 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
 
   int ply = 0;
   final steps = [GameStep(ply: ply, position: position)];
-  final moves =
-      pick('game', 'pgn').letOrNull((it) => it.asStringOrThrow().split(' '));
-  if (moves != null) {
+  final pgn = pick('game', 'pgn').asStringOrNull();
+  final moves = pgn != null && pgn != '' ? pgn.split(' ') : null;
+  if (moves != null && moves.isNotEmpty) {
     for (final san in moves) {
       ply++;
       final move = position.parseSan(san);

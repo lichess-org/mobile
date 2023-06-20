@@ -8,6 +8,7 @@ import 'package:logging/logging.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
@@ -49,14 +50,14 @@ class AuthSocket {
   /// The current connection.
   ({
     String sri,
-    Stream<Map<String, dynamic>> stream,
+    Stream<SocketEvent> stream,
     IOWebSocketChannel channel,
   })? _connection;
 
   /// Creates a new WebSocket channel.
   ///
   /// Will not do anything if the channel is already connected.
-  Stream<Map<String, dynamic>> connect({
+  Stream<SocketEvent> connect({
     /// The delay between the next ping after receiving a pong.
     Duration pingDelay = const Duration(seconds: 3),
   }) {
@@ -90,20 +91,20 @@ class AuthSocket {
       headers: headers,
     );
 
-    bool connected = false;
-
-    final stream = channel.stream.asBroadcastStream().map((event) {
-      // _log.info('[WS IN]: $event');
-      final data = jsonDecode(event as String) as Map<String, dynamic>;
-      if (data['t'] == 'n') {
-        if (!connected) {
-          connected = true;
-          _log.info('WebSocket connection established.');
-        }
+    final Stream<SocketEvent> stream = channel.stream.map((raw) {
+      if (raw == '0') {
+        _handlePong(pingDelay);
+        return SocketEvent.pong;
+      }
+      // _log.info('[WS IN]: $raw');
+      final event = SocketEvent.fromJson(
+        jsonDecode(raw as String) as Map<String, dynamic>,
+      );
+      if (event.type == SocketEventType.pong) {
         _handlePong(pingDelay);
       }
-      return data;
-    });
+      return event;
+    }).asBroadcastStream();
 
     _schedulePing(pingDelay);
 
@@ -150,6 +151,9 @@ class AuthSocket {
   }
 
   void _handlePong(Duration pingDelay) {
+    if (_pongCount == 0) {
+      _log.info('WebSocket connection established.');
+    }
     _schedulePing(pingDelay);
     _pongCount++;
     final currentLag = DateTime.now().difference(_lastPing!);

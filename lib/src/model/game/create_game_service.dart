@@ -2,9 +2,11 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:deep_pick/deep_pick.dart';
 
 import 'package:lichess_mobile/src/http_client.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
@@ -25,7 +27,7 @@ class CreateGameService {
 
   StreamSubscription<dynamic>? _socketSubscription;
 
-  Future<PlayableGame> newOnlineGame() async {
+  Future<GameFullId> newOnlineGame() async {
     if (_socketSubscription != null) {
       throw Exception('Already creating a game');
     }
@@ -34,22 +36,15 @@ class CreateGameService {
     final playPref = ref.read(playPreferencesProvider);
     final lobbyRepo = ref.read(lobbyRepositoryProvider);
 
-    final completer = Completer<PlayableGame>();
+    final completer = Completer<GameFullId>();
 
     final stream = socket.connect();
 
-    _socketSubscription = stream.listen((msg) {
-      switch (msg['t'] as String) {
-        case 'redirect':
-          // ignore: avoid_dynamic_calls
-          final gameId = msg['d']['id'] as String;
-          socket.switchRoute(Uri(path: '/play/$gameId/v6'));
-
-        case 'full':
-          final game =
-              // ignore: avoid_dynamic_calls
-              PlayableGame.fromWebSocketJson(msg['d'] as Map<String, dynamic>);
-          completer.complete(game);
+    _socketSubscription = stream.listen((event) {
+      if (event.type == SocketEventType.redirect) {
+        final data = event.data as Map<String, dynamic>;
+        final gameId = pick(data['id']).asGameFullIdOrThrow();
+        completer.complete(gameId);
       }
     });
 
