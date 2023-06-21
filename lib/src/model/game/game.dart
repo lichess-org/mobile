@@ -58,13 +58,14 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
     required IList<GameStep> steps,
     required Player white,
     required Player black,
-    required int socketVersion,
     Side? youAre,
     PlayableClockData? clock,
   }) = _PlayableGame;
 
   factory PlayableGame.fromWebSocketJson(Map<String, dynamic> json) =>
       _playableGameFromPick(pick(json).required());
+
+  bool get playable => data.status.value < GameStatus.aborted.value;
 }
 
 PlayableGame _playableGameFromPick(RequiredPick pick) {
@@ -103,7 +104,6 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
     steps: steps.toIList(),
     white: pick('white').letOrThrow(_playerFromUserGamePick),
     black: pick('black').letOrThrow(_playerFromUserGamePick),
-    socketVersion: pick('socket').asIntOrThrow(),
     clock: pick('clock').letOrNull(_playableClockDataFromPick),
     youAre: pick('youAre').asSideOrNull(),
   );

@@ -140,6 +140,15 @@ class AuthSocket {
     );
   }
 
+  void send(String topic, dynamic data) {
+    sink?.add(
+      jsonEncode({
+        't': topic,
+        if (data != null) 'd': data,
+      }),
+    );
+  }
+
   void _schedulePing(Duration delay) {
     _pingTimer?.cancel();
     _pingTimer = Timer(delay, _sendPing);

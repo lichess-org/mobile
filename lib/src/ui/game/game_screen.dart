@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
-// import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
@@ -72,24 +72,24 @@ class OnlineGameScreen extends ConsumerWidget {
       ),
     );
   }
+}
 
-  // Future<void> _showExitConfirmDialog(BuildContext context) {
-  //   return showAdaptiveDialog<void>(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return YesNoDialog(
-  //         title: const Text('Exit.'),
-  //         content: const Text('Are you sure you want to quit?'),
-  //         onYes: () {
-  //           Navigator.of(context).popUntil((route) => route.isFirst);
-  //         },
-  //         onNo: () {
-  //           Navigator.of(context).pop();
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
+Future<bool?> _showExitConfirmDialog(BuildContext context) {
+  return showAdaptiveDialog<bool?>(
+    context: context,
+    builder: (BuildContext context) {
+      return YesNoDialog(
+        title: const Text('Exit.'),
+        content: const Text('Are you sure you want to quit?'),
+        onYes: () {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+        },
+        onNo: () {
+          Navigator.of(context).pop(false);
+        },
+      );
+    },
+  );
 }
 
 class _WaitForGame extends ConsumerWidget {
@@ -100,7 +100,19 @@ class _WaitForGame extends ConsumerWidget {
     final gameId = ref.watch(_createGameProvider);
 
     return gameId.when(
-      data: (id) => _Body(gameId: id),
+      data: (id) {
+        final gameState = ref.watch(gameCtrlProvider(id));
+        return gameState.when(
+          data: (state) => _Body(gameState: state),
+          loading: () => const _GameLoader(),
+          error: (e, s) {
+            debugPrint(
+              'SEVERE: [OnlineGameScreen] could not create game; $e\n$s',
+            );
+            return const _CreateGameError();
+          },
+        );
+      },
       loading: () => const _GameLoader(),
       error: (e, s) {
         debugPrint(
@@ -114,10 +126,10 @@ class _WaitForGame extends ConsumerWidget {
 
 class _Body extends ConsumerStatefulWidget {
   const _Body({
-    required this.gameId,
+    required this.gameState,
   });
 
-  final GameFullId gameId;
+  final GameCtrlState gameState;
 
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -126,41 +138,47 @@ class _Body extends ConsumerStatefulWidget {
 class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
   @override
   Widget build(BuildContext context) {
-    final gameState = ref.watch(gameCtrlProvider(widget.gameId));
-    return gameState.when(
-      data: (state) {
-        final black = BoardPlayer(
-          key: const ValueKey('black-player'),
-          player: state.game.black,
-        );
-        final white = BoardPlayer(
-          key: const ValueKey('white-player'),
-          player: state.game.white,
-        );
-        final orientation = state.game.youAre ?? Side.white;
-        final topPlayer = orientation == Side.white ? black : white;
-        final bottomPlayer = orientation == Side.white ? white : black;
-        return TableBoardLayout(
-          boardData: cg.BoardData(
-            interactableSide: orientation == Side.white
-                ? cg.InteractableSide.white
-                : cg.InteractableSide.black,
-            orientation: orientation.cg,
-            fen: state.game.lastPosition.fen,
-            lastMove: state.game.lastMove?.cg,
-          ),
-          topTable: topPlayer,
-          bottomTable: bottomPlayer,
-        );
-      },
-      loading: () => const _GameLoader(),
-      error: (e, s) {
-        debugPrint(
-          'SEVERE: [OnlineGameScreen] could not create game; $e\n$s',
-        );
-        return const _CreateGameError();
-      },
+    final state = widget.gameState;
+    final black = BoardPlayer(
+      key: const ValueKey('black-player'),
+      player: state.game.black,
     );
+    final white = BoardPlayer(
+      key: const ValueKey('white-player'),
+      player: state.game.white,
+    );
+    final orientation = state.game.youAre ?? Side.white;
+    final topPlayer = orientation == Side.white ? black : white;
+    final bottomPlayer = orientation == Side.white ? white : black;
+    final position = state.game.positionAt(state.stepCursor);
+    final content = TableBoardLayout(
+      boardData: cg.BoardData(
+        interactableSide: orientation == Side.white
+            ? cg.InteractableSide.white
+            : cg.InteractableSide.black,
+        orientation: orientation.cg,
+        fen: position.fen,
+        lastMove: state.game.moveAt(state.stepCursor)?.cg,
+        isCheck: position.isCheck,
+        sideToMove: position.turn.cg,
+        validMoves: algebraicLegalMoves(position),
+        onMove: (move, {isPremove}) {
+          // ref.read(ctrlProvider.notifier).onUserMove(Move.fromUci(move.uci)!);
+        },
+      ),
+      topTable: topPlayer,
+      bottomTable: bottomPlayer,
+    );
+
+    return !state.game.playable
+        ? content
+        : WillPopScope(
+            onWillPop: () async {
+              final result = await _showExitConfirmDialog(context);
+              return result ?? true;
+            },
+            child: content,
+          );
   }
 }
 
