@@ -38,7 +38,7 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
       },
       onCreate: (db, version) async {
         final batch = db.batch();
-        _createPuzzleBatchTableV1(batch);
+        _createPuzzleBatchTableV2(batch);
         _createPuzzleTableV2(batch);
         await batch.commit();
       },
@@ -53,7 +53,8 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
   );
 }
 
-void _createPuzzleBatchTableV1(Batch batch) {
+void _createPuzzleBatchTableV2(Batch batch) {
+  batch.execute('DROP TABLE IF EXISTS puzzle_batchs');
   batch.execute('''
     CREATE TABLE puzzle_batchs(
       userId TEXT NOT NULL,
@@ -65,6 +66,7 @@ void _createPuzzleBatchTableV1(Batch batch) {
 }
 
 void _createPuzzleTableV2(Batch batch) {
+  batch.execute('DROP TABLE IF EXISTS puzzle');
   batch.execute('''
     CREATE TABLE puzzle(
     puzzleId TEXT NOT NULL,
