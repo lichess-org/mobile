@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_socket.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 
@@ -190,4 +191,19 @@ class GameCtrlState with _$GameCtrlState {
   }) = _GameCtrlState;
 
   bool get isReplaying => stepCursor < game.steps.length - 1;
+
+  Side? get activeClockSide {
+    if (game.clock == null) {
+      return null;
+    }
+
+    if (game.data.status == GameStatus.started) {
+      final pos = game.lastPosition;
+      if (pos.fullmoves > 1) {
+        return pos.turn;
+      }
+    }
+
+    return null;
+  }
 }

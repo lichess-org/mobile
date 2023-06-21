@@ -145,10 +145,14 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
     final black = BoardPlayer(
       key: const ValueKey('black-player'),
       player: state.game.black,
+      clock: state.game.clock?.black,
+      active: state.activeClockSide == Side.black,
     );
     final white = BoardPlayer(
       key: const ValueKey('white-player'),
       player: state.game.white,
+      clock: state.game.clock?.white,
+      active: state.activeClockSide == Side.white,
     );
     final orientation = state.game.youAre ?? Side.white;
     final topPlayer = orientation == Side.white ? black : white;
