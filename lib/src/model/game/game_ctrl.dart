@@ -19,9 +19,7 @@ class GameCtrl extends _$GameCtrl {
     final socket = ref.watch(authSocketProvider);
     final stream = socket.connect();
 
-    final state = stream
-        .firstWhere((e) => e.type == SocketEventType.gameFull)
-        .then((event) {
+    final state = stream.firstWhere((e) => e.topic == 'full').then((event) {
       final game =
           PlayableGame.fromWebSocketJson(event.data as Map<String, dynamic>);
       return GameCtrlState(game: game);

@@ -6,7 +6,6 @@ import 'package:deep_pick/deep_pick.dart';
 
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
@@ -41,9 +40,8 @@ class CreateGameService {
 
     final stream = socket.connect();
 
-    final futureGameId = stream
-        .firstWhere((e) => e.type == SocketEventType.redirect)
-        .then((event) {
+    final futureGameId =
+        stream.firstWhere((e) => e.topic == 'redirect').then((event) {
       _isCreatingGame = false;
       final data = event.data as Map<String, dynamic>;
       return pick(data['id']).asGameFullIdOrThrow();

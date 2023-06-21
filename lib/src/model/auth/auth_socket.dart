@@ -30,12 +30,19 @@ AuthSocket authSocket(AuthSocketRef ref) {
   return authSocket;
 }
 
-/// WebSocket channel wrapper to authenticate with lichess
+/// Lichess websocket client.
 ///
-/// It automatically generate a new SRI for each connection.
-/// It adds the following headers on connect:
+/// This class can only create one single connection, because we never want to
+/// have more than one connection open at a time.
+/// Calling several times [connect] will return the same stream.
+///
+/// Handles authentication:
+///  - automatically generate a new SRI for each connection.
+///  - adds the following headers on connect:
 ///   - Authorization header when a token has been stored,
 ///   - User-Agent header
+///
+/// Handles low-level ping/pong protocol.
 class AuthSocket {
   AuthSocket(this._ref, this._log);
 
@@ -91,19 +98,22 @@ class AuthSocket {
       headers: headers,
     );
 
-    final Stream<SocketEvent> stream = channel.stream.map((raw) {
-      if (raw == '0') {
-        _handlePong(pingDelay);
-        return SocketEvent.pong;
-      }
-      final event = SocketEvent.fromJson(
-        jsonDecode(raw as String) as Map<String, dynamic>,
-      );
-      if (event.type == SocketEventType.pong) {
-        _handlePong(pingDelay);
-      }
-      return event;
-    }).asBroadcastStream();
+    final Stream<SocketEvent> stream = channel.stream
+        .map((raw) {
+          if (raw == '0') {
+            _handlePong(pingDelay);
+            return SocketEvent.pong;
+          }
+          final event = SocketEvent.fromJson(
+            jsonDecode(raw as String) as Map<String, dynamic>,
+          );
+          if (event.topic == 'n') {
+            _handlePong(pingDelay);
+          }
+          return event;
+        })
+        .where((event) => event.type != SocketEventType.pong)
+        .asBroadcastStream();
 
     _schedulePing(pingDelay);
 
