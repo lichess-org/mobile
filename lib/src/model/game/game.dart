@@ -46,6 +46,8 @@ mixin IndexableSteps on BaseGame {
   }
 
   Position get lastPosition => steps.last.position;
+
+  int get lastPly => steps.last.ply;
 }
 
 @freezed

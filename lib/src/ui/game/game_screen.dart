@@ -101,9 +101,10 @@ class _WaitForGame extends ConsumerWidget {
 
     return gameId.when(
       data: (id) {
-        final gameState = ref.watch(gameCtrlProvider(id));
+        final ctrlProvider = gameCtrlProvider(id);
+        final gameState = ref.watch(ctrlProvider);
         return gameState.when(
-          data: (state) => _Body(gameState: state),
+          data: (state) => _Body(gameState: state, ctrlProvider: ctrlProvider),
           loading: () => const _GameLoader(),
           error: (e, s) {
             debugPrint(
@@ -127,9 +128,11 @@ class _WaitForGame extends ConsumerWidget {
 class _Body extends ConsumerStatefulWidget {
   const _Body({
     required this.gameState,
+    required this.ctrlProvider,
   });
 
   final GameCtrlState gameState;
+  final GameCtrlProvider ctrlProvider;
 
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -163,7 +166,9 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
         sideToMove: position.turn.cg,
         validMoves: algebraicLegalMoves(position),
         onMove: (move, {isPremove}) {
-          // ref.read(ctrlProvider.notifier).onUserMove(Move.fromUci(move.uci)!);
+          ref
+              .read(widget.ctrlProvider.notifier)
+              .onUserMove(Move.fromUci(move.uci)!);
         },
       ),
       topTable: topPlayer,

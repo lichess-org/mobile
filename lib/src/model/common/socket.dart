@@ -6,7 +6,7 @@ enum SocketEventType {
   /// Sent by the server to check the connection is still alive.
   pong,
 
-  /// Versioned socket will send this to notify the client of the current version.
+  /// Event which only purpose is to tell the current version of socket.
   version,
 
   /// All the other events, usually part of a domain protocol (eg. lobby, game, etc.)
@@ -31,7 +31,7 @@ class SocketEvent with _$SocketEvent {
       if (json['v'] != null) {
         return SocketEvent(
           type: SocketEventType.version,
-          topic: 'version',
+          topic: '_version',
           version: json['v'] as int,
         );
       } else {

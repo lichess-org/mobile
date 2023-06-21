@@ -21,8 +21,7 @@ class SocketMoveEvent with _$SocketMoveEvent {
     bool? blackDrawOffer,
     GameStatus? status,
     Side? winner,
-    Duration? whiteClock,
-    Duration? blackClock,
+    ({Duration white, Duration black, Duration? lag})? clock,
     Duration? clockLag,
   }) = _SocketMoveEvent;
 
@@ -40,10 +39,13 @@ SocketMoveEvent _socketMoveEventFromPick(RequiredPick pick) {
     threefold: pick('threefold').asBoolOrNull(),
     whiteDrawOffer: pick('wDraw').asBoolOrNull(),
     blackDrawOffer: pick('bDraw').asBoolOrNull(),
-    whiteClock: pick('clock', 'white').asDurationFromSecondsOrNull(),
-    blackClock: pick('clock', 'black').asDurationFromSecondsOrNull(),
-    clockLag: pick('clock', 'lag').letOrNull((it) {
-      return Duration(milliseconds: it.asIntOrThrow() * 10);
-    }),
+    clock: pick('clock').letOrNull(
+      (it) => (
+        white: it('white').asDurationFromSecondsOrThrow(),
+        black: it('black').asDurationFromSecondsOrThrow(),
+        lag: it('lag')
+            .letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10)),
+      ),
+    ),
   );
 }
