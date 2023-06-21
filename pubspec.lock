@@ -13,10 +13,10 @@ packages:
     dependency: transitive
     description:
       name: _flutterfire_internals
-      sha256: "9ebe81588e666f7e2b21309f2b5653bd9642d7f27fd0a6894278d2ff40cb9481"
+      sha256: a742f71d7f3484253a623b30e19256aa4668ecbb3de6ad1beb0bcf8d4777ecd8
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.2"
+    version: "1.3.3"
   analyzer:
     dependency: transitive
     description:
@@ -196,12 +196,11 @@ packages:
   chessground:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "68ca39c82614a21a11649963c4c95135068970f2"
-      resolved-ref: "68ca39c82614a21a11649963c4c95135068970f2"
-      url: "https://github.com/lichess-org/flutter-chessground.git"
-    source: git
-    version: "0.1.0"
+      name: chessground
+      sha256: "8f84bf644e8d9853ea81752677531a240f4f0afa2acea44611d004f9199c724d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   ci:
     dependency: transitive
     description:
@@ -357,11 +356,10 @@ packages:
   dartchess:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "057e114e18d61431dc3f817d672792f51b84747f"
-      resolved-ref: "057e114e18d61431dc3f817d672792f51b84747f"
-      url: "https://github.com/lichess-org/dartchess.git"
-    source: git
+      name: dartchess
+      sha256: "13c75e333212871fee385c31b7702a0e769177a7e294c79d343442e1e670c676"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.1.0"
   dbus:
     dependency: transitive
@@ -439,10 +437,10 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_core
-      sha256: e9b36b391690cf329c6fb1de220045e97c13784c303820cd33962319580a56c6
+      sha256: a4a99204da264a0aa9d54a332ea0315ce7b0768075139c77abefe98093dd98be
       url: "https://pub.dev"
     source: hosted
-    version: "2.13.1"
+    version: "2.14.0"
   firebase_core_platform_interface:
     dependency: transitive
     description:
@@ -455,26 +453,26 @@ packages:
     dependency: transitive
     description:
       name: firebase_core_web
-      sha256: "8c0f4c87d20e2d001a5915df238c1f9c88704231f591324205f5a5d2a7740a45"
+      sha256: "0fd5c4b228de29b55fac38aed0d9e42514b3d3bd47675de52bf7f8fccaf922fa"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.0"
+    version: "2.6.0"
   firebase_crashlytics:
     dependency: "direct main"
     description:
       name: firebase_crashlytics
-      sha256: "603f23a74995c193cae89a784b8da529b1e6a91c03bc63f885f36456e9e867a0"
+      sha256: "398012cf7838f8a373a25da65dd62fc3a3f4abe4b5f886caa634952c3387dce3"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.2"
+    version: "3.3.3"
   firebase_crashlytics_platform_interface:
     dependency: transitive
     description:
       name: firebase_crashlytics_platform_interface
-      sha256: cefeeeb98abdb9d848581603bd1e33a2a8e6d3ed937586cb84437e606049071b
+      sha256: "39dfcc9a5ddfaa0588ad67f1016174dd9e19f6b31f592b8641bd559399567592"
       url: "https://pub.dev"
     source: hosted
-    version: "3.6.2"
+    version: "3.6.3"
   fixnum:
     dependency: transitive
     description:
@@ -975,14 +973,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.4"
-  protobuf:
-    dependency: transitive
-    description:
-      name: protobuf
-      sha256: "01dd9bd0fa02548bf2ceee13545d4a0ec6046459d847b6b061d8a27237108a08"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
   pub_semver:
     dependency: transitive
     description:
@@ -1018,11 +1008,10 @@ packages:
   result_extensions:
     dependency: "direct main"
     description:
-      path: "."
-      ref: b2c283a9554dab416da89e1334b842b87257002d
-      resolved-ref: b2c283a9554dab416da89e1334b842b87257002d
-      url: "https://github.com/veloce/result_extensions.git"
-    source: git
+      name: result_extensions
+      sha256: fb9255281e89228a217fd6175164cf83877d59b7583100d24b2a1de445e1b94f
+      url: "https://pub.dev"
+    source: hosted
     version: "0.1.0"
   riverpod:
     dependency: transitive
@@ -1265,10 +1254,10 @@ packages:
     dependency: transitive
     description:
       name: sqflite_common
-      sha256: e77abf6ff961d69dfef41daccbb66b51e9983cdd5cb35bf30733598057401555
+      sha256: "8f7603f3f8f126740bc55c4ca2d1027aab4b74a1267a3e31ce51fe40e3b65b8f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.5"
+    version: "2.4.5+1"
   sqflite_common_ffi:
     dependency: "direct dev"
     description:
@@ -1281,10 +1270,10 @@ packages:
     dependency: transitive
     description:
       name: sqlite3
-      sha256: "281b672749af2edf259fc801f0fcba092257425bcd32a0ce1c8237130bc934c7"
+      sha256: f7511ddd6a2dda8ded9d849f8a925bb6020e0faa59db2443debc18d484e59401
       url: "https://pub.dev"
     source: hosted
-    version: "1.11.2"
+    version: "2.0.0"
   stack_trace:
     dependency: transitive
     description:
@@ -1449,10 +1438,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_platform_interface
-      sha256: "6c9ca697a5ae218ce56cece69d46128169a58aa8653c1b01d26fcd4aad8c4370"
+      sha256: bfdfa402f1f3298637d71ca8ecfe840b4696698213d5346e9d12d4ab647ee2ea
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.3"
   url_launcher_web:
     dependency: transitive
     description:
@@ -1497,10 +1486,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: "1311639ad908dfdcb64734ac1fbd60416234c06e4351846783a79c56848a5185"
+      sha256: c620a6f783fa22436da68e42db7ebbf18b8c44b9a46ab911f666ff09ffd9153f
       url: "https://pub.dev"
     source: hosted
-    version: "11.7.0"
+    version: "11.7.1"
   watcher:
     dependency: transitive
     description:
@@ -1529,10 +1518,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: "7dacfda1edcca378031db9905ad7d7bd56b29fd1a90b0908b71a52a12c41e36b"
+      sha256: "1414f27dd781737e51afa9711f2ac2ace6ab4498ee98e20863fa5505aa00c58c"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.3"
+    version: "5.0.4"
   win32_registry:
     dependency: transitive
     description:
