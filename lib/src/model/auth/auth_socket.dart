@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/model/auth/bearer.dart';
 part 'auth_socket.g.dart';
 
 /// The native ping interval. This is different from the ping protocol of lichess.
-const kNativePingInterval = Duration(seconds: 10);
+const kNativePingInterval = Duration(seconds: 30);
 const kDefaultConnectTimeout = Duration(seconds: 5);
 
 const kWebSocketPath = '/socket/v5';
@@ -42,7 +42,7 @@ AuthSocket authSocket(AuthSocketRef ref) {
 ///   - Authorization header when a token has been stored,
 ///   - User-Agent header
 ///
-/// Handles low-level ping/pong protocol.
+/// Handles low-level ping/pong protocol and message acks.
 class AuthSocket {
   AuthSocket(this._ref, this._log);
 
@@ -50,9 +50,16 @@ class AuthSocket {
   final AuthSocketRef _ref;
 
   Timer? _pingTimer;
+  Timer? _ackResendTimer;
   int _pongCount = 0;
   DateTime? _lastPing;
   Duration _averageLag = Duration.zero;
+
+  /// The list of acknowledgeable messages.
+  List<(DateTime, int, Map<String, dynamic>)> _acks = [];
+
+  /// The current ack id. Incremented for each ack.
+  int _ackId = 1;
 
   /// The current connection.
   ({
@@ -60,6 +67,12 @@ class AuthSocket {
     Stream<SocketEvent> stream,
     IOWebSocketChannel channel,
   })? _connection;
+
+  /// Gets the current WebSocket sink
+  WebSocketSink? get sink => _connection?.channel.sink;
+
+  /// Gets the current SRI
+  String? get sri => _connection?.sri;
 
   /// Creates a new WebSocket channel.
   ///
@@ -74,6 +87,13 @@ class AuthSocket {
 
     _pongCount = 0;
     _averageLag = Duration.zero;
+    _acks = [];
+    _ackId = 1;
+    _ackResendTimer?.cancel();
+    _ackResendTimer = Timer.periodic(
+      const Duration(milliseconds: 1500),
+      (_) => _resendAcks(),
+    );
 
     final session = _ref.read(authSessionProvider);
     final info = _ref.read(packageInfoProvider);
@@ -98,6 +118,11 @@ class AuthSocket {
       headers: headers,
     );
 
+    channel.ready.then((_) {
+      _log.info('WebSocket connection established.');
+      _sendPing();
+    });
+
     final Stream<SocketEvent> stream = channel.stream
         .map((raw) {
           if (raw == '0') {
@@ -107,15 +132,16 @@ class AuthSocket {
           final event = SocketEvent.fromJson(
             jsonDecode(raw as String) as Map<String, dynamic>,
           );
-          if (event.topic == 'n') {
-            _handlePong(pingDelay);
+          switch (event.topic) {
+            case 'n':
+              _handlePong(pingDelay);
+            case 'ack':
+              _onServerAck(event);
           }
           return event;
         })
-        .where((event) => event.type != SocketEventType.pong)
+        .where((event) => event != SocketEvent.pong)
         .asBroadcastStream();
-
-    _schedulePing(pingDelay);
 
     _connection = (
       sri: sri,
@@ -140,13 +166,28 @@ class AuthSocket {
     );
   }
 
-  void send(String topic, dynamic data) {
-    sink?.add(
-      jsonEncode({
+  /// Sends a message to the websocket.
+  void send(String topic, Object? data, {bool? ackable}) {
+    Map<String, Object> message;
+
+    if (ackable == true) {
+      final ackId = _ackId++;
+      message = {
+        't': topic,
+        'd': {
+          if (data != null && data is Map<String, Object>) ...data,
+          'a': ackId,
+        },
+      };
+      _acks.add((DateTime.now(), ackId, message));
+    } else {
+      message = {
         't': topic,
         if (data != null) 'd': data,
-      }),
-    );
+      };
+    }
+
+    sink?.add(jsonEncode(message));
   }
 
   void _schedulePing(Duration delay) {
@@ -170,7 +211,7 @@ class AuthSocket {
 
   void _handlePong(Duration pingDelay) {
     if (_pongCount == 0) {
-      _log.info('WebSocket connection established.');
+      _log.info('Ping/pong protocol established.');
     }
     _schedulePing(pingDelay);
     _pongCount++;
@@ -181,11 +222,22 @@ class AuthSocket {
     _averageLag += (currentLag - _averageLag) * mix;
   }
 
-  /// Gets the current WebSocket sink
-  WebSocketSink? get sink => _connection?.channel.sink;
+  void _onServerAck(SocketEvent event) {
+    if (event.data is! int) {
+      return;
+    }
+    _acks.removeWhere((rec) => rec.$2 == event.data);
+  }
 
-  /// Gets the current SRI
-  String? get sri => _connection?.sri;
+  void _resendAcks() {
+    final resendCutoff =
+        DateTime.now().subtract(const Duration(milliseconds: 2500));
+    for (final (at, _, ack) in _acks) {
+      if (at.isBefore(resendCutoff)) {
+        sink?.add(jsonEncode(ack));
+      }
+    }
+  }
 
   /// Closes the WebSocket connection, if open.
   void close() {
@@ -193,6 +245,8 @@ class AuthSocket {
       _log.info('Closing WebSocket connection.');
     }
     sink?.close();
+    _pingTimer?.cancel();
+    _ackResendTimer?.cancel();
     _connection = null;
   }
 }

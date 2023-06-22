@@ -117,12 +117,16 @@ class GameCtrl extends _$GameCtrl {
     }
   }
 
-  // TODO: ack, blur, lag
+  // TODO: blur, lag
   void _sendMove(Move move) {
     final socket = ref.read(authSocketProvider);
-    socket.send('move', {
-      'u': move.uci,
-    });
+    socket.send(
+      'move',
+      {
+        'u': move.uci,
+      },
+      ackable: true,
+    );
   }
 
   /// Move feedback while playing
