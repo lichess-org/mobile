@@ -143,7 +143,10 @@ class _BoardBody extends ConsumerWidget {
           ),
           topTable: topPlayer,
           bottomTable: bottomPlayer,
-          moves: game.steps.skip(1).map((e) => e.san!).toList(growable: false),
+          moves: game.steps
+              .skip(1)
+              .map((e) => e.sanMove!.san)
+              .toList(growable: false),
           currentMoveIndex: cursor,
           onSelectMove: (moveIndex) {
             ref

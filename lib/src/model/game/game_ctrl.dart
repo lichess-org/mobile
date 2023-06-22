@@ -5,8 +5,10 @@ import 'package:dartchess/dartchess.dart';
 import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_socket.dart';
@@ -55,11 +57,11 @@ class GameCtrl extends _$GameCtrl {
     final curState = state.requireValue;
 
     final (newPos, newSan) = curState.game.lastPosition.playToSan(move);
+    final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
       ply: curState.game.lastPly + 1,
       position: newPos,
-      san: newSan,
-      uci: move.uci,
+      sanMove: sanMove,
       diff: MaterialDiff.fromBoard(newPos.board),
     );
 
@@ -73,6 +75,8 @@ class GameCtrl extends _$GameCtrl {
     );
 
     sendMove(move);
+
+    _playMoveFeedback(sanMove);
   }
 
   void sendMove(Move move) {
@@ -80,6 +84,15 @@ class GameCtrl extends _$GameCtrl {
     socket.send('move', {
       'u': move.uci,
     });
+  }
+
+  void _playMoveFeedback(SanMove sanMove) {
+    final isCheck = sanMove.san.contains('+');
+    if (sanMove.san.contains('x')) {
+      ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+    } else {
+      ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
+    }
   }
 
   /// Resync full game data with the server
@@ -90,8 +103,6 @@ class GameCtrl extends _$GameCtrl {
   }
 
   void _handleSocketEvent(SocketEvent event) {
-    print('game socket event: $event');
-
     if (event.version != null) {
       if (event.version! <= _socketEventVersion) {
         _logger.fine('Already handled event ${event.version}');
@@ -137,16 +148,21 @@ class GameCtrl extends _$GameCtrl {
         /// Opponent move
         if (data.ply == curState.game.lastPly + 1) {
           final lastPos = curState.game.lastPosition;
-          final newPos = lastPos.playUnchecked(Move.fromUci(data.uci)!);
+          final move = Move.fromUci(data.uci)!;
+          final sanMove = SanMove(data.san, move);
+          final newPos = lastPos.playUnchecked(move);
           final newStep = GameStep(
             ply: data.ply,
-            san: data.san,
-            uci: data.uci,
+            sanMove: sanMove,
             position: newPos,
             diff: MaterialDiff.fromBoard(newPos.board),
           );
 
           newState = newState.copyWith(
+            isThreefoldRepetition: data.threefold,
+            winner: data.winner,
+            whiteOfferingDraw: data.whiteOfferingDraw,
+            blackOfferingDraw: data.blackOfferingDraw,
             game: newState.game.copyWith(
               steps: newState.game.steps.add(newStep),
             ),
@@ -154,8 +170,10 @@ class GameCtrl extends _$GameCtrl {
 
           if (!curState.isReplaying) {
             newState = newState.copyWith(
-              stepCursor: curState.stepCursor + 1,
+              stepCursor: newState.stepCursor + 1,
             );
+
+            _playMoveFeedback(sanMove);
           }
         }
 
@@ -188,7 +206,13 @@ class GameCtrlState with _$GameCtrlState {
   const factory GameCtrlState({
     required PlayableGame game,
     required int stepCursor,
+    bool? isThreefoldRepetition,
+    bool? whiteOfferingDraw,
+    bool? blackOfferingDraw,
+    Side? winner,
   }) = _GameCtrlState;
+
+  bool get playable => game.data.status.value < GameStatus.aborted.value;
 
   bool get isReplaying => stepCursor < game.steps.length - 1;
 

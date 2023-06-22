@@ -17,12 +17,11 @@ class SocketMoveEvent with _$SocketMoveEvent {
     required String uci,
     required String san,
     bool? threefold,
-    bool? whiteDrawOffer,
-    bool? blackDrawOffer,
+    bool? whiteOfferingDraw,
+    bool? blackOfferingDraw,
     GameStatus? status,
     Side? winner,
     ({Duration white, Duration black, Duration? lag})? clock,
-    Duration? clockLag,
   }) = _SocketMoveEvent;
 
   factory SocketMoveEvent.fromJson(Map<String, dynamic> json) =>
@@ -37,8 +36,8 @@ SocketMoveEvent _socketMoveEventFromPick(RequiredPick pick) {
     status: pick('status').asGameStatusOrNull(),
     winner: pick('winner').asSideOrNull(),
     threefold: pick('threefold').asBoolOrNull(),
-    whiteDrawOffer: pick('wDraw').asBoolOrNull(),
-    blackDrawOffer: pick('bDraw').asBoolOrNull(),
+    whiteOfferingDraw: pick('wDraw').asBoolOrNull(),
+    blackOfferingDraw: pick('bDraw').asBoolOrNull(),
     clock: pick('clock').letOrNull(
       (it) => (
         white: it('white').asDurationFromSecondsOrThrow(),

@@ -107,8 +107,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
         steps.add(
           GameStep(
             ply: index,
-            san: san,
-            uci: move.uci,
+            sanMove: SanMove(san, move),
             position: position,
             diff: MaterialDiff.fromBoard(position.board),
             whiteClock: index.isOdd ? stepClock : clock,

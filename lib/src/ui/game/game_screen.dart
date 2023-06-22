@@ -143,16 +143,16 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
   Widget build(BuildContext context) {
     final state = widget.gameState;
     final black = BoardPlayer(
-      key: const ValueKey('black-player'),
       player: state.game.black,
       clock: state.game.clock?.black,
       active: state.activeClockSide == Side.black,
+      diff: state.game.materialDiffAt(state.stepCursor, Side.black),
     );
     final white = BoardPlayer(
-      key: const ValueKey('white-player'),
       player: state.game.white,
       clock: state.game.clock?.white,
       active: state.activeClockSide == Side.white,
+      diff: state.game.materialDiffAt(state.stepCursor, Side.white),
     );
     final orientation = state.game.youAre ?? Side.white;
     final topPlayer = orientation == Side.white ? black : white;
@@ -160,9 +160,11 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
     final position = state.game.positionAt(state.stepCursor);
     final content = TableBoardLayout(
       boardData: cg.BoardData(
-        interactableSide: orientation == Side.white
-            ? cg.InteractableSide.white
-            : cg.InteractableSide.black,
+        interactableSide: state.playable
+            ? orientation == Side.white
+                ? cg.InteractableSide.white
+                : cg.InteractableSide.black
+            : cg.InteractableSide.none,
         orientation: orientation.cg,
         fen: position.fen,
         lastMove: state.game.moveAt(state.stepCursor)?.cg,
@@ -179,7 +181,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
       bottomTable: bottomPlayer,
     );
 
-    return !state.game.playable
+    return !state.playable
         ? content
         : WillPopScope(
             onWillPop: () async {

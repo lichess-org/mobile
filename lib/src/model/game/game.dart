@@ -30,8 +30,7 @@ mixin IndexableSteps on BaseGame {
   String fenAt(int cursor) => steps[cursor].position.fen;
 
   Move? moveAt(int cursor) {
-    final uci = steps[cursor].uci;
-    return uci != null ? Move.fromUci(uci) : null;
+    return steps[cursor].sanMove?.move;
   }
 
   Position positionAt(int cursor) => steps[cursor].position;
@@ -41,8 +40,7 @@ mixin IndexableSteps on BaseGame {
   Duration? blackClockAt(int cursor) => steps[cursor].blackClock;
 
   Move? get lastMove {
-    final uci = steps.last.uci;
-    return uci != null ? Move.fromUci(uci) : null;
+    return steps.last.sanMove?.move;
   }
 
   Position get lastPosition => steps.last.position;
@@ -66,8 +64,6 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
 
   factory PlayableGame.fromWebSocketJson(Map<String, dynamic> json) =>
       _playableGameFromPick(pick(json).required());
-
-  bool get playable => data.status.value < GameStatus.aborted.value;
 }
 
 PlayableGame _playableGameFromPick(RequiredPick pick) {
@@ -92,8 +88,7 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
       steps.add(
         GameStep(
           ply: ply,
-          san: san,
-          uci: move.uci,
+          sanMove: SanMove(san, move),
           position: position,
           diff: MaterialDiff.fromBoard(position.board),
         ),
@@ -224,8 +219,7 @@ class GameStep with _$GameStep {
   const factory GameStep({
     required int ply,
     required Position position,
-    String? san,
-    String? uci,
+    SanMove? sanMove,
     MaterialDiff? diff,
 
     /// The remaining white clock time at this step. Only for archived game.
