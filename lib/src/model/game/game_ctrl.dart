@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
@@ -9,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_socket.dart';
@@ -74,24 +76,74 @@ class GameCtrl extends _$GameCtrl {
       ),
     );
 
-    sendMove(move);
+    _sendMove(move);
 
     _playMoveFeedback(sanMove);
   }
 
-  void sendMove(Move move) {
+  void cursorAt(int cursor) {
+    if (state.hasValue) {
+      state = AsyncValue.data(state.requireValue.copyWith(stepCursor: cursor));
+      final san = state.requireValue.game.stepAt(cursor).sanMove?.san;
+      if (san != null) {
+        _playReplayMoveSound(san);
+        HapticFeedback.lightImpact();
+      }
+    }
+  }
+
+  void cursorForward({bool hapticFeedback = true}) {
+    if (state.hasValue) {
+      final curState = state.requireValue;
+      final newCursor = curState.stepCursor + 1;
+      state = AsyncValue.data(curState.copyWith(stepCursor: newCursor));
+      final san = curState.game.stepAt(newCursor).sanMove?.san;
+      if (san != null) {
+        _playReplayMoveSound(san);
+        if (hapticFeedback) HapticFeedback.lightImpact();
+      }
+    }
+  }
+
+  void cursorBackward() {
+    if (state.hasValue) {
+      final curState = state.requireValue;
+      final newCursor = curState.stepCursor - 1;
+      state = AsyncValue.data(curState.copyWith(stepCursor: newCursor));
+      final san = curState.game.stepAt(newCursor).sanMove?.san;
+      if (san != null) {
+        _playReplayMoveSound(san);
+      }
+    }
+  }
+
+  // TODO: ack, blur, lag
+  void _sendMove(Move move) {
     final socket = ref.read(authSocketProvider);
     socket.send('move', {
       'u': move.uci,
     });
   }
 
+  /// Move feedback while playing
   void _playMoveFeedback(SanMove sanMove) {
     final isCheck = sanMove.san.contains('+');
     if (sanMove.san.contains('x')) {
       ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
     } else {
       ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
+    }
+  }
+
+  /// Play the sound when replaying moves
+  void _playReplayMoveSound(String san) {
+    final soundService = ref.read(soundServiceProvider);
+    if (san.contains('x')) {
+      soundService.stopCurrent();
+      soundService.play(Sound.capture);
+    } else {
+      soundService.stopCurrent();
+      soundService.play(Sound.move);
     }
   }
 
@@ -215,6 +267,9 @@ class GameCtrlState with _$GameCtrlState {
   bool get playable => game.data.status.value < GameStatus.aborted.value;
 
   bool get isReplaying => stepCursor < game.steps.length - 1;
+
+  bool get canGoForward => stepCursor < game.steps.length - 1;
+  bool get canGoBackward => stepCursor > 0;
 
   Side? get activeClockSide {
     if (game.clock == null) {

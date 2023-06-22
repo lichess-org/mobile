@@ -80,13 +80,6 @@ class GameCursor extends _$GameCursor {
     }
   }
 
-  void cursorLast() {
-    if (state.hasValue) {
-      final (game, _) = state.value!;
-      state = AsyncValue.data((game, game.steps.length - 1));
-    }
-  }
-
   void _playMoveSound(String san) {
     final soundService = ref.read(soundServiceProvider);
     if (san.contains('x')) {
