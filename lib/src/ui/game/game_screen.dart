@@ -66,14 +66,7 @@ class OnlineGameScreen extends ConsumerWidget {
         padding: const EdgeInsetsDirectional.only(end: 16.0),
         trailing: ToggleSoundButton(),
       ),
-      child: const SafeArea(
-        child: Column(
-          children: [
-            Expanded(child: _WaitForGame()),
-            // _BottomBar(game: game),
-          ],
-        ),
-      ),
+      child: const _WaitForGame(),
     );
   }
 }
@@ -189,6 +182,14 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                 ),
                 topTable: topPlayer,
                 bottomTable: bottomPlayer,
+                moves: state.game.steps
+                    .skip(1)
+                    .map((e) => e.sanMove!.san)
+                    .toList(growable: false),
+                currentMoveIndex: state.stepCursor,
+                onSelectMove: (moveIndex) {
+                  ref.read(widget.ctrlProvider.notifier).cursorAt(moveIndex);
+                },
               ),
             ),
           ),
