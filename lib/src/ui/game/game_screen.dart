@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
@@ -32,6 +33,18 @@ Future<GameFullId> _createGame(_CreateGameRef ref) {
   final service = ref.watch(createGameServiceProvider);
   ref.onDispose(service.cancel);
   return service.newOnlineGame();
+}
+
+@riverpod
+class IsBoardTurned extends _$IsBoardTurned {
+  @override
+  bool build() {
+    return false;
+  }
+
+  void toggle() {
+    state = !state;
+  }
 }
 
 class OnlineGameScreen extends ConsumerWidget {
@@ -189,6 +202,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
     final topPlayer = orientation == Side.white ? black : white;
     final bottomPlayer = orientation == Side.white ? white : black;
     final position = state.game.positionAt(state.stepCursor);
+    final isBoardTurned = ref.watch(isBoardTurnedProvider);
 
     final content = Column(
       children: [
@@ -202,7 +216,8 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                           ? cg.InteractableSide.white
                           : cg.InteractableSide.black
                       : cg.InteractableSide.none,
-                  orientation: orientation.cg,
+                  orientation:
+                      isBoardTurned ? orientation.opposite.cg : orientation.cg,
                   fen: position.fen,
                   lastMove: state.game.moveAt(state.stepCursor)?.cg,
                   isCheck: position.isCheck,
@@ -235,10 +250,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
     return !state.playable
         ? content
         : WillPopScope(
-            onWillPop: () async {
-              final result = await _showExitConfirmDialog(context);
-              return result ?? false;
-            },
+            onWillPop: () async => false,
             child: content,
           );
   }
@@ -265,6 +277,17 @@ class _GameBottomBar extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            BottomBarButton(
+              label: context.l10n.menu,
+              shortLabel: context.l10n.menu,
+              onTap: () {
+                _showGameMenu(context, ref);
+              },
+              icon: Icons.menu,
+            ),
+            const SizedBox(
+              width: 44.0,
+            ),
             RepeatButton(
               onLongPress:
                   gameState.canGoBackward ? () => _moveBackward(ref) : null,
@@ -301,6 +324,53 @@ class _GameBottomBar extends ConsumerWidget {
 
   void _moveBackward(WidgetRef ref) {
     ref.read(ctrlProvider.notifier).cursorBackward();
+  }
+
+  Future<void> _showGameMenu(BuildContext context, WidgetRef ref) {
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        BottomSheetAction(
+          leading: const Icon(Icons.swap_vert),
+          label: Text(context.l10n.flipBoard),
+          onPressed: (context) {
+            ref.read(isBoardTurnedProvider.notifier).toggle();
+          },
+        ),
+        if (gameState.abortable)
+          BottomSheetAction(
+            leading: const Icon(Icons.cancel),
+            label: Text(context.l10n.abortGame),
+            onPressed: (context) {
+              ref.read(ctrlProvider.notifier).abortGame();
+            },
+          ),
+        if (gameState.resignable)
+          BottomSheetAction(
+            leading: const Icon(Icons.flag),
+            label: Text(context.l10n.resign),
+            onPressed: (context) async {
+              await Navigator.of(context).maybePop();
+              if (context.mounted) {
+                final result = await showAdaptiveDialog<bool>(
+                  context: context,
+                  builder: (context) => YesNoDialog(
+                    title: const Text('Are you sure?'),
+                    content: Text(context.l10n.resignTheGame),
+                    onYes: () {
+                      return Navigator.of(context).pop(true);
+                    },
+                    onNo: () => Navigator.of(context).pop(false),
+                  ),
+                );
+                if (result == true) {
+                  ref.read(ctrlProvider.notifier).resignGame();
+                }
+              }
+            },
+          ),
+      ],
+    );
   }
 }
 

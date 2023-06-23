@@ -48,3 +48,39 @@ SocketMoveEvent _socketMoveEventFromPick(RequiredPick pick) {
     ),
   );
 }
+
+@freezed
+class GameEndEvent with _$GameEndEvent {
+  const GameEndEvent._();
+
+  const factory GameEndEvent({
+    required GameStatus status,
+    Side? winner,
+    ({double white, double black})? ratingDiff,
+    bool? boosted,
+    ({Duration white, Duration black})? clock,
+  }) = _GameEndEvent;
+
+  factory GameEndEvent.fromJson(Map<String, dynamic> json) =>
+      _gameEndEventFromPick(pick(json).required());
+}
+
+GameEndEvent _gameEndEventFromPick(RequiredPick pick) {
+  return GameEndEvent(
+    status: pick('status').asGameStatusOrThrow(),
+    winner: pick('winner').asSideOrNull(),
+    ratingDiff: pick('ratingDiff').letOrNull(
+      (it) => (
+        white: it('white').asDoubleOrThrow(),
+        black: it('black').asDoubleOrThrow(),
+      ),
+    ),
+    boosted: pick('boosted').asBoolOrNull(),
+    clock: pick('clock').letOrNull(
+      (it) => (
+        white: it('wc').asDurationFromSecondsOrThrow(),
+        black: it('bc').asDurationFromSecondsOrThrow(),
+      ),
+    ),
+  );
+}

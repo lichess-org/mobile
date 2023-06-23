@@ -118,10 +118,17 @@ class GameCtrl extends _$GameCtrl {
     }
   }
 
+  void abortGame() {
+    _socket.send('abort', null);
+  }
+
+  void resignGame() {
+    _socket.send('resign', null);
+  }
+
   // TODO: blur, lag
   void _sendMove(Move move) {
-    final socket = ref.read(authSocketProvider);
-    socket.send(
+    _socket.send(
       'move',
       {
         'u': move.uci,
@@ -155,8 +162,7 @@ class GameCtrl extends _$GameCtrl {
   /// Resync full game data with the server
   void _resyncGameData() {
     _logger.info('Resyncing game data');
-    final socket = ref.read(authSocketProvider);
-    socket.switchRoute(Uri(path: '/play/$gameFullId/v6'));
+    _socket.switchRoute(Uri(path: '/play/$gameFullId/v6'));
   }
 
   void _handleSocketEvent(SocketEvent event) {
@@ -250,10 +256,35 @@ class GameCtrl extends _$GameCtrl {
 
         state = AsyncValue.data(newState);
 
+      case 'endData':
+        final endData =
+            GameEndEvent.fromJson(event.data as Map<String, dynamic>);
+        final curState = state.requireValue;
+        GameCtrlState newState = curState.copyWith(
+          winner: endData.winner,
+          game: curState.game.copyWith(
+            data: curState.game.data.copyWith(
+              status: endData.status,
+            ),
+          ),
+          ratingDiff: endData.ratingDiff,
+        );
+
+        if (endData.clock != null) {
+          newState = newState.copyWith.game.clock!(
+            white: endData.clock!.white,
+            black: endData.clock!.black,
+          );
+        }
+
+        state = AsyncValue.data(newState);
+
       default:
         break;
     }
   }
+
+  AuthSocket get _socket => ref.read(authSocketProvider);
 }
 
 @freezed
@@ -267,9 +298,12 @@ class GameCtrlState with _$GameCtrlState {
     bool? whiteOfferingDraw,
     bool? blackOfferingDraw,
     Side? winner,
+    ({double white, double black})? ratingDiff,
   }) = _GameCtrlState;
 
   bool get playable => game.data.status.value < GameStatus.aborted.value;
+  bool get abortable => playable && game.lastPosition.fullmoves <= 1;
+  bool get resignable => playable && !abortable;
 
   bool get isReplaying => stepCursor < game.steps.length - 1;
 
