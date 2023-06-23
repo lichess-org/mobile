@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/widgets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -50,5 +51,6 @@ class PlayPrefs with _$PlayPrefs {
   factory PlayPrefs.fromJson(Map<String, dynamic> json) =>
       _$PlayPrefsFromJson(json);
 
+  IconData get speedIcon => timeIncrement.speed.icon;
   String get gameTitle => '${timeIncrement.display} • Rated';
 }

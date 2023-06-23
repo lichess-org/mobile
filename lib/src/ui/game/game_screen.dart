@@ -72,7 +72,7 @@ class OnlineGameScreen extends ConsumerWidget {
           padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
           child: PingRating(size: 24.0),
         ),
-        title: Text(playPrefs.gameTitle),
+        title: _GameTitle(playPrefs: playPrefs),
         actions: [
           ToggleSoundButton(),
         ],
@@ -91,10 +91,33 @@ class OnlineGameScreen extends ConsumerWidget {
           padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
           child: PingRating(size: 24.0),
         ),
-        middle: Text(playPrefs.gameTitle),
+        middle: _GameTitle(playPrefs: playPrefs),
         trailing: ToggleSoundButton(),
       ),
       child: const _WaitForGame(),
+    );
+  }
+}
+
+class _GameTitle extends StatelessWidget {
+  const _GameTitle({
+    required this.playPrefs,
+  });
+
+  final PlayPrefs playPrefs;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          playPrefs.speedIcon,
+          color: DefaultTextStyle.of(context).style.color,
+        ),
+        const SizedBox(width: 4.0),
+        Text(playPrefs.gameTitle),
+      ],
     );
   }
 }
