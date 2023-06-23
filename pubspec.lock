@@ -1165,6 +1165,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  signal_strength_indicator:
+    dependency: "direct main"
+    description:
+      name: signal_strength_indicator
+      sha256: "076f84fbffc69694f0df3d376822d806cc0de67d379aa57ebcdab09384ab839b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.1"
   sky_engine:
     dependency: transitive
     description: flutter

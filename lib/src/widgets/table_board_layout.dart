@@ -124,8 +124,8 @@ class TableBoardLayout extends ConsumerWidget {
                   dimension: boardSize,
                   child: Center(
                     child: SizedBox(
-                      width: (boardSize / 8) * 6,
-                      height: (boardSize / 8) * 4,
+                      width: (boardSize / 8) * 6.6,
+                      height: (boardSize / 8) * 4.6,
                       child: boardOverlay,
                     ),
                   ),

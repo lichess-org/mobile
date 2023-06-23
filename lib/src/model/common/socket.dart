@@ -30,6 +30,15 @@ class SocketEvent with _$SocketEvent {
       }
     }
     final topic = json['t'] as String;
+    if (topic == 'n') {
+      return SocketEvent(
+        topic: topic,
+        data: {
+          'nbPlayers': json['d'] as int,
+          'nbGames': json['r'] as int,
+        },
+      );
+    }
     return SocketEvent(
       topic: topic,
       data: json['d'],

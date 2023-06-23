@@ -30,6 +30,20 @@ AuthSocket authSocket(AuthSocketRef ref) {
   return authSocket;
 }
 
+@riverpod
+class AverageLag extends _$AverageLag {
+  @override
+  Duration build() => Duration.zero;
+
+  void reset() {
+    state = Duration.zero;
+  }
+
+  void add(Duration currentLag, double mix) {
+    state += (currentLag - state) * mix;
+  }
+}
+
 /// Lichess websocket client.
 ///
 /// This class can only create one single connection, because we never want to
@@ -53,7 +67,6 @@ class AuthSocket {
   Timer? _ackResendTimer;
   int _pongCount = 0;
   DateTime? _lastPing;
-  Duration _averageLag = Duration.zero;
 
   /// The list of acknowledgeable messages.
   List<(DateTime, int, Map<String, dynamic>)> _acks = [];
@@ -86,7 +99,6 @@ class AuthSocket {
     }
 
     _pongCount = 0;
-    _averageLag = Duration.zero;
     _acks = [];
     _ackId = 1;
     _ackResendTimer?.cancel();
@@ -120,6 +132,7 @@ class AuthSocket {
 
     channel.ready.then((_) {
       _log.info('WebSocket connection established.');
+      _ref.read(averageLagProvider.notifier).reset();
       _sendPing();
     });
 
@@ -202,7 +215,7 @@ class AuthSocket {
       _pongCount % 10 == 0
           ? jsonEncode({
               't': 'p',
-              'l': _averageLag.inMilliseconds,
+              'l': _ref.read(averageLagProvider).inMilliseconds,
             })
           : 'p',
     );
@@ -219,7 +232,7 @@ class AuthSocket {
 
     // Average first 4 pings, then switch to decaying average.
     final mix = _pongCount > 4 ? 0.1 : 1 / _pongCount;
-    _averageLag += (currentLag - _averageLag) * mix;
+    _ref.read(averageLagProvider.notifier).add(currentLag, mix);
   }
 
   void _onServerAck(SocketEvent event) {
@@ -247,6 +260,5 @@ class AuthSocket {
     sink?.close();
     _pingTimer?.cancel();
     _ackResendTimer?.cancel();
-    _connection = null;
   }
 }

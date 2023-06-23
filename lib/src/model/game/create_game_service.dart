@@ -6,6 +6,7 @@ import 'package:deep_pick/deep_pick.dart';
 
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
@@ -24,30 +25,26 @@ class CreateGameService {
   final CreateGameServiceRef ref;
   final Logger _log;
 
-  bool _isCreatingGame = false;
+  StreamSubscription<SocketEvent>? _socketSubscription;
 
   /// Create a new online game seek based on saved preferences.
   Future<GameFullId> newOnlineGame() async {
-    if (_isCreatingGame) {
+    if (_socketSubscription != null) {
       throw StateError('Bad state: already creating a game.');
     }
-
-    _isCreatingGame = true;
 
     final socket = ref.read(authSocketProvider);
     final playPref = ref.read(playPreferencesProvider);
     final lobbyRepo = ref.read(lobbyRepositoryProvider);
-
     final stream = socket.connect();
+    final completer = Completer<GameFullId>();
 
-    final futureGameId =
-        stream.firstWhere((e) => e.topic == 'redirect').then((event) {
-      _isCreatingGame = false;
-      final data = event.data as Map<String, dynamic>;
-      return pick(data['id']).asGameFullIdOrThrow();
-    }).catchError((Object e) {
-      _isCreatingGame = false;
-      throw e;
+    _socketSubscription = stream.listen((event) {
+      if (event.topic == 'redirect') {
+        final data = event.data as Map<String, dynamic>;
+        completer.complete(pick(data['id']).asGameFullIdOrThrow());
+        _socketSubscription?.cancel();
+      }
     });
 
     socket.switchRoute(Uri(path: '/lobby/socket/v5'));
@@ -66,16 +63,18 @@ class CreateGameService {
       ),
     );
 
-    return futureGameId;
+    return completer.future;
   }
 
   /// Cancel the current game creation.
   void cancel() {
-    if (_isCreatingGame) {
+    _socketSubscription?.cancel();
+    if (_socketSubscription != null) {
       // close client connection to cancel seek
       // cf: https://lichess.org/api#tag/Board/operation/apiBoardSeek
       ref.invalidate(httpClientProvider);
+      ref.invalidate(authSocketProvider);
     }
-    _isCreatingGame = false;
+    _socketSubscription = null;
   }
 }

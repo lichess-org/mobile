@@ -21,8 +21,8 @@ part 'game_ctrl.g.dart';
 
 @riverpod
 class GameCtrl extends _$GameCtrl {
-  StreamSubscription<SocketEvent>? _socketSubscription;
   final _logger = Logger('GameCtrl');
+  StreamSubscription<SocketEvent>? _socketSubscription;
 
   /// Last socket version received
   int _socketEventVersion = 0;
@@ -48,6 +48,7 @@ class GameCtrl extends _$GameCtrl {
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
+      ref.invalidate(authSocketProvider);
     });
 
     socket.switchRoute(Uri(path: '/play/$gameFullId/v6'));

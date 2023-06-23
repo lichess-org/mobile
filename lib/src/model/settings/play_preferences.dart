@@ -41,10 +41,14 @@ class PlayPreferences extends _$PlayPreferences {
 
 @Freezed(fromJson: true, toJson: true)
 class PlayPrefs with _$PlayPrefs {
+  const PlayPrefs._();
+
   const factory PlayPrefs({
     required TimeIncrement timeIncrement,
   }) = _PlayPrefs;
 
   factory PlayPrefs.fromJson(Map<String, dynamic> json) =>
       _$PlayPrefsFromJson(json);
+
+  String get gameTitle => '${timeIncrement.display} • Rated';
 }
