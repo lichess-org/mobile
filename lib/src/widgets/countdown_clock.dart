@@ -98,7 +98,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
               color: widget.active
                   ? clockStyle.activeTextColor
                   : clockStyle.textColor,
-              fontSize: screenHeight < kSmallHeightScreenThreshold ? 24 : 30,
+              fontSize: screenHeight < kSmallHeightScreenThreshold ? 24 : 26,
               height: screenHeight < kSmallHeightScreenThreshold ? 1.0 : null,
               fontFeatures: const [
                 FontFeature.tabularFigures(),
@@ -124,7 +124,7 @@ class ClockStyle {
     textColor: Colors.grey,
     activeTextColor: Colors.black,
     backgroundColor: Colors.black,
-    activeBackgroundColor: Colors.white,
+    activeBackgroundColor: Color(0xFFDDDDDD),
   );
 
   static const lightThemeStyle = ClockStyle(
