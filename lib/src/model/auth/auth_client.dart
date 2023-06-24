@@ -29,12 +29,11 @@ AuthClient authClient(AuthClientRef ref) {
     httpClient,
     logger,
   );
-  final authClient = AuthClient(
+  return AuthClient(
     logger,
     insideAuthClient,
     crashlytics,
   );
-  return authClient;
 }
 
 /// HTTP client to communicate with lichess
