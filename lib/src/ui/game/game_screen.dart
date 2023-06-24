@@ -239,7 +239,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
             child: SafeArea(
               child: TableBoardLayout(
                 boardData: cg.BoardData(
-                  interactableSide: state.playable
+                  interactableSide: state.playable && !state.isReplaying
                       ? orientation == Side.white
                           ? cg.InteractableSide.white
                           : cg.InteractableSide.black

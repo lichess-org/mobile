@@ -206,9 +206,14 @@ class GameCtrl extends _$GameCtrl {
         final data =
             SocketMoveEvent.fromJson(event.data as Map<String, dynamic>);
 
-        GameCtrlState newState = curState;
+        GameCtrlState newState = curState.copyWith(
+          isThreefoldRepetition: data.threefold,
+          winner: data.winner,
+          whiteOfferingDraw: data.whiteOfferingDraw,
+          blackOfferingDraw: data.blackOfferingDraw,
+        );
 
-        /// Opponent move
+        /// add opponent move
         if (data.ply == curState.game.lastPly + 1) {
           final lastPos = curState.game.lastPosition;
           final move = Move.fromUci(data.uci)!;
@@ -222,10 +227,6 @@ class GameCtrl extends _$GameCtrl {
           );
 
           newState = newState.copyWith(
-            isThreefoldRepetition: data.threefold,
-            winner: data.winner,
-            whiteOfferingDraw: data.whiteOfferingDraw,
-            blackOfferingDraw: data.blackOfferingDraw,
             game: newState.game.copyWith(
               steps: newState.game.steps.add(newStep),
             ),
@@ -236,7 +237,10 @@ class GameCtrl extends _$GameCtrl {
               stepCursor: newState.stepCursor + 1,
             );
 
-            _playMoveFeedback(sanMove);
+            // TODO adjust with animation duration pref
+            Timer(const Duration(milliseconds: 50), () {
+              _playMoveFeedback(sanMove);
+            });
           }
         }
 
