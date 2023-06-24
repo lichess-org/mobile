@@ -110,7 +110,9 @@ class BoardPlayer extends StatelessWidget {
                                 : '',
                           )
                         ],
-                      ),
+                      )
+                    else
+                      const Text('', style: TextStyle(fontSize: 13)),
                   ],
                 ),
               ),
