@@ -65,7 +65,7 @@ class _Body extends ConsumerWidget {
                   context,
                   rootNavigator: true,
                   builder: (BuildContext context) {
-                    return const OnlineGameScreen();
+                    return const GameScreen();
                   },
                 );
               },

@@ -47,50 +47,129 @@ class IsBoardTurned extends _$IsBoardTurned {
   }
 }
 
-class OnlineGameScreen extends ConsumerWidget {
-  const OnlineGameScreen({
+class GameScreen extends ConsumerWidget {
+  const GameScreen({
     super.key,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return PlatformWidget(
-      androidBuilder: (context) => _androidBuilder(context, ref),
-      iosBuilder: (context) => _iosBuilder(context, ref),
+    final gameId = ref.watch(_createGameProvider);
+    final playPrefs = ref.watch(playPreferencesProvider);
+
+    return gameId.when(
+      data: (id) {
+        final ctrlProvider = gameCtrlProvider(id);
+        final gameState = ref.watch(ctrlProvider);
+        return gameState.when(
+          data: (state) {
+            final body = _Body(gameState: state, ctrlProvider: ctrlProvider);
+            return PlatformWidget(
+              androidBuilder: (context) => _androidBuilder(
+                context: context,
+                playPrefs: playPrefs,
+                body: body,
+                gameState: state,
+              ),
+              iosBuilder: (context) => _iosBuilder(
+                context: context,
+                playPrefs: playPrefs,
+                body: body,
+                gameState: state,
+              ),
+            );
+          },
+          loading: () => _loadingContent(playPrefs),
+          error: (e, s) {
+            debugPrint(
+              'SEVERE: [GameScreen] could not create game; $e\n$s',
+            );
+            return _errorContent(playPrefs);
+          },
+        );
+      },
+      loading: () => _loadingContent(playPrefs),
+      error: (e, s) {
+        debugPrint(
+          'SEVERE: [GameScreen] could not create game; $e\n$s',
+        );
+        return _errorContent(playPrefs);
+      },
     );
   }
 
-  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    final playPrefs = ref.watch(playPreferencesProvider);
+  Widget _loadingContent(PlayPrefs playPrefs) {
+    return PlatformWidget(
+      androidBuilder: (context) => _androidBuilder(
+        context: context,
+        playPrefs: playPrefs,
+        body: const GameLoader(),
+      ),
+      iosBuilder: (context) => _iosBuilder(
+        context: context,
+        playPrefs: playPrefs,
+        body: const GameLoader(),
+      ),
+    );
+  }
+
+  Widget _errorContent(PlayPrefs playPrefs) {
+    return PlatformWidget(
+      androidBuilder: (context) => _androidBuilder(
+        context: context,
+        playPrefs: playPrefs,
+        body: const _CreateGameError(),
+      ),
+      iosBuilder: (context) => _iosBuilder(
+        context: context,
+        playPrefs: playPrefs,
+        body: const _CreateGameError(),
+      ),
+    );
+  }
+
+  Widget _androidBuilder({
+    required BuildContext context,
+    required PlayPrefs playPrefs,
+    required Widget body,
+    GameCtrlState? gameState,
+  }) {
     return Scaffold(
       appBar: AppBar(
-        leading: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
-          child: PingRating(size: 24.0),
-        ),
+        leading: gameState == null || gameState.playable == true
+            ? const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
+                child: PingRating(size: 24.0),
+              )
+            : null,
         title: _GameTitle(playPrefs: playPrefs),
         actions: [
           ToggleSoundButton(),
         ],
       ),
-      body: const _WaitForGame(),
-      // bottomNavigationBar: _BottomBar(game: game),
+      body: body,
     );
   }
 
-  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    final playPrefs = ref.watch(playPreferencesProvider);
+  Widget _iosBuilder({
+    required BuildContext context,
+    required PlayPrefs playPrefs,
+    required Widget body,
+    GameCtrlState? gameState,
+  }) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 16.0),
-        leading: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-          child: PingRating(size: 24.0),
-        ),
+        leading: gameState == null || gameState.playable == true
+            ? const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                child: PingRating(size: 24.0),
+              )
+            : null,
         middle: _GameTitle(playPrefs: playPrefs),
         trailing: ToggleSoundButton(),
       ),
-      child: const _WaitForGame(),
+      child: body,
     );
   }
 }
@@ -114,57 +193,6 @@ class _GameTitle extends StatelessWidget {
         const SizedBox(width: 4.0),
         Text(playPrefs.gameTitle),
       ],
-    );
-  }
-}
-
-Future<bool?> _showExitConfirmDialog(BuildContext context) {
-  return showAdaptiveDialog<bool?>(
-    context: context,
-    builder: (BuildContext context) {
-      return YesNoDialog(
-        title: const Text('Exit.'),
-        content: const Text('Are you sure you want to quit?'),
-        onYes: () {
-          Navigator.of(context).pop(true);
-        },
-        onNo: () {
-          Navigator.of(context).pop(false);
-        },
-      );
-    },
-  );
-}
-
-class _WaitForGame extends ConsumerWidget {
-  const _WaitForGame();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final gameId = ref.watch(_createGameProvider);
-
-    return gameId.when(
-      data: (id) {
-        final ctrlProvider = gameCtrlProvider(id);
-        final gameState = ref.watch(ctrlProvider);
-        return gameState.when(
-          data: (state) => _Body(gameState: state, ctrlProvider: ctrlProvider),
-          loading: () => const GameLoader(),
-          error: (e, s) {
-            debugPrint(
-              'SEVERE: [OnlineGameScreen] could not create game; $e\n$s',
-            );
-            return const _CreateGameError();
-          },
-        );
-      },
-      loading: () => const GameLoader(),
-      error: (e, s) {
-        debugPrint(
-          'SEVERE: [OnlineGameScreen] could not create game; $e\n$s',
-        );
-        return const _CreateGameError();
-      },
     );
   }
 }
@@ -247,12 +275,12 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
       ],
     );
 
-    return !state.playable
-        ? content
-        : WillPopScope(
+    return state.playable
+        ? WillPopScope(
             onWillPop: () async => false,
             child: content,
-          );
+          )
+        : content;
   }
 }
 

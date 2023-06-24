@@ -145,15 +145,12 @@ class _LobbyNumbers extends ConsumerWidget {
           ),
         ],
       ),
-      loading: () => const Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-        child: Column(
-          children: [
-            Text(''),
-            SizedBox(height: 8.0),
-            Text(''),
-          ],
-        ),
+      loading: () => const Column(
+        children: [
+          Text(''),
+          SizedBox(height: 8.0),
+          Text(''),
+        ],
       ),
       error: (err, __) {
         return const SizedBox.shrink();
