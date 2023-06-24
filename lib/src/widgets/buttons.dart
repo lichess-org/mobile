@@ -433,13 +433,9 @@ class RepeatButton extends StatefulWidget {
     required this.onLongPress,
     required this.child,
     this.triggerDelays = const [
-      Duration(milliseconds: 600),
-      Duration(milliseconds: 400),
-      Duration(milliseconds: 250),
-      Duration(milliseconds: 200),
+      Duration(milliseconds: 500),
+      Duration(milliseconds: 300),
       Duration(milliseconds: 150),
-      Duration(milliseconds: 100),
-      Duration(milliseconds: 80),
     ],
     this.holdDelay = const Duration(milliseconds: 50),
   });
