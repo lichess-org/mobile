@@ -78,8 +78,8 @@ GameEndEvent _gameEndEventFromPick(RequiredPick pick) {
     boosted: pick('boosted').asBoolOrNull(),
     clock: pick('clock').letOrNull(
       (it) => (
-        white: it('wc').asDurationFromSecondsOrThrow(),
-        black: it('bc').asDurationFromSecondsOrThrow(),
+        white: Duration(milliseconds: it('wc').asIntOrThrow() * 10),
+        black: Duration(milliseconds: it('bc').asIntOrThrow() * 10),
       ),
     ),
   );
