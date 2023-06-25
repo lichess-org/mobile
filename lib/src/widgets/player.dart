@@ -102,7 +102,7 @@ class BoardPlayer extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 14,
-                              color: textShade(context, 0.8),
+                              color: textShade(context, 0.7),
                             ),
                           ),
                       ],
