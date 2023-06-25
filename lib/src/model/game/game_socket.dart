@@ -56,7 +56,7 @@ class GameEndEvent with _$GameEndEvent {
   const factory GameEndEvent({
     required GameStatus status,
     Side? winner,
-    ({double white, double black})? ratingDiff,
+    ({int white, int black})? ratingDiff,
     bool? boosted,
     ({Duration white, Duration black})? clock,
   }) = _GameEndEvent;
@@ -71,8 +71,8 @@ GameEndEvent _gameEndEventFromPick(RequiredPick pick) {
     winner: pick('winner').asSideOrNull(),
     ratingDiff: pick('ratingDiff').letOrNull(
       (it) => (
-        white: it('white').asDoubleOrThrow(),
-        black: it('black').asDoubleOrThrow(),
+        white: it('white').asIntOrThrow(),
+        black: it('black').asIntOrThrow(),
       ),
     ),
     boosted: pick('boosted').asBoolOrNull(),

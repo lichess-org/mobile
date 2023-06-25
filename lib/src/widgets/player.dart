@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -82,10 +83,27 @@ class BoardPlayer extends StatelessWidget {
                         ),
                         const SizedBox(width: 5),
                         if (player.rating != null)
-                          Text(
-                            '(${player.rating})',
+                          Text.rich(
+                            TextSpan(
+                              text: '${player.rating}',
+                              children: [
+                                if (player.ratingDiff != null)
+                                  TextSpan(
+                                    text:
+                                        ' ${player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
+                                    style: TextStyle(
+                                      color: player.ratingDiff! > 0
+                                          ? LichessColors.green
+                                          : LichessColors.red,
+                                    ),
+                                  ),
+                              ],
+                            ),
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 14),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: textShade(context, 0.8),
+                            ),
                           ),
                       ],
                     ),

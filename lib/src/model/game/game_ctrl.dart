@@ -270,8 +270,13 @@ class GameCtrl extends _$GameCtrl {
             data: curState.game.data.copyWith(
               status: endData.status,
             ),
+            white: curState.game.white.copyWith(
+              ratingDiff: endData.ratingDiff?.white,
+            ),
+            black: curState.game.black.copyWith(
+              ratingDiff: endData.ratingDiff?.black,
+            ),
           ),
-          ratingDiff: endData.ratingDiff,
         );
 
         if (endData.clock != null) {
@@ -306,7 +311,6 @@ class GameCtrlState with _$GameCtrlState {
     bool? whiteOfferingDraw,
     bool? blackOfferingDraw,
     Side? winner,
-    ({double white, double black})? ratingDiff,
   }) = _GameCtrlState;
 
   bool get playable => game.data.status.value < GameStatus.aborted.value;
