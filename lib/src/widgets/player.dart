@@ -19,14 +19,14 @@ class BoardPlayer extends StatelessWidget {
     required this.player,
     this.active,
     this.clock,
-    this.diff,
+    this.materialDiff,
     super.key,
   });
 
   final Player player;
   final Duration? clock;
   final bool? active;
-  final MaterialDiffSide? diff;
+  final MaterialDiffSide? materialDiff;
 
   @override
   Widget build(BuildContext context) {
@@ -89,11 +89,13 @@ class BoardPlayer extends StatelessWidget {
                           ),
                       ],
                     ),
-                    if (diff != null)
+                    if (materialDiff != null)
                       Row(
                         children: [
                           for (final role in Role.values)
-                            for (int i = 0; i < diff!.pieces[role]!; i++)
+                            for (int i = 0;
+                                i < materialDiff!.pieces[role]!;
+                                i++)
                               Icon(
                                 _iconByRole[role],
                                 size: 13,
@@ -105,8 +107,8 @@ class BoardPlayer extends StatelessWidget {
                               fontSize: 13,
                               color: Colors.grey,
                             ),
-                            diff != null && diff!.score > 0
-                                ? '+${diff!.score}'
+                            materialDiff != null && materialDiff!.score > 0
+                                ? '+${materialDiff!.score}'
                                 : '',
                           )
                         ],

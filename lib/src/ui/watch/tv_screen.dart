@@ -135,14 +135,14 @@ class _Body extends ConsumerWidget {
               clock: Duration(seconds: topPlayer.seconds ?? 0),
               active: !game.position.position.isGameOver &&
                   game.position.position.turn == topPlayer.side,
-              diff: game.position.diff.bySide(topPlayer.side),
+              materialDiff: game.position.diff.bySide(topPlayer.side),
             );
             final bottomPlayerWidget = BoardPlayer(
               player: bottomPlayer.asPlayer,
               clock: Duration(seconds: bottomPlayer.seconds ?? 0),
               active: !game.position.position.isGameOver &&
                   game.position.position.turn == bottomPlayer.side,
-              diff: game.position.diff.bySide(bottomPlayer.side),
+              materialDiff: game.position.diff.bySide(bottomPlayer.side),
             );
             return TableBoardLayout(
               boardData: boardData,
