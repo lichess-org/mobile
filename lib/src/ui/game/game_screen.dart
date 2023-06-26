@@ -460,6 +460,7 @@ class _GameEndDialog extends ConsumerWidget {
           semanticsLabel: context.l10n.newOpponent,
           onPressed: () {
             ref.read(lobbyGameProvider.notifier).newOpponent();
+            Navigator.of(context).pop();
           },
           child: Text(context.l10n.newOpponent),
         ),
