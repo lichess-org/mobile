@@ -4,7 +4,6 @@ import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:deep_pick/deep_pick.dart';
 
-import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
@@ -30,7 +29,7 @@ class CreateGameService {
   /// Create a new online game seek based on saved preferences.
   Future<GameFullId> newOnlineGame() async {
     if (_socketSubscription != null) {
-      throw StateError('Bad state: already creating a game.');
+      throw StateError('Already creating a game.');
     }
 
     final socket = ref.read(authSocketProvider);
@@ -43,7 +42,7 @@ class CreateGameService {
       if (event.topic == 'redirect') {
         final data = event.data as Map<String, dynamic>;
         completer.complete(pick(data['id']).asGameFullIdOrThrow());
-        _socketSubscription?.cancel();
+        cancel();
       }
     });
 
@@ -69,12 +68,10 @@ class CreateGameService {
   /// Cancel the current game creation.
   void cancel() {
     _socketSubscription?.cancel();
-    if (_socketSubscription != null) {
-      // close client connection to cancel seek
-      // cf: https://lichess.org/api#tag/Board/operation/apiBoardSeek
-      ref.invalidate(httpClientProvider);
-      ref.invalidate(authSocketProvider);
-    }
     _socketSubscription = null;
+    // we need to invalidate lobbyRepositoryProvider to cancel the seek
+    // (it closes client connection)
+    // cf: https://lichess.org/api#tag/Board/operation/apiBoardSeek
+    ref.invalidate(lobbyRepositoryProvider);
   }
 }

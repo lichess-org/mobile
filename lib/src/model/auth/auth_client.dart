@@ -23,15 +23,10 @@ part 'auth_client.g.dart';
 AuthClient authClient(AuthClientRef ref) {
   final httpClient = ref.watch(httpClientProvider);
   final crashlytics = ref.watch(crashlyticsProvider);
-  final logger = Logger('AuthClient');
-  final insideAuthClient = _AuthClient(
-    ref,
-    httpClient,
-    logger,
-  );
   return AuthClient(
-    logger,
-    insideAuthClient,
+    httpClient,
+    ref,
+    Logger('AuthClient'),
     crashlytics,
   );
 }
@@ -46,15 +41,17 @@ AuthClient authClient(AuthClientRef ref) {
 ///   (TODO) - log the user out when a 401 is received,
 class AuthClient {
   AuthClient(
+    Client client,
+    ProviderRef<dynamic> ref,
     this._log,
-    this._client,
     this._crashlytics, {
     List<Duration> retryDelays = defaultRetries,
-  }) : _retryClient = RetryClient.withDelays(
-          _client,
+  })  : _client = _AuthClient(ref, client, _log),
+        _retryClient = RetryClient.withDelays(
+          _AuthClient(ref, client, _log),
           retryDelays,
         ) {
-    _log.info('Creating new AuthClient.');
+    _log.info('Creating new ${_log.name}.');
   }
 
   final Logger _log;
@@ -195,18 +192,13 @@ class AuthClient {
       );
     }
   }
-
-  void close() {
-    _retryClient.close();
-    _client.close();
-  }
 }
 
 /// Http client that sets the Authorization header when a token has been stored.
 class _AuthClient extends BaseClient {
   _AuthClient(this.ref, this._inner, this._logger);
 
-  final AuthClientRef ref;
+  final ProviderRef<dynamic> ref;
   final Client _inner;
   final Logger _logger;
 

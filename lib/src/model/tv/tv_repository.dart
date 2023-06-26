@@ -27,16 +27,10 @@ class TvRepository {
         .map((json) => TvEvent.fromJson(json))
         .handleError((Object error) => _log.warning(error));
   }
-
-  void dispose() {
-    apiClient.close();
-  }
 }
 
 @Riverpod(keepAlive: true)
 TvRepository tvRepository(TvRepositoryRef ref) {
   final apiClient = ref.watch(authClientProvider);
-  final repo = TvRepository(Logger('TvRepository'), apiClient: apiClient);
-  ref.onDispose(() => repo.dispose());
-  return repo;
+  return TvRepository(Logger('TvRepository'), apiClient: apiClient);
 }

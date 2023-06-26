@@ -48,7 +48,6 @@ class GameCtrl extends _$GameCtrl {
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
-      ref.invalidate(authSocketProvider);
     });
 
     socket.switchRoute(Uri(path: '/play/$gameFullId/v6'));
@@ -316,6 +315,10 @@ class GameCtrlState with _$GameCtrlState {
   bool get playable => game.data.status.value < GameStatus.aborted.value;
   bool get abortable => playable && game.lastPosition.fullmoves <= 1;
   bool get resignable => playable && !abortable;
+  bool get canGetNewOpponent =>
+      !playable &&
+      (game.data.source == GameSource.lobby ||
+          game.data.source == GameSource.pool);
 
   bool get isReplaying => stepCursor < game.steps.length - 1;
 

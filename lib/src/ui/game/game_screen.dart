@@ -1,14 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/create_game_service.dart';
 import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
@@ -23,29 +20,9 @@ import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
+import 'game_screen_providers.dart';
 import 'ping_rating.dart';
 import 'game_loader.dart';
-
-part 'game_screen.g.dart';
-
-@riverpod
-Future<GameFullId> _createGame(_CreateGameRef ref) {
-  final service = ref.watch(createGameServiceProvider);
-  ref.onDispose(service.cancel);
-  return service.newOnlineGame();
-}
-
-@riverpod
-class IsBoardTurned extends _$IsBoardTurned {
-  @override
-  bool build() {
-    return false;
-  }
-
-  void toggle() {
-    state = !state;
-  }
-}
 
 class GameScreen extends ConsumerWidget {
   const GameScreen({
@@ -54,7 +31,7 @@ class GameScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameId = ref.watch(_createGameProvider);
+    final gameId = ref.watch(lobbyGameProvider);
     final playPrefs = ref.watch(playPreferencesProvider);
 
     return gameId.when(
@@ -377,6 +354,7 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             leading: const Icon(Icons.flag),
             label: Text(context.l10n.resign),
+            dismissOnPress: false,
             onPressed: (context) async {
               await Navigator.of(context).maybePop();
               if (context.mounted) {
@@ -395,6 +373,13 @@ class _GameBottomBar extends ConsumerWidget {
                   ref.read(ctrlProvider.notifier).resignGame();
                 }
               }
+            },
+          ),
+        if (gameState.canGetNewOpponent)
+          BottomSheetAction(
+            label: Text(context.l10n.newOpponent),
+            onPressed: (context) async {
+              ref.read(lobbyGameProvider.notifier).newOpponent();
             },
           ),
       ],

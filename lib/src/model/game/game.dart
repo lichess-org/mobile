@@ -114,6 +114,8 @@ PlayableGameData _playableGameDataFromPick(RequiredPick pick) {
     perf: pick('perf').asPerfOrThrow(),
     status: pick('status').asGameStatusOrThrow(),
     variant: pick('variant').asVariantOrThrow(),
+    source: pick('source')
+        .letOrThrow((pick) => GameSource.nameMap[pick.asStringOrThrow()]!),
     initialFen: pick('initialFen').asStringOrNull(),
   );
 }
@@ -142,6 +144,24 @@ PlayableClockData _playableClockDataFromPick(RequiredPick pick) {
   );
 }
 
+enum GameSource {
+  lobby,
+  friend,
+  ai,
+  api,
+  arena,
+  position,
+  import,
+  importLive,
+  simul,
+  relay,
+  pool,
+  swiss,
+  unknown;
+
+  static final nameMap = IMap(GameSource.values.asNameMap());
+}
+
 @freezed
 class PlayableGameData with _$PlayableGameData {
   const PlayableGameData._();
@@ -152,6 +172,7 @@ class PlayableGameData with _$PlayableGameData {
     required Variant variant,
     required Speed speed,
     required Perf perf,
+    required GameSource source,
     String? initialFen,
     required GameStatus status,
   }) = _PlayableGameData;
