@@ -19,14 +19,22 @@ This project is meant to run on iOS and Android, so you need to follow the
 
 Note that this project is not meant to be run on web platform.
 
-Read the [wiki](https://github.com/lichess-org/mobile/wiki) for more information.
+### Local lila
+
+You will need a local `lila` (lichess server scala app) instance to work on this
+project. You will also need to setup `lila-ws` (websocket server).
+
+Instruction to install both are found in [the lila wiki](https://github.com/lichess-org/lila/wiki).
+
+The mobile application is configured by default to target `http://127.0.0.1:9663` and `ws://127.0.0.1:9664`, so keep these when installing lila.
+
 
 ## Run
 
 First run the code generator:
 
 ```
-flutter pub run build_runner watch
+dart run build_runner watch
 ```
 
 Then use flutter run:
@@ -34,6 +42,8 @@ Then use flutter run:
 ```
 flutter run
 ```
+
+Read the [wiki](https://github.com/lichess-org/mobile/wiki) for more information.
 
 ## Internationalisation
 
