@@ -24,13 +24,19 @@ import 'game_screen_providers.dart';
 import 'ping_rating.dart';
 import 'game_loader.dart';
 
-class GameScreen extends ConsumerWidget {
+class GameScreen extends ConsumerStatefulWidget {
   const GameScreen({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<GameScreen> createState() => _GameScreenState();
+}
+
+class _GameScreenState extends ConsumerState<GameScreen>
+    with AndroidImmersiveMode {
+  @override
+  Widget build(BuildContext context) {
     final gameId = ref.watch(lobbyGameProvider);
     final playPrefs = ref.watch(playPreferencesProvider);
 
@@ -174,7 +180,7 @@ class _GameTitle extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
+class _Body extends ConsumerWidget {
   const _Body({
     required this.gameState,
     required this.ctrlProvider,
@@ -184,29 +190,25 @@ class _Body extends ConsumerStatefulWidget {
   final GameCtrlProvider ctrlProvider;
 
   @override
-  ConsumerState<_Body> createState() => _BodyState();
-}
-
-class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
-  @override
-  Widget build(BuildContext context) {
-    final state = widget.gameState;
+  Widget build(BuildContext context, WidgetRef ref) {
     final black = BoardPlayer(
-      player: state.game.black,
-      clock: state.game.clock?.black,
-      active: state.activeClockSide == Side.black,
-      materialDiff: state.game.materialDiffAt(state.stepCursor, Side.black),
+      player: gameState.game.black,
+      clock: gameState.game.clock?.black,
+      active: gameState.activeClockSide == Side.black,
+      materialDiff:
+          gameState.game.materialDiffAt(gameState.stepCursor, Side.black),
     );
     final white = BoardPlayer(
-      player: state.game.white,
-      clock: state.game.clock?.white,
-      active: state.activeClockSide == Side.white,
-      materialDiff: state.game.materialDiffAt(state.stepCursor, Side.white),
+      player: gameState.game.white,
+      clock: gameState.game.clock?.white,
+      active: gameState.activeClockSide == Side.white,
+      materialDiff:
+          gameState.game.materialDiffAt(gameState.stepCursor, Side.white),
     );
-    final orientation = state.game.youAre ?? Side.white;
+    final orientation = gameState.game.youAre ?? Side.white;
     final topPlayer = orientation == Side.white ? black : white;
     final bottomPlayer = orientation == Side.white ? white : black;
-    final position = state.game.positionAt(state.stepCursor);
+    final position = gameState.game.positionAt(gameState.stepCursor);
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
 
     final content = Column(
@@ -216,7 +218,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
             child: SafeArea(
               child: TableBoardLayout(
                 boardData: cg.BoardData(
-                  interactableSide: state.playable && !state.isReplaying
+                  interactableSide: gameState.playable && !gameState.isReplaying
                       ? orientation == Side.white
                           ? cg.InteractableSide.white
                           : cg.InteractableSide.black
@@ -224,35 +226,35 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                   orientation:
                       isBoardTurned ? orientation.opposite.cg : orientation.cg,
                   fen: position.fen,
-                  lastMove: state.game.moveAt(state.stepCursor)?.cg,
+                  lastMove: gameState.game.moveAt(gameState.stepCursor)?.cg,
                   isCheck: position.isCheck,
                   sideToMove: position.turn.cg,
                   validMoves: algebraicLegalMoves(position),
                   onMove: (move, {isPremove}) {
                     ref
-                        .read(widget.ctrlProvider.notifier)
+                        .read(ctrlProvider.notifier)
                         .onUserMove(Move.fromUci(move.uci)!);
                   },
                 ),
                 topTable: topPlayer,
                 bottomTable: bottomPlayer,
-                moves: state.game.steps
+                moves: gameState.game.steps
                     .skip(1)
                     .map((e) => e.sanMove!.san)
                     .toList(growable: false),
-                currentMoveIndex: state.stepCursor,
+                currentMoveIndex: gameState.stepCursor,
                 onSelectMove: (moveIndex) {
-                  ref.read(widget.ctrlProvider.notifier).cursorAt(moveIndex);
+                  ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
                 },
               ),
             ),
           ),
         ),
-        _GameBottomBar(gameState: state, ctrlProvider: widget.ctrlProvider),
+        _GameBottomBar(gameState: gameState, ctrlProvider: ctrlProvider),
       ],
     );
 
-    return state.playable
+    return gameState.playable
         ? WillPopScope(
             onWillPop: () async => false,
             child: content,
