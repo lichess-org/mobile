@@ -59,8 +59,6 @@ class SecondaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cupertinoBrightness =
-        CupertinoTheme.maybeBrightnessOf(context) ?? Brightness.light;
     return Semantics(
       container: true,
       enabled: true,
@@ -71,14 +69,15 @@ class SecondaryButton extends StatelessWidget {
           ? CupertinoButton(
               onPressed: onPressed,
               color: CupertinoColors.secondarySystemFill,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: DefaultTextStyle.merge(
                 style: TextStyle(
-                  color: cupertinoBrightness == Brightness.light
-                      ? Colors.black
-                      : Colors.white,
-                  // fontSize: 17,
-                  fontWeight: FontWeight.w500,
+                  color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.label,
+                    context,
+                  ),
+                  fontSize: 16,
                 ),
                 child: child,
               ),

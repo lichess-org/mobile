@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'game_screen_providers.dart';
 import 'ping_rating.dart';
 import 'game_loader.dart';
+import 'status_l10n.dart';
 
 class GameScreen extends ConsumerStatefulWidget {
   const GameScreen({
@@ -191,6 +192,20 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(ctrlProvider, (prev, state) {
+      if (prev?.hasValue == true && prev!.requireValue.playable == true) {
+        if (state.hasValue && state.requireValue.playable == false) {
+          showAdaptiveDialog<void>(
+            context: context,
+            builder: (context) => _GameEndDialog(
+              ctrlProvider: ctrlProvider,
+            ),
+            barrierDismissible: true,
+          );
+        }
+      }
+    });
+
     final black = BoardPlayer(
       player: gameState.game.black,
       clock: gameState.game.clock?.black,
@@ -295,6 +310,9 @@ class _GameBottomBar extends ConsumerWidget {
             const SizedBox(
               width: 44.0,
             ),
+            const SizedBox(
+              width: 44.0,
+            ),
             RepeatButton(
               onLongPress:
                   gameState.canGoBackward ? () => _moveBackward(ref) : null,
@@ -380,12 +398,80 @@ class _GameBottomBar extends ConsumerWidget {
         if (gameState.canGetNewOpponent)
           BottomSheetAction(
             label: Text(context.l10n.newOpponent),
-            onPressed: (context) async {
+            onPressed: (_) {
               ref.read(lobbyGameProvider.notifier).newOpponent();
             },
           ),
       ],
     );
+  }
+}
+
+class _GameEndDialog extends ConsumerWidget {
+  const _GameEndDialog({
+    required this.ctrlProvider,
+  });
+
+  final GameCtrlProvider ctrlProvider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final gameState = ref.watch(ctrlProvider).requireValue;
+
+    final showWinner = gameState.winner != null
+        ? ' • ${gameState.winner == Side.white ? context.l10n.whiteIsVictorious : context.l10n.blackIsVictorious}'
+        : '';
+
+    final content = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          gameState.winner == null
+              ? '½-½'
+              : gameState.winner == Side.white
+                  ? '1-0'
+                  : '0-1',
+          style: const TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 6.0),
+        Text(
+          '${gameStatusL10n(context, gameState)}$showWinner',
+          style: const TextStyle(
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+        const SizedBox(height: 24.0),
+        // SecondaryButton(
+        //   semanticsLabel: context.l10n.rematch,
+        //   onPressed: () {
+        //     // Navigator.of(context).pop();
+        //   },
+        //   child: Text(context.l10n.rematch),
+        // ),
+        // const SizedBox(height: 8.0),
+        SecondaryButton(
+          semanticsLabel: context.l10n.newOpponent,
+          onPressed: () {
+            ref.read(lobbyGameProvider.notifier).newOpponent();
+          },
+          child: Text(context.l10n.newOpponent),
+        ),
+      ],
+    );
+
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return CupertinoAlertDialog(
+        content: content,
+      );
+    } else {
+      return Dialog(
+        child: content,
+      );
+    }
   }
 }
 

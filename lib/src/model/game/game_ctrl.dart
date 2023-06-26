@@ -259,12 +259,14 @@ class GameCtrl extends _$GameCtrl {
 
         state = AsyncValue.data(newState);
 
+      /// End game event
       case 'endData':
         final endData =
             GameEndEvent.fromJson(event.data as Map<String, dynamic>);
         final curState = state.requireValue;
         GameCtrlState newState = curState.copyWith(
           winner: endData.winner,
+          boosted: endData.boosted,
           game: curState.game.copyWith(
             data: curState.game.data.copyWith(
               status: endData.status,
@@ -306,6 +308,7 @@ class GameCtrlState with _$GameCtrlState {
   const factory GameCtrlState({
     required PlayableGame game,
     required int stepCursor,
+    bool? boosted,
     bool? isThreefoldRepetition,
     bool? whiteOfferingDraw,
     bool? blackOfferingDraw,
