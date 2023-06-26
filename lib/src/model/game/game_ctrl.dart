@@ -210,8 +210,8 @@ class GameCtrl extends _$GameCtrl {
             isThreefoldRepetition: data.threefold,
             winner: data.winner,
           ),
-          whiteOfferingDraw: data.whiteOfferingDraw,
-          blackOfferingDraw: data.blackOfferingDraw,
+          // whiteOfferingDraw: data.whiteOfferingDraw,
+          // blackOfferingDraw: data.blackOfferingDraw,
         );
 
         /// add opponent move
@@ -308,20 +308,22 @@ class GameCtrlState with _$GameCtrlState {
   const factory GameCtrlState({
     required PlayableGame game,
     required int stepCursor,
-    bool? whiteOfferingDraw,
-    bool? blackOfferingDraw,
+    bool? playerOfferingDraw,
+    bool? opponentOfferingDraw,
+    int? lastDrawOfferAtPly,
   }) = _GameCtrlState;
 
-  bool get playable => game.status.value < GameStatus.aborted.value;
-  bool get abortable => playable && game.lastPosition.fullmoves <= 1;
-  bool get resignable => playable && !abortable;
   bool get canGetNewOpponent =>
-      !playable &&
+      !game.playable &&
       (game.meta.source == GameSource.lobby ||
           game.meta.source == GameSource.pool);
 
-  bool get isReplaying => stepCursor < game.steps.length - 1;
+  bool get canOfferDraw =>
+      game.drawable &&
+      (playerOfferingDraw == null || playerOfferingDraw == false) &&
+      (lastDrawOfferAtPly ?? -99) < game.lastPly - 20;
 
+  bool get isReplaying => stepCursor < game.steps.length - 1;
   bool get canGoForward => stepCursor < game.steps.length - 1;
   bool get canGoBackward => stepCursor > 0;
 

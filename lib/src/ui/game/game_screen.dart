@@ -120,7 +120,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
   }) {
     return Scaffold(
       appBar: AppBar(
-        leading: gameState == null || gameState.playable == true
+        leading: gameState == null || gameState.game.playable == true
             ? const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
                 child: PingRating(size: 24.0),
@@ -144,7 +144,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 16.0),
-        leading: gameState == null || gameState.playable == true
+        leading: gameState == null || gameState.game.playable == true
             ? const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                 child: PingRating(size: 24.0),
@@ -193,8 +193,8 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen(ctrlProvider, (prev, state) {
-      if (prev?.hasValue == true && prev!.requireValue.playable == true) {
-        if (state.hasValue && state.requireValue.playable == false) {
+      if (prev?.hasValue == true && prev!.requireValue.game.playable == true) {
+        if (state.hasValue && state.requireValue.game.playable == false) {
           showAdaptiveDialog<void>(
             context: context,
             builder: (context) => _GameEndDialog(
@@ -233,11 +233,12 @@ class _Body extends ConsumerWidget {
             child: SafeArea(
               child: TableBoardLayout(
                 boardData: cg.BoardData(
-                  interactableSide: gameState.playable && !gameState.isReplaying
-                      ? orientation == Side.white
-                          ? cg.InteractableSide.white
-                          : cg.InteractableSide.black
-                      : cg.InteractableSide.none,
+                  interactableSide:
+                      gameState.game.playable && !gameState.isReplaying
+                          ? orientation == Side.white
+                              ? cg.InteractableSide.white
+                              : cg.InteractableSide.black
+                          : cg.InteractableSide.none,
                   orientation:
                       isBoardTurned ? orientation.opposite.cg : orientation.cg,
                   fen: position.fen,
@@ -269,7 +270,7 @@ class _Body extends ConsumerWidget {
       ],
     );
 
-    return gameState.playable
+    return gameState.game.playable
         ? WillPopScope(
             onWillPop: () async => false,
             child: content,
@@ -362,7 +363,7 @@ class _GameBottomBar extends ConsumerWidget {
             ref.read(isBoardTurnedProvider.notifier).toggle();
           },
         ),
-        if (gameState.abortable)
+        if (gameState.game.abortable)
           BottomSheetAction(
             leading: const Icon(Icons.cancel),
             label: Text(context.l10n.abortGame),
@@ -370,7 +371,7 @@ class _GameBottomBar extends ConsumerWidget {
               ref.read(ctrlProvider.notifier).abortGame();
             },
           ),
-        if (gameState.resignable)
+        if (gameState.game.resignable)
           BottomSheetAction(
             leading: const Icon(Icons.flag),
             label: Text(context.l10n.resign),

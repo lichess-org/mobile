@@ -68,6 +68,16 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
 
   factory PlayableGame.fromWebSocketJson(Map<String, dynamic> json) =>
       _playableGameFromPick(pick(json).required());
+
+  bool get hasAi => white.aiLevel != null || black.aiLevel != null;
+
+  bool get playable => status.value < GameStatus.aborted.value;
+  bool get abortable =>
+      playable &&
+      lastPosition.fullmoves <= 1 &&
+      (meta.rules == null || !meta.rules!.contains(GameRule.noAbort));
+  bool get resignable => playable && !abortable;
+  bool get drawable => playable && lastPosition.fullmoves >= 2 && !hasAi;
 }
 
 PlayableGame _playableGameFromPick(RequiredPick pick) {
@@ -121,10 +131,19 @@ PlayableGameMeta _playableGameMetaFromPick(RequiredPick pick) {
     speed: pick('speed').asSpeedOrThrow(),
     perf: pick('perf').asPerfOrThrow(),
     variant: pick('variant').asVariantOrThrow(),
-    source: pick('source')
-        .letOrThrow((pick) => GameSource.nameMap[pick.asStringOrThrow()]!),
+    source: pick('source').letOrThrow(
+      (pick) =>
+          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
+    ),
     initialFen: pick('initialFen').asStringOrNull(),
     startedAtTurn: pick('startedAtTurn').asIntOrNull(),
+    rules: pick('rules').letOrNull(
+      (it) => ISet(
+        pick.asListOrThrow(
+          (e) => GameRule.nameMap[e.asStringOrThrow()] ?? GameRule.unknown,
+        ),
+      ),
+    ),
   );
 }
 
@@ -170,6 +189,16 @@ enum GameSource {
   static final nameMap = IMap(GameSource.values.asNameMap());
 }
 
+enum GameRule {
+  noAbort,
+  noRematch,
+  noGiveTime,
+  noClaimWin,
+  unknown;
+
+  static final nameMap = IMap(GameRule.values.asNameMap());
+}
+
 @freezed
 class PlayableGameMeta with _$PlayableGameMeta {
   const PlayableGameMeta._();
@@ -183,6 +212,7 @@ class PlayableGameMeta with _$PlayableGameMeta {
     required GameSource source,
     String? initialFen,
     int? startedAtTurn,
+    ISet<GameRule>? rules,
   }) = _PlayableGameMeta;
 }
 
