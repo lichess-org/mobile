@@ -10,9 +10,9 @@ String gameStatusL10n(
   BuildContext context,
   GameCtrlState gameState,
 ) {
-  final winner = gameState.winner;
+  final winner = gameState.game.winner;
 
-  switch (gameState.game.data.status) {
+  switch (gameState.game.status) {
     case GameStatus.started:
       return context.l10n.playingRightNow;
     case GameStatus.aborted:
@@ -36,7 +36,7 @@ String gameStatusL10n(
     case GameStatus.draw:
       if (gameState.game.lastPosition.isInsufficientMaterial) {
         return '${context.l10n.insufficientMaterial} • ${context.l10n.draw}';
-      } else if (gameState.isThreefoldRepetition == true) {
+      } else if (gameState.game.isThreefoldRepetition == true) {
         return '${context.l10n.threefoldRepetition} • ${context.l10n.draw}';
       } else {
         return context.l10n.draw;
@@ -58,7 +58,7 @@ String gameStatusL10n(
     case GameStatus.cheat:
       return context.l10n.cheatDetected;
     case GameStatus.variantEnd:
-      switch (gameState.game.data.variant) {
+      switch (gameState.game.meta.variant) {
         case Variant.kingOfTheHill:
           return context.l10n.kingInTheCenter;
         case Variant.threeCheck:
@@ -67,6 +67,6 @@ String gameStatusL10n(
           return context.l10n.variantEnding;
       }
     default:
-      return gameState.game.data.status.toString();
+      return gameState.game.status.toString();
   }
 }

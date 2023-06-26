@@ -8,7 +8,7 @@ void main() {
   test('decode game from websocket json', () {
     final json = jsonDecode(_gameJson) as Map<String, dynamic>;
     final game = PlayableGame.fromWebSocketJson(json);
-    expect(game.data.id, const GameId('nV3DaALy'));
+    expect(game.meta.id, const GameId('nV3DaALy'));
   });
 }
 

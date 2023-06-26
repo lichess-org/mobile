@@ -54,12 +54,16 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
 
   @Assert('steps.isNotEmpty')
   factory PlayableGame({
-    required PlayableGameData data,
+    required PlayableGameMeta meta,
     required IList<GameStep> steps,
     required Player white,
     required Player black,
+    required GameStatus status,
     Side? youAre,
     PlayableClockData? clock,
+    bool? boosted,
+    bool? isThreefoldRepetition,
+    Side? winner,
   }) = _PlayableGame;
 
   factory PlayableGame.fromWebSocketJson(Map<String, dynamic> json) =>
@@ -67,13 +71,13 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
 }
 
 PlayableGame _playableGameFromPick(RequiredPick pick) {
-  final data = _playableGameDataFromPick(pick('game').required());
+  final meta = _playableGameMetaFromPick(pick('game').required());
 
   // assume lichess always send initialFen with fromPosition and chess960
   Position position =
-      (data.variant == Variant.fromPosition || data.variant == Variant.chess960)
-          ? Chess.fromSetup(Setup.parseFen(data.initialFen!))
-          : data.variant.initialPosition;
+      (meta.variant == Variant.fromPosition || meta.variant == Variant.chess960)
+          ? Chess.fromSetup(Setup.parseFen(meta.initialFen!))
+          : meta.variant.initialPosition;
 
   int ply = 0;
   final steps = [GameStep(ply: ply, position: position)];
@@ -97,26 +101,30 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
   }
 
   return PlayableGame(
-    data: data,
+    meta: meta,
     steps: steps.toIList(),
     white: pick('white').letOrThrow(_playerFromUserGamePick),
     black: pick('black').letOrThrow(_playerFromUserGamePick),
     clock: pick('clock').letOrNull(_playableClockDataFromPick),
+    status: pick('game', 'status').asGameStatusOrThrow(),
+    winner: pick('game, winner').asSideOrNull(),
+    boosted: pick('game', 'boosted').asBoolOrNull(),
+    isThreefoldRepetition: pick('game', 'threefold').asBoolOrNull(),
     youAre: pick('youAre').asSideOrNull(),
   );
 }
 
-PlayableGameData _playableGameDataFromPick(RequiredPick pick) {
-  return PlayableGameData(
+PlayableGameMeta _playableGameMetaFromPick(RequiredPick pick) {
+  return PlayableGameMeta(
     id: pick('id').asGameIdOrThrow(),
     rated: pick('rated').asBoolOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),
     perf: pick('perf').asPerfOrThrow(),
-    status: pick('status').asGameStatusOrThrow(),
     variant: pick('variant').asVariantOrThrow(),
     source: pick('source')
         .letOrThrow((pick) => GameSource.nameMap[pick.asStringOrThrow()]!),
     initialFen: pick('initialFen').asStringOrNull(),
+    startedAtTurn: pick('startedAtTurn').asIntOrNull(),
   );
 }
 
@@ -163,10 +171,10 @@ enum GameSource {
 }
 
 @freezed
-class PlayableGameData with _$PlayableGameData {
-  const PlayableGameData._();
+class PlayableGameMeta with _$PlayableGameMeta {
+  const PlayableGameMeta._();
 
-  const factory PlayableGameData({
+  const factory PlayableGameMeta({
     required GameId id,
     required bool rated,
     required Variant variant,
@@ -174,8 +182,8 @@ class PlayableGameData with _$PlayableGameData {
     required Perf perf,
     required GameSource source,
     String? initialFen,
-    required GameStatus status,
-  }) = _PlayableGameData;
+    int? startedAtTurn,
+  }) = _PlayableGameMeta;
 }
 
 @freezed

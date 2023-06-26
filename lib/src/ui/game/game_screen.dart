@@ -418,8 +418,8 @@ class _GameEndDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(ctrlProvider).requireValue;
 
-    final showWinner = gameState.winner != null
-        ? ' • ${gameState.winner == Side.white ? context.l10n.whiteIsVictorious : context.l10n.blackIsVictorious}'
+    final showWinner = gameState.game.winner != null
+        ? ' • ${gameState.game.winner == Side.white ? context.l10n.whiteIsVictorious : context.l10n.blackIsVictorious}'
         : '';
 
     final content = Column(
@@ -427,9 +427,9 @@ class _GameEndDialog extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          gameState.winner == null
+          gameState.game.winner == null
               ? '½-½'
-              : gameState.winner == Side.white
+              : gameState.game.winner == Side.white
                   ? '1-0'
                   : '0-1',
           style: const TextStyle(

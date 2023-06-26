@@ -206,8 +206,10 @@ class GameCtrl extends _$GameCtrl {
             SocketMoveEvent.fromJson(event.data as Map<String, dynamic>);
 
         GameCtrlState newState = curState.copyWith(
-          isThreefoldRepetition: data.threefold,
-          winner: data.winner,
+          game: curState.game.copyWith(
+            isThreefoldRepetition: data.threefold,
+            winner: data.winner,
+          ),
           whiteOfferingDraw: data.whiteOfferingDraw,
           blackOfferingDraw: data.blackOfferingDraw,
         );
@@ -252,7 +254,7 @@ class GameCtrl extends _$GameCtrl {
         }
 
         if (data.status != null) {
-          newState = newState.copyWith.game.data(
+          newState = newState.copyWith.game(
             status: data.status!,
           );
         }
@@ -265,12 +267,10 @@ class GameCtrl extends _$GameCtrl {
             GameEndEvent.fromJson(event.data as Map<String, dynamic>);
         final curState = state.requireValue;
         GameCtrlState newState = curState.copyWith(
-          winner: endData.winner,
-          boosted: endData.boosted,
           game: curState.game.copyWith(
-            data: curState.game.data.copyWith(
-              status: endData.status,
-            ),
+            status: endData.status,
+            winner: endData.winner,
+            boosted: endData.boosted,
             white: curState.game.white.copyWith(
               ratingDiff: endData.ratingDiff?.white,
             ),
@@ -308,20 +308,17 @@ class GameCtrlState with _$GameCtrlState {
   const factory GameCtrlState({
     required PlayableGame game,
     required int stepCursor,
-    bool? boosted,
-    bool? isThreefoldRepetition,
     bool? whiteOfferingDraw,
     bool? blackOfferingDraw,
-    Side? winner,
   }) = _GameCtrlState;
 
-  bool get playable => game.data.status.value < GameStatus.aborted.value;
+  bool get playable => game.status.value < GameStatus.aborted.value;
   bool get abortable => playable && game.lastPosition.fullmoves <= 1;
   bool get resignable => playable && !abortable;
   bool get canGetNewOpponent =>
       !playable &&
-      (game.data.source == GameSource.lobby ||
-          game.data.source == GameSource.pool);
+      (game.meta.source == GameSource.lobby ||
+          game.meta.source == GameSource.pool);
 
   bool get isReplaying => stepCursor < game.steps.length - 1;
 
@@ -333,7 +330,7 @@ class GameCtrlState with _$GameCtrlState {
       return null;
     }
 
-    if (game.data.status == GameStatus.started) {
+    if (game.status == GameStatus.started) {
       final pos = game.lastPosition;
       if (pos.fullmoves > 1) {
         return pos.turn;
