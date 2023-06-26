@@ -7,6 +7,7 @@ import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -427,17 +428,18 @@ class _GameEndDialog extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          gameState.game.winner == null
-              ? '½-½'
-              : gameState.game.winner == Side.white
-                  ? '1-0'
-                  : '0-1',
-          style: const TextStyle(
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
+        if (gameState.game.status.value >= GameStatus.mate.value)
+          Text(
+            gameState.game.winner == null
+                ? '½-½'
+                : gameState.game.winner == Side.white
+                    ? '1-0'
+                    : '0-1',
+            style: const TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
         const SizedBox(height: 6.0),
         Text(
           '${gameStatusL10n(context, gameState)}$showWinner',

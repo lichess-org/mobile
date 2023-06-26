@@ -85,7 +85,8 @@ class BoardPlayer extends StatelessWidget {
                         if (player.rating != null)
                           Text.rich(
                             TextSpan(
-                              text: '${player.rating}',
+                              text:
+                                  '${player.rating}${player.provisional == true ? '?' : ''}',
                               children: [
                                 if (player.ratingDiff != null)
                                   TextSpan(

@@ -154,6 +154,7 @@ Player _playerFromUserGamePick(RequiredPick pick) {
     patron: pick('user', 'patron').asBoolOrNull(),
     title: pick('user', 'title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),
+    provisional: pick('provisional').asBoolOrNull(),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     aiLevel: pick('aiLevel').asIntOrNull(),
   );
