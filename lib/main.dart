@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'firebase_options.dart';
 
 import 'src/constants.dart';
 import 'src/app.dart';
@@ -21,17 +24,33 @@ void main() async {
         stackTrace: record.stackTrace,
       );
 
-      if (record.loggerName == 'AuthClient') {
+      if (record.loggerName == 'AuthClient' ||
+          record.loggerName == 'AuthSocket') {
         debugPrint(record.message);
       }
     });
   }
 
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  // Crashlytics setup
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  if (kReleaseMode) {
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+    // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+  }
+
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   if (defaultTargetPlatform == TargetPlatform.android) {
-    final data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
+    final view = widgetsBinding.platformDispatcher.views.first;
+    final data = MediaQueryData.fromView(view);
     if (data.size.shortestSide < kTabletThreshold) {
       await SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp],

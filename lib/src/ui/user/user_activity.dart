@@ -222,6 +222,25 @@ class UserActivityEntry extends ConsumerWidget {
               loss: 0,
             ),
           ),
+        if (entry.storm != null)
+          PlatformListTile(
+            leading: Icon(
+              LichessIcons.storm,
+              size: leadingIconSize,
+            ),
+            title: Text(
+              context.l10n.stormPlayedNbRunsOfPuzzleStorm(
+                entry.storm!.runs,
+                'Puzzle Storm',
+              ),
+            ),
+            subtitle: emptySubtitle,
+            trailing: BriefGameResultBox(
+              win: entry.storm!.score,
+              draw: 0,
+              loss: 0,
+            ),
+          ),
         if (entry.correspondenceEnds != null)
           PlatformListTile(
             leading: Icon(

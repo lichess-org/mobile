@@ -139,14 +139,14 @@ class _WatchScreenState extends ConsumerState<WatchScreen>
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      watchRouteObserver.subscribe(this, route);
+      tvRouteObserver.subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    watchRouteObserver.unsubscribe(this);
+    tvRouteObserver.unsubscribe(this);
     super.dispose();
   }
 

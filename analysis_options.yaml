@@ -18,6 +18,8 @@ analyzer:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
     - lib/src/styles/lichess_icons.dart
+    - lib/src/styles/social_icons.dart
+    - lib/firebase_options.dart
   errors:
     invalid_annotation_target: ignore
   plugins:
@@ -42,7 +44,6 @@ dart_code_metrics:
     - avoid-unnecessary-type-assertions
     - avoid-unnecessary-type-casts
     - avoid-unrelated-type-assertions
-    - prefer-iterable-of
     - prefer-first
     - prefer-immediate-return
     - prefer-iterable-of
@@ -59,7 +60,6 @@ dart_code_metrics:
     - avoid-shrink-wrap-in-lists
     - avoid-unnecessary-setstate
     - avoid-expanded-as-spacer
-    - avoid-wrapping-in-padding
     - check-for-equals-in-render-object-setters
     - consistent-update-render-object
     - prefer-const-border-radius

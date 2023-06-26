@@ -11,13 +11,11 @@ extension AsyncValueUI on AsyncValue<Object?> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(error.toString())),
           );
-          break;
         case TargetPlatform.iOS:
           showCupertinoErrorSnackBar(
             context: context,
             message: error.toString(),
           );
-          break;
         default:
           assert(false, 'Unexpected platform $defaultTargetPlatform');
           break;

@@ -29,6 +29,7 @@ class ToggleSoundButton extends ConsumerWidget {
         );
       case TargetPlatform.iOS:
         return CupertinoIconButton(
+          padding: EdgeInsets.zero,
           semanticsLabel: 'Toggle sound',
           icon: isSoundEnabled
               ? const Icon(CupertinoIcons.volume_up)

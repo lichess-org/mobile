@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:async/async.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart'
-    hide Tuple2;
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -10,6 +12,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
 
 part 'puzzle_providers.g.dart';
 
@@ -34,9 +37,17 @@ Future<PuzzleStreakResponse> streak(StreakRef ref) {
   return Result.release(repo.streak());
 }
 
-// TODO when history database is available should first try to fetch from there
+@riverpod
+Future<PuzzleStormResponse> storm(StormRef ref) {
+  final repo = ref.watch(puzzleRepositoryProvider);
+  return Result.release(repo.storm());
+}
+
 @Riverpod(keepAlive: true)
-Future<Puzzle> puzzle(PuzzleRef ref, PuzzleId id) {
+Future<Puzzle> puzzle(PuzzleRef ref, PuzzleId id) async {
+  final puzzleStorage = ref.watch(puzzleStorageProvider);
+  final puzzle = await puzzleStorage.fetch(puzzleId: id);
+  if (puzzle != null) return puzzle;
   final repo = ref.watch(puzzleRepositoryProvider);
   return Result.release(repo.fetch(id));
 }
@@ -55,7 +66,15 @@ Future<ISet<PuzzleTheme>> savedThemes(SavedThemesRef ref) {
 }
 
 @riverpod
-Future<PuzzleDashboard> puzzleDashboard(PuzzleDashboardRef ref, int days) {
+Future<PuzzleDashboard> puzzleDashboard(
+  PuzzleDashboardRef ref,
+  int days,
+) async {
+  final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(puzzleRepositoryProvider);
-  return Result.release(repo.puzzleDashboard(days));
+  final result = await repo.puzzleDashboard(days);
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }

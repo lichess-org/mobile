@@ -1,12 +1,11 @@
 import 'dart:math' show max;
+import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:logging/logging.dart';
-import 'package:tuple/tuple.dart';
 import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart'
-    hide Tuple2;
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'puzzle_batch_storage.dart';
@@ -23,12 +22,14 @@ const kPuzzleLocalQueueLength = 50;
 
 @Riverpod(keepAlive: true)
 PuzzleService puzzleService(PuzzleServiceRef ref, {required int queueLength}) {
-  final storage = ref.watch(puzzleBatchStorageProvider);
+  final batchStorage = ref.watch(puzzleBatchStorageProvider);
   final repository = ref.watch(puzzleRepositoryProvider);
+  final puzzleStorage = ref.watch(puzzleStorageProvider);
   return PuzzleService(
     ref,
     Logger('PuzzleService'),
-    storage: storage,
+    batchStorage: batchStorage,
+    puzzleStorage: puzzleStorage,
     repository: repository,
     queueLength: queueLength,
   );
@@ -58,14 +59,16 @@ class PuzzleService {
   const PuzzleService(
     this._ref,
     this._log, {
-    required this.storage,
+    required this.batchStorage,
+    required this.puzzleStorage,
     required this.repository,
     required this.queueLength,
   });
 
   final PuzzleServiceRef _ref;
   final int queueLength;
-  final PuzzleBatchStorage storage;
+  final PuzzleBatchStorage batchStorage;
+  final PuzzleStorage puzzleStorage;
   final PuzzleRepository repository;
   final Logger _log;
 
@@ -79,13 +82,13 @@ class PuzzleService {
   }) {
     return Result.release(
       _syncAndLoadData(userId, angle).map(
-        (data) => data.item1 != null && data.item1!.unsolved.isNotEmpty
+        (data) => data.$1 != null && data.$1!.unsolved.isNotEmpty
             ? PuzzleContext(
-                puzzle: data.item1!.unsolved[0],
+                puzzle: data.$1!.unsolved[0],
                 theme: angle,
                 userId: userId,
-                glicko: data.item2,
-                rounds: data.item3,
+                glicko: data.$2,
+                rounds: data.$3,
               )
             : null,
       ),
@@ -99,14 +102,16 @@ class PuzzleService {
   Future<PuzzleContext?> solve({
     required UserId? userId,
     required PuzzleSolution solution,
+    required Puzzle puzzle,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
-    final data = await storage.fetch(
+    puzzleStorage.save(puzzle: puzzle);
+    final data = await batchStorage.fetch(
       userId: userId,
       angle: angle,
     );
     if (data != null) {
-      await storage.save(
+      await batchStorage.save(
         userId: userId,
         angle: angle,
         data: PuzzleBatch(
@@ -125,7 +130,7 @@ class PuzzleService {
     required UserId? userId,
     PuzzleTheme angle = PuzzleTheme.mix,
   }) async {
-    await storage.delete(userId: userId, angle: angle);
+    await batchStorage.delete(userId: userId, angle: angle);
     return nextPuzzle(userId: userId, angle: angle);
   }
 
@@ -137,12 +142,12 @@ class PuzzleService {
   ///
   /// This method should never fail, as if the network is down it will fallback
   /// to the local database.
-  FutureResult<Tuple3<PuzzleBatch?, PuzzleGlicko?, IList<PuzzleRound>?>>
+  FutureResult<(PuzzleBatch?, PuzzleGlicko?, IList<PuzzleRound>?)>
       _syncAndLoadData(
     UserId? userId,
     PuzzleTheme angle,
   ) async {
-    final data = await storage.fetch(
+    final data = await batchStorage.fetch(
       userId: userId,
       angle: angle,
     );
@@ -174,7 +179,7 @@ class PuzzleService {
     return batchResponse
         .fold(
       (value) => Result.value(
-        Tuple4(
+        (
           PuzzleBatch(
             solved: IList(const []),
             unsolved: IList([...unsolved, ...value.puzzles]),
@@ -186,21 +191,18 @@ class PuzzleService {
       ),
 
       // we don't need to save the batch if the request failed
-      (_, __) => Result.value(Tuple4(data, null, null, false)),
+      (_, __) => Result.value((data, null, null, false)),
     )
         .flatMap((tuple) async {
-      final newBatch = tuple.item1;
-      final glitcho = tuple.item2;
-      final rounds = tuple.item3;
-      final shouldSave = tuple.item4;
+      final (newBatch, glicko, rounds, shouldSave) = tuple;
       if (newBatch != null && shouldSave) {
-        await storage.save(
+        await batchStorage.save(
           userId: userId,
           angle: angle,
           data: newBatch,
         );
       }
-      return Result.value(Tuple3(newBatch, glitcho, rounds));
+      return Result.value((newBatch, glicko, rounds));
     });
   }
 }

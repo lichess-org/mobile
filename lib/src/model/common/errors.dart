@@ -1,4 +1,6 @@
 abstract class IOException implements Exception {
+  const IOException();
+
   String get message;
 
   @override
@@ -19,9 +21,13 @@ class DataFormatException extends IOException {
 
 /// Generic error for API requests.
 class ApiRequestException extends IOException {
+  const ApiRequestException(this.errorCode, this.errorMessage);
+
+  final int errorCode;
+  final String errorMessage;
+
   @override
-  String get message =>
-      'Something went wrong with the request. Please try again later.';
+  String get message => '$errorMessage ($errorCode)';
 }
 
 class NotFoundException extends IOException {

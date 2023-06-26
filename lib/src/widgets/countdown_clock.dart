@@ -5,8 +5,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
-
-const _kMaxClockTextScaleFactor = 1.94;
+import 'package:lichess_mobile/src/constants.dart';
 
 /// A simple countdown clock.
 ///
@@ -75,6 +74,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
         ? ClockStyle.darkThemeStyle
         : ClockStyle.lightThemeStyle;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
+    final screenHeight = mediaQueryData.size.height;
 
     return Container(
       decoration: BoxDecoration(
@@ -89,7 +89,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
           data: mediaQueryData.copyWith(
             textScaleFactor: math.min(
               mediaQueryData.textScaleFactor,
-              _kMaxClockTextScaleFactor,
+              kMaxClockTextScaleFactor,
             ),
           ),
           child: Text(
@@ -98,7 +98,8 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
               color: widget.active
                   ? clockStyle.activeTextColor
                   : clockStyle.textColor,
-              fontSize: 30,
+              fontSize: screenHeight < kSmallHeightScreenThreshold ? 24 : 30,
+              height: screenHeight < kSmallHeightScreenThreshold ? 1.0 : null,
               fontFeatures: const [
                 FontFeature.tabularFigures(),
               ],

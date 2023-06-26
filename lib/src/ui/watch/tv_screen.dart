@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:chessground/chessground.dart';
+import 'package:chessground/chessground.dart' as cg;
+import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
@@ -20,6 +20,9 @@ import 'package:lichess_mobile/src/model/tv/tv_repository_providers.dart';
 import 'package:result_extensions/result_extensions.dart';
 
 final _featuredGameWithSoundProvider = featuredGameProvider(withSound: true);
+
+final RouteObserver<PageRoute<void>> tvRouteObserver =
+    RouteObserver<PageRoute<void>>();
 
 class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({super.key});
@@ -80,14 +83,14 @@ class _TvScreenState extends ConsumerState<TvScreen>
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      watchRouteObserver.subscribe(this, route);
+      tvRouteObserver.subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    watchRouteObserver.unsubscribe(this);
+    tvRouteObserver.unsubscribe(this);
     super.dispose();
   }
 
@@ -118,8 +121,8 @@ class _Body extends ConsumerWidget {
       child: Center(
         child: featuredGame.when(
           data: (game) {
-            final boardData = BoardData(
-              interactableSide: InteractableSide.none,
+            final boardData = cg.BoardData(
+              interactableSide: cg.InteractableSide.none,
               orientation: game.orientation.cg,
               fen: game.position.position.fen,
               lastMove: game.position.lastMove?.cg,
@@ -134,12 +137,14 @@ class _Body extends ConsumerWidget {
               clock: Duration(seconds: topPlayer.seconds ?? 0),
               active: !game.position.position.isGameOver &&
                   game.position.position.turn == topPlayer.side,
+              diff: game.position.diff.bySide(topPlayer.side),
             );
             final bottomPlayerWidget = BoardPlayer(
               player: bottomPlayer.asPlayer,
               clock: Duration(seconds: bottomPlayer.seconds ?? 0),
               active: !game.position.position.isGameOver &&
                   game.position.position.turn == bottomPlayer.side,
+              diff: game.position.diff.bySide(bottomPlayer.side),
             );
             return TableBoardLayout(
               boardData: boardData,
@@ -153,9 +158,9 @@ class _Body extends ConsumerWidget {
           loading: () => const TableBoardLayout(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
-            boardData: BoardData(
-              interactableSide: InteractableSide.none,
-              orientation: Side.white,
+            boardData: cg.BoardData(
+              interactableSide: cg.InteractableSide.none,
+              orientation: cg.Side.white,
               fen: kEmptyFen,
             ),
           ),
@@ -166,10 +171,10 @@ class _Body extends ConsumerWidget {
             return const TableBoardLayout(
               topTable: kEmptyWidget,
               bottomTable: kEmptyWidget,
-              boardData: BoardData(
+              boardData: cg.BoardData(
                 fen: kEmptyFen,
-                interactableSide: InteractableSide.none,
-                orientation: Side.white,
+                interactableSide: cg.InteractableSide.none,
+                orientation: cg.Side.white,
               ),
               errorMessage: 'Could not load TV stream.',
             );

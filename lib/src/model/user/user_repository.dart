@@ -137,6 +137,7 @@ UserActivity _userActivityFromPick(RequiredPick pick) {
     bestTournament: bestTour?.firstOrNull,
     puzzles: pick('puzzles', 'score').letOrNull(UserActivityScore.fromPick),
     streak: pick('streak').letOrNull(UserActivityStreak.fromPick),
+    storm: pick('storm').letOrNull(UserActivityStreak.fromPick),
     correspondenceEnds: pick('correspondenceEnds', 'score')
         .letOrNull(UserActivityScore.fromPick),
     correspondenceMovesNb: pick('correspondenceMoves', 'nb').asIntOrNull(),

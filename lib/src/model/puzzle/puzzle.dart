@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/model/common/tree.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 
 part 'puzzle.freezed.dart';
@@ -92,7 +91,6 @@ class PuzzleGame with _$PuzzleGame {
     required PuzzleGamePlayer white,
     required PuzzleGamePlayer black,
     required String pgn,
-    TimeIncrement? clock,
   }) = _PuzzleGame;
 
   factory PuzzleGame.fromJson(Map<String, dynamic> json) =>
@@ -143,6 +141,28 @@ class PuzzlePreview with _$PuzzlePreview {
   }
 }
 
+@Freezed(fromJson: true)
+class LitePuzzle with _$LitePuzzle {
+  const LitePuzzle._();
+
+  const factory LitePuzzle({
+    required PuzzleId id,
+    required String fen,
+    required IList<UCIMove> solution,
+    required int rating,
+  }) = _LitePuzzle;
+
+  factory LitePuzzle.fromJson(Map<String, dynamic> json) =>
+      _$LitePuzzleFromJson(json);
+
+  (Side, String, Move) get preview {
+    final pos1 = Chess.fromSetup(Setup.parseFen(fen));
+    final move = Move.fromUci(solution.first);
+    final pos = pos1.play(move!);
+    return (pos.turn, pos.fen, move);
+  }
+}
+
 @freezed
 class PuzzleDashboard with _$PuzzleDashboard {
   const factory PuzzleDashboard({
@@ -160,4 +180,38 @@ class PuzzleDashboardData with _$PuzzleDashboardData {
     required int performance,
     required PuzzleTheme theme,
   }) = _PuzzleDashboardData;
+}
+
+@freezed
+class PuzzleHistoryEntry with _$PuzzleHistoryEntry {
+  const PuzzleHistoryEntry._();
+  const factory PuzzleHistoryEntry({
+    required bool win,
+    required DateTime date,
+    required PuzzleId id,
+    required int rating,
+    required String fen,
+    required Move lastMove,
+    Duration? solvingTime,
+  }) = _PuzzleHistoryEntry;
+
+  factory PuzzleHistoryEntry.fromLitePuzzle(
+    LitePuzzle puzzle,
+    bool win,
+    Duration duration,
+  ) {
+    final (_, fen, move) = puzzle.preview;
+    return PuzzleHistoryEntry(
+      date: DateTime.now(),
+      win: win,
+      id: puzzle.id,
+      rating: puzzle.rating,
+      fen: fen,
+      lastMove: move,
+      solvingTime: duration,
+    );
+  }
+
+  (String, Side, Move) get preview =>
+      (fen, Chess.fromSetup(Setup.parseFen(fen)).turn, lastMove);
 }

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:async/async.dart';
 import 'package:logging/logging.dart';
@@ -8,9 +7,12 @@ import 'package:result_extensions/result_extensions.dart';
 import 'package:http/retry.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'package:lichess_mobile/src/http_client.dart';
+import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
@@ -20,6 +22,7 @@ part 'auth_client.g.dart';
 @Riverpod(keepAlive: true)
 AuthClient authClient(AuthClientRef ref) {
   final httpClient = ref.watch(httpClientProvider);
+  final crashlytics = ref.watch(crashlyticsProvider);
   final logger = Logger('AuthClient');
   final insideAuthClient = _AuthClient(
     ref,
@@ -29,10 +32,8 @@ AuthClient authClient(AuthClientRef ref) {
   final authClient = AuthClient(
     logger,
     insideAuthClient,
+    crashlytics,
   );
-  ref.onDispose(() {
-    authClient.close();
-  });
   return authClient;
 }
 
@@ -47,16 +48,12 @@ AuthClient authClient(AuthClientRef ref) {
 class AuthClient {
   AuthClient(
     this._log,
-    this._client, {
+    this._client,
+    this._crashlytics, {
     List<Duration> retryDelays = defaultRetries,
-  })  : _retryClient = RetryClient.withDelays(
+  }) : _retryClient = RetryClient.withDelays(
           _client,
           retryDelays,
-        ),
-        _retryClientOnError = RetryClient.withDelays(
-          _client,
-          retryDelays,
-          whenError: (error, _) async => error is SocketException,
         ) {
     _log.info('Creating new AuthClient.');
   }
@@ -64,7 +61,7 @@ class AuthClient {
   final Logger _log;
   final Client _client;
   final RetryClient _retryClient;
-  final RetryClient _retryClientOnError;
+  final FirebaseCrashlytics _crashlytics;
 
   /// Makes app user agent
   static String userAgent(PackageInfo info, LightUser? user) =>
@@ -76,10 +73,9 @@ class AuthClient {
     bool retryOnError = true,
   }) =>
       Result.capture(
-        (retryOnError ? _retryClientOnError : _retryClient)
-            .get(url, headers: headers),
+        (retryOnError ? _retryClient : _client).get(url, headers: headers),
       ).mapError((error, stackTrace) {
-        _log.severe('Request error', error, stackTrace);
+        _recordError('GET', error, stackTrace, url, headers);
         return GenericIOException();
       }).flatMap(
         (response) => _validateResponseStatusResult('GET', url, response),
@@ -93,10 +89,10 @@ class AuthClient {
     bool retryOnError = true,
   }) =>
       Result.capture(
-        (retryOnError ? _retryClientOnError : _retryClient)
+        (retryOnError ? _retryClient : _client)
             .post(url, headers: headers, body: body, encoding: encoding),
       ).mapError((error, stackTrace) {
-        _log.severe('Request error', error, stackTrace);
+        _recordError('POST', error, stackTrace, url, headers);
         return GenericIOException();
       }).flatMap(
         (response) => _validateResponseStatusResult('POST', url, response),
@@ -110,10 +106,10 @@ class AuthClient {
     bool retryOnError = true,
   }) =>
       Result.capture(
-        (retryOnError ? _retryClientOnError : _retryClient)
+        (retryOnError ? _retryClient : _client)
             .delete(url, headers: headers, body: body, encoding: encoding),
       ).mapError((error, stackTrace) {
-        _log.severe('Request error', error, stackTrace);
+        _recordError('DELETE', error, stackTrace, url, headers);
         return GenericIOException();
       }).flatMap(
         (response) => _validateResponseStatusResult('DELETE', url, response),
@@ -129,7 +125,7 @@ class AuthClient {
     }
     return Result.capture(_client.send(request))
         .mapError((error, stackTrace) {
-          _log.severe('Request error', error, stackTrace);
+          _recordError('GET', error, stackTrace, url, headers);
           return GenericIOException();
         })
         .flatMap((r) => _validateResponseStatusResult('GET', url, r))
@@ -141,13 +137,22 @@ class AuthClient {
     Uri url,
     T response,
   ) {
-    if (response.statusCode >= 500) {
-      _log.severe('$method $url responded with status ${response.statusCode}');
-    } else if (response.statusCode >= 400) {
+    if (response.statusCode >= 400) {
       final body = response is Response ? response.body : '';
       _log.warning(
         '$method $url responded with status ${response.statusCode}\n$body',
       );
+      if (kReleaseMode) {
+        _crashlytics.recordError(
+          'Server error: ${response.statusCode}',
+          null,
+          reason: 'server error',
+          information: [
+            'url: $url',
+            'method: $method',
+          ],
+        );
+      }
     }
 
     return response.statusCode < 400
@@ -158,13 +163,43 @@ class AuthClient {
                 ? Result.error(UnauthorizedException())
                 : response.statusCode == 403
                     ? Result.error(ForbiddenException())
-                    : Result.error(ApiRequestException());
+                    : Result.error(
+                        ApiRequestException(
+                          response.statusCode,
+                          response is Response ? response.body : '',
+                        ),
+                      );
+  }
+
+  void _recordError(
+    String method,
+    Object error,
+    StackTrace? stackTrace,
+    Uri url,
+    Map<String, String>? headers,
+  ) {
+    // Ignore canceling seek requests
+    if (error is ClientException && url.path.contains('api/board/seek')) {
+      return;
+    }
+    _log.severe('Request error', error, stackTrace);
+    if (kReleaseMode) {
+      _crashlytics.recordError(
+        error,
+        stackTrace,
+        reason: 'a non-fatal http request error',
+        information: [
+          'method: $method',
+          'url: $url',
+          'headers: $headers',
+        ],
+      );
+    }
   }
 
   void close() {
-    _log.info('Closing AuthClient.');
-    _client.close();
     _retryClient.close();
+    _client.close();
   }
 }
 
@@ -182,7 +217,8 @@ class _AuthClient extends BaseClient {
     final info = ref.read(packageInfoProvider);
 
     if (session != null && !request.headers.containsKey('Authorization')) {
-      request.headers['Authorization'] = 'Bearer ${session.token}';
+      final bearer = signBearerToken(session.token);
+      request.headers['Authorization'] = 'Bearer $bearer';
     }
 
     request.headers['user-agent'] = AuthClient.userAgent(info, session?.user);
@@ -194,7 +230,6 @@ class _AuthClient extends BaseClient {
 }
 
 const defaultRetries = [
-  Duration(milliseconds: 200),
   Duration(milliseconds: 300),
   Duration(milliseconds: 500),
   Duration(milliseconds: 800),

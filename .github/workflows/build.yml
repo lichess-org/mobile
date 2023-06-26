@@ -38,6 +38,6 @@ jobs:
         run: flutter pub get
 
       - name: Code generation
-        run: flutter pub run build_runner build
+        run: dart run build_runner build
 
       - run: flutter build ${{ matrix.target }}

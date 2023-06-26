@@ -1,26 +1,20 @@
 import 'package:flutter/widgets.dart';
 
-import 'perf.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 
-/// A pair of time and increment used as game clock
+/// A pair of time and increment in seconds used as game clock
+///
+/// If both time and increment are 0, the clock is infinite.
 @immutable
 class TimeIncrement {
-  const TimeIncrement(this.time, this.increment);
+  const TimeIncrement(this.time, this.increment)
+      : assert(time >= 0 && increment >= 0);
 
-  /// Clock initial time in minutes
+  /// Clock initial time in seconds
   final int time;
 
   /// Clock increment in seconds
   final int increment;
-
-  static TimeIncrement? fromString(String str) {
-    try {
-      final nums = str.split('+').map(int.parse).toList();
-      return TimeIncrement(nums.first, nums[1]);
-    } catch (_) {
-      return null;
-    }
-  }
 
   TimeIncrement.fromJson(Map<String, dynamic> json)
       : time = json['time'] as int,
@@ -31,7 +25,30 @@ class TimeIncrement {
         'increment': increment,
       };
 
-  String get display => '$time + $increment';
+  Duration get duration => Duration(seconds: time + increment);
+
+  Speed get speed => Speed.fromTimeIncrement(this);
+
+  String get display {
+    String displayTime = '';
+    switch (time) {
+      case 0:
+        if (increment == 0) {
+          displayTime = '∞';
+        } else {
+          displayTime = '0 + $increment';
+        }
+      case 45:
+        displayTime = '¾ + $increment';
+      case 30:
+        displayTime = '½ + $increment';
+      case 15:
+        displayTime = '¼ + $increment';
+      default:
+        displayTime = '${(time / 60).floor()} + $increment';
+    }
+    return displayTime;
+  }
 
   @override
   bool operator ==(Object other) =>
@@ -45,22 +62,5 @@ class TimeIncrement {
   int get hashCode => Object.hash(time, increment);
 
   @override
-  String toString() => '$time+$increment';
-}
-
-/// Default game clock choice of lichess
-enum DefaultGameClock {
-  blitz3_0(TimeIncrement(3, 0), Perf.blitz),
-  blitz3_2(TimeIncrement(3, 2), Perf.blitz),
-  blitz5_0(TimeIncrement(5, 0), Perf.blitz),
-  blitz5_3(TimeIncrement(5, 3), Perf.blitz),
-  rapid10_0(TimeIncrement(10, 0), Perf.rapid),
-  rapid10_5(TimeIncrement(10, 5), Perf.rapid),
-  rapid15_10(TimeIncrement(15, 10), Perf.rapid),
-  classical30_0(TimeIncrement(30, 0), Perf.classical),
-  classical30_20(TimeIncrement(30, 20), Perf.classical);
-
-  const DefaultGameClock(this.value, this.perf);
-  final TimeIncrement value;
-  final Perf perf;
+  String toString() => 'TimeIncrement($time+$increment)';
 }

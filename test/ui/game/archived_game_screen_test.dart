@@ -10,10 +10,12 @@ import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/ui/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import '../../test_utils.dart';
 import '../../test_app.dart';
@@ -132,7 +134,17 @@ void main() {
         isTrue,
       );
 
-      for (var i = 0; i < movesAfterE4.length; i++) {
+      // cannot go forward
+      expect(
+        tester
+            .widget<BottomBarIconButton>(
+              find.byKey(const Key('cursor-forward')),
+            )
+            .onPressed,
+        isNull,
+      );
+
+      for (var i = 0; i <= movesAfterE4.length; i++) {
         // go back in history
         await tester.tap(find.byKey(const Key('cursor-back')));
         // wait for animation to finish
@@ -159,29 +171,6 @@ void main() {
             .widget<BottomBarIconButton>(find.byKey(const Key('cursor-back')))
             .onPressed,
         isNull,
-      );
-
-      // go to last
-      await tester.tap(find.byKey(const Key('cursor-last')));
-      // wait for animation to finish
-      await tester.pumpAndSettle();
-
-      // cannot go forward anymore
-      expect(
-        tester
-            .widget<BottomBarIconButton>(
-              find.byKey(const Key('cursor-forward')),
-            )
-            .onPressed,
-        isNull,
-      );
-      expect(
-        tester
-            .widget<InlineMoveItem>(
-              find.widgetWithText(InlineMoveItem, 'Qe1#'),
-            )
-            .current,
-        isTrue,
       );
     });
   });

@@ -2,6 +2,17 @@ import 'package:flutter/material.dart';
 
 const kLichessHost =
     String.fromEnvironment('LICHESS_HOST', defaultValue: 'https://lichess.org');
+
+const kLichessWSHost = String.fromEnvironment(
+  'LICHESS_WS_HOST',
+  defaultValue: 'wss://socket.lichess.org',
+);
+
+const kLichessWSSecret = String.fromEnvironment(
+  'LICHESS_WS_SECRET',
+  defaultValue: 'somethingElseInProd',
+);
+
 const kLichessDevUser =
     String.fromEnvironment('LICHESS_DEV_USER', defaultValue: 'lichess');
 const kLichessDevPassword = String.fromEnvironment('LICHESS_DEV_PASSWORD');
@@ -14,8 +25,10 @@ const kProvisionalDeviation = 110;
 const kClueLessDeviation = 230;
 
 // UI
+const kSmallHeightScreenThreshold = 650;
 const kTabletThreshold = 600;
 const kCardTextScaleFactor = 1.64;
+const kMaxClockTextScaleFactor = 1.94;
 const kEmptyWidget = SizedBox.shrink();
 const kEmptyFen = '8/8/8/8/8/8/8/8 w - - 0 1';
 

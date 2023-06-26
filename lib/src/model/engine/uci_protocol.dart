@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'package:tuple/tuple.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart'
-    hide Tuple2;
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:logging/logging.dart';
 
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 
 import 'work.dart';
@@ -42,7 +41,7 @@ class UCIProtocol {
 
   void disconnected() {
     if (_work != null && _currentEval != null) {
-      _evalController.sink.add(Tuple2(_work!, _currentEval!));
+      _evalController.sink.add((_work!, _currentEval!));
     }
     _work = null;
     _send = null;
@@ -87,7 +86,7 @@ class UCIProtocol {
       engineName = parts.sublist(2).join(' ');
     } else if (parts.first == 'bestmove') {
       if (_work != null && _currentEval != null) {
-        _evalController.sink.add(Tuple2(_work!, _currentEval!));
+        _evalController.sink.add((_work!, _currentEval!));
       }
       _work = null;
       _swapWork();
@@ -107,16 +106,12 @@ class UCIProtocol {
         switch (parts[i]) {
           case 'depth':
             depth = int.parse(parts[++i]);
-            break;
           case 'nodes':
             nodes = int.parse(parts[++i]);
-            break;
           case 'multipv':
             multiPv = int.parse(parts[++i]);
-            break;
           case 'time':
             elapsedMs = int.parse(parts[++i]);
-            break;
           case 'score':
             isMate = parts[++i] == 'mate';
             povEv = int.parse(parts[++i]);
@@ -125,11 +120,9 @@ class UCIProtocol {
                     parts[i + 1] == 'upperbound')) {
               evalType = parts[++i];
             }
-            break;
           case 'pv':
             moves = parts.sublist(++i);
             i = parts.length;
-            break;
         }
       }
 
@@ -176,7 +169,7 @@ class UCIProtocol {
       }
 
       if (multiPv == _expectedPvs && _currentEval != null) {
-        _evalController.sink.add(Tuple2(_work!, _currentEval!));
+        _evalController.sink.add((_work!, _currentEval!));
 
         // Depth limits are nice in the user interface, but in clearly decided
         // positions the usual depth limits are reached very quickly due to
@@ -220,7 +213,11 @@ class UCIProtocol {
           'position fen',
           _work!.initialFen,
           'moves',
-          ..._work!.moves,
+          ..._work!.steps.map(
+            (s) => _work!.variant == Variant.chess960
+                ? s.sanMove.move.uci
+                : s.castleSafeUCI,
+          ),
         ].join(' '),
       );
       _sendAndLog(

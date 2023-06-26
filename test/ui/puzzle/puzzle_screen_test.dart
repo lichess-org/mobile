@@ -4,11 +4,11 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:chessground/chessground.dart' as cg;
+import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -21,6 +21,8 @@ import '../../test_utils.dart';
 
 class MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
 
+class MockPuzzleStorage extends Mock implements PuzzleStorage {}
+
 void main() {
   setUpAll(() {
     registerFallbackValue(
@@ -29,9 +31,11 @@ void main() {
         unsolved: IList([puzzle]),
       ),
     );
+    registerFallbackValue(puzzle);
   });
 
   final mockBatchStorage = MockPuzzleBatchStorage();
+  final mockHistoryStorage = MockPuzzleStorage();
 
   group('PuzzleScreen', () {
     testWidgets(
@@ -95,11 +99,15 @@ void main() {
           puzzleBatchStorageProvider.overrideWith((ref) {
             return mockBatchStorage;
           }),
+          puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
         ],
       );
 
       when(() => mockBatchStorage.fetch(userId: null, angle: PuzzleTheme.mix))
           .thenAnswer((_) async => batch);
+
+      when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle')))
+          .thenAnswer((_) async {});
 
       await tester.pumpWidget(app);
 
@@ -140,6 +148,7 @@ void main() {
             puzzleBatchStorageProvider.overrideWith((ref) {
               return mockBatchStorage;
             }),
+            puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
           ],
         );
 
@@ -151,6 +160,9 @@ void main() {
         when(saveDBReq).thenAnswer((_) async {});
         when(() => mockBatchStorage.fetch(userId: null, angle: PuzzleTheme.mix))
             .thenAnswer((_) async => batch);
+
+        when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle')))
+            .thenAnswer((_) async {});
 
         await tester.pumpWidget(app);
 
@@ -235,8 +247,12 @@ void main() {
             puzzleBatchStorageProvider.overrideWith((ref) {
               return mockBatchStorage;
             }),
+            puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage)
           ],
         );
+
+        when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle')))
+            .thenAnswer((_) async {});
 
         Future<void> saveDBReq() => mockBatchStorage.save(
               userId: null,
@@ -328,8 +344,12 @@ void main() {
             puzzleBatchStorageProvider.overrideWith((ref) {
               return mockBatchStorage;
             }),
+            puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
           ],
         );
+
+        when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle')))
+            .thenAnswer((_) async {});
 
         Future<void> saveDBReq() => mockBatchStorage.save(
               userId: null,
@@ -455,7 +475,6 @@ final puzzle2 = Puzzle(
     ),
     pgn:
         'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 b5 Bb3 Nf6 c3 Nxe4 d4 exd4 cxd4 Qe7 O-O Qd8 Bd5 Nf6 Bb3 Bd6 Nc3 O-O Bg5 h6 Bh4 g5 Nxg5 hxg5 Bxg5 Kg7 Ne4 Be7 Bxf6+ Bxf6 Qg4+ Kh8 Qh5+ Kg8 Qg6+ Kh8 Qxf6+ Qxf6 Nxf6 Nxd4 Rfd1 Ne2+ Kh1 d6 Rd5 Kg7 Nh5+ Kh6 Rad1 Be6 R5d2 Bxb3 axb3 Kxh5 Rxe2 Rfe8 Red2 Re5 h3 Rae8 Kh2 Re2 Rd5+ Kg6 f4 Rxb2 R1d3 Ree2 Rg3+ Kf6 h4 Re4 Rg4 Rxb3 h5 Rbb4 h6 Rxf4 h7 Rxg4 h8=Q+ Ke7 Rd3',
-    clock: TimeIncrement(10, 0),
   ),
 );
 

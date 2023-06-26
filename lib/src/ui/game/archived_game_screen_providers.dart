@@ -1,9 +1,10 @@
+import 'package:flutter/services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tuple/tuple.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 
 part 'archived_game_screen_providers.g.dart';
 
@@ -23,8 +24,8 @@ class IsBoardTurned extends _$IsBoardTurned {
 bool canGoForward(CanGoForwardRef ref, GameId id) {
   final gameCursor = ref.watch(gameCursorProvider(id));
   if (gameCursor.hasValue) {
-    final stepsLength = gameCursor.value!.item1.steps.length;
-    final cursor = gameCursor.value!.item2;
+    final (game, cursor) = gameCursor.value!;
+    final stepsLength = game.steps.length;
     return cursor < stepsLength - 1;
   }
   return false;
@@ -34,7 +35,7 @@ bool canGoForward(CanGoForwardRef ref, GameId id) {
 bool canGoBackward(CanGoBackwardRef ref, GameId id) {
   final gameCursor = ref.watch(gameCursorProvider(id));
   if (gameCursor.hasValue) {
-    final cursor = gameCursor.value!.item2;
+    final (_, cursor) = gameCursor.value!;
     return cursor > 0;
   }
   return false;
@@ -43,37 +44,57 @@ bool canGoBackward(CanGoBackwardRef ref, GameId id) {
 @riverpod
 class GameCursor extends _$GameCursor {
   @override
-  FutureOr<Tuple2<ArchivedGame, int>> build(GameId id) async {
+  FutureOr<(ArchivedGame, int)> build(GameId id) async {
     final data = await ref.watch(archivedGameProvider(id: id).future);
 
-    return Tuple2(data, data.steps.length - 1);
+    return (data, data.steps.length - 1);
   }
 
   void cursorAt(int newPosition) {
     if (state.hasValue) {
-      state = AsyncValue.data(state.value!.withItem2(newPosition));
+      final (game, _) = state.value!;
+      state = AsyncValue.data((game, newPosition));
     }
   }
 
-  void cursorForward() {
+  void cursorForward({bool hapticFeedback = true}) {
     if (state.hasValue) {
-      final current = state.value!;
-      state = AsyncValue.data(current.withItem2(current.item2 + 1));
+      final (game, cursor) = state.value!;
+      state = AsyncValue.data((game, cursor + 1));
+      final san = game.stepAt(cursor + 1).san;
+      if (san != null) {
+        _playMoveSound(san);
+        if (hapticFeedback) HapticFeedback.lightImpact();
+      }
     }
   }
 
   void cursorBackward() {
     if (state.hasValue) {
-      final current = state.value!;
-      state = AsyncValue.data(current.withItem2(current.item2 - 1));
+      final (game, cursor) = state.value!;
+      state = AsyncValue.data((game, cursor - 1));
+      final san = game.stepAt(cursor - 1).san;
+      if (san != null) {
+        _playMoveSound(san);
+      }
     }
   }
 
   void cursorLast() {
     if (state.hasValue) {
-      final current = state.value!;
-      state =
-          AsyncValue.data(current.withItem2(current.item1.steps.length - 1));
+      final (game, _) = state.value!;
+      state = AsyncValue.data((game, game.steps.length - 1));
+    }
+  }
+
+  void _playMoveSound(String san) {
+    final soundService = ref.read(soundServiceProvider);
+    if (san.contains('x')) {
+      soundService.stopCurrent();
+      soundService.play(Sound.capture);
+    } else {
+      soundService.stopCurrent();
+      soundService.play(Sound.move);
     }
   }
 }

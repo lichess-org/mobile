@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/constants.dart';
 part 'auth_repository.g.dart';
 
 const redirectUri = 'org.lichess.mobile://login-callback';
-const oauthScopes = ['puzzle:read', 'puzzle:write'];
+const oauthScopes = ['web:mobile'];
 
 @Riverpod(keepAlive: true)
 AuthRepository authRepository(AuthRepositoryRef ref) {
@@ -63,7 +63,7 @@ class AuthRepository {
 
     return Result.capture(future).mapError((error, trace) {
       _log.severe('signIn error', error, trace);
-      return ApiRequestException();
+      return const ApiRequestException(500, 'Failed to get access token.');
     });
   }
 
