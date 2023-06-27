@@ -1,13 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:deep_pick/deep_pick.dart';
 
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/utils/json.dart';
 
 import 'player.dart';
 import 'game_status.dart';
@@ -66,9 +64,6 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
     Side? winner,
   }) = _PlayableGame;
 
-  factory PlayableGame.fromWebSocketJson(Map<String, dynamic> json) =>
-      _playableGameFromPick(pick(json).required());
-
   bool get hasAi => white.aiLevel != null || black.aiLevel != null;
 
   bool get playable => status.value < GameStatus.aborted.value;
@@ -78,98 +73,6 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
       (meta.rules == null || !meta.rules!.contains(GameRule.noAbort));
   bool get resignable => playable && !abortable;
   bool get drawable => playable && lastPosition.fullmoves >= 2 && !hasAi;
-}
-
-PlayableGame _playableGameFromPick(RequiredPick pick) {
-  final meta = _playableGameMetaFromPick(pick('game').required());
-
-  // assume lichess always send initialFen with fromPosition and chess960
-  Position position =
-      (meta.variant == Variant.fromPosition || meta.variant == Variant.chess960)
-          ? Chess.fromSetup(Setup.parseFen(meta.initialFen!))
-          : meta.variant.initialPosition;
-
-  int ply = 0;
-  final steps = [GameStep(ply: ply, position: position)];
-  final pgn = pick('game', 'pgn').asStringOrNull();
-  final moves = pgn != null && pgn != '' ? pgn.split(' ') : null;
-  if (moves != null && moves.isNotEmpty) {
-    for (final san in moves) {
-      ply++;
-      final move = position.parseSan(san);
-      // assume lichess only sends correct moves
-      position = position.playUnchecked(move!);
-      steps.add(
-        GameStep(
-          ply: ply,
-          sanMove: SanMove(san, move),
-          position: position,
-          diff: MaterialDiff.fromBoard(position.board),
-        ),
-      );
-    }
-  }
-
-  return PlayableGame(
-    meta: meta,
-    steps: steps.toIList(),
-    white: pick('white').letOrThrow(_playerFromUserGamePick),
-    black: pick('black').letOrThrow(_playerFromUserGamePick),
-    clock: pick('clock').letOrNull(_playableClockDataFromPick),
-    status: pick('game', 'status').asGameStatusOrThrow(),
-    winner: pick('game, winner').asSideOrNull(),
-    boosted: pick('game', 'boosted').asBoolOrNull(),
-    isThreefoldRepetition: pick('game', 'threefold').asBoolOrNull(),
-    youAre: pick('youAre').asSideOrNull(),
-  );
-}
-
-PlayableGameMeta _playableGameMetaFromPick(RequiredPick pick) {
-  return PlayableGameMeta(
-    id: pick('id').asGameIdOrThrow(),
-    rated: pick('rated').asBoolOrThrow(),
-    speed: pick('speed').asSpeedOrThrow(),
-    perf: pick('perf').asPerfOrThrow(),
-    variant: pick('variant').asVariantOrThrow(),
-    source: pick('source').letOrThrow(
-      (pick) =>
-          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
-    ),
-    initialFen: pick('initialFen').asStringOrNull(),
-    startedAtTurn: pick('startedAtTurn').asIntOrNull(),
-    rules: pick('rules').letOrNull(
-      (it) => ISet(
-        pick.asListOrThrow(
-          (e) => GameRule.nameMap[e.asStringOrThrow()] ?? GameRule.unknown,
-        ),
-      ),
-    ),
-  );
-}
-
-Player _playerFromUserGamePick(RequiredPick pick) {
-  return Player(
-    id: pick('user', 'id').asUserIdOrNull(),
-    name: pick('user', 'name').asStringOrNull() ?? 'Stockfish',
-    patron: pick('user', 'patron').asBoolOrNull(),
-    title: pick('user', 'title').asStringOrNull(),
-    rating: pick('rating').asIntOrNull(),
-    provisional: pick('provisional').asBoolOrNull(),
-    ratingDiff: pick('ratingDiff').asIntOrNull(),
-    aiLevel: pick('aiLevel').asIntOrNull(),
-  );
-}
-
-PlayableClockData _playableClockDataFromPick(RequiredPick pick) {
-  return PlayableClockData(
-    initial: pick('initial').asDurationFromSecondsOrThrow(),
-    increment: pick('increment').asDurationFromSecondsOrThrow(),
-    running: pick('running').asBoolOrThrow(),
-    white: pick('white').asDurationFromSecondsOrThrow(),
-    black: pick('black').asDurationFromSecondsOrThrow(),
-    emergency: pick('emerg').asDurationFromSecondsOrNull(),
-    moreTime: pick('moretime').asDurationFromSecondsOrNull(),
-  );
 }
 
 enum GameSource {

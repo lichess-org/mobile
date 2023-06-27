@@ -33,16 +33,16 @@ class GameCtrl extends _$GameCtrl {
     final stream = socket.connect();
 
     final state = stream.firstWhere((e) => e.topic == 'full').then((event) {
-      final data = event.data as Map<String, dynamic>;
-      final game = PlayableGame.fromWebSocketJson(data);
+      final fullEvent =
+          GameFullEvent.fromJson(event.data as Map<String, dynamic>);
 
       _socketSubscription = stream.listen(_handleSocketEvent);
 
-      _socketEventVersion = data['socket'] as int;
+      _socketEventVersion = fullEvent.socketEventVersion;
 
       return GameCtrlState(
-        game: game,
-        stepCursor: game.steps.length - 1,
+        game: fullEvent.game,
+        stepCursor: fullEvent.game.steps.length - 1,
       );
     });
 
@@ -187,23 +187,22 @@ class GameCtrl extends _$GameCtrl {
 
       /// Full game data, received after switching route to /play/<gameId>
       case 'full':
-        final data = event.data as Map<String, dynamic>;
-        final game = PlayableGame.fromWebSocketJson(data);
+        final fullEvent =
+            GameFullEvent.fromJson(event.data as Map<String, dynamic>);
 
-        _socketEventVersion = data['socket'] as int;
+        _socketEventVersion = fullEvent.socketEventVersion;
 
         state = AsyncValue.data(
           GameCtrlState(
-            game: game,
-            stepCursor: game.steps.length - 1,
+            game: fullEvent.game,
+            stepCursor: fullEvent.game.steps.length - 1,
           ),
         );
 
       /// Move event, received after sending a move or receiving a move from the opponent
       case 'move':
         final curState = state.requireValue;
-        final data =
-            SocketMoveEvent.fromJson(event.data as Map<String, dynamic>);
+        final data = MoveEvent.fromJson(event.data as Map<String, dynamic>);
 
         GameCtrlState newState = curState.copyWith(
           game: curState.game.copyWith(

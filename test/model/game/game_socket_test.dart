@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_socket.dart';
 
 void main() {
-  test('decode game from websocket json', () {
+  test('decode game full event from websocket json', () {
     final json = jsonDecode(_gameJson) as Map<String, dynamic>;
-    final game = PlayableGame.fromWebSocketJson(json);
-    expect(game.meta.id, const GameId('nV3DaALy'));
+    final fullEvent = GameFullEvent.fromJson(json);
+    expect(fullEvent.game.meta.id, const GameId('nV3DaALy'));
   });
 }
 
