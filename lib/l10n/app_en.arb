@@ -13,7 +13,7 @@
     }
   },
   "activitySignedUp": "Signed up to lichess.org",
-  "activitySupportedNbMonths": "{count, plural, =1{Supported lichess.org for {count} month as a {param2}} other{Supported lichess.org for {count} months as a {param2}}}",
+  "activitySupportedNbMonths": "{count, plural, =0{Supported lichess.org for {count} month as a {param2}} =1{Supported lichess.org for {count} month as a {param2}} other{Supported lichess.org for {count} months as a {param2}}}",
   "@activitySupportedNbMonths": {
     "placeholders": {
       "count": {
@@ -24,7 +24,7 @@
       }
     }
   },
-  "activityPracticedNbPositions": "{count, plural, =1{Practised {count} position on {param2}} other{Practised {count} positions on {param2}}}",
+  "activityPracticedNbPositions": "{count, plural, =0{Practised {count} position on {param2}} =1{Practised {count} position on {param2}} other{Practised {count} positions on {param2}}}",
   "@activityPracticedNbPositions": {
     "placeholders": {
       "count": {
@@ -35,7 +35,7 @@
       }
     }
   },
-  "activitySolvedNbPuzzles": "{count, plural, =1{Solved {count} tactical puzzle} other{Solved {count} tactical puzzles}}",
+  "activitySolvedNbPuzzles": "{count, plural, =0{Solved {count} tactical puzzle} =1{Solved {count} tactical puzzle} other{Solved {count} tactical puzzles}}",
   "@activitySolvedNbPuzzles": {
     "placeholders": {
       "count": {
@@ -43,7 +43,7 @@
       }
     }
   },
-  "activityPlayedNbGames": "{count, plural, =1{Played {count} {param2} game} other{Played {count} {param2} games}}",
+  "activityPlayedNbGames": "{count, plural, =0{Played {count} {param2} game} =1{Played {count} {param2} game} other{Played {count} {param2} games}}",
   "@activityPlayedNbGames": {
     "placeholders": {
       "count": {
@@ -54,7 +54,7 @@
       }
     }
   },
-  "activityPostedNbMessages": "{count, plural, =1{Posted {count} message in {param2}} other{Posted {count} messages in {param2}}}",
+  "activityPostedNbMessages": "{count, plural, =0{Posted {count} message in {param2}} =1{Posted {count} message in {param2}} other{Posted {count} messages in {param2}}}",
   "@activityPostedNbMessages": {
     "placeholders": {
       "count": {
@@ -65,7 +65,7 @@
       }
     }
   },
-  "activityPlayedNbMoves": "{count, plural, =1{Played {count} move} other{Played {count} moves}}",
+  "activityPlayedNbMoves": "{count, plural, =0{Played {count} move} =1{Played {count} move} other{Played {count} moves}}",
   "@activityPlayedNbMoves": {
     "placeholders": {
       "count": {
@@ -73,7 +73,7 @@
       }
     }
   },
-  "activityInNbCorrespondenceGames": "{count, plural, =1{in {count} correspondence game} other{in {count} correspondence games}}",
+  "activityInNbCorrespondenceGames": "{count, plural, =0{in {count} correspondence game} =1{in {count} correspondence game} other{in {count} correspondence games}}",
   "@activityInNbCorrespondenceGames": {
     "placeholders": {
       "count": {
@@ -81,7 +81,7 @@
       }
     }
   },
-  "activityCompletedNbGames": "{count, plural, =1{Completed {count} correspondence game} other{Completed {count} correspondence games}}",
+  "activityCompletedNbGames": "{count, plural, =0{Completed {count} correspondence game} =1{Completed {count} correspondence game} other{Completed {count} correspondence games}}",
   "@activityCompletedNbGames": {
     "placeholders": {
       "count": {
@@ -89,7 +89,7 @@
       }
     }
   },
-  "activityFollowedNbPlayers": "{count, plural, =1{Started following {count} player} other{Started following {count} players}}",
+  "activityFollowedNbPlayers": "{count, plural, =0{Started following {count} player} =1{Started following {count} player} other{Started following {count} players}}",
   "@activityFollowedNbPlayers": {
     "placeholders": {
       "count": {
@@ -97,7 +97,7 @@
       }
     }
   },
-  "activityGainedNbFollowers": "{count, plural, =1{Gained {count} new follower} other{Gained {count} new followers}}",
+  "activityGainedNbFollowers": "{count, plural, =0{Gained {count} new follower} =1{Gained {count} new follower} other{Gained {count} new followers}}",
   "@activityGainedNbFollowers": {
     "placeholders": {
       "count": {
@@ -105,7 +105,7 @@
       }
     }
   },
-  "activityHostedNbSimuls": "{count, plural, =1{Hosted {count} simultaneous exhibition} other{Hosted {count} simultaneous exhibitions}}",
+  "activityHostedNbSimuls": "{count, plural, =0{Hosted {count} simultaneous exhibition} =1{Hosted {count} simultaneous exhibition} other{Hosted {count} simultaneous exhibitions}}",
   "@activityHostedNbSimuls": {
     "placeholders": {
       "count": {
@@ -113,7 +113,7 @@
       }
     }
   },
-  "activityJoinedNbSimuls": "{count, plural, =1{Participated in {count} simultaneous exhibition} other{Participated in {count} simultaneous exhibitions}}",
+  "activityJoinedNbSimuls": "{count, plural, =0{Participated in {count} simultaneous exhibition} =1{Participated in {count} simultaneous exhibition} other{Participated in {count} simultaneous exhibitions}}",
   "@activityJoinedNbSimuls": {
     "placeholders": {
       "count": {
@@ -121,7 +121,7 @@
       }
     }
   },
-  "activityCreatedNbStudies": "{count, plural, =1{Created {count} new study} other{Created {count} new studies}}",
+  "activityCreatedNbStudies": "{count, plural, =0{Created {count} new study} =1{Created {count} new study} other{Created {count} new studies}}",
   "@activityCreatedNbStudies": {
     "placeholders": {
       "count": {
@@ -129,7 +129,7 @@
       }
     }
   },
-  "activityCompetedInNbTournaments": "{count, plural, =1{Competed in {count} Arena tournament} other{Competed in {count} Arena tournaments}}",
+  "activityCompetedInNbTournaments": "{count, plural, =0{Competed in {count} Arena tournament} =1{Competed in {count} Arena tournament} other{Competed in {count} Arena tournaments}}",
   "@activityCompetedInNbTournaments": {
     "placeholders": {
       "count": {
@@ -137,7 +137,7 @@
       }
     }
   },
-  "activityRankedInTournament": "{count, plural, =1{Ranked #{count} (top {param2}%) with {param3} game in {param4}} other{Ranked #{count} (top {param2}%) with {param3} games in {param4}}}",
+  "activityRankedInTournament": "{count, plural, =0{Ranked #{count} (top {param2}%) with {param3} game in {param4}} =1{Ranked #{count} (top {param2}%) with {param3} game in {param4}} other{Ranked #{count} (top {param2}%) with {param3} games in {param4}}}",
   "@activityRankedInTournament": {
     "placeholders": {
       "count": {
@@ -154,7 +154,7 @@
       }
     }
   },
-  "activityCompetedInNbSwissTournaments": "{count, plural, =1{Competed in {count} swiss tournament} other{Competed in {count} swiss tournaments}}",
+  "activityCompetedInNbSwissTournaments": "{count, plural, =0{Competed in {count} swiss tournament} =1{Competed in {count} swiss tournament} other{Competed in {count} swiss tournaments}}",
   "@activityCompetedInNbSwissTournaments": {
     "placeholders": {
       "count": {
@@ -162,7 +162,7 @@
       }
     }
   },
-  "activityJoinedNbTeams": "{count, plural, =1{Joined {count} team} other{Joined {count} teams}}",
+  "activityJoinedNbTeams": "{count, plural, =0{Joined {count} team} =1{Joined {count} team} other{Joined {count} teams}}",
   "@activityJoinedNbTeams": {
     "placeholders": {
       "count": {
@@ -292,6 +292,7 @@
   },
   "dtzWithRounding": "DTZ50'' with rounding, based on number of half-moves until next capture or pawn move",
   "noGameFound": "No game found",
+  "maxDepthReached": "Max depth reached!",
   "maybeIncludeMoreGamesFromThePreferencesMenu": "Maybe include more games from the preferences menu?",
   "openings": "Openings",
   "openingExplorer": "Opening explorer",
@@ -304,6 +305,7 @@
       }
     }
   },
+  "playFirstOpeningEndgameExplorerMove": "Play first opening/endgame-explorer move",
   "winPreventedBy50MoveRule": "Win prevented by 50-move rule",
   "lossSavedBy50MoveRule": "Loss prevented by 50-move rule",
   "winOr50MovesByPriorMistake": "Win or 50 moves by prior mistake",
@@ -325,6 +327,7 @@
   "memory": "Memory",
   "infiniteAnalysis": "Infinite analysis",
   "removesTheDepthLimit": "Removes the depth limit, and keeps your computer warm",
+  "engineManager": "Engine manager",
   "blunder": "Blunder",
   "mistake": "Mistake",
   "inaccuracy": "Inaccuracy",
@@ -548,6 +551,7 @@
   "tournamentPoints": "Tournament points",
   "viewTournament": "View tournament",
   "backToTournament": "Back to tournament",
+  "noDrawBeforeSwissLimit": "You cannot draw before 30 moves are played in a Swiss tournament.",
   "thematic": "Thematic",
   "yourPerfRatingIsProvisional": "Your {param} rating is provisional",
   "@yourPerfRatingIsProvisional": {
@@ -830,7 +834,7 @@
   "ifNoneLeaveEmpty": "If none, leave empty",
   "profile": "Profile",
   "editProfile": "Edit profile",
-  "firstName": "Given name",
+  "firstName": "First name",
   "lastName": "Surname",
   "biography": "Biography",
   "countryOrFlag": "Country or flag",
@@ -1135,6 +1139,11 @@
   "keyGoToStartOrEnd": "go to start/end",
   "keyShowOrHideComments": "show/hide comments",
   "keyEnterOrExitVariation": "enter/exit variation",
+  "keyRequestComputerAnalysis": "Request computer analysis, Learn from your mistakes",
+  "keyNextLearnFromYourMistakes": "Next (Learn from your mistakes)",
+  "keyNextBlunder": "Next blunder",
+  "keyNextMistake": "Next mistake",
+  "keyNextInaccuracy": "Next inaccuracy",
   "newTournament": "New tournament",
   "tournamentHomeTitle": "Chess tournaments featuring various time controls and variants",
   "tournamentHomeDescription": "Play fast-paced chess tournaments! Join an official scheduled tournament, or create your own. Bullet, Blitz, Classical, Chess960, King of the Hill, Threecheck, and more options available for endless chess fun.",
@@ -1336,6 +1345,14 @@
   "invalidFen": "Invalid FEN",
   "custom": "Custom",
   "notifications": "Notifications",
+  "notificationsX": "Notifications: {param1}",
+  "@notificationsX": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      }
+    }
+  },
   "perfRatingX": "Rating: {param}",
   "@perfRatingX": {
     "placeholders": {
@@ -1488,6 +1505,15 @@
     }
   },
   "tryTheContactPage": "try the contact page",
+  "makeSureToRead": "Make sure to read {param1}",
+  "@makeSureToRead": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      }
+    }
+  },
+  "theForumEtiquette": "the forum etiquette",
   "thisTopicIsArchived": "This topic has been archived and can no longer be replied to.",
   "joinTheTeamXToPost": "Join the {param1}, to post in this forum",
   "@joinTheTeamXToPost": {
@@ -1576,8 +1602,6 @@
       }
     }
   },
-  "someoneReviewedYourCoachProfile": "Someone reviewed your coach profile.",
-  "newPendingReview": "New pending review",
   "lostAgainstTOSViolator": "You lost rating points to someone who violated the Lichess TOS",
   "refundXpointsTimeControlY": "Refund: {param1} {param2} rating points.",
   "@refundXpointsTimeControlY": {
@@ -1684,7 +1708,7 @@
   "switchSides": "Switch sides",
   "closingAccountWithdrawAppeal": "Closing your account will withdraw your appeal",
   "ourEventTips": "Our tips for organising events",
-  "opponentLeftCounter": "{count, plural, =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}",
+  "opponentLeftCounter": "{count, plural, =0{Your opponent left the game. You can claim victory in {count} second.} =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}",
   "@opponentLeftCounter": {
     "placeholders": {
       "count": {
@@ -1692,7 +1716,7 @@
       }
     }
   },
-  "mateInXHalfMoves": "{count, plural, =1{Mate in {count} half-move} other{Mate in {count} half-moves}}",
+  "mateInXHalfMoves": "{count, plural, =0{Mate in {count} half-move} =1{Mate in {count} half-move} other{Mate in {count} half-moves}}",
   "@mateInXHalfMoves": {
     "placeholders": {
       "count": {
@@ -1700,7 +1724,7 @@
       }
     }
   },
-  "nbBlunders": "{count, plural, =1{{count} blunder} other{{count} blunders}}",
+  "nbBlunders": "{count, plural, =0{{count} blunder} =1{{count} blunder} other{{count} blunders}}",
   "@nbBlunders": {
     "placeholders": {
       "count": {
@@ -1708,7 +1732,7 @@
       }
     }
   },
-  "nbMistakes": "{count, plural, =1{{count} mistake} other{{count} mistakes}}",
+  "nbMistakes": "{count, plural, =0{{count} mistake} =1{{count} mistake} other{{count} mistakes}}",
   "@nbMistakes": {
     "placeholders": {
       "count": {
@@ -1716,7 +1740,7 @@
       }
     }
   },
-  "nbInaccuracies": "{count, plural, =1{{count} inaccuracy} other{{count} inaccuracies}}",
+  "nbInaccuracies": "{count, plural, =0{{count} inaccuracy} =1{{count} inaccuracy} other{{count} inaccuracies}}",
   "@nbInaccuracies": {
     "placeholders": {
       "count": {
@@ -1724,7 +1748,7 @@
       }
     }
   },
-  "nbPlayers": "{count, plural, =1{{count} player} other{{count} players}}",
+  "nbPlayers": "{count, plural, =0{{count} player} =1{{count} player} other{{count} players}}",
   "@nbPlayers": {
     "placeholders": {
       "count": {
@@ -1732,7 +1756,7 @@
       }
     }
   },
-  "nbGames": "{count, plural, =1{{count} game} other{{count} games}}",
+  "nbGames": "{count, plural, =0{{count} game} =1{{count} game} other{{count} games}}",
   "@nbGames": {
     "placeholders": {
       "count": {
@@ -1740,7 +1764,18 @@
       }
     }
   },
-  "nbBookmarks": "{count, plural, =1{{count} bookmark} other{{count} bookmarks}}",
+  "ratingXOverYGames": "{count, plural, =0{{count} rating over {param2} game} =1{{count} rating over {param2} game} other{{count} rating over {param2} games}}",
+  "@ratingXOverYGames": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "nbBookmarks": "{count, plural, =0{{count} bookmark} =1{{count} bookmark} other{{count} bookmarks}}",
   "@nbBookmarks": {
     "placeholders": {
       "count": {
@@ -1748,7 +1783,7 @@
       }
     }
   },
-  "nbDays": "{count, plural, =1{{count} day} other{{count} days}}",
+  "nbDays": "{count, plural, =0{{count} day} =1{{count} day} other{{count} days}}",
   "@nbDays": {
     "placeholders": {
       "count": {
@@ -1756,7 +1791,7 @@
       }
     }
   },
-  "nbHours": "{count, plural, =1{{count} hour} other{{count} hours}}",
+  "nbHours": "{count, plural, =0{{count} hour} =1{{count} hour} other{{count} hours}}",
   "@nbHours": {
     "placeholders": {
       "count": {
@@ -1764,7 +1799,7 @@
       }
     }
   },
-  "nbMinutes": "{count, plural, =1{{count} minute} other{{count} minutes}}",
+  "nbMinutes": "{count, plural, =0{{count} minute} =1{{count} minute} other{{count} minutes}}",
   "@nbMinutes": {
     "placeholders": {
       "count": {
@@ -1772,7 +1807,7 @@
       }
     }
   },
-  "rankIsUpdatedEveryNbMinutes": "{count, plural, =1{Rank is updated every minute} other{Rank is updated every {count} minutes}}",
+  "rankIsUpdatedEveryNbMinutes": "{count, plural, =0{Rank is updated every minute} =1{Rank is updated every minute} other{Rank is updated every {count} minutes}}",
   "@rankIsUpdatedEveryNbMinutes": {
     "placeholders": {
       "count": {
@@ -1780,7 +1815,7 @@
       }
     }
   },
-  "nbPuzzles": "{count, plural, =1{{count} puzzle} other{{count} puzzles}}",
+  "nbPuzzles": "{count, plural, =0{{count} puzzle} =1{{count} puzzle} other{{count} puzzles}}",
   "@nbPuzzles": {
     "placeholders": {
       "count": {
@@ -1788,7 +1823,7 @@
       }
     }
   },
-  "nbGamesWithYou": "{count, plural, =1{{count} game with you} other{{count} games with you}}",
+  "nbGamesWithYou": "{count, plural, =0{{count} game with you} =1{{count} game with you} other{{count} games with you}}",
   "@nbGamesWithYou": {
     "placeholders": {
       "count": {
@@ -1796,7 +1831,7 @@
       }
     }
   },
-  "nbRated": "{count, plural, =1{{count} rated} other{{count} rated}}",
+  "nbRated": "{count, plural, =0{{count} rated} =1{{count} rated} other{{count} rated}}",
   "@nbRated": {
     "placeholders": {
       "count": {
@@ -1804,7 +1839,7 @@
       }
     }
   },
-  "nbWins": "{count, plural, =1{{count} win} other{{count} wins}}",
+  "nbWins": "{count, plural, =0{{count} win} =1{{count} win} other{{count} wins}}",
   "@nbWins": {
     "placeholders": {
       "count": {
@@ -1812,7 +1847,7 @@
       }
     }
   },
-  "nbLosses": "{count, plural, =1{{count} loss} other{{count} losses}}",
+  "nbLosses": "{count, plural, =0{{count} loss} =1{{count} loss} other{{count} losses}}",
   "@nbLosses": {
     "placeholders": {
       "count": {
@@ -1820,7 +1855,7 @@
       }
     }
   },
-  "nbDraws": "{count, plural, =1{{count} draw} other{{count} draws}}",
+  "nbDraws": "{count, plural, =0{{count} draw} =1{{count} draw} other{{count} draws}}",
   "@nbDraws": {
     "placeholders": {
       "count": {
@@ -1828,7 +1863,7 @@
       }
     }
   },
-  "nbPlaying": "{count, plural, =1{{count} playing} other{{count} playing}}",
+  "nbPlaying": "{count, plural, =0{{count} playing} =1{{count} playing} other{{count} playing}}",
   "@nbPlaying": {
     "placeholders": {
       "count": {
@@ -1836,7 +1871,7 @@
       }
     }
   },
-  "giveNbSeconds": "{count, plural, =1{Give {count} second} other{Give {count} seconds}}",
+  "giveNbSeconds": "{count, plural, =0{Give {count} second} =1{Give {count} second} other{Give {count} seconds}}",
   "@giveNbSeconds": {
     "placeholders": {
       "count": {
@@ -1844,7 +1879,7 @@
       }
     }
   },
-  "nbTournamentPoints": "{count, plural, =1{{count} tournament point} other{{count} tournament points}}",
+  "nbTournamentPoints": "{count, plural, =0{{count} tournament point} =1{{count} tournament point} other{{count} tournament points}}",
   "@nbTournamentPoints": {
     "placeholders": {
       "count": {
@@ -1852,7 +1887,7 @@
       }
     }
   },
-  "nbStudies": "{count, plural, =1{{count} study} other{{count} studies}}",
+  "nbStudies": "{count, plural, =0{{count} study} =1{{count} study} other{{count} studies}}",
   "@nbStudies": {
     "placeholders": {
       "count": {
@@ -1860,7 +1895,15 @@
       }
     }
   },
-  "moreThanNbRatedGames": "{count, plural, =1{≥ {count} rated game} other{≥ {count} rated games}}",
+  "nbSimuls": "{count, plural, =0{{count} simul} =1{{count} simul} other{{count} simuls}}",
+  "@nbSimuls": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "moreThanNbRatedGames": "{count, plural, =0{≥ {count} rated game} =1{≥ {count} rated game} other{≥ {count} rated games}}",
   "@moreThanNbRatedGames": {
     "placeholders": {
       "count": {
@@ -1868,7 +1911,7 @@
       }
     }
   },
-  "moreThanNbPerfRatedGames": "{count, plural, =1{≥ {count} {param2} rated game} other{≥ {count} {param2} rated games}}",
+  "moreThanNbPerfRatedGames": "{count, plural, =0{≥ {count} {param2} rated game} =1{≥ {count} {param2} rated game} other{≥ {count} {param2} rated games}}",
   "@moreThanNbPerfRatedGames": {
     "placeholders": {
       "count": {
@@ -1879,7 +1922,7 @@
       }
     }
   },
-  "needNbMorePerfGames": "{count, plural, =1{You need to play {count} more {param2} rated game} other{You need to play {count} more {param2} rated games}}",
+  "needNbMorePerfGames": "{count, plural, =0{You need to play {count} more {param2} rated game} =1{You need to play {count} more {param2} rated game} other{You need to play {count} more {param2} rated games}}",
   "@needNbMorePerfGames": {
     "placeholders": {
       "count": {
@@ -1890,7 +1933,7 @@
       }
     }
   },
-  "needNbMoreGames": "{count, plural, =1{You need to play {count} more rated game} other{You need to play {count} more rated games}}",
+  "needNbMoreGames": "{count, plural, =0{You need to play {count} more rated game} =1{You need to play {count} more rated game} other{You need to play {count} more rated games}}",
   "@needNbMoreGames": {
     "placeholders": {
       "count": {
@@ -1898,7 +1941,7 @@
       }
     }
   },
-  "nbImportedGames": "{count, plural, =1{{count} imported game} other{{count} imported games}}",
+  "nbImportedGames": "{count, plural, =0{{count} imported game} =1{{count} imported game} other{{count} imported games}}",
   "@nbImportedGames": {
     "placeholders": {
       "count": {
@@ -1906,7 +1949,7 @@
       }
     }
   },
-  "nbFriendsOnline": "{count, plural, =1{{count} friend online} other{{count} friends online}}",
+  "nbFriendsOnline": "{count, plural, =0{{count} friend online} =1{{count} friend online} other{{count} friends online}}",
   "@nbFriendsOnline": {
     "placeholders": {
       "count": {
@@ -1914,7 +1957,7 @@
       }
     }
   },
-  "nbFollowers": "{count, plural, =1{{count} follower} other{{count} followers}}",
+  "nbFollowers": "{count, plural, =0{{count} follower} =1{{count} follower} other{{count} followers}}",
   "@nbFollowers": {
     "placeholders": {
       "count": {
@@ -1922,7 +1965,7 @@
       }
     }
   },
-  "nbFollowing": "{count, plural, =1{{count} following} other{{count} following}}",
+  "nbFollowing": "{count, plural, =0{{count} following} =1{{count} following} other{{count} following}}",
   "@nbFollowing": {
     "placeholders": {
       "count": {
@@ -1930,7 +1973,7 @@
       }
     }
   },
-  "lessThanNbMinutes": "{count, plural, =1{Less than {count} minute} other{Less than {count} minutes}}",
+  "lessThanNbMinutes": "{count, plural, =0{Less than {count} minute} =1{Less than {count} minute} other{Less than {count} minutes}}",
   "@lessThanNbMinutes": {
     "placeholders": {
       "count": {
@@ -1938,7 +1981,7 @@
       }
     }
   },
-  "nbGamesInPlay": "{count, plural, =1{{count} game in play} other{{count} games in play}}",
+  "nbGamesInPlay": "{count, plural, =0{{count} game in play} =1{{count} game in play} other{{count} games in play}}",
   "@nbGamesInPlay": {
     "placeholders": {
       "count": {
@@ -1946,7 +1989,7 @@
       }
     }
   },
-  "maximumNbCharacters": "{count, plural, =1{Maximum: {count} character.} other{Maximum: {count} characters.}}",
+  "maximumNbCharacters": "{count, plural, =0{Maximum: {count} character.} =1{Maximum: {count} character.} other{Maximum: {count} characters.}}",
   "@maximumNbCharacters": {
     "placeholders": {
       "count": {
@@ -1954,7 +1997,7 @@
       }
     }
   },
-  "blocks": "{count, plural, =1{{count} block} other{{count} blocks}}",
+  "blocks": "{count, plural, =0{{count} block} =1{{count} block} other{{count} blocks}}",
   "@blocks": {
     "placeholders": {
       "count": {
@@ -1962,7 +2005,7 @@
       }
     }
   },
-  "nbForumPosts": "{count, plural, =1{{count} forum post} other{{count} forum posts}}",
+  "nbForumPosts": "{count, plural, =0{{count} forum post} =1{{count} forum post} other{{count} forum posts}}",
   "@nbForumPosts": {
     "placeholders": {
       "count": {
@@ -1970,7 +2013,7 @@
       }
     }
   },
-  "nbPerfTypePlayersThisWeek": "{count, plural, =1{{count} {param2} player this week.} other{{count} {param2} players this week.}}",
+  "nbPerfTypePlayersThisWeek": "{count, plural, =0{{count} {param2} player this week.} =1{{count} {param2} player this week.} other{{count} {param2} players this week.}}",
   "@nbPerfTypePlayersThisWeek": {
     "placeholders": {
       "count": {
@@ -1981,7 +2024,7 @@
       }
     }
   },
-  "availableInNbLanguages": "{count, plural, =1{Available in {count} language!} other{Available in {count} languages!}}",
+  "availableInNbLanguages": "{count, plural, =0{Available in {count} language!} =1{Available in {count} language!} other{Available in {count} languages!}}",
   "@availableInNbLanguages": {
     "placeholders": {
       "count": {
@@ -1989,7 +2032,7 @@
       }
     }
   },
-  "nbSecondsToPlayTheFirstMove": "{count, plural, =1{{count} second to play the first move} other{{count} seconds to play the first move}}",
+  "nbSecondsToPlayTheFirstMove": "{count, plural, =0{{count} second to play the first move} =1{{count} second to play the first move} other{{count} seconds to play the first move}}",
   "@nbSecondsToPlayTheFirstMove": {
     "placeholders": {
       "count": {
@@ -1997,7 +2040,7 @@
       }
     }
   },
-  "nbSeconds": "{count, plural, =1{{count} second} other{{count} seconds}}",
+  "nbSeconds": "{count, plural, =0{{count} second} =1{{count} second} other{{count} seconds}}",
   "@nbSeconds": {
     "placeholders": {
       "count": {
@@ -2005,7 +2048,7 @@
       }
     }
   },
-  "andSaveNbPremoveLines": "{count, plural, =1{and save {count} premove line} other{and save {count} premove lines}}",
+  "andSaveNbPremoveLines": "{count, plural, =0{and save {count} premove line} =1{and save {count} premove line} other{and save {count} premove lines}}",
   "@andSaveNbPremoveLines": {
     "placeholders": {
       "count": {
@@ -2136,7 +2179,7 @@
   "puzzleNoPuzzlesToShow": "Nothing to show, go play some puzzles first!",
   "puzzleImprovementAreasDescription": "Train these to optimize your progress!",
   "puzzleStrengthDescription": "You perform the best in these themes",
-  "puzzlePlayedXTimes": "{count, plural, =1{Played {count} time} other{Played {count} times}}",
+  "puzzlePlayedXTimes": "{count, plural, =0{Played {count} time} =1{Played {count} time} other{Played {count} times}}",
   "@puzzlePlayedXTimes": {
     "placeholders": {
       "count": {
@@ -2144,7 +2187,7 @@
       }
     }
   },
-  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{One point below your puzzle rating} other{{count} points below your puzzle rating}}",
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =0{One point below your puzzle rating} =1{One point below your puzzle rating} other{{count} points below your puzzle rating}}",
   "@puzzleNbPointsBelowYourPuzzleRating": {
     "placeholders": {
       "count": {
@@ -2152,7 +2195,7 @@
       }
     }
   },
-  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{One point above your puzzle rating} other{{count} points above your puzzle rating}}",
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =0{One point above your puzzle rating} =1{One point above your puzzle rating} other{{count} points above your puzzle rating}}",
   "@puzzleNbPointsAboveYourPuzzleRating": {
     "placeholders": {
       "count": {
@@ -2485,7 +2528,7 @@
   "streamerStreamerLanguageSettings": "The Lichess streamer page targets your audience with the language provided by your streaming platform. Set the correct default language for your chess streams in the app or service you use to broadcast.",
   "streamerTwitchUsername": "Your Twitch username or URL",
   "streamerOptionalOrEmpty": "Optional. Leave empty if none",
-  "streamerYoutubeChannel": "Your YouTube channel ID or URL",
+  "streamerYouTubeChannelId": "Your YouTube channel ID",
   "streamerStreamerName": "Your streamer name on Lichess",
   "streamerVisibility": "Visible on the streamers page",
   "streamerWhenApproved": "When approved by moderators",
@@ -2510,7 +2553,7 @@
       }
     }
   },
-  "streamerKeepItShort": "{count, plural, =1{Keep it short: {count} character max} other{Keep it short: {count} characters max}}",
+  "streamerKeepItShort": "{count, plural, =0{Keep it short: {count} character max} =1{Keep it short: {count} character max} other{Keep it short: {count} characters max}}",
   "@streamerKeepItShort": {
     "placeholders": {
       "count": {
@@ -2590,7 +2633,7 @@
   "stormClickToReload": "Click to reload",
   "stormThisRunHasExpired": "This run has expired!",
   "stormThisRunWasOpenedInAnotherTab": "This run was opened in another tab!",
-  "stormXRuns": "{count, plural, =1{1 run} other{{count} runs}}",
+  "stormXRuns": "{count, plural, =0{1 run} =1{1 run} other{{count} runs}}",
   "@stormXRuns": {
     "placeholders": {
       "count": {
@@ -2598,7 +2641,7 @@
       }
     }
   },
-  "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =1{Played one run of {param2}} other{Played {count} runs of {param2}}}",
+  "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Played one run of {param2}} =1{Played one run of {param2}} other{Played {count} runs of {param2}}}",
   "@stormPlayedNbRunsOfPuzzleStorm": {
     "placeholders": {
       "count": {

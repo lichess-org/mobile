@@ -228,6 +228,18 @@ function transformTranslations(data, locale, module, makeTemplate = false) {
       count: { type: 'int' }
     };
     let pluralString = '{count, plural,'
+
+    // add a zero quantity item if it doesn't exist
+    // to avoid translations like "0 players"
+    if (!plural.item.some((item) => item.$.quantity === 'zero')) {
+      const oneItem = plural.item.find((item) => item.$.quantity === 'one')
+      if (oneItem) {
+        plural.item.unshift({
+          $: { quantity: 'zero' },
+          _: oneItem._
+        })
+      }
+    }
     plural.item.forEach((child) => {
       const string = unescape(child._);
       let transformedString;
