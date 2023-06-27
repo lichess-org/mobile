@@ -117,6 +117,8 @@ Player _playerFromUserGamePick(RequiredPick pick) {
     provisional: pick('provisional').asBoolOrNull(),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     aiLevel: pick('aiLevel').asIntOrNull(),
+    onGame: pick('onGame').asBoolOrNull(),
+    isGone: pick('isGone').asBoolOrNull(),
   );
 }
 

@@ -308,6 +308,41 @@ class GameCtrl extends _$GameCtrl {
 
         state = AsyncValue.data(newState);
 
+      /// Crowd event, sent when a player quits or joins the game
+      case 'crowd':
+        final data = event.data as Map<String, dynamic>;
+        final whiteOnGame = data['white'] as bool?;
+        final blackOnGame = data['black'] as bool?;
+        final curState = state.requireValue;
+        GameCtrlState newState = curState;
+        if (whiteOnGame != null) {
+          newState = newState.copyWith.game(
+            white: newState.game.white.setOnGame(whiteOnGame),
+          );
+        }
+        if (blackOnGame != null) {
+          newState = newState.copyWith.game(
+            black: newState.game.black.setOnGame(blackOnGame),
+          );
+        }
+        state = AsyncValue.data(newState);
+
+      /// Gone event, sent when the opponent has quit the game for long enough
+      /// than we can claim victory
+      case 'gone':
+        final isGone = event.data as bool;
+        GameCtrlState newState = state.requireValue;
+        final youAre = newState.game.youAre;
+        newState = newState.copyWith.game(
+          white: youAre == Side.white
+              ? newState.game.white
+              : newState.game.white.setGone(isGone),
+          black: youAre == Side.black
+              ? newState.game.black
+              : newState.game.black.setGone(isGone),
+        );
+        state = AsyncValue.data(newState);
+
       default:
         break;
     }

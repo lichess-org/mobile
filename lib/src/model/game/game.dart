@@ -68,7 +68,7 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
     ({Duration idle, Duration timeToMove, DateTime movedAt})? expiration,
   }) = _PlayableGame;
 
-  bool get hasAi => white.aiLevel != null || black.aiLevel != null;
+  bool get hasAI => white.isAI || black.isAI;
 
   bool get playable => status.value < GameStatus.aborted.value;
   bool get abortable =>
@@ -76,7 +76,7 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
       lastPosition.fullmoves <= 1 &&
       (meta.rules == null || !meta.rules!.contains(GameRule.noAbort));
   bool get resignable => playable && !abortable;
-  bool get drawable => playable && lastPosition.fullmoves >= 2 && !hasAi;
+  bool get drawable => playable && lastPosition.fullmoves >= 2 && !hasAI;
 }
 
 enum GameSource {

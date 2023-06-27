@@ -12,12 +12,21 @@ class Player with _$Player {
   const factory Player({
     UserId? id,
     required String name,
-    int? rating,
-    int? ratingDiff,
-    bool? provisional,
     String? title,
     bool? patron,
     int? aiLevel,
+    int? rating,
+    int? ratingDiff,
+
+    /// if true, the rating is not definitive yet
+    bool? provisional,
+
+    /// Whether the player is connected to the game websocket
+    bool? onGame,
+
+    /// Is true if the player is disconnected from the game long enough that the
+    /// opponent can claim a win
+    bool? isGone,
   }) = _Player;
 
   LightUser? get lightUser => id != null
@@ -28,4 +37,16 @@ class Player with _$Player {
           isPatron: patron,
         )
       : null;
+
+  bool get isAI => aiLevel != null;
+
+  Player setOnGame(bool onGame) {
+    final isOnGame = onGame || isAI;
+    return copyWith(onGame: isOnGame, isGone: isOnGame ? false : isGone);
+  }
+
+  Player setGone(bool isGone) {
+    final goneButNoAI = isGone && !isAI;
+    return copyWith(isGone: goneButNoAI, onGame: goneButNoAI ? false : onGame);
+  }
 }
