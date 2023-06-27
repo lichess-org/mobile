@@ -258,6 +258,22 @@ class GameCtrl extends _$GameCtrl {
           );
         }
 
+        if (newState.game.expiration != null) {
+          if (newState.game.steps.length > 2) {
+            newState = newState.copyWith.game(
+              expiration: null,
+            );
+          } else {
+            newState = curState.copyWith.game(
+              expiration: (
+                idle: curState.game.expiration!.idle,
+                timeToMove: curState.game.expiration!.timeToMove,
+                movedAt: DateTime.now(),
+              ),
+            );
+          }
+        }
+
         state = AsyncValue.data(newState);
 
       /// End game event
@@ -325,6 +341,20 @@ class GameCtrlState with _$GameCtrlState {
   bool get isReplaying => stepCursor < game.steps.length - 1;
   bool get canGoForward => stepCursor < game.steps.length - 1;
   bool get canGoBackward => stepCursor > 0;
+
+  /// Time left to move for the active player if an expiration is set
+  Duration? get timeToMove {
+    if (!game.playable || game.expiration == null) {
+      return null;
+    }
+    final timeLeft = game.expiration!.movedAt.difference(DateTime.now()) +
+        game.expiration!.timeToMove;
+
+    if (timeLeft.isNegative) {
+      return Duration.zero;
+    }
+    return timeLeft;
+  }
 
   Side? get activeClockSide {
     if (game.clock == null) {

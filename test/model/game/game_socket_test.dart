@@ -57,7 +57,7 @@ const _gameJson = '''
     "moretime": 15
   },
   "expiration": {
-    "idleMillis": 1685698678950,
+    "idleMillis": 245,
     "millisToMove": 30000
   }
 }

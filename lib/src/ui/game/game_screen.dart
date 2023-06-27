@@ -207,12 +207,19 @@ class _Body extends ConsumerWidget {
       }
     });
 
+    final position = gameState.game.positionAt(gameState.stepCursor);
+    final sideToMove = position.turn;
+    final youAre = gameState.game.youAre ?? Side.white;
+
     final black = BoardPlayer(
       player: gameState.game.black,
       clock: gameState.game.clock?.black,
       active: gameState.activeClockSide == Side.black,
       materialDiff:
           gameState.game.materialDiffAt(gameState.stepCursor, Side.black),
+      timeToMove: sideToMove == Side.black ? gameState.timeToMove : null,
+      shouldLinkToUserProfile: youAre != Side.black,
+      mePlaying: youAre == Side.black,
     );
     final white = BoardPlayer(
       player: gameState.game.white,
@@ -220,11 +227,13 @@ class _Body extends ConsumerWidget {
       active: gameState.activeClockSide == Side.white,
       materialDiff:
           gameState.game.materialDiffAt(gameState.stepCursor, Side.white),
+      timeToMove: sideToMove == Side.white ? gameState.timeToMove : null,
+      shouldLinkToUserProfile: youAre != Side.white,
+      mePlaying: youAre == Side.white,
     );
-    final orientation = gameState.game.youAre ?? Side.white;
-    final topPlayer = orientation == Side.white ? black : white;
-    final bottomPlayer = orientation == Side.white ? white : black;
-    final position = gameState.game.positionAt(gameState.stepCursor);
+
+    final topPlayer = youAre == Side.white ? black : white;
+    final bottomPlayer = youAre == Side.white ? white : black;
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
 
     final content = Column(
@@ -236,16 +245,15 @@ class _Body extends ConsumerWidget {
                 boardData: cg.BoardData(
                   interactableSide:
                       gameState.game.playable && !gameState.isReplaying
-                          ? orientation == Side.white
+                          ? youAre == Side.white
                               ? cg.InteractableSide.white
                               : cg.InteractableSide.black
                           : cg.InteractableSide.none,
-                  orientation:
-                      isBoardTurned ? orientation.opposite.cg : orientation.cg,
+                  orientation: isBoardTurned ? youAre.opposite.cg : youAre.cg,
                   fen: position.fen,
                   lastMove: gameState.game.moveAt(gameState.stepCursor)?.cg,
                   isCheck: position.isCheck,
-                  sideToMove: position.turn.cg,
+                  sideToMove: sideToMove.cg,
                   validMoves: algebraicLegalMoves(position),
                   onMove: (move, {isPremove}) {
                     ref

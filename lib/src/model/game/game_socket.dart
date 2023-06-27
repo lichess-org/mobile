@@ -72,10 +72,14 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
     isThreefoldRepetition: pick('game', 'threefold').asBoolOrNull(),
     youAre: pick('youAre').asSideOrNull(),
     expiration: pick('expiration').letOrNull(
-      (it) => (
-        idle: it('idleMillis').asDateTimeFromMillisecondsOrThrow(),
-        timeToMove: it('millisToMove').asDurationFromMilliSecondsOrThrow(),
-      ),
+      (it) {
+        final idle = it('idleMillis').asDurationFromMilliSecondsOrThrow();
+        return (
+          idle: idle,
+          timeToMove: it('millisToMove').asDurationFromMilliSecondsOrThrow(),
+          movedAt: DateTime.now().subtract(idle),
+        );
+      },
     ),
   );
 }

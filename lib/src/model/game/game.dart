@@ -57,12 +57,15 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
     required Player white,
     required Player black,
     required GameStatus status,
+
+    /// The side that the current player is playing as. This is null if viewing
+    /// the game as a spectator.
     Side? youAre,
     PlayableClockData? clock,
     bool? boosted,
     bool? isThreefoldRepetition,
     Side? winner,
-    ({DateTime idle, Duration timeToMove})? expiration,
+    ({Duration idle, Duration timeToMove, DateTime movedAt})? expiration,
   }) = _PlayableGame;
 
   bool get hasAi => white.aiLevel != null || black.aiLevel != null;

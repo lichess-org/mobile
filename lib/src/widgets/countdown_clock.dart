@@ -1,8 +1,8 @@
 import 'dart:math' as math;
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/constants.dart';

@@ -212,7 +212,7 @@ class AuthSocket {
   void _sendPing() {
     _pingTimer?.cancel();
     sink?.add(
-      _pongCount % 10 == 0
+      _pongCount % 10 == 2
           ? jsonEncode({
               't': 'p',
               'l': _ref.read(averageLagProvider).inMilliseconds,
