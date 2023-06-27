@@ -62,6 +62,7 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
     bool? boosted,
     bool? isThreefoldRepetition,
     Side? winner,
+    ({DateTime idle, Duration timeToMove})? expiration,
   }) = _PlayableGame;
 
   bool get hasAi => white.aiLevel != null || black.aiLevel != null;

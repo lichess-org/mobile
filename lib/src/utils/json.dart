@@ -130,11 +130,34 @@ extension TimeExtension on Pick {
     );
   }
 
-  /// Matches a DateTime from milliseconds since unix epoch.
+  /// Matches a Duration from seconds
   Duration? asDurationFromSecondsOrNull() {
     if (value == null) return null;
     try {
       return asDurationFromSecondsOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Matches a Duration from milliseconds
+  Duration asDurationFromMilliSecondsOrThrow() {
+    final value = required().value;
+    if (value is Duration) {
+      return value;
+    }
+    if (value is int) {
+      return Duration(milliseconds: value);
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to Duration",
+    );
+  }
+
+  Duration? asDurationFromMilliSecondsOrNull() {
+    if (value == null) return null;
+    try {
+      return asDurationFromMilliSecondsOrThrow();
     } catch (_) {
       return null;
     }

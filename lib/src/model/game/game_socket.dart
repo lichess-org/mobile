@@ -71,6 +71,12 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
     boosted: pick('game', 'boosted').asBoolOrNull(),
     isThreefoldRepetition: pick('game', 'threefold').asBoolOrNull(),
     youAre: pick('youAre').asSideOrNull(),
+    expiration: pick('expiration').letOrNull(
+      (it) => (
+        idle: it('idleMillis').asDateTimeFromMillisecondsOrThrow(),
+        timeToMove: it('millisToMove').asDurationFromMilliSecondsOrThrow(),
+      ),
+    ),
   );
 }
 

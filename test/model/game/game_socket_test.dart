@@ -55,6 +55,10 @@ const _gameJson = '''
     "black": 775.94,
     "emerg": 60,
     "moretime": 15
+  },
+  "expiration": {
+    "idleMillis": 1685698678950,
+    "millisToMove": 30000
   }
 }
 ''';
