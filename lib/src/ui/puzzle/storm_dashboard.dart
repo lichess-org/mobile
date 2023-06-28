@@ -98,22 +98,18 @@ class _Body extends ConsumerWidget {
                           Text(
                             textAlign: TextAlign.center,
                             context.l10n.stormScore,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Text(
                             textAlign: TextAlign.center,
                             context.l10n.stormTime,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Text(
                             textAlign: TextAlign.center,
                             context.l10n.stormHighestSolved,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Text(
                             textAlign: TextAlign.center,
                             context.l10n.stormRuns,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -128,14 +124,14 @@ class _Body extends ConsumerWidget {
                         // Date row
                         final entryIndex = index ~/ 2;
                         return ColoredBox(
-                          color: LichessColors.grey.withOpacity(0.25),
+                          color: LichessColors.grey.withOpacity(0.23),
                           child: Padding(
                             padding: Styles.horizontalBodyPadding,
                             child: Text(
                               dateFormat
                                   .format(data.dayHighscores[entryIndex].day),
                               style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
+                                  const TextStyle(fontWeight: FontWeight.w600),
                             ),
                           ),
                         );
