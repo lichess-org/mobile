@@ -18,7 +18,7 @@ default_platform(:android)
 platform :android do
   desc "Deploy an internal test version to Google Play"
   lane :internal_test do
-    sh "flutter build appbundle -v --dart-define=LICHESS_HOST=https://lichess.org"
+    sh "flutter build appbundle -v --dart-define=LICHESS_HOST=https://lichess.org --dart-define=LICHESS_WS_HOST=wss://socket.lichess.org" + options[:wssecret] ? " --dart-define=LICHESS_WS_SECRET=#{options[:wssecret]}" : ""
     upload_to_play_store(
       track: 'internal',
       aab: '../build/app/outputs/bundle/release/app-release.aab',
@@ -30,7 +30,7 @@ end
 platform :android do
   desc "Deploy an closed test version to Google Play"
   lane :alpha do
-    sh "flutter build appbundle -v --dart-define=LICHESS_HOST=https://lichess.org"
+    sh "flutter build appbundle -v --dart-define=LICHESS_HOST=https://lichess.org --dart-define=LICHESS_WS_HOST=wss://socket.lichess.org" + options[:wssecret] ? " --dart-define=LICHESS_WS_SECRET=#{options[:wssecret]}" : ""
     upload_to_play_store(
       track: 'alpha',
       aab: '../build/app/outputs/bundle/release/app-release.aab',
