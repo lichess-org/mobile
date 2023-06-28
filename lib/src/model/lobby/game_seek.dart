@@ -21,6 +21,6 @@ class GameSeek with _$GameSeek {
         'increment': increment.inSeconds.toString(),
         'rated': rated.toString(),
         if (variant != null) 'variant': variant!.name,
-        if (side != null) 'side': side!.name,
+        if (side != null) 'color': side!.name,
       };
 }
