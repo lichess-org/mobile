@@ -646,27 +646,21 @@ class _RunStats extends StatelessWidget {
   }
 }
 
-class _RunStatsPopup extends ConsumerWidget {
+class _RunStatsPopup extends ConsumerStatefulWidget {
   const _RunStatsPopup(this.stats);
 
   final StormRunStats stats;
 
-  String newHighTitle(BuildContext context, StormNewHigh newHigh) {
-    switch (newHigh.key) {
-      case StormNewHighType.day:
-        return context.l10n.stormNewDailyHighscore;
-      case StormNewHighType.week:
-        return context.l10n.stormNewWeeklyHighscore;
-      case StormNewHighType.month:
-        return context.l10n.stormNewMonthlyHighscore;
-      case StormNewHighType.allTime:
-        return context.l10n.stormNewAllTimeHighscore;
-    }
-  }
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final highScoreWidgets = stats.newHigh != null
+  ConsumerState<_RunStatsPopup> createState() => _RunStatsPopupState();
+}
+
+class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
+  StormFilter filter = const StormFilter(slow: false, failed: false);
+  @override
+  Widget build(BuildContext context) {
+    final puzzleList = widget.stats.historyFilter(filter);
+    final highScoreWidgets = widget.stats.newHigh != null
         ? [
             const SizedBox(height: 16),
             ListTile(
@@ -676,14 +670,14 @@ class _RunStatsPopup extends ConsumerWidget {
                 color: LichessColors.brag,
               ),
               title: Text(
-                newHighTitle(context, stats.newHigh!),
+                newHighTitle(context, widget.stats.newHigh!),
                 style: Styles.sectionTitle.copyWith(
                   color: LichessColors.brag,
                 ),
               ),
               subtitle: Text(
                 context.l10n.stormPreviousHighscoreWasX(
-                  stats.newHigh!.prev.toString(),
+                  widget.stats.newHigh!.prev.toString(),
                 ),
                 style: const TextStyle(
                   color: LichessColors.brag,
@@ -701,32 +695,32 @@ class _RunStatsPopup extends ConsumerWidget {
           ListSection(
             cupertinoAdditionalDividerMargin: 6,
             header: Text(
-              '${stats.score} ${context.l10n.stormPuzzlesSolved}',
+              '${widget.stats.score} ${context.l10n.stormPuzzlesSolved}',
             ),
             children: [
               _StatsRow(
                 context.l10n.stormMoves,
-                stats.moves.toString(),
+                widget.stats.moves.toString(),
               ),
               _StatsRow(
                 context.l10n.accuracy,
-                '${(((stats.moves - stats.errors) / stats.moves) * 100).toStringAsFixed(2)}%',
+                '${(((widget.stats.moves - widget.stats.errors) / widget.stats.moves) * 100).toStringAsFixed(2)}%',
               ),
               _StatsRow(
                 context.l10n.stormCombo,
-                stats.comboBest.toString(),
+                widget.stats.comboBest.toString(),
               ),
               _StatsRow(
                 context.l10n.stormTime,
-                '${stats.time.inSeconds}s',
+                '${widget.stats.time.inSeconds}s',
               ),
               _StatsRow(
                 context.l10n.stormTimePerMove,
-                '${stats.timePerMove.toStringAsFixed(1)}s',
+                '${widget.stats.timePerMove.toStringAsFixed(1)}s',
               ),
               _StatsRow(
                 context.l10n.stormHighestSolved,
-                stats.highest.toString(),
+                widget.stats.highest.toString(),
               ),
             ],
           ),
@@ -748,18 +742,57 @@ class _RunStatsPopup extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  context.l10n.stormPuzzlesPlayed,
-                  style: Styles.sectionTitle,
+                Row(
+                  children: [
+                    Text(
+                      context.l10n.stormPuzzlesPlayed,
+                      style: Styles.sectionTitle,
+                    ),
+                    const Spacer(),
+                    PlatformIconButton(
+                      semanticsLabel: context.l10n.stormFailedPuzzles,
+                      icon: Icons.close,
+                      onTap: () => setState(
+                        () => filter = filter.copyWith(failed: !filter.failed),
+                      ),
+                      highlighted: filter.failed,
+                    ),
+                    PlatformIconButton(
+                      semanticsLabel: context.l10n.stormSlowPuzzles,
+                      icon: Icons.hourglass_bottom,
+                      onTap: () => setState(
+                        () => filter = filter.copyWith(slow: !filter.slow),
+                      ),
+                      highlighted: filter.slow,
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 3.0),
-                PuzzleHistoryBoards(stats.history),
+                if (puzzleList.isNotEmpty)
+                  PuzzleHistoryBoards(puzzleList)
+                else
+                  const Center(
+                    child: Text('Nothing to show, go change the filters'),
+                  ),
               ],
             ),
-          ),
+          )
         ],
       ),
     );
+  }
+
+  String newHighTitle(BuildContext context, StormNewHigh newHigh) {
+    switch (newHigh.key) {
+      case StormNewHighType.day:
+        return context.l10n.stormNewDailyHighscore;
+      case StormNewHighType.week:
+        return context.l10n.stormNewWeeklyHighscore;
+      case StormNewHighType.month:
+        return context.l10n.stormNewMonthlyHighscore;
+      case StormNewHighType.allTime:
+        return context.l10n.stormNewAllTimeHighscore;
+    }
   }
 }
 
