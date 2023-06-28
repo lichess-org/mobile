@@ -39,6 +39,25 @@ enum StormNewHighType {
 }
 
 @freezed
+class StormDashboard with _$StormDashboard {
+  const factory StormDashboard({
+    required PuzzleStormHighScore highScore,
+    required IList<StormDayScore> dayHighscores,
+  }) = _StormDashboard;
+}
+
+@freezed
+class StormDayScore with _$StormDayScore {
+  const factory StormDayScore({
+    required DateTime day,
+    required int runs,
+    required int score,
+    required int highest,
+    required int time,
+  }) = _StormDayScore;
+}
+
+@freezed
 class StormNewHigh with _$StormNewHigh {
   const factory StormNewHigh({
     required StormNewHighType key,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:async/async.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:deep_pick/deep_pick.dart';
@@ -217,6 +218,18 @@ class PuzzleRepository {
         );
   }
 
+  FutureResult<StormDashboard> stormDashboard(UserId userId) {
+    return apiClient
+        .get(Uri.parse('$kLichessHost/api/storm/dashboard/${userId.value}'))
+        .flatMap(
+          (response) => readJsonObject(
+            response,
+            mapper: _stormDashboardFromJson,
+            logger: _log,
+          ),
+        );
+  }
+
   Result<PuzzleBatchResponse> _decodeBatchResponse(http.Response response) {
     return readJsonObject(
       response,
@@ -292,6 +305,33 @@ Puzzle _puzzleFromPick(RequiredPick pick) {
     game: pick('game').letOrThrow(_puzzleGameFromPick),
   );
 }
+
+StormDashboard _stormDashboardFromJson(Map<String, dynamic> json) =>
+    _stormDashboardFromPick(pick(json).required());
+
+StormDashboard _stormDashboardFromPick(RequiredPick pick) {
+  final dateFormat = DateFormat('yyyy/M/d');
+  return StormDashboard(
+    highScore: PuzzleStormHighScore(
+      day: pick('high', 'day').asIntOrThrow(),
+      allTime: pick('high', 'allTime').asIntOrThrow(),
+      month: pick('high', 'month').asIntOrThrow(),
+      week: pick('high', 'week').asIntOrThrow(),
+    ),
+    dayHighscores: pick('days')
+        .asListOrThrow((p0) => _stormDayFromPick(p0, dateFormat))
+        .toIList(),
+  );
+}
+
+StormDayScore _stormDayFromPick(RequiredPick pick, DateFormat format) =>
+    StormDayScore(
+      runs: pick('runs').asIntOrThrow(),
+      score: pick('score').asIntOrThrow(),
+      time: pick('time').asIntOrThrow(),
+      highest: pick('highest').asIntOrThrow(),
+      day: format.parse(pick('_id').asStringOrThrow()),
+    );
 
 LitePuzzle _litePuzzleFromPick(RequiredPick pick) {
   return LitePuzzle(
