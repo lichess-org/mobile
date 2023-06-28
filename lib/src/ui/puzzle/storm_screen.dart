@@ -3,8 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/ui/puzzle/storm_clock.dart';
+import 'package:lichess_mobile/src/ui/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
@@ -46,7 +48,7 @@ class StormScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [ToggleSoundButton()],
+        actions: [_StormDashboardButton(), ToggleSoundButton()],
         title: const Text('Puzzle Storm'),
       ),
       body: const _Load(),
@@ -57,7 +59,11 @@ class StormScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: const Text('Puzzle Storm'),
-        trailing: ToggleSoundButton(),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [_StormDashboardButton(), ToggleSoundButton()],
+        ),
       ),
       child: const _Load(),
     );
@@ -76,7 +82,7 @@ class _Load extends ConsumerWidget {
       loading: () => const CenterLoadingIndicator(),
       error: (e, s) {
         debugPrint(
-          'SEVERE: [PuzzleStreakScreen] could not load streak; $e\n$s',
+          'SEVERE: [PuzzleStormScreen] could not load streak; $e\n$s',
         );
         return Center(
           child: TableBoardLayout(
@@ -776,4 +782,39 @@ class _StatsRow extends StatelessWidget {
       ),
     );
   }
+}
+
+class _StormDashboardButton extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+    if (session != null) {
+      switch (defaultTargetPlatform) {
+        case TargetPlatform.iOS:
+          return CupertinoIconButton(
+            padding: EdgeInsets.zero,
+            onPressed: () => _showDashboard(context),
+            semanticsLabel: 'Storm History',
+            icon: const Icon(Icons.history),
+          );
+        case TargetPlatform.android:
+          return IconButton(
+            tooltip: 'Storm History',
+            onPressed: () => _showDashboard(context),
+            icon: const Icon(Icons.history),
+          );
+        default:
+          assert(false, 'Unexpected platform $defaultTargetPlatform');
+          return const SizedBox.shrink();
+      }
+    }
+    return const SizedBox.shrink();
+  }
+
+  void _showDashboard(BuildContext context) => pushPlatformRoute(
+        context,
+        rootNavigator: true,
+        fullscreenDialog: true,
+        builder: (_) => StormDashboardModal(),
+      );
 }

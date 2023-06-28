@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
+import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
@@ -77,4 +78,12 @@ Future<PuzzleDashboard> puzzleDashboard(
     link.close();
   }
   return result.asFuture;
+}
+
+@riverpod
+Future<StormDashboard> stormDashboard(StormDashboardRef ref) {
+  ref.cacheFor(const Duration(minutes: 5));
+  final session = ref.watch(authSessionProvider);
+  final repo = ref.watch(puzzleRepositoryProvider);
+  return Result.release(repo.stormDashboard(session!.user.id));
 }

@@ -312,6 +312,9 @@ class RecentGames extends ConsumerWidget {
 
     return recentGames.when(
       data: (data) {
+        if (data.isEmpty) {
+          return kEmptyWidget;
+        }
         return ListSection(
           header: Text(context.l10n.recentGames, style: Styles.sectionTitle),
           hasLeading: true,
