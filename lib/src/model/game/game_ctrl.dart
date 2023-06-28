@@ -218,6 +218,7 @@ class GameCtrl extends _$GameCtrl {
           game: curState.game.copyWith(
             isThreefoldRepetition: data.threefold,
             winner: data.winner,
+            status: data.status ?? curState.game.status,
           ),
           // whiteOfferingDraw: data.whiteOfferingDraw,
           // blackOfferingDraw: data.blackOfferingDraw,
@@ -255,16 +256,10 @@ class GameCtrl extends _$GameCtrl {
         }
 
         // TODO handle lag
-        if (curState.game.clock != null && data.clock != null) {
+        if (newState.game.clock != null && data.clock != null) {
           newState = newState.copyWith.game.clock!(
             white: data.clock!.white,
             black: data.clock!.black,
-          );
-        }
-
-        if (data.status != null) {
-          newState = newState.copyWith.game(
-            status: data.status!,
           );
         }
 
@@ -274,16 +269,15 @@ class GameCtrl extends _$GameCtrl {
               expiration: null,
             );
           } else {
-            newState = curState.copyWith.game(
+            newState = newState.copyWith.game(
               expiration: (
-                idle: curState.game.expiration!.idle,
+                idle: newState.game.expiration!.idle,
                 timeToMove: curState.game.expiration!.timeToMove,
                 movedAt: DateTime.now(),
               ),
             );
           }
         }
-
         state = AsyncValue.data(newState);
 
       // End game event
@@ -396,6 +390,9 @@ class GameCtrl extends _$GameCtrl {
                   opponentLeftCountdown - const Duration(seconds: 1);
               if (newTime <= Duration.zero) {
                 _opponentLeftCountdownTimer?.cancel();
+                state = AsyncValue.data(
+                  curState.copyWith(opponentLeftCountdown: null),
+                );
               }
               state = AsyncValue.data(
                 curState.copyWith(opponentLeftCountdown: newTime),

@@ -535,13 +535,13 @@ class _ClaimWinDialog extends ConsumerWidget {
     final content = Text(context.l10n.opponentLeftChoices);
 
     void onClaimWin() {
-      ref.read(ctrlProvider.notifier).forceResign();
       Navigator.of(context).pop();
+      ref.read(ctrlProvider.notifier).forceResign();
     }
 
     void onClaimDraw() {
-      ref.read(ctrlProvider.notifier).forceDraw();
       Navigator.of(context).pop();
+      ref.read(ctrlProvider.notifier).forceDraw();
     }
 
     if (defaultTargetPlatform == TargetPlatform.iOS) {
