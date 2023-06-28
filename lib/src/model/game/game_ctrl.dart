@@ -125,6 +125,14 @@ class GameCtrl extends _$GameCtrl {
     _socket.send('resign', null);
   }
 
+  void forceResign() {
+    _socket.send('resign-force', null);
+  }
+
+  void forceDraw() {
+    _socket.send('draw-force', null);
+  }
+
   // TODO: blur, lag
   void _sendMove(Move move) {
     _socket.send(
@@ -363,6 +371,10 @@ class GameCtrlState with _$GameCtrlState {
     int? lastDrawOfferAtPly,
   }) = _GameCtrlState;
 
+  bool get isReplaying => stepCursor < game.steps.length - 1;
+  bool get canGoForward => stepCursor < game.steps.length - 1;
+  bool get canGoBackward => stepCursor > 0;
+
   bool get canGetNewOpponent =>
       !game.playable &&
       (game.meta.source == GameSource.lobby ||
@@ -372,10 +384,6 @@ class GameCtrlState with _$GameCtrlState {
       game.drawable &&
       (playerOfferingDraw == null || playerOfferingDraw == false) &&
       (lastDrawOfferAtPly ?? -99) < game.lastPly - 20;
-
-  bool get isReplaying => stepCursor < game.steps.length - 1;
-  bool get canGoForward => stepCursor < game.steps.length - 1;
-  bool get canGoBackward => stepCursor > 0;
 
   /// Time left to move for the active player if an expiration is set
   Duration? get timeToMove {

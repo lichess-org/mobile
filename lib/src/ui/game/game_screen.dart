@@ -191,14 +191,29 @@ class _Body extends ConsumerWidget {
   final GameCtrlState gameState;
   final GameCtrlProvider ctrlProvider;
 
+  // void _stateChangeListener(BuildContext context,
+  //     AsyncValue<GameCtrlState>? prev, AsyncValue<GameCtrlState> state) {}
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen(ctrlProvider, (prev, state) {
-      if (prev?.hasValue == true && prev!.requireValue.game.playable == true) {
-        if (state.hasValue && state.requireValue.game.playable == false) {
+      if (prev?.hasValue == true && state.hasValue) {
+        if (prev!.requireValue.game.playable == true &&
+            state.requireValue.game.playable == false) {
           showAdaptiveDialog<void>(
             context: context,
             builder: (context) => _GameEndDialog(
+              ctrlProvider: ctrlProvider,
+            ),
+            barrierDismissible: true,
+          );
+        }
+
+        if (!prev.requireValue.game.canClaimWin &&
+            state.requireValue.game.canClaimWin) {
+          showAdaptiveDialog<void>(
+            context: context,
+            builder: (context) => _ClaimWinDialog(
               ctrlProvider: ctrlProvider,
             ),
             barrierDismissible: true,
@@ -405,6 +420,22 @@ class _GameBottomBar extends ConsumerWidget {
               }
             },
           ),
+        if (gameState.game.canClaimWin) ...[
+          BottomSheetAction(
+            label: Text(context.l10n.forceDraw),
+            dismissOnPress: true,
+            onPressed: (context) {
+              ref.read(ctrlProvider.notifier).forceDraw();
+            },
+          ),
+          BottomSheetAction(
+            label: Text(context.l10n.forceResignation),
+            dismissOnPress: true,
+            onPressed: (context) {
+              ref.read(ctrlProvider.notifier).forceResign();
+            },
+          ),
+        ],
         if (gameState.canGetNewOpponent)
           BottomSheetAction(
             label: Text(context.l10n.newOpponent),
@@ -482,6 +513,61 @@ class _GameEndDialog extends ConsumerWidget {
     } else {
       return Dialog(
         child: content,
+      );
+    }
+  }
+}
+
+class _ClaimWinDialog extends ConsumerWidget {
+  const _ClaimWinDialog({
+    required this.ctrlProvider,
+  });
+
+  final GameCtrlProvider ctrlProvider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final gameState = ref.watch(ctrlProvider).requireValue;
+
+    final content = Text(context.l10n.opponentLeftChoices);
+
+    void onClaimWin() {
+      ref.read(ctrlProvider.notifier).forceResign();
+      Navigator.of(context).pop();
+    }
+
+    void onClaimDraw() {
+      ref.read(ctrlProvider.notifier).forceDraw();
+      Navigator.of(context).pop();
+    }
+
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return CupertinoAlertDialog(
+        content: content,
+        actions: [
+          CupertinoDialogAction(
+            onPressed: gameState.game.canClaimWin ? onClaimWin : null,
+            child: Text(context.l10n.forceResignation),
+          ),
+          CupertinoDialogAction(
+            onPressed: gameState.game.canClaimWin ? onClaimDraw : null,
+            child: Text(context.l10n.forceDraw),
+          ),
+        ],
+      );
+    } else {
+      return AlertDialog(
+        content: content,
+        actions: [
+          TextButton(
+            onPressed: gameState.game.canClaimWin ? onClaimWin : null,
+            child: Text(context.l10n.forceResignation),
+          ),
+          TextButton(
+            onPressed: gameState.game.canClaimWin ? onClaimDraw : null,
+            child: Text(context.l10n.forceDraw),
+          ),
+        ],
       );
     }
   }

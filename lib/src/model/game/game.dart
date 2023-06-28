@@ -70,6 +70,7 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
 
   bool get hasAI => white.isAI || black.isAI;
 
+  bool get isPlayerTurn => lastPosition.turn == youAre;
   bool get playable => status.value < GameStatus.aborted.value;
   bool get abortable =>
       playable &&
@@ -77,6 +78,18 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
       (meta.rules == null || !meta.rules!.contains(GameRule.noAbort));
   bool get resignable => playable && !abortable;
   bool get drawable => playable && lastPosition.fullmoves >= 2 && !hasAI;
+
+  bool? get opponentGone => youAre == Side.white
+      ? black.isGone
+      : youAre == Side.black
+          ? white.isGone
+          : null;
+
+  bool get canClaimWin =>
+      opponentGone == true &&
+      !isPlayerTurn &&
+      resignable &&
+      (meta.rules == null || !meta.rules!.contains(GameRule.noClaimWin));
 }
 
 enum GameSource {
