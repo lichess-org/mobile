@@ -749,21 +749,34 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                       style: Styles.sectionTitle,
                     ),
                     const Spacer(),
-                    PlatformIconButton(
-                      semanticsLabel: context.l10n.stormFailedPuzzles,
-                      icon: Icons.close,
-                      onTap: () => setState(
-                        () => filter = filter.copyWith(failed: !filter.failed),
+                    Tooltip(
+                      excludeFromSemantics: true,
+                      message: context.l10n.stormFailedPuzzles,
+                      child: PlatformIconButton(
+                        semanticsLabel: context.l10n.stormFailedPuzzles,
+                        icon: defaultTargetPlatform == TargetPlatform.iOS
+                            ? CupertinoIcons.clear_fill
+                            : Icons.close,
+                        onTap: () => setState(
+                          () =>
+                              filter = filter.copyWith(failed: !filter.failed),
+                        ),
+                        highlighted: filter.failed,
                       ),
-                      highlighted: filter.failed,
                     ),
-                    PlatformIconButton(
-                      semanticsLabel: context.l10n.stormSlowPuzzles,
-                      icon: Icons.hourglass_bottom,
-                      onTap: () => setState(
-                        () => filter = filter.copyWith(slow: !filter.slow),
+                    Tooltip(
+                      message: context.l10n.stormSlowPuzzles,
+                      excludeFromSemantics: true,
+                      child: PlatformIconButton(
+                        semanticsLabel: context.l10n.stormSlowPuzzles,
+                        icon: defaultTargetPlatform == TargetPlatform.iOS
+                            ? CupertinoIcons.hourglass
+                            : Icons.hourglass_bottom,
+                        onTap: () => setState(
+                          () => filter = filter.copyWith(slow: !filter.slow),
+                        ),
+                        highlighted: filter.slow,
                       ),
-                      highlighted: filter.slow,
                     ),
                   ],
                 ),
