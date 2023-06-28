@@ -23,6 +23,7 @@ part 'game_ctrl.g.dart';
 class GameCtrl extends _$GameCtrl {
   final _logger = Logger('GameCtrl');
   StreamSubscription<SocketEvent>? _socketSubscription;
+  Timer? _opponentLeftCountdownTimer;
 
   /// Last socket version received
   int _socketEventVersion = 0;
@@ -48,6 +49,7 @@ class GameCtrl extends _$GameCtrl {
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
+      _opponentLeftCountdownTimer?.cancel();
     });
 
     socket.switchRoute(Uri(path: '/play/$gameFullId/v6'));
@@ -188,12 +190,12 @@ class GameCtrl extends _$GameCtrl {
     }
 
     switch (event.topic) {
-      /// Server asking for a reload
+      // Server asking for a reload
       case 'reload':
       case 'resync':
         _resyncGameData();
 
-      /// Full game data, received after switching route to /play/<gameId>
+      // Full game data, received after switching route to /play/<gameId>
       case 'full':
         final fullEvent =
             GameFullEvent.fromJson(event.data as Map<String, dynamic>);
@@ -207,7 +209,7 @@ class GameCtrl extends _$GameCtrl {
           ),
         );
 
-      /// Move event, received after sending a move or receiving a move from the opponent
+      // Move event, received after sending a move or receiving a move from the opponent
       case 'move':
         final curState = state.requireValue;
         final data = MoveEvent.fromJson(event.data as Map<String, dynamic>);
@@ -221,7 +223,7 @@ class GameCtrl extends _$GameCtrl {
           // blackOfferingDraw: data.blackOfferingDraw,
         );
 
-        /// add opponent move
+        // add opponent move
         if (data.ply == curState.game.lastPly + 1) {
           final lastPos = curState.game.lastPosition;
           final move = Move.fromUci(data.uci)!;
@@ -284,7 +286,7 @@ class GameCtrl extends _$GameCtrl {
 
         state = AsyncValue.data(newState);
 
-      /// End game event
+      // End game event
       case 'endData':
         final endData =
             GameEndEvent.fromJson(event.data as Map<String, dynamic>);
@@ -316,29 +318,43 @@ class GameCtrl extends _$GameCtrl {
 
         state = AsyncValue.data(newState);
 
-      /// Crowd event, sent when a player quits or joins the game
+      // Crowd event, sent when a player quits or joins the game
       case 'crowd':
         final data = event.data as Map<String, dynamic>;
         final whiteOnGame = data['white'] as bool?;
         final blackOnGame = data['black'] as bool?;
         final curState = state.requireValue;
+        final opponent = curState.game.youAre?.opposite;
         GameCtrlState newState = curState;
         if (whiteOnGame != null) {
           newState = newState.copyWith.game(
             white: newState.game.white.setOnGame(whiteOnGame),
           );
+          if (opponent == Side.white && whiteOnGame == true) {
+            _opponentLeftCountdownTimer?.cancel();
+            newState = newState.copyWith(
+              opponentLeftCountdown: null,
+            );
+          }
         }
         if (blackOnGame != null) {
           newState = newState.copyWith.game(
             black: newState.game.black.setOnGame(blackOnGame),
           );
+          if (opponent == Side.black && blackOnGame == true) {
+            _opponentLeftCountdownTimer?.cancel();
+            newState = newState.copyWith(
+              opponentLeftCountdown: null,
+            );
+          }
         }
         state = AsyncValue.data(newState);
 
-      /// Gone event, sent when the opponent has quit the game for long enough
-      /// than we can claim victory
+      // Gone event, sent when the opponent has quit the game for long enough
+      // than we can claim victory
       case 'gone':
         final isGone = event.data as bool;
+        _opponentLeftCountdownTimer?.cancel();
         GameCtrlState newState = state.requireValue;
         final youAre = newState.game.youAre;
         newState = newState.copyWith.game(
@@ -350,6 +366,43 @@ class GameCtrl extends _$GameCtrl {
               : newState.game.black.setGone(isGone),
         );
         state = AsyncValue.data(newState);
+
+      // Event sent when the opponent has quit the game, to display a countdown
+      // before claiming victory is possible
+      case 'goneIn':
+        final timeLeft = Duration(seconds: event.data as int);
+        state = AsyncValue.data(
+          state.requireValue.copyWith(
+            opponentLeftCountdown: timeLeft,
+          ),
+        );
+        _opponentLeftCountdownTimer?.cancel();
+        _opponentLeftCountdownTimer = Timer.periodic(
+          const Duration(seconds: 1),
+          (_) {
+            final curState = state.requireValue;
+            final opponentLeftCountdown = curState.opponentLeftCountdown;
+            if (opponentLeftCountdown == null) {
+              _opponentLeftCountdownTimer?.cancel();
+            } else if (!curState.canShowClaimWinCountdown) {
+              _opponentLeftCountdownTimer?.cancel();
+              state = AsyncValue.data(
+                curState.copyWith(
+                  opponentLeftCountdown: null,
+                ),
+              );
+            } else {
+              final newTime =
+                  opponentLeftCountdown - const Duration(seconds: 1);
+              if (newTime <= Duration.zero) {
+                _opponentLeftCountdownTimer?.cancel();
+              }
+              state = AsyncValue.data(
+                curState.copyWith(opponentLeftCountdown: newTime),
+              );
+            }
+          },
+        );
 
       default:
         break;
@@ -369,6 +422,7 @@ class GameCtrlState with _$GameCtrlState {
     bool? playerOfferingDraw,
     bool? opponentOfferingDraw,
     int? lastDrawOfferAtPly,
+    Duration? opponentLeftCountdown,
   }) = _GameCtrlState;
 
   bool get isReplaying => stepCursor < game.steps.length - 1;
@@ -384,6 +438,12 @@ class GameCtrlState with _$GameCtrlState {
       game.drawable &&
       (playerOfferingDraw == null || playerOfferingDraw == false) &&
       (lastDrawOfferAtPly ?? -99) < game.lastPly - 20;
+
+  bool get canShowClaimWinCountdown =>
+      !game.isPlayerTurn &&
+      game.resignable &&
+      (game.meta.rules == null ||
+          !game.meta.rules!.contains(GameRule.noClaimWin));
 
   /// Time left to move for the active player if an expiration is set
   Duration? get timeToMove {

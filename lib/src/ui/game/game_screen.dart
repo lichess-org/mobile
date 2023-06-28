@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -191,9 +192,6 @@ class _Body extends ConsumerWidget {
   final GameCtrlState gameState;
   final GameCtrlProvider ctrlProvider;
 
-  // void _stateChangeListener(BuildContext context,
-  //     AsyncValue<GameCtrlState>? prev, AsyncValue<GameCtrlState> state) {}
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen(ctrlProvider, (prev, state) {
@@ -277,7 +275,12 @@ class _Body extends ConsumerWidget {
                   },
                 ),
                 topTable: topPlayer,
-                bottomTable: bottomPlayer,
+                bottomTable: gameState.canShowClaimWinCountdown &&
+                        gameState.opponentLeftCountdown != null
+                    ? _ClaimWinCountdown(
+                        duration: gameState.opponentLeftCountdown!,
+                      )
+                    : bottomPlayer,
                 moves: gameState.game.steps
                     .skip(1)
                     .map((e) => e.sanMove!.san)
@@ -570,6 +573,25 @@ class _ClaimWinDialog extends ConsumerWidget {
         ],
       );
     }
+  }
+}
+
+class _ClaimWinCountdown extends StatelessWidget {
+  const _ClaimWinCountdown({
+    required this.duration,
+  });
+
+  final Duration duration;
+
+  @override
+  Widget build(BuildContext context) {
+    final secs = duration.inSeconds.remainder(60);
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Text(context.l10n.opponentLeftCounter(secs)),
+      ),
+    );
   }
 }
 

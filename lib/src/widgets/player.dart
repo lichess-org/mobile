@@ -179,7 +179,7 @@ class MoveExpiration extends StatefulWidget {
 }
 
 class _MoveExpirationState extends State<MoveExpiration> {
-  static const _period = Duration(milliseconds: 100);
+  static const _period = Duration(milliseconds: 1000);
   Timer? _timer;
   Duration timeLeft = Duration.zero;
 
