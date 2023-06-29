@@ -30,10 +30,12 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   Duration timeLeft = Duration.zero;
 
   Timer startTimer() {
+    _timer?.cancel();
     return Timer.periodic(_period, (timer) {
       setState(() {
         timeLeft = timeLeft - _period;
         if (timeLeft <= Duration.zero) {
+          timeLeft = Duration.zero;
           timer.cancel();
         }
       });
@@ -52,10 +54,13 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   @override
   void didUpdateWidget(CountdownClock oldClock) {
     super.didUpdateWidget(oldClock);
-    _timer?.cancel();
-    timeLeft = widget.duration;
+    if (widget.duration != oldClock.duration) {
+      timeLeft = widget.duration;
+    }
     if (widget.active) {
       _timer = startTimer();
+    } else {
+      _timer?.cancel();
     }
   }
 
