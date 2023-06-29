@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 
 import 'player.dart';
 import 'game_status.dart';
@@ -156,6 +157,8 @@ class PlayableClockData with _$PlayableClockData {
 
 @freezed
 class ArchivedGameData with _$ArchivedGameData {
+  const ArchivedGameData._();
+
   const factory ArchivedGameData({
     required GameId id,
     required bool rated,
@@ -170,7 +173,15 @@ class ArchivedGameData with _$ArchivedGameData {
     String? initialFen,
     String? lastFen,
     Side? winner,
+    ClockData? clock,
   }) = _ArchivedGameData;
+
+  String get clockDisplay {
+    return TimeIncrement(
+      clock?.initial.inSeconds ?? 0,
+      clock?.increment.inSeconds ?? 0,
+    ).display;
+  }
 }
 
 @freezed
@@ -182,7 +193,6 @@ class ArchivedGame with _$ArchivedGame, BaseGame, IndexableSteps {
     required ArchivedGameData data,
     required IList<GameStep> steps,
     // IList<MoveAnalysis>? analysis,
-    ClockData? clock,
   }) = _ArchivedGame;
 }
 

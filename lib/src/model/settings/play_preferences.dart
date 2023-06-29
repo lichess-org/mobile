@@ -52,5 +52,4 @@ class PlayPrefs with _$PlayPrefs {
       _$PlayPrefsFromJson(json);
 
   IconData get speedIcon => timeIncrement.speed.icon;
-  String get gameTitle => '${timeIncrement.display} • Rated';
 }

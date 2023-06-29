@@ -177,7 +177,7 @@ class _GameTitle extends StatelessWidget {
           color: DefaultTextStyle.of(context).style.color,
         ),
         const SizedBox(width: 4.0),
-        Text(playPrefs.gameTitle),
+        Text('${playPrefs.timeIncrement.display} • ${context.l10n.rated}'),
       ],
     );
   }

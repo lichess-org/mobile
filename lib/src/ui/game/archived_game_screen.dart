@@ -38,6 +38,7 @@ class ArchivedGameScreen extends ConsumerWidget {
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        title: _GameTitle(gameData: gameData),
         actions: [
           ToggleSoundButton(),
         ],
@@ -53,6 +54,7 @@ class ArchivedGameScreen extends ConsumerWidget {
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        middle: _GameTitle(gameData: gameData),
         padding: const EdgeInsetsDirectional.only(end: 16.0),
         trailing: ToggleSoundButton(),
       ),
@@ -69,6 +71,31 @@ class ArchivedGameScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _GameTitle extends StatelessWidget {
+  const _GameTitle({
+    required this.gameData,
+  });
+
+  final ArchivedGameData gameData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          gameData.speed.icon,
+          color: DefaultTextStyle.of(context).style.color,
+        ),
+        const SizedBox(width: 4.0),
+        Text(
+          '${gameData.clockDisplay} • ${gameData.rated ? context.l10n.rated : context.l10n.casual}',
+        ),
+      ],
     );
   }
 }
