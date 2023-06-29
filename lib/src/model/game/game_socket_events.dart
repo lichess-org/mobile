@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
-part 'game_socket.freezed.dart';
+part 'game_socket_events.freezed.dart';
 
 @freezed
 class GameFullEvent with _$GameFullEvent {
