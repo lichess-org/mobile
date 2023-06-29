@@ -4,6 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:logging/logging.dart';
+import 'package:deep_pick/deep_pick.dart';
 
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -135,6 +136,14 @@ class GameCtrl extends _$GameCtrl {
     _socket.send('draw-force', null);
   }
 
+  void proposeOrAcceptRematch() {
+    _socket.send('rematch-yes', null);
+  }
+
+  void declineRematch() {
+    _socket.send('rematch-no', null);
+  }
+
   // TODO: blur, lag
   void _sendMove(Move move) {
     _socket.send(
@@ -187,17 +196,41 @@ class GameCtrl extends _$GameCtrl {
       _socketEventVersion = event.version!;
     }
 
+    _handleSocketTopic(event);
+  }
+
+  void _handleSocketTopic(SocketEvent event) {
     switch (event.topic) {
-      // Server asking for a reload
-      case 'reload':
+      // Server asking for a resync
       case 'resync':
         _resyncGameData();
+
+      // Server asking for a reload, or in some cases the reload itself contains
+      // another topic message
+      case 'reload':
+        if (event.data is Map<String, dynamic>) {
+          final data = event.data as Map<String, dynamic>;
+          if (data['t'] == null) {
+            _resyncGameData();
+            return;
+          }
+          final reloadEvent = SocketEvent(
+            topic: data['t'] as String,
+            data: data['d'],
+          );
+          _handleSocketTopic(reloadEvent);
+        } else {
+          _resyncGameData();
+        }
 
       // Full game data, received after switching route to /play/<gameId>
       case 'full':
         final fullEvent =
             GameFullEvent.fromJson(event.data as Map<String, dynamic>);
 
+        if (fullEvent.socketEventVersion < _socketEventVersion) {
+          return;
+        }
         _socketEventVersion = fullEvent.socketEventVersion;
 
         state = AsyncValue.data(
@@ -218,8 +251,6 @@ class GameCtrl extends _$GameCtrl {
             winner: data.winner,
             status: data.status ?? curState.game.status,
           ),
-          // whiteOfferingDraw: data.whiteOfferingDraw,
-          // blackOfferingDraw: data.blackOfferingDraw,
         );
 
         // add opponent move
@@ -307,7 +338,6 @@ class GameCtrl extends _$GameCtrl {
         if (curState.game.lastPosition.fullmoves > 1) {
           ref.read(soundServiceProvider).play(Sound.dong);
         }
-
         state = AsyncValue.data(newState);
 
       // Crowd event, sent when a player quits or joins the game
@@ -399,8 +429,38 @@ class GameCtrl extends _$GameCtrl {
           },
         );
 
-      default:
-        break;
+      case 'rematchOffer':
+        final side = pick(event.data).asSideOrNull();
+        final curState = state.requireValue;
+        state = AsyncValue.data(
+          curState.copyWith(
+            game: curState.game.copyWith(
+              white: curState.game.white.copyWith(
+                offeringRematch: side == null ? null : side == Side.white,
+              ),
+              black: curState.game.black.copyWith(
+                offeringRematch: side == null ? null : side == Side.black,
+              ),
+            ),
+          ),
+        );
+
+      case 'rematchTaken':
+        final nextId = pick(event.data).asGameIdOrThrow();
+        state = AsyncValue.data(
+          state.requireValue.copyWith.game(
+            rematch: nextId,
+          ),
+        );
+
+      case 'redirect':
+        final data = event.data as Map<String, dynamic>;
+        final fullId = pick(data['id']).asGameFullIdOrThrow();
+        state = AsyncValue.data(
+          state.requireValue.copyWith(
+            redirectGameId: fullId,
+          ),
+        );
     }
   }
 
@@ -418,6 +478,9 @@ class GameCtrlState with _$GameCtrlState {
     bool? opponentOfferingDraw,
     int? lastDrawOfferAtPly,
     Duration? opponentLeftCountdown,
+
+    /// Game full id used to redirect to the new game of the rematch
+    GameFullId? redirectGameId,
   }) = _GameCtrlState;
 
   bool get isReplaying => stepCursor < game.steps.length - 1;
@@ -439,6 +502,16 @@ class GameCtrlState with _$GameCtrlState {
       game.resignable &&
       (game.meta.rules == null ||
           !game.meta.rules!.contains(GameRule.noClaimWin));
+
+  bool get canOfferRematch =>
+      game.rematch == null &&
+      game.rematchable &&
+      (game.finished ||
+          (game.aborted &&
+              (!game.meta.rated ||
+                  !{GameSource.lobby, GameSource.pool}
+                      .contains(game.meta.source)))) &&
+      game.boosted != true;
 
   /// Time left to move for the active player if an expiration is set
   Duration? get timeToMove {

@@ -68,19 +68,7 @@ class SecondaryButton extends StatelessWidget {
       child: defaultTargetPlatform == TargetPlatform.iOS
           ? CupertinoButton(
               onPressed: onPressed,
-              color: CupertinoColors.secondarySystemFill,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: DefaultTextStyle.merge(
-                style: TextStyle(
-                  color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.label,
-                    context,
-                  ),
-                  fontSize: 16,
-                ),
-                child: child,
-              ),
+              child: child,
             )
           : OutlinedButton(
               onPressed: onPressed,

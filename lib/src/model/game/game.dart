@@ -67,11 +67,24 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
     bool? isThreefoldRepetition,
     Side? winner,
     ({Duration idle, Duration timeToMove, DateTime movedAt})? expiration,
+
+    /// The game id of the next game if a rematch has been accepted.
+    GameId? rematch,
   }) = _PlayableGame;
+
+  /// The side that the current player is playing as. Null if spectating.
+  Player? get player => youAre == Side.white ? white : black;
+
+  /// The side that the current player is playing against. Null if spectating.
+  Player? get opponent => youAre == Side.white ? black : white;
 
   bool get hasAI => white.isAI || black.isAI;
 
   bool get isPlayerTurn => lastPosition.turn == youAre;
+  bool get playing => status.value > GameStatus.started.value;
+  bool get finished => status.value >= GameStatus.mate.value;
+  bool get aborted => status == GameStatus.aborted;
+
   bool get playable => status.value < GameStatus.aborted.value;
   bool get abortable =>
       playable &&
@@ -79,15 +92,11 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
       (meta.rules == null || !meta.rules!.contains(GameRule.noAbort));
   bool get resignable => playable && !abortable;
   bool get drawable => playable && lastPosition.fullmoves >= 2 && !hasAI;
-
-  bool? get opponentGone => youAre == Side.white
-      ? black.isGone
-      : youAre == Side.black
-          ? white.isGone
-          : null;
+  bool get rematchable =>
+      meta.rules == null || !meta.rules!.contains(GameRule.noRematch);
 
   bool get canClaimWin =>
-      opponentGone == true &&
+      opponent?.isGone == true &&
       !isPlayerTurn &&
       resignable &&
       (meta.rules == null || !meta.rules!.contains(GameRule.noClaimWin));

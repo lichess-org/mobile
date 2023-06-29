@@ -8,6 +8,7 @@ import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
+import 'package:lichess_mobile/src/model/game/lobby_game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
@@ -216,6 +217,14 @@ class _Body extends ConsumerWidget {
             ),
             barrierDismissible: true,
           );
+        }
+
+        if (state.requireValue.redirectGameId != null) {
+          // Be sure to pop any dialogs that might be on top of the game screen.
+          Navigator.of(context).popUntil((route) => route is! RawDialogRoute);
+          ref
+              .read(lobbyGameProvider.notifier)
+              .rematch(state.requireValue.redirectGameId!);
         }
       }
     });
@@ -490,14 +499,25 @@ class _GameEndDialog extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 24.0),
-        // SecondaryButton(
-        //   semanticsLabel: context.l10n.rematch,
-        //   onPressed: () {
-        //     // Navigator.of(context).pop();
-        //   },
-        //   child: Text(context.l10n.rematch),
-        // ),
-        // const SizedBox(height: 8.0),
+        if (gameState.game.player?.offeringRematch == true)
+          SecondaryButton(
+            semanticsLabel: context.l10n.cancelRematchOffer,
+            onPressed: () {
+              ref.read(ctrlProvider.notifier).declineRematch();
+            },
+            child: Text(context.l10n.cancelRematchOffer),
+          )
+        else if (gameState.canOfferRematch)
+          SecondaryButton(
+            semanticsLabel: context.l10n.rematch,
+            onPressed: gameState.game.opponent?.onGame == true
+                ? () {
+                    ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
+                  }
+                : null,
+            child: Text(context.l10n.rematch),
+          ),
+        const SizedBox(height: 8.0),
         SecondaryButton(
           semanticsLabel: context.l10n.newOpponent,
           onPressed: () {

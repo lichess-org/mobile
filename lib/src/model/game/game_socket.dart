@@ -67,7 +67,7 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
     black: pick('black').letOrThrow(_playerFromUserGamePick),
     clock: pick('clock').letOrNull(_playableClockDataFromPick),
     status: pick('game', 'status').asGameStatusOrThrow(),
-    winner: pick('game, winner').asSideOrNull(),
+    winner: pick('game', 'winner').asSideOrNull(),
     boosted: pick('game', 'boosted').asBoolOrNull(),
     isThreefoldRepetition: pick('game', 'threefold').asBoolOrNull(),
     youAre: pick('youAre').asSideOrNull(),
@@ -81,6 +81,7 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
         );
       },
     ),
+    rematch: pick('game', 'rematch').asGameIdOrNull(),
   );
 }
 
@@ -119,6 +120,9 @@ Player _playerFromUserGamePick(RequiredPick pick) {
     aiLevel: pick('aiLevel').asIntOrNull(),
     onGame: pick('onGame').asBoolOrNull(),
     isGone: pick('isGone').asBoolOrNull(),
+    offeringDraw: pick('offeringDraw').asBoolOrNull(),
+    offeringRematch: pick('offeringRematch').asBoolOrNull(),
+    proposingTakeback: pick('proposingTakeback').asBoolOrNull(),
   );
 }
 

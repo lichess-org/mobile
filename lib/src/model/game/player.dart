@@ -27,6 +27,9 @@ class Player with _$Player {
     /// Is true if the player is disconnected from the game long enough that the
     /// opponent can claim a win
     bool? isGone,
+    bool? offeringDraw,
+    bool? offeringRematch,
+    bool? proposingTakeback,
   }) = _Player;
 
   LightUser? get lightUser => id != null
