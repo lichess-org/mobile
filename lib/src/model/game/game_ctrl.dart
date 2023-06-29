@@ -160,10 +160,8 @@ class GameCtrl extends _$GameCtrl {
   void _playReplayMoveSound(String san) {
     final soundService = ref.read(soundServiceProvider);
     if (san.contains('x')) {
-      soundService.stopCurrent();
       soundService.play(Sound.capture);
     } else {
-      soundService.stopCurrent();
       soundService.play(Sound.move);
     }
   }

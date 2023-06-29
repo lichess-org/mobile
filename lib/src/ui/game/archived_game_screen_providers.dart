@@ -83,10 +83,8 @@ class GameCursor extends _$GameCursor {
   void _playMoveSound(String san) {
     final soundService = ref.read(soundServiceProvider);
     if (san.contains('x')) {
-      soundService.stopCurrent();
       soundService.play(Sound.capture);
     } else {
-      soundService.stopCurrent();
       soundService.play(Sound.move);
     }
   }

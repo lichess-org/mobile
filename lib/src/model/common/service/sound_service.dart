@@ -76,6 +76,9 @@ class SoundService {
     final isEnabled = _ref.read(generalPreferencesProvider).isSoundEnabled;
     final soundId = _sounds[sound];
     if (soundId != null && isEnabled) {
+      if (_currentStreamId != null) {
+        await _pool.stop(_currentStreamId!);
+      }
       return _currentStreamId = await _pool.play(soundId);
     }
     return null;
