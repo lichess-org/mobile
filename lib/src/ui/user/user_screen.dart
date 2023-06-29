@@ -279,34 +279,27 @@ class RecentGames extends ConsumerWidget {
     final recentGames = ref.watch(userRecentGamesProvider(userId: user.id));
 
     Widget getResultIcon(ArchivedGameData game, Side mySide) {
-      if (game.status == GameStatus.draw ||
-          game.status == GameStatus.stalemate) {
-        return const Icon(
-          CupertinoIcons.equal_square_fill,
-          color: LichessColors.brag,
-        );
-      } else if (game.status == GameStatus.aborted ||
+      if (game.status == GameStatus.aborted ||
           game.status == GameStatus.noStart) {
         return const Icon(
           CupertinoIcons.xmark_square_fill,
           color: LichessColors.grey,
         );
-      } else if (game.status == GameStatus.unknown ||
-          game.status == GameStatus.unknownFinish) {
-        return const Icon(
-          CupertinoIcons.question_square_fill,
-          color: LichessColors.grey,
-        );
       } else {
-        return game.winner == mySide
+        return game.winner == null
             ? const Icon(
-                CupertinoIcons.plus_square_fill,
-                color: LichessColors.good,
+                CupertinoIcons.equal_square_fill,
+                color: LichessColors.brag,
               )
-            : const Icon(
-                CupertinoIcons.minus_square_fill,
-                color: LichessColors.red,
-              );
+            : game.winner == mySide
+                ? const Icon(
+                    CupertinoIcons.plus_square_fill,
+                    color: LichessColors.good,
+                  )
+                : const Icon(
+                    CupertinoIcons.minus_square_fill,
+                    color: LichessColors.red,
+                  );
       }
     }
 
