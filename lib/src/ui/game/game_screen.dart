@@ -502,7 +502,8 @@ class _GameEndDialog extends ConsumerWidget {
           semanticsLabel: context.l10n.newOpponent,
           onPressed: () {
             ref.read(lobbyGameProvider.notifier).newOpponent();
-            Navigator.of(context).pop();
+            // Other alert dialogs may be shown before this one, so be sure to pop them all
+            Navigator.of(context).popUntil((route) => route is! RawDialogRoute);
           },
           child: Text(context.l10n.newOpponent),
         ),
