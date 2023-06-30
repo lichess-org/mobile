@@ -21,10 +21,10 @@ Note that this project is not meant to be run on web platform.
 
 ### Local lila
 
-You will need a local `lila` (lichess server scala app) instance to work on this
-project. You will also need to setup `lila-ws` (websocket server).
+You will need a local [lila](https://github.com/lichess-org/lila) (lichess server scala app) instance to work on this
+project. You will also need to setup [lila-ws](https://github.com/lichess-org/lila-ws) (websocket server).
 
-Instruction to install both are found in [the lila wiki](https://github.com/lichess-org/lila/wiki).
+Instructions to install both are found in [the lila wiki](https://github.com/lichess-org/lila/wiki).
 
 The mobile application is configured by default to target `http://127.0.0.1:9663` and `ws://127.0.0.1:9664`, so keep these when installing lila.
 
