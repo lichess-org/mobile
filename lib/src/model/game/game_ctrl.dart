@@ -429,6 +429,7 @@ class GameCtrl extends _$GameCtrl {
           },
         );
 
+      // Event sent when a player adds or cancels a rematch offer
       case 'rematchOffer':
         final side = pick(event.data).asSideOrNull();
         final curState = state.requireValue;
@@ -445,6 +446,8 @@ class GameCtrl extends _$GameCtrl {
           ),
         );
 
+      // Event sent when a rematch is taken. Not used for now, except to prevent
+      // sending another rematch offer, which should not happen
       case 'rematchTaken':
         final nextId = pick(event.data).asGameIdOrThrow();
         state = AsyncValue.data(
@@ -453,6 +456,7 @@ class GameCtrl extends _$GameCtrl {
           ),
         );
 
+      // Event sent after a rematch is taken, to redirect to the new game
       case 'redirect':
         final data = event.data as Map<String, dynamic>;
         final fullId = pick(data['id']).asGameFullIdOrThrow();

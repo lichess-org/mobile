@@ -448,6 +448,23 @@ class _GameBottomBar extends ConsumerWidget {
             },
           ),
         ],
+        if (gameState.game.player?.offeringRematch == true)
+          BottomSheetAction(
+            label: Text(context.l10n.cancelRematchOffer),
+            dismissOnPress: true,
+            onPressed: (context) {
+              ref.read(ctrlProvider.notifier).declineRematch();
+            },
+          )
+        else if (gameState.canOfferRematch &&
+            gameState.game.opponent?.onGame == true)
+          BottomSheetAction(
+            label: Text(context.l10n.rematch),
+            dismissOnPress: true,
+            onPressed: (context) {
+              ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
+            },
+          ),
         if (gameState.canGetNewOpponent)
           BottomSheetAction(
             label: Text(context.l10n.newOpponent),
