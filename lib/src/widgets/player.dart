@@ -1,7 +1,8 @@
 import 'dart:async';
-import 'package:dartchess/dartchess.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
+import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -51,6 +52,23 @@ class BoardPlayer extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            if (player.patron == true)
+              Icon(
+                LichessIcons.patron,
+                size: 14,
+                color:
+                    player.onGame == true ? LichessColors.green : Colors.grey,
+              )
+            else
+              Icon(
+                player.onGame == true
+                    ? CupertinoIcons.circle_fill
+                    : CupertinoIcons.circle,
+                size: 14,
+                color:
+                    player.onGame == true ? LichessColors.green : Colors.grey,
+              ),
+            const SizedBox(width: 5),
             if (player.title != null) ...[
               Text(
                 player.title!,
