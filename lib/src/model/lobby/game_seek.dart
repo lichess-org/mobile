@@ -17,7 +17,7 @@ class GameSeek with _$GameSeek {
   }) = _GameSeek;
 
   Map<String, String> get requestBody => {
-        'time': time.inMinutes.toString(),
+        'time': (time.inSeconds / 60).toString(),
         'increment': increment.inSeconds.toString(),
         'rated': rated.toString(),
         if (variant != null) 'variant': variant!.name,
