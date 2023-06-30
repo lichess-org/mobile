@@ -219,6 +219,17 @@ class _Body extends ConsumerWidget {
           );
         }
 
+        if (prev.requireValue.game.opponent?.offeringRematch != true &&
+            state.requireValue.game.opponent?.offeringRematch == true) {
+          showAdaptiveDialog<void>(
+            context: context,
+            builder: (context) => _OpponentRematchDialog(
+              ctrlProvider: ctrlProvider,
+            ),
+            barrierDismissible: false,
+          );
+        }
+
         if (state.requireValue.redirectGameId != null) {
           // Be sure to pop any dialogs that might be on top of the game screen.
           Navigator.of(context).popUntil((route) => route is! RawDialogRoute);
@@ -554,6 +565,59 @@ class _GameEndDialog extends ConsumerWidget {
     } else {
       return Dialog(
         child: content,
+      );
+    }
+  }
+}
+
+class _OpponentRematchDialog extends ConsumerWidget {
+  const _OpponentRematchDialog({
+    required this.ctrlProvider,
+  });
+
+  final GameCtrlProvider ctrlProvider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final content = Text(context.l10n.yourOpponentWantsToPlayANewGameWithYou);
+
+    void decline() {
+      Navigator.of(context).pop();
+      ref.read(ctrlProvider.notifier).declineRematch();
+    }
+
+    void accept() {
+      Navigator.of(context).pop();
+      ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
+    }
+
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return CupertinoAlertDialog(
+        content: content,
+        actions: [
+          CupertinoDialogAction(
+            onPressed: decline,
+            child: Text(context.l10n.decline),
+          ),
+          CupertinoDialogAction(
+            onPressed: accept,
+            child: Text(context.l10n.accept),
+          ),
+        ],
+      );
+    } else {
+      return AlertDialog(
+        content: content,
+        actions: [
+          TextButton(
+            onPressed: decline,
+            child: Text(context.l10n.decline),
+          ),
+          TextButton(
+            onPressed: accept,
+            child: Text(context.l10n.accept),
+          ),
+        ],
       );
     }
   }
