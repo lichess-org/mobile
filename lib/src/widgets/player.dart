@@ -26,6 +26,7 @@ class BoardPlayer extends StatelessWidget {
     this.timeToMove,
     this.shouldLinkToUserProfile = true,
     this.mePlaying = false,
+    this.clockEmergencyThreshold,
     super.key,
   });
 
@@ -33,6 +34,7 @@ class BoardPlayer extends StatelessWidget {
   final Duration? clock;
   final bool? active;
   final MaterialDiffSide? materialDiff;
+  final Duration? clockEmergencyThreshold;
   final bool shouldLinkToUserProfile;
   final bool mePlaying;
 
@@ -175,6 +177,7 @@ class BoardPlayer extends StatelessWidget {
             CountdownClock(
               duration: clock!,
               active: active == true,
+              emergencyThreshold: clockEmergencyThreshold,
             ),
         ],
       ),

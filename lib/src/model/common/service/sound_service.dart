@@ -13,6 +13,7 @@ part 'sound_service.g.dart';
 enum Sound {
   move,
   capture,
+  lowTime,
   dong,
   error,
   confirmation,

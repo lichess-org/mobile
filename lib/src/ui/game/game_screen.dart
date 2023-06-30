@@ -252,6 +252,8 @@ class _Body extends ConsumerWidget {
       timeToMove: sideToMove == Side.black ? gameState.timeToMove : null,
       shouldLinkToUserProfile: youAre != Side.black,
       mePlaying: youAre == Side.black,
+      clockEmergencyThreshold:
+          youAre == Side.black ? gameState.game.clock?.emergency : null,
     );
     final white = BoardPlayer(
       player: gameState.game.white,
@@ -262,6 +264,8 @@ class _Body extends ConsumerWidget {
       timeToMove: sideToMove == Side.white ? gameState.timeToMove : null,
       shouldLinkToUserProfile: youAre != Side.white,
       mePlaying: youAre == Side.white,
+      clockEmergencyThreshold:
+          youAre == Side.white ? gameState.game.clock?.emergency : null,
     );
 
     final topPlayer = youAre == Side.white ? black : white;
@@ -271,44 +275,43 @@ class _Body extends ConsumerWidget {
     final content = Column(
       children: [
         Expanded(
-          child: Center(
-            child: SafeArea(
-              child: TableBoardLayout(
-                boardData: cg.BoardData(
-                  interactableSide:
-                      gameState.game.playable && !gameState.isReplaying
-                          ? youAre == Side.white
-                              ? cg.InteractableSide.white
-                              : cg.InteractableSide.black
-                          : cg.InteractableSide.none,
-                  orientation: isBoardTurned ? youAre.opposite.cg : youAre.cg,
-                  fen: position.fen,
-                  lastMove: gameState.game.moveAt(gameState.stepCursor)?.cg,
-                  isCheck: position.isCheck,
-                  sideToMove: sideToMove.cg,
-                  validMoves: algebraicLegalMoves(position),
-                  onMove: (move, {isPremove}) {
-                    ref
-                        .read(ctrlProvider.notifier)
-                        .onUserMove(Move.fromUci(move.uci)!);
-                  },
-                ),
-                topTable: topPlayer,
-                bottomTable: gameState.canShowClaimWinCountdown &&
-                        gameState.opponentLeftCountdown != null
-                    ? _ClaimWinCountdown(
-                        duration: gameState.opponentLeftCountdown!,
-                      )
-                    : bottomPlayer,
-                moves: gameState.game.steps
-                    .skip(1)
-                    .map((e) => e.sanMove!.san)
-                    .toList(growable: false),
-                currentMoveIndex: gameState.stepCursor,
-                onSelectMove: (moveIndex) {
-                  ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
+          child: SafeArea(
+            bottom: false,
+            child: TableBoardLayout(
+              boardData: cg.BoardData(
+                interactableSide:
+                    gameState.game.playable && !gameState.isReplaying
+                        ? youAre == Side.white
+                            ? cg.InteractableSide.white
+                            : cg.InteractableSide.black
+                        : cg.InteractableSide.none,
+                orientation: isBoardTurned ? youAre.opposite.cg : youAre.cg,
+                fen: position.fen,
+                lastMove: gameState.game.moveAt(gameState.stepCursor)?.cg,
+                isCheck: position.isCheck,
+                sideToMove: sideToMove.cg,
+                validMoves: algebraicLegalMoves(position),
+                onMove: (move, {isPremove}) {
+                  ref
+                      .read(ctrlProvider.notifier)
+                      .onUserMove(Move.fromUci(move.uci)!);
                 },
               ),
+              topTable: topPlayer,
+              bottomTable: gameState.canShowClaimWinCountdown &&
+                      gameState.opponentLeftCountdown != null
+                  ? _ClaimWinCountdown(
+                      duration: gameState.opponentLeftCountdown!,
+                    )
+                  : bottomPlayer,
+              moves: gameState.game.steps
+                  .skip(1)
+                  .map((e) => e.sanMove!.san)
+                  .toList(growable: false),
+              currentMoveIndex: gameState.stepCursor,
+              onSelectMove: (moveIndex) {
+                ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
+              },
             ),
           ),
         ),
@@ -692,26 +695,6 @@ class _ClaimWinCountdown extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: Text(context.l10n.opponentLeftCounter(secs)),
       ),
-    );
-  }
-}
-
-class _CreateGameError extends StatelessWidget {
-  const _CreateGameError();
-
-  @override
-  Widget build(BuildContext context) {
-    return const TableBoardLayout(
-      boardData: cg.BoardData(
-        interactableSide: cg.InteractableSide.none,
-        orientation: cg.Side.white,
-        fen: kEmptyFen,
-      ),
-      topTable: SizedBox.shrink(),
-      bottomTable: SizedBox.shrink(),
-      showMoveListPlaceholder: true,
-      errorMessage:
-          'Sorry, we could not create the game. Please try again later.',
     );
   }
 }
