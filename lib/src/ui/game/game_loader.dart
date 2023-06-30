@@ -44,45 +44,84 @@ class GameLoader extends ConsumerWidget {
     return Column(
       children: [
         Expanded(
-          child: Center(
-            child: SafeArea(
-              child: TableBoardLayout(
-                boardData: const cg.BoardData(
-                  interactableSide: cg.InteractableSide.none,
-                  orientation: cg.Side.white,
-                  fen: kEmptyFen,
-                ),
-                topTable: const SizedBox.shrink(),
-                bottomTable: const SizedBox.shrink(),
-                showMoveListPlaceholder: true,
-                boardOverlay: PlatformCard(
-                  elevation: 2.0,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text('${context.l10n.waitingForOpponent}...'),
-                        const SizedBox(height: 26.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(timeControlPref.speed.icon),
-                            const SizedBox(width: 8.0),
-                            Text(
-                              timeControlPref.display,
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16.0),
-                        _LobbyNumbers(),
-                      ],
-                    ),
+          child: SafeArea(
+            bottom: false,
+            child: TableBoardLayout(
+              boardData: const cg.BoardData(
+                interactableSide: cg.InteractableSide.none,
+                orientation: cg.Side.white,
+                fen: kEmptyFen,
+              ),
+              topTable: const SizedBox.shrink(),
+              bottomTable: const SizedBox.shrink(),
+              showMoveListPlaceholder: true,
+              boardOverlay: PlatformCard(
+                elevation: 2.0,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('${context.l10n.waitingForOpponent}...'),
+                      const SizedBox(height: 26.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(timeControlPref.speed.icon),
+                          const SizedBox(width: 8.0),
+                          Text(
+                            timeControlPref.display,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16.0),
+                      _LobbyNumbers(),
+                    ],
                   ),
                 ),
               ),
+            ),
+          ),
+        ),
+        _BottomBar(
+          children: [
+            BottomBarButton(
+              onTap: () => Navigator.of(context).pop(),
+              label: context.l10n.cancel,
+              shortLabel: context.l10n.cancel,
+              icon: CupertinoIcons.xmark,
+              showAndroidShortLabel: true,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class CreateGameError extends StatelessWidget {
+  const CreateGameError();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const Expanded(
+          child: SafeArea(
+            bottom: false,
+            child: TableBoardLayout(
+              boardData: cg.BoardData(
+                interactableSide: cg.InteractableSide.none,
+                orientation: cg.Side.white,
+                fen: kEmptyFen,
+              ),
+              topTable: SizedBox.shrink(),
+              bottomTable: SizedBox.shrink(),
+              showMoveListPlaceholder: true,
+              errorMessage:
+                  'Sorry, we could not create the game. Please try again later.',
             ),
           ),
         ),

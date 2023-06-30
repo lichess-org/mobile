@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
 import 'package:lichess_mobile/src/model/game/lobby_game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -105,12 +104,12 @@ class _GameScreenState extends ConsumerState<GameScreen>
       androidBuilder: (context) => _androidBuilder(
         context: context,
         playPrefs: playPrefs,
-        body: const _CreateGameError(),
+        body: const CreateGameError(),
       ),
       iosBuilder: (context) => _iosBuilder(
         context: context,
         playPrefs: playPrefs,
-        body: const _CreateGameError(),
+        body: const CreateGameError(),
       ),
     );
   }
