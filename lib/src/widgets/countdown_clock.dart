@@ -116,46 +116,32 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
               kMaxClockTextScaleFactor,
             ),
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              Text(
-                '$min:$secs',
-                style: TextStyle(
-                  color: widget.active
-                      ? isEmergency
-                          ? clockStyle.emergencyTextColor
-                          : clockStyle.activeTextColor
-                      : clockStyle.textColor,
-                  fontSize:
-                      screenHeight < kSmallHeightScreenThreshold ? 20 : 24,
-                  height:
-                      screenHeight < kSmallHeightScreenThreshold ? 1.0 : null,
-                  fontFeatures: const [
-                    FontFeature.tabularFigures(),
-                  ],
-                ),
+          child: RichText(
+            text: TextSpan(
+              text: '$min:$secs',
+              style: TextStyle(
+                color: widget.active
+                    ? isEmergency
+                        ? clockStyle.emergencyTextColor
+                        : clockStyle.activeTextColor
+                    : clockStyle.textColor,
+                fontSize: screenHeight < kSmallHeightScreenThreshold ? 20 : 24,
+                height: screenHeight < kSmallHeightScreenThreshold ? 1.0 : null,
+                fontFeatures: const [
+                  FontFeature.tabularFigures(),
+                ],
               ),
-              if (showTenths)
-                Text(
-                  '.$tenths',
-                  style: TextStyle(
-                    color: widget.active
-                        ? isEmergency
-                            ? clockStyle.emergencyTextColor
-                            : clockStyle.activeTextColor
-                        : clockStyle.textColor,
-                    fontSize:
-                        screenHeight < kSmallHeightScreenThreshold ? 14 : 18,
-                    height:
-                        screenHeight < kSmallHeightScreenThreshold ? 1.0 : null,
-                    fontFeatures: const [
-                      FontFeature.tabularFigures(),
-                    ],
+              children: [
+                if (showTenths)
+                  TextSpan(
+                    text: '.$tenths',
+                    style: TextStyle(
+                      fontSize:
+                          screenHeight < kSmallHeightScreenThreshold ? 14 : 18,
+                    ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
