@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/glowing_text.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
@@ -215,17 +216,6 @@ class _Body extends ConsumerWidget {
               ctrlProvider: ctrlProvider,
             ),
             barrierDismissible: true,
-          );
-        }
-
-        if (prev.requireValue.game.opponent?.offeringRematch != true &&
-            state.requireValue.game.opponent?.offeringRematch == true) {
-          showAdaptiveDialog<void>(
-            context: context,
-            builder: (context) => _OpponentRematchDialog(
-              ctrlProvider: ctrlProvider,
-            ),
-            barrierDismissible: false,
           );
         }
 
@@ -465,6 +455,7 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             label: Text(context.l10n.cancelRematchOffer),
             dismissOnPress: true,
+            isDestructiveAction: true,
             onPressed: (context) {
               ref.read(ctrlProvider.notifier).declineRematch();
             },
@@ -545,7 +536,12 @@ class _GameEndDialog extends ConsumerWidget {
                     ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
                   }
                 : null,
-            child: Text(context.l10n.rematch),
+            child: gameState.game.opponent?.offeringRematch == true
+                ? GlowingText(
+                    context.l10n.rematch,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
+                  )
+                : Text(context.l10n.rematch),
           ),
         const SizedBox(height: 8.0),
         SecondaryButton(
@@ -567,59 +563,6 @@ class _GameEndDialog extends ConsumerWidget {
     } else {
       return Dialog(
         child: content,
-      );
-    }
-  }
-}
-
-class _OpponentRematchDialog extends ConsumerWidget {
-  const _OpponentRematchDialog({
-    required this.ctrlProvider,
-  });
-
-  final GameCtrlProvider ctrlProvider;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final content = Text(context.l10n.yourOpponentWantsToPlayANewGameWithYou);
-
-    void decline() {
-      Navigator.of(context).pop();
-      ref.read(ctrlProvider.notifier).declineRematch();
-    }
-
-    void accept() {
-      Navigator.of(context).pop();
-      ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
-    }
-
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return CupertinoAlertDialog(
-        content: content,
-        actions: [
-          CupertinoDialogAction(
-            onPressed: decline,
-            child: Text(context.l10n.decline),
-          ),
-          CupertinoDialogAction(
-            onPressed: accept,
-            child: Text(context.l10n.accept),
-          ),
-        ],
-      );
-    } else {
-      return AlertDialog(
-        content: content,
-        actions: [
-          TextButton(
-            onPressed: decline,
-            child: Text(context.l10n.decline),
-          ),
-          TextButton(
-            onPressed: accept,
-            child: Text(context.l10n.accept),
-          ),
-        ],
       );
     }
   }

@@ -28,7 +28,7 @@ class LobbyGame extends _$LobbyGame {
   Future<void> newOpponent() async {
     final key = _key;
     state = const AsyncValue.loading();
-    final newState = await AsyncValue.guard(() async {
+    final newState = await AsyncValue.guard(() {
       return _service.newOnlineGame();
     });
     // mounted property check logic from:
