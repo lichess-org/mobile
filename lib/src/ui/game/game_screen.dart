@@ -481,7 +481,7 @@ class _GameBottomBar extends ConsumerWidget {
   }
 }
 
-class _GameEndDialog extends ConsumerWidget {
+class _GameEndDialog extends ConsumerStatefulWidget {
   const _GameEndDialog({
     required this.ctrlProvider,
   });
@@ -489,8 +489,34 @@ class _GameEndDialog extends ConsumerWidget {
   final GameCtrlProvider ctrlProvider;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final gameState = ref.watch(ctrlProvider).requireValue;
+  ConsumerState<_GameEndDialog> createState() => _GameEndDialogState();
+}
+
+class _GameEndDialogState extends ConsumerState<_GameEndDialog> {
+  late Timer _buttonActivationTimer;
+  bool _activateButtons = false;
+
+  @override
+  void initState() {
+    _buttonActivationTimer = Timer(const Duration(milliseconds: 1000), () {
+      if (mounted) {
+        setState(() {
+          _activateButtons = true;
+        });
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _buttonActivationTimer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final gameState = ref.watch(widget.ctrlProvider).requireValue;
 
     final showWinner = gameState.game.winner != null
         ? ' • ${gameState.game.winner == Side.white ? context.l10n.whiteIsVictorious : context.l10n.blackIsVictorious}'
@@ -524,18 +550,21 @@ class _GameEndDialog extends ConsumerWidget {
           SecondaryButton(
             semanticsLabel: context.l10n.cancelRematchOffer,
             onPressed: () {
-              ref.read(ctrlProvider.notifier).declineRematch();
+              ref.read(widget.ctrlProvider.notifier).declineRematch();
             },
             child: Text(context.l10n.cancelRematchOffer),
           )
         else if (gameState.canOfferRematch)
           SecondaryButton(
             semanticsLabel: context.l10n.rematch,
-            onPressed: gameState.game.opponent?.onGame == true
-                ? () {
-                    ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
-                  }
-                : null,
+            onPressed:
+                _activateButtons && gameState.game.opponent?.onGame == true
+                    ? () {
+                        ref
+                            .read(widget.ctrlProvider.notifier)
+                            .proposeOrAcceptRematch();
+                      }
+                    : null,
             child: gameState.game.opponent?.offeringRematch == true
                 ? GlowingText(
                     context.l10n.rematch,
@@ -546,11 +575,14 @@ class _GameEndDialog extends ConsumerWidget {
         const SizedBox(height: 8.0),
         SecondaryButton(
           semanticsLabel: context.l10n.newOpponent,
-          onPressed: () {
-            ref.read(lobbyGameProvider.notifier).newOpponent();
-            // Other alert dialogs may be shown before this one, so be sure to pop them all
-            Navigator.of(context).popUntil((route) => route is! RawDialogRoute);
-          },
+          onPressed: _activateButtons
+              ? () {
+                  ref.read(lobbyGameProvider.notifier).newOpponent();
+                  // Other alert dialogs may be shown before this one, so be sure to pop them all
+                  Navigator.of(context)
+                      .popUntil((route) => route is! RawDialogRoute);
+                }
+              : null,
           child: Text(context.l10n.newOpponent),
         ),
       ],
