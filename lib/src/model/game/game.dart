@@ -91,9 +91,18 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
       lastPosition.fullmoves <= 1 &&
       (meta.rules == null || !meta.rules!.contains(GameRule.noAbort));
   bool get resignable => playable && !abortable;
-  bool get drawable => playable && lastPosition.fullmoves >= 2 && !hasAI;
+  bool get drawable =>
+      playable &&
+      lastPosition.fullmoves >= 2 &&
+      !(player?.offeringDraw == true) &&
+      !hasAI;
   bool get rematchable =>
       meta.rules == null || !meta.rules!.contains(GameRule.noRematch);
+  bool get takebackable =>
+      playable &&
+      lastPosition.fullmoves >= 2 &&
+      !(player?.proposingTakeback == true) &&
+      !(opponent?.proposingTakeback == true);
 
   bool get canClaimWin =>
       opponent?.isGone == true &&

@@ -347,9 +347,74 @@ class _GameBottomBar extends ConsumerWidget {
               },
               icon: Icons.menu,
             ),
-            const SizedBox(
-              width: 44.0,
-            ),
+            if (gameState.game.playable &&
+                gameState.game.opponent?.offeringDraw == true)
+              BottomBarButton(
+                label: context.l10n.yourOpponentOffersADraw,
+                highlighted: true,
+                shortLabel: context.l10n.draw,
+                onTap: () {
+                  showAdaptiveDialog<void>(
+                    context: context,
+                    builder: (context) => _GameNegotiationDialog(
+                      title: Text(context.l10n.yourOpponentOffersADraw),
+                      onAccept: () {
+                        ref.read(ctrlProvider.notifier).offerOrAcceptDraw();
+                      },
+                      onDecline: () {
+                        ref.read(ctrlProvider.notifier).cancelOrDeclineDraw();
+                      },
+                    ),
+                    barrierDismissible: true,
+                  );
+                },
+                icon: const IconData(0xBD),
+              )
+            else if (gameState.game.playable &&
+                gameState.game.isThreefoldRepetition == true)
+              BottomBarButton(
+                label: context.l10n.threefoldRepetition,
+                highlighted: true,
+                shortLabel: context.l10n.draw,
+                onTap: () {
+                  showAdaptiveDialog<void>(
+                    context: context,
+                    builder: (context) =>
+                        _ThreefoldDialog(ctrlProvider: ctrlProvider),
+                    barrierDismissible: true,
+                  );
+                },
+                icon: const IconData(0xBD),
+              )
+            else if (gameState.game.playable &&
+                gameState.game.opponent?.proposingTakeback == true)
+              BottomBarButton(
+                label: context.l10n.yourOpponentProposesATakeback,
+                highlighted: true,
+                shortLabel: context.l10n.takeback,
+                onTap: () {
+                  showAdaptiveDialog<void>(
+                    context: context,
+                    builder: (context) => _GameNegotiationDialog(
+                      title: Text(context.l10n.yourOpponentProposesATakeback),
+                      onAccept: () {
+                        ref.read(ctrlProvider.notifier).offerOrAcceptTakeback();
+                      },
+                      onDecline: () {
+                        ref
+                            .read(ctrlProvider.notifier)
+                            .cancelOrDeclineTakeback();
+                      },
+                    ),
+                    barrierDismissible: true,
+                  );
+                },
+                icon: CupertinoIcons.arrowshape_turn_up_left,
+              )
+            else
+              const SizedBox(
+                width: 44.0,
+              ),
             const SizedBox(
               width: 44.0,
             ),
@@ -408,6 +473,39 @@ class _GameBottomBar extends ConsumerWidget {
             label: Text(context.l10n.abortGame),
             onPressed: (context) {
               ref.read(ctrlProvider.notifier).abortGame();
+            },
+          ),
+        if (gameState.game.takebackable)
+          BottomSheetAction(
+            leading: const Icon(CupertinoIcons.arrowshape_turn_up_left),
+            label: Text(context.l10n.takeback),
+            onPressed: (context) {
+              ref.read(ctrlProvider.notifier).offerOrAcceptTakeback();
+            },
+          ),
+        if (gameState.game.player?.proposingTakeback == true)
+          BottomSheetAction(
+            leading: const Icon(CupertinoIcons.arrowshape_turn_up_left),
+            label: const Text('Cancel takeback offer'),
+            isDestructiveAction: true,
+            onPressed: (context) {
+              ref.read(ctrlProvider.notifier).cancelOrDeclineTakeback();
+            },
+          ),
+        if (gameState.game.player?.offeringDraw == true)
+          BottomSheetAction(
+            leading: const Icon(Icons.flag),
+            label: const Text('Cancel draw offer'),
+            isDestructiveAction: true,
+            onPressed: (context) {
+              ref.read(ctrlProvider.notifier).cancelOrDeclineDraw();
+            },
+          )
+        else if (gameState.canOfferDraw)
+          BottomSheetAction(
+            label: Text(context.l10n.offerDraw),
+            onPressed: (context) {
+              ref.read(ctrlProvider.notifier).offerOrAcceptDraw();
             },
           ),
         if (gameState.game.resignable)
@@ -600,6 +698,115 @@ class _GameEndDialogState extends ConsumerState<_GameEndDialog> {
   }
 }
 
+class _GameNegotiationDialog extends StatelessWidget {
+  const _GameNegotiationDialog({
+    required this.title,
+    required this.onAccept,
+    required this.onDecline,
+  });
+
+  final Widget title;
+  final VoidCallback onAccept;
+  final VoidCallback onDecline;
+
+  @override
+  Widget build(BuildContext context) {
+    void decline() {
+      Navigator.of(context).pop();
+      onDecline();
+    }
+
+    void accept() {
+      Navigator.of(context).pop();
+      onAccept();
+    }
+
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return CupertinoAlertDialog(
+        content: title,
+        actions: [
+          CupertinoDialogAction(
+            onPressed: accept,
+            child: Text(context.l10n.accept),
+          ),
+          CupertinoDialogAction(
+            onPressed: decline,
+            isDestructiveAction: true,
+            child: Text(context.l10n.decline),
+          ),
+        ],
+      );
+    } else {
+      return AlertDialog(
+        content: title,
+        actions: [
+          TextButton(
+            onPressed: accept,
+            child: Text(context.l10n.accept),
+          ),
+          TextButton(
+            onPressed: decline,
+            child: Text(context.l10n.decline),
+          ),
+        ],
+      );
+    }
+  }
+}
+
+class _ThreefoldDialog extends ConsumerWidget {
+  const _ThreefoldDialog({
+    required this.ctrlProvider,
+  });
+
+  final GameCtrlProvider ctrlProvider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final content = Text(context.l10n.threefoldRepetition);
+
+    void decline() {
+      Navigator.of(context).pop();
+    }
+
+    void accept() {
+      Navigator.of(context).pop();
+      ref.read(ctrlProvider.notifier).claimDraw();
+    }
+
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return CupertinoAlertDialog(
+        content: content,
+        actions: [
+          CupertinoDialogAction(
+            onPressed: accept,
+            child: Text(context.l10n.claimADraw),
+          ),
+          CupertinoDialogAction(
+            onPressed: decline,
+            isDestructiveAction: true,
+            child: Text(context.l10n.cancel),
+          ),
+        ],
+      );
+    } else {
+      return AlertDialog(
+        content: content,
+        actions: [
+          TextButton(
+            onPressed: accept,
+            child: Text(context.l10n.claimADraw),
+          ),
+          TextButton(
+            onPressed: decline,
+            child: Text(context.l10n.cancel),
+          ),
+        ],
+      );
+    }
+  }
+}
+
 class _ClaimWinDialog extends ConsumerWidget {
   const _ClaimWinDialog({
     required this.ctrlProvider,
@@ -629,6 +836,7 @@ class _ClaimWinDialog extends ConsumerWidget {
         actions: [
           CupertinoDialogAction(
             onPressed: gameState.game.canClaimWin ? onClaimWin : null,
+            isDefaultAction: true,
             child: Text(context.l10n.forceResignation),
           ),
           CupertinoDialogAction(

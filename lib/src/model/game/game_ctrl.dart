@@ -136,6 +136,26 @@ class GameCtrl extends _$GameCtrl {
     _socket.send('draw-force', null);
   }
 
+  void claimDraw() {
+    _socket.send('draw-claim', null);
+  }
+
+  void offerOrAcceptDraw() {
+    _socket.send('draw-yes', null);
+  }
+
+  void cancelOrDeclineDraw() {
+    _socket.send('draw-no', null);
+  }
+
+  void offerOrAcceptTakeback() {
+    _socket.send('takeback-yes', null);
+  }
+
+  void cancelOrDeclineTakeback() {
+    _socket.send('takeback-no', null);
+  }
+
   void proposeOrAcceptRematch() {
     _socket.send('rematch-yes', null);
   }
@@ -200,6 +220,11 @@ class GameCtrl extends _$GameCtrl {
   }
 
   void _handleSocketTopic(SocketEvent event) {
+    if (!state.hasValue) {
+      assert(false, 'received a game SocketEvent while GameCtrlState is null');
+      return;
+    }
+
     switch (event.topic) {
       // Server asking for a resync
       case 'resync':
@@ -429,6 +454,43 @@ class GameCtrl extends _$GameCtrl {
           },
         );
 
+      case 'drawOffer':
+        final side = pick(event.data).asSideOrNull();
+        final curState = state.requireValue;
+        state = AsyncValue.data(
+          curState.copyWith(
+            lastDrawOfferAtPly: side != null && side == curState.game.youAre
+                ? curState.game.lastPly
+                : null,
+            game: curState.game.copyWith(
+              white: curState.game.white.copyWith(
+                offeringDraw: side == null ? null : side == Side.white,
+              ),
+              black: curState.game.black.copyWith(
+                offeringDraw: side == null ? null : side == Side.black,
+              ),
+            ),
+          ),
+        );
+
+      case 'takebackOffers':
+        final data = event.data as Map<String, dynamic>;
+        final white = pick(data['white']).asBoolOrNull();
+        final black = pick(data['black']).asBoolOrNull();
+        final curState = state.requireValue;
+        state = AsyncValue.data(
+          curState.copyWith(
+            game: curState.game.copyWith(
+              white: curState.game.white.copyWith(
+                proposingTakeback: white ?? false,
+              ),
+              black: curState.game.black.copyWith(
+                proposingTakeback: black ?? false,
+              ),
+            ),
+          ),
+        );
+
       // Event sent when a player adds or cancels a rematch offer
       case 'rematchOffer':
         final side = pick(event.data).asSideOrNull();
@@ -478,8 +540,6 @@ class GameCtrlState with _$GameCtrlState {
   const factory GameCtrlState({
     required PlayableGame game,
     required int stepCursor,
-    bool? playerOfferingDraw,
-    bool? opponentOfferingDraw,
     int? lastDrawOfferAtPly,
     Duration? opponentLeftCountdown,
 
@@ -497,9 +557,7 @@ class GameCtrlState with _$GameCtrlState {
           game.meta.source == GameSource.pool);
 
   bool get canOfferDraw =>
-      game.drawable &&
-      (playerOfferingDraw == null || playerOfferingDraw == false) &&
-      (lastDrawOfferAtPly ?? -99) < game.lastPly - 20;
+      game.drawable && (lastDrawOfferAtPly ?? -99) < game.lastPly - 20;
 
   bool get canShowClaimWinCountdown =>
       !game.isPlayerTurn &&
