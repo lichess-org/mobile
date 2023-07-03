@@ -731,7 +731,6 @@ class _GameNegotiationDialog extends StatelessWidget {
           ),
           CupertinoDialogAction(
             onPressed: decline,
-            isDestructiveAction: true,
             child: Text(context.l10n.decline),
           ),
         ],
@@ -784,7 +783,6 @@ class _ThreefoldDialog extends ConsumerWidget {
           ),
           CupertinoDialogAction(
             onPressed: decline,
-            isDestructiveAction: true,
             child: Text(context.l10n.cancel),
           ),
         ],
