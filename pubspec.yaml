@@ -23,7 +23,7 @@ dependencies:
   flutter_appauth: ^6.0.0
   flutter_secure_storage: ^8.0.0
   logging: ^1.1.0
-  shared_preferences: ^2.1.0
+  shared_preferences: ^2.2.0
   cached_network_image: ^3.2.2
   dartchess: ^0.1.0
   chessground: ^1.0.0
