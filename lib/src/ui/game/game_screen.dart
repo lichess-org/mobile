@@ -476,7 +476,6 @@ class _GameBottomBar extends ConsumerWidget {
       context: context,
       actions: [
         BottomSheetAction(
-          leading: const Icon(Icons.swap_vert),
           label: Text(context.l10n.flipBoard),
           onPressed: (context) {
             ref.read(isBoardTurnedProvider.notifier).toggle();
@@ -484,7 +483,6 @@ class _GameBottomBar extends ConsumerWidget {
         ),
         if (gameState.game.abortable)
           BottomSheetAction(
-            leading: const Icon(Icons.cancel),
             label: Text(context.l10n.abortGame),
             onPressed: (context) {
               ref.read(ctrlProvider.notifier).abortGame();
@@ -492,7 +490,6 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.game.clock != null && gameState.game.moretimeable)
           BottomSheetAction(
-            leading: const Icon(Icons.add_box),
             label: Text(
               context.l10n.giveNbSeconds(
                 gameState.game.clock!.moreTime?.inSeconds ?? 15,
@@ -504,7 +501,6 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.game.takebackable)
           BottomSheetAction(
-            leading: const Icon(CupertinoIcons.arrowshape_turn_up_left),
             label: Text(context.l10n.takeback),
             onPressed: (context) {
               ref.read(ctrlProvider.notifier).offerOrAcceptTakeback();
@@ -512,7 +508,6 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.game.player?.proposingTakeback == true)
           BottomSheetAction(
-            leading: const Icon(CupertinoIcons.arrowshape_turn_up_left),
             label: const Text('Cancel takeback offer'),
             isDestructiveAction: true,
             onPressed: (context) {
@@ -521,7 +516,6 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.game.player?.offeringDraw == true)
           BottomSheetAction(
-            leading: const Icon(Icons.flag),
             label: const Text('Cancel draw offer'),
             isDestructiveAction: true,
             onPressed: (context) {
@@ -537,7 +531,6 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.game.resignable)
           BottomSheetAction(
-            leading: const Icon(Icons.flag),
             label: Text(context.l10n.resign),
             dismissOnPress: false,
             onPressed: (context) async {
@@ -662,6 +655,7 @@ class _GameEndDialogState extends ConsumerState<_GameEndDialog> {
               fontSize: 18.0,
               fontWeight: FontWeight.bold,
             ),
+            textAlign: TextAlign.center,
           ),
         const SizedBox(height: 6.0),
         Text(
@@ -669,6 +663,7 @@ class _GameEndDialogState extends ConsumerState<_GameEndDialog> {
           style: const TextStyle(
             fontStyle: FontStyle.italic,
           ),
+          textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24.0),
         if (gameState.game.player?.offeringRematch == true)
@@ -719,7 +714,10 @@ class _GameEndDialogState extends ConsumerState<_GameEndDialog> {
       );
     } else {
       return Dialog(
-        child: content,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: content,
+        ),
       );
     }
   }
