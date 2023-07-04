@@ -21,10 +21,12 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/ui/auth/sign_in_widget.dart';
 import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/ui/user/leaderboard_widget.dart';
 import 'package:lichess_mobile/src/ui/play/play_screen.dart';
+import 'package:lichess_mobile/src/ui/game/game_screen.dart';
 
 final RouteObserver<PageRoute<void>> homeRouteObserver =
     RouteObserver<PageRoute<void>>();
@@ -249,12 +251,14 @@ class _HomeBody extends ConsumerWidget {
               ? ListView(
                   controller: homeScrollController,
                   children: [
+                    const _CreateAGame(),
                     const _DailyPuzzle(),
                     LeaderboardWidget(),
                   ],
                 )
               : SliverList(
                   delegate: SliverChildListDelegate([
+                    const _CreateAGame(),
                     const _DailyPuzzle(),
                     LeaderboardWidget(),
                   ]),
@@ -330,6 +334,50 @@ class _ConnectivityBanner extends ConsumerWidget {
   }
 }
 
+class _CreateAGame extends ConsumerWidget {
+  const _CreateAGame();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final timeControlPref = ref
+        .watch(playPreferencesProvider.select((prefs) => prefs.timeIncrement));
+    return SmallBoardPreview(
+      orientation: Side.white.cg,
+      fen: kInitialFEN,
+      description: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(
+            context.l10n.createAGame,
+            style: Styles.boardPreviewTitle,
+          ),
+          Row(
+            children: [
+              Icon(
+                timeControlPref.speed.icon,
+                size: 20,
+                color: DefaultTextStyle.of(context).style.color,
+              ),
+              const SizedBox(width: 5),
+              Text(timeControlPref.display)
+            ],
+          ),
+        ],
+      ),
+      onTap: () {
+        pushPlatformRoute(
+          context,
+          rootNavigator: true,
+          builder: (BuildContext context) {
+            return const GameScreen();
+          },
+        );
+      },
+    );
+  }
+}
+
 class _DailyPuzzle extends ConsumerWidget {
   const _DailyPuzzle();
 
@@ -339,11 +387,23 @@ class _DailyPuzzle extends ConsumerWidget {
     return puzzle.when(
       data: (data) {
         final preview = PuzzlePreview.fromPuzzle(data);
-        return BoardPreview(
+        return SmallBoardPreview(
           orientation: preview.orientation.cg,
           fen: preview.initialFen,
           lastMove: preview.initialMove.cg,
-          header: Text(context.l10n.puzzleDailyPuzzle),
+          description: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                context.l10n.puzzlePuzzleOfTheDay,
+                style: Styles.boardPreviewTitle,
+              ),
+              Text(
+                context.l10n.puzzlePlayedXTimes(data.puzzle.plays),
+              ),
+            ],
+          ),
           onTap: () {
             final session = ref.read(authSessionProvider);
             pushPlatformRoute(
@@ -383,18 +443,28 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzle = ref.watch(nextPuzzleProvider(PuzzleTheme.mix));
-    return puzzle.when(
+    return puzzle.maybeWhen(
       data: (data) {
         final preview =
             data != null ? PuzzlePreview.fromPuzzle(data.puzzle) : null;
-        return BoardPreview(
+        return SmallBoardPreview(
           orientation: preview?.orientation.cg ?? Side.white.cg,
           fen: preview?.initialFen ?? kEmptyFen,
           lastMove: preview?.initialMove.cg,
-          header: Text(context.l10n.puzzles),
-          errorMessage: data == null
-              ? 'No offline puzzles available. Go online to get more puzzles.'
-              : null,
+          description: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              const Text(
+                'Puzzle training',
+                style: Styles.boardPreviewTitle,
+              ),
+              Text(
+                context.l10n.puzzlePlayedXTimes(data?.puzzle.puzzle.plays ?? 0),
+              ),
+            ],
+          ),
           onTap: data != null
               ? () {
                   pushPlatformRoute(
@@ -411,11 +481,7 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
               : null,
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stack) => Padding(
-        padding: Styles.bodySectionPadding,
-        child: const Text('Could not load offline puzzles.'),
-      ),
+      orElse: () => const SizedBox.shrink(),
     );
   }
 }

@@ -9,6 +9,10 @@ abstract class Styles {
         fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
         fontWeight: FontWeight.bold,
       );
+  static const boardPreviewTitle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  );
   static const subtitleOpacity = 0.7;
 
   // padding

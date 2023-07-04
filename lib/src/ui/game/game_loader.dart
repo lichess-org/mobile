@@ -68,7 +68,10 @@ class GameLoader extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(timeControlPref.speed.icon),
+                          Icon(
+                            timeControlPref.speed.icon,
+                            color: DefaultTextStyle.of(context).style.color,
+                          ),
                           const SizedBox(width: 8.0),
                           Text(
                             timeControlPref.display,
