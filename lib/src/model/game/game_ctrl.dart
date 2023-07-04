@@ -120,6 +120,10 @@ class GameCtrl extends _$GameCtrl {
     }
   }
 
+  void moreTime() {
+    _socket.send('moretime', null);
+  }
+
   void abortGame() {
     _socket.send('abort', null);
   }

@@ -475,6 +475,18 @@ class _GameBottomBar extends ConsumerWidget {
               ref.read(ctrlProvider.notifier).abortGame();
             },
           ),
+        if (gameState.game.clock != null && gameState.game.moretimeable)
+          BottomSheetAction(
+            leading: const Icon(Icons.add_box),
+            label: Text(
+              context.l10n.giveNbSeconds(
+                gameState.game.clock!.moreTime?.inSeconds ?? 15,
+              ),
+            ),
+            onPressed: (context) {
+              ref.read(ctrlProvider.notifier).moreTime();
+            },
+          ),
         if (gameState.game.takebackable)
           BottomSheetAction(
             leading: const Icon(CupertinoIcons.arrowshape_turn_up_left),

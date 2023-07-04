@@ -103,6 +103,7 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
       lastPosition.fullmoves >= 2 &&
       !(player?.proposingTakeback == true) &&
       !(opponent?.proposingTakeback == true);
+  bool get moretimeable => playable && clock != null;
 
   bool get canClaimWin =>
       opponent?.isGone == true &&
