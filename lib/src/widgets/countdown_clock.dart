@@ -37,6 +37,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   Timer? _timer;
   Duration timeLeft = Duration.zero;
   DateTime _lastUpdate = DateTime.now();
+  bool _shouldPlayEmergencyFeedback = true;
   DateTime? _nextEmergency;
 
   Timer startTimer() {
@@ -47,9 +48,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
         final now = DateTime.now();
         timeLeft = timeLeft - now.difference(_lastUpdate);
         _lastUpdate = now;
-        final isEmergency = widget.emergencyThreshold != null &&
-            timeLeft <= widget.emergencyThreshold!;
-        _playEmergencyFeedback(isEmergency);
+        _playEmergencyFeedback();
         if (timeLeft <= Duration.zero) {
           widget.onFlag?.call();
           timeLeft = Duration.zero;
@@ -59,12 +58,18 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
     });
   }
 
-  void _playEmergencyFeedback(bool isEmergency) {
-    if (isEmergency &&
+  void _playEmergencyFeedback() {
+    if (widget.emergencyThreshold != null &&
+        timeLeft <= widget.emergencyThreshold! &&
+        _shouldPlayEmergencyFeedback &&
         (_nextEmergency == null || _nextEmergency!.isBefore(DateTime.now()))) {
+      _shouldPlayEmergencyFeedback = false;
       _nextEmergency = DateTime.now().add(_emergencyDelay);
       ref.read(soundServiceProvider).play(Sound.lowTime);
       HapticFeedback.heavyImpact();
+    } else if (widget.emergencyThreshold != null &&
+        timeLeft > widget.emergencyThreshold! * 1.5) {
+      _shouldPlayEmergencyFeedback = true;
     }
   }
 
