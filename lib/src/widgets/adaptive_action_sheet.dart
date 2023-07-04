@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
@@ -106,8 +107,13 @@ Future<T?> showMaterialActionSheet<T>({
                       child: Center(child: title),
                     ),
                   ],
-                  ...actions.map<Widget>((action) {
+                  ...actions.mapIndexed<Widget>((index, action) {
                     return InkWell(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(
+                          index == 0 ? 28 : 0,
+                        ),
+                      ),
                       onTap: () {
                         action.onPressed(context);
                         if (action.dismissOnPress) {
