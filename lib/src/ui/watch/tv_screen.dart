@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game.dart';
@@ -132,16 +133,20 @@ class _Body extends ConsumerWidget {
                 game.orientation == Side.white ? game.white : game.black;
             final topPlayerWidget = BoardPlayer(
               player: topPlayer.asPlayer,
-              clock: Duration(seconds: topPlayer.seconds ?? 0),
-              active: !game.position.position.isGameOver &&
-                  game.position.position.turn == topPlayer.side,
+              clock: CountdownClock(
+                duration: Duration(seconds: topPlayer.seconds ?? 0),
+                active: !game.position.position.isGameOver &&
+                    game.position.position.turn == topPlayer.side,
+              ),
               materialDiff: game.position.diff.bySide(topPlayer.side),
             );
             final bottomPlayerWidget = BoardPlayer(
               player: bottomPlayer.asPlayer,
-              clock: Duration(seconds: bottomPlayer.seconds ?? 0),
-              active: !game.position.position.isGameOver &&
-                  game.position.position.turn == bottomPlayer.side,
+              clock: CountdownClock(
+                duration: Duration(seconds: bottomPlayer.seconds ?? 0),
+                active: !game.position.position.isGameOver &&
+                    game.position.position.turn == bottomPlayer.side,
+              ),
               materialDiff: game.position.diff.bySide(bottomPlayer.side),
             );
             return TableBoardLayout(

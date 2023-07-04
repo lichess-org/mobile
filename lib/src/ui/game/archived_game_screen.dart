@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
@@ -116,12 +117,10 @@ class _BoardBody extends ConsumerWidget {
     final black = BoardPlayer(
       key: const ValueKey('black-player'),
       player: gameData.black,
-      active: false,
     );
     final white = BoardPlayer(
       key: const ValueKey('white-player'),
       player: gameData.white,
-      active: false,
     );
     final topPlayer = orientation == Side.white ? black : white;
     final bottomPlayer = orientation == Side.white ? white : black;
@@ -139,18 +138,28 @@ class _BoardBody extends ConsumerWidget {
     return gameCursor.when(
       data: (data) {
         final (game, cursor) = data;
+        final whiteClock = game.whiteClockAt(cursor);
+        final blackClock = game.blackClockAt(cursor);
         final black = BoardPlayer(
           key: const ValueKey('black-player'),
           player: gameData.black,
-          active: false,
-          clock: game.blackClockAt(cursor),
+          clock: blackClock != null
+              ? CountdownClock(
+                  duration: blackClock,
+                  active: false,
+                )
+              : null,
           materialDiff: game.materialDiffAt(cursor, Side.black),
         );
         final white = BoardPlayer(
           key: const ValueKey('white-player'),
           player: gameData.white,
-          active: false,
-          clock: game.whiteClockAt(cursor),
+          clock: whiteClock != null
+              ? CountdownClock(
+                  duration: whiteClock,
+                  active: false,
+                )
+              : null,
           materialDiff: game.materialDiffAt(cursor, Side.white),
         );
         final topPlayer = orientation == Side.white ? black : white;

@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
+import 'package:lichess_mobile/src/utils/rate_limit.dart';
 
 part 'game_ctrl.freezed.dart';
 part 'game_ctrl.g.dart';
@@ -25,6 +26,8 @@ class GameCtrl extends _$GameCtrl {
   final _logger = Logger('GameCtrl');
   StreamSubscription<SocketEvent>? _socketSubscription;
   Timer? _opponentLeftCountdownTimer;
+
+  final _onFlagThrottler = Throttler(const Duration(milliseconds: 500));
 
   /// Last socket version received
   int _socketEventVersion = 0;
@@ -118,6 +121,14 @@ class GameCtrl extends _$GameCtrl {
         _playReplayMoveSound(san);
       }
     }
+  }
+
+  void onFlag() {
+    _onFlagThrottler(() {
+      if (state.hasValue) {
+        _socket.send('flag', state.requireValue.game.youAre?.name);
+      }
+    });
   }
 
   void moreTime() {

@@ -16,11 +16,13 @@ class CountdownClock extends ConsumerStatefulWidget {
   final Duration duration;
   final Duration? emergencyThreshold;
   final bool active;
+  final VoidCallback? onFlag;
 
   const CountdownClock({
     required this.duration,
     required this.active,
     this.emergencyThreshold,
+    this.onFlag,
     super.key,
   });
 
@@ -49,6 +51,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
             timeLeft <= widget.emergencyThreshold!;
         _playEmergencyFeedback(isEmergency);
         if (timeLeft <= Duration.zero) {
+          widget.onFlag?.call();
           timeLeft = Duration.zero;
           timer.cancel();
         }

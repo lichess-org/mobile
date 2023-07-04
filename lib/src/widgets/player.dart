@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/ui/user/user_screen.dart';
-import './countdown_clock.dart';
 
 /// A widget to display player information above/below the chess board.
 ///
@@ -20,21 +19,17 @@ import './countdown_clock.dart';
 class BoardPlayer extends StatelessWidget {
   const BoardPlayer({
     required this.player,
-    this.active,
     this.clock,
     this.materialDiff,
     this.timeToMove,
     this.shouldLinkToUserProfile = true,
     this.mePlaying = false,
-    this.clockEmergencyThreshold,
     super.key,
   });
 
   final Player player;
-  final Duration? clock;
-  final bool? active;
+  final Widget? clock;
   final MaterialDiffSide? materialDiff;
-  final Duration? clockEmergencyThreshold;
   final bool shouldLinkToUserProfile;
   final bool mePlaying;
 
@@ -173,12 +168,7 @@ class BoardPlayer extends StatelessWidget {
                   : playerWidget,
             ),
           ),
-          if (clock != null)
-            CountdownClock(
-              duration: clock!,
-              active: active == true,
-              emergencyThreshold: clockEmergencyThreshold,
-            ),
+          if (clock != null) clock!,
         ],
       ),
     );
