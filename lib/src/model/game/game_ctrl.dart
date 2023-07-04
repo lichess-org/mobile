@@ -365,6 +365,23 @@ class GameCtrl extends _$GameCtrl {
         }
         state = AsyncValue.data(newState);
 
+      case 'clockInc':
+        final data = event.data as Map<String, dynamic>;
+        final side = pick(data['color']).asSideOrNull();
+        final newClock = pick(data['total'])
+            .letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10));
+        final curState = state.requireValue;
+        if (side != null && newClock != null) {
+          final newState = side == Side.white
+              ? curState.copyWith.game.clock!(
+                  white: newClock,
+                )
+              : curState.copyWith.game.clock!(
+                  black: newClock,
+                );
+          state = AsyncValue.data(newState);
+        }
+
       // Crowd event, sent when a player quits or joins the game
       case 'crowd':
         final data = event.data as Map<String, dynamic>;
@@ -454,6 +471,7 @@ class GameCtrl extends _$GameCtrl {
           },
         );
 
+      // Event sent when a player adds or cancels a draw offer
       case 'drawOffer':
         final side = pick(event.data).asSideOrNull();
         final curState = state.requireValue;
@@ -473,6 +491,7 @@ class GameCtrl extends _$GameCtrl {
           ),
         );
 
+      // Event sent when a player adds or cancels a takeback offer
       case 'takebackOffers':
         final data = event.data as Map<String, dynamic>;
         final white = pick(data['white']).asBoolOrNull();
