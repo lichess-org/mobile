@@ -383,7 +383,7 @@ class _GameBottomBar extends ConsumerWidget {
                     barrierDismissible: true,
                   );
                 },
-                icon: const IconData(0xBD),
+                icon: Icons.handshake_outlined,
               )
             else if (gameState.game.playable &&
                 gameState.game.isThreefoldRepetition == true)
@@ -399,7 +399,7 @@ class _GameBottomBar extends ConsumerWidget {
                     barrierDismissible: true,
                   );
                 },
-                icon: const IconData(0xBD),
+                icon: Icons.handshake_outlined,
               )
             else if (gameState.game.playable &&
                 gameState.game.opponent?.proposingTakeback == true)
