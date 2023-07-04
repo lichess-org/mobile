@@ -26,6 +26,11 @@ import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/ui/user/leaderboard_widget.dart';
 import 'package:lichess_mobile/src/ui/play/play_screen.dart';
 
+final RouteObserver<PageRoute<void>> homeRouteObserver =
+    RouteObserver<PageRoute<void>>();
+
+final isHomeRootProvider = StateProvider<bool>((ref) => true);
+
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -33,7 +38,7 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> with RouteAware {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
   bool wasOnline = true;
@@ -59,6 +64,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       androidBuilder: _androidBuilder,
       iosBuilder: _iosBuilder,
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null && route is PageRoute) {
+      homeRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    homeRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPushNext() {
+    ref.read(isHomeRootProvider.notifier).state = false;
+    super.didPushNext();
+  }
+
+  @override
+  void didPopNext() {
+    ref.read(isHomeRootProvider.notifier).state = true;
+    super.didPopNext();
   }
 
   Widget _androidBuilder(BuildContext context) {
@@ -118,16 +150,32 @@ class _HomeScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return PlatformWidget(
+      androidBuilder: _androidBuilder,
+      iosBuilder: _iosBuilder,
+    );
+  }
+
+  Widget _iosBuilder(BuildContext context) {
     return SafeArea(
+      top: false,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: child,
           ),
-          SizedBox(
+          Container(
             height: 80,
-            // color: CupertinoTheme.of(context).barBackgroundColor,
+            decoration: BoxDecoration(
+              color: CupertinoTheme.of(context).barBackgroundColor,
+              border: const Border(
+                top: BorderSide(
+                  color: Styles.cupertinoDefaultTabBarBorderColor,
+                  width: 0.0,
+                ),
+              ),
+            ),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 15.0)
                   .add(Styles.horizontalBodyPadding),
@@ -135,12 +183,50 @@ class _HomeScaffold extends StatelessWidget {
                 semanticsLabel: context.l10n.play,
                 child: Text(context.l10n.play),
                 onPressed: () {
-                  Navigator.of(context).push<void>(
-                    MaterialPageRoute(
-                      builder: (context) => const PlayScreen(),
-                    ),
+                  pushPlatformRoute(
+                    context,
+                    builder: (_) => const PlayScreen(),
                   );
                 },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _androidBuilder(BuildContext context) {
+    final navigationBarTheme = NavigationBarTheme.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    return SafeArea(
+      top: false,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: child,
+          ),
+          Material(
+            color: navigationBarTheme.backgroundColor ?? colorScheme.surface,
+            elevation: navigationBarTheme.elevation ?? 3.0,
+            shadowColor: navigationBarTheme.shadowColor ?? Colors.transparent,
+            surfaceTintColor:
+                navigationBarTheme.surfaceTintColor ?? colorScheme.surfaceTint,
+            child: SizedBox(
+              height: 80,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15.0)
+                    .add(Styles.horizontalBodyPadding),
+                child: FilledButton.tonal(
+                  child: Text(context.l10n.play),
+                  onPressed: () {
+                    pushPlatformRoute(
+                      context,
+                      builder: (_) => const PlayScreen(),
+                    );
+                  },
+                ),
               ),
             ),
           ),

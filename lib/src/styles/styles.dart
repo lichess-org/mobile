@@ -29,6 +29,14 @@ abstract class Styles {
 
   static EdgeInsetsGeometry get bodySectionBottomPadding =>
       horizontalBodyPadding.add(sectionBottomPadding);
+
+  // from:
+  // https://github.com/flutter/flutter/blob/796c8ef79279f9c774545b3771238c3098dbefab/packages/flutter/lib/src/cupertino/bottom_tab_bar.dart#L17
+  static const Color cupertinoDefaultTabBarBorderColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0x4D000000),
+    darkColor: Color(0x29000000),
+  );
 }
 
 /// Retrieve the default text color and apply an opacity to it.

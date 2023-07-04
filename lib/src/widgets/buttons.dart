@@ -31,7 +31,7 @@ class FatButton extends StatelessWidget {
       excludeSemantics: true,
       child: defaultTargetPlatform == TargetPlatform.iOS
           ? CupertinoButton.filled(onPressed: onPressed, child: child)
-          : ElevatedButton(
+          : FilledButton(
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
                 textStyle: const TextStyle(fontSize: 18),
