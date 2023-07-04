@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
-final RouteObserver<Route<void>> immersiveModeRouteObserver =
-    RouteObserver<Route<void>>();
+final RouteObserver<PageRoute<void>> immersiveModeRouteObserver =
+    RouteObserver<PageRoute<void>>();
 
 /// State mixin that sets immersive mode on Android 10 and above.
 ///
@@ -19,7 +19,7 @@ mixin AndroidImmersiveMode<T extends StatefulWidget> on State<T>
   void didChangeDependencies() {
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
-    if (route != null) {
+    if (route != null && route is PageRoute) {
       immersiveModeRouteObserver.subscribe(this, route);
     }
   }
