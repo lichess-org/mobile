@@ -229,7 +229,6 @@ class _ChoiceChip extends StatelessWidget {
           label: label,
           selected: selected,
           onSelected: onSelected,
-          labelStyle: const TextStyle(fontSize: 16),
         );
       case TargetPlatform.iOS:
         return GestureDetector(
