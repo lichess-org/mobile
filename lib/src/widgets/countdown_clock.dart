@@ -29,30 +29,40 @@ class CountdownClock extends ConsumerStatefulWidget {
 }
 
 const _period = Duration(milliseconds: 100);
+const _emergencyDelay = Duration(seconds: 20);
 
 class _CountdownClockState extends ConsumerState<CountdownClock> {
   Timer? _timer;
   Duration timeLeft = Duration.zero;
-  bool emergencyReached = false;
+  DateTime _lastUpdate = DateTime.now();
+  DateTime? _nextEmergency;
+
+  Duration get _elapsed => DateTime.now().difference(_lastUpdate);
 
   Timer startTimer() {
     _timer?.cancel();
+    _lastUpdate = DateTime.now();
     return Timer.periodic(_period, (timer) {
       setState(() {
-        timeLeft = timeLeft - _period;
-        if (!emergencyReached &&
-            widget.emergencyThreshold != null &&
-            timeLeft <= widget.emergencyThreshold!) {
-          ref.read(soundServiceProvider).play(Sound.lowTime);
-          HapticFeedback.heavyImpact();
-          emergencyReached = true;
-        }
+        timeLeft = timeLeft - _elapsed;
+        final isEmergency = widget.emergencyThreshold != null &&
+            timeLeft <= widget.emergencyThreshold!;
+        _playEmergencyFeedback(isEmergency);
         if (timeLeft <= Duration.zero) {
           timeLeft = Duration.zero;
           timer.cancel();
         }
       });
     });
+  }
+
+  void _playEmergencyFeedback(bool isEmergency) {
+    if (isEmergency && _nextEmergency == null ||
+        _nextEmergency!.isBefore(DateTime.now())) {
+      _nextEmergency = DateTime.now().add(_emergencyDelay);
+      ref.read(soundServiceProvider).play(Sound.lowTime);
+      HapticFeedback.heavyImpact();
+    }
   }
 
   @override
