@@ -94,8 +94,10 @@ class _WatchScreenState extends ConsumerState<WatchScreen>
             controller: watchScrollController,
             slivers: [
               const CupertinoSliverNavigationBar(),
-              CupertinoSliverRefreshControl( //TODO: Explore workaround to handle refresh on iOS.
-                onRefresh: () => ref.refresh(liveStreamersProvider.future),
+              CupertinoSliverRefreshControl(
+                onRefresh: () => isNowOnline
+                    ? ref.refresh(liveStreamersProvider.future)
+                    : Future.delayed(const Duration(seconds: 1)),
               ),
               SliverSafeArea(
                 top: false,
@@ -203,7 +205,8 @@ class _WatchTvWidget extends ConsumerWidget {
           header: Text('Lichess TV', style: Styles.sectionTitle),
           orientation: Side.white,
           fen: kEmptyFen,
-          errorMessage: 'Could not load TV Stream. Go online to watch TV Stream.', //TBD: Should we have different error messages depending on the error?
+          errorMessage:
+              'Could not load TV Stream. Go online to watch TV Stream.', //TBD: Should we have different error messages depending on the error?
         );
       },
       loading: () => BoardPreview(
