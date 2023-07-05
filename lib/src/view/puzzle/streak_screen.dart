@@ -24,7 +24,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
-import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
 import 'puzzle_feedback_widget.dart';
 

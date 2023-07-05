@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
-import 'package:lichess_mobile/src/ui/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 
 import './time_control_modal.dart';
 

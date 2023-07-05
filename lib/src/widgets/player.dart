@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/ui/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_screen.dart';
 
 /// A widget to display player information above/below the chess board.
 ///

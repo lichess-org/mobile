@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';

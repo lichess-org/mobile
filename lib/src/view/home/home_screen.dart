@@ -22,11 +22,11 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
-import 'package:lichess_mobile/src/ui/auth/sign_in_widget.dart';
-import 'package:lichess_mobile/src/ui/puzzle/puzzle_screen.dart';
-import 'package:lichess_mobile/src/ui/user/leaderboard_widget.dart';
-import 'package:lichess_mobile/src/ui/play/play_screen.dart';
-import 'package:lichess_mobile/src/ui/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_widget.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
+import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
+import 'package:lichess_mobile/src/view/play/play_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 
 final RouteObserver<PageRoute<void>> homeRouteObserver =
     RouteObserver<PageRoute<void>>();

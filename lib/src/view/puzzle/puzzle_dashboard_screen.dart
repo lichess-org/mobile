@@ -19,9 +19,9 @@ import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:lichess_mobile/src/ui/puzzle/puzzle_dashboard_widget.dart';
-import 'package:lichess_mobile/src/ui/puzzle/history_boards.dart';
-import 'package:lichess_mobile/src/ui/puzzle/puzzle_history_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_dashboard_widget.dart';
+import 'package:lichess_mobile/src/view/puzzle/history_boards.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 
 import 'storm_screen.dart';
 import 'puzzle_screen.dart';

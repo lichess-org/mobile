@@ -16,8 +16,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:lichess_mobile/src/ui/watch/streamer_screen.dart';
-import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
+import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 
 final _featuredGameNoSoundProvider = featuredGameProvider(withSound: false);
 

@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
 import 'package:lichess_mobile/src/model/game/lobby_game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
-import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';

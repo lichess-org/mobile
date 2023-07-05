@@ -25,8 +25,8 @@ import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
-import 'package:lichess_mobile/src/ui/engine/engine_gauge.dart';
-import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
 import 'puzzle_feedback_widget.dart';
 import 'puzzle_session_widget.dart';
