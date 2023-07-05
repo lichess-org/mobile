@@ -67,6 +67,7 @@ class _PuzzleHistoryState extends ConsumerState<PuzzleHistoryBoards> {
                           setState(() => isLoading = false);
                           pushPlatformRoute(
                             context,
+                            rootNavigator: true,
                             builder: (_) => PuzzleScreen(
                               theme: PuzzleTheme.mix,
                               initialPuzzleContext: PuzzleContext(
