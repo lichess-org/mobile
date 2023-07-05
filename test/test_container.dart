@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
-import 'package:lichess_mobile/src/model/auth/user_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import './model/common/service/fake_sound_service.dart';
 import './model/auth/fake_auth_repository.dart';
@@ -25,7 +25,7 @@ class MockDatabase extends Mock implements Database {}
 
 Future<ProviderContainer> makeContainer({
   List<Override>? overrides,
-  UserSession? userSession,
+  AuthSessionState? userSession,
 }) async {
   SharedPreferences.setMockInitialValues({});
   final sharedPreferences = await SharedPreferences.getInstance();

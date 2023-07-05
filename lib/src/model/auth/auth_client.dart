@@ -11,7 +11,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
-import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';

@@ -7,8 +7,7 @@ import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/auth/user_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -51,7 +50,7 @@ class _PuzzleDashboardScreenState extends ConsumerState<PuzzleDashboardScreen> {
     );
   }
 
-  Widget _androidBuilder(BuildContext context, UserSession? userSession) {
+  Widget _androidBuilder(BuildContext context, AuthSessionState? userSession) {
     return Scaffold(
       appBar:
           AppBar(title: Text(context.l10n.puzzles), actions: [DaysSelector()]),
@@ -65,7 +64,7 @@ class _PuzzleDashboardScreenState extends ConsumerState<PuzzleDashboardScreen> {
     );
   }
 
-  Widget _iosBuilder(BuildContext context, UserSession? userSession) {
+  Widget _iosBuilder(BuildContext context, AuthSessionState? userSession) {
     return CupertinoPageScaffold(
       child: CustomScrollView(
         controller: puzzlesScrollController,
@@ -98,7 +97,7 @@ class _PuzzleDashboardScreenState extends ConsumerState<PuzzleDashboardScreen> {
 class _Body extends ConsumerWidget {
   const _Body(this.session);
 
-  final UserSession? session;
+  final AuthSessionState? session;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

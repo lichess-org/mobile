@@ -2,16 +2,14 @@ import 'package:async/async.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
 
-import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
-import 'user_session.dart';
 import 'auth_repository.dart';
-import 'session_storage.dart';
 import 'bearer.dart';
 
 part 'auth_controller.g.dart';
@@ -26,7 +24,7 @@ class AuthController extends _$AuthController {
   Future<void> signIn() async {
     state = const AsyncLoading();
 
-    final Result<UserSession> result =
+    final Result<AuthSessionState> result =
         await ref.read(authRepositoryProvider).signIn().flatMap(
       (oAuthResp) {
         if (oAuthResp.accessToken != null) {
@@ -39,7 +37,7 @@ class AuthController extends _$AuthController {
             },
           ).flatMap((response) {
             return readJsonObject(response, mapper: User.fromJson).map((user) {
-              return UserSession(
+              return AuthSessionState(
                 token: oAuthResp.accessToken!,
                 user: user.lightUser,
               );
@@ -47,7 +45,7 @@ class AuthController extends _$AuthController {
           });
         } else {
           return Future.value(
-            Result<UserSession>.error(
+            Result<AuthSessionState>.error(
               const ApiRequestException(500, 'Access token not found.'),
             ),
           );
@@ -74,29 +72,5 @@ class AuthController extends _$AuthController {
       await ref.read(authSessionProvider.notifier).delete();
     }
     state = result.asAsyncValue;
-  }
-}
-
-@Riverpod(keepAlive: true)
-class AuthSession extends _$AuthSession {
-  @override
-  UserSession? build() {
-    // requireValue is possible because appDependenciesProvider is loaded before
-    // anything. See: lib/src/app.dart
-    return ref.watch(
-      appDependenciesProvider.select((data) => data.requireValue.userSession),
-    );
-  }
-
-  Future<void> update(UserSession session) async {
-    final sessionStorage = ref.read(sessionStorageProvider);
-    await sessionStorage.write(session);
-    state = session;
-  }
-
-  Future<void> delete() async {
-    final sessionStorage = ref.read(sessionStorageProvider);
-    await sessionStorage.delete();
-    state = null;
   }
 }

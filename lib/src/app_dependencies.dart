@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
-import 'package:lichess_mobile/src/model/auth/user_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 
 part 'app_dependencies.freezed.dart';
@@ -79,7 +79,7 @@ class AppDependencies with _$AppDependencies {
     required PackageInfo packageInfo,
     required SharedPreferences sharedPreferences,
     required (Soundpool, IMap<Sound, int>) soundPool,
-    required UserSession? userSession,
+    required AuthSessionState? userSession,
     required Database database,
   }) = _AppDependencies;
 }
