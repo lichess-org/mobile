@@ -44,7 +44,8 @@ class CreateGameService {
       if (event.topic == 'redirect') {
         final data = event.data as Map<String, dynamic>;
         completer.complete(pick(data['id']).asGameFullIdOrThrow());
-        cancel();
+        _socketSubscription?.cancel();
+        _socketSubscription = null;
       }
     });
 
