@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
 import 'package:lichess_mobile/src/model/game/lobby_game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -162,7 +163,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
   }
 }
 
-class _GameTitle extends StatelessWidget {
+class _GameTitle extends ConsumerWidget {
   const _GameTitle({
     required this.playPrefs,
   });
@@ -170,7 +171,9 @@ class _GameTitle extends StatelessWidget {
   final PlayPrefs playPrefs;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+    final mode = session == null ? '' : ' • ${context.l10n.rated}';
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -179,7 +182,7 @@ class _GameTitle extends StatelessWidget {
           color: DefaultTextStyle.of(context).style.color,
         ),
         const SizedBox(width: 4.0),
-        Text('${playPrefs.timeIncrement.display} • ${context.l10n.rated}'),
+        Text('${playPrefs.timeIncrement.display}$mode'),
       ],
     );
   }
