@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 
 part 'create_game_service.g.dart';
@@ -32,6 +33,7 @@ class CreateGameService {
       throw StateError('Already creating a game.');
     }
 
+    final session = ref.read(authSessionProvider);
     final socket = ref.read(authSocketProvider);
     final playPref = ref.read(playPreferencesProvider);
     final lobbyRepo = ref.read(lobbyRepositoryProvider);
@@ -56,7 +58,7 @@ class CreateGameService {
           time: Duration(seconds: playPref.timeIncrement.time),
           increment: Duration(seconds: playPref.timeIncrement.increment),
           // TODO add rated choice
-          rated: true,
+          rated: session != null,
         ),
         sri: socket.sri!,
       ),
