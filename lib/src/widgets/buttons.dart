@@ -407,6 +407,62 @@ class _CardButtonState extends State<CardButton> {
   }
 }
 
+/// InkWell that adapts to the iOS platform.
+///
+/// Used to create a button that shows a ripple on Android and a highlight on iOS.
+class AdaptiveInkWell extends StatefulWidget {
+  const AdaptiveInkWell({
+    required this.child,
+    this.onTap,
+    this.borderRadius,
+  });
+
+  final Widget child;
+  final VoidCallback? onTap;
+  final BorderRadius? borderRadius;
+
+  @override
+  State<AdaptiveInkWell> createState() => _AdaptiveInkWellState();
+}
+
+class _AdaptiveInkWellState extends State<AdaptiveInkWell> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return InkWell(
+          onTap: widget.onTap,
+          borderRadius: widget.borderRadius,
+          child: widget.child,
+        );
+      case TargetPlatform.iOS:
+        return GestureDetector(
+          onTap: widget.onTap,
+          onTapDown: (_) => setState(() => _isPressed = true),
+          onTapCancel: () => setState(() => _isPressed = false),
+          onTapUp: (_) => setState(() => _isPressed = false),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: widget.borderRadius,
+              color: _isPressed
+                  ? CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemGrey4,
+                      context,
+                    )
+                  : null,
+            ),
+            child: widget.child,
+          ),
+        );
+      default:
+        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        return const SizedBox.shrink();
+    }
+  }
+}
+
 /// Button to repeatedly call a funtion, triggered after a long press.
 ///
 /// This widget is just a wrapper, the visuals are delegated to the child widget.

@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -195,11 +196,12 @@ class PerfCards extends StatelessWidget {
             return SizedBox(
               height: 100,
               width: 100,
-              child: GestureDetector(
-                onTap: isPerfWithoutStats
-                    ? null
-                    : () => _handlePerfCardTap(context, perf),
-                child: PlatformCard(
+              child: PlatformCard(
+                child: AdaptiveInkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: isPerfWithoutStats
+                      ? null
+                      : () => _handlePerfCardTap(context, perf),
                   child: Padding(
                     padding: const EdgeInsets.all(6.0),
                     child: Column(
