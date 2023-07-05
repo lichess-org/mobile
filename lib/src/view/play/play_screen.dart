@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 
@@ -108,16 +109,7 @@ class _TimeControlButton extends ConsumerWidget {
     switch (defaultTargetPlatform) {
       case TargetPlatform.iOS:
         return GestureDetector(
-          onTap: () {
-            pushPlatformRoute(
-              context,
-              rootNavigator: true,
-              fullscreenDialog: true,
-              builder: (BuildContext context) {
-                return const TimeControlModal();
-              },
-            );
-          },
+          onTap: () => _onPressed(context),
           child: PlatformCard(
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -130,20 +122,24 @@ class _TimeControlButton extends ConsumerWidget {
         );
       case TargetPlatform.android:
         return OutlinedButton(
-          onPressed: () {
-            pushPlatformRoute(
-              context,
-              rootNavigator: true,
-              fullscreenDialog: true,
-              builder: (BuildContext context) {
-                return const TimeControlModal();
-              },
-            );
-          },
+          onPressed: () => _onPressed(context),
           child: content,
         );
       default:
         throw UnsupportedError('Unsupported platform');
     }
+  }
+
+  void _onPressed(BuildContext context) {
+    final double screenHeight = MediaQuery.of(context).size.height;
+    showAdaptiveBottomSheet<void>(
+      context: context,
+      constraints: BoxConstraints(
+        maxHeight: screenHeight - (screenHeight / 10),
+      ),
+      builder: (BuildContext context) {
+        return const TimeControlModal();
+      },
+    );
   }
 }

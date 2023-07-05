@@ -5,6 +5,10 @@ import 'package:flutter/cupertino.dart';
 abstract class Styles {
   // text
   static const bold = TextStyle(fontWeight: FontWeight.bold);
+  static const title = TextStyle(
+    fontSize: 20.0,
+    fontWeight: FontWeight.bold,
+  );
   static TextStyle get sectionTitle => TextStyle(
         fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
         fontWeight: FontWeight.bold,
