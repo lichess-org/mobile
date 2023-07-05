@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -95,7 +96,7 @@ class _TimeControlButton extends ConsumerWidget {
               children: [
                 Icon(timeControlPref.speed.icon, size: 20),
                 const SizedBox(width: 5),
-                Text(timeControlPref.display)
+                Text(timeControlPref.display, style: Styles.timeControl)
               ],
             ),
           ),

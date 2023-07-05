@@ -227,6 +227,7 @@ class _ChoiceChip extends StatelessWidget {
       case TargetPlatform.android:
         return ChoiceChip(
           label: label,
+          labelStyle: Styles.timeControl,
           selected: selected,
           onSelected: onSelected,
         );
@@ -256,7 +257,12 @@ class _ChoiceChip extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Center(child: label),
+              child: Center(
+                child: DefaultTextStyle.merge(
+                  style: Styles.timeControl,
+                  child: label,
+                ),
+              ),
             ),
           ),
         );

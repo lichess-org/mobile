@@ -360,7 +360,7 @@ class _CreateAGame extends ConsumerWidget {
                 color: DefaultTextStyle.of(context).style.color,
               ),
               const SizedBox(width: 5),
-              Text(timeControlPref.display)
+              Text(timeControlPref.display, style: Styles.timeControl),
             ],
           ),
         ],

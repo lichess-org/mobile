@@ -14,6 +14,9 @@ abstract class Styles {
     fontWeight: FontWeight.bold,
   );
   static const subtitleOpacity = 0.7;
+  static const timeControl = TextStyle(
+    letterSpacing: 1.2,
+  );
 
   // padding
   static const bodyPadding =
