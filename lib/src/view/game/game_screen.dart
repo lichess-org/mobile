@@ -7,6 +7,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
 import 'package:lichess_mobile/src/model/game/lobby_game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -30,6 +31,9 @@ import 'ping_rating.dart';
 import 'game_loader.dart';
 import 'status_l10n.dart';
 
+final RouteObserver<PageRoute<void>> gameRouteObserver =
+    RouteObserver<PageRoute<void>>();
+
 class GameScreen extends ConsumerStatefulWidget {
   const GameScreen({
     super.key,
@@ -40,7 +44,27 @@ class GameScreen extends ConsumerStatefulWidget {
 }
 
 class _GameScreenState extends ConsumerState<GameScreen>
-    with AndroidImmersiveMode {
+    with AndroidImmersiveMode, RouteAware {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null && route is PageRoute) {
+      gameRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    gameRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPop() {
+    ref.read(authSocketProvider).close();
+  }
+
   @override
   Widget build(BuildContext context) {
     final gameId = ref.watch(lobbyGameProvider);

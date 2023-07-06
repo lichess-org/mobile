@@ -65,6 +65,7 @@ class AuthSocket {
 
   Timer? _pingTimer;
   Timer? _ackResendTimer;
+  Timer? _closeTimer;
   int _pongCount = 0;
   DateTime? _lastPing;
 
@@ -97,6 +98,8 @@ class AuthSocket {
     if (_connection != null && _connection!.channel.closeCode == null) {
       return _connection!.stream;
     }
+
+    _closeTimer?.cancel();
 
     _pongCount = 0;
     _acks = [];
@@ -253,12 +256,19 @@ class AuthSocket {
   }
 
   /// Closes the WebSocket connection, if open.
-  void close() {
-    if (_connection?.channel.closeCode == null) {
-      _log.info('Closing WebSocket connection.');
+  void close({Duration? delay}) {
+    if (_connection?.channel.closeCode != null) {
+      return;
     }
-    sink?.close();
-    _pingTimer?.cancel();
-    _ackResendTimer?.cancel();
+    _log.info(
+      'Closing WebSocket connection ${delay == null ? 'now' : 'in ${delay.inSeconds}s'}.',
+    );
+    _closeTimer?.cancel();
+    _closeTimer = Timer(delay ?? Duration.zero, () {
+      sink?.close();
+      _pingTimer?.cancel();
+      _ackResendTimer?.cancel();
+      _connection = null;
+    });
   }
 }
