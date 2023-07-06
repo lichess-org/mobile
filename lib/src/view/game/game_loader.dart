@@ -187,11 +187,11 @@ class _LobbyNumbers extends ConsumerWidget {
           ),
         ],
       ),
-      loading: () => const Column(
+      loading: () => Column(
         children: [
-          Text(''),
-          SizedBox(height: 8.0),
-          Text(''),
+          Text(context.l10n.nbPlayers(0).replaceAll('0', '?')),
+          const SizedBox(height: 8.0),
+          Text(context.l10n.nbGamesInPlay(0).replaceAll('0', '?')),
         ],
       ),
       error: (err, __) {
