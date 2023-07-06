@@ -30,37 +30,48 @@ class CountdownClock extends ConsumerStatefulWidget {
   ConsumerState<CountdownClock> createState() => _CountdownClockState();
 }
 
-const _period = Duration(milliseconds: 100);
 const _emergencyDelay = Duration(seconds: 20);
 
 class _CountdownClockState extends ConsumerState<CountdownClock> {
   Timer? _timer;
-  Duration timeLeft = Duration.zero;
+  Duration _timeLeft = Duration.zero;
   DateTime _lastUpdate = DateTime.now();
   bool _shouldPlayEmergencyFeedback = true;
   DateTime? _nextEmergency;
 
-  Timer startTimer() {
-    _timer?.cancel();
+  void _startTimer() {
     _lastUpdate = DateTime.now();
-    return Timer.periodic(_period, (timer) {
-      setState(() {
-        final now = DateTime.now();
-        timeLeft = timeLeft - now.difference(_lastUpdate);
-        _lastUpdate = now;
-        _playEmergencyFeedback();
-        if (timeLeft <= Duration.zero) {
-          widget.onFlag?.call();
-          timeLeft = Duration.zero;
-          timer.cancel();
-        }
-      });
+    _scheduleTick();
+  }
+
+  void _scheduleTick() {
+    _timer?.cancel();
+    _timer = Timer(
+      Duration(
+        milliseconds: _timeLeft.inMilliseconds % (_showTenths ? 100 : 500) + 1,
+      ),
+      _tick,
+    );
+  }
+
+  void _tick() {
+    setState(() {
+      final now = DateTime.now();
+      _timeLeft = _timeLeft - now.difference(_lastUpdate);
+      _lastUpdate = now;
+      _scheduleTick();
+      if (_timeLeft <= Duration.zero) {
+        widget.onFlag?.call();
+        _timeLeft = Duration.zero;
+        _timer?.cancel();
+      }
+      _playEmergencyFeedback();
     });
   }
 
   void _playEmergencyFeedback() {
     if (widget.emergencyThreshold != null &&
-        timeLeft <= widget.emergencyThreshold! &&
+        _timeLeft <= widget.emergencyThreshold! &&
         _shouldPlayEmergencyFeedback &&
         (_nextEmergency == null || _nextEmergency!.isBefore(DateTime.now()))) {
       _shouldPlayEmergencyFeedback = false;
@@ -68,17 +79,19 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
       ref.read(soundServiceProvider).play(Sound.lowTime);
       HapticFeedback.heavyImpact();
     } else if (widget.emergencyThreshold != null &&
-        timeLeft > widget.emergencyThreshold! * 1.5) {
+        _timeLeft > widget.emergencyThreshold! * 1.5) {
       _shouldPlayEmergencyFeedback = true;
     }
   }
 
+  bool get _showTenths => _timeLeft < const Duration(seconds: 10);
+
   @override
   void initState() {
     super.initState();
-    timeLeft = widget.duration;
+    _timeLeft = widget.duration;
     if (widget.active) {
-      _timer = startTimer();
+      _startTimer();
     }
   }
 
@@ -86,10 +99,10 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   void didUpdateWidget(CountdownClock oldClock) {
     super.didUpdateWidget(oldClock);
     if (widget.duration != oldClock.duration) {
-      timeLeft = widget.duration;
+      _timeLeft = widget.duration;
     }
     if (widget.active) {
-      _timer = startTimer();
+      _startTimer();
     } else {
       _timer?.cancel();
     }
@@ -103,11 +116,10 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
 
   @override
   Widget build(BuildContext context) {
-    final min = timeLeft.inMinutes.remainder(60);
-    final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
-    final showTenths = timeLeft < const Duration(seconds: 10);
+    final min = _timeLeft.inMinutes.remainder(60);
+    final secs = _timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
     final isEmergency = widget.emergencyThreshold != null &&
-        timeLeft <= widget.emergencyThreshold!;
+        _timeLeft <= widget.emergencyThreshold!;
     final brightness = ref.watch(currentBrightnessProvider);
     final clockStyle = brightness == Brightness.dark
         ? ClockStyle.darkThemeStyle
@@ -149,10 +161,16 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
                 ],
               ),
               children: [
-                if (showTenths)
+                if (_showTenths)
                   TextSpan(
-                    text: '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
+                    text: '.${_timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
                     style: const TextStyle(fontSize: 20),
+                  ),
+                if (!widget.active && _timeLeft < const Duration(seconds: 1))
+                  TextSpan(
+                    text:
+                        '${_timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
+                    style: const TextStyle(fontSize: 16),
                   ),
               ],
             ),
