@@ -105,7 +105,6 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   Widget build(BuildContext context) {
     final min = timeLeft.inMinutes.remainder(60);
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
-    final tenths = timeLeft.inMilliseconds.remainder(1000) ~/ 100;
     final showTenths = timeLeft < const Duration(seconds: 10);
     final isEmergency = widget.emergencyThreshold != null &&
         timeLeft <= widget.emergencyThreshold!;
@@ -143,7 +142,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
                         ? clockStyle.emergencyTextColor
                         : clockStyle.activeTextColor
                     : clockStyle.textColor,
-                fontSize: screenHeight < kSmallHeightScreenThreshold ? 20 : 24,
+                fontSize: 26,
                 height: screenHeight < kSmallHeightScreenThreshold ? 1.0 : null,
                 fontFeatures: const [
                   FontFeature.tabularFigures(),
@@ -152,11 +151,8 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
               children: [
                 if (showTenths)
                   TextSpan(
-                    text: '.$tenths',
-                    style: TextStyle(
-                      fontSize:
-                          screenHeight < kSmallHeightScreenThreshold ? 14 : 18,
-                    ),
+                    text: '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
+                    style: const TextStyle(fontSize: 20),
                   ),
               ],
             ),
