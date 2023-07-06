@@ -95,7 +95,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
           loading: () => _loadingContent(playPrefs),
           error: (e, s) {
             debugPrint(
-              'SEVERE: [GameScreen] could not create game; $e\n$s',
+              'SEVERE: [GameScreen] could not load game data; $e\n$s',
             );
             return _errorContent(playPrefs);
           },
