@@ -36,26 +36,32 @@ const _emergencyDelay = Duration(seconds: 20);
 class _CountdownClockState extends ConsumerState<CountdownClock> {
   Timer? _timer;
   Duration timeLeft = Duration.zero;
-  DateTime _lastUpdate = DateTime.now();
   bool _shouldPlayEmergencyFeedback = true;
   DateTime? _nextEmergency;
 
-  void startTimer() {
+  final _stopwatch = Stopwatch();
+
+  void startClock() {
     _timer?.cancel();
-    _lastUpdate = DateTime.now();
+    _stopwatch.reset();
+    _stopwatch.start();
     _timer = Timer.periodic(_period, (timer) {
       setState(() {
-        final now = DateTime.now();
-        timeLeft = timeLeft - now.difference(_lastUpdate);
-        _lastUpdate = now;
+        timeLeft = timeLeft - _stopwatch.elapsed;
+        _stopwatch.reset();
         _playEmergencyFeedback();
         if (timeLeft <= Duration.zero) {
           widget.onFlag?.call();
           timeLeft = Duration.zero;
-          timer.cancel();
+          stopClock();
         }
       });
     });
+  }
+
+  void stopClock() {
+    _timer?.cancel();
+    _stopwatch.stop();
   }
 
   void _playEmergencyFeedback() {
@@ -78,7 +84,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
     super.initState();
     timeLeft = widget.duration;
     if (widget.active) {
-      startTimer();
+      startClock();
     }
   }
 
@@ -89,9 +95,9 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
       timeLeft = widget.duration;
     }
     if (widget.active) {
-      startTimer();
+      startClock();
     } else {
-      _timer?.cancel();
+      stopClock();
     }
   }
 
