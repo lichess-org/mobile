@@ -1,7 +1,9 @@
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 part 'player.freezed.dart';
 
@@ -11,7 +13,7 @@ class Player with _$Player {
 
   const factory Player({
     UserId? id,
-    required String name,
+    String? name,
     String? title,
     bool? patron,
     int? aiLevel,
@@ -35,13 +37,22 @@ class Player with _$Player {
   LightUser? get lightUser => id != null
       ? LightUser(
           id: id!,
-          name: name,
+          name: name ?? id!.value,
           title: title,
           isPatron: patron,
         )
       : null;
 
   bool get isAI => aiLevel != null;
+
+  String displayName(BuildContext context) =>
+      name ??
+      (aiLevel != null
+          ? context.l10n.aiNameLevelAiLevel(
+              'Stockfish',
+              aiLevel.toString(),
+            )
+          : context.l10n.anonymous);
 
   Player setOnGame(bool onGame) {
     final isOnGame = onGame || isAI;

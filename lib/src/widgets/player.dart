@@ -79,7 +79,7 @@ class BoardPlayer extends StatelessWidget {
             ],
             Flexible(
               child: Text(
-                player.name,
+                player.displayName(context),
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: playerFontSize,

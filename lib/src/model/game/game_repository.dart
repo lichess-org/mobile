@@ -152,7 +152,7 @@ ClockData _clockDataFromPick(RequiredPick pick) {
 Player _playerFromUserGamePick(RequiredPick pick) {
   return Player(
     id: pick('user', 'id').asUserIdOrNull(),
-    name: pick('user', 'name').asStringOrNull() ?? 'Stockfish',
+    name: pick('user', 'name').asStringOrNull(),
     patron: pick('user', 'patron').asBoolOrNull(),
     title: pick('user', 'title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),
