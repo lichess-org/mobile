@@ -161,7 +161,7 @@ class TableBoardLayout extends ConsumerWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          topTable,
+                          Flexible(child: topTable),
                           if (slicedMoves != null)
                             Expanded(
                               child: Padding(
@@ -182,7 +182,7 @@ class TableBoardLayout extends ConsumerWidget {
                                 child: SizedBox(height: 40),
                               ),
                             ),
-                          bottomTable,
+                          Flexible(child: bottomTable),
                         ],
                       ),
                     ),
