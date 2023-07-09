@@ -193,15 +193,10 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                   children: [
                     Expanded(
                       child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0,
-                          ),
-                          child: PuzzleFeedbackWidget(
-                            puzzle: puzzleState.puzzle,
-                            state: puzzleState,
-                            onStreak: false,
-                          ),
+                        child: PuzzleFeedbackWidget(
+                          puzzle: puzzleState.puzzle,
+                          state: puzzleState,
+                          onStreak: false,
                         ),
                       ),
                     ),
@@ -220,8 +215,6 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                       Padding(
                         padding: const EdgeInsets.only(
                           top: 10.0,
-                          left: 10.0,
-                          right: 10.0,
                         ),
                         child: Row(
                           children: [

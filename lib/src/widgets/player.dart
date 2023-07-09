@@ -143,34 +143,31 @@ class BoardPlayer extends StatelessWidget {
       ],
     );
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: shouldLinkToUserProfile
-                  ? GestureDetector(
-                      onTap: player.lightUser != null
-                          ? () {
-                              pushPlatformRoute(
-                                context,
-                                builder: (context) =>
-                                    UserScreen(user: player.lightUser!),
-                              );
-                            }
-                          : null,
-                      child: playerWidget,
-                    )
-                  : playerWidget,
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: shouldLinkToUserProfile
+                ? GestureDetector(
+                    onTap: player.lightUser != null
+                        ? () {
+                            pushPlatformRoute(
+                              context,
+                              builder: (context) =>
+                                  UserScreen(user: player.lightUser!),
+                            );
+                          }
+                        : null,
+                    child: playerWidget,
+                  )
+                : playerWidget,
           ),
-          if (clock != null) clock!,
-        ],
-      ),
+        ),
+        if (clock != null) clock!,
+      ],
     );
   }
 }

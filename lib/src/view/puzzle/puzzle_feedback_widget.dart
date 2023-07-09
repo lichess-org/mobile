@@ -100,32 +100,29 @@ class _FeedbackTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final defaultFontSize = DefaultTextStyle.of(context).style.fontSize;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Row(
-        children: [
-          if (leading != null) ...[
-            leading!,
-            const SizedBox(width: 18),
-          ],
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              DefaultTextStyle.merge(
-                style: TextStyle(
-                  fontSize:
-                      defaultFontSize != null ? defaultFontSize * 1.2 : null,
-                  fontWeight: FontWeight.bold,
-                ),
-                child: title,
-              ),
-              if (subtitle != null) subtitle!,
-            ],
-          ),
+    return Row(
+      children: [
+        if (leading != null) ...[
+          leading!,
+          const SizedBox(width: 18),
         ],
-      ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            DefaultTextStyle.merge(
+              style: TextStyle(
+                fontSize:
+                    defaultFontSize != null ? defaultFontSize * 1.2 : null,
+                fontWeight: FontWeight.bold,
+              ),
+              child: title,
+            ),
+            if (subtitle != null) subtitle!,
+          ],
+        ),
+      ],
     );
   }
 }

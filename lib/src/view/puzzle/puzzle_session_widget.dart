@@ -71,7 +71,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
     );
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: OrientationBuilder(
         builder: (context, orientation) {
           final estimatedTableHeight = estimateTableHeight(context);

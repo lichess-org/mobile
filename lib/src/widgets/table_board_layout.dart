@@ -13,6 +13,8 @@ import 'platform.dart';
 const _scrollAnimationDuration = Duration(milliseconds: 200);
 const _moveListOpacity = 0.6;
 
+const _boardPadding = 16.0;
+
 /// Widget that provides a board layout according to screen constraints.
 ///
 /// This widget will try to adapt the board and tables display according to screen
@@ -68,10 +70,17 @@ class TableBoardLayout extends ConsumerWidget {
       builder: (context, constraints) {
         final aspectRatio = constraints.biggest.aspectRatio;
         final defaultBoardSize = constraints.biggest.shortestSide;
-        final double boardSize = aspectRatio < 1 && aspectRatio >= 0.84 ||
-                aspectRatio > 1 && aspectRatio <= 1.18
+
+        // some screen ratios do not leave enough space so we need a smaller board
+        // in portrait mode
+        final shouldDisplaySmallerBoard =
+            aspectRatio < 1 && aspectRatio >= 0.84;
+
+        double boardSize = shouldDisplaySmallerBoard
             ? defaultBoardSize * 0.94
             : defaultBoardSize;
+
+        if (aspectRatio > 1) boardSize = boardSize - _boardPadding * 2;
 
         final error = errorMessage != null
             ? SizedBox.square(
@@ -153,11 +162,18 @@ class TableBoardLayout extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  boardWidget,
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: _boardPadding,
+                      top: _boardPadding,
+                      bottom: _boardPadding,
+                    ),
+                    child: boardWidget,
+                  ),
                   Flexible(
                     fit: FlexFit.loose,
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(_boardPadding),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -192,7 +208,6 @@ class TableBoardLayout extends ConsumerWidget {
             : Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   if (slicedMoves != null)
                     MoveList(
@@ -203,9 +218,27 @@ class TableBoardLayout extends ConsumerWidget {
                     )
                   else if (showMoveListPlaceholder)
                     const SizedBox(height: 40),
-                  Expanded(child: topTable),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: shouldDisplaySmallerBoard
+                            ? defaultBoardSize * 0.03
+                            : 12.0,
+                      ),
+                      child: topTable,
+                    ),
+                  ),
                   boardWidget,
-                  Expanded(child: bottomTable),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: shouldDisplaySmallerBoard
+                            ? defaultBoardSize * 0.03
+                            : 12.0,
+                      ),
+                      child: bottomTable,
+                    ),
+                  ),
                 ],
               );
       },
