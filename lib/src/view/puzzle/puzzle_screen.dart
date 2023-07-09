@@ -158,6 +158,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
         Expanded(
           child: Center(
             child: SafeArea(
+              bottom: false,
               child: BoardTable(
                 boardData: cg.BoardData(
                   orientation: puzzleState.pov.cg,

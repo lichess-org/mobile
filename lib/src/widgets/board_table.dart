@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:chessground/chessground.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -13,7 +14,7 @@ import 'platform.dart';
 const _scrollAnimationDuration = Duration(milliseconds: 200);
 const _moveListOpacity = 0.6;
 
-const _boardPadding = 16.0;
+const _tabletPadding = 16.0;
 
 /// Widget that provides a board layout according to screen constraints.
 ///
@@ -80,16 +81,9 @@ class BoardTable extends ConsumerWidget {
         final aspectRatio = constraints.biggest.aspectRatio;
         final defaultBoardSize = constraints.biggest.shortestSide;
 
-        // some screen ratios do not leave enough space so we need a smaller board
-        // in portrait mode
-        final shouldDisplaySmallerBoard =
-            aspectRatio < 1 && aspectRatio >= 0.84;
-
-        double boardSize = shouldDisplaySmallerBoard
-            ? defaultBoardSize * 0.94
-            : defaultBoardSize;
-
-        if (aspectRatio > 1) boardSize = boardSize - _boardPadding * 2;
+        final isTablet = defaultBoardSize > kTabletThreshold;
+        final boardSize =
+            isTablet ? defaultBoardSize - _tabletPadding * 2 : defaultBoardSize;
 
         final error = errorMessage != null
             ? SizedBox.square(
@@ -173,16 +167,16 @@ class BoardTable extends ConsumerWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(
-                      left: _boardPadding,
-                      top: _boardPadding,
-                      bottom: _boardPadding,
+                      left: _tabletPadding,
+                      top: _tabletPadding,
+                      bottom: _tabletPadding,
                     ),
                     child: boardWidget,
                   ),
                   Flexible(
                     fit: FlexFit.loose,
                     child: Padding(
-                      padding: const EdgeInsets.all(_boardPadding),
+                      padding: const EdgeInsets.all(_tabletPadding),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -230,9 +224,7 @@ class BoardTable extends ConsumerWidget {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: shouldDisplaySmallerBoard
-                            ? defaultBoardSize * 0.03
-                            : 12.0,
+                        horizontal: isTablet ? _tabletPadding : 12.0,
                       ),
                       child: topTable,
                     ),
@@ -241,9 +233,7 @@ class BoardTable extends ConsumerWidget {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: shouldDisplaySmallerBoard
-                            ? defaultBoardSize * 0.03
-                            : 12.0,
+                        horizontal: isTablet ? _tabletPadding : 12.0,
                       ),
                       child: bottomTable,
                     ),
