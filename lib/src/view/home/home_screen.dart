@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
@@ -424,10 +425,20 @@ class _DailyPuzzle extends ConsumerWidget {
           },
         );
       },
-      loading: () => BoardPreview(
+      loading: () => SmallBoardPreview(
         orientation: Side.white.cg,
         fen: kEmptyFen,
-        header: Text(context.l10n.puzzleDailyPuzzle),
+        description: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              context.l10n.puzzlePuzzleOfTheDay,
+              style: Styles.boardPreviewTitle,
+            ),
+            const Text(''),
+          ],
+        ),
       ),
       error: (error, stack) => Padding(
         padding: Styles.bodySectionPadding,
