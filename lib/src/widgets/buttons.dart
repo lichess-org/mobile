@@ -248,6 +248,7 @@ class BottomBarButton extends StatelessWidget {
     required this.label,
     required this.shortLabel,
     required this.onTap,
+    this.showAndroidTooltip = true,
     this.highlighted = false,
     this.showAndroidShortLabel = false,
   });
@@ -258,6 +259,7 @@ class BottomBarButton extends StatelessWidget {
   final VoidCallback? onTap;
   final bool highlighted;
   final bool showAndroidShortLabel;
+  final bool showAndroidTooltip;
 
   bool get enabled => onTap != null;
 
@@ -282,7 +284,7 @@ class BottomBarButton extends StatelessWidget {
                 : IconButton(
                     onPressed: onTap,
                     icon: Icon(icon),
-                    tooltip: label,
+                    tooltip: showAndroidTooltip ? label : null,
                     color: highlighted ? themeData.colorScheme.primary : null,
                   ),
           ),
