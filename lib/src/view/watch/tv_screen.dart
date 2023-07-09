@@ -6,7 +6,7 @@ import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
+import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
@@ -149,7 +149,7 @@ class _Body extends ConsumerWidget {
               ),
               materialDiff: game.position.diff.bySide(bottomPlayer.side),
             );
-            return TableBoardLayout(
+            return BoardTable(
               boardData: boardData,
               boardSettingsOverrides: const BoardSettingsOverrides(
                 animationDuration: Duration.zero,
@@ -158,7 +158,7 @@ class _Body extends ConsumerWidget {
               bottomTable: bottomPlayerWidget,
             );
           },
-          loading: () => const TableBoardLayout(
+          loading: () => const BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
             boardData: cg.BoardData(
@@ -171,7 +171,7 @@ class _Body extends ConsumerWidget {
             debugPrint(
               'SEVERE: [TvScreen] could not load stream; $err\n$stackTrace',
             );
-            return const TableBoardLayout(
+            return const BoardTable(
               topTable: kEmptyWidget,
               bottomTable: kEmptyWidget,
               boardData: cg.BoardData(

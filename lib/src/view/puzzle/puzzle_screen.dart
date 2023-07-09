@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
+import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_ctrl.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
@@ -90,7 +90,7 @@ class _LoadPuzzle extends ConsumerWidget {
       data: (data) {
         if (data == null) {
           return const Center(
-            child: TableBoardLayout(
+            child: BoardTable(
               topTable: kEmptyWidget,
               bottomTable: kEmptyWidget,
               boardData: cg.BoardData(
@@ -113,7 +113,7 @@ class _LoadPuzzle extends ConsumerWidget {
           'SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s',
         );
         return Center(
-          child: TableBoardLayout(
+          child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
             boardData: const cg.BoardData(
@@ -158,7 +158,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
         Expanded(
           child: Center(
             child: SafeArea(
-              child: TableBoardLayout(
+              child: BoardTable(
                 boardData: cg.BoardData(
                   orientation: puzzleState.pov.cg,
                   interactableSide: puzzleState.position.isGameOver

@@ -7,7 +7,7 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
+import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
@@ -124,7 +124,7 @@ class _BoardBody extends ConsumerWidget {
     );
     final topPlayer = orientation == Side.white ? black : white;
     final bottomPlayer = orientation == Side.white ? white : black;
-    final loadingBoard = TableBoardLayout(
+    final loadingBoard = BoardTable(
       boardData: cg.BoardData(
         interactableSide: cg.InteractableSide.none,
         orientation: (isBoardTurned ? orientation.opposite : orientation).cg,
@@ -167,7 +167,7 @@ class _BoardBody extends ConsumerWidget {
 
         final position = game.positionAt(cursor);
 
-        return TableBoardLayout(
+        return BoardTable(
           boardData: cg.BoardData(
             interactableSide: cg.InteractableSide.none,
             orientation:

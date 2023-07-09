@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
+import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
@@ -46,7 +46,7 @@ class GameLoader extends ConsumerWidget {
         Expanded(
           child: SafeArea(
             bottom: false,
-            child: TableBoardLayout(
+            child: BoardTable(
               boardData: const cg.BoardData(
                 interactableSide: cg.InteractableSide.none,
                 orientation: cg.Side.white,
@@ -114,7 +114,7 @@ class CreateGameError extends StatelessWidget {
         const Expanded(
           child: SafeArea(
             bottom: false,
-            child: TableBoardLayout(
+            child: BoardTable(
               boardData: cg.BoardData(
                 interactableSide: cg.InteractableSide.none,
                 orientation: cg.Side.white,

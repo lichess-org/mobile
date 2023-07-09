@@ -19,8 +19,17 @@ const _boardPadding = 16.0;
 ///
 /// This widget will try to adapt the board and tables display according to screen
 /// size constraints and aspect ratio.
-class TableBoardLayout extends ConsumerWidget {
-  const TableBoardLayout({
+///
+/// On portrait mode, the board will be displayed in the middle of the screen,
+/// with the table spaces on top and bottom.
+/// On landscape mode, the board will be displayed on the left side of the screen,
+/// with the table spaces on the right side.
+///
+/// An optional move list can be displayed above the top table space.
+///
+/// An optional overlay or error message can be displayed on top of the board.
+class BoardTable extends ConsumerWidget {
+  const BoardTable({
     required this.boardData,
     this.boardSettingsOverrides,
     required this.topTable,

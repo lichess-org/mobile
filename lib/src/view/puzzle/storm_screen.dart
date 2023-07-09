@@ -25,7 +25,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
+import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import "package:lichess_mobile/src/utils/l10n_context.dart";
@@ -85,7 +85,7 @@ class _Load extends ConsumerWidget {
           'SEVERE: [PuzzleStormScreen] could not load streak; $e\n$s',
         );
         return Center(
-          child: TableBoardLayout(
+          child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
             boardData: const cg.BoardData(
@@ -129,7 +129,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
           child: Center(
             child: SafeArea(
               bottom: false,
-              child: TableBoardLayout(
+              child: BoardTable(
                 boardData: cg.BoardData(
                   onMove: (move, {isPremove}) => ref
                       .read(ctrlProvider.notifier)

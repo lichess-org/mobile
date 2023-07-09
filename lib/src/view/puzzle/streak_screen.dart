@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
+import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_ctrl.dart';
@@ -90,7 +90,7 @@ class _Load extends ConsumerWidget {
           'SEVERE: [StreakScreen] could not load streak; $e\n$s',
         );
         return Center(
-          child: TableBoardLayout(
+          child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
             boardData: const cg.BoardData(
@@ -147,7 +147,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
         Expanded(
           child: Center(
             child: SafeArea(
-              child: TableBoardLayout(
+              child: BoardTable(
                 boardData: cg.BoardData(
                   orientation: puzzleState.pov.cg,
                   interactableSide: puzzleState.position.isGameOver
