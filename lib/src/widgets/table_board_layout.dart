@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'platform.dart';
 
 const _scrollAnimationDuration = Duration(milliseconds: 200);
@@ -243,6 +244,7 @@ class MoveList extends StatefulWidget {
 
 class _MoveListState extends State<MoveList> {
   final currentMoveKey = GlobalKey();
+  final _debounce = Debouncer(const Duration(milliseconds: 100));
 
   @override
   void initState() {
@@ -258,9 +260,15 @@ class _MoveListState extends State<MoveList> {
   }
 
   @override
+  void dispose() {
+    _debounce.dispose();
+    super.dispose();
+  }
+
+  @override
   void didUpdateWidget(covariant MoveList oldWidget) {
     super.didUpdateWidget(oldWidget);
-    Future<void>.delayed(const Duration(milliseconds: 300)).then((_) {
+    _debounce(() {
       if (currentMoveKey.currentContext != null) {
         Scrollable.ensureVisible(
           currentMoveKey.currentContext!,
