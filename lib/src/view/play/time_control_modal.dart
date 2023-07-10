@@ -107,6 +107,7 @@ class TimeControlModal extends ConsumerWidget {
               ),
               onSelected: onSelected,
             ),
+            const SizedBox(height: 40.0),
           ],
         ),
       ),
