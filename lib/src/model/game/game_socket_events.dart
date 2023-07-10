@@ -159,9 +159,28 @@ class MoveEvent with _$MoveEvent {
 }
 
 MoveEvent _socketMoveEventFromPick(RequiredPick pick) {
+  String uci = pick('uci').asStringOrThrow();
+
+  final promotion = pick('promotion', 'pieceClass').asStringOrNull();
+  switch (promotion) {
+    case 'queen':
+      uci += 'q';
+    case 'rook':
+      uci += 'r';
+    case 'bishop':
+      uci += 'b';
+    case 'knight':
+      uci += 'n';
+    // variants support
+    case 'pawn':
+      uci += 'p';
+    case 'king':
+      uci += 'k';
+  }
+
   return MoveEvent(
     ply: pick('ply').asIntOrThrow(),
-    uci: pick('uci').asStringOrThrow(),
+    uci: uci,
     san: pick('san').asStringOrThrow(),
     status: pick('status').asGameStatusOrNull(),
     winner: pick('winner').asSideOrNull(),
