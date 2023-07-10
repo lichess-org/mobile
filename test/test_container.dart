@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:mocktail/mocktail.dart';
@@ -54,6 +55,15 @@ Future<ProviderContainer> makeContainer({
             buildNumber: '0.0.0',
             packageName: 'lichess_mobile_test',
           ),
+          deviceInfo: BaseDeviceInfo({
+            'name': 'test',
+            'model': 'test',
+            'manufacturer': 'test',
+            'systemName': 'test',
+            'systemVersion': 'test',
+            'identifierForVendor': 'test',
+            'isPhysicalDevice': true,
+          }),
           sharedPreferences: sharedPreferences,
           soundPool: (MockSoundPool(), IMap<Sound, int>(const {})),
           userSession: userSession,

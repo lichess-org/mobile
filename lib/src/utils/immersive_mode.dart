@@ -6,6 +6,8 @@ import 'package:device_info_plus/device_info_plus.dart';
 final RouteObserver<PageRoute<void>> immersiveModeRouteObserver =
     RouteObserver<PageRoute<void>>();
 
+final _deviceInfoPlugin = DeviceInfoPlugin();
+
 /// State mixin that sets immersive mode on Android 10 and above.
 ///
 /// Navigation gestures start with Android 10 (API 29).
@@ -13,8 +15,6 @@ final RouteObserver<PageRoute<void>> immersiveModeRouteObserver =
 /// to disable them.
 mixin AndroidImmersiveMode<T extends StatefulWidget> on State<T>
     implements RouteAware {
-  final _deviceInfoPlugin = DeviceInfoPlugin();
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();

@@ -6,11 +6,12 @@ import 'package:web_socket_channel/io.dart';
 import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
+import 'package:lichess_mobile/src/utils/device_info.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 
 part 'auth_socket.g.dart';
@@ -111,17 +112,18 @@ class AuthSocket {
     );
 
     final session = _ref.read(authSessionProvider);
-    final info = _ref.read(packageInfoProvider);
+    final pInfo = _ref.read(packageInfoProvider);
+    final deviceInfo = _ref.read(deviceInfoProvider);
     final sri = genRandomString(12);
     final uri = Uri.parse('$kLichessWSHost$kWebSocketPath?sri=$sri');
     final bearer = session != null ? signBearerToken(session.token) : '';
     final headers = session != null
         ? {
             'Authorization': 'Bearer $bearer',
-            'User-Agent': AuthClient.userAgent(info, session.user),
+            'User-Agent': userAgent(pInfo, deviceInfo, session.user),
           }
         : {
-            'User-Agent': AuthClient.userAgent(info, null),
+            'User-Agent': userAgent(pInfo, deviceInfo, null),
           };
 
     _log.info('Creating WebSocket connection to $uri');
