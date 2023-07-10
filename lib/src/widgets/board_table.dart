@@ -431,7 +431,7 @@ class InlineMoveItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onSelectMove != null ? () => onSelectMove!(move.key) : null,
+      onTap: onSelectMove != null ? () => onSelectMove!(move.key + 1) : null,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 4),
         decoration: ShapeDecoration(
@@ -496,7 +496,7 @@ class StackedMoveItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onSelectMove != null ? () => onSelectMove!(move.key) : null,
+      onTap: onSelectMove != null ? () => onSelectMove!(move.key + 1) : null,
       child: Container(
         padding: const EdgeInsets.all(8),
         child: Text(
