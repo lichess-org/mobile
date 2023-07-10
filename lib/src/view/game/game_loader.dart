@@ -187,11 +187,11 @@ class _LobbyNumbers extends ConsumerWidget {
           ),
         ],
       ),
-      loading: () => Column(
+      loading: () => const Column(
         children: [
-          Text(context.l10n.nbPlayers(0).replaceAll('0', '?')),
-          const SizedBox(height: 8.0),
-          Text(context.l10n.nbGamesInPlay(0).replaceAll('0', '?')),
+          Text(''),
+          SizedBox(height: 8.0),
+          Text(''),
         ],
       ),
       error: (err, __) {
@@ -232,7 +232,7 @@ class _AnimatedLobbyNumberState extends State<_AnimatedLobbyNumber> {
         begin: previousValue,
         end: value,
       ),
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(seconds: 3),
       builder: (context, int value, _) {
         return Text(widget.labelBuilder(value));
       },
