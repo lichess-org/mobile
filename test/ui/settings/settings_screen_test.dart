@@ -72,7 +72,7 @@ void main() {
           await tester
               .tap(find.widgetWithText(CupertinoActionSheetAction, 'Sign out'));
         } else {
-          await tester.tap(find.text('Accept'));
+          await tester.tap(find.text('OK'));
         }
         await tester.pump();
 

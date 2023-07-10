@@ -255,7 +255,7 @@ class _Body extends ConsumerWidget {
                 style: TextButton.styleFrom(
                   textStyle: Theme.of(context).textTheme.labelLarge,
                 ),
-                child: Text(context.l10n.accept),
+                child: const Text('OK'),
                 onPressed: () async {
                   Navigator.of(context).pop();
                   await ref.read(authControllerProvider.notifier).signOut();
