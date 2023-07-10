@@ -28,6 +28,7 @@ class TimeControlModal extends ConsumerWidget {
       child: Padding(
         padding: Styles.bodyPadding,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               context.l10n.timeControl,
