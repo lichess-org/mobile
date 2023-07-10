@@ -227,13 +227,15 @@ class _Body extends ConsumerWidget {
       if (prev?.hasValue == true && state.hasValue) {
         if (prev!.requireValue.game.playable == true &&
             state.requireValue.game.playable == false) {
-          showAdaptiveDialog<void>(
-            context: context,
-            builder: (context) => _GameEndDialog(
-              ctrlProvider: ctrlProvider,
-            ),
-            barrierDismissible: true,
-          );
+          Future.delayed(const Duration(milliseconds: 500), () {
+            showAdaptiveDialog<void>(
+              context: context,
+              builder: (context) => _GameEndDialog(
+                ctrlProvider: ctrlProvider,
+              ),
+              barrierDismissible: true,
+            );
+          });
         }
 
         if (!prev.requireValue.game.canClaimWin &&
