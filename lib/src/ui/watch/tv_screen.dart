@@ -174,7 +174,7 @@ class _Body extends ConsumerWidget {
                 interactableSide: cg.InteractableSide.none,
                 orientation: cg.Side.white,
               ),
-              errorMessage: 'Could not load TV stream.',
+              errorMessage: 'Could not load TV Stream. Go online to watch TV Stream.', //TBD: Should we have different error messages depending on the error?
             );
           },
         ),

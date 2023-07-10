@@ -19,6 +19,8 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/ui/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
 
+import '../../utils/connectivity.dart';
+
 final _featuredGameNoSoundProvider = featuredGameProvider(withSound: false);
 
 class WatchScreen extends ConsumerStatefulWidget {
@@ -32,8 +34,15 @@ class _WatchScreenState extends ConsumerState<WatchScreen>
     with RouteAware, WidgetsBindingObserver {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
+  bool isNowOnline = true;
+
   @override
   Widget build(BuildContext context) {
+    ref.listen(connectivityChangesProvider, (_, connectivity) {
+      if (!connectivity.isRefreshing && connectivity.hasValue) {
+        isNowOnline = connectivity.value!.isOnline;
+      }
+    });
     return ConsumerPlatformWidget(
       ref: ref,
       androidBuilder: _buildAndroid,
@@ -49,6 +58,7 @@ class _WatchScreenState extends ConsumerState<WatchScreen>
       body: RefreshIndicator(
         key: _androidRefreshKey,
         onRefresh: () => ref.refresh(liveStreamersProvider.future),
+        notificationPredicate: (_) => isNowOnline,
         child: SafeArea(
           child: OrientationBuilder(
             builder: (context, orientation) {
@@ -85,7 +95,9 @@ class _WatchScreenState extends ConsumerState<WatchScreen>
             slivers: [
               const CupertinoSliverNavigationBar(),
               CupertinoSliverRefreshControl(
-                onRefresh: () => ref.refresh(liveStreamersProvider.future),
+                onRefresh: () => isNowOnline
+                    ? ref.refresh(liveStreamersProvider.future)
+                    : Future.delayed(const Duration(seconds: 1)),
               ),
               SliverSafeArea(
                 top: false,
@@ -193,7 +205,8 @@ class _WatchTvWidget extends ConsumerWidget {
           header: Text('Lichess TV', style: Styles.sectionTitle),
           orientation: Side.white,
           fen: kEmptyFen,
-          errorMessage: 'Could not load Tv Stream',
+          errorMessage:
+              'Could not load TV Stream. Go online to watch TV Stream.', //TBD: Should we have different error messages depending on the error?
         );
       },
       loading: () => BoardPreview(
