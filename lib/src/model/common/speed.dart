@@ -34,9 +34,9 @@ enum Speed {
         return Speed.correspondence;
     }
   }
-}
 
-final IMap<String, Speed> speedNameMap = IMap(Speed.values.asNameMap());
+  static final IMap<String, Speed> nameMap = IMap(Speed.values.asNameMap());
+}
 
 extension SpeedExtension on Pick {
   Speed asSpeedOrThrow() {
@@ -45,7 +45,7 @@ extension SpeedExtension on Pick {
       return value;
     }
     if (value is String) {
-      final speed = speedNameMap[value];
+      final speed = Speed.nameMap[value];
       if (speed != null) return speed;
     }
     throw PickException(

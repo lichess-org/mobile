@@ -25,7 +25,7 @@ class TimeIncrement {
         'increment': increment,
       };
 
-  Duration get duration => Duration(seconds: time + increment);
+  Duration get duration => Duration(seconds: time);
 
   Speed get speed => Speed.fromTimeIncrement(this);
 
@@ -36,16 +36,16 @@ class TimeIncrement {
         if (increment == 0) {
           displayTime = '∞';
         } else {
-          displayTime = '0 + $increment';
+          displayTime = '0+$increment';
         }
       case 45:
-        displayTime = '¾ + $increment';
+        displayTime = '¾+$increment';
       case 30:
-        displayTime = '½ + $increment';
+        displayTime = '½+$increment';
       case 15:
-        displayTime = '¼ + $increment';
+        displayTime = '¼+$increment';
       default:
-        displayTime = '${(time / 60).floor()} + $increment';
+        displayTime = '${(time / 60).floor()}+$increment';
     }
     return displayTime;
   }

@@ -3,7 +3,7 @@ description: Lichess mobile app V2
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 0.2.1+21
+version: 0.3.0+22
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -26,7 +26,7 @@ dependencies:
   shared_preferences: ^2.1.0
   cached_network_image: ^3.2.2
   dartchess: ^0.1.0
-  chessground: ^1.0.0
+  chessground: ^1.0.1
   soundpool: ^2.3.0
   meta: ^1.8.0
   deep_pick: ^1.0.0
@@ -52,6 +52,7 @@ dependencies:
   web_socket_channel: ^2.4.0
   device_info_plus: ^9.0.2
   crypto: ^3.0.3
+  signal_strength_indicator: ^0.4.1
 
 dev_dependencies:
   build_runner: ^2.3.2

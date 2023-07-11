@@ -5,11 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
-import 'package:lichess_mobile/src/ui/home/home_screen.dart';
-import 'package:lichess_mobile/src/ui/account/profile_screen.dart';
-import 'package:lichess_mobile/src/ui/watch/watch_screen.dart';
-import 'package:lichess_mobile/src/ui/watch/tv_screen.dart';
-import 'package:lichess_mobile/src/ui/puzzle/puzzle_dashboard_screen.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/view/home/home_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/watch/watch_screen.dart';
+import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_dashboard_screen.dart';
 
 enum BottomTab {
   home,
@@ -69,6 +71,8 @@ class BottomNavScaffold extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
+    final isHomeRoot = ref.watch(isHomeRootProvider);
+    final shouldRemoveTabBarBorder = currentTab == BottomTab.home && isHomeRoot;
 
     final tabs = [
       const _Tab(
@@ -139,6 +143,14 @@ class BottomNavScaffold extends ConsumerWidget {
         return CupertinoTabScaffold(
           tabBuilder: _iOSTabBuilder,
           tabBar: CupertinoTabBar(
+            border: shouldRemoveTabBarBorder
+                ? const Border(top: BorderSide.none)
+                : const Border(
+                    top: BorderSide(
+                      color: Styles.cupertinoDefaultTabBarBorderColor,
+                      width: 0.0, // 0.0 means one physical pixel
+                    ),
+                  ),
             currentIndex: currentTab.index,
             items: [
               for (final tab in tabs)
@@ -158,6 +170,7 @@ class BottomNavScaffold extends ConsumerWidget {
       case 0:
         return _MaterialTabView(
           navigatorKey: homeNavigatorKey,
+          navigatorObservers: [homeRouteObserver, gameRouteObserver],
           builder: (context) => const HomeScreen(),
         );
       case 1:
@@ -168,6 +181,7 @@ class BottomNavScaffold extends ConsumerWidget {
       case 2:
         return _MaterialTabView(
           navigatorKey: watchNavigatorKey,
+          navigatorObservers: [tvRouteObserver],
           builder: (context) => const WatchScreen(),
         );
       case 3:
@@ -187,6 +201,7 @@ class BottomNavScaffold extends ConsumerWidget {
         return CupertinoTabView(
           defaultTitle: 'Home',
           navigatorKey: homeNavigatorKey,
+          navigatorObservers: [homeRouteObserver, gameRouteObserver],
           builder: (context) => const HomeScreen(),
         );
       case 1:

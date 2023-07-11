@@ -5,17 +5,16 @@ import 'package:logging/logging.dart';
 import 'package:http/http.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:http/retry.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
-import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
+import 'package:lichess_mobile/src/utils/device_info.dart';
 
 part 'auth_client.g.dart';
 
@@ -23,18 +22,12 @@ part 'auth_client.g.dart';
 AuthClient authClient(AuthClientRef ref) {
   final httpClient = ref.watch(httpClientProvider);
   final crashlytics = ref.watch(crashlyticsProvider);
-  final logger = Logger('AuthClient');
-  final insideAuthClient = _AuthClient(
-    ref,
+  return AuthClient(
     httpClient,
-    logger,
-  );
-  final authClient = AuthClient(
-    logger,
-    insideAuthClient,
+    ref,
+    Logger('AuthClient'),
     crashlytics,
   );
-  return authClient;
 }
 
 /// HTTP client to communicate with lichess
@@ -47,25 +40,23 @@ AuthClient authClient(AuthClientRef ref) {
 ///   (TODO) - log the user out when a 401 is received,
 class AuthClient {
   AuthClient(
+    Client client,
+    ProviderRef<dynamic> ref,
     this._log,
-    this._client,
     this._crashlytics, {
     List<Duration> retryDelays = defaultRetries,
-  }) : _retryClient = RetryClient.withDelays(
-          _client,
+  })  : _client = _AuthClient(ref, client, _log),
+        _retryClient = RetryClient.withDelays(
+          _AuthClient(ref, client, _log),
           retryDelays,
         ) {
-    _log.info('Creating new AuthClient.');
+    _log.info('Creating new ${_log.name}.');
   }
 
   final Logger _log;
   final Client _client;
   final RetryClient _retryClient;
   final FirebaseCrashlytics _crashlytics;
-
-  /// Makes app user agent
-  static String userAgent(PackageInfo info, LightUser? user) =>
-      '${info.appName}/${info.version} $defaultTargetPlatform ${user != null ? user.id : 'anon.'}';
 
   FutureResult<Response> get(
     Uri url, {
@@ -196,32 +187,28 @@ class AuthClient {
       );
     }
   }
-
-  void close() {
-    _retryClient.close();
-    _client.close();
-  }
 }
 
 /// Http client that sets the Authorization header when a token has been stored.
 class _AuthClient extends BaseClient {
   _AuthClient(this.ref, this._inner, this._logger);
 
-  final AuthClientRef ref;
+  final ProviderRef<dynamic> ref;
   final Client _inner;
   final Logger _logger;
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
     final session = ref.read(authSessionProvider);
-    final info = ref.read(packageInfoProvider);
+    final pInfo = ref.read(packageInfoProvider);
+    final deviceInfo = ref.read(deviceInfoProvider);
 
     if (session != null && !request.headers.containsKey('Authorization')) {
       final bearer = signBearerToken(session.token);
       request.headers['Authorization'] = 'Bearer $bearer';
     }
 
-    request.headers['user-agent'] = AuthClient.userAgent(info, session?.user);
+    request.headers['user-agent'] = userAgent(pInfo, deviceInfo, session?.user);
 
     _logger.info('${request.method} ${request.url}', request.headers);
 

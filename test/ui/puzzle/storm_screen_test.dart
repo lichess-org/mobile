@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
-import 'package:lichess_mobile/src/ui/puzzle/storm_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
 import 'package:lichess_mobile/src/http_client.dart';
 
 import '../../test_utils.dart';

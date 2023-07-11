@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sqflite/sqflite.dart';
@@ -13,10 +14,9 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
-import 'package:lichess_mobile/src/model/auth/user_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 
 part 'app_dependencies.freezed.dart';
@@ -28,6 +28,7 @@ Future<AppDependencies> appDependencies(
 ) async {
   final sessionStorage = ref.watch(sessionStorageProvider);
   final pInfo = await PackageInfo.fromPlatform();
+  final deviceInfo = await DeviceInfoPlugin().deviceInfo;
   final prefs = await SharedPreferences.getInstance();
   final soundTheme = GeneralPreferences.fetchFromStorage(prefs).soundTheme;
   final soundPool = await ref.watch(soundPoolProvider(soundTheme).future);
@@ -50,7 +51,7 @@ Future<AppDependencies> appDependencies(
         Uri.parse('$kLichessHost/api/account'),
         headers: {
           'Authorization': 'Bearer ${signBearerToken(storedSession.token)}',
-          'user-agent': AuthClient.userAgent(pInfo, storedSession.user),
+          'user-agent': userAgent(pInfo, deviceInfo, storedSession.user),
         },
       ).timeout(const Duration(seconds: 3));
       if (response.statusCode == 401) {
@@ -66,6 +67,7 @@ Future<AppDependencies> appDependencies(
 
   return AppDependencies(
     packageInfo: pInfo,
+    deviceInfo: deviceInfo,
     sharedPreferences: prefs,
     soundPool: soundPool,
     userSession: await sessionStorage.read(),
@@ -77,9 +79,10 @@ Future<AppDependencies> appDependencies(
 class AppDependencies with _$AppDependencies {
   const factory AppDependencies({
     required PackageInfo packageInfo,
+    required BaseDeviceInfo deviceInfo,
     required SharedPreferences sharedPreferences,
     required (Soundpool, IMap<Sound, int>) soundPool,
-    required UserSession? userSession,
+    required AuthSessionState? userSession,
     required Database database,
   }) = _AppDependencies;
 }

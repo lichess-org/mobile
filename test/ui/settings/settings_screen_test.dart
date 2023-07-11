@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:lichess_mobile/src/ui/settings/settings_screen.dart';
+import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import '../../test_utils.dart';
 import '../../test_app.dart';
@@ -72,7 +72,7 @@ void main() {
           await tester
               .tap(find.widgetWithText(CupertinoActionSheetAction, 'Sign out'));
         } else {
-          await tester.tap(find.text('Accept'));
+          await tester.tap(find.text('OK'));
         }
         await tester.pump();
 

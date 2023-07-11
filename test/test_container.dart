@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:mocktail/mocktail.dart';
@@ -12,7 +13,7 @@ import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
-import 'package:lichess_mobile/src/model/auth/user_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import './model/common/service/fake_sound_service.dart';
 import './model/auth/fake_auth_repository.dart';
@@ -25,7 +26,7 @@ class MockDatabase extends Mock implements Database {}
 
 Future<ProviderContainer> makeContainer({
   List<Override>? overrides,
-  UserSession? userSession,
+  AuthSessionState? userSession,
 }) async {
   SharedPreferences.setMockInitialValues({});
   final sharedPreferences = await SharedPreferences.getInstance();
@@ -54,6 +55,15 @@ Future<ProviderContainer> makeContainer({
             buildNumber: '0.0.0',
             packageName: 'lichess_mobile_test',
           ),
+          deviceInfo: BaseDeviceInfo({
+            'name': 'test',
+            'model': 'test',
+            'manufacturer': 'test',
+            'systemName': 'test',
+            'systemVersion': 'test',
+            'identifierForVendor': 'test',
+            'isPhysicalDevice': true,
+          }),
           sharedPreferences: sharedPreferences,
           soundPool: (MockSoundPool(), IMap<Sound, int>(const {})),
           userSession: userSession,

@@ -26,15 +26,9 @@ class ChallengeRepository {
       body: req.toRequestBody,
     );
   }
-
-  void dispose() {
-    apiClient.close();
-  }
 }
 
 final challengeRepositoryProvider = Provider<ChallengeRepository>((ref) {
   final apiClient = ref.watch(authClientProvider);
-  final repo = ChallengeRepository(apiClient: apiClient);
-  ref.onDispose(() => repo.dispose());
-  return repo;
+  return ChallengeRepository(apiClient: apiClient);
 });

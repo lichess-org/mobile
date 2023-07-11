@@ -42,9 +42,6 @@ jobs:
       - name: Run riverpod lint
         run: dart run custom_lint
 
-      - name: Run DCM checks
-        run: dart run dart_code_metrics:metrics analyze lib --no-fatal-style
-
       - name: Run unit tests
         run: flutter test
 

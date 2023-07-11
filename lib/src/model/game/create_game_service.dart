@@ -4,12 +4,12 @@ import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:deep_pick/deep_pick.dart';
 
-import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 
 part 'create_game_service.g.dart';
@@ -25,31 +25,28 @@ class CreateGameService {
   final CreateGameServiceRef ref;
   final Logger _log;
 
-  bool _isCreatingGame = false;
+  StreamSubscription<SocketEvent>? _socketSubscription;
 
   /// Create a new online game seek based on saved preferences.
   Future<GameFullId> newOnlineGame() async {
-    if (_isCreatingGame) {
-      throw StateError('Bad state: already creating a game.');
+    if (_socketSubscription != null) {
+      throw StateError('Already creating a game.');
     }
 
-    _isCreatingGame = true;
-
+    final session = ref.read(authSessionProvider);
     final socket = ref.read(authSocketProvider);
     final playPref = ref.read(playPreferencesProvider);
     final lobbyRepo = ref.read(lobbyRepositoryProvider);
-
     final stream = socket.connect();
+    final completer = Completer<GameFullId>();
 
-    final futureGameId = stream
-        .firstWhere((e) => e.type == SocketEventType.redirect)
-        .then((event) {
-      _isCreatingGame = false;
-      final data = event.data as Map<String, dynamic>;
-      return pick(data['id']).asGameFullIdOrThrow();
-    }).catchError((Object e) {
-      _isCreatingGame = false;
-      throw e;
+    _socketSubscription = stream.listen((event) {
+      if (event.topic == 'redirect') {
+        final data = event.data as Map<String, dynamic>;
+        completer.complete(pick(data['id']).asGameFullIdOrThrow());
+        _socketSubscription?.cancel();
+        _socketSubscription = null;
+      }
     });
 
     socket.switchRoute(Uri(path: '/lobby/socket/v5'));
@@ -62,22 +59,22 @@ class CreateGameService {
           time: Duration(seconds: playPref.timeIncrement.time),
           increment: Duration(seconds: playPref.timeIncrement.increment),
           // TODO add rated choice
-          rated: true,
+          rated: session != null,
         ),
         sri: socket.sri!,
       ),
     );
 
-    return futureGameId;
+    return completer.future;
   }
 
   /// Cancel the current game creation.
   void cancel() {
-    if (_isCreatingGame) {
-      // close client connection to cancel seek
-      // cf: https://lichess.org/api#tag/Board/operation/apiBoardSeek
-      ref.invalidate(httpClientProvider);
-    }
-    _isCreatingGame = false;
+    _socketSubscription?.cancel();
+    _socketSubscription = null;
+    // we need to invalidate lobbyRepositoryProvider to cancel the seek
+    // (it closes client connection)
+    // cf: https://lichess.org/api#tag/Board/operation/apiBoardSeek
+    ref.invalidate(lobbyRepositoryProvider);
   }
 }

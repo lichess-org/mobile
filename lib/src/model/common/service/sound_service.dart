@@ -13,6 +13,7 @@ part 'sound_service.g.dart';
 enum Sound {
   move,
   capture,
+  lowTime,
   dong,
   error,
   confirmation,
@@ -70,19 +71,27 @@ class SoundService {
   SoundMap _sounds;
   final SoundServiceRef _ref;
 
-  int? _currentStreamId;
+  (int, Sound)? _currentStream;
 
   Future<int?> play(Sound sound) async {
     final isEnabled = _ref.read(generalPreferencesProvider).isSoundEnabled;
     final soundId = _sounds[sound];
     if (soundId != null && isEnabled) {
-      return _currentStreamId = await _pool.play(soundId);
+      // Stop current sound only if it is a move or capture sound
+      if (_currentStream != null &&
+          _currentStream!.$1 > 0 &&
+          (_currentStream!.$2 == Sound.move ||
+              _currentStream!.$2 == Sound.capture)) {
+        await _pool.stop(_currentStream!.$1);
+      }
+      _currentStream = (await _pool.play(soundId), sound);
+      return _currentStream!.$1;
     }
     return null;
   }
 
   Future<void> stopCurrent() async {
-    if (_currentStreamId != null) return _pool.stop(_currentStreamId!);
+    if (_currentStream != null) return _pool.stop(_currentStream!.$1);
   }
 
   Future<void> changeTheme(SoundTheme theme, {bool playSound = false}) async {
