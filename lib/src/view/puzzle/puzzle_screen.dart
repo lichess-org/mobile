@@ -341,6 +341,7 @@ class _BottomBar extends ConsumerWidget {
                   label: 'Previous',
                   shortLabel: 'Previous',
                   icon: CupertinoIcons.chevron_back,
+                  showAndroidTooltip: false,
                 ),
               ),
             if (puzzleState.mode == PuzzleMode.view)
@@ -354,6 +355,7 @@ class _BottomBar extends ConsumerWidget {
                   label: context.l10n.next,
                   shortLabel: context.l10n.next,
                   icon: CupertinoIcons.chevron_forward,
+                  showAndroidTooltip: false,
                 ),
               ),
             if (puzzleState.mode == PuzzleMode.view)
