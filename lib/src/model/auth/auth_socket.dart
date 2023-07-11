@@ -113,6 +113,10 @@ class AuthSocket {
   /// If a connection already exists it will keep the current connection.
   (Stream<SocketEvent>, String) connect([Uri? route]) {
     if (_connection != null && _connection!.channel.closeCode == null) {
+      if (route != null && _connection!.route != route) {
+        switchRoute(route);
+      }
+
       return (_streamController.stream, _connection!.sri);
     }
 
