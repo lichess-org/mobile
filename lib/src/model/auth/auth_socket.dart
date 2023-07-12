@@ -20,10 +20,12 @@ part 'auth_socket.g.dart';
 const kNativePingInterval = Duration(seconds: 30);
 const kDefaultConnectTimeout = Duration(seconds: 5);
 
-const kWebSocketPath = '/socket/v5';
+const kDefaultWSRoute = '/socket/v5';
 
 /// The delay between the next ping after receiving a pong.
-const _kPingDelay = Duration(seconds: 3);
+const _kPingDelay = Duration(milliseconds: 2500);
+
+/// The maximum lag before considering the connection as lost.
 const _kPingMaxLag = Duration(seconds: 9);
 const _kAutoReconnectDelay = Duration(milliseconds: 3500);
 
@@ -47,7 +49,6 @@ class AverageLag extends _$AverageLag {
 
   void add(Duration currentLag, double mix) {
     state += (currentLag - state) * mix;
-    print('average lag: ${state.inMilliseconds}ms');
   }
 }
 
@@ -147,7 +148,8 @@ class AuthSocket {
     final session = _ref.read(authSessionProvider);
     final pInfo = _ref.read(packageInfoProvider);
     final deviceInfo = _ref.read(deviceInfoProvider);
-    final uri = Uri.parse('$kLichessWSHost$kWebSocketPath?sri=$sri');
+    final uri =
+        Uri.parse('$kLichessWSHost${route ?? kDefaultWSRoute}?sri=$sri');
     final bearer = session != null ? signBearerToken(session.token) : '';
     final headers = session != null
         ? {
@@ -187,15 +189,13 @@ class AuthSocket {
       (_) {
         _log.info('WebSocket connection established.');
         _ref.read(averageLagProvider.notifier).reset();
-        if (route != null) {
-          switchRoute(route);
-        }
         _sendPing();
         _resendAcks();
         _schedulePing(_kPingDelay);
       },
       onError: (Object e) {
         _log.severe('WebSocket connection failed.', e);
+        _ref.read(averageLagProvider.notifier).reset();
         _scheduleReconnect(_kAutoReconnectDelay, sri, route);
       },
     );
@@ -249,7 +249,6 @@ class AuthSocket {
   }
 
   void _handleEvent(SocketEvent event) {
-    print(event);
     switch (event.topic) {
       case '_pong':
       case 'n':
@@ -259,7 +258,7 @@ class AuthSocket {
       case 'switch':
         final data = event.data as Map<String, dynamic>;
         _log.info(
-          'switching to new route ${data['uri']}, status: ${data['status']}',
+          'switch to new route ${data['uri']}, status: ${data['status']}',
         );
     }
 
