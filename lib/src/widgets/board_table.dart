@@ -318,6 +318,7 @@ class _MoveListState extends State<MoveList> {
         ? Container(
             padding: const EdgeInsets.only(left: 5),
             height: 40,
+            width: double.infinity,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(

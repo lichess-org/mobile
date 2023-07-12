@@ -4,10 +4,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:signal_strength_indicator/signal_strength_indicator.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 
 part 'ping_rating.g.dart';
+
+const spinKit = SpinKitThreeBounce(
+  color: Colors.grey,
+  size: 15,
+);
 
 @riverpod
 int pingRating(PingRatingRef ref) {
@@ -50,31 +56,29 @@ class PingRating extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pingRating = ref.watch(pingRatingProvider);
 
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-        return SignalStrengthIndicator.bars(
-          barCount: 4,
-          minValue: 1,
-          maxValue: 4,
-          value: pingRating,
-          size: size,
-          inactiveColor: Colors.grey,
-          levels: materialLevels,
-        );
-      case TargetPlatform.iOS:
-        return SignalStrengthIndicator.bars(
-          barCount: 4,
-          minValue: 1,
-          maxValue: 4,
-          value: pingRating,
-          size: size,
-          inactiveColor: CupertinoColors.systemGrey2,
-          levels: cupertinoLevels,
-        );
-
-      default:
-        assert(false, 'Unexpected platform $defaultTargetPlatform');
-        return const SizedBox.shrink();
-    }
+    return SizedBox.square(
+      dimension: size,
+      child: Stack(
+        children: [
+          SignalStrengthIndicator.bars(
+            barCount: 4,
+            minValue: 1,
+            maxValue: 4,
+            value: pingRating,
+            size: size,
+            inactiveColor: defaultTargetPlatform == TargetPlatform.iOS
+                ? CupertinoDynamicColor.resolve(
+                    CupertinoColors.systemGrey,
+                    context,
+                  ).withOpacity(0.2)
+                : Colors.grey.withOpacity(0.2),
+            levels: defaultTargetPlatform == TargetPlatform.iOS
+                ? cupertinoLevels
+                : materialLevels,
+          ),
+          if (pingRating == 0) spinKit,
+        ],
+      ),
+    );
   }
 }

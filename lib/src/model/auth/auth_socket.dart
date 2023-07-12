@@ -20,7 +20,14 @@ part 'auth_socket.g.dart';
 const kNativePingInterval = Duration(seconds: 30);
 const kDefaultConnectTimeout = Duration(seconds: 5);
 
-const kWebSocketPath = '/socket/v5';
+const kDefaultWSRoute = '/socket/v5';
+
+/// The delay between the next ping after receiving a pong.
+const _kPingDelay = Duration(milliseconds: 2500);
+
+/// The maximum lag before considering the connection as lost.
+const _kPingMaxLag = Duration(seconds: 9);
+const _kAutoReconnectDelay = Duration(milliseconds: 3500);
 
 @Riverpod(keepAlive: true)
 AuthSocket authSocket(AuthSocketRef ref) {
@@ -45,6 +52,12 @@ class AverageLag extends _$AverageLag {
   }
 }
 
+typedef CurrentConnection = ({
+  String sri,
+  IOWebSocketChannel channel,
+  Uri? route,
+});
+
 /// Lichess websocket client.
 ///
 /// This class can only create one single connection, because we never want to
@@ -65,10 +78,16 @@ class AuthSocket {
   final AuthSocketRef _ref;
 
   Timer? _pingTimer;
+  Timer? _reconnectTimer;
   Timer? _ackResendTimer;
   Timer? _closeTimer;
   int _pongCount = 0;
   DateTime? _lastPing;
+
+  StreamSubscription<SocketEvent>? _streamSubscription;
+
+  /// Socket event stream stream controller.
+  late StreamController<SocketEvent> _streamController;
 
   /// The list of acknowledgeable messages.
   List<(DateTime, int, Map<String, dynamic>)> _acks = [];
@@ -77,34 +96,49 @@ class AuthSocket {
   int _ackId = 1;
 
   /// The current connection.
-  ({
-    String sri,
-    Stream<SocketEvent> stream,
-    IOWebSocketChannel channel,
-  })? _connection;
+  CurrentConnection? _connection;
 
   /// Gets the current WebSocket sink
   WebSocketSink? get sink => _connection?.channel.sink;
 
+  /// The current socket route if any.
+  Uri? get route => _connection?.route;
+
   /// Gets the current SRI
-  String? get sri => _connection?.sri;
+  String? get currentSri => _connection?.sri;
 
   /// Creates a new WebSocket channel.
   ///
-  /// Will not do anything if the channel is already connected.
-  Stream<SocketEvent> connect({
-    /// The delay between the next ping after receiving a pong.
-    Duration pingDelay = const Duration(seconds: 3),
-  }) {
+  /// A websocket route can be provided to connect to a specific route.
+  ///
+  /// If a connection already exists it will keep the current connection.
+  (Stream<SocketEvent>, String) connect([Uri? route]) {
     if (_connection != null && _connection!.channel.closeCode == null) {
-      return _connection!.stream;
+      if (route != null && _connection!.route != route) {
+        switchRoute(route);
+      }
+
+      return (_streamController.stream, _connection!.sri);
     }
 
     _closeTimer?.cancel();
-
-    _pongCount = 0;
     _acks = [];
     _ackId = 1;
+
+    final sri = genRandomString(12);
+
+    _streamController = StreamController<SocketEvent>.broadcast();
+
+    final connection = _doConnect(sri, route);
+
+    return (_streamController.stream, connection.sri);
+  }
+
+  /// Connect or reconnect the WebSocket.
+  CurrentConnection _doConnect(String sri, Uri? route) {
+    _doClose();
+    _pongCount = 0;
+    _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
     _ackResendTimer = Timer.periodic(
       const Duration(milliseconds: 1500),
@@ -114,8 +148,8 @@ class AuthSocket {
     final session = _ref.read(authSessionProvider);
     final pInfo = _ref.read(packageInfoProvider);
     final deviceInfo = _ref.read(deviceInfoProvider);
-    final sri = genRandomString(12);
-    final uri = Uri.parse('$kLichessWSHost$kWebSocketPath?sri=$sri');
+    final uri =
+        Uri.parse('$kLichessWSHost${route ?? kDefaultWSRoute}?sri=$sri');
     final bearer = session != null ? signBearerToken(session.token) : '';
     final headers = session != null
         ? {
@@ -135,50 +169,56 @@ class AuthSocket {
       headers: headers,
     );
 
-    channel.ready.then((_) {
-      _log.info('WebSocket connection established.');
-      _ref.read(averageLagProvider.notifier).reset();
-      _sendPing();
-    });
-
-    final Stream<SocketEvent> stream = channel.stream
-        .map((raw) {
-          if (raw == '0') {
-            _handlePong(pingDelay);
-            return SocketEvent.pong;
-          }
-          final event = SocketEvent.fromJson(
-            jsonDecode(raw as String) as Map<String, dynamic>,
-          );
-          switch (event.topic) {
-            case 'n':
-              _handlePong(pingDelay);
-            case 'ack':
-              _onServerAck(event);
-          }
-          return event;
-        })
-        .where((event) => event != SocketEvent.pong)
-        .asBroadcastStream();
+    _streamSubscription?.cancel();
+    _streamSubscription = channel.stream.map((raw) {
+      if (raw == '0') {
+        return SocketEvent.pong;
+      }
+      return SocketEvent.fromJson(
+        jsonDecode(raw as String) as Map<String, dynamic>,
+      );
+    }).listen(_handleEvent);
 
     _connection = (
       sri: sri,
-      stream: stream,
       channel: channel,
+      route: route,
     );
 
-    return _connection!.stream;
+    channel.ready.then(
+      (_) {
+        _log.info('WebSocket connection established.');
+        _ref.read(averageLagProvider.notifier).reset();
+        _sendPing();
+        _resendAcks();
+        _schedulePing(_kPingDelay);
+      },
+      onError: (Object e) {
+        _log.severe('WebSocket connection failed.', e);
+        _ref.read(averageLagProvider.notifier).reset();
+        _scheduleReconnect(_kAutoReconnectDelay, sri, route);
+      },
+    );
+
+    return _connection!;
   }
 
   /// Switches the current WebSocket connection to a new route.
   ///
   /// Will not do anything if the channel is not connected.
   void switchRoute(Uri route) {
+    if (_connection != null) {
+      _connection = (
+        sri: _connection!.sri,
+        channel: _connection!.channel,
+        route: route,
+      );
+    }
     sink?.add(
       jsonEncode({
         't': 'switch',
         'd': {
-          'uri': '${route.path}?sri=$sri',
+          'uri': '${route.path}?sri=$currentSri',
         },
       }),
     );
@@ -208,6 +248,25 @@ class AuthSocket {
     sink?.add(jsonEncode(message));
   }
 
+  void _handleEvent(SocketEvent event) {
+    switch (event.topic) {
+      case '_pong':
+      case 'n':
+        _handlePong(_kPingDelay);
+      case 'ack':
+        _onServerAck(event);
+      case 'switch':
+        final data = event.data as Map<String, dynamic>;
+        _log.info(
+          'switch to new route ${data['uri']}, status: ${data['status']}',
+        );
+    }
+
+    if (event != SocketEvent.pong) {
+      _streamController.add(event);
+    }
+  }
+
   void _schedulePing(Duration delay) {
     _pingTimer?.cancel();
     _pingTimer = Timer(delay, _sendPing);
@@ -215,7 +274,6 @@ class AuthSocket {
 
   /// Sends a ping to the server.
   void _sendPing() {
-    _pingTimer?.cancel();
     sink?.add(
       _pongCount % 10 == 2
           ? jsonEncode({
@@ -225,9 +283,13 @@ class AuthSocket {
           : 'p',
     );
     _lastPing = DateTime.now();
+    if (_connection != null) {
+      _scheduleReconnect(_kPingMaxLag, _connection!.sri, _connection!.route);
+    }
   }
 
   void _handlePong(Duration pingDelay) {
+    _reconnectTimer?.cancel();
     if (_pongCount == 0) {
       _log.info('Ping/pong protocol established.');
     }
@@ -238,6 +300,17 @@ class AuthSocket {
     // Average first 4 pings, then switch to decaying average.
     final mix = _pongCount > 4 ? 0.1 : 1 / _pongCount;
     _ref.read(averageLagProvider.notifier).add(currentLag, mix);
+  }
+
+  void _scheduleReconnect(Duration delay, String sri, Uri? route) {
+    _reconnectTimer?.cancel();
+    _reconnectTimer = Timer(delay, () {
+      if (_connection != null) {
+        _ref.read(averageLagProvider.notifier).reset();
+        _log.info('Reconnecting WebSocket.');
+        _doConnect(sri, route);
+      }
+    });
   }
 
   void _onServerAck(SocketEvent event) {
@@ -266,11 +339,22 @@ class AuthSocket {
       'Closing WebSocket connection ${delay == null ? 'now' : 'in ${delay.inSeconds}s'}.',
     );
     _closeTimer?.cancel();
-    _closeTimer = Timer(delay ?? Duration.zero, () {
-      sink?.close();
-      _pingTimer?.cancel();
-      _ackResendTimer?.cancel();
-      _connection = null;
-    });
+    _closeTimer = Timer(
+      delay ?? Duration.zero,
+      () => _doClose(() {
+        _streamController.close();
+      }),
+    );
+  }
+
+  void _doClose([void Function()? callback]) {
+    sink?.close();
+    _streamSubscription?.cancel();
+    _pingTimer?.cancel();
+    _reconnectTimer?.cancel();
+    _ackResendTimer?.cancel();
+    _connection = null;
+
+    callback?.call();
   }
 }
