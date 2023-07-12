@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -104,7 +105,7 @@ class AuthSocket {
   /// The current socket route if any.
   Uri? get route => _connection?.route;
 
-  /// Gets the current SRI
+  /// Gets the current SRI (Socket Request Identifier).
   String? get currentSri => _connection?.sri;
 
   /// Creates a new WebSocket channel.
@@ -112,13 +113,28 @@ class AuthSocket {
   /// A websocket route can be provided to connect to a specific route.
   ///
   /// If a connection already exists it will keep the current connection.
-  (Stream<SocketEvent>, String) connect([Uri? route]) {
-    if (_connection != null && _connection!.channel.closeCode == null) {
-      if (route != null && _connection!.route != route) {
-        switchRoute(route);
-      }
+  ///
+  /// Returns a tuple of:
+  ///  - the socket event Stream
+  ///  - the current SRI
+  ///  - a future that completes when the socket is ready. This future Will
+  ///    complete immediately if the socket is already connected. The future might
+  ///    never complete if the socket fails to connect.
+  (Stream<SocketEvent>, String, Future<void>) connect([Uri? route]) {
+    final completer = Completer<void>();
 
-      return (_streamController.stream, _connection!.sri);
+    if (_connection != null && _connection!.channel.closeCode == null) {
+      _connection!.channel.ready.then((_) {
+        if (route != null &&
+            _connection != null &&
+            route != _connection!.route) {
+          switchRoute(route);
+        }
+
+        completer.complete();
+      });
+
+      return (_streamController.stream, _connection!.sri, completer.future);
     }
 
     _closeTimer?.cancel();
@@ -129,13 +145,17 @@ class AuthSocket {
 
     _streamController = StreamController<SocketEvent>.broadcast();
 
-    final connection = _doConnect(sri, route);
+    final connection = _doConnect(sri, route, completer);
 
-    return (_streamController.stream, connection.sri);
+    return (_streamController.stream, connection.sri, completer.future);
   }
 
   /// Connect or reconnect the WebSocket.
-  CurrentConnection _doConnect(String sri, Uri? route) {
+  CurrentConnection _doConnect(
+    String sri,
+    Uri? route,
+    Completer<void>? readyCompleter,
+  ) {
     _doClose();
     _pongCount = 0;
     _reconnectTimer?.cancel();
@@ -192,11 +212,12 @@ class AuthSocket {
         _sendPing();
         _resendAcks();
         _schedulePing(_kPingDelay);
+        readyCompleter?.complete();
       },
       onError: (Object e) {
         _log.severe('WebSocket connection failed.', e);
         _ref.read(averageLagProvider.notifier).reset();
-        _scheduleReconnect(_kAutoReconnectDelay, sri, route);
+        _scheduleReconnect(_kAutoReconnectDelay, sri, route, readyCompleter);
       },
     );
 
@@ -302,13 +323,18 @@ class AuthSocket {
     _ref.read(averageLagProvider.notifier).add(currentLag, mix);
   }
 
-  void _scheduleReconnect(Duration delay, String sri, Uri? route) {
+  void _scheduleReconnect(
+    Duration delay,
+    String sri,
+    Uri? route, [
+    Completer<void>? readyCompleter,
+  ]) {
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(delay, () {
       if (_connection != null) {
         _ref.read(averageLagProvider.notifier).reset();
         _log.info('Reconnecting WebSocket.');
-        _doConnect(sri, route);
+        _doConnect(sri, route, readyCompleter);
       }
     });
   }
@@ -332,9 +358,6 @@ class AuthSocket {
 
   /// Closes the WebSocket connection, if open.
   void close({Duration? delay}) {
-    if (_connection?.channel.closeCode != null) {
-      return;
-    }
     _log.info(
       'Closing WebSocket connection ${delay == null ? 'now' : 'in ${delay.inSeconds}s'}.',
     );

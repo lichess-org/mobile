@@ -21,7 +21,7 @@ Stream<({int nbPlayers, int nbGames})> lobbyNumbers(
   LobbyNumbersRef ref,
 ) async* {
   final socket = ref.watch(authSocketProvider);
-  final (stream, _) = socket.connect();
+  final (stream, _, _) = socket.connect();
   await for (final msg in stream) {
     if (msg.topic == 'n') {
       final data = msg.data as Map<String, int>;
