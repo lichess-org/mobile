@@ -29,7 +29,6 @@ void main() {
           home: PerfStatsScreen(
             user: fakeUser,
             perf: testPerf,
-            loggedInUser: null,
           ),
           overrides: [
             httpClientProvider.overrideWithValue(mockClient),
@@ -60,7 +59,6 @@ void main() {
           home: PerfStatsScreen(
             user: fakeUser,
             perf: testPerf,
-            loggedInUser: null,
           ),
           overrides: [
             httpClientProvider.overrideWithValue(mockClient),

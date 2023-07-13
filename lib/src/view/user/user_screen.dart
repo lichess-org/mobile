@@ -265,7 +265,6 @@ class PerfCards extends StatelessWidget {
       builder: (context) => PerfStatsScreen(
         user: user,
         perf: perf,
-        loggedInUser: user,
       ),
     );
   }

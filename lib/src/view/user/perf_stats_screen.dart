@@ -9,15 +9,16 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
-import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -35,13 +36,11 @@ class PerfStatsScreen extends StatelessWidget {
   const PerfStatsScreen({
     required this.user,
     required this.perf,
-    required this.loggedInUser,
     super.key,
   });
 
   final User user;
   final Perf perf;
-  final User? loggedInUser;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +56,7 @@ class PerfStatsScreen extends StatelessWidget {
         titleSpacing: 0,
         title: _Title(user: user, perf: perf),
       ),
-      body: _Body(user: user, perf: perf, loggedInUser: loggedInUser),
+      body: _Body(user: user, perf: perf),
     );
   }
 
@@ -66,7 +65,7 @@ class PerfStatsScreen extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         middle: _Title(user: user, perf: perf),
       ),
-      child: _Body(user: user, perf: perf, loggedInUser: loggedInUser),
+      child: _Body(user: user, perf: perf),
     );
   }
 }
@@ -99,16 +98,15 @@ class _Body extends ConsumerWidget {
   const _Body({
     required this.user,
     required this.perf,
-    required this.loggedInUser,
   });
 
   final User user;
   final Perf perf;
-  final User? loggedInUser;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final perfStats = ref.watch(userPerfStatsProvider(id: user.id, perf: perf));
+    final loggedInUser = ref.watch(authSessionProvider);
 
     const statGroupSpace = SizedBox(height: 15.0);
     const subStatSpace = SizedBox(height: 10);
@@ -144,7 +142,7 @@ class _Body extends ConsumerWidget {
                     if (data.percentile != null)
                       Text(
                         (loggedInUser != null &&
-                                loggedInUser!.username == user.username)
+                                loggedInUser.user.id == user.id)
                             ? context.l10n
                                 .youAreBetterThanPercentOfPerfTypePlayers(
                                 '${data.percentile!.toStringAsFixed(2)}%',
