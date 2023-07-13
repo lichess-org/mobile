@@ -9,7 +9,5 @@ part 'device_info.g.dart';
 BaseDeviceInfo deviceInfo(DeviceInfoRef ref) {
   // requireValue is possible because appDependenciesProvider is loaded before
   // anything. See: lib/src/app.dart
-  return ref.watch(
-    appDependenciesProvider.select((data) => data.requireValue.deviceInfo),
-  );
+  return ref.read(appDependenciesProvider).requireValue.deviceInfo;
 }

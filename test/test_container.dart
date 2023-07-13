@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:soundpool/soundpool.dart';
@@ -14,6 +15,7 @@ import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import './model/common/service/fake_sound_service.dart';
 import './model/auth/fake_auth_repository.dart';
@@ -30,6 +32,10 @@ Future<ProviderContainer> makeContainer({
 }) async {
   SharedPreferences.setMockInitialValues({});
   final sharedPreferences = await SharedPreferences.getInstance();
+
+  FlutterSecureStorage.setMockInitialValues({
+    kSRIStorageKey: 'test',
+  });
 
   // Logger.root.onRecord.listen((record) {
   //   if (record.level > Level.WARNING) {
@@ -68,6 +74,7 @@ Future<ProviderContainer> makeContainer({
           soundPool: (MockSoundPool(), IMap<Sound, int>(const {})),
           userSession: userSession,
           database: MockDatabase(),
+          sri: 'test',
         );
       }),
       ...overrides ?? [],

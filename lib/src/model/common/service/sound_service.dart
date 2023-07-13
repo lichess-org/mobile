@@ -26,7 +26,7 @@ typedef SoundMap = IMap<Sound, int>;
 SoundService soundService(SoundServiceRef ref) {
   // requireValue is possible because appDependenciesProvider is loaded before
   // anything. See: lib/src/app.dart
-  final deps = ref.watch(appDependenciesProvider).requireValue;
+  final deps = ref.read(appDependenciesProvider).requireValue;
   final (pool, sounds) = deps.soundPool;
   return SoundService(pool, sounds, ref);
 }

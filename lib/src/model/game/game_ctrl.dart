@@ -35,7 +35,7 @@ class GameCtrl extends _$GameCtrl {
   @override
   Future<GameCtrlState> build(GameFullId gameFullId) {
     final socket = ref.watch(authSocketProvider);
-    final (stream, _, _) = socket.connect(Uri(path: '/play/$gameFullId/v6'));
+    final (stream, _) = socket.connect(Uri(path: '/play/$gameFullId/v6'));
 
     final state = stream.firstWhere((e) => e.topic == 'full').then((event) {
       final fullEvent =

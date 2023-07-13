@@ -3,19 +3,22 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 
 part 'session_storage.g.dart';
 
 @Riverpod(keepAlive: true)
 SessionStorage sessionStorage(SessionStorageRef ref) {
-  return const SessionStorage(FlutterSecureStorage());
+  return SessionStorage(ref);
 }
 
 class SessionStorage {
-  const SessionStorage(FlutterSecureStorage storage) : _storage = storage;
+  const SessionStorage(SessionStorageRef ref) : _ref = ref;
 
-  final FlutterSecureStorage _storage;
+  final SessionStorageRef _ref;
+
+  FlutterSecureStorage get _storage => _ref.read(secureStorageProvider);
 
   Future<AuthSessionState?> read() async {
     final string = await _storage.read(key: _kSessionStorageKey);

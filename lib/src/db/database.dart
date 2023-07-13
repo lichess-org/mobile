@@ -11,9 +11,7 @@ const puzzleStorageTTL = Duration(days: 60);
 Database database(DatabaseRef ref) {
   // requireValue is possible because appDependenciesProvider is loaded before
   // anything. See: lib/src/app.dart
-  final db = ref.watch(
-    appDependenciesProvider.select((data) => data.requireValue.database),
-  );
+  final db = ref.read(appDependenciesProvider).requireValue.database;
   ref.onDispose(db.close);
   return db;
 }

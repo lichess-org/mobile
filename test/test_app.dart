@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
@@ -20,6 +21,7 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import './model/common/service/fake_sound_service.dart';
 import './model/auth/fake_auth_repository.dart';
 import './model/auth/fake_session_storage.dart';
@@ -43,6 +45,10 @@ Future<Widget> buildTestApp(
   await tester.binding.setSurfaceSize(kTestSurfaceSize);
   SharedPreferences.setMockInitialValues({});
   final sharedPreferences = await SharedPreferences.getInstance();
+
+  FlutterSecureStorage.setMockInitialValues({
+    kSRIStorageKey: 'test',
+  });
 
   // TODO consider loading true fonts as well
   FlutterError.onError = _ignoreOverflowErrors;
@@ -90,6 +96,7 @@ Future<Widget> buildTestApp(
           soundPool: (MockSoundPool(), IMap<Sound, int>(const {})),
           userSession: userSession,
           database: MockDatabase(),
+          sri: 'test',
         );
       }),
       ...overrides ?? [],

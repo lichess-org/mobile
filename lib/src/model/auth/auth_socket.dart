@@ -7,7 +7,7 @@ import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/http_client.dart';
-import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
 import 'package:lichess_mobile/src/utils/device_info.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -22,12 +22,22 @@ const kDefaultConnectTimeout = Duration(seconds: 5);
 
 const kDefaultWSRoute = '/socket/v5';
 
+const kSRIStorageKey = 'socket_random_identifier';
+
 /// The delay between the next ping after receiving a pong.
 const _kPingDelay = Duration(milliseconds: 2500);
 
 /// The maximum lag before considering the connection as lost.
 const _kPingMaxLag = Duration(seconds: 9);
 const _kAutoReconnectDelay = Duration(milliseconds: 3500);
+
+/// Socket Random Identifier.
+@Riverpod(keepAlive: true)
+String sri(SriRef ref) {
+  // requireValue is possible because appDependenciesProvider is loaded before
+  // anything. See: lib/src/app.dart
+  return ref.read(appDependenciesProvider).requireValue.sri;
+}
 
 @Riverpod(keepAlive: true)
 AuthSocket authSocket(AuthSocketRef ref) {
@@ -53,7 +63,6 @@ class AverageLag extends _$AverageLag {
 }
 
 typedef CurrentConnection = ({
-  String sri,
   IOWebSocketChannel channel,
   Uri? route,
 });
@@ -104,8 +113,8 @@ class AuthSocket {
   /// The current socket route if any.
   Uri? get route => _connection?.route;
 
-  /// Gets the current SRI (Socket Request Identifier).
-  String? get currentSri => _connection?.sri;
+  /// The Socket Random Identifier.
+  String get sri => _ref.read(sriProvider);
 
   /// Creates a new WebSocket channel.
   ///
@@ -115,11 +124,10 @@ class AuthSocket {
   ///
   /// Returns a tuple of:
   ///  - the socket event Stream
-  ///  - the current SRI
   ///  - a future that completes when the socket is ready. This future Will
   ///    complete immediately if the socket is already connected. The future might
   ///    never complete if the socket fails to connect.
-  (Stream<SocketEvent>, String, Future<void>) connect([Uri? route]) {
+  (Stream<SocketEvent>, Future<void>) connect([Uri? route]) {
     final completer = Completer<void>();
 
     if (_connection != null && _connection!.channel.closeCode == null) {
@@ -133,25 +141,22 @@ class AuthSocket {
         completer.complete();
       });
 
-      return (_streamController.stream, _connection!.sri, completer.future);
+      return (_streamController.stream, completer.future);
     }
 
     _closeTimer?.cancel();
     _acks = [];
     _ackId = 1;
 
-    final sri = genRandomString(12);
-
     _streamController = StreamController<SocketEvent>.broadcast();
 
-    final connection = _doConnect(sri, route, completer);
+    _doConnect(route, completer);
 
-    return (_streamController.stream, connection.sri, completer.future);
+    return (_streamController.stream, completer.future);
   }
 
   /// Connect or reconnect the WebSocket.
   CurrentConnection _doConnect(
-    String sri,
     Uri? route,
     Completer<void>? readyCompleter,
   ) {
@@ -173,10 +178,10 @@ class AuthSocket {
     final headers = session != null
         ? {
             'Authorization': 'Bearer $bearer',
-            'User-Agent': userAgent(pInfo, deviceInfo, session.user),
+            'User-Agent': userAgent(pInfo, deviceInfo, sri, session.user),
           }
         : {
-            'User-Agent': userAgent(pInfo, deviceInfo, null),
+            'User-Agent': userAgent(pInfo, deviceInfo, sri, null),
           };
 
     _log.info('Creating WebSocket connection to $uri');
@@ -199,7 +204,6 @@ class AuthSocket {
     }).listen(_handleEvent);
 
     _connection = (
-      sri: sri,
       channel: channel,
       route: route,
     );
@@ -216,7 +220,7 @@ class AuthSocket {
       onError: (Object e) {
         _log.severe('WebSocket connection failed.', e);
         _ref.read(averageLagProvider.notifier).reset();
-        _scheduleReconnect(_kAutoReconnectDelay, sri, route, readyCompleter);
+        _scheduleReconnect(_kAutoReconnectDelay, route, readyCompleter);
       },
     );
 
@@ -229,7 +233,6 @@ class AuthSocket {
   void switchRoute(Uri route) {
     if (_connection != null) {
       _connection = (
-        sri: _connection!.sri,
         channel: _connection!.channel,
         route: route,
       );
@@ -238,7 +241,7 @@ class AuthSocket {
       jsonEncode({
         't': 'switch',
         'd': {
-          'uri': '${route.path}?sri=$currentSri',
+          'uri': '${route.path}?sri=$sri',
         },
       }),
     );
@@ -304,7 +307,7 @@ class AuthSocket {
     );
     _lastPing = DateTime.now();
     if (_connection != null) {
-      _scheduleReconnect(_kPingMaxLag, _connection!.sri, _connection!.route);
+      _scheduleReconnect(_kPingMaxLag, _connection!.route);
     }
   }
 
@@ -324,7 +327,6 @@ class AuthSocket {
 
   void _scheduleReconnect(
     Duration delay,
-    String sri,
     Uri? route, [
     Completer<void>? readyCompleter,
   ]) {
@@ -333,7 +335,7 @@ class AuthSocket {
       if (_connection != null) {
         _ref.read(averageLagProvider.notifier).reset();
         _log.info('Reconnecting WebSocket.');
-        _doConnect(sri, route, readyCompleter);
+        _doConnect(route, readyCompleter);
       }
     });
   }

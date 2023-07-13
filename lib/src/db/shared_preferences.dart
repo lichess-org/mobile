@@ -9,8 +9,5 @@ part 'shared_preferences.g.dart';
 SharedPreferences sharedPreferences(SharedPreferencesRef ref) {
   // requireValue is possible because appDependenciesProvider is loaded before
   // anything. See: lib/src/app.dart
-  return ref.watch(
-    appDependenciesProvider
-        .select((data) => data.requireValue.sharedPreferences),
-  );
+  return ref.read(appDependenciesProvider).requireValue.sharedPreferences;
 }

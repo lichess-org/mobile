@@ -37,8 +37,7 @@ class CreateGameService {
     final socket = ref.read(authSocketProvider);
     final playPref = ref.read(playPreferencesProvider);
     final lobbyRepo = ref.read(lobbyRepositoryProvider);
-    final (stream, sri, socketReady) =
-        socket.connect(Uri(path: '/lobby/socket/v5'));
+    final (stream, socketReady) = socket.connect(Uri(path: '/lobby/socket/v5'));
     final completer = Completer<GameFullId>();
 
     _socketSubscription = stream.listen((event) {
@@ -62,7 +61,7 @@ class CreateGameService {
           // TODO add rated choice
           rated: session != null,
         ),
-        sri: sri,
+        sri: socket.sri,
       ),
     );
 

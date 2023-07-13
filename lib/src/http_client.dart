@@ -16,9 +16,14 @@ Client httpClient(HttpClientRef ref) {
   return client;
 }
 
-String userAgent(PackageInfo info, BaseDeviceInfo deviceInfo, LightUser? user) {
+String userAgent(
+  PackageInfo info,
+  BaseDeviceInfo deviceInfo,
+  String sri,
+  LightUser? user,
+) {
   final base =
-      'Lichess Mobile/${info.version} (${info.buildNumber}) as:${user != null ? user.id : 'anon'}';
+      'Lichess Mobile/${info.version} (${info.buildNumber}) as:${user != null ? user.id : 'anon'} sri:$sri';
 
   if (deviceInfo is AndroidDeviceInfo) {
     return '$base os:android/${deviceInfo.version.release} dev:${deviceInfo.model}';

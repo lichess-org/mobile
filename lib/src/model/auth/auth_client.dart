@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
+import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
 import 'package:lichess_mobile/src/utils/device_info.dart';
@@ -202,13 +203,15 @@ class _AuthClient extends BaseClient {
     final session = ref.read(authSessionProvider);
     final pInfo = ref.read(packageInfoProvider);
     final deviceInfo = ref.read(deviceInfoProvider);
+    final sri = ref.read(sriProvider);
 
     if (session != null && !request.headers.containsKey('Authorization')) {
       final bearer = signBearerToken(session.token);
       request.headers['Authorization'] = 'Bearer $bearer';
     }
 
-    request.headers['user-agent'] = userAgent(pInfo, deviceInfo, session?.user);
+    request.headers['user-agent'] =
+        userAgent(pInfo, deviceInfo, sri, session?.user);
 
     _logger.info('${request.method} ${request.url}', request.headers);
 
