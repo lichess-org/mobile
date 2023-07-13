@@ -170,7 +170,7 @@ class _Body extends ConsumerWidget {
             children: [
               PlatformListTile(
                 leading: const Icon(LichessIcons.chess_board),
-                title: const Text('Board'),
+                title: const Text('Chessboard'),
                 trailing: defaultTargetPlatform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
