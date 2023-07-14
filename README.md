@@ -28,12 +28,12 @@ Instructions to install both are found in [the lila wiki](https://github.com/lic
 
 The mobile application is configured by default to target `http://127.0.0.1:9663` and `ws://127.0.0.1:9664`, so keep these when installing lila.
 
-
 ## Run
 
 First run the code generator:
 
 ```
+flutter pub get
 dart run build_runner watch
 ```
 
