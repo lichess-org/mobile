@@ -32,6 +32,9 @@ class GameCtrl extends _$GameCtrl {
   /// Last socket version received
   int _socketEventVersion = 0;
 
+  /// Last move time
+  DateTime? _lastMoveTime;
+
   @override
   Future<GameCtrlState> build(GameFullId gameFullId) {
     final socket = ref.watch(authSocketProvider);
@@ -48,6 +51,7 @@ class GameCtrl extends _$GameCtrl {
       return GameCtrlState(
         game: fullEvent.game,
         stepCursor: fullEvent.game.steps.length - 1,
+        stopClockWaitingForServerAck: false,
       );
     });
 
@@ -59,7 +63,7 @@ class GameCtrl extends _$GameCtrl {
     return state;
   }
 
-  void onUserMove(Move move) {
+  void onUserMove(Move move, {bool? isPremove}) {
     final curState = state.requireValue;
 
     final (newPos, newSan) = curState.game.lastPosition.playToSan(move);
@@ -77,10 +81,18 @@ class GameCtrl extends _$GameCtrl {
           steps: curState.game.steps.add(newStep),
         ),
         stepCursor: curState.stepCursor + 1,
+        stopClockWaitingForServerAck: true,
       ),
     );
 
-    _sendMove(move);
+    _sendMove(
+      move,
+      isPremove: isPremove ?? false,
+      hasClock: curState.game.clock != null,
+      // same logic as web client
+      // we want to send client lag only at the beginning of the game when the clock is not running yet
+      withLag: curState.game.clock != null && curState.activeClockSide == null,
+    );
 
     _playMoveFeedback(sanMove);
   }
@@ -177,14 +189,28 @@ class GameCtrl extends _$GameCtrl {
     _socket.send('rematch-no', null);
   }
 
-  // TODO: blur, lag
-  void _sendMove(Move move) {
+  void _sendMove(
+    Move move, {
+    required bool isPremove,
+    required bool hasClock,
+    required bool withLag,
+  }) {
+    final moveTime = hasClock
+        ? isPremove == true
+            ? Duration.zero
+            : _lastMoveTime != null
+                ? DateTime.now().difference(_lastMoveTime!)
+                : null
+        : null;
     _socket.send(
       'move',
       {
         'u': move.uci,
+        if (moveTime != null)
+          's': (moveTime.inMilliseconds * 0.1).round().toRadixString(36),
       },
       ackable: true,
+      withLag: hasClock && (moveTime == null || withLag),
     );
   }
 
@@ -270,11 +296,13 @@ class GameCtrl extends _$GameCtrl {
           return;
         }
         _socketEventVersion = fullEvent.socketEventVersion;
+        _lastMoveTime = null;
 
         state = AsyncValue.data(
           GameCtrlState(
             game: fullEvent.game,
             stepCursor: fullEvent.game.steps.length - 1,
+            stopClockWaitingForServerAck: false,
           ),
         );
 
@@ -322,11 +350,15 @@ class GameCtrl extends _$GameCtrl {
           }
         }
 
-        // TODO handle lag
+        // TODO handle delay
         if (newState.game.clock != null && data.clock != null) {
+          _lastMoveTime = DateTime.now();
           newState = newState.copyWith.game.clock!(
             white: data.clock!.white,
             black: data.clock!.black,
+          );
+          newState = newState.copyWith(
+            stopClockWaitingForServerAck: false,
           );
         }
 
@@ -574,6 +606,7 @@ class GameCtrlState with _$GameCtrlState {
     required int stepCursor,
     int? lastDrawOfferAtPly,
     Duration? opponentLeftCountdown,
+    required bool stopClockWaitingForServerAck,
 
     /// Game full id used to redirect to the new game of the rematch
     GameFullId? redirectGameId,
@@ -623,6 +656,10 @@ class GameCtrlState with _$GameCtrlState {
 
   Side? get activeClockSide {
     if (game.clock == null) {
+      return null;
+    }
+
+    if (stopClockWaitingForServerAck) {
       return null;
     }
 

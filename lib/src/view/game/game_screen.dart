@@ -326,9 +326,10 @@ class _Body extends ConsumerWidget {
                 sideToMove: sideToMove.cg,
                 validMoves: algebraicLegalMoves(position),
                 onMove: (move, {isPremove}) {
-                  ref
-                      .read(ctrlProvider.notifier)
-                      .onUserMove(Move.fromUci(move.uci)!);
+                  ref.read(ctrlProvider.notifier).onUserMove(
+                        Move.fromUci(move.uci)!,
+                        isPremove: isPremove,
+                      );
                 },
               ),
               topTable: topPlayer,

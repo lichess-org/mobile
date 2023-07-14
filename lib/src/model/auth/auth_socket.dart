@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:async';
 import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -16,8 +17,6 @@ import 'package:lichess_mobile/src/model/auth/bearer.dart';
 
 part 'auth_socket.g.dart';
 
-/// The native ping interval. This is different from the ping protocol of lichess.
-const kNativePingInterval = Duration(seconds: 30);
 const kDefaultConnectTimeout = Duration(seconds: 5);
 
 const kDefaultWSRoute = '/socket/v5';
@@ -91,7 +90,7 @@ class AuthSocket {
   Timer? _ackResendTimer;
   Timer? _closeTimer;
   int _pongCount = 0;
-  DateTime? _lastPing;
+  DateTime _lastPing = DateTime.now();
 
   StreamSubscription<SocketEvent>? _streamSubscription;
 
@@ -188,7 +187,6 @@ class AuthSocket {
 
     final channel = IOWebSocketChannel.connect(
       uri,
-      pingInterval: kNativePingInterval,
       connectTimeout: kDefaultConnectTimeout,
       headers: headers,
     );
@@ -248,7 +246,12 @@ class AuthSocket {
   }
 
   /// Sends a message to the websocket.
-  void send(String topic, Object? data, {bool? ackable}) {
+  void send(
+    String topic,
+    Object? data, {
+    bool? ackable,
+    bool? withLag,
+  }) {
     Map<String, Object> message;
 
     if (ackable == true) {
@@ -258,13 +261,22 @@ class AuthSocket {
         'd': {
           if (data != null && data is Map<String, Object>) ...data,
           'a': ackId,
+          if (withLag == true)
+            'l': _ref.read(averageLagProvider).inMilliseconds,
         },
       };
       _acks.add((DateTime.now(), ackId, message));
     } else {
       message = {
         't': topic,
-        if (data != null) 'd': data,
+        if (data != null && data is Map<String, Object>)
+          'd': {
+            ...data,
+            if (withLag == true)
+              'l': _ref.read(averageLagProvider).inMilliseconds,
+          }
+        else if (data != null)
+          'd': data,
       };
     }
 
@@ -301,7 +313,7 @@ class AuthSocket {
       _pongCount % 10 == 2
           ? jsonEncode({
               't': 'p',
-              'l': _ref.read(averageLagProvider).inMilliseconds,
+              'l': (_ref.read(averageLagProvider).inMilliseconds * 0.1).round(),
             })
           : 'p',
     );
@@ -318,7 +330,10 @@ class AuthSocket {
     }
     _schedulePing(pingDelay);
     _pongCount++;
-    final currentLag = DateTime.now().difference(_lastPing!);
+    final currentLag = Duration(
+      milliseconds:
+          math.min(DateTime.now().difference(_lastPing).inMilliseconds, 10000),
+    );
 
     // Average first 4 pings, then switch to decaying average.
     final mix = _pongCount > 4 ? 0.1 : 1 / _pongCount;
