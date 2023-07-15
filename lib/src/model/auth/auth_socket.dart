@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math' as math;
 import 'dart:async';
 import 'dart:convert';
@@ -173,15 +174,12 @@ class AuthSocket {
     final deviceInfo = _ref.read(deviceInfoProvider);
     final uri =
         Uri.parse('$kLichessWSHost${route ?? kDefaultWSRoute}?sri=$sri');
-    final bearer = session != null ? signBearerToken(session.token) : '';
-    final headers = session != null
+    final Map<String, String> headers = session != null
         ? {
-            'Authorization': 'Bearer $bearer',
-            'User-Agent': userAgent(pInfo, deviceInfo, sri, session.user),
+            'Authorization': 'Bearer ${signBearerToken(session.token)}',
           }
-        : {
-            'User-Agent': userAgent(pInfo, deviceInfo, sri, null),
-          };
+        : {};
+    WebSocket.userAgent = userAgent(pInfo, deviceInfo, sri, session?.user);
 
     _log.info('Creating WebSocket connection to $uri');
 
