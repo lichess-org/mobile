@@ -187,11 +187,11 @@ class _LobbyNumbers extends ConsumerWidget {
           ),
         ],
       ),
-      loading: () => const Column(
+      loading: () => Column(
         children: [
-          Text(''),
-          SizedBox(height: 8.0),
-          Text(''),
+          Text(context.l10n.nbPlayers(0).replaceAll('0', '...')),
+          const SizedBox(height: 8.0),
+          Text(context.l10n.nbGamesInPlay(0).replaceAll('0', '...')),
         ],
       ),
       error: (err, __) {
@@ -219,6 +219,13 @@ class _AnimatedLobbyNumberState extends State<_AnimatedLobbyNumber> {
   int value = 0;
 
   @override
+  void initState() {
+    super.initState();
+    previousValue = widget.value;
+    value = widget.value;
+  }
+
+  @override
   void didUpdateWidget(covariant _AnimatedLobbyNumber oldWidget) {
     previousValue = oldWidget.value;
     value = widget.value;
@@ -232,6 +239,7 @@ class _AnimatedLobbyNumberState extends State<_AnimatedLobbyNumber> {
         begin: previousValue,
         end: value,
       ),
+      curve: Curves.linear,
       duration: const Duration(seconds: 3),
       builder: (context, int value, _) {
         return Text(widget.labelBuilder(value));
