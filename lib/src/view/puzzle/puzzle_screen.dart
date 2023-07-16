@@ -189,25 +189,19 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                         .onUserMove(Move.fromUci(move.uci)!);
                   },
                 ),
-                topTable: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Center(
-                        child: PuzzleFeedbackWidget(
-                          puzzle: puzzleState.puzzle,
-                          state: puzzleState,
-                          onStreak: false,
-                        ),
-                      ),
-                    ),
-                    if (puzzleState.isEngineEnabled)
-                      EngineGauge(
+                engineGauge: puzzleState.isEngineEnabled
+                    ? EngineGaugeParams(
                         evaluationContext: puzzleState.evaluationContext,
                         position: puzzleState.position,
                         savedEval: puzzleState.node.eval,
-                      ),
-                  ],
+                      )
+                    : null,
+                topTable: Center(
+                  child: PuzzleFeedbackWidget(
+                    puzzle: puzzleState.puzzle,
+                    state: puzzleState,
+                    onStreak: false,
+                  ),
                 ),
                 bottomTable: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'platform.dart';
 
@@ -16,10 +17,7 @@ const _moveListOpacity = 0.6;
 
 const _tabletPadding = 16.0;
 
-/// Widget that provides a board layout according to screen constraints.
-///
-/// This widget will try to adapt the board and tables display according to screen
-/// size constraints and aspect ratio.
+/// Board layout that adapts to screen size and aspect ratio.
 ///
 /// On portrait mode, the board will be displayed in the middle of the screen,
 /// with the table spaces on top and bottom.
@@ -35,6 +33,7 @@ class BoardTable extends ConsumerWidget {
     this.boardSettingsOverrides,
     required this.topTable,
     required this.bottomTable,
+    this.engineGauge,
     this.moves,
     this.currentMoveIndex,
     this.onSelectMove,
@@ -57,10 +56,16 @@ class BoardTable extends ConsumerWidget {
   /// Widget that will appear at the bottom of the board.
   final Widget bottomTable;
 
+  /// Optional engine gauge that will be displayed next to the board.
+  final EngineGaugeParams? engineGauge;
+
+  /// Optional list of moves that will be displayed on top of the board.
   final List<String>? moves;
 
+  /// Index of the current move in the [moves] list. Must be provided if [moves] is provided.
   final int? currentMoveIndex;
 
+  /// Callback that will be called when a move is selected from the [moves] list.
   final void Function(int moveIndex)? onSelectMove;
 
   /// Optional error message that will be displayed on top of the board.
@@ -171,7 +176,16 @@ class BoardTable extends ConsumerWidget {
                       top: _tabletPadding,
                       bottom: _tabletPadding,
                     ),
-                    child: boardWidget,
+                    child: Row(
+                      children: [
+                        boardWidget,
+                        if (engineGauge != null)
+                          EngineGauge(
+                            params: engineGauge!,
+                            displayMode: EngineGaugeDisplayMode.vertical,
+                          ),
+                      ],
+                    ),
                   ),
                   Flexible(
                     fit: FlexFit.loose,
@@ -229,6 +243,18 @@ class BoardTable extends ConsumerWidget {
                       child: topTable,
                     ),
                   ),
+                  if (engineGauge != null)
+                    Padding(
+                      padding: isTablet
+                          ? const EdgeInsets.symmetric(
+                              horizontal: _tabletPadding,
+                            )
+                          : EdgeInsets.zero,
+                      child: EngineGauge(
+                        params: engineGauge!,
+                        displayMode: EngineGaugeDisplayMode.horizontal,
+                      ),
+                    ),
                   boardWidget,
                   Expanded(
                     child: Padding(

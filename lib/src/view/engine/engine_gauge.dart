@@ -2,56 +2,76 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 
-const double _kEvalGaugeHeight = 20.0;
+part 'engine_gauge.freezed.dart';
+
+const double _kEvalGaugeSize = 20.0;
 const Color _kEvalGaugeBackgroundColor = Color(0xFF444444);
 const Color _kEvalGaugeValueColorDarkBg = Color(0xEEEEEEEE);
 const Color _kEvalGaugeValueColorLightBg = Color(0xFFFFFFFF);
 
+enum EngineGaugeDisplayMode {
+  vertical,
+  horizontal,
+}
+
+@freezed
+class EngineGaugeParams with _$EngineGaugeParams {
+  const factory EngineGaugeParams({
+    required EvaluationContext evaluationContext,
+
+    /// Position to evaluate.
+    required Position position,
+
+    /// Saved evaluation to display when the current evaluation is not available.
+    ClientEval? savedEval,
+  }) = _EngineGaugeParams;
+}
+
 class EngineGauge extends ConsumerWidget {
   const EngineGauge({
-    required this.evaluationContext,
-    required this.position,
-    this.savedEval,
+    required this.displayMode,
+    required this.params,
   });
 
-  final EvaluationContext evaluationContext;
+  final EngineGaugeDisplayMode displayMode;
 
-  /// Position to evaluate.
-  final Position position;
-
-  /// Saved evaluation to display when the current evaluation is not available.
-  final ClientEval? savedEval;
+  final EngineGaugeParams params;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final eval = ref.watch(engineEvaluationProvider(evaluationContext));
+    final eval = ref.watch(engineEvaluationProvider(params.evaluationContext));
 
     return eval != null
         ? _EvalGauge(
-            position: position,
+            displayMode: displayMode,
+            position: params.position,
             eval: eval,
           )
-        : savedEval != null
+        : params.savedEval != null
             ? _EvalGauge(
-                position: position,
-                eval: savedEval,
+                displayMode: displayMode,
+                position: params.position,
+                eval: params.savedEval,
               )
-            : _EvalGauge(position: position);
+            : _EvalGauge(displayMode: displayMode, position: params.position);
   }
 }
 
 class _EvalGauge extends ConsumerStatefulWidget {
   const _EvalGauge({
     required this.position,
+    required this.displayMode,
     this.eval,
   });
 
+  final EngineGaugeDisplayMode displayMode;
   final Position position;
   final ClientEval? eval;
 
@@ -104,35 +124,56 @@ class _EvalGaugeState extends ConsumerState<_EvalGauge> {
           label: context.l10n.evaluationGauge,
           value: evalDisplay ?? context.l10n.loadingEngine,
           child: Container(
-            constraints: const BoxConstraints(
-              minWidth: double.infinity,
-              minHeight: _kEvalGaugeHeight,
-            ),
-            child: CustomPaint(
-              painter: _EvalGaugePainter(
-                backgroundColor: _kEvalGaugeBackgroundColor,
-                valueColor: brightness == Brightness.dark
-                    ? _kEvalGaugeValueColorDarkBg
-                    : _kEvalGaugeValueColorLightBg,
-                value: value,
-                textDirection: textDirection,
-              ),
-              child: Align(
-                alignment: toValue >= 0.5
-                    ? Alignment.centerLeft
-                    : Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  child: Text(
-                    evalDisplay ?? '',
-                    style: TextStyle(
-                      color: toValue >= 0.5 ? Colors.black : Colors.white,
-                      fontSize: 11.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+            constraints: widget.displayMode == EngineGaugeDisplayMode.vertical
+                ? const BoxConstraints(
+                    minWidth: _kEvalGaugeSize,
+                    minHeight: double.infinity,
+                  )
+                : const BoxConstraints(
+                    minWidth: double.infinity,
+                    minHeight: _kEvalGaugeSize,
                   ),
-                ),
-              ),
+            width: widget.displayMode == EngineGaugeDisplayMode.vertical
+                ? _kEvalGaugeSize
+                : null,
+            height: widget.displayMode == EngineGaugeDisplayMode.vertical
+                ? null
+                : _kEvalGaugeSize,
+            child: CustomPaint(
+              painter: widget.displayMode == EngineGaugeDisplayMode.vertical
+                  ? _EvalGaugeVerticalPainter(
+                      backgroundColor: _kEvalGaugeBackgroundColor,
+                      valueColor: brightness == Brightness.dark
+                          ? _kEvalGaugeValueColorDarkBg
+                          : _kEvalGaugeValueColorLightBg,
+                      value: value,
+                    )
+                  : _EvalGaugeHorizontalPainter(
+                      backgroundColor: _kEvalGaugeBackgroundColor,
+                      valueColor: brightness == Brightness.dark
+                          ? _kEvalGaugeValueColorDarkBg
+                          : _kEvalGaugeValueColorLightBg,
+                      value: value,
+                      textDirection: textDirection,
+                    ),
+              child: widget.displayMode == EngineGaugeDisplayMode.vertical
+                  ? const SizedBox.shrink()
+                  : Align(
+                      alignment: toValue >= 0.5
+                          ? Alignment.centerLeft
+                          : Alignment.centerRight,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: Text(
+                          evalDisplay ?? '',
+                          style: TextStyle(
+                            color: toValue >= 0.5 ? Colors.black : Colors.white,
+                            fontSize: 11.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
             ),
           ),
         );
@@ -141,8 +182,8 @@ class _EvalGaugeState extends ConsumerState<_EvalGauge> {
   }
 }
 
-class _EvalGaugePainter extends CustomPainter {
-  const _EvalGaugePainter({
+class _EvalGaugeHorizontalPainter extends CustomPainter {
+  const _EvalGaugeHorizontalPainter({
     required this.backgroundColor,
     required this.valueColor,
     required this.value,
@@ -182,10 +223,49 @@ class _EvalGaugePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_EvalGaugePainter oldPainter) {
+  bool shouldRepaint(_EvalGaugeHorizontalPainter oldPainter) {
     return oldPainter.backgroundColor != backgroundColor ||
         oldPainter.valueColor != valueColor ||
         oldPainter.value != value ||
         oldPainter.textDirection != textDirection;
+  }
+}
+
+class _EvalGaugeVerticalPainter extends CustomPainter {
+  const _EvalGaugeVerticalPainter({
+    required this.backgroundColor,
+    required this.valueColor,
+    required this.value,
+  });
+
+  final Color backgroundColor;
+  final Color valueColor;
+  final double value;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint = Paint()
+      ..color = backgroundColor
+      ..style = PaintingStyle.fill;
+    canvas.drawRect(Offset.zero & size, paint);
+
+    paint.color = valueColor;
+
+    void drawBar(double y, double height) {
+      if (height <= 0.0) {
+        return;
+      }
+
+      canvas.drawRect(Offset(0.0, y) & Size(size.width, height), paint);
+    }
+
+    drawBar(0.0, clampDouble(value, 0.0, 1.0) * size.height);
+  }
+
+  @override
+  bool shouldRepaint(_EvalGaugeVerticalPainter oldPainter) {
+    return oldPainter.backgroundColor != backgroundColor ||
+        oldPainter.valueColor != valueColor ||
+        oldPainter.value != value;
   }
 }
