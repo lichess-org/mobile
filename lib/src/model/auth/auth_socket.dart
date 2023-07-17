@@ -110,13 +110,10 @@ class AuthSocket {
   CurrentConnection? _connection;
 
   /// Gets the current WebSocket sink
-  WebSocketSink? get sink => _connection?.channel.sink;
+  WebSocketSink? get _sink => _connection?.channel.sink;
 
   /// The current socket route if connected.
   Uri? get route => _connection?.route;
-
-  /// The Socket Random Identifier.
-  String get sri => _ref.read(sriProvider);
 
   /// Returns the current socket stream if connected.
   Stream<SocketEvent>? get stream {
@@ -126,17 +123,18 @@ class AuthSocket {
     return _streamController.stream;
   }
 
+  /// The Socket Random Identifier.
+  String get sri => _ref.read(sriProvider);
+
   /// Creates a new WebSocket channel.
-  ///
-  /// A websocket route can be provided to connect to a specific route.
   ///
   /// If a connection already exists it will keep the current connection.
   ///
   /// Returns a tuple of:
   ///  - the socket event Stream
-  ///  - a future that completes when the socket is ready. This future Will
-  ///    complete immediately if the socket is already connected. The future might
-  ///    never complete if the socket fails to connect.
+  ///  - a future that completes when the socket is ready on the route asked.
+  ///    This future Will complete immediately if the socket is already connected on the same route.
+  ///    The future might never complete if the socket fails to connect.
   (Stream<SocketEvent>, Future<void>) connect(Uri route) {
     // If a connection already exists, return the current stream and ensure
     // to switch to the new route if any.
@@ -150,7 +148,7 @@ class AuthSocket {
           readyCompleter: Completer<void>(),
         );
         _connection!.channel.ready.then((_) {
-          sink?.add(
+          _sink?.add(
             jsonEncode({
               't': 'switch',
               'd': {
@@ -277,7 +275,7 @@ class AuthSocket {
       };
     }
 
-    sink?.add(jsonEncode(message));
+    _sink?.add(jsonEncode(message));
   }
 
   void _handleEvent(SocketEvent event) {
@@ -324,7 +322,7 @@ class AuthSocket {
 
   /// Sends a ping to the server.
   void _sendPing() {
-    sink?.add(
+    _sink?.add(
       _pongCount % 10 == 2
           ? jsonEncode({
               't': 'p',
@@ -389,7 +387,7 @@ class AuthSocket {
         DateTime.now().subtract(const Duration(milliseconds: 2500));
     for (final (at, _, ack) in _acks) {
       if (at.isBefore(resendCutoff)) {
-        sink?.add(jsonEncode(ack));
+        _sink?.add(jsonEncode(ack));
       }
     }
   }
@@ -409,7 +407,7 @@ class AuthSocket {
   }
 
   void _doClose([void Function()? callback]) {
-    sink?.close();
+    _sink?.close();
     _streamSubscription?.cancel();
     _pingTimer?.cancel();
     _switchReconnectTimer?.cancel();
