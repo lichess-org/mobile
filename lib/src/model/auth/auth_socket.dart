@@ -120,12 +120,18 @@ class AuthSocket {
   ///
   /// If a connection already exists it will keep the current connection.
   ///
+  /// An optional `forceReconnect` boolean can be provided to force a reconnection.
+  ///
   /// Returns a tuple of:
   ///  - the socket event [Stream]
   ///  - a [Future] that completes when the socket is ready. The future might never
   /// complete if the socket fails to connect because it tries to reconnect automatically.
-  (Stream<SocketEvent>, Future<void>) connect(Uri route) {
-    if (_connection != null &&
+  (Stream<SocketEvent>, Future<void>) connect(
+    Uri route, {
+    bool? forceReconnect = false,
+  }) {
+    if (forceReconnect == false &&
+        _connection != null &&
         _connection!.channel.closeCode == null &&
         route == _connection!.route) {
       return (
