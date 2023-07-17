@@ -65,7 +65,6 @@ class AverageLag extends _$AverageLag {
 typedef CurrentConnection = ({
   IOWebSocketChannel channel,
   Uri route,
-  Completer<void> readyCompleter,
 });
 
 /// Lichess websocket client.
@@ -89,7 +88,6 @@ class AuthSocket {
 
   Timer? _pingTimer;
   Timer? _reconnectTimer;
-  Timer? _switchReconnectTimer;
   Timer? _ackResendTimer;
   Timer? _closeTimer;
   int _pongCount = 0;
@@ -131,36 +129,13 @@ class AuthSocket {
   /// If a connection already exists it will keep the current connection.
   ///
   /// Returns a tuple of:
-  ///  - the socket event Stream
-  ///  - a future that completes when the socket is ready on the route asked.
-  ///    This future Will complete immediately if the socket is already connected on the same route.
-  ///    The future might never complete if the socket fails to connect.
+  ///  - the socket event [Stream]
+  ///  - a [Future] that completes when the socket is ready. The future might never complete if the socket fails to connect.
   (Stream<SocketEvent>, Future<void>) connect(Uri route) {
-    // If a connection already exists, return the current stream and ensure
-    // to switch to the new route if any.
-    if (_connection != null && _connection!.channel.closeCode == null) {
-      // If the route is different, switch to the new route while keeping the
-      // current channel.
-      if (route != _connection!.route) {
-        _connection = (
-          channel: _connection!.channel,
-          route: route,
-          readyCompleter: Completer<void>(),
-        );
-        _connection!.channel.ready.then((_) {
-          _sink?.add(
-            jsonEncode({
-              't': 'switch',
-              'd': {
-                'uri': '${route.path}?sri=$sri',
-              },
-            }),
-          );
-          _scheduleReconnectForSwitch(route);
-        });
-      }
-
-      return (_streamController.stream, _connection!.readyCompleter.future);
+    if (_connection != null &&
+        _connection!.channel.closeCode == null &&
+        route == _connection!.route) {
+      return (_streamController.stream, _connection!.channel.ready);
     }
 
     _closeTimer?.cancel();
@@ -171,14 +146,13 @@ class AuthSocket {
 
     final connection = _doConnect(route);
 
-    return (_streamController.stream, connection.readyCompleter.future);
+    return (_streamController.stream, connection.channel.ready);
   }
 
   /// Connect or reconnect the WebSocket.
   CurrentConnection _doConnect(Uri route) {
     _doClose();
     _pongCount = 0;
-    _switchReconnectTimer?.cancel();
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
     _ackResendTimer = Timer.periodic(
@@ -218,7 +192,6 @@ class AuthSocket {
     _connection = (
       channel: channel,
       route: route,
-      readyCompleter: Completer<void>(),
     );
 
     channel.ready.then(
@@ -228,7 +201,6 @@ class AuthSocket {
         _sendPing();
         _resendAcks();
         _schedulePing(_kPingDelay);
-        _connection?.readyCompleter.complete();
       },
       onError: (Object e) {
         _log.severe('WebSocket connection failed.', e);
@@ -287,29 +259,6 @@ class AuthSocket {
         _handlePong(_kPingDelay);
       case 'ack':
         _onServerAck(event);
-      case 'switch':
-        _switchReconnectTimer?.cancel();
-        final data = event.data as Map<String, dynamic>;
-        final status = data['status'] as int;
-        if (_connection?.readyCompleter.isCompleted == false) {
-          if (status == 200) {
-            _connection?.readyCompleter.complete();
-            _log.info(
-              'switch to new route ${data['uri']}',
-            );
-          } else {
-            _connection?.readyCompleter
-                .completeError('switch failed ($status)');
-            _log.severe(
-              'failed to switch to route ${data['uri']}, status: $status',
-            );
-          }
-        } else {
-          assert(
-            false,
-            'impossible state: switch event received after connection ready',
-          );
-        }
     }
 
     if (event != SocketEvent.pong) {
@@ -358,23 +307,12 @@ class AuthSocket {
   void _scheduleReconnect(Duration delay, Uri route) {
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(delay, () {
-      _doReconnect(route);
+      if (_connection != null) {
+        _ref.read(averageLagProvider.notifier).reset();
+        _log.info('Reconnecting WebSocket.');
+        _doConnect(route);
+      }
     });
-  }
-
-  void _scheduleReconnectForSwitch(Uri route) {
-    _switchReconnectTimer?.cancel();
-    _switchReconnectTimer = Timer(_kAutoReconnectDelay, () {
-      _doReconnect(route);
-    });
-  }
-
-  void _doReconnect(Uri route) {
-    if (_connection != null) {
-      _ref.read(averageLagProvider.notifier).reset();
-      _log.info('Reconnecting WebSocket.');
-      _doConnect(route);
-    }
   }
 
   void _onServerAck(SocketEvent event) {
@@ -412,7 +350,6 @@ class AuthSocket {
     _sink?.close();
     _streamSubscription?.cancel();
     _pingTimer?.cancel();
-    _switchReconnectTimer?.cancel();
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
     _connection = null;
