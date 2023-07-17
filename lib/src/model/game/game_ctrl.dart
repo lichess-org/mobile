@@ -237,7 +237,7 @@ class GameCtrl extends _$GameCtrl {
   /// Resync full game data with the server
   void _resyncGameData() {
     _logger.info('Resyncing game data');
-    _socket.switchRoute(Uri(path: '/play/$gameFullId/v6'));
+    _socket.connect(Uri(path: '/play/$gameFullId/v6'));
   }
 
   void _handleSocketEvent(SocketEvent event) {
