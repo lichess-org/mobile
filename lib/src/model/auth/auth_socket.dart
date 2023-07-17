@@ -233,7 +233,9 @@ class AuthSocket {
       onError: (Object e) {
         _log.severe('WebSocket connection failed.', e);
         _ref.read(averageLagProvider.notifier).reset();
-        _scheduleReconnect(_kAutoReconnectDelay, route);
+        if (_connection != null) {
+          _scheduleReconnect(_kAutoReconnectDelay, _connection!.route);
+        }
       },
     );
 
