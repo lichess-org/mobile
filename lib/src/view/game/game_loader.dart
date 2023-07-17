@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -189,9 +190,13 @@ class _LobbyNumbers extends ConsumerWidget {
       ),
       loading: () => Column(
         children: [
-          Text(context.l10n.nbPlayers(0).replaceAll('0', '...')),
+          Text(
+            context.l10n.nbPlayers(0).replaceAll('0', '...'),
+          ),
           const SizedBox(height: 8.0),
-          Text(context.l10n.nbGamesInPlay(0).replaceAll('0', '...')),
+          Text(
+            context.l10n.nbGamesInPlay(0).replaceAll('0', '...'),
+          ),
         ],
       ),
       error: (err, __) {
@@ -200,6 +205,12 @@ class _LobbyNumbers extends ConsumerWidget {
     );
   }
 }
+
+const _lobbyNumbersStyle = TextStyle(
+  fontFeatures: [
+    FontFeature.tabularFigures(),
+  ],
+);
 
 class _AnimatedLobbyNumber extends StatefulWidget {
   const _AnimatedLobbyNumber({
@@ -242,7 +253,7 @@ class _AnimatedLobbyNumberState extends State<_AnimatedLobbyNumber> {
       curve: Curves.linear,
       duration: const Duration(seconds: 3),
       builder: (context, int value, _) {
-        return Text(widget.labelBuilder(value));
+        return Text(widget.labelBuilder(value), style: _lobbyNumbersStyle);
       },
     );
   }
