@@ -63,7 +63,7 @@ dev_dependencies:
   dart_code_metrics: ^5.7.2
   flutter_test:
     sdk: flutter
-  freezed: ^2.3.4
+  freezed: ^2.4.1
   json_serializable: ^6.5.4
   lint: ^2.0.1
   mocktail: ^0.3.0
