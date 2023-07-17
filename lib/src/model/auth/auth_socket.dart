@@ -63,8 +63,9 @@ class AverageLag extends _$AverageLag {
 }
 
 typedef CurrentConnection = ({
-  IOWebSocketChannel channel,
   Uri route,
+  IOWebSocketChannel channel,
+  StreamController<SocketEvent> streamController,
 });
 
 /// Lichess websocket client.
@@ -95,9 +96,6 @@ class AuthSocket {
 
   StreamSubscription<SocketEvent>? _streamSubscription;
 
-  /// Socket event stream stream controller.
-  late StreamController<SocketEvent> _streamController;
-
   /// The list of acknowledgeable messages.
   List<(DateTime, int, Map<String, dynamic>)> _acks = [];
 
@@ -114,12 +112,7 @@ class AuthSocket {
   Uri? get route => _connection?.route;
 
   /// Returns the current socket stream if connected.
-  Stream<SocketEvent>? get stream {
-    if (_connection == null) {
-      return null;
-    }
-    return _streamController.stream;
-  }
+  Stream<SocketEvent>? get stream => _connection?.streamController.stream;
 
   /// The Socket Random Identifier.
   String get sri => _ref.read(sriProvider);
@@ -135,83 +128,31 @@ class AuthSocket {
     if (_connection != null &&
         _connection!.channel.closeCode == null &&
         route == _connection!.route) {
-      return (_streamController.stream, _connection!.channel.ready);
+      return (_connection!.streamController.stream, _connection!.channel.ready);
     }
 
     _closeTimer?.cancel();
     _acks = [];
     _ackId = 1;
 
-    _streamController = StreamController<SocketEvent>.broadcast();
-
     final connection = _doConnect(route);
 
-    return (_streamController.stream, connection.channel.ready);
+    return (connection.streamController.stream, connection.channel.ready);
   }
 
-  /// Connect or reconnect the WebSocket.
-  CurrentConnection _doConnect(Uri route) {
-    _doClose();
-    _pongCount = 0;
-    _reconnectTimer?.cancel();
-    _ackResendTimer?.cancel();
-    _ackResendTimer = Timer.periodic(
-      const Duration(milliseconds: 1500),
-      (_) => _resendAcks(),
+  /// Closes the WebSocket connection if open.
+  void close({Duration? delay}) {
+    _log.info(
+      'Closing WebSocket connection ${delay == null ? 'now' : 'in ${delay.inSeconds}s'}.',
     );
-
-    final session = _ref.read(authSessionProvider);
-    final pInfo = _ref.read(packageInfoProvider);
-    final deviceInfo = _ref.read(deviceInfoProvider);
-    final uri = Uri.parse('$kLichessWSHost$route?sri=$sri');
-    final Map<String, String> headers = session != null
-        ? {
-            'Authorization': 'Bearer ${signBearerToken(session.token)}',
-          }
-        : {};
-    WebSocket.userAgent = userAgent(pInfo, deviceInfo, sri, session?.user);
-
-    _log.info('Creating WebSocket connection to $uri');
-
-    final channel = IOWebSocketChannel.connect(
-      uri,
-      connectTimeout: kDefaultConnectTimeout,
-      headers: headers,
+    _closeTimer?.cancel();
+    _closeTimer = Timer(
+      delay ?? Duration.zero,
+      () => _closeCurrent(() {
+        _connection?.streamController.close();
+        _connection = null;
+      }),
     );
-
-    _streamSubscription?.cancel();
-    _streamSubscription = channel.stream.map((raw) {
-      if (raw == '0') {
-        return SocketEvent.pong;
-      }
-      return SocketEvent.fromJson(
-        jsonDecode(raw as String) as Map<String, dynamic>,
-      );
-    }).listen(_handleEvent);
-
-    _connection = (
-      channel: channel,
-      route: route,
-    );
-
-    channel.ready.then(
-      (_) {
-        _log.info('WebSocket connection established.');
-        _ref.read(averageLagProvider.notifier).reset();
-        _sendPing();
-        _resendAcks();
-        _schedulePing(_kPingDelay);
-      },
-      onError: (Object e) {
-        _log.severe('WebSocket connection failed.', e);
-        _ref.read(averageLagProvider.notifier).reset();
-        if (_connection != null) {
-          _scheduleReconnect(_kAutoReconnectDelay, _connection!.route);
-        }
-      },
-    );
-
-    return _connection!;
   }
 
   /// Sends a message to the websocket.
@@ -252,6 +193,73 @@ class AuthSocket {
     _sink?.add(jsonEncode(message));
   }
 
+  /// Connect or reconnect the WebSocket.
+  CurrentConnection _doConnect(Uri route) {
+    _closeCurrent();
+    _pongCount = 0;
+    _reconnectTimer?.cancel();
+    _ackResendTimer?.cancel();
+    _ackResendTimer = Timer.periodic(
+      const Duration(milliseconds: 1500),
+      (_) => _resendAcks(),
+    );
+
+    final session = _ref.read(authSessionProvider);
+    final pInfo = _ref.read(packageInfoProvider);
+    final deviceInfo = _ref.read(deviceInfoProvider);
+    final uri = Uri.parse('$kLichessWSHost$route?sri=$sri');
+    final Map<String, String> headers = session != null
+        ? {
+            'Authorization': 'Bearer ${signBearerToken(session.token)}',
+          }
+        : {};
+    WebSocket.userAgent = userAgent(pInfo, deviceInfo, sri, session?.user);
+
+    _log.info('Creating WebSocket connection to $uri');
+
+    final channel = IOWebSocketChannel.connect(
+      uri,
+      connectTimeout: kDefaultConnectTimeout,
+      headers: headers,
+    );
+
+    _streamSubscription?.cancel();
+    _streamSubscription = channel.stream.map((raw) {
+      if (raw == '0') {
+        return SocketEvent.pong;
+      }
+      return SocketEvent.fromJson(
+        jsonDecode(raw as String) as Map<String, dynamic>,
+      );
+    }).listen(_handleEvent);
+
+    _connection = (
+      route: route,
+      channel: channel,
+      streamController: _connection?.streamController ??
+          StreamController<SocketEvent>.broadcast(),
+    );
+
+    channel.ready.then(
+      (_) {
+        _log.info('WebSocket connection established.');
+        _ref.read(averageLagProvider.notifier).reset();
+        _sendPing();
+        _resendAcks();
+        _schedulePing(_kPingDelay);
+      },
+      onError: (Object e) {
+        _log.severe('WebSocket connection failed.', e);
+        _ref.read(averageLagProvider.notifier).reset();
+        if (_connection != null) {
+          _scheduleReconnect(_kAutoReconnectDelay, _connection!.route);
+        }
+      },
+    );
+
+    return _connection!;
+  }
+
   void _handleEvent(SocketEvent event) {
     switch (event.topic) {
       case '_pong':
@@ -262,7 +270,7 @@ class AuthSocket {
     }
 
     if (event != SocketEvent.pong) {
-      _streamController.add(event);
+      _connection?.streamController.add(event);
     }
   }
 
@@ -332,28 +340,13 @@ class AuthSocket {
     }
   }
 
-  /// Closes the WebSocket connection, if open.
-  void close({Duration? delay}) {
-    _log.info(
-      'Closing WebSocket connection ${delay == null ? 'now' : 'in ${delay.inSeconds}s'}.',
-    );
-    _closeTimer?.cancel();
-    _closeTimer = Timer(
-      delay ?? Duration.zero,
-      () => _doClose(() {
-        _streamController.close();
-      }),
-    );
-  }
-
-  void _doClose([void Function()? callback]) {
+  /// Closes current connection, but keep the streamController open to allow for reconnections
+  void _closeCurrent([void Function()? callback]) {
     _sink?.close();
     _streamSubscription?.cancel();
     _pingTimer?.cancel();
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
-    _connection = null;
-
     callback?.call();
   }
 }
