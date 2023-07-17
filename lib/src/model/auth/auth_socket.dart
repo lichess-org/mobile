@@ -64,7 +64,7 @@ class AverageLag extends _$AverageLag {
 
 typedef CurrentConnection = ({
   IOWebSocketChannel channel,
-  Uri? route,
+  Uri route,
   Completer<void> readyCompleter,
 });
 
@@ -112,11 +112,19 @@ class AuthSocket {
   /// Gets the current WebSocket sink
   WebSocketSink? get sink => _connection?.channel.sink;
 
-  /// The current socket route if any.
+  /// The current socket route if connected.
   Uri? get route => _connection?.route;
 
   /// The Socket Random Identifier.
   String get sri => _ref.read(sriProvider);
+
+  /// Returns the current socket stream if connected.
+  Stream<SocketEvent>? get stream {
+    if (_connection == null) {
+      return null;
+    }
+    return _streamController.stream;
+  }
 
   /// Creates a new WebSocket channel.
   ///
@@ -129,13 +137,13 @@ class AuthSocket {
   ///  - a future that completes when the socket is ready. This future Will
   ///    complete immediately if the socket is already connected. The future might
   ///    never complete if the socket fails to connect.
-  (Stream<SocketEvent>, Future<void>) connect([Uri? route]) {
+  (Stream<SocketEvent>, Future<void>) connect(Uri route) {
     // If a connection already exists, return the current stream and ensure
     // to switch to the new route if any.
     if (_connection != null && _connection!.channel.closeCode == null) {
       // If the route is different, switch to the new route while keeping the
       // current channel.
-      if (route != null && route != _connection!.route) {
+      if (route != _connection!.route) {
         _connection = (
           channel: _connection!.channel,
           route: route,
@@ -169,7 +177,7 @@ class AuthSocket {
   }
 
   /// Connect or reconnect the WebSocket.
-  CurrentConnection _doConnect(Uri? route) {
+  CurrentConnection _doConnect(Uri route) {
     _doClose();
     _pongCount = 0;
     _switchReconnectTimer?.cancel();
@@ -183,8 +191,7 @@ class AuthSocket {
     final session = _ref.read(authSessionProvider);
     final pInfo = _ref.read(packageInfoProvider);
     final deviceInfo = _ref.read(deviceInfoProvider);
-    final uri =
-        Uri.parse('$kLichessWSHost${route ?? kDefaultWSRoute}?sri=$sri');
+    final uri = Uri.parse('$kLichessWSHost$route?sri=$sri');
     final Map<String, String> headers = session != null
         ? {
             'Authorization': 'Bearer ${signBearerToken(session.token)}',
@@ -348,7 +355,7 @@ class AuthSocket {
     _ref.read(averageLagProvider.notifier).add(currentLag, mix);
   }
 
-  void _scheduleReconnect(Duration delay, Uri? route) {
+  void _scheduleReconnect(Duration delay, Uri route) {
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(delay, () {
       _doReconnect(route);
@@ -362,7 +369,7 @@ class AuthSocket {
     });
   }
 
-  void _doReconnect(Uri? route) {
+  void _doReconnect(Uri route) {
     if (_connection != null) {
       _ref.read(averageLagProvider.notifier).reset();
       _log.info('Reconnecting WebSocket.');
