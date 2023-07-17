@@ -20,8 +20,6 @@ part 'auth_socket.g.dart';
 
 const kDefaultConnectTimeout = Duration(seconds: 5);
 
-const kDefaultWSRoute = '/socket/v5';
-
 const kSRIStorageKey = 'socket_random_identifier';
 
 /// The delay between the next ping after receiving a pong.
@@ -66,6 +64,7 @@ typedef CurrentConnection = ({
   Uri route,
   IOWebSocketChannel channel,
   StreamController<SocketEvent> streamController,
+  Completer<void> readyCompleter,
 });
 
 /// Lichess websocket client.
@@ -123,12 +122,16 @@ class AuthSocket {
   ///
   /// Returns a tuple of:
   ///  - the socket event [Stream]
-  ///  - a [Future] that completes when the socket is ready. The future might never complete if the socket fails to connect.
+  ///  - a [Future] that completes when the socket is ready. The future might never
+  /// complete if the socket fails to connect because it tries to reconnect automatically.
   (Stream<SocketEvent>, Future<void>) connect(Uri route) {
     if (_connection != null &&
         _connection!.channel.closeCode == null &&
         route == _connection!.route) {
-      return (_connection!.streamController.stream, _connection!.channel.ready);
+      return (
+        _connection!.streamController.stream,
+        _connection!.readyCompleter.future
+      );
     }
 
     _closeTimer?.cancel();
@@ -137,7 +140,10 @@ class AuthSocket {
 
     final connection = _doConnect(route);
 
-    return (connection.streamController.stream, connection.channel.ready);
+    return (
+      connection.streamController.stream,
+      connection.readyCompleter.future
+    );
   }
 
   /// Closes the WebSocket connection if open.
@@ -238,10 +244,12 @@ class AuthSocket {
       channel: channel,
       streamController: _connection?.streamController ??
           StreamController<SocketEvent>.broadcast(),
+      readyCompleter: Completer<void>(),
     );
 
     channel.ready.then(
       (_) {
+        _connection?.readyCompleter.complete();
         _log.info('WebSocket connection established.');
         _ref.read(averageLagProvider.notifier).reset();
         _sendPing();
