@@ -48,7 +48,7 @@ jobs:
           working-directory: android
 
       - name: Exec fastlane deploy
-      - run: bundle exec fastlane ${{ github.event.inputs.lane || 'internal' }}
+        run: bundle exec fastlane ${{ github.event.inputs.lane || 'internal' }}
         env:
           PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
           WS_SECRET: ${{ secrets.WS_SECRET }}
