@@ -17,25 +17,23 @@ default_platform(:android)
 
 platform :android do
   desc "Deploy an internal test version to Google Play"
-  lane :internal_test do |options|
-    UI.user_error!("No wssecret given") unless options[:wssecret]
-    sh "flutter build appbundle -v --obfuscate --split-debug-info=./split-debug-info --dart-define=LICHESS_HOST=https://lichess.org --dart-define=LICHESS_WS_HOST=wss://socket.lichess.org --dart-define=LICHESS_WS_SECRET=#{options[:wssecret]}"
-    upload_to_play_store(
-      track: 'internal',
-      aab: '../build/app/outputs/bundle/release/app-release.aab',
-      release_status: 'draft',
-    )
+  lane :internal do
+    deploy_to_play_store('internal')
   end
 end
 
 platform :android do
   desc "Deploy an closed test version to Google Play"
-  lane :alpha do |options|
-    UI.user_error!("No wssecret given") unless options[:wssecret]
-    sh "flutter build appbundle -v --obfuscate --split-debug-info=./split-debug-info --dart-define=LICHESS_HOST=https://lichess.org --dart-define=LICHESS_WS_HOST=wss://socket.lichess.org --dart-define=LICHESS_WS_SECRET=#{options[:wssecret]}"
-    upload_to_play_store(
-      track: 'alpha',
-      aab: '../build/app/outputs/bundle/release/app-release.aab',
-    )
+  lane :alpha do
+    deploy_to_play_store('alpha')
   end
+end
+
+def deploy_to_play_store(track)
+  sh "flutter build appbundle -v --obfuscate --split-debug-info=./split-debug-info --dart-define=LICHESS_HOST=https://lichess.org --dart-define=LICHESS_WS_HOST=wss://socket.lichess.org --dart-define=LICHESS_WS_SECRET=#{ENV['WS_SECRET']}"
+  upload_to_play_store(
+    track: track,
+    aab: '../build/app/outputs/bundle/release/app-release.aab',
+    json_key_data: ENV['PLAY_STORE_CONFIG_JSON'],
+  )
 end
