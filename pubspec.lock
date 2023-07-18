@@ -333,10 +333,10 @@ packages:
     dependency: "direct dev"
     description:
       name: dart_code_metrics
-      sha256: "1dc1fa763b73ed52147bd91b015d81903edc3f227b77b1672fcddba43390ed18"
+      sha256: "3dede3f7abc077a4181ec7445448a289a9ce08e2981e6a4d49a3fb5099d47e1f"
       url: "https://pub.dev"
     source: hosted
-    version: "5.7.5"
+    version: "5.7.6"
   dart_code_metrics_presets:
     dependency: transitive
     description:
@@ -498,10 +498,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_appauth
-      sha256: a047019b525ab0e260776d1b0da1000b7416b45b9e8dd02d124c9da571fc1918
+      sha256: "72ee99075781afe804faaf4f02c81df151f09f82fc551de42c64a1dd5f16f42d"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.0"
+    version: "6.0.1"
   flutter_appauth_platform_interface:
     dependency: transitive
     description:
@@ -633,18 +633,18 @@ packages:
     dependency: "direct dev"
     description:
       name: freezed
-      sha256: a9520490532087cf38bf3f7de478ab6ebeb5f68bb1eb2641546d92719b224445
+      sha256: "2df89855fe181baae3b6d714dc3c4317acf4fccd495a6f36e5e00f24144c6c3b"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.5"
+    version: "2.4.1"
   freezed_annotation:
     dependency: "direct main"
     description:
       name: freezed_annotation
-      sha256: aeac15850ef1b38ee368d4c53ba9a847e900bb2c53a4db3f6881cbb3cb684338
+      sha256: c3fd9336eb55a38cc1bbd79ab17573113a8deccd0ecbbf926cca3c62803b5c2d
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.4.1"
   frontend_server_client:
     dependency: transitive
     description:
@@ -897,10 +897,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_foundation
-      sha256: "1995d88ec2948dac43edf8fe58eb434d35d22a2940ecee1a9fefcd62beee6eb3"
+      sha256: "916731ccbdce44d545414dd9961f26ba5fbaa74bcbb55237d8e65a623a8c7297"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.3"
+    version: "2.2.4"
   path_provider_linux:
     dependency: transitive
     description:
@@ -1097,10 +1097,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_foundation
-      sha256: b046999bf0ff58f04c364491bb803dcfa8f42e47b19c75478f53d323684a8cc1
+      sha256: f39696b83e844923b642ce9dd4bd31736c17e697f6731a5adf445b1274cf3cd4
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.1"
+    version: "2.3.2"
   shared_preferences_linux:
     dependency: transitive
     description:
@@ -1439,10 +1439,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_macos
-      sha256: "91ee3e75ea9dadf38036200c5d3743518f4a5eb77a8d13fda1ee5764373f185e"
+      sha256: "1c4fdc0bfea61a70792ce97157e5cc17260f61abbe4f39354513f39ec6fd73b1"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.5"
+    version: "3.0.6"
   url_launcher_platform_interface:
     dependency: transitive
     description:
@@ -1495,10 +1495,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: b8c67f5fa3897b122cf60fe9ff314f7b0ef71eab25c5f8b771480bc338f48823
+      sha256: ada49637c27973c183dad90beb6bd781eea4c9f5f955d35da172de0af7bd3440
       url: "https://pub.dev"
     source: hosted
-    version: "11.7.2"
+    version: "11.8.0"
   watcher:
     dependency: transitive
     description:
@@ -1543,10 +1543,10 @@ packages:
     dependency: transitive
     description:
       name: xdg_directories
-      sha256: ee1505df1426458f7f60aac270645098d318a8b4766d85fde75f76f2e21807d1
+      sha256: e0b1147eec179d3911f1f19b59206448f78195ca1d20514134e10641b7d7fbff
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   xml:
     dependency: transitive
     description:
