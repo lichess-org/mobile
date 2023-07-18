@@ -24,6 +24,7 @@ class BoardPlayer extends StatelessWidget {
     this.timeToMove,
     this.shouldLinkToUserProfile = true,
     this.mePlaying = false,
+    this.zenMode = false,
     super.key,
   });
 
@@ -32,6 +33,7 @@ class BoardPlayer extends StatelessWidget {
   final MaterialDiffSide? materialDiff;
   final bool shouldLinkToUserProfile;
   final bool mePlaying;
+  final bool zenMode;
 
   /// Time left for the player to move at the start of the game.
   final Duration? timeToMove;
@@ -147,25 +149,26 @@ class BoardPlayer extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: shouldLinkToUserProfile
-                ? GestureDetector(
-                    onTap: player.lightUser != null
-                        ? () {
-                            pushPlatformRoute(
-                              context,
-                              builder: (context) =>
-                                  UserScreen(user: player.lightUser!),
-                            );
-                          }
-                        : null,
-                    child: playerWidget,
-                  )
-                : playerWidget,
+        if (!zenMode || timeToMove != null)
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: shouldLinkToUserProfile
+                  ? GestureDetector(
+                      onTap: player.lightUser != null
+                          ? () {
+                              pushPlatformRoute(
+                                context,
+                                builder: (context) =>
+                                    UserScreen(user: player.lightUser!),
+                              );
+                            }
+                          : null,
+                      child: playerWidget,
+                    )
+                  : playerWidget,
+            ),
           ),
-        ),
         if (clock != null) clock!,
       ],
     );

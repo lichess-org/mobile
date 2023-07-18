@@ -1,5 +1,4 @@
 import 'package:async/async.dart';
-import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,6 +13,7 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -167,27 +167,13 @@ class _SettingsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return defaultTargetPlatform == TargetPlatform.iOS
-        ? CupertinoIconButton(
-            padding: EdgeInsets.zero,
-            semanticsLabel: context.l10n.settingsSettings,
-            onPressed: () => Navigator.of(context).push<void>(
-              CupertinoPageRoute(
-                title: context.l10n.settingsSettings,
-                builder: (context) => const SettingsScreen(),
-              ),
-            ),
-            icon: const Icon(Icons.settings),
-          )
-        : IconButton(
-            tooltip: context.l10n.settingsSettings,
-            icon: const Icon(Icons.settings),
-            onPressed: () => Navigator.of(context).push<void>(
-              MaterialPageRoute(
-                builder: (context) => const SettingsScreen(),
-              ),
-            ),
-          );
+    return SettingsButton(
+      onPressed: () => pushPlatformRoute(
+        context,
+        title: context.l10n.settingsSettings,
+        builder: (_) => const SettingsScreen(),
+      ),
+    );
   }
 }
 

@@ -119,6 +119,9 @@ class BoardTable extends ConsumerWidget {
           pieceAssets: boardPrefs.pieceSet.assets,
           colorScheme: boardPrefs.boardTheme.colors,
           showValidMoves: boardPrefs.showLegalMoves,
+          showLastMove: boardPrefs.boardHighlights,
+          enableCoordinates: boardPrefs.coordinates,
+          animationDuration: boardPrefs.pieceAnimationDuration,
         );
 
         final settings = boardSettingsOverrides != null

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 /// Platform agnostic button which is used for important actions.
 ///
@@ -102,6 +103,32 @@ class AppBarTextButton extends StatelessWidget {
         : TextButton(
             onPressed: onPressed,
             child: child,
+          );
+  }
+}
+
+/// A cogs icon button in the app bar
+class SettingsButton extends StatelessWidget {
+  const SettingsButton({
+    required this.onPressed,
+    super.key,
+  });
+
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoIconButton(
+            padding: EdgeInsets.zero,
+            semanticsLabel: context.l10n.settingsSettings,
+            onPressed: onPressed,
+            icon: const Icon(Icons.settings),
+          )
+        : IconButton(
+            tooltip: context.l10n.settingsSettings,
+            icon: const Icon(Icons.settings),
+            onPressed: onPressed,
           );
   }
 }
