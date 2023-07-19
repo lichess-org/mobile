@@ -219,7 +219,7 @@ class AuthSocket {
     final session = _ref.read(authSessionProvider);
     final pInfo = _ref.read(packageInfoProvider);
     final deviceInfo = _ref.read(deviceInfoProvider);
-    final uri = Uri.parse('$kLichessWSHost$route?sri=$sri');
+    final uri = Uri.parse('$kLichessWSHost$route');
     final Map<String, String> headers = session != null
         ? {
             'Authorization': 'Bearer ${signBearerToken(session.token)}',
