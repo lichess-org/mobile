@@ -282,6 +282,7 @@ class _BottomBarState extends ConsumerState<_BottomBar>
   late Animation<double> _animation;
   PuzzleId? _currentPuzId;
   Timer? _showSolutionTimer;
+  bool _showSolution = false;
 
   @override
   void initState() {
@@ -307,11 +308,13 @@ class _BottomBarState extends ConsumerState<_BottomBar>
   }
 
   void _showSolutionButton() {
+    _showSolution = false;
     _animationController.reset();
     _showSolutionTimer = Timer(const Duration(seconds: 3), () {
       if (mounted) {
         setState(() {
           _animationController.forward(from: 0.0);
+          _showSolution = true;
         });
       }
     });
@@ -377,10 +380,10 @@ class _BottomBarState extends ConsumerState<_BottomBar>
                   label: context.l10n.viewTheSolution,
                   shortLabel: context.l10n.solution,
                   showAndroidShortLabel: true,
-                  onTap: _animation.isCompleted
-                      ? null
-                      : () =>
-                          ref.read(widget.ctrlProvider.notifier).viewSolution(),
+                  onTap: _showSolution
+                      ? () =>
+                          ref.read(widget.ctrlProvider.notifier).viewSolution()
+                      : null,
                 ),
               ),
             if (puzzleState.mode == PuzzleMode.view)
