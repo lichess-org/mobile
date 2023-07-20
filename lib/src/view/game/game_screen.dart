@@ -18,7 +18,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/glowing_text.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
@@ -789,12 +788,8 @@ class _GameEndDialogState extends ConsumerState<_GameEndDialog> {
                             .proposeOrAcceptRematch();
                       }
                     : null,
-            child: gameState.game.opponent?.offeringRematch == true
-                ? GlowingText(
-                    context.l10n.rematch,
-                    style: const TextStyle(fontWeight: FontWeight.w500),
-                  )
-                : Text(context.l10n.rematch),
+            glowing: gameState.game.opponent?.offeringRematch == true,
+            child: Text(context.l10n.rematch),
           ),
         const SizedBox(height: 8.0),
         SecondaryButton(

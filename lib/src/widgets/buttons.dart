@@ -44,12 +44,13 @@ class FatButton extends StatelessWidget {
 }
 
 /// Platform agnostic button meant for medium importance actions.
-class SecondaryButton extends StatelessWidget {
+class SecondaryButton extends StatefulWidget {
   const SecondaryButton({
     required this.semanticsLabel,
     required this.child,
     required this.onPressed,
     this.textStyle,
+    this.glowing = false,
     super.key,
   });
 
@@ -57,6 +58,54 @@ class SecondaryButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final Widget child;
   final TextStyle? textStyle;
+  final bool glowing;
+
+  @override
+  State<SecondaryButton> createState() => _SecondaryButtonState();
+}
+
+class _SecondaryButtonState extends State<SecondaryButton>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+    _animation = (defaultTargetPlatform == TargetPlatform.iOS
+            ? Tween<double>(begin: 0.5, end: 1.0)
+            : Tween<double>(begin: 0.0, end: 0.3))
+        .animate(_controller)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    if (widget.glowing) {
+      _controller.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(SecondaryButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.glowing != oldWidget.glowing) {
+      if (widget.glowing) {
+        _controller.repeat(reverse: true);
+      } else {
+        _controller.stop();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,19 +113,30 @@ class SecondaryButton extends StatelessWidget {
       container: true,
       enabled: true,
       button: true,
-      label: semanticsLabel,
+      label: widget.semanticsLabel,
       excludeSemantics: true,
       child: defaultTargetPlatform == TargetPlatform.iOS
           ? CupertinoButton(
-              onPressed: onPressed,
-              child: child,
+              color: widget.glowing
+                  ? CupertinoTheme.of(context)
+                      .primaryColor
+                      .withOpacity(_animation.value)
+                  : null,
+              onPressed: widget.onPressed,
+              child: widget.child,
             )
           : OutlinedButton(
-              onPressed: onPressed,
+              onPressed: widget.onPressed,
               style: OutlinedButton.styleFrom(
-                textStyle: textStyle,
+                textStyle: widget.textStyle,
+                backgroundColor: widget.glowing
+                    ? Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withOpacity(_animation.value)
+                    : null,
               ),
-              child: child,
+              child: widget.child,
             ),
     );
   }
