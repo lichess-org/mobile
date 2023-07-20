@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
@@ -254,7 +257,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
   }
 }
 
-class _BottomBar extends ConsumerWidget {
+class _BottomBar extends ConsumerStatefulWidget {
   const _BottomBar({
     required this.initialPuzzleContext,
     required this.ctrlProvider,
@@ -263,16 +266,66 @@ class _BottomBar extends ConsumerWidget {
   final PuzzleContext initialPuzzleContext;
   final PuzzleCtrlProvider ctrlProvider;
 
+  @override
+  ConsumerState<_BottomBar> createState() => _BottomBarState();
+}
+
+class _BottomBarState extends ConsumerState<_BottomBar>
+    with SingleTickerProviderStateMixin {
   static const _repeatTriggerDelays = [
     Duration(milliseconds: 500),
     Duration(milliseconds: 250),
     Duration(milliseconds: 100),
   ];
 
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+  PuzzleId? _currentPuzId;
+  Timer? _showSolutionTimer;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final puzzleState = ref.watch(ctrlProvider);
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(
+        seconds: 1,
+      ),
+    );
+
+    _animation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(_animationController);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    _showSolutionTimer?.cancel();
+    super.dispose();
+  }
+
+  void _showSolutionButton() {
+    _animationController.reset();
+    _showSolutionTimer = Timer(const Duration(seconds: 3), () {
+      if (mounted) {
+        setState(() {
+          _animationController.forward(from: 0.0);
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final puzzleState = ref.watch(widget.ctrlProvider);
     final isDailyPuzzle = puzzleState.puzzle.isDailyPuzzle == true;
+
+    if (puzzleState.puzzle.puzzle.id != _currentPuzId) {
+      _currentPuzId = puzzleState.puzzle.puzzle.id;
+      _showSolutionButton();
+    }
 
     return Container(
       padding: Styles.horizontalBodyPadding,
@@ -284,12 +337,12 @@ class _BottomBar extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            if (initialPuzzleContext.userId != null &&
+            if (widget.initialPuzzleContext.userId != null &&
                 !isDailyPuzzle &&
                 puzzleState.mode != PuzzleMode.view)
               _DifficultySelector(
-                initialPuzzleContext: initialPuzzleContext,
-                ctrlProvider: ctrlProvider,
+                initialPuzzleContext: widget.initialPuzzleContext,
+                ctrlProvider: widget.ctrlProvider,
               ),
             if (puzzleState.mode == PuzzleMode.view)
               BottomBarButton(
@@ -307,7 +360,9 @@ class _BottomBar extends ConsumerWidget {
             if (puzzleState.mode == PuzzleMode.view)
               BottomBarButton(
                 onTap: () {
-                  ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
+                  ref
+                      .read(widget.ctrlProvider.notifier)
+                      .toggleLocalEvaluation();
                 },
                 label: context.l10n.toggleLocalEvaluation,
                 shortLabel: 'Evaluation',
@@ -315,14 +370,18 @@ class _BottomBar extends ConsumerWidget {
                 highlighted: puzzleState.isLocalEvalEnabled,
               ),
             if (puzzleState.mode != PuzzleMode.view)
-              BottomBarButton(
-                icon: Icons.help,
-                label: context.l10n.viewTheSolution,
-                shortLabel: context.l10n.solution,
-                showAndroidShortLabel: true,
-                onTap: puzzleState.mode == PuzzleMode.view
-                    ? null
-                    : () => ref.read(ctrlProvider.notifier).viewSolution(),
+              FadeTransition(
+                opacity: _animation,
+                child: BottomBarButton(
+                  icon: Icons.help,
+                  label: context.l10n.viewTheSolution,
+                  shortLabel: context.l10n.solution,
+                  showAndroidShortLabel: true,
+                  onTap: _animation.isCompleted
+                      ? null
+                      : () =>
+                          ref.read(widget.ctrlProvider.notifier).viewSolution(),
+                ),
               ),
             if (puzzleState.mode == PuzzleMode.view)
               RepeatButton(
@@ -357,7 +416,7 @@ class _BottomBar extends ConsumerWidget {
                 onTap: puzzleState.mode == PuzzleMode.view &&
                         puzzleState.nextContext != null
                     ? () => ref
-                        .read(ctrlProvider.notifier)
+                        .read(widget.ctrlProvider.notifier)
                         .loadPuzzle(puzzleState.nextContext!)
                     : null,
                 highlighted: true,
@@ -372,11 +431,13 @@ class _BottomBar extends ConsumerWidget {
   }
 
   void _moveForward(WidgetRef ref, {bool hapticFeedback = true}) {
-    ref.read(ctrlProvider.notifier).userNext(hapticFeedback: hapticFeedback);
+    ref
+        .read(widget.ctrlProvider.notifier)
+        .userNext(hapticFeedback: hapticFeedback);
   }
 
   void _moveBackward(WidgetRef ref) {
-    ref.read(ctrlProvider.notifier).userPrevious();
+    ref.read(widget.ctrlProvider.notifier).userPrevious();
   }
 }
 
