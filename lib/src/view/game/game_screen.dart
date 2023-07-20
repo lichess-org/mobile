@@ -12,22 +12,20 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
-import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:lichess_mobile/src/widgets/board_preference.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/wakelock.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 
 import 'game_screen_providers.dart';
 import 'ping_rating.dart';
@@ -171,7 +169,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
           SettingsButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
-              builder: (_) => const _Preferences(),
+              builder: (_) => const BoardPreferenceModal(),
               showDragHandle: true,
             ),
           ),
@@ -200,7 +198,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
         trailing: SettingsButton(
           onPressed: () => showAdaptiveBottomSheet<void>(
             context: context,
-            builder: (_) => const _Preferences(),
+            builder: (_) => const BoardPreferenceModal(),
             showDragHandle: true,
           ),
         ),
@@ -390,64 +388,6 @@ class _Body extends ConsumerWidget {
             child: content,
           )
         : content;
-  }
-}
-
-class _Preferences extends ConsumerWidget {
-  const _Preferences();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isSoundEnabled = ref.watch(
-      generalPreferencesProvider.select(
-        (prefs) => prefs.isSoundEnabled,
-      ),
-    );
-    final boardPrefs = ref.watch(boardPreferencesProvider);
-
-    return SafeArea(
-      child: ListView(
-        children: [
-          Padding(
-            padding: Styles.bodyPadding,
-            child: Text(
-              context.l10n.preferencesPreferences,
-              style: Styles.title,
-            ),
-          ),
-          SwitchSettingTile(
-            title: Text(context.l10n.sound),
-            value: isSoundEnabled,
-            onChanged: (value) {
-              ref
-                  .read(generalPreferencesProvider.notifier)
-                  .toggleSoundEnabled();
-            },
-          ),
-          SwitchSettingTile(
-            title: const Text('Haptic feedback'),
-            value: boardPrefs.hapticFeedback,
-            onChanged: (value) {
-              ref
-                  .read(boardPreferencesProvider.notifier)
-                  .toggleHapticFeedback();
-            },
-          ),
-          SwitchSettingTile(
-            title: Text(
-              context.l10n.preferencesPieceAnimation,
-              maxLines: 2,
-            ),
-            value: boardPrefs.pieceAnimation,
-            onChanged: (value) {
-              ref
-                  .read(boardPreferencesProvider.notifier)
-                  .togglePieceAnimation();
-            },
-          ),
-        ],
-      ),
-    );
   }
 }
 

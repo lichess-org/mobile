@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/board_preference.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
@@ -27,7 +29,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/wakelock.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
 import 'puzzle_feedback_widget.dart';
 import 'puzzle_session_widget.dart';
@@ -53,7 +54,15 @@ class PuzzleScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [ToggleSoundButton()],
+        actions: [
+          SettingsButton(
+            onPressed: () => showAdaptiveBottomSheet<void>(
+              context: context,
+              builder: (_) => const BoardPreferenceModal(),
+              showDragHandle: true,
+            ),
+          )
+        ],
         title: const Text('Puzzle training'),
       ),
       body: initialPuzzleContext != null
@@ -67,7 +76,13 @@ class PuzzleScreen extends StatelessWidget {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        trailing: ToggleSoundButton(),
+        trailing: SettingsButton(
+          onPressed: () => showAdaptiveBottomSheet<void>(
+            context: context,
+            builder: (_) => const BoardPreferenceModal(),
+            showDragHandle: true,
+          ),
+        ),
       ),
       child: initialPuzzleContext != null
           ? _Body(

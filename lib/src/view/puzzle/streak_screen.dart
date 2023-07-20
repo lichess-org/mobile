@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/board_preference.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:result_extensions/result_extensions.dart';
 
@@ -24,7 +26,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
 import 'puzzle_feedback_widget.dart';
 
@@ -42,7 +43,15 @@ class StreakScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [ToggleSoundButton()],
+        actions: [
+          SettingsButton(
+            onPressed: () => showAdaptiveBottomSheet<void>(
+              context: context,
+              builder: (_) => const BoardPreferenceModal(),
+              showDragHandle: true,
+            ),
+          )
+        ],
         title: const Text('Puzzle Streak'),
       ),
       body: const _Load(),
@@ -53,7 +62,13 @@ class StreakScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: const Text('Puzzle Streak'),
-        trailing: ToggleSoundButton(),
+        trailing: SettingsButton(
+          onPressed: () => showAdaptiveBottomSheet<void>(
+            context: context,
+            builder: (_) => const BoardPreferenceModal(),
+            showDragHandle: true,
+          ),
+        ),
       ),
       child: const _Load(),
     );

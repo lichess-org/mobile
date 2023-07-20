@@ -21,6 +21,8 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/board_preference.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -31,7 +33,6 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import "package:lichess_mobile/src/utils/l10n_context.dart";
 import "package:lichess_mobile/src/utils/immersive_mode.dart";
 import 'package:lichess_mobile/src/utils/wakelock.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
 import 'history_boards.dart';
 
@@ -49,7 +50,16 @@ class StormScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [_StormDashboardButton(), ToggleSoundButton()],
+        actions: [
+          _StormDashboardButton(),
+          SettingsButton(
+            onPressed: () => showAdaptiveBottomSheet<void>(
+              context: context,
+              builder: (_) => const BoardPreferenceModal(),
+              showDragHandle: true,
+            ),
+          ),
+        ],
         title: const Text('Puzzle Storm'),
       ),
       body: const _Load(),
@@ -63,7 +73,16 @@ class StormScreen extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
-          children: [_StormDashboardButton(), ToggleSoundButton()],
+          children: [
+            _StormDashboardButton(),
+            SettingsButton(
+              onPressed: () => showAdaptiveBottomSheet<void>(
+                context: context,
+                builder: (_) => const BoardPreferenceModal(),
+                showDragHandle: true,
+              ),
+            ),
+          ],
         ),
       ),
       child: const _Load(),
