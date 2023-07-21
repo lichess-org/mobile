@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'featured_position.dart';
 import 'featured_player.dart';
 import 'tv_event.dart';
-import 'tv_repository.dart';
+import 'tv_repository_providers.dart';
 
 part 'featured_game.freezed.dart';
 part 'featured_game.g.dart';
@@ -19,6 +19,7 @@ part 'featured_game.g.dart';
 class FeaturedGame extends _$FeaturedGame {
   StreamSubscription<TvEvent>? _streamSub;
 
+  String? _gameId;
   final _debounceConnect = Debouncer(const Duration(seconds: 1));
 
   @override
@@ -43,13 +44,26 @@ class FeaturedGame extends _$FeaturedGame {
     );
   }
 
+  void setGameId(String? value) {
+    if (_gameId != value) {
+      _gameId = value;
+      disconnectStream();
+      connectStream();
+    }
+  }
+
   void connectStream() {
     _debounceConnect(_connectStream);
   }
 
   Stream<TvEvent> _connectStream() {
     final tvRepository = ref.watch(tvRepositoryProvider);
-    final stream = tvRepository.tvFeed().asBroadcastStream();
+    final Stream<TvEvent> stream;
+    if (_gameId == null) {
+      stream = tvRepository.tvFeed().asBroadcastStream();
+    } else {
+      stream = tvRepository.tvGameFeed(_gameId!).asBroadcastStream();
+    }
 
     _streamSub?.cancel();
     _streamSub = stream.listen((event) {

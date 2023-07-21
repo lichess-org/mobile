@@ -12,6 +12,12 @@ import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game.dart';
 import 'package:lichess_mobile/src/ui/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+
+import 'package:lichess_mobile/src/model/tv/tv_repository_providers.dart';
+import 'package:result_extensions/result_extensions.dart';
 
 final _featuredGameWithSoundProvider = featuredGameProvider(withSound: true);
 
@@ -35,12 +41,10 @@ class _TvScreenState extends ConsumerState<TvScreen>
     );
   }
 
-  Widget _androidBuilder(
-    BuildContext context,
-  ) {
+  Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Top Rated'),
+        title: const ChannelSelector(),
         actions: [
           ToggleSoundButton(),
         ],
@@ -49,12 +53,10 @@ class _TvScreenState extends ConsumerState<TvScreen>
     );
   }
 
-  Widget _iosBuilder(
-    BuildContext context,
-  ) {
+  Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: const Text('Top Rated'),
+        middle: const ChannelSelector(),
         trailing: ToggleSoundButton(),
       ),
       child: const _Body(),
@@ -180,5 +182,100 @@ class _Body extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+class ChannelSelector extends ConsumerStatefulWidget {
+  const ChannelSelector({super.key});
+
+  @override
+  ConsumerState<ChannelSelector> createState() => _ChannelSelectorState();
+}
+
+class _ChannelSelectorState extends ConsumerState<ChannelSelector> {
+  ChannelVariant _selectedVariant = ChannelVariant.topRated;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformWidget(
+      androidBuilder: _androidBuilder,
+      iosBuilder: _iosBuilder,
+    );
+  }
+
+  Widget _androidBuilder(BuildContext context) {
+    return AppBarTextButton(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(_selectedVariant.title),
+          const Icon(
+            Icons.arrow_drop_down,
+            size: 34.0,
+          ),
+        ],
+      ),
+      onPressed: () {
+        showChoicesDialog(ref);
+      },
+    );
+  }
+
+  Widget _iosBuilder(BuildContext context) {
+    return AppBarTextButton(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(_selectedVariant.title),
+          const Icon(
+            Icons.arrow_drop_down,
+            size: 34.0,
+          ),
+        ],
+      ),
+      onPressed: () {
+        showChoicesDialog(ref);
+      },
+    );
+  }
+
+  void showChoicesDialog(WidgetRef ref) {
+    final repo = ref.read(tvRepositoryProvider);
+    final FutureResult<TvChannels> channelResult = repo.getTvChannels();
+
+    channelResult.then((res) {
+      ChannelVariant newlySelectedVariant = ChannelVariant.topRated;
+      if (res.isValue) {
+        final TvChannels data = res.asValue!.value;
+        showChoicePicker(
+          context,
+          choices: ChannelVariant.values,
+          selectedItem: _selectedVariant,
+          labelBuilder: (t) => Text(t.title),
+          onSelectedItemChanged: (ChannelVariant? d) {
+            if (d != null) {
+              newlySelectedVariant = d;
+            }
+          },
+        ).then((_) {
+          String? newGameId = data.entries
+              .where(
+                (element) => element.key.title == newlySelectedVariant.title,
+              )
+              .first
+              .value
+              .gameId;
+          if (newlySelectedVariant.title == "Top Rated") newGameId = null;
+
+          setState(() {
+            _selectedVariant = newlySelectedVariant;
+          });
+
+          ref
+              .read(_featuredGameWithSoundProvider.notifier)
+              .setGameId(newGameId);
+        });
+      }
+    }); // End FR_data.then
   }
 }
