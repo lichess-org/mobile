@@ -15,10 +15,10 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## Android
 
-### android internal_test
+### android internal
 
 ```sh
-[bundle exec] fastlane android internal_test
+[bundle exec] fastlane android internal
 ```
 
 Deploy an internal test version to Google Play

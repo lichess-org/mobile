@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/widgets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -41,10 +42,14 @@ class PlayPreferences extends _$PlayPreferences {
 
 @Freezed(fromJson: true, toJson: true)
 class PlayPrefs with _$PlayPrefs {
+  const PlayPrefs._();
+
   const factory PlayPrefs({
     required TimeIncrement timeIncrement,
   }) = _PlayPrefs;
 
   factory PlayPrefs.fromJson(Map<String, dynamic> json) =>
       _$PlayPrefsFromJson(json);
+
+  IconData get speedIcon => timeIncrement.speed.icon;
 }

@@ -17,18 +17,34 @@ default_platform(:ios)
 
 platform :ios do
   desc "Push a new beta build to TestFlight"
-  lane :beta do |options|
-    UI.user_error!("No wssecret given") unless options[:wssecret]
-    sh "flutter build ipa -v --obfuscate --split-debug-info=./split-debug-info --dart-define=LICHESS_HOST=https://lichess.org --dart-define=LICHESS_WS_HOST=wss://socket.lichess.org --dart-define=LICHESS_WS_SECRET=#{options[:wssecret]}"
-    increment_build_number(
-      build_number: latest_testflight_build_number + 1,
-      xcodeproj: "Runner.xcodeproj"
+  lane :beta do
+    # sh "flutter build ios --release --no-codesign --obfuscate --split-debug-info=./split-debug-info --dart-define=LICHESS_HOST=https://lichess.org --dart-define=LICHESS_WS_HOST=wss://socket.lichess.org --dart-define=LICHESS_WS_SECRET=#{ENV['WS_SECRET']}"
+    if is_ci
+      create_keychain(
+        name: ENV['MATCH_KEYCHAIN_NAME'],
+        password: ENV["MATCH_KEYCHAIN_PASSWORD"],
+        default_keychain: true,
+        unlock: true,
+        timeout: 3600,
+        lock_when_sleeps: false
+      )
+    end
+
+    sync_code_signing(
+      type: "appstore",
+      readonly: is_ci,
+      api_key: ENV['APP_STORE_KEY_JSON'],
+      keychain_name: ENV['MATCH_KEYCHAIN_NAME'],
+      keychain_password: ENV["MATCH_KEYCHAIN_PASSWORD"],
     )
+
     build_app(
       scheme: "Runner",
-      skip_build_archive: true,
-      archive_path: "../build/ios/archive/Runner.xcarchive",
     )
-    upload_to_testflight(api_key_path: "fastlane/app-store-key.json", skip_waiting_for_build_processing: true)
+
+    upload_to_testflight(
+      api_key: ENV['APP_STORE_KEY_JSON'],
+      skip_waiting_for_build_processing: true
+    )
   end
 end

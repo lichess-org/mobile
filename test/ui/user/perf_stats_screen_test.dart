@@ -4,7 +4,7 @@ import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/ui/user/perf_stats_screen.dart';
+import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../test_utils.dart';
 import '../../test_app.dart';
@@ -29,7 +29,6 @@ void main() {
           home: PerfStatsScreen(
             user: fakeUser,
             perf: testPerf,
-            loggedInUser: null,
           ),
           overrides: [
             httpClientProvider.overrideWithValue(mockClient),
@@ -60,7 +59,6 @@ void main() {
           home: PerfStatsScreen(
             user: fakeUser,
             perf: testPerf,
-            loggedInUser: null,
           ),
           overrides: [
             httpClientProvider.overrideWithValue(mockClient),

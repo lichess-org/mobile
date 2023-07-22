@@ -8,9 +8,9 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
-import 'package:lichess_mobile/src/model/auth/user_session.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import '../../test_utils.dart';
 import '../../test_container.dart';
@@ -36,7 +36,7 @@ void main() {
     return mockResponse('', 404);
   });
 
-  const testUserSession = UserSession(
+  const testUserSession = AuthSessionState(
     token: 'testToken',
     user: LightUser(
       id: UserId('test'),

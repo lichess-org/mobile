@@ -6,13 +6,12 @@ import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
-import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
-import 'package:lichess_mobile/src/widgets/table_board_layout.dart';
+import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/http_client.dart';
-import 'package:lichess_mobile/src/ui/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -80,8 +79,8 @@ void main() {
         expect(find.widgetWithText(BoardPlayer, 'Stockfish'), findsOneWidget);
 
         // now with the clocks
-        expect(find.widgetWithText(CountdownClock, '1:46'), findsNWidgets(1));
-        expect(find.widgetWithText(CountdownClock, '0:46'), findsNWidgets(1));
+        expect(find.text('1:46', findRichText: true), findsNWidgets(1));
+        expect(find.text('0:46', findRichText: true), findsNWidgets(1));
 
         // moves are loaded
         expect(find.byType(MoveList), findsOneWidget);

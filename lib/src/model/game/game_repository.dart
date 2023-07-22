@@ -81,7 +81,6 @@ ArchivedGame _makeArchivedGameFromJson(Map<String, dynamic> json) =>
 
 ArchivedGame _archivedGameFromPick(RequiredPick pick) {
   final data = _archivedGameDataFromPick(pick);
-  final clockData = pick('clock').letOrNull(_clockDataFromPick);
   final clocks = pick('clocks').asListOrNull<Duration>(
     (p0) => Duration(milliseconds: p0.asIntOrThrow() * 10),
   );
@@ -97,7 +96,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
           : data.variant.initialPosition;
       int index = 0;
       final List<GameStep> steps = [GameStep(ply: index, position: position)];
-      Duration? clock = clockData?.initial;
+      Duration? clock = data.clock?.initial;
       for (final san in moves) {
         final stepClock = clocks?[index];
         index++;
@@ -107,8 +106,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
         steps.add(
           GameStep(
             ply: index,
-            san: san,
-            uci: move.uci,
+            sanMove: SanMove(san, move),
             position: position,
             diff: MaterialDiff.fromBoard(position.board),
             whiteClock: index.isOdd ? stepClock : clock,
@@ -119,7 +117,6 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
       }
       return IList(steps);
     }),
-    clock: clockData,
   );
 }
 
@@ -141,6 +138,7 @@ ArchivedGameData _archivedGameDataFromPick(RequiredPick pick) {
     variant: pick('variant').asVariantOrThrow(),
     initialFen: pick('initialFen').asStringOrNull(),
     lastFen: pick('lastFen').asStringOrNull(),
+    clock: pick('clock').letOrNull(_clockDataFromPick),
   );
 }
 
@@ -154,7 +152,7 @@ ClockData _clockDataFromPick(RequiredPick pick) {
 Player _playerFromUserGamePick(RequiredPick pick) {
   return Player(
     id: pick('user', 'id').asUserIdOrNull(),
-    name: pick('user', 'name').asStringOrNull() ?? 'Stockfish',
+    name: pick('user', 'name').asStringOrNull(),
     patron: pick('user', 'patron').asBoolOrNull(),
     title: pick('user', 'title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),

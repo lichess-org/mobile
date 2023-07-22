@@ -1,6 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
+import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 
+import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 
@@ -10,7 +13,20 @@ part 'lobby_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 LobbyRepository lobbyRepository(LobbyRepositoryRef ref) {
-  final authClient = ref.watch(authClientProvider);
+  // lobbyRepository gets its own httpClient because it needs to be able to
+  // close it independently from the rest of the app.
+  final httpClient = http.Client();
+  final crashlytics = ref.watch(crashlyticsProvider);
+  final logger = Logger('LobbyAuthClient');
+  final authClient = AuthClient(
+    httpClient,
+    ref,
+    logger,
+    crashlytics,
+  );
+  ref.onDispose(() {
+    httpClient.close();
+  });
   return LobbyRepository(authClient: authClient);
 }
 

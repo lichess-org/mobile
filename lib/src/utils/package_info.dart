@@ -9,7 +9,5 @@ part 'package_info.g.dart';
 PackageInfo packageInfo(PackageInfoRef ref) {
   // requireValue is possible because appDependenciesProvider is loaded before
   // anything. See: lib/src/app.dart
-  return ref.watch(
-    appDependenciesProvider.select((data) => data.requireValue.packageInfo),
-  );
+  return ref.read(appDependenciesProvider).requireValue.packageInfo;
 }

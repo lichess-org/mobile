@@ -1,10 +1,12 @@
 import 'dart:math' as math;
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 import 'dart:ui';
+import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
 /// A simple countdown clock.
@@ -12,11 +14,15 @@ import 'package:lichess_mobile/src/constants.dart';
 /// The clock starts only when [active] is `true`.
 class CountdownClock extends ConsumerStatefulWidget {
   final Duration duration;
+  final Duration? emergencyThreshold;
   final bool active;
+  final VoidCallback? onFlag;
 
   const CountdownClock({
     required this.duration,
     required this.active,
+    this.emergencyThreshold,
+    this.onFlag,
     super.key,
   });
 
@@ -24,20 +30,53 @@ class CountdownClock extends ConsumerStatefulWidget {
   ConsumerState<CountdownClock> createState() => _CountdownClockState();
 }
 
+const _period = Duration(milliseconds: 100);
+const _emergencyDelay = Duration(seconds: 20);
+
 class _CountdownClockState extends ConsumerState<CountdownClock> {
-  static const _period = Duration(milliseconds: 100);
   Timer? _timer;
   Duration timeLeft = Duration.zero;
+  bool _shouldPlayEmergencyFeedback = true;
+  DateTime? _nextEmergency;
 
-  Timer startTimer() {
-    return Timer.periodic(_period, (timer) {
+  final _stopwatch = Stopwatch();
+
+  void startClock() {
+    _timer?.cancel();
+    _stopwatch.reset();
+    _stopwatch.start();
+    _timer = Timer.periodic(_period, (timer) {
       setState(() {
-        timeLeft = timeLeft - _period;
+        timeLeft = timeLeft - _stopwatch.elapsed;
+        _stopwatch.reset();
+        _playEmergencyFeedback();
         if (timeLeft <= Duration.zero) {
-          timer.cancel();
+          widget.onFlag?.call();
+          timeLeft = Duration.zero;
+          stopClock();
         }
       });
     });
+  }
+
+  void stopClock() {
+    _timer?.cancel();
+    _stopwatch.stop();
+  }
+
+  void _playEmergencyFeedback() {
+    if (widget.emergencyThreshold != null &&
+        timeLeft <= widget.emergencyThreshold! &&
+        _shouldPlayEmergencyFeedback &&
+        (_nextEmergency == null || _nextEmergency!.isBefore(DateTime.now()))) {
+      _shouldPlayEmergencyFeedback = false;
+      _nextEmergency = DateTime.now().add(_emergencyDelay);
+      ref.read(soundServiceProvider).play(Sound.lowTime);
+      HapticFeedback.heavyImpact();
+    } else if (widget.emergencyThreshold != null &&
+        timeLeft > widget.emergencyThreshold! * 1.5) {
+      _shouldPlayEmergencyFeedback = true;
+    }
   }
 
   @override
@@ -45,17 +84,20 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
     super.initState();
     timeLeft = widget.duration;
     if (widget.active) {
-      _timer = startTimer();
+      startClock();
     }
   }
 
   @override
   void didUpdateWidget(CountdownClock oldClock) {
     super.didUpdateWidget(oldClock);
-    _timer?.cancel();
-    timeLeft = widget.duration;
+    if (widget.duration != oldClock.duration) {
+      timeLeft = widget.duration;
+    }
     if (widget.active) {
-      _timer = startTimer();
+      startClock();
+    } else {
+      stopClock();
     }
   }
 
@@ -69,6 +111,9 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   Widget build(BuildContext context) {
     final min = timeLeft.inMinutes.remainder(60);
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
+    final showTenths = timeLeft < const Duration(seconds: 10);
+    final isEmergency = widget.emergencyThreshold != null &&
+        timeLeft <= widget.emergencyThreshold!;
     final brightness = ref.watch(currentBrightnessProvider);
     final clockStyle = brightness == Brightness.dark
         ? ClockStyle.darkThemeStyle
@@ -80,7 +125,9 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         color: widget.active
-            ? clockStyle.activeBackgroundColor
+            ? isEmergency
+                ? clockStyle.emergencyBackgroundColor
+                : clockStyle.activeBackgroundColor
             : clockStyle.backgroundColor,
       ),
       child: Padding(
@@ -92,16 +139,33 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
               kMaxClockTextScaleFactor,
             ),
           ),
-          child: Text(
-            '$min:$secs',
-            style: TextStyle(
-              color: widget.active
-                  ? clockStyle.activeTextColor
-                  : clockStyle.textColor,
-              fontSize: screenHeight < kSmallHeightScreenThreshold ? 24 : 30,
-              height: screenHeight < kSmallHeightScreenThreshold ? 1.0 : null,
-              fontFeatures: const [
-                FontFeature.tabularFigures(),
+          child: RichText(
+            text: TextSpan(
+              text: '$min:$secs',
+              style: TextStyle(
+                color: widget.active
+                    ? isEmergency
+                        ? clockStyle.emergencyTextColor
+                        : clockStyle.activeTextColor
+                    : clockStyle.textColor,
+                fontSize: 26,
+                height: screenHeight < kSmallHeightScreenThreshold ? 1.0 : null,
+                fontFeatures: const [
+                  FontFeature.tabularFigures(),
+                ],
+              ),
+              children: [
+                if (showTenths)
+                  TextSpan(
+                    text: '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                if (!widget.active && timeLeft < const Duration(seconds: 1))
+                  TextSpan(
+                    text:
+                        '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
+                    style: const TextStyle(fontSize: 18),
+                  ),
               ],
             ),
           ),
@@ -116,26 +180,34 @@ class ClockStyle {
   const ClockStyle({
     required this.textColor,
     required this.activeTextColor,
+    required this.emergencyTextColor,
     required this.backgroundColor,
     required this.activeBackgroundColor,
+    required this.emergencyBackgroundColor,
   });
 
   static const darkThemeStyle = ClockStyle(
     textColor: Colors.grey,
     activeTextColor: Colors.black,
+    emergencyTextColor: Colors.white,
     backgroundColor: Colors.black,
-    activeBackgroundColor: Colors.white,
+    activeBackgroundColor: Color(0xFFDDDDDD),
+    emergencyBackgroundColor: Color(0xFF673431),
   );
 
   static const lightThemeStyle = ClockStyle(
     textColor: Colors.grey,
     activeTextColor: Colors.black,
+    emergencyTextColor: Colors.black,
     backgroundColor: Colors.white,
     activeBackgroundColor: Color(0xFFD0E0BD),
+    emergencyBackgroundColor: Color(0xFFF2CCCC),
   );
 
   final Color textColor;
   final Color activeTextColor;
+  final Color emergencyTextColor;
   final Color backgroundColor;
   final Color activeBackgroundColor;
+  final Color emergencyBackgroundColor;
 }

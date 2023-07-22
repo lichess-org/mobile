@@ -8,16 +8,19 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 Future<T?> showAdaptiveDialog<T>({
   required BuildContext context,
   required WidgetBuilder builder,
+  bool? barrierDismissible,
 }) async {
   if (defaultTargetPlatform == TargetPlatform.iOS) {
     return showCupertinoDialog(
       context: context,
       builder: builder,
+      barrierDismissible: barrierDismissible ?? false,
     );
   } else {
     return showDialog(
       context: context,
       builder: builder,
+      barrierDismissible: barrierDismissible ?? true,
     );
   }
 }

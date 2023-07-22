@@ -21,7 +21,7 @@ const lilaTranslationsPath = `${tmpDir}/[lichess-org.lila] master/translation/de
 const unzipMaxBufferSize = 1024 * 1024 * 10 // Set maxbuffer to 10MB to avoid errors when default 1MB used
 
 // selection of lila translation modules to include
-const modules = ['activity', 'site', 'puzzle', 'puzzleTheme', 'perfStat', 'settings', 'streamer', 'storm']
+const modules = ['activity', 'site', 'preferences', 'puzzle', 'puzzleTheme', 'perfStat', 'settings', 'streamer', 'storm']
 
 // Order of locales with variants matters: the fallback must always be first
 // eg: 'de-DE' is before 'de-CH'
@@ -228,6 +228,18 @@ function transformTranslations(data, locale, module, makeTemplate = false) {
       count: { type: 'int' }
     };
     let pluralString = '{count, plural,'
+
+    // add a zero quantity item if it doesn't exist
+    // to avoid translations like "0 players"
+    if (!plural.item.some((item) => item.$.quantity === 'zero')) {
+      const oneItem = plural.item.find((item) => item.$.quantity === 'one')
+      if (oneItem) {
+        plural.item.unshift({
+          $: { quantity: 'zero' },
+          _: oneItem._
+        })
+      }
+    }
     plural.item.forEach((child) => {
       const string = unescape(child._);
       let transformedString;

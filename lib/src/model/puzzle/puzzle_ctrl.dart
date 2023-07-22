@@ -392,10 +392,8 @@ class PuzzleCtrl extends _$PuzzleCtrl {
       // when replaying moves fast we don't want haptic feedback
       final soundService = ref.read(soundServiceProvider);
       if (sanMove.san.contains('x')) {
-        soundService.stopCurrent();
         soundService.play(Sound.capture);
       } else {
-        soundService.stopCurrent();
         soundService.play(Sound.move);
       }
     }

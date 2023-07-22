@@ -5,11 +5,22 @@ import 'package:flutter/cupertino.dart';
 abstract class Styles {
   // text
   static const bold = TextStyle(fontWeight: FontWeight.bold);
+  static const title = TextStyle(
+    fontSize: 20.0,
+    fontWeight: FontWeight.bold,
+  );
   static TextStyle get sectionTitle => TextStyle(
         fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
         fontWeight: FontWeight.bold,
       );
+  static const boardPreviewTitle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  );
   static const subtitleOpacity = 0.7;
+  static const timeControl = TextStyle(
+    letterSpacing: 1.2,
+  );
 
   // padding
   static const bodyPadding =
@@ -29,6 +40,14 @@ abstract class Styles {
 
   static EdgeInsetsGeometry get bodySectionBottomPadding =>
       horizontalBodyPadding.add(sectionBottomPadding);
+
+  // from:
+  // https://github.com/flutter/flutter/blob/796c8ef79279f9c774545b3771238c3098dbefab/packages/flutter/lib/src/cupertino/bottom_tab_bar.dart#L17
+  static const Color cupertinoDefaultTabBarBorderColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0x4D000000),
+    darkColor: Color(0x29000000),
+  );
 }
 
 /// Retrieve the default text color and apply an opacity to it.

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 /// Platform agnostic button which is used for important actions.
 ///
@@ -31,7 +32,7 @@ class FatButton extends StatelessWidget {
       excludeSemantics: true,
       child: defaultTargetPlatform == TargetPlatform.iOS
           ? CupertinoButton.filled(onPressed: onPressed, child: child)
-          : ElevatedButton(
+          : FilledButton(
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
                 textStyle: const TextStyle(fontSize: 18),
@@ -43,12 +44,13 @@ class FatButton extends StatelessWidget {
 }
 
 /// Platform agnostic button meant for medium importance actions.
-class SecondaryButton extends StatelessWidget {
+class SecondaryButton extends StatefulWidget {
   const SecondaryButton({
     required this.semanticsLabel,
     required this.child,
     required this.onPressed,
     this.textStyle,
+    this.glowing = false,
     super.key,
   });
 
@@ -56,39 +58,85 @@ class SecondaryButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final Widget child;
   final TextStyle? textStyle;
+  final bool glowing;
+
+  @override
+  State<SecondaryButton> createState() => _SecondaryButtonState();
+}
+
+class _SecondaryButtonState extends State<SecondaryButton>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+    _animation = (defaultTargetPlatform == TargetPlatform.iOS
+            ? Tween<double>(begin: 0.5, end: 1.0)
+            : Tween<double>(begin: 0.0, end: 0.3))
+        .animate(_controller)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    if (widget.glowing) {
+      _controller.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(SecondaryButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.glowing != oldWidget.glowing) {
+      if (widget.glowing) {
+        _controller.repeat(reverse: true);
+      } else {
+        _controller.stop();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final cupertinoBrightness =
-        CupertinoTheme.maybeBrightnessOf(context) ?? Brightness.light;
     return Semantics(
       container: true,
       enabled: true,
       button: true,
-      label: semanticsLabel,
+      label: widget.semanticsLabel,
       excludeSemantics: true,
       child: defaultTargetPlatform == TargetPlatform.iOS
           ? CupertinoButton(
-              onPressed: onPressed,
-              color: CupertinoColors.secondarySystemFill,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-              child: DefaultTextStyle.merge(
-                style: TextStyle(
-                  color: cupertinoBrightness == Brightness.light
-                      ? Colors.black
-                      : Colors.white,
-                  // fontSize: 17,
-                  fontWeight: FontWeight.w500,
-                ),
-                child: child,
-              ),
+              color: widget.glowing
+                  ? CupertinoTheme.of(context)
+                      .primaryColor
+                      .withOpacity(_animation.value)
+                  : null,
+              onPressed: widget.onPressed,
+              child: widget.child,
             )
           : OutlinedButton(
-              onPressed: onPressed,
+              onPressed: widget.onPressed,
               style: OutlinedButton.styleFrom(
-                textStyle: textStyle,
+                textStyle: widget.textStyle,
+                backgroundColor: widget.glowing
+                    ? Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withOpacity(_animation.value)
+                    : null,
               ),
-              child: child,
+              child: widget.child,
             ),
     );
   }
@@ -115,6 +163,32 @@ class AppBarTextButton extends StatelessWidget {
         : TextButton(
             onPressed: onPressed,
             child: child,
+          );
+  }
+}
+
+/// A cogs icon button in the app bar
+class SettingsButton extends StatelessWidget {
+  const SettingsButton({
+    required this.onPressed,
+    super.key,
+  });
+
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoIconButton(
+            padding: EdgeInsets.zero,
+            semanticsLabel: context.l10n.settingsSettings,
+            onPressed: onPressed,
+            icon: const Icon(Icons.settings),
+          )
+        : IconButton(
+            tooltip: context.l10n.settingsSettings,
+            icon: const Icon(Icons.settings),
+            onPressed: onPressed,
           );
   }
 }
@@ -248,6 +322,7 @@ class BottomBarButton extends StatelessWidget {
     required this.label,
     required this.shortLabel,
     required this.onTap,
+    this.showAndroidTooltip = true,
     this.highlighted = false,
     this.showAndroidShortLabel = false,
   });
@@ -258,6 +333,7 @@ class BottomBarButton extends StatelessWidget {
   final VoidCallback? onTap;
   final bool highlighted;
   final bool showAndroidShortLabel;
+  final bool showAndroidTooltip;
 
   bool get enabled => onTap != null;
 
@@ -282,7 +358,7 @@ class BottomBarButton extends StatelessWidget {
                 : IconButton(
                     onPressed: onTap,
                     icon: Icon(icon),
-                    tooltip: label,
+                    tooltip: showAndroidTooltip ? label : null,
                     color: highlighted ? themeData.colorScheme.primary : null,
                   ),
           ),
@@ -420,6 +496,62 @@ class _CardButtonState extends State<CardButton> {
   }
 }
 
+/// InkWell that adapts to the iOS platform.
+///
+/// Used to create a button that shows a ripple on Android and a highlight on iOS.
+class AdaptiveInkWell extends StatefulWidget {
+  const AdaptiveInkWell({
+    required this.child,
+    this.onTap,
+    this.borderRadius,
+  });
+
+  final Widget child;
+  final VoidCallback? onTap;
+  final BorderRadius? borderRadius;
+
+  @override
+  State<AdaptiveInkWell> createState() => _AdaptiveInkWellState();
+}
+
+class _AdaptiveInkWellState extends State<AdaptiveInkWell> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return InkWell(
+          onTap: widget.onTap,
+          borderRadius: widget.borderRadius,
+          child: widget.child,
+        );
+      case TargetPlatform.iOS:
+        return GestureDetector(
+          onTap: widget.onTap,
+          onTapDown: (_) => setState(() => _isPressed = true),
+          onTapCancel: () => setState(() => _isPressed = false),
+          onTapUp: (_) => setState(() => _isPressed = false),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: widget.borderRadius,
+              color: _isPressed
+                  ? CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemGrey4,
+                      context,
+                    )
+                  : null,
+            ),
+            child: widget.child,
+          ),
+        );
+      default:
+        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        return const SizedBox.shrink();
+    }
+  }
+}
+
 /// Button to repeatedly call a funtion, triggered after a long press.
 ///
 /// This widget is just a wrapper, the visuals are delegated to the child widget.
@@ -433,13 +565,9 @@ class RepeatButton extends StatefulWidget {
     required this.onLongPress,
     required this.child,
     this.triggerDelays = const [
-      Duration(milliseconds: 600),
-      Duration(milliseconds: 400),
-      Duration(milliseconds: 250),
-      Duration(milliseconds: 200),
+      Duration(milliseconds: 500),
+      Duration(milliseconds: 300),
       Duration(milliseconds: 150),
-      Duration(milliseconds: 100),
-      Duration(milliseconds: 80),
     ],
     this.holdDelay = const Duration(milliseconds: 50),
   });

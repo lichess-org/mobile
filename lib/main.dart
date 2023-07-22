@@ -25,6 +25,7 @@ void main() async {
       );
 
       if (record.loggerName == 'AuthClient' ||
+          record.loggerName == 'LobbyAuthClient' ||
           record.loggerName == 'AuthSocket') {
         debugPrint(record.message);
       }

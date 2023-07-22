@@ -4,7 +4,7 @@ import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/ui/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import '../../test_utils.dart';
 import '../../test_app.dart';

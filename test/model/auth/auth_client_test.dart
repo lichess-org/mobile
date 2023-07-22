@@ -1,32 +1,44 @@
 import 'dart:io';
 import 'dart:convert';
-import 'package:logging/logging.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 
+import 'package:lichess_mobile/src/http_client.dart';
+import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import '../../test_container.dart';
 import '../../fake_crashlytics.dart';
-
-class MockLogger extends Mock implements Logger {}
 
 class MockClient extends Mock implements http.Client {}
 
 void main() {
-  final mockLogger = MockLogger();
-  final mockCrashlytics = FakeCrashlytics();
-
   setUpAll(() {
     registerFallbackValue(http.Request('GET', Uri.parse('http://api.test')));
   });
 
   group('AuthClient non stream', () {
     test('ValueResult responses are returned as success', () async {
-      final apiClient = AuthClient(mockLogger, FakeClient(), mockCrashlytics);
+      final container = await makeContainer(
+        overrides: [
+          httpClientProvider.overrideWith((ref) {
+            return FakeClient();
+          }),
+          crashlyticsProvider.overrideWith((ref) {
+            return FakeCrashlytics();
+          }),
+        ],
+      );
 
-      for (final method in [apiClient.get, apiClient.post, apiClient.delete]) {
+      final authClient = container.read(authClientProvider);
+
+      for (final method in [
+        authClient.get,
+        authClient.post,
+        authClient.delete
+      ]) {
         expect(
           await method.call(Uri.parse('http://api.test/will/return/200')),
           isA<ValueResult<http.Response>>(),
@@ -45,9 +57,24 @@ void main() {
     });
 
     test('error responses are returned as error', () async {
-      final apiClient = AuthClient(mockLogger, FakeClient(), mockCrashlytics);
+      final container = await makeContainer(
+        overrides: [
+          httpClientProvider.overrideWith((ref) {
+            return FakeClient();
+          }),
+          crashlyticsProvider.overrideWith((ref) {
+            return FakeCrashlytics();
+          }),
+        ],
+      );
 
-      for (final method in [apiClient.get, apiClient.post, apiClient.delete]) {
+      final authClient = container.read(authClientProvider);
+
+      for (final method in [
+        authClient.get,
+        authClient.post,
+        authClient.delete
+      ]) {
         expect(
           await method
               .call(Uri.parse('http://api.test/will/return/401'))
@@ -86,8 +113,22 @@ void main() {
     });
 
     test('catches socket error', () async {
-      final apiClient = AuthClient(mockLogger, FakeClient(), mockCrashlytics);
-      for (final method in [apiClient.get, apiClient.post, apiClient.delete]) {
+      final container = await makeContainer(
+        overrides: [
+          httpClientProvider.overrideWith((ref) {
+            return FakeClient();
+          }),
+          crashlyticsProvider.overrideWith((ref) {
+            return FakeCrashlytics();
+          }),
+        ],
+      );
+      final authClient = container.read(authClientProvider);
+      for (final method in [
+        authClient.get,
+        authClient.post,
+        authClient.delete
+      ]) {
         final resp = await method
             .call(Uri.parse('http://api.test/will/throw/socket/exception'));
         expect(resp.asError?.error, isA<GenericIOException>());
@@ -96,7 +137,17 @@ void main() {
 
     test('retry on error by default', () async {
       final mockClient = MockClient();
-      final apiClient = AuthClient(mockLogger, mockClient, mockCrashlytics);
+      final container = await makeContainer(
+        overrides: [
+          httpClientProvider.overrideWith((ref) {
+            return mockClient;
+          }),
+          crashlyticsProvider.overrideWith((ref) {
+            return FakeCrashlytics();
+          }),
+        ],
+      );
+      final authClient = container.read(authClientProvider);
 
       int retries = 3;
 
@@ -110,7 +161,7 @@ void main() {
             : http.StreamedResponse(_streamBody('ok'), 200);
       });
 
-      final resp = await apiClient.get(Uri.parse('http://api.test/retry'));
+      final resp = await authClient.get(Uri.parse('http://api.test/retry'));
 
       verify(() => mockClient.send(any())).called(3);
       expect(resp, isA<ValueResult<http.Response>>());
@@ -119,58 +170,88 @@ void main() {
 
   group('AuthClient stream', () {
     test('response is returned when ValueResult', () async {
-      final apiClient = AuthClient(mockLogger, FakeClient(), mockCrashlytics);
+      final container = await makeContainer(
+        overrides: [
+          httpClientProvider.overrideWith((ref) {
+            return FakeClient();
+          }),
+          crashlyticsProvider.overrideWith((ref) {
+            return FakeCrashlytics();
+          }),
+        ],
+      );
+      final authClient = container.read(authClientProvider);
 
       expect(
-        await apiClient.stream(Uri.parse('http://api.test/will/return/200')),
+        await authClient.stream(Uri.parse('http://api.test/will/return/200')),
         isA<http.StreamedResponse>(),
       );
 
       expect(
-        await apiClient.stream(Uri.parse('http://api.test/will/return/301')),
+        await authClient.stream(Uri.parse('http://api.test/will/return/301')),
         isA<http.StreamedResponse>(),
       );
 
       expect(
-        await apiClient.stream(Uri.parse('http://api.test/will/return/204')),
+        await authClient.stream(Uri.parse('http://api.test/will/return/204')),
         isA<http.StreamedResponse>(),
       );
     });
 
-    test('throws on error', () {
-      final apiClient = AuthClient(mockLogger, FakeClient(), mockCrashlytics);
+    test('throws on error', () async {
+      final container = await makeContainer(
+        overrides: [
+          httpClientProvider.overrideWith((ref) {
+            return FakeClient();
+          }),
+          crashlyticsProvider.overrideWith((ref) {
+            return FakeCrashlytics();
+          }),
+        ],
+      );
+      final authClient = container.read(authClientProvider);
 
       expect(
-        () => apiClient.stream(Uri.parse('http://api.test/will/return/401')),
+        () => authClient.stream(Uri.parse('http://api.test/will/return/401')),
         throwsA(isA<UnauthorizedException>()),
       );
 
       expect(
-        () => apiClient.stream(Uri.parse('http://api.test/will/return/403')),
+        () => authClient.stream(Uri.parse('http://api.test/will/return/403')),
         throwsA(isA<ForbiddenException>()),
       );
 
       expect(
-        () => apiClient.stream(Uri.parse('http://api.test/will/return/404')),
+        () => authClient.stream(Uri.parse('http://api.test/will/return/404')),
         throwsA(isA<NotFoundException>()),
       );
 
       expect(
-        () => apiClient.stream(Uri.parse('http://api.test/will/return/500')),
+        () => authClient.stream(Uri.parse('http://api.test/will/return/500')),
         throwsA(isA<ApiRequestException>()),
       );
 
       expect(
-        () => apiClient.stream(Uri.parse('http://api.test/will/return/503')),
+        () => authClient.stream(Uri.parse('http://api.test/will/return/503')),
         throwsA(isA<ApiRequestException>()),
       );
     });
 
-    test('socket error is a GenericIOException', () {
-      final apiClient = AuthClient(mockLogger, FakeClient(), mockCrashlytics);
+    test('socket error is a GenericIOException', () async {
+      final container = await makeContainer(
+        overrides: [
+          httpClientProvider.overrideWith((ref) {
+            return FakeClient();
+          }),
+          crashlyticsProvider.overrideWith((ref) {
+            return FakeCrashlytics();
+          }),
+        ],
+      );
+      final authClient = container.read(authClientProvider);
 
       expect(
-        () => apiClient
+        () => authClient
             .stream(Uri.parse('http://api.test/will/throw/socket/exception')),
         throwsA(isA<GenericIOException>()),
       );

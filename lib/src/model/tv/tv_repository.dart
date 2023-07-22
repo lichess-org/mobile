@@ -52,10 +52,6 @@ class TvRepository {
       );
     });
   }
-
-  void dispose() {
-    apiClient.close();
-  }
 }
 
 IMap<ChannelVariant, TvChannel> tvChannelsFromJson(Map<String, dynamic> json) {
