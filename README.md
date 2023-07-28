@@ -58,3 +58,11 @@ You can find more information about the `flutter run` command by running `flutte
 ## Internationalisation
 
 Don't edit the `app_en.arb` file by hand, this file is generated. More information [here](https://github.com/lichess-org/mobile/wiki/About-internationalisation).
+
+## Releasing
+
+Only for members of lichess team.
+
+1. Bump the pubspec.yaml version number. This can be in a PR making a change or a separate PR. Use semantic versioning to determine which part to increment. The version number after the + should also be incremented. For example 0.3.3+000303 with a patch should become 0.3.4+000304.
+2. Run workflow [Draft GitHub Release](https://github.com/lichess-org/mobile/actions/workflows/draft_github_release.yml)
+3. Run workflow [Deploy to Play Store](https://github.com/lichess-org/mobile/actions/workflows/deploy_play_store.yml)
