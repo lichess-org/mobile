@@ -57,9 +57,10 @@ You can find more information about the `flutter run` command by running `flutte
 
 ## Internationalisation
 
-Don't edit the `app_en.arb` file by hand, this file is generated. More information [here](https://github.com/lichess-org/mobile/wiki/About-internationalisation).
+Do not edit the `app_en.arb` file by hand, this file is generated. 
+More information [in the wiki](https://github.com/lichess-org/mobile/wiki/About-internationalisation).
 
-## Releasing
+## Releasing
 
 Only for members of lichess team.
 
