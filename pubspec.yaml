@@ -26,7 +26,7 @@ dependencies:
   shared_preferences: ^2.1.0
   cached_network_image: ^3.2.2
   dartchess: ^0.1.0
-  chessground: ^1.0.4
+  chessground: ^1.1.0
   soundpool: ^2.3.0
   meta: ^1.8.0
   deep_pick: ^1.0.0
