@@ -298,6 +298,9 @@ class _BottomBarState extends ConsumerState<_BottomBar>
       begin: 0.0,
       end: 1.0,
     ).animate(_animationController);
+
+    _currentPuzId = ref.read(widget.ctrlProvider).puzzle.puzzle.id;
+    _showSolutionButton();
   }
 
   @override
@@ -321,14 +324,19 @@ class _BottomBarState extends ConsumerState<_BottomBar>
   }
 
   @override
+  void didUpdateWidget(covariant _BottomBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final newPuzzId = ref.read(widget.ctrlProvider).puzzle.puzzle.id;
+    if (_currentPuzId != newPuzzId) {
+      _currentPuzId = newPuzzId;
+      _showSolutionButton();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final puzzleState = ref.watch(widget.ctrlProvider);
     final isDailyPuzzle = puzzleState.puzzle.isDailyPuzzle == true;
-
-    if (puzzleState.puzzle.puzzle.id != _currentPuzId) {
-      _currentPuzId = puzzleState.puzzle.puzzle.id;
-      _showSolutionButton();
-    }
 
     return Container(
       padding: Styles.horizontalBodyPadding,
