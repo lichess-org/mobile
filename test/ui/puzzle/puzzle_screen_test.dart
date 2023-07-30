@@ -365,8 +365,8 @@ void main() {
         expect(find.byType(cg.Board), findsOneWidget);
         expect(find.text('Your turn'), findsOneWidget);
 
-        // await for first move to be played
-        await tester.pump(const Duration(milliseconds: 1500));
+        // await for first move to be played and view solution button to appear
+        await tester.pump(const Duration(seconds: 5));
 
         expect(find.byKey(const Key('g4-blackRook')), findsOneWidget);
 
