@@ -216,6 +216,9 @@ void main() {
 
         expect(find.text('Success!'), findsNothing);
         expect(find.text('Your turn'), findsOneWidget);
+
+        // await for view solution timer
+        await tester.pump(const Duration(seconds: 4));
       },
       variant: kPlatformVariant,
     );
