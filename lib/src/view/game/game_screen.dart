@@ -22,7 +22,6 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -391,44 +390,44 @@ class _Preferences extends ConsumerWidget {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
     return SafeArea(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: ListView(
         children: [
-          ListSection(
-            hasLeading: false,
-            showDivider: false,
-            children: [
-              SwitchSettingTile(
-                title: Text(context.l10n.sound),
-                value: isSoundEnabled,
-                onChanged: (value) {
-                  ref
-                      .read(generalPreferencesProvider.notifier)
-                      .toggleSoundEnabled();
-                },
-              ),
-              SwitchSettingTile(
-                title: const Text('Haptic feedback'),
-                value: boardPrefs.hapticFeedback,
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .toggleHapticFeedback();
-                },
-              ),
-              SwitchSettingTile(
-                title: Text(
-                  context.l10n.preferencesPieceAnimation,
-                  maxLines: 2,
-                ),
-                value: boardPrefs.pieceAnimation,
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .togglePieceAnimation();
-                },
-              ),
-            ],
+          Padding(
+            padding: Styles.bodyPadding,
+            child: Text(
+              context.l10n.preferencesPreferences,
+              style: Styles.title,
+            ),
+          ),
+          SwitchSettingTile(
+            title: Text(context.l10n.sound),
+            value: isSoundEnabled,
+            onChanged: (value) {
+              ref
+                  .read(generalPreferencesProvider.notifier)
+                  .toggleSoundEnabled();
+            },
+          ),
+          SwitchSettingTile(
+            title: const Text('Haptic feedback'),
+            value: boardPrefs.hapticFeedback,
+            onChanged: (value) {
+              ref
+                  .read(boardPreferencesProvider.notifier)
+                  .toggleHapticFeedback();
+            },
+          ),
+          SwitchSettingTile(
+            title: Text(
+              context.l10n.preferencesPieceAnimation,
+              maxLines: 2,
+            ),
+            value: boardPrefs.pieceAnimation,
+            onChanged: (value) {
+              ref
+                  .read(boardPreferencesProvider.notifier)
+                  .togglePieceAnimation();
+            },
           ),
         ],
       ),

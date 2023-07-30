@@ -81,74 +81,66 @@ Future<T?> showMaterialActionSheet<T>({
   bool isDismissible = true,
 }) {
   final defaultTextStyle =
-      Theme.of(context).textTheme.titleLarge ?? const TextStyle(fontSize: 20);
-  return showModalBottomSheet<T>(
+      Theme.of(context).textTheme.titleMedium ?? const TextStyle(fontSize: 20);
+  return showDialog<T>(
     context: context,
-    isDismissible: isDismissible,
-    enableDrag: isDismissible,
-    isScrollControlled: true,
+    barrierDismissible: isDismissible,
     builder: (BuildContext context) {
-      final double screenHeight = MediaQuery.of(context).size.height;
-      return SafeArea(
-        child: WillPopScope(
-          onWillPop: () async => isDismissible,
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: screenHeight - (screenHeight / 10),
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  if (title != null) ...[
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Center(child: title),
+      return Dialog(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              if (title != null) ...[
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Center(child: title),
+                ),
+              ],
+              ...actions.mapIndexed<Widget>((index, action) {
+                return InkWell(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(
+                      index == 0 ? 28 : 0,
                     ),
-                  ],
-                  ...actions.mapIndexed<Widget>((index, action) {
-                    return InkWell(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(
-                          index == 0 ? 28 : 0,
+                    bottom: Radius.circular(
+                      index == actions.length - 1 ? 28 : 0,
+                    ),
+                  ),
+                  onTap: () {
+                    action.onPressed(context);
+                    if (action.dismissOnPress) {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        if (action.leading != null) ...[
+                          action.leading!,
+                          const SizedBox(width: 15),
+                        ],
+                        Expanded(
+                          child: DefaultTextStyle(
+                            style: defaultTextStyle,
+                            textAlign: action.leading != null
+                                ? TextAlign.start
+                                : TextAlign.center,
+                            child: action.label,
+                          ),
                         ),
-                      ),
-                      onTap: () {
-                        action.onPressed(context);
-                        if (action.dismissOnPress) {
-                          Navigator.of(context).pop();
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          children: [
-                            if (action.leading != null) ...[
-                              action.leading!,
-                              const SizedBox(width: 15),
-                            ],
-                            Expanded(
-                              child: DefaultTextStyle(
-                                style: defaultTextStyle,
-                                textAlign: action.leading != null
-                                    ? TextAlign.start
-                                    : TextAlign.center,
-                                child: action.label,
-                              ),
-                            ),
-                            if (action.trailing != null) ...[
-                              const SizedBox(width: 10),
-                              action.trailing!,
-                            ],
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
-                ],
-              ),
-            ),
+                        if (action.trailing != null) ...[
+                          const SizedBox(width: 10),
+                          action.trailing!,
+                        ],
+                      ],
+                    ),
+                  ),
+                );
+              }),
+            ],
           ),
         ),
       );
