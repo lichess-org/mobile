@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
@@ -25,6 +26,7 @@ import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
+import 'package:lichess_mobile/src/utils/wakelock.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
@@ -46,7 +48,7 @@ class GameScreen extends ConsumerStatefulWidget {
 }
 
 class _GameScreenState extends ConsumerState<GameScreen>
-    with AndroidImmersiveMode, RouteAware {
+    with AndroidImmersiveMode, RouteAware, Wakelock {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -241,6 +243,7 @@ class _Body extends ConsumerWidget {
       if (prev?.hasValue == true && state.hasValue) {
         if (prev!.requireValue.game.playable == true &&
             state.requireValue.game.playable == false) {
+          WakelockPlus.disable();
           Future.delayed(const Duration(milliseconds: 500), () {
             showAdaptiveDialog<void>(
               context: context,
