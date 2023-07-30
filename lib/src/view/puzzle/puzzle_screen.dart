@@ -1,12 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
@@ -257,7 +254,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
   }
 }
 
-class _BottomBar extends ConsumerStatefulWidget {
+class _BottomBar extends ConsumerWidget {
   const _BottomBar({
     required this.initialPuzzleContext,
     required this.ctrlProvider,
@@ -266,76 +263,15 @@ class _BottomBar extends ConsumerStatefulWidget {
   final PuzzleContext initialPuzzleContext;
   final PuzzleCtrlProvider ctrlProvider;
 
-  @override
-  ConsumerState<_BottomBar> createState() => _BottomBarState();
-}
-
-class _BottomBarState extends ConsumerState<_BottomBar>
-    with SingleTickerProviderStateMixin {
   static const _repeatTriggerDelays = [
     Duration(milliseconds: 500),
     Duration(milliseconds: 250),
     Duration(milliseconds: 100),
   ];
 
-  late AnimationController _animationController;
-  late Animation<double> _animation;
-  PuzzleId? _currentPuzId;
-  Timer? _showSolutionTimer;
-  bool _showSolution = false;
-
   @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(
-        seconds: 1,
-      ),
-    );
-
-    _animation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(_animationController);
-
-    _currentPuzId = ref.read(widget.ctrlProvider).puzzle.puzzle.id;
-    _showSolutionButton();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    _showSolutionTimer?.cancel();
-    super.dispose();
-  }
-
-  void _showSolutionButton() {
-    _showSolution = false;
-    _animationController.reset();
-    _showSolutionTimer = Timer(const Duration(seconds: 3), () {
-      if (mounted) {
-        setState(() {
-          _animationController.forward(from: 0.0);
-          _showSolution = true;
-        });
-      }
-    });
-  }
-
-  @override
-  void didUpdateWidget(covariant _BottomBar oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    final newPuzzId = ref.read(widget.ctrlProvider).puzzle.puzzle.id;
-    if (_currentPuzId != newPuzzId) {
-      _currentPuzId = newPuzzId;
-      _showSolutionButton();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final puzzleState = ref.watch(widget.ctrlProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final puzzleState = ref.watch(ctrlProvider);
     final isDailyPuzzle = puzzleState.puzzle.isDailyPuzzle == true;
 
     return Container(
@@ -348,12 +284,12 @@ class _BottomBarState extends ConsumerState<_BottomBar>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            if (widget.initialPuzzleContext.userId != null &&
+            if (initialPuzzleContext.userId != null &&
                 !isDailyPuzzle &&
                 puzzleState.mode != PuzzleMode.view)
               _DifficultySelector(
-                initialPuzzleContext: widget.initialPuzzleContext,
-                ctrlProvider: widget.ctrlProvider,
+                initialPuzzleContext: initialPuzzleContext,
+                ctrlProvider: ctrlProvider,
               ),
             if (puzzleState.mode == PuzzleMode.view)
               BottomBarButton(
@@ -371,9 +307,7 @@ class _BottomBarState extends ConsumerState<_BottomBar>
             if (puzzleState.mode == PuzzleMode.view)
               BottomBarButton(
                 onTap: () {
-                  ref
-                      .read(widget.ctrlProvider.notifier)
-                      .toggleLocalEvaluation();
+                  ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
                 },
                 label: context.l10n.toggleLocalEvaluation,
                 shortLabel: 'Evaluation',
@@ -381,18 +315,14 @@ class _BottomBarState extends ConsumerState<_BottomBar>
                 highlighted: puzzleState.isLocalEvalEnabled,
               ),
             if (puzzleState.mode != PuzzleMode.view)
-              FadeTransition(
-                opacity: _animation,
-                child: BottomBarButton(
-                  icon: Icons.help,
-                  label: context.l10n.viewTheSolution,
-                  shortLabel: context.l10n.solution,
-                  showAndroidShortLabel: true,
-                  onTap: _showSolution
-                      ? () =>
-                          ref.read(widget.ctrlProvider.notifier).viewSolution()
-                      : null,
-                ),
+              BottomBarButton(
+                icon: Icons.help,
+                label: context.l10n.viewTheSolution,
+                shortLabel: context.l10n.solution,
+                showAndroidShortLabel: true,
+                onTap: puzzleState.canViewSolution
+                    ? () => ref.read(ctrlProvider.notifier).viewSolution()
+                    : null,
               ),
             if (puzzleState.mode == PuzzleMode.view)
               RepeatButton(
@@ -427,7 +357,7 @@ class _BottomBarState extends ConsumerState<_BottomBar>
                 onTap: puzzleState.mode == PuzzleMode.view &&
                         puzzleState.nextContext != null
                     ? () => ref
-                        .read(widget.ctrlProvider.notifier)
+                        .read(ctrlProvider.notifier)
                         .loadPuzzle(puzzleState.nextContext!)
                     : null,
                 highlighted: true,
@@ -442,13 +372,11 @@ class _BottomBarState extends ConsumerState<_BottomBar>
   }
 
   void _moveForward(WidgetRef ref, {bool hapticFeedback = true}) {
-    ref
-        .read(widget.ctrlProvider.notifier)
-        .userNext(hapticFeedback: hapticFeedback);
+    ref.read(ctrlProvider.notifier).userNext(hapticFeedback: hapticFeedback);
   }
 
   void _moveBackward(WidgetRef ref) {
-    ref.read(widget.ctrlProvider.notifier).userPrevious();
+    ref.read(ctrlProvider.notifier).userPrevious();
   }
 }
 

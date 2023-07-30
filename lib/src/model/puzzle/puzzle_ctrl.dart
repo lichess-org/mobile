@@ -33,6 +33,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
   // ignore: avoid-late-keyword
   late Node _gameTree;
   Timer? _firstMoveTimer;
+  Timer? _enableSolutionButtonTimer;
   Timer? _viewSolutionTimer;
   // on streak, we pre-load the next puzzle to avoid a delay when the user
   // completes the current one
@@ -48,6 +49,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
       _viewSolutionTimer?.cancel();
+      _enableSolutionButtonTimer?.cancel();
       _engineEvalDebounce.dispose();
     });
 
@@ -66,6 +68,13 @@ class PuzzleCtrl extends _$PuzzleCtrl {
       _setPath(state.initialPath);
     });
 
+    // enable solution button after 4 seconds
+    _enableSolutionButtonTimer = Timer(const Duration(seconds: 4), () {
+      state = state.copyWith(
+        canViewSolution: true,
+      );
+    });
+
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
 
     // preload next streak puzzle
@@ -82,6 +91,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
       currentPath: UciPath.empty,
       nodeList: IList([ViewNode.fromNode(_gameTree)]),
       pov: _gameTree.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
+      canViewSolution: false,
       resultSent: false,
       isChangingDifficulty: false,
       isLocalEvalEnabled: false,
@@ -504,6 +514,7 @@ class PuzzleCtrlState with _$PuzzleCtrlState {
     Move? lastMove,
     PuzzleResult? result,
     PuzzleFeedback? feedback,
+    required bool canViewSolution,
     required bool isLocalEvalEnabled,
     required bool resultSent,
     required bool isChangingDifficulty,
