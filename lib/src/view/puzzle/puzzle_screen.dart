@@ -320,9 +320,9 @@ class _BottomBar extends ConsumerWidget {
                 label: context.l10n.viewTheSolution,
                 shortLabel: context.l10n.solution,
                 showAndroidShortLabel: true,
-                onTap: puzzleState.mode == PuzzleMode.view
-                    ? null
-                    : () => ref.read(ctrlProvider.notifier).viewSolution(),
+                onTap: puzzleState.canViewSolution
+                    ? () => ref.read(ctrlProvider.notifier).viewSolution()
+                    : null,
               ),
             if (puzzleState.mode == PuzzleMode.view)
               RepeatButton(
