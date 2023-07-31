@@ -65,7 +65,7 @@ class _AppState extends ConsumerState<App> {
         (state) => state.boardTheme,
       ),
     );
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.sizeOf(context).height;
 
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,

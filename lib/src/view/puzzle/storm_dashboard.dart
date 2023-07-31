@@ -203,7 +203,7 @@ class _Body extends ConsumerWidget {
 class _Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final containerHeigth = MediaQuery.of(context).size.width / 2 * 0.8;
+    final containerHeight = MediaQuery.sizeOf(context).width / 2 * 0.8;
     return SafeArea(
       child: Shimmer(
         child: ShimmerLoading(
@@ -219,7 +219,7 @@ class _Loading extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Container(
-                        width: containerHeigth,
+                        width: containerHeight,
                         height: 60,
                         decoration: const BoxDecoration(
                           color: Colors.black,
@@ -232,7 +232,7 @@ class _Loading extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Container(
-                        width: containerHeigth,
+                        width: containerHeight,
                         height: 60,
                         decoration: const BoxDecoration(
                           color: Colors.black,
@@ -249,7 +249,7 @@ class _Loading extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Container(
-                        width: containerHeigth,
+                        width: containerHeight,
                         height: 60,
                         decoration: const BoxDecoration(
                           color: Colors.black,
@@ -262,7 +262,7 @@ class _Loading extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Container(
-                        width: containerHeigth,
+                        width: containerHeight,
                         height: 60,
                         decoration: const BoxDecoration(
                           color: Colors.black,

@@ -119,7 +119,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
         ? ClockStyle.darkThemeStyle
         : ClockStyle.lightThemeStyle;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
-    final screenHeight = mediaQueryData.size.height;
+    final screenHeight = MediaQuery.sizeOf(context).height;
 
     return Container(
       decoration: BoxDecoration(
