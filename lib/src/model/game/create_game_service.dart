@@ -28,7 +28,7 @@ class CreateGameService {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   /// Create a new online game seek based on saved preferences.
-  Future<GameFullId> newOnlineGame() async {
+  Future<GameFullId> newLobbyGame() async {
     if (_socketSubscription != null) {
       throw StateError('Already creating a game.');
     }

@@ -22,14 +22,14 @@ class LobbyGame extends _$LobbyGame {
       _service.cancel();
       _key = null;
     });
-    return _service.newOnlineGame();
+    return _service.newLobbyGame();
   }
 
   Future<void> newOpponent() async {
     final key = _key;
     state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(() {
-      return _service.newOnlineGame();
+      return _service.newLobbyGame();
     });
     // mounted property check logic from:
     // https://github.com/rrousselGit/riverpod/issues/1879#issuecomment-1303189191
