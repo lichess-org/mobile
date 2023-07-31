@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
+import 'package:lichess_mobile/src/utils/wakelock.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
@@ -46,7 +47,7 @@ class GameScreen extends ConsumerStatefulWidget {
 }
 
 class _GameScreenState extends ConsumerState<GameScreen>
-    with AndroidImmersiveMode, RouteAware {
+    with AndroidImmersiveMode, RouteAware, Wakelock {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();

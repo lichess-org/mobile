@@ -1499,6 +1499,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "11.8.0"
+  wakelock_plus:
+    dependency: "direct main"
+    description:
+      name: wakelock_plus
+      sha256: aac3f3258f01781ec9212df94eecef1eb9ba9350e106728def405baa096ba413
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
+  wakelock_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: wakelock_plus_platform_interface
+      sha256: "40fabed5da06caff0796dc638e1f07ee395fb18801fbff3255a2372db2d80385"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   watcher:
     dependency: transitive
     description:
