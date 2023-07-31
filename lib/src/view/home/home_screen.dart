@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
@@ -340,8 +341,8 @@ class _CreateAGame extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timeControlPref = ref
-        .watch(playPreferencesProvider.select((prefs) => prefs.timeIncrement));
+    final playPrefs = ref.watch(playPreferencesProvider);
+    final session = ref.watch(authSessionProvider);
     return SmallBoardPreview(
       orientation: Side.white.cg,
       fen: kInitialFEN,
@@ -356,12 +357,12 @@ class _CreateAGame extends ConsumerWidget {
           Row(
             children: [
               Icon(
-                timeControlPref.speed.icon,
+                playPrefs.timeIncrement.speed.icon,
                 size: 20,
                 color: DefaultTextStyle.of(context).style.color,
               ),
               const SizedBox(width: 5),
-              Text(timeControlPref.display, style: Styles.timeControl),
+              Text(playPrefs.timeIncrement.display, style: Styles.timeControl),
             ],
           ),
         ],
@@ -371,7 +372,9 @@ class _CreateAGame extends ConsumerWidget {
           context,
           rootNavigator: true,
           builder: (BuildContext context) {
-            return const GameScreen();
+            return GameScreen(
+              seek: GameSeek.fastPairingSeekFromPrefs(playPrefs, session),
+            );
           },
         );
       },

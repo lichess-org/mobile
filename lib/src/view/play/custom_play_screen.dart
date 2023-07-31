@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -141,6 +142,27 @@ class _Body extends ConsumerWidget {
                 },
               ),
             ),
+          if (preferences.customRated == false)
+            PlatformListTile(
+              title: Text(context.l10n.side),
+              trailing: AdaptiveTextButton(
+                onPressed: () {
+                  showChoicePicker<PlayableSide>(
+                    context,
+                    choices: PlayableSide.values,
+                    selectedItem: preferences.customSide,
+                    labelBuilder: (PlayableSide side) =>
+                        Text(_customSideLabel(context, side)),
+                    onSelectedItemChanged: (PlayableSide side) {
+                      ref
+                          .read(playPreferencesProvider.notifier)
+                          .setCustomSide(side);
+                    },
+                  );
+                },
+                child: Text(_customSideLabel(context, preferences.customSide)),
+              ),
+            ),
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -152,7 +174,12 @@ class _Body extends ConsumerWidget {
                         context,
                         rootNavigator: true,
                         builder: (BuildContext context) {
-                          return const GameScreen();
+                          return GameScreen(
+                            seek: GameSeek.customSeekFromPrefs(
+                              preferences,
+                              session,
+                            ),
+                          );
                         },
                       );
                     }
@@ -178,5 +205,16 @@ String _clockTimeLabel(num seconds) {
       return '¼';
     default:
       return '${(seconds / 60).floor()}';
+  }
+}
+
+String _customSideLabel(BuildContext context, PlayableSide side) {
+  switch (side) {
+    case PlayableSide.white:
+      return context.l10n.white;
+    case PlayableSide.black:
+      return context.l10n.black;
+    case PlayableSide.random:
+      return context.l10n.randomColor;
   }
 }

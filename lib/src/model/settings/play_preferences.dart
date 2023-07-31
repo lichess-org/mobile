@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'package:flutter/widgets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
@@ -12,6 +10,8 @@ part 'play_preferences.freezed.dart';
 part 'play_preferences.g.dart';
 
 const _prefKey = 'preferences.play';
+
+enum PlayableSide { random, white, black }
 
 @Riverpod(keepAlive: true)
 class PlayPreferences extends _$PlayPreferences {
@@ -46,7 +46,7 @@ class PlayPreferences extends _$PlayPreferences {
     return _save(state.copyWith(customRated: rated));
   }
 
-  Future<void> setCustomSide(Side? side) {
+  Future<void> setCustomSide(PlayableSide side) {
     return _save(state.copyWith(customSide: side));
   }
 
@@ -73,7 +73,7 @@ class PlayPrefs with _$PlayPrefs {
     required int customIncrementSeconds,
     required Variant customVariant,
     required bool customRated,
-    Side? customSide,
+    required PlayableSide customSide,
   }) = _PlayPrefs;
 
   static const defaults = PlayPrefs(
@@ -82,7 +82,7 @@ class PlayPrefs with _$PlayPrefs {
     customIncrementSeconds: 0,
     customVariant: Variant.standard,
     customRated: false,
-    customSide: null,
+    customSide: PlayableSide.random,
   );
 
   factory PlayPrefs.fromJson(Map<String, dynamic> json) {
@@ -92,8 +92,6 @@ class PlayPrefs with _$PlayPrefs {
       return defaults;
     }
   }
-
-  IconData get speedIcon => timeIncrement.speed.icon;
 }
 
 const kAvailableTimesInSeconds = [

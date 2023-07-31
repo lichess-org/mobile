@@ -6,11 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
-import 'package:lichess_mobile/src/model/game/lobby_game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
+import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
@@ -39,8 +39,11 @@ final RouteObserver<PageRoute<void>> gameRouteObserver =
 
 class GameScreen extends ConsumerStatefulWidget {
   const GameScreen({
+    required this.seek,
     super.key,
   });
+
+  final GameSeek seek;
 
   @override
   ConsumerState<GameScreen> createState() => _GameScreenState();
@@ -70,7 +73,8 @@ class _GameScreenState extends ConsumerState<GameScreen>
 
   @override
   Widget build(BuildContext context) {
-    final gameId = ref.watch(lobbyGameProvider);
+    final gameProvider = lobbyGameProvider(widget.seek);
+    final gameId = ref.watch(gameProvider);
     final playPrefs = ref.watch(playPreferencesProvider);
 
     return gameId.when(
@@ -79,7 +83,11 @@ class _GameScreenState extends ConsumerState<GameScreen>
         final gameState = ref.watch(ctrlProvider);
         return gameState.when(
           data: (state) {
-            final body = _Body(gameState: state, ctrlProvider: ctrlProvider);
+            final body = _Body(
+              gameState: state,
+              ctrlProvider: ctrlProvider,
+              gameProvider: gameProvider,
+            );
             return PlatformWidget(
               androidBuilder: (context) => _androidBuilder(
                 context: context,
@@ -158,7 +166,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
                 child: PingRating(size: 24.0),
               )
             : null,
-        title: _GameTitle(playPrefs: playPrefs),
+        title: _GameTitle(seek: widget.seek),
         actions: [
           SettingsButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
@@ -188,7 +196,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
                 child: PingRating(size: 24.0),
               )
             : null,
-        middle: _GameTitle(playPrefs: playPrefs),
+        middle: _GameTitle(seek: widget.seek),
         trailing: SettingsButton(
           onPressed: () => showAdaptiveBottomSheet<void>(
             context: context,
@@ -204,24 +212,24 @@ class _GameScreenState extends ConsumerState<GameScreen>
 
 class _GameTitle extends ConsumerWidget {
   const _GameTitle({
-    required this.playPrefs,
+    required this.seek,
   });
 
-  final PlayPrefs playPrefs;
+  final GameSeek seek;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
-    final mode = session == null ? '' : ' • ${context.l10n.rated}';
+    final mode =
+        seek.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(
-          playPrefs.speedIcon,
+          seek.speed.icon,
           color: DefaultTextStyle.of(context).style.color,
         ),
         const SizedBox(width: 4.0),
-        Text('${playPrefs.timeIncrement.display}$mode'),
+        Text('${seek.timeIncrement.display}$mode'),
       ],
     );
   }
@@ -231,10 +239,12 @@ class _Body extends ConsumerWidget {
   const _Body({
     required this.gameState,
     required this.ctrlProvider,
+    required this.gameProvider,
   });
 
   final GameCtrlState gameState;
   final GameCtrlProvider ctrlProvider;
+  final LobbyGameProvider gameProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -247,6 +257,7 @@ class _Body extends ConsumerWidget {
               context: context,
               builder: (context) => _GameEndDialog(
                 ctrlProvider: ctrlProvider,
+                gameProvider: gameProvider,
               ),
               barrierDismissible: true,
             );
@@ -268,7 +279,7 @@ class _Body extends ConsumerWidget {
           // Be sure to pop any dialogs that might be on top of the game screen.
           Navigator.of(context).popUntil((route) => route is! RawDialogRoute);
           ref
-              .read(lobbyGameProvider.notifier)
+              .read(gameProvider.notifier)
               .rematch(state.requireValue.redirectGameId!);
         }
       }
@@ -365,7 +376,11 @@ class _Body extends ConsumerWidget {
             ),
           ),
         ),
-        _GameBottomBar(gameState: gameState, ctrlProvider: ctrlProvider),
+        _GameBottomBar(
+          gameState: gameState,
+          ctrlProvider: ctrlProvider,
+          gameProvider: gameProvider,
+        ),
       ],
     );
 
@@ -440,10 +455,12 @@ class _GameBottomBar extends ConsumerWidget {
   const _GameBottomBar({
     required this.gameState,
     required this.ctrlProvider,
+    required this.gameProvider,
   });
 
   final GameCtrlState gameState;
   final GameCtrlProvider ctrlProvider;
+  final LobbyGameProvider gameProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -694,7 +711,7 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             label: Text(context.l10n.newOpponent),
             onPressed: (_) {
-              ref.read(lobbyGameProvider.notifier).newOpponent();
+              ref.read(gameProvider.notifier).newOpponent();
             },
           ),
       ],
@@ -705,9 +722,11 @@ class _GameBottomBar extends ConsumerWidget {
 class _GameEndDialog extends ConsumerStatefulWidget {
   const _GameEndDialog({
     required this.ctrlProvider,
+    required this.gameProvider,
   });
 
   final GameCtrlProvider ctrlProvider;
+  final LobbyGameProvider gameProvider;
 
   @override
   ConsumerState<_GameEndDialog> createState() => _GameEndDialogState();
@@ -796,7 +815,7 @@ class _GameEndDialogState extends ConsumerState<_GameEndDialog> {
           semanticsLabel: context.l10n.newOpponent,
           onPressed: _activateButtons
               ? () {
-                  ref.read(lobbyGameProvider.notifier).newOpponent();
+                  ref.read(widget.gameProvider.notifier).newOpponent();
                   // Other alert dialogs may be shown before this one, so be sure to pop them all
                   Navigator.of(context)
                       .popUntil((route) => route is! RawDialogRoute);

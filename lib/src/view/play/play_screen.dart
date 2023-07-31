@@ -9,6 +9,8 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 
@@ -45,6 +47,8 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final playPrefs = ref.watch(playPreferencesProvider);
+    final session = ref.watch(authSessionProvider);
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -65,7 +69,10 @@ class _Body extends ConsumerWidget {
                   context,
                   rootNavigator: true,
                   builder: (BuildContext context) {
-                    return const GameScreen();
+                    return GameScreen(
+                      seek:
+                          GameSeek.fastPairingSeekFromPrefs(playPrefs, session),
+                    );
                   },
                 );
               },
