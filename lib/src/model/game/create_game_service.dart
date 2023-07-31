@@ -58,7 +58,6 @@ class CreateGameService {
         GameSeek(
           time: Duration(seconds: playPref.timeIncrement.time),
           increment: Duration(seconds: playPref.timeIncrement.increment),
-          // TODO add rated choice
           rated: session != null,
         ),
         sri: socket.sri,

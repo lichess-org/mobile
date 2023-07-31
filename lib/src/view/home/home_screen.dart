@@ -187,6 +187,7 @@ class _HomeScaffold extends StatelessWidget {
                 onPressed: () {
                   pushPlatformRoute(
                     context,
+                    title: context.l10n.play,
                     builder: (_) => const PlayScreen(),
                   );
                 },

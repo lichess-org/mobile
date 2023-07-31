@@ -20,15 +20,7 @@ class BoardPreferences extends _$BoardPreferences {
         ? BoardPrefs.fromJson(
             jsonDecode(stored) as Map<String, dynamic>,
           )
-        : const BoardPrefs(
-            pieceSet: PieceSet.staunty,
-            boardTheme: BoardTheme.brown,
-            hapticFeedback: true,
-            showLegalMoves: true,
-            boardHighlights: true,
-            coordinates: true,
-            pieceAnimation: true,
-          );
+        : BoardPrefs.defaults;
   }
 
   Future<void> setPieceSet(PieceSet pieceSet) {
@@ -83,8 +75,23 @@ class BoardPrefs with _$BoardPrefs {
     required bool pieceAnimation,
   }) = _BoardPrefs;
 
-  factory BoardPrefs.fromJson(Map<String, dynamic> json) =>
-      _$BoardPrefsFromJson(json);
+  static const defaults = BoardPrefs(
+    pieceSet: PieceSet.staunty,
+    boardTheme: BoardTheme.brown,
+    hapticFeedback: true,
+    showLegalMoves: true,
+    boardHighlights: true,
+    coordinates: true,
+    pieceAnimation: true,
+  );
+
+  factory BoardPrefs.fromJson(Map<String, dynamic> json) {
+    try {
+      return _$BoardPrefsFromJson(json);
+    } catch (_) {
+      return defaults;
+    }
+  }
 
   Duration get pieceAnimationDuration =>
       pieceAnimation ? const Duration(milliseconds: 200) : Duration.zero;

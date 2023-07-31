@@ -193,6 +193,30 @@ class SettingsButton extends StatelessWidget {
   }
 }
 
+class AdaptiveTextButton extends StatelessWidget {
+  const AdaptiveTextButton({
+    required this.child,
+    required this.onPressed,
+    super.key,
+  });
+
+  final VoidCallback? onPressed;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoButton(
+            onPressed: onPressed,
+            child: child,
+          )
+        : TextButton(
+            onPressed: onPressed,
+            child: child,
+          );
+  }
+}
+
 /// Button that explicitly reduce padding, thus does not conform to accessibility
 /// guidelines. So use sparingly.
 class NoPaddingTextButton extends StatelessWidget {

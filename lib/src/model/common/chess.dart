@@ -47,16 +47,20 @@ const ISet<Variant> supportedVariants = ISetConst({
 });
 
 enum Variant {
-  standard,
-  chess960,
-  fromPosition,
-  antichess,
-  kingOfTheHill,
-  threeCheck,
-  atomic,
-  horde,
-  racingKings,
-  crazyhouse;
+  standard('Standard'),
+  chess960('Chess960'),
+  fromPosition('From Position'),
+  antichess('Antichess'),
+  kingOfTheHill('King of the Hill'),
+  threeCheck('Three Check'),
+  atomic('Atomic'),
+  horde('Horde'),
+  racingKings('Racing Kings'),
+  crazyhouse('Crazyhouse');
+
+  const Variant(this.label);
+
+  final String label;
 
   bool get isSupported => supportedVariants.contains(this);
 

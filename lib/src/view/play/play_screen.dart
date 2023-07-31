@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 
 import './time_control_modal.dart';
+import './custom_play_screen.dart';
 
 class PlayScreen extends StatelessWidget {
   const PlayScreen();
@@ -23,12 +24,9 @@ class PlayScreen extends StatelessWidget {
   }
 
   Widget _buildIos(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        previousPageTitle: 'Home',
-        middle: Text(context.l10n.play),
-      ),
-      child: const _Body(),
+    return const CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(),
+      child: _Body(),
     );
   }
 
@@ -72,6 +70,23 @@ class _Body extends ConsumerWidget {
                 );
               },
               child: Text(context.l10n.createAGame),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: SecondaryButton(
+              semanticsLabel: context.l10n.custom,
+              onPressed: () {
+                pushPlatformRoute(
+                  context,
+                  title: context.l10n.custom,
+                  builder: (BuildContext context) {
+                    return const CustomPlayScreen();
+                  },
+                );
+              },
+              child: Text(context.l10n.custom),
             ),
           ),
         ],
