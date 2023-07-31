@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
-import 'package:wakelock_plus/wakelock_plus.dart';
 
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
@@ -243,7 +242,6 @@ class _Body extends ConsumerWidget {
       if (prev?.hasValue == true && state.hasValue) {
         if (prev!.requireValue.game.playable == true &&
             state.requireValue.game.playable == false) {
-          WakelockPlus.disable();
           Future.delayed(const Duration(milliseconds: 500), () {
             showAdaptiveDialog<void>(
               context: context,

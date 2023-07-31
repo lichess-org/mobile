@@ -30,6 +30,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import "package:lichess_mobile/src/utils/l10n_context.dart";
 import "package:lichess_mobile/src/utils/immersive_mode.dart";
+import 'package:lichess_mobile/src/utils/wakelock.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
 import 'history_boards.dart';
@@ -109,7 +110,8 @@ class _Body extends ConsumerStatefulWidget {
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
+class _BodyState extends ConsumerState<_Body>
+    with AndroidImmersiveMode, Wakelock {
   @override
   Widget build(BuildContext context) {
     final ctrlProvider = stormCtrlProvider(widget.data.puzzles);
