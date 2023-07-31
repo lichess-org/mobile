@@ -13,10 +13,10 @@ packages:
     dependency: transitive
     description:
       name: _flutterfire_internals
-      sha256: d687576bb973e8d2539d0b4615d985336269a0dbe1b3984e937fd22d31406fb8
+      sha256: "5dce45a06d386358334eb1689108db6455d90ceb0d75848d5f4819283d4ee2b8"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.0"
+    version: "1.3.4"
   analyzer:
     dependency: transitive
     description:
@@ -49,14 +49,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.0"
-  ansicolor:
-    dependency: transitive
-    description:
-      name: ansicolor
-      sha256: "607f8fa9786f392043f169898923e6c59b4518242b68b8862eb8a8b7d9c30b4a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.1"
   archive:
     dependency: transitive
     description:
@@ -329,22 +321,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.0"
-  dart_code_metrics:
-    dependency: "direct dev"
-    description:
-      name: dart_code_metrics
-      sha256: "3dede3f7abc077a4181ec7445448a289a9ce08e2981e6a4d49a3fb5099d47e1f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.7.6"
-  dart_code_metrics_presets:
-    dependency: transitive
-    description:
-      name: dart_code_metrics_presets
-      sha256: b71eadf02a3787ebd5c887623f83f6fdc204d45c75a081bd636c4104b3fd8b73
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.8.0"
   dart_style:
     dependency: transitive
     description:
@@ -437,10 +413,10 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_core
-      sha256: "4491238f4fddc885bc994e304a035eb8aba2c935816b2c0b31d87f3ec6e96682"
+      sha256: "2e9324f719e90200dc7d3c4f5d2abc26052f9f2b995d3b6626c47a0dfe1c8192"
       url: "https://pub.dev"
     source: hosted
-    version: "2.12.0"
+    version: "2.15.0"
   firebase_core_platform_interface:
     dependency: transitive
     description:
@@ -461,18 +437,18 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_crashlytics
-      sha256: cc6cab05d4de3257408c167ec1e2e410f21c0764aea22f78481314496a1cc4ca
+      sha256: "3607b46342537f98df18b130b6f5ab25cee6981a3a782e1a7b121d04dfea3caa"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.0"
+    version: "3.3.4"
   firebase_crashlytics_platform_interface:
     dependency: transitive
     description:
       name: firebase_crashlytics_platform_interface
-      sha256: b3b6017045866b981b566896a0de6114181bf9e91465221f2e89996f47a160b4
+      sha256: c63abeb87b18f6e6d4bf6bb3977f15d2d9281a049d93fe098e83e56dcbf7da06
       url: "https://pub.dev"
     source: hosted
-    version: "3.6.0"
+    version: "3.6.4"
   fixnum:
     dependency: transitive
     description:
@@ -689,10 +665,10 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
+      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.6"
+    version: "1.1.0"
   http_multi_server:
     dependency: transitive
     description:
@@ -945,10 +921,10 @@ packages:
     dependency: transitive
     description:
       name: plugin_platform_interface
-      sha256: "6a2128648c854906c53fa8e33986fc0247a1116122f9534dd20e3ab9e16a32bc"
+      sha256: "43798d895c929056255600343db8f049921cbec94d31ec87f1dc5c16c01935dd"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.5"
   pointycastle:
     dependency: transitive
     description:
@@ -965,14 +941,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
-  process:
-    dependency: transitive
-    description:
-      name: process
-      sha256: "53fd8db9cec1d37b0574e12f07520d582019cb6c44abf5479a01505099a34a09"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.2.4"
   pub_semver:
     dependency: transitive
     description:
@@ -981,14 +949,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  pub_updater:
-    dependency: transitive
-    description:
-      name: pub_updater
-      sha256: "05ae70703e06f7fdeb05f7f02dd680b8aad810e87c756a618f33e1794635115c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0"
   pubspec_parse:
     dependency: transitive
     description:
@@ -1041,18 +1001,18 @@ packages:
     dependency: "direct dev"
     description:
       name: riverpod_generator
-      sha256: cd0595de57ccf5d944ff4b0f68289e11ac6a2eff1e3dfd1d884a43f6f3bcee5e
+      sha256: "691180275664a5420c87d72c1ed26ef8404d32b823807540172bfd1660425376"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.3"
+    version: "2.2.4"
   riverpod_lint:
     dependency: "direct dev"
     description:
       name: riverpod_lint
-      sha256: "043ff016011be4c5887b3239bfbca05d284bdb68db0a5363cee0242b7567e250"
+      sha256: "17ad319914ac6863c64524e598913c0f17e30688aca8f5b7509e96d6e372d493"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.2"
+    version: "1.4.0"
   rxdart:
     dependency: transitive
     description:
@@ -1181,35 +1141,12 @@ packages:
   soundpool:
     dependency: "direct main"
     description:
-      name: soundpool
-      sha256: "4aa6b4950e7853dc7f6318234f12c6f27fe1fa8ee55a002ce7d158bc927f6129"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.0"
-  soundpool_macos:
-    dependency: transitive
-    description:
-      name: soundpool_macos
-      sha256: dd389a629d32e3960fbe55958f2f7e03e074c4987fadf38fbe6c7e0a1ba32528
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.0"
-  soundpool_platform_interface:
-    dependency: transitive
-    description:
-      name: soundpool_platform_interface
-      sha256: "9787f96b54a12e236cd3715cd2cc4bcd1fc1131e834ea7b295ac849ab4e24eab"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
-  soundpool_web:
-    dependency: transitive
-    description:
-      name: soundpool_web
-      sha256: "5242ebd135c210e6b4239fb2409f2da91af688358e3070c9c33ea625d85b7d22"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.0"
+      path: "."
+      ref: "6685de749c71c7f77d05ef765c136100ae79bb6f"
+      resolved-ref: "6685de749c71c7f77d05ef765c136100ae79bb6f"
+      url: "https://github.com/lichess-org/flutter-soundpool.git"
+    source: git
+    version: "2.4.0"
   source_gen:
     dependency: transitive
     description:
@@ -1254,34 +1191,34 @@ packages:
     dependency: "direct main"
     description:
       name: sqflite
-      sha256: b4d6710e1200e96845747e37338ea8a819a12b51689a3bcf31eff0003b37a0b9
+      sha256: "591f1602816e9c31377d5f008c2d9ef7b8aca8941c3f89cc5fd9d84da0c38a9a"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.8+4"
+    version: "2.3.0"
   sqflite_common:
     dependency: transitive
     description:
       name: sqflite_common
-      sha256: "8f7603f3f8f126740bc55c4ca2d1027aab4b74a1267a3e31ce51fe40e3b65b8f"
+      sha256: "1b92f368f44b0dee2425bb861cfa17b6f6cf3961f762ff6f941d20b33355660a"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.5+1"
+    version: "2.5.0"
   sqflite_common_ffi:
     dependency: "direct dev"
     description:
       name: sqflite_common_ffi
-      sha256: f86de82d37403af491b21920a696b19f01465b596f545d1acd4d29a0a72418ad
+      sha256: "8e3b8fc8bc53e1eac87a80a255a1fb88549359aafcfb58107402c69bf0b88828"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.5"
+    version: "2.3.0"
   sqlite3:
     dependency: transitive
     description:
       name: sqlite3
-      sha256: f7511ddd6a2dda8ded9d849f8a925bb6020e0faa59db2443debc18d484e59401
+      sha256: db65233e6b99e99b2548932f55a987961bc06d82a31a0665451fa0b4fff4c3fb
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.0"
   stack_trace:
     dependency: transitive
     description:
@@ -1415,10 +1352,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_android
-      sha256: "15f5acbf0dce90146a0f5a2c4a002b1814a6303c4c5c075aa2623b2d16156f03"
+      sha256: "78cb6dea3e93148615109e58e42c35d1ffbf5ef66c44add673d0ab75f12ff3af"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.36"
+    version: "6.0.37"
   url_launcher_ios:
     dependency: transitive
     description:
@@ -1543,10 +1480,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: dfdf0136e0aa7a1b474ea133e67cb0154a0acd2599c4f3ada3b49d38d38793ee
+      sha256: f2add6fa510d3ae152903412227bda57d0d5a8da61d2c39c1fb022c9429a41c0
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.5"
+    version: "5.0.6"
   win32_registry:
     dependency: transitive
     description:

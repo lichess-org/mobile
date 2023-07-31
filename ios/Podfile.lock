@@ -10,27 +10,27 @@ PODS:
     - ReachabilitySwift
   - device_info_plus (0.0.1):
     - Flutter
-  - Firebase/CoreOnly (10.7.0):
-    - FirebaseCore (= 10.7.0)
-  - Firebase/Crashlytics (10.7.0):
+  - Firebase/CoreOnly (10.12.0):
+    - FirebaseCore (= 10.12.0)
+  - Firebase/Crashlytics (10.12.0):
     - Firebase/CoreOnly
-    - FirebaseCrashlytics (~> 10.7.0)
-  - firebase_core (2.12.0):
-    - Firebase/CoreOnly (= 10.7.0)
+    - FirebaseCrashlytics (~> 10.12.0)
+  - firebase_core (2.15.0):
+    - Firebase/CoreOnly (= 10.12.0)
     - Flutter
-  - firebase_crashlytics (3.3.0):
-    - Firebase/Crashlytics (= 10.7.0)
+  - firebase_crashlytics (3.3.4):
+    - Firebase/Crashlytics (= 10.12.0)
     - firebase_core
     - Flutter
-  - FirebaseCore (10.7.0):
+  - FirebaseCore (10.12.0):
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/Logger (~> 7.8)
-  - FirebaseCoreExtension (10.11.0):
+  - FirebaseCoreExtension (10.12.0):
     - FirebaseCore (~> 10.0)
-  - FirebaseCoreInternal (10.11.0):
+  - FirebaseCoreInternal (10.12.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
-  - FirebaseCrashlytics (10.7.0):
+  - FirebaseCrashlytics (10.12.0):
     - FirebaseCore (~> 10.5)
     - FirebaseInstallations (~> 10.0)
     - FirebaseSessions (~> 10.5)
@@ -38,12 +38,12 @@ PODS:
     - GoogleUtilities/Environment (~> 7.8)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (~> 2.1)
-  - FirebaseInstallations (10.11.0):
+  - FirebaseInstallations (10.12.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
     - PromisesObjC (~> 2.1)
-  - FirebaseSessions (10.11.0):
+  - FirebaseSessions (10.12.0):
     - FirebaseCore (~> 10.5)
     - FirebaseCoreExtension (~> 10.0)
     - FirebaseInstallations (~> 10.0)
@@ -66,12 +66,12 @@ PODS:
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Environment (7.11.1):
+  - GoogleUtilities/Environment (7.11.4):
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.11.1):
+  - GoogleUtilities/Logger (7.11.4):
     - GoogleUtilities/Environment
-  - "GoogleUtilities/NSData+zlib (7.11.1)"
-  - GoogleUtilities/UserDefaults (7.11.1):
+  - "GoogleUtilities/NSData+zlib (7.11.4)"
+  - GoogleUtilities/UserDefaults (7.11.4):
     - GoogleUtilities/Logger
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
@@ -83,9 +83,9 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - PromisesObjC (2.2.0)
-  - PromisesSwift (2.2.0):
-    - PromisesObjC (= 2.2.0)
+  - PromisesObjC (2.3.1)
+  - PromisesSwift (2.3.1):
+    - PromisesObjC (= 2.3.1)
   - ReachabilitySwift (5.0.0)
   - share_plus (0.0.1):
     - Flutter
@@ -181,27 +181,27 @@ SPEC CHECKSUMS:
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
   connectivity_plus: 07c49e96d7fc92bc9920617b83238c4d178b446a
   device_info_plus: 7545d84d8d1b896cb16a4ff98c19f07ec4b298ea
-  Firebase: 0219acf760880eeec8ce479895bd7767466d9f81
-  firebase_core: 312d0d81b346ec20540822c8498e626d6918ef48
-  firebase_crashlytics: 869c43dd16f650004bb312ff9eff8d068406b939
-  FirebaseCore: e317665b9d744727a97e623edbbed009320afdd7
-  FirebaseCoreExtension: cacdad57fdb60e0b86dcbcac058ec78237946759
-  FirebaseCoreInternal: 9e46c82a14a3b3a25be4e1e151ce6d21536b89c0
-  FirebaseCrashlytics: 35fdd1a433b31e28adcf5c8933f4c526691a1e0b
-  FirebaseInstallations: 2a2c6859354cbec0a228a863d4daf6de7c74ced4
-  FirebaseSessions: a62ba5c45284adb7714f4126cfbdb32b17c260bd
+  Firebase: 07150e75d142fb9399f6777fa56a187b17f833a0
+  firebase_core: e477125798fc37cd4ab43ca6a8536bf7e0929c00
+  firebase_crashlytics: 6043ce85800f96e53f15ee5051f9cfad10cce73d
+  FirebaseCore: f86a1394906b97ac445ae49c92552a9425831bed
+  FirebaseCoreExtension: 0ce5ac36042001cfa233ce7bfa28e5c313cf80f4
+  FirebaseCoreInternal: 950500ad8a08963657f6d8c67b579740c06d6aa1
+  FirebaseCrashlytics: c4d111b7430c49744c74bcc6346ea00868661ac8
+  FirebaseInstallations: 7b99ef103f013624444c614397038219c45f8e63
+  FirebaseSessions: a4ee211eeb31a2224cd8d9d4e30a0fccde9aa00c
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_appauth: cf9b928962105b2a64a9802585d1c8adaf3e0f46
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GoogleDataTransport: f0308f5905a745f94fb91fea9c6cbaf3831cb1bd
-  GoogleUtilities: 9aa0ad5a7bc171f8bae016300bfcfa3fb8425749
+  GoogleUtilities: c63691989bf362ba0505507da00eeb326192e83e
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
-  PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
-  PromisesSwift: cf9eb58666a43bbe007302226e510b16c1e10959
+  PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
+  PromisesSwift: 28dca69a9c40779916ac2d6985a0192a5cb4a265
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   share_plus: 599aa54e4ea31d4b4c0e9c911bcc26c55e791028
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126

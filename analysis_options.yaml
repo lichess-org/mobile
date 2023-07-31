@@ -32,37 +32,3 @@ linter:
     avoid_redundant_argument_values: false
     sort_pub_dependencies: false
     sort_unnamed_constructors_first: false
-      
-dart_code_metrics:
-  rules:
-    # common
-    - avoid-collection-methods-with-unrelated-types
-    - avoid-double-slash-imports
-    - avoid-redundant-async
-    - avoid-global-state
-    - avoid-late-keyword
-    - avoid-unnecessary-type-assertions
-    - avoid-unnecessary-type-casts
-    - avoid-unrelated-type-assertions
-    - prefer-first
-    - prefer-immediate-return
-    - prefer-iterable-of
-    - prefer-last
-
-    # flutter
-    - always-remove-listener
-    - avoid-border-all
-    - avoid-returning-widgets:
-        exclude:
-          - test/**
-        ignored-annotations:
-          - allowedWidgetReturn
-    - avoid-shrink-wrap-in-lists
-    - avoid-unnecessary-setstate
-    - avoid-expanded-as-spacer
-    - check-for-equals-in-render-object-setters
-    - consistent-update-render-object
-    - prefer-const-border-radius
-    - prefer-correct-edge-insets-constructor
-    # - prefer-extracting-callbacks
-    - use-setstate-synchronously
