@@ -38,7 +38,7 @@ dependencies:
   package_info_plus: ^4.0.0
   url_launcher: ^6.1.9
   flutter_layout_grid: ^2.0.1
-  sqflite: ^2.2.5
+  sqflite: ^2.3.0
   path: ^1.8.2
   connectivity_plus: ^4.0.0
   share_plus: ^7.0.0
