@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 
 /// Platform adaptive slider that allows for non-linear values.
 class NonLinearSlider extends StatefulWidget {
-  const NonLinearSlider({
+  NonLinearSlider({
     required this.value,
     required this.values,
     this.labelBuilder,
     this.onChangeEnd,
     super.key,
-  });
+  })  : assert(values.length > 1),
+        assert(values.contains(value));
 
   final num value;
   final List<num> values;
