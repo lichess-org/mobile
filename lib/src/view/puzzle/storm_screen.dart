@@ -454,7 +454,7 @@ class _ComboState extends ConsumerState<_Combo>
             ),
           ),
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.65,
+            width: MediaQuery.sizeOf(context).width * 0.65,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -493,8 +493,8 @@ class _ComboState extends ConsumerState<_Combo>
                       alignment: Alignment.center,
                       curve: Curves.easeIn,
                       duration: const Duration(milliseconds: 1000),
-                      width: 28 * MediaQuery.of(context).textScaleFactor,
-                      height: 24 * MediaQuery.of(context).textScaleFactor,
+                      width: 28 * MediaQuery.textScaleFactorOf(context),
+                      height: 24 * MediaQuery.textScaleFactorOf(context),
                       decoration: isCurrentLevel
                           ? BoxDecoration(
                               color: comboShades[index],

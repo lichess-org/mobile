@@ -40,7 +40,7 @@ class BoardPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.sizeOf(context).height;
     final playerFontSize =
         screenHeight < kSmallHeightScreenThreshold ? 14.0 : 16.0;
 

@@ -87,7 +87,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
         );
       },
       loading: () {
-        final loaderHeight = MediaQuery.of(context).size.width;
+        final loaderHeight = MediaQuery.sizeOf(context).width;
         return Shimmer(
           child: ShimmerLoading(
             isLoading: true,

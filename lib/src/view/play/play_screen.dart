@@ -131,7 +131,7 @@ class _TimeControlButton extends ConsumerWidget {
   }
 
   void _onPressed(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenHeight = MediaQuery.sizeOf(context).height;
     showAdaptiveBottomSheet<void>(
       context: context,
       constraints: BoxConstraints(
