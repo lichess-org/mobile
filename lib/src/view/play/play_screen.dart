@@ -9,10 +9,13 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 
 import './time_control_modal.dart';
+import './custom_play_screen.dart';
 
 class PlayScreen extends StatelessWidget {
   const PlayScreen();
@@ -23,12 +26,9 @@ class PlayScreen extends StatelessWidget {
   }
 
   Widget _buildIos(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        previousPageTitle: 'Home',
-        middle: Text(context.l10n.play),
-      ),
-      child: const _Body(),
+    return const CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(),
+      child: _Body(),
     );
   }
 
@@ -47,6 +47,8 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final playPrefs = ref.watch(playPreferencesProvider);
+    final session = ref.watch(authSessionProvider);
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -61,17 +63,40 @@ class _Body extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: FatButton(
-              semanticsLabel: context.l10n.createAGame,
+              semanticsLabel: context.l10n.quickPairing,
               onPressed: () {
+                ref
+                    .read(playPreferencesProvider.notifier)
+                    .setSeekMode(SeekMode.fast);
+
                 pushPlatformRoute(
                   context,
                   rootNavigator: true,
                   builder: (BuildContext context) {
-                    return const GameScreen();
+                    return GameScreen(
+                      seek: GameSeek.fastPairingFromPrefs(playPrefs, session),
+                    );
                   },
                 );
               },
-              child: Text(context.l10n.createAGame),
+              child: Text(context.l10n.quickPairing),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: SecondaryButton(
+              semanticsLabel: context.l10n.custom,
+              onPressed: () {
+                pushPlatformRoute(
+                  context,
+                  title: context.l10n.custom,
+                  builder: (BuildContext context) {
+                    return const CustomPlayScreen();
+                  },
+                );
+              },
+              child: Text(context.l10n.custom),
             ),
           ),
         ],
