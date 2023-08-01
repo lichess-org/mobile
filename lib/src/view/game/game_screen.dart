@@ -562,6 +562,7 @@ class _GameBottomBar extends ConsumerWidget {
                 label: 'Previous',
                 shortLabel: 'Previous',
                 icon: CupertinoIcons.chevron_back,
+                showAndroidTooltip: false,
               ),
             ),
             RepeatButton(
@@ -573,6 +574,7 @@ class _GameBottomBar extends ConsumerWidget {
                 label: context.l10n.next,
                 shortLabel: context.l10n.next,
                 icon: CupertinoIcons.chevron_forward,
+                showAndroidTooltip: false,
               ),
             ),
           ],
