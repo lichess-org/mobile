@@ -3,6 +3,9 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:deep_pick/deep_pick.dart';
 
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
+
 /// Represents a lichess rating perf item
 enum Perf {
   ultraBullet('UltraBullet', 'Ultra', LichessIcons.ultrabullet),
@@ -28,6 +31,44 @@ enum Perf {
   final String title;
   final String shortTitle;
   final IconData icon;
+
+  factory Perf.fromVariantAndSpeed(Variant variant, Speed speed) {
+    switch (variant) {
+      case Variant.standard:
+        switch (speed) {
+          case Speed.ultraBullet:
+            return Perf.ultraBullet;
+          case Speed.bullet:
+            return Perf.bullet;
+          case Speed.blitz:
+            return Perf.blitz;
+          case Speed.rapid:
+            return Perf.rapid;
+          case Speed.classical:
+            return Perf.classical;
+          case Speed.correspondence:
+            return Perf.correspondence;
+        }
+      case Variant.chess960:
+        return Perf.chess960;
+      case Variant.fromPosition:
+        return Perf.fromPosition;
+      case Variant.antichess:
+        return Perf.antichess;
+      case Variant.kingOfTheHill:
+        return Perf.kingOfTheHill;
+      case Variant.threeCheck:
+        return Perf.threeCheck;
+      case Variant.atomic:
+        return Perf.atomic;
+      case Variant.horde:
+        return Perf.horde;
+      case Variant.racingKings:
+        return Perf.racingKings;
+      case Variant.crazyhouse:
+        return Perf.crazyhouse;
+    }
+  }
 }
 
 final IMap<String, Perf> perfNameMap = IMap(Perf.values.asNameMap());

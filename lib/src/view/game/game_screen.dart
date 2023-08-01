@@ -127,12 +127,12 @@ class _GameScreenState extends ConsumerState<GameScreen>
       androidBuilder: (context) => _androidBuilder(
         context: context,
         playPrefs: playPrefs,
-        body: const GameLoader(),
+        body: GameLoader(widget.seek),
       ),
       iosBuilder: (context) => _iosBuilder(
         context: context,
         playPrefs: playPrefs,
-        body: const GameLoader(),
+        body: GameLoader(widget.seek),
       ),
     );
   }
@@ -225,7 +225,7 @@ class _GameTitle extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(
-          seek.speed.icon,
+          seek.perf.icon,
           color: DefaultTextStyle.of(context).style.color,
         ),
         const SizedBox(width: 4.0),

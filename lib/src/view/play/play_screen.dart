@@ -63,20 +63,23 @@ class _Body extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: FatButton(
-              semanticsLabel: context.l10n.createAGame,
+              semanticsLabel: context.l10n.quickPairing,
               onPressed: () {
+                ref
+                    .read(playPreferencesProvider.notifier)
+                    .setSeekMode(SeekMode.fast);
+
                 pushPlatformRoute(
                   context,
                   rootNavigator: true,
                   builder: (BuildContext context) {
                     return GameScreen(
-                      seek:
-                          GameSeek.fastPairingSeekFromPrefs(playPrefs, session),
+                      seek: GameSeek.fastPairingFromPrefs(playPrefs, session),
                     );
                   },
                 );
               },
-              child: Text(context.l10n.createAGame),
+              child: Text(context.l10n.quickPairing),
             ),
           ),
           const SizedBox(height: 20),

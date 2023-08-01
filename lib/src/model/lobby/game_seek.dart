@@ -3,6 +3,7 @@ import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
@@ -21,7 +22,7 @@ class GameSeek with _$GameSeek {
     Side? side,
   }) = _GameSeek;
 
-  factory GameSeek.fastPairingSeekFromPrefs(
+  factory GameSeek.fastPairingFromPrefs(
     PlayPrefs playPref,
     AuthSessionState? session,
   ) {
@@ -32,7 +33,7 @@ class GameSeek with _$GameSeek {
     );
   }
 
-  factory GameSeek.customSeekFromPrefs(
+  factory GameSeek.customFromPrefs(
     PlayPrefs playPref,
     AuthSessionState? session,
   ) {
@@ -55,7 +56,10 @@ class GameSeek with _$GameSeek {
         increment.inSeconds,
       );
 
-  Speed get speed => Speed.fromTimeIncrement(timeIncrement);
+  Perf get perf => Perf.fromVariantAndSpeed(
+        variant ?? Variant.standard,
+        Speed.fromTimeIncrement(timeIncrement),
+      );
 
   Map<String, String> get requestBody => {
         'time': (time.inSeconds / 60).toString(),

@@ -8,7 +8,7 @@ import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
-import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
+import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
@@ -35,13 +35,12 @@ Stream<({int nbPlayers, int nbGames})> lobbyNumbers(
 }
 
 class GameLoader extends ConsumerWidget {
-  const GameLoader();
+  const GameLoader(this.seek);
+
+  final GameSeek seek;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timeControlPref = ref
-        .watch(playPreferencesProvider.select((prefs) => prefs.timeIncrement));
-
     return Column(
       children: [
         Expanded(
@@ -70,12 +69,12 @@ class GameLoader extends ConsumerWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            timeControlPref.speed.icon,
+                            seek.perf.icon,
                             color: DefaultTextStyle.of(context).style.color,
                           ),
                           const SizedBox(width: 8.0),
                           Text(
-                            timeControlPref.display,
+                            seek.timeIncrement.display,
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ],

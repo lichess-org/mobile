@@ -343,6 +343,13 @@ class _CreateAGame extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final playPrefs = ref.watch(playPreferencesProvider);
     final session = ref.watch(authSessionProvider);
+    final seek = playPrefs.seekMode == SeekMode.fast
+        ? GameSeek.fastPairingFromPrefs(playPrefs, session)
+        : GameSeek.customFromPrefs(playPrefs, session);
+
+    final mode =
+        seek.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
+
     return SmallBoardPreview(
       orientation: Side.white.cg,
       fen: kInitialFEN,
@@ -357,12 +364,15 @@ class _CreateAGame extends ConsumerWidget {
           Row(
             children: [
               Icon(
-                playPrefs.timeIncrement.speed.icon,
+                seek.perf.icon,
                 size: 20,
                 color: DefaultTextStyle.of(context).style.color,
               ),
               const SizedBox(width: 5),
-              Text(playPrefs.timeIncrement.display, style: Styles.timeControl),
+              Text(
+                '${seek.timeIncrement.display}$mode',
+                style: Styles.timeControl,
+              ),
             ],
           ),
         ],
@@ -373,7 +383,7 @@ class _CreateAGame extends ConsumerWidget {
           rootNavigator: true,
           builder: (BuildContext context) {
             return GameScreen(
-              seek: GameSeek.fastPairingSeekFromPrefs(playPrefs, session),
+              seek: seek,
             );
           },
         );

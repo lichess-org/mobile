@@ -170,12 +170,15 @@ class _Body extends ConsumerWidget {
               semanticsLabel: context.l10n.createAGame,
               onPressed: isValidTimeControl
                   ? () {
+                      ref
+                          .read(playPreferencesProvider.notifier)
+                          .setSeekMode(SeekMode.custom);
                       pushPlatformRoute(
                         context,
                         rootNavigator: true,
                         builder: (BuildContext context) {
                           return GameScreen(
-                            seek: GameSeek.customSeekFromPrefs(
+                            seek: GameSeek.customFromPrefs(
                               preferences,
                               session,
                             ),

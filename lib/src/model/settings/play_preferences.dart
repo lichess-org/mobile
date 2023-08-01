@@ -13,6 +13,8 @@ const _prefKey = 'preferences.play';
 
 enum PlayableSide { random, white, black }
 
+enum SeekMode { fast, custom }
+
 @Riverpod(keepAlive: true)
 class PlayPreferences extends _$PlayPreferences {
   @override
@@ -50,6 +52,10 @@ class PlayPreferences extends _$PlayPreferences {
     return _save(state.copyWith(customSide: side));
   }
 
+  Future<void> setSeekMode(SeekMode mode) {
+    return _save(state.copyWith(seekMode: mode));
+  }
+
   Future<void> _save(PlayPrefs newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(
@@ -74,6 +80,9 @@ class PlayPrefs with _$PlayPrefs {
     required Variant customVariant,
     required bool customRated,
     required PlayableSide customSide,
+
+    // prefered seek mode, set after a seek is made
+    required SeekMode seekMode,
   }) = _PlayPrefs;
 
   static const defaults = PlayPrefs(
@@ -83,6 +92,7 @@ class PlayPrefs with _$PlayPrefs {
     customVariant: Variant.standard,
     customRated: false,
     customSide: PlayableSide.random,
+    seekMode: SeekMode.fast,
   );
 
   factory PlayPrefs.fromJson(Map<String, dynamic> json) {
