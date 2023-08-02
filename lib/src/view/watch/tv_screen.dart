@@ -14,8 +14,6 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
-final _featuredGameWithSoundProvider = featuredGameProvider(withSound: true);
-
 final RouteObserver<PageRoute<void>> tvRouteObserver =
     RouteObserver<PageRoute<void>>();
 
@@ -65,9 +63,9 @@ class _TvScreenState extends ConsumerState<TvScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      ref.read(_featuredGameWithSoundProvider.notifier).connectStream();
+      ref.read(featuredGameProvider.notifier).connectStream();
     } else {
-      ref.read(_featuredGameWithSoundProvider.notifier).disconnectStream();
+      ref.read(featuredGameProvider.notifier).disconnectStream();
     }
   }
 
@@ -95,13 +93,13 @@ class _TvScreenState extends ConsumerState<TvScreen>
 
   @override
   void didPushNext() {
-    ref.read(_featuredGameWithSoundProvider.notifier).disconnectStream();
+    ref.read(featuredGameProvider.notifier).disconnectStream();
     super.didPushNext();
   }
 
   @override
   void didPopNext() {
-    ref.read(_featuredGameWithSoundProvider.notifier).connectStream();
+    ref.read(featuredGameProvider.notifier).connectStream();
     super.didPopNext();
   }
 }
@@ -113,7 +111,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
     final featuredGame = currentTab == BottomTab.watch
-        ? ref.watch(_featuredGameWithSoundProvider)
+        ? ref.watch(featuredGameProvider)
         : const AsyncLoading<FeaturedGameState>();
 
     return SafeArea(

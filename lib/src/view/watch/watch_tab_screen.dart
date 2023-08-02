@@ -1,35 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart';
+import 'package:chessground/chessground.dart' as cg;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/model/tv/featured_game.dart';
+import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 
-final _featuredGameNoSoundProvider = featuredGameProvider(withSound: false);
-
-class WatchScreen extends ConsumerStatefulWidget {
-  const WatchScreen({super.key});
+class WatchTabScreen extends ConsumerStatefulWidget {
+  const WatchTabScreen({super.key});
 
   @override
   _WatchScreenState createState() => _WatchScreenState();
 }
 
-class _WatchScreenState extends ConsumerState<WatchScreen>
-    with RouteAware, WidgetsBindingObserver {
+class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
@@ -48,7 +47,7 @@ class _WatchScreenState extends ConsumerState<WatchScreen>
       ),
       body: RefreshIndicator(
         key: _androidRefreshKey,
-        onRefresh: () => ref.refresh(liveStreamersProvider.future),
+        onRefresh: _refreshData,
         child: SafeArea(
           child: OrientationBuilder(
             builder: (context, orientation) {
@@ -85,7 +84,7 @@ class _WatchScreenState extends ConsumerState<WatchScreen>
             slivers: [
               const CupertinoSliverNavigationBar(),
               CupertinoSliverRefreshControl(
-                onRefresh: () => ref.refresh(liveStreamersProvider.future),
+                onRefresh: _refreshData,
               ),
               SliverSafeArea(
                 top: false,
@@ -119,47 +118,11 @@ class _WatchScreenState extends ConsumerState<WatchScreen>
     );
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      ref.read(_featuredGameNoSoundProvider.notifier).connectStream();
-    } else {
-      ref.read(_featuredGameNoSoundProvider.notifier).disconnectStream();
-    }
-  }
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final route = ModalRoute.of(context);
-    if (route != null && route is PageRoute) {
-      tvRouteObserver.subscribe(this, route);
-    }
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    tvRouteObserver.unsubscribe(this);
-    super.dispose();
-  }
-
-  @override
-  void didPushNext() {
-    ref.read(_featuredGameNoSoundProvider.notifier).disconnectStream();
-    super.didPushNext();
-  }
-
-  @override
-  void didPopNext() {
-    ref.read(_featuredGameNoSoundProvider.notifier).connectStream();
-    super.didPopNext();
+  Future<void> _refreshData() {
+    return Future.wait([
+      ref.refresh(tvBestSnapshotProvider.future),
+      ref.refresh(liveStreamersProvider.future),
+    ]);
   }
 }
 
@@ -168,12 +131,24 @@ class _WatchTvWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentTab = ref.watch(currentBottomTabProvider);
-    final featuredGame = currentTab == BottomTab.watch
-        ? ref.watch(_featuredGameNoSoundProvider)
-        : const AsyncLoading<FeaturedGameState>();
+    final featuredGame = ref.watch(tvBestSnapshotProvider);
+
     return featuredGame.when(
       data: (game) {
+        final whitePlayer = PlayerTitle(
+          userName: game.white.asPlayer.displayName(context),
+          title: game.white.title,
+          rating: game.white.rating,
+        );
+        final blackPlayer = PlayerTitle(
+          userName: game.black.asPlayer.displayName(context),
+          title: game.black.title,
+          rating: game.black.rating,
+        );
+        final firstPlayer =
+            game.orientation == Side.white ? whitePlayer : blackPlayer;
+        final secondPlayer =
+            game.orientation == Side.white ? blackPlayer : whitePlayer;
         return BoardPreview(
           header: Text('Lichess TV', style: Styles.sectionTitle),
           onTap: () => pushPlatformRoute(
@@ -181,8 +156,15 @@ class _WatchTvWidget extends ConsumerWidget {
             builder: (context) => const TvScreen(),
           ),
           orientation: game.orientation.cg,
-          fen: game.position.position.fen,
-          lastMove: game.position.lastMove?.cg,
+          fen: game.fen,
+          footer: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              firstPlayer,
+              const Text('vs'),
+              secondPlayer,
+            ],
+          ),
         );
       },
       error: (err, stackTrace) {
@@ -191,14 +173,14 @@ class _WatchTvWidget extends ConsumerWidget {
         );
         return BoardPreview(
           header: Text('Lichess TV', style: Styles.sectionTitle),
-          orientation: Side.white,
+          orientation: cg.Side.white,
           fen: kEmptyFen,
           errorMessage: 'Could not load Tv Stream',
         );
       },
       loading: () => BoardPreview(
         header: Text('Lichess TV', style: Styles.sectionTitle),
-        orientation: Side.white,
+        orientation: cg.Side.white,
         fen: kEmptyFen,
       ),
     );
