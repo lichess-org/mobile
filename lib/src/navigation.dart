@@ -2,8 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/l10n.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/home/home_screen.dart';
@@ -14,10 +16,27 @@ import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_dashboard_screen.dart';
 
 enum BottomTab {
-  home,
-  puzzles,
-  watch,
-  profile;
+  home(Icons.home),
+  puzzles(LichessIcons.target),
+  watch(Icons.live_tv),
+  profile(CupertinoIcons.profile_circled);
+
+  const BottomTab(this.icon);
+
+  final IconData icon;
+
+  String label(AppLocalizations strings) {
+    switch (this) {
+      case BottomTab.home:
+        return 'Home';
+      case BottomTab.puzzles:
+        return strings.puzzles;
+      case BottomTab.watch:
+        return strings.watch;
+      case BottomTab.profile:
+        return strings.profile;
+    }
+  }
 }
 
 final currentBottomTabProvider =
@@ -61,10 +80,23 @@ final puzzlesScrollController = ScrollController(debugLabel: 'PuzzlesScroll');
 final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
 final profileScrollController = ScrollController(debugLabel: 'ProfileScroll');
 
+final tabsProvider = Provider<List<_Tab>>((ref) {
+  final l10n = ref.watch(l10nProvider);
+
+  return BottomTab.values.map((tab) {
+    return _Tab(
+      label: tab.label(l10n.strings),
+      icon: Icon(tab.icon),
+    );
+  }).toList();
+});
+
 /// Implements a tabbed (iOS style) root layout and behavior structure.
 ///
-/// The scaffold lays out the tab bar at the bottom and the content between or
-/// behind the tab bar.
+/// This widget is intended to be used as the root of the app, and it provides
+/// the structure necessary to display tabs in iOS style. It also defines the
+/// tab bar and tab switching behavior, but does not define the contents of
+/// each tab.
 class BottomNavScaffold extends ConsumerWidget {
   const BottomNavScaffold({super.key});
 
@@ -72,49 +104,8 @@ class BottomNavScaffold extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
     final isHomeRoot = ref.watch(isHomeRootProvider);
+    final tabs = ref.watch(tabsProvider);
     final shouldRemoveTabBarBorder = currentTab == BottomTab.home && isHomeRoot;
-
-    final tabs = [
-      const _Tab(
-        label: 'Home',
-        icon: Icon(Icons.home),
-      ),
-      _Tab(
-        label: context.l10n.puzzles,
-        icon: const Icon(LichessIcons.target),
-      ),
-      _Tab(
-        label: context.l10n.watch,
-        icon: const Icon(Icons.live_tv),
-      ),
-      _Tab(
-        label: context.l10n.profile,
-        icon: const Icon(CupertinoIcons.profile_circled),
-      ),
-    ];
-
-    void onItemTapped(int index) {
-      final curTab = ref.read(currentBottomTabProvider);
-      final tappedTab = BottomTab.values[index];
-      if (tappedTab == curTab) {
-        final navState = ref.read(currentNavigatorKeyProvider).currentState;
-        if (navState?.canPop() == true) {
-          navState?.popUntil((route) => route.isFirst);
-        } else {
-          final scrollController =
-              ref.read(currentRootScrollControllerProvider);
-          if (scrollController.hasClients) {
-            scrollController.animateTo(
-              0,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeOut,
-            );
-          }
-        }
-      } else {
-        ref.read(currentBottomTabProvider.notifier).state = tappedTab;
-      }
-    }
 
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -135,7 +126,7 @@ class BottomNavScaffold extends ConsumerWidget {
                 for (final tab in tabs)
                   NavigationDestination(icon: tab.icon, label: tab.label)
               ],
-              onDestinationSelected: onItemTapped,
+              onDestinationSelected: (i) => _onItemTapped(ref, i),
             ),
           ),
         );
@@ -156,12 +147,39 @@ class BottomNavScaffold extends ConsumerWidget {
               for (final tab in tabs)
                 BottomNavigationBarItem(icon: tab.icon, label: tab.label)
             ],
-            onTap: onItemTapped,
+            onTap: (i) => _onItemTapped(ref, i),
           ),
         );
       default:
         assert(false, 'Unexpected platform $defaultTargetPlatform');
         return const SizedBox.shrink();
+    }
+  }
+
+  /// If tapped tab is the same as the current tab, pop to the first route in
+  /// the tab's stack.
+  /// If the route is already at the first route, scroll the tab's root
+  /// scrollable to the top.
+  /// Otherwise, switch to the tapped tab.
+  void _onItemTapped(WidgetRef ref, int index) {
+    final curTab = ref.read(currentBottomTabProvider);
+    final tappedTab = BottomTab.values[index];
+    if (tappedTab == curTab) {
+      final navState = ref.read(currentNavigatorKeyProvider).currentState;
+      if (navState?.canPop() == true) {
+        navState?.popUntil((route) => route.isFirst);
+      } else {
+        final scrollController = ref.read(currentRootScrollControllerProvider);
+        if (scrollController.hasClients) {
+          scrollController.animateTo(
+            0,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
+        }
+      }
+    } else {
+      ref.read(currentBottomTabProvider.notifier).state = tappedTab;
     }
   }
 
