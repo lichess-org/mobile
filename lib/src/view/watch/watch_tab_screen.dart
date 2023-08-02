@@ -52,6 +52,12 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<BottomTab>(currentBottomTabProvider, (prev, current) {
+      if (prev != BottomTab.watch && current == BottomTab.watch) {
+        _refreshData();
+      }
+    });
+
     return ConsumerPlatformWidget(
       ref: ref,
       androidBuilder: _buildAndroid,
