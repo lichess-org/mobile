@@ -3,7 +3,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
 import 'featured_player.dart';
@@ -39,7 +38,6 @@ class TvGame with _$TvGame {
 class TvGameSnapshot with _$TvGameSnapshot {
   const factory TvGameSnapshot({
     required GameId id,
-    required Perf perf,
     required Side orientation,
     required String fen,
     required FeaturedPlayer white,

@@ -162,10 +162,14 @@ class _WatchTvWidget extends ConsumerWidget {
                 ? game.white.asPlayer
                 : game.black.asPlayer;
             return SmallBoardPreview(
-              onTap: () => pushPlatformRoute(
-                context,
-                builder: (context) => const TvScreen(),
-              ),
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  builder: (context) => const TvScreen(),
+                ).then((_) {
+                  ref.invalidate(tvBestSnapshotProvider);
+                });
+              },
               orientation: game.orientation.cg,
               fen: game.fen,
               description: Column(
@@ -177,7 +181,7 @@ class _WatchTvWidget extends ConsumerWidget {
                     'Top Rated',
                     style: Styles.boardPreviewTitle,
                   ),
-                  Icon(
+                  const Icon(
                     LichessIcons.crown,
                     color: LichessColors.brag,
                     size: 30,
