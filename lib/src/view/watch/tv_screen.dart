@@ -130,7 +130,7 @@ class _Body extends ConsumerWidget {
             final bottomPlayer =
                 game.orientation == Side.white ? game.white : game.black;
             final topPlayerWidget = BoardPlayer(
-              player: topPlayer.asPlayer,
+              player: topPlayer.asPlayer.copyWith(onGame: true),
               clock: CountdownClock(
                 duration: Duration(seconds: topPlayer.seconds ?? 0),
                 active: !game.position.position.isGameOver &&
@@ -139,7 +139,7 @@ class _Body extends ConsumerWidget {
               materialDiff: game.position.diff.bySide(topPlayer.side),
             );
             final bottomPlayerWidget = BoardPlayer(
-              player: bottomPlayer.asPlayer,
+              player: bottomPlayer.asPlayer.copyWith(onGame: true),
               clock: CountdownClock(
                 duration: Duration(seconds: bottomPlayer.seconds ?? 0),
                 active: !game.position.position.isGameOver &&

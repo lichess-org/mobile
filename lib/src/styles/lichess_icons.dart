@@ -75,6 +75,14 @@ class LichessIcons {
       IconData(0xe815, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData streak =
       IconData(0xe816, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData microscope =
+      IconData(0xe817, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData tournament_cup =
+      IconData(0xe818, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData cogs =
+      IconData(0xe819, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData crown =
+      IconData(0xe81a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData step_backward =
       IconData(0xf048, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData fast_backward =

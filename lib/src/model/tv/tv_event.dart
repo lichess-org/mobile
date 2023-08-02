@@ -80,14 +80,3 @@ class TvEvent with _$TvEvent {
     );
   }
 }
-
-@freezed
-class TvGameSnapshot with _$TvGameSnapshot {
-  const factory TvGameSnapshot({
-    required GameId id,
-    required Side orientation,
-    required String fen,
-    required FeaturedPlayer white,
-    required FeaturedPlayer black,
-  }) = _TvGameSnapshot;
-}
