@@ -10,7 +10,7 @@ on:
         type: choice
         options:
           - internal
-          - beta
+          - alpha
 
 # Declare default permissions as read only.
 permissions: read-all
