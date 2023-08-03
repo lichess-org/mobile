@@ -209,7 +209,7 @@ class _Body extends ConsumerWidget {
           Padding(
             padding: Styles.horizontalBodyPadding,
             child: Text(
-              'v${packageInfo.version} (${packageInfo.buildNumber})',
+              'v${packageInfo.version}',
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ),
