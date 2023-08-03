@@ -58,6 +58,8 @@ class PuzzleActivity extends _$PuzzleActivity {
   }
 
   void getNext() {
+    if (!state.hasValue) return;
+
     final currentVal = state.requireValue;
     if (_list.length < _maxPuzzles) {
       state = AsyncData(currentVal.copyWith(isLoading: true));
