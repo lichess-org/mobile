@@ -419,7 +419,9 @@ class GameCtrl extends _$GameCtrl {
         }
 
         if (curState.game.lastPosition.fullmoves > 1) {
-          ref.read(soundServiceProvider).play(Sound.dong);
+          Timer(const Duration(milliseconds: 500), () {
+            ref.read(soundServiceProvider).play(Sound.dong);
+          });
         }
         state = AsyncValue.data(newState);
 
