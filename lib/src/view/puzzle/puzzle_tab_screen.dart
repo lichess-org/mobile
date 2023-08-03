@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -15,7 +16,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -30,15 +30,14 @@ import 'streak_screen.dart';
 
 final daysProvider = StateProvider<Days>((ref) => Days.month);
 
-class PuzzleDashboardScreen extends ConsumerStatefulWidget {
-  const PuzzleDashboardScreen({super.key});
+class PuzzleTabScreen extends ConsumerStatefulWidget {
+  const PuzzleTabScreen({super.key});
 
   @override
-  ConsumerState<PuzzleDashboardScreen> createState() =>
-      _PuzzleDashboardScreenState();
+  ConsumerState<PuzzleTabScreen> createState() => _PuzzleTabScreenState();
 }
 
-class _PuzzleDashboardScreenState extends ConsumerState<PuzzleDashboardScreen> {
+class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override

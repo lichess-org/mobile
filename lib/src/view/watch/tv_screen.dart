@@ -6,15 +6,13 @@ import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
-import 'package:lichess_mobile/src/widgets/bottom_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/tv/featured_game.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
-
-final _featuredGameWithSoundProvider = featuredGameProvider(withSound: true);
 
 final RouteObserver<PageRoute<void>> tvRouteObserver =
     RouteObserver<PageRoute<void>>();
@@ -65,9 +63,9 @@ class _TvScreenState extends ConsumerState<TvScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      ref.read(_featuredGameWithSoundProvider.notifier).connectStream();
+      ref.read(featuredGameProvider.notifier).connectStream();
     } else {
-      ref.read(_featuredGameWithSoundProvider.notifier).disconnectStream();
+      ref.read(featuredGameProvider.notifier).disconnectStream();
     }
   }
 
@@ -95,13 +93,13 @@ class _TvScreenState extends ConsumerState<TvScreen>
 
   @override
   void didPushNext() {
-    ref.read(_featuredGameWithSoundProvider.notifier).disconnectStream();
+    ref.read(featuredGameProvider.notifier).disconnectStream();
     super.didPushNext();
   }
 
   @override
   void didPopNext() {
-    ref.read(_featuredGameWithSoundProvider.notifier).connectStream();
+    ref.read(featuredGameProvider.notifier).connectStream();
     super.didPopNext();
   }
 }
@@ -113,7 +111,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
     final featuredGame = currentTab == BottomTab.watch
-        ? ref.watch(_featuredGameWithSoundProvider)
+        ? ref.watch(featuredGameProvider)
         : const AsyncLoading<FeaturedGameState>();
 
     return SafeArea(
@@ -132,7 +130,7 @@ class _Body extends ConsumerWidget {
             final bottomPlayer =
                 game.orientation == Side.white ? game.white : game.black;
             final topPlayerWidget = BoardPlayer(
-              player: topPlayer.asPlayer,
+              player: topPlayer.asPlayer.copyWith(onGame: true),
               clock: CountdownClock(
                 duration: Duration(seconds: topPlayer.seconds ?? 0),
                 active: !game.position.position.isGameOver &&
@@ -141,7 +139,7 @@ class _Body extends ConsumerWidget {
               materialDiff: game.position.diff.bySide(topPlayer.side),
             );
             final bottomPlayerWidget = BoardPlayer(
-              player: bottomPlayer.asPlayer,
+              player: bottomPlayer.asPlayer.copyWith(onGame: true),
               clock: CountdownClock(
                 duration: Duration(seconds: bottomPlayer.seconds ?? 0),
                 active: !game.position.position.isGameOver &&

@@ -1,11 +1,20 @@
 import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:logging/logging.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+
 import './tv_event.dart';
+import './tv_game.dart';
 
 part 'tv_repository.g.dart';
+
+@Riverpod(keepAlive: true)
+TvRepository tvRepository(TvRepositoryRef ref) {
+  final apiClient = ref.watch(authClientProvider);
+  return TvRepository(Logger('TvRepository'), apiClient: apiClient);
+}
 
 class TvRepository {
   const TvRepository(
@@ -27,10 +36,19 @@ class TvRepository {
         .map((json) => TvEvent.fromJson(json))
         .handleError((Object error) => _log.warning(error));
   }
-}
 
-@Riverpod(keepAlive: true)
-TvRepository tvRepository(TvRepositoryRef ref) {
-  final apiClient = ref.watch(authClientProvider);
-  return TvRepository(Logger('TvRepository'), apiClient: apiClient);
+  Future<TvGameSnapshot> currentBestSnapshot() {
+    return tvFeed()
+        .firstWhere((event) => event is TvFeaturedEvent)
+        .then((event) async {
+      final featured = event as TvFeaturedEvent;
+      return TvGameSnapshot(
+        id: featured.id,
+        orientation: featured.orientation,
+        fen: featured.fen,
+        white: featured.white,
+        black: featured.black,
+      );
+    });
+  }
 }
