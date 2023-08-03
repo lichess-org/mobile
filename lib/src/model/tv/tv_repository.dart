@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:logging/logging.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 
 import './tv_event.dart';
 import './tv_game.dart';
-import './tv_channel.dart';
 
 part 'tv_repository.g.dart';
 
@@ -17,8 +15,6 @@ TvRepository tvRepository(TvRepositoryRef ref) {
   final apiClient = ref.watch(authClientProvider);
   return TvRepository(Logger('TvRepository'), apiClient: apiClient);
 }
-
-typedef TvGames = IMap<TvChannel, TvGame>;
 
 class TvRepository {
   const TvRepository(
