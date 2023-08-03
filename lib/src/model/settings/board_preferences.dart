@@ -94,5 +94,5 @@ class BoardPrefs with _$BoardPrefs {
   }
 
   Duration get pieceAnimationDuration =>
-      pieceAnimation ? const Duration(milliseconds: 200) : Duration.zero;
+      pieceAnimation ? const Duration(milliseconds: 150) : Duration.zero;
 }

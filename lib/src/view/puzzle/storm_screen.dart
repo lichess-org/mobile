@@ -133,7 +133,7 @@ class _BodyState extends ConsumerState<_Body>
               bottom: false,
               child: BoardTable(
                 boardData: cg.BoardData(
-                  onMove: (move, {isPremove}) => ref
+                  onMove: (move, {isDrop, isPremove}) => ref
                       .read(ctrlProvider.notifier)
                       .onUserMove(Move.fromUci(move.uci)!),
                   orientation: puzzleState.pov.cg,

@@ -185,7 +185,7 @@ class _BodyState extends ConsumerState<_Body>
                           ),
                         ])
                       : null,
-                  onMove: (move, {isPremove}) {
+                  onMove: (move, {isDrop, isPremove}) {
                     ref
                         .read(ctrlProvider.notifier)
                         .onUserMove(Move.fromUci(move.uci)!);
@@ -343,9 +343,8 @@ class _BottomBar extends ConsumerWidget {
             if (puzzleState.mode == PuzzleMode.view)
               RepeatButton(
                 triggerDelays: _repeatTriggerDelays,
-                onLongPress: puzzleState.canGoNext
-                    ? () => _moveForward(ref, hapticFeedback: false)
-                    : null,
+                onLongPress:
+                    puzzleState.canGoNext ? () => _moveForward(ref) : null,
                 child: BottomBarButton(
                   onTap: puzzleState.canGoNext ? () => _moveForward(ref) : null,
                   label: context.l10n.next,
@@ -373,8 +372,8 @@ class _BottomBar extends ConsumerWidget {
     );
   }
 
-  void _moveForward(WidgetRef ref, {bool hapticFeedback = true}) {
-    ref.read(ctrlProvider.notifier).userNext(hapticFeedback: hapticFeedback);
+  void _moveForward(WidgetRef ref) {
+    ref.read(ctrlProvider.notifier).userNext();
   }
 
   void _moveBackward(WidgetRef ref) {

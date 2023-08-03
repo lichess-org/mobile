@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -57,14 +56,13 @@ class GameCursor extends _$GameCursor {
     }
   }
 
-  void cursorForward({bool hapticFeedback = true}) {
+  void cursorForward() {
     if (state.hasValue) {
       final (game, cursor) = state.value!;
       state = AsyncValue.data((game, cursor + 1));
       final san = game.stepAt(cursor + 1).sanMove?.san;
       if (san != null) {
         _playMoveSound(san);
-        if (hapticFeedback) HapticFeedback.lightImpact();
       }
     }
   }

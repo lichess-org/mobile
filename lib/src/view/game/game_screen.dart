@@ -351,10 +351,11 @@ class _Body extends ConsumerWidget {
                 isCheck: position.isCheck,
                 sideToMove: sideToMove.cg,
                 validMoves: algebraicLegalMoves(position),
-                onMove: (move, {isPremove}) {
+                onMove: (move, {isDrop, isPremove}) {
                   ref.read(ctrlProvider.notifier).onUserMove(
                         Move.fromUci(move.uci)!,
                         isPremove: isPremove,
+                        isDrop: isDrop,
                       );
                 },
               ),
@@ -566,9 +567,8 @@ class _GameBottomBar extends ConsumerWidget {
               ),
             ),
             RepeatButton(
-              onLongPress: gameState.canGoForward
-                  ? () => _moveForward(ref, hapticFeedback: false)
-                  : null,
+              onLongPress:
+                  gameState.canGoForward ? () => _moveForward(ref) : null,
               child: BottomBarButton(
                 onTap: gameState.canGoForward ? () => _moveForward(ref) : null,
                 label: context.l10n.next,
@@ -583,10 +583,8 @@ class _GameBottomBar extends ConsumerWidget {
     );
   }
 
-  void _moveForward(WidgetRef ref, {bool hapticFeedback = true}) {
-    ref
-        .read(ctrlProvider.notifier)
-        .cursorForward(hapticFeedback: hapticFeedback);
+  void _moveForward(WidgetRef ref) {
+    ref.read(ctrlProvider.notifier).cursorForward();
   }
 
   void _moveBackward(WidgetRef ref) {

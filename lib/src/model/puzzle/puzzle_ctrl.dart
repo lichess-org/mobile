@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/services.dart';
 import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:collection/collection.dart';
@@ -144,10 +143,9 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     }
   }
 
-  void userNext({bool hapticFeedback = true}) {
+  void userNext() {
     _viewSolutionTimer?.cancel();
     _goToNextNode(replaying: true);
-    if (hapticFeedback) HapticFeedback.lightImpact();
   }
 
   void userPrevious() {

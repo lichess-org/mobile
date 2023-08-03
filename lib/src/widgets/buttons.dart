@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -622,8 +623,10 @@ class _RepeatButtonState extends State<RepeatButton> {
     super.dispose();
   }
 
-  Future<void> _onPress() async {
+  Future<void> _onLongPress() async {
     _isPressed = true;
+
+    HapticFeedback.selectionClick();
 
     widget.onLongPress?.call();
     for (final time in widget.triggerDelays) {
@@ -648,7 +651,7 @@ class _RepeatButtonState extends State<RepeatButton> {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onLongPress: _onPress,
+      onLongPress: _onLongPress,
       onLongPressCancel: _onPressEnd,
       onLongPressUp: _onPressEnd,
       child: widget.child,

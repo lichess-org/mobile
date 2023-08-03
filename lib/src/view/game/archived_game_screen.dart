@@ -242,9 +242,7 @@ class _BottomBar extends ConsumerWidget {
             ),
           ),
           RepeatButton(
-            onLongPress: canGoForward
-                ? () => _cursorForward(ref, hapticFeedback: false)
-                : null,
+            onLongPress: canGoForward ? () => _cursorForward(ref) : null,
             child: BottomBarIconButton(
               key: const ValueKey('cursor-forward'),
               // TODO add translation
@@ -259,10 +257,8 @@ class _BottomBar extends ConsumerWidget {
     );
   }
 
-  void _cursorForward(WidgetRef ref, {bool hapticFeedback = true}) {
-    ref.read(gameCursorProvider(gameData.id).notifier).cursorForward(
-          hapticFeedback: hapticFeedback,
-        );
+  void _cursorForward(WidgetRef ref) {
+    ref.read(gameCursorProvider(gameData.id).notifier).cursorForward();
   }
 
   void _cursorBackward(WidgetRef ref) {

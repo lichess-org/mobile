@@ -162,7 +162,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                   lastMove: puzzleState.lastMove?.cg,
                   sideToMove: puzzleState.position.turn.cg,
                   validMoves: puzzleState.validMoves,
-                  onMove: (move, {isPremove}) {
+                  onMove: (move, {isDrop, isPremove}) {
                     ref
                         .read(ctrlProvider.notifier)
                         .onUserMove(Move.fromUci(move.uci)!);

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -16,6 +17,7 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 
 part 'game_ctrl.freezed.dart';
@@ -63,7 +65,7 @@ class GameCtrl extends _$GameCtrl {
     return state;
   }
 
-  void onUserMove(Move move, {bool? isPremove}) {
+  void onUserMove(Move move, {bool? isDrop, bool? isPremove}) {
     final curState = state.requireValue;
 
     final (newPos, newSan) = curState.game.lastPosition.playToSan(move);
@@ -94,7 +96,7 @@ class GameCtrl extends _$GameCtrl {
       withLag: curState.game.clock != null && curState.activeClockSide == null,
     );
 
-    _playMoveFeedback(sanMove);
+    _playMoveFeedback(sanMove, skipAnimationDelay: isDrop ?? false);
   }
 
   void cursorAt(int cursor) {
@@ -108,7 +110,7 @@ class GameCtrl extends _$GameCtrl {
     }
   }
 
-  void cursorForward({bool hapticFeedback = true}) {
+  void cursorForward() {
     if (state.hasValue) {
       final curState = state.requireValue;
       final newCursor = curState.stepCursor + 1;
@@ -116,7 +118,6 @@ class GameCtrl extends _$GameCtrl {
       final san = curState.game.stepAt(newCursor).sanMove?.san;
       if (san != null) {
         _playReplayMoveSound(san);
-        if (hapticFeedback) HapticFeedback.lightImpact();
       }
     }
   }
@@ -215,7 +216,22 @@ class GameCtrl extends _$GameCtrl {
   }
 
   /// Move feedback while playing
-  void _playMoveFeedback(SanMove sanMove) {
+  void _playMoveFeedback(SanMove sanMove, {bool skipAnimationDelay = false}) {
+    final animationDuration =
+        ref.read(boardPreferencesProvider).pieceAnimationDuration;
+
+    final delay = animationDuration - const Duration(milliseconds: 10);
+
+    if (skipAnimationDelay || delay <= Duration.zero) {
+      _moveFeedback(sanMove);
+    } else {
+      Timer(delay, () {
+        _moveFeedback(sanMove);
+      });
+    }
+  }
+
+  void _moveFeedback(SanMove sanMove) {
     final isCheck = sanMove.san.contains('+');
     if (sanMove.san.contains('x')) {
       ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
@@ -343,10 +359,7 @@ class GameCtrl extends _$GameCtrl {
               stepCursor: newState.stepCursor + 1,
             );
 
-            // TODO adjust with animation duration pref
-            Timer(const Duration(milliseconds: 50), () {
-              _playMoveFeedback(sanMove);
-            });
+            _playMoveFeedback(sanMove);
           }
         }
 
