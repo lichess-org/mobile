@@ -20,7 +20,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 
-part 'profile_screen.g.dart';
+part 'profile_tab_screen.g.dart';
 
 @riverpod
 Future<User?> _sessionProfile(_SessionProfileRef ref) async {
@@ -32,14 +32,14 @@ Future<User?> _sessionProfile(_SessionProfileRef ref) async {
   return null;
 }
 
-class ProfileScreen extends ConsumerStatefulWidget {
-  const ProfileScreen({super.key});
+class ProfileTabScreen extends ConsumerStatefulWidget {
+  const ProfileTabScreen({super.key});
 
   @override
-  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+  ConsumerState<ProfileTabScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+class _ProfileScreenState extends ConsumerState<ProfileTabScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override

@@ -30,15 +30,14 @@ import 'streak_screen.dart';
 
 final daysProvider = StateProvider<Days>((ref) => Days.month);
 
-class PuzzleDashboardScreen extends ConsumerStatefulWidget {
-  const PuzzleDashboardScreen({super.key});
+class PuzzleTabScreen extends ConsumerStatefulWidget {
+  const PuzzleTabScreen({super.key});
 
   @override
-  ConsumerState<PuzzleDashboardScreen> createState() =>
-      _PuzzleDashboardScreenState();
+  ConsumerState<PuzzleTabScreen> createState() => _PuzzleTabScreenState();
 }
 
-class _PuzzleDashboardScreenState extends ConsumerState<PuzzleDashboardScreen> {
+class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override

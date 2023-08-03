@@ -34,14 +34,14 @@ final RouteObserver<PageRoute<void>> homeRouteObserver =
 
 final isHomeRootProvider = StateProvider<bool>((ref) => true);
 
-class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({super.key});
+class HomeTabScreen extends ConsumerStatefulWidget {
+  const HomeTabScreen({super.key});
 
   @override
-  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeTabScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> with RouteAware {
+class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
   bool wasOnline = true;

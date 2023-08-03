@@ -8,12 +8,12 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/view/home/home_screen.dart';
+import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
-import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/account/profile_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
-import 'package:lichess_mobile/src/view/puzzle/puzzle_dashboard_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 
 enum BottomTab {
   home(Icons.home),
@@ -189,12 +189,12 @@ class BottomNavScaffold extends ConsumerWidget {
         return _MaterialTabView(
           navigatorKey: homeNavigatorKey,
           navigatorObservers: [homeRouteObserver, gameRouteObserver],
-          builder: (context) => const HomeScreen(),
+          builder: (context) => const HomeTabScreen(),
         );
       case 1:
         return _MaterialTabView(
           navigatorKey: puzzlesNavigatorKey,
-          builder: (context) => const PuzzleDashboardScreen(),
+          builder: (context) => const PuzzleTabScreen(),
         );
       case 2:
         return _MaterialTabView(
@@ -205,7 +205,7 @@ class BottomNavScaffold extends ConsumerWidget {
       case 3:
         return _MaterialTabView(
           navigatorKey: profileNavigatorKey,
-          builder: (context) => const ProfileScreen(),
+          builder: (context) => const ProfileTabScreen(),
         );
       default:
         assert(false, 'Unexpected tab');
@@ -220,13 +220,13 @@ class BottomNavScaffold extends ConsumerWidget {
           defaultTitle: 'Home',
           navigatorKey: homeNavigatorKey,
           navigatorObservers: [homeRouteObserver, gameRouteObserver],
-          builder: (context) => const HomeScreen(),
+          builder: (context) => const HomeTabScreen(),
         );
       case 1:
         return CupertinoTabView(
           defaultTitle: context.l10n.puzzles,
           navigatorKey: puzzlesNavigatorKey,
-          builder: (context) => const PuzzleDashboardScreen(),
+          builder: (context) => const PuzzleTabScreen(),
         );
       case 2:
         return CupertinoTabView(
@@ -239,7 +239,7 @@ class BottomNavScaffold extends ConsumerWidget {
         return CupertinoTabView(
           defaultTitle: context.l10n.profile,
           navigatorKey: profileNavigatorKey,
-          builder: (context) => const ProfileScreen(),
+          builder: (context) => const ProfileTabScreen(),
         );
       default:
         assert(false, 'Unexpected tab');
