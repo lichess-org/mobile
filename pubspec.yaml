@@ -30,7 +30,7 @@ dependencies:
   soundpool:
     git:
      url: https://github.com/lichess-org/flutter-soundpool.git
-     ref: 6685de749c71c7f77d05ef765c136100ae79bb6f
+     ref: 3900871fd9b6eec4a2437dbdc2946c96ca1f58fd
   meta: ^1.8.0
   deep_pick: ^1.0.0
   timeago: ^3.3.0

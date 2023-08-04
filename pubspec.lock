@@ -1142,8 +1142,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "6685de749c71c7f77d05ef765c136100ae79bb6f"
-      resolved-ref: "6685de749c71c7f77d05ef765c136100ae79bb6f"
+      ref: "3900871fd9b6eec4a2437dbdc2946c96ca1f58fd"
+      resolved-ref: "3900871fd9b6eec4a2437dbdc2946c96ca1f58fd"
       url: "https://github.com/lichess-org/flutter-soundpool.git"
     source: git
     version: "2.4.0"
