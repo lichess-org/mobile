@@ -121,52 +121,56 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
     final screenHeight = MediaQuery.sizeOf(context).height;
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-        color: widget.active
-            ? isEmergency
-                ? clockStyle.emergencyBackgroundColor
-                : clockStyle.activeBackgroundColor
-            : clockStyle.backgroundColor,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
-        child: MediaQuery(
-          data: mediaQueryData.copyWith(
-            textScaleFactor: math.min(
-              mediaQueryData.textScaleFactor,
-              kMaxClockTextScaleFactor,
+    return RepaintBoundary(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+          color: widget.active
+              ? isEmergency
+                  ? clockStyle.emergencyBackgroundColor
+                  : clockStyle.activeBackgroundColor
+              : clockStyle.backgroundColor,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
+          child: MediaQuery(
+            data: mediaQueryData.copyWith(
+              textScaleFactor: math.min(
+                mediaQueryData.textScaleFactor,
+                kMaxClockTextScaleFactor,
+              ),
             ),
-          ),
-          child: RichText(
-            text: TextSpan(
-              text: '$min:$secs',
-              style: TextStyle(
-                color: widget.active
-                    ? isEmergency
-                        ? clockStyle.emergencyTextColor
-                        : clockStyle.activeTextColor
-                    : clockStyle.textColor,
-                fontSize: 26,
-                height: screenHeight < kSmallHeightScreenThreshold ? 1.0 : null,
-                fontFeatures: const [
-                  FontFeature.tabularFigures(),
+            child: RichText(
+              text: TextSpan(
+                text: '$min:$secs',
+                style: TextStyle(
+                  color: widget.active
+                      ? isEmergency
+                          ? clockStyle.emergencyTextColor
+                          : clockStyle.activeTextColor
+                      : clockStyle.textColor,
+                  fontSize: 26,
+                  height:
+                      screenHeight < kSmallHeightScreenThreshold ? 1.0 : null,
+                  fontFeatures: const [
+                    FontFeature.tabularFigures(),
+                  ],
+                ),
+                children: [
+                  if (showTenths)
+                    TextSpan(
+                      text:
+                          '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  if (!widget.active && timeLeft < const Duration(seconds: 1))
+                    TextSpan(
+                      text:
+                          '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
+                      style: const TextStyle(fontSize: 18),
+                    ),
                 ],
               ),
-              children: [
-                if (showTenths)
-                  TextSpan(
-                    text: '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                if (!widget.active && timeLeft < const Duration(seconds: 1))
-                  TextSpan(
-                    text:
-                        '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-              ],
             ),
           ),
         ),
