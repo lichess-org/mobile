@@ -15,7 +15,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
 
   @override
   AnalysisCtrlState build(
-    List<GameStep> steps,
+    IList<GameStep> steps,
     Side orientation,
   ) {
     final root = Root(
@@ -23,23 +23,22 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       fen: steps[0].position.fen,
       position: steps[0].position,
     );
+
     RootOrNode current = root;
-
-    for (var i = 1; i < steps.length; i++) {
+    steps.skip(1).forEach((step) {
       final nextNode = Node(
-        id: UciCharPair.fromUci(steps[i].sanMove!.san),
-        ply: steps[i].ply,
-        sanMove: steps[i].sanMove!,
-        fen: steps[i].position.fen,
-        position: steps[i].position,
+        // skipping root node makes sure that sanMove is available
+        id: UciCharPair.fromMove(step.sanMove!.move),
+        ply: step.ply,
+        sanMove: step.sanMove!,
+        fen: step.position.fen,
+        position: step.position,
       );
-
       current.addChild(nextNode);
       current = nextNode;
-    }
+    });
 
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
-
     return AnalysisCtrlState(
       currentNode: ViewNode.fromNode(_gameTree),
       pov: orientation,
