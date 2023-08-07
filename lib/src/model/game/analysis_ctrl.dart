@@ -44,6 +44,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       initialPath: UciPath.empty,
       currentPath: _root.mainlinePath,
       nodeList: IList(_root.nodesOn(_root.mainlinePath)),
+      root: IList(_root.mainline),
       pov: orientation,
     );
   }
@@ -96,6 +97,7 @@ class AnalysisCtrlState with _$AnalysisCtrlState {
   const AnalysisCtrlState._();
 
   const factory AnalysisCtrlState({
+    required IList<ViewNode> root,
     required IList<ViewNode> nodeList,
     required UciPath initialPath,
     required UciPath currentPath,

@@ -5,7 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/game/analysis_ctrl.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
@@ -97,13 +100,79 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                   validMoves: analysisState.validMoves,
                 ),
                 topTable: const SizedBox(height: 50),
-                bottomTable: const SizedBox(height: 50),
+                bottomTable: _Moves(ctrlProvider: ctrlProvider),
               ),
             ),
           ),
         ),
         _BottomBar(ctrlProvider: ctrlProvider),
       ],
+    );
+  }
+}
+
+class _Moves extends ConsumerWidget {
+  const _Moves({
+    required this.ctrlProvider,
+  });
+
+  final AnalysisCtrlProvider ctrlProvider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final analysisState = ref.watch(ctrlProvider);
+    var path = UciPath.empty;
+    return SingleChildScrollView(
+      child: Wrap(
+        spacing: 1.0,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        children: analysisState.root.map((move) {
+          path = path + move.id;
+          return _Move(
+            ctrlProvider,
+            path: path,
+            move: move.sanMove,
+            ply: move.ply,
+            isCurrentMove: path == analysisState.currentPath,
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class _Move extends ConsumerWidget {
+  const _Move(
+    this.ctrlProvider, {
+    required this.path,
+    required this.move,
+    required this.ply,
+    required this.isCurrentMove,
+  });
+
+  final AnalysisCtrlProvider ctrlProvider;
+  final UciPath path;
+  final SanMove move;
+  final int ply;
+  final bool isCurrentMove;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final text = ply.isOdd ? '${(ply / 2).ceil()}. ${move.san}' : move.san;
+    return Container(
+      padding: const EdgeInsets.all(3),
+      decoration: isCurrentMove
+          ? const BoxDecoration(
+              color: Colors.black,
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.all(
+                Radius.circular(8.0),
+              ),
+            )
+          : null,
+      child: Text(
+        text,
+      ),
     );
   }
 }
@@ -162,3 +231,12 @@ class _BottomBar extends ConsumerWidget {
   void _moveBackward(WidgetRef ref) =>
       ref.read(ctrlProvider.notifier).userPrevious();
 }
+
+
+// how to display the ui for the tree.
+// First display mainline.
+// For the first sideline it should be in a new line.
+// Each subsequent sidelines in the sidelines can be inlined
+//
+// Implementation Maybe?:
+// Add nodes to a Wrap Widget.
