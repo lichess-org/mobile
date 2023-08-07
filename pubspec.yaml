@@ -44,7 +44,7 @@ dependencies:
   sqflite: ^2.2.5
   path: ^1.8.2
   connectivity_plus: ^4.0.0
-  share_plus: ^7.0.0
+  share_plus: ^7.1.0
   fl_chart: ^0.63.0
   stream_transform: ^2.1.0
   flutter_native_splash: ^2.2.19
