@@ -228,17 +228,19 @@ class _BottomBar extends ConsumerWidget {
           ),
           BottomBarIconButton(
             semanticsLabel: context.l10n.menu,
-            onPressed: () => pushPlatformRoute(
-              context,
-              builder: (context) => AnalysisScreen(
-                steps: ref
-                    .read(gameCursorProvider(gameData.id))
-                    .requireValue
-                    .$1
-                    .steps,
-                orientation: Side.white,
-              ),
-            ),
+            onPressed: ref.read(gameCursorProvider(gameData.id)).hasValue
+                ? () => pushPlatformRoute(
+                      context,
+                      builder: (context) => AnalysisScreen(
+                        steps: ref
+                            .read(gameCursorProvider(gameData.id))
+                            .requireValue
+                            .$1
+                            .steps,
+                        orientation: Side.white,
+                      ),
+                    )
+                : null,
             icon: const Icon(Icons.computer),
           ),
           const SizedBox(

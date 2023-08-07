@@ -85,16 +85,15 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
               child: BoardTable(
                 boardData: cg.BoardData(
                   orientation: analysisState.pov.cg,
-                  interactableSide: analysisState
-                          .currentNode.position.isGameOver
+                  interactableSide: analysisState.position.isGameOver
                       ? cg.InteractableSide.none
-                      : analysisState.currentNode.position.turn == Side.white
+                      : analysisState.position.turn == Side.white
                           ? cg.InteractableSide.white
                           : cg.InteractableSide.black,
-                  fen: analysisState.currentNode.fen,
-                  isCheck: analysisState.currentNode.position.isCheck,
+                  fen: analysisState.fen,
+                  isCheck: analysisState.position.isCheck,
                   lastMove: analysisState.lastMove?.cg,
-                  sideToMove: analysisState.currentNode.position.turn.cg,
+                  sideToMove: analysisState.position.turn.cg,
                   validMoves: analysisState.validMoves,
                 ),
                 topTable: const SizedBox(height: 50),
@@ -129,10 +128,12 @@ class _BottomBar extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const RepeatButton(
-              onLongPress: null,
+            RepeatButton(
+              onLongPress:
+                  analysisState.canGoBack ? () => _moveBackward(ref) : null,
               child: BottomBarButton(
-                onTap: null,
+                onTap:
+                    analysisState.canGoBack ? () => _moveBackward(ref) : null,
                 label: 'Previous',
                 shortLabel: 'Previous',
                 icon: CupertinoIcons.chevron_back,
@@ -140,12 +141,13 @@ class _BottomBar extends ConsumerWidget {
               ),
             ),
             RepeatButton(
-              onLongPress: null,
+              onLongPress:
+                  analysisState.canGoNext ? () => _moveForward(ref) : null,
               child: BottomBarButton(
                 icon: CupertinoIcons.chevron_forward,
                 label: context.l10n.next,
                 shortLabel: context.l10n.next,
-                onTap: null,
+                onTap: analysisState.canGoNext ? () => _moveForward(ref) : null,
                 showAndroidTooltip: false,
               ),
             ),
@@ -154,4 +156,9 @@ class _BottomBar extends ConsumerWidget {
       ),
     );
   }
+
+  void _moveForward(WidgetRef ref) =>
+      ref.read(ctrlProvider.notifier).userNext();
+  void _moveBackward(WidgetRef ref) =>
+      ref.read(ctrlProvider.notifier).userPrevious();
 }
