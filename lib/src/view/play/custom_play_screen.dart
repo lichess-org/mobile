@@ -207,7 +207,7 @@ String _clockTimeLabel(num seconds) {
     case 15:
       return '¼';
     default:
-      return '${(seconds / 60).floor()}';
+      return (seconds / 60).toString().replaceAll('.0', '');
   }
 }
 
