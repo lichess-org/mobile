@@ -38,7 +38,7 @@ dependencies:
   fast_immutable_collections: ^9.0.0
   result_extensions: ^0.1.0
   async: ^2.10.0
-  package_info_plus: ^4.0.0
+  package_info_plus: ^4.1.0
   url_launcher: ^6.1.9
   flutter_layout_grid: ^2.0.1
   sqflite: ^2.2.5
