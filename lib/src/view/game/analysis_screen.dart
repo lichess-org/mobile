@@ -8,10 +8,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/tree.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/game/analysis_ctrl.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
+import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -27,10 +29,12 @@ class AnalysisScreen extends StatelessWidget {
   const AnalysisScreen({
     required this.steps,
     required this.orientation,
+    required this.gameData,
   });
 
   final IList<GameStep> steps;
   final Side orientation;
+  final ArchivedGameData gameData;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +52,7 @@ class AnalysisScreen extends StatelessWidget {
       body: _Body(
         steps: steps,
         orientation: orientation,
+        gameData: gameData,
       ),
     );
   }
@@ -60,6 +65,7 @@ class AnalysisScreen extends StatelessWidget {
       child: _Body(
         steps: steps,
         orientation: orientation,
+        gameData: gameData,
       ),
     );
   }
@@ -69,10 +75,12 @@ class _Body extends ConsumerStatefulWidget {
   const _Body({
     required this.steps,
     required this.orientation,
+    required this.gameData,
   });
 
   final IList<GameStep> steps;
   final Side orientation;
+  final ArchivedGameData gameData;
 
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -81,7 +89,11 @@ class _Body extends ConsumerStatefulWidget {
 class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
   @override
   Widget build(BuildContext context) {
-    final ctrlProvider = analysisCtrlProvider(widget.steps, widget.orientation);
+    final ctrlProvider = analysisCtrlProvider(
+      widget.steps,
+      widget.orientation,
+      widget.gameData.id,
+    );
 
     return Column(
       children: [
@@ -90,6 +102,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
+              _Ceval(ctrlProvider),
               _Board(ctrlProvider),
               _InlineTreeView(ctrlProvider),
             ],
@@ -110,6 +123,15 @@ class _Board extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(ctrlProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final evalContext =
+        ref.watch(ctrlProvider.select((value) => value.evaluationContext));
+    final currentEvalBest = ref.watch(
+      engineEvaluationProvider(evalContext).select((e) => e?.bestMove),
+    );
+
+    final evalBestMove =
+        (currentEvalBest ?? analysisState.node.eval?.bestMove)?.cg;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final boardSize = constraints.biggest.shortestSide;
@@ -130,6 +152,15 @@ class _Board extends ConsumerWidget {
             onMove: (move, {isPremove}) => ref
                 .read(ctrlProvider.notifier)
                 .onUserMove(Move.fromUci(move.uci)!),
+            shapes: analysisState.isEngineEnabled && evalBestMove != null
+                ? ISet([
+                    cg.Arrow(
+                      color: const Color(0x40003088),
+                      orig: evalBestMove.from,
+                      dest: evalBestMove.to,
+                    )
+                  ])
+                : null,
           ),
           settings: cg.BoardSettings(
             pieceAssets: boardPrefs.pieceSet.assets,
@@ -142,6 +173,28 @@ class _Board extends ConsumerWidget {
         );
       },
     );
+  }
+}
+
+class _Ceval extends ConsumerWidget {
+  const _Ceval(this.ctrlProvider);
+
+  final AnalysisCtrlProvider ctrlProvider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final analysisState = ref.watch(ctrlProvider);
+
+    return analysisState.isEngineEnabled
+        ? EngineGauge(
+            displayMode: EngineGaugeDisplayMode.horizontal,
+            params: EngineGaugeParams(
+              evaluationContext: analysisState.evaluationContext,
+              position: analysisState.position,
+              savedEval: analysisState.node.eval,
+            ),
+          )
+        : const SizedBox.shrink();
   }
 }
 
