@@ -89,7 +89,7 @@ class _GameTitle extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(
-          gameData.speed.icon,
+          gameData.perf.icon,
           color: DefaultTextStyle.of(context).style.color,
         ),
         const SizedBox(width: 4.0),
