@@ -7,6 +7,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -99,7 +100,21 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              String.fromCharCode(LichessIcons.lichess.codePoint),
+              style: TextStyle(
+                fontFamily: LichessIcons.lichess.fontFamily,
+                fontSize: 26.0,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(width: 8.0),
+            const Text('lichess.org'),
+          ],
+        ),
         actions: const [
           SignInWidget(),
         ],
@@ -120,9 +135,22 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         child: CustomScrollView(
           controller: homeScrollController,
           slivers: [
-            const CupertinoSliverNavigationBar(
-              largeTitle: Text('Home'),
-              trailing: SignInWidget(),
+            CupertinoSliverNavigationBar(
+              largeTitle: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    String.fromCharCode(LichessIcons.lichess.codePoint),
+                    style: TextStyle(
+                      fontFamily: LichessIcons.lichess.fontFamily,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(width: 8.0),
+                  const Text('lichess.org'),
+                ],
+              ),
+              trailing: const SignInWidget(),
             ),
             CupertinoSliverRefreshControl(
               onRefresh: _refreshData,
