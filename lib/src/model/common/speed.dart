@@ -19,7 +19,7 @@ enum Speed {
   final IconData icon;
 
   factory Speed.fromTimeIncrement(TimeIncrement t) {
-    switch (t.duration.inSeconds) {
+    switch (t.estimatedDuration.inSeconds) {
       case >= 1 && <= 29:
         return Speed.ultraBullet;
       case >= 30 && <= 179:
