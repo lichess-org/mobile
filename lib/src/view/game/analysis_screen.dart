@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/tree.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/game/analysis_ctrl.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -148,27 +149,78 @@ class _InlineTreeView extends ConsumerWidget {
     final currentPath =
         ref.watch(ctrlProvider.select((value) => value.currentPath));
     var path = UciPath.empty;
+
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
         child: SingleChildScrollView(
           child: Wrap(
             spacing: 1.0,
-            children: nodes.map((move) {
-              path = path + move.id;
-              return _Move(
-                ctrlProvider,
-                path: path,
-                move: move.sanMove,
-                ply: move.ply,
-                isCurrentMove: path == currentPath,
-                isSideline: false,
-              );
-            }).toList(),
+            children: _buildTreeWidgets(
+              ctrlProvider,
+              nodes: nodes,
+              inMainline: true,
+              path: UciPath.empty,
+              currentPath: currentPath,
+            ),
           ),
         ),
       ),
     );
+  }
+
+  List<Widget> _buildTreeWidgets(
+    AnalysisCtrlProvider ctrlProvider, {
+    required IList<ViewNode> nodes,
+    required bool inMainline,
+    required UciPath path,
+    required UciPath currentPath,
+  }) {
+    if (nodes.isEmpty) return [];
+
+    final List<Widget> widgets = [];
+
+    for (var i = 0; i < nodes.length; i++) {
+      final node = nodes[i];
+      if (inMainline && i > 0) {
+        // shift to a new Wrap for a sideline
+        // only shift to a new Wrap if in mainline
+        widgets.add(
+          Wrap(
+            children: _buildTreeWidgets(
+              ctrlProvider,
+              nodes: IList([node]),
+              path: path + node.id,
+              inMainline: false,
+              currentPath: currentPath,
+            ),
+          ),
+        );
+      } else {
+        final newPath = path + node.id;
+        widgets.add(
+          _Move(
+            ctrlProvider,
+            path: newPath,
+            move: node.sanMove,
+            ply: node.ply,
+            isCurrentMove: newPath == currentPath,
+            isSideline: !inMainline,
+          ),
+        );
+        widgets.addAll(
+          _buildTreeWidgets(
+            ctrlProvider,
+            nodes: node.children,
+            inMainline: i == 0 && inMainline,
+            path: newPath,
+            currentPath: currentPath,
+          ),
+        );
+      }
+    }
+
+    return widgets;
   }
 }
 
