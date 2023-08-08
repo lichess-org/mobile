@@ -61,27 +61,27 @@ class AnalysisCtrl extends _$AnalysisCtrl {
     _setPath(state.currentPath.penultimate, replaying: true);
   }
 
+  void userJump(UciPath path) {
+    _setPath(path);
+  }
+
   void _setPath(UciPath path, {bool replaying = false}) {
     final newNodeList = IList(_root.nodesOn(path));
     if (newNodeList.isEmpty) return;
     final sanMove = newNodeList.last.sanMove;
+    final isCheck = sanMove.san.contains('+');
     if (!replaying) {
-      final isForward = path.size > state.currentPath.size;
-      if (isForward) {
-        final isCheck = sanMove.san.contains('+');
-        if (sanMove.san.contains('x')) {
-          ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
-        } else {
-          ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
-        }
+      if (isCheck) {
+        ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+      } else {
+        ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
       }
     } else {
       // when replaying moves fast we don't want haptic feedback
-      final soundService = ref.read(soundServiceProvider);
-      if (sanMove.san.contains('x')) {
-        soundService.play(Sound.capture);
+      if (isCheck) {
+        ref.read(soundServiceProvider).play(Sound.capture);
       } else {
-        soundService.play(Sound.move);
+        ref.read(soundServiceProvider).play(Sound.move);
       }
     }
     state = state.copyWith(

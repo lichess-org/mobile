@@ -8,10 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/game/analysis_ctrl.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
-import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -77,31 +76,17 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
   @override
   Widget build(BuildContext context) {
     final ctrlProvider = analysisCtrlProvider(widget.steps, widget.orientation);
-    final analysisState = ref.watch(ctrlProvider);
 
     return Column(
       children: [
         Expanded(
-          child: Center(
-            child: SafeArea(
-              bottom: false,
-              child: BoardTable(
-                boardData: cg.BoardData(
-                  orientation: analysisState.pov.cg,
-                  interactableSide: analysisState.position.isGameOver
-                      ? cg.InteractableSide.none
-                      : analysisState.position.turn == Side.white
-                          ? cg.InteractableSide.white
-                          : cg.InteractableSide.black,
-                  fen: analysisState.fen,
-                  isCheck: analysisState.position.isCheck,
-                  lastMove: analysisState.lastMove?.cg,
-                  sideToMove: analysisState.position.turn.cg,
-                  validMoves: analysisState.validMoves,
-                ),
-                topTable: const SizedBox(height: 50),
-                bottomTable: _Moves(ctrlProvider: ctrlProvider),
-              ),
+          child: SafeArea(
+            bottom: false,
+            child: Column(
+              children: [
+                _Board(ctrlProvider),
+                _InlineTreeView(ctrlProvider),
+              ],
             ),
           ),
         ),
@@ -111,31 +96,75 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
   }
 }
 
-class _Moves extends ConsumerWidget {
-  const _Moves({
-    required this.ctrlProvider,
-  });
+class _Board extends ConsumerWidget {
+  const _Board(this.ctrlProvider);
 
   final AnalysisCtrlProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(ctrlProvider);
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+    final defaultSettings = cg.BoardSettings(
+      pieceAssets: boardPrefs.pieceSet.assets,
+      colorScheme: boardPrefs.boardTheme.colors,
+      showValidMoves: boardPrefs.showLegalMoves,
+      showLastMove: boardPrefs.boardHighlights,
+      enableCoordinates: boardPrefs.coordinates,
+      animationDuration: boardPrefs.pieceAnimationDuration,
+    );
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final boardSize = constraints.biggest.shortestSide;
+        return cg.Board(
+          size: boardSize,
+          data: cg.BoardData(
+            orientation: analysisState.pov.cg,
+            interactableSide: analysisState.position.isGameOver
+                ? cg.InteractableSide.none
+                : analysisState.position.turn == Side.white
+                    ? cg.InteractableSide.white
+                    : cg.InteractableSide.black,
+            fen: analysisState.fen,
+            isCheck: analysisState.position.isCheck,
+            lastMove: analysisState.lastMove?.cg,
+            sideToMove: analysisState.position.turn.cg,
+            validMoves: analysisState.validMoves,
+          ),
+          settings: defaultSettings,
+        );
+      },
+    );
+  }
+}
+
+class _InlineTreeView extends ConsumerWidget {
+  const _InlineTreeView(this.ctrlProvider);
+
+  final AnalysisCtrlProvider ctrlProvider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final nodes = ref.watch(ctrlProvider.select((value) => value.root));
+    final currentPath =
+        ref.watch(ctrlProvider.select((value) => value.currentPath));
     var path = UciPath.empty;
-    return SingleChildScrollView(
-      child: Wrap(
-        spacing: 1.0,
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        children: analysisState.root.map((move) {
-          path = path + move.id;
-          return _Move(
-            ctrlProvider,
-            path: path,
-            move: move.sanMove,
-            ply: move.ply,
-            isCurrentMove: path == analysisState.currentPath,
-          );
-        }).toList(),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SingleChildScrollView(
+        child: Wrap(
+          spacing: 1.0,
+          children: nodes.map((move) {
+            path = path + move.id;
+            return _Move(
+              ctrlProvider,
+              path: path,
+              move: move.sanMove,
+              ply: move.ply,
+              isCurrentMove: path == currentPath,
+            );
+          }).toList(),
+        ),
       ),
     );
   }
@@ -159,19 +188,26 @@ class _Move extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final text = ply.isOdd ? '${(ply / 2).ceil()}. ${move.san}' : move.san;
-    return Container(
-      padding: const EdgeInsets.all(3),
-      decoration: isCurrentMove
-          ? const BoxDecoration(
-              color: Colors.black,
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.all(
-                Radius.circular(8.0),
-              ),
-            )
-          : null,
-      child: Text(
-        text,
+    return InkWell(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(8.0),
+      ),
+      onTap: () => ref.read(ctrlProvider.notifier).userJump(path),
+      child: Container(
+        padding: const EdgeInsets.all(3),
+        decoration: isCurrentMove
+            ? BoxDecoration(
+                color: Theme.of(context).focusColor,
+                shape: BoxShape.rectangle,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(8.0),
+                ),
+              )
+            : null,
+        child: Text(
+          text,
+          style: const TextStyle(fontFamily: 'ChessFont'),
+        ),
       ),
     );
   }
