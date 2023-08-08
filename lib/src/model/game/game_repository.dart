@@ -43,7 +43,7 @@ class GameRepository {
   FutureResult<IList<ArchivedGameData>> getUserGames(UserId userId) {
     return apiClient.get(
       Uri.parse(
-        '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true',
+        '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true&accuracy=true',
       ),
       headers: {'Accept': 'application/x-ndjson'},
     ).flatMap(
@@ -158,19 +158,21 @@ Player _playerFromUserGamePick(RequiredPick pick) {
     rating: pick('rating').asIntOrNull(),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     aiLevel: pick('aiLevel').asIntOrNull(),
+    analysis: pick('analysis').letOrNull(_playerAnalysisFromPick),
+  );
+}
+
+PlayerAnalysis _playerAnalysisFromPick(RequiredPick pick) {
+  return PlayerAnalysis(
+    inaccuracy: pick('inaccuracy').asIntOrThrow(),
+    mistake: pick('mistake').asIntOrThrow(),
+    blunder: pick('blunder').asIntOrThrow(),
+    acpl: pick('acpl').asIntOrNull(),
+    accuracy: pick('accuracy').asIntOrNull(),
   );
 }
 
 // Will be needed later
-
-// PlayerAnalysis _playerAnalysisFromPick(RequiredPick pick) {
-//   return PlayerAnalysis(
-//     inaccuracy: pick('inaccuracy').asIntOrThrow(),
-//     mistake: pick('mistake').asIntOrThrow(),
-//     blunder: pick('blunder').asIntOrThrow(),
-//     acpl: pick('acpl').asIntOrNull(),
-//   );
-// }
 
 // MoveAnalysis _moveAnalysisFromPick(RequiredPick pick) {
 //   return MoveAnalysis(
