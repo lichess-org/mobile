@@ -25,7 +25,9 @@ class TimeIncrement {
         'increment': increment,
       };
 
-  Duration get duration => Duration(seconds: time);
+  /// Returns the estimated duration of the game, with increment * 40 added to
+  /// the initial time.
+  Duration get estimatedDuration => Duration(seconds: time + increment * 40);
 
   Speed get speed => Speed.fromTimeIncrement(this);
 

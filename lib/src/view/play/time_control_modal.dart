@@ -39,19 +39,6 @@ class TimeControlModal extends ConsumerWidget {
               timeControlPref,
               choices: const [
                 TimeIncrement(0, 1),
-                TimeIncrement(15, 0),
-              ],
-              title: const _SectionTitle(
-                title: 'Ultrabullet',
-                icon: LichessIcons.ultrabullet,
-              ),
-              onSelected: onSelected,
-            ),
-            const SizedBox(height: 20.0),
-            _SectionChoices(
-              timeControlPref,
-              choices: const [
-                TimeIncrement(30, 0),
                 TimeIncrement(60, 0),
                 TimeIncrement(60, 1),
                 TimeIncrement(120, 1),
