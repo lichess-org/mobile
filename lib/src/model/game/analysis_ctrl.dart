@@ -49,6 +49,13 @@ class AnalysisCtrl extends _$AnalysisCtrl {
     );
   }
 
+  void onUserMove(Move move) {
+    final (newPath, _) = _root.addMoveAt(state.currentPath, move);
+    if (newPath != null) {
+      _setPath(newPath, moveAdded: true);
+    }
+  }
+
   void userNext() {
     if (state.node.children.isEmpty) return;
     _setPath(
@@ -65,7 +72,11 @@ class AnalysisCtrl extends _$AnalysisCtrl {
     _setPath(path);
   }
 
-  void _setPath(UciPath path, {bool replaying = false}) {
+  void _setPath(
+    UciPath path, {
+    bool replaying = false,
+    bool moveAdded = false,
+  }) {
     final newNodeList = IList(_root.nodesOn(path));
     if (newNodeList.isEmpty) return;
     final sanMove = newNodeList.last.sanMove;
@@ -88,6 +99,9 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       currentPath: path,
       nodeList: newNodeList,
       lastMove: sanMove.move,
+      root: moveAdded
+          ? IList(_root.children.map((e) => ViewNode.fromNode(e)))
+          : state.root,
     );
   }
 }

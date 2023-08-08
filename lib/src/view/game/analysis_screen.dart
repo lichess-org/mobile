@@ -18,6 +18,11 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 
+const baseTextStyle =
+    TextStyle(fontFamily: 'ChessFont', fontWeight: FontWeight.bold);
+const sideLineStyle =
+    TextStyle(fontFamily: 'ChessFont', fontStyle: FontStyle.italic);
+
 class AnalysisScreen extends StatelessWidget {
   const AnalysisScreen({
     required this.steps,
@@ -105,14 +110,6 @@ class _Board extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(ctrlProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final defaultSettings = cg.BoardSettings(
-      pieceAssets: boardPrefs.pieceSet.assets,
-      colorScheme: boardPrefs.boardTheme.colors,
-      showValidMoves: boardPrefs.showLegalMoves,
-      showLastMove: boardPrefs.boardHighlights,
-      enableCoordinates: boardPrefs.coordinates,
-      animationDuration: boardPrefs.pieceAnimationDuration,
-    );
     return LayoutBuilder(
       builder: (context, constraints) {
         final boardSize = constraints.biggest.shortestSide;
@@ -130,8 +127,18 @@ class _Board extends ConsumerWidget {
             lastMove: analysisState.lastMove?.cg,
             sideToMove: analysisState.position.turn.cg,
             validMoves: analysisState.validMoves,
+            onMove: (move, {isPremove}) => ref
+                .read(ctrlProvider.notifier)
+                .onUserMove(Move.fromUci(move.uci)!),
           ),
-          settings: defaultSettings,
+          settings: cg.BoardSettings(
+            pieceAssets: boardPrefs.pieceSet.assets,
+            colorScheme: boardPrefs.boardTheme.colors,
+            showValidMoves: boardPrefs.showLegalMoves,
+            showLastMove: boardPrefs.boardHighlights,
+            enableCoordinates: boardPrefs.coordinates,
+            animationDuration: boardPrefs.pieceAnimationDuration,
+          ),
         );
       },
     );
@@ -148,7 +155,6 @@ class _InlineTreeView extends ConsumerWidget {
     final nodes = ref.watch(ctrlProvider.select((value) => value.root));
     final currentPath =
         ref.watch(ctrlProvider.select((value) => value.currentPath));
-    var path = UciPath.empty;
 
     return Expanded(
       child: Padding(
@@ -160,6 +166,7 @@ class _InlineTreeView extends ConsumerWidget {
               ctrlProvider,
               nodes: nodes,
               inMainline: true,
+              startSideline: false,
               path: UciPath.empty,
               currentPath: currentPath,
             ),
@@ -173,25 +180,48 @@ class _InlineTreeView extends ConsumerWidget {
     AnalysisCtrlProvider ctrlProvider, {
     required IList<ViewNode> nodes,
     required bool inMainline,
+    required bool startSideline,
     required UciPath path,
     required UciPath currentPath,
   }) {
-    if (nodes.isEmpty) return [];
+    if (nodes.isEmpty) {
+      return inMainline
+          ? []
+          : [
+              const Opacity(
+                opacity: 0.8,
+                child: Text(')', style: sideLineStyle),
+              )
+            ];
+    }
 
     final List<Widget> widgets = [];
 
-    for (var i = 0; i < nodes.length; i++) {
+    if (startSideline) {
+      widgets.add(
+        const Opacity(
+          opacity: 0.8,
+          child: Text(
+            '(',
+            style: sideLineStyle,
+          ),
+        ),
+      );
+    }
+
+    for (var i = 1; i < nodes.length; i++) {
       final node = nodes[i];
-      if (inMainline && i > 0) {
-        // shift to a new Wrap for a sideline
-        // only shift to a new Wrap if in mainline
+      if (inMainline) {
         widgets.add(
           Wrap(
+            spacing: 1.0,
+            alignment: WrapAlignment.center,
             children: _buildTreeWidgets(
               ctrlProvider,
               nodes: IList([node]),
-              path: path + node.id,
+              path: path,
               inMainline: false,
+              startSideline: true,
               currentPath: currentPath,
             ),
           ),
@@ -212,13 +242,37 @@ class _InlineTreeView extends ConsumerWidget {
           _buildTreeWidgets(
             ctrlProvider,
             nodes: node.children,
-            inMainline: i == 0 && inMainline,
+            inMainline: false,
             path: newPath,
+            startSideline: true,
             currentPath: currentPath,
           ),
         );
       }
     }
+
+    final newPath = path + nodes[0].id;
+    widgets.add(
+      _Move(
+        ctrlProvider,
+        path: newPath,
+        move: nodes[0].sanMove,
+        ply: nodes[0].ply,
+        isCurrentMove: newPath == currentPath,
+        isSideline: !inMainline,
+        startSideline: startSideline,
+      ),
+    );
+    widgets.addAll(
+      _buildTreeWidgets(
+        ctrlProvider,
+        nodes: nodes[0].children,
+        inMainline: inMainline,
+        startSideline: false,
+        path: newPath,
+        currentPath: currentPath,
+      ),
+    );
 
     return widgets;
   }
@@ -232,6 +286,7 @@ class _Move extends ConsumerWidget {
     required this.ply,
     required this.isCurrentMove,
     required this.isSideline,
+    this.startSideline = false,
   });
 
   final AnalysisCtrlProvider ctrlProvider;
@@ -240,17 +295,12 @@ class _Move extends ConsumerWidget {
   final int ply;
   final bool isCurrentMove;
   final bool isSideline;
-
-  static const baseTextStyle =
-      TextStyle(fontFamily: 'ChessFont', fontWeight: FontWeight.bold);
-  static const sideLineStyle =
-      TextStyle(fontFamily: 'ChessFont', fontStyle: FontStyle.italic);
-
+  final bool startSideline;
   static const borderRadius = BorderRadius.all(Radius.circular(8.0));
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final text = ply.isOdd ? '${(ply / 2).ceil()}. ${move.san}' : move.san;
+    final text = buildText();
     return InkWell(
       borderRadius: borderRadius,
       onTap: () => ref.read(ctrlProvider.notifier).userJump(path),
@@ -272,6 +322,14 @@ class _Move extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  String buildText() {
+    if (startSideline) {
+      return '${(ply / 2).ceil()}... ${move.san}';
+    } else {
+      return ply.isOdd ? '${(ply / 2).ceil()}. ${move.san}' : move.san;
+    }
   }
 }
 
