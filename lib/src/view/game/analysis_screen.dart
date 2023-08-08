@@ -80,14 +80,13 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
     return Column(
       children: [
         Expanded(
-          child: SafeArea(
-            bottom: false,
-            child: Column(
-              children: [
-                _Board(ctrlProvider),
-                _InlineTreeView(ctrlProvider),
-              ],
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              _Board(ctrlProvider),
+              _InlineTreeView(ctrlProvider),
+            ],
           ),
         ),
         _BottomBar(ctrlProvider: ctrlProvider),
@@ -149,21 +148,24 @@ class _InlineTreeView extends ConsumerWidget {
     final currentPath =
         ref.watch(ctrlProvider.select((value) => value.currentPath));
     var path = UciPath.empty;
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SingleChildScrollView(
-        child: Wrap(
-          spacing: 1.0,
-          children: nodes.map((move) {
-            path = path + move.id;
-            return _Move(
-              ctrlProvider,
-              path: path,
-              move: move.sanMove,
-              ply: move.ply,
-              isCurrentMove: path == currentPath,
-            );
-          }).toList(),
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+        child: SingleChildScrollView(
+          child: Wrap(
+            spacing: 1.0,
+            children: nodes.map((move) {
+              path = path + move.id;
+              return _Move(
+                ctrlProvider,
+                path: path,
+                move: move.sanMove,
+                ply: move.ply,
+                isCurrentMove: path == currentPath,
+                isSideline: false,
+              );
+            }).toList(),
+          ),
         ),
       ),
     );
@@ -177,6 +179,7 @@ class _Move extends ConsumerWidget {
     required this.move,
     required this.ply,
     required this.isCurrentMove,
+    required this.isSideline,
   });
 
   final AnalysisCtrlProvider ctrlProvider;
@@ -184,14 +187,20 @@ class _Move extends ConsumerWidget {
   final SanMove move;
   final int ply;
   final bool isCurrentMove;
+  final bool isSideline;
+
+  static const baseTextStyle =
+      TextStyle(fontFamily: 'ChessFont', fontWeight: FontWeight.bold);
+  static const sideLineStyle =
+      TextStyle(fontFamily: 'ChessFont', fontStyle: FontStyle.italic);
+
+  static const borderRadius = BorderRadius.all(Radius.circular(8.0));
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final text = ply.isOdd ? '${(ply / 2).ceil()}. ${move.san}' : move.san;
     return InkWell(
-      borderRadius: const BorderRadius.all(
-        Radius.circular(8.0),
-      ),
+      borderRadius: borderRadius,
       onTap: () => ref.read(ctrlProvider.notifier).userJump(path),
       child: Container(
         padding: const EdgeInsets.all(3),
@@ -199,14 +208,15 @@ class _Move extends ConsumerWidget {
             ? BoxDecoration(
                 color: Theme.of(context).focusColor,
                 shape: BoxShape.rectangle,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(8.0),
-                ),
+                borderRadius: borderRadius,
               )
             : null,
-        child: Text(
-          text,
-          style: const TextStyle(fontFamily: 'ChessFont'),
+        child: Opacity(
+          opacity: isSideline ? 0.8 : 1.0,
+          child: Text(
+            text,
+            style: isSideline ? sideLineStyle : baseTextStyle,
+          ),
         ),
       ),
     );
@@ -242,6 +252,7 @@ class _BottomBar extends ConsumerWidget {
                 label: 'Previous',
                 shortLabel: 'Previous',
                 icon: CupertinoIcons.chevron_back,
+                showAndroidShortLabel: true,
                 showAndroidTooltip: false,
               ),
             ),
@@ -252,6 +263,7 @@ class _BottomBar extends ConsumerWidget {
                 icon: CupertinoIcons.chevron_forward,
                 label: context.l10n.next,
                 shortLabel: context.l10n.next,
+                showAndroidShortLabel: true,
                 onTap: analysisState.canGoNext ? () => _moveForward(ref) : null,
                 showAndroidTooltip: false,
               ),
