@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -64,7 +65,7 @@ class EngineEvaluation extends _$EngineEvaluation {
         .start(
           Work(
             variant: context.variant,
-            threads: maxCores,
+            threads: kDebugMode ? 1 : maxCores,
             maxDepth: kMaxDepth,
             multiPv: 1,
             ply: step.ply,

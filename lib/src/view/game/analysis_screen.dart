@@ -149,7 +149,7 @@ class _Board extends ConsumerWidget {
             lastMove: analysisState.lastMove?.cg,
             sideToMove: analysisState.position.turn.cg,
             validMoves: analysisState.validMoves,
-            onMove: (move, {isPremove}) => ref
+            onMove: (move, {isDrop, isPremove}) => ref
                 .read(ctrlProvider.notifier)
                 .onUserMove(Move.fromUci(move.uci)!),
             shapes: analysisState.isEngineEnabled && evalBestMove != null
@@ -442,12 +442,3 @@ class _BottomBar extends ConsumerWidget {
   void _moveBackward(WidgetRef ref) =>
       ref.read(ctrlProvider.notifier).userPrevious();
 }
-
-
-// how to display the ui for the tree.
-// First display mainline.
-// For the first sideline it should be in a new line.
-// Each subsequent sidelines in the sidelines can be inlined
-//
-// Implementation Maybe?:
-// Add nodes to a Wrap Widget.
