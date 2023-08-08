@@ -240,16 +240,6 @@ class GameStep with _$GameStep {
 }
 
 @freezed
-class PlayerAnalysis with _$PlayerAnalysis {
-  const factory PlayerAnalysis({
-    required int inaccuracy,
-    required int mistake,
-    required int blunder,
-    int? acpl,
-  }) = _PlayerAnalysis;
-}
-
-@freezed
 class MoveAnalysis with _$MoveAnalysis {
   const factory MoveAnalysis({
     int? eval,

@@ -32,6 +32,9 @@ class Player with _$Player {
     bool? offeringDraw,
     bool? offeringRematch,
     bool? proposingTakeback,
+
+    /// Post game player analysis summary
+    PlayerAnalysis? analysis,
   }) = _Player;
 
   LightUser? get lightUser => id != null
@@ -63,4 +66,15 @@ class Player with _$Player {
     final goneButNoAI = isGone && !isAI;
     return copyWith(isGone: goneButNoAI, onGame: goneButNoAI ? false : onGame);
   }
+}
+
+@freezed
+class PlayerAnalysis with _$PlayerAnalysis {
+  const factory PlayerAnalysis({
+    required int inaccuracy,
+    required int mistake,
+    required int blunder,
+    int? acpl,
+    int? accuracy,
+  }) = _PlayerAnalysis;
 }
