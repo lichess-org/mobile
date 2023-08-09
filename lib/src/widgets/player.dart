@@ -5,10 +5,10 @@ import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
@@ -273,6 +273,7 @@ class PlayerTitle extends StatelessWidget {
     required this.userName,
     this.title,
     this.rating,
+    this.isPatron,
     this.style,
     super.key,
   });
@@ -280,6 +281,7 @@ class PlayerTitle extends StatelessWidget {
   final String userName;
   final String? title;
   final int? rating;
+  final bool? isPatron;
   final TextStyle? style;
 
   @override
@@ -288,6 +290,15 @@ class PlayerTitle extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (isPatron == true)
+          Padding(
+            padding: const EdgeInsets.only(right: 5),
+            child: Icon(
+              LichessIcons.patron,
+              size: DefaultTextStyle.of(context).style.fontSize,
+              color: DefaultTextStyle.of(context).style.color,
+            ),
+          ),
         if (title != null) ...[
           Text(
             title!,

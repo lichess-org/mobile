@@ -60,6 +60,7 @@ class _ProfileScreenState extends ConsumerState<ProfileTabScreen> {
                   title: PlayerTitle(
                     userName: account.username,
                     title: account.title,
+                    isPatron: account.isPatron,
                   ),
                   actions: const [
                     _SettingsButton(),
@@ -113,6 +114,7 @@ class _ProfileScreenState extends ConsumerState<ProfileTabScreen> {
                       largeTitle: PlayerTitle(
                         userName: account.username,
                         title: account.title,
+                        isPatron: account.isPatron,
                       ),
                       trailing: const _SettingsButton(),
                     ),
