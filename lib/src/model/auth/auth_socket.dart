@@ -18,7 +18,7 @@ import 'package:lichess_mobile/src/model/auth/bearer.dart';
 
 part 'auth_socket.g.dart';
 
-const kDefaultConnectTimeout = Duration(seconds: 5);
+const kDefaultConnectTimeout = Duration(seconds: 10);
 
 const kSRIStorageKey = 'socket_random_identifier';
 
