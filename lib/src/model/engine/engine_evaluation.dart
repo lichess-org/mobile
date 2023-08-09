@@ -27,6 +27,7 @@ class EvaluationContext with _$EvaluationContext {
   const factory EvaluationContext({
     required Variant variant,
     required String initialFen,
+    int? cores,
 
     /// Unique ID to ensure engine is properly disposed when no more needed
     /// and a new engine instance is created per context (puzzle, game, etc).
@@ -65,7 +66,7 @@ class EngineEvaluation extends _$EngineEvaluation {
         .start(
           Work(
             variant: context.variant,
-            threads: kDebugMode ? 1 : maxCores,
+            threads: kDebugMode ? 1 : context.cores ?? maxCores,
             maxDepth: kMaxDepth,
             multiPv: 1,
             ply: step.ply,

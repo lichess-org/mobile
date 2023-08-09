@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/tree.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
@@ -14,18 +15,22 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 
 const baseTextStyle =
     TextStyle(fontFamily: 'ChessFont', fontWeight: FontWeight.bold);
 const sideLineStyle =
     TextStyle(fontFamily: 'ChessFont', fontStyle: FontStyle.italic);
 
-class AnalysisScreen extends StatelessWidget {
+class AnalysisScreen extends ConsumerWidget {
   const AnalysisScreen({
     required this.steps,
     required this.orientation,
@@ -37,50 +42,52 @@ class AnalysisScreen extends StatelessWidget {
   final ArchivedGameData gameData;
 
   @override
-  Widget build(BuildContext context) {
-    return PlatformWidget(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ConsumerPlatformWidget(
       androidBuilder: _androidBuilder,
       iosBuilder: _iosBuilder,
+      ref: ref,
     );
   }
 
-  Widget _androidBuilder(BuildContext context) {
+  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = analysisCtrlProvider(steps, orientation, gameData.id);
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.gameAnalysis),
+        actions: [
+          _EngineDepth(
+            ref.watch(ctrlProvider.select((value) => value.evaluationContext)),
+          ),
+          SettingsButton(
+            onPressed: () => showAdaptiveDialog<void>(
+              context: context,
+              builder: (_) => _Prefrences(ctrlProvider),
+            ),
+          )
+        ],
       ),
-      body: _Body(
-        steps: steps,
-        orientation: orientation,
-        gameData: gameData,
-      ),
+      body: _Body(ctrlProvider: ctrlProvider),
     );
   }
 
-  Widget _iosBuilder(BuildContext context) {
+  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = analysisCtrlProvider(steps, orientation, gameData.id);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(context.l10n.analysis),
       ),
-      child: _Body(
-        steps: steps,
-        orientation: orientation,
-        gameData: gameData,
-      ),
+      child: _Body(ctrlProvider: ctrlProvider),
     );
   }
 }
 
 class _Body extends ConsumerStatefulWidget {
   const _Body({
-    required this.steps,
-    required this.orientation,
-    required this.gameData,
+    required this.ctrlProvider,
   });
 
-  final IList<GameStep> steps;
-  final Side orientation;
-  final ArchivedGameData gameData;
+  final AnalysisCtrlProvider ctrlProvider;
 
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -89,12 +96,6 @@ class _Body extends ConsumerStatefulWidget {
 class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
   @override
   Widget build(BuildContext context) {
-    final ctrlProvider = analysisCtrlProvider(
-      widget.steps,
-      widget.orientation,
-      widget.gameData.id,
-    );
-
     return Column(
       children: [
         Expanded(
@@ -102,13 +103,13 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
-              _Ceval(ctrlProvider),
-              _Board(ctrlProvider),
-              _InlineTreeView(ctrlProvider),
+              _Ceval(widget.ctrlProvider),
+              _Board(widget.ctrlProvider),
+              _InlineTreeView(widget.ctrlProvider),
             ],
           ),
         ),
-        _BottomBar(ctrlProvider: ctrlProvider),
+        _BottomBar(ctrlProvider: widget.ctrlProvider),
       ],
     );
   }
@@ -441,4 +442,120 @@ class _BottomBar extends ConsumerWidget {
       ref.read(ctrlProvider.notifier).userNext();
   void _moveBackward(WidgetRef ref) =>
       ref.read(ctrlProvider.notifier).userPrevious();
+}
+
+class _EngineDepth extends ConsumerWidget {
+  const _EngineDepth(this.evalContext);
+
+  final EvaluationContext evalContext;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final depth = ref.watch(
+      engineEvaluationProvider(evalContext).select((value) => value?.depth),
+    );
+
+    return depth != null ? Text('$depth') : kEmptyWidget;
+  }
+}
+
+class _Prefrences extends ConsumerWidget {
+  const _Prefrences(this.ctrlProvider);
+
+  final AnalysisCtrlProvider ctrlProvider;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(ctrlProvider);
+
+    final content = Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: Styles.bodyPadding,
+            child: Text(
+              context.l10n.settingsSettings,
+              style: Styles.title,
+            ),
+          ),
+          SwitchSettingTile(
+            title: Text(context.l10n.bestMoveArrow),
+            value: state.showBestMoveArrow,
+            onChanged: (value) =>
+                ref.read(ctrlProvider.notifier).toggleBestMoveArrow(),
+          ),
+          SwitchSettingTile(
+            title: Text(context.l10n.evaluationGauge),
+            value: state.isEngineEnabled,
+            onChanged: (value) =>
+                ref.read(ctrlProvider.notifier).toggleLocalEvaluation(),
+          ),
+          PlatformListTile(
+            title: Text.rich(
+              TextSpan(
+                text: '${context.l10n.multipleLines}: ',
+                style: const TextStyle(
+                  fontWeight: FontWeight.normal,
+                ),
+                children: [
+                  TextSpan(
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                    text: state.numCevalLines.toString(),
+                  ),
+                ],
+              ),
+            ),
+            subtitle: NonLinearSlider(
+              value: state.numCevalLines,
+              values: const [1, 2, 3],
+              onChangeEnd: (value) =>
+                  ref.read(ctrlProvider.notifier).setCevalLines(value.toInt()),
+            ),
+          ),
+          PlatformListTile(
+            title: Text.rich(
+              TextSpan(
+                text: '${context.l10n.cpus}: ',
+                style: const TextStyle(
+                  fontWeight: FontWeight.normal,
+                ),
+                children: [
+                  TextSpan(
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                    text: state.numCores.toString(),
+                  ),
+                ],
+              ),
+            ),
+            subtitle: NonLinearSlider(
+              value: state.numCores,
+              values: List.generate(maxCores, (index) => index + 1),
+              onChangeEnd: (value) =>
+                  ref.read(ctrlProvider.notifier).setCores(value.toInt()),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.iOS:
+        return CupertinoAlertDialog(
+          title: Text(context.l10n.settingsSettings),
+          content: content,
+        );
+      case TargetPlatform.android:
+        return Dialog(child: content);
+
+      default:
+        throw UnimplementedError('Platform not supported');
+    }
+  }
 }

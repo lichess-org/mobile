@@ -30,6 +30,9 @@ class AnalysisCtrl extends _$AnalysisCtrl {
     Side orientation,
     GameId id,
   ) {
+    ref.onDispose(() {
+      _engineEvalDebounce.dispose();
+    });
     _root = Root(
       ply: 0,
       fen: steps[0].position.fen,
@@ -50,6 +53,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       current = nextNode;
     });
 
+    // TODO: start without timer
     Timer(const Duration(seconds: 1), () => _startEngineEval());
     return AnalysisCtrlState(
       gameId: id,
@@ -59,7 +63,16 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       nodeList: IList(_root.mainline),
       root: IList(_root.children.map((e) => ViewNode.fromNode(e))),
       pov: orientation,
+      numCevalLines: 1,
+      numCores: maxCores,
       isEngineEnabled: true,
+      showBestMoveArrow: true,
+      evaluationContext: EvaluationContext(
+        variant: Variant.standard,
+        initialFen: _root.fen,
+        contextId: id,
+        cores: maxCores,
+      ),
     );
   }
 
@@ -72,6 +85,22 @@ class AnalysisCtrl extends _$AnalysisCtrl {
           .read(engineEvaluationProvider(state.evaluationContext).notifier)
           .stop();
     }
+  }
+
+  void toggleBestMoveArrow() {
+    state = state.copyWith(showBestMoveArrow: !state.showBestMoveArrow);
+  }
+
+  void setCevalLines(int lines) {
+    if (lines > 3) return;
+    state = state.copyWith(numCevalLines: lines);
+  }
+
+  void setCores(int num) {
+    state = state.copyWith(
+      numCores: num,
+      evaluationContext: state.evaluationContext.copyWith(cores: num),
+    );
   }
 
   void onUserMove(Move move) {
@@ -163,17 +192,15 @@ class AnalysisCtrlState with _$AnalysisCtrlState {
     required String initialFen,
     required UciPath initialPath,
     required UciPath currentPath,
-    required bool isEngineEnabled,
     required GameId gameId,
-    Move? lastMove,
     required Side pov,
+    required bool isEngineEnabled,
+    required bool showBestMoveArrow,
+    required int numCevalLines,
+    required int numCores,
+    required EvaluationContext evaluationContext,
+    Move? lastMove,
   }) = _AnalysisCtrlState;
-
-  EvaluationContext get evaluationContext => EvaluationContext(
-        variant: Variant.standard,
-        initialFen: initialFen,
-        contextId: gameId,
-      );
 
   IMap<String, ISet<String>> get validMoves =>
       algebraicLegalMoves(nodeList.last.position);
