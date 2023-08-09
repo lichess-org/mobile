@@ -42,7 +42,7 @@ void main() {
 
         // full name at the top
         expect(
-          find.widgetWithText(ListTile, 'John Doe'),
+          find.text('John Doe'),
           findsOneWidget,
         );
 
