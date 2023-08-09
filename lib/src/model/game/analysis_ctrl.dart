@@ -63,7 +63,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       nodeList: IList(_root.mainline),
       root: IList(_root.children.map((e) => ViewNode.fromNode(e))),
       pov: orientation,
-      numCevalLines: 1,
+      numCevalLines: 2,
       numCores: maxCores,
       isEngineEnabled: true,
       showBestMoveArrow: true,
@@ -93,13 +93,19 @@ class AnalysisCtrl extends _$AnalysisCtrl {
 
   void setCevalLines(int lines) {
     if (lines > 3) return;
+    ref
+        .read(engineEvaluationProvider(state.evaluationContext).notifier)
+        .multiPv = lines;
+    _startEngineEval();
     state = state.copyWith(numCevalLines: lines);
   }
 
   void setCores(int num) {
+    ref.read(engineEvaluationProvider(state.evaluationContext).notifier).cores =
+        num;
+    _startEngineEval();
     state = state.copyWith(
       numCores: num,
-      evaluationContext: state.evaluationContext.copyWith(cores: num),
     );
   }
 
@@ -173,6 +179,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
           .start(
             state.currentPath,
             state.nodeList.map(Step.fromNode),
+            state.node.position,
             shouldEmit: (work) => work.path == state.currentPath,
           )
           ?.forEach(

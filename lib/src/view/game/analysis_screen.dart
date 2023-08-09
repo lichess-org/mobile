@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/tree.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
@@ -185,17 +187,95 @@ class _Ceval extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(ctrlProvider);
-
+    final ceval =
+        ref.watch(engineEvaluationProvider(analysisState.evaluationContext));
     return analysisState.isEngineEnabled
-        ? EngineGauge(
-            displayMode: EngineGaugeDisplayMode.horizontal,
-            params: EngineGaugeParams(
-              evaluationContext: analysisState.evaluationContext,
-              position: analysisState.position,
-              savedEval: analysisState.node.eval,
-            ),
+        ? Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              EngineGauge(
+                displayMode: EngineGaugeDisplayMode.horizontal,
+                params: EngineGaugeParams(
+                  evaluationContext: analysisState.evaluationContext,
+                  position: analysisState.position,
+                  savedEval: analysisState.node.eval,
+                ),
+              ),
+              if (ceval != null)
+                ...ceval.sanMoves().mapIndexed(
+                      (i, e) => _CevalLine(
+                        ctrlProvider,
+                        e,
+                        analysisState.node.ply,
+                        ceval.pvs[i],
+                      ),
+                    ),
+            ],
           )
         : const SizedBox.shrink();
+  }
+}
+
+class _CevalLine extends ConsumerWidget {
+  const _CevalLine(
+    this.ctrlProvider,
+    this.moves,
+    this.initialPly,
+    this.data,
+  );
+
+  final AnalysisCtrlProvider ctrlProvider;
+  final List<String> moves;
+  final int initialPly;
+  final PvData data;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final builder = StringBuffer();
+    var ply = initialPly + 1;
+    moves.forEachIndexed((i, s) {
+      builder.write(
+        ply.isOdd
+            ? '${(ply / 2).ceil()}. $s '
+            : i == 0
+                ? '${(ply / 2).ceil()}... $s '
+                : '$s ',
+      );
+      ply += 1;
+    });
+    return InkWell(
+      onTap: () => ref
+          .read(ctrlProvider.notifier)
+          .onUserMove(Move.fromUci(data.moves[0])!),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(4.0),
+              decoration: BoxDecoration(
+                color: Theme.of(context).focusColor,
+                shape: BoxShape.rectangle,
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+              ),
+              child: Text(
+                data.evalString,
+              ),
+            ),
+            const SizedBox(width: 8.0),
+            Flexible(
+              child: Text(
+                builder.toString(),
+                style: const TextStyle(fontFamily: 'ChessFont'),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

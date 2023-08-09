@@ -441,6 +441,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
           .start(
             state.currentPath,
             state.nodeList.map(Step.fromNode),
+            state.node.position,
             shouldEmit: (work) => work.path == state.currentPath,
           )
           ?.forEach((t) {

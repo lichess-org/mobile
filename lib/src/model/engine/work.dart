@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
@@ -25,6 +26,7 @@ class Work with _$Work {
     required String initialFen,
     required String currentFen,
     required IList<Step> steps,
+    required Position currentPosition,
   }) = _Work;
 }
 
