@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -105,7 +106,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
-              _Ceval(widget.ctrlProvider),
+              _TopTable(widget.ctrlProvider),
               _Board(widget.ctrlProvider),
               _InlineTreeView(widget.ctrlProvider),
             ],
@@ -179,16 +180,15 @@ class _Board extends ConsumerWidget {
   }
 }
 
-class _Ceval extends ConsumerWidget {
-  const _Ceval(this.ctrlProvider);
+class _TopTable extends ConsumerWidget {
+  const _TopTable(this.ctrlProvider);
 
   final AnalysisCtrlProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(ctrlProvider);
-    final ceval =
-        ref.watch(engineEvaluationProvider(analysisState.evaluationContext));
+
     return analysisState.isEngineEnabled
         ? Column(
             mainAxisSize: MainAxisSize.min,
@@ -202,18 +202,39 @@ class _Ceval extends ConsumerWidget {
                   savedEval: analysisState.node.eval,
                 ),
               ),
-              if (ceval != null)
-                ...ceval.sanMoves().mapIndexed(
-                      (i, e) => _CevalLine(
-                        ctrlProvider,
-                        e,
-                        analysisState.node.ply,
-                        ceval.pvs[i],
-                      ),
-                    ),
+              _CevalLines(ctrlProvider),
             ],
           )
         : const SizedBox.shrink();
+  }
+}
+
+class _CevalLines extends ConsumerWidget {
+  const _CevalLines(this.ctrlProvider);
+  final AnalysisCtrlProvider ctrlProvider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final analysisState = ref.watch(ctrlProvider);
+    final ceval =
+        ref.watch(engineEvaluationProvider(analysisState.evaluationContext));
+
+    return ceval != null && !analysisState.position.isGameOver
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: ceval
+                .sanMoves()
+                .mapIndexed(
+                  (i, e) => _CevalLine(
+                    ctrlProvider,
+                    e,
+                    analysisState.node.ply,
+                    ceval.pvs[i],
+                  ),
+                )
+                .toList(),
+          )
+        : kEmptyWidget;
   }
 }
 
@@ -244,6 +265,9 @@ class _CevalLine extends ConsumerWidget {
       );
       ply += 1;
     });
+
+    final eval = data.evalString;
+
     return InkWell(
       onTap: () => ref
           .read(ctrlProvider.notifier)
@@ -254,21 +278,24 @@ class _CevalLine extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              padding: const EdgeInsets.all(4.0),
-              decoration: BoxDecoration(
-                color: Theme.of(context).focusColor,
+              padding: const EdgeInsets.all(2.0),
+              decoration: const BoxDecoration(
+                color: Colors.white,
                 shape: BoxShape.rectangle,
-                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                borderRadius: BorderRadius.all(Radius.circular(4.0)),
               ),
               child: Text(
-                data.evalString,
+                eval,
+                style: const TextStyle(color: Colors.black),
               ),
             ),
             const SizedBox(width: 8.0),
             Flexible(
               child: Text(
                 builder.toString(),
-                style: const TextStyle(fontFamily: 'ChessFont'),
+                style: const TextStyle(
+                  fontFamily: 'ChessFont',
+                ),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -487,6 +514,19 @@ class _BottomBar extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            BottomBarIconButton(
+              semanticsLabel: context.l10n.menu,
+              onPressed: () {
+                _showGameMenu(context, ref);
+              },
+              icon: const Icon(Icons.menu),
+            ),
+            const SizedBox(
+              width: 44.0,
+            ),
+            const SizedBox(
+              width: 44.0,
+            ),
             RepeatButton(
               onLongPress:
                   analysisState.canGoBack ? () => _moveBackward(ref) : null,
@@ -496,7 +536,6 @@ class _BottomBar extends ConsumerWidget {
                 label: 'Previous',
                 shortLabel: 'Previous',
                 icon: CupertinoIcons.chevron_back,
-                showAndroidShortLabel: true,
                 showAndroidTooltip: false,
               ),
             ),
@@ -507,7 +546,6 @@ class _BottomBar extends ConsumerWidget {
                 icon: CupertinoIcons.chevron_forward,
                 label: context.l10n.next,
                 shortLabel: context.l10n.next,
-                showAndroidShortLabel: true,
                 onTap: analysisState.canGoNext ? () => _moveForward(ref) : null,
                 showAndroidTooltip: false,
               ),
@@ -522,6 +560,21 @@ class _BottomBar extends ConsumerWidget {
       ref.read(ctrlProvider.notifier).userNext();
   void _moveBackward(WidgetRef ref) =>
       ref.read(ctrlProvider.notifier).userPrevious();
+
+  Future<void> _showGameMenu(BuildContext context, WidgetRef ref) {
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        BottomSheetAction(
+          leading: const Icon(Icons.swap_vert),
+          label: Text(context.l10n.flipBoard),
+          onPressed: (context) {
+            ref.read(ctrlProvider.notifier).toggleBoard();
+          },
+        ),
+      ],
+    );
+  }
 }
 
 class _EngineDepth extends ConsumerWidget {

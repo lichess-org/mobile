@@ -124,6 +124,10 @@ class AnalysisCtrl extends _$AnalysisCtrl {
     );
   }
 
+  void toggleBoard() {
+    state = state.copyWith(pov: state.pov.opposite);
+  }
+
   void userPrevious() {
     _setPath(state.currentPath.penultimate, replaying: true);
   }
