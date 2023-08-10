@@ -1,5 +1,7 @@
 import 'dart:math' as math;
 import 'dart:io';
+import 'package:dartchess/dartchess.dart';
+import 'package:flutter/foundation.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -18,6 +20,7 @@ part 'engine_evaluation.freezed.dart';
 
 // TODO: make this configurable
 const kMaxDepth = 22;
+const kDefaultLines = 2;
 
 final maxCores = math.max(1, Platform.numberOfProcessors - 1);
 
@@ -26,6 +29,8 @@ class EvaluationContext with _$EvaluationContext {
   const factory EvaluationContext({
     required Variant variant,
     required String initialFen,
+    int? cores,
+    int? multiPv,
 
     /// Unique ID to ensure engine is properly disposed when no more needed
     /// and a new engine instance is created per context (puzzle, game, etc).
@@ -37,18 +42,25 @@ class EvaluationContext with _$EvaluationContext {
 class EngineEvaluation extends _$EngineEvaluation {
   StockfishEngine? _engine;
 
+  late int _multiPv;
+  late int _cores;
+
   @override
   ClientEval? build(EvaluationContext context) {
     ref.onDispose(() {
       _engine?.dispose();
     });
 
+    _multiPv = context.multiPv ?? kDefaultLines;
+    _cores = context.cores ?? maxCores;
+
     return null;
   }
 
   Stream<EvalResult>? start(
     UciPath path,
-    Iterable<Step> steps, {
+    Iterable<Step> steps,
+    Position position, {
     required bool Function(Work work) shouldEmit,
   }) {
     _engine ??= StockfishEngine();
@@ -64,14 +76,15 @@ class EngineEvaluation extends _$EngineEvaluation {
         .start(
           Work(
             variant: context.variant,
-            threads: maxCores,
+            threads: _cores,
             maxDepth: kMaxDepth,
-            multiPv: 1,
+            multiPv: _multiPv,
             ply: step.ply,
             path: path,
             initialFen: context.initialFen,
             currentFen: step.fen,
             steps: IList(steps),
+            currentPosition: position,
           ),
         )
         .throttle(
@@ -93,4 +106,9 @@ class EngineEvaluation extends _$EngineEvaluation {
     state = null;
     _engine?.stop();
   }
+
+  // ignore:avoid_setters_without_getters
+  set cores(int cores) => _cores = cores;
+  // ignore:avoid_setters_without_getters
+  set multiPv(int pv) => _multiPv = pv;
 }

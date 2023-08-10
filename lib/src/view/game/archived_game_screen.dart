@@ -6,6 +6,8 @@ import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/game/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -223,6 +225,24 @@ class _BottomBar extends ConsumerWidget {
               _showGameMenu(context, ref);
             },
             icon: const Icon(Icons.menu),
+          ),
+          BottomBarIconButton(
+            semanticsLabel: context.l10n.menu,
+            onPressed: ref.read(gameCursorProvider(gameData.id)).hasValue
+                ? () => pushPlatformRoute(
+                      context,
+                      builder: (context) => AnalysisScreen(
+                        steps: ref
+                            .read(gameCursorProvider(gameData.id))
+                            .requireValue
+                            .$1
+                            .steps,
+                        orientation: Side.white,
+                        gameData: gameData,
+                      ),
+                    )
+                : null,
+            icon: const Icon(Icons.computer),
           ),
           const SizedBox(
             width: 44.0,

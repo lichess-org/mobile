@@ -99,6 +99,9 @@ flutter:
     - family: SocialIcons
       fonts:
         - asset: assets/fonts/SocialIcons.ttf
+    - family: ChessFont
+      fonts: 
+        - asset: assets/fonts/ChessSansPiratf.ttf
 
   # Enable generation of localized Strings from arb files.
   generate: true

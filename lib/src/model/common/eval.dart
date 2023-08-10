@@ -18,6 +18,7 @@ class ClientEval with _$ClientEval {
     required IList<PvData> pvs,
     required int millis,
     required int maxDepth,
+    required Position currentPosition,
     int? cp,
     int? mate,
   }) = _ClientEval;
@@ -28,6 +29,10 @@ class ClientEval with _$ClientEval {
     final uci = pvs.firstOrNull?.moves.firstOrNull;
     if (uci == null) return null;
     return Move.fromUci(uci);
+  }
+
+  IList<Move?> get bestMoves {
+    return pvs.map((e) => Move.fromUci(e.moves.first)).toIList();
   }
 
   String get evalString {
@@ -60,11 +65,34 @@ class ClientEval with _$ClientEval {
 
 @freezed
 class PvData with _$PvData {
+  const PvData._();
   const factory PvData({
     required IList<UCIMove> moves,
     int? mate,
     int? cp,
   }) = _PvData;
+
+  String get evalString {
+    if (cp != null) {
+      final e = math.max(math.min((cp! / 10).round() / 10, 99), -99);
+      return (e > 0 ? '+' : '') + e.toStringAsFixed(1);
+    } else if (mate != null) {
+      return '#$mate';
+    } else {
+      return '-';
+    }
+  }
+
+  List<String> sanMoves(Position currentPosition) {
+    var pos = currentPosition;
+    final List<String> res = [];
+    for (final move in moves) {
+      final (newPos, san) = pos.playToSan(Move.fromUci(move)!);
+      res.add(san);
+      pos = newPos;
+    }
+    return res;
+  }
 }
 
 double _toPov(Side side, double diff) => side == Side.white ? diff : -diff;
