@@ -31,19 +31,8 @@ class ClientEval with _$ClientEval {
     return Move.fromUci(uci);
   }
 
-  List<List<String>> sanMoves() {
-    final List<List<String>> res = [];
-    for (final pv in pvs) {
-      var pos = currentPosition;
-      final List<String> temp = [];
-      for (final move in pv.moves) {
-        final (newPos, san) = pos.playToSan(Move.fromUci(move)!);
-        temp.add(san);
-        pos = newPos;
-      }
-      res.add(temp);
-    }
-    return res;
+  IList<Move?> get bestMoves {
+    return pvs.map((e) => Move.fromUci(e.moves.first)).toIList();
   }
 
   String get evalString {
@@ -92,6 +81,17 @@ class PvData with _$PvData {
     } else {
       return '-';
     }
+  }
+
+  List<String> sanMoves(Position currentPosition) {
+    var pos = currentPosition;
+    final List<String> res = [];
+    for (final move in moves) {
+      final (newPos, san) = pos.playToSan(Move.fromUci(move)!);
+      res.add(san);
+      pos = newPos;
+    }
+    return res;
   }
 }
 

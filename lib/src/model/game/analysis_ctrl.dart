@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -53,26 +51,45 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       current = nextNode;
     });
 
-    // TODO: start without timer
-    Timer(const Duration(seconds: 1), () => _startEngineEval());
+    final nodeList = IList(_root.mainline);
+    final currentPath = _root.mainlinePath;
+    final evalContext = EvaluationContext(
+      variant: Variant.standard,
+      initialFen: _root.fen,
+      contextId: id,
+      cores: maxCores,
+    );
+
+    _engineEvalDebounce(
+      () => ref
+          .read(
+            engineEvaluationProvider(
+              evalContext,
+            ).notifier,
+          )
+          .start(
+            currentPath,
+            nodeList.map(Step.fromNode),
+            nodeList.last.position,
+            shouldEmit: (work) => work.path == currentPath,
+          )
+          ?.forEach(
+            (t) => _root.updateAt(t.$1.path, (node) => node.eval = t.$2),
+          ),
+    );
     return AnalysisCtrlState(
       gameId: id,
       initialFen: _root.fen,
       initialPath: UciPath.empty,
-      currentPath: _root.mainlinePath,
-      nodeList: IList(_root.mainline),
+      currentPath: currentPath,
+      nodeList: nodeList,
       root: IList(_root.children.map((e) => ViewNode.fromNode(e))),
       pov: orientation,
-      numCevalLines: 2,
+      numCevalLines: kDefaultLines,
       numCores: maxCores,
       isEngineEnabled: true,
       showBestMoveArrow: true,
-      evaluationContext: EvaluationContext(
-        variant: Variant.standard,
-        initialFen: _root.fen,
-        contextId: id,
-        cores: maxCores,
-      ),
+      evaluationContext: evalContext,
     );
   }
 
@@ -145,19 +162,23 @@ class AnalysisCtrl extends _$AnalysisCtrl {
     final newNodeList = IList(_root.nodesOn(path));
     if (newNodeList.isEmpty) return;
     final sanMove = newNodeList.last.sanMove;
-    final isCheck = sanMove.san.contains('+');
     if (!replaying) {
-      if (isCheck) {
-        ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
-      } else {
-        ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
+      final isForward = path.size > state.currentPath.size;
+      if (isForward) {
+        final isCheck = sanMove.san.contains('+');
+        if (sanMove.san.contains('x')) {
+          ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+        } else {
+          ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
+        }
       }
     } else {
       // when replaying moves fast we don't want haptic feedback
-      if (isCheck) {
-        ref.read(soundServiceProvider).play(Sound.capture);
+      final soundService = ref.read(soundServiceProvider);
+      if (sanMove.san.contains('x')) {
+        soundService.play(Sound.capture);
       } else {
-        ref.read(soundServiceProvider).play(Sound.move);
+        soundService.play(Sound.move);
       }
     }
     state = state.copyWith(

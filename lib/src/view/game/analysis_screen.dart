@@ -129,12 +129,11 @@ class _Board extends ConsumerWidget {
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final evalContext =
         ref.watch(ctrlProvider.select((value) => value.evaluationContext));
-    final currentEvalBest = ref.watch(
-      engineEvaluationProvider(evalContext).select((e) => e?.bestMove),
+    final evalBestMoves = ref.watch(
+      engineEvaluationProvider(evalContext).select((e) => e?.bestMoves),
     );
 
-    final evalBestMove =
-        (currentEvalBest ?? analysisState.node.eval?.bestMove)?.cg;
+    final bestMoves = evalBestMoves ?? analysisState.node.eval?.bestMoves;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -156,14 +155,17 @@ class _Board extends ConsumerWidget {
             onMove: (move, {isDrop, isPremove}) => ref
                 .read(ctrlProvider.notifier)
                 .onUserMove(Move.fromUci(move.uci)!),
-            shapes: analysisState.isEngineEnabled && evalBestMove != null
-                ? ISet([
-                    cg.Arrow(
-                      color: const Color(0x40003088),
-                      orig: evalBestMove.from,
-                      dest: evalBestMove.to,
-                    )
-                  ])
+            shapes: analysisState.isEngineEnabled && bestMoves != null
+                ? ISet(
+                    bestMoves.where((move) => move != null).mapIndexed(
+                          (i, move) => cg.Arrow(
+                            color: const Color(0x40003088)
+                                .withOpacity(0.4 - 0.15 * i),
+                            orig: move!.cg.from,
+                            dest: move.cg.to,
+                          ),
+                        ),
+                  )
                 : null,
           ),
           settings: cg.BoardSettings(
@@ -219,20 +221,34 @@ class _CevalLines extends ConsumerWidget {
     final ceval =
         ref.watch(engineEvaluationProvider(analysisState.evaluationContext));
 
-    return ceval != null && !analysisState.position.isGameOver
-        ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: ceval
-                .sanMoves()
-                .mapIndexed(
-                  (i, e) => _CevalLine(
+    final content = ceval != null
+        ? ceval.pvs
+            .map(
+              (pv) => _CevalLine(
+                ctrlProvider,
+                pv.sanMoves(ceval.currentPosition),
+                analysisState.node.ply,
+                pv,
+              ),
+            )
+            .toList()
+        : (analysisState.node.eval != null
+            ? analysisState.node.eval!.pvs
+                .map(
+                  (pv) => _CevalLine(
                     ctrlProvider,
-                    e,
+                    pv.sanMoves(analysisState.node.position),
                     analysisState.node.ply,
-                    ceval.pvs[i],
+                    pv,
                   ),
                 )
-                .toList(),
+                .toList()
+            : null);
+
+    return content != null
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: content,
           )
         : kEmptyWidget;
   }
