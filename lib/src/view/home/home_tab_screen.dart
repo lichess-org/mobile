@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/search/search_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -281,6 +282,7 @@ class _HomeBody extends ConsumerWidget {
               ? ListView(
                   controller: homeScrollController,
                   children: [
+                    const _SearchBar(),
                     const _CreateAGame(),
                     const _DailyPuzzle(),
                     LeaderboardWidget(),
@@ -288,6 +290,7 @@ class _HomeBody extends ConsumerWidget {
                 )
               : SliverList(
                   delegate: SliverChildListDelegate([
+                    const _SearchBar(),
                     const _CreateAGame(),
                     const _DailyPuzzle(),
                     LeaderboardWidget(),
@@ -360,6 +363,47 @@ class _ConnectivityBanner extends ConsumerWidget {
       },
       loading: () => const SizedBox.shrink(),
       error: (error, stack) => const SizedBox.shrink(),
+    );
+  }
+}
+
+class _SearchBar extends ConsumerWidget {
+  const _SearchBar();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Hero(
+      tag: "searchHero",
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Stack(
+          children: [
+            SearchBar(
+              shadowColor: MaterialStateColor.resolveWith(
+                (states) => Colors.transparent,
+              ),
+              constraints: const BoxConstraints(maxHeight: 50),
+              hintText: "Search Lichess",
+              leading: const Icon(
+                Icons.search,
+                color: Colors.grey,
+              ),
+            ),
+            InkWell(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+              ),
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  builder: (context) => const SearchScreen(),
+                );
+              },
+            )
+          ],
+        ),
+      ),
     );
   }
 }
