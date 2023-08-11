@@ -51,7 +51,6 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       current = nextNode;
     });
 
-    final nodeList = IList(_root.mainline);
     final currentPath = _root.mainlinePath;
     final evalContext = EvaluationContext(
       variant: Variant.standard,
@@ -69,8 +68,8 @@ class AnalysisCtrl extends _$AnalysisCtrl {
           )
           .start(
             currentPath,
-            nodeList.map(Step.fromNode),
-            nodeList.last.position,
+            _root.mainline.map(Step.fromNode),
+            current.position,
             shouldEmit: (work) => work.path == currentPath,
           )
           ?.forEach(
@@ -82,8 +81,8 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       initialFen: _root.fen,
       initialPath: UciPath.empty,
       currentPath: currentPath,
-      nodeList: nodeList,
-      root: IList(_root.children.map((e) => ViewNode.fromNode(e))),
+      root: IList(_root.children.map(ViewNode.fromNode)),
+      currentNode: ViewNode.fromNode(current as Node),
       pov: orientation,
       numCevalLines: kDefaultLines,
       numCores: maxCores,
@@ -134,9 +133,9 @@ class AnalysisCtrl extends _$AnalysisCtrl {
   }
 
   void userNext() {
-    if (state.node.children.isEmpty) return;
+    if (state.currentNode.children.isEmpty) return;
     _setPath(
-      state.currentPath + state.node.children.first.id,
+      state.currentPath + state.currentNode.children.first.id,
       replaying: true,
     );
   }
@@ -159,36 +158,42 @@ class AnalysisCtrl extends _$AnalysisCtrl {
     bool moveAdded = false,
   }) {
     final pathChange = state.currentPath != path;
-    final newNodeList = IList(_root.nodesOn(path));
-    if (newNodeList.isEmpty) return;
-    final sanMove = newNodeList.last.sanMove;
-    if (!replaying) {
-      final isForward = path.size > state.currentPath.size;
-      if (isForward) {
-        final isCheck = sanMove.san.contains('+');
-        if (sanMove.san.contains('x')) {
-          ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+    final rootOrNode = _root.nodeAt(path);
+
+    if (rootOrNode.runtimeType == Node) {
+      final currentNode = rootOrNode as Node;
+      if (!replaying) {
+        final isForward = path.size > state.currentPath.size;
+        if (isForward) {
+          final isCheck = currentNode.sanMove.san.contains('+');
+          if (currentNode.sanMove.san.contains('x')) {
+            ref
+                .read(moveFeedbackServiceProvider)
+                .captureFeedback(check: isCheck);
+          } else {
+            ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
+          }
+        }
+      } else {
+        // when replaying moves fast we don't want haptic feedback
+        final soundService = ref.read(soundServiceProvider);
+        if (currentNode.sanMove.san.contains('x')) {
+          soundService.play(Sound.capture);
         } else {
-          ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
+          soundService.play(Sound.move);
         }
       }
-    } else {
-      // when replaying moves fast we don't want haptic feedback
-      final soundService = ref.read(soundServiceProvider);
-      if (sanMove.san.contains('x')) {
-        soundService.play(Sound.capture);
-      } else {
-        soundService.play(Sound.move);
-      }
+      state = state.copyWith(
+        currentPath: path,
+        currentNode: ViewNode.fromNode(currentNode),
+        lastMove: currentNode.sanMove.move,
+        root: moveAdded
+            ? IList(_root.children.map(ViewNode.fromNode))
+            : state.root,
+      );
     }
-    state = state.copyWith(
-      currentPath: path,
-      nodeList: newNodeList,
-      lastMove: sanMove.move,
-      root: moveAdded
-          ? IList(_root.children.map((e) => ViewNode.fromNode(e)))
-          : state.root,
-    );
+
+    // TODO: handle if root node is reached
     if (pathChange) {
       _startEngineEval();
     }
@@ -203,8 +208,8 @@ class AnalysisCtrl extends _$AnalysisCtrl {
           )
           .start(
             state.currentPath,
-            state.nodeList.map(Step.fromNode),
-            state.node.position,
+            _root.nodesOn(state.currentPath).map(Step.fromNode),
+            state.currentNode.position,
             shouldEmit: (work) => work.path == state.currentPath,
           )
           ?.forEach(
@@ -220,7 +225,7 @@ class AnalysisCtrlState with _$AnalysisCtrlState {
 
   const factory AnalysisCtrlState({
     required IList<ViewNode> root,
-    required IList<ViewNode> nodeList,
+    required ViewNode currentNode,
     required String initialFen,
     required UciPath initialPath,
     required UciPath currentPath,
@@ -235,11 +240,10 @@ class AnalysisCtrlState with _$AnalysisCtrlState {
   }) = _AnalysisCtrlState;
 
   IMap<String, ISet<String>> get validMoves =>
-      algebraicLegalMoves(nodeList.last.position);
+      algebraicLegalMoves(currentNode.position);
 
-  ViewNode get node => nodeList.last;
-  Position get position => nodeList.last.position;
-  String get fen => nodeList.last.position.fen;
-  bool get canGoNext => node.children.isNotEmpty;
+  Position get position => currentNode.position;
+  String get fen => currentNode.position.fen;
+  bool get canGoNext => currentNode.children.isNotEmpty;
   bool get canGoBack => currentPath.size > initialPath.size;
 }

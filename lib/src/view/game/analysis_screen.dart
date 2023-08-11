@@ -127,13 +127,14 @@ class _Board extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(ctrlProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final evalContext =
-        ref.watch(ctrlProvider.select((value) => value.evaluationContext));
+
     final evalBestMoves = ref.watch(
-      engineEvaluationProvider(evalContext).select((e) => e?.bestMoves),
+      engineEvaluationProvider(analysisState.evaluationContext)
+          .select((e) => e?.bestMoves),
     );
 
-    final bestMoves = evalBestMoves ?? analysisState.node.eval?.bestMoves;
+    final bestMoves =
+        evalBestMoves ?? analysisState.currentNode.eval?.bestMoves;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -201,7 +202,7 @@ class _TopTable extends ConsumerWidget {
                 params: EngineGaugeParams(
                   evaluationContext: analysisState.evaluationContext,
                   position: analysisState.position,
-                  savedEval: analysisState.node.eval,
+                  savedEval: analysisState.currentNode.eval,
                 ),
               ),
               _CevalLines(ctrlProvider),
@@ -227,18 +228,18 @@ class _CevalLines extends ConsumerWidget {
               (pv) => _CevalLine(
                 ctrlProvider,
                 pv.sanMoves(ceval.currentPosition),
-                analysisState.node.ply,
+                analysisState.currentNode.ply,
                 pv,
               ),
             )
             .toList()
-        : (analysisState.node.eval != null
-            ? analysisState.node.eval!.pvs
+        : (analysisState.currentNode.eval != null
+            ? analysisState.currentNode.eval!.pvs
                 .map(
                   (pv) => _CevalLine(
                     ctrlProvider,
-                    pv.sanMoves(analysisState.node.position),
-                    analysisState.node.ply,
+                    pv.sanMoves(analysisState.currentNode.position),
+                    analysisState.currentNode.ply,
                     pv,
                   ),
                 )
@@ -259,13 +260,13 @@ class _CevalLine extends ConsumerWidget {
     this.ctrlProvider,
     this.moves,
     this.initialPly,
-    this.data,
+    this.pvData,
   );
 
   final AnalysisCtrlProvider ctrlProvider;
   final List<String> moves;
   final int initialPly;
-  final PvData data;
+  final PvData pvData;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -282,12 +283,12 @@ class _CevalLine extends ConsumerWidget {
       ply += 1;
     });
 
-    final eval = data.evalString;
+    final eval = pvData.evalString;
 
     return InkWell(
       onTap: () => ref
           .read(ctrlProvider.notifier)
-          .onUserMove(Move.fromUci(data.moves[0])!),
+          .onUserMove(Move.fromUci(pvData.moves[0])!),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
         child: Row(
