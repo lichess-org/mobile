@@ -390,16 +390,18 @@ class _InlineTreeView extends ConsumerWidget {
       final node = nodes[i];
       if (inMainline) {
         widgets.add(
-          Wrap(
-            spacing: 1.0,
-            alignment: WrapAlignment.center,
-            children: _buildTreeWidgets(
-              ctrlProvider,
-              nodes: IList([node]),
-              path: path,
-              inMainline: false,
-              startSideline: true,
-              currentPath: currentPath,
+          SizedBox(
+            width: double.infinity,
+            child: Wrap(
+              spacing: 1.0,
+              children: _buildTreeWidgets(
+                ctrlProvider,
+                nodes: IList([node]),
+                path: path,
+                inMainline: false,
+                startSideline: true,
+                currentPath: currentPath,
+              ),
             ),
           ),
         );
