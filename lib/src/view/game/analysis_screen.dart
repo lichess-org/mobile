@@ -234,6 +234,7 @@ class _CevalLines extends ConsumerWidget {
             .toList()
         : (analysisState.currentNode.eval != null
             ? analysisState.currentNode.eval!.pvs
+                .take(analysisState.numCevalLines)
                 .map(
                   (pv) => _CevalLine(
                     ctrlProvider,
@@ -363,28 +364,9 @@ class _InlineTreeView extends ConsumerWidget {
     required UciPath currentPath,
   }) {
     if (nodes.isEmpty) {
-      return inMainline
-          ? []
-          : [
-              const Opacity(
-                opacity: 0.8,
-                child: Text(')', style: sideLineStyle),
-              )
-            ];
+      return [];
     }
     final List<Widget> widgets = [];
-
-    if (startSideline) {
-      widgets.add(
-        const Opacity(
-          opacity: 0.8,
-          child: Text(
-            '(',
-            style: sideLineStyle,
-          ),
-        ),
-      );
-    }
 
     // add the node[0]
     final newPath = initialPath + nodes[0].id;
@@ -397,6 +379,7 @@ class _InlineTreeView extends ConsumerWidget {
         isCurrentMove: newPath == currentPath,
         isSideline: !inMainline,
         startSideline: startSideline,
+        endSideline: !inMainline && nodes[0].children.isEmpty,
       ),
     );
 
@@ -459,6 +442,7 @@ class _Move extends ConsumerWidget {
     required this.isCurrentMove,
     required this.isSideline,
     this.startSideline = false,
+    this.endSideline = false,
   });
 
   final AnalysisCtrlProvider ctrlProvider;
@@ -468,12 +452,12 @@ class _Move extends ConsumerWidget {
   final bool isCurrentMove;
   final bool isSideline;
   final bool startSideline;
+  final bool endSideline;
   static const borderRadius = BorderRadius.all(Radius.circular(8.0));
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final text = buildText();
-    return InkWell(
+    final content = InkWell(
       borderRadius: borderRadius,
       onTap: () => ref.read(ctrlProvider.notifier).userJump(path),
       child: Container(
@@ -488,18 +472,34 @@ class _Move extends ConsumerWidget {
         child: Opacity(
           opacity: isSideline ? 0.8 : 1.0,
           child: Text(
-            text,
+            ply.isOdd
+                ? '${(ply / 2).ceil()}. ${move.san}'
+                : (startSideline
+                    ? '${(ply / 2).ceil()}... ${move.san}'
+                    : move.san),
             style: isSideline ? sideLineStyle : baseTextStyle,
           ),
         ),
       ),
     );
-  }
-
-  String buildText() {
-    return ply.isOdd
-        ? '${(ply / 2).ceil()}. ${move.san}'
-        : (startSideline ? '${(ply / 2).ceil()}... ${move.san}' : move.san);
+    return startSideline || endSideline
+        ? Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (startSideline)
+                const Opacity(
+                  opacity: 0.8,
+                  child: Text('(', style: sideLineStyle),
+                ),
+              content,
+              if (endSideline)
+                const Opacity(
+                  opacity: 0.8,
+                  child: Text(')', style: sideLineStyle),
+                ),
+            ],
+          )
+        : content;
   }
 }
 
