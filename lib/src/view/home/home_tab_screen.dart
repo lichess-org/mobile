@@ -372,38 +372,9 @@ class _SearchBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Hero(
-      tag: "searchHero",
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Stack(
-          children: [
-            SearchBar(
-              shadowColor: MaterialStateColor.resolveWith(
-                (states) => Colors.transparent,
-              ),
-              constraints: const BoxConstraints(maxHeight: 50),
-              hintText: "Search Lichess",
-              leading: const Icon(
-                Icons.search,
-                color: Colors.grey,
-              ),
-            ),
-            InkWell(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-              ),
-              onTap: () {
-                pushPlatformRoute(
-                  context,
-                  builder: (context) => const SearchScreen(),
-                );
-              },
-            )
-          ],
-        ),
-      ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: const SearchScreen(),
     );
   }
 }

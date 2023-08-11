@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        foregroundColor: Colors.black,
+  State<SearchScreen> createState() => _SearchScreenState();
+}
 
-        title: Hero(
-          tag: "searchHero",
-          child: SearchBar(
+class _SearchScreenState extends State<SearchScreen> {
+  final SearchController controller = SearchController();
+
+  @override
+  Widget build(BuildContext context) {
+    return SearchAnchor(
+      searchController: controller,
+      builder: (context, controller) => Stack(
+        children: [
+          SearchBar(
             shadowColor: MaterialStateColor.resolveWith(
               (states) => Colors.transparent,
             ),
@@ -23,8 +27,30 @@ class SearchScreen extends StatelessWidget {
               color: Colors.grey,
             ),
           ),
-        ),
+          InkWell(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 50,
+            ),
+            onTap: () {
+              controller.openView();
+            },
+          )
+        ],
       ),
+      suggestionsBuilder: (BuildContext context, SearchController controller) {
+        return List<ListTile>.generate(5, (int index) {
+          final String item = 'item $index';
+          return ListTile(
+            title: Text(item),
+            onTap: () {
+              setState(() {
+                controller.closeView(item);
+              });
+            },
+          );
+        });
+      },
     );
   }
 }
