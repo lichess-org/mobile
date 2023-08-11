@@ -28,8 +28,7 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-const baseTextStyle =
-    TextStyle(fontFamily: 'ChessFont', fontWeight: FontWeight.bold);
+const baseTextStyle = TextStyle(fontFamily: 'ChessFont');
 const sideLineStyle =
     TextStyle(fontFamily: 'ChessFont', fontStyle: FontStyle.italic);
 
@@ -330,23 +329,24 @@ class _InlineTreeView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final nodes = ref.watch(ctrlProvider.select((value) => value.root));
-    final currentPath =
-        ref.watch(ctrlProvider.select((value) => value.currentPath));
+    final analysisState = ref.watch(ctrlProvider);
 
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
-        child: SingleChildScrollView(
-          child: Wrap(
-            spacing: 1.0,
-            children: _buildTreeWidgets(
-              ctrlProvider,
-              nodes: nodes,
-              inMainline: true,
-              startSideline: false,
-              path: UciPath.empty,
-              currentPath: currentPath,
+        child: SizedBox(
+          width: double.infinity,
+          child: SingleChildScrollView(
+            child: Wrap(
+              spacing: 1.0,
+              children: _buildTreeWidget(
+                ctrlProvider,
+                nodes: analysisState.root,
+                inMainline: true,
+                startSideline: false,
+                initialPath: UciPath.empty,
+                currentPath: analysisState.currentPath,
+              ),
             ),
           ),
         ),
@@ -354,12 +354,12 @@ class _InlineTreeView extends ConsumerWidget {
     );
   }
 
-  List<Widget> _buildTreeWidgets(
+  List<Widget> _buildTreeWidget(
     AnalysisCtrlProvider ctrlProvider, {
     required IList<ViewNode> nodes,
     required bool inMainline,
     required bool startSideline,
-    required UciPath path,
+    required UciPath initialPath,
     required UciPath currentPath,
   }) {
     if (nodes.isEmpty) {
@@ -372,7 +372,6 @@ class _InlineTreeView extends ConsumerWidget {
               )
             ];
     }
-
     final List<Widget> widgets = [];
 
     if (startSideline) {
@@ -387,51 +386,8 @@ class _InlineTreeView extends ConsumerWidget {
       );
     }
 
-    for (var i = 1; i < nodes.length; i++) {
-      final node = nodes[i];
-      if (inMainline) {
-        widgets.add(
-          SizedBox(
-            width: double.infinity,
-            child: Wrap(
-              spacing: 1.0,
-              children: _buildTreeWidgets(
-                ctrlProvider,
-                nodes: IList([node]),
-                path: path,
-                inMainline: false,
-                startSideline: true,
-                currentPath: currentPath,
-              ),
-            ),
-          ),
-        );
-      } else {
-        final newPath = path + node.id;
-        widgets.add(
-          _Move(
-            ctrlProvider,
-            path: newPath,
-            move: node.sanMove,
-            ply: node.ply,
-            isCurrentMove: newPath == currentPath,
-            isSideline: !inMainline,
-          ),
-        );
-        widgets.addAll(
-          _buildTreeWidgets(
-            ctrlProvider,
-            nodes: node.children,
-            inMainline: false,
-            path: newPath,
-            startSideline: true,
-            currentPath: currentPath,
-          ),
-        );
-      }
-    }
-
-    final newPath = path + nodes[0].id;
+    // add the node[0]
+    final newPath = initialPath + nodes[0].id;
     widgets.add(
       _Move(
         ctrlProvider,
@@ -443,13 +399,49 @@ class _InlineTreeView extends ConsumerWidget {
         startSideline: startSideline,
       ),
     );
+
+    // add the sidelines if present
+    for (var i = 1; i < nodes.length; i++) {
+      // start new sideline from mainline on a new line
+      if (inMainline) {
+        widgets.add(
+          SizedBox(
+            width: double.infinity,
+            child: Wrap(
+              spacing: 1.0,
+              children: _buildTreeWidget(
+                ctrlProvider,
+                nodes: IList([nodes[i]]),
+                inMainline: false,
+                startSideline: true,
+                initialPath: initialPath,
+                currentPath: currentPath,
+              ),
+            ),
+          ),
+        );
+      } else {
+        widgets.addAll(
+          _buildTreeWidget(
+            ctrlProvider,
+            nodes: IList([nodes[i]]),
+            inMainline: false,
+            startSideline: true,
+            initialPath: initialPath,
+            currentPath: currentPath,
+          ),
+        );
+      }
+    }
+
+    // add the children of the first child
     widgets.addAll(
-      _buildTreeWidgets(
+      _buildTreeWidget(
         ctrlProvider,
         nodes: nodes[0].children,
         inMainline: inMainline,
         startSideline: false,
-        path: newPath,
+        initialPath: newPath,
         currentPath: currentPath,
       ),
     );
@@ -505,11 +497,9 @@ class _Move extends ConsumerWidget {
   }
 
   String buildText() {
-    if (startSideline) {
-      return '${(ply / 2).ceil()}... ${move.san}';
-    } else {
-      return ply.isOdd ? '${(ply / 2).ceil()}. ${move.san}' : move.san;
-    }
+    return ply.isOdd
+        ? '${(ply / 2).ceil()}. ${move.san}'
+        : (startSideline ? '${(ply / 2).ceil()}... ${move.san}' : move.san);
   }
 }
 
