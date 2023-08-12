@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/game/analysis_ctrl.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
+import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
@@ -107,7 +108,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
             children: [
               _TopTable(widget.ctrlProvider),
               _Board(widget.ctrlProvider),
-              _InlineTreeView(widget.ctrlProvider),
+              _Moves(widget.ctrlProvider),
             ],
           ),
         ),
@@ -283,8 +284,6 @@ class _CevalLine extends ConsumerWidget {
       ply += 1;
     });
 
-    final eval = pvData.evalString;
-
     return InkWell(
       onTap: () => ref
           .read(ctrlProvider.notifier)
@@ -302,7 +301,7 @@ class _CevalLine extends ConsumerWidget {
                 borderRadius: BorderRadius.all(Radius.circular(4.0)),
               ),
               child: Text(
-                eval,
+                pvData.evalString,
                 style: const TextStyle(color: Colors.black),
               ),
             ),
@@ -323,8 +322,8 @@ class _CevalLine extends ConsumerWidget {
   }
 }
 
-class _InlineTreeView extends ConsumerWidget {
-  const _InlineTreeView(this.ctrlProvider);
+class _Moves extends ConsumerWidget {
+  const _Moves(this.ctrlProvider);
 
   final AnalysisCtrlProvider ctrlProvider;
 
@@ -332,6 +331,68 @@ class _InlineTreeView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(ctrlProvider);
 
+    return _InlineTreeView(
+      ctrlProvider,
+      analysisState.root,
+      analysisState.currentPath,
+    );
+  }
+}
+
+class _InlineTreeView extends ConsumerStatefulWidget {
+  const _InlineTreeView(
+    this.ctrlProvider,
+    this.root,
+    this.currentPath,
+  );
+
+  final AnalysisCtrlProvider ctrlProvider;
+  final IList<ViewNode> root;
+  final UciPath currentPath;
+
+  @override
+  ConsumerState<_InlineTreeView> createState() => _InlineTreeViewState();
+}
+
+class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
+  final currentMoveKey = GlobalKey();
+  final _debounce = Debouncer(const Duration(milliseconds: 100));
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (currentMoveKey.currentContext != null) {
+        Scrollable.ensureVisible(
+          currentMoveKey.currentContext!,
+          alignment: 10.0,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _debounce.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant _InlineTreeView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _debounce(() {
+      if (currentMoveKey.currentContext != null) {
+        Scrollable.ensureVisible(
+          currentMoveKey.currentContext!,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeIn,
+        );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
@@ -341,12 +402,12 @@ class _InlineTreeView extends ConsumerWidget {
             child: Wrap(
               spacing: 1.0,
               children: _buildTreeWidget(
-                ctrlProvider,
-                nodes: analysisState.root,
+                widget.ctrlProvider,
+                nodes: widget.root,
                 inMainline: true,
                 startSideline: false,
                 initialPath: UciPath.empty,
-                currentPath: analysisState.currentPath,
+                currentPath: widget.currentPath,
               ),
             ),
           ),
@@ -363,20 +424,20 @@ class _InlineTreeView extends ConsumerWidget {
     required UciPath initialPath,
     required UciPath currentPath,
   }) {
-    if (nodes.isEmpty) {
-      return [];
-    }
+    if (nodes.isEmpty) return [];
     final List<Widget> widgets = [];
 
     // add the node[0]
     final newPath = initialPath + nodes[0].id;
+    final currentMove = newPath == currentPath;
     widgets.add(
-      _Move(
+      _InlineMove(
         ctrlProvider,
         path: newPath,
         move: nodes[0].sanMove,
         ply: nodes[0].ply,
-        isCurrentMove: newPath == currentPath,
+        isCurrentMove: currentMove,
+        key: currentMove ? currentMoveKey : null,
         isSideline: !inMainline,
         startSideline: startSideline,
         endSideline: !inMainline && nodes[0].children.isEmpty,
@@ -433,14 +494,15 @@ class _InlineTreeView extends ConsumerWidget {
   }
 }
 
-class _Move extends ConsumerWidget {
-  const _Move(
+class _InlineMove extends ConsumerWidget {
+  const _InlineMove(
     this.ctrlProvider, {
     required this.path,
     required this.move,
     required this.ply,
     required this.isCurrentMove,
     required this.isSideline,
+    super.key,
     this.startSideline = false,
     this.endSideline = false,
   });
