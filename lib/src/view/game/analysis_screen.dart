@@ -366,7 +366,7 @@ class _CevalLine extends ConsumerWidget {
       ply += 1;
     });
 
-    final (evalString, whiteBetter) = pvData.evalStringAndSide;
+    final (evalString, whiteBetter) = pvData.evalStringAndWinningSide;
     return InkWell(
       onTap: () => ref
           .read(ctrlProvider.notifier)
@@ -859,6 +859,13 @@ class _Prefrences extends ConsumerWidget {
         return CupertinoAlertDialog(
           title: Text(context.l10n.settingsSettings),
           content: content,
+          actions: [
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
         );
       case TargetPlatform.android:
         return Dialog(child: content);

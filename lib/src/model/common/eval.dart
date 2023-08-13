@@ -83,11 +83,11 @@ class PvData with _$PvData {
     }
   }
 
-  (String, bool?) get evalStringAndSide {
+  (String, bool?) get evalStringAndWinningSide {
     if (cp != null) {
       final e = math.max(math.min((cp! / 10).round() / 10, 99), -99);
       final eString = e > 0 ? '+${e.toStringAsFixed(1)}' : e.toStringAsFixed(1);
-      return e > 0 ? (eString, true) : (eString, false);
+      return e >= 0 ? (eString, true) : (eString, false);
     } else if (mate != null) {
       return ('#$mate', null);
     } else {
