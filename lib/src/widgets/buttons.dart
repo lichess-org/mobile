@@ -350,6 +350,7 @@ class BottomBarButton extends StatelessWidget {
     this.showAndroidTooltip = true,
     this.highlighted = false,
     this.showAndroidShortLabel = false,
+    super.key,
   });
 
   final IconData icon;

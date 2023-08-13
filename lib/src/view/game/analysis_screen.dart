@@ -522,7 +522,7 @@ class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
     final newPath = initialPath + nodes[0].id;
     final currentMove = newPath == currentPath;
     widgets.add(
-      _InlineMove(
+      InlineMove(
         ctrlProvider,
         path: newPath,
         move: nodes[0].sanMove,
@@ -585,8 +585,8 @@ class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
   }
 }
 
-class _InlineMove extends ConsumerWidget {
-  const _InlineMove(
+class InlineMove extends ConsumerWidget {
+  const InlineMove(
     this.ctrlProvider, {
     required this.path,
     required this.move,
@@ -694,6 +694,7 @@ class _BottomBar extends ConsumerWidget {
               onLongPress:
                   analysisState.canGoBack ? () => _moveBackward(ref) : null,
               child: BottomBarButton(
+                key: const ValueKey('goto-previous'),
                 onTap:
                     analysisState.canGoBack ? () => _moveBackward(ref) : null,
                 label: 'Previous',
@@ -706,6 +707,7 @@ class _BottomBar extends ConsumerWidget {
               onLongPress:
                   analysisState.canGoNext ? () => _moveForward(ref) : null,
               child: BottomBarButton(
+                key: const ValueKey('goto-next'),
                 icon: CupertinoIcons.chevron_forward,
                 label: context.l10n.next,
                 shortLabel: context.l10n.next,
