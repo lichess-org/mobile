@@ -15,8 +15,6 @@ import 'platform.dart';
 const _scrollAnimationDuration = Duration(milliseconds: 200);
 const _moveListOpacity = 0.6;
 
-const _tabletPadding = 16.0;
-
 /// Board layout that adapts to screen size and aspect ratio.
 ///
 /// On portrait mode, the board will be displayed in the middle of the screen,
@@ -88,7 +86,7 @@ class BoardTable extends ConsumerWidget {
 
         final isTablet = defaultBoardSize > kTabletThreshold;
         final boardSize =
-            isTablet ? defaultBoardSize - _tabletPadding * 2 : defaultBoardSize;
+            isTablet ? defaultBoardSize - kTabletPadding * 2 : defaultBoardSize;
 
         final error = errorMessage != null
             ? SizedBox.square(
@@ -175,9 +173,9 @@ class BoardTable extends ConsumerWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(
-                      left: _tabletPadding,
-                      top: _tabletPadding,
-                      bottom: _tabletPadding,
+                      left: kTabletPadding,
+                      top: kTabletPadding,
+                      bottom: kTabletPadding,
                     ),
                     child: Row(
                       children: [
@@ -193,7 +191,7 @@ class BoardTable extends ConsumerWidget {
                   Flexible(
                     fit: FlexFit.loose,
                     child: Padding(
-                      padding: const EdgeInsets.all(_tabletPadding),
+                      padding: const EdgeInsets.all(kTabletPadding),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -241,7 +239,7 @@ class BoardTable extends ConsumerWidget {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: isTablet ? _tabletPadding : 12.0,
+                        horizontal: isTablet ? kTabletPadding : 12.0,
                       ),
                       child: topTable,
                     ),
@@ -250,7 +248,7 @@ class BoardTable extends ConsumerWidget {
                     Padding(
                       padding: isTablet
                           ? const EdgeInsets.symmetric(
-                              horizontal: _tabletPadding,
+                              horizontal: kTabletPadding,
                             )
                           : EdgeInsets.zero,
                       child: EngineGauge(
@@ -262,7 +260,7 @@ class BoardTable extends ConsumerWidget {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: isTablet ? _tabletPadding : 12.0,
+                        horizontal: isTablet ? kTabletPadding : 12.0,
                       ),
                       child: bottomTable,
                     ),

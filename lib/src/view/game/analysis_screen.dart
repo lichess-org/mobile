@@ -76,9 +76,26 @@ class AnalysisScreen extends ConsumerWidget {
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisCtrlProvider(steps, orientation, gameData.id);
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(context.l10n.analysis),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _EngineDepth(
+              ref.watch(
+                ctrlProvider.select((value) => value.evaluationContext),
+              ),
+            ),
+            SettingsButton(
+              onPressed: () => showAdaptiveDialog<void>(
+                context: context,
+                builder: (_) => _Prefrences(ctrlProvider),
+              ),
+            ),
+          ],
+        ),
       ),
       child: _Body(ctrlProvider: ctrlProvider),
     );
@@ -102,14 +119,56 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
     return Column(
       children: [
         Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              _TopTable(widget.ctrlProvider),
-              _Board(widget.ctrlProvider),
-              _Moves(widget.ctrlProvider),
-            ],
+          child: SafeArea(
+            bottom: false,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final aspectRatio = constraints.biggest.aspectRatio;
+                final defaultBoardSize = constraints.biggest.shortestSide;
+                final isTablet = defaultBoardSize > kTabletThreshold;
+                final boardSize =
+                    isTablet ? defaultBoardSize - 16.0 * 2 : defaultBoardSize;
+
+                return aspectRatio > 1
+                    ? Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: kTabletPadding,
+                              top: kTabletPadding,
+                              bottom: kTabletPadding,
+                            ),
+                            child: Row(
+                              children: [
+                                _Board(widget.ctrlProvider, boardSize),
+                                _EngineGaugeVertical(widget.ctrlProvider),
+                              ],
+                            ),
+                          ),
+                          Flexible(
+                            fit: FlexFit.loose,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _CevalLines(widget.ctrlProvider),
+                                _Moves(widget.ctrlProvider),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          _TopTable(widget.ctrlProvider),
+                          _Board(widget.ctrlProvider, boardSize),
+                          _Moves(widget.ctrlProvider),
+                        ],
+                      );
+              },
+            ),
           ),
         ),
         _BottomBar(ctrlProvider: widget.ctrlProvider),
@@ -119,9 +178,10 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
 }
 
 class _Board extends ConsumerWidget {
-  const _Board(this.ctrlProvider);
+  const _Board(this.ctrlProvider, this.boardSize);
 
   final AnalysisCtrlProvider ctrlProvider;
+  final double boardSize;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -136,51 +196,45 @@ class _Board extends ConsumerWidget {
     final bestMoves =
         evalBestMoves ?? analysisState.currentNode.eval?.bestMoves;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final boardSize = constraints.biggest.shortestSide;
-        return cg.Board(
-          size: boardSize,
-          data: cg.BoardData(
-            orientation: analysisState.pov.cg,
-            interactableSide: analysisState.position.isGameOver
-                ? cg.InteractableSide.none
-                : analysisState.position.turn == Side.white
-                    ? cg.InteractableSide.white
-                    : cg.InteractableSide.black,
-            fen: analysisState.fen,
-            isCheck: analysisState.position.isCheck,
-            lastMove: analysisState.lastMove?.cg,
-            sideToMove: analysisState.position.turn.cg,
-            validMoves: analysisState.validMoves,
-            onMove: (move, {isDrop, isPremove}) => ref
-                .read(ctrlProvider.notifier)
-                .onUserMove(Move.fromUci(move.uci)!),
-            shapes: analysisState.showBestMoveArrow &&
-                    analysisState.isEngineEnabled &&
-                    bestMoves != null
-                ? ISet(
-                    bestMoves.where((move) => move != null).mapIndexed(
-                          (i, move) => cg.Arrow(
-                            color: const Color(0x40003088)
-                                .withOpacity(0.4 - 0.15 * i),
-                            orig: move!.cg.from,
-                            dest: move.cg.to,
-                          ),
-                        ),
-                  )
-                : null,
-          ),
-          settings: cg.BoardSettings(
-            pieceAssets: boardPrefs.pieceSet.assets,
-            colorScheme: boardPrefs.boardTheme.colors,
-            showValidMoves: boardPrefs.showLegalMoves,
-            showLastMove: boardPrefs.boardHighlights,
-            enableCoordinates: boardPrefs.coordinates,
-            animationDuration: boardPrefs.pieceAnimationDuration,
-          ),
-        );
-      },
+    return cg.Board(
+      size: boardSize,
+      data: cg.BoardData(
+        orientation: analysisState.pov.cg,
+        interactableSide: analysisState.position.isGameOver
+            ? cg.InteractableSide.none
+            : analysisState.position.turn == Side.white
+                ? cg.InteractableSide.white
+                : cg.InteractableSide.black,
+        fen: analysisState.fen,
+        isCheck: analysisState.position.isCheck,
+        lastMove: analysisState.lastMove?.cg,
+        sideToMove: analysisState.position.turn.cg,
+        validMoves: analysisState.validMoves,
+        onMove: (move, {isDrop, isPremove}) =>
+            ref.read(ctrlProvider.notifier).onUserMove(Move.fromUci(move.uci)!),
+        shapes: analysisState.showBestMoveArrow &&
+                analysisState.isEngineEnabled &&
+                bestMoves != null
+            ? ISet(
+                bestMoves.where((move) => move != null).mapIndexed(
+                      (i, move) => cg.Arrow(
+                        color:
+                            const Color(0x40003088).withOpacity(0.4 - 0.15 * i),
+                        orig: move!.cg.from,
+                        dest: move.cg.to,
+                      ),
+                    ),
+              )
+            : null,
+      ),
+      settings: cg.BoardSettings(
+        pieceAssets: boardPrefs.pieceSet.assets,
+        colorScheme: boardPrefs.boardTheme.colors,
+        showValidMoves: boardPrefs.showLegalMoves,
+        showLastMove: boardPrefs.boardHighlights,
+        enableCoordinates: boardPrefs.coordinates,
+        animationDuration: boardPrefs.pieceAnimationDuration,
+      ),
     );
   }
 }
@@ -211,6 +265,28 @@ class _TopTable extends ConsumerWidget {
             ],
           )
         : const SizedBox.shrink();
+  }
+}
+
+class _EngineGaugeVertical extends ConsumerWidget {
+  const _EngineGaugeVertical(this.ctrlProvider);
+
+  final AnalysisCtrlProvider ctrlProvider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final analysisState = ref.watch(ctrlProvider);
+
+    return analysisState.isEngineEnabled
+        ? EngineGauge(
+            displayMode: EngineGaugeDisplayMode.vertical,
+            params: EngineGaugeParams(
+              evaluationContext: analysisState.evaluationContext,
+              position: analysisState.position,
+              savedEval: analysisState.currentNode.eval,
+            ),
+          )
+        : kEmptyWidget;
   }
 }
 
@@ -250,9 +326,13 @@ class _CevalLines extends ConsumerWidget {
             : null);
 
     return content != null
-        ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: content,
+        ? Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: content,
+            ),
           )
         : kEmptyWidget;
   }
@@ -286,6 +366,7 @@ class _CevalLine extends ConsumerWidget {
       ply += 1;
     });
 
+    final (evalString, whiteBetter) = pvData.evalStringAndSide;
     return InkWell(
       onTap: () => ref
           .read(ctrlProvider.notifier)
@@ -293,24 +374,33 @@ class _CevalLine extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               padding: const EdgeInsets.all(2.0),
-              decoration: const BoxDecoration(
-                color: Colors.white,
+              decoration: BoxDecoration(
+                color: whiteBetter != null && !whiteBetter
+                    ? kEvalGaugeBackgroundColor
+                    : kEvalGaugeValueColorLightBg,
                 shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                borderRadius: const BorderRadius.all(Radius.circular(4.0)),
               ),
               child: Text(
-                pvData.evalString,
-                style: const TextStyle(color: Colors.black),
+                evalString,
+                style: TextStyle(
+                  color: whiteBetter != null && !whiteBetter
+                      ? Colors.white
+                      : Colors.black,
+                ),
               ),
             ),
             const SizedBox(width: 8.0),
-            Flexible(
+            Expanded(
               child: Text(
                 builder.toString(),
+                maxLines: 1,
+                softWrap: false,
                 style: const TextStyle(
                   fontFamily: 'ChessFont',
                 ),
@@ -396,22 +486,17 @@ class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
-        child: SizedBox(
-          width: double.infinity,
-          child: SingleChildScrollView(
-            child: Wrap(
-              spacing: 1.0,
-              children: _buildTreeWidget(
-                widget.ctrlProvider,
-                nodes: widget.root,
-                inMainline: true,
-                startSideline: false,
-                initialPath: UciPath.empty,
-                currentPath: widget.currentPath,
-              ),
-            ),
+        child: Wrap(
+          spacing: 1.0,
+          children: _buildTreeWidget(
+            widget.ctrlProvider,
+            nodes: widget.root,
+            inMainline: true,
+            startSideline: false,
+            initialPath: UciPath.empty,
+            currentPath: widget.currentPath,
           ),
         ),
       ),
@@ -584,6 +669,7 @@ class _BottomBar extends ConsumerWidget {
           ? CupertinoTheme.of(context).barBackgroundColor
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
+        top: false,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -671,7 +757,6 @@ class _EngineDepth extends ConsumerWidget {
                 Text(
                   '$depth',
                   style: TextStyle(
-                    fontSize: 12,
                     color: Theme.of(context).colorScheme.onSecondary,
                   ),
                 ),
@@ -695,13 +780,14 @@ class _Prefrences extends ConsumerWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: Styles.bodyPadding,
-            child: Text(
-              context.l10n.settingsSettings,
-              style: Styles.title,
+          if (defaultTargetPlatform == TargetPlatform.android)
+            Padding(
+              padding: Styles.bodyPadding,
+              child: Text(
+                context.l10n.settingsSettings,
+                style: Styles.title,
+              ),
             ),
-          ),
           SwitchSettingTile(
             title: Text(context.l10n.bestMoveArrow),
             value: state.showBestMoveArrow,
