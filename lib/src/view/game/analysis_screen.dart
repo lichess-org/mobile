@@ -14,12 +14,13 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/game/analysis_ctrl.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_dialog.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
@@ -63,9 +64,10 @@ class AnalysisScreen extends ConsumerWidget {
             ref.watch(ctrlProvider.select((value) => value.evaluationContext)),
           ),
           SettingsButton(
-            onPressed: () => showAdaptiveDialog<void>(
+            onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               builder: (_) => _Prefrences(ctrlProvider),
+              showDragHandle: true,
             ),
           )
         ],
@@ -79,6 +81,7 @@ class AnalysisScreen extends ConsumerWidget {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        padding: const EdgeInsetsDirectional.only(end: 16.0),
         middle: Text(context.l10n.analysis),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -89,9 +92,10 @@ class AnalysisScreen extends ConsumerWidget {
               ),
             ),
             SettingsButton(
-              onPressed: () => showAdaptiveDialog<void>(
+              onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
                 builder: (_) => _Prefrences(ctrlProvider),
+                showDragHandle: true,
               ),
             ),
           ],
@@ -757,6 +761,7 @@ class _EngineDepth extends ConsumerWidget {
                 Text(
                   '$depth',
                   style: TextStyle(
+                    fontSize: 13,
                     color: Theme.of(context).colorScheme.onSecondary,
                   ),
                 ),
@@ -774,20 +779,21 @@ class _Prefrences extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(ctrlProvider);
+    final isSoundEnabled = ref.watch(
+      generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
+    );
+    final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    final content = Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+    return SafeArea(
+      child: ListView(
         children: [
-          if (defaultTargetPlatform == TargetPlatform.android)
-            Padding(
-              padding: Styles.bodyPadding,
-              child: Text(
-                context.l10n.settingsSettings,
-                style: Styles.title,
-              ),
+          Padding(
+            padding: Styles.bodyPadding,
+            child: Text(
+              context.l10n.settingsSettings,
+              style: Styles.title,
             ),
+          ),
           SwitchSettingTile(
             title: Text(context.l10n.bestMoveArrow),
             value: state.showBestMoveArrow,
@@ -850,28 +856,38 @@ class _Prefrences extends ConsumerWidget {
                   ref.read(ctrlProvider.notifier).setCores(value.toInt()),
             ),
           ),
+          SwitchSettingTile(
+            title: Text(context.l10n.sound),
+            value: isSoundEnabled,
+            onChanged: (value) {
+              ref
+                  .read(generalPreferencesProvider.notifier)
+                  .toggleSoundEnabled();
+            },
+          ),
+          SwitchSettingTile(
+            title: const Text('Haptic feedback'),
+            value: boardPrefs.hapticFeedback,
+            onChanged: (value) {
+              ref
+                  .read(boardPreferencesProvider.notifier)
+                  .toggleHapticFeedback();
+            },
+          ),
+          SwitchSettingTile(
+            title: Text(
+              context.l10n.preferencesPieceAnimation,
+              maxLines: 2,
+            ),
+            value: boardPrefs.pieceAnimation,
+            onChanged: (value) {
+              ref
+                  .read(boardPreferencesProvider.notifier)
+                  .togglePieceAnimation();
+            },
+          ),
         ],
       ),
     );
-
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.iOS:
-        return CupertinoAlertDialog(
-          title: Text(context.l10n.settingsSettings),
-          content: content,
-          actions: [
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      case TargetPlatform.android:
-        return Dialog(child: content);
-
-      default:
-        throw UnimplementedError('Platform not supported');
-    }
   }
 }
