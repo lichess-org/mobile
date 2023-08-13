@@ -20,7 +20,7 @@ part 'analysis_ctrl.freezed.dart';
 class AnalysisCtrl extends _$AnalysisCtrl {
   late Root _root;
 
-  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 100));
+  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
 
   @override
   AnalysisCtrlState build(

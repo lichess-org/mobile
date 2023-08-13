@@ -156,7 +156,9 @@ class _Board extends ConsumerWidget {
             onMove: (move, {isDrop, isPremove}) => ref
                 .read(ctrlProvider.notifier)
                 .onUserMove(Move.fromUci(move.uci)!),
-            shapes: analysisState.isEngineEnabled && bestMoves != null
+            shapes: analysisState.showBestMoveArrow &&
+                    analysisState.isEngineEnabled &&
+                    bestMoves != null
                 ? ISet(
                     bestMoves.where((move) => move != null).mapIndexed(
                           (i, move) => cg.Arrow(
@@ -659,7 +661,24 @@ class _EngineDepth extends ConsumerWidget {
       engineEvaluationProvider(evalContext).select((value) => value?.depth),
     );
 
-    return depth != null ? Text('$depth') : kEmptyWidget;
+    return depth != null
+        ? Tooltip(
+            message: 'Engine Depth',
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                const Icon(CupertinoIcons.app_fill),
+                Text(
+                  '$depth',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  ),
+                ),
+              ],
+            ),
+          )
+        : kEmptyWidget;
   }
 }
 

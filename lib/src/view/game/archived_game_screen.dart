@@ -242,7 +242,7 @@ class _BottomBar extends ConsumerWidget {
                       ),
                     )
                 : null,
-            icon: const Icon(Icons.computer),
+            icon: const Icon(Icons.biotech),
           ),
           const SizedBox(
             width: 44.0,
