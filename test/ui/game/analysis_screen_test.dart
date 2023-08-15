@@ -46,7 +46,7 @@ void main() {
         home: AnalysisScreen(
           steps: gameStep,
           orientation: Side.white,
-          gameData: gameData,
+          gameId: gameData.id,
         ),
       );
 
@@ -67,7 +67,7 @@ void main() {
         home: AnalysisScreen(
           steps: gameStep,
           orientation: Side.white,
-          gameData: gameData,
+          gameId: gameData.id,
         ),
       );
 
@@ -93,7 +93,7 @@ void main() {
       await tester.tap(find.byKey(const Key('goto-previous')));
       await tester.pumpAndSettle();
 
-      final currentMove = find.widgetWithText(InlineMove, '19. Kc1');
+      final currentMove = find.widgetWithText(InlineMove, 'Kc1');
       expect(currentMove, findsOneWidget);
       expect(
         tester.widgetList<InlineMove>(currentMove).any((e) => e.isCurrentMove),
