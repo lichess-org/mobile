@@ -130,8 +130,13 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                 final aspectRatio = constraints.biggest.aspectRatio;
                 final defaultBoardSize = constraints.biggest.shortestSide;
                 final isTablet = defaultBoardSize > kTabletThreshold;
-                final boardSize =
-                    isTablet ? defaultBoardSize - 16.0 * 2 : defaultBoardSize;
+                final isSmallScreen =
+                    constraints.maxHeight < kSmallHeightScreenThreshold;
+                final boardSize = isTablet
+                    ? defaultBoardSize - 16.0 * 2
+                    : (isSmallScreen
+                        ? defaultBoardSize - 16.0
+                        : defaultBoardSize);
 
                 return aspectRatio > 1
                     ? Row(
@@ -153,10 +158,19 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                           Flexible(
                             fit: FlexFit.loose,
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 _CevalLines(widget.ctrlProvider),
-                                _Moves(widget.ctrlProvider),
+                                Expanded(
+                                  child: PlatformCard(
+                                    margin: const EdgeInsets.all(16.0),
+                                    semanticContainer: false,
+                                    child: _Moves(
+                                      widget.ctrlProvider,
+                                      _MovesDisplayMode.tablet,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -166,9 +180,9 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          _TopTable(widget.ctrlProvider),
+                          _ColumnTopTable(widget.ctrlProvider),
                           _Board(widget.ctrlProvider, boardSize),
-                          _Moves(widget.ctrlProvider),
+                          _Moves(widget.ctrlProvider, _MovesDisplayMode.normal),
                         ],
                       );
               },
@@ -243,8 +257,8 @@ class _Board extends ConsumerWidget {
   }
 }
 
-class _TopTable extends ConsumerWidget {
-  const _TopTable(this.ctrlProvider);
+class _ColumnTopTable extends ConsumerWidget {
+  const _ColumnTopTable(this.ctrlProvider);
 
   final AnalysisCtrlProvider ctrlProvider;
 
@@ -331,7 +345,12 @@ class _CevalLines extends ConsumerWidget {
 
     return content != null
         ? Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(
+              top: 8.0,
+              left: 4.0,
+              right: 4.0,
+              bottom: 4.0,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -359,7 +378,7 @@ class _CevalLine extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final builder = StringBuffer();
     var ply = initialPly + 1;
-    moves.forEachIndexed((i, s) {
+    moves.take(15).forEachIndexed((i, s) {
       builder.write(
         ply.isOdd
             ? '${(ply / 2).ceil()}. $s '
@@ -376,7 +395,7 @@ class _CevalLine extends ConsumerWidget {
           .read(ctrlProvider.notifier)
           .onUserMove(Move.fromUci(pvData.moves[0])!),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+        padding: const EdgeInsets.all(2.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -418,19 +437,28 @@ class _CevalLine extends ConsumerWidget {
   }
 }
 
+enum _MovesDisplayMode {
+  tablet,
+  normal,
+}
+
 class _Moves extends ConsumerWidget {
-  const _Moves(this.ctrlProvider);
+  const _Moves(this.ctrlProvider, this.displayMode);
 
   final AnalysisCtrlProvider ctrlProvider;
+  final _MovesDisplayMode displayMode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final analysisState = ref.watch(ctrlProvider);
+    final root = ref.watch(ctrlProvider.select((value) => value.root));
+    final currentPath =
+        ref.watch(ctrlProvider.select((value) => value.currentPath));
 
     return _InlineTreeView(
       ctrlProvider,
-      analysisState.root,
-      analysisState.currentPath,
+      root,
+      currentPath,
+      displayMode,
     );
   }
 }
@@ -440,11 +468,13 @@ class _InlineTreeView extends ConsumerStatefulWidget {
     this.ctrlProvider,
     this.root,
     this.currentPath,
+    this.displayMode,
   );
 
   final AnalysisCtrlProvider ctrlProvider;
   final IList<ViewNode> root;
   final UciPath currentPath;
+  final _MovesDisplayMode displayMode;
 
   @override
   ConsumerState<_InlineTreeView> createState() => _InlineTreeViewState();
@@ -462,6 +492,7 @@ class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
         Scrollable.ensureVisible(
           currentMoveKey.currentContext!,
           alignment: 10.0,
+          alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
         );
       }
     });
@@ -482,6 +513,8 @@ class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
           currentMoveKey.currentContext!,
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeIn,
+          alignment: 0.5,
+          alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
         );
       }
     });
@@ -489,22 +522,25 @@ class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
-        child: Wrap(
-          spacing: 1.0,
-          children: _buildTreeWidget(
-            widget.ctrlProvider,
-            nodes: widget.root,
-            inMainline: true,
-            startSideline: false,
-            initialPath: UciPath.empty,
-            currentPath: widget.currentPath,
-          ),
+    final content = SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+      child: Wrap(
+        spacing: 1.0,
+        children: _buildTreeWidget(
+          widget.ctrlProvider,
+          nodes: widget.root,
+          inMainline: true,
+          startSideline: false,
+          initialPath: UciPath.empty,
+          currentPath: widget.currentPath,
         ),
       ),
     );
+
+    return switch (widget.displayMode) {
+      _MovesDisplayMode.tablet => content,
+      _MovesDisplayMode.normal => Expanded(child: content)
+    };
   }
 
   List<Widget> _buildTreeWidget(
@@ -625,34 +661,43 @@ class InlineMove extends ConsumerWidget {
         child: Opacity(
           opacity: isSideline ? 0.8 : 1.0,
           child: Text(
-            ply.isOdd
-                ? '${(ply / 2).ceil()}. ${move.san}'
-                : (startSideline
-                    ? '${(ply / 2).ceil()}... ${move.san}'
-                    : move.san),
+            move.san,
             style: isSideline ? sideLineStyle : baseTextStyle,
           ),
         ),
       ),
     );
-    return startSideline || endSideline
-        ? Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (startSideline)
-                const Opacity(
-                  opacity: 0.8,
-                  child: Text('(', style: sideLineStyle),
-                ),
-              content,
-              if (endSideline)
-                const Opacity(
-                  opacity: 0.8,
-                  child: Text(')', style: sideLineStyle),
-                ),
-            ],
+
+    final index = ply.isOdd
+        ? Text(
+            '${(ply / 2).ceil()}. ',
+            style: isSideline ? sideLineStyle : baseTextStyle,
           )
-        : content;
+        : (startSideline
+            ? Text(
+                '${(ply / 2).ceil()}... ',
+                style: isSideline ? sideLineStyle : baseTextStyle,
+              )
+            : null);
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (startSideline)
+          const Opacity(
+            opacity: 0.8,
+            child: Text('(', style: sideLineStyle),
+          ),
+        if (index != null && isSideline) Opacity(opacity: 0.8, child: index),
+        if (index != null && !isSideline) index,
+        content,
+        if (endSideline)
+          const Opacity(
+            opacity: 0.8,
+            child: Text(')', style: sideLineStyle),
+          ),
+      ],
+    );
   }
 }
 
@@ -756,18 +801,22 @@ class _EngineDepth extends ConsumerWidget {
     return depth != null
         ? Tooltip(
             message: 'Engine Depth',
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                const Icon(CupertinoIcons.app_fill),
-                Text(
-                  '$depth',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Theme.of(context).colorScheme.onSecondary,
-                  ),
+            child: Container(
+              padding: const EdgeInsets.all(2.0),
+              decoration: BoxDecoration(
+                color: defaultTargetPlatform == TargetPlatform.android
+                    ? Theme.of(context).colorScheme.secondary
+                    : CupertinoTheme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+              child: Text(
+                '$depth',
+                style: TextStyle(
+                  color: defaultTargetPlatform == TargetPlatform.android
+                      ? Theme.of(context).colorScheme.onSecondary
+                      : CupertinoTheme.of(context).primaryContrastingColor,
                 ),
-              ],
+              ),
             ),
           )
         : kEmptyWidget;
@@ -833,31 +882,32 @@ class _Prefrences extends ConsumerWidget {
                   ref.read(ctrlProvider.notifier).setCevalLines(value.toInt()),
             ),
           ),
-          PlatformListTile(
-            title: Text.rich(
-              TextSpan(
-                text: '${context.l10n.cpus}: ',
-                style: const TextStyle(
-                  fontWeight: FontWeight.normal,
-                ),
-                children: [
-                  TextSpan(
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                    text: state.numCores.toString(),
+          if (state.numCores > 1)
+            PlatformListTile(
+              title: Text.rich(
+                TextSpan(
+                  text: '${context.l10n.cpus}: ',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.normal,
                   ),
-                ],
+                  children: [
+                    TextSpan(
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                      text: state.numCores.toString(),
+                    ),
+                  ],
+                ),
+              ),
+              subtitle: NonLinearSlider(
+                value: state.numCores,
+                values: List.generate(maxCores, (index) => index + 1),
+                onChangeEnd: (value) =>
+                    ref.read(ctrlProvider.notifier).setCores(value.toInt()),
               ),
             ),
-            subtitle: NonLinearSlider(
-              value: state.numCores,
-              values: List.generate(maxCores, (index) => index + 1),
-              onChangeEnd: (value) =>
-                  ref.read(ctrlProvider.notifier).setCores(value.toInt()),
-            ),
-          ),
           SwitchSettingTile(
             title: Text(context.l10n.sound),
             value: isSoundEnabled,
