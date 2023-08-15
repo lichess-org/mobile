@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/tree.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
@@ -38,12 +39,12 @@ class AnalysisScreen extends ConsumerWidget {
   const AnalysisScreen({
     required this.steps,
     required this.orientation,
-    required this.gameData,
+    required this.gameId,
   });
 
   final IList<GameStep> steps;
   final Side orientation;
-  final ArchivedGameData gameData;
+  final GameId gameId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -55,7 +56,7 @@ class AnalysisScreen extends ConsumerWidget {
   }
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisCtrlProvider(steps, orientation, gameData.id);
+    final ctrlProvider = analysisCtrlProvider(steps, orientation, gameId);
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.gameAnalysis),
@@ -77,7 +78,7 @@ class AnalysisScreen extends ConsumerWidget {
   }
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisCtrlProvider(steps, orientation, gameData.id);
+    final ctrlProvider = analysisCtrlProvider(steps, orientation, gameId);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(

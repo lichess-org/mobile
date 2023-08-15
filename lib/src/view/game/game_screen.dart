@@ -15,6 +15,8 @@ import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/game/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -483,6 +485,21 @@ class _GameBottomBar extends ConsumerWidget {
               },
               icon: Icons.menu,
             ),
+            if (gameState.game.finished)
+              BottomBarButton(
+                label: context.l10n.gameAnalysis,
+                highlighted: true,
+                shortLabel: context.l10n.gameAnalysis,
+                icon: Icons.biotech,
+                onTap: () => pushPlatformRoute(
+                  context,
+                  builder: (_) => AnalysisScreen(
+                    steps: gameState.game.steps,
+                    orientation: gameState.game.youAre!,
+                    gameId: gameState.game.meta.id,
+                  ),
+                ),
+              ),
             if (gameState.game.playable &&
                 gameState.game.opponent?.offeringDraw == true)
               BottomBarButton(
