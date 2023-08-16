@@ -10,7 +10,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/tree.dart';
+import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
@@ -30,7 +30,7 @@ part 'puzzle_ctrl.freezed.dart';
 @riverpod
 class PuzzleCtrl extends _$PuzzleCtrl {
   // ignore: avoid-late-keyword
-  late Node _gameTree;
+  late Branch _gameTree;
   Timer? _firstMoveTimer;
   Timer? _enableSolutionButtonTimer;
   Timer? _viewSolutionTimer;
@@ -60,7 +60,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     PuzzleStreak? streak,
   ) {
     final root = Root.fromPgn(context.puzzle.game.pgn);
-    _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
+    _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Branch;
 
     // play first move after 1 second
     _firstMoveTimer = Timer(const Duration(seconds: 1), () {
@@ -88,7 +88,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
       initialFen: _gameTree.fen,
       initialPath: initialPath,
       currentPath: UciPath.empty,
-      nodeList: IList([ViewNode.fromNode(_gameTree)]),
+      node: _gameTree.view,
       pov: _gameTree.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
       canViewSolution: false,
       resultSent: false,
@@ -104,8 +104,9 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     _addMove(move);
 
     if (state.mode == PuzzleMode.play) {
+      final nodeList = _gameTree.nodesOn(state.currentPath).toList();
       final movesToTest =
-          state.nodeList.sublist(state.initialPath.size).map((e) => e.sanMove);
+          nodeList.sublist(state.initialPath.size).map((e) => e.sanMove);
 
       final isGoodMove = state.puzzle.testSolution(movesToTest);
 
@@ -159,7 +160,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     _mergeSolution();
 
     state = state.copyWith(
-      nodeList: IList(_gameTree.nodesOn(state.currentPath)),
+      node: _gameTree.branchAt(state.currentPath).view,
     );
 
     _onFailOrWin(PuzzleResult.lose);
@@ -344,7 +345,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
         _mergeSolution();
         state = state.copyWith(
           mode: PuzzleMode.view,
-          nodeList: IList(_gameTree.nodesOn(state.currentPath)),
+          node: _gameTree.branchAt(state.currentPath).view,
           streak: state.streak!.copyWith(
             finished: true,
           ),
@@ -384,8 +385,8 @@ class PuzzleCtrl extends _$PuzzleCtrl {
 
   void _setPath(UciPath path, {bool replaying = false}) {
     final pathChange = state.currentPath != path;
-    final newNodeList = IList(_gameTree.nodesOn(path));
-    final sanMove = newNodeList.last.sanMove;
+    final newNode = _gameTree.branchAt(path).view;
+    final sanMove = newNode.sanMove;
     if (!replaying) {
       final isForward = path.size > state.currentPath.size;
       if (isForward) {
@@ -407,7 +408,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     }
     state = state.copyWith(
       currentPath: path,
-      nodeList: newNodeList,
+      node: newNode,
       lastMove: sanMove.move,
     );
 
@@ -440,8 +441,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
           )
           .start(
             state.currentPath,
-            state.nodeList.map(Step.fromNode),
-            state.node.position,
+            _gameTree.nodesOn(state.currentPath).map(Step.fromNode),
             shouldEmit: (work) => work.path == state.currentPath,
           )
           ?.forEach((t) {
@@ -468,7 +468,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     final initialNode = _gameTree.nodeAt(state.initialPath);
     final fromPly = initialNode.ply;
     final (_, newNodes) = state.puzzle.puzzle.solution.foldIndexed(
-      (initialNode.position, IList<Node>(const [])),
+      (initialNode.position, IList<Branch>(const [])),
       (index, previous, uci) {
         final move = Move.fromUci(uci);
         final (pos, nodes) = previous;
@@ -476,8 +476,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
         return (
           newPos,
           nodes.add(
-            Node(
-              id: UciCharPair.fromMove(move),
+            Branch(
               ply: fromPly + index + 1,
               fen: newPos.fen,
               position: newPos,
@@ -509,7 +508,7 @@ class PuzzleCtrlState with _$PuzzleCtrlState {
     required UciPath initialPath,
     required UciPath currentPath,
     required Side pov,
-    required IList<ViewNode> nodeList, // must be non empty
+    required ViewBranch node,
     Move? lastMove,
     PuzzleResult? result,
     PuzzleFeedback? feedback,
@@ -535,9 +534,8 @@ class PuzzleCtrlState with _$PuzzleCtrlState {
         contextId: puzzle.puzzle.id,
       );
 
-  ViewNode get node => nodeList.last;
-  Position get position => nodeList.last.position;
-  String get fen => nodeList.last.fen;
+  Position get position => node.position;
+  String get fen => node.fen;
   bool get canGoNext => mode == PuzzleMode.view && node.children.isNotEmpty;
   bool get canGoBack =>
       mode == PuzzleMode.view && currentPath.size > initialPath.size;

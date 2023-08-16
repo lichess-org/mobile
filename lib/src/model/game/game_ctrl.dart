@@ -25,8 +25,20 @@ part 'game_ctrl.g.dart';
 @riverpod
 class GameCtrl extends _$GameCtrl {
   final _logger = Logger('GameCtrl');
+
   StreamSubscription<SocketEvent>? _socketSubscription;
+
+  /// Periodic timer when the opponent has left the game, to display the countdown
+  /// until the player can claim victory.
   Timer? _opponentLeftCountdownTimer;
+
+  /// Tracks moves that were played on the board, sent to the server, possibly
+  /// acked, but without a move response from the server yet.
+  /// After a delay, it will trigger a reload. This might fix bugs where the
+  /// board is in a transient, dirty state, where clocks don't tick, eventually
+  /// causing the player to flag.
+  /// It will also help with lila-ws restarts.
+  Timer? _transientMoveTimer;
 
   final _onFlagThrottler = Throttler(const Duration(milliseconds: 500));
 
@@ -59,6 +71,7 @@ class GameCtrl extends _$GameCtrl {
     ref.onDispose(() {
       _socketSubscription?.cancel();
       _opponentLeftCountdownTimer?.cancel();
+      _transientMoveTimer?.cancel();
     });
 
     return state;
@@ -96,6 +109,8 @@ class GameCtrl extends _$GameCtrl {
     );
 
     _playMoveFeedback(sanMove, skipAnimationDelay: isDrop ?? false);
+
+    _transientMoveTimer = Timer(const Duration(seconds: 10), _resyncGameData);
   }
 
   void cursorAt(int cursor) {
@@ -321,10 +336,12 @@ class GameCtrl extends _$GameCtrl {
           ),
         );
 
-      // Move event, received after sending a move or receiving a move from the opponent
+      // Move event, received after sending a move or receiving a move from the
+      // opponent
       case 'move':
         final curState = state.requireValue;
         final data = MoveEvent.fromJson(event.data as Map<String, dynamic>);
+        final playedSide = data.ply.isOdd ? Side.white : Side.black;
 
         GameCtrlState newState = curState.copyWith(
           game: curState.game.copyWith(
@@ -333,6 +350,10 @@ class GameCtrl extends _$GameCtrl {
             status: data.status ?? curState.game.status,
           ),
         );
+
+        if (playedSide == curState.game.youAre) {
+          _transientMoveTimer?.cancel();
+        }
 
         // add opponent move
         if (data.ply == curState.game.lastPly + 1) {

@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-import 'package:lichess_mobile/src/model/common/tree.dart';
+import 'package:lichess_mobile/src/model/common/node.dart';
 
 part 'uci.freezed.dart';
 part 'uci.g.dart';
@@ -22,38 +22,21 @@ class UciCharPair with _$UciCharPair {
     return UciCharPair.fromMove(move);
   }
 
-  factory UciCharPair.fromMove(Move move) {
-    if (move is DropMove) {
-      final roles = [
-        Role.queen,
-        Role.rook,
-        Role.bishop,
-        Role.knight,
-        Role.pawn
-      ];
-      return UciCharPair(
-        String.fromCharCode(35 + move.to),
-        String.fromCharCode(35 + 64 + 8 * 5 + roles.indexOf(move.role)),
-      );
-    } else if (move is NormalMove) {
-      final roles = [
-        Role.queen,
-        Role.rook,
-        Role.bishop,
-        Role.knight,
-        Role.king
-      ];
-      final b = move.promotion != null
-          ? 35 + 64 + 8 * roles.indexOf(move.promotion!) + squareFile(move.to)
-          : 35 + move.to;
-      return UciCharPair(
-        String.fromCharCode(35 + move.from),
-        String.fromCharCode(b),
-      );
-    }
-
-    throw ArgumentError('Invalid move type $move');
-  }
+  factory UciCharPair.fromMove(Move move) => switch (move) {
+        NormalMove(from: final f, to: final t, promotion: final p) =>
+          UciCharPair(
+            String.fromCharCode(35 + f),
+            String.fromCharCode(
+              p != null
+                  ? 35 + 64 + 8 * _promotionRoles.indexOf(p) + squareFile(t)
+                  : 35 + t,
+            ),
+          ),
+        DropMove(to: final t, role: final r) => UciCharPair(
+            String.fromCharCode(35 + t),
+            String.fromCharCode(35 + 64 + 8 * 5 + _dropRoles.indexOf(r)),
+          ),
+      };
 
   factory UciCharPair.fromJson(Map<String, dynamic> json) =>
       _$UciCharPairFromJson(json);
@@ -61,6 +44,22 @@ class UciCharPair with _$UciCharPair {
   @override
   String toString() => '$a$b';
 }
+
+const _promotionRoles = [
+  Role.queen,
+  Role.rook,
+  Role.bishop,
+  Role.knight,
+  Role.king,
+];
+
+const _dropRoles = [
+  Role.queen,
+  Role.rook,
+  Role.bishop,
+  Role.knight,
+  Role.pawn,
+];
 
 /// Compact representation of a path to a game node made from concatenated
 /// UciCharPair strings.

@@ -5,10 +5,10 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/tree.dart';
+import 'package:lichess_mobile/src/model/common/node.dart';
 
 void main() {
-  group('RootOrNode', () {
+  group('Node', () {
     test('Root.fromPgn', () {
       final root = Root.fromPgn('e4 e5');
       expect(root.ply, equals(0));
@@ -36,7 +36,7 @@ void main() {
       expect(nodeList.length, equals(1));
       expect(
         nodeList.first,
-        equals(ViewNode.fromNode(root.nodeAt(path) as Node)),
+        equals((root.nodeAt(path) as Branch).view),
       );
     });
 
@@ -54,12 +54,12 @@ void main() {
       expect(root.mainline.length, equals(3));
       expect(
         root.mainline.last,
-        equals(ViewNode.fromNode(root.nodeAt(root.mainlinePath) as Node)),
+        equals((root.nodeAt(root.mainlinePath) as Branch).view),
       );
 
       final nodeList = root.nodesOn(newPath!);
       expect(nodeList.length, equals(3));
-      expect(nodeList.last, equals(ViewNode.fromNode(newNode!)));
+      expect(nodeList.last, equals(newNode!.view));
     });
 
     test('mainline', () {
@@ -78,8 +78,7 @@ void main() {
         fen: 'fen',
         position: Chess.initial,
       );
-      final child = Node(
-        id: UciCharPair.fromMove(Move.fromUci('e2e4')!),
+      final child = Branch(
         ply: 1,
         sanMove: SanMove('e4', Move.fromUci('e2e4')!),
         fen: 'fen2',
@@ -92,8 +91,7 @@ void main() {
 
     test('prepend child', () {
       final root = Root.fromPgn('e4 e5');
-      final child = Node(
-        id: UciCharPair.fromMove(Move.fromUci('d2d4')!),
+      final child = Branch(
         ply: 1,
         sanMove: SanMove('d4', Move.fromUci('d2d4')!),
         fen: 'fen2',
@@ -122,10 +120,23 @@ void main() {
       expect(branch2, isNull);
     });
 
+    test('branchAt from root', () {
+      final root = Root.fromPgn('e4 e5');
+      final branch = root.branchAt(UciPath.fromId(UciCharPair.fromUci('e2e4')));
+      expect(branch, equals(root.children.first));
+    });
+
+    test('branchAt from branch', () {
+      final root = Root.fromPgn('e4 e5 Nf3');
+      final branch = root.branchAt(UciPath.fromId(UciCharPair.fromUci('e2e4')));
+      final branch2 =
+          branch!.branchAt(UciPath.fromId(UciCharPair.fromUci('e7e5')));
+      expect(branch2, equals(branch.children.first));
+    });
+
     test('updateAt', () {
       final root = Root.fromPgn('e4 e5');
-      final branch = Node(
-        id: UciCharPair.fromMove(Move.fromUci('b8c6')!),
+      final branch = Branch(
         ply: 2,
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
         fen: 'fen2',
@@ -138,8 +149,8 @@ void main() {
       expect(
         root.nodesOn(nodePath!),
         equals([
-          ViewNode.fromNode(root.children.first),
-          ViewNode.fromNode(branch)
+          root.children.first.view,
+          branch.view,
         ]),
       );
 
@@ -163,16 +174,15 @@ void main() {
       expect(
         root.nodesOn(nodePath),
         equals([
-          ViewNode.fromNode(root.children.first),
-          ViewNode.fromNode(newNode!)
+          root.children.first.view,
+          newNode!.view,
         ]),
       );
     });
 
     test('addNodeAt', () {
       final root = Root.fromPgn('e4 e5');
-      final branch = Node(
-        id: UciCharPair.fromMove(Move.fromUci('b8c6')!),
+      final branch = Branch(
         ply: 2,
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
         fen: 'fen2',
@@ -187,8 +197,7 @@ void main() {
 
     test('addNodeAt, prepend', () {
       final root = Root.fromPgn('e4 e5');
-      final branch = Node(
-        id: UciCharPair.fromMove(Move.fromUci('b8c6')!),
+      final branch = Branch(
         ply: 2,
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
         fen: 'fen2',
@@ -207,8 +216,7 @@ void main() {
 
     test('addNodeAt, with an existing node at path', () {
       final root = Root.fromPgn('e4 e5');
-      final branch = Node(
-        id: UciCharPair.fromMove(Move.fromUci('e7e5')!),
+      final branch = Branch(
         ply: 2,
         sanMove: SanMove('e5', Move.fromUci('e7e5')!),
         fen: 'fen2',
@@ -225,15 +233,13 @@ void main() {
 
     test('addNodesAt', () {
       final root = Root.fromPgn('e4 e5');
-      final branch = Node(
-        id: UciCharPair.fromMove(Move.fromUci('b8c6')!),
+      final branch = Branch(
         ply: 2,
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
         fen: 'fen2',
         position: Chess.initial,
       );
-      final branch2 = Node(
-        id: UciCharPair.fromMove(Move.fromUci('b8a6')!),
+      final branch2 = Branch(
         ply: 3,
         sanMove: SanMove('Na6', Move.fromUci('b8a6')!),
         fen: 'fen3',

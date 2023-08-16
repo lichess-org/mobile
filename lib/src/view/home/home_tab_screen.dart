@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -210,9 +209,13 @@ class _HomeScaffold extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 15.0)
                   .add(Styles.horizontalBodyPadding),
-              child: FatButton(
-                semanticsLabel: context.l10n.play,
-                child: Text(context.l10n.play),
+              child: CupertinoButton.filled(
+                child: DefaultTextStyle.merge(
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  child: Text(context.l10n.play),
+                ),
                 onPressed: () {
                   pushPlatformRoute(
                     context,
@@ -251,6 +254,12 @@ class _HomeScaffold extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 15.0)
                     .add(Styles.horizontalBodyPadding),
                 child: FilledButton.tonal(
+                  style: FilledButton.styleFrom(
+                    textStyle: const TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   child: Text(context.l10n.play),
                   onPressed: () {
                     pushPlatformRoute(
