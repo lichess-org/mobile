@@ -36,7 +36,7 @@ void main() {
       expect(nodeList.length, equals(1));
       expect(
         nodeList.first,
-        equals(ViewNode.fromNode(root.nodeAt(path) as Node)),
+        equals((root.nodeAt(path) as Branch).view),
       );
     });
 
@@ -54,12 +54,12 @@ void main() {
       expect(root.mainline.length, equals(3));
       expect(
         root.mainline.last,
-        equals(ViewNode.fromNode(root.nodeAt(root.mainlinePath) as Node)),
+        equals((root.nodeAt(root.mainlinePath) as Branch).view),
       );
 
       final nodeList = root.nodesOn(newPath!);
       expect(nodeList.length, equals(3));
-      expect(nodeList.last, equals(ViewNode.fromNode(newNode!)));
+      expect(nodeList.last, equals(newNode!.view));
     });
 
     test('mainline', () {
@@ -78,7 +78,7 @@ void main() {
         fen: 'fen',
         position: Chess.initial,
       );
-      final child = Node(
+      final child = Branch(
         id: UciCharPair.fromMove(Move.fromUci('e2e4')!),
         ply: 1,
         sanMove: SanMove('e4', Move.fromUci('e2e4')!),
@@ -92,7 +92,7 @@ void main() {
 
     test('prepend child', () {
       final root = Root.fromPgn('e4 e5');
-      final child = Node(
+      final child = Branch(
         id: UciCharPair.fromMove(Move.fromUci('d2d4')!),
         ply: 1,
         sanMove: SanMove('d4', Move.fromUci('d2d4')!),
@@ -124,7 +124,7 @@ void main() {
 
     test('updateAt', () {
       final root = Root.fromPgn('e4 e5');
-      final branch = Node(
+      final branch = Branch(
         id: UciCharPair.fromMove(Move.fromUci('b8c6')!),
         ply: 2,
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
@@ -138,8 +138,8 @@ void main() {
       expect(
         root.nodesOn(nodePath!),
         equals([
-          ViewNode.fromNode(root.children.first),
-          ViewNode.fromNode(branch)
+          root.children.first.view,
+          branch.view,
         ]),
       );
 
@@ -162,15 +162,15 @@ void main() {
       expect(
         root.nodesOn(nodePath),
         equals([
-          ViewNode.fromNode(root.children.first),
-          ViewNode.fromNode(newNode!)
+          root.children.first.view,
+          newNode!.view,
         ]),
       );
     });
 
     test('addNodeAt', () {
       final root = Root.fromPgn('e4 e5');
-      final branch = Node(
+      final branch = Branch(
         id: UciCharPair.fromMove(Move.fromUci('b8c6')!),
         ply: 2,
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
@@ -186,7 +186,7 @@ void main() {
 
     test('addNodeAt, prepend', () {
       final root = Root.fromPgn('e4 e5');
-      final branch = Node(
+      final branch = Branch(
         id: UciCharPair.fromMove(Move.fromUci('b8c6')!),
         ply: 2,
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
@@ -206,7 +206,7 @@ void main() {
 
     test('addNodeAt, with an existing node at path', () {
       final root = Root.fromPgn('e4 e5');
-      final branch = Node(
+      final branch = Branch(
         id: UciCharPair.fromMove(Move.fromUci('e7e5')!),
         ply: 2,
         sanMove: SanMove('e5', Move.fromUci('e7e5')!),
@@ -224,14 +224,14 @@ void main() {
 
     test('addNodesAt', () {
       final root = Root.fromPgn('e4 e5');
-      final branch = Node(
+      final branch = Branch(
         id: UciCharPair.fromMove(Move.fromUci('b8c6')!),
         ply: 2,
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
         fen: 'fen2',
         position: Chess.initial,
       );
-      final branch2 = Node(
+      final branch2 = Branch(
         id: UciCharPair.fromMove(Move.fromUci('b8a6')!),
         ply: 3,
         sanMove: SanMove('Na6', Move.fromUci('b8a6')!),

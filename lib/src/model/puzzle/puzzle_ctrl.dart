@@ -30,7 +30,7 @@ part 'puzzle_ctrl.freezed.dart';
 @riverpod
 class PuzzleCtrl extends _$PuzzleCtrl {
   // ignore: avoid-late-keyword
-  late Node _gameTree;
+  late Branch _gameTree;
   Timer? _firstMoveTimer;
   Timer? _enableSolutionButtonTimer;
   Timer? _viewSolutionTimer;
@@ -60,7 +60,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     PuzzleStreak? streak,
   ) {
     final root = Root.fromPgn(context.puzzle.game.pgn);
-    _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Node;
+    _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Branch;
 
     // play first move after 1 second
     _firstMoveTimer = Timer(const Duration(seconds: 1), () {
@@ -88,7 +88,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
       initialFen: _gameTree.fen,
       initialPath: initialPath,
       currentPath: UciPath.empty,
-      nodeList: IList([ViewNode.fromNode(_gameTree)]),
+      nodeList: IList([_gameTree.view]),
       pov: _gameTree.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
       canViewSolution: false,
       resultSent: false,
@@ -467,7 +467,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     final initialNode = _gameTree.nodeAt(state.initialPath);
     final fromPly = initialNode.ply;
     final (_, newNodes) = state.puzzle.puzzle.solution.foldIndexed(
-      (initialNode.position, IList<Node>(const [])),
+      (initialNode.position, IList<Branch>(const [])),
       (index, previous, uci) {
         final move = Move.fromUci(uci);
         final (pos, nodes) = previous;
@@ -475,7 +475,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
         return (
           newPos,
           nodes.add(
-            Node(
+            Branch(
               id: UciCharPair.fromMove(move),
               ply: fromPly + index + 1,
               fen: newPos.fen,
@@ -508,7 +508,7 @@ class PuzzleCtrlState with _$PuzzleCtrlState {
     required UciPath initialPath,
     required UciPath currentPath,
     required Side pov,
-    required IList<ViewNode> nodeList, // must be non empty
+    required IList<ViewBranch> nodeList, // must be non empty
     Move? lastMove,
     PuzzleResult? result,
     PuzzleFeedback? feedback,
@@ -534,7 +534,7 @@ class PuzzleCtrlState with _$PuzzleCtrlState {
         contextId: puzzle.puzzle.id,
       );
 
-  ViewNode get node => nodeList.last;
+  ViewBranch get node => nodeList.last;
   Position get position => nodeList.last.position;
   String get fen => nodeList.last.fen;
   bool get canGoNext => mode == PuzzleMode.view && node.children.isNotEmpty;

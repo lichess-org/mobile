@@ -39,7 +39,7 @@ class Step with _$Step {
     ClientEval? eval,
   }) = _Step;
 
-  factory Step.fromNode(ViewNode node) {
+  factory Step.fromNode(ViewBranch node) {
     return Step(
       ply: node.ply,
       fen: node.fen,

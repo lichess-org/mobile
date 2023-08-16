@@ -9,44 +9,59 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 
 part 'tree.freezed.dart';
 
-abstract class RootOrNode {
-  RootOrNode({
+/// A node in the game tree.
+///
+/// The tree is implemented with a linked list of nodes, using mutable [List] of
+/// children.
+///
+/// It cannot be directly used in a riverpod state, because it is mutable, and
+/// riverpod relies on object reference equality to detect changes and emit new
+/// states. Therefore, it must be converted into a [ViewNode], which is immutable,
+/// using the [view] getter.
+abstract class Node {
+  Node({
     required this.ply,
     required this.fen,
     required this.position,
+    this.eval,
   });
 
   final int ply;
   final String fen;
   final Position position;
-  final List<Node> children = [];
+
+  ClientEval? eval;
+
+  final List<Branch> children = [];
+
+  ViewNode get view;
 
   /// Adds a child to this node.
-  void addChild(Node node) => children.add(node);
+  void addChild(Branch node) => children.add(node);
 
   /// Prepends a child to this node.
-  void prependChild(Node node) => children.insert(0, node);
+  void prependChild(Branch node) => children.insert(0, node);
 
   /// Finds the child node with that id.
-  Node? childById(UciCharPair id) {
+  Branch? childById(UciCharPair id) {
     return children.firstWhereOrNull((node) => node.id == id);
   }
 
   /// An iterable of all nodes on the mainline.
-  Iterable<ViewNode> get mainline sync* {
-    RootOrNode current = this;
+  Iterable<ViewBranch> get mainline sync* {
+    Node current = this;
     while (current.children.isNotEmpty) {
       final child = current.children.first;
-      yield ViewNode.fromNode(child);
+      yield child.view;
       current = child;
     }
   }
 
   /// Selects all nodes on that path.
-  Iterable<ViewNode> nodesOn(UciPath path) sync* {
+  Iterable<ViewBranch> nodesOn(UciPath path) sync* {
     UciPath currentPath = path;
 
-    Node? pickChild(RootOrNode node) {
+    Branch? pickChild(Node node) {
       final id = currentPath.head;
       if (id == null) {
         return null;
@@ -54,11 +69,11 @@ abstract class RootOrNode {
       return node.childById(id);
     }
 
-    RootOrNode current = this;
-    Node? child;
+    Node current = this;
+    Branch? child;
 
     while ((child = pickChild(current)) != null) {
-      yield ViewNode.fromNode(child!);
+      yield child!.view;
       current = child;
       currentPath = currentPath.tail;
     }
@@ -70,9 +85,9 @@ abstract class RootOrNode {
   /// Updates the node at the given path.
   ///
   /// Returns the updated node, or null if the node was not found.
-  Node? updateAt(UciPath path, void Function(Node node) update) {
+  Branch? updateAt(UciPath path, void Function(Branch node) update) {
     final node = nodeAtOrNull(path);
-    if (node != null && node is Node) {
+    if (node != null && node is Branch) {
       update(node);
       return node;
     }
@@ -82,7 +97,7 @@ abstract class RootOrNode {
   /// Adds a new node at the given path and returns the new path.
   ///
   /// If the node already exists, it is not added again.
-  UciPath? addNodeAt(UciPath path, Node newNode, {bool prepend = false}) {
+  UciPath? addNodeAt(UciPath path, Branch newNode, {bool prepend = false}) {
     final newPath = path + newNode.id;
     final node = nodeAtOrNull(path);
     if (node != null) {
@@ -103,7 +118,7 @@ abstract class RootOrNode {
   /// Adds a list of nodes at the given path and returns the new path.
   UciPath? addNodesAt(
     UciPath path,
-    Iterable<Node> newNodes, {
+    Iterable<Branch> newNodes, {
     bool prepend = false,
   }) {
     final node = newNodes.elementAtOrNull(0);
@@ -118,14 +133,14 @@ abstract class RootOrNode {
   ///
   /// Returns the new path and the new node.
   /// If the node already exists, it is not added again.
-  (UciPath?, Node?) addMoveAt(
+  (UciPath?, Branch?) addMoveAt(
     UciPath path,
     Move move, {
     bool prepend = false,
   }) {
     final pos = nodeAt(path).position;
     final (newPos, newSan) = pos.playToSan(move);
-    final newNode = Node(
+    final newNode = Branch(
       id: UciCharPair.fromMove(move),
       ply: 2 * (newPos.fullmoves - 1) + (newPos.turn == Side.white ? 0 : 1),
       sanMove: SanMove(newSan, move),
@@ -137,7 +152,7 @@ abstract class RootOrNode {
   }
 
   /// Gets the node at the given path.
-  RootOrNode nodeAt(UciPath path) {
+  Node nodeAt(UciPath path) {
     if (path.isEmpty) return this;
     final child = childById(path.head!);
     if (child != null) {
@@ -148,7 +163,7 @@ abstract class RootOrNode {
   }
 
   /// Gets the node at the given path, or null if it does not exist.
-  RootOrNode? nodeAtOrNull(UciPath path) {
+  Node? nodeAtOrNull(UciPath path) {
     if (path.isEmpty) return this;
     final child = childById(path.head!);
     if (child != null) {
@@ -159,34 +174,59 @@ abstract class RootOrNode {
   }
 }
 
-class Node extends RootOrNode {
-  Node({
+/// A branch node of a game tree
+///
+/// It has an associated [SanMove] and an id to identify it using an [UciPath].
+class Branch extends Node {
+  Branch({
     required this.id,
     required super.ply,
     required super.fen,
     required super.position,
+    super.eval,
     required this.sanMove,
-    this.eval,
   });
 
   final UciCharPair id;
 
   final SanMove sanMove;
 
-  ClientEval? eval;
+  @override
+  ViewBranch get view => ViewBranch(
+        id: id,
+        ply: ply,
+        fen: fen,
+        position: position,
+        sanMove: sanMove,
+        eval: eval,
+        children: IList(children.map((child) => child.view)),
+      );
 
   @override
   String toString() {
-    return 'Node(id: $id, ply: $ply, fen: $fen, sanMove: $sanMove, eval: $eval, children: $children)';
+    return 'Branch(id: $id, ply: $ply, fen: $fen, sanMove: $sanMove, eval: $eval, children: $children)';
   }
 }
 
-class Root extends RootOrNode {
+/// The root node of a game tree.
+///
+/// Represents the initial position, where no move has been played yet.
+class Root extends Node {
   Root({
     required super.ply,
     required super.fen,
     required super.position,
+    super.eval,
   });
+
+  @override
+  ViewRoot get view => ViewRoot(
+        ply: ply,
+        fen: fen,
+        position: position,
+        eval: eval,
+        children: IList(children.map((child) => child.view)),
+      );
 
   /// Creates a game tree from a PGN string.
   ///
@@ -199,13 +239,13 @@ class Root extends RootOrNode {
       fen: kInitialFEN,
       position: position,
     );
-    RootOrNode current = root;
+    Node current = root;
     final moves = pgn.split(' ');
     for (final san in moves) {
       ply++;
       final move = position.parseSan(san);
       position = position.playUnchecked(move!);
-      final nextNode = Node(
+      final nextNode = Branch(
         id: UciCharPair.fromMove(move),
         ply: ply,
         sanMove: SanMove(san, move),
@@ -220,29 +260,46 @@ class Root extends RootOrNode {
 }
 
 /// An immutable view of a [Node].
-@freezed
-class ViewNode with _$ViewNode {
-  const ViewNode._();
+abstract class ViewNode {
+  UciCharPair? get id;
+  SanMove? get sanMove;
+  int get ply;
+  String get fen;
+  Position get position;
+  IList<ViewNode> get children;
+  ClientEval? get eval;
+}
 
-  const factory ViewNode({
-    required UciCharPair id,
+/// An immutable view of a [Root] node.
+@freezed
+class ViewRoot with _$ViewRoot implements ViewNode {
+  const ViewRoot._();
+  const factory ViewRoot({
     required int ply,
     required String fen,
     required Position position,
-    required SanMove sanMove,
-    required IList<ViewNode> children,
+    required IList<ViewBranch> children,
     ClientEval? eval,
-  }) = _ViewNode;
+  }) = _ViewRoot;
 
-  factory ViewNode.fromNode(Node node) {
-    return ViewNode(
-      id: node.id,
-      ply: node.ply,
-      fen: node.fen,
-      position: node.position,
-      sanMove: node.sanMove,
-      eval: node.eval,
-      children: node.children.map(ViewNode.fromNode).toIList(),
-    );
-  }
+  @override
+  UciCharPair? get id => null;
+
+  @override
+  SanMove? get sanMove => null;
+}
+
+/// An immutable view of a [Branch] node.
+@freezed
+class ViewBranch with _$ViewBranch implements ViewNode {
+  const ViewBranch._();
+  const factory ViewBranch({
+    required UciCharPair id,
+    required SanMove sanMove,
+    required int ply,
+    required String fen,
+    required Position position,
+    required IList<ViewBranch> children,
+    ClientEval? eval,
+  }) = _ViewBranch;
 }
