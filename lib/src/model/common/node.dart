@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 
 part 'node.freezed.dart';
 
-/// A node in the game tree.
+/// A node in a game tree.
 ///
 /// The tree is implemented with a linked list of nodes, using mutable [List] of
 /// children.
@@ -37,6 +37,7 @@ abstract class Node {
 
   final List<Branch> children = [];
 
+  /// Immutable view of this node.
   ViewNode get view;
 
   /// Adds a child to this node.
@@ -144,7 +145,6 @@ abstract class Node {
     final pos = nodeAt(path).position;
     final (newPos, newSan) = pos.playToSan(move);
     final newNode = Branch(
-      id: UciCharPair.fromMove(move),
       ply: 2 * (newPos.fullmoves - 1) + (newPos.turn == Side.white ? 0 : 1),
       sanMove: SanMove(newSan, move),
       fen: newPos.fen,
@@ -175,6 +175,16 @@ abstract class Node {
       return null;
     }
   }
+
+  /// Gets the branch at the given path, or null if it does not exist.
+  Branch? branchAt(UciPath path) {
+    final node = nodeAtOrNull(path);
+    if (node != null && node is Branch) {
+      return node;
+    } else {
+      return null;
+    }
+  }
 }
 
 /// A branch node of a game tree
@@ -182,7 +192,6 @@ abstract class Node {
 /// It has an associated [SanMove] and an id to identify it using an [UciPath].
 class Branch extends Node {
   Branch({
-    required this.id,
     required super.ply,
     required super.fen,
     required super.position,
@@ -190,8 +199,10 @@ class Branch extends Node {
     required this.sanMove,
   });
 
-  final UciCharPair id;
+  /// The id of the branch, using a concise notation of associated move.
+  UciCharPair get id => UciCharPair.fromMove(sanMove.move);
 
+  /// The associated move.
   final SanMove sanMove;
 
   @override
@@ -204,6 +215,10 @@ class Branch extends Node {
         eval: eval,
         children: IList(children.map((child) => child.view)),
       );
+
+  /// Gets the branch at the given path
+  @override
+  Branch branchAt(UciPath path) => nodeAt(path) as Branch;
 
   @override
   String toString() {
@@ -249,7 +264,6 @@ class Root extends Node {
       final move = position.parseSan(san);
       position = position.playUnchecked(move!);
       final nextNode = Branch(
-        id: UciCharPair.fromMove(move),
         ply: ply,
         sanMove: SanMove(san, move),
         fen: position.fen,
