@@ -161,7 +161,10 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                _CevalLines(widget.ctrlProvider),
+                                _CevalLines(
+                                  widget.ctrlProvider,
+                                  isTablet: true,
+                                ),
                                 Expanded(
                                   child: PlatformCard(
                                     margin: const EdgeInsets.all(16.0),
@@ -280,7 +283,7 @@ class _ColumnTopTable extends ConsumerWidget {
                   savedEval: analysisState.currentNode.eval,
                 ),
               ),
-              _CevalLines(ctrlProvider),
+              _CevalLines(ctrlProvider, isTablet: false),
             ],
           )
         : const SizedBox.shrink();
@@ -310,8 +313,9 @@ class _EngineGaugeVertical extends ConsumerWidget {
 }
 
 class _CevalLines extends ConsumerWidget {
-  const _CevalLines(this.ctrlProvider);
+  const _CevalLines(this.ctrlProvider, {required this.isTablet});
   final AnalysisCtrlProvider ctrlProvider;
+  final bool isTablet;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -346,11 +350,9 @@ class _CevalLines extends ConsumerWidget {
 
     return content != null
         ? Padding(
-            padding: const EdgeInsets.only(
-              top: 8.0,
-              left: 4.0,
-              right: 4.0,
-              bottom: 4.0,
+            padding: EdgeInsets.symmetric(
+              vertical: isTablet ? kTabletPadding : 4.0,
+              horizontal: isTablet ? kTabletPadding : 4.0,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -730,12 +732,7 @@ class _BottomBar extends ConsumerWidget {
               },
               icon: const Icon(Icons.menu),
             ),
-            const SizedBox(
-              width: 44.0,
-            ),
-            const SizedBox(
-              width: 44.0,
-            ),
+            const Spacer(),
             RepeatButton(
               onLongPress:
                   analysisState.canGoBack ? () => _moveBackward(ref) : null,
@@ -749,6 +746,7 @@ class _BottomBar extends ConsumerWidget {
                 showAndroidTooltip: false,
               ),
             ),
+            const SizedBox(width: 40),
             RepeatButton(
               onLongPress:
                   analysisState.canGoNext ? () => _moveForward(ref) : null,
