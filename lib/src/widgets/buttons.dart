@@ -35,9 +35,6 @@ class FatButton extends StatelessWidget {
           ? CupertinoButton.filled(onPressed: onPressed, child: child)
           : FilledButton(
               onPressed: onPressed,
-              style: FilledButton.styleFrom(
-                textStyle: const TextStyle(fontSize: 18),
-              ),
               child: child,
             ),
     );
