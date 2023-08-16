@@ -5,10 +5,10 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/tree.dart';
+import 'package:lichess_mobile/src/model/common/node.dart';
 
 void main() {
-  group('RootOrNode', () {
+  group('Node', () {
     test('Root.fromPgn', () {
       final root = Root.fromPgn('e4 e5');
       expect(root.ply, equals(0));

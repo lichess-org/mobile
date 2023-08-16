@@ -7,12 +7,15 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 
-part 'tree.freezed.dart';
+part 'node.freezed.dart';
 
 /// A node in the game tree.
 ///
 /// The tree is implemented with a linked list of nodes, using mutable [List] of
 /// children.
+///
+/// It has an optional [eval] field, which is the evaluation of the position. This
+/// field is mutable so it can be updated efficiently when the evaluation changes.
 ///
 /// It cannot be directly used in a riverpod state, because it is mutable, and
 /// riverpod relies on object reference equality to detect changes and emit new
