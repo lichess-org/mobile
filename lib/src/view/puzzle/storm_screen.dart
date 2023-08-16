@@ -423,102 +423,114 @@ class _ComboState extends ConsumerState<_Combo>
     );
     return AnimatedBuilder(
       animation: _controller,
-      builder: (context, child) => Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  widget.combo.current.toString(),
-                  style: TextStyle(
-                    fontSize: 26,
-                    height: 1.0,
-                    fontWeight: FontWeight.bold,
-                    color: defaultTargetPlatform == TargetPlatform.iOS
-                        ? CupertinoTheme.of(context).textTheme.textStyle.color
-                        : null,
-                  ),
-                ),
-                Text(
-                  context.l10n.stormCombo,
-                  style: TextStyle(
-                    color: defaultTargetPlatform == TargetPlatform.iOS
-                        ? CupertinoTheme.of(context).textTheme.textStyle.color
-                        : null,
-                  ),
-                )
-              ],
-            ),
-          ),
-          SizedBox(
-            width: MediaQuery.sizeOf(context).width * 0.65,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 25,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      boxShadow: _controller.value == 1.0
-                          ? [
-                              BoxShadow(
-                                color: indicatorColor.withOpacity(0.3),
-                                blurRadius: 10.0,
-                                spreadRadius: 2.0,
-                              ),
-                            ]
-                          : [],
-                    ),
-                    child: ClipRRect(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(3.0)),
-                      child: LinearProgressIndicator(
-                        value: _controller.value,
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(indicatorColor),
+      builder: (context, child) => LayoutBuilder(
+        builder: (context, constraints) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.combo.current.toString(),
+                      style: TextStyle(
+                        fontSize: 26,
+                        height: 1.0,
+                        fontWeight: FontWeight.bold,
+                        color: defaultTargetPlatform == TargetPlatform.iOS
+                            ? CupertinoTheme.of(context)
+                                .textTheme
+                                .textStyle
+                                .color
+                            : null,
                       ),
                     ),
-                  ),
+                    Text(
+                      context.l10n.stormCombo,
+                      style: TextStyle(
+                        color: defaultTargetPlatform == TargetPlatform.iOS
+                            ? CupertinoTheme.of(context)
+                                .textTheme
+                                .textStyle
+                                .color
+                            : null,
+                      ),
+                    )
+                  ],
                 ),
-                const SizedBox(height: 4),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: StormCombo.levelBonus.mapIndexed((index, level) {
-                    final isCurrentLevel = index < lvl;
-                    return AnimatedContainer(
-                      alignment: Alignment.center,
-                      curve: Curves.easeIn,
-                      duration: const Duration(milliseconds: 1000),
-                      width: 28 * MediaQuery.textScaleFactorOf(context),
-                      height: 24 * MediaQuery.textScaleFactorOf(context),
-                      decoration: isCurrentLevel
-                          ? BoxDecoration(
-                              color: comboShades[index],
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(3.0),
-                              ),
-                            )
-                          : null,
-                      child: Text(
-                        '${level}s',
-                        style: TextStyle(
-                          color: isCurrentLevel
-                              ? Theme.of(context).colorScheme.onSecondary
-                              : null,
+              ),
+              SizedBox(
+                width: constraints.maxWidth * 0.65,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 25,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: _controller.value == 1.0
+                              ? [
+                                  BoxShadow(
+                                    color: indicatorColor.withOpacity(0.3),
+                                    blurRadius: 10.0,
+                                    spreadRadius: 2.0,
+                                  ),
+                                ]
+                              : [],
+                        ),
+                        child: ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(3.0)),
+                          child: LinearProgressIndicator(
+                            value: _controller.value,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(indicatorColor),
+                          ),
                         ),
                       ),
-                    );
-                  }).toList(),
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children:
+                          StormCombo.levelBonus.mapIndexed((index, level) {
+                        final isCurrentLevel = index < lvl;
+                        return AnimatedContainer(
+                          alignment: Alignment.center,
+                          curve: Curves.easeIn,
+                          duration: const Duration(milliseconds: 1000),
+                          width: 28 * MediaQuery.textScaleFactorOf(context),
+                          height: 24 * MediaQuery.textScaleFactorOf(context),
+                          decoration: isCurrentLevel
+                              ? BoxDecoration(
+                                  color: comboShades[index],
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(3.0),
+                                  ),
+                                )
+                              : null,
+                          child: Text(
+                            '${level}s',
+                            style: TextStyle(
+                              color: isCurrentLevel
+                                  ? Theme.of(context).colorScheme.onSecondary
+                                  : null,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 10.0),
-        ],
+              ),
+              const SizedBox(width: 10.0),
+            ],
+          );
+        },
       ),
     );
   }
