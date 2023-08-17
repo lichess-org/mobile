@@ -207,7 +207,6 @@ class Branch extends Node {
 
   @override
   ViewBranch get view => ViewBranch(
-        id: id,
         ply: ply,
         fen: fen,
         position: position,
@@ -283,7 +282,7 @@ abstract class ViewNode {
   int get ply;
   String get fen;
   Position get position;
-  IList<ViewNode> get children;
+  IList<ViewBranch> get children;
   ClientEval? get eval;
 }
 
@@ -310,8 +309,8 @@ class ViewRoot with _$ViewRoot implements ViewNode {
 @freezed
 class ViewBranch with _$ViewBranch implements ViewNode {
   const ViewBranch._();
+
   const factory ViewBranch({
-    required UciCharPair id,
     required SanMove sanMove,
     required int ply,
     required String fen,
@@ -319,4 +318,7 @@ class ViewBranch with _$ViewBranch implements ViewNode {
     required IList<ViewBranch> children,
     ClientEval? eval,
   }) = _ViewBranch;
+
+  @override
+  UciCharPair get id => UciCharPair.fromMove(sanMove.move);
 }
