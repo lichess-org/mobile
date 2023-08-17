@@ -61,7 +61,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                   ),
                   const SizedBox(height: 30),
                 ],
-              )
+              ),
           ],
         );
       },

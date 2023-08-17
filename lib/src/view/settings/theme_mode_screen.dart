@@ -63,7 +63,7 @@ class _Body extends ConsumerWidget {
             selectedItem: themeMode,
             titleBuilder: (t) => Text(ThemeModeScreen.themeTitle(context, t)),
             onSelectedItemChanged: onChanged,
-          )
+          ),
         ],
       ),
     );

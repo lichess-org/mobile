@@ -58,10 +58,12 @@ class _PuzzleHistoryState extends ConsumerState<PuzzleHistoryBoards> {
                         setState(() => isLoading = true);
                         puzzle = await ref.read(puzzleProvider(e.id).future);
                       } catch (e) {
-                        showPlatformSnackbar(
-                          context,
-                          e.toString(),
-                        );
+                        if (mounted) {
+                          showPlatformSnackbar(
+                            context,
+                            e.toString(),
+                          );
+                        }
                       } finally {
                         if (mounted && puzzle != null) {
                           setState(() => isLoading = false);

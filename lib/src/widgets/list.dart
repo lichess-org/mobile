@@ -26,7 +26,7 @@ class ListSection extends StatelessWidget {
     bool header = false,
     this.margin,
   })  : children = [
-          for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink()
+          for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink(),
         ],
         headerTrailing = null,
         header = header ? const SizedBox.shrink() : null,

@@ -59,7 +59,7 @@ class User with _$User {
       perfs: IMap({
         for (final entry in receivedPerfsMap.entries)
           if (perfNameMap.containsKey(entry.key) && entry.key != 'storm')
-            perfNameMap.get(entry.key)!: UserPerf.fromJson(entry.value)
+            perfNameMap.get(entry.key)!: UserPerf.fromJson(entry.value),
       }),
     );
   }

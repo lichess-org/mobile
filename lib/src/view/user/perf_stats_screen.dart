@@ -181,7 +181,7 @@ class _Body extends ConsumerWidget {
                       .perfStatRatingDeviation('')
                       .replaceAll(': .', ''),
                   value: data.deviation.toStringAsFixed(2),
-                )
+                ),
               ]),
               StatCardRow([
                 StatCard(
@@ -388,7 +388,7 @@ class _ProgressionWidget extends StatelessWidget {
               color: textShade(context, _customOpacity),
               fontSize: progressionFontSize,
             ),
-          )
+          ),
       ],
     );
   }
@@ -434,7 +434,7 @@ class _RatingWidget extends StatelessWidget {
                 rating.toString(),
                 style: TextStyle(fontSize: _defaultValueFontSize, color: color),
               ),
-              _UserGameWidget(game)
+              _UserGameWidget(game),
             ],
           );
   }
@@ -474,7 +474,7 @@ class _PercentageValueWidget extends StatelessWidget {
                 ? textShade(context, _customOpacity / 2)
                 : textShade(context, _customOpacity),
           ),
-        )
+        ),
       ],
     );
   }
@@ -518,7 +518,7 @@ class _StreakWidget extends StatelessWidget {
                 '-',
                 style: const TextStyle(fontSize: _defaultValueFontSize),
                 semanticsLabel: context.l10n.none,
-              )
+              ),
             ],
           ),
         );
@@ -557,9 +557,9 @@ class _StreakWidget extends StatelessWidget {
                     Icons.arrow_downward_rounded,
                     color: textShade(context, _customOpacity),
                   ),
-                  _UserGameWidget(streak.endGame)
+                  _UserGameWidget(streak.endGame),
                 ],
-              )
+              ),
           ],
         ),
       );
@@ -572,7 +572,7 @@ class _StreakWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: streakWidgets,
-        )
+        ),
       ],
     );
   }

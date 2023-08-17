@@ -156,7 +156,7 @@ class LeaderboardListTile extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(width: 5)
+              const SizedBox(width: 5),
             ],
             Flexible(
               child: Text(user.username, overflow: TextOverflow.ellipsis),
@@ -214,7 +214,7 @@ class _Progress extends StatelessWidget {
             fontSize: 12,
             color: progress > 0 ? LichessColors.good : LichessColors.red,
           ),
-        )
+        ),
       ],
     );
   }

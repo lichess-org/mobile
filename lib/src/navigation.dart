@@ -124,7 +124,7 @@ class BottomNavScaffold extends ConsumerWidget {
               selectedIndex: currentTab.index,
               destinations: [
                 for (final tab in tabs)
-                  NavigationDestination(icon: tab.icon, label: tab.label)
+                  NavigationDestination(icon: tab.icon, label: tab.label),
               ],
               onDestinationSelected: (i) => _onItemTapped(ref, i),
             ),
@@ -145,7 +145,7 @@ class BottomNavScaffold extends ConsumerWidget {
             currentIndex: currentTab.index,
             items: [
               for (final tab in tabs)
-                BottomNavigationBarItem(icon: tab.icon, label: tab.label)
+                BottomNavigationBarItem(icon: tab.icon, label: tab.label),
             ],
             onTap: (i) => _onItemTapped(ref, i),
           ),

@@ -162,7 +162,7 @@ void main() {
         nodes: 1000,
         millis: 1000,
         pvs: IList([
-          PvData(moves: IList(const ['e2e4']))
+          PvData(moves: IList(const ['e2e4'])),
         ]),
         currentPosition: branch.position,
       );

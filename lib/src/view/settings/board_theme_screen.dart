@@ -65,7 +65,7 @@ class _Body extends ConsumerWidget {
               ),
             ),
             onSelectedItemChanged: onChanged,
-          )
+          ),
         ],
       ),
     );

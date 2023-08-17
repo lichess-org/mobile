@@ -37,7 +37,7 @@ void main() {
       for (final method in [
         authClient.get,
         authClient.post,
-        authClient.delete
+        authClient.delete,
       ]) {
         expect(
           await method.call(Uri.parse('http://api.test/will/return/200')),
@@ -73,7 +73,7 @@ void main() {
       for (final method in [
         authClient.get,
         authClient.post,
-        authClient.delete
+        authClient.delete,
       ]) {
         expect(
           await method
@@ -127,7 +127,7 @@ void main() {
       for (final method in [
         authClient.get,
         authClient.post,
-        authClient.delete
+        authClient.delete,
       ]) {
         final resp = await method
             .call(Uri.parse('http://api.test/will/throw/socket/exception'));
