@@ -442,6 +442,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
           .start(
             state.currentPath,
             _gameTree.nodesOn(state.currentPath).map(Step.fromNode),
+            state.node.position,
             shouldEmit: (work) => work.path == state.currentPath,
           )
           ?.forEach((t) {

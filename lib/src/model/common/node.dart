@@ -283,7 +283,7 @@ abstract class ViewNode {
   int get ply;
   String get fen;
   Position get position;
-  IList<ViewNode> get children;
+  IList<ViewBranch> get children;
   ClientEval? get eval;
 }
 

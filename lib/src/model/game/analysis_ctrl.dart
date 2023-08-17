@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-import 'package:lichess_mobile/src/model/common/tree.dart';
+import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
@@ -37,11 +37,9 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       position: steps[0].position,
     );
 
-    RootOrNode current = _root;
+    Node current = _root;
     steps.skip(1).forEach((step) {
-      final nextNode = Node(
-        // skipping root node makes sure that sanMove is available
-        id: UciCharPair.fromMove(step.sanMove!.move),
+      final nextNode = Branch(
         ply: step.ply,
         sanMove: step.sanMove!,
         fen: step.position.fen,
@@ -81,8 +79,8 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       initialFen: _root.fen,
       initialPath: UciPath.empty,
       currentPath: currentPath,
-      root: IList(_root.children.map(ViewNode.fromNode)),
-      currentNode: ViewNode.fromNode(current as Node),
+      root: _root.view,
+      currentNode: current.view,
       pov: orientation,
       numCevalLines: kDefaultLines,
       numCores: maxCores,
@@ -159,10 +157,10 @@ class AnalysisCtrl extends _$AnalysisCtrl {
     bool moveAdded = false,
   }) {
     final pathChange = state.currentPath != path;
-    final rootOrNode = _root.nodeAt(path);
+    final rootOrBranch = _root.nodeAt(path);
 
-    if (rootOrNode.runtimeType == Node) {
-      final currentNode = rootOrNode as Node;
+    if (rootOrBranch.runtimeType == Branch) {
+      final currentNode = rootOrBranch as Branch;
       if (!replaying) {
         final isForward = path.size > state.currentPath.size;
         if (isForward) {
@@ -186,17 +184,19 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       }
       state = state.copyWith(
         currentPath: path,
-        currentNode: ViewNode.fromNode(currentNode),
+        currentNode: currentNode.view,
         lastMove: currentNode.sanMove.move,
-        root: moveAdded
-            ? IList(_root.children.map(ViewNode.fromNode))
-            : state.root,
+        root: moveAdded ? _root.view : state.root,
       );
-    }
-
-    // TODO: handle if root node is reached
-    if (pathChange) {
-      _startEngineEval();
+      if (pathChange) {
+        _startEngineEval();
+      }
+    } else {
+      state = state.copyWith(
+        currentPath: path,
+        currentNode: state.root,
+        lastMove: null,
+      );
     }
   }
 
@@ -225,7 +225,7 @@ class AnalysisCtrlState with _$AnalysisCtrlState {
   const AnalysisCtrlState._();
 
   const factory AnalysisCtrlState({
-    required IList<ViewNode> root,
+    required ViewRoot root,
     required ViewNode currentNode,
     required String initialFen,
     required UciPath initialPath,

@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/tree.dart';
+import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/game/analysis_ctrl.dart';
@@ -475,7 +475,7 @@ class _InlineTreeView extends ConsumerStatefulWidget {
   );
 
   final AnalysisCtrlProvider ctrlProvider;
-  final IList<ViewNode> root;
+  final ViewRoot root;
   final UciPath currentPath;
   final _MovesDisplayMode displayMode;
 
@@ -531,7 +531,7 @@ class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
         spacing: 1.0,
         children: _buildTreeWidget(
           widget.ctrlProvider,
-          nodes: widget.root,
+          nodes: widget.root.children,
           inMainline: true,
           startSideline: false,
           initialPath: UciPath.empty,
@@ -548,7 +548,7 @@ class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
 
   List<Widget> _buildTreeWidget(
     AnalysisCtrlProvider ctrlProvider, {
-    required IList<ViewNode> nodes,
+    required IList<ViewBranch> nodes,
     required bool inMainline,
     required bool startSideline,
     required UciPath initialPath,
