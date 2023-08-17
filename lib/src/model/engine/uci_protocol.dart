@@ -152,7 +152,7 @@ class UCIProtocol {
 
       if (multiPv == 1) {
         _currentEval = ClientEval(
-          fen: _work!.currentFen,
+          fen: _work!.fen,
           maxDepth: _work!.maxDepth,
           depth: depth,
           nodes: nodes,

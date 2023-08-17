@@ -53,28 +53,24 @@ class EngineEvaluation extends _$EngineEvaluation {
   }) {
     _engine ??= StockfishEngine();
 
-    final step = steps.last;
+    final work = Work(
+      variant: context.variant,
+      threads: maxCores,
+      maxDepth: kMaxDepth,
+      multiPv: 1,
+      path: path,
+      initialFen: context.initialFen,
+      steps: IList(steps),
+    );
 
-    if (step.eval != null && step.eval!.depth >= kMaxDepth) {
+    // cancel evaluation if we already have a cached eval at max depth
+    final cachedEval = work.evalCache;
+    if (cachedEval != null && cachedEval.depth >= kMaxDepth) {
       state = null;
       return null;
     }
 
-    final evalStream = _engine!
-        .start(
-          Work(
-            variant: context.variant,
-            threads: maxCores,
-            maxDepth: kMaxDepth,
-            multiPv: 1,
-            ply: step.ply,
-            path: path,
-            initialFen: context.initialFen,
-            currentFen: step.fen,
-            steps: IList(steps),
-          ),
-        )
-        .throttle(
+    final evalStream = _engine!.start(work).throttle(
           const Duration(milliseconds: 200),
           trailing: true,
         );

@@ -10,8 +10,11 @@ part 'work.freezed.dart';
 
 typedef EvalResult = (Work, ClientEval);
 
+/// A work item for the engine.
 @freezed
 class Work with _$Work {
+  const Work._();
+
   const factory Work({
     required Variant variant,
     required int threads,
@@ -20,12 +23,19 @@ class Work with _$Work {
     required UciPath path,
     required int maxDepth,
     required int multiPv,
-    required int ply,
     bool? threatMode,
     required String initialFen,
-    required String currentFen,
     required IList<Step> steps,
   }) = _Work;
+
+  /// The work position FEN.
+  String get fen => steps.lastOrNull?.fen ?? initialFen;
+
+  /// The work ply.
+  int get ply => steps.lastOrNull?.ply ?? 0;
+
+  /// Cached eval for the work position.
+  ClientEval? get evalCache => steps.lastOrNull?.eval;
 }
 
 @freezed
