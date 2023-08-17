@@ -70,7 +70,7 @@ class AnalysisScreen extends ConsumerWidget {
               builder: (_) => _Prefrences(ctrlProvider),
               showDragHandle: true,
             ),
-          )
+          ),
         ],
       ),
       body: _Body(ctrlProvider: ctrlProvider),
