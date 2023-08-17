@@ -188,15 +188,16 @@ class AnalysisCtrl extends _$AnalysisCtrl {
         lastMove: currentNode.sanMove.move,
         root: moveAdded ? _root.view : state.root,
       );
-      if (pathChange) {
-        _startEngineEval();
-      }
     } else {
       state = state.copyWith(
         currentPath: path,
         currentNode: state.root,
         lastMove: null,
       );
+    }
+
+    if (pathChange) {
+      _startEngineEval();
     }
   }
 

@@ -67,9 +67,9 @@ class EngineEvaluation extends _$EngineEvaluation {
 
     final work = Work(
       variant: context.variant,
-      threads: maxCores,
+      threads: _cores,
       maxDepth: kMaxDepth,
-      multiPv: 1,
+      multiPv: _multiPv,
       path: path,
       initialFen: context.initialFen,
       steps: IList(steps),
