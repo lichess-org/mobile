@@ -494,7 +494,7 @@ class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
       if (currentMoveKey.currentContext != null) {
         Scrollable.ensureVisible(
           currentMoveKey.currentContext!,
-          alignment: 10.0,
+          alignment: 0.5,
           alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
         );
       }
@@ -649,37 +649,17 @@ class InlineMove extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final content = InkWell(
-      borderRadius: borderRadius,
-      onTap: () => ref.read(ctrlProvider.notifier).userJump(path),
-      child: Container(
-        padding: const EdgeInsets.all(3),
-        decoration: isCurrentMove
-            ? BoxDecoration(
-                color: Theme.of(context).focusColor,
-                shape: BoxShape.rectangle,
-                borderRadius: borderRadius,
-              )
-            : null,
-        child: Opacity(
-          opacity: isSideline ? 0.8 : 1.0,
-          child: Text(
-            move.san,
-            style: isSideline ? sideLineStyle : baseTextStyle,
-          ),
-        ),
-      ),
-    );
+    final baseStyle = isSideline ? sideLineStyle : baseTextStyle;
 
     final index = ply.isOdd
         ? Text(
             '${(ply / 2).ceil()}. ',
-            style: isSideline ? sideLineStyle : baseTextStyle,
+            style: baseStyle,
           )
         : (startSideline
             ? Text(
                 '${(ply / 2).ceil()}... ',
-                style: isSideline ? sideLineStyle : baseTextStyle,
+                style: baseStyle,
               )
             : null);
 
@@ -693,7 +673,27 @@ class InlineMove extends ConsumerWidget {
           ),
         if (index != null && isSideline) Opacity(opacity: 0.8, child: index),
         if (index != null && !isSideline) index,
-        content,
+        InkWell(
+          borderRadius: borderRadius,
+          onTap: () => ref.read(ctrlProvider.notifier).userJump(path),
+          child: Container(
+            padding: const EdgeInsets.all(3),
+            decoration: isCurrentMove
+                ? BoxDecoration(
+                    color: Theme.of(context).focusColor,
+                    shape: BoxShape.rectangle,
+                    borderRadius: borderRadius,
+                  )
+                : null,
+            child: Opacity(
+              opacity: isSideline ? 0.8 : 1.0,
+              child: Text(
+                move.san,
+                style: baseStyle,
+              ),
+            ),
+          ),
+        ),
         if (endSideline)
           const Opacity(
             opacity: 0.8,
@@ -881,7 +881,7 @@ class _Prefrences extends ConsumerWidget {
                   ref.read(ctrlProvider.notifier).setCevalLines(value.toInt()),
             ),
           ),
-          if (state.numCores > 1)
+          if (maxCores > 1)
             PlatformListTile(
               title: Text.rich(
                 TextSpan(

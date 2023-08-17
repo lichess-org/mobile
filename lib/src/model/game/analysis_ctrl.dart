@@ -115,6 +115,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
   }
 
   void setCores(int num) {
+    if (num > maxCores) return;
     ref.read(engineEvaluationProvider(state.evaluationContext).notifier).cores =
         num;
     _startEngineEval();
@@ -124,7 +125,6 @@ class AnalysisCtrl extends _$AnalysisCtrl {
   }
 
   void onUserMove(Move move) {
-    // TODO: sometimes incorrent move might be sent from the engine line if UI dones't update quickly
     final (newPath, _) = _root.addMoveAt(state.currentPath, move);
     if (newPath != null) {
       _setPath(newPath, moveAdded: true);
