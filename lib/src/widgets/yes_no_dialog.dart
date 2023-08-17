@@ -4,27 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
-/// A dialog modal that adapts to the platform (Android/iOS).
-Future<T?> showAdaptiveDialog<T>({
-  required BuildContext context,
-  required WidgetBuilder builder,
-  bool? barrierDismissible,
-}) async {
-  if (defaultTargetPlatform == TargetPlatform.iOS) {
-    return showCupertinoDialog(
-      context: context,
-      builder: builder,
-      barrierDismissible: barrierDismissible ?? false,
-    );
-  } else {
-    return showDialog(
-      context: context,
-      builder: builder,
-      barrierDismissible: barrierDismissible ?? true,
-    );
-  }
-}
-
 class YesNoDialog extends StatelessWidget {
   const YesNoDialog({
     super.key,

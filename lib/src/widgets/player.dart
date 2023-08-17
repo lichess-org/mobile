@@ -137,7 +137,7 @@ class BoardPlayer extends StatelessWidget {
                 materialDiff != null && materialDiff!.score > 0
                     ? '+${materialDiff!.score}'
                     : '',
-              )
+              ),
             ],
           )
         else
@@ -307,7 +307,7 @@ class PlayerTitle extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(width: 5)
+          const SizedBox(width: 5),
         ],
         Flexible(
           child: Text(

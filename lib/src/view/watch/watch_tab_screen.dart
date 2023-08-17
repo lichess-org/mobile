@@ -253,7 +253,7 @@ class _StreamerWidget extends ConsumerWidget {
           children: [
             ...data
                 .take(numberOfItems)
-                .map((e) => StreamerListTile(streamer: e))
+                .map((e) => StreamerListTile(streamer: e)),
           ],
         );
       },

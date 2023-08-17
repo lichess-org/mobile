@@ -61,7 +61,7 @@ class _Body extends ConsumerWidget {
                     StatCard(
                       context.l10n.stormThisMonth,
                       value: data.highScore.month.toString(),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -184,7 +184,7 @@ class _Body extends ConsumerWidget {
               ] else
                 const Center(
                   child: Text('Nothing to show. Play some runs of storm'),
-                )
+                ),
             ],
           ),
         );

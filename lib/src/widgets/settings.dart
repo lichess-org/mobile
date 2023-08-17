@@ -136,7 +136,7 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
                 tiles: tiles,
               )
             else
-              ...tiles
+              ...tiles,
           ],
         );
       case TargetPlatform.iOS:

@@ -36,7 +36,8 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 33
+    namespace 'org.lichess.mobileV2'
+    compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -54,8 +55,6 @@ android {
 
     defaultConfig {
         applicationId "org.lichess.mobileV2"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
@@ -79,7 +78,6 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    namespace 'org.lichess.mobileV2'
 }
 
 flutter {

@@ -59,7 +59,7 @@ void main() {
       final ids = ISet({
         const GameId('Huk88k3D'),
         const GameId('g2bzFol8'),
-        const GameId('9WLmxmiB')
+        const GameId('9WLmxmiB'),
       });
 
       when(

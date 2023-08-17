@@ -79,7 +79,7 @@ void main() {
           '2', // Won games
           '2', // Lost games
           '1', // Drawn games
-          '1' // Disconnections
+          '1', // Disconnections
         ];
 
         // rating

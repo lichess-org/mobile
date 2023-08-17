@@ -320,7 +320,7 @@ void main() {
               id: PuzzleId('pId3'),
               ratingDiff: 10,
               win: true,
-            )
+            ),
           ]),
         ),
       );

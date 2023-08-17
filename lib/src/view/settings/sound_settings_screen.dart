@@ -64,7 +64,7 @@ class _Body extends ConsumerWidget {
             selectedItem: soundTheme,
             titleBuilder: (t) => Text(soundThemeL10n(context, t)),
             onSelectedItemChanged: onChanged,
-          )
+          ),
         ],
       ),
     );

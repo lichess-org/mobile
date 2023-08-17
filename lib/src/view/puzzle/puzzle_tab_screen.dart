@@ -269,7 +269,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
             children: [
               Center(
                 child: Text(context.l10n.puzzleNoPuzzlesToShow),
-              )
+              ),
             ],
           );
         }

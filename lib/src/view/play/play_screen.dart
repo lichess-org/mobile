@@ -122,7 +122,7 @@ class _TimeControlButton extends ConsumerWidget {
               children: [
                 Icon(timeControlPref.speed.icon, size: 20),
                 const SizedBox(width: 5),
-                Text(timeControlPref.display, style: Styles.timeControl)
+                Text(timeControlPref.display, style: Styles.timeControl),
               ],
             ),
           ),

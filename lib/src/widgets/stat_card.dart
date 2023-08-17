@@ -63,7 +63,7 @@ class StatCard extends StatelessWidget {
               else if (child != null)
                 child!
               else
-                Text('?', style: defaultValueStyle)
+                Text('?', style: defaultValueStyle),
             ],
           ),
         ),

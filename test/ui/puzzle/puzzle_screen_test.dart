@@ -250,7 +250,7 @@ void main() {
             puzzleBatchStorageProvider.overrideWith((ref) {
               return mockBatchStorage;
             }),
-            puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage)
+            puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
           ],
         );
 

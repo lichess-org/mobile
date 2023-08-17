@@ -33,7 +33,7 @@ class AuthController extends _$AuthController {
             Uri.parse('$kLichessHost/api/account'),
             headers: {
               'Authorization':
-                  'Bearer ${signBearerToken(oAuthResp.accessToken!)}'
+                  'Bearer ${signBearerToken(oAuthResp.accessToken!)}',
             },
           ).flatMap((response) {
             return readJsonObject(response, mapper: User.fromJson).map((user) {

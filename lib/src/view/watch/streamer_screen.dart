@@ -62,7 +62,7 @@ class StreamerScreen extends StatelessWidget {
                         ),
                       )
                       .toList(),
-                )
+                ),
               ]),
             ),
           ),
@@ -109,11 +109,11 @@ class StreamerListTile extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(width: 5)
+              const SizedBox(width: 5),
             ],
             Flexible(
               child: Text(streamer.username, overflow: TextOverflow.ellipsis),
-            )
+            ),
           ],
         ),
       ),
@@ -124,9 +124,9 @@ class StreamerListTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           if (streamer.platform == 'twitch') ...{
-            const Icon(SocialIcons.twitch)
+            const Icon(SocialIcons.twitch),
           } else ...{
-            const Icon(SocialIcons.youtube)
+            const Icon(SocialIcons.youtube),
           },
           if (streamer.lang.isNotEmpty) Text(streamer.lang),
         ],
