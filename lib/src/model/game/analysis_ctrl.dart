@@ -125,9 +125,10 @@ class AnalysisCtrl extends _$AnalysisCtrl {
   }
 
   void onUserMove(Move move) {
-    final (newPath, _) = _root.addMoveAt(state.currentPath, move);
+    if (!state.position.isLegal(move)) return;
+    final (newPath, newNode) = _root.addMoveAt(state.currentPath, move);
     if (newPath != null) {
-      _setPath(newPath, moveAdded: true);
+      _setPath(newPath, moveAdded: true, newNode: newNode);
     }
   }
 
@@ -153,11 +154,12 @@ class AnalysisCtrl extends _$AnalysisCtrl {
 
   void _setPath(
     UciPath path, {
+    Node? newNode,
     bool replaying = false,
     bool moveAdded = false,
   }) {
     final pathChange = state.currentPath != path;
-    final rootOrBranch = _root.nodeAt(path);
+    final rootOrBranch = newNode ?? _root.nodeAt(path);
 
     if (rootOrBranch.runtimeType == Branch) {
       final currentNode = rootOrBranch as Branch;
