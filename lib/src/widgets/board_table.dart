@@ -195,6 +195,7 @@ class BoardTable extends ConsumerWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(_tabletPadding),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Flexible(child: topTable),
