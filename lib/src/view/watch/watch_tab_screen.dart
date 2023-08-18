@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -164,9 +163,6 @@ class _WatchTvWidget extends ConsumerWidget {
         ),
         featuredGame.when(
           data: (game) {
-            final player = game.orientation == Side.white
-                ? game.white.asPlayer
-                : game.black.asPlayer;
             return SmallBoardPreview(
               onTap: () {
                 pushPlatformRoute(
@@ -193,9 +189,9 @@ class _WatchTvWidget extends ConsumerWidget {
                     size: 30,
                   ),
                   PlayerTitle(
-                    userName: player.displayName(context),
-                    title: player.title,
-                    rating: player.rating,
+                    userName: game.player.asPlayer.displayName(context),
+                    title: game.player.title,
+                    rating: game.player.rating,
                   ),
                 ],
               ),
