@@ -31,20 +31,16 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-const baseTextStyle = TextStyle(fontFamily: 'ChessFont');
-const sideLineStyle =
-    TextStyle(fontFamily: 'ChessFont', fontStyle: FontStyle.italic);
-
 class AnalysisScreen extends ConsumerWidget {
   const AnalysisScreen({
     required this.steps,
     required this.orientation,
-    required this.gameId,
+    required this.id,
   });
 
   final IList<GameStep> steps;
   final Side orientation;
-  final GameId gameId;
+  final ID id;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -56,7 +52,7 @@ class AnalysisScreen extends ConsumerWidget {
   }
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisCtrlProvider(steps, orientation, gameId);
+    final ctrlProvider = analysisCtrlProvider(steps, orientation, id);
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.gameAnalysis),
@@ -67,7 +63,7 @@ class AnalysisScreen extends ConsumerWidget {
           SettingsButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
-              builder: (_) => _Prefrences(ctrlProvider),
+              builder: (_) => _Preferences(ctrlProvider),
               showDragHandle: true,
             ),
           ),
@@ -78,7 +74,7 @@ class AnalysisScreen extends ConsumerWidget {
   }
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisCtrlProvider(steps, orientation, gameId);
+    final ctrlProvider = analysisCtrlProvider(steps, orientation, id);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -95,7 +91,7 @@ class AnalysisScreen extends ConsumerWidget {
             SettingsButton(
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
-                builder: (_) => _Prefrences(ctrlProvider),
+                builder: (_) => _Preferences(ctrlProvider),
                 showDragHandle: true,
               ),
             ),
@@ -145,9 +141,9 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(
-                              left: kTabletPadding,
-                              top: kTabletPadding,
-                              bottom: kTabletPadding,
+                              left: kTabletBoardTableSidePadding,
+                              top: kTabletBoardTableSidePadding,
+                              bottom: kTabletBoardTableSidePadding,
                             ),
                             child: Row(
                               children: [
@@ -161,7 +157,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                _CevalLines(
+                                _EngineLines(
                                   widget.ctrlProvider,
                                   isTablet: true,
                                 ),
@@ -261,35 +257,6 @@ class _Board extends ConsumerWidget {
   }
 }
 
-class _ColumnTopTable extends ConsumerWidget {
-  const _ColumnTopTable(this.ctrlProvider);
-
-  final AnalysisCtrlProvider ctrlProvider;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final analysisState = ref.watch(ctrlProvider);
-
-    return analysisState.isEngineEnabled
-        ? Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              EngineGauge(
-                displayMode: EngineGaugeDisplayMode.horizontal,
-                params: EngineGaugeParams(
-                  evaluationContext: analysisState.evaluationContext,
-                  position: analysisState.position,
-                  savedEval: analysisState.currentNode.eval,
-                ),
-              ),
-              _CevalLines(ctrlProvider, isTablet: false),
-            ],
-          )
-        : const SizedBox.shrink();
-  }
-}
-
 class _EngineGaugeVertical extends ConsumerWidget {
   const _EngineGaugeVertical(this.ctrlProvider);
 
@@ -312,8 +279,37 @@ class _EngineGaugeVertical extends ConsumerWidget {
   }
 }
 
-class _CevalLines extends ConsumerWidget {
-  const _CevalLines(this.ctrlProvider, {required this.isTablet});
+class _ColumnTopTable extends ConsumerWidget {
+  const _ColumnTopTable(this.ctrlProvider);
+
+  final AnalysisCtrlProvider ctrlProvider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final analysisState = ref.watch(ctrlProvider);
+
+    return analysisState.isEngineEnabled
+        ? Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              EngineGauge(
+                displayMode: EngineGaugeDisplayMode.horizontal,
+                params: EngineGaugeParams(
+                  evaluationContext: analysisState.evaluationContext,
+                  position: analysisState.position,
+                  savedEval: analysisState.currentNode.eval,
+                ),
+              ),
+              _EngineLines(ctrlProvider, isTablet: false),
+            ],
+          )
+        : kEmptyWidget;
+  }
+}
+
+class _EngineLines extends ConsumerWidget {
+  const _EngineLines(this.ctrlProvider, {required this.isTablet});
   final AnalysisCtrlProvider ctrlProvider;
   final bool isTablet;
 
@@ -323,36 +319,38 @@ class _CevalLines extends ConsumerWidget {
     final ceval =
         ref.watch(engineEvaluationProvider(analysisState.evaluationContext));
 
-    final content = ceval != null
-        ? ceval.pvs
-            .map(
-              (pv) => _CevalLine(
-                ctrlProvider,
-                pv.sanMoves(ceval.currentPosition),
-                analysisState.currentNode.ply,
-                pv,
-              ),
-            )
-            .toList()
-        : (analysisState.currentNode.eval != null
-            ? analysisState.currentNode.eval!.pvs
-                .take(analysisState.numCevalLines)
+    final content = !analysisState.position.isGameOver
+        ? (ceval != null
+            ? ceval.pvs
                 .map(
-                  (pv) => _CevalLine(
+                  (pv) => _Engineline(
                     ctrlProvider,
-                    pv.sanMoves(analysisState.currentNode.position),
+                    pv.sanMoves(ceval.position),
                     analysisState.currentNode.ply,
                     pv,
                   ),
                 )
                 .toList()
-            : null);
+            : (analysisState.currentNode.eval != null
+                ? analysisState.currentNode.eval!.pvs
+                    .take(analysisState.numCevalLines)
+                    .map(
+                      (pv) => _Engineline(
+                        ctrlProvider,
+                        pv.sanMoves(analysisState.currentNode.position),
+                        analysisState.currentNode.ply,
+                        pv,
+                      ),
+                    )
+                    .toList()
+                : null))
+        : null;
 
     return content != null
         ? Padding(
             padding: EdgeInsets.symmetric(
-              vertical: isTablet ? kTabletPadding : 4.0,
-              horizontal: isTablet ? kTabletPadding : 4.0,
+              vertical: isTablet ? 16.0 : 4.0,
+              horizontal: isTablet ? 16.0 : 4.0,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -364,8 +362,8 @@ class _CevalLines extends ConsumerWidget {
   }
 }
 
-class _CevalLine extends ConsumerWidget {
-  const _CevalLine(
+class _Engineline extends ConsumerWidget {
+  const _Engineline(
     this.ctrlProvider,
     this.moves,
     this.initialPly,
@@ -381,7 +379,7 @@ class _CevalLine extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final builder = StringBuffer();
     var ply = initialPly + 1;
-    moves.take(15).forEachIndexed((i, s) {
+    moves.forEachIndexed((i, s) {
       builder.write(
         ply.isOdd
             ? '${(ply / 2).ceil()}. $s '
@@ -392,8 +390,8 @@ class _CevalLine extends ConsumerWidget {
       ply += 1;
     });
 
-    final (evalString, whiteBetter) = pvData.evalStringAndWinningSide;
-    return InkWell(
+    final evalString = pvData.evalString;
+    return AdaptiveInkWell(
       onTap: () => ref
           .read(ctrlProvider.notifier)
           .onUserMove(Move.fromUci(pvData.moves[0])!),
@@ -403,24 +401,7 @@ class _CevalLine extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              padding: const EdgeInsets.all(2.0),
-              decoration: BoxDecoration(
-                color: whiteBetter != null && !whiteBetter
-                    ? kEvalGaugeBackgroundColor
-                    : kEvalGaugeValueColorLightBg,
-                shape: BoxShape.rectangle,
-                borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-              ),
-              child: Text(
-                evalString,
-                style: TextStyle(
-                  color: whiteBetter != null && !whiteBetter
-                      ? Colors.white
-                      : Colors.black,
-                ),
-              ),
-            ),
+            Text(evalString),
             const SizedBox(width: 8.0),
             Expanded(
               child: Text(
@@ -646,34 +627,42 @@ class InlineMove extends ConsumerWidget {
   final bool startSideline;
   final bool endSideline;
   static const borderRadius = BorderRadius.all(Radius.circular(8.0));
+  static const baseTextStyle = TextStyle(fontFamily: 'ChessFont');
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final baseStyle = isSideline ? sideLineStyle : baseTextStyle;
+    final textStyle = isSideline
+        ? TextStyle(
+            fontFamily: 'ChessFont',
+            fontStyle: FontStyle.italic,
+            color: defaultTargetPlatform == TargetPlatform.android
+                ? Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7)
+                : CupertinoTheme.of(context)
+                    .textTheme
+                    .textStyle
+                    .color
+                    ?.withOpacity(0.7),
+          )
+        : baseTextStyle;
 
     final index = ply.isOdd
         ? Text(
             '${(ply / 2).ceil()}. ',
-            style: baseStyle,
+            style: textStyle,
           )
         : (startSideline
             ? Text(
                 '${(ply / 2).ceil()}... ',
-                style: baseStyle,
+                style: textStyle,
               )
             : null);
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (startSideline)
-          const Opacity(
-            opacity: 0.8,
-            child: Text('(', style: sideLineStyle),
-          ),
-        if (index != null && isSideline) Opacity(opacity: 0.8, child: index),
-        if (index != null && !isSideline) index,
-        InkWell(
+        if (startSideline) Text('(', style: textStyle),
+        if (index != null) index,
+        AdaptiveInkWell(
           borderRadius: borderRadius,
           onTap: () => ref.read(ctrlProvider.notifier).userJump(path),
           child: Container(
@@ -685,20 +674,13 @@ class InlineMove extends ConsumerWidget {
                     borderRadius: borderRadius,
                   )
                 : null,
-            child: Opacity(
-              opacity: isSideline ? 0.8 : 1.0,
-              child: Text(
-                move.san,
-                style: baseStyle,
-              ),
+            child: Text(
+              move.san,
+              style: textStyle,
             ),
           ),
         ),
-        if (endSideline)
-          const Opacity(
-            opacity: 0.8,
-            child: Text(')', style: sideLineStyle),
-          ),
+        if (endSideline) Text(')', style: textStyle),
       ],
     );
   }
@@ -822,8 +804,8 @@ class _EngineDepth extends ConsumerWidget {
   }
 }
 
-class _Prefrences extends ConsumerWidget {
-  const _Prefrences(this.ctrlProvider);
+class _Preferences extends ConsumerWidget {
+  const _Preferences(this.ctrlProvider);
 
   final AnalysisCtrlProvider ctrlProvider;
   @override
@@ -907,6 +889,12 @@ class _Prefrences extends ConsumerWidget {
                     ref.read(ctrlProvider.notifier).setCores(value.toInt()),
               ),
             ),
+          Divider(
+            height: 20,
+            indent: 20,
+            endIndent: 20,
+            color: Theme.of(context).unselectedWidgetColor,
+          ),
           SwitchSettingTile(
             title: Text(context.l10n.sound),
             value: isSoundEnabled,

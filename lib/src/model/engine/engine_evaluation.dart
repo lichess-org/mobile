@@ -29,8 +29,6 @@ class EvaluationContext with _$EvaluationContext {
   const factory EvaluationContext({
     required Variant variant,
     required String initialFen,
-    int? cores,
-    int? multiPv,
 
     /// Unique ID to ensure engine is properly disposed when no more needed
     /// and a new engine instance is created per context (puzzle, game, etc).
@@ -42,18 +40,14 @@ class EvaluationContext with _$EvaluationContext {
 class EngineEvaluation extends _$EngineEvaluation {
   StockfishEngine? _engine;
 
-  late int _multiPv;
-  late int _cores;
+  int _multiPv = kDefaultLines;
+  int _cores = maxCores;
 
   @override
   ClientEval? build(EvaluationContext context) {
     ref.onDispose(() {
       _engine?.dispose();
     });
-
-    _multiPv = context.multiPv ?? kDefaultLines;
-    _cores = context.cores ?? maxCores;
-
     return null;
   }
 

@@ -160,7 +160,7 @@ class UCIProtocol {
           mate: isMate ? ev : null,
           pvs: IList([pvData]),
           millis: elapsedMs,
-          currentPosition: _work!.currentPosition,
+          position: _work!.currentPosition,
         );
       } else if (_currentEval != null) {
         _currentEval = _currentEval!.copyWith(

@@ -46,7 +46,7 @@ void main() {
         home: AnalysisScreen(
           steps: gameStep,
           orientation: Side.white,
-          gameId: gameData.id,
+          id: gameData.id,
         ),
       );
 
@@ -67,7 +67,7 @@ void main() {
         home: AnalysisScreen(
           steps: gameStep,
           orientation: Side.white,
-          gameId: gameData.id,
+          id: gameData.id,
         ),
       );
 

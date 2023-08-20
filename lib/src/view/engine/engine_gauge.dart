@@ -7,12 +7,14 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 
 part 'engine_gauge.freezed.dart';
 
 const double _kEvalGaugeSize = 20.0;
+const Color _kEvalGaugeBackgroundColor = Color(0xFF444444);
+const Color _kEvalGaugeValueColorDarkBg = Color(0xEEEEEEEE);
+const Color _kEvalGaugeValueColorLightBg = Color(0xFFFFFFFF);
 
 enum EngineGaugeDisplayMode {
   vertical,
@@ -140,17 +142,17 @@ class _EvalGaugeState extends ConsumerState<_EvalGauge> {
             child: CustomPaint(
               painter: widget.displayMode == EngineGaugeDisplayMode.vertical
                   ? _EvalGaugeVerticalPainter(
-                      backgroundColor: kEvalGaugeBackgroundColor,
+                      backgroundColor: _kEvalGaugeBackgroundColor,
                       valueColor: brightness == Brightness.dark
-                          ? kEvalGaugeValueColorDarkBg
-                          : kEvalGaugeValueColorLightBg,
+                          ? _kEvalGaugeValueColorDarkBg
+                          : _kEvalGaugeValueColorLightBg,
                       value: value,
                     )
                   : _EvalGaugeHorizontalPainter(
-                      backgroundColor: kEvalGaugeBackgroundColor,
+                      backgroundColor: _kEvalGaugeBackgroundColor,
                       valueColor: brightness == Brightness.dark
-                          ? kEvalGaugeValueColorDarkBg
-                          : kEvalGaugeValueColorLightBg,
+                          ? _kEvalGaugeValueColorDarkBg
+                          : _kEvalGaugeValueColorLightBg,
                       value: value,
                       textDirection: textDirection,
                     ),

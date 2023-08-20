@@ -390,8 +390,8 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     if (!replaying) {
       final isForward = path.size > state.currentPath.size;
       if (isForward) {
-        final isCheck = sanMove.san.contains('+');
-        if (sanMove.san.contains('x')) {
+        final isCheck = sanMove.isCheck;
+        if (sanMove.isCapture) {
           ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
         } else {
           ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
@@ -400,7 +400,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     } else {
       // when replaying moves fast we don't want haptic feedback
       final soundService = ref.read(soundServiceProvider);
-      if (sanMove.san.contains('x')) {
+      if (sanMove.isCapture) {
         soundService.play(Sound.capture);
       } else {
         soundService.play(Sound.move);

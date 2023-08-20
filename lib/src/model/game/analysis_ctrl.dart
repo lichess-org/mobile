@@ -26,13 +26,13 @@ class AnalysisCtrl extends _$AnalysisCtrl {
   AnalysisCtrlState build(
     IList<GameStep> steps,
     Side orientation,
-    GameId id,
+    ID id,
   ) {
     ref.onDispose(() {
       _engineEvalDebounce.dispose();
     });
     _root = Root(
-      ply: 0,
+      ply: steps[0].ply,
       fen: steps[0].position.fen,
       position: steps[0].position,
     );
@@ -54,7 +54,6 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       variant: Variant.standard,
       initialFen: _root.fen,
       contextId: id,
-      cores: maxCores,
     );
 
     _engineEvalDebounce(
@@ -75,7 +74,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
           ),
     );
     return AnalysisCtrlState(
-      gameId: id,
+      id: id,
       initialFen: _root.fen,
       initialPath: UciPath.empty,
       currentPath: currentPath,
@@ -128,7 +127,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
     if (!state.position.isLegal(move)) return;
     final (newPath, newNode) = _root.addMoveAt(state.currentPath, move);
     if (newPath != null) {
-      _setPath(newPath, moveAdded: true, newNode: newNode);
+      _setPath(newPath, newNode: newNode);
     }
   }
 
@@ -156,18 +155,16 @@ class AnalysisCtrl extends _$AnalysisCtrl {
     UciPath path, {
     Node? newNode,
     bool replaying = false,
-    bool moveAdded = false,
   }) {
     final pathChange = state.currentPath != path;
-    final rootOrBranch = newNode ?? _root.nodeAt(path);
+    final currentNode = newNode ?? _root.nodeAt(path);
 
-    if (rootOrBranch.runtimeType == Branch) {
-      final currentNode = rootOrBranch as Branch;
+    if (currentNode is Branch) {
       if (!replaying) {
         final isForward = path.size > state.currentPath.size;
         if (isForward) {
-          final isCheck = currentNode.sanMove.san.contains('+');
-          if (currentNode.sanMove.san.contains('x')) {
+          final isCheck = currentNode.sanMove.isCheck;
+          if (currentNode.sanMove.isCapture) {
             ref
                 .read(moveFeedbackServiceProvider)
                 .captureFeedback(check: isCheck);
@@ -176,9 +173,8 @@ class AnalysisCtrl extends _$AnalysisCtrl {
           }
         }
       } else {
-        // when replaying moves fast we don't want haptic feedback
         final soundService = ref.read(soundServiceProvider);
-        if (currentNode.sanMove.san.contains('x')) {
+        if (currentNode.sanMove.isCapture) {
           soundService.play(Sound.capture);
         } else {
           soundService.play(Sound.move);
@@ -188,7 +184,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
         currentPath: path,
         currentNode: currentNode.view,
         lastMove: currentNode.sanMove.move,
-        root: moveAdded ? _root.view : state.root,
+        root: newNode != null ? _root.view : state.root,
       );
     } else {
       state = state.copyWith(
@@ -233,7 +229,7 @@ class AnalysisCtrlState with _$AnalysisCtrlState {
     required String initialFen,
     required UciPath initialPath,
     required UciPath currentPath,
-    required GameId gameId,
+    required ID id,
     required Side pov,
     required bool isEngineEnabled,
     required bool showBestMoveArrow,

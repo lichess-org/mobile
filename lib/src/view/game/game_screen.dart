@@ -496,7 +496,7 @@ class _GameBottomBar extends ConsumerWidget {
                   builder: (_) => AnalysisScreen(
                     steps: gameState.game.steps,
                     orientation: gameState.game.youAre!,
-                    gameId: gameState.game.meta.id,
+                    id: gameState.game.meta.id,
                   ),
                 ),
               ),

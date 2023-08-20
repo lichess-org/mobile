@@ -18,7 +18,7 @@ class ClientEval with _$ClientEval {
     required IList<PvData> pvs,
     required int millis,
     required int maxDepth,
-    required Position currentPosition,
+    required Position position,
     int? cp,
     int? mate,
   }) = _ClientEval;
@@ -35,16 +35,7 @@ class ClientEval with _$ClientEval {
     return pvs.map((e) => Move.fromUci(e.moves.first)).toIList();
   }
 
-  String get evalString {
-    if (cp != null) {
-      final e = math.max(math.min((cp! / 10).round() / 10, 99), -99);
-      return (e > 0 ? '+' : '') + e.toStringAsFixed(1);
-    } else if (mate != null) {
-      return '#$mate';
-    } else {
-      return '-';
-    }
-  }
+  String get evalString => _evalString(cp, mate);
 
   /// The winning chances for the given [Side].
   ///
@@ -72,28 +63,7 @@ class PvData with _$PvData {
     int? cp,
   }) = _PvData;
 
-  String get evalString {
-    if (cp != null) {
-      final e = math.max(math.min((cp! / 10).round() / 10, 99), -99);
-      return (e > 0 ? '+' : '') + e.toStringAsFixed(1);
-    } else if (mate != null) {
-      return '#$mate';
-    } else {
-      return '-';
-    }
-  }
-
-  (String, bool?) get evalStringAndWinningSide {
-    if (cp != null) {
-      final e = math.max(math.min((cp! / 10).round() / 10, 99), -99);
-      final eString = e > 0 ? '+${e.toStringAsFixed(1)}' : e.toStringAsFixed(1);
-      return e >= 0 ? (eString, true) : (eString, false);
-    } else if (mate != null) {
-      return ('#$mate', null);
-    } else {
-      return ('-', null);
-    }
-  }
+  String get evalString => _evalString(cp, mate);
 
   List<String> sanMoves(Position currentPosition) {
     var pos = currentPosition;
@@ -123,4 +93,15 @@ double _mateWinningChances(int mate) {
   final cp = (21 - math.min(10, mate.abs())) * 100;
   final signed = cp * (mate > 0 ? 1 : -1);
   return _rawWinningChances(signed);
+}
+
+String _evalString(int? cp, int? mate) {
+  if (cp != null) {
+    final e = math.max(math.min((cp / 10).round() / 10, 99), -99);
+    return e > 0 ? '+${e.toStringAsFixed(1)}' : e.toStringAsFixed(1);
+  } else if (mate != null) {
+    return '#$mate';
+  } else {
+    return '-';
+  }
 }
