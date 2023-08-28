@@ -97,7 +97,7 @@ List<Widget> buildUserScreenList(User user) {
     _Profile(user: user),
     PerfCards(user: user),
     UserActivityWidget(user: user),
-    RecentGames(user: user),
+    RecentGames(user: user.lightUser),
   ];
 }
 

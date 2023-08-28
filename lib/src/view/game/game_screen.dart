@@ -7,13 +7,16 @@ import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -68,6 +71,9 @@ class _GameScreenState extends ConsumerState<GameScreen>
 
   @override
   void didPop() {
+    ref.invalidate(userRecentGamesProvider);
+    ref.invalidate(accountProvider);
+    ref.invalidate(userActivityProvider);
     ref.read(authSocketProvider).close();
   }
 
