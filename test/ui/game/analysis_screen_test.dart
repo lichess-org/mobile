@@ -44,6 +44,7 @@ void main() {
       final app = await buildTestApp(
         tester,
         home: AnalysisScreen(
+          variant: Variant.standard,
           steps: gameStep,
           orientation: Side.white,
           id: gameData.id,
@@ -65,6 +66,7 @@ void main() {
       final app = await buildTestApp(
         tester,
         home: AnalysisScreen(
+          variant: Variant.standard,
           steps: gameStep,
           orientation: Side.white,
           id: gameData.id,

@@ -14,7 +14,11 @@ class NonLinearSlider extends StatefulWidget {
 
   final num value;
   final List<num> values;
+
+  /// Called when the user is done selecting a value. If null, the widget will
+  /// be disabled.
   final ValueChanged<num>? onChangeEnd;
+
   final String Function(num)? labelBuilder;
 
   @override
@@ -45,23 +49,25 @@ class _NonLinearSliderState extends State<NonLinearSlider> {
       divisions: widget.values.length - 1,
       label: widget.labelBuilder?.call(widget.values[_index]) ??
           widget.values[_index].toString(),
-      onChanged: (double value) {
-        final currentIndex = _index;
-        final newIndex = value.toInt();
-        setState(() {
-          _index = newIndex;
-        });
+      onChanged: widget.onChangeEnd != null
+          ? (double value) {
+              final currentIndex = _index;
+              final newIndex = value.toInt();
+              setState(() {
+                _index = newIndex;
+              });
 
-        // iOS doesn't show a label when sliding, so we need to manually
-        // call the callback when the value changes.
-        if (defaultTargetPlatform == TargetPlatform.iOS &&
-            currentIndex != newIndex &&
-            widget.onChangeEnd != null) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            widget.onChangeEnd?.call(widget.values[_index]);
-          });
-        }
-      },
+              // iOS doesn't show a label when sliding, so we need to manually
+              // call the callback when the value changes.
+              if (defaultTargetPlatform == TargetPlatform.iOS &&
+                  currentIndex != newIndex &&
+                  widget.onChangeEnd != null) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  widget.onChangeEnd?.call(widget.values[_index]);
+                });
+              }
+            }
+          : null,
       onChangeEnd: (double value) {
         if (defaultTargetPlatform != TargetPlatform.iOS) {
           widget.onChangeEnd?.call(widget.values[_index]);

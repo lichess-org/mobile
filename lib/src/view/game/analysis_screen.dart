@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
@@ -33,11 +34,13 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class AnalysisScreen extends ConsumerWidget {
   const AnalysisScreen({
+    required this.variant,
     required this.steps,
     required this.orientation,
     required this.id,
   });
 
+  final Variant variant;
   final IList<GameStep> steps;
   final Side orientation;
   final ID id;
@@ -52,14 +55,19 @@ class AnalysisScreen extends ConsumerWidget {
   }
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisCtrlProvider(steps, orientation, id);
+    final ctrlProvider = analysisCtrlProvider(variant, steps, orientation, id);
+
+    final evalContext = ref.watch(
+      ctrlProvider.select((value) => value.evaluationContext),
+    );
+    final depth = ref.watch(
+      engineEvaluationProvider(evalContext).select((value) => value?.depth),
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.gameAnalysis),
         actions: [
-          _EngineDepth(
-            ref.watch(ctrlProvider.select((value) => value.evaluationContext)),
-          ),
+          if (depth != null) _EngineDepth(depth),
           SettingsButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
@@ -74,20 +82,21 @@ class AnalysisScreen extends ConsumerWidget {
   }
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisCtrlProvider(steps, orientation, id);
+    final ctrlProvider = analysisCtrlProvider(variant, steps, orientation, id);
+    final evalContext = ref.watch(
+      ctrlProvider.select((value) => value.evaluationContext),
+    );
+    final depth = ref.watch(
+      engineEvaluationProvider(evalContext).select((value) => value?.depth),
+    );
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        padding: const EdgeInsetsDirectional.only(end: 16.0),
         middle: Text(context.l10n.analysis),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _EngineDepth(
-              ref.watch(
-                ctrlProvider.select((value) => value.evaluationContext),
-              ),
-            ),
+            if (depth != null) _EngineDepth(depth),
             SettingsButton(
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
@@ -231,7 +240,7 @@ class _Board extends ConsumerWidget {
         onMove: (move, {isDrop, isPremove}) =>
             ref.read(ctrlProvider.notifier).onUserMove(Move.fromUci(move.uci)!),
         shapes: analysisState.showBestMoveArrow &&
-                analysisState.isEngineEnabled &&
+                analysisState.isEngineAvailable &&
                 bestMoves != null
             ? ISet(
                 bestMoves.where((move) => move != null).mapIndexed(
@@ -266,7 +275,7 @@ class _EngineGaugeVertical extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(ctrlProvider);
 
-    return analysisState.isEngineEnabled
+    return analysisState.isEngineAvailable
         ? EngineGauge(
             displayMode: EngineGaugeDisplayMode.vertical,
             params: EngineGaugeParams(
@@ -288,7 +297,7 @@ class _ColumnTopTable extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(ctrlProvider);
 
-    return analysisState.isEngineEnabled
+    return analysisState.isEngineAvailable
         ? Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -769,38 +778,37 @@ class _BottomBar extends ConsumerWidget {
 }
 
 class _EngineDepth extends ConsumerWidget {
-  const _EngineDepth(this.evalContext);
+  const _EngineDepth(this.depth);
 
-  final EvaluationContext evalContext;
+  final int depth;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final depth = ref.watch(
-      engineEvaluationProvider(evalContext).select((value) => value?.depth),
+    return Tooltip(
+      triggerMode: TooltipTriggerMode.tap,
+      message: context.l10n.depthX(depth.toString()),
+      child: Container(
+        padding: const EdgeInsets.all(2.0),
+        decoration: BoxDecoration(
+          color: defaultTargetPlatform == TargetPlatform.android
+              ? Theme.of(context).colorScheme.secondary
+              : CupertinoTheme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(4.0),
+        ),
+        child: Text(
+          '$depth',
+          style: TextStyle(
+            fontSize: 14.0,
+            color: defaultTargetPlatform == TargetPlatform.android
+                ? Theme.of(context).colorScheme.onSecondary
+                : CupertinoTheme.of(context).primaryContrastingColor,
+            fontFeatures: const [
+              FontFeature.tabularFigures(),
+            ],
+          ),
+        ),
+      ),
     );
-
-    return depth != null
-        ? Tooltip(
-            message: 'Engine Depth',
-            child: Container(
-              padding: const EdgeInsets.all(2.0),
-              decoration: BoxDecoration(
-                color: defaultTargetPlatform == TargetPlatform.android
-                    ? Theme.of(context).colorScheme.secondary
-                    : CupertinoTheme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(4.0),
-              ),
-              child: Text(
-                '$depth',
-                style: TextStyle(
-                  color: defaultTargetPlatform == TargetPlatform.android
-                      ? Theme.of(context).colorScheme.onSecondary
-                      : CupertinoTheme.of(context).primaryContrastingColor,
-                ),
-              ),
-            ),
-          )
-        : kEmptyWidget;
   }
 }
 
@@ -808,6 +816,7 @@ class _Preferences extends ConsumerWidget {
   const _Preferences(this.ctrlProvider);
 
   final AnalysisCtrlProvider ctrlProvider;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(ctrlProvider);
@@ -829,45 +838,25 @@ class _Preferences extends ConsumerWidget {
           SwitchSettingTile(
             title: Text(context.l10n.bestMoveArrow),
             value: state.showBestMoveArrow,
-            onChanged: (value) =>
-                ref.read(ctrlProvider.notifier).toggleBestMoveArrow(),
+            onChanged: state.isEngineAvailable
+                ? (value) =>
+                    ref.read(ctrlProvider.notifier).toggleBestMoveArrow()
+                : null,
           ),
           SwitchSettingTile(
             title: Text(context.l10n.evaluationGauge),
-            value: state.isEngineEnabled,
-            onChanged: (value) =>
-                ref.read(ctrlProvider.notifier).toggleLocalEvaluation(),
+            value: state.showEvaluationGauge,
+            onChanged: state.isEngineAvailable
+                ? (value) =>
+                    ref.read(ctrlProvider.notifier).toggleEvaluationGauge()
+                : null,
           ),
-          PlatformListTile(
-            title: Text.rich(
-              TextSpan(
-                text: '${context.l10n.multipleLines}: ',
-                style: const TextStyle(
-                  fontWeight: FontWeight.normal,
-                ),
-                children: [
-                  TextSpan(
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                    text: state.numCevalLines.toString(),
-                  ),
-                ],
-              ),
-            ),
-            subtitle: NonLinearSlider(
-              value: state.numCevalLines,
-              values: const [1, 2, 3],
-              onChangeEnd: (value) =>
-                  ref.read(ctrlProvider.notifier).setCevalLines(value.toInt()),
-            ),
-          ),
-          if (maxCores > 1)
-            PlatformListTile(
+          Opacity(
+            opacity: state.isEngineAvailable ? 1.0 : 0.5,
+            child: PlatformListTile(
               title: Text.rich(
                 TextSpan(
-                  text: '${context.l10n.cpus}: ',
+                  text: '${context.l10n.multipleLines}: ',
                   style: const TextStyle(
                     fontWeight: FontWeight.normal,
                   ),
@@ -877,16 +866,52 @@ class _Preferences extends ConsumerWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                       ),
-                      text: state.numCores.toString(),
+                      text: state.numCevalLines.toString(),
                     ),
                   ],
                 ),
               ),
               subtitle: NonLinearSlider(
-                value: state.numCores,
-                values: List.generate(maxCores, (index) => index + 1),
-                onChangeEnd: (value) =>
-                    ref.read(ctrlProvider.notifier).setCores(value.toInt()),
+                value: state.numCevalLines,
+                values: const [1, 2, 3],
+                onChangeEnd: state.isEngineAvailable
+                    ? (value) => ref
+                        .read(ctrlProvider.notifier)
+                        .setCevalLines(value.toInt())
+                    : null,
+              ),
+            ),
+          ),
+          if (maxCores > 1)
+            Opacity(
+              opacity: state.isEngineAvailable ? 1.0 : 0.5,
+              child: PlatformListTile(
+                title: Text.rich(
+                  TextSpan(
+                    text: '${context.l10n.cpus}: ',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                    ),
+                    children: [
+                      TextSpan(
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                        text: state.numCores.toString(),
+                      ),
+                    ],
+                  ),
+                ),
+                subtitle: NonLinearSlider(
+                  value: state.numCores,
+                  values: List.generate(maxCores, (index) => index + 1),
+                  onChangeEnd: state.isEngineAvailable
+                      ? (value) => ref
+                          .read(ctrlProvider.notifier)
+                          .setCores(value.toInt())
+                      : null,
+                ),
               ),
             ),
           Divider(

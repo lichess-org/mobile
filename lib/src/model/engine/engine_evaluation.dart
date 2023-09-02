@@ -36,6 +36,11 @@ class EvaluationContext with _$EvaluationContext {
   }) = _EvaluationContext;
 }
 
+const engineSupportedVariants = {
+  Variant.standard,
+  Variant.chess960,
+};
+
 @riverpod
 class EngineEvaluation extends _$EngineEvaluation {
   StockfishEngine? _engine;
@@ -57,6 +62,10 @@ class EngineEvaluation extends _$EngineEvaluation {
     Position position, {
     required bool Function(Work work) shouldEmit,
   }) {
+    if (!engineSupportedVariants.contains(context.variant)) {
+      return null;
+    }
+
     _engine ??= StockfishEngine();
 
     final work = Work(

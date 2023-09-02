@@ -493,7 +493,9 @@ class _GameBottomBar extends ConsumerWidget {
                 icon: Icons.biotech,
                 onTap: () => pushPlatformRoute(
                   context,
+                  fullscreenDialog: true,
                   builder: (_) => AnalysisScreen(
+                    variant: gameState.game.meta.variant,
                     steps: gameState.game.steps,
                     orientation: gameState.game.youAre!,
                     id: gameState.game.meta.id,

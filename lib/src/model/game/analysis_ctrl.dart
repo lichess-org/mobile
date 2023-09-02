@@ -24,6 +24,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
 
   @override
   AnalysisCtrlState build(
+    Variant variant,
     IList<GameStep> steps,
     Side orientation,
     ID id,
@@ -51,7 +52,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
 
     final currentPath = _root.mainlinePath;
     final evalContext = EvaluationContext(
-      variant: Variant.standard,
+      variant: variant,
       initialFen: _root.fen,
       contextId: id,
     );
@@ -83,21 +84,14 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       pov: orientation,
       numCevalLines: kDefaultLines,
       numCores: maxCores,
-      isEngineEnabled: true,
+      showEvaluationGauge: true,
       showBestMoveArrow: true,
       evaluationContext: evalContext,
     );
   }
 
-  void toggleLocalEvaluation() {
-    state = state.copyWith(isEngineEnabled: !state.isEngineEnabled);
-    if (state.isEngineEnabled) {
-      _startEngineEval();
-    } else {
-      ref
-          .read(engineEvaluationProvider(state.evaluationContext).notifier)
-          .stop();
-    }
+  void toggleEvaluationGauge() {
+    state = state.copyWith(showEvaluationGauge: !state.showEvaluationGauge);
   }
 
   void toggleBestMoveArrow() {
@@ -200,7 +194,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
   }
 
   void _startEngineEval() {
-    if (!state.isEngineEnabled) return;
+    if (!state.isEngineAvailable) return;
     _engineEvalDebounce(
       () => ref
           .read(
@@ -231,7 +225,7 @@ class AnalysisCtrlState with _$AnalysisCtrlState {
     required UciPath currentPath,
     required ID id,
     required Side pov,
-    required bool isEngineEnabled,
+    required bool showEvaluationGauge,
     required bool showBestMoveArrow,
     required int numCevalLines,
     required int numCores,
@@ -241,6 +235,10 @@ class AnalysisCtrlState with _$AnalysisCtrlState {
 
   IMap<String, ISet<String>> get validMoves =>
       algebraicLegalMoves(currentNode.position);
+
+  bool get isEngineAvailable => engineSupportedVariants.contains(
+        evaluationContext.variant,
+      );
 
   Position get position => currentNode.position;
   String get fen => currentNode.position.fen;
