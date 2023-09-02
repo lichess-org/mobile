@@ -193,6 +193,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           _ColumnTopTable(widget.ctrlProvider),
                           _Board(widget.ctrlProvider, boardSize),
@@ -473,6 +474,8 @@ class _Moves extends ConsumerWidget {
   }
 }
 
+const kInlineMoveSpacing = 5.0;
+
 class _InlineTreeView extends ConsumerStatefulWidget {
   const _InlineTreeView(
     this.ctrlProvider,
@@ -533,9 +536,9 @@ class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
   @override
   Widget build(BuildContext context) {
     final content = SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Wrap(
-        spacing: 1.0,
+        spacing: kInlineMoveSpacing,
         children: _buildTreeWidget(
           widget.ctrlProvider,
           nodes: widget.root.children,
@@ -589,7 +592,7 @@ class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
           SizedBox(
             width: double.infinity,
             child: Wrap(
-              spacing: 1.0,
+              spacing: kInlineMoveSpacing,
               children: _buildTreeWidget(
                 ctrlProvider,
                 nodes: IList([nodes[i]]),
@@ -652,34 +655,44 @@ class InlineMove extends ConsumerWidget {
   final bool isSideline;
   final bool startSideline;
   final bool endSideline;
+
   static const borderRadius = BorderRadius.all(Radius.circular(8.0));
-  static const baseTextStyle = TextStyle(fontFamily: 'ChessFont');
+  static const baseTextStyle = TextStyle(fontFamily: 'ChessFont', fontSize: 13);
+
+  Color? _textColor(BuildContext context, double opacity) {
+    return defaultTargetPlatform == TargetPlatform.android
+        ? Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(opacity)
+        : CupertinoTheme.of(context)
+            .textTheme
+            .textStyle
+            .color
+            ?.withOpacity(opacity);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textStyle = isSideline
         ? TextStyle(
             fontFamily: 'ChessFont',
+            fontSize: 13,
             fontStyle: FontStyle.italic,
-            color: defaultTargetPlatform == TargetPlatform.android
-                ? Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7)
-                : CupertinoTheme.of(context)
-                    .textTheme
-                    .textStyle
-                    .color
-                    ?.withOpacity(0.7),
+            color: _textColor(context, 0.7),
           )
         : baseTextStyle;
 
-    final index = ply.isOdd
+    final indexTextStyle = baseTextStyle.copyWith(
+      color: _textColor(context, 0.6),
+    );
+
+    final indexWidget = ply.isOdd
         ? Text(
-            '${(ply / 2).ceil()}. ',
-            style: textStyle,
+            '${(ply / 2).ceil()}.',
+            style: indexTextStyle,
           )
         : (startSideline
             ? Text(
-                '${(ply / 2).ceil()}... ',
-                style: textStyle,
+                '${(ply / 2).ceil()}...',
+                style: indexTextStyle,
               )
             : null);
 
@@ -687,12 +700,13 @@ class InlineMove extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (startSideline) Text('(', style: textStyle),
-        if (index != null) index,
+        if (indexWidget != null) indexWidget,
+        if (indexWidget != null) const SizedBox(width: 1),
         AdaptiveInkWell(
           borderRadius: borderRadius,
           onTap: () => ref.read(ctrlProvider.notifier).userJump(path),
           child: Container(
-            padding: const EdgeInsets.all(3),
+            padding: const EdgeInsets.symmetric(vertical: 3),
             decoration: isCurrentMove
                 ? BoxDecoration(
                     color: Theme.of(context).focusColor,
@@ -702,7 +716,12 @@ class InlineMove extends ConsumerWidget {
                 : null,
             child: Text(
               move.san,
-              style: textStyle,
+              style: isCurrentMove
+                  ? textStyle.copyWith(
+                      color: _textColor(context, 1),
+                      fontWeight: FontWeight.w600,
+                    )
+                  : textStyle,
             ),
           ),
         ),
