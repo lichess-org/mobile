@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 
 part 'engine_gauge.freezed.dart';
 
-const double _kEvalGaugeSize = 20.0;
+const double kEvalGaugeSize = 26.0;
 const Color _kEvalGaugeBackgroundColor = Color(0xFF444444);
 const Color _kEvalGaugeValueColorDarkBg = Color(0xEEEEEEEE);
 const Color _kEvalGaugeValueColorLightBg = Color(0xFFFFFFFF);
@@ -126,19 +126,19 @@ class _EvalGaugeState extends ConsumerState<_EvalGauge> {
           child: Container(
             constraints: widget.displayMode == EngineGaugeDisplayMode.vertical
                 ? const BoxConstraints(
-                    minWidth: _kEvalGaugeSize,
+                    minWidth: kEvalGaugeSize,
                     minHeight: double.infinity,
                   )
                 : const BoxConstraints(
                     minWidth: double.infinity,
-                    minHeight: _kEvalGaugeSize,
+                    minHeight: kEvalGaugeSize,
                   ),
             width: widget.displayMode == EngineGaugeDisplayMode.vertical
-                ? _kEvalGaugeSize
+                ? kEvalGaugeSize
                 : null,
             height: widget.displayMode == EngineGaugeDisplayMode.vertical
                 ? null
-                : _kEvalGaugeSize,
+                : kEvalGaugeSize,
             child: CustomPaint(
               painter: widget.displayMode == EngineGaugeDisplayMode.vertical
                   ? _EvalGaugeVerticalPainter(

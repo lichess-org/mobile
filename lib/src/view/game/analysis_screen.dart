@@ -68,6 +68,7 @@ class AnalysisScreen extends ConsumerWidget {
         title: Text(context.l10n.gameAnalysis),
         actions: [
           if (depth != null) _EngineDepth(depth),
+          if (depth != null) const SizedBox(width: 5),
           SettingsButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
@@ -97,6 +98,7 @@ class AnalysisScreen extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (depth != null) _EngineDepth(depth),
+            if (depth != null) const SizedBox(width: 5),
             SettingsButton(
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
@@ -126,6 +128,8 @@ class _Body extends ConsumerStatefulWidget {
 class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(widget.ctrlProvider);
+
     return Column(
       children: [
         Expanded(
@@ -157,7 +161,8 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                             child: Row(
                               children: [
                                 _Board(widget.ctrlProvider, boardSize),
-                                _EngineGaugeVertical(widget.ctrlProvider),
+                                if (state.showEvaluationGauge)
+                                  _EngineGaugeVertical(widget.ctrlProvider),
                               ],
                             ),
                           ),
@@ -302,20 +307,26 @@ class _ColumnTopTable extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              EngineGauge(
-                displayMode: EngineGaugeDisplayMode.horizontal,
-                params: EngineGaugeParams(
-                  evaluationContext: analysisState.evaluationContext,
-                  position: analysisState.position,
-                  savedEval: analysisState.currentNode.eval,
+              if (analysisState.showEvaluationGauge)
+                EngineGauge(
+                  displayMode: EngineGaugeDisplayMode.horizontal,
+                  params: EngineGaugeParams(
+                    evaluationContext: analysisState.evaluationContext,
+                    position: analysisState.position,
+                    savedEval: analysisState.currentNode.eval,
+                  ),
                 ),
-              ),
               _EngineLines(ctrlProvider, isTablet: false),
             ],
           )
         : kEmptyWidget;
   }
 }
+
+const _engineLinePlaceHolder = SizedBox(
+  height: kEvalGaugeSize,
+  child: SizedBox.shrink(),
+);
 
 class _EngineLines extends ConsumerWidget {
   const _EngineLines(this.ctrlProvider, {required this.isTablet});
@@ -327,6 +338,11 @@ class _EngineLines extends ConsumerWidget {
     final analysisState = ref.watch(ctrlProvider);
     final ceval =
         ref.watch(engineEvaluationProvider(analysisState.evaluationContext));
+
+    final List<Widget> emptyLines = List.filled(
+      analysisState.numEvalLines,
+      _engineLinePlaceHolder,
+    );
 
     final content = !analysisState.position.isGameOver
         ? (ceval != null
@@ -342,7 +358,7 @@ class _EngineLines extends ConsumerWidget {
                 .toList()
             : (analysisState.currentNode.eval != null
                 ? analysisState.currentNode.eval!.pvs
-                    .take(analysisState.numCevalLines)
+                    .take(analysisState.numEvalLines)
                     .map(
                       (pv) => _Engineline(
                         ctrlProvider,
@@ -352,22 +368,20 @@ class _EngineLines extends ConsumerWidget {
                       ),
                     )
                     .toList()
-                : null))
-        : null;
+                : emptyLines))
+        : emptyLines;
 
-    return content != null
-        ? Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: isTablet ? 16.0 : 4.0,
-              horizontal: isTablet ? 16.0 : 4.0,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: content,
-            ),
-          )
-        : kEmptyWidget;
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: isTablet ? 16.0 : 0.0,
+        horizontal: isTablet ? 16.0 : 0.0,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: content,
+      ),
+    );
   }
 }
 
@@ -404,26 +418,29 @@ class _Engineline extends ConsumerWidget {
       onTap: () => ref
           .read(ctrlProvider.notifier)
           .onUserMove(Move.fromUci(pvData.moves[0])!),
-      child: Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(evalString),
-            const SizedBox(width: 8.0),
-            Expanded(
-              child: Text(
-                builder.toString(),
-                maxLines: 1,
-                softWrap: false,
-                style: const TextStyle(
-                  fontFamily: 'ChessFont',
+      child: SizedBox(
+        height: kEvalGaugeSize,
+        child: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(evalString),
+              const SizedBox(width: 8.0),
+              Expanded(
+                child: Text(
+                  builder.toString(),
+                  maxLines: 1,
+                  softWrap: false,
+                  style: const TextStyle(
+                    fontFamily: 'ChessFont',
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -798,7 +815,7 @@ class _EngineDepth extends ConsumerWidget {
         child: Text(
           '$depth',
           style: TextStyle(
-            fontSize: 14.0,
+            fontSize: 12.0,
             color: defaultTargetPlatform == TargetPlatform.android
                 ? Theme.of(context).colorScheme.onSecondary
                 : CupertinoTheme.of(context).primaryContrastingColor,
@@ -866,13 +883,13 @@ class _Preferences extends ConsumerWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                       ),
-                      text: state.numCevalLines.toString(),
+                      text: state.numEvalLines.toString(),
                     ),
                   ],
                 ),
               ),
               subtitle: NonLinearSlider(
-                value: state.numCevalLines,
+                value: state.numEvalLines,
                 values: const [1, 2, 3],
                 onChangeEnd: state.isEngineAvailable
                     ? (value) => ref

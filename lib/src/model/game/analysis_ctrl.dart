@@ -82,7 +82,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       root: _root.view,
       currentNode: current.view,
       pov: orientation,
-      numCevalLines: kDefaultLines,
+      numEvalLines: kDefaultLines,
       numCores: maxCores,
       showEvaluationGauge: true,
       showBestMoveArrow: true,
@@ -104,7 +104,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
         .read(engineEvaluationProvider(state.evaluationContext).notifier)
         .multiPv = lines;
     _startEngineEval();
-    state = state.copyWith(numCevalLines: lines);
+    state = state.copyWith(numEvalLines: lines);
   }
 
   void setCores(int num) {
@@ -227,7 +227,7 @@ class AnalysisCtrlState with _$AnalysisCtrlState {
     required Side pov,
     required bool showEvaluationGauge,
     required bool showBestMoveArrow,
-    required int numCevalLines,
+    required int numEvalLines,
     required int numCores,
     required EvaluationContext evaluationContext,
     Move? lastMove,
