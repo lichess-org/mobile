@@ -39,7 +39,7 @@ dependencies:
   result_extensions: ^0.1.0
   async: ^2.10.0
   package_info_plus: ^4.0.0
-  url_launcher: ^6.1.9
+  url_launcher: ^6.1.14
   flutter_layout_grid: ^2.0.1
   sqflite: ^2.2.5
   path: ^1.8.2
