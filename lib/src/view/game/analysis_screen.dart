@@ -685,9 +685,12 @@ class InlineMove extends ConsumerWidget {
   final bool startSideline;
   final bool endSideline;
 
-  static const borderRadius = BorderRadius.all(Radius.circular(8.0));
-  static const baseTextStyle =
-      TextStyle(fontFamily: 'ChessFont', fontSize: kChessNotationFontSize);
+  static const borderRadius = BorderRadius.all(Radius.circular(4.0));
+  static const baseTextStyle = TextStyle(
+    fontFamily: 'ChessFont',
+    fontSize: kChessNotationFontSize,
+    height: 1.5,
+  );
 
   Color? _textColor(BuildContext context, double opacity) {
     return defaultTargetPlatform == TargetPlatform.android
@@ -736,7 +739,7 @@ class InlineMove extends ConsumerWidget {
           borderRadius: borderRadius,
           onTap: () => ref.read(ctrlProvider.notifier).userJump(path),
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 3),
+            padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 2),
             decoration: isCurrentMove
                 ? BoxDecoration(
                     color: Theme.of(context).focusColor,
