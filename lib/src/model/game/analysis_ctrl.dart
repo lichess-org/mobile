@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
+import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -51,10 +52,17 @@ class AnalysisCtrl extends _$AnalysisCtrl {
     });
 
     final currentPath = _root.mainlinePath;
+
+    // don't use ref.watch here: we don't want to loose all state when the
+    // analysis preferences change
+    final prefs = ref.read(analysisPreferencesProvider);
+
     final evalContext = EvaluationContext(
       variant: variant,
       initialFen: _root.fen,
       contextId: id,
+      multiPv: prefs.numEvalLines,
+      cores: prefs.numEngineCores,
     );
 
     _engineEvalDebounce(
@@ -82,38 +90,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       root: _root.view,
       currentNode: current.view,
       pov: orientation,
-      numEvalLines: kDefaultLines,
-      numCores: maxCores,
-      showEvaluationGauge: true,
-      showBestMoveArrow: true,
       evaluationContext: evalContext,
-    );
-  }
-
-  void toggleEvaluationGauge() {
-    state = state.copyWith(showEvaluationGauge: !state.showEvaluationGauge);
-  }
-
-  void toggleBestMoveArrow() {
-    state = state.copyWith(showBestMoveArrow: !state.showBestMoveArrow);
-  }
-
-  void setCevalLines(int lines) {
-    if (lines > 3) return;
-    ref
-        .read(engineEvaluationProvider(state.evaluationContext).notifier)
-        .multiPv = lines;
-    _startEngineEval();
-    state = state.copyWith(numEvalLines: lines);
-  }
-
-  void setCores(int num) {
-    if (num > maxCores) return;
-    ref.read(engineEvaluationProvider(state.evaluationContext).notifier).cores =
-        num;
-    _startEngineEval();
-    state = state.copyWith(
-      numCores: num,
     );
   }
 
@@ -143,6 +120,32 @@ class AnalysisCtrl extends _$AnalysisCtrl {
 
   void userJump(UciPath path) {
     _setPath(path);
+  }
+
+  void setNumEvalLines(int numEvalLines) {
+    ref
+        .read(analysisPreferencesProvider.notifier)
+        .setNumEvalLines(numEvalLines);
+
+    state = state.copyWith(
+      evaluationContext: state.evaluationContext.copyWith(
+        multiPv: numEvalLines,
+      ),
+    );
+    _startEngineEval();
+  }
+
+  void setEngineCores(int numEngineCores) {
+    ref
+        .read(analysisPreferencesProvider.notifier)
+        .setEngineCores(numEngineCores);
+
+    state = state.copyWith(
+      evaluationContext: state.evaluationContext.copyWith(
+        cores: numEngineCores,
+      ),
+    );
+    _startEngineEval();
   }
 
   void _setPath(
@@ -225,10 +228,6 @@ class AnalysisCtrlState with _$AnalysisCtrlState {
     required UciPath currentPath,
     required ID id,
     required Side pov,
-    required bool showEvaluationGauge,
-    required bool showBestMoveArrow,
-    required int numEvalLines,
-    required int numCores,
     required EvaluationContext evaluationContext,
     Move? lastMove,
   }) = _AnalysisCtrlState;

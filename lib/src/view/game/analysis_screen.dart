@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/model/game/analysis_ctrl.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
+import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -25,7 +26,6 @@ import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/debounced.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -132,7 +132,9 @@ class _Body extends ConsumerStatefulWidget {
 class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(widget.ctrlProvider);
+    final showEvaluationGauge = ref.watch(
+      analysisPreferencesProvider.select((value) => value.showEvaluationGauge),
+    );
 
     return Column(
       children: [
@@ -165,7 +167,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                             child: Row(
                               children: [
                                 _Board(widget.ctrlProvider, boardSize),
-                                if (state.showEvaluationGauge)
+                                if (showEvaluationGauge)
                                   _EngineGaugeVertical(widget.ctrlProvider),
                               ],
                             ),
@@ -224,6 +226,11 @@ class _Board extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(ctrlProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final showBestMoveArrow = ref.watch(
+      analysisPreferencesProvider.select(
+        (value) => value.showBestMoveArrow,
+      ),
+    );
 
     final evalBestMoves = ref.watch(
       engineEvaluationProvider(analysisState.evaluationContext)
@@ -249,7 +256,7 @@ class _Board extends ConsumerWidget {
         validMoves: analysisState.validMoves,
         onMove: (move, {isDrop, isPremove}) =>
             ref.read(ctrlProvider.notifier).onUserMove(Move.fromUci(move.uci)!),
-        shapes: analysisState.showBestMoveArrow &&
+        shapes: showBestMoveArrow &&
                 analysisState.isEngineAvailable &&
                 bestMoves != null
             ? ISet(
@@ -306,13 +313,16 @@ class _ColumnTopTable extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(ctrlProvider);
+    final showEvaluationGauge = ref.watch(
+      analysisPreferencesProvider.select((p) => p.showEvaluationGauge),
+    );
 
     return analysisState.isEngineAvailable
         ? Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (analysisState.showEvaluationGauge)
+              if (showEvaluationGauge)
                 EngineGauge(
                   displayMode: EngineGaugeDisplayMode.horizontal,
                   params: EngineGaugeParams(
@@ -341,11 +351,16 @@ class _EngineLines extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(ctrlProvider);
+    final numEvalLines = ref.watch(
+      analysisPreferencesProvider.select(
+        (p) => p.numEvalLines,
+      ),
+    );
     final ceval =
         ref.watch(engineEvaluationProvider(analysisState.evaluationContext));
 
     final List<Widget> emptyLines = List.filled(
-      analysisState.numEvalLines,
+      numEvalLines,
       _engineLinePlaceHolder,
     );
 
@@ -363,7 +378,7 @@ class _EngineLines extends ConsumerWidget {
                 .toList()
             : (analysisState.currentNode.eval != null
                 ? analysisState.currentNode.eval!.pvs
-                    .take(analysisState.numEvalLines)
+                    .take(numEvalLines)
                     .map(
                       (pv) => _Engineline(
                         ctrlProvider,
@@ -381,13 +396,10 @@ class _EngineLines extends ConsumerWidget {
         vertical: isTablet ? 16.0 : 0.0,
         horizontal: isTablet ? 16.0 : 0.0,
       ),
-      child: Debounced(
-        delay: kFastReplayDebounceDelay,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: content,
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: content,
       ),
     );
   }
@@ -906,6 +918,7 @@ class _Preferences extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(ctrlProvider);
+    final prefs = ref.watch(analysisPreferencesProvider);
     final isSoundEnabled = ref.watch(
       generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
     );
@@ -922,18 +935,20 @@ class _Preferences extends ConsumerWidget {
           ),
           SwitchSettingTile(
             title: Text(context.l10n.bestMoveArrow),
-            value: state.showBestMoveArrow,
+            value: prefs.showBestMoveArrow,
             onChanged: state.isEngineAvailable
-                ? (value) =>
-                    ref.read(ctrlProvider.notifier).toggleBestMoveArrow()
+                ? (value) => ref
+                    .read(analysisPreferencesProvider.notifier)
+                    .toggleShowBestMoveArrow()
                 : null,
           ),
           SwitchSettingTile(
             title: Text(context.l10n.evaluationGauge),
-            value: state.showEvaluationGauge,
+            value: prefs.showEvaluationGauge,
             onChanged: state.isEngineAvailable
-                ? (value) =>
-                    ref.read(ctrlProvider.notifier).toggleEvaluationGauge()
+                ? (value) => ref
+                    .read(analysisPreferencesProvider.notifier)
+                    .toggleShowEvaluationGauge()
                 : null,
           ),
           Opacity(
@@ -951,23 +966,23 @@ class _Preferences extends ConsumerWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                       ),
-                      text: state.numEvalLines.toString(),
+                      text: prefs.numEvalLines.toString(),
                     ),
                   ],
                 ),
               ),
               subtitle: NonLinearSlider(
-                value: state.numEvalLines,
+                value: prefs.numEvalLines,
                 values: const [1, 2, 3],
                 onChangeEnd: state.isEngineAvailable
                     ? (value) => ref
                         .read(ctrlProvider.notifier)
-                        .setCevalLines(value.toInt())
+                        .setNumEvalLines(value.toInt())
                     : null,
               ),
             ),
           ),
-          if (maxCores > 1)
+          if (maxEngineCores > 1)
             Opacity(
               opacity: state.isEngineAvailable ? 1.0 : 0.5,
               child: PlatformListTile(
@@ -983,18 +998,18 @@ class _Preferences extends ConsumerWidget {
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                         ),
-                        text: state.numCores.toString(),
+                        text: prefs.numEngineCores.toString(),
                       ),
                     ],
                   ),
                 ),
                 subtitle: NonLinearSlider(
-                  value: state.numCores,
-                  values: List.generate(maxCores, (index) => index + 1),
+                  value: prefs.numEngineCores,
+                  values: List.generate(maxEngineCores, (index) => index + 1),
                   onChangeEnd: state.isEngineAvailable
                       ? (value) => ref
                           .read(ctrlProvider.notifier)
-                          .setCores(value.toInt())
+                          .setEngineCores(value.toInt())
                       : null,
                 ),
               ),

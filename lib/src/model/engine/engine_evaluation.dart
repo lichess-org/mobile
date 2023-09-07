@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-import 'dart:io';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -22,17 +20,16 @@ part 'engine_evaluation.freezed.dart';
 const kMaxDepth = 22;
 const kDefaultLines = 2;
 
-final maxCores = math.max(1, Platform.numberOfProcessors - 1);
-
 @freezed
 class EvaluationContext with _$EvaluationContext {
   const factory EvaluationContext({
-    required Variant variant,
-    required String initialFen,
-
     /// Unique ID to ensure engine is properly disposed when no more needed
     /// and a new engine instance is created per context (puzzle, game, etc).
     required ID contextId,
+    required Variant variant,
+    required String initialFen,
+    required int multiPv,
+    required int cores,
   }) = _EvaluationContext;
 }
 
@@ -44,9 +41,6 @@ const engineSupportedVariants = {
 @riverpod
 class EngineEvaluation extends _$EngineEvaluation {
   StockfishEngine? _engine;
-
-  int _multiPv = kDefaultLines;
-  int _cores = maxCores;
 
   @override
   ClientEval? build(EvaluationContext context) {
@@ -70,9 +64,9 @@ class EngineEvaluation extends _$EngineEvaluation {
 
     final work = Work(
       variant: context.variant,
-      threads: _cores,
+      threads: context.cores,
       maxDepth: kMaxDepth,
-      multiPv: _multiPv,
+      multiPv: context.multiPv,
       path: path,
       initialFen: context.initialFen,
       steps: IList(steps),
@@ -105,9 +99,4 @@ class EngineEvaluation extends _$EngineEvaluation {
     state = null;
     _engine?.stop();
   }
-
-  // ignore:avoid_setters_without_getters
-  set cores(int cores) => _cores = cores;
-  // ignore:avoid_setters_without_getters
-  set multiPv(int pv) => _multiPv = pv;
 }
