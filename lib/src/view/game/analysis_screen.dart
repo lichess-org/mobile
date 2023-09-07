@@ -63,11 +63,15 @@ class AnalysisScreen extends ConsumerWidget {
     final evalContext = ref.watch(
       ctrlProvider.select((value) => value.evaluationContext),
     );
+    final currentNode = ref.watch(
+      ctrlProvider.select((value) => value.currentNode),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.gameAnalysis),
         actions: [
-          _EngineDepth(evalContext),
+          _EngineDepth(evalContext, currentNode),
           SettingsButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
@@ -86,6 +90,9 @@ class AnalysisScreen extends ConsumerWidget {
     final evalContext = ref.watch(
       ctrlProvider.select((value) => value.evaluationContext),
     );
+    final currentNode = ref.watch(
+      ctrlProvider.select((value) => value.currentNode),
+    );
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -93,7 +100,7 @@ class AnalysisScreen extends ConsumerWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _EngineDepth(evalContext),
+            _EngineDepth(evalContext, currentNode),
             SettingsButton(
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
@@ -837,22 +844,25 @@ class _BottomBar extends ConsumerWidget {
 }
 
 class _EngineDepth extends ConsumerWidget {
-  const _EngineDepth(this.evalContext);
+  const _EngineDepth(this.evalContext, this.currentNode);
 
   final EvaluationContext evalContext;
+  final ViewNode currentNode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final depth = ref.watch(
-      engineEvaluationProvider(evalContext).select((value) => value?.depth),
-    );
+          engineEvaluationProvider(evalContext).select((value) => value?.depth),
+        ) ??
+        currentNode.eval?.depth;
 
     return depth != null
         ? Padding(
             padding: const EdgeInsets.only(right: 5.0),
             child: Tooltip(
               triggerMode: TooltipTriggerMode.tap,
-              message: context.l10n.depthX(depth.toString()),
+              message:
+                  '${context.l10n.depthX(depth.toString())} (Stockfish 16)',
               child: Container(
                 padding: const EdgeInsets.all(2.0),
                 decoration: BoxDecoration(
@@ -891,7 +901,6 @@ class _Preferences extends ConsumerWidget {
     final isSoundEnabled = ref.watch(
       generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
     );
-    final boardPrefs = ref.watch(boardPreferencesProvider);
 
     return SafeArea(
       child: ListView(
@@ -899,7 +908,7 @@ class _Preferences extends ConsumerWidget {
           Padding(
             padding: Styles.bodyPadding,
             child: Text(
-              context.l10n.settingsSettings,
+              context.l10n.analysisOptions,
               style: Styles.title,
             ),
           ),
