@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/game/analysis_ctrl.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -31,6 +32,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+
+const kChessNotationFontSize = 13.0;
 
 class AnalysisScreen extends ConsumerWidget {
   const AnalysisScreen({
@@ -60,15 +63,11 @@ class AnalysisScreen extends ConsumerWidget {
     final evalContext = ref.watch(
       ctrlProvider.select((value) => value.evaluationContext),
     );
-    final depth = ref.watch(
-      engineEvaluationProvider(evalContext).select((value) => value?.depth),
-    );
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.gameAnalysis),
         actions: [
-          if (depth != null) _EngineDepth(depth),
-          if (depth != null) const SizedBox(width: 5),
+          _EngineDepth(evalContext),
           SettingsButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
@@ -87,9 +86,6 @@ class AnalysisScreen extends ConsumerWidget {
     final evalContext = ref.watch(
       ctrlProvider.select((value) => value.evaluationContext),
     );
-    final depth = ref.watch(
-      engineEvaluationProvider(evalContext).select((value) => value?.depth),
-    );
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -97,8 +93,7 @@ class AnalysisScreen extends ConsumerWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (depth != null) _EngineDepth(depth),
-            if (depth != null) const SizedBox(width: 5),
+            _EngineDepth(evalContext),
             SettingsButton(
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
@@ -414,6 +409,8 @@ class _Engineline extends ConsumerWidget {
       ply += 1;
     });
 
+    final brightness = ref.watch(currentBrightnessProvider);
+
     final evalString = pvData.evalString;
     return AdaptiveInkWell(
       onTap: () => ref
@@ -426,8 +423,32 @@ class _Engineline extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(evalString),
+              Container(
+                decoration: BoxDecoration(
+                  color: pvData.winningSide == Side.black
+                      ? kEvalGaugeBackgroundColor
+                      : brightness == Brightness.light
+                          ? kEvalGaugeValueColorLightBg
+                          : kEvalGaugeValueColorDarkBg,
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 4.0,
+                  vertical: 2.0,
+                ),
+                child: Text(
+                  evalString,
+                  style: TextStyle(
+                    color: pvData.winningSide == Side.black
+                        ? Colors.white
+                        : Colors.black,
+                    fontSize: kEvalGaugeFontSize,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
               const SizedBox(width: 8.0),
               Expanded(
                 child: Text(
@@ -436,6 +457,7 @@ class _Engineline extends ConsumerWidget {
                   softWrap: false,
                   style: const TextStyle(
                     fontFamily: 'ChessFont',
+                    fontSize: kChessNotationFontSize,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -657,7 +679,8 @@ class InlineMove extends ConsumerWidget {
   final bool endSideline;
 
   static const borderRadius = BorderRadius.all(Radius.circular(8.0));
-  static const baseTextStyle = TextStyle(fontFamily: 'ChessFont', fontSize: 13);
+  static const baseTextStyle =
+      TextStyle(fontFamily: 'ChessFont', fontSize: kChessNotationFontSize);
 
   Color? _textColor(BuildContext context, double opacity) {
     return defaultTargetPlatform == TargetPlatform.android
@@ -674,7 +697,7 @@ class InlineMove extends ConsumerWidget {
     final textStyle = isSideline
         ? TextStyle(
             fontFamily: 'ChessFont',
-            fontSize: 13,
+            fontSize: kChessNotationFontSize,
             fontStyle: FontStyle.italic,
             color: _textColor(context, 0.7),
           )
@@ -814,37 +837,46 @@ class _BottomBar extends ConsumerWidget {
 }
 
 class _EngineDepth extends ConsumerWidget {
-  const _EngineDepth(this.depth);
+  const _EngineDepth(this.evalContext);
 
-  final int depth;
+  final EvaluationContext evalContext;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Tooltip(
-      triggerMode: TooltipTriggerMode.tap,
-      message: context.l10n.depthX(depth.toString()),
-      child: Container(
-        padding: const EdgeInsets.all(2.0),
-        decoration: BoxDecoration(
-          color: defaultTargetPlatform == TargetPlatform.android
-              ? Theme.of(context).colorScheme.secondary
-              : CupertinoTheme.of(context).primaryColor,
-          borderRadius: BorderRadius.circular(4.0),
-        ),
-        child: Text(
-          '$depth',
-          style: TextStyle(
-            fontSize: 12.0,
-            color: defaultTargetPlatform == TargetPlatform.android
-                ? Theme.of(context).colorScheme.onSecondary
-                : CupertinoTheme.of(context).primaryContrastingColor,
-            fontFeatures: const [
-              FontFeature.tabularFigures(),
-            ],
-          ),
-        ),
-      ),
+    final depth = ref.watch(
+      engineEvaluationProvider(evalContext).select((value) => value?.depth),
     );
+
+    return depth != null
+        ? Padding(
+            padding: const EdgeInsets.only(right: 5.0),
+            child: Tooltip(
+              triggerMode: TooltipTriggerMode.tap,
+              message: context.l10n.depthX(depth.toString()),
+              child: Container(
+                padding: const EdgeInsets.all(2.0),
+                decoration: BoxDecoration(
+                  color: defaultTargetPlatform == TargetPlatform.android
+                      ? Theme.of(context).colorScheme.secondary
+                      : CupertinoTheme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                child: Text(
+                  '$depth',
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    color: defaultTargetPlatform == TargetPlatform.android
+                        ? Theme.of(context).colorScheme.onSecondary
+                        : CupertinoTheme.of(context).primaryContrastingColor,
+                    fontFeatures: const [
+                      FontFeature.tabularFigures(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          )
+        : const SizedBox.shrink();
   }
 }
 

@@ -65,6 +65,16 @@ class PvData with _$PvData {
 
   String get evalString => _evalString(cp, mate);
 
+  Side? get winningSide {
+    if (mate != null) {
+      return mate! > 0 ? Side.white : Side.black;
+    } else if (cp != null) {
+      return cp! > 0 ? Side.white : Side.black;
+    } else {
+      return null;
+    }
+  }
+
   List<String> sanMoves(Position currentPosition) {
     var pos = currentPosition;
     final List<String> res = [];

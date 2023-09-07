@@ -12,9 +12,10 @@ import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 part 'engine_gauge.freezed.dart';
 
 const double kEvalGaugeSize = 26.0;
-const Color _kEvalGaugeBackgroundColor = Color(0xFF444444);
-const Color _kEvalGaugeValueColorDarkBg = Color(0xEEEEEEEE);
-const Color _kEvalGaugeValueColorLightBg = Color(0xFFFFFFFF);
+const double kEvalGaugeFontSize = 11.0;
+const Color kEvalGaugeBackgroundColor = Color(0xFF444444);
+const Color kEvalGaugeValueColorDarkBg = Color(0xEEEEEEEE);
+const Color kEvalGaugeValueColorLightBg = Color(0xFFFFFFFF);
 
 enum EngineGaugeDisplayMode {
   vertical,
@@ -142,17 +143,17 @@ class _EvalGaugeState extends ConsumerState<_EvalGauge> {
             child: CustomPaint(
               painter: widget.displayMode == EngineGaugeDisplayMode.vertical
                   ? _EvalGaugeVerticalPainter(
-                      backgroundColor: _kEvalGaugeBackgroundColor,
+                      backgroundColor: kEvalGaugeBackgroundColor,
                       valueColor: brightness == Brightness.dark
-                          ? _kEvalGaugeValueColorDarkBg
-                          : _kEvalGaugeValueColorLightBg,
+                          ? kEvalGaugeValueColorDarkBg
+                          : kEvalGaugeValueColorLightBg,
                       value: value,
                     )
                   : _EvalGaugeHorizontalPainter(
-                      backgroundColor: _kEvalGaugeBackgroundColor,
+                      backgroundColor: kEvalGaugeBackgroundColor,
                       valueColor: brightness == Brightness.dark
-                          ? _kEvalGaugeValueColorDarkBg
-                          : _kEvalGaugeValueColorLightBg,
+                          ? kEvalGaugeValueColorDarkBg
+                          : kEvalGaugeValueColorLightBg,
                       value: value,
                       textDirection: textDirection,
                     ),
@@ -168,7 +169,7 @@ class _EvalGaugeState extends ConsumerState<_EvalGauge> {
                           evalDisplay ?? '',
                           style: TextStyle(
                             color: toValue >= 0.5 ? Colors.black : Colors.white,
-                            fontSize: 11.0,
+                            fontSize: kEvalGaugeFontSize,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
