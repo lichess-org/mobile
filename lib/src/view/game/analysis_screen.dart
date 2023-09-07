@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/debounced.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -34,6 +35,7 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 const kChessNotationFontSize = 13.0;
+const kFastReplayDebounceDelay = Duration(milliseconds: 100);
 
 class AnalysisScreen extends ConsumerWidget {
   const AnalysisScreen({
@@ -379,10 +381,13 @@ class _EngineLines extends ConsumerWidget {
         vertical: isTablet ? 16.0 : 0.0,
         horizontal: isTablet ? 16.0 : 0.0,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: content,
+      child: Debounced(
+        delay: kFastReplayDebounceDelay,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: content,
+        ),
       ),
     );
   }
@@ -524,7 +529,7 @@ class _InlineTreeView extends ConsumerStatefulWidget {
 
 class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
   final currentMoveKey = GlobalKey();
-  final _debounce = Debouncer(const Duration(milliseconds: 100));
+  final _debounce = Debouncer(kFastReplayDebounceDelay);
 
   @override
   void initState() {
