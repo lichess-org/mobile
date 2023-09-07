@@ -127,10 +127,15 @@ class AnalysisCtrl extends _$AnalysisCtrl {
         .read(analysisPreferencesProvider.notifier)
         .setNumEvalLines(numEvalLines);
 
+    _stopEngineEval();
+
+    _root.updateAll((node) => node.eval = null);
+
     state = state.copyWith(
       evaluationContext: state.evaluationContext.copyWith(
         multiPv: numEvalLines,
       ),
+      currentNode: _root.nodeAt(state.currentPath).view,
     );
     _startEngineEval();
   }
@@ -139,6 +144,8 @@ class AnalysisCtrl extends _$AnalysisCtrl {
     ref
         .read(analysisPreferencesProvider.notifier)
         .setEngineCores(numEngineCores);
+
+    _stopEngineEval();
 
     state = state.copyWith(
       evaluationContext: state.evaluationContext.copyWith(
@@ -213,6 +220,10 @@ class AnalysisCtrl extends _$AnalysisCtrl {
             (t) => _root.updateAt(t.$1.path, (node) => node.eval = t.$2),
           ),
     );
+  }
+
+  void _stopEngineEval() {
+    ref.read(engineEvaluationProvider(state.evaluationContext).notifier).stop();
   }
 }
 
