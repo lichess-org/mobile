@@ -997,27 +997,6 @@ class _Preferences extends ConsumerWidget {
                   .toggleSoundEnabled();
             },
           ),
-          SwitchSettingTile(
-            title: const Text('Haptic feedback'),
-            value: boardPrefs.hapticFeedback,
-            onChanged: (value) {
-              ref
-                  .read(boardPreferencesProvider.notifier)
-                  .toggleHapticFeedback();
-            },
-          ),
-          SwitchSettingTile(
-            title: Text(
-              context.l10n.preferencesPieceAnimation,
-              maxLines: 2,
-            ),
-            value: boardPrefs.pieceAnimation,
-            onChanged: (value) {
-              ref
-                  .read(boardPreferencesProvider.notifier)
-                  .togglePieceAnimation();
-            },
-          ),
         ],
       ),
     );
