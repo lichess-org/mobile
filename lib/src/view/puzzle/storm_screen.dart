@@ -161,11 +161,9 @@ class _BodyState extends ConsumerState<_Body>
       ],
     );
 
-    return !puzzleState.clock.isActive
-        ? content
-        : WillPopScope(
-            child: content,
-            onWillPop: () async {
+    return WillPopScope(
+      onWillPop: puzzleState.clock.isActive
+          ? () async {
               final result = await showAdaptiveDialog<bool>(
                 context: context,
                 builder: (context) => YesNoDialog(
@@ -180,8 +178,10 @@ class _BodyState extends ConsumerState<_Body>
                 ),
               );
               return result ?? false;
-            },
-          );
+            }
+          : null,
+      child: content,
+    );
   }
 }
 

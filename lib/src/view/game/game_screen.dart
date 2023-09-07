@@ -387,12 +387,10 @@ class _Body extends ConsumerWidget {
       ],
     );
 
-    return gameState.game.playable
-        ? WillPopScope(
-            onWillPop: () async => false,
-            child: content,
-          )
-        : content;
+    return WillPopScope(
+      onWillPop: gameState.game.playable ? () async => false : null,
+      child: content,
+    );
   }
 }
 
