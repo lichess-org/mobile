@@ -148,11 +148,9 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                 final isTablet = defaultBoardSize > kTabletThreshold;
                 final isSmallScreen =
                     constraints.maxHeight < kSmallHeightScreenThreshold;
-                final boardSize = isTablet
+                final boardSize = isTablet || isSmallScreen
                     ? defaultBoardSize - 16.0 * 2
-                    : (isSmallScreen
-                        ? defaultBoardSize - 16.0
-                        : defaultBoardSize);
+                    : defaultBoardSize;
 
                 return aspectRatio > 1
                     ? Row(
@@ -199,7 +197,8 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        // don't use stretch here because board background size would be wrong
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           _ColumnTopTable(widget.ctrlProvider),
                           _Board(widget.ctrlProvider, boardSize),
