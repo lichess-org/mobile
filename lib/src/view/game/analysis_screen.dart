@@ -337,11 +337,6 @@ class _ColumnTopTable extends ConsumerWidget {
   }
 }
 
-const _engineLinePlaceHolder = SizedBox(
-  height: kEvalGaugeSize,
-  child: SizedBox.shrink(),
-);
-
 class _EngineLines extends ConsumerWidget {
   const _EngineLines(this.ctrlProvider, {required this.isTablet});
   final AnalysisCtrlProvider ctrlProvider;
@@ -355,40 +350,38 @@ class _EngineLines extends ConsumerWidget {
         (p) => p.numEvalLines,
       ),
     );
-    final ceval =
-        ref.watch(engineEvaluationProvider(analysisState.evaluationContext));
+    final eval =
+        ref.watch(engineEvaluationProvider(analysisState.evaluationContext)) ??
+            analysisState.currentNode.eval;
 
-    final List<Widget> emptyLines = List.filled(
+    final emptyLines = List.filled(
       numEvalLines,
-      _engineLinePlaceHolder,
+      _Engineline.empty(ctrlProvider),
     );
 
     final content = !analysisState.position.isGameOver
-        ? (ceval != null
-            ? ceval.pvs
+        ? (eval != null
+            ? eval.pvs
+                .take(numEvalLines)
                 .map(
                   (pv) => _Engineline(
                     ctrlProvider,
-                    pv.sanMoves(ceval.position),
+                    pv.sanMoves(eval.position),
                     analysisState.currentNode.ply,
                     pv,
                   ),
                 )
                 .toList()
-            : (analysisState.currentNode.eval != null
-                ? analysisState.currentNode.eval!.pvs
-                    .take(numEvalLines)
-                    .map(
-                      (pv) => _Engineline(
-                        ctrlProvider,
-                        pv.sanMoves(analysisState.currentNode.position),
-                        analysisState.currentNode.ply,
-                        pv,
-                      ),
-                    )
-                    .toList()
-                : emptyLines))
+            : emptyLines)
         : emptyLines;
+
+    if (content.length < numEvalLines) {
+      final padding = List.filled(
+        numEvalLines - content.length,
+        _Engineline.empty(ctrlProvider),
+      );
+      content.addAll(padding);
+    }
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -412,6 +405,11 @@ class _Engineline extends ConsumerWidget {
     this.pvData,
   );
 
+  const _Engineline.empty(this.ctrlProvider)
+      : moves = const [],
+        pvData = const PvData(moves: IListConst([])),
+        initialPly = 0;
+
   final AnalysisCtrlProvider ctrlProvider;
   final List<String> moves;
   final int initialPly;
@@ -419,6 +417,13 @@ class _Engineline extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (moves.isEmpty) {
+      return const SizedBox(
+        height: kEvalGaugeSize,
+        child: SizedBox.shrink(),
+      );
+    }
+
     final builder = StringBuffer();
     var ply = initialPly + 1;
     moves.forEachIndexed((i, s) {
@@ -851,7 +856,6 @@ class _BottomBar extends ConsumerWidget {
       context: context,
       actions: [
         BottomSheetAction(
-          leading: const Icon(Icons.swap_vert),
           label: Text(context.l10n.flipBoard),
           onPressed: (context) {
             ref.read(ctrlProvider.notifier).toggleBoard();

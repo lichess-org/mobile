@@ -53,7 +53,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
 
     final currentPath = _root.mainlinePath;
 
-    // don't use ref.watch here: we don't want to loose all state when the
+    // don't use ref.watch here: we don't want to clear all state when the
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
 
@@ -82,6 +82,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
             (t) => _root.updateAt(t.$1.path, (node) => node.eval = t.$2),
           ),
     );
+
     return AnalysisCtrlState(
       id: id,
       initialFen: _root.fen,
@@ -137,6 +138,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       ),
       currentNode: _root.nodeAt(state.currentPath).view,
     );
+
     _startEngineEval();
   }
 
@@ -152,6 +154,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
         cores: numEngineCores,
       ),
     );
+
     _startEngineEval();
   }
 
