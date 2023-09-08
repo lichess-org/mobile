@@ -4,6 +4,7 @@ import 'package:stream_transform/stream_transform.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:lichess_mobile/src/app_dependencies.dart';
 
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -18,7 +19,6 @@ part 'engine_evaluation.freezed.dart';
 
 // TODO: make this configurable
 const kMaxDepth = 22;
-const kDefaultLines = 2;
 
 @freezed
 class EvaluationContext with _$EvaluationContext {
@@ -62,9 +62,15 @@ class EngineEvaluation extends _$EngineEvaluation {
 
     _engine ??= StockfishEngine();
 
+    // requireValue is possible because appDependenciesProvider is loaded before
+    // anything. See: lib/src/app.dart
+    final maxMemory =
+        ref.read(appDependenciesProvider).requireValue.engineMaxMemoryInMb;
+
     final work = Work(
       variant: context.variant,
       threads: context.cores,
+      hashSize: maxMemory,
       maxDepth: kMaxDepth,
       multiPv: context.multiPv,
       path: path,

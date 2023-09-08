@@ -97,6 +97,7 @@ Future<Widget> buildTestApp(
           userSession: userSession,
           database: MockDatabase(),
           sri: 'test',
+          engineMaxMemoryInMb: 16,
         );
       }),
       ...overrides ?? [],
