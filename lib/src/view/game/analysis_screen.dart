@@ -936,24 +936,6 @@ class _Preferences extends ConsumerWidget {
               style: Styles.title,
             ),
           ),
-          SwitchSettingTile(
-            title: Text(context.l10n.bestMoveArrow),
-            value: prefs.showBestMoveArrow,
-            onChanged: state.isEngineAvailable
-                ? (value) => ref
-                    .read(analysisPreferencesProvider.notifier)
-                    .toggleShowBestMoveArrow()
-                : null,
-          ),
-          SwitchSettingTile(
-            title: Text(context.l10n.evaluationGauge),
-            value: prefs.showEvaluationGauge,
-            onChanged: state.isEngineAvailable
-                ? (value) => ref
-                    .read(analysisPreferencesProvider.notifier)
-                    .toggleShowEvaluationGauge()
-                : null,
-          ),
           Opacity(
             opacity: state.isEngineAvailable ? 1.0 : 0.5,
             child: PlatformListTile(
@@ -1017,6 +999,24 @@ class _Preferences extends ConsumerWidget {
                 ),
               ),
             ),
+          SwitchSettingTile(
+            title: Text(context.l10n.bestMoveArrow),
+            value: prefs.showBestMoveArrow,
+            onChanged: state.isEngineAvailable
+                ? (value) => ref
+                    .read(analysisPreferencesProvider.notifier)
+                    .toggleShowBestMoveArrow()
+                : null,
+          ),
+          SwitchSettingTile(
+            title: Text(context.l10n.evaluationGauge),
+            value: prefs.showEvaluationGauge,
+            onChanged: state.isEngineAvailable
+                ? (value) => ref
+                    .read(analysisPreferencesProvider.notifier)
+                    .toggleShowEvaluationGauge()
+                : null,
+          ),
           Divider(
             height: 20,
             indent: 20,
