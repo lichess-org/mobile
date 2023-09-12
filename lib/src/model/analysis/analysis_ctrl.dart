@@ -1,6 +1,8 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -11,8 +13,7 @@ import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'game.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 
 part 'analysis_ctrl.g.dart';
 part 'analysis_ctrl.freezed.dart';
