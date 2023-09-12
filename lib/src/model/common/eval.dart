@@ -19,6 +19,14 @@ class ClientEval with _$ClientEval {
     required int millis,
     required int maxDepth,
     required Position position,
+
+    /// Whether the engine is still computing.
+    ///
+    /// If false, the evaluation can be considered final, as in the engine replied
+    /// with the `bestmove` uci command.
+    /// Thus, cached evaluations, from cloud or local, can be distinguished from
+    /// the currently computed evaluation.
+    required bool isComputing,
     int? cp,
     int? mate,
   }) = _ClientEval;

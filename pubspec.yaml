@@ -62,6 +62,7 @@ dependencies:
   flutter_spinkit: ^5.2.0
   wakelock_plus: ^1.1.1
   system_info_plus: ^0.0.5
+  popover: ^0.2.8+2
 
 dev_dependencies:
   build_runner: ^2.3.2
@@ -85,6 +86,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/stockfish/
     - assets/sounds/futuristic/
     - assets/sounds/lisp/
     - assets/sounds/nes/

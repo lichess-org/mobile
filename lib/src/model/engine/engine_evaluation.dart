@@ -17,8 +17,7 @@ import 'work.dart';
 part 'engine_evaluation.g.dart';
 part 'engine_evaluation.freezed.dart';
 
-// TODO: make this configurable
-const kMaxDepth = 22;
+const kMaxEngineDepth = 22;
 
 @freezed
 class EvaluationContext with _$EvaluationContext {
@@ -71,7 +70,7 @@ class EngineEvaluation extends _$EngineEvaluation {
       variant: context.variant,
       threads: context.cores,
       hashSize: maxMemory,
-      maxDepth: kMaxDepth,
+      maxDepth: kMaxEngineDepth,
       multiPv: context.multiPv,
       path: path,
       initialFen: context.initialFen,
@@ -81,7 +80,7 @@ class EngineEvaluation extends _$EngineEvaluation {
 
     // cancel evaluation if we already have a cached eval at max depth
     final cachedEval = work.evalCache;
-    if (cachedEval != null && cachedEval.depth >= kMaxDepth) {
+    if (cachedEval != null && cachedEval.depth >= kMaxEngineDepth) {
       state = null;
       return null;
     }

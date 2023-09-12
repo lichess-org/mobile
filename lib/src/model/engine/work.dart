@@ -20,7 +20,6 @@ class Work with _$Work {
     required Variant variant,
     required int threads,
     int? hashSize,
-    bool? stopRequested,
     required UciPath path,
     required int maxDepth,
     required int multiPv,

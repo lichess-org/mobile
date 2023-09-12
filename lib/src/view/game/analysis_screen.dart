@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:popover/popover.dart';
+
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -880,36 +882,81 @@ class _EngineDepth extends ConsumerWidget {
         currentNode.eval?.depth;
 
     return depth != null
-        ? Padding(
-            padding: const EdgeInsets.only(right: 5.0),
-            child: Tooltip(
-              triggerMode: TooltipTriggerMode.tap,
-              message:
-                  '${context.l10n.depthX(depth.toString())} (Stockfish 16)',
-              child: Container(
-                padding: const EdgeInsets.all(2.0),
-                decoration: BoxDecoration(
+        ? AppBarTextButton(
+            onPressed: () {
+              showPopover(
+                context: context,
+                bodyBuilder: (context) {
+                  return _StockfishInfo(evalContext, currentNode);
+                },
+                direction: PopoverDirection.top,
+                width: 300,
+                backgroundColor: defaultTargetPlatform == TargetPlatform.android
+                    ? Theme.of(context).dialogBackgroundColor
+                    : CupertinoDynamicColor.resolve(
+                        CupertinoColors.tertiarySystemBackground,
+                        context,
+                      ),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.all(2.0),
+              decoration: BoxDecoration(
+                color: defaultTargetPlatform == TargetPlatform.android
+                    ? Theme.of(context).colorScheme.secondary
+                    : CupertinoTheme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+              child: Text(
+                '$depth',
+                style: TextStyle(
+                  fontSize: 12.0,
                   color: defaultTargetPlatform == TargetPlatform.android
-                      ? Theme.of(context).colorScheme.secondary
-                      : CupertinoTheme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
-                child: Text(
-                  '$depth',
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: defaultTargetPlatform == TargetPlatform.android
-                        ? Theme.of(context).colorScheme.onSecondary
-                        : CupertinoTheme.of(context).primaryContrastingColor,
-                    fontFeatures: const [
-                      FontFeature.tabularFigures(),
-                    ],
-                  ),
+                      ? Theme.of(context).colorScheme.onSecondary
+                      : CupertinoTheme.of(context).primaryContrastingColor,
+                  fontFeatures: const [
+                    FontFeature.tabularFigures(),
+                  ],
                 ),
               ),
             ),
           )
         : const SizedBox.shrink();
+  }
+}
+
+class _StockfishInfo extends ConsumerWidget {
+  const _StockfishInfo(this.evalContext, this.currentNode);
+
+  final EvaluationContext evalContext;
+  final ViewNode currentNode;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final eval =
+        ref.watch(engineEvaluationProvider(evalContext)) ?? currentNode.eval;
+
+    final knps =
+        eval?.isComputing == true ? ', ${eval?.knps.round()}k nodes/s' : '';
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        PlatformListTile(
+          leading: Image.asset(
+            'assets/images/stockfish/icon.png',
+            width: 44,
+            height: 44,
+          ),
+          title: const Text('Stockfish 16'),
+          subtitle: Text(
+            context.l10n.depthX(
+              '${eval?.depth ?? 0}/$kMaxEngineDepth$knps',
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 
