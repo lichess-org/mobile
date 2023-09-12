@@ -81,6 +81,7 @@ class AnalysisScreen extends ConsumerWidget {
           SettingsButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
+              showDragHandle: true,
               builder: (_) => _Preferences(ctrlProvider),
             ),
           ),
@@ -109,6 +110,7 @@ class AnalysisScreen extends ConsumerWidget {
             SettingsButton(
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
+                showDragHandle: true,
                 builder: (_) => _Preferences(ctrlProvider),
               ),
             ),

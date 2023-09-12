@@ -173,6 +173,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
           SettingsButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
+              showDragHandle: true,
               builder: (_) => const _Preferences(),
             ),
           ),
@@ -201,6 +202,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
         trailing: SettingsButton(
           onPressed: () => showAdaptiveBottomSheet<void>(
             context: context,
+            showDragHandle: true,
             builder: (_) => const _Preferences(),
           ),
         ),
@@ -487,7 +489,7 @@ class _GameBottomBar extends ConsumerWidget {
                 label: context.l10n.gameAnalysis,
                 highlighted: true,
                 shortLabel: context.l10n.gameAnalysis,
-                icon: Icons.biotech,
+                icon: CupertinoIcons.gauge,
                 onTap: () => pushPlatformRoute(
                   context,
                   fullscreenDialog: true,
