@@ -174,7 +174,6 @@ class _GameScreenState extends ConsumerState<GameScreen>
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               builder: (_) => const _Preferences(),
-              showDragHandle: true,
             ),
           ),
         ],
@@ -203,7 +202,6 @@ class _GameScreenState extends ConsumerState<GameScreen>
           onPressed: () => showAdaptiveBottomSheet<void>(
             context: context,
             builder: (_) => const _Preferences(),
-            showDragHandle: true,
           ),
         ),
       ),
@@ -408,6 +406,7 @@ class _Preferences extends ConsumerWidget {
 
     return SafeArea(
       child: ListView(
+        shrinkWrap: true,
         children: [
           Padding(
             padding: Styles.bodyPadding,

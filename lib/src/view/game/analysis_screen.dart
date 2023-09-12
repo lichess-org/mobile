@@ -82,7 +82,6 @@ class AnalysisScreen extends ConsumerWidget {
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               builder: (_) => _Preferences(ctrlProvider),
-              showDragHandle: true,
             ),
           ),
         ],
@@ -111,7 +110,6 @@ class AnalysisScreen extends ConsumerWidget {
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
                 builder: (_) => _Preferences(ctrlProvider),
-                showDragHandle: true,
               ),
             ),
           ],
@@ -976,6 +974,7 @@ class _Preferences extends ConsumerWidget {
 
     return SafeArea(
       child: ListView(
+        shrinkWrap: true,
         children: [
           Padding(
             padding: Styles.bodyPadding,
@@ -1064,12 +1063,6 @@ class _Preferences extends ConsumerWidget {
                     .read(analysisPreferencesProvider.notifier)
                     .toggleShowEvaluationGauge()
                 : null,
-          ),
-          Divider(
-            height: 20,
-            indent: 20,
-            endIndent: 20,
-            color: Theme.of(context).unselectedWidgetColor,
           ),
           SwitchSettingTile(
             title: Text(context.l10n.sound),
