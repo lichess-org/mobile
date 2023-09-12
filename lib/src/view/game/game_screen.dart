@@ -497,6 +497,7 @@ class _GameBottomBar extends ConsumerWidget {
                     steps: gameState.game.steps,
                     orientation: gameState.game.youAre!,
                     id: gameState.game.meta.id,
+                    title: context.l10n.gameAnalysis,
                   ),
                 ),
               ),

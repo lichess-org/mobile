@@ -45,12 +45,14 @@ class AnalysisScreen extends ConsumerWidget {
     required this.steps,
     required this.orientation,
     required this.id,
+    this.title,
   });
 
   final Variant variant;
   final IList<GameStep> steps;
   final Side orientation;
   final ID id;
+  final String? title;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -73,7 +75,7 @@ class AnalysisScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.gameAnalysis),
+        title: Text(title ?? context.l10n.analysis),
         actions: [
           _EngineDepth(evalContext, currentNode),
           SettingsButton(
@@ -100,7 +102,7 @@ class AnalysisScreen extends ConsumerWidget {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(context.l10n.analysis),
+        middle: Text(title ?? context.l10n.analysis),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

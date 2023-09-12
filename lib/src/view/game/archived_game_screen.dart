@@ -241,6 +241,7 @@ class _BottomBar extends ConsumerWidget {
                             .steps,
                         orientation: Side.white,
                         id: gameData.id,
+                        title: context.l10n.gameAnalysis,
                       ),
                     )
                 : null,
