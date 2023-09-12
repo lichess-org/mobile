@@ -892,7 +892,7 @@ class _EngineDepth extends ConsumerWidget {
                   return _StockfishInfo(evalContext, currentNode);
                 },
                 direction: PopoverDirection.top,
-                width: 300,
+                width: 240,
                 backgroundColor: defaultTargetPlatform == TargetPlatform.android
                     ? Theme.of(context).dialogBackgroundColor
                     : CupertinoDynamicColor.resolve(
@@ -938,8 +938,7 @@ class _StockfishInfo extends ConsumerWidget {
     final eval =
         ref.watch(engineEvaluationProvider(evalContext)) ?? currentNode.eval;
 
-    final knps =
-        eval?.isComputing == true ? ', ${eval?.knps.round()}k nodes/s' : '';
+    final knps = eval?.isComputing == true ? ', ${eval?.knps.round()}kn/s' : '';
 
     return Column(
       mainAxisSize: MainAxisSize.min,
