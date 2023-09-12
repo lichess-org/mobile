@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'dart:io';
 import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -11,7 +10,7 @@ part 'analysis_preferences.g.dart';
 
 const _prefKey = 'preferences.board';
 
-final maxEngineCores = math.max(1, Platform.numberOfProcessors - 1);
+final maxEngineCores = Platform.numberOfProcessors - 1;
 
 @Riverpod(keepAlive: true)
 class AnalysisPreferences extends _$AnalysisPreferences {
