@@ -50,7 +50,8 @@ class ArchivedGameScreen extends ConsumerWidget {
         gameData: gameData,
         orientation: orientation,
       ),
-      bottomNavigationBar: _BottomBar(gameData: gameData),
+      bottomNavigationBar:
+          _BottomBar(gameData: gameData, orientation: orientation),
     );
   }
 
@@ -70,7 +71,7 @@ class ArchivedGameScreen extends ConsumerWidget {
                 orientation: orientation,
               ),
             ),
-            _BottomBar(gameData: gameData),
+            _BottomBar(gameData: gameData, orientation: orientation),
           ],
         ),
       ),
@@ -205,8 +206,9 @@ class _BoardBody extends ConsumerWidget {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.gameData});
+  const _BottomBar({required this.gameData, required this.orientation});
 
+  final Side orientation;
   final ArchivedGameData gameData;
 
   @override
@@ -239,7 +241,7 @@ class _BottomBar extends ConsumerWidget {
                             .requireValue
                             .$1
                             .steps,
-                        orientation: Side.white,
+                        orientation: orientation,
                         id: gameData.id,
                         title: context.l10n.gameAnalysis,
                       ),
