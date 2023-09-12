@@ -488,7 +488,7 @@ class _GameBottomBar extends ConsumerWidget {
               BottomBarButton(
                 label: context.l10n.gameAnalysis,
                 highlighted: true,
-                shortLabel: context.l10n.gameAnalysis,
+                shortLabel: 'Analysis',
                 icon: CupertinoIcons.gauge,
                 onTap: () => pushPlatformRoute(
                   context,

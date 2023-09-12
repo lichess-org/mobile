@@ -229,7 +229,7 @@ class _BottomBar extends ConsumerWidget {
             icon: const Icon(Icons.menu),
           ),
           BottomBarIconButton(
-            semanticsLabel: context.l10n.menu,
+            semanticsLabel: context.l10n.gameAnalysis,
             onPressed: ref.read(gameCursorProvider(gameData.id)).hasValue
                 ? () => pushPlatformRoute(
                       context,
