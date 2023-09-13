@@ -347,6 +347,7 @@ class BottomBarButton extends StatelessWidget {
     this.showAndroidTooltip = true,
     this.highlighted = false,
     this.showAndroidShortLabel = false,
+    super.key,
   });
 
   final IconData icon;
@@ -591,7 +592,7 @@ class RepeatButton extends StatefulWidget {
       Duration(milliseconds: 300),
       Duration(milliseconds: 150),
     ],
-    this.holdDelay = const Duration(milliseconds: 50),
+    this.holdDelay = const Duration(milliseconds: 30),
   });
 
   final Widget child;

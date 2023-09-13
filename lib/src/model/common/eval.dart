@@ -18,6 +18,15 @@ class ClientEval with _$ClientEval {
     required IList<PvData> pvs,
     required int millis,
     required int maxDepth,
+    required Position position,
+
+    /// Whether the engine is still computing.
+    ///
+    /// If false, the evaluation can be considered final, as in the engine replied
+    /// with the `bestmove` uci command.
+    /// Thus, cached evaluations, from cloud or local, can be distinguished from
+    /// the currently computed evaluation.
+    required bool isComputing,
     int? cp,
     int? mate,
   }) = _ClientEval;
@@ -30,16 +39,11 @@ class ClientEval with _$ClientEval {
     return Move.fromUci(uci);
   }
 
-  String get evalString {
-    if (cp != null) {
-      final e = math.max(math.min((cp! / 10).round() / 10, 99), -99);
-      return (e > 0 ? '+' : '') + e.toStringAsFixed(1);
-    } else if (mate != null) {
-      return '#$mate';
-    } else {
-      return '-';
-    }
+  IList<Move?> get bestMoves {
+    return pvs.map((e) => Move.fromUci(e.moves.first)).toIList();
   }
+
+  String get evalString => _evalString(cp, mate);
 
   /// The winning chances for the given [Side].
   ///
@@ -60,11 +64,35 @@ class ClientEval with _$ClientEval {
 
 @freezed
 class PvData with _$PvData {
+  const PvData._();
   const factory PvData({
     required IList<UCIMove> moves,
     int? mate,
     int? cp,
   }) = _PvData;
+
+  String get evalString => _evalString(cp, mate);
+
+  Side? get winningSide {
+    if (mate != null) {
+      return mate! > 0 ? Side.white : Side.black;
+    } else if (cp != null) {
+      return cp! > 0 ? Side.white : Side.black;
+    } else {
+      return null;
+    }
+  }
+
+  List<String> sanMoves(Position currentPosition) {
+    var pos = currentPosition;
+    final List<String> res = [];
+    for (final move in moves) {
+      final (newPos, san) = pos.playToSan(Move.fromUci(move)!);
+      res.add(san);
+      pos = newPos;
+    }
+    return res;
+  }
 }
 
 double _toPov(Side side, double diff) => side == Side.white ? diff : -diff;
@@ -83,4 +111,15 @@ double _mateWinningChances(int mate) {
   final cp = (21 - math.min(10, mate.abs())) * 100;
   final signed = cp * (mate > 0 ? 1 : -1);
   return _rawWinningChances(signed);
+}
+
+String _evalString(int? cp, int? mate) {
+  if (cp != null) {
+    final e = math.max(math.min((cp / 10).round() / 10, 99), -99);
+    return e > 0 ? '+${e.toStringAsFixed(1)}' : e.toStringAsFixed(1);
+  } else if (mate != null) {
+    return '#$mate';
+  } else {
+    return '-';
+  }
 }

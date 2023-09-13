@@ -18,6 +18,8 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -177,8 +179,8 @@ class _GameScreenState extends ConsumerState<GameScreen>
           SettingsButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
-              builder: (_) => const _Preferences(),
               showDragHandle: true,
+              builder: (_) => const _Preferences(),
             ),
           ),
         ],
@@ -206,8 +208,8 @@ class _GameScreenState extends ConsumerState<GameScreen>
         trailing: SettingsButton(
           onPressed: () => showAdaptiveBottomSheet<void>(
             context: context,
-            builder: (_) => const _Preferences(),
             showDragHandle: true,
+            builder: (_) => const _Preferences(),
           ),
         ),
       ),
@@ -391,12 +393,10 @@ class _Body extends ConsumerWidget {
       ],
     );
 
-    return gameState.game.playable
-        ? WillPopScope(
-            onWillPop: () async => false,
-            child: content,
-          )
-        : content;
+    return WillPopScope(
+      onWillPop: gameState.game.playable ? () async => false : null,
+      child: content,
+    );
   }
 }
 
@@ -414,6 +414,7 @@ class _Preferences extends ConsumerWidget {
 
     return SafeArea(
       child: ListView(
+        shrinkWrap: true,
         children: [
           Padding(
             padding: Styles.bodyPadding,
@@ -489,6 +490,24 @@ class _GameBottomBar extends ConsumerWidget {
               },
               icon: Icons.menu,
             ),
+            if (gameState.game.finished)
+              BottomBarButton(
+                label: context.l10n.gameAnalysis,
+                highlighted: true,
+                shortLabel: 'Analysis',
+                icon: CupertinoIcons.gauge,
+                onTap: () => pushPlatformRoute(
+                  context,
+                  fullscreenDialog: true,
+                  builder: (_) => AnalysisScreen(
+                    variant: gameState.game.meta.variant,
+                    steps: gameState.game.steps,
+                    orientation: gameState.game.youAre ?? Side.white,
+                    id: gameState.game.meta.id,
+                    title: context.l10n.gameAnalysis,
+                  ),
+                ),
+              ),
             if (gameState.game.playable &&
                 gameState.game.opponent?.offeringDraw == true)
               BottomBarButton(

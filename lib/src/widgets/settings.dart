@@ -53,7 +53,7 @@ class SwitchSettingTile extends StatelessWidget {
     required this.title,
     this.subtitle,
     required this.value,
-    required this.onChanged,
+    this.onChanged,
     this.leading,
     super.key,
   });
@@ -61,7 +61,7 @@ class SwitchSettingTile extends StatelessWidget {
   final Widget title;
   final Widget? subtitle;
   final bool value;
-  final void Function(bool value) onChanged;
+  final void Function(bool value)? onChanged;
   final Widget? leading;
 
   @override

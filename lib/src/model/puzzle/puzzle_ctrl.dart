@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
+import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -390,8 +391,8 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     if (!replaying) {
       final isForward = path.size > state.currentPath.size;
       if (isForward) {
-        final isCheck = sanMove.san.contains('+');
-        if (sanMove.san.contains('x')) {
+        final isCheck = sanMove.isCheck;
+        if (sanMove.isCapture) {
           ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
         } else {
           ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
@@ -400,7 +401,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     } else {
       // when replaying moves fast we don't want haptic feedback
       final soundService = ref.read(soundServiceProvider);
-      if (sanMove.san.contains('x')) {
+      if (sanMove.isCapture) {
         soundService.play(Sound.capture);
       } else {
         soundService.play(Sound.move);
@@ -442,6 +443,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
           .start(
             state.currentPath,
             _gameTree.nodesOn(state.currentPath).map(Step.fromNode),
+            state.node.position,
             shouldEmit: (work) => work.path == state.currentPath,
           )
           ?.forEach((t) {
@@ -532,6 +534,8 @@ class PuzzleCtrlState with _$PuzzleCtrlState {
         variant: Variant.standard,
         initialFen: initialFen,
         contextId: puzzle.puzzle.id,
+        multiPv: 1,
+        cores: maxEngineCores,
       );
 
   Position get position => node.position;

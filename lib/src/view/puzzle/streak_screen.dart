@@ -228,10 +228,10 @@ class _BodyState extends ConsumerState<_Body>
       ],
     );
 
-    return puzzleState.streak!.index == 0 || puzzleState.streak!.finished
-        ? content
-        : WillPopScope(
-            onWillPop: () async {
+    return WillPopScope(
+      onWillPop: puzzleState.streak!.index == 0 || puzzleState.streak!.finished
+          ? null
+          : () async {
               final result = await showAdaptiveDialog<bool>(
                 context: context,
                 builder: (context) => YesNoDialog(
@@ -248,8 +248,8 @@ class _BodyState extends ConsumerState<_Body>
               );
               return result ?? false;
             },
-            child: content,
-          );
+      child: content,
+    );
   }
 }
 
