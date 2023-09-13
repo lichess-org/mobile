@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
@@ -941,6 +942,8 @@ class _StockfishInfo extends ConsumerWidget {
         ref.watch(engineEvaluationProvider(evalContext)) ?? currentNode.eval;
 
     final knps = eval?.isComputing == true ? ', ${eval?.knps.round()}kn/s' : '';
+    final depth = eval?.depth ?? 0;
+    final maxDepth = math.max(depth, kMaxEngineDepth);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -954,7 +957,7 @@ class _StockfishInfo extends ConsumerWidget {
           title: const Text('Stockfish 16'),
           subtitle: Text(
             context.l10n.depthX(
-              '${eval?.depth ?? 0}/$kMaxEngineDepth$knps',
+              '$depth/$maxDepth$knps',
             ),
           ),
         ),
