@@ -43,7 +43,7 @@ class AnalysisPreferences extends _$AnalysisPreferences {
   }
 
   Future<void> setNumEvalLines(int numEvalLines) {
-    assert(numEvalLines >= 1 && numEvalLines <= 5);
+    assert(numEvalLines >= 1 && numEvalLines <= 3);
     return _save(
       state.copyWith(
         numEvalLines: numEvalLines,
@@ -77,7 +77,7 @@ class AnalysisPrefState with _$AnalysisPrefState {
   const factory AnalysisPrefState({
     required bool showEvaluationGauge,
     required bool showBestMoveArrow,
-    @Assert('numEvalLines >= 1 && numEvalLines <= 5') required int numEvalLines,
+    @Assert('numEvalLines >= 1 && numEvalLines <= 3') required int numEvalLines,
     @Assert('numEngineCores >= 1 && numEngineCores <= maxEngineCores')
     required int numEngineCores,
   }) = _AnalysisPrefState;
