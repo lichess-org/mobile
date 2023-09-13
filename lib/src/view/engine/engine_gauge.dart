@@ -27,6 +27,9 @@ class EngineGaugeParams with _$EngineGaugeParams {
   const factory EngineGaugeParams({
     required EvaluationContext evaluationContext,
 
+    /// Only used for vertical display mode.
+    required Side orientation,
+
     /// Position to evaluate.
     required Position position,
 
@@ -53,15 +56,21 @@ class EngineGauge extends ConsumerWidget {
         ? _EvalGauge(
             displayMode: displayMode,
             position: params.position,
+            orientation: params.orientation,
             eval: eval,
           )
         : params.savedEval != null
             ? _EvalGauge(
                 displayMode: displayMode,
                 position: params.position,
+                orientation: params.orientation,
                 eval: params.savedEval,
               )
-            : _EvalGauge(displayMode: displayMode, position: params.position);
+            : _EvalGauge(
+                displayMode: displayMode,
+                position: params.position,
+                orientation: params.orientation,
+              );
   }
 }
 
@@ -69,12 +78,14 @@ class _EvalGauge extends ConsumerStatefulWidget {
   const _EvalGauge({
     required this.position,
     required this.displayMode,
+    required this.orientation,
     this.eval,
   });
 
   final EngineGaugeDisplayMode displayMode;
   final Position position;
   final ClientEval? eval;
+  final Side orientation;
 
   double get whiteWinningChances => eval?.winningChances(Side.white) ?? 0.0;
   double get animationValue =>
@@ -143,6 +154,7 @@ class _EvalGaugeState extends ConsumerState<_EvalGauge> {
             child: CustomPaint(
               painter: widget.displayMode == EngineGaugeDisplayMode.vertical
                   ? _EvalGaugeVerticalPainter(
+                      orientation: widget.orientation,
                       backgroundColor: kEvalGaugeBackgroundColor,
                       valueColor: brightness == Brightness.dark
                           ? kEvalGaugeValueColorDarkBg
@@ -237,11 +249,13 @@ class _EvalGaugeVerticalPainter extends CustomPainter {
     required this.backgroundColor,
     required this.valueColor,
     required this.value,
+    required this.orientation,
   });
 
   final Color backgroundColor;
   final Color valueColor;
   final double value;
+  final Side orientation;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -253,14 +267,19 @@ class _EvalGaugeVerticalPainter extends CustomPainter {
     paint.color = valueColor;
 
     void drawBar(double y, double height) {
-      if (height <= 0.0) {
+      if (height == 0.0) {
         return;
       }
 
       canvas.drawRect(Offset(0.0, y) & Size(size.width, height), paint);
     }
 
-    drawBar(0.0, clampDouble(value, 0.0, 1.0) * size.height);
+    final double height = clampDouble(value, 0.0, 1.0) * size.height;
+
+    drawBar(
+      orientation == Side.white ? size.height : 0.0,
+      height * (orientation == Side.white ? -1.0 : 1.0),
+    );
   }
 
   @override

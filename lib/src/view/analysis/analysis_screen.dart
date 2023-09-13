@@ -299,6 +299,7 @@ class _EngineGaugeVertical extends ConsumerWidget {
         ? EngineGauge(
             displayMode: EngineGaugeDisplayMode.vertical,
             params: EngineGaugeParams(
+              orientation: analysisState.pov,
               evaluationContext: analysisState.evaluationContext,
               position: analysisState.position,
               savedEval: analysisState.currentNode.eval,
@@ -329,6 +330,7 @@ class _ColumnTopTable extends ConsumerWidget {
                 EngineGauge(
                   displayMode: EngineGaugeDisplayMode.horizontal,
                   params: EngineGaugeParams(
+                    orientation: analysisState.pov,
                     evaluationContext: analysisState.evaluationContext,
                     position: analysisState.position,
                     savedEval: analysisState.currentNode.eval,
