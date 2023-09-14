@@ -736,8 +736,7 @@ class InlineMove extends ConsumerWidget {
         ? TextStyle(
             fontFamily: 'ChessFont',
             fontSize: kChessNotationFontSize,
-            fontStyle: FontStyle.italic,
-            color: _textColor(context, 0.7),
+            color: _textColor(context, 0.6),
           )
         : baseTextStyle;
 
