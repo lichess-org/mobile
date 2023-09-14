@@ -25,8 +25,8 @@ class TvGameSnapshot with _$TvGameSnapshot {
     required TvChannel channel,
     required GameId id,
     required Side orientation,
-    required String fen,
     required FeaturedPlayer player,
+    String? fen,
     Move? lastMove,
   }) = _TvGameSnapshot;
 }

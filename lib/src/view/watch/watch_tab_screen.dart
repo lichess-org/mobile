@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/view/watch/tv_channels_screen.dart';
 
 part 'watch_tab_screen.g.dart';
 
@@ -159,7 +160,21 @@ class _WatchTvWidget extends ConsumerWidget {
       children: [
         Padding(
           padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
-          child: Text('Lichess TV', style: Styles.sectionTitle),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Lichess TV', style: Styles.sectionTitle),
+              NoPaddingTextButton(
+                onPressed: () {
+                  pushPlatformRoute(
+                    context,
+                    builder: (context) => const TvChannelsScreen(),
+                  );
+                },
+                child: Text(context.l10n.more),
+              ),
+            ],
+          ),
         ),
         featuredGame.when(
           data: (game) {
@@ -173,7 +188,7 @@ class _WatchTvWidget extends ConsumerWidget {
                 });
               },
               orientation: game.orientation.cg,
-              fen: game.fen,
+              fen: game.fen ?? kEmptyFen,
               description: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
