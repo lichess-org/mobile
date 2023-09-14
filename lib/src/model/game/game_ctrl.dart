@@ -6,6 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:logging/logging.dart';
 import 'package:deep_pick/deep_pick.dart';
 
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -49,9 +50,12 @@ class GameCtrl extends _$GameCtrl {
   DateTime? _lastMoveTime;
 
   @override
-  Future<GameCtrlState> build(GameFullId gameFullId) {
+  Future<GameCtrlState> build(GameFullId gameFullId) async {
     final socket = ref.watch(authSocketProvider);
     final (stream, _) = socket.connect(Uri(path: '/play/$gameFullId/v6'));
+
+    // this future should never fail
+    final accountPrefs = await ref.watch(accountPreferencesProvider.future);
 
     final state = stream.firstWhere((e) => e.topic == 'full').then((event) {
       final fullEvent =
@@ -65,6 +69,7 @@ class GameCtrl extends _$GameCtrl {
         game: fullEvent.game,
         stepCursor: fullEvent.game.steps.length - 1,
         stopClockWaitingForServerAck: false,
+        accountPrefs: accountPrefs,
       );
     });
 
@@ -642,11 +647,17 @@ class GameCtrlState with _$GameCtrlState {
     int? lastDrawOfferAtPly,
     Duration? opponentLeftCountdown,
     required bool stopClockWaitingForServerAck,
+    AccountPreferences? accountPrefs,
 
     /// Game full id used to redirect to the new game of the rematch
     GameFullId? redirectGameId,
   }) = _GameCtrlState;
 
+  // preferences
+  bool get autoQueen => accountPrefs?.autoQueen == AutoQueen.always;
+  bool get autoQueenOnPremove => accountPrefs?.autoQueen == AutoQueen.premove;
+
+  // game state
   bool get isReplaying => stepCursor < game.steps.length - 1;
   bool get canGoForward => stepCursor < game.steps.length - 1;
   bool get canGoBackward => stepCursor > 0;

@@ -346,6 +346,10 @@ class _Body extends ConsumerWidget {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
+              boardSettingsOverrides: BoardSettingsOverrides(
+                autoQueenPromotion: gameState.autoQueen,
+                autoQueenPromotionOnPremove: gameState.autoQueenOnPremove,
+              ),
               boardData: cg.BoardData(
                 interactableSide:
                     gameState.game.playable && !gameState.isReplaying
