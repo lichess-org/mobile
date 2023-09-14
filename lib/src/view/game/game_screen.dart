@@ -495,7 +495,7 @@ class _GameBottomBar extends ConsumerWidget {
                 label: context.l10n.gameAnalysis,
                 highlighted: true,
                 shortLabel: 'Analysis',
-                icon: CupertinoIcons.gauge,
+                icon: Icons.biotech,
                 onTap: () => pushPlatformRoute(
                   context,
                   fullscreenDialog: true,

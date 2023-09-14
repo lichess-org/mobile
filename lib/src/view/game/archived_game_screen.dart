@@ -247,7 +247,7 @@ class _BottomBar extends ConsumerWidget {
                       ),
                     )
                 : null,
-            icon: const Icon(CupertinoIcons.gauge),
+            icon: const Icon(Icons.biotech),
           ),
           const SizedBox(
             width: 44.0,
