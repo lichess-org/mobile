@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -31,6 +32,7 @@ import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/friends/friends_screen.dart';
 
 final RouteObserver<PageRoute<void>> homeRouteObserver =
     RouteObserver<PageRoute<void>>();
@@ -119,9 +121,13 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             const Text('lichess.org'),
           ],
         ),
-        actions: const [
-          SignInWidget(),
-        ],
+        actions: session == null
+            ? const [
+                SignInWidget(),
+              ]
+            : const [
+                _FriendsButton(),
+              ],
       ),
       body: RefreshIndicator(
         key: _androidRefreshKey,
@@ -155,7 +161,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                   const Text('lichess.org'),
                 ],
               ),
-              trailing: const SignInWidget(),
+              trailing: session == null
+                  ? const SignInWidget()
+                  : const _FriendsButton(),
             ),
             CupertinoSliverRefreshControl(
               onRefresh: () => _refreshData(session?.user),
@@ -556,6 +564,25 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
         );
       },
       orElse: () => const SizedBox.shrink(),
+    );
+  }
+}
+
+class _FriendsButton extends StatelessWidget {
+  const _FriendsButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformIconButton(
+      icon: Icons.people,
+      semanticsLabel: context.l10n.friends,
+      onTap: () {
+        pushPlatformRoute(
+          context,
+          title: context.l10n.friends,
+          builder: (_) => const FriendsScreen(),
+        );
+      },
     );
   }
 }
