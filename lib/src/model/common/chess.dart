@@ -12,6 +12,7 @@ typedef UCIMove = String;
 /// Represents a [Move] with its associated SAN.
 @Freezed(fromJson: true, toJson: true)
 class SanMove with _$SanMove {
+  const SanMove._();
   const factory SanMove(
     String san,
     @JsonKey(fromJson: _moveFromJson, toJson: _moveToJson) Move move,
@@ -19,6 +20,9 @@ class SanMove with _$SanMove {
 
   factory SanMove.fromJson(Map<String, dynamic> json) =>
       _$SanMoveFromJson(json);
+
+  bool get isCheck => san.contains('+');
+  bool get isCapture => san.contains('x');
 }
 
 String _moveToJson(Move move) => move.uci;

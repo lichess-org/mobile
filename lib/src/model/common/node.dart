@@ -98,6 +98,17 @@ abstract class Node {
     return null;
   }
 
+  /// Updates all nodes.
+  void updateAll(void Function(Branch node) update) {
+    switch (this) {
+      case final Branch branch:
+        update(branch);
+    }
+    for (final child in children) {
+      child.updateAll(update);
+    }
+  }
+
   /// Adds a new node at the given path and returns the new path.
   ///
   /// If the node already exists, it is not added again.

@@ -99,6 +99,8 @@ PODS:
     - FMDB (>= 2.7.5)
   - stockfish (1.4.0):
     - Flutter
+  - system_info_plus (0.0.1):
+    - Flutter
   - url_launcher_ios (0.0.1):
     - Flutter
   - wakelock_plus (0.0.1):
@@ -120,6 +122,7 @@ DEPENDENCIES:
   - soundpool (from `.symlinks/plugins/soundpool/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - stockfish (from `.symlinks/plugins/stockfish/ios`)
+  - system_info_plus (from `.symlinks/plugins/system_info_plus/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
 
@@ -172,6 +175,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
   stockfish:
     :path: ".symlinks/plugins/stockfish/ios"
+  system_info_plus:
+    :path: ".symlinks/plugins/system_info_plus/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
   wakelock_plus:
@@ -208,6 +213,7 @@ SPEC CHECKSUMS:
   soundpool: c7f4422ca206e77f8900ed3c4ee6a6ff5a0e38a9
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   stockfish: 614d240ac2cd05a462dad552c7b5937bb14604fd
+  system_info_plus: 5393c8da281d899950d751713575fbf91c7709aa
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
   wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47
 

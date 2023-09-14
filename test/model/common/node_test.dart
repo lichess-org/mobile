@@ -164,6 +164,8 @@ void main() {
         pvs: IList([
           PvData(moves: IList(const ['e2e4'])),
         ]),
+        position: branch.position,
+        isComputing: false,
       );
 
       final newNode = root.updateAt(nodePath, (node) {

@@ -29,6 +29,7 @@ class UCIProtocol {
 
   Work? _work;
   Work? _nextWork;
+  bool _stopRequested = false;
   void Function(String command)? _send;
   ClientEval? _currentEval;
   int _expectedPvs = 1;
@@ -67,7 +68,7 @@ class UCIProtocol {
   }
 
   bool isComputing() {
-    return _work != null && _work!.stopRequested == false;
+    return _work != null && _stopRequested == false;
   }
 
   void received(String line) {
@@ -86,13 +87,16 @@ class UCIProtocol {
       engineName = parts.sublist(2).join(' ');
     } else if (parts.first == 'bestmove') {
       if (_work != null && _currentEval != null) {
+        _currentEval = _currentEval!.copyWith(
+          isComputing: false,
+        );
         _evalController.sink.add((_work!, _currentEval!));
       }
       _work = null;
       _swapWork();
       return;
     } else if (_work != null &&
-        _work!.stopRequested != true &&
+        _stopRequested != true &&
         parts.first == 'info') {
       int depth = 0;
       int? nodes;
@@ -160,6 +164,8 @@ class UCIProtocol {
           mate: isMate ? ev : null,
           pvs: IList([pvData]),
           millis: elapsedMs,
+          position: _work!.currentPosition,
+          isComputing: true,
         );
       } else if (_currentEval != null) {
         _currentEval = _currentEval!.copyWith(
@@ -188,8 +194,8 @@ class UCIProtocol {
   }
 
   void _stop() {
-    if (_work != null && _work!.stopRequested != true) {
-      _work = _work!.copyWith(stopRequested: true);
+    if (_work != null && _stopRequested != true) {
+      _stopRequested = true;
       _sendAndLog('stop');
     }
   }
@@ -197,6 +203,7 @@ class UCIProtocol {
   void _swapWork() {
     if (_send == null || _work != null) return;
 
+    _stopRequested = false;
     _work = _nextWork;
     _nextWork = null;
 

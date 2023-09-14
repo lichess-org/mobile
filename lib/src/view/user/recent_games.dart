@@ -20,7 +20,7 @@ import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 class RecentGames extends ConsumerWidget {
   const RecentGames({required this.user, super.key});
 
-  final User user;
+  final LightUser user;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

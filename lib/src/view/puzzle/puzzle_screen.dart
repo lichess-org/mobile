@@ -193,6 +193,7 @@ class _BodyState extends ConsumerState<_Body>
                 ),
                 engineGauge: puzzleState.isEngineEnabled
                     ? EngineGaugeParams(
+                        orientation: puzzleState.pov,
                         evaluationContext: puzzleState.evaluationContext,
                         position: puzzleState.position,
                         savedEval: puzzleState.node.eval,

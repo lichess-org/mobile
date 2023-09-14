@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
@@ -20,14 +21,18 @@ AccountRepository accountRepository(AccountRepositoryRef ref) {
 }
 
 @riverpod
-Future<User> account(AccountRef ref) async {
+Future<User?> account(AccountRef ref) async {
+  final session = ref.watch(authSessionProvider);
   final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(accountRepositoryProvider);
-  final result = await repo.getProfile();
-  if (result.isError) {
-    link.close();
+  if (session != null) {
+    final result = await repo.getProfile();
+    if (result.isError) {
+      link.close();
+    }
+    return result.asFuture;
   }
-  return result.asFuture;
+  return null;
 }
 
 class AccountRepository {

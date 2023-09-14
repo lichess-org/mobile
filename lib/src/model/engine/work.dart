@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
@@ -19,13 +20,13 @@ class Work with _$Work {
     required Variant variant,
     required int threads,
     int? hashSize,
-    bool? stopRequested,
     required UciPath path,
     required int maxDepth,
     required int multiPv,
     bool? threatMode,
     required String initialFen,
     required IList<Step> steps,
+    required Position currentPosition,
   }) = _Work;
 
   /// The work position FEN.

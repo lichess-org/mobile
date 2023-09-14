@@ -9,6 +9,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:path/path.dart' as p;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:system_info_plus/system_info_plus.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/http_client.dart';
@@ -80,6 +81,9 @@ Future<AppDependencies> appDependencies(
   final dbPath = p.join(await getDatabasesPath(), 'lichess_mobile.db');
   final db = await openDb(databaseFactory, dbPath);
 
+  final physicalMemory = await SystemInfoPlus.physicalMemory ?? 256.0;
+  final engineMaxMemory = (physicalMemory / 10).ceil();
+
   return AppDependencies(
     packageInfo: pInfo,
     deviceInfo: deviceInfo,
@@ -88,6 +92,7 @@ Future<AppDependencies> appDependencies(
     userSession: await sessionStorage.read(),
     database: db,
     sri: sri,
+    engineMaxMemoryInMb: engineMaxMemory,
   );
 }
 
@@ -101,5 +106,6 @@ class AppDependencies with _$AppDependencies {
     required AuthSessionState? userSession,
     required Database database,
     required String sri,
+    required int engineMaxMemoryInMb,
   }) = _AppDependencies;
 }

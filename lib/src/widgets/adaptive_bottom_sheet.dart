@@ -8,8 +8,8 @@ Future<T?> showAdaptiveBottomSheet<T>({
   required WidgetBuilder builder,
   bool isDismissible = true,
   bool useRootNavigator = true,
-  bool showDragHandle = false,
   bool useSafeArea = true,
+  bool? showDragHandle,
   BoxConstraints? constraints,
 }) async {
   return showModalBottomSheet<T>(

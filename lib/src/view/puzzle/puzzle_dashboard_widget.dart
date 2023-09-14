@@ -51,16 +51,12 @@ class PuzzleDashboardWidget extends ConsumerWidget {
               ),
             ]),
             if (chartData.length >= 3)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AspectRatio(
-                    aspectRatio: 1.2,
-                    child: PuzzleChart(chartData),
-                  ),
-                  const SizedBox(height: 30),
-                ],
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: AspectRatio(
+                  aspectRatio: 1.2,
+                  child: PuzzleChart(chartData),
+                ),
               ),
           ],
         );

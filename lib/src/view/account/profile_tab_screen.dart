@@ -1,5 +1,3 @@
-import 'package:async/async.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
@@ -19,18 +16,6 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
-
-part 'profile_tab_screen.g.dart';
-
-@riverpod
-Future<User?> _sessionProfile(_SessionProfileRef ref) async {
-  final session = ref.watch(authSessionProvider);
-  final accountRepo = ref.watch(accountRepositoryProvider);
-  if (session != null) {
-    return Result.release(accountRepo.getProfile());
-  }
-  return null;
-}
 
 class ProfileTabScreen extends ConsumerStatefulWidget {
   const ProfileTabScreen({super.key});
@@ -51,16 +36,16 @@ class _ProfileScreenState extends ConsumerState<ProfileTabScreen> {
   }
 
   Widget _buildAndroid(BuildContext context) {
-    final sessionProfile = ref.watch(_sessionProfileProvider);
-    return sessionProfile.when(
-      data: (account) {
-        return account != null
+    final account = ref.watch(accountProvider);
+    return account.when(
+      data: (data) {
+        return data != null
             ? Scaffold(
                 appBar: AppBar(
                   title: PlayerTitle(
-                    userName: account.username,
-                    title: account.title,
-                    isPatron: account.isPatron,
+                    userName: data.username,
+                    title: data.title,
+                    isPatron: data.isPatron,
                   ),
                   actions: const [
                     _SettingsButton(),
@@ -68,10 +53,10 @@ class _ProfileScreenState extends ConsumerState<ProfileTabScreen> {
                 ),
                 body: RefreshIndicator(
                   key: _androidRefreshKey,
-                  onRefresh: () => _refreshData(account),
+                  onRefresh: () => _refreshData(data),
                   child: ListView(
                     controller: profileScrollController,
-                    children: buildUserScreenList(account),
+                    children: buildUserScreenList(data),
                   ),
                 ),
               )
@@ -94,7 +79,7 @@ class _ProfileScreenState extends ConsumerState<ProfileTabScreen> {
             ],
           ),
           body: FullScreenRetryRequest(
-            onRetry: () => ref.invalidate(_sessionProfileProvider),
+            onRetry: () => ref.invalidate(accountProvider),
           ),
         );
       },
@@ -102,30 +87,30 @@ class _ProfileScreenState extends ConsumerState<ProfileTabScreen> {
   }
 
   Widget _buildIos(BuildContext context) {
-    final sessionProfile = ref.watch(_sessionProfileProvider);
-    return sessionProfile.when(
-      data: (account) {
-        return account != null
+    final account = ref.watch(accountProvider);
+    return account.when(
+      data: (data) {
+        return data != null
             ? CupertinoPageScaffold(
                 child: CustomScrollView(
                   controller: profileScrollController,
                   slivers: [
                     CupertinoSliverNavigationBar(
                       largeTitle: PlayerTitle(
-                        userName: account.username,
-                        title: account.title,
-                        isPatron: account.isPatron,
+                        userName: data.username,
+                        title: data.title,
+                        isPatron: data.isPatron,
                       ),
                       trailing: const _SettingsButton(),
                     ),
                     CupertinoSliverRefreshControl(
-                      onRefresh: () => _refreshData(account),
+                      onRefresh: () => _refreshData(data),
                     ),
                     SliverSafeArea(
                       top: false,
                       sliver: SliverList(
                         delegate: SliverChildListDelegate(
-                          buildUserScreenList(account),
+                          buildUserScreenList(data),
                         ),
                       ),
                     ),
@@ -148,7 +133,7 @@ class _ProfileScreenState extends ConsumerState<ProfileTabScreen> {
             trailing: _SettingsButton(),
           ),
           child: FullScreenRetryRequest(
-            onRetry: () => ref.invalidate(_sessionProfileProvider),
+            onRetry: () => ref.invalidate(accountProvider),
           ),
         );
       },
@@ -159,7 +144,7 @@ class _ProfileScreenState extends ConsumerState<ProfileTabScreen> {
     return Future.wait([
       ref.refresh(userRecentGamesProvider(userId: account.id).future),
       ref.refresh(userActivityProvider(id: account.id).future),
-      ref.refresh(_sessionProfileProvider.future),
+      ref.refresh(accountProvider.future),
     ]);
   }
 }

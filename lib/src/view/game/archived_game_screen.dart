@@ -6,6 +6,8 @@ import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -48,7 +50,8 @@ class ArchivedGameScreen extends ConsumerWidget {
         gameData: gameData,
         orientation: orientation,
       ),
-      bottomNavigationBar: _BottomBar(gameData: gameData),
+      bottomNavigationBar:
+          _BottomBar(gameData: gameData, orientation: orientation),
     );
   }
 
@@ -68,7 +71,7 @@ class ArchivedGameScreen extends ConsumerWidget {
                 orientation: orientation,
               ),
             ),
-            _BottomBar(gameData: gameData),
+            _BottomBar(gameData: gameData, orientation: orientation),
           ],
         ),
       ),
@@ -203,8 +206,9 @@ class _BoardBody extends ConsumerWidget {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.gameData});
+  const _BottomBar({required this.gameData, required this.orientation});
 
+  final Side orientation;
   final ArchivedGameData gameData;
 
   @override
@@ -223,6 +227,27 @@ class _BottomBar extends ConsumerWidget {
               _showGameMenu(context, ref);
             },
             icon: const Icon(Icons.menu),
+          ),
+          BottomBarIconButton(
+            semanticsLabel: context.l10n.gameAnalysis,
+            onPressed: ref.read(gameCursorProvider(gameData.id)).hasValue
+                ? () => pushPlatformRoute(
+                      context,
+                      fullscreenDialog: true,
+                      builder: (context) => AnalysisScreen(
+                        variant: gameData.variant,
+                        steps: ref
+                            .read(gameCursorProvider(gameData.id))
+                            .requireValue
+                            .$1
+                            .steps,
+                        orientation: orientation,
+                        id: gameData.id,
+                        title: context.l10n.gameAnalysis,
+                      ),
+                    )
+                : null,
+            icon: const Icon(Icons.biotech),
           ),
           const SizedBox(
             width: 44.0,
@@ -270,7 +295,6 @@ class _BottomBar extends ConsumerWidget {
       context: context,
       actions: [
         BottomSheetAction(
-          leading: const Icon(Icons.swap_vert),
           label: Text(context.l10n.flipBoard),
           onPressed: (context) {
             ref.read(isBoardTurnedProvider.notifier).toggle();

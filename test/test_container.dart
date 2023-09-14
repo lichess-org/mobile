@@ -75,6 +75,7 @@ Future<ProviderContainer> makeContainer({
           userSession: userSession,
           database: MockDatabase(),
           sri: 'test',
+          engineMaxMemoryInMb: 16,
         );
       }),
       ...overrides ?? [],
