@@ -67,18 +67,11 @@ class AnalysisScreen extends ConsumerWidget {
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisCtrlProvider(variant, steps, orientation, id);
 
-    final evalContext = ref.watch(
-      ctrlProvider.select((value) => value.evaluationContext),
-    );
-    final currentNode = ref.watch(
-      ctrlProvider.select((value) => value.currentNode),
-    );
-
     return Scaffold(
       appBar: AppBar(
         title: Text(title ?? context.l10n.analysis),
         actions: [
-          _EngineDepth(evalContext, currentNode),
+          _EngineDepth(ctrlProvider),
           SettingsButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
@@ -94,12 +87,6 @@ class AnalysisScreen extends ConsumerWidget {
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisCtrlProvider(variant, steps, orientation, id);
-    final evalContext = ref.watch(
-      ctrlProvider.select((value) => value.evaluationContext),
-    );
-    final currentNode = ref.watch(
-      ctrlProvider.select((value) => value.currentNode),
-    );
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -107,7 +94,7 @@ class AnalysisScreen extends ConsumerWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _EngineDepth(evalContext, currentNode),
+            _EngineDepth(ctrlProvider),
             SettingsButton(
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
@@ -873,13 +860,18 @@ class _BottomBar extends ConsumerWidget {
 }
 
 class _EngineDepth extends ConsumerWidget {
-  const _EngineDepth(this.evalContext, this.currentNode);
+  const _EngineDepth(this.ctrlProvider);
 
-  final EvaluationContext evalContext;
-  final ViewNode currentNode;
+  final AnalysisCtrlProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final evalContext = ref.watch(
+      ctrlProvider.select((value) => value.evaluationContext),
+    );
+    final currentNode = ref.watch(
+      ctrlProvider.select((value) => value.currentNode),
+    );
     final depth = ref.watch(
           engineEvaluationProvider(evalContext).select((value) => value?.depth),
         ) ??
