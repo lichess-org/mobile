@@ -24,20 +24,34 @@ class TvGames extends _$TvGames {
 
   @override
   Future<IMap<TvChannel, TvGameSnapshot>> build() async {
-    final socket = ref.watch(authSocketProvider);
-    final (stream, _) = socket.connect(Uri(path: kDefaultSocketRoute));
-
-    _socketSubscription = stream.listen(_handleSocketEvent);
-
     ref.onDispose(() {
       _socketSubscription?.cancel();
     });
 
-    final repo = ref.watch(tvRepositoryProvider);
+    return _doStartWatching();
+  }
 
+  AuthSocket get _socket => ref.read(authSocketProvider);
+
+  /// Start watching the TV games
+  Future<void> startWatching() async {
+    final (stream, _) = _socket.connect(Uri(path: kDefaultSocketRoute));
+    _socketSubscription = stream.listen(_handleSocketEvent);
+
+    final newState = await _doStartWatching();
+    state = AsyncValue.data(newState);
+  }
+
+  /// Stop watching the TV games.
+  void stopWatching() {
+    _socketSubscription?.cancel();
+  }
+
+  Future<IMap<TvChannel, TvGameSnapshot>> _doStartWatching() async {
+    final repo = ref.read(tvRepositoryProvider);
     final repoGames = await Result.release(repo.channels());
 
-    socket.send(
+    _socket.send(
       'startWatching',
       repoGames.entries
           .where((e) => TvChannel.values.contains(e.key))
@@ -45,7 +59,7 @@ class TvGames extends _$TvGames {
           .join(' '),
     );
 
-    socket.send('startWatchingTvChannels', null);
+    _socket.send('startWatchingTvChannels', null);
 
     return repoGames.map((channel, game) {
       return MapEntry(
@@ -74,6 +88,7 @@ class TvGames extends _$TvGames {
     switch (event.topic) {
       case 'fen':
         final json = event.data as Map<String, dynamic>;
+        print('fen: $json');
         final fenEvent = FenSocketEvent.fromJson(json);
         final snapshots =
             state.requireValue.values.where((s) => s.id == fenEvent.id);
@@ -93,6 +108,7 @@ class TvGames extends _$TvGames {
 
       case 'tvSelect':
         final json = event.data as Map<String, dynamic>;
+        print('tvSelect: $json');
         final requiredPick = pick(json).required();
         final channel = requiredPick('channel').asTvChannelOrNull();
         if (channel != null) {
@@ -104,6 +120,7 @@ class TvGames extends _$TvGames {
             player: FeaturedPlayer(
               // don't know why server returns null sometimes
               name: requiredPick('player', 'name').asStringOrNull() ?? '',
+              title: requiredPick('player', 'title').asStringOrNull(),
               side: side,
               rating: requiredPick('player', 'rating').asIntOrNull(),
             ),
@@ -117,6 +134,4 @@ class TvGames extends _$TvGames {
         }
     }
   }
-
-  AuthSocket get _socket => ref.read(authSocketProvider);
 }

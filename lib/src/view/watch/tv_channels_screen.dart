@@ -22,7 +22,7 @@ class TvChannelsScreen extends ConsumerStatefulWidget {
 }
 
 class _TvChannelsScreenState extends ConsumerState<TvChannelsScreen>
-    with RouteAware {
+    with RouteAware, WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(
@@ -54,6 +54,22 @@ class _TvChannelsScreenState extends ConsumerState<TvChannelsScreen>
   }
 
   @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      ref.read(tvGamesProvider.notifier).startWatching();
+    } else {
+      ref.read(tvGamesProvider.notifier).stopWatching();
+      ref.read(authSocketProvider).close();
+    }
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
@@ -64,8 +80,21 @@ class _TvChannelsScreenState extends ConsumerState<TvChannelsScreen>
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     watchTabRouteObserver.unsubscribe(this);
     super.dispose();
+  }
+
+  @override
+  void didPushNext() {
+    ref.read(tvGamesProvider.notifier).stopWatching();
+    super.didPushNext();
+  }
+
+  @override
+  void didPopNext() {
+    ref.read(tvGamesProvider.notifier).startWatching();
+    super.didPopNext();
   }
 
   @override
