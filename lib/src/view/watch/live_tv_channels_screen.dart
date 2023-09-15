@@ -8,20 +8,20 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
-import 'package:lichess_mobile/src/model/tv/tv_games.dart';
+import 'package:lichess_mobile/src/model/tv/live_tv_channels.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 
-class TvChannelsScreen extends ConsumerStatefulWidget {
-  const TvChannelsScreen({super.key});
+class LiveTvChannelsScreen extends ConsumerStatefulWidget {
+  const LiveTvChannelsScreen({super.key});
 
   @override
-  ConsumerState<TvChannelsScreen> createState() => _TvChannelsScreenState();
+  ConsumerState<LiveTvChannelsScreen> createState() => _TvChannelsScreenState();
 }
 
-class _TvChannelsScreenState extends ConsumerState<TvChannelsScreen>
+class _TvChannelsScreenState extends ConsumerState<LiveTvChannelsScreen>
     with RouteAware, WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
@@ -62,9 +62,9 @@ class _TvChannelsScreenState extends ConsumerState<TvChannelsScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      ref.read(tvGamesProvider.notifier).startWatching();
+      ref.read(liveTvChannelsProvider.notifier).startWatching();
     } else {
-      ref.read(tvGamesProvider.notifier).stopWatching();
+      ref.read(liveTvChannelsProvider.notifier).stopWatching();
       ref.read(authSocketProvider).close();
     }
   }
@@ -87,13 +87,13 @@ class _TvChannelsScreenState extends ConsumerState<TvChannelsScreen>
 
   @override
   void didPushNext() {
-    ref.read(tvGamesProvider.notifier).stopWatching();
+    ref.read(liveTvChannelsProvider.notifier).stopWatching();
     super.didPushNext();
   }
 
   @override
   void didPopNext() {
-    ref.read(tvGamesProvider.notifier).startWatching();
+    ref.read(liveTvChannelsProvider.notifier).startWatching();
     super.didPopNext();
   }
 
@@ -108,7 +108,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gamesAsync = ref.watch(tvGamesProvider);
+    final gamesAsync = ref.watch(liveTvChannelsProvider);
     return gamesAsync.when(
       data: (games) {
         final list = [

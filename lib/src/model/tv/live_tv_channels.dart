@@ -16,10 +16,10 @@ import 'tv_game.dart';
 import 'tv_channel.dart';
 import 'featured_player.dart';
 
-part 'tv_games.g.dart';
+part 'live_tv_channels.g.dart';
 
 @riverpod
-class TvGames extends _$TvGames {
+class LiveTvChannels extends _$LiveTvChannels {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   @override
@@ -81,7 +81,10 @@ class TvGames extends _$TvGames {
 
   void _handleSocketEvent(SocketEvent event) {
     if (!state.hasValue) {
-      assert(false, 'received a SocketEvent while TvGames state is null');
+      assert(
+        false,
+        'received a SocketEvent while LiveTvChannels state is null',
+      );
       return;
     }
 

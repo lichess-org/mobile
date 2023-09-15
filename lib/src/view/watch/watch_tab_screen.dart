@@ -24,7 +24,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
-import 'package:lichess_mobile/src/view/watch/tv_channels_screen.dart';
+import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 
 part 'watch_tab_screen.g.dart';
 
@@ -168,7 +168,7 @@ class _WatchTvWidget extends ConsumerWidget {
                 onPressed: () {
                   pushPlatformRoute(
                     context,
-                    builder: (context) => const TvChannelsScreen(),
+                    builder: (context) => const LiveTvChannelsScreen(),
                   );
                 },
                 child: Text(context.l10n.more),
