@@ -1,16 +1,19 @@
 import 'dart:async';
-import 'package:collection/collection.dart';
 import 'package:async/async.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:deep_pick/deep_pick.dart';
 
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 
 import 'tv_repository.dart';
 import 'tv_event.dart';
 import 'tv_game.dart';
+import 'tv_channel.dart';
 import 'featured_player.dart';
 
 part 'tv_games.g.dart';
@@ -20,7 +23,7 @@ class TvGames extends _$TvGames {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   @override
-  Future<IList<TvGameSnapshot>> build() async {
+  Future<IMap<TvChannel, TvGameSnapshot>> build() async {
     final socket = ref.watch(authSocketProvider);
     final (stream, _) = socket.connect(Uri(path: kDefaultSocketRoute));
 
@@ -32,28 +35,34 @@ class TvGames extends _$TvGames {
 
     final repo = ref.watch(tvRepositoryProvider);
 
-    final channels = await Result.release(repo.channels());
-    final snapshots = channels.entries.map((entry) {
-      final orientation = entry.value.side ?? Side.white;
-      return TvGameSnapshot(
-        channel: entry.key,
-        id: entry.value.id,
-        orientation: orientation,
-        player: FeaturedPlayer(
-          id: entry.value.user.id,
-          name: entry.value.user.name,
-          side: orientation,
-          rating: entry.value.rating,
-        ),
-      );
-    });
+    final repoGames = await Result.release(repo.channels());
 
     socket.send(
       'startWatching',
-      snapshots.map((s) => s.id).join(' '),
+      repoGames.entries
+          .where((e) => TvChannel.values.contains(e.key))
+          .map((e) => e.value.id)
+          .join(' '),
     );
 
-    return snapshots.toIList();
+    socket.send('startWatchingTvChannels', null);
+
+    return repoGames.map((channel, game) {
+      return MapEntry(
+        channel,
+        TvGameSnapshot(
+          channel: channel,
+          id: game.id,
+          orientation: game.side ?? Side.white,
+          player: FeaturedPlayer(
+            name: game.user.name,
+            title: game.user.title,
+            side: game.side ?? Side.white,
+            rating: game.rating,
+          ),
+        ),
+      );
+    });
   }
 
   void _handleSocketEvent(SocketEvent event) {
@@ -66,20 +75,48 @@ class TvGames extends _$TvGames {
       case 'fen':
         final json = event.data as Map<String, dynamic>;
         final fenEvent = FenSocketEvent.fromJson(json);
-        final snapshot =
-            state.requireValue.firstWhereOrNull((s) => s.id == fenEvent.id);
+        final snapshots =
+            state.requireValue.values.where((s) => s.id == fenEvent.id);
 
-        if (snapshot != null) {
-          final newSnapshot = snapshot.copyWith(
-            fen: fenEvent.fen,
-            lastMove: fenEvent.lastMove,
-          );
+        if (snapshots.isNotEmpty) {
           state = AsyncValue.data(
-            state.requireValue
-                .map((s) => s.id == newSnapshot.id ? newSnapshot : s)
-                .toIList(),
+            state.requireValue.updateAll(
+              (key, value) => value.id == fenEvent.id
+                  ? value.copyWith(
+                      fen: fenEvent.fen,
+                      lastMove: fenEvent.lastMove,
+                    )
+                  : value,
+            ),
           );
+        }
+
+      case 'tvSelect':
+        final json = event.data as Map<String, dynamic>;
+        final requiredPick = pick(json).required();
+        final channel = requiredPick('channel').asTvChannelOrNull();
+        if (channel != null) {
+          final side = requiredPick('color').asSideOrThrow();
+          final newSnaphot = TvGameSnapshot(
+            channel: channel,
+            id: requiredPick('id').asGameIdOrThrow(),
+            orientation: side,
+            player: FeaturedPlayer(
+              // don't know why server returns null sometimes
+              name: requiredPick('player', 'name').asStringOrNull() ?? '',
+              side: side,
+              rating: requiredPick('player', 'rating').asIntOrNull(),
+            ),
+          );
+
+          state = AsyncValue.data(
+            state.requireValue.update(channel, (_) => newSnaphot),
+          );
+
+          _socket.send('startWatching', newSnaphot.id.value);
         }
     }
   }
+
+  AuthSocket get _socket => ref.read(authSocketProvider);
 }

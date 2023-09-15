@@ -24,16 +24,17 @@ class LightUser with _$LightUser {
 
 extension LightUserExtension on Pick {
   LightUser asLightUserOrThrow() {
-    final value = this.required().value;
+    final requiredPick = this.required();
+    final value = requiredPick.value;
     if (value is LightUser) {
       return value;
     }
     if (value is Map<String, dynamic>) {
       return LightUser(
-        id: pick('id').asUserIdOrThrow(),
-        name: pick('name').asStringOrThrow(),
-        title: pick('title').asStringOrNull(),
-        isPatron: pick('patron').asBoolOrNull(),
+        id: requiredPick('id').asUserIdOrThrow(),
+        name: requiredPick('name').asStringOrThrow(),
+        title: requiredPick('title').asStringOrNull(),
+        isPatron: requiredPick('patron').asBoolOrNull(),
       );
     }
     throw PickException(
@@ -41,7 +42,7 @@ extension LightUserExtension on Pick {
     );
   }
 
-  LightUser? asPerfOrNull() {
+  LightUser? asLightUserOrNull() {
     if (value == null) return null;
     try {
       return asLightUserOrThrow();

@@ -1,7 +1,8 @@
 import 'package:flutter/widgets.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:deep_pick/deep_pick.dart';
 
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 enum TvChannel {
   best('Top Rated', LichessIcons.crown),
@@ -28,4 +29,30 @@ enum TvChannel {
 
   static final IMap<String, TvChannel> nameMap =
       IMap(TvChannel.values.asNameMap());
+}
+
+extension TvChannelExtension on Pick {
+  TvChannel asTvChannelOrThrow() {
+    final value = this.required().value;
+    if (value is TvChannel) {
+      return value;
+    }
+    if (value is String) {
+      if (TvChannel.nameMap.containsKey(value)) {
+        return TvChannel.nameMap[value]!;
+      }
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to TvChannel",
+    );
+  }
+
+  TvChannel? asTvChannelOrNull() {
+    if (value == null) return null;
+    try {
+      return asTvChannelOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
 }

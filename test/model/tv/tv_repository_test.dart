@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/tv/tv_event.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 
 class MockAuthClient extends Mock implements AuthClient {}
 
@@ -84,151 +85,157 @@ void main() {
     test('correctly parse JSON', () async {
       const response = '''
 {
-  "Bot": {
-    "user": {
-      "id": "leelachess",
-      "name": "LeelaChess",
-      "title": "BOT"
+    "antichess": {
+        "color": "white",
+        "gameId": "RofQdyBG",
+        "rating": 2222,
+        "user": {
+            "id": "snezhok777",
+            "name": "Snezhok777"
+        }
     },
-    "rating": 2660,
-    "gameId": "Zznv9MIl",
-    "color": "black"
-  },
-  "Blitz": {
-    "user": {
-      "id": "lekkerkortook",
-      "name": "LekkerKortOok"
+    "atomic": {
+        "color": "black",
+        "gameId": "3Sd0elkL",
+        "rating": 2072,
+        "user": {
+            "id": "fide-sahand",
+            "name": "FIDE-SAHAND"
+        }
     },
-    "rating": 2603,
-    "gameId": "hTJ4v7Mp",
-    "color": "black"
-  },
-  "Racing Kings": {
-    "user": {
-      "id": "chesslo21",
-      "name": "chesslo21"
+    "best": {
+        "color": "white",
+        "gameId": "H4DPx15L",
+        "rating": 2954,
+        "user": {
+            "id": "chessisnotfair",
+            "name": "Chessisnotfair",
+            "title": "GM"
+        }
     },
-    "rating": 2123,
-    "gameId": "lgCDl5Of",
-    "color": "white"
-  },
-  "UltraBullet": {
-    "user": {
-      "id": "farmville",
-      "name": "Farmville"
+    "blitz": {
+        "color": "white",
+        "gameId": "v3pIFdTz",
+        "rating": 2615,
+        "user": {
+            "id": "gemivuk",
+            "name": "gemivuk",
+            "title": "GM"
+        }
     },
-    "rating": 2338,
-    "gameId": "NEY6OQ32",
-    "color": "white"
-  },
-  "Bullet": {
-    "user": {
-      "id": "nurmibrah",
-      "name": "nurmiBrah"
+    "bot": {
+        "color": "white",
+        "gameId": "NRfWSRwD",
+        "rating": 2731,
+        "user": {
+            "id": "caissa-test",
+            "name": "caissa-test",
+            "title": "BOT"
+        }
     },
-    "rating": 2499,
-    "gameId": "5LgyE516",
-    "color": "black"
-  },
-  "Classical": {
-    "user": {
-      "id": "holden_m_j_thomas",
-      "name": "Holden_M_J_Thomas"
+    "bullet": {
+        "color": "white",
+        "gameId": "H4DPx15L",
+        "rating": 2954,
+        "user": {
+            "id": "chessisnotfair",
+            "name": "Chessisnotfair",
+            "title": "GM"
+        }
     },
-    "rating": 1806,
-    "gameId": "k3oLby6N",
-    "color": "white"
-  },
-  "Three-check": {
-    "user": {
-      "id": "pepellou",
-      "name": "pepellou",
-      "patron": true
+    "chess960": {
+        "color": "black",
+        "gameId": "Itv9tinK",
+        "rating": 2259,
+        "user": {
+            "id": "ti-ga",
+            "name": "Ti-Ga",
+            "title": "FM"
+        }
     },
-    "rating": 1978,
-    "gameId": "Og5RCvmu",
-    "color": "black"
-  },
-  "Antichess": {
-    "user": {
-      "id": "maria-bakkar",
-      "name": "maria-bakkar"
+    "classical": {
+        "color": "white",
+        "gameId": "s6AArAR4",
+        "rating": 2017,
+        "user": {
+            "id": "aku_sofi-bodo",
+            "name": "aku_sofi-bodo"
+        }
     },
-    "rating": 2103,
-    "gameId": "toCr41yx",
-    "color": "black"
-  },
-  "Computer": {
-    "user": {
-      "id": "oh_my_goat_im_so_bat",
-      "name": "oh_my_goat_Im_so_bat"
+    "computer": {
+        "color": "white",
+        "gameId": "6VdUmiKE",
+        "rating": 2183,
+        "user": {
+            "id": "farbod_king",
+            "name": "Farbod_king"
+        }
     },
-    "rating": 2314,
-    "gameId": "TkI4qZxu",
-    "color": "black"
-  },
-  "Horde": {
-    "user": {
-      "id": "habitualchess",
-      "name": "HabitualChess"
+    "crazyhouse": {
+        "color": "white",
+        "gameId": "TdDcjyPz",
+        "rating": 2190,
+        "user": {
+            "id": "ageless_2",
+            "name": "Ageless_2"
+        }
     },
-    "rating": 1803,
-    "gameId": "oMofN63H",
-    "color": "white"
-  },
-  "Rapid": {
-    "user": {
-      "id": "denpayd",
-      "name": "DenpaYD"
+    "horde": {
+        "color": "white",
+        "gameId": "WfZ18lIf",
+        "rating": 2447,
+        "user": {
+            "id": "bagera9",
+            "name": "bagera9"
+        }
     },
-    "rating": 2289,
-    "gameId": "IcWOl8ee"
-  },
-  "Atomic": {
-    "user": {
-      "id": "meetyourdemise",
-      "name": "MeetYourDemise"
+    "kingOfTheHill": {
+        "color": "black",
+        "gameId": "jTpl62fa",
+        "rating": 2097,
+        "user": {
+            "id": "evgeny036",
+            "name": "Evgeny036"
+        }
     },
-    "rating": 2210,
-    "gameId": "tvMxtCMN",
-    "color": "white"
-  },
-  "Crazyhouse": {
-    "user": {
-      "id": "mathace",
-      "name": "mathace"
+    "racingKings": {
+        "color": "white",
+        "gameId": "3pAqChhF",
+        "rating": 1298,
+        "user": {
+            "id": "oburch11",
+            "name": "Oburch11"
+        }
     },
-    "rating": 2397,
-    "gameId": "i3gTZlUb",
-    "color": "black"
-  },
-  "Chess960": {
-    "user": {
-      "id": "voja_7",
-      "name": "voja_7"
+    "rapid": {
+        "color": "black",
+        "gameId": "Z74J2aQ2",
+        "rating": 2408,
+        "user": {
+            "id": "tsukuru",
+            "name": "Tsukuru",
+            "patron": true
+        }
     },
-    "rating": 1782,
-    "gameId": "lrXLcedu",
-    "color": "white"
-  },
-  "King of the Hill": {
-    "user": {
-      "id": "nadime",
-      "name": "Nadime"
+    "threeCheck": {
+        "color": "black",
+        "gameId": "pKpWRnsH",
+        "rating": 1982,
+        "user": {
+            "id": "vdsukhov",
+            "name": "vdsukhov",
+            "patron": true
+        }
     },
-    "rating": 1500,
-    "gameId": "DsQn8aEV",
-    "color": "white"
-  },
-  "Top Rated": {
-    "user": {
-      "id": "lekkerkortook",
-      "name": "LekkerKortOok"
-    },
-    "rating": 2603,
-    "gameId": "hTJ4v7Mp",
-    "color": "black"
-  }
+    "ultraBullet": {
+        "color": "black",
+        "gameId": "TT4BvMOf",
+        "rating": 2004,
+        "user": {
+            "id": "i-play-atomic",
+            "name": "i-play-atomic"
+        }
+    }
 }
 ''';
 
@@ -243,6 +250,14 @@ void main() {
       final result = await repo.channels();
 
       expect(result.isValue, true);
+
+      // supported channels only
+      expect(result.asValue?.value.length, 13);
+
+      expect(
+        result.asValue?.value[TvChannel.best]?.user.name,
+        'Chessisnotfair',
+      );
     });
   });
 }
