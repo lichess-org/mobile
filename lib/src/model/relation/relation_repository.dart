@@ -15,18 +15,17 @@ class RelationRepository {
   final Logger _log;
 
   FutureResult<IList<User>> getFollowing() async {
-    return apiClient
-        .get(
-          Uri.parse('$kLichessHost/api/rel/following'),
-        )
-        .then(
-          (result) => result.flatMap(
-            (response) => readJsonListOfObjects(
-              response,
-              mapper: (json) => User.fromJson(json),
-              logger: _log,
-            ),
-          ),
-        );
+    return apiClient.get(
+      Uri.parse('$kLichessHost/api/rel/following'),
+      headers: {'Accept': 'application/x-ndjson'},
+    ).then(
+      (result) => result.flatMap(
+        (response) => readNdJsonList(
+          response,
+          mapper: (json) => User.fromJson(json),
+          logger: _log,
+        ),
+      ),
+    );
   }
 }

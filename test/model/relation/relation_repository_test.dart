@@ -25,25 +25,14 @@ void main() {
   group('RelationRepository.getFollowing', () {
     test('json read, minimal example', () async {
       const testRelationResponseMinimal = '''
-[{
-  "id": "georges",
-  "username": "Georges",
-  "createdAt": 1290415680000,
-  "seenAt": 1290415680000,
-  "perfs": {
-  }
-},
-{
-  "id": "georges",
-  "username": "Georges",
-  "createdAt": 1290415680000,
-  "seenAt": 1290415680000,
-  "perfs": {
-  }
-}]
+{"id":"georges","username":"Georges","createdAt":1290415680000,"seenAt":1290415680000,"perfs":{}}
+{"id":"georges","username":"Georges","createdAt":1290415680000,"seenAt":1290415680000,"perfs":{}}
 ''';
       when(
-        () => mockAuthClient.get(Uri.parse('$kLichessHost/api/rel/following')),
+        () => mockAuthClient.get(
+          Uri.parse('$kLichessHost/api/rel/following'),
+          headers: {'Accept': 'application/x-ndjson'},
+        ),
       ).thenAnswer(
         (_) async =>
             Result.value(http.Response(testRelationResponseMinimal, 200)),
@@ -56,124 +45,13 @@ void main() {
 
     test('json read, full example', () async {
       const testRelationResponse = '''
-[{
-  "id": "georges",
-  "username": "Georges",
-  "createdAt": 1290415680000,
-  "seenAt": 1290415680000,
-  "title": "GM",
-  "patron": true,
-  "perfs": {
-    "chess960": {
-      "games": 2945,
-      "rating": 1609,
-      "rd": 60,
-      "prog": -22,
-      "prov": true
-    },
-    "atomic": {
-      "games": 2945,
-      "rating": 1609,
-      "rd": 60,
-      "prog": -22,
-      "prov": true
-    },
-    "racingKings": {
-      "games": 2945,
-      "rating": 1609,
-      "rd": 60,
-      "prog": -22,
-      "prov": true
-    },
-    "ultraBullet": {
-      "games": 2945,
-      "rating": 1609,
-      "rd": 60,
-      "prog": -22,
-      "prov": true
-    },
-    "blitz": {
-      "games": 2945,
-      "rating": 1609,
-      "rd": 60,
-      "prog": -22,
-      "prov": true
-    },
-    "kingOfTheHill": {
-      "games": 2945,
-      "rating": 1609,
-      "rd": 60,
-      "prog": -22,
-      "prov": true
-    },
-    "bullet": {
-      "games": 2945,
-      "rating": 1609,
-      "rd": 60,
-      "prog": -22,
-      "prov": true
-    },
-    "correspondence": {
-      "games": 2945,
-      "rating": 1609,
-      "rd": 60,
-      "prog": -22,
-      "prov": true
-    },
-    "horde": {
-      "games": 2945,
-      "rating": 1609,
-      "rd": 60,
-      "prog": -22,
-      "prov": true
-    },
-    "puzzle": {
-      "games": 2945,
-      "rating": 1609,
-      "rd": 60,
-      "prog": -22,
-      "prov": true
-    },
-    "classical": {
-      "games": 2945,
-      "rating": 1609,
-      "rd": 60,
-      "prog": -22,
-      "prov": true
-    },
-    "rapid": {
-      "games": 2945,
-      "rating": 1609,
-      "rd": 60,
-      "prog": -22,
-      "prov": true
-    },
-    "storm": {
-      "runs": 44,
-      "score": 61
-    },
-    "racer": {
-      "runs": 44,
-      "score": 61
-    },
-    "streak": {
-      "runs": 44,
-      "score": 61
-    }
-  },
-   "profile": {
-    "country": "France",
-    "location": "Lille",
-    "bio": "test bio",
-    "firstName": "John",
-    "lastName": "Doe",
-    "fideRating": 1800,
-    "links": "http://test.com"
-  }
-}]
+{"id":"georges","username":"Georges","createdAt":1290415680000,"seenAt":1290415680000,"title":"GM","patron":true,"perfs":{"chess960":{"games":2945,"rating":1609,"rd":60,"prog":-22,"prov":true},"atomic":{"games":2945,"rating":1609,"rd":60,"prog":-22,"prov":true},"racingKings":{"games":2945,"rating":1609,"rd":60,"prog":-22,"prov":true},"ultraBullet":{"games":2945,"rating":1609,"rd":60,"prog":-22,"prov":true},"blitz":{"games":2945,"rating":1609,"rd":60,"prog":-22,"prov":true},"kingOfTheHill":{"games":2945,"rating":1609,"rd":60,"prog":-22,"prov":true},"bullet":{"games":2945,"rating":1609,"rd":60,"prog":-22,"prov":true},"correspondence":{"games":2945,"rating":1609,"rd":60,"prog":-22,"prov":true},"horde":{"games":2945,"rating":1609,"rd":60,"prog":-22,"prov":true},"puzzle":{"games":2945,"rating":1609,"rd":60,"prog":-22,"prov":true},"classical":{"games":2945,"rating":1609,"rd":60,"prog":-22,"prov":true},"rapid":{"games":2945,"rating":1609,"rd":60,"prog":-22,"prov":true},"storm":{"runs":44,"score":61},"racer":{"runs":44,"score":61},"streak":{"runs":44,"score":61}},"profile":{"country":"France","location":"Lille","bio":"test bio","firstName":"John","lastName":"Doe","fideRating":1800,"links":"http://test.com"}}
 ''';
       when(
-        () => mockAuthClient.get(Uri.parse('$kLichessHost/api/rel/following')),
+        () => mockAuthClient.get(
+          Uri.parse('$kLichessHost/api/rel/following'),
+          headers: {'Accept': 'application/x-ndjson'},
+        ),
       ).thenAnswer(
         (_) async => Result.value(http.Response(testRelationResponse, 200)),
       );
