@@ -28,4 +28,16 @@ class RelationRepository {
       ),
     );
   }
+
+  FutureResult<void> follow(String username) async {
+    return apiClient.post(
+      Uri.parse('$kLichessHost/api/rel/follow/$username'),
+    );
+  }
+
+  FutureResult<void> unfollow(String username) async {
+    return apiClient.post(
+      Uri.parse('$kLichessHost/api/rel/unfollow/$username'),
+    );
+  }
 }
