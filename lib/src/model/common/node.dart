@@ -111,8 +111,15 @@ abstract class Node {
 
   /// Adds a new node at the given path and returns the new path.
   ///
+  /// Returns a tuple of the new path and whether the node was added.
+  /// Returns null if the node at path does not exist.
+  ///
   /// If the node already exists, it is not added again.
-  UciPath? addNodeAt(UciPath path, Branch newNode, {bool prepend = false}) {
+  (UciPath?, bool) addNodeAt(
+    UciPath path,
+    Branch newNode, {
+    bool prepend = false,
+  }) {
     final newPath = path + newNode.id;
     final node = nodeAtOrNull(path);
     if (node != null) {
@@ -124,9 +131,9 @@ abstract class Node {
           node.addChild(newNode);
         }
       }
-      return newPath;
+      return (newPath, !existing);
     } else {
-      return null;
+      return (null, false);
     }
   }
 
@@ -138,7 +145,7 @@ abstract class Node {
   }) {
     final node = newNodes.elementAtOrNull(0);
     if (node == null) return path;
-    final newPath = addNodeAt(path, node, prepend: prepend);
+    final (newPath, _) = addNodeAt(path, node, prepend: prepend);
     return newPath != null
         ? addNodesAt(newPath, newNodes.skip(1), prepend: prepend)
         : null;
@@ -146,9 +153,11 @@ abstract class Node {
 
   /// Adds a new node with that [Move] at the given path.
   ///
-  /// Returns the new path and the new node.
+  /// Returns a tuple of the new path and whether the node was added.
+  /// Returns null if the node at path does not exist.
+  ///
   /// If the node already exists, it is not added again.
-  (UciPath?, Branch?) addMoveAt(
+  (UciPath?, bool) addMoveAt(
     UciPath path,
     Move move, {
     bool prepend = false,
@@ -161,8 +170,7 @@ abstract class Node {
       fen: newPos.fen,
       position: newPos,
     );
-    final newPath = addNodeAt(path, newNode, prepend: prepend);
-    return (newPath, newPath != null ? newNode : null);
+    return addNodeAt(path, newNode, prepend: prepend);
   }
 
   /// Gets the node at the given path.
