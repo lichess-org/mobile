@@ -63,6 +63,18 @@ class _ClockState extends ConsumerState<StormClockWidget>
 
     time = widget.clock.timeLeft;
 
+    _subscribeToStream();
+  }
+
+  @override
+  void didUpdateWidget(covariant StormClockWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.clock != widget.clock) {
+      _subscribeToStream();
+    }
+  }
+
+  void _subscribeToStream() {
     streamSubscription = widget.clock.timeStream.listen((data) {
       final (newTime, bonusSeconds) = data;
 
