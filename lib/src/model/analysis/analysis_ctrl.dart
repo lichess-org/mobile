@@ -98,9 +98,9 @@ class AnalysisCtrl extends _$AnalysisCtrl {
 
   void onUserMove(Move move) {
     if (!state.position.isLegal(move)) return;
-    final (newPath, newNode) = _root.addMoveAt(state.currentPath, move);
+    final (newPath, isNewNode) = _root.addMoveAt(state.currentPath, move);
     if (newPath != null) {
-      _setPath(newPath, newNode: newNode);
+      _setPath(newPath, isNewNode: isNewNode);
     }
   }
 
@@ -161,11 +161,11 @@ class AnalysisCtrl extends _$AnalysisCtrl {
 
   void _setPath(
     UciPath path, {
-    Node? newNode,
+    bool isNewNode = false,
     bool replaying = false,
   }) {
     final pathChange = state.currentPath != path;
-    final currentNode = newNode ?? _root.nodeAt(path);
+    final currentNode = _root.nodeAt(path);
 
     if (currentNode is Branch) {
       if (!replaying) {
@@ -192,7 +192,9 @@ class AnalysisCtrl extends _$AnalysisCtrl {
         currentPath: path,
         currentNode: currentNode.view,
         lastMove: currentNode.sanMove.move,
-        root: newNode != null ? _root.view : state.root,
+        // root view is only used to display move list, so we need to
+        // recompute the root view only when a new node is added
+        root: isNewNode ? _root.view : state.root,
       );
     } else {
       state = state.copyWith(
