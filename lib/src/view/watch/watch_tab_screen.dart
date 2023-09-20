@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/tv/tv_game.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -182,7 +183,7 @@ class _WatchTvWidget extends ConsumerWidget {
               onTap: () {
                 pushPlatformRoute(
                   context,
-                  builder: (context) => const TvScreen(),
+                  builder: (context) => const TvScreen(channel: TvChannel.best),
                 ).then((_) {
                   ref.invalidate(tvBestSnapshotProvider);
                 });

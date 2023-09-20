@@ -45,6 +45,9 @@ mixin IndexableSteps on BaseGame {
   Position get lastPosition => steps.last.position;
 
   int get lastPly => steps.last.ply;
+
+  MaterialDiffSide? lastMaterialDiffAt(Side side) =>
+      steps.last.diff?.bySide(side);
 }
 
 @freezed

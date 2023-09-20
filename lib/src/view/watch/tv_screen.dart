@@ -11,11 +11,15 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/model/tv/featured_game.dart';
+import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
+import 'package:lichess_mobile/src/model/tv/tv_game_ctrl.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
 class TvScreen extends ConsumerStatefulWidget {
-  const TvScreen({super.key});
+  const TvScreen({required this.channel, super.key});
+
+  final TvChannel channel;
 
   @override
   ConsumerState<TvScreen> createState() => _TvScreenState();
@@ -23,6 +27,9 @@ class TvScreen extends ConsumerStatefulWidget {
 
 class _TvScreenState extends ConsumerState<TvScreen>
     with RouteAware, WidgetsBindingObserver {
+  TvGameCtrlProvider get _tvGameCtrl =>
+      tvGameCtrlProvider(widget.channel, null);
+
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(
@@ -36,12 +43,12 @@ class _TvScreenState extends ConsumerState<TvScreen>
   ) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Top Rated'),
+        title: Text('${widget.channel.label} TV'),
         actions: [
           ToggleSoundButton(),
         ],
       ),
-      body: const _Body(),
+      body: _Body(widget.channel),
     );
   }
 
@@ -50,19 +57,20 @@ class _TvScreenState extends ConsumerState<TvScreen>
   ) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: const Text('Top Rated'),
+        middle: Text('${widget.channel.label} TV'),
         trailing: ToggleSoundButton(),
       ),
-      child: const _Body(),
+      child: _Body(widget.channel),
     );
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      ref.read(featuredGameProvider.notifier).connectStream();
+      ref.read(_tvGameCtrl.notifier).startWatching();
     } else {
-      ref.read(featuredGameProvider.notifier).disconnectStream();
+      ref.read(_tvGameCtrl.notifier).stopWatching();
+      ref.read(authSocketProvider).close();
     }
   }
 
@@ -90,67 +98,81 @@ class _TvScreenState extends ConsumerState<TvScreen>
 
   @override
   void didPushNext() {
-    ref.read(featuredGameProvider.notifier).disconnectStream();
+    ref.read(_tvGameCtrl.notifier).stopWatching();
     super.didPushNext();
   }
 
   @override
   void didPopNext() {
-    ref.read(featuredGameProvider.notifier).connectStream();
+    ref.read(_tvGameCtrl.notifier).startWatching();
     super.didPopNext();
+  }
+
+  @override
+  void didPop() {
+    ref.read(_tvGameCtrl.notifier).stopWatching();
+    final navState = ref.read(currentNavigatorKeyProvider).currentState;
+    // only close the socket if we're going back to the root screen
+    if (navState != null && !navState.canPop()) {
+      ref.read(authSocketProvider).close();
+    }
+    super.didPop();
   }
 }
 
 class _Body extends ConsumerWidget {
-  const _Body();
+  const _Body(this.channel);
+
+  final TvChannel channel;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentTab = ref.watch(currentBottomTabProvider);
-    final featuredGame = currentTab == BottomTab.watch
-        ? ref.watch(featuredGameProvider)
-        : const AsyncLoading<FeaturedGameState>();
+    final asyncGame = ref.watch(tvGameCtrlProvider(channel, null));
 
     return SafeArea(
       child: Center(
-        child: featuredGame.when(
-          data: (game) {
+        child: asyncGame.when(
+          data: (gameState) {
+            final game = gameState.game;
+
             final boardData = cg.BoardData(
               interactableSide: cg.InteractableSide.none,
-              orientation: game.orientation.cg,
-              fen: game.position.position.fen,
-              lastMove: game.position.lastMove?.cg,
+              orientation: gameState.orientation.cg,
+              fen: game.lastPosition.fen,
+              lastMove: game.lastMove?.cg,
+              isCheck: game.lastPosition.isCheck,
             );
-            final topPlayer =
-                game.orientation == Side.white ? game.black : game.white;
-
-            final bottomPlayer =
-                game.orientation == Side.white ? game.white : game.black;
-            final topPlayerWidget = BoardPlayer(
-              player: topPlayer.asPlayer.copyWith(onGame: true),
-              clock: CountdownClock(
-                duration: Duration(seconds: topPlayer.seconds ?? 0),
-                active: !game.position.position.isGameOver &&
-                    game.position.position.turn == topPlayer.side,
-              ),
-              materialDiff: game.position.diff.bySide(topPlayer.side),
+            final blackPlayerWidget = BoardPlayer(
+              player: game.black.setOnGame(true),
+              clock: gameState.game.clock != null
+                  ? CountdownClock(
+                      duration: gameState.game.clock!.black,
+                      active: gameState.activeClockSide == Side.black,
+                    )
+                  : null,
+              materialDiff: game.lastMaterialDiffAt(Side.black),
             );
-            final bottomPlayerWidget = BoardPlayer(
-              player: bottomPlayer.asPlayer.copyWith(onGame: true),
-              clock: CountdownClock(
-                duration: Duration(seconds: bottomPlayer.seconds ?? 0),
-                active: !game.position.position.isGameOver &&
-                    game.position.position.turn == bottomPlayer.side,
-              ),
-              materialDiff: game.position.diff.bySide(bottomPlayer.side),
+            final whitePlayerWidget = BoardPlayer(
+              player: game.white.setOnGame(true),
+              clock: gameState.game.clock != null
+                  ? CountdownClock(
+                      duration: gameState.game.clock!.white,
+                      active: gameState.activeClockSide == Side.white,
+                    )
+                  : null,
+              materialDiff: game.lastMaterialDiffAt(Side.white),
             );
             return BoardTable(
               boardData: boardData,
               boardSettingsOverrides: const BoardSettingsOverrides(
                 animationDuration: Duration.zero,
               ),
-              topTable: topPlayerWidget,
-              bottomTable: bottomPlayerWidget,
+              topTable: gameState.orientation == Side.white
+                  ? blackPlayerWidget
+                  : whitePlayerWidget,
+              bottomTable: gameState.orientation == Side.white
+                  ? whitePlayerWidget
+                  : blackPlayerWidget,
             );
           },
           loading: () => const BoardTable(

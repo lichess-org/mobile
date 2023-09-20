@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/tv/live_tv_channels.dart';
@@ -13,6 +14,7 @@ import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 
 class LiveTvChannelsScreen extends ConsumerStatefulWidget {
   const LiveTvChannelsScreen({super.key});
@@ -100,6 +102,7 @@ class _TvChannelsScreenState extends ConsumerState<LiveTvChannelsScreen>
   @override
   void didPop() {
     ref.read(authSocketProvider).close();
+    super.didPop();
   }
 }
 
@@ -120,7 +123,12 @@ class _Body extends ConsumerWidget {
           itemBuilder: (context, index) {
             final game = list[index];
             return SmallBoardPreview(
-              onTap: () {},
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  builder: (_) => TvScreen(channel: game.channel),
+                );
+              },
               orientation: game.orientation.cg,
               fen: game.fen ?? kEmptyFen,
               lastMove: game.lastMove?.cg,

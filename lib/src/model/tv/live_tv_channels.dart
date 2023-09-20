@@ -5,10 +5,9 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 
-import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
+import 'package:lichess_mobile/src/model/tv/tv_socket_events.dart';
 
 import 'tv_repository.dart';
 import 'tv_event.dart';
@@ -35,9 +34,6 @@ class LiveTvChannels extends _$LiveTvChannels {
 
   /// Start watching the TV games
   Future<void> startWatching() async {
-    final (stream, _) = _socket.connect(Uri(path: kDefaultSocketRoute));
-    _socketSubscription = stream.listen(_handleSocketEvent);
-
     final newState = await _doStartWatching();
     state = AsyncValue.data(newState);
   }
@@ -48,6 +44,10 @@ class LiveTvChannels extends _$LiveTvChannels {
   }
 
   Future<IMap<TvChannel, TvGameSnapshot>> _doStartWatching() async {
+    final (stream, _) = _socket.connect(Uri(path: kDefaultSocketRoute));
+    _socketSubscription?.cancel();
+    _socketSubscription = stream.listen(_handleSocketEvent);
+
     final repo = ref.read(tvRepositoryProvider);
     final repoGames = await Result.release(repo.channels());
 
@@ -91,7 +91,6 @@ class LiveTvChannels extends _$LiveTvChannels {
     switch (event.topic) {
       case 'fen':
         final json = event.data as Map<String, dynamic>;
-        print('fen: $json');
         final fenEvent = FenSocketEvent.fromJson(json);
         final snapshots =
             state.requireValue.values.where((s) => s.id == fenEvent.id);
@@ -111,26 +110,24 @@ class LiveTvChannels extends _$LiveTvChannels {
 
       case 'tvSelect':
         final json = event.data as Map<String, dynamic>;
-        print('tvSelect: $json');
-        final requiredPick = pick(json).required();
-        final channel = requiredPick('channel').asTvChannelOrNull();
+        final channel = pick(json, 'channel').asTvChannelOrNull();
         if (channel != null) {
-          final side = requiredPick('color').asSideOrThrow();
+          final selectEvent = TvSelectEvent.fromJson(json);
           final newSnaphot = TvGameSnapshot(
-            channel: channel,
-            id: requiredPick('id').asGameIdOrThrow(),
-            orientation: side,
+            channel: selectEvent.channel,
+            id: selectEvent.id,
+            orientation: selectEvent.orientation,
             player: FeaturedPlayer(
               // don't know why server returns null sometimes
-              name: requiredPick('player', 'name').asStringOrNull() ?? '',
-              title: requiredPick('player', 'title').asStringOrNull(),
-              side: side,
-              rating: requiredPick('player', 'rating').asIntOrNull(),
+              name: selectEvent.player.name,
+              title: selectEvent.player.title,
+              side: selectEvent.orientation,
+              rating: selectEvent.player.rating,
             ),
           );
 
           state = AsyncValue.data(
-            state.requireValue.update(channel, (_) => newSnaphot),
+            state.requireValue.update(selectEvent.channel, (_) => newSnaphot),
           );
 
           _socket.send('startWatching', newSnaphot.id.value);
