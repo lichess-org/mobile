@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/navigation.dart';
@@ -13,13 +14,14 @@ import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
-import 'package:lichess_mobile/src/model/tv/tv_game_ctrl.dart';
+import 'package:lichess_mobile/src/model/tv/tv_ctrl.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
 class TvScreen extends ConsumerStatefulWidget {
-  const TvScreen({required this.channel, super.key});
+  const TvScreen({required this.channel, this.initialGame, super.key});
 
   final TvChannel channel;
+  final (GameId id, Side orientation)? initialGame;
 
   @override
   ConsumerState<TvScreen> createState() => _TvScreenState();
@@ -27,8 +29,8 @@ class TvScreen extends ConsumerStatefulWidget {
 
 class _TvScreenState extends ConsumerState<TvScreen>
     with RouteAware, WidgetsBindingObserver {
-  TvGameCtrlProvider get _tvGameCtrl =>
-      tvGameCtrlProvider(widget.channel, null);
+  TvCtrlProvider get _tvGameCtrl =>
+      tvCtrlProvider(widget.channel, widget.initialGame);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +50,7 @@ class _TvScreenState extends ConsumerState<TvScreen>
           ToggleSoundButton(),
         ],
       ),
-      body: _Body(widget.channel),
+      body: _Body(widget.channel, widget.initialGame),
     );
   }
 
@@ -60,7 +62,7 @@ class _TvScreenState extends ConsumerState<TvScreen>
         middle: Text('${widget.channel.label} TV'),
         trailing: ToggleSoundButton(),
       ),
-      child: _Body(widget.channel),
+      child: _Body(widget.channel, widget.initialGame),
     );
   }
 
@@ -121,13 +123,14 @@ class _TvScreenState extends ConsumerState<TvScreen>
 }
 
 class _Body extends ConsumerWidget {
-  const _Body(this.channel);
+  const _Body(this.channel, this.initialGame);
 
   final TvChannel channel;
+  final (GameId id, Side orientation)? initialGame;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncGame = ref.watch(tvGameCtrlProvider(channel, null));
+    final asyncGame = ref.watch(tvCtrlProvider(channel, initialGame));
 
     return SafeArea(
       child: Center(

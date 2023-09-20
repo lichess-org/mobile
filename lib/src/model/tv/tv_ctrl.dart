@@ -18,18 +18,18 @@ import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_socket_events.dart';
 
-part 'tv_game_ctrl.freezed.dart';
-part 'tv_game_ctrl.g.dart';
+part 'tv_ctrl.freezed.dart';
+part 'tv_ctrl.g.dart';
 
 @riverpod
-class TvGameCtrl extends _$TvGameCtrl {
+class TvCtrl extends _$TvCtrl {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   /// Last socket version received
   int _socketEventVersion = 0;
 
   @override
-  Future<TvGameCtrlState> build(
+  Future<TvCtrlState> build(
     TvChannel channel,
     (GameId id, Side orientation)? initialGame,
   ) async {
@@ -53,7 +53,7 @@ class TvGameCtrl extends _$TvGameCtrl {
     _socketSubscription?.cancel();
   }
 
-  Future<TvGameCtrlState> _connectWebsocket(
+  Future<TvCtrlState> _connectWebsocket(
     (GameId id, Side orientation)? game,
   ) async {
     GameId id;
@@ -86,7 +86,7 @@ class TvGameCtrl extends _$TvGameCtrl {
 
       _socketEventVersion = fullEvent.socketEventVersion;
 
-      return TvGameCtrlState(
+      return TvCtrlState(
         game: fullEvent.game,
         orientation: orientation,
       );
@@ -116,7 +116,7 @@ class TvGameCtrl extends _$TvGameCtrl {
     if (!state.hasValue) {
       assert(
         false,
-        'received a game SocketEvent while TvGameCtrlState is null',
+        'received a game SocketEvent while TvCtrlState is null',
       );
       return;
     }
@@ -136,7 +136,7 @@ class TvGameCtrl extends _$TvGameCtrl {
           diff: MaterialDiff.fromBoard(newPos.board),
         );
 
-        TvGameCtrlState newState = curState.copyWith(
+        TvCtrlState newState = curState.copyWith(
           game: curState.game.copyWith(
             steps: curState.game.steps.add(newStep),
           ),
@@ -169,13 +169,13 @@ class TvGameCtrl extends _$TvGameCtrl {
 }
 
 @freezed
-class TvGameCtrlState with _$TvGameCtrlState {
-  const TvGameCtrlState._();
+class TvCtrlState with _$TvCtrlState {
+  const TvCtrlState._();
 
-  const factory TvGameCtrlState({
+  const factory TvCtrlState({
     required PlayableGame game,
     required Side orientation,
-  }) = _TvGameCtrlState;
+  }) = _TvCtrlState;
 
   Side? get activeClockSide {
     if (game.clock == null) {

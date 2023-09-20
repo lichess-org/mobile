@@ -126,7 +126,10 @@ class _Body extends ConsumerWidget {
               onTap: () {
                 pushPlatformRoute(
                   context,
-                  builder: (_) => TvScreen(channel: game.channel),
+                  builder: (_) => TvScreen(
+                    channel: game.channel,
+                    initialGame: (game.id, game.orientation),
+                  ),
                 );
               },
               orientation: game.orientation.cg,
