@@ -233,6 +233,8 @@ class _Board extends ConsumerWidget {
 
     return cg.Board(
       size: boardSize,
+      onMove: (move, {isDrop, isPremove}) =>
+          ref.read(ctrlProvider.notifier).onUserMove(Move.fromUci(move.uci)!),
       data: cg.BoardData(
         orientation: analysisState.pov.cg,
         interactableSide: analysisState.position.isGameOver
@@ -245,8 +247,6 @@ class _Board extends ConsumerWidget {
         lastMove: analysisState.lastMove?.cg,
         sideToMove: analysisState.position.turn.cg,
         validMoves: analysisState.validMoves,
-        onMove: (move, {isDrop, isPremove}) =>
-            ref.read(ctrlProvider.notifier).onUserMove(Move.fromUci(move.uci)!),
         shapes: showBestMoveArrow &&
                 analysisState.isEngineAvailable &&
                 bestMoves != null

@@ -27,6 +27,8 @@ const _moveListOpacity = 0.6;
 /// An optional overlay or error message can be displayed on top of the board.
 class BoardTable extends ConsumerWidget {
   const BoardTable({
+    this.onMove,
+    this.onPremove,
     required this.boardData,
     this.boardSettingsOverrides,
     required this.topTable,
@@ -43,6 +45,9 @@ class BoardTable extends ConsumerWidget {
           moves == null || currentMoveIndex != null,
           'You must provide `currentMoveIndex` along with `moves`',
         );
+
+  final void Function(Move, {bool? isDrop, bool? isPremove})? onMove;
+  final void Function(Move?)? onPremove;
 
   final BoardData boardData;
 
@@ -129,8 +134,13 @@ class BoardTable extends ConsumerWidget {
               )
             : defaultSettings;
 
-        final board =
-            Board(size: boardSize, data: boardData, settings: settings);
+        final board = Board(
+          size: boardSize,
+          data: boardData,
+          settings: settings,
+          onMove: onMove,
+          onPremove: onPremove,
+        );
 
         Widget boardWidget = board;
 
