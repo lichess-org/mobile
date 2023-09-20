@@ -131,10 +131,10 @@ class _BodyState extends ConsumerState<_Body>
             child: SafeArea(
               bottom: false,
               child: BoardTable(
+                onMove: (move, {isDrop, isPremove}) => ref
+                    .read(ctrlProvider.notifier)
+                    .onUserMove(Move.fromUci(move.uci)!),
                 boardData: cg.BoardData(
-                  onMove: (move, {isDrop, isPremove}) => ref
-                      .read(ctrlProvider.notifier)
-                      .onUserMove(Move.fromUci(move.uci)!),
                   orientation: puzzleState.pov.cg,
                   interactableSide:
                       puzzleState.runOver || puzzleState.position.isGameOver

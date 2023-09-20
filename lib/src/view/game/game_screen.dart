@@ -346,6 +346,16 @@ class _Body extends ConsumerWidget {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
+              onMove: (move, {isDrop, isPremove}) {
+                ref.read(ctrlProvider.notifier).onUserMove(
+                      Move.fromUci(move.uci)!,
+                      isPremove: isPremove,
+                      isDrop: isDrop,
+                    );
+              },
+              onPremove: (move) {
+                ref.read(ctrlProvider.notifier).setPremove(move);
+              },
               boardData: cg.BoardData(
                 interactableSide:
                     gameState.game.playable && !gameState.isReplaying
@@ -359,13 +369,7 @@ class _Body extends ConsumerWidget {
                 isCheck: position.isCheck,
                 sideToMove: sideToMove.cg,
                 validMoves: algebraicLegalMoves(position),
-                onMove: (move, {isDrop, isPremove}) {
-                  ref.read(ctrlProvider.notifier).onUserMove(
-                        Move.fromUci(move.uci)!,
-                        isPremove: isPremove,
-                        isDrop: isDrop,
-                      );
-                },
+                premove: gameState.premove,
               ),
               topTable: topPlayer,
               bottomTable: gameState.canShowClaimWinCountdown &&
@@ -559,7 +563,7 @@ class _GameBottomBar extends ConsumerWidget {
                     builder: (context) => _GameNegotiationDialog(
                       title: Text(context.l10n.yourOpponentProposesATakeback),
                       onAccept: () {
-                        ref.read(ctrlProvider.notifier).offerOrAcceptTakeback();
+                        ref.read(ctrlProvider.notifier).acceptTakeback();
                       },
                       onDecline: () {
                         ref
@@ -648,7 +652,7 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             label: Text(context.l10n.takeback),
             onPressed: (context) {
-              ref.read(ctrlProvider.notifier).offerOrAcceptTakeback();
+              ref.read(ctrlProvider.notifier).offerTakeback();
             },
           ),
         if (gameState.game.player?.proposingTakeback == true)

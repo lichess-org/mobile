@@ -162,6 +162,11 @@ class _BodyState extends ConsumerState<_Body>
             child: SafeArea(
               bottom: false,
               child: BoardTable(
+                onMove: (move, {isDrop, isPremove}) {
+                  ref
+                      .read(ctrlProvider.notifier)
+                      .onUserMove(Move.fromUci(move.uci)!);
+                },
                 boardData: cg.BoardData(
                   orientation: puzzleState.pov.cg,
                   interactableSide: puzzleState.position.isGameOver
@@ -185,11 +190,6 @@ class _BodyState extends ConsumerState<_Body>
                           ),
                         ])
                       : null,
-                  onMove: (move, {isDrop, isPremove}) {
-                    ref
-                        .read(ctrlProvider.notifier)
-                        .onUserMove(Move.fromUci(move.uci)!);
-                  },
                 ),
                 engineGauge: puzzleState.isEngineEnabled
                     ? EngineGaugeParams(
