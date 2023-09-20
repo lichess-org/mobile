@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/tv/tv_socket_events.dart';
 
 import 'tv_repository.dart';
-import 'tv_event.dart';
 import 'tv_game.dart';
 import 'tv_channel.dart';
 import 'featured_player.dart';

@@ -5,8 +5,34 @@ import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
 
 part 'tv_socket_events.freezed.dart';
+
+@freezed
+class FenSocketEvent with _$FenSocketEvent {
+  const factory FenSocketEvent({
+    required GameId id,
+    required String fen,
+    required Move lastMove,
+    required Duration whiteClock,
+    required Duration blackClock,
+  }) = _FenSocketEvent;
+
+  factory FenSocketEvent.fromJson(Map<String, dynamic> json) {
+    return _tvFenEventFromPick(pick(json).required());
+  }
+}
+
+FenSocketEvent _tvFenEventFromPick(RequiredPick pick) {
+  return FenSocketEvent(
+    id: pick('id').asGameIdOrThrow(),
+    fen: pick('fen').asStringOrThrow(),
+    lastMove: pick('lm').asUciMoveOrThrow(),
+    whiteClock: pick('wc').asDurationFromSecondsOrThrow(),
+    blackClock: pick('bc').asDurationFromSecondsOrThrow(),
+  );
+}
 
 @freezed
 class TvSelectEvent with _$TvSelectEvent {
