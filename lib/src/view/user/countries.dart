@@ -7,6 +7,7 @@ const Map<String, String> countries = {
   "AL": "Albania",
   "AM": "Armenia",
   "AM-RA": "Artsakh",
+  "AN": "Netherlands Antilles",
   "AO": "Angola",
   "AQ": "Antarctica",
   "AR": "Argentina",
@@ -109,6 +110,7 @@ const Map<String, String> countries = {
   "HR": "Croatia",
   "HT": "Haiti",
   "HU": "Hungary",
+  "IC": "Canary Islands",
   "ID": "Indonesia",
   "IE": "Ireland",
   "IL": "Israel",
@@ -259,6 +261,7 @@ const Map<String, String> countries = {
   "YT": "Mayotte",
   "ZA": "South Africa",
   "ZM": "Zambia",
+  "ZW": "Zimbabwe",
 
   // non countries
   "EU": "European Union",
