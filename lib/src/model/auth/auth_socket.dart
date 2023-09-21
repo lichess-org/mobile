@@ -18,9 +18,10 @@ import 'package:lichess_mobile/src/model/auth/bearer.dart';
 
 part 'auth_socket.g.dart';
 
-const kDefaultConnectTimeout = Duration(seconds: 10);
-
 const kSRIStorageKey = 'socket_random_identifier';
+const kDefaultSocketRoute = '/socket/v5';
+
+const _kDefaultConnectTimeout = Duration(seconds: 10);
 
 /// The delay between the next ping after receiving a pong.
 const _kPingDelay = Duration(milliseconds: 2500);
@@ -231,7 +232,7 @@ class AuthSocket {
 
     final channel = IOWebSocketChannel.connect(
       uri,
-      connectTimeout: kDefaultConnectTimeout,
+      connectTimeout: _kDefaultConnectTimeout,
       headers: headers,
     );
 

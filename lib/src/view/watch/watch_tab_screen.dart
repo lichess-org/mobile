@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +11,7 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/tv/tv_game.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 
 part 'watch_tab_screen.g.dart';
 
@@ -160,24 +161,35 @@ class _WatchTvWidget extends ConsumerWidget {
       children: [
         Padding(
           padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
-          child: Text('Lichess TV', style: Styles.sectionTitle),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Lichess TV', style: Styles.sectionTitle),
+              NoPaddingTextButton(
+                onPressed: () {
+                  pushPlatformRoute(
+                    context,
+                    builder: (context) => const LiveTvChannelsScreen(),
+                  );
+                },
+                child: Text(context.l10n.more),
+              ),
+            ],
+          ),
         ),
         featuredGame.when(
           data: (game) {
-            final player = game.orientation == Side.white
-                ? game.white.asPlayer
-                : game.black.asPlayer;
             return SmallBoardPreview(
               onTap: () {
                 pushPlatformRoute(
                   context,
-                  builder: (context) => const TvScreen(),
+                  builder: (context) => const TvScreen(channel: TvChannel.best),
                 ).then((_) {
                   ref.invalidate(tvBestSnapshotProvider);
                 });
               },
               orientation: game.orientation.cg,
-              fen: game.fen,
+              fen: game.fen ?? kEmptyFen,
               description: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
@@ -193,9 +205,9 @@ class _WatchTvWidget extends ConsumerWidget {
                     size: 30,
                   ),
                   PlayerTitle(
-                    userName: player.displayName(context),
-                    title: player.title,
-                    rating: player.rating,
+                    userName: game.player.asPlayer.displayName(context),
+                    title: game.player.title,
+                    rating: game.player.rating,
                   ),
                 ],
               ),

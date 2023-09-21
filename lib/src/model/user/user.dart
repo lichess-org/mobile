@@ -22,6 +22,36 @@ class LightUser with _$LightUser {
       _$LightUserFromJson(json);
 }
 
+extension LightUserExtension on Pick {
+  LightUser asLightUserOrThrow() {
+    final requiredPick = this.required();
+    final value = requiredPick.value;
+    if (value is LightUser) {
+      return value;
+    }
+    if (value is Map<String, dynamic>) {
+      return LightUser(
+        id: requiredPick('id').asUserIdOrThrow(),
+        name: requiredPick('name').asStringOrThrow(),
+        title: requiredPick('title').asStringOrNull(),
+        isPatron: requiredPick('patron').asBoolOrNull(),
+      );
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to LightUser",
+    );
+  }
+
+  LightUser? asLightUserOrNull() {
+    if (value == null) return null;
+    try {
+      return asLightUserOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+}
+
 @freezed
 class User with _$User {
   const User._();
