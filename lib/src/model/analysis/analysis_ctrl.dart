@@ -216,6 +216,8 @@ class AnalysisCtrl extends _$AnalysisCtrl {
   }
 
   Future<void> _fetchOpening(UciPath path) async {
+    if (!kOpeningAllowedVariants.contains(variant)) return;
+
     final moves = _root.nodesOn(path).map((node) => node.sanMove.move);
     if (moves.isEmpty) return;
     if (moves.length > 20) return;
