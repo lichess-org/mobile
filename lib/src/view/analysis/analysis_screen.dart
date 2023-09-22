@@ -194,6 +194,7 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                         children: [
                           _ColumnTopTable(widget.ctrlProvider),
                           _Board(widget.ctrlProvider, boardSize),
+                          _Opening(widget.ctrlProvider),
                           _Moves(widget.ctrlProvider, _MovesDisplayMode.normal),
                         ],
                       );
@@ -271,6 +272,39 @@ class _Board extends ConsumerWidget {
         animationDuration: boardPrefs.pieceAnimationDuration,
       ),
     );
+  }
+}
+
+class _Opening extends ConsumerWidget {
+  const _Opening(this.ctrlProvider);
+
+  final AnalysisCtrlProvider ctrlProvider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final nodeOpening =
+        ref.watch(ctrlProvider.select((s) => s.currentNode.opening));
+
+    final gameOpening = ref.watch(ctrlProvider.select((s) => s.gameOpening));
+    final opening = nodeOpening ?? gameOpening?.$2;
+    return opening != null
+        ? Container(
+            height: kEvalGaugeSize,
+            width: double.infinity,
+            color: defaultTargetPlatform == TargetPlatform.iOS
+                ? CupertinoDynamicColor.resolve(
+                    CupertinoColors.secondarySystemBackground,
+                    context,
+                  )
+                : null,
+            child: Center(
+              child: Text(
+                opening.name,
+                style: const TextStyle(fontSize: kChessNotationFontSize),
+              ),
+            ),
+          )
+        : const SizedBox.shrink();
   }
 }
 

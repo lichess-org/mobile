@@ -85,6 +85,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/chess_openings.db
     - assets/images/
     - assets/images/stockfish/
     - assets/sounds/futuristic/

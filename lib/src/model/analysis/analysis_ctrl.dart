@@ -8,12 +8,13 @@ import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 
 part 'analysis_ctrl.g.dart';
 part 'analysis_ctrl.freezed.dart';
@@ -188,6 +189,11 @@ class AnalysisCtrl extends _$AnalysisCtrl {
           soundService.play(Sound.move);
         }
       }
+
+      if (currentNode.opening == null && currentNode.ply <= 20) {
+        _fetchOpening(path);
+      }
+
       state = state.copyWith(
         currentPath: path,
         currentNode: currentNode.view,
@@ -206,6 +212,29 @@ class AnalysisCtrl extends _$AnalysisCtrl {
 
     if (pathChange) {
       _startEngineEval();
+    }
+  }
+
+  Future<void> _fetchOpening(UciPath path) async {
+    final moves = _root.nodesOn(path).map((node) => node.sanMove.move);
+    if (moves.isEmpty) return;
+    if (moves.length > 20) return;
+
+    final opening =
+        await ref.read(openingServiceProvider).fetchFromMoves(moves);
+
+    if (opening != null) {
+      _root.updateAt(path, (node) => node.opening = opening);
+
+      AnalysisCtrlState newState = state;
+      if (state.currentPath == path) {
+        newState = newState.copyWith(currentNode: _root.nodeAt(path).view);
+      }
+      if (state.gameOpening == null || path.size > state.gameOpening!.$1.size) {
+        newState = newState.copyWith(gameOpening: (path, opening));
+      }
+
+      state = newState;
     }
   }
 
@@ -247,6 +276,7 @@ class AnalysisCtrlState with _$AnalysisCtrlState {
     required Side pov,
     required EvaluationContext evaluationContext,
     Move? lastMove,
+    (UciPath, Opening)? gameOpening,
   }) = _AnalysisCtrlState;
 
   IMap<String, ISet<String>> get validMoves =>

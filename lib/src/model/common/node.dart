@@ -27,13 +27,18 @@ abstract class Node {
     required this.fen,
     required this.position,
     this.eval,
+    this.opening,
   });
 
   final int ply;
   final String fen;
   final Position position;
 
+  /// The evaluation of the position.
   ClientEval? eval;
+
+  /// The opening associated with this node.
+  Opening? opening;
 
   final List<Branch> children = [];
 
@@ -215,6 +220,7 @@ class Branch extends Node {
     required super.fen,
     required super.position,
     super.eval,
+    super.opening,
     required this.sanMove,
   });
 
@@ -231,6 +237,7 @@ class Branch extends Node {
         position: position,
         sanMove: sanMove,
         eval: eval,
+        opening: opening,
         children: IList(children.map((child) => child.view)),
       );
 
@@ -303,6 +310,7 @@ abstract class ViewNode {
   Position get position;
   IList<ViewBranch> get children;
   ClientEval? get eval;
+  Opening? get opening;
 }
 
 /// An immutable view of a [Root] node.
@@ -322,6 +330,9 @@ class ViewRoot with _$ViewRoot implements ViewNode {
 
   @override
   SanMove? get sanMove => null;
+
+  @override
+  Opening? get opening => null;
 }
 
 /// An immutable view of a [Branch] node.
@@ -334,6 +345,7 @@ class ViewBranch with _$ViewBranch implements ViewNode {
     required int ply,
     required String fen,
     required Position position,
+    Opening? opening,
     required IList<ViewBranch> children,
     ClientEval? eval,
   }) = _ViewBranch;

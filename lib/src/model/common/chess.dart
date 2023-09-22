@@ -121,6 +121,17 @@ enum Variant {
   }
 }
 
+@freezed
+class Opening with _$Opening {
+  const factory Opening({
+    required String eco,
+    required String name,
+    required String fen,
+    required String pgnMoves,
+    required String uciMoves,
+  }) = _Opening;
+}
+
 extension ChessExtension on Pick {
   Move asUciMoveOrThrow() {
     final value = this.required().value;
