@@ -23,7 +23,6 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -121,7 +120,7 @@ class _Body extends ConsumerStatefulWidget {
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
+class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final showEvaluationGauge = ref.watch(
