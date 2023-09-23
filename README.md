@@ -11,7 +11,7 @@ If you want to contribute, please read the [contributing guide](./CONTRIBUTING.m
 
 ## Setup
 
-Follow the [flutter guide](https://docs.flutter.dev/get-started/install)
+Follow the [fvm (flutter version management) guide](https://fvm.app/docs/getting_started/installation)
 to install flutter on your operating system.
 
 This project is meant to run on iOS and Android, so you need to follow the
@@ -33,11 +33,11 @@ The mobile application is configured by default to target `http://127.0.0.1:9663
 First run the code generator:
 
 ```
-flutter pub get
+fvm flutter pub get
 dart run build_runner watch
 ```
 
-Check you have some connected device with: `flutter devices`.
+Check you have some connected device with: `fvm flutter devices`.
 
 If you target an android device you need to run these commands so the device can reach the local lila instance:
 ```
@@ -48,12 +48,12 @@ adb reverse tcp:9664 tcp:9664
 Then run on your device:
 
 ```
-flutter run -d <my_device>
+fvm flutter run -d <my_device>
 ```
 
 You can find more information about emulators [in the wiki](https://github.com/lichess-org/mobile/wiki/Setting-up-device-emulators).
 
-You can find more information about the `flutter run` command by running `flutter run --help`.
+You can find more information about the `fvm flutter run` command by running `fvm flutter run --help`.
 
 ## Internationalisation
 
