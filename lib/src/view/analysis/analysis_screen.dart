@@ -295,7 +295,7 @@ class _Opening extends ConsumerWidget {
                     CupertinoColors.secondarySystemBackground,
                     context,
                   )
-                : null,
+                : Theme.of(context).colorScheme.secondaryContainer,
             child: Center(
               child: Text(
                 opening.name,
