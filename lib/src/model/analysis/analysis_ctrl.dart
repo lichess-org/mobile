@@ -160,13 +160,24 @@ class AnalysisCtrl extends _$AnalysisCtrl {
     _startEngineEval();
   }
 
+  /// Gets the node and maybe the associated branch opening at the given path.
+  (Node, Opening?) _nodeOpeningAt(Node node, UciPath path, [Opening? opening]) {
+    if (path.isEmpty) return (node, opening);
+    final child = node.childById(path.head!);
+    if (child != null) {
+      return _nodeOpeningAt(child, path.tail, child.opening ?? opening);
+    } else {
+      return (node, opening);
+    }
+  }
+
   void _setPath(
     UciPath path, {
     bool isNewNode = false,
     bool replaying = false,
   }) {
     final pathChange = state.currentPath != path;
-    final currentNode = _root.nodeAt(path);
+    final (currentNode, opening) = _nodeOpeningAt(_root, path);
 
     if (currentNode is Branch) {
       if (!replaying) {
@@ -198,6 +209,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
         currentPath: path,
         currentNode: currentNode.view,
         lastMove: currentNode.sanMove.move,
+        currentBranchOpening: opening,
         // root view is only used to display move list, so we need to
         // recompute the root view only when a new node is added
         root: isNewNode ? _root.view : state.root,
@@ -206,6 +218,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       state = state.copyWith(
         currentPath: path,
         currentNode: state.root,
+        currentBranchOpening: opening,
         lastMove: null,
       );
     }
@@ -228,15 +241,9 @@ class AnalysisCtrl extends _$AnalysisCtrl {
     if (opening != null) {
       _root.updateAt(path, (node) => node.opening = opening);
 
-      AnalysisCtrlState newState = state;
       if (state.currentPath == path) {
-        newState = newState.copyWith(currentNode: _root.nodeAt(path).view);
+        state = state.copyWith(currentNode: _root.nodeAt(path).view);
       }
-      if (state.gameOpening == null || path.size > state.gameOpening!.$1.size) {
-        newState = newState.copyWith(gameOpening: (path, opening));
-      }
-
-      state = newState;
     }
   }
 
@@ -278,7 +285,7 @@ class AnalysisCtrlState with _$AnalysisCtrlState {
     required Side pov,
     required EvaluationContext evaluationContext,
     Move? lastMove,
-    (UciPath, Opening)? gameOpening,
+    Opening? currentBranchOpening,
   }) = _AnalysisCtrlState;
 
   IMap<String, ISet<String>> get validMoves =>

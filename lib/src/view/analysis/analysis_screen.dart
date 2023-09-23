@@ -284,8 +284,9 @@ class _Opening extends ConsumerWidget {
     final nodeOpening =
         ref.watch(ctrlProvider.select((s) => s.currentNode.opening));
 
-    final gameOpening = ref.watch(ctrlProvider.select((s) => s.gameOpening));
-    final opening = nodeOpening ?? gameOpening?.$2;
+    final branchOpening =
+        ref.watch(ctrlProvider.select((s) => s.currentBranchOpening));
+    final opening = nodeOpening ?? branchOpening;
     return opening != null
         ? Container(
             height: kEvalGaugeSize,
