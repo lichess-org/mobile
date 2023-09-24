@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/db/shared_preferences.dart';
 part 'analysis_preferences.freezed.dart';
 part 'analysis_preferences.g.dart';
 
-const _prefKey = 'preferences.board';
+const _prefKey = 'preferences.analysis';
 
 final maxEngineCores = Platform.numberOfProcessors - 1;
 
