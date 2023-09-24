@@ -697,9 +697,13 @@ class _Preferences extends ConsumerWidget {
           SwitchSettingTile(
             title: Text(context.l10n.toggleLocalEvaluation),
             value: prefs.enableLocalEvaluation,
-            onChanged: (value) {
-              ref.read(ctrlProvider.notifier).toggleLocalEvaluation(value);
-            },
+            onChanged: state.isLocalEvaluationAllowed
+                ? (value) {
+                    ref
+                        .read(ctrlProvider.notifier)
+                        .toggleLocalEvaluation(value);
+                  }
+                : null,
           ),
           Opacity(
             opacity: state.isEngineAvailable ? 1.0 : 0.5,
