@@ -27,7 +27,7 @@ class OpeningService {
 
   Future<Database> get _db => ref.read(openingsDatabaseProvider.future);
 
-  Future<Opening?> fetchFromMoves(Iterable<Move> moves) async {
+  Future<FullOpening?> fetchFromMoves(Iterable<Move> moves) async {
     final db = await _db;
     final movesString = moves.map((move) => move.uci).join(' ');
     final list = await db.query(
@@ -39,7 +39,7 @@ class OpeningService {
     final first = list.firstOrNull;
 
     if (first != null) {
-      return Opening(
+      return FullOpening(
         eco: first['eco']! as String,
         name: first['name']! as String,
         fen: first['epd']! as String,

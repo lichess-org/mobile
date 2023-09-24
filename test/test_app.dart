@@ -43,7 +43,10 @@ Future<Widget> buildTestApp(
   AuthSessionState? userSession,
 }) async {
   await tester.binding.setSurfaceSize(kTestSurfaceSize);
+
+  // disable stockfish in analysis screen tests
   SharedPreferences.setMockInitialValues({});
+
   final sharedPreferences = await SharedPreferences.getInstance();
 
   FlutterSecureStorage.setMockInitialValues({
