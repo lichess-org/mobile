@@ -44,7 +44,6 @@ Future<Widget> buildTestApp(
 }) async {
   await tester.binding.setSurfaceSize(kTestSurfaceSize);
 
-  // disable stockfish in analysis screen tests
   SharedPreferences.setMockInitialValues({});
 
   final sharedPreferences = await SharedPreferences.getInstance();
