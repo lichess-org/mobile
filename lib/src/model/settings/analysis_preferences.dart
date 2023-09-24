@@ -8,22 +8,30 @@ import 'package:lichess_mobile/src/db/shared_preferences.dart';
 part 'analysis_preferences.freezed.dart';
 part 'analysis_preferences.g.dart';
 
-const _prefKey = 'preferences.board';
-
 final maxEngineCores = Platform.numberOfProcessors - 1;
 
 @Riverpod(keepAlive: true)
 class AnalysisPreferences extends _$AnalysisPreferences {
+  static const prefKey = 'preferences.analysis';
+
   @override
   AnalysisPrefState build() {
     final prefs = ref.watch(sharedPreferencesProvider);
 
-    final stored = prefs.getString(_prefKey);
+    final stored = prefs.getString(prefKey);
     return stored != null
         ? AnalysisPrefState.fromJson(
             jsonDecode(stored) as Map<String, dynamic>,
           )
         : AnalysisPrefState.defaults;
+  }
+
+  Future<void> toggleEnableLocalEvaluation() {
+    return _save(
+      state.copyWith(
+        enableLocalEvaluation: !state.enableLocalEvaluation,
+      ),
+    );
   }
 
   Future<void> toggleShowEvaluationGauge() {
@@ -63,7 +71,7 @@ class AnalysisPreferences extends _$AnalysisPreferences {
   Future<void> _save(AnalysisPrefState newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(
-      _prefKey,
+      prefKey,
       jsonEncode(newState.toJson()),
     );
     state = newState;
@@ -75,6 +83,7 @@ class AnalysisPrefState with _$AnalysisPrefState {
   const AnalysisPrefState._();
 
   const factory AnalysisPrefState({
+    required bool enableLocalEvaluation,
     required bool showEvaluationGauge,
     required bool showBestMoveArrow,
     @Assert('numEvalLines >= 1 && numEvalLines <= 3') required int numEvalLines,
@@ -83,6 +92,7 @@ class AnalysisPrefState with _$AnalysisPrefState {
   }) = _AnalysisPrefState;
 
   static final defaults = AnalysisPrefState(
+    enableLocalEvaluation: true,
     showEvaluationGauge: true,
     showBestMoveArrow: true,
     numEvalLines: 2,

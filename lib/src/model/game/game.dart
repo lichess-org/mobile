@@ -192,6 +192,7 @@ class ArchivedGameData with _$ArchivedGameData {
     required Player white,
     required Player black,
     required Variant variant,
+    LightOpening? opening,
     String? initialFen,
     String? lastFen,
     Side? winner,

@@ -43,7 +43,9 @@ Future<Widget> buildTestApp(
   AuthSessionState? userSession,
 }) async {
   await tester.binding.setSurfaceSize(kTestSurfaceSize);
+
   SharedPreferences.setMockInitialValues({});
+
   final sharedPreferences = await SharedPreferences.getInstance();
 
   FlutterSecureStorage.setMockInitialValues({

@@ -121,6 +121,33 @@ enum Variant {
   }
 }
 
+/// Represents a chess opening.
+sealed class Opening {
+  String get eco;
+  String get name;
+}
+
+@freezed
+class LightOpening with _$LightOpening implements Opening {
+  const LightOpening._();
+  const factory LightOpening({
+    required String eco,
+    required String name,
+  }) = _LightOpening;
+}
+
+@freezed
+class FullOpening with _$FullOpening implements Opening {
+  const FullOpening._();
+  const factory FullOpening({
+    required String eco,
+    required String name,
+    required String fen,
+    required String pgnMoves,
+    required String uciMoves,
+  }) = _FullOpening;
+}
+
 extension ChessExtension on Pick {
   Move asUciMoveOrThrow() {
     final value = this.required().value;

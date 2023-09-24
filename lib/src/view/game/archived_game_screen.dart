@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_ctrl.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
 import 'archived_game_screen_providers.dart';
@@ -235,15 +236,19 @@ class _BottomBar extends ConsumerWidget {
                       context,
                       fullscreenDialog: true,
                       builder: (context) => AnalysisScreen(
-                        variant: gameData.variant,
-                        steps: ref
-                            .read(gameCursorProvider(gameData.id))
-                            .requireValue
-                            .$1
-                            .steps,
-                        orientation: orientation,
-                        id: gameData.id,
                         title: context.l10n.gameAnalysis,
+                        options: AnalysisOptions(
+                          isLocalEvaluationAllowed: true,
+                          variant: gameData.variant,
+                          steps: ref
+                              .read(gameCursorProvider(gameData.id))
+                              .requireValue
+                              .$1
+                              .steps,
+                          orientation: orientation,
+                          id: gameData.id,
+                          opening: gameData.opening,
+                        ),
                       ),
                     )
                 : null,

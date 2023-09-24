@@ -12,7 +12,9 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_ctrl.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 import '../../test_app.dart';
@@ -44,10 +46,13 @@ void main() {
       final app = await buildTestApp(
         tester,
         home: AnalysisScreen(
-          variant: Variant.standard,
-          steps: gameStep,
-          orientation: Side.white,
-          id: gameData.id,
+          options: AnalysisOptions(
+            isLocalEvaluationAllowed: false,
+            variant: Variant.standard,
+            steps: gameStep,
+            orientation: Side.white,
+            id: gameData.id,
+          ),
         ),
       );
 
@@ -62,14 +67,18 @@ void main() {
         isTrue,
       );
     });
+
     testWidgets('move backwards and forward', (tester) async {
       final app = await buildTestApp(
         tester,
         home: AnalysisScreen(
-          variant: Variant.standard,
-          steps: gameStep,
-          orientation: Side.white,
-          id: gameData.id,
+          options: AnalysisOptions(
+            isLocalEvaluationAllowed: false,
+            variant: Variant.standard,
+            steps: gameStep,
+            orientation: Side.white,
+            id: gameData.id,
+          ),
         ),
       );
 

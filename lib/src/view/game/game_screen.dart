@@ -8,6 +8,7 @@ import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_ctrl.dart';
 import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
@@ -504,10 +505,13 @@ class _GameBottomBar extends ConsumerWidget {
                   context,
                   fullscreenDialog: true,
                   builder: (_) => AnalysisScreen(
-                    variant: gameState.game.meta.variant,
-                    steps: gameState.game.steps,
-                    orientation: gameState.game.youAre ?? Side.white,
-                    id: gameState.game.meta.id,
+                    options: AnalysisOptions(
+                      isLocalEvaluationAllowed: true,
+                      variant: gameState.game.meta.variant,
+                      steps: gameState.game.steps,
+                      orientation: gameState.game.youAre ?? Side.white,
+                      id: gameState.game.meta.id,
+                    ),
                     title: context.l10n.gameAnalysis,
                   ),
                 ),

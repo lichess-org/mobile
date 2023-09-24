@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -8,15 +9,28 @@ import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 
 part 'analysis_ctrl.g.dart';
 part 'analysis_ctrl.freezed.dart';
+
+@freezed
+class AnalysisOptions with _$AnalysisOptions {
+  const factory AnalysisOptions({
+    required ID id,
+    required bool isLocalEvaluationAllowed,
+    required Variant variant,
+    required IList<GameStep> steps,
+    required Side orientation,
+    LightOpening? opening,
+  }) = _AnalysisOptions;
+}
 
 @riverpod
 class AnalysisCtrl extends _$AnalysisCtrl {
@@ -24,24 +38,22 @@ class AnalysisCtrl extends _$AnalysisCtrl {
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
 
+  Timer? _startEngineEvalTimer;
+
   @override
-  AnalysisCtrlState build(
-    Variant variant,
-    IList<GameStep> steps,
-    Side orientation,
-    ID id,
-  ) {
+  AnalysisCtrlState build(AnalysisOptions options) {
     ref.onDispose(() {
+      _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
     });
     _root = Root(
-      ply: steps[0].ply,
-      fen: steps[0].position.fen,
-      position: steps[0].position,
+      ply: options.steps[0].ply,
+      fen: options.steps[0].position.fen,
+      position: options.steps[0].position,
     );
 
     Node current = _root;
-    steps.skip(1).forEach((step) {
+    options.steps.skip(1).forEach((step) {
       final nextNode = Branch(
         ply: step.ply,
         sanMove: step.sanMove!,
@@ -54,45 +66,34 @@ class AnalysisCtrl extends _$AnalysisCtrl {
 
     final currentPath = _root.mainlinePath;
 
-    // don't use ref.watch here: we don't want to clear all state when the
+    // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
 
     final evalContext = EvaluationContext(
-      variant: variant,
+      variant: options.variant,
       initialFen: _root.fen,
-      contextId: id,
+      contextId: options.id,
       multiPv: prefs.numEvalLines,
       cores: prefs.numEngineCores,
     );
 
-    _engineEvalDebounce(
-      () => ref
-          .read(
-            engineEvaluationProvider(
-              evalContext,
-            ).notifier,
-          )
-          .start(
-            currentPath,
-            _root.mainline.map(Step.fromNode),
-            current.position,
-            shouldEmit: (work) => work.path == currentPath,
-          )
-          ?.forEach(
-            (t) => _root.updateAt(t.$1.path, (node) => node.eval = t.$2),
-          ),
-    );
+    _startEngineEvalTimer = Timer(const Duration(milliseconds: 200), () {
+      _startEngineEval();
+    });
 
     return AnalysisCtrlState(
-      id: id,
+      id: options.id,
+      isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
+      isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
       initialFen: _root.fen,
       initialPath: UciPath.empty,
       currentPath: currentPath,
       root: _root.view,
       currentNode: current.view,
-      pov: orientation,
+      pov: options.orientation,
       evaluationContext: evalContext,
+      contextOpening: options.opening,
     );
   }
 
@@ -122,6 +123,20 @@ class AnalysisCtrl extends _$AnalysisCtrl {
 
   void userJump(UciPath path) {
     _setPath(path);
+  }
+
+  void toggleLocalEvaluation(bool value) {
+    ref
+        .read(analysisPreferencesProvider.notifier)
+        .toggleEnableLocalEvaluation();
+
+    state = state.copyWith(isLocalEvaluationEnabled: value);
+
+    if (value) {
+      _startEngineEval();
+    } else {
+      _stopEngineEval();
+    }
   }
 
   void setNumEvalLines(int numEvalLines) {
@@ -159,13 +174,24 @@ class AnalysisCtrl extends _$AnalysisCtrl {
     _startEngineEval();
   }
 
+  /// Gets the node and maybe the associated branch opening at the given path.
+  (Node, Opening?) _nodeOpeningAt(Node node, UciPath path, [Opening? opening]) {
+    if (path.isEmpty) return (node, opening);
+    final child = node.childById(path.head!);
+    if (child != null) {
+      return _nodeOpeningAt(child, path.tail, child.opening ?? opening);
+    } else {
+      return (node, opening);
+    }
+  }
+
   void _setPath(
     UciPath path, {
     bool isNewNode = false,
     bool replaying = false,
   }) {
     final pathChange = state.currentPath != path;
-    final currentNode = _root.nodeAt(path);
+    final (currentNode, opening) = _nodeOpeningAt(_root, path);
 
     if (currentNode is Branch) {
       if (!replaying) {
@@ -188,10 +214,16 @@ class AnalysisCtrl extends _$AnalysisCtrl {
           soundService.play(Sound.move);
         }
       }
+
+      if (currentNode.opening == null && currentNode.ply <= 20) {
+        _fetchOpening(path);
+      }
+
       state = state.copyWith(
         currentPath: path,
         currentNode: currentNode.view,
         lastMove: currentNode.sanMove.move,
+        currentBranchOpening: opening,
         // root view is only used to display move list, so we need to
         // recompute the root view only when a new node is added
         root: isNewNode ? _root.view : state.root,
@@ -200,6 +232,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       state = state.copyWith(
         currentPath: path,
         currentNode: state.root,
+        currentBranchOpening: opening,
         lastMove: null,
       );
     }
@@ -209,8 +242,30 @@ class AnalysisCtrl extends _$AnalysisCtrl {
     }
   }
 
+  Future<void> _fetchOpening(UciPath path) async {
+    if (!kOpeningAllowedVariants.contains(options.variant)) return;
+
+    final moves = _root.nodesOn(path).map((node) => node.sanMove.move);
+    if (moves.isEmpty) return;
+    if (moves.length > 20) return;
+
+    final opening =
+        await ref.read(openingServiceProvider).fetchFromMoves(moves);
+
+    if (opening != null) {
+      _root.updateAt(path, (node) => node.opening = opening);
+
+      if (state.currentPath == path) {
+        state = state.copyWith(currentNode: _root.nodeAt(path).view);
+      }
+    }
+  }
+
+  bool get _isEngineEnabled =>
+      ref.read(analysisPreferencesProvider).enableLocalEvaluation;
+
   void _startEngineEval() {
-    if (!state.isEngineAvailable) return;
+    if (!_isEngineEnabled || !state.isEngineAvailable) return;
     _engineEvalDebounce(
       () => ref
           .read(
@@ -246,13 +301,20 @@ class AnalysisCtrlState with _$AnalysisCtrlState {
     required ID id,
     required Side pov,
     required EvaluationContext evaluationContext,
+    required bool isLocalEvaluationAllowed,
+    required bool isLocalEvaluationEnabled,
     Move? lastMove,
+    Opening? contextOpening,
+    Opening? currentBranchOpening,
   }) = _AnalysisCtrlState;
 
   IMap<String, ISet<String>> get validMoves =>
       algebraicLegalMoves(currentNode.position);
 
-  bool get isEngineAvailable => engineSupportedVariants.contains(
+  bool get isEngineAvailable =>
+      isLocalEvaluationAllowed &&
+      isLocalEvaluationEnabled &&
+      engineSupportedVariants.contains(
         evaluationContext.variant,
       );
 

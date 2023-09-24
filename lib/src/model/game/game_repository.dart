@@ -43,7 +43,7 @@ class GameRepository {
   FutureResult<IList<ArchivedGameData>> getUserGames(UserId userId) {
     return apiClient.get(
       Uri.parse(
-        '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true&accuracy=true',
+        '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true&accuracy=true&opening=true',
       ),
       headers: {'Accept': 'application/x-ndjson'},
     ).flatMap(
@@ -139,6 +139,14 @@ ArchivedGameData _archivedGameDataFromPick(RequiredPick pick) {
     initialFen: pick('initialFen').asStringOrNull(),
     lastFen: pick('lastFen').asStringOrNull(),
     clock: pick('clock').letOrNull(_clockDataFromPick),
+    opening: pick('opening').letOrNull(_openingFromPick),
+  );
+}
+
+LightOpening _openingFromPick(RequiredPick pick) {
+  return LightOpening(
+    eco: pick('eco').asStringOrThrow(),
+    name: pick('name').asStringOrThrow(),
   );
 }
 
