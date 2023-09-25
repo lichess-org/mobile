@@ -553,12 +553,3 @@ class StackedMoveItem extends StatelessWidget {
     );
   }
 }
-
-/// Returns the estimated height of spaces around the board.
-double estimateTableHeight(BuildContext context) {
-  final size = MediaQuery.sizeOf(context);
-  final padding = MediaQuery.paddingOf(context);
-  final safeHeight = size.height - padding.top - padding.bottom;
-  // viewport height - board size - app bar height - bottom bar height
-  return (safeHeight - size.width - 50 - 56) / 2;
-}

@@ -125,8 +125,10 @@ class _BodyState extends ConsumerState<_Body> {
                 final aspectRatio = constraints.biggest.aspectRatio;
                 final defaultBoardSize = constraints.biggest.shortestSide;
                 final isTablet = defaultBoardSize > kTabletThreshold;
+                final remainingHeight =
+                    constraints.maxHeight - defaultBoardSize;
                 final isSmallScreen =
-                    constraints.maxHeight < kSmallHeightScreenThreshold;
+                    remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
                 final boardSize = isTablet || isSmallScreen
                     ? defaultBoardSize - kTabletBoardTableSidePadding * 2
                     : defaultBoardSize;

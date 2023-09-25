@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 
 /// A widget to display player information above/below the chess board.
@@ -40,9 +41,9 @@ class BoardPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.sizeOf(context).height;
+    final remaingHeight = estimateRemainingHeightLeftBoard(context);
     final playerFontSize =
-        screenHeight < kSmallHeightScreenThreshold ? 14.0 : 16.0;
+        remaingHeight <= kSmallRemainingHeightLeftBoardThreshold ? 14.0 : 16.0;
 
     final playerWidget = Column(
       mainAxisAlignment: MainAxisAlignment.center,

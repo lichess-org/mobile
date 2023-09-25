@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/wakelock.dart';
+import 'package:lichess_mobile/src/utils/layout.dart';
 
 class App extends ConsumerStatefulWidget {
   const App({super.key});
@@ -44,7 +45,7 @@ class _AppState extends ConsumerState<App> {
         (state) => state.boardTheme,
       ),
     );
-    final screenHeight = MediaQuery.sizeOf(context).height;
+    final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -52,7 +53,9 @@ class _AppState extends ConsumerState<App> {
       onGenerateTitle: (BuildContext context) => 'lichess.org',
       theme: ThemeData(
         navigationBarTheme: NavigationBarTheme.of(context).copyWith(
-          height: screenHeight < kSmallHeightScreenThreshold ? 60 : null,
+          height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold
+              ? 60
+              : null,
         ),
         textTheme: defaultTargetPlatform == TargetPlatform.iOS
             ? brightness == Brightness.light
