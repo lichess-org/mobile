@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -64,6 +66,7 @@ class ArchivedGameScreen extends ConsumerWidget {
         trailing: ToggleSoundButton(),
       ),
       child: SafeArea(
+        bottom: false,
         child: Column(
           children: [
             Expanded(
@@ -217,72 +220,78 @@ class _BottomBar extends ConsumerWidget {
     final canGoForward = ref.watch(canGoForwardProvider(gameData.id));
     final canGoBackward = ref.watch(canGoBackwardProvider(gameData.id));
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          BottomBarIconButton(
-            semanticsLabel: context.l10n.menu,
-            onPressed: () {
-              _showGameMenu(context, ref);
-            },
-            icon: const Icon(Icons.menu),
-          ),
-          BottomBarIconButton(
-            semanticsLabel: context.l10n.gameAnalysis,
-            onPressed: ref.read(gameCursorProvider(gameData.id)).hasValue
-                ? () => pushPlatformRoute(
-                      context,
-                      fullscreenDialog: true,
-                      builder: (context) => AnalysisScreen(
-                        title: context.l10n.gameAnalysis,
-                        options: AnalysisOptions(
-                          isLocalEvaluationAllowed: true,
-                          variant: gameData.variant,
-                          steps: ref
-                              .read(gameCursorProvider(gameData.id))
-                              .requireValue
-                              .$1
-                              .steps,
-                          orientation: orientation,
-                          id: gameData.id,
-                          opening: gameData.opening,
+    return Container(
+      padding: Styles.horizontalBodyPadding,
+      color: defaultTargetPlatform == TargetPlatform.iOS
+          ? CupertinoTheme.of(context).barBackgroundColor
+          : Theme.of(context).bottomAppBarTheme.color,
+      child: SafeArea(
+        top: false,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            BottomBarIconButton(
+              semanticsLabel: context.l10n.menu,
+              onPressed: () {
+                _showGameMenu(context, ref);
+              },
+              icon: const Icon(Icons.menu),
+            ),
+            BottomBarIconButton(
+              semanticsLabel: context.l10n.gameAnalysis,
+              onPressed: ref.read(gameCursorProvider(gameData.id)).hasValue
+                  ? () => pushPlatformRoute(
+                        context,
+                        fullscreenDialog: true,
+                        builder: (context) => AnalysisScreen(
+                          title: context.l10n.gameAnalysis,
+                          options: AnalysisOptions(
+                            isLocalEvaluationAllowed: true,
+                            variant: gameData.variant,
+                            steps: ref
+                                .read(gameCursorProvider(gameData.id))
+                                .requireValue
+                                .$1
+                                .steps,
+                            orientation: orientation,
+                            id: gameData.id,
+                            opening: gameData.opening,
+                          ),
                         ),
-                      ),
-                    )
-                : null,
-            icon: const Icon(Icons.biotech),
-          ),
-          const SizedBox(
-            width: 44.0,
-          ),
-          const SizedBox(
-            width: 44.0,
-          ),
-          RepeatButton(
-            onLongPress: canGoBackward ? () => _cursorBackward(ref) : null,
-            child: BottomBarIconButton(
-              key: const ValueKey('cursor-back'),
-              // TODO add translation
-              semanticsLabel: 'Backward',
-              showTooltip: false,
-              onPressed: canGoBackward ? () => _cursorBackward(ref) : null,
-              icon: const Icon(CupertinoIcons.chevron_back),
+                      )
+                  : null,
+              icon: const Icon(Icons.biotech),
             ),
-          ),
-          RepeatButton(
-            onLongPress: canGoForward ? () => _cursorForward(ref) : null,
-            child: BottomBarIconButton(
-              key: const ValueKey('cursor-forward'),
-              // TODO add translation
-              semanticsLabel: 'Forward',
-              showTooltip: false,
-              onPressed: canGoForward ? () => _cursorForward(ref) : null,
-              icon: const Icon(CupertinoIcons.chevron_forward),
+            const SizedBox(
+              width: 44.0,
             ),
-          ),
-        ],
+            const SizedBox(
+              width: 44.0,
+            ),
+            RepeatButton(
+              onLongPress: canGoBackward ? () => _cursorBackward(ref) : null,
+              child: BottomBarIconButton(
+                key: const ValueKey('cursor-back'),
+                // TODO add translation
+                semanticsLabel: 'Backward',
+                showTooltip: false,
+                onPressed: canGoBackward ? () => _cursorBackward(ref) : null,
+                icon: const Icon(CupertinoIcons.chevron_back),
+              ),
+            ),
+            RepeatButton(
+              onLongPress: canGoForward ? () => _cursorForward(ref) : null,
+              child: BottomBarIconButton(
+                key: const ValueKey('cursor-forward'),
+                // TODO add translation
+                semanticsLabel: 'Forward',
+                showTooltip: false,
+                onPressed: canGoForward ? () => _cursorForward(ref) : null,
+                icon: const Icon(CupertinoIcons.chevron_forward),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
