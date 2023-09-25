@@ -98,12 +98,6 @@ class _TvChannelsScreenState extends ConsumerState<LiveTvChannelsScreen>
     ref.read(liveTvChannelsProvider.notifier).startWatching();
     super.didPopNext();
   }
-
-  @override
-  void didPop() {
-    ref.read(authSocketProvider).close();
-    super.didPop();
-  }
 }
 
 class _Body extends ConsumerWidget {
@@ -111,7 +105,10 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gamesAsync = ref.watch(liveTvChannelsProvider);
+    final currentBottomTab = ref.watch(currentBottomTabProvider);
+    final gamesAsync = currentBottomTab == BottomTab.watch
+        ? ref.watch(liveTvChannelsProvider)
+        : const AsyncLoading<TvChannels>();
     return gamesAsync.when(
       data: (games) {
         final list = [
@@ -130,6 +127,7 @@ class _Body extends ConsumerWidget {
                     channel: game.channel,
                     initialGame: (game.id, game.orientation),
                   ),
+                  rootNavigator: true,
                 );
               },
               orientation: game.orientation.cg,

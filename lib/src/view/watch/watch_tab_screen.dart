@@ -184,6 +184,7 @@ class _WatchTvWidget extends ConsumerWidget {
                 pushPlatformRoute(
                   context,
                   builder: (context) => const TvScreen(channel: TvChannel.best),
+                  rootNavigator: true,
                 ).then((_) {
                   ref.invalidate(tvBestSnapshotProvider);
                 });

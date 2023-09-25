@@ -16,14 +16,17 @@ import 'featured_player.dart';
 
 part 'live_tv_channels.g.dart';
 
+typedef TvChannels = IMap<TvChannel, TvGameSnapshot>;
+
 @riverpod
 class LiveTvChannels extends _$LiveTvChannels {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   @override
-  Future<IMap<TvChannel, TvGameSnapshot>> build() async {
+  Future<TvChannels> build() async {
     ref.onDispose(() {
       _socketSubscription?.cancel();
+      _socket.close();
     });
 
     return _doStartWatching();

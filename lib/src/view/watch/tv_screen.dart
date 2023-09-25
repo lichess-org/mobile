@@ -17,6 +17,9 @@ import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_ctrl.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
+final RouteObserver<PageRoute<void>> tvRouteObserver =
+    RouteObserver<PageRoute<void>>();
+
 class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({required this.channel, this.initialGame, super.key});
 
@@ -87,14 +90,14 @@ class _TvScreenState extends ConsumerState<TvScreen>
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      watchTabRouteObserver.subscribe(this, route);
+      tvRouteObserver.subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    watchTabRouteObserver.unsubscribe(this);
+    tvRouteObserver.unsubscribe(this);
     super.dispose();
   }
 
@@ -130,7 +133,10 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncGame = ref.watch(tvCtrlProvider(channel, initialGame));
+    final currentBottomTab = ref.watch(currentBottomTabProvider);
+    final asyncGame = currentBottomTab == BottomTab.watch
+        ? ref.watch(tvCtrlProvider(channel, initialGame))
+        : const AsyncLoading<TvCtrlState>();
 
     return SafeArea(
       child: Center(
@@ -176,6 +182,11 @@ class _Body extends ConsumerWidget {
               bottomTable: gameState.orientation == Side.white
                   ? whitePlayerWidget
                   : blackPlayerWidget,
+              moves: game.steps
+                  .skip(1)
+                  .map((e) => e.sanMove!.san)
+                  .toList(growable: false),
+              currentMoveIndex: gameState.stepCursor,
             );
           },
           loading: () => const BoardTable(

@@ -88,6 +88,7 @@ class TvCtrl extends _$TvCtrl {
 
       return TvCtrlState(
         game: fullEvent.game,
+        stepCursor: fullEvent.game.steps.length - 1,
         orientation: orientation,
       );
     });
@@ -140,6 +141,7 @@ class TvCtrl extends _$TvCtrl {
           game: curState.game.copyWith(
             steps: curState.game.steps.add(newStep),
           ),
+          stepCursor: curState.stepCursor + 1,
         );
 
         if (newState.game.clock != null && data.clock != null) {
@@ -174,6 +176,7 @@ class TvCtrlState with _$TvCtrlState {
 
   const factory TvCtrlState({
     required PlayableGame game,
+    required int stepCursor,
     required Side orientation,
   }) = _TvCtrlState;
 
