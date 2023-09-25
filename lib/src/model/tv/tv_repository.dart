@@ -1,11 +1,9 @@
-import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:deep_pick/deep_pick.dart';
-import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -14,7 +12,6 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 
 import './tv_channel.dart';
-import './tv_event.dart';
 import './tv_game.dart';
 
 part 'tv_repository.g.dart';
@@ -35,35 +32,6 @@ class TvRepository {
 
   final AuthClient apiClient;
   final Logger _log;
-
-  Stream<TvEvent> tvFeed() async* {
-    final resp = await apiClient.stream(Uri.parse('$kLichessHost/api/tv/feed'));
-    _log.fine('Start streaming TV.');
-    yield* resp.stream
-        .toStringStream()
-        .where((event) => event.isNotEmpty && event != '\n')
-        .map((event) => jsonDecode(event) as Map<String, dynamic>)
-        .where((json) => json['t'] == 'featured' || json['t'] == 'fen')
-        .map((json) => TvEvent.fromJson(json))
-        .handleError((Object error) => _log.warning(error));
-  }
-
-  Future<TvGameSnapshot> currentBestSnapshot() {
-    return tvFeed()
-        .firstWhere((event) => event is TvFeaturedEvent)
-        .then((event) async {
-      final featured = event as TvFeaturedEvent;
-      return TvGameSnapshot(
-        channel: TvChannel.best,
-        id: featured.id,
-        orientation: featured.orientation,
-        fen: featured.fen,
-        player: featured.orientation == Side.white
-            ? featured.white
-            : featured.black,
-      );
-    });
-  }
 
   FutureResult<TvChannels> channels() {
     return apiClient

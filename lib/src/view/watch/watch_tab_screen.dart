@@ -1,44 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:chessground/chessground.dart' as cg;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:result_extensions/result_extensions.dart';
+import 'package:dartchess/dartchess.dart';
 
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/tv/tv_game.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
+import 'package:lichess_mobile/src/model/tv/featured_player.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
-import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 part 'watch_tab_screen.g.dart';
 
+const _featuredChannelsSet = ISetConst({
+  TvChannel.best,
+  TvChannel.bullet,
+  TvChannel.blitz,
+  TvChannel.rapid,
+});
+
 @riverpod
-Future<TvGameSnapshot> tvBestSnapshot(TvBestSnapshotRef ref) async {
-  final link = ref.cacheFor(const Duration(minutes: 5));
+Future<IList<TvGameSnapshot>> featuredChannels(FeaturedChannelsRef ref) async {
+  final link = ref.cacheFor(const Duration(seconds: 5));
   final repo = ref.watch(tvRepositoryProvider);
-  try {
-    return repo.currentBestSnapshot();
-  } catch (e) {
+  final result = await repo.channels();
+  if (result.isError) {
     link.close();
-    rethrow;
   }
+  return result.fold(
+    (value) => value.entries
+        .where((channel) => _featuredChannelsSet.contains(channel.key))
+        .map(
+          (entry) => TvGameSnapshot(
+            channel: entry.key,
+            id: entry.value.id,
+            orientation: entry.value.side ?? Side.white,
+            player: FeaturedPlayer(
+              name: entry.value.user.name,
+              title: entry.value.user.title,
+              side: entry.value.side ?? Side.white,
+              rating: entry.value.rating,
+            ),
+          ),
+        )
+        .toIList(),
+    (Object error, _) => throw error,
+  );
 }
 
 class WatchTabScreen extends ConsumerStatefulWidget {
@@ -55,7 +77,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   Widget build(BuildContext context) {
     ref.listen<BottomTab>(currentBottomTabProvider, (prev, current) {
       if (prev != BottomTab.watch && current == BottomTab.watch) {
-        _refreshData();
+        refreshData();
       }
     });
 
@@ -73,7 +95,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       ),
       body: RefreshIndicator(
         key: _androidRefreshKey,
-        onRefresh: _refreshData,
+        onRefresh: refreshData,
         child: SafeArea(
           child: OrientationBuilder(
             builder: (context, orientation) {
@@ -107,7 +129,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
             slivers: [
               const CupertinoSliverNavigationBar(),
               CupertinoSliverRefreshControl(
-                onRefresh: _refreshData,
+                onRefresh: refreshData,
               ),
               SliverSafeArea(
                 top: false,
@@ -141,12 +163,14 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
     );
   }
 
-  Future<void> _refreshData() {
-    return Future.wait([
-      ref.refresh(tvBestSnapshotProvider.future),
-      ref.refresh(liveStreamersProvider.future),
-    ]);
-  }
+  Future<void> refreshData() => _refreshData(ref);
+}
+
+Future<void> _refreshData(WidgetRef ref) {
+  return Future.wait([
+    ref.refresh(featuredChannelsProvider.future),
+    ref.refresh(liveStreamersProvider.future),
+  ]);
 }
 
 class _WatchTvWidget extends ConsumerWidget {
@@ -154,85 +178,58 @@ class _WatchTvWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final featuredGame = ref.watch(tvBestSnapshotProvider);
+    final featuredChannels = ref.watch(featuredChannelsProvider);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Lichess TV', style: Styles.sectionTitle),
-              NoPaddingTextButton(
-                onPressed: () {
-                  pushPlatformRoute(
-                    context,
-                    builder: (context) => const LiveTvChannelsScreen(),
-                  );
-                },
-                child: Text(context.l10n.more),
+    return featuredChannels.when(
+      data: (data) {
+        return ListSection(
+          header: const Text('Lichess TV'),
+          hasLeading: true,
+          headerTrailing: NoPaddingTextButton(
+            onPressed: () => pushPlatformRoute(
+              context,
+              builder: (context) => const LiveTvChannelsScreen(),
+            ).then((_) => _refreshData(ref)),
+            child: Text(
+              context.l10n.more,
+            ),
+          ),
+          children: data.map((snapshot) {
+            return PlatformListTile(
+              leading: Icon(snapshot.channel.icon),
+              title: Text(snapshot.channel.label),
+              subtitle: PlayerTitle(
+                userName: snapshot.player.name,
+                title: snapshot.player.title,
+                rating: snapshot.player.rating,
               ),
-            ],
+              onTap: () => pushPlatformRoute(
+                context,
+                builder: (context) => TvScreen(channel: snapshot.channel),
+                rootNavigator: true,
+              ).then((_) => _refreshData(ref)),
+            );
+          }).toList(growable: false),
+        );
+      },
+      error: (error, stackTrace) {
+        debugPrint(
+          'SEVERE: [StreamerWidget] could not load channels data; $error\n $stackTrace',
+        );
+        return Padding(
+          padding: Styles.bodySectionPadding,
+          child: const Text('Could not load TV channels'),
+        );
+      },
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(
+            itemsNumber: 4,
+            header: true,
           ),
         ),
-        featuredGame.when(
-          data: (game) {
-            return SmallBoardPreview(
-              onTap: () {
-                pushPlatformRoute(
-                  context,
-                  builder: (context) => const TvScreen(channel: TvChannel.best),
-                  rootNavigator: true,
-                ).then((_) {
-                  ref.invalidate(tvBestSnapshotProvider);
-                });
-              },
-              orientation: game.orientation.cg,
-              fen: game.fen ?? kEmptyFen,
-              description: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  const Text(
-                    'Top Rated',
-                    style: Styles.boardPreviewTitle,
-                  ),
-                  const Icon(
-                    LichessIcons.crown,
-                    color: LichessColors.brag,
-                    size: 30,
-                  ),
-                  PlayerTitle(
-                    userName: game.player.asPlayer.displayName(context),
-                    title: game.player.title,
-                    rating: game.player.rating,
-                  ),
-                ],
-              ),
-            );
-          },
-          error: (err, stackTrace) {
-            debugPrint(
-              'SEVERE: [WatchTvWidget] could not load tv stream; $err\n$stackTrace',
-            );
-            return const SmallBoardPreview(
-              orientation: cg.Side.white,
-              fen: kEmptyFen,
-              description: Center(
-                child: Text('Could not load tv stream.'),
-              ),
-            );
-          },
-          loading: () => const SmallBoardPreview(
-            orientation: cg.Side.white,
-            fen: kEmptyFen,
-            description: SizedBox.shrink(),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

@@ -197,6 +197,7 @@ class _Body extends ConsumerWidget {
               orientation: cg.Side.white,
               fen: kEmptyFen,
             ),
+            showMoveListPlaceholder: true,
           ),
           error: (err, stackTrace) {
             debugPrint(
@@ -211,6 +212,7 @@ class _Body extends ConsumerWidget {
                 orientation: cg.Side.white,
               ),
               errorMessage: 'Could not load TV stream.',
+              showMoveListPlaceholder: true,
             );
           },
         ),

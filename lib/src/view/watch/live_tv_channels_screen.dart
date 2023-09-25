@@ -108,7 +108,7 @@ class _Body extends ConsumerWidget {
     final currentBottomTab = ref.watch(currentBottomTabProvider);
     final gamesAsync = currentBottomTab == BottomTab.watch
         ? ref.watch(liveTvChannelsProvider)
-        : const AsyncLoading<TvChannels>();
+        : const AsyncLoading<LiveTvChannelsState>();
     return gamesAsync.when(
       data: (games) {
         final list = [
