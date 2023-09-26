@@ -37,3 +37,4 @@ doc/api/
 *.ipr
 *.iws
 .idea/
+.fvm/flutter_sdk
