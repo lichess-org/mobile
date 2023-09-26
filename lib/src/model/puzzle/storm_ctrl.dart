@@ -7,6 +7,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -39,6 +40,7 @@ class StormCtrl extends _$StormCtrl {
     });
     final pov = Chess.fromSetup(Setup.parseFen(puzzles.first.fen));
     final newState = StormCtrlState(
+      firstMovePlayed: false,
       runOver: false,
       runStarted: false,
       puzzle: puzzles[_nextPuzzleIndex],
@@ -59,6 +61,7 @@ class StormCtrl extends _$StormCtrl {
         ComboState.noChange,
         runStarted: false,
         userMove: false,
+        isFirstMove: true,
       ),
     );
     newState.clock.timeStream.listen((e) {
@@ -110,6 +113,12 @@ class StormCtrl extends _$StormCtrl {
       _pushToHistory(success: false);
       await _loadNextPuzzle(false, ComboState.reset);
     }
+  }
+
+  void setPremove(cg.Move? move) {
+    state = state.copyWith(
+      premove: move,
+    );
   }
 
   Future<void> end() async {
@@ -189,6 +198,7 @@ class StormCtrl extends _$StormCtrl {
     ComboState comboChange, {
     required bool runStarted,
     required bool userMove,
+    bool isFirstMove = false,
   }) {
     int newComboCurrent;
     switch (comboChange) {
@@ -201,6 +211,7 @@ class StormCtrl extends _$StormCtrl {
     }
     final pos = state.position;
     state = state.copyWith(
+      firstMovePlayed: isFirstMove || state.firstMovePlayed,
       runStarted: runStarted,
       position: state.position.play(move),
       moveIndex: state.moveIndex + 1,
@@ -298,6 +309,12 @@ class StormCtrlState with _$StormCtrlState {
 
     /// bool to indicate run has started
     required bool runStarted,
+
+    /// bool to indicate that the first move has been played
+    required bool firstMovePlayed,
+
+    /// premove to be played
+    cg.Move? premove,
   }) = _StormCtrlState;
 
   Move? get expectedMove => Move.fromUci(puzzle.solution[moveIndex + 1]);
