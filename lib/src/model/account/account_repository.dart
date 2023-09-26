@@ -60,7 +60,7 @@ class AccountRepository {
         );
   }
 
-  FutureResult<AccountPreferences> getPreferences() {
+  FutureResult<AccountPrefState> getPreferences() {
     return _apiClient
         .get(Uri.parse('$kLichessHost/api/account/preferences'))
         .then(
@@ -77,12 +77,31 @@ class AccountRepository {
           ),
         );
   }
+
+  FutureResult<void> setPreference<T>(String prefKey, AccountPref<T> pref) {
+    return _apiClient.post(
+      Uri.parse('$kLichessHost/api/account/preferences/$prefKey'),
+      body: {prefKey: pref.value.toString()},
+    );
+  }
 }
 
-AccountPreferences _accountPreferencesFromPick(RequiredPick pick) {
+AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
   return (
     autoQueen: AutoQueen.fromInt(
       pick('autoQueen').asIntOrThrow(),
+    ),
+    autoThreefold: AutoThreefold.fromInt(
+      pick('autoThreefold').asIntOrThrow(),
+    ),
+    takeback: Takeback.fromInt(
+      pick('takeback').asIntOrThrow(),
+    ),
+    moretime: Moretime.fromInt(
+      pick('moretime').asIntOrThrow(),
+    ),
+    confirmResign: BooleanPref.fromInt(
+      pick('confirmResign').asIntOrThrow(),
     ),
   );
 }

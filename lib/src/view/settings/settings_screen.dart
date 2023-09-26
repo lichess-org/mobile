@@ -27,6 +27,7 @@ import './sound_settings_screen.dart';
 import './piece_set_screen.dart';
 import './board_theme_screen.dart';
 import './board_settings_screen.dart';
+import './account_preferences_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -162,12 +163,6 @@ class _Body extends ConsumerWidget {
                   );
                 },
               ),
-            ],
-          ),
-          ListSection(
-            hasLeading: true,
-            showDivider: true,
-            children: [
               PlatformListTile(
                 leading: const Icon(LichessIcons.chess_board),
                 title: const Text('Chessboard'),
@@ -184,6 +179,27 @@ class _Body extends ConsumerWidget {
               ),
             ],
           ),
+          if (userSession != null)
+            ListSection(
+              hasLeading: true,
+              showDivider: true,
+              children: [
+                PlatformListTile(
+                  leading: const Icon(Icons.person),
+                  title: const Text('Account preferences'),
+                  trailing: defaultTargetPlatform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  onTap: () {
+                    pushPlatformRoute(
+                      context,
+                      title: 'Account preferences',
+                      builder: (context) => const AccountPreferencesScreen(),
+                    );
+                  },
+                ),
+              ],
+            ),
           if (userSession != null)
             if (authController.isLoading)
               const ListSection(

@@ -663,7 +663,7 @@ class GameCtrlState with _$GameCtrlState {
   const factory GameCtrlState({
     required PlayableGame game,
     required int stepCursor,
-    AccountPreferences? accountPrefs,
+    AccountPrefState? accountPrefs,
     int? lastDrawOfferAtPly,
     Duration? opponentLeftCountdown,
     required bool stopClockWaitingForServerAck,
