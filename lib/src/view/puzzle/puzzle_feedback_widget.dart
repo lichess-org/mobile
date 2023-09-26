@@ -48,6 +48,7 @@ class PuzzleFeedbackWidget extends StatelessWidget {
               ? null
               : Text('$puzzleRating. $playedXTimes.'),
         );
+      case PuzzleMode.load:
       case PuzzleMode.play:
         if (state.feedback == PuzzleFeedback.bad) {
           return _FeedbackTile(

@@ -65,7 +65,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
 
     // play first move after 1 second
     _firstMoveTimer = Timer(const Duration(seconds: 1), () {
-      _setPath(state.initialPath);
+      _setPath(state.initialPath, firstMove: true);
     });
 
     // enable solution button after 4 seconds
@@ -85,7 +85,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     return PuzzleCtrlState(
       puzzle: context.puzzle,
       glicko: context.glicko,
-      mode: PuzzleMode.play,
+      mode: PuzzleMode.load,
       initialFen: _gameTree.fen,
       initialPath: initialPath,
       currentPath: UciPath.empty,
@@ -384,7 +384,11 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     }
   }
 
-  void _setPath(UciPath path, {bool replaying = false}) {
+  void _setPath(
+    UciPath path, {
+    bool replaying = false,
+    bool firstMove = false,
+  }) {
     final pathChange = state.currentPath != path;
     final newNode = _gameTree.branchAt(path).view;
     final sanMove = newNode.sanMove;
@@ -408,6 +412,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
       }
     }
     state = state.copyWith(
+      mode: firstMove ? PuzzleMode.play : state.mode,
       currentPath: path,
       node: newNode,
       lastMove: sanMove.move,
@@ -492,7 +497,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
   }
 }
 
-enum PuzzleMode { play, view }
+enum PuzzleMode { load, play, view }
 
 enum PuzzleResult { win, lose }
 
