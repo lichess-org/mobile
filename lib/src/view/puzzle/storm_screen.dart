@@ -116,7 +116,6 @@ class _BodyState extends ConsumerState<_Body>
   Widget build(BuildContext context) {
     final ctrlProvider = stormCtrlProvider(widget.data.puzzles);
     final puzzleState = ref.watch(ctrlProvider);
-
     ref.listen(ctrlProvider.select((state) => state.runOver), (_, s) {
       if (s) {
         Future.delayed(const Duration(milliseconds: 200), () {
@@ -132,10 +131,10 @@ class _BodyState extends ConsumerState<_Body>
             child: SafeArea(
               bottom: false,
               child: BoardTable(
+                onMove: (move, {isDrop, isPremove}) => ref
+                    .read(ctrlProvider.notifier)
+                    .onUserMove(Move.fromUci(move.uci)!),
                 boardData: cg.BoardData(
-                  onMove: (move, {isDrop, isPremove}) => ref
-                      .read(ctrlProvider.notifier)
-                      .onUserMove(Move.fromUci(move.uci)!),
                   orientation: puzzleState.pov.cg,
                   interactableSide:
                       puzzleState.runOver || puzzleState.position.isGameOver

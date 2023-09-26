@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:chessground/chessground.dart' as cg;
 import 'package:logging/logging.dart';
 import 'package:deep_pick/deep_pick.dart';
 
@@ -118,6 +119,16 @@ class GameCtrl extends _$GameCtrl {
     _transientMoveTimer = Timer(const Duration(seconds: 10), _resyncGameData);
   }
 
+  /// Set or unset a premove.
+  void setPremove(cg.Move? move) {
+    final curState = state.requireValue;
+    state = AsyncValue.data(
+      curState.copyWith(
+        premove: move,
+      ),
+    );
+  }
+
   void cursorAt(int cursor) {
     if (state.hasValue) {
       state = AsyncValue.data(state.requireValue.copyWith(stepCursor: cursor));
@@ -193,8 +204,13 @@ class GameCtrl extends _$GameCtrl {
     _socket.send('draw-no', null);
   }
 
-  void offerOrAcceptTakeback() {
+  void offerTakeback() {
     _socket.send('takeback-yes', null);
+  }
+
+  void acceptTakeback() {
+    _socket.send('takeback-yes', null);
+    setPremove(null);
   }
 
   void cancelOrDeclineTakeback() {
@@ -322,7 +338,7 @@ class GameCtrl extends _$GameCtrl {
           _resyncGameData();
         }
 
-      // Full game data, received after switching route to /play/<gameId>
+      // Full game data, received after a (re)connection to game socket
       case 'full':
         final fullEvent =
             GameFullEvent.fromJson(event.data as Map<String, dynamic>);
@@ -338,6 +354,9 @@ class GameCtrl extends _$GameCtrl {
             game: fullEvent.game,
             stepCursor: fullEvent.game.steps.length - 1,
             stopClockWaitingForServerAck: false,
+            // cancel the premove to avoid playing wrong premove when the full
+            // game data is reloaded
+            premove: null,
           ),
         );
 
@@ -644,10 +663,11 @@ class GameCtrlState with _$GameCtrlState {
   const factory GameCtrlState({
     required PlayableGame game,
     required int stepCursor,
+    AccountPreferences? accountPrefs,
     int? lastDrawOfferAtPly,
     Duration? opponentLeftCountdown,
     required bool stopClockWaitingForServerAck,
-    AccountPreferences? accountPrefs,
+    cg.Move? premove,
 
     /// Game full id used to redirect to the new game of the rematch
     GameFullId? redirectGameId,

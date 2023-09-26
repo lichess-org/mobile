@@ -27,13 +27,15 @@ const kProvisionalDeviation = 110;
 const kClueLessDeviation = 230;
 
 // UI
-const kSmallHeightScreenThreshold = 650;
 const kTabletThreshold = 600;
 const kCardTextScaleFactor = 1.64;
 const kMaxClockTextScaleFactor = 1.94;
 const kEmptyWidget = SizedBox.shrink();
 const kEmptyFen = '8/8/8/8/8/8/8/8 w - - 0 1';
 const kTabletBoardTableSidePadding = 16.0;
+
+/// The threshold to detect screens with a small remaining height left board.
+const kSmallRemainingHeightLeftBoardThreshold = 160;
 
 // annotations
 class _AllowedWidgetReturn {

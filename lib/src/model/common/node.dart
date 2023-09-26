@@ -27,13 +27,18 @@ abstract class Node {
     required this.fen,
     required this.position,
     this.eval,
+    this.opening,
   });
 
   final int ply;
   final String fen;
   final Position position;
 
+  /// The evaluation of the position.
   ClientEval? eval;
+
+  /// The opening associated with this node.
+  Opening? opening;
 
   final List<Branch> children = [];
 
@@ -111,8 +116,15 @@ abstract class Node {
 
   /// Adds a new node at the given path and returns the new path.
   ///
+  /// Returns a tuple of the new path and whether the node was added.
+  /// Returns null if the node at path does not exist.
+  ///
   /// If the node already exists, it is not added again.
-  UciPath? addNodeAt(UciPath path, Branch newNode, {bool prepend = false}) {
+  (UciPath?, bool) addNodeAt(
+    UciPath path,
+    Branch newNode, {
+    bool prepend = false,
+  }) {
     final newPath = path + newNode.id;
     final node = nodeAtOrNull(path);
     if (node != null) {
@@ -124,9 +136,9 @@ abstract class Node {
           node.addChild(newNode);
         }
       }
-      return newPath;
+      return (newPath, !existing);
     } else {
-      return null;
+      return (null, false);
     }
   }
 
@@ -138,7 +150,7 @@ abstract class Node {
   }) {
     final node = newNodes.elementAtOrNull(0);
     if (node == null) return path;
-    final newPath = addNodeAt(path, node, prepend: prepend);
+    final (newPath, _) = addNodeAt(path, node, prepend: prepend);
     return newPath != null
         ? addNodesAt(newPath, newNodes.skip(1), prepend: prepend)
         : null;
@@ -146,9 +158,11 @@ abstract class Node {
 
   /// Adds a new node with that [Move] at the given path.
   ///
-  /// Returns the new path and the new node.
+  /// Returns a tuple of the new path and whether the node was added.
+  /// Returns null if the node at path does not exist.
+  ///
   /// If the node already exists, it is not added again.
-  (UciPath?, Branch?) addMoveAt(
+  (UciPath?, bool) addMoveAt(
     UciPath path,
     Move move, {
     bool prepend = false,
@@ -161,8 +175,7 @@ abstract class Node {
       fen: newPos.fen,
       position: newPos,
     );
-    final newPath = addNodeAt(path, newNode, prepend: prepend);
-    return (newPath, newPath != null ? newNode : null);
+    return addNodeAt(path, newNode, prepend: prepend);
   }
 
   /// Gets the node at the given path.
@@ -207,6 +220,7 @@ class Branch extends Node {
     required super.fen,
     required super.position,
     super.eval,
+    super.opening,
     required this.sanMove,
   });
 
@@ -223,6 +237,7 @@ class Branch extends Node {
         position: position,
         sanMove: sanMove,
         eval: eval,
+        opening: opening,
         children: IList(children.map((child) => child.view)),
       );
 
@@ -295,6 +310,7 @@ abstract class ViewNode {
   Position get position;
   IList<ViewBranch> get children;
   ClientEval? get eval;
+  Opening? get opening;
 }
 
 /// An immutable view of a [Root] node.
@@ -314,6 +330,9 @@ class ViewRoot with _$ViewRoot implements ViewNode {
 
   @override
   SanMove? get sanMove => null;
+
+  @override
+  Opening? get opening => null;
 }
 
 /// An immutable view of a [Branch] node.
@@ -326,6 +345,7 @@ class ViewBranch with _$ViewBranch implements ViewNode {
     required int ply,
     required String fen,
     required Position position,
+    Opening? opening,
     required IList<ViewBranch> children,
     ClientEval? eval,
   }) = _ViewBranch;

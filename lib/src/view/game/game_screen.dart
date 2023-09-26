@@ -8,6 +8,7 @@ import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_ctrl.dart';
 import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
@@ -350,6 +351,16 @@ class _Body extends ConsumerWidget {
                 autoQueenPromotion: gameState.autoQueen,
                 autoQueenPromotionOnPremove: gameState.autoQueenOnPremove,
               ),
+              onMove: (move, {isDrop, isPremove}) {
+                ref.read(ctrlProvider.notifier).onUserMove(
+                      Move.fromUci(move.uci)!,
+                      isPremove: isPremove,
+                      isDrop: isDrop,
+                    );
+              },
+              onPremove: (move) {
+                ref.read(ctrlProvider.notifier).setPremove(move);
+              },
               boardData: cg.BoardData(
                 interactableSide:
                     gameState.game.playable && !gameState.isReplaying
@@ -363,13 +374,7 @@ class _Body extends ConsumerWidget {
                 isCheck: position.isCheck,
                 sideToMove: sideToMove.cg,
                 validMoves: algebraicLegalMoves(position),
-                onMove: (move, {isDrop, isPremove}) {
-                  ref.read(ctrlProvider.notifier).onUserMove(
-                        Move.fromUci(move.uci)!,
-                        isPremove: isPremove,
-                        isDrop: isDrop,
-                      );
-                },
+                premove: gameState.premove,
               ),
               topTable: topPlayer,
               bottomTable: gameState.canShowClaimWinCountdown &&
@@ -499,15 +504,18 @@ class _GameBottomBar extends ConsumerWidget {
                 label: context.l10n.gameAnalysis,
                 highlighted: true,
                 shortLabel: 'Analysis',
-                icon: CupertinoIcons.gauge,
+                icon: Icons.biotech,
                 onTap: () => pushPlatformRoute(
                   context,
                   fullscreenDialog: true,
                   builder: (_) => AnalysisScreen(
-                    variant: gameState.game.meta.variant,
-                    steps: gameState.game.steps,
-                    orientation: gameState.game.youAre ?? Side.white,
-                    id: gameState.game.meta.id,
+                    options: AnalysisOptions(
+                      isLocalEvaluationAllowed: true,
+                      variant: gameState.game.meta.variant,
+                      steps: gameState.game.steps,
+                      orientation: gameState.game.youAre ?? Side.white,
+                      id: gameState.game.meta.id,
+                    ),
                     title: context.l10n.gameAnalysis,
                   ),
                 ),
@@ -563,7 +571,7 @@ class _GameBottomBar extends ConsumerWidget {
                     builder: (context) => _GameNegotiationDialog(
                       title: Text(context.l10n.yourOpponentProposesATakeback),
                       onAccept: () {
-                        ref.read(ctrlProvider.notifier).offerOrAcceptTakeback();
+                        ref.read(ctrlProvider.notifier).acceptTakeback();
                       },
                       onDecline: () {
                         ref
@@ -652,7 +660,7 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             label: Text(context.l10n.takeback),
             onPressed: (context) {
-              ref.read(ctrlProvider.notifier).offerOrAcceptTakeback();
+              ref.read(ctrlProvider.notifier).offerTakeback();
             },
           ),
         if (gameState.game.player?.proposingTakeback == true)

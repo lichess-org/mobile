@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/utils/layout.dart';
 
 /// A simple countdown clock.
 ///
@@ -119,7 +120,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
         ? ClockStyle.darkThemeStyle
         : ClockStyle.lightThemeStyle;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
-    final screenHeight = MediaQuery.sizeOf(context).height;
+    final remaingHeight = estimateRemainingHeightLeftBoard(context);
 
     return RepaintBoundary(
       child: Container(
@@ -151,7 +152,9 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
                       : clockStyle.textColor,
                   fontSize: 26,
                   height:
-                      screenHeight < kSmallHeightScreenThreshold ? 1.0 : null,
+                      remaingHeight < kSmallRemainingHeightLeftBoardThreshold
+                          ? 1.0
+                          : null,
                   fontFeatures: const [
                     FontFeature.tabularFigures(),
                   ],

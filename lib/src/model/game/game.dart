@@ -45,6 +45,9 @@ mixin IndexableSteps on BaseGame {
   Position get lastPosition => steps.last.position;
 
   int get lastPly => steps.last.ply;
+
+  MaterialDiffSide? lastMaterialDiffAt(Side side) =>
+      steps.last.diff?.bySide(side);
 }
 
 @freezed
@@ -189,6 +192,7 @@ class ArchivedGameData with _$ArchivedGameData {
     required Player white,
     required Player black,
     required Variant variant,
+    LightOpening? opening,
     String? initialFen,
     String? lastFen,
     Side? winner,

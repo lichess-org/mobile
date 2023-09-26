@@ -43,12 +43,13 @@ void main() {
     test('nodesOn, with variation', () {
       final root = Root.fromPgn('e4 e5 Nf3');
       final move = Move.fromUci('b1c3')!;
-      final (newPath, newNode) = root.addMoveAt(
+      final (newPath, _) = root.addMoveAt(
         UciPath.fromIds(
           [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,
         ),
         move,
       );
+      final newNode = root.nodeAt(newPath!);
 
       // mainline has not changed
       expect(root.mainline.length, equals(3));
@@ -57,9 +58,9 @@ void main() {
         equals((root.nodeAt(root.mainlinePath) as Branch).view),
       );
 
-      final nodeList = root.nodesOn(newPath!);
+      final nodeList = root.nodesOn(newPath);
       expect(nodeList.length, equals(3));
-      expect(nodeList.last, equals(newNode!.view));
+      expect(nodeList.last, equals(newNode.view));
     });
 
     test('mainline', () {
@@ -144,7 +145,7 @@ void main() {
       );
 
       final fromPath = UciPath.fromId(UciCharPair.fromUci('e2e4'));
-      final nodePath = root.addNodeAt(fromPath, branch);
+      final (nodePath, _) = root.addNodeAt(fromPath, branch);
 
       expect(
         root.nodesOn(nodePath!),
@@ -189,7 +190,19 @@ void main() {
         fen: 'fen2',
         position: Chess.initial,
       );
-      root.addNodeAt(UciPath.fromId(UciCharPair.fromUci('e2e4')), branch);
+      final (newPath, isNewNode) =
+          root.addNodeAt(UciPath.fromId(UciCharPair.fromUci('e2e4')), branch);
+
+      expect(
+        newPath,
+        equals(
+          UciPath.fromIds(
+            IList([UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('b8c6')]),
+          ),
+        ),
+      );
+
+      expect(isNewNode, isTrue);
 
       final testNode = root.nodeAt(UciPath.fromId(UciCharPair.fromUci('e2e4')));
       expect(testNode.children.length, equals(2));
@@ -223,7 +236,19 @@ void main() {
         fen: 'fen2',
         position: Chess.initial,
       );
-      root.addNodeAt(UciPath.fromId(UciCharPair.fromUci('e2e4')), branch);
+      final (newPath, isNewNode) =
+          root.addNodeAt(UciPath.fromId(UciCharPair.fromUci('e2e4')), branch);
+
+      expect(
+        newPath,
+        equals(
+          UciPath.fromIds(
+            IList([UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')]),
+          ),
+        ),
+      );
+
+      expect(isNewNode, isFalse);
 
       final testNode = root.nodeAt(UciPath.fromId(UciCharPair.fromUci('e2e4')));
 
@@ -264,11 +289,12 @@ void main() {
         [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,
       );
       final currentPath = root.mainlinePath;
-      final (newPath, newNode) = root.addMoveAt(path, move);
+      final (newPath, _) = root.addMoveAt(path, move);
       expect(
         newPath,
         equals(currentPath + UciCharPair.fromMove(move)),
       );
+      final newNode = root.branchAt(newPath!);
       expect(newNode?.ply, equals(3));
       expect(newNode?.sanMove, equals(SanMove('Nc3', move)));
       expect(

@@ -11,11 +11,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:popover/popover.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
-import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_ctrl.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -23,8 +20,6 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/immersive_mode.dart';
-import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -34,25 +29,17 @@ import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-const kChessNotationFontSize = 13.0;
-const kFastReplayDebounceDelay = Duration(milliseconds: 100);
+import 'tree_view.dart';
 
 class AnalysisScreen extends ConsumerWidget {
   const AnalysisScreen({
-    required this.variant,
-    required this.steps,
-    required this.orientation,
-    required this.id,
+    required this.options,
     this.title,
   });
 
-  final Variant variant;
-  final IList<GameStep> steps;
-  final Side orientation;
-  final ID id;
+  final AnalysisOptions options;
   final String? title;
 
   @override
@@ -65,20 +52,13 @@ class AnalysisScreen extends ConsumerWidget {
   }
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisCtrlProvider(variant, steps, orientation, id);
-
-    final evalContext = ref.watch(
-      ctrlProvider.select((value) => value.evaluationContext),
-    );
-    final currentNode = ref.watch(
-      ctrlProvider.select((value) => value.currentNode),
-    );
+    final ctrlProvider = analysisCtrlProvider(options);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(title ?? context.l10n.analysis),
         actions: [
-          _EngineDepth(evalContext, currentNode),
+          _EngineDepth(ctrlProvider),
           SettingsButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
@@ -93,13 +73,7 @@ class AnalysisScreen extends ConsumerWidget {
   }
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisCtrlProvider(variant, steps, orientation, id);
-    final evalContext = ref.watch(
-      ctrlProvider.select((value) => value.evaluationContext),
-    );
-    final currentNode = ref.watch(
-      ctrlProvider.select((value) => value.currentNode),
-    );
+    final ctrlProvider = analysisCtrlProvider(options);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -107,7 +81,7 @@ class AnalysisScreen extends ConsumerWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _EngineDepth(evalContext, currentNode),
+            _EngineDepth(ctrlProvider),
             SettingsButton(
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
@@ -134,7 +108,7 @@ class _Body extends ConsumerStatefulWidget {
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
+class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final showEvaluationGauge = ref.watch(
@@ -151,10 +125,12 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                 final aspectRatio = constraints.biggest.aspectRatio;
                 final defaultBoardSize = constraints.biggest.shortestSide;
                 final isTablet = defaultBoardSize > kTabletThreshold;
+                final remainingHeight =
+                    constraints.maxHeight - defaultBoardSize;
                 final isSmallScreen =
-                    constraints.maxHeight < kSmallHeightScreenThreshold;
+                    remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
                 final boardSize = isTablet || isSmallScreen
-                    ? defaultBoardSize - 16.0 * 2
+                    ? defaultBoardSize - kTabletBoardTableSidePadding * 2
                     : defaultBoardSize;
 
                 return aspectRatio > 1
@@ -182,15 +158,17 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                               children: [
                                 _EngineLines(
                                   widget.ctrlProvider,
-                                  isTablet: true,
+                                  isLandscape: true,
                                 ),
                                 Expanded(
                                   child: PlatformCard(
-                                    margin: const EdgeInsets.all(16.0),
+                                    margin: const EdgeInsets.all(
+                                      kTabletBoardTableSidePadding,
+                                    ),
                                     semanticContainer: false,
-                                    child: _Moves(
+                                    child: AnalysisTreeView(
                                       widget.ctrlProvider,
-                                      _MovesDisplayMode.tablet,
+                                      Orientation.landscape,
                                     ),
                                   ),
                                 ),
@@ -202,12 +180,22 @@ class _BodyState extends ConsumerState<_Body> with AndroidImmersiveMode {
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.max,
-                        // don't use stretch here because board background size would be wrong
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           _ColumnTopTable(widget.ctrlProvider),
-                          _Board(widget.ctrlProvider, boardSize),
-                          _Moves(widget.ctrlProvider, _MovesDisplayMode.normal),
+                          if (isTablet)
+                            Padding(
+                              padding: const EdgeInsets.all(
+                                kTabletBoardTableSidePadding,
+                              ),
+                              child: _Board(widget.ctrlProvider, boardSize),
+                            )
+                          else
+                            _Board(widget.ctrlProvider, boardSize),
+                          AnalysisTreeView(
+                            widget.ctrlProvider,
+                            Orientation.portrait,
+                          ),
                         ],
                       );
               },
@@ -246,6 +234,8 @@ class _Board extends ConsumerWidget {
 
     return cg.Board(
       size: boardSize,
+      onMove: (move, {isDrop, isPremove}) =>
+          ref.read(ctrlProvider.notifier).onUserMove(Move.fromUci(move.uci)!),
       data: cg.BoardData(
         orientation: analysisState.pov.cg,
         interactableSide: analysisState.position.isGameOver
@@ -258,8 +248,6 @@ class _Board extends ConsumerWidget {
         lastMove: analysisState.lastMove?.cg,
         sideToMove: analysisState.position.turn.cg,
         validMoves: analysisState.validMoves,
-        onMove: (move, {isDrop, isPremove}) =>
-            ref.read(ctrlProvider.notifier).onUserMove(Move.fromUci(move.uci)!),
         shapes: showBestMoveArrow &&
                 analysisState.isEngineAvailable &&
                 bestMoves != null
@@ -337,7 +325,7 @@ class _ColumnTopTable extends ConsumerWidget {
                     savedEval: analysisState.currentNode.eval,
                   ),
                 ),
-              _EngineLines(ctrlProvider, isTablet: false),
+              _EngineLines(ctrlProvider, isLandscape: false),
             ],
           )
         : kEmptyWidget;
@@ -345,9 +333,9 @@ class _ColumnTopTable extends ConsumerWidget {
 }
 
 class _EngineLines extends ConsumerWidget {
-  const _EngineLines(this.ctrlProvider, {required this.isTablet});
+  const _EngineLines(this.ctrlProvider, {required this.isLandscape});
   final AnalysisCtrlProvider ctrlProvider;
-  final bool isTablet;
+  final bool isLandscape;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -392,8 +380,8 @@ class _EngineLines extends ConsumerWidget {
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        vertical: isTablet ? 16.0 : 0.0,
-        horizontal: isTablet ? 16.0 : 0.0,
+        vertical: isLandscape ? kTabletBoardTableSidePadding : 0.0,
+        horizontal: isLandscape ? kTabletBoardTableSidePadding : 0.0,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -505,293 +493,6 @@ class _Engineline extends ConsumerWidget {
   }
 }
 
-enum _MovesDisplayMode {
-  tablet,
-  normal,
-}
-
-class _Moves extends ConsumerWidget {
-  const _Moves(this.ctrlProvider, this.displayMode);
-
-  final AnalysisCtrlProvider ctrlProvider;
-  final _MovesDisplayMode displayMode;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final root = ref.watch(ctrlProvider.select((value) => value.root));
-    final currentPath =
-        ref.watch(ctrlProvider.select((value) => value.currentPath));
-
-    return _InlineTreeView(
-      ctrlProvider,
-      root,
-      currentPath,
-      displayMode,
-    );
-  }
-}
-
-const kInlineMoveSpacing = 5.0;
-
-class _InlineTreeView extends ConsumerStatefulWidget {
-  const _InlineTreeView(
-    this.ctrlProvider,
-    this.root,
-    this.currentPath,
-    this.displayMode,
-  );
-
-  final AnalysisCtrlProvider ctrlProvider;
-  final ViewRoot root;
-  final UciPath currentPath;
-  final _MovesDisplayMode displayMode;
-
-  @override
-  ConsumerState<_InlineTreeView> createState() => _InlineTreeViewState();
-}
-
-class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
-  final currentMoveKey = GlobalKey();
-  final _debounce = Debouncer(kFastReplayDebounceDelay);
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (currentMoveKey.currentContext != null) {
-        Scrollable.ensureVisible(
-          currentMoveKey.currentContext!,
-          alignment: 0.5,
-          alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
-        );
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _debounce.dispose();
-    super.dispose();
-  }
-
-  @override
-  void didUpdateWidget(covariant _InlineTreeView oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _debounce(() {
-      if (currentMoveKey.currentContext != null) {
-        Scrollable.ensureVisible(
-          currentMoveKey.currentContext!,
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeIn,
-          alignment: 0.5,
-          alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
-        );
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final content = SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      child: Wrap(
-        spacing: kInlineMoveSpacing,
-        children: _buildTreeWidget(
-          widget.ctrlProvider,
-          nodes: widget.root.children,
-          inMainline: true,
-          startSideline: false,
-          initialPath: UciPath.empty,
-          currentPath: widget.currentPath,
-        ),
-      ),
-    );
-
-    return switch (widget.displayMode) {
-      _MovesDisplayMode.tablet => content,
-      _MovesDisplayMode.normal => Expanded(child: content)
-    };
-  }
-
-  List<Widget> _buildTreeWidget(
-    AnalysisCtrlProvider ctrlProvider, {
-    required IList<ViewBranch> nodes,
-    required bool inMainline,
-    required bool startSideline,
-    required UciPath initialPath,
-    required UciPath currentPath,
-  }) {
-    if (nodes.isEmpty) return [];
-    final List<Widget> widgets = [];
-
-    // add the node[0]
-    final newPath = initialPath + nodes[0].id;
-    final currentMove = newPath == currentPath;
-    widgets.add(
-      InlineMove(
-        ctrlProvider,
-        path: newPath,
-        move: nodes[0].sanMove,
-        ply: nodes[0].ply,
-        isCurrentMove: currentMove,
-        key: currentMove ? currentMoveKey : null,
-        isSideline: !inMainline,
-        startSideline: startSideline,
-        endSideline: !inMainline && nodes[0].children.isEmpty,
-      ),
-    );
-
-    // add the sidelines if present
-    for (var i = 1; i < nodes.length; i++) {
-      // start new sideline from mainline on a new line
-      if (inMainline) {
-        widgets.add(
-          SizedBox(
-            width: double.infinity,
-            child: Wrap(
-              spacing: kInlineMoveSpacing,
-              children: _buildTreeWidget(
-                ctrlProvider,
-                nodes: IList([nodes[i]]),
-                inMainline: false,
-                startSideline: true,
-                initialPath: initialPath,
-                currentPath: currentPath,
-              ),
-            ),
-          ),
-        );
-      } else {
-        widgets.addAll(
-          _buildTreeWidget(
-            ctrlProvider,
-            nodes: IList([nodes[i]]),
-            inMainline: false,
-            startSideline: true,
-            initialPath: initialPath,
-            currentPath: currentPath,
-          ),
-        );
-      }
-    }
-
-    // add the children of the first child
-    widgets.addAll(
-      _buildTreeWidget(
-        ctrlProvider,
-        nodes: nodes[0].children,
-        inMainline: inMainline,
-        startSideline: false,
-        initialPath: newPath,
-        currentPath: currentPath,
-      ),
-    );
-
-    return widgets;
-  }
-}
-
-class InlineMove extends ConsumerWidget {
-  const InlineMove(
-    this.ctrlProvider, {
-    required this.path,
-    required this.move,
-    required this.ply,
-    required this.isCurrentMove,
-    required this.isSideline,
-    super.key,
-    this.startSideline = false,
-    this.endSideline = false,
-  });
-
-  final AnalysisCtrlProvider ctrlProvider;
-  final UciPath path;
-  final SanMove move;
-  final int ply;
-  final bool isCurrentMove;
-  final bool isSideline;
-  final bool startSideline;
-  final bool endSideline;
-
-  static const borderRadius = BorderRadius.all(Radius.circular(4.0));
-  static const baseTextStyle = TextStyle(
-    fontFamily: 'ChessFont',
-    fontSize: kChessNotationFontSize,
-    height: 1.5,
-  );
-
-  Color? _textColor(BuildContext context, double opacity) {
-    return defaultTargetPlatform == TargetPlatform.android
-        ? Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(opacity)
-        : CupertinoTheme.of(context)
-            .textTheme
-            .textStyle
-            .color
-            ?.withOpacity(opacity);
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final textStyle = isSideline
-        ? TextStyle(
-            fontFamily: 'ChessFont',
-            fontSize: kChessNotationFontSize,
-            fontStyle: FontStyle.italic,
-            color: _textColor(context, 0.7),
-          )
-        : baseTextStyle;
-
-    final indexTextStyle = baseTextStyle.copyWith(
-      color: _textColor(context, 0.6),
-    );
-
-    final indexWidget = ply.isOdd
-        ? Text(
-            '${(ply / 2).ceil()}.',
-            style: indexTextStyle,
-          )
-        : (startSideline
-            ? Text(
-                '${(ply / 2).ceil()}...',
-                style: indexTextStyle,
-              )
-            : null);
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (startSideline) Text('(', style: textStyle),
-        if (indexWidget != null) indexWidget,
-        if (indexWidget != null) const SizedBox(width: 1),
-        AdaptiveInkWell(
-          borderRadius: borderRadius,
-          onTap: () => ref.read(ctrlProvider.notifier).userJump(path),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 2),
-            decoration: isCurrentMove
-                ? BoxDecoration(
-                    color: Theme.of(context).focusColor,
-                    shape: BoxShape.rectangle,
-                    borderRadius: borderRadius,
-                  )
-                : null,
-            child: Text(
-              move.san,
-              style: isCurrentMove
-                  ? textStyle.copyWith(
-                      color: _textColor(context, 1),
-                      fontWeight: FontWeight.w600,
-                    )
-                  : textStyle,
-            ),
-          ),
-        ),
-        if (endSideline) Text(')', style: textStyle),
-      ],
-    );
-  }
-}
-
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({
     required this.ctrlProvider,
@@ -874,13 +575,18 @@ class _BottomBar extends ConsumerWidget {
 }
 
 class _EngineDepth extends ConsumerWidget {
-  const _EngineDepth(this.evalContext, this.currentNode);
+  const _EngineDepth(this.ctrlProvider);
 
-  final EvaluationContext evalContext;
-  final ViewNode currentNode;
+  final AnalysisCtrlProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final evalContext = ref.watch(
+      ctrlProvider.select((value) => value.evaluationContext),
+    );
+    final currentNode = ref.watch(
+      ctrlProvider.select((value) => value.currentNode),
+    );
     final depth = ref.watch(
           engineEvaluationProvider(evalContext).select((value) => value?.depth),
         ) ??
@@ -989,6 +695,17 @@ class _Preferences extends ConsumerWidget {
               context.l10n.analysisOptions,
               style: Styles.title,
             ),
+          ),
+          SwitchSettingTile(
+            title: Text(context.l10n.toggleLocalEvaluation),
+            value: prefs.enableLocalEvaluation,
+            onChanged: state.isLocalEvaluationAllowed
+                ? (value) {
+                    ref
+                        .read(ctrlProvider.notifier)
+                        .toggleLocalEvaluation(value);
+                  }
+                : null,
           ),
           Opacity(
             opacity: state.isEngineAvailable ? 1.0 : 0.5,
