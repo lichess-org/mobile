@@ -67,6 +67,7 @@ class PuzzleScreen extends StatelessWidget {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        middle: const Text('Puzzle training'),
         trailing: ToggleSoundButton(),
       ),
       child: initialPuzzleContext != null
