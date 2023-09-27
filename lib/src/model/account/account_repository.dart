@@ -81,13 +81,14 @@ class AccountRepository {
   FutureResult<void> setPreference<T>(String prefKey, AccountPref<T> pref) {
     return _apiClient.post(
       Uri.parse('$kLichessHost/api/account/preferences/$prefKey'),
-      body: {prefKey: pref.value.toString()},
+      body: {prefKey: pref.toFormData},
     );
   }
 }
 
 AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
   return (
+    premove: BooleanPref(pick('premove').asBoolOrThrow()),
     autoQueen: AutoQueen.fromInt(
       pick('autoQueen').asIntOrThrow(),
     ),

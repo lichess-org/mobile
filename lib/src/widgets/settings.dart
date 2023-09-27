@@ -17,7 +17,10 @@ class SettingsListTile extends StatelessWidget {
   });
 
   final Icon? icon;
-  final String settingsLabel;
+
+  /// The label of the settings value, typically a [Text] widget.
+  final Widget settingsLabel;
+
   final String settingsValue;
   final void Function() onTap;
 
@@ -30,7 +33,7 @@ class SettingsListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final tile = PlatformListTile(
       leading: icon,
-      title: Text(settingsLabel),
+      title: settingsLabel,
       additionalInfo: showCupertinoTrailingValue ? Text(settingsValue) : null,
       subtitle: defaultTargetPlatform == TargetPlatform.android
           ? Text(

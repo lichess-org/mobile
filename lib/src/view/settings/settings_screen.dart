@@ -86,7 +86,7 @@ class _Body extends ConsumerWidget {
             children: [
               SettingsListTile(
                 icon: const Icon(Icons.music_note),
-                settingsLabel: context.l10n.sound,
+                settingsLabel: Text(context.l10n.sound),
                 settingsValue: soundThemeL10n(context, soundTheme),
                 onTap: () {
                   if (defaultTargetPlatform == TargetPlatform.android) {
@@ -116,7 +116,7 @@ class _Body extends ConsumerWidget {
               ),
               SettingsListTile(
                 icon: const Icon(Icons.brightness_medium),
-                settingsLabel: context.l10n.background,
+                settingsLabel: Text(context.l10n.background),
                 settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
                 onTap: () {
                   if (defaultTargetPlatform == TargetPlatform.android) {
@@ -141,7 +141,7 @@ class _Body extends ConsumerWidget {
               ),
               SettingsListTile(
                 icon: const Icon(LichessIcons.chess_board),
-                settingsLabel: context.l10n.boardTheme,
+                settingsLabel: Text(context.l10n.boardTheme),
                 settingsValue: boardPrefs.boardTheme.label,
                 onTap: () {
                   pushPlatformRoute(
@@ -153,7 +153,7 @@ class _Body extends ConsumerWidget {
               ),
               SettingsListTile(
                 icon: const Icon(LichessIcons.chess_knight),
-                settingsLabel: context.l10n.pieceSet,
+                settingsLabel: Text(context.l10n.pieceSet),
                 settingsValue: boardPrefs.pieceSet.label,
                 onTap: () {
                   pushPlatformRoute(

@@ -10,6 +10,7 @@ import 'account_repository.dart';
 part 'account_preferences.g.dart';
 
 typedef AccountPrefState = ({
+  BooleanPref premove,
   AutoQueen autoQueen,
   AutoThreefold autoThreefold,
   Takeback takeback,
@@ -34,17 +35,43 @@ class AccountPreferences extends _$AccountPreferences {
     return _repo.getPreferences().fold(
           (value) => value,
           (_, __) => (
+            premove: const BooleanPref(true),
             autoQueen: AutoQueen.premove,
             autoThreefold: AutoThreefold.always,
             takeback: Takeback.always,
             moretime: Moretime.always,
-            confirmResign: BooleanPref.yes,
+            confirmResign: const BooleanPref(true),
           ),
         );
   }
 
+  Future<void> setPremove(BooleanPref value) async {
+    await _repo.setPreference('premove', value);
+    ref.invalidateSelf();
+  }
+
+  Future<void> setTakeback(Takeback value) async {
+    await _repo.setPreference('takeback', value);
+    ref.invalidateSelf();
+  }
+
   Future<void> setAutoQueen(AutoQueen value) async {
     await _repo.setPreference('autoQueen', value);
+    ref.invalidateSelf();
+  }
+
+  Future<void> setAutoThreefold(AutoThreefold value) async {
+    await _repo.setPreference('autoThreefold', value);
+    ref.invalidateSelf();
+  }
+
+  Future<void> setMoretime(Moretime value) async {
+    await _repo.setPreference('moretime', value);
+    ref.invalidateSelf();
+  }
+
+  Future<void> setConfirmResign(BooleanPref value) async {
+    await _repo.setPreference('confirmResign', value);
     ref.invalidateSelf();
   }
 
@@ -53,32 +80,24 @@ class AccountPreferences extends _$AccountPreferences {
 
 sealed class AccountPref<T> {
   T get value;
+  String get toFormData;
 }
 
-enum BooleanPref implements AccountPref<int> {
-  yes(1),
-  no(0);
-
+class BooleanPref implements AccountPref<bool> {
   const BooleanPref(this.value);
 
   @override
-  final int value;
+  final bool value;
 
-  String label(BuildContext context) {
-    switch (this) {
-      case BooleanPref.yes:
-        return context.l10n.yes;
-      case BooleanPref.no:
-        return context.l10n.no;
-    }
-  }
+  @override
+  String get toFormData => value ? '1' : '0';
 
   static BooleanPref fromInt(int value) {
     switch (value) {
       case 1:
-        return BooleanPref.yes;
+        return const BooleanPref(true);
       case 0:
-        return BooleanPref.no;
+        return const BooleanPref(false);
       default:
         throw Exception('Invalid value for BooleanPref');
     }
@@ -94,6 +113,9 @@ enum AutoQueen implements AccountPref<int> {
 
   @override
   final int value;
+
+  @override
+  String get toFormData => value.toString();
 
   String label(BuildContext context) {
     switch (this) {
@@ -130,6 +152,9 @@ enum AutoThreefold implements AccountPref<int> {
   @override
   final int value;
 
+  @override
+  String get toFormData => value.toString();
+
   String label(BuildContext context) {
     switch (this) {
       case AutoThreefold.never:
@@ -165,6 +190,9 @@ enum Takeback implements AccountPref<int> {
   @override
   final int value;
 
+  @override
+  String get toFormData => value.toString();
+
   String label(BuildContext context) {
     switch (this) {
       case Takeback.never:
@@ -199,6 +227,9 @@ enum Moretime implements AccountPref<int> {
 
   @override
   final int value;
+
+  @override
+  String get toFormData => value.toString();
 
   String label(BuildContext context) {
     switch (this) {
