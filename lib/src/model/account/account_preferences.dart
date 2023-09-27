@@ -78,7 +78,7 @@ class AccountPreferences extends _$AccountPreferences {
   AccountRepository get _repo => ref.read(accountRepositoryProvider);
 }
 
-sealed class AccountPref<T> {
+abstract class AccountPref<T> {
   T get value;
   String get toFormData;
 }
