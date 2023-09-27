@@ -45,33 +45,17 @@ class AccountPreferences extends _$AccountPreferences {
         );
   }
 
-  Future<void> setPremove(BooleanPref value) async {
-    await _repo.setPreference('premove', value);
-    ref.invalidateSelf();
-  }
+  Future<void> setPremove(BooleanPref value) => _setPref('premove', value);
+  Future<void> setTakeback(Takeback value) => _setPref('takeback', value);
+  Future<void> setAutoQueen(AutoQueen value) => _setPref('autoQueen', value);
+  Future<void> setAutoThreefold(AutoThreefold value) =>
+      _setPref('autoThreefold', value);
+  Future<void> setMoretime(Moretime value) => _setPref('moretime', value);
+  Future<void> setConfirmResign(BooleanPref value) =>
+      _setPref('confirmResign', value);
 
-  Future<void> setTakeback(Takeback value) async {
-    await _repo.setPreference('takeback', value);
-    ref.invalidateSelf();
-  }
-
-  Future<void> setAutoQueen(AutoQueen value) async {
-    await _repo.setPreference('autoQueen', value);
-    ref.invalidateSelf();
-  }
-
-  Future<void> setAutoThreefold(AutoThreefold value) async {
-    await _repo.setPreference('autoThreefold', value);
-    ref.invalidateSelf();
-  }
-
-  Future<void> setMoretime(Moretime value) async {
-    await _repo.setPreference('moretime', value);
-    ref.invalidateSelf();
-  }
-
-  Future<void> setConfirmResign(BooleanPref value) async {
-    await _repo.setPreference('confirmResign', value);
+  Future<void> _setPref<T>(String key, AccountPref<T> value) async {
+    await _repo.setPreference(key, value);
     ref.invalidateSelf();
   }
 
