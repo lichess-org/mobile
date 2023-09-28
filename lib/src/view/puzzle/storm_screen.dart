@@ -134,19 +134,23 @@ class _BodyState extends ConsumerState<_Body>
                 onMove: (move, {isDrop, isPremove}) => ref
                     .read(ctrlProvider.notifier)
                     .onUserMove(Move.fromUci(move.uci)!),
+                onPremove: (move) =>
+                    ref.read(ctrlProvider.notifier).setPremove(move),
                 boardData: cg.BoardData(
                   orientation: puzzleState.pov.cg,
-                  interactableSide:
-                      puzzleState.runOver || puzzleState.position.isGameOver
-                          ? cg.InteractableSide.none
-                          : puzzleState.pov == Side.white
-                              ? cg.InteractableSide.white
-                              : cg.InteractableSide.black,
+                  interactableSide: !puzzleState.firstMovePlayed ||
+                          puzzleState.runOver ||
+                          puzzleState.position.isGameOver
+                      ? cg.InteractableSide.none
+                      : puzzleState.pov == Side.white
+                          ? cg.InteractableSide.white
+                          : cg.InteractableSide.black,
                   fen: puzzleState.position.fen,
                   isCheck: puzzleState.position.isCheck,
                   lastMove: puzzleState.lastMove?.cg,
                   sideToMove: puzzleState.position.turn.cg,
                   validMoves: puzzleState.validMoves,
+                  premove: puzzleState.premove,
                 ),
                 topTable: _TopTable(
                   ctrl: ctrlProvider,

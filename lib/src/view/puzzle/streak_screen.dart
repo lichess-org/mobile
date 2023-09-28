@@ -157,7 +157,8 @@ class _BodyState extends ConsumerState<_Body>
                 },
                 boardData: cg.BoardData(
                   orientation: puzzleState.pov.cg,
-                  interactableSide: puzzleState.position.isGameOver
+                  interactableSide: puzzleState.mode == PuzzleMode.load ||
+                          puzzleState.position.isGameOver
                       ? cg.InteractableSide.none
                       : puzzleState.mode == PuzzleMode.view
                           ? cg.InteractableSide.both

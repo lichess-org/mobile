@@ -82,6 +82,12 @@ void main() {
 
         await tester.pumpWidget(app);
 
+        // before the first move is played, puzzle is not interactable
+        expect(find.byKey(const Key('h5-whiteRook')), findsOneWidget);
+        await tester.tap(find.byKey(const Key('h5-whiteRook')));
+        await tester.pump();
+        expect(find.byKey(const Key('h5-selected')), findsNothing);
+
         // wait for first move to be played
         await tester.pump(const Duration(seconds: 1));
 
@@ -111,6 +117,7 @@ void main() {
         );
 
         await tester.pump(const Duration(milliseconds: 500));
+
         // should have loaded next puzzle
         expect(find.byKey(const Key('h6-blackKing')), findsOneWidget);
       },

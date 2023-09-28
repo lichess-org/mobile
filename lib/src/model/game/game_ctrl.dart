@@ -143,11 +143,14 @@ class GameCtrl extends _$GameCtrl {
   void cursorForward() {
     if (state.hasValue) {
       final curState = state.requireValue;
-      final newCursor = curState.stepCursor + 1;
-      state = AsyncValue.data(curState.copyWith(stepCursor: newCursor));
-      final san = curState.game.stepAt(newCursor).sanMove?.san;
-      if (san != null) {
-        _playReplayMoveSound(san);
+      if (curState.stepCursor < curState.game.steps.length - 1) {
+        state = AsyncValue.data(
+          curState.copyWith(stepCursor: curState.stepCursor + 1),
+        );
+        final san = curState.game.stepAt(curState.stepCursor + 1).sanMove?.san;
+        if (san != null) {
+          _playReplayMoveSound(san);
+        }
       }
     }
   }
@@ -155,11 +158,14 @@ class GameCtrl extends _$GameCtrl {
   void cursorBackward() {
     if (state.hasValue) {
       final curState = state.requireValue;
-      final newCursor = curState.stepCursor - 1;
-      state = AsyncValue.data(curState.copyWith(stepCursor: newCursor));
-      final san = curState.game.stepAt(newCursor).sanMove?.san;
-      if (san != null) {
-        _playReplayMoveSound(san);
+      if (curState.stepCursor > 0) {
+        state = AsyncValue.data(
+          curState.copyWith(stepCursor: curState.stepCursor - 1),
+        );
+        final san = curState.game.stepAt(curState.stepCursor - 1).sanMove?.san;
+        if (san != null) {
+          _playReplayMoveSound(san);
+        }
       }
     }
   }

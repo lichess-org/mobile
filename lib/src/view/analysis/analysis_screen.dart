@@ -451,10 +451,8 @@ class _Engineline extends ConsumerWidget {
               Container(
                 decoration: BoxDecoration(
                   color: pvData.winningSide == Side.black
-                      ? kEvalGaugeBackgroundColor
-                      : brightness == Brightness.light
-                          ? kEvalGaugeValueColorLightBg
-                          : kEvalGaugeValueColorDarkBg,
+                      ? EngineGauge.backgroundColor(context, brightness)
+                      : EngineGauge.valueColor(context, brightness),
                   borderRadius: BorderRadius.circular(4.0),
                 ),
                 padding: const EdgeInsets.symmetric(

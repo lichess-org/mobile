@@ -59,10 +59,12 @@ class GameCursor extends _$GameCursor {
   void cursorForward() {
     if (state.hasValue) {
       final (game, cursor) = state.value!;
-      state = AsyncValue.data((game, cursor + 1));
-      final san = game.stepAt(cursor + 1).sanMove?.san;
-      if (san != null) {
-        _playMoveSound(san);
+      if (cursor < game.steps.length - 1) {
+        state = AsyncValue.data((game, cursor + 1));
+        final san = game.stepAt(cursor + 1).sanMove?.san;
+        if (san != null) {
+          _playMoveSound(san);
+        }
       }
     }
   }
@@ -70,10 +72,12 @@ class GameCursor extends _$GameCursor {
   void cursorBackward() {
     if (state.hasValue) {
       final (game, cursor) = state.value!;
-      state = AsyncValue.data((game, cursor - 1));
-      final san = game.stepAt(cursor - 1).sanMove?.san;
-      if (san != null) {
-        _playMoveSound(san);
+      if (cursor > 0) {
+        state = AsyncValue.data((game, cursor - 1));
+        final san = game.stepAt(cursor - 1).sanMove?.san;
+        if (san != null) {
+          _playMoveSound(san);
+        }
       }
     }
   }
