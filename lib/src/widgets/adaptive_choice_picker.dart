@@ -84,8 +84,8 @@ Future<void> showChoicePicker<T extends Enum>(
 
 Future<Set<T>?> showMultipleChoicesPicker<T extends Enum>(
   BuildContext context, {
-  required List<T> choices,
-  required Set<T> selectedItems,
+  required Iterable<T> choices,
+  required Iterable<T> selectedItems,
   required Widget Function(T choice) labelBuilder,
 }) {
   return showAdaptiveDialog<Set<T>>(

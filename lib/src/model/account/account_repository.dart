@@ -104,5 +104,8 @@ AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
     confirmResign: BooleanPref.fromInt(
       pick('confirmResign').asIntOrThrow(),
     ),
+    submitMove: SubmitMove.fromInt(
+      pick('submitMove').asIntOrThrow(),
+    ),
   );
 }

@@ -177,6 +177,28 @@ class _Body extends ConsumerWidget {
                       }
                     },
                   ),
+                  SettingsListTile(
+                    settingsLabel: Text(
+                      context.l10n.preferencesMoveConfirmation,
+                      maxLines: 2,
+                    ),
+                    settingsValue: data.submitMove.label(context),
+                    showCupertinoTrailingValue: false,
+                    onTap: () {
+                      showMultipleChoicesPicker(
+                        context,
+                        choices: SubmitMoveChoice.values,
+                        selectedItems: data.submitMove.choices,
+                        labelBuilder: (t) => Text(t.label(context)),
+                      ).then((value) {
+                        if (value != null) {
+                          ref
+                              .read(accountPreferencesProvider.notifier)
+                              .setSubmitMove(SubmitMove(value));
+                        }
+                      });
+                    },
+                  ),
                 ],
               ),
             ],

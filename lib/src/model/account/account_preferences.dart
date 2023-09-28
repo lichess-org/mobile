@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -16,6 +17,7 @@ typedef AccountPrefState = ({
   Takeback takeback,
   Moretime moretime,
   BooleanPref confirmResign,
+  SubmitMove submitMove,
 });
 
 /// Get the account preferences for the current user.
@@ -41,6 +43,9 @@ class AccountPreferences extends _$AccountPreferences {
             takeback: Takeback.always,
             moretime: Moretime.always,
             confirmResign: const BooleanPref(true),
+            submitMove: SubmitMove({
+              SubmitMoveChoice.correspondence,
+            }),
           ),
         );
   }
@@ -53,6 +58,7 @@ class AccountPreferences extends _$AccountPreferences {
   Future<void> setMoretime(Moretime value) => _setPref('moretime', value);
   Future<void> setConfirmResign(BooleanPref value) =>
       _setPref('confirmResign', value);
+  Future<void> setSubmitMove(SubmitMove value) => _setPref('submitMove', value);
 
   Future<void> _setPref<T>(String key, AccountPref<T> value) async {
     await _repo.setPreference(key, value);
@@ -239,3 +245,75 @@ enum Moretime implements AccountPref<int> {
     }
   }
 }
+
+class SubmitMove implements AccountPref<int> {
+  SubmitMove(Iterable<SubmitMoveChoice> choices)
+      : choices = ISet(choices.toSet());
+
+  final ISet<SubmitMoveChoice> choices;
+
+  @override
+  int get value => choices.fold(0, (acc, choice) => acc | choice.value);
+
+  @override
+  String get toFormData => value.toString();
+
+  String label(BuildContext context) {
+    if (choices.isEmpty) {
+      return context.l10n.never;
+    }
+
+    return choices.map((choice) => choice.label(context)).join(', ');
+  }
+
+  factory SubmitMove.fromInt(int value) => SubmitMove(
+        SubmitMoveChoice.values
+            .where((choice) => _bitPresent(value, choice.value)),
+      );
+}
+
+enum SubmitMoveChoice {
+  unlimited(1),
+  correspondence(2),
+  classical(4),
+  rapid(8),
+  blitz(16);
+
+  const SubmitMoveChoice(this.value);
+
+  final int value;
+
+  String label(BuildContext context) {
+    switch (this) {
+      case SubmitMoveChoice.unlimited:
+        return context.l10n.unlimited;
+      case SubmitMoveChoice.correspondence:
+        return context.l10n.correspondence;
+      case SubmitMoveChoice.classical:
+        return context.l10n.classical;
+      case SubmitMoveChoice.rapid:
+        return context.l10n.rapid;
+      case SubmitMoveChoice.blitz:
+        return 'Blitz';
+    }
+  }
+
+  static SubmitMoveChoice fromInt(int value) {
+    switch (value) {
+      case 1:
+        return SubmitMoveChoice.unlimited;
+      case 2:
+        return SubmitMoveChoice.correspondence;
+      case 4:
+        return SubmitMoveChoice.classical;
+      case 8:
+        return SubmitMoveChoice.rapid;
+      case 16:
+        return SubmitMoveChoice.blitz;
+      default:
+        throw Exception('Invalid value for SubmitMoveChoice');
+    }
+  }
+}
+
+bool _bitPresent(int anInt, int bit) => (anInt & bit) == bit;
