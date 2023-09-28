@@ -503,12 +503,10 @@ class _GameBottomBar extends ConsumerWidget {
             if (gameState.game.finished)
               BottomBarButton(
                 label: context.l10n.gameAnalysis,
-                highlighted: true,
                 shortLabel: 'Analysis',
                 icon: Icons.biotech,
                 onTap: () => pushPlatformRoute(
                   context,
-                  fullscreenDialog: true,
                   builder: (_) => AnalysisScreen(
                     options: gameState.analysisOptions,
                     title: context.l10n.gameAnalysis,
@@ -843,7 +841,7 @@ class _GameEndDialogState extends ConsumerState<_GameEndDialog> {
           ),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 24.0),
+        const SizedBox(height: 16.0),
         if (gameState.game.player?.offeringRematch == true)
           SecondaryButton(
             semanticsLabel: context.l10n.cancelRematchOffer,
@@ -866,7 +864,6 @@ class _GameEndDialogState extends ConsumerState<_GameEndDialog> {
             glowing: gameState.game.opponent?.offeringRematch == true,
             child: Text(context.l10n.rematch),
           ),
-        const SizedBox(height: 8.0),
         SecondaryButton(
           semanticsLabel: context.l10n.newOpponent,
           onPressed: _activateButtons
@@ -878,6 +875,17 @@ class _GameEndDialogState extends ConsumerState<_GameEndDialog> {
                 }
               : null,
           child: Text(context.l10n.newOpponent),
+        ),
+        SecondaryButton(
+          semanticsLabel: context.l10n.analysis,
+          onPressed: () => pushPlatformRoute(
+            context,
+            builder: (_) => AnalysisScreen(
+              options: gameState.analysisOptions,
+              title: context.l10n.gameAnalysis,
+            ),
+          ),
+          child: Text(context.l10n.analysis),
         ),
       ],
     );
