@@ -8,7 +8,6 @@ import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_ctrl.dart';
 import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
@@ -348,8 +347,8 @@ class _Body extends ConsumerWidget {
             bottom: false,
             child: BoardTable(
               boardSettingsOverrides: BoardSettingsOverrides(
-                autoQueenPromotion: gameState.autoQueen,
-                autoQueenPromotionOnPremove: gameState.autoQueenOnPremove,
+                autoQueenPromotion: gameState.canAutoQueen,
+                autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
               ),
               onMove: (move, {isDrop, isPremove}) {
                 ref.read(ctrlProvider.notifier).onUserMove(
@@ -358,9 +357,11 @@ class _Body extends ConsumerWidget {
                       isDrop: isDrop,
                     );
               },
-              onPremove: (move) {
-                ref.read(ctrlProvider.notifier).setPremove(move);
-              },
+              onPremove: gameState.canPremove
+                  ? (move) {
+                      ref.read(ctrlProvider.notifier).setPremove(move);
+                    }
+                  : null,
               boardData: cg.BoardData(
                 interactableSide:
                     gameState.game.playable && !gameState.isReplaying
@@ -509,13 +510,7 @@ class _GameBottomBar extends ConsumerWidget {
                   context,
                   fullscreenDialog: true,
                   builder: (_) => AnalysisScreen(
-                    options: AnalysisOptions(
-                      isLocalEvaluationAllowed: true,
-                      variant: gameState.game.meta.variant,
-                      steps: gameState.game.steps,
-                      orientation: gameState.game.youAre ?? Side.white,
-                      id: gameState.game.meta.id,
-                    ),
+                    options: gameState.analysisOptions,
                     title: context.l10n.gameAnalysis,
                   ),
                 ),
@@ -682,33 +677,33 @@ class _GameBottomBar extends ConsumerWidget {
         else if (gameState.canOfferDraw)
           BottomSheetAction(
             label: Text(context.l10n.offerDraw),
-            onPressed: (context) {
-              ref.read(ctrlProvider.notifier).offerOrAcceptDraw();
-            },
+            onPressed: gameState.shouldConfirmResignAndDrawOffer
+                ? (context) => _showConfirmDialog(
+                      context,
+                      description: Text(context.l10n.offerDraw),
+                      onConfirm: () {
+                        ref.read(ctrlProvider.notifier).offerOrAcceptDraw();
+                      },
+                    )
+                : (context) {
+                    ref.read(ctrlProvider.notifier).offerOrAcceptDraw();
+                  },
           ),
         if (gameState.game.resignable)
           BottomSheetAction(
             label: Text(context.l10n.resign),
             dismissOnPress: false,
-            onPressed: (context) async {
-              await Navigator.of(context).maybePop();
-              if (context.mounted) {
-                final result = await showAdaptiveDialog<bool>(
-                  context: context,
-                  builder: (context) => YesNoDialog(
-                    title: const Text('Are you sure?'),
-                    content: Text(context.l10n.resignTheGame),
-                    onYes: () {
-                      return Navigator.of(context).pop(true);
-                    },
-                    onNo: () => Navigator.of(context).pop(false),
-                  ),
-                );
-                if (result == true) {
-                  ref.read(ctrlProvider.notifier).resignGame();
-                }
-              }
-            },
+            onPressed: gameState.shouldConfirmResignAndDrawOffer
+                ? (context) => _showConfirmDialog(
+                      context,
+                      description: Text(context.l10n.resignTheGame),
+                      onConfirm: () {
+                        ref.read(ctrlProvider.notifier).resignGame();
+                      },
+                    )
+                : (context) {
+                    ref.read(ctrlProvider.notifier).resignGame();
+                  },
           ),
         if (gameState.game.canClaimWin) ...[
           BottomSheetAction(
@@ -753,6 +748,30 @@ class _GameBottomBar extends ConsumerWidget {
           ),
       ],
     );
+  }
+
+  Future<void> _showConfirmDialog(
+    BuildContext context, {
+    required Widget description,
+    required VoidCallback onConfirm,
+  }) async {
+    await Navigator.of(context).maybePop();
+    if (context.mounted) {
+      final result = await showAdaptiveDialog<bool>(
+        context: context,
+        builder: (context) => YesNoDialog(
+          title: const Text('Are you sure?'),
+          content: description,
+          onYes: () {
+            return Navigator.of(context).pop(true);
+          },
+          onNo: () => Navigator.of(context).pop(false),
+        ),
+      );
+      if (result == true) {
+        onConfirm();
+      }
+    }
   }
 }
 

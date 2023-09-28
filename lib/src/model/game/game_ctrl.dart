@@ -7,13 +7,14 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:logging/logging.dart';
 import 'package:deep_pick/deep_pick.dart';
 
-import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_ctrl.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
@@ -52,9 +53,6 @@ class GameCtrl extends _$GameCtrl {
 
   @override
   Future<GameCtrlState> build(GameFullId gameFullId) async {
-    // this future should never fail
-    final accountPrefs = await ref.watch(accountPreferencesProvider.future);
-
     final socket = ref.watch(authSocketProvider);
     final (stream, _) = socket.connect(Uri(path: '/play/$gameFullId/v6'));
 
@@ -70,7 +68,6 @@ class GameCtrl extends _$GameCtrl {
         game: fullEvent.game,
         stepCursor: fullEvent.game.steps.length - 1,
         stopClockWaitingForServerAck: false,
-        accountPrefs: accountPrefs,
       );
     });
 
@@ -669,7 +666,6 @@ class GameCtrlState with _$GameCtrlState {
   const factory GameCtrlState({
     required PlayableGame game,
     required int stepCursor,
-    AccountPrefState? accountPrefs,
     int? lastDrawOfferAtPly,
     Duration? opponentLeftCountdown,
     required bool stopClockWaitingForServerAck,
@@ -680,8 +676,10 @@ class GameCtrlState with _$GameCtrlState {
   }) = _GameCtrlState;
 
   // preferences
-  bool get autoQueen => accountPrefs?.autoQueen == AutoQueen.always;
-  bool get autoQueenOnPremove => accountPrefs?.autoQueen == AutoQueen.premove;
+  bool get canPremove => game.prefs?.enablePremove ?? true;
+  bool get canAutoQueen => game.prefs?.autoQueen == AutoQueen.always;
+  bool get canAutoQueenOnPremove => game.prefs?.autoQueen == AutoQueen.premove;
+  bool get shouldConfirmResignAndDrawOffer => game.prefs?.confirmResign ?? true;
 
   // game state
   bool get isReplaying => stepCursor < game.steps.length - 1;
@@ -744,4 +742,12 @@ class GameCtrlState with _$GameCtrlState {
 
     return null;
   }
+
+  AnalysisOptions get analysisOptions => AnalysisOptions(
+        isLocalEvaluationAllowed: true,
+        variant: game.meta.variant,
+        steps: game.steps,
+        orientation: game.youAre ?? Side.white,
+        id: game.meta.id,
+      );
 }

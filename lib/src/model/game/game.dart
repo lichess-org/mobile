@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 
 import 'player.dart';
 import 'game_status.dart';
@@ -65,6 +66,7 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
     /// The side that the current player is playing as. This is null if viewing
     /// the game as a spectator.
     Side? youAre,
+    GamePrefs? prefs,
     PlayableClockData? clock,
     bool? boosted,
     bool? isThreefoldRepetition,
@@ -114,6 +116,13 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
       resignable &&
       (meta.rules == null || !meta.rules!.contains(GameRule.noClaimWin));
 }
+
+typedef GamePrefs = ({
+  bool enablePremove,
+  AutoQueen autoQueen,
+  bool confirmResign,
+  bool submitMove,
+});
 
 enum GameSource {
   lobby,
