@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -13,9 +14,9 @@ part 'engine_gauge.freezed.dart';
 
 const double kEvalGaugeSize = 26.0;
 const double kEvalGaugeFontSize = 11.0;
-const Color kEvalGaugeBackgroundColor = Color(0xFF444444);
-const Color kEvalGaugeValueColorDarkBg = Color(0xEEEEEEEE);
-const Color kEvalGaugeValueColorLightBg = Color(0xFFFFFFFF);
+const Color _kEvalGaugeBackgroundColor = Color(0xFF444444);
+const Color _kEvalGaugeValueColorDarkBg = Color(0xEEEEEEEE);
+const Color _kEvalGaugeValueColorLightBg = Color(0xFFFFFFFF);
 
 enum EngineGaugeDisplayMode {
   vertical,
@@ -47,6 +48,22 @@ class EngineGauge extends ConsumerWidget {
   final EngineGaugeDisplayMode displayMode;
 
   final EngineGaugeParams params;
+
+  static Color backgroundColor(BuildContext context, Brightness brightness) =>
+      defaultTargetPlatform == TargetPlatform.iOS
+          ? _kEvalGaugeBackgroundColor
+          : brightness == Brightness.dark
+              ? lighten(Theme.of(context).colorScheme.background, .07)
+              : lighten(Theme.of(context).colorScheme.onBackground, .17);
+
+  static Color valueColor(BuildContext context, Brightness brightness) =>
+      defaultTargetPlatform == TargetPlatform.iOS
+          ? brightness == Brightness.dark
+              ? _kEvalGaugeValueColorDarkBg
+              : _kEvalGaugeValueColorLightBg
+          : brightness == Brightness.dark
+              ? darken(Theme.of(context).colorScheme.onBackground, .03)
+              : darken(Theme.of(context).colorScheme.background, .01);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -155,17 +172,15 @@ class _EvalGaugeState extends ConsumerState<_EvalGauge> {
               painter: widget.displayMode == EngineGaugeDisplayMode.vertical
                   ? _EvalGaugeVerticalPainter(
                       orientation: widget.orientation,
-                      backgroundColor: kEvalGaugeBackgroundColor,
-                      valueColor: brightness == Brightness.dark
-                          ? kEvalGaugeValueColorDarkBg
-                          : kEvalGaugeValueColorLightBg,
+                      backgroundColor:
+                          EngineGauge.backgroundColor(context, brightness),
+                      valueColor: EngineGauge.valueColor(context, brightness),
                       value: value,
                     )
                   : _EvalGaugeHorizontalPainter(
-                      backgroundColor: kEvalGaugeBackgroundColor,
-                      valueColor: brightness == Brightness.dark
-                          ? kEvalGaugeValueColorDarkBg
-                          : kEvalGaugeValueColorLightBg,
+                      backgroundColor:
+                          EngineGauge.backgroundColor(context, brightness),
+                      valueColor: EngineGauge.valueColor(context, brightness),
                       value: value,
                       textDirection: textDirection,
                     ),
