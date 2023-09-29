@@ -52,7 +52,7 @@ class GameCtrl extends _$GameCtrl {
   DateTime? _lastMoveTime;
 
   @override
-  Future<GameCtrlState> build(GameFullId gameFullId) async {
+  Future<GameCtrlState> build(GameFullId gameFullId) {
     final socket = ref.watch(authSocketProvider);
     final (stream, _) = socket.connect(Uri(path: '/play/$gameFullId/v6'));
 
