@@ -733,7 +733,7 @@ class GameCtrlState with _$GameCtrlState {
     /// Game only setting to override the account preference
     bool? moveConfirmSettingOverride,
 
-    /// Set if confirm move preference is enabled
+    /// Set if confirm move preference is enabled and player played a move
     Move? moveToConfirm,
 
     /// Game full id used to redirect to the new game of the rematch
