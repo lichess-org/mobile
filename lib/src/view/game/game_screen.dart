@@ -102,12 +102,14 @@ class _GameScreenState extends ConsumerState<GameScreen>
                 playPrefs: playPrefs,
                 body: body,
                 gameState: state,
+                ctrlProvider: ctrlProvider,
               ),
               iosBuilder: (context) => _iosBuilder(
                 context: context,
                 playPrefs: playPrefs,
                 body: body,
                 gameState: state,
+                ctrlProvider: ctrlProvider,
               ),
             );
           },
@@ -164,6 +166,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
     required BuildContext context,
     required PlayPrefs playPrefs,
     required Widget body,
+    GameCtrlProvider? ctrlProvider,
     GameCtrlState? gameState,
   }) {
     return Scaffold(
@@ -180,7 +183,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               showDragHandle: true,
-              builder: (_) => const _Preferences(),
+              builder: (_) => _Preferences(ctrlProvider),
             ),
           ),
         ],
@@ -193,6 +196,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
     required BuildContext context,
     required PlayPrefs playPrefs,
     required Widget body,
+    GameCtrlProvider? ctrlProvider,
     GameCtrlState? gameState,
   }) {
     return CupertinoPageScaffold(
@@ -209,7 +213,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
           onPressed: () => showAdaptiveBottomSheet<void>(
             context: context,
             showDragHandle: true,
-            builder: (_) => const _Preferences(),
+            builder: (_) => _Preferences(ctrlProvider),
           ),
         ),
       ),
@@ -256,42 +260,15 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(ctrlProvider, (prev, state) {
-      if (prev?.hasValue == true && state.hasValue) {
-        if (prev!.requireValue.game.playable == true &&
-            state.requireValue.game.playable == false) {
-          Timer(const Duration(milliseconds: 500), () {
-            showAdaptiveDialog<void>(
-              context: context,
-              builder: (context) => _GameEndDialog(
-                ctrlProvider: ctrlProvider,
-                gameProvider: gameProvider,
-              ),
-              barrierDismissible: true,
-            );
-          });
-        }
-
-        if (!prev.requireValue.game.canClaimWin &&
-            state.requireValue.game.canClaimWin) {
-          showAdaptiveDialog<void>(
-            context: context,
-            builder: (context) => _ClaimWinDialog(
-              ctrlProvider: ctrlProvider,
-            ),
-            barrierDismissible: true,
-          );
-        }
-
-        if (state.requireValue.redirectGameId != null) {
-          // Be sure to pop any dialogs that might be on top of the game screen.
-          Navigator.of(context).popUntil((route) => route is! RawDialogRoute);
-          ref
-              .read(gameProvider.notifier)
-              .rematch(state.requireValue.redirectGameId!);
-        }
-      }
-    });
+    ref.listen(
+      ctrlProvider,
+      (prev, state) => _stateListener(
+        prev,
+        state,
+        context: context,
+        ref: ref,
+      ),
+    );
 
     final position = gameState.game.positionAt(gameState.stepCursor);
     final sideToMove = position.turn;
@@ -304,6 +281,17 @@ class _Body extends ConsumerWidget {
       timeToMove: sideToMove == Side.black ? gameState.timeToMove : null,
       shouldLinkToUserProfile: youAre != Side.black,
       mePlaying: youAre == Side.black,
+      confirmMoveCallbacks:
+          youAre == Side.black && gameState.moveToConfirm != null
+              ? (
+                  confirm: () {
+                    ref.read(ctrlProvider.notifier).confirmMove();
+                  },
+                  cancel: () {
+                    ref.read(ctrlProvider.notifier).cancelMove();
+                  },
+                )
+              : null,
       clock: gameState.game.clock != null
           ? CountdownClock(
               duration: gameState.game.clock!.black,
@@ -323,6 +311,17 @@ class _Body extends ConsumerWidget {
       timeToMove: sideToMove == Side.white ? gameState.timeToMove : null,
       shouldLinkToUserProfile: youAre != Side.white,
       mePlaying: youAre == Side.white,
+      confirmMoveCallbacks:
+          youAre == Side.white && gameState.moveToConfirm != null
+              ? (
+                  confirm: () {
+                    ref.read(ctrlProvider.notifier).confirmMove();
+                  },
+                  cancel: () {
+                    ref.read(ctrlProvider.notifier).cancelMove();
+                  },
+                )
+              : null,
       clock: gameState.game.clock != null
           ? CountdownClock(
               duration: gameState.game.clock!.white,
@@ -408,10 +407,60 @@ class _Body extends ConsumerWidget {
       child: content,
     );
   }
+
+  void _stateListener(
+    AsyncValue<GameCtrlState>? prev,
+    AsyncValue<GameCtrlState> state, {
+    required BuildContext context,
+    required WidgetRef ref,
+  }) {
+    if (prev?.hasValue == true && state.hasValue) {
+      // If the game is no longer playable, show the game end dialog.
+      if (prev!.requireValue.game.playable == true &&
+          state.requireValue.game.playable == false) {
+        Timer(const Duration(milliseconds: 500), () {
+          if (context.mounted) {
+            showAdaptiveDialog<void>(
+              context: context,
+              builder: (context) => _GameEndDialog(
+                ctrlProvider: ctrlProvider,
+                gameProvider: gameProvider,
+              ),
+              barrierDismissible: true,
+            );
+          }
+        });
+      }
+
+      // Opponent is gone long enough to show the claim win dialog.
+      if (!prev.requireValue.game.canClaimWin &&
+          state.requireValue.game.canClaimWin) {
+        if (context.mounted) {
+          showAdaptiveDialog<void>(
+            context: context,
+            builder: (context) => _ClaimWinDialog(
+              ctrlProvider: ctrlProvider,
+            ),
+            barrierDismissible: true,
+          );
+        }
+      }
+
+      if (state.requireValue.redirectGameId != null) {
+        // Be sure to pop any dialogs that might be on top of the game screen.
+        Navigator.of(context).popUntil((route) => route is! RawDialogRoute);
+        ref
+            .read(gameProvider.notifier)
+            .rematch(state.requireValue.redirectGameId!);
+      }
+    }
+  }
 }
 
 class _Preferences extends ConsumerWidget {
-  const _Preferences();
+  const _Preferences(this.ctrlProvider);
+
+  final GameCtrlProvider? ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -421,6 +470,9 @@ class _Preferences extends ConsumerWidget {
       ),
     );
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final gameState = ctrlProvider != null
+        ? ref.watch(ctrlProvider!)
+        : const AsyncValue<GameCtrlState>.loading();
 
     return SafeArea(
       child: ListView(
@@ -463,6 +515,27 @@ class _Preferences extends ConsumerWidget {
                   .togglePieceAnimation();
             },
           ),
+          gameState.when(
+            data: (data) {
+              if (data.game.prefs?.submitMove == true) {
+                return SwitchSettingTile(
+                  title: Text(
+                    context.l10n.preferencesMoveConfirmation,
+                    maxLines: 2,
+                  ),
+                  value: data.shouldConfirmMove,
+                  onChanged: (value) {
+                    ref.read(ctrlProvider!.notifier).toggleMoveConfirmation();
+                  },
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+            loading: () => const SizedBox.shrink(),
+            error: (e, s) => const SizedBox.shrink(),
+          ),
+          const SizedBox(height: 16.0),
         ],
       ),
     );

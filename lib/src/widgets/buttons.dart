@@ -666,13 +666,20 @@ class PlatformIconButton extends StatelessWidget {
     required this.icon,
     required this.semanticsLabel,
     required this.onTap,
-    this.highlighted = true,
-  });
+    this.highlighted = false,
+    this.color,
+    this.iconSize,
+  }) : assert(
+          color == null || !highlighted,
+          'Cannot provide both color and highlighted',
+        );
 
   final IconData icon;
   final String semanticsLabel;
   final VoidCallback? onTap;
   final bool highlighted;
+  final Color? color;
+  final double? iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -685,7 +692,8 @@ class PlatformIconButton extends StatelessWidget {
             onPressed: onTap,
             icon: Icon(icon),
             tooltip: semanticsLabel,
-            color: highlighted ? themeData.colorScheme.primary : null,
+            color: highlighted ? themeData.colorScheme.primary : color,
+            iconSize: iconSize,
           ),
         );
       case TargetPlatform.iOS:
@@ -699,7 +707,8 @@ class PlatformIconButton extends StatelessWidget {
             semanticsLabel: semanticsLabel,
             icon: Icon(
               icon,
-              color: highlighted ? themeData.primaryColor : null,
+              color: highlighted ? themeData.primaryColor : color,
+              size: iconSize,
             ),
           ),
         );
