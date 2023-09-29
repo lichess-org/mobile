@@ -669,6 +669,7 @@ class PlatformIconButton extends StatelessWidget {
     this.highlighted = false,
     this.color,
     this.iconSize,
+    this.padding,
   }) : assert(
           color == null || !highlighted,
           'Cannot provide both color and highlighted',
@@ -680,6 +681,7 @@ class PlatformIconButton extends StatelessWidget {
   final bool highlighted;
   final Color? color;
   final double? iconSize;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -694,6 +696,7 @@ class PlatformIconButton extends StatelessWidget {
             tooltip: semanticsLabel,
             color: highlighted ? themeData.colorScheme.primary : color,
             iconSize: iconSize,
+            padding: padding,
           ),
         );
       case TargetPlatform.iOS:
@@ -705,6 +708,7 @@ class PlatformIconButton extends StatelessWidget {
           child: CupertinoIconButton(
             onPressed: onTap,
             semanticsLabel: semanticsLabel,
+            padding: padding,
             icon: Icon(
               icon,
               color: highlighted ? themeData.primaryColor : color,

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
@@ -205,27 +206,29 @@ class ConfirmMove extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          context.l10n.confirmMove,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 2,
-        ),
-        const SizedBox(width: 15),
         PlatformIconButton(
           icon: CupertinoIcons.xmark_rectangle_fill,
           color: LichessColors.red,
           iconSize: 35,
           semanticsLabel: context.l10n.cancel,
+          padding: const EdgeInsets.all(10),
           onTap: onCancel,
         ),
-        const SizedBox(width: 10),
+        Flexible(
+          child: Text(
+            context.l10n.confirmMove,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+          ),
+        ),
         PlatformIconButton(
           icon: CupertinoIcons.checkmark_rectangle_fill,
           color: LichessColors.green,
           iconSize: 35,
           semanticsLabel: context.l10n.accept,
+          padding: const EdgeInsets.all(10),
           onTap: onConfirm,
         ),
       ],
