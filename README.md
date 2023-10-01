@@ -13,6 +13,8 @@ If you want to contribute, please read the [contributing guide](./CONTRIBUTING.m
 
 Follow the [official flutter guide](https://docs.flutter.dev/get-started/install).
 
+**Note, if you're on Linux**, you should install flutter manually because there is an [issue](https://github.com/lichess-org/mobile/issues/123) with snapd when building Stockfish.
+
 This project is meant to run on iOS and Android, so you need to follow the
 "Platform setup" section of that guide to install the iOS and/or Android platform.
 
