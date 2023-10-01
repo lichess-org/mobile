@@ -62,8 +62,8 @@ class AnalysisScreen extends ConsumerWidget {
           SettingsButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
-              showDragHandle: true,
-              builder: (_) => _Preferences(ctrlProvider),
+              isScrollControlled: true,
+              builder: (_) => _AnalysisSettings(ctrlProvider),
             ),
           ),
         ],
@@ -85,8 +85,8 @@ class AnalysisScreen extends ConsumerWidget {
             SettingsButton(
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
-                showDragHandle: true,
-                builder: (_) => _Preferences(ctrlProvider),
+                isScrollControlled: true,
+                builder: (_) => _AnalysisSettings(ctrlProvider),
               ),
             ),
           ],
@@ -670,8 +670,8 @@ class _StockfishInfo extends ConsumerWidget {
   }
 }
 
-class _Preferences extends ConsumerWidget {
-  const _Preferences(this.ctrlProvider);
+class _AnalysisSettings extends ConsumerWidget {
+  const _AnalysisSettings(this.ctrlProvider);
 
   final AnalysisCtrlProvider ctrlProvider;
 
@@ -683,17 +683,12 @@ class _Preferences extends ConsumerWidget {
       generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
     );
 
-    return SafeArea(
+    return ModalSheetScaffold(
+      title: Text(context.l10n.analysisOptions),
       child: ListView(
         shrinkWrap: true,
         children: [
-          Padding(
-            padding: Styles.bodyPadding,
-            child: Text(
-              context.l10n.analysisOptions,
-              style: Styles.title,
-            ),
-          ),
+          const SizedBox(height: 8.0),
           SwitchSettingTile(
             title: Text(context.l10n.toggleLocalEvaluation),
             value: prefs.enableLocalEvaluation,
@@ -705,12 +700,39 @@ class _Preferences extends ConsumerWidget {
                   }
                 : null,
           ),
-          Opacity(
-            opacity: state.isEngineAvailable ? 1.0 : 0.5,
-            child: PlatformListTile(
+          PlatformListTile(
+            title: Text.rich(
+              TextSpan(
+                text: '${context.l10n.multipleLines}: ',
+                style: const TextStyle(
+                  fontWeight: FontWeight.normal,
+                ),
+                children: [
+                  TextSpan(
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                    text: prefs.numEvalLines.toString(),
+                  ),
+                ],
+              ),
+            ),
+            subtitle: NonLinearSlider(
+              value: prefs.numEvalLines,
+              values: const [1, 2, 3],
+              onChangeEnd: state.isEngineAvailable
+                  ? (value) => ref
+                      .read(ctrlProvider.notifier)
+                      .setNumEvalLines(value.toInt())
+                  : null,
+            ),
+          ),
+          if (maxEngineCores > 1)
+            PlatformListTile(
               title: Text.rich(
                 TextSpan(
-                  text: '${context.l10n.multipleLines}: ',
+                  text: '${context.l10n.cpus}: ',
                   style: const TextStyle(
                     fontWeight: FontWeight.normal,
                   ),
@@ -720,52 +742,19 @@ class _Preferences extends ConsumerWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                       ),
-                      text: prefs.numEvalLines.toString(),
+                      text: prefs.numEngineCores.toString(),
                     ),
                   ],
                 ),
               ),
               subtitle: NonLinearSlider(
-                value: prefs.numEvalLines,
-                values: const [1, 2, 3],
+                value: prefs.numEngineCores,
+                values: List.generate(maxEngineCores, (index) => index + 1),
                 onChangeEnd: state.isEngineAvailable
                     ? (value) => ref
                         .read(ctrlProvider.notifier)
-                        .setNumEvalLines(value.toInt())
+                        .setEngineCores(value.toInt())
                     : null,
-              ),
-            ),
-          ),
-          if (maxEngineCores > 1)
-            Opacity(
-              opacity: state.isEngineAvailable ? 1.0 : 0.5,
-              child: PlatformListTile(
-                title: Text.rich(
-                  TextSpan(
-                    text: '${context.l10n.cpus}: ',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                    ),
-                    children: [
-                      TextSpan(
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                        text: prefs.numEngineCores.toString(),
-                      ),
-                    ],
-                  ),
-                ),
-                subtitle: NonLinearSlider(
-                  value: prefs.numEngineCores,
-                  values: List.generate(maxEngineCores, (index) => index + 1),
-                  onChangeEnd: state.isEngineAvailable
-                      ? (value) => ref
-                          .read(ctrlProvider.notifier)
-                          .setEngineCores(value.toInt())
-                      : null,
-                ),
               ),
             ),
           SwitchSettingTile(

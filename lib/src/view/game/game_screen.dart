@@ -183,7 +183,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               showDragHandle: true,
-              builder: (_) => _Preferences(ctrlProvider),
+              builder: (_) => _GameSettings(ctrlProvider),
             ),
           ),
         ],
@@ -212,8 +212,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
         trailing: SettingsButton(
           onPressed: () => showAdaptiveBottomSheet<void>(
             context: context,
-            showDragHandle: true,
-            builder: (_) => _Preferences(ctrlProvider),
+            builder: (_) => _GameSettings(ctrlProvider),
           ),
         ),
       ),
@@ -457,8 +456,8 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _Preferences extends ConsumerWidget {
-  const _Preferences(this.ctrlProvider);
+class _GameSettings extends ConsumerWidget {
+  const _GameSettings(this.ctrlProvider);
 
   final GameCtrlProvider? ctrlProvider;
 
