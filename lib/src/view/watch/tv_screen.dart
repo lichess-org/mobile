@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
-import 'package:lichess_mobile/src/model/tv/tv_ctrl.dart';
+import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
 final RouteObserver<PageRoute<void>> tvRouteObserver =
@@ -32,8 +32,8 @@ class TvScreen extends ConsumerStatefulWidget {
 
 class _TvScreenState extends ConsumerState<TvScreen>
     with RouteAware, WidgetsBindingObserver {
-  TvCtrlProvider get _tvGameCtrl =>
-      tvCtrlProvider(widget.channel, widget.initialGame);
+  TvControllerProvider get _tvGameCtrl =>
+      tvControllerProvider(widget.channel, widget.initialGame);
 
   @override
   Widget build(BuildContext context) {
@@ -135,8 +135,8 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentBottomTab = ref.watch(currentBottomTabProvider);
     final asyncGame = currentBottomTab == BottomTab.watch
-        ? ref.watch(tvCtrlProvider(channel, initialGame))
-        : const AsyncLoading<TvCtrlState>();
+        ? ref.watch(tvControllerProvider(channel, initialGame))
+        : const AsyncLoading<TvState>();
 
     return SafeArea(
       child: Center(
