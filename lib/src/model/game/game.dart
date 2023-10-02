@@ -62,6 +62,8 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
     required Player white,
     required Player black,
     required GameStatus status,
+    required bool moretimeable,
+    required bool takebackable,
 
     /// The side that the current player is playing as. This is null if viewing
     /// the game as a spectator.
@@ -103,12 +105,13 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
       !hasAI;
   bool get rematchable =>
       meta.rules == null || !meta.rules!.contains(GameRule.noRematch);
-  bool get takebackable =>
+  bool get canTakeback =>
+      takebackable &&
       playable &&
       lastPosition.fullmoves >= 2 &&
       !(player?.proposingTakeback == true) &&
       !(opponent?.proposingTakeback == true);
-  bool get moretimeable => playable && clock != null;
+  bool get canGiveTime => moretimeable && playable && clock != null;
 
   bool get canClaimWin =>
       opponent?.isGone == true &&
@@ -145,7 +148,6 @@ enum GameSource {
 enum GameRule {
   noAbort,
   noRematch,
-  noGiveTime,
   noClaimWin,
   unknown;
 

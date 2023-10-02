@@ -71,6 +71,8 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
     winner: pick('game', 'winner').asSideOrNull(),
     boosted: pick('game', 'boosted').asBoolOrNull(),
     isThreefoldRepetition: pick('game', 'threefold').asBoolOrNull(),
+    moretimeable: pick('moretimeable').asBoolOrFalse(),
+    takebackable: pick('takebackable').asBoolOrFalse(),
     youAre: pick('youAre').asSideOrNull(),
     prefs: pick('prefs').letOrNull(_gamePrefsFromPick),
     expiration: pick('expiration').letOrNull(

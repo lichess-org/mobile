@@ -614,7 +614,7 @@ class _GameBottomBar extends ConsumerWidget {
               ref.read(ctrlProvider.notifier).abortGame();
             },
           ),
-        if (gameState.game.clock != null && gameState.game.moretimeable)
+        if (gameState.game.clock != null && gameState.game.canGiveTime)
           BottomSheetAction(
             label: Text(
               context.l10n.giveNbSeconds(
@@ -625,7 +625,7 @@ class _GameBottomBar extends ConsumerWidget {
               ref.read(ctrlProvider.notifier).moreTime();
             },
           ),
-        if (gameState.game.takebackable)
+        if (gameState.game.canTakeback)
           BottomSheetAction(
             label: Text(context.l10n.takeback),
             onPressed: (context) {
