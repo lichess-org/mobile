@@ -22,12 +22,12 @@ import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 
-part 'game_ctrl.freezed.dart';
-part 'game_ctrl.g.dart';
+part 'game_controller.freezed.dart';
+part 'game_controller.g.dart';
 
 @riverpod
-class GameCtrl extends _$GameCtrl {
-  final _logger = Logger('GameCtrl');
+class GameController extends _$GameController {
+  final _logger = Logger('GameController');
 
   StreamSubscription<SocketEvent>? _socketSubscription;
 
@@ -52,7 +52,7 @@ class GameCtrl extends _$GameCtrl {
   DateTime? _lastMoveTime;
 
   @override
-  Future<GameCtrlState> build(GameFullId gameFullId) {
+  Future<GameState> build(GameFullId gameFullId) {
     final socket = ref.watch(authSocketProvider);
     final (stream, _) = socket.connect(Uri(path: '/play/$gameFullId/v6'));
 
@@ -64,7 +64,7 @@ class GameCtrl extends _$GameCtrl {
 
       _socketEventVersion = fullEvent.socketEventVersion;
 
-      return GameCtrlState(
+      return GameState(
         game: fullEvent.game,
         stepCursor: fullEvent.game.steps.length - 1,
         stopClockWaitingForServerAck: false,
@@ -373,7 +373,7 @@ class GameCtrl extends _$GameCtrl {
 
   void _handleSocketTopic(SocketEvent event) {
     if (!state.hasValue) {
-      assert(false, 'received a game SocketEvent while GameCtrlState is null');
+      assert(false, 'received a game SocketEvent while GameState is null');
       return;
     }
 
@@ -412,7 +412,7 @@ class GameCtrl extends _$GameCtrl {
         _lastMoveTime = null;
 
         state = AsyncValue.data(
-          GameCtrlState(
+          GameState(
             game: fullEvent.game,
             stepCursor: fullEvent.game.steps.length - 1,
             stopClockWaitingForServerAck: false,
@@ -429,7 +429,7 @@ class GameCtrl extends _$GameCtrl {
         final data = MoveEvent.fromJson(event.data as Map<String, dynamic>);
         final playedSide = data.ply.isOdd ? Side.white : Side.black;
 
-        GameCtrlState newState = curState.copyWith(
+        GameState newState = curState.copyWith(
           game: curState.game.copyWith(
             isThreefoldRepetition: data.threefold,
             winner: data.winner,
@@ -503,7 +503,7 @@ class GameCtrl extends _$GameCtrl {
         final endData =
             GameEndEvent.fromJson(event.data as Map<String, dynamic>);
         final curState = state.requireValue;
-        GameCtrlState newState = curState.copyWith(
+        GameState newState = curState.copyWith(
           game: curState.game.copyWith(
             status: endData.status,
             winner: endData.winner,
@@ -555,7 +555,7 @@ class GameCtrl extends _$GameCtrl {
         final blackOnGame = data['black'] as bool?;
         final curState = state.requireValue;
         final opponent = curState.game.youAre?.opposite;
-        GameCtrlState newState = curState;
+        GameState newState = curState;
         if (whiteOnGame != null) {
           newState = newState.copyWith.game(
             white: newState.game.white.setOnGame(whiteOnGame),
@@ -585,7 +585,7 @@ class GameCtrl extends _$GameCtrl {
       case 'gone':
         final isGone = event.data as bool;
         _opponentLeftCountdownTimer?.cancel();
-        GameCtrlState newState = state.requireValue;
+        GameState newState = state.requireValue;
         final youAre = newState.game.youAre;
         newState = newState.copyWith.game(
           white: youAre == Side.white
@@ -719,10 +719,10 @@ class GameCtrl extends _$GameCtrl {
 }
 
 @freezed
-class GameCtrlState with _$GameCtrlState {
-  const GameCtrlState._();
+class GameState with _$GameState {
+  const GameState._();
 
-  const factory GameCtrlState({
+  const factory GameState({
     required PlayableGame game,
     required int stepCursor,
     int? lastDrawOfferAtPly,
@@ -738,7 +738,7 @@ class GameCtrlState with _$GameCtrlState {
 
     /// Game full id used to redirect to the new game of the rematch
     GameFullId? redirectGameId,
-  }) = _GameCtrlState;
+  }) = _GameState;
 
   // preferences
   bool get canPremove => game.prefs?.enablePremove ?? true;

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
+import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 class GameSettings extends ConsumerWidget {
   const GameSettings(this.ctrlProvider, {super.key});
 
-  final GameCtrlProvider? ctrlProvider;
+  final GameControllerProvider? ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,7 +24,7 @@ class GameSettings extends ConsumerWidget {
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final gameState = ctrlProvider != null
         ? ref.watch(ctrlProvider!)
-        : const AsyncValue<GameCtrlState>.loading();
+        : const AsyncValue<GameState>.loading();
 
     return ModalSheetScaffold(
       title: Text(context.l10n.settingsSettings),

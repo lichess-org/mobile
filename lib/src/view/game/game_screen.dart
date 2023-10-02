@@ -8,7 +8,7 @@ import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
+import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
@@ -83,7 +83,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
 
     return gameId.when(
       data: (id) {
-        final ctrlProvider = gameCtrlProvider(id);
+        final ctrlProvider = gameControllerProvider(id);
         final gameState = ref.watch(ctrlProvider);
         return gameState.when(
           data: (state) {
@@ -155,8 +155,8 @@ class _GameScreenState extends ConsumerState<GameScreen>
   Widget _androidBuilder({
     required BuildContext context,
     required Widget body,
-    GameCtrlProvider? ctrlProvider,
-    GameCtrlState? gameState,
+    GameControllerProvider? ctrlProvider,
+    GameState? gameState,
   }) {
     return Scaffold(
       appBar: AppBar(
@@ -184,8 +184,8 @@ class _GameScreenState extends ConsumerState<GameScreen>
   Widget _iosBuilder({
     required BuildContext context,
     required Widget body,
-    GameCtrlProvider? ctrlProvider,
-    GameCtrlState? gameState,
+    GameControllerProvider? ctrlProvider,
+    GameState? gameState,
   }) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -242,8 +242,8 @@ class _Body extends ConsumerWidget {
     required this.gameProvider,
   });
 
-  final GameCtrlState gameState;
-  final GameCtrlProvider ctrlProvider;
+  final GameState gameState;
+  final GameControllerProvider ctrlProvider;
   final LobbyGameProvider gameProvider;
 
   @override
@@ -397,8 +397,8 @@ class _Body extends ConsumerWidget {
   }
 
   void _stateListener(
-    AsyncValue<GameCtrlState>? prev,
-    AsyncValue<GameCtrlState> state, {
+    AsyncValue<GameState>? prev,
+    AsyncValue<GameState> state, {
     required BuildContext context,
     required WidgetRef ref,
   }) {
@@ -452,8 +452,8 @@ class _GameBottomBar extends ConsumerWidget {
     required this.gameProvider,
   });
 
-  final GameCtrlState gameState;
-  final GameCtrlProvider ctrlProvider;
+  final GameState gameState;
+  final GameControllerProvider ctrlProvider;
   final LobbyGameProvider gameProvider;
 
   @override
@@ -755,7 +755,7 @@ class _GameEndDialog extends ConsumerStatefulWidget {
     required this.gameProvider,
   });
 
-  final GameCtrlProvider ctrlProvider;
+  final GameControllerProvider ctrlProvider;
   final LobbyGameProvider gameProvider;
 
   @override
@@ -941,7 +941,7 @@ class _ThreefoldDialog extends ConsumerWidget {
     required this.ctrlProvider,
   });
 
-  final GameCtrlProvider ctrlProvider;
+  final GameControllerProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -993,7 +993,7 @@ class _ClaimWinDialog extends ConsumerWidget {
     required this.ctrlProvider,
   });
 
-  final GameCtrlProvider ctrlProvider;
+  final GameControllerProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
