@@ -17,8 +17,8 @@ import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 
-part 'analysis_ctrl.g.dart';
-part 'analysis_ctrl.freezed.dart';
+part 'analysis_controller.g.dart';
+part 'analysis_controller.freezed.dart';
 
 @freezed
 class AnalysisOptions with _$AnalysisOptions {
@@ -33,7 +33,7 @@ class AnalysisOptions with _$AnalysisOptions {
 }
 
 @riverpod
-class AnalysisCtrl extends _$AnalysisCtrl {
+class AnalysisController extends _$AnalysisController {
   late Root _root;
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
@@ -41,7 +41,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
   Timer? _startEngineEvalTimer;
 
   @override
-  AnalysisCtrlState build(AnalysisOptions options) {
+  AnalysisState build(AnalysisOptions options) {
     ref.onDispose(() {
       _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
@@ -82,7 +82,7 @@ class AnalysisCtrl extends _$AnalysisCtrl {
       _startEngineEval();
     });
 
-    return AnalysisCtrlState(
+    return AnalysisState(
       id: options.id,
       isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
@@ -289,10 +289,10 @@ class AnalysisCtrl extends _$AnalysisCtrl {
 }
 
 @freezed
-class AnalysisCtrlState with _$AnalysisCtrlState {
-  const AnalysisCtrlState._();
+class AnalysisState with _$AnalysisState {
+  const AnalysisState._();
 
-  const factory AnalysisCtrlState({
+  const factory AnalysisState({
     required ViewRoot root,
     required ViewNode currentNode,
     required String initialFen,
@@ -306,7 +306,7 @@ class AnalysisCtrlState with _$AnalysisCtrlState {
     Move? lastMove,
     Opening? contextOpening,
     Opening? currentBranchOpening,
-  }) = _AnalysisCtrlState;
+  }) = _AnalysisState;
 
   IMap<String, ISet<String>> get validMoves =>
       algebraicLegalMoves(currentNode.position);

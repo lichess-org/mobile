@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_ctrl.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
@@ -52,7 +52,7 @@ class AnalysisScreen extends ConsumerWidget {
   }
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisCtrlProvider(options);
+    final ctrlProvider = analysisControllerProvider(options);
 
     return Scaffold(
       appBar: AppBar(
@@ -73,7 +73,7 @@ class AnalysisScreen extends ConsumerWidget {
   }
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisCtrlProvider(options);
+    final ctrlProvider = analysisControllerProvider(options);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -102,7 +102,7 @@ class _Body extends ConsumerStatefulWidget {
     required this.ctrlProvider,
   });
 
-  final AnalysisCtrlProvider ctrlProvider;
+  final AnalysisControllerProvider ctrlProvider;
 
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -211,7 +211,7 @@ class _BodyState extends ConsumerState<_Body> {
 class _Board extends ConsumerWidget {
   const _Board(this.ctrlProvider, this.boardSize);
 
-  final AnalysisCtrlProvider ctrlProvider;
+  final AnalysisControllerProvider ctrlProvider;
   final double boardSize;
 
   @override
@@ -278,7 +278,7 @@ class _Board extends ConsumerWidget {
 class _EngineGaugeVertical extends ConsumerWidget {
   const _EngineGaugeVertical(this.ctrlProvider);
 
-  final AnalysisCtrlProvider ctrlProvider;
+  final AnalysisControllerProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -301,7 +301,7 @@ class _EngineGaugeVertical extends ConsumerWidget {
 class _ColumnTopTable extends ConsumerWidget {
   const _ColumnTopTable(this.ctrlProvider);
 
-  final AnalysisCtrlProvider ctrlProvider;
+  final AnalysisControllerProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -334,7 +334,7 @@ class _ColumnTopTable extends ConsumerWidget {
 
 class _EngineLines extends ConsumerWidget {
   const _EngineLines(this.ctrlProvider, {required this.isLandscape});
-  final AnalysisCtrlProvider ctrlProvider;
+  final AnalysisControllerProvider ctrlProvider;
   final bool isLandscape;
 
   @override
@@ -405,7 +405,7 @@ class _Engineline extends ConsumerWidget {
         pvData = const PvData(moves: IListConst([])),
         initialPly = 0;
 
-  final AnalysisCtrlProvider ctrlProvider;
+  final AnalysisControllerProvider ctrlProvider;
   final List<String> moves;
   final int initialPly;
   final PvData pvData;
@@ -496,7 +496,7 @@ class _BottomBar extends ConsumerWidget {
     required this.ctrlProvider,
   });
 
-  final AnalysisCtrlProvider ctrlProvider;
+  final AnalysisControllerProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -575,7 +575,7 @@ class _BottomBar extends ConsumerWidget {
 class _EngineDepth extends ConsumerWidget {
   const _EngineDepth(this.ctrlProvider);
 
-  final AnalysisCtrlProvider ctrlProvider;
+  final AnalysisControllerProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -673,7 +673,7 @@ class _StockfishInfo extends ConsumerWidget {
 class _AnalysisSettings extends ConsumerWidget {
   const _AnalysisSettings(this.ctrlProvider);
 
-  final AnalysisCtrlProvider ctrlProvider;
+  final AnalysisControllerProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

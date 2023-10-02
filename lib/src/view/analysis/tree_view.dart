@@ -7,7 +7,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_ctrl.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
@@ -19,7 +19,7 @@ const kInlineMoveSpacing = 5.0;
 class AnalysisTreeView extends ConsumerWidget {
   const AnalysisTreeView(this.ctrlProvider, this.displayMode);
 
-  final AnalysisCtrlProvider ctrlProvider;
+  final AnalysisControllerProvider ctrlProvider;
   final Orientation displayMode;
 
   @override
@@ -45,7 +45,7 @@ class _InlineTreeView extends ConsumerStatefulWidget {
     this.displayMode,
   );
 
-  final AnalysisCtrlProvider ctrlProvider;
+  final AnalysisControllerProvider ctrlProvider;
   final ViewRoot root;
   final UciPath currentPath;
   final Orientation displayMode;
@@ -131,7 +131,7 @@ class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
   }
 
   List<Widget> _buildTreeWidget(
-    AnalysisCtrlProvider ctrlProvider, {
+    AnalysisControllerProvider ctrlProvider, {
     required IList<ViewBranch> nodes,
     required bool inMainline,
     required bool startSideline,
@@ -221,7 +221,7 @@ class InlineMove extends ConsumerWidget {
     this.endSideline = false,
   });
 
-  final AnalysisCtrlProvider ctrlProvider;
+  final AnalysisControllerProvider ctrlProvider;
   final UciPath path;
   final SanMove move;
   final int ply;
@@ -314,7 +314,7 @@ class _OpeningHeaderDelegate extends SliverPersistentHeaderDelegate {
     required this.displayMode,
   });
 
-  final AnalysisCtrlProvider ctrlProvider;
+  final AnalysisControllerProvider ctrlProvider;
   final Orientation displayMode;
 
   @override
@@ -340,7 +340,7 @@ class _OpeningHeaderDelegate extends SliverPersistentHeaderDelegate {
 class _Opening extends ConsumerWidget {
   const _Opening(this.ctrlProvider, this.displayMode);
 
-  final AnalysisCtrlProvider ctrlProvider;
+  final AnalysisControllerProvider ctrlProvider;
   final Orientation displayMode;
 
   @override
