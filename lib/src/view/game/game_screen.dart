@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -81,7 +80,6 @@ class _GameScreenState extends ConsumerState<GameScreen>
   Widget build(BuildContext context) {
     final gameProvider = lobbyGameProvider(widget.seek);
     final gameId = ref.watch(gameProvider);
-    final playPrefs = ref.watch(playPreferencesProvider);
 
     return gameId.when(
       data: (id) {
@@ -97,64 +95,58 @@ class _GameScreenState extends ConsumerState<GameScreen>
             return PlatformWidget(
               androidBuilder: (context) => _androidBuilder(
                 context: context,
-                playPrefs: playPrefs,
                 body: body,
                 gameState: state,
                 ctrlProvider: ctrlProvider,
               ),
               iosBuilder: (context) => _iosBuilder(
                 context: context,
-                playPrefs: playPrefs,
                 body: body,
                 gameState: state,
                 ctrlProvider: ctrlProvider,
               ),
             );
           },
-          loading: () => _loadingContent(playPrefs),
+          loading: () => _loadingContent(),
           error: (e, s) {
             debugPrint(
               'SEVERE: [GameScreen] could not load game data; $e\n$s',
             );
-            return _errorContent(playPrefs);
+            return _errorContent();
           },
         );
       },
-      loading: () => _loadingContent(playPrefs),
+      loading: () => _loadingContent(),
       error: (e, s) {
         debugPrint(
           'SEVERE: [GameScreen] could not create game; $e\n$s',
         );
-        return _errorContent(playPrefs);
+        return _errorContent();
       },
     );
   }
 
-  Widget _loadingContent(PlayPrefs playPrefs) {
+  Widget _loadingContent() {
     return PlatformWidget(
       androidBuilder: (context) => _androidBuilder(
         context: context,
-        playPrefs: playPrefs,
         body: LobbyGameLoadingBoard(widget.seek),
       ),
       iosBuilder: (context) => _iosBuilder(
         context: context,
-        playPrefs: playPrefs,
         body: LobbyGameLoadingBoard(widget.seek),
       ),
     );
   }
 
-  Widget _errorContent(PlayPrefs playPrefs) {
+  Widget _errorContent() {
     return PlatformWidget(
       androidBuilder: (context) => _androidBuilder(
         context: context,
-        playPrefs: playPrefs,
         body: const CreateGameError(),
       ),
       iosBuilder: (context) => _iosBuilder(
         context: context,
-        playPrefs: playPrefs,
         body: const CreateGameError(),
       ),
     );
@@ -162,7 +154,6 @@ class _GameScreenState extends ConsumerState<GameScreen>
 
   Widget _androidBuilder({
     required BuildContext context,
-    required PlayPrefs playPrefs,
     required Widget body,
     GameCtrlProvider? ctrlProvider,
     GameCtrlState? gameState,
@@ -192,7 +183,6 @@ class _GameScreenState extends ConsumerState<GameScreen>
 
   Widget _iosBuilder({
     required BuildContext context,
-    required PlayPrefs playPrefs,
     required Widget body,
     GameCtrlProvider? ctrlProvider,
     GameCtrlState? gameState,
