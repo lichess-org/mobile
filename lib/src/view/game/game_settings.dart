@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -32,13 +31,6 @@ class GameSettings extends ConsumerWidget {
       child: ListView(
         shrinkWrap: true,
         children: [
-          Padding(
-            padding: Styles.bodyPadding,
-            child: Text(
-              context.l10n.preferencesPreferences,
-              style: Styles.title,
-            ),
-          ),
           SwitchSettingTile(
             title: Text(context.l10n.sound),
             value: isSoundEnabled,
