@@ -25,11 +25,11 @@ import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 
-part 'puzzle_ctrl.g.dart';
-part 'puzzle_ctrl.freezed.dart';
+part 'puzzle_controller.g.dart';
+part 'puzzle_controller.freezed.dart';
 
 @riverpod
-class PuzzleCtrl extends _$PuzzleCtrl {
+class PuzzleController extends _$PuzzleController {
   // ignore: avoid-late-keyword
   late Branch _gameTree;
   Timer? _firstMoveTimer;
@@ -42,7 +42,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 100));
 
   @override
-  PuzzleCtrlState build(
+  PuzzleState build(
     PuzzleContext initialContext, {
     PuzzleStreak? initialStreak,
   }) {
@@ -56,7 +56,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     return _loadNewContext(initialContext, initialStreak);
   }
 
-  PuzzleCtrlState _loadNewContext(
+  PuzzleState _loadNewContext(
     PuzzleContext context,
     PuzzleStreak? streak,
   ) {
@@ -82,7 +82,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
       _nextPuzzleFuture = _fetchNextStreakPuzzle(streak);
     }
 
-    return PuzzleCtrlState(
+    return PuzzleState(
       puzzle: context.puzzle,
       glicko: context.glicko,
       mode: PuzzleMode.load,
@@ -504,10 +504,10 @@ enum PuzzleResult { win, lose }
 enum PuzzleFeedback { good, bad }
 
 @freezed
-class PuzzleCtrlState with _$PuzzleCtrlState {
-  const PuzzleCtrlState._();
+class PuzzleState with _$PuzzleState {
+  const PuzzleState._();
 
-  const factory PuzzleCtrlState({
+  const factory PuzzleState({
     required Puzzle puzzle,
     required PuzzleGlicko? glicko,
     required PuzzleMode mode,
@@ -529,7 +529,7 @@ class PuzzleCtrlState with _$PuzzleCtrlState {
     // we will make the user retry
     required bool nextPuzzleStreakFetchError,
     required bool nextPuzzleStreakFetchIsRetrying,
-  }) = _PuzzleScreenState;
+  }) = _PuzzleState;
 
   bool get isEngineEnabled {
     return mode == PuzzleMode.view && isLocalEvalEnabled;

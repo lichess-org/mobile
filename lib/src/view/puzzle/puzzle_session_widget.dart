@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_ctrl.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 
 class PuzzleSessionWidget extends ConsumerStatefulWidget {
@@ -19,7 +19,7 @@ class PuzzleSessionWidget extends ConsumerStatefulWidget {
   });
 
   final PuzzleContext initialPuzzleContext;
-  final PuzzleCtrlProvider ctrlProvider;
+  final PuzzleControllerProvider ctrlProvider;
 
   @override
   ConsumerState<PuzzleSessionWidget> createState() =>

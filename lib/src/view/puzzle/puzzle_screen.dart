@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_ctrl.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -146,7 +146,7 @@ class _BodyState extends ConsumerState<_Body>
     with AndroidImmersiveMode, Wakelock {
   @override
   Widget build(BuildContext context) {
-    final ctrlProvider = puzzleCtrlProvider(widget.initialPuzzleContext);
+    final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
 
     final currentEvalBest = ref.watch(
@@ -266,7 +266,7 @@ class _BottomBar extends ConsumerWidget {
   });
 
   final PuzzleContext initialPuzzleContext;
-  final PuzzleCtrlProvider ctrlProvider;
+  final PuzzleControllerProvider ctrlProvider;
 
   static const _repeatTriggerDelays = [
     Duration(milliseconds: 500),
@@ -391,7 +391,7 @@ class _DifficultySelector extends ConsumerWidget {
   });
 
   final PuzzleContext initialPuzzleContext;
-  final PuzzleCtrlProvider ctrlProvider;
+  final PuzzleControllerProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
