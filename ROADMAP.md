@@ -1,12 +1,11 @@
 # Roadmap
 
-This is not a real roadmap but a simple list of features that are actually planned, in no particular order.
+Here is a list of the features that are planned for now, in no particular order. This list is just to indicate what we will be probably work on in a foreseeable future, nothing more, and it is subject to evolve.
+If a feature is missing here, it does not mean we will not implement it.
 
-If a feature is missing here, it does not mean we won't implement it. It just mean it has a lower priority and will probably wait for the other to be done.
+Some of the planned features are also described in [Issues](https://github.com/lichess-org/mobile/issues), these ones have usually higher priority.
 
-Some of the planned features are also described in the Issues, these ones have usually higher priority.
-
-## Features
+## Higher priority
 
 - server analysis
 - challenges
@@ -21,3 +20,32 @@ Some of the planned features are also described in the Issues, these ones have u
 - private messaging
 - broadcasts
 - opening explorer
+- non visual board play
+- standalone analysis board
+- puzzles by opening
+
+## Lower priority
+
+- practice
+- study
+- teams
+- swiss tournaments
+- board editor
+- import game
+- coordinate trainer
+
+## Lowest priority
+
+- puzzle racer
+- learn chess basics
+
+## Done
+
+- lobby games
+- puzzles
+- puzzle streak
+- puzzle storm
+- TV
+- online streamers
+- activity on profile
+- recent games list
