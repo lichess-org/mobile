@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
-part 'game_loader.g.dart';
+part 'lobby_game_loading_board.g.dart';
 
 @riverpod
 Stream<({int nbPlayers, int nbGames})> lobbyNumbers(
@@ -34,13 +34,13 @@ Stream<({int nbPlayers, int nbGames})> lobbyNumbers(
   }
 }
 
-class GameLoader extends ConsumerWidget {
-  const GameLoader(this.seek);
+class LobbyGameLoadingBoard extends StatelessWidget {
+  const LobbyGameLoadingBoard(this.seek);
 
   final GameSeek seek;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Expanded(

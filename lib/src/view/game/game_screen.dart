@@ -33,7 +33,7 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
 import 'game_screen_providers.dart';
 import 'ping_rating.dart';
-import 'game_loader.dart';
+import 'lobby_game_loading_board.dart';
 import 'game_settings.dart';
 import 'status_l10n.dart';
 
@@ -135,12 +135,12 @@ class _GameScreenState extends ConsumerState<GameScreen>
       androidBuilder: (context) => _androidBuilder(
         context: context,
         playPrefs: playPrefs,
-        body: GameLoader(widget.seek),
+        body: LobbyGameLoadingBoard(widget.seek),
       ),
       iosBuilder: (context) => _iosBuilder(
         context: context,
         playPrefs: playPrefs,
-        body: GameLoader(widget.seek),
+        body: LobbyGameLoadingBoard(widget.seek),
       ),
     );
   }
