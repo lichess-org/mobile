@@ -182,7 +182,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
           SettingsButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
-              showDragHandle: true,
+              isScrollControlled: true,
               builder: (_) => _GameSettings(ctrlProvider),
             ),
           ),
@@ -212,6 +212,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
         trailing: SettingsButton(
           onPressed: () => showAdaptiveBottomSheet<void>(
             context: context,
+            isScrollControlled: true,
             builder: (_) => _GameSettings(ctrlProvider),
           ),
         ),
@@ -473,7 +474,8 @@ class _GameSettings extends ConsumerWidget {
         ? ref.watch(ctrlProvider!)
         : const AsyncValue<GameCtrlState>.loading();
 
-    return SafeArea(
+    return ModalSheetScaffold(
+      title: Text(context.l10n.settingsSettings),
       child: ListView(
         shrinkWrap: true,
         children: [
