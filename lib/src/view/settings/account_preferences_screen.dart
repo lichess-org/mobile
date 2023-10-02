@@ -201,6 +201,43 @@ class _Body extends ConsumerWidget {
                   ),
                 ],
               ),
+              ListSection(
+                header: Text(
+                  context.l10n.preferencesChessClock,
+                ),
+                hasLeading: false,
+                children: [
+                  SettingsListTile(
+                    settingsLabel: Text(
+                      context.l10n.preferencesGiveMoreTime,
+                      maxLines: 2,
+                    ),
+                    settingsValue: data.moretime.label(context),
+                    showCupertinoTrailingValue: false,
+                    onTap: () {
+                      if (defaultTargetPlatform == TargetPlatform.android) {
+                        showChoicePicker(
+                          context,
+                          choices: Moretime.values,
+                          selectedItem: data.moretime,
+                          labelBuilder: (t) => Text(t.label(context)),
+                          onSelectedItemChanged: (Moretime? value) {
+                            ref
+                                .read(accountPreferencesProvider.notifier)
+                                .setMoretime(value ?? data.moretime);
+                          },
+                        );
+                      } else {
+                        pushPlatformRoute(
+                          context,
+                          title: context.l10n.preferencesGiveMoreTime,
+                          builder: (context) => const MoretimeSettingsScreen(),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
         );
