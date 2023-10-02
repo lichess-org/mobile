@@ -242,7 +242,6 @@ class _BottomBar extends ConsumerWidget {
               onPressed: ref.read(gameCursorProvider(gameData.id)).hasValue
                   ? () => pushPlatformRoute(
                         context,
-                        fullscreenDialog: true,
                         builder: (context) => AnalysisScreen(
                           title: context.l10n.gameAnalysis,
                           options: AnalysisOptions(

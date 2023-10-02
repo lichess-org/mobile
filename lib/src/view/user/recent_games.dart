@@ -119,9 +119,12 @@ class RecentGames extends ConsumerWidget {
       },
       error: (error, stackTrace) {
         debugPrint(
-          'SEVERE: [UserScreen] could not load user games; $error\n$stackTrace',
+          'SEVERE: [RecentGames] could not recent games; $error\n$stackTrace',
         );
-        return const Text('Could not load games.');
+        return Padding(
+          padding: Styles.bodySectionPadding,
+          child: const Text('Could not load recent games.'),
+        );
       },
       loading: () => Shimmer(
         child: ShimmerLoading(

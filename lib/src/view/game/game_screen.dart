@@ -8,15 +8,11 @@ import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_ctrl.dart';
 import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -29,7 +25,6 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
-import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/wakelock.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -37,7 +32,8 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
 import 'game_screen_providers.dart';
 import 'ping_rating.dart';
-import 'game_loader.dart';
+import 'lobby_game_loading_board.dart';
+import 'game_settings.dart';
 import 'status_l10n.dart';
 
 final RouteObserver<PageRoute<void>> gameRouteObserver =
@@ -84,7 +80,6 @@ class _GameScreenState extends ConsumerState<GameScreen>
   Widget build(BuildContext context) {
     final gameProvider = lobbyGameProvider(widget.seek);
     final gameId = ref.watch(gameProvider);
-    final playPrefs = ref.watch(playPreferencesProvider);
 
     return gameId.when(
       data: (id) {
@@ -100,62 +95,58 @@ class _GameScreenState extends ConsumerState<GameScreen>
             return PlatformWidget(
               androidBuilder: (context) => _androidBuilder(
                 context: context,
-                playPrefs: playPrefs,
                 body: body,
                 gameState: state,
+                ctrlProvider: ctrlProvider,
               ),
               iosBuilder: (context) => _iosBuilder(
                 context: context,
-                playPrefs: playPrefs,
                 body: body,
                 gameState: state,
+                ctrlProvider: ctrlProvider,
               ),
             );
           },
-          loading: () => _loadingContent(playPrefs),
+          loading: () => _loadingContent(),
           error: (e, s) {
             debugPrint(
               'SEVERE: [GameScreen] could not load game data; $e\n$s',
             );
-            return _errorContent(playPrefs);
+            return _errorContent();
           },
         );
       },
-      loading: () => _loadingContent(playPrefs),
+      loading: () => _loadingContent(),
       error: (e, s) {
         debugPrint(
           'SEVERE: [GameScreen] could not create game; $e\n$s',
         );
-        return _errorContent(playPrefs);
+        return _errorContent();
       },
     );
   }
 
-  Widget _loadingContent(PlayPrefs playPrefs) {
+  Widget _loadingContent() {
     return PlatformWidget(
       androidBuilder: (context) => _androidBuilder(
         context: context,
-        playPrefs: playPrefs,
-        body: GameLoader(widget.seek),
+        body: LobbyGameLoadingBoard(widget.seek),
       ),
       iosBuilder: (context) => _iosBuilder(
         context: context,
-        playPrefs: playPrefs,
-        body: GameLoader(widget.seek),
+        body: LobbyGameLoadingBoard(widget.seek),
       ),
     );
   }
 
-  Widget _errorContent(PlayPrefs playPrefs) {
+  Widget _errorContent() {
     return PlatformWidget(
       androidBuilder: (context) => _androidBuilder(
         context: context,
-        playPrefs: playPrefs,
         body: const CreateGameError(),
       ),
       iosBuilder: (context) => _iosBuilder(
         context: context,
-        playPrefs: playPrefs,
         body: const CreateGameError(),
       ),
     );
@@ -163,8 +154,8 @@ class _GameScreenState extends ConsumerState<GameScreen>
 
   Widget _androidBuilder({
     required BuildContext context,
-    required PlayPrefs playPrefs,
     required Widget body,
+    GameCtrlProvider? ctrlProvider,
     GameCtrlState? gameState,
   }) {
     return Scaffold(
@@ -180,8 +171,8 @@ class _GameScreenState extends ConsumerState<GameScreen>
           SettingsButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
-              showDragHandle: true,
-              builder: (_) => const _Preferences(),
+              isScrollControlled: true,
+              builder: (_) => GameSettings(ctrlProvider),
             ),
           ),
         ],
@@ -192,8 +183,8 @@ class _GameScreenState extends ConsumerState<GameScreen>
 
   Widget _iosBuilder({
     required BuildContext context,
-    required PlayPrefs playPrefs,
     required Widget body,
+    GameCtrlProvider? ctrlProvider,
     GameCtrlState? gameState,
   }) {
     return CupertinoPageScaffold(
@@ -209,8 +200,8 @@ class _GameScreenState extends ConsumerState<GameScreen>
         trailing: SettingsButton(
           onPressed: () => showAdaptiveBottomSheet<void>(
             context: context,
-            showDragHandle: true,
-            builder: (_) => const _Preferences(),
+            isScrollControlled: true,
+            builder: (_) => GameSettings(ctrlProvider),
           ),
         ),
       ),
@@ -257,42 +248,15 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(ctrlProvider, (prev, state) {
-      if (prev?.hasValue == true && state.hasValue) {
-        if (prev!.requireValue.game.playable == true &&
-            state.requireValue.game.playable == false) {
-          Timer(const Duration(milliseconds: 500), () {
-            showAdaptiveDialog<void>(
-              context: context,
-              builder: (context) => _GameEndDialog(
-                ctrlProvider: ctrlProvider,
-                gameProvider: gameProvider,
-              ),
-              barrierDismissible: true,
-            );
-          });
-        }
-
-        if (!prev.requireValue.game.canClaimWin &&
-            state.requireValue.game.canClaimWin) {
-          showAdaptiveDialog<void>(
-            context: context,
-            builder: (context) => _ClaimWinDialog(
-              ctrlProvider: ctrlProvider,
-            ),
-            barrierDismissible: true,
-          );
-        }
-
-        if (state.requireValue.redirectGameId != null) {
-          // Be sure to pop any dialogs that might be on top of the game screen.
-          Navigator.of(context).popUntil((route) => route is! RawDialogRoute);
-          ref
-              .read(gameProvider.notifier)
-              .rematch(state.requireValue.redirectGameId!);
-        }
-      }
-    });
+    ref.listen(
+      ctrlProvider,
+      (prev, state) => _stateListener(
+        prev,
+        state,
+        context: context,
+        ref: ref,
+      ),
+    );
 
     final position = gameState.game.positionAt(gameState.stepCursor);
     final sideToMove = position.turn;
@@ -305,6 +269,17 @@ class _Body extends ConsumerWidget {
       timeToMove: sideToMove == Side.black ? gameState.timeToMove : null,
       shouldLinkToUserProfile: youAre != Side.black,
       mePlaying: youAre == Side.black,
+      confirmMoveCallbacks:
+          youAre == Side.black && gameState.moveToConfirm != null
+              ? (
+                  confirm: () {
+                    ref.read(ctrlProvider.notifier).confirmMove();
+                  },
+                  cancel: () {
+                    ref.read(ctrlProvider.notifier).cancelMove();
+                  },
+                )
+              : null,
       clock: gameState.game.clock != null
           ? CountdownClock(
               duration: gameState.game.clock!.black,
@@ -324,6 +299,17 @@ class _Body extends ConsumerWidget {
       timeToMove: sideToMove == Side.white ? gameState.timeToMove : null,
       shouldLinkToUserProfile: youAre != Side.white,
       mePlaying: youAre == Side.white,
+      confirmMoveCallbacks:
+          youAre == Side.white && gameState.moveToConfirm != null
+              ? (
+                  confirm: () {
+                    ref.read(ctrlProvider.notifier).confirmMove();
+                  },
+                  cancel: () {
+                    ref.read(ctrlProvider.notifier).cancelMove();
+                  },
+                )
+              : null,
       clock: gameState.game.clock != null
           ? CountdownClock(
               duration: gameState.game.clock!.white,
@@ -347,6 +333,10 @@ class _Body extends ConsumerWidget {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
+              boardSettingsOverrides: BoardSettingsOverrides(
+                autoQueenPromotion: gameState.canAutoQueen,
+                autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
+              ),
               onMove: (move, {isDrop, isPremove}) {
                 ref.read(ctrlProvider.notifier).onUserMove(
                       Move.fromUci(move.uci)!,
@@ -354,9 +344,11 @@ class _Body extends ConsumerWidget {
                       isDrop: isDrop,
                     );
               },
-              onPremove: (move) {
-                ref.read(ctrlProvider.notifier).setPremove(move);
-              },
+              onPremove: gameState.canPremove
+                  ? (move) {
+                      ref.read(ctrlProvider.notifier).setPremove(move);
+                    }
+                  : null,
               boardData: cg.BoardData(
                 interactableSide:
                     gameState.game.playable && !gameState.isReplaying
@@ -403,64 +395,53 @@ class _Body extends ConsumerWidget {
       child: content,
     );
   }
-}
 
-class _Preferences extends ConsumerWidget {
-  const _Preferences();
+  void _stateListener(
+    AsyncValue<GameCtrlState>? prev,
+    AsyncValue<GameCtrlState> state, {
+    required BuildContext context,
+    required WidgetRef ref,
+  }) {
+    if (prev?.hasValue == true && state.hasValue) {
+      // If the game is no longer playable, show the game end dialog.
+      if (prev!.requireValue.game.playable == true &&
+          state.requireValue.game.playable == false) {
+        Timer(const Duration(milliseconds: 500), () {
+          if (context.mounted) {
+            showAdaptiveDialog<void>(
+              context: context,
+              builder: (context) => _GameEndDialog(
+                ctrlProvider: ctrlProvider,
+                gameProvider: gameProvider,
+              ),
+              barrierDismissible: true,
+            );
+          }
+        });
+      }
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isSoundEnabled = ref.watch(
-      generalPreferencesProvider.select(
-        (prefs) => prefs.isSoundEnabled,
-      ),
-    );
-    final boardPrefs = ref.watch(boardPreferencesProvider);
-
-    return SafeArea(
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          Padding(
-            padding: Styles.bodyPadding,
-            child: Text(
-              context.l10n.preferencesPreferences,
-              style: Styles.title,
+      // Opponent is gone long enough to show the claim win dialog.
+      if (!prev.requireValue.game.canClaimWin &&
+          state.requireValue.game.canClaimWin) {
+        if (context.mounted) {
+          showAdaptiveDialog<void>(
+            context: context,
+            builder: (context) => _ClaimWinDialog(
+              ctrlProvider: ctrlProvider,
             ),
-          ),
-          SwitchSettingTile(
-            title: Text(context.l10n.sound),
-            value: isSoundEnabled,
-            onChanged: (value) {
-              ref
-                  .read(generalPreferencesProvider.notifier)
-                  .toggleSoundEnabled();
-            },
-          ),
-          SwitchSettingTile(
-            title: const Text('Haptic feedback'),
-            value: boardPrefs.hapticFeedback,
-            onChanged: (value) {
-              ref
-                  .read(boardPreferencesProvider.notifier)
-                  .toggleHapticFeedback();
-            },
-          ),
-          SwitchSettingTile(
-            title: Text(
-              context.l10n.preferencesPieceAnimation,
-              maxLines: 2,
-            ),
-            value: boardPrefs.pieceAnimation,
-            onChanged: (value) {
-              ref
-                  .read(boardPreferencesProvider.notifier)
-                  .togglePieceAnimation();
-            },
-          ),
-        ],
-      ),
-    );
+            barrierDismissible: true,
+          );
+        }
+      }
+
+      if (state.requireValue.redirectGameId != null) {
+        // Be sure to pop any dialogs that might be on top of the game screen.
+        Navigator.of(context).popUntil((route) => route is! RawDialogRoute);
+        ref
+            .read(gameProvider.notifier)
+            .rematch(state.requireValue.redirectGameId!);
+      }
+    }
   }
 }
 
@@ -498,20 +479,12 @@ class _GameBottomBar extends ConsumerWidget {
             if (gameState.game.finished)
               BottomBarButton(
                 label: context.l10n.gameAnalysis,
-                highlighted: true,
                 shortLabel: 'Analysis',
                 icon: Icons.biotech,
                 onTap: () => pushPlatformRoute(
                   context,
-                  fullscreenDialog: true,
                   builder: (_) => AnalysisScreen(
-                    options: AnalysisOptions(
-                      isLocalEvaluationAllowed: true,
-                      variant: gameState.game.meta.variant,
-                      steps: gameState.game.steps,
-                      orientation: gameState.game.youAre ?? Side.white,
-                      id: gameState.game.meta.id,
-                    ),
+                    options: gameState.analysisOptions,
                     title: context.l10n.gameAnalysis,
                   ),
                 ),
@@ -641,7 +614,7 @@ class _GameBottomBar extends ConsumerWidget {
               ref.read(ctrlProvider.notifier).abortGame();
             },
           ),
-        if (gameState.game.clock != null && gameState.game.moretimeable)
+        if (gameState.game.clock != null && gameState.game.canGiveTime)
           BottomSheetAction(
             label: Text(
               context.l10n.giveNbSeconds(
@@ -652,7 +625,7 @@ class _GameBottomBar extends ConsumerWidget {
               ref.read(ctrlProvider.notifier).moreTime();
             },
           ),
-        if (gameState.game.takebackable)
+        if (gameState.game.canTakeback)
           BottomSheetAction(
             label: Text(context.l10n.takeback),
             onPressed: (context) {
@@ -678,33 +651,33 @@ class _GameBottomBar extends ConsumerWidget {
         else if (gameState.canOfferDraw)
           BottomSheetAction(
             label: Text(context.l10n.offerDraw),
-            onPressed: (context) {
-              ref.read(ctrlProvider.notifier).offerOrAcceptDraw();
-            },
+            onPressed: gameState.shouldConfirmResignAndDrawOffer
+                ? (context) => _showConfirmDialog(
+                      context,
+                      description: Text(context.l10n.offerDraw),
+                      onConfirm: () {
+                        ref.read(ctrlProvider.notifier).offerOrAcceptDraw();
+                      },
+                    )
+                : (context) {
+                    ref.read(ctrlProvider.notifier).offerOrAcceptDraw();
+                  },
           ),
         if (gameState.game.resignable)
           BottomSheetAction(
             label: Text(context.l10n.resign),
             dismissOnPress: false,
-            onPressed: (context) async {
-              await Navigator.of(context).maybePop();
-              if (context.mounted) {
-                final result = await showAdaptiveDialog<bool>(
-                  context: context,
-                  builder: (context) => YesNoDialog(
-                    title: const Text('Are you sure?'),
-                    content: Text(context.l10n.resignTheGame),
-                    onYes: () {
-                      return Navigator.of(context).pop(true);
-                    },
-                    onNo: () => Navigator.of(context).pop(false),
-                  ),
-                );
-                if (result == true) {
-                  ref.read(ctrlProvider.notifier).resignGame();
-                }
-              }
-            },
+            onPressed: gameState.shouldConfirmResignAndDrawOffer
+                ? (context) => _showConfirmDialog(
+                      context,
+                      description: Text(context.l10n.resignTheGame),
+                      onConfirm: () {
+                        ref.read(ctrlProvider.notifier).resignGame();
+                      },
+                    )
+                : (context) {
+                    ref.read(ctrlProvider.notifier).resignGame();
+                  },
           ),
         if (gameState.game.canClaimWin) ...[
           BottomSheetAction(
@@ -749,6 +722,30 @@ class _GameBottomBar extends ConsumerWidget {
           ),
       ],
     );
+  }
+
+  Future<void> _showConfirmDialog(
+    BuildContext context, {
+    required Widget description,
+    required VoidCallback onConfirm,
+  }) async {
+    await Navigator.of(context).maybePop();
+    if (context.mounted) {
+      final result = await showAdaptiveDialog<bool>(
+        context: context,
+        builder: (context) => YesNoDialog(
+          title: const Text('Are you sure?'),
+          content: description,
+          onYes: () {
+            return Navigator.of(context).pop(true);
+          },
+          onNo: () => Navigator.of(context).pop(false),
+        ),
+      );
+      if (result == true) {
+        onConfirm();
+      }
+    }
   }
 }
 
@@ -820,7 +817,7 @@ class _GameEndDialogState extends ConsumerState<_GameEndDialog> {
           ),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 24.0),
+        const SizedBox(height: 16.0),
         if (gameState.game.player?.offeringRematch == true)
           SecondaryButton(
             semanticsLabel: context.l10n.cancelRematchOffer,
@@ -843,7 +840,6 @@ class _GameEndDialogState extends ConsumerState<_GameEndDialog> {
             glowing: gameState.game.opponent?.offeringRematch == true,
             child: Text(context.l10n.rematch),
           ),
-        const SizedBox(height: 8.0),
         SecondaryButton(
           semanticsLabel: context.l10n.newOpponent,
           onPressed: _activateButtons
@@ -855,6 +851,17 @@ class _GameEndDialogState extends ConsumerState<_GameEndDialog> {
                 }
               : null,
           child: Text(context.l10n.newOpponent),
+        ),
+        SecondaryButton(
+          semanticsLabel: context.l10n.analysis,
+          onPressed: () => pushPlatformRoute(
+            context,
+            builder: (_) => AnalysisScreen(
+              options: gameState.analysisOptions,
+              title: context.l10n.gameAnalysis,
+            ),
+          ),
+          child: Text(context.l10n.analysis),
         ),
       ],
     );

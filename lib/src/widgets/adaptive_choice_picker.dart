@@ -81,3 +81,65 @@ Future<void> showChoicePicker<T extends Enum>(
       throw Exception('Unexpected platform $defaultTargetPlatform');
   }
 }
+
+Future<Set<T>?> showMultipleChoicesPicker<T extends Enum>(
+  BuildContext context, {
+  required Iterable<T> choices,
+  required Iterable<T> selectedItems,
+  required Widget Function(T choice) labelBuilder,
+}) {
+  return showAdaptiveDialog<Set<T>>(
+    context: context,
+    builder: (context) {
+      Set<T> items = {...selectedItems};
+      return AlertDialog.adaptive(
+        contentPadding: const EdgeInsets.only(top: 12),
+        scrollable: true,
+        content: StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: choices.map((choice) {
+                return CheckboxListTile.adaptive(
+                  title: labelBuilder(choice),
+                  value: items.contains(choice),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        items = value
+                            ? items.union({choice})
+                            : items.difference({choice});
+                      });
+                    }
+                  },
+                );
+              }).toList(growable: false),
+            );
+          },
+        ),
+        actions: defaultTargetPlatform == TargetPlatform.iOS
+            ? [
+                CupertinoDialogAction(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(context.l10n.cancel),
+                ),
+                CupertinoDialogAction(
+                  isDefaultAction: true,
+                  child: const Text('OK'),
+                  onPressed: () => Navigator.of(context).pop(items),
+                ),
+              ]
+            : [
+                TextButton(
+                  child: Text(context.l10n.cancel),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () => Navigator.of(context).pop(items),
+                ),
+              ],
+      );
+    },
+  );
+}

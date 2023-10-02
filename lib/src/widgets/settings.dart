@@ -12,20 +12,29 @@ class SettingsListTile extends StatelessWidget {
     required this.settingsLabel,
     required this.settingsValue,
     required this.onTap,
+    this.showCupertinoTrailingValue = true,
     super.key,
   });
 
   final Icon? icon;
-  final String settingsLabel;
+
+  /// The label of the settings value, typically a [Text] widget.
+  final Widget settingsLabel;
+
   final String settingsValue;
   final void Function() onTap;
+
+  /// Whether to show the value in the trailing position on iOS.
+  ///
+  /// True by default, can be disabled for long settings names.
+  final bool showCupertinoTrailingValue;
 
   @override
   Widget build(BuildContext context) {
     final tile = PlatformListTile(
       leading: icon,
-      title: Text(settingsLabel),
-      additionalInfo: Text(settingsValue),
+      title: settingsLabel,
+      additionalInfo: showCupertinoTrailingValue ? Text(settingsValue) : null,
       subtitle: defaultTargetPlatform == TargetPlatform.android
           ? Text(
               settingsValue,
@@ -78,7 +87,7 @@ class SwitchSettingTile extends StatelessWidget {
   }
 }
 
-/// A platform agnostic choice picker.
+/// A platform agnostic choice picker
 class ChoicePicker<T extends Enum> extends StatelessWidget {
   const ChoicePicker({
     super.key,

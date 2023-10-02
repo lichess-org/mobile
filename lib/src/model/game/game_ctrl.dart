@@ -13,6 +13,8 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_ctrl.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
@@ -90,28 +92,75 @@ class GameCtrl extends _$GameCtrl {
       diff: MaterialDiff.fromBoard(newPos.board),
     );
 
+    final shouldConfirmMove = curState.shouldConfirmMove && isPremove != true;
+
     state = AsyncValue.data(
       curState.copyWith(
         game: curState.game.copyWith(
           steps: curState.game.steps.add(newStep),
         ),
         stepCursor: curState.stepCursor + 1,
-        stopClockWaitingForServerAck: true,
+        stopClockWaitingForServerAck: !shouldConfirmMove,
+        moveToConfirm: shouldConfirmMove ? move : null,
       ),
     );
 
-    _sendMove(
-      move,
-      isPremove: isPremove ?? false,
+    _playMoveFeedback(sanMove, skipAnimationDelay: isDrop ?? false);
+
+    if (!shouldConfirmMove) {
+      _sendMoveToSocket(
+        move,
+        isPremove: isPremove ?? false,
+        hasClock: curState.game.clock != null,
+        // same logic as web client
+        // we want to send client lag only at the beginning of the game when the clock is not running yet
+        withLag:
+            curState.game.clock != null && curState.activeClockSide == null,
+      );
+    }
+  }
+
+  /// Called if the player cancels the move when confirm move preference is enabled
+  void cancelMove() {
+    final curState = state.requireValue;
+    if (curState.game.steps.isEmpty) {
+      assert(false, 'game steps cannot be empty on cancel move');
+      return;
+    }
+    state = AsyncValue.data(
+      curState.copyWith(
+        game: curState.game.copyWith(
+          steps: curState.game.steps.removeLast(),
+        ),
+        stepCursor: curState.stepCursor - 1,
+        moveToConfirm: null,
+      ),
+    );
+  }
+
+  /// Called if the player confirms the move when confirm move preference is enabled
+  void confirmMove() {
+    final curState = state.requireValue;
+    final moveToConfirm = curState.moveToConfirm;
+    if (moveToConfirm == null) {
+      assert(false, 'moveToConfirm must not be null on confirm move');
+      return;
+    }
+
+    state = AsyncValue.data(
+      curState.copyWith(
+        stopClockWaitingForServerAck: true,
+        moveToConfirm: null,
+      ),
+    );
+    _sendMoveToSocket(
+      moveToConfirm,
+      isPremove: false,
       hasClock: curState.game.clock != null,
       // same logic as web client
       // we want to send client lag only at the beginning of the game when the clock is not running yet
       withLag: curState.game.clock != null && curState.activeClockSide == null,
     );
-
-    _playMoveFeedback(sanMove, skipAnimationDelay: isDrop ?? false);
-
-    _transientMoveTimer = Timer(const Duration(seconds: 10), _resyncGameData);
   }
 
   /// Set or unset a premove.
@@ -163,6 +212,16 @@ class GameCtrl extends _$GameCtrl {
         }
       }
     }
+  }
+
+  void toggleMoveConfirmation() {
+    final curState = state.requireValue;
+    state = AsyncValue.data(
+      curState.copyWith(
+        moveConfirmSettingOverride:
+            !(curState.moveConfirmSettingOverride ?? true),
+      ),
+    );
   }
 
   void onFlag() {
@@ -226,7 +285,7 @@ class GameCtrl extends _$GameCtrl {
     _socket.send('rematch-no', null);
   }
 
-  void _sendMove(
+  void _sendMoveToSocket(
     Move move, {
     required bool isPremove,
     required bool hasClock,
@@ -249,6 +308,8 @@ class GameCtrl extends _$GameCtrl {
       ackable: true,
       withLag: hasClock && (moveTime == null || withLag),
     );
+
+    _transientMoveTimer = Timer(const Duration(seconds: 10), _resyncGameData);
   }
 
   /// Move feedback while playing
@@ -669,10 +730,25 @@ class GameCtrlState with _$GameCtrlState {
     required bool stopClockWaitingForServerAck,
     cg.Move? premove,
 
+    /// Game only setting to override the account preference
+    bool? moveConfirmSettingOverride,
+
+    /// Set if confirm move preference is enabled and player played a move
+    Move? moveToConfirm,
+
     /// Game full id used to redirect to the new game of the rematch
     GameFullId? redirectGameId,
   }) = _GameCtrlState;
 
+  // preferences
+  bool get canPremove => game.prefs?.enablePremove ?? true;
+  bool get canAutoQueen => game.prefs?.autoQueen == AutoQueen.always;
+  bool get canAutoQueenOnPremove => game.prefs?.autoQueen == AutoQueen.premove;
+  bool get shouldConfirmResignAndDrawOffer => game.prefs?.confirmResign ?? true;
+  bool get shouldConfirmMove =>
+      moveConfirmSettingOverride ?? game.prefs?.submitMove ?? false;
+
+  // game state
   bool get isReplaying => stepCursor < game.steps.length - 1;
   bool get canGoForward => stepCursor < game.steps.length - 1;
   bool get canGoBackward => stepCursor > 0;
@@ -727,10 +803,18 @@ class GameCtrlState with _$GameCtrlState {
     if (game.status == GameStatus.started) {
       final pos = game.lastPosition;
       if (pos.fullmoves > 1) {
-        return pos.turn;
+        return moveToConfirm != null ? pos.turn.opposite : pos.turn;
       }
     }
 
     return null;
   }
+
+  AnalysisOptions get analysisOptions => AnalysisOptions(
+        isLocalEvaluationAllowed: true,
+        variant: game.meta.variant,
+        steps: game.steps,
+        orientation: game.youAre ?? Side.white,
+        id: game.meta.id,
+      );
 }

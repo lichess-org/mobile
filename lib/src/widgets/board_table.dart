@@ -129,9 +129,7 @@ class BoardTable extends ConsumerWidget {
         );
 
         final settings = boardSettingsOverrides != null
-            ? defaultSettings.copyWith(
-                animationDuration: boardSettingsOverrides!.animationDuration,
-              )
+            ? boardSettingsOverrides!.merge(defaultSettings)
             : defaultSettings;
 
         final board = Board(
@@ -290,9 +288,21 @@ class BoardTable extends ConsumerWidget {
 class BoardSettingsOverrides {
   const BoardSettingsOverrides({
     this.animationDuration,
+    this.autoQueenPromotion,
+    this.autoQueenPromotionOnPremove,
   });
 
   final Duration? animationDuration;
+  final bool? autoQueenPromotion;
+  final bool? autoQueenPromotionOnPremove;
+
+  BoardSettings merge(BoardSettings settings) {
+    return settings.copyWith(
+      animationDuration: animationDuration,
+      autoQueenPromotion: autoQueenPromotion,
+      autoQueenPromotionOnPremove: autoQueenPromotionOnPremove,
+    );
+  }
 }
 
 enum MoveListType { inline, stacked }

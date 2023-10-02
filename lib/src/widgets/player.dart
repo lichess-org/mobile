@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 /// A widget to display player information above/below the chess board.
 ///
@@ -22,6 +23,7 @@ class BoardPlayer extends StatelessWidget {
     required this.player,
     this.clock,
     this.materialDiff,
+    this.confirmMoveCallbacks,
     this.timeToMove,
     this.shouldLinkToUserProfile = true,
     this.mePlaying = false,
@@ -32,6 +34,10 @@ class BoardPlayer extends StatelessWidget {
   final Player player;
   final Widget? clock;
   final MaterialDiffSide? materialDiff;
+
+  /// if confirm move preference is enabled, used to display confirmation buttons
+  final ({VoidCallback confirm, VoidCallback cancel})? confirmMoveCallbacks;
+
   final bool shouldLinkToUserProfile;
   final bool mePlaying;
   final bool zenMode;
@@ -150,7 +156,17 @@ class BoardPlayer extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        if (!zenMode || timeToMove != null)
+        if (mePlaying && confirmMoveCallbacks != null)
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: ConfirmMove(
+                onConfirm: confirmMoveCallbacks!.confirm,
+                onCancel: confirmMoveCallbacks!.cancel,
+              ),
+            ),
+          )
+        else if (!zenMode || timeToMove != null)
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(right: 20),
@@ -171,6 +187,49 @@ class BoardPlayer extends StatelessWidget {
             ),
           ),
         if (clock != null) clock!,
+      ],
+    );
+  }
+}
+
+class ConfirmMove extends StatelessWidget {
+  const ConfirmMove({
+    required this.onConfirm,
+    required this.onCancel,
+    super.key,
+  });
+
+  final VoidCallback onConfirm;
+  final VoidCallback onCancel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        PlatformIconButton(
+          icon: CupertinoIcons.xmark_rectangle_fill,
+          color: LichessColors.red,
+          iconSize: 35,
+          semanticsLabel: context.l10n.cancel,
+          padding: const EdgeInsets.all(10),
+          onTap: onCancel,
+        ),
+        Flexible(
+          child: Text(
+            context.l10n.confirmMove,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+          ),
+        ),
+        PlatformIconButton(
+          icon: CupertinoIcons.checkmark_rectangle_fill,
+          color: LichessColors.green,
+          iconSize: 35,
+          semanticsLabel: context.l10n.accept,
+          padding: const EdgeInsets.all(10),
+          onTap: onConfirm,
+        ),
       ],
     );
   }

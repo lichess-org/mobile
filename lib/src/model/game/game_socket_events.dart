@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
@@ -70,7 +71,10 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
     winner: pick('game', 'winner').asSideOrNull(),
     boosted: pick('game', 'boosted').asBoolOrNull(),
     isThreefoldRepetition: pick('game', 'threefold').asBoolOrNull(),
+    moretimeable: pick('moretimeable').asBoolOrFalse(),
+    takebackable: pick('takebackable').asBoolOrFalse(),
     youAre: pick('youAre').asSideOrNull(),
+    prefs: pick('prefs').letOrNull(_gamePrefsFromPick),
     expiration: pick('expiration').letOrNull(
       (it) {
         final idle = it('idleMillis').asDurationFromMilliSecondsOrThrow();
@@ -105,6 +109,15 @@ PlayableGameMeta _playableGameMetaFromPick(RequiredPick pick) {
         ),
       ),
     ),
+  );
+}
+
+GamePrefs _gamePrefsFromPick(RequiredPick pick) {
+  return (
+    enablePremove: pick('enablePremove').asBoolOrFalse(),
+    autoQueen: AutoQueen.fromInt(pick('autoQueen').asIntOrThrow()),
+    confirmResign: pick('confirmResign').asBoolOrFalse(),
+    submitMove: pick('submitMove').asBoolOrFalse(),
   );
 }
 

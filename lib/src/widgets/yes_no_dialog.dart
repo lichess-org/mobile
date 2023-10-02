@@ -7,16 +7,18 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 class YesNoDialog extends StatelessWidget {
   const YesNoDialog({
     super.key,
-    required this.title,
-    required this.content,
+    this.title,
+    this.content,
     required this.onYes,
     required this.onNo,
+    this.alignment,
   });
 
-  final Widget title;
-  final Widget content;
+  final Widget? title;
+  final Widget? content;
   final VoidCallback onYes;
   final VoidCallback onNo;
+  final AlignmentGeometry? alignment;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,7 @@ class YesNoDialog extends StatelessWidget {
       return AlertDialog(
         title: title,
         content: content,
+        alignment: alignment,
         actions: [
           TextButton(
             onPressed: onNo,
