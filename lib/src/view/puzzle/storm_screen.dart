@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
-import 'package:lichess_mobile/src/model/puzzle/storm_ctrl.dart';
+import 'package:lichess_mobile/src/model/puzzle/storm_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -114,7 +114,7 @@ class _BodyState extends ConsumerState<_Body>
     with AndroidImmersiveMode, Wakelock {
   @override
   Widget build(BuildContext context) {
-    final ctrlProvider = stormCtrlProvider(widget.data.puzzles);
+    final ctrlProvider = stormControllerProvider(widget.data.puzzles);
     final puzzleState = ref.watch(ctrlProvider);
     ref.listen(ctrlProvider.select((state) => state.runOver), (_, s) {
       if (s) {
@@ -295,7 +295,7 @@ class _TopTable extends ConsumerWidget {
     required this.ctrl,
   });
 
-  final StormCtrlProvider ctrl;
+  final StormControllerProvider ctrl;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -574,7 +574,7 @@ class _ComboState extends ConsumerState<_Combo>
 class _BottomBar extends ConsumerWidget {
   const _BottomBar(this.ctrl);
 
-  final StormCtrlProvider ctrl;
+  final StormControllerProvider ctrl;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

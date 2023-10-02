@@ -17,15 +17,15 @@ import 'puzzle.dart';
 import 'puzzle_repository.dart';
 import 'storm.dart';
 
-part 'storm_ctrl.g.dart';
-part 'storm_ctrl.freezed.dart';
+part 'storm_controller.g.dart';
+part 'storm_controller.freezed.dart';
 
 const malus = Duration(seconds: 10);
 const moveDelay = Duration(milliseconds: 200);
 const startTime = Duration(minutes: 3);
 
 @riverpod
-class StormCtrl extends _$StormCtrl {
+class StormController extends _$StormController {
   int _nextPuzzleIndex = 0;
   int _moves = 0;
   int _errors = 0;
@@ -33,13 +33,13 @@ class StormCtrl extends _$StormCtrl {
   Timer? _firstMoveTimer;
 
   @override
-  StormCtrlState build(IList<LitePuzzle> puzzles) {
+  StormState build(IList<LitePuzzle> puzzles) {
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
       state.clock.dispose();
     });
     final pov = Chess.fromSetup(Setup.parseFen(puzzles.first.fen));
-    final newState = StormCtrlState(
+    final newState = StormState(
       firstMovePlayed: false,
       runOver: false,
       runStarted: false,
@@ -274,9 +274,9 @@ class StormCtrl extends _$StormCtrl {
 }
 
 @freezed
-class StormCtrlState with _$StormCtrlState {
-  const StormCtrlState._();
-  const factory StormCtrlState({
+class StormState with _$StormState {
+  const StormState._();
+  const factory StormState({
     /// Current puzzle being played
     required LitePuzzle puzzle,
 
@@ -315,7 +315,7 @@ class StormCtrlState with _$StormCtrlState {
 
     /// premove to be played
     cg.Move? premove,
-  }) = _StormCtrlState;
+  }) = _StormState;
 
   Move? get expectedMove => Move.fromUci(puzzle.solution[moveIndex + 1]);
 
