@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import './model/common/service/fake_sound_service.dart';
 import './model/auth/fake_auth_repository.dart';
 import './model/auth/fake_session_storage.dart';
@@ -66,6 +67,10 @@ Future<Widget> buildTestApp(
 
   return ProviderScope(
     overrides: [
+      // ignore: scoped_providers_should_specify_dependencies
+      showRatingsPrefProvider.overrideWith((ref) {
+        return true;
+      }),
       // ignore: scoped_providers_should_specify_dependencies
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       // ignore: scoped_providers_should_specify_dependencies

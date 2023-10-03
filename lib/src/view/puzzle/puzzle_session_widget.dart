@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
+import 'package:lichess_mobile/src/view/account/show_rating_aware_widget.dart';
 
 class PuzzleSessionWidget extends ConsumerStatefulWidget {
   const PuzzleSessionWidget({
@@ -205,16 +206,27 @@ class _SessionItem extends StatelessWidget {
                 ),
               )
             : attempt?.ratingDiff != null && attempt!.ratingDiff != 0
-                ? Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: FittedBox(
-                      fit: BoxFit.cover,
-                      child: Text(
-                        attempt!.ratingDiffString!,
-                        maxLines: 1,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          height: 1,
+                ? ShowRatingPrefAwareWidget(
+                    orElse: Icon(
+                      attempt != null
+                          ? attempt!.win
+                              ? Icons.check
+                              : Icons.close
+                          : null,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: Text(
+                          attempt!.ratingDiffString!,
+                          maxLines: 1,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            height: 1,
+                          ),
                         ),
                       ),
                     ),

@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/view/account/show_rating_aware_widget.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 
 import 'user_activity.dart';
@@ -185,80 +186,82 @@ class PerfCards extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return Padding(
-      padding: Styles.bodySectionPadding,
-      child: SizedBox(
-        height: 106,
-        child: ListView.separated(
-          padding: const EdgeInsets.symmetric(vertical: 3.0),
-          scrollDirection: Axis.horizontal,
-          itemCount: userPerfs.length,
-          itemBuilder: (context, index) {
-            final perf = userPerfs[index];
-            final userPerf = user.perfs[perf]!;
-            final bool isPerfWithoutStats =
-                [Perf.puzzle, Perf.storm].contains(perf);
-            return SizedBox(
-              height: 100,
-              width: 100,
-              child: PlatformCard(
-                child: AdaptiveInkWell(
-                  borderRadius: BorderRadius.circular(10),
-                  onTap: isPerfWithoutStats
-                      ? null
-                      : () => _handlePerfCardTap(context, perf),
-                  child: Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          perf.shortTitle,
-                          style: TextStyle(color: textShade(context, 0.7)),
-                        ),
-                        Icon(perf.icon, color: textShade(context, 0.6)),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            PlayerRating(
-                              rating: userPerf.rating,
-                              deviation: userPerf.ratingDeviation,
-                              provisional: userPerf.provisional,
-                              style: Styles.bold,
-                            ),
-                            const SizedBox(width: 3),
-                            if (userPerf.progression != 0) ...[
-                              Icon(
-                                userPerf.progression > 0
-                                    ? LichessIcons.arrow_full_upperright
-                                    : LichessIcons.arrow_full_lowerright,
-                                color: userPerf.progression > 0
-                                    ? LichessColors.good
-                                    : LichessColors.red,
-                                size: 12,
+    return ShowRatingPrefAwareWidget(
+      child: Padding(
+        padding: Styles.bodySectionPadding,
+        child: SizedBox(
+          height: 106,
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(vertical: 3.0),
+            scrollDirection: Axis.horizontal,
+            itemCount: userPerfs.length,
+            itemBuilder: (context, index) {
+              final perf = userPerfs[index];
+              final userPerf = user.perfs[perf]!;
+              final bool isPerfWithoutStats =
+                  [Perf.puzzle, Perf.storm].contains(perf);
+              return SizedBox(
+                height: 100,
+                width: 100,
+                child: PlatformCard(
+                  child: AdaptiveInkWell(
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: isPerfWithoutStats
+                        ? null
+                        : () => _handlePerfCardTap(context, perf),
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            perf.shortTitle,
+                            style: TextStyle(color: textShade(context, 0.7)),
+                          ),
+                          Icon(perf.icon, color: textShade(context, 0.6)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
+                            children: [
+                              PlayerRating(
+                                rating: userPerf.rating,
+                                deviation: userPerf.ratingDeviation,
+                                provisional: userPerf.provisional,
+                                style: Styles.bold,
                               ),
-                              Text(
-                                userPerf.progression.abs().toString(),
-                                style: TextStyle(
+                              const SizedBox(width: 3),
+                              if (userPerf.progression != 0) ...[
+                                Icon(
+                                  userPerf.progression > 0
+                                      ? LichessIcons.arrow_full_upperright
+                                      : LichessIcons.arrow_full_lowerright,
                                   color: userPerf.progression > 0
                                       ? LichessColors.good
                                       : LichessColors.red,
-                                  fontSize: 11,
+                                  size: 12,
                                 ),
-                              ),
+                                Text(
+                                  userPerf.progression.abs().toString(),
+                                  style: TextStyle(
+                                    color: userPerf.progression > 0
+                                        ? LichessColors.good
+                                        : LichessColors.red,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ],
                             ],
-                          ],
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
-          separatorBuilder: (context, index) => const SizedBox(width: 10),
+              );
+            },
+            separatorBuilder: (context, index) => const SizedBox(width: 10),
+          ),
         ),
       ),
     );

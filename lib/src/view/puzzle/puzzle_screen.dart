@@ -26,6 +26,7 @@ import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/wakelock.dart';
+import 'package:lichess_mobile/src/view/account/show_rating_aware_widget.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
@@ -212,32 +213,35 @@ class _BodyState extends ConsumerState<_Body>
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     if (puzzleState.glicko != null)
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 10.0,
-                        ),
-                        child: Row(
-                          children: [
-                            Text(context.l10n.rating),
-                            const SizedBox(width: 5.0),
-                            TweenAnimationBuilder<double>(
-                              tween: Tween<double>(
-                                begin: puzzleState.glicko!.rating,
-                                end: puzzleState.nextContext?.glicko?.rating ??
-                                    puzzleState.glicko!.rating,
+                      ShowRatingPrefAwareWidget(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            top: 10.0,
+                          ),
+                          child: Row(
+                            children: [
+                              Text(context.l10n.rating),
+                              const SizedBox(width: 5.0),
+                              TweenAnimationBuilder<double>(
+                                tween: Tween<double>(
+                                  begin: puzzleState.glicko!.rating,
+                                  end:
+                                      puzzleState.nextContext?.glicko?.rating ??
+                                          puzzleState.glicko!.rating,
+                                ),
+                                duration: const Duration(milliseconds: 500),
+                                builder: (context, double rating, _) {
+                                  return Text(
+                                    rating.truncate().toString(),
+                                    style: const TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  );
+                                },
                               ),
-                              duration: const Duration(milliseconds: 500),
-                              builder: (context, double rating, _) {
-                                return Text(
-                                  rating.truncate().toString(),
-                                  style: const TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     PuzzleSessionWidget(

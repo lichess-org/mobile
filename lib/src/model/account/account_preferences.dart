@@ -27,6 +27,29 @@ typedef AccountPrefState = ({
   Moretime moretime,
 });
 
+final showRatingsPrefProvider = FutureProvider<bool>((ref) async {
+  return ref.watch(
+    accountPreferencesProvider
+        .selectAsync((state) => state?.showRatings.value ?? true),
+  );
+});
+
+final defaultAccountPreferences = (
+  materialDifference: const BooleanPref(true),
+  moveList: MoveList.always,
+  zenMode: Zen.no,
+  showRatings: const BooleanPref(true),
+  premove: const BooleanPref(true),
+  autoQueen: AutoQueen.premove,
+  autoThreefold: AutoThreefold.always,
+  takeback: Takeback.always,
+  moretime: Moretime.always,
+  confirmResign: const BooleanPref(true),
+  submitMove: SubmitMove({
+    SubmitMoveChoice.correspondence,
+  }),
+);
+
 /// Get the account preferences for the current user.
 ///
 /// The result is cached for the lifetime of the app, until refreshed.
@@ -44,22 +67,10 @@ class AccountPreferences extends _$AccountPreferences {
     return _repo.getPreferences().fold(
       (value) => value,
       (e, __) {
-        debugPrint('Error getting account preferences: $e');
-        return (
-          materialDifference: const BooleanPref(true),
-          moveList: MoveList.always,
-          zenMode: Zen.no,
-          showRatings: const BooleanPref(true),
-          premove: const BooleanPref(true),
-          autoQueen: AutoQueen.premove,
-          autoThreefold: AutoThreefold.always,
-          takeback: Takeback.always,
-          moretime: Moretime.always,
-          confirmResign: const BooleanPref(true),
-          submitMove: SubmitMove({
-            SubmitMoveChoice.correspondence,
-          }),
+        debugPrint(
+          '[AccountPreferences] Error getting account preferences: $e',
         );
+        return defaultAccountPreferences;
       },
     );
   }

@@ -23,7 +23,6 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/wakelock.dart';
@@ -31,6 +30,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
 import 'game_screen_providers.dart';
+import 'game_player.dart';
 import 'ping_rating.dart';
 import 'lobby_game_loading_board.dart';
 import 'game_settings.dart';
@@ -262,7 +262,7 @@ class _Body extends ConsumerWidget {
     final sideToMove = position.turn;
     final youAre = gameState.game.youAre ?? Side.white;
 
-    final black = BoardPlayer(
+    final black = GamePlayer(
       player: gameState.game.black,
       materialDiff: gameState.shouldShowMaterialDiff
           ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
@@ -294,7 +294,7 @@ class _Body extends ConsumerWidget {
             )
           : null,
     );
-    final white = BoardPlayer(
+    final white = GamePlayer(
       player: gameState.game.white,
       materialDiff: gameState.shouldShowMaterialDiff
           ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)

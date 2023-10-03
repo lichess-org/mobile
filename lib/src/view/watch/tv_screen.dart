@@ -9,12 +9,12 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
+import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
 final RouteObserver<PageRoute<void>> tvRouteObserver =
@@ -151,7 +151,7 @@ class _Body extends ConsumerWidget {
               lastMove: game.lastMove?.cg,
               isCheck: game.lastPosition.isCheck,
             );
-            final blackPlayerWidget = BoardPlayer(
+            final blackPlayerWidget = GamePlayer(
               player: game.black.setOnGame(true),
               clock: gameState.game.clock != null
                   ? CountdownClock(
@@ -161,7 +161,7 @@ class _Body extends ConsumerWidget {
                   : null,
               materialDiff: game.lastMaterialDiffAt(Side.black),
             );
-            final whitePlayerWidget = BoardPlayer(
+            final whitePlayerWidget = GamePlayer(
               player: game.white.setOnGame(true),
               clock: gameState.game.clock != null
                   ? CountdownClock(

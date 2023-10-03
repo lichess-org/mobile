@@ -5,13 +5,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -47,8 +47,8 @@ void main() {
         // data shown immediately
         expect(find.byType(cg.Board), findsOneWidget);
         expect(find.byType(cg.PieceWidget), findsNWidgets(25));
-        expect(find.widgetWithText(BoardPlayer, 'veloce'), findsOneWidget);
-        expect(find.widgetWithText(BoardPlayer, 'Stockfish'), findsOneWidget);
+        expect(find.widgetWithText(GamePlayer, 'veloce'), findsOneWidget);
+        expect(find.widgetWithText(GamePlayer, 'Stockfish'), findsOneWidget);
 
         // cannot interact with board
         expect(
@@ -75,8 +75,8 @@ void main() {
         // same info still displayed
         expect(find.byType(cg.Board), findsOneWidget);
         expect(find.byType(cg.PieceWidget), findsNWidgets(25));
-        expect(find.widgetWithText(BoardPlayer, 'veloce'), findsOneWidget);
-        expect(find.widgetWithText(BoardPlayer, 'Stockfish'), findsOneWidget);
+        expect(find.widgetWithText(GamePlayer, 'veloce'), findsOneWidget);
+        expect(find.widgetWithText(GamePlayer, 'Stockfish'), findsOneWidget);
 
         // now with the clocks
         expect(find.text('1:46', findRichText: true), findsNWidgets(1));
