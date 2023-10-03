@@ -114,10 +114,14 @@ PlayableGameMeta _playableGameMetaFromPick(RequiredPick pick) {
 
 GamePrefs _gamePrefsFromPick(RequiredPick pick) {
   return (
+    showMaterialDiff: pick('showCaptured').asBoolOrFalse(),
+    showRatings: pick('showRatings').asBoolOrFalse(),
+    showMoveList: pick('showReplay').asBoolOrFalse(),
     enablePremove: pick('enablePremove').asBoolOrFalse(),
     autoQueen: AutoQueen.fromInt(pick('autoQueen').asIntOrThrow()),
     confirmResign: pick('confirmResign').asBoolOrFalse(),
     submitMove: pick('submitMove').asBoolOrFalse(),
+    zenMode: Zen.fromInt(pick('zen').asIntOrThrow()),
   );
 }
 

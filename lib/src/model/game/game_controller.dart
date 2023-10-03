@@ -224,6 +224,15 @@ class GameController extends _$GameController {
     );
   }
 
+  void toggleZenMode() {
+    final curState = state.requireValue;
+    state = AsyncValue.data(
+      curState.copyWith(
+        zenModeGameSetting: !(curState.zenModeGameSetting ?? false),
+      ),
+    );
+  }
+
   void onFlag() {
     _onFlagThrottler(() {
       if (state.hasValue) {
@@ -733,6 +742,9 @@ class GameState with _$GameState {
     /// Game only setting to override the account preference
     bool? moveConfirmSettingOverride,
 
+    /// Zen mode setting if account preference is set to [Zen.gameAuto]
+    bool? zenModeGameSetting,
+
     /// Set if confirm move preference is enabled and player played a move
     Move? moveToConfirm,
 
@@ -741,6 +753,10 @@ class GameState with _$GameState {
   }) = _GameState;
 
   // preferences
+  bool get shouldShowMaterialDiff => game.prefs?.showMaterialDiff ?? true;
+  bool get shouldShowMoveList => game.prefs?.showMoveList ?? true;
+  bool get isZenModeEnabled =>
+      zenModeGameSetting ?? game.prefs?.zenMode == Zen.yes;
   bool get canPremove => game.prefs?.enablePremove ?? true;
   bool get canAutoQueen => game.prefs?.autoQueen == AutoQueen.always;
   bool get canAutoQueenOnPremove => game.prefs?.autoQueen == AutoQueen.premove;

@@ -264,11 +264,13 @@ class _Body extends ConsumerWidget {
 
     final black = BoardPlayer(
       player: gameState.game.black,
-      materialDiff:
-          gameState.game.materialDiffAt(gameState.stepCursor, Side.black),
+      materialDiff: gameState.shouldShowMaterialDiff
+          ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
+          : null,
       timeToMove: sideToMove == Side.black ? gameState.timeToMove : null,
       shouldLinkToUserProfile: youAre != Side.black,
       mePlaying: youAre == Side.black,
+      zenMode: gameState.isZenModeEnabled,
       confirmMoveCallbacks:
           youAre == Side.black && gameState.moveToConfirm != null
               ? (
@@ -294,11 +296,13 @@ class _Body extends ConsumerWidget {
     );
     final white = BoardPlayer(
       player: gameState.game.white,
-      materialDiff:
-          gameState.game.materialDiffAt(gameState.stepCursor, Side.white),
+      materialDiff: gameState.shouldShowMaterialDiff
+          ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
+          : null,
       timeToMove: sideToMove == Side.white ? gameState.timeToMove : null,
       shouldLinkToUserProfile: youAre != Side.white,
       mePlaying: youAre == Side.white,
+      zenMode: gameState.isZenModeEnabled,
       confirmMoveCallbacks:
           youAre == Side.white && gameState.moveToConfirm != null
               ? (
@@ -371,11 +375,14 @@ class _Body extends ConsumerWidget {
                       duration: gameState.opponentLeftCountdown!,
                     )
                   : bottomPlayer,
-              moves: gameState.game.steps
-                  .skip(1)
-                  .map((e) => e.sanMove!.san)
-                  .toList(growable: false),
-              currentMoveIndex: gameState.stepCursor,
+              moves: gameState.shouldShowMoveList
+                  ? gameState.game.steps
+                      .skip(1)
+                      .map((e) => e.sanMove!.san)
+                      .toList(growable: false)
+                  : null,
+              currentMoveIndex:
+                  gameState.shouldShowMoveList ? gameState.stepCursor : null,
               onSelectMove: (moveIndex) {
                 ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
               },
