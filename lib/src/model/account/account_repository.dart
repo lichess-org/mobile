@@ -88,6 +88,14 @@ class AccountRepository {
 
 AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
   return (
+    materialDifference: BooleanPref(pick('captured').asBoolOrThrow()),
+    moveList: MoveList.fromInt(
+      pick('replay').asIntOrThrow(),
+    ),
+    zenMode: Zen.fromInt(
+      pick('zen').asIntOrThrow(),
+    ),
+    showRatings: BooleanPref.fromInt(pick('ratings').asIntOrThrow()),
     premove: BooleanPref(pick('premove').asBoolOrThrow()),
     autoQueen: AutoQueen.fromInt(
       pick('autoQueen').asIntOrThrow(),

@@ -57,6 +57,96 @@ class _Body extends ConsumerWidget {
             children: [
               ListSection(
                 header: Text(
+                  context.l10n.preferencesDisplay,
+                ),
+                hasLeading: false,
+                children: [
+                  SwitchSettingTile(
+                    title: Text(
+                      context.l10n.preferencesMaterialDifference,
+                      maxLines: 2,
+                    ),
+                    value: data.materialDifference.value,
+                    onChanged: (value) {
+                      ref
+                          .read(accountPreferencesProvider.notifier)
+                          .setMaterialDiff(BooleanPref(value));
+                    },
+                  ),
+                  SettingsListTile(
+                    settingsLabel: Text(
+                      context.l10n.preferencesMoveListWhilePlaying,
+                      maxLines: 2,
+                    ),
+                    settingsValue: data.moveList.label(context),
+                    showCupertinoTrailingValue: false,
+                    onTap: () {
+                      if (defaultTargetPlatform == TargetPlatform.android) {
+                        showChoicePicker(
+                          context,
+                          choices: MoveList.values,
+                          selectedItem: data.moveList,
+                          labelBuilder: (t) => Text(t.label(context)),
+                          onSelectedItemChanged: (MoveList? value) {
+                            ref
+                                .read(accountPreferencesProvider.notifier)
+                                .setMoveList(value ?? data.moveList);
+                          },
+                        );
+                      } else {
+                        pushPlatformRoute(
+                          context,
+                          title: context.l10n.preferencesMoveListWhilePlaying,
+                          builder: (context) => const MoveListSettingsScreen(),
+                        );
+                      }
+                    },
+                  ),
+                  SettingsListTile(
+                    settingsLabel: Text(
+                      context.l10n.preferencesZenMode,
+                      maxLines: 2,
+                    ),
+                    settingsValue: data.zenMode.label(context),
+                    showCupertinoTrailingValue: false,
+                    onTap: () {
+                      if (defaultTargetPlatform == TargetPlatform.android) {
+                        showChoicePicker(
+                          context,
+                          choices: Zen.values,
+                          selectedItem: data.zenMode,
+                          labelBuilder: (t) => Text(t.label(context)),
+                          onSelectedItemChanged: (Zen? value) {
+                            ref
+                                .read(accountPreferencesProvider.notifier)
+                                .setZen(value ?? data.zenMode);
+                          },
+                        );
+                      } else {
+                        pushPlatformRoute(
+                          context,
+                          title: context.l10n.preferencesZenMode,
+                          builder: (context) => const ZenSettingsScreen(),
+                        );
+                      }
+                    },
+                  ),
+                  SwitchSettingTile(
+                    title: Text(
+                      context.l10n.preferencesShowPlayerRatings,
+                      maxLines: 2,
+                    ),
+                    value: data.showRatings.value,
+                    onChanged: (value) {
+                      ref
+                          .read(accountPreferencesProvider.notifier)
+                          .setShowRatings(BooleanPref(value));
+                    },
+                  ),
+                ],
+              ),
+              ListSection(
+                header: Text(
                   context.l10n.preferencesGameBehavior,
                 ),
                 hasLeading: false,
@@ -239,6 +329,86 @@ class _Body extends ConsumerWidget {
                 ],
               ),
             ],
+          ),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Center(child: Text(err.toString())),
+    );
+  }
+}
+
+class MoveListSettingsScreen extends ConsumerWidget {
+  const MoveListSettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final accountPrefs = ref.watch(accountPreferencesProvider);
+    return accountPrefs.when(
+      data: (data) {
+        if (data == null) {
+          return const Center(
+            child: Text('You must be logged in to view this page.'),
+          );
+        }
+
+        return CupertinoPageScaffold(
+          navigationBar: const CupertinoNavigationBar(),
+          child: SafeArea(
+            child: ListView(
+              children: [
+                ChoicePicker(
+                  choices: MoveList.values,
+                  selectedItem: data.moveList,
+                  titleBuilder: (t) => Text(t.label(context)),
+                  onSelectedItemChanged: (MoveList? v) {
+                    ref
+                        .read(accountPreferencesProvider.notifier)
+                        .setMoveList(v ?? data.moveList);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Center(child: Text(err.toString())),
+    );
+  }
+}
+
+class ZenSettingsScreen extends ConsumerWidget {
+  const ZenSettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final accountPrefs = ref.watch(accountPreferencesProvider);
+    return accountPrefs.when(
+      data: (data) {
+        if (data == null) {
+          return const Center(
+            child: Text('You must be logged in to view this page.'),
+          );
+        }
+
+        return CupertinoPageScaffold(
+          navigationBar: const CupertinoNavigationBar(),
+          child: SafeArea(
+            child: ListView(
+              children: [
+                ChoicePicker(
+                  choices: Zen.values,
+                  selectedItem: data.zenMode,
+                  titleBuilder: (t) => Text(t.label(context)),
+                  onSelectedItemChanged: (Zen? v) {
+                    ref
+                        .read(accountPreferencesProvider.notifier)
+                        .setZen(v ?? data.zenMode);
+                  },
+                ),
+              ],
+            ),
           ),
         );
       },

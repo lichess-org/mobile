@@ -104,7 +104,7 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
   });
 
   final List<T> choices;
-  final Enum selectedItem;
+  final T selectedItem;
   final Widget Function(T choice) titleBuilder;
   final Widget Function(T choice)? subtitleBuilder;
   final Widget Function(T choice)? leadingBuilder;
