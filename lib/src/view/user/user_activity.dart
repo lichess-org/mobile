@@ -105,7 +105,7 @@ class UserActivityEntry extends ConsumerWidget {
                   gameEntry.key.title,
                 ),
               ),
-              subtitle: ShowRatingPrefAwareWidget(
+              subtitle: RatingPrefAware(
                 child: Row(
                   children: [
                     PlayerRating(
@@ -164,7 +164,7 @@ class UserActivityEntry extends ConsumerWidget {
                 entry.puzzles!.win + entry.puzzles!.loss,
               ),
             ),
-            subtitle: ShowRatingPrefAwareWidget(
+            subtitle: RatingPrefAware(
               child: Row(
                 children: [
                   PlayerRating(

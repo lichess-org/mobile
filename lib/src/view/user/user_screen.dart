@@ -186,7 +186,7 @@ class PerfCards extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return ShowRatingPrefAwareWidget(
+    return RatingPrefAware(
       child: Padding(
         padding: Styles.bodySectionPadding,
         child: SizedBox(

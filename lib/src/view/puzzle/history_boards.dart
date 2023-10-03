@@ -126,7 +126,7 @@ class _PuzzleHistoryState extends ConsumerState<PuzzleHistoryBoards> {
                       ),
                     ),
                     const SizedBox(width: 6),
-                    ShowRatingPrefAwareWidget(child: Text(e.rating.toString())),
+                    RatingPrefAware(child: Text(e.rating.toString())),
                   ],
                 ),
               ),

@@ -213,7 +213,7 @@ class _BodyState extends ConsumerState<_Body>
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     if (puzzleState.glicko != null)
-                      ShowRatingPrefAwareWidget(
+                      RatingPrefAware(
                         child: Padding(
                           padding: const EdgeInsets.only(
                             top: 10.0,

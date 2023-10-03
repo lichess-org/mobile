@@ -206,7 +206,7 @@ class _SessionItem extends StatelessWidget {
                 ),
               )
             : attempt?.ratingDiff != null && attempt!.ratingDiff != 0
-                ? ShowRatingPrefAwareWidget(
+                ? RatingPrefAware(
                     orElse: Icon(
                       attempt != null
                           ? attempt!.win

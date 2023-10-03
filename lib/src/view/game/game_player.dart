@@ -97,7 +97,7 @@ class GamePlayer extends StatelessWidget {
             ),
             const SizedBox(width: 5),
             if (player.rating != null)
-              ShowRatingPrefAwareWidget(
+              RatingPrefAware(
                 child: Text.rich(
                   TextSpan(
                     text:

@@ -305,7 +305,7 @@ class _HomeBody extends ConsumerWidget {
                     const _CreateAGame(),
                     const _DailyPuzzle(),
                     if (session != null) RecentGames(user: session.user),
-                    ShowRatingPrefAwareWidget(child: LeaderboardWidget()),
+                    RatingPrefAware(child: LeaderboardWidget()),
                   ],
                 )
               : SliverList(
@@ -313,7 +313,7 @@ class _HomeBody extends ConsumerWidget {
                     const _CreateAGame(),
                     const _DailyPuzzle(),
                     if (session != null) RecentGames(user: session.user),
-                    ShowRatingPrefAwareWidget(child: LeaderboardWidget()),
+                    RatingPrefAware(child: LeaderboardWidget()),
                   ]),
                 );
         } else {

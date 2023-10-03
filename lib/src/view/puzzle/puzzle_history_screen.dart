@@ -224,7 +224,7 @@ class _HistoryBoard extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              ShowRatingPrefAwareWidget(child: Text(puzzle.rating.toString())),
+              RatingPrefAware(child: Text(puzzle.rating.toString())),
             ],
           ),
         ),
