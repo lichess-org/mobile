@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
-import 'package:lichess_mobile/src/view/account/show_rating_aware_widget.dart';
+import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 /// A widget to display player information above/below the chess board.

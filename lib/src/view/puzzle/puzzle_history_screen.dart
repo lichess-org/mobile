@@ -21,7 +21,7 @@ import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
-import 'package:lichess_mobile/src/view/account/show_rating_aware_widget.dart';
+import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 
 final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
 final _puzzleLoadingProvider = StateProvider<bool>((ref) => false);
