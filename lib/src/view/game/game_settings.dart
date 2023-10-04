@@ -53,7 +53,6 @@ class GameSettings extends ConsumerWidget {
           SwitchSettingTile(
             title: Text(
               context.l10n.preferencesPieceAnimation,
-              maxLines: 2,
             ),
             value: boardPrefs.pieceAnimation,
             onChanged: (value) {
@@ -69,7 +68,6 @@ class GameSettings extends ConsumerWidget {
                   SwitchSettingTile(
                     title: Text(
                       context.l10n.preferencesMoveConfirmation,
-                      maxLines: 2,
                     ),
                     value: data.shouldConfirmMove,
                     onChanged: (value) {
@@ -80,7 +78,6 @@ class GameSettings extends ConsumerWidget {
                   SwitchSettingTile(
                     title: Text(
                       context.l10n.preferencesZenMode,
-                      maxLines: 2,
                     ),
                     value: data.isZenModeEnabled,
                     onChanged: (value) {
