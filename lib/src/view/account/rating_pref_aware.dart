@@ -28,7 +28,7 @@ class RatingPrefAware extends ConsumerWidget {
         }
         return child;
       },
-      orElse: () => orElse ?? const SizedBox.shrink(),
+      orElse: () => const SizedBox.shrink(),
     );
   }
 }

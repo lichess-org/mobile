@@ -27,6 +27,7 @@ typedef AccountPrefState = ({
   Moretime moretime,
 });
 
+/// A provider that tells if the user has wants to see ratings in the app.
 final showRatingsPrefProvider = FutureProvider<bool>((ref) async {
   return ref.watch(
     accountPreferencesProvider
