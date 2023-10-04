@@ -133,6 +133,18 @@ class _Body extends ConsumerWidget {
                   ),
                   SwitchSettingTile(
                     title: Text(
+                      context.l10n.preferencesBlindfoldChess,
+                      maxLines: 2,
+                    ),
+                    value: data.blindfold.value,
+                    onChanged: (value) {
+                      ref
+                          .read(accountPreferencesProvider.notifier)
+                          .setBlindfold(BooleanPref(value));
+                    },
+                  ),
+                  SwitchSettingTile(
+                    title: Text(
                       context.l10n.preferencesShowPlayerRatings,
                       maxLines: 2,
                     ),

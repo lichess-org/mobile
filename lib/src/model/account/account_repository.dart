@@ -96,6 +96,7 @@ AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
       pick('zen').asIntOrThrow(),
     ),
     showRatings: BooleanPref.fromInt(pick('ratings').asIntOrThrow()),
+    blindfold: BooleanPref.fromInt(pick('blindfold').asIntOrThrow()),
     premove: BooleanPref(pick('premove').asBoolOrThrow()),
     autoQueen: AutoQueen.fromInt(
       pick('autoQueen').asIntOrThrow(),

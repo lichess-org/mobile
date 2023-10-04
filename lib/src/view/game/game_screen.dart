@@ -340,6 +340,7 @@ class _Body extends ConsumerWidget {
               boardSettingsOverrides: BoardSettingsOverrides(
                 autoQueenPromotion: gameState.canAutoQueen,
                 autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
+                blindfoldMode: gameState.blindfoldMode,
               ),
               onMove: (move, {isDrop, isPremove}) {
                 ref.read(ctrlProvider.notifier).onUserMove(

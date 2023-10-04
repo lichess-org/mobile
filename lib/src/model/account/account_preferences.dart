@@ -16,6 +16,7 @@ typedef AccountPrefState = ({
   MoveList moveList,
   Zen zenMode,
   BooleanPref showRatings,
+  BooleanPref blindfold,
   // game behavior
   BooleanPref premove,
   AutoQueen autoQueen,
@@ -40,6 +41,7 @@ final defaultAccountPreferences = (
   moveList: MoveList.always,
   zenMode: Zen.no,
   showRatings: const BooleanPref(true),
+  blindfold: const BooleanPref(false),
   premove: const BooleanPref(true),
   autoQueen: AutoQueen.premove,
   autoThreefold: AutoThreefold.always,
@@ -81,6 +83,7 @@ class AccountPreferences extends _$AccountPreferences {
   Future<void> setMoveList(MoveList value) => _setPref('replay', value);
   Future<void> setZen(Zen value) => _setPref('zen', value);
   Future<void> setShowRatings(BooleanPref value) => _setPref('ratings', value);
+  Future<void> setBlindfold(BooleanPref value) => _setPref('blindfold', value);
 
   Future<void> setPremove(BooleanPref value) => _setPref('premove', value);
   Future<void> setTakeback(Takeback value) => _setPref('takeback', value);

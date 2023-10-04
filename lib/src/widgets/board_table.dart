@@ -290,17 +290,20 @@ class BoardSettingsOverrides {
     this.animationDuration,
     this.autoQueenPromotion,
     this.autoQueenPromotionOnPremove,
+    this.blindfoldMode,
   });
 
   final Duration? animationDuration;
   final bool? autoQueenPromotion;
   final bool? autoQueenPromotionOnPremove;
+  final bool? blindfoldMode;
 
   BoardSettings merge(BoardSettings settings) {
     return settings.copyWith(
       animationDuration: animationDuration,
       autoQueenPromotion: autoQueenPromotion,
       autoQueenPromotionOnPremove: autoQueenPromotionOnPremove,
+      blindfoldMode: blindfoldMode,
     );
   }
 }
