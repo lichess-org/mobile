@@ -11,14 +11,41 @@ import 'account_repository.dart';
 part 'account_preferences.g.dart';
 
 typedef AccountPrefState = ({
+  // game display
+  Zen zenMode,
+  BooleanPref showRatings,
+  // game behavior
   BooleanPref premove,
   AutoQueen autoQueen,
   AutoThreefold autoThreefold,
   Takeback takeback,
-  Moretime moretime,
   BooleanPref confirmResign,
   SubmitMove submitMove,
+  // clock
+  Moretime moretime,
 });
+
+/// A provider that tells if the user has wants to see ratings in the app.
+final showRatingsPrefProvider = FutureProvider<bool>((ref) async {
+  return ref.watch(
+    accountPreferencesProvider
+        .selectAsync((state) => state?.showRatings.value ?? true),
+  );
+});
+
+final defaultAccountPreferences = (
+  zenMode: Zen.no,
+  showRatings: const BooleanPref(true),
+  premove: const BooleanPref(true),
+  autoQueen: AutoQueen.premove,
+  autoThreefold: AutoThreefold.always,
+  takeback: Takeback.always,
+  moretime: Moretime.always,
+  confirmResign: const BooleanPref(true),
+  submitMove: SubmitMove({
+    SubmitMoveChoice.correspondence,
+  }),
+);
 
 /// Get the account preferences for the current user.
 ///
@@ -35,20 +62,18 @@ class AccountPreferences extends _$AccountPreferences {
     }
 
     return _repo.getPreferences().fold(
-          (value) => value,
-          (_, __) => (
-            premove: const BooleanPref(true),
-            autoQueen: AutoQueen.premove,
-            autoThreefold: AutoThreefold.always,
-            takeback: Takeback.always,
-            moretime: Moretime.always,
-            confirmResign: const BooleanPref(true),
-            submitMove: SubmitMove({
-              SubmitMoveChoice.correspondence,
-            }),
-          ),
+      (value) => value,
+      (e, __) {
+        debugPrint(
+          '[AccountPreferences] Error getting account preferences: $e',
         );
+        return defaultAccountPreferences;
+      },
+    );
   }
+
+  Future<void> setZen(Zen value) => _setPref('zen', value);
+  Future<void> setShowRatings(BooleanPref value) => _setPref('ratings', value);
 
   Future<void> setPremove(BooleanPref value) => _setPref('premove', value);
   Future<void> setTakeback(Takeback value) => _setPref('takeback', value);
@@ -90,6 +115,44 @@ class BooleanPref implements AccountPref<bool> {
         return const BooleanPref(false);
       default:
         throw Exception('Invalid value for BooleanPref');
+    }
+  }
+}
+
+enum Zen implements AccountPref<int> {
+  no(0),
+  yes(1),
+  gameAuto(2);
+
+  const Zen(this.value);
+
+  @override
+  final int value;
+
+  @override
+  String get toFormData => value.toString();
+
+  String label(BuildContext context) {
+    switch (this) {
+      case Zen.no:
+        return context.l10n.no;
+      case Zen.yes:
+        return context.l10n.yes;
+      case Zen.gameAuto:
+        return context.l10n.preferencesInGameOnly;
+    }
+  }
+
+  static Zen fromInt(int value) {
+    switch (value) {
+      case 0:
+        return Zen.no;
+      case 1:
+        return Zen.yes;
+      case 2:
+        return Zen.gameAuto;
+      default:
+        throw Exception('Invalid value for Zen');
     }
   }
 }

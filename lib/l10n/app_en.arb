@@ -321,6 +321,7 @@
   "openStudy": "Open study",
   "enable": "Enable",
   "bestMoveArrow": "Best move arrow",
+  "showVariationArrows": "Show variation arrows",
   "evaluationGauge": "Evaluation gauge",
   "multipleLines": "Multiple lines",
   "cpus": "CPUs",
@@ -837,13 +838,11 @@
   "firstName": "First name",
   "lastName": "Surname",
   "biography": "Biography",
-  "countryOrFlag": "Country or flag",
+  "flag": "Flag",
   "thankYou": "Thank you!",
   "socialMediaLinks": "Social media links",
   "oneUrlPerLine": "One URL per line.",
   "inlineNotation": "Inline notation",
-  "savingMoves": "Temporary move storage",
-  "savingMovesHelp": "We're always storing your variations in your browser cache.",
   "makeAStudy": "For safekeeping and sharing, consider making a study.",
   "clearSavedMoves": "Clear moves",
   "previouslyOnLichessTV": "Previously on Lichess TV",
@@ -1191,6 +1190,17 @@
         "type": "String"
       },
       "param3": {
+        "type": "String"
+      }
+    }
+  },
+  "betterThanPercentPlayers": "Better than {param1} of {param2} players",
+  "@betterThanPercentPlayers": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
         "type": "String"
       }
     }
@@ -2074,6 +2084,7 @@
   "preferencesExplainShowPlayerRatings": "This allows hiding all ratings from the website, to help focus on the chess. Games can still be rated, this is only about what you get to see.",
   "preferencesDisplayBoardResizeHandle": "Show board resize handle",
   "preferencesOnlyOnInitialPosition": "Only on initial position",
+  "preferencesInGameOnly": "In-game only",
   "preferencesBlindfoldChess": "Blindfold chess (invisible pieces)",
   "preferencesChessClock": "Chess clock",
   "preferencesTenthsOfSeconds": "Tenths of seconds",

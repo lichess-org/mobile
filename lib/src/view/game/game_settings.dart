@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
@@ -52,7 +53,6 @@ class GameSettings extends ConsumerWidget {
           SwitchSettingTile(
             title: Text(
               context.l10n.preferencesPieceAnimation,
-              maxLines: 2,
             ),
             value: boardPrefs.pieceAnimation,
             onChanged: (value) {
@@ -61,25 +61,33 @@ class GameSettings extends ConsumerWidget {
                   .togglePieceAnimation();
             },
           ),
-          gameState.when(
+          ...gameState.when(
             data: (data) {
-              if (data.game.prefs?.submitMove == true) {
-                return SwitchSettingTile(
-                  title: Text(
-                    context.l10n.preferencesMoveConfirmation,
-                    maxLines: 2,
+              return [
+                if (data.game.prefs?.submitMove == true)
+                  SwitchSettingTile(
+                    title: Text(
+                      context.l10n.preferencesMoveConfirmation,
+                    ),
+                    value: data.shouldConfirmMove,
+                    onChanged: (value) {
+                      ref.read(ctrlProvider!.notifier).toggleMoveConfirmation();
+                    },
                   ),
-                  value: data.shouldConfirmMove,
-                  onChanged: (value) {
-                    ref.read(ctrlProvider!.notifier).toggleMoveConfirmation();
-                  },
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
+                if (data.game.prefs?.zenMode == Zen.gameAuto)
+                  SwitchSettingTile(
+                    title: Text(
+                      context.l10n.preferencesZenMode,
+                    ),
+                    value: data.isZenModeEnabled,
+                    onChanged: (value) {
+                      ref.read(ctrlProvider!.notifier).toggleZenMode();
+                    },
+                  ),
+              ];
             },
-            loading: () => const SizedBox.shrink(),
-            error: (e, s) => const SizedBox.shrink(),
+            loading: () => [const SizedBox.shrink()],
+            error: (e, s) => [const SizedBox.shrink()],
           ),
           const SizedBox(height: 16.0),
         ],

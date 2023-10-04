@@ -13,12 +13,12 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/game/game_player.dart';
 
 import 'archived_game_screen_providers.dart';
 
@@ -121,11 +121,11 @@ class _BoardBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
-    final black = BoardPlayer(
+    final black = GamePlayer(
       key: const ValueKey('black-player'),
       player: gameData.black,
     );
-    final white = BoardPlayer(
+    final white = GamePlayer(
       key: const ValueKey('white-player'),
       player: gameData.white,
     );
@@ -147,7 +147,7 @@ class _BoardBody extends ConsumerWidget {
         final (game, cursor) = data;
         final whiteClock = game.whiteClockAt(cursor);
         final blackClock = game.blackClockAt(cursor);
-        final black = BoardPlayer(
+        final black = GamePlayer(
           key: const ValueKey('black-player'),
           player: gameData.black,
           clock: blackClock != null
@@ -158,7 +158,7 @@ class _BoardBody extends ConsumerWidget {
               : null,
           materialDiff: game.materialDiffAt(cursor, Side.black),
         );
-        final white = BoardPlayer(
+        final white = GamePlayer(
           key: const ValueKey('white-player'),
           player: gameData.white,
           clock: whiteClock != null

@@ -12,6 +12,7 @@ class SettingsListTile extends StatelessWidget {
     required this.settingsLabel,
     required this.settingsValue,
     required this.onTap,
+    this.additionalInfo,
     this.showCupertinoTrailingValue = true,
     super.key,
   });
@@ -24,6 +25,8 @@ class SettingsListTile extends StatelessWidget {
   final String settingsValue;
   final void Function() onTap;
 
+  final String? additionalInfo;
+
   /// Whether to show the value in the trailing position on iOS.
   ///
   /// True by default, can be disabled for long settings names.
@@ -33,7 +36,10 @@ class SettingsListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final tile = PlatformListTile(
       leading: icon,
-      title: settingsLabel,
+      title: _SettingsTitle(
+        title: settingsLabel,
+        additionalInfo: additionalInfo,
+      ),
       additionalInfo: showCupertinoTrailingValue ? Text(settingsValue) : null,
       subtitle: defaultTargetPlatform == TargetPlatform.android
           ? Text(
@@ -52,7 +58,12 @@ class SettingsListTile extends StatelessWidget {
       button: true,
       label: '$settingsLabel: $settingsValue',
       excludeSemantics: true,
-      child: tile,
+      child: additionalInfo != null
+          ? _SettingsInfoTooltip(
+              message: additionalInfo!,
+              child: tile,
+            )
+          : tile,
     );
   }
 }
@@ -62,6 +73,7 @@ class SwitchSettingTile extends StatelessWidget {
     required this.title,
     this.subtitle,
     required this.value,
+    this.additionalInfo,
     this.onChanged,
     this.leading,
     super.key,
@@ -69,20 +81,82 @@ class SwitchSettingTile extends StatelessWidget {
 
   final Widget title;
   final Widget? subtitle;
+  final String? additionalInfo;
   final bool value;
   final void Function(bool value)? onChanged;
   final Widget? leading;
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
+    final tile = PlatformListTile(
       leading: leading,
-      title: title,
+      title: _SettingsTitle(
+        title: title,
+        additionalInfo: additionalInfo,
+      ),
       subtitle: subtitle,
       trailing: Switch.adaptive(
         value: value,
         onChanged: onChanged,
       ),
+    );
+
+    return additionalInfo != null
+        ? _SettingsInfoTooltip(
+            message: additionalInfo!,
+            child: tile,
+          )
+        : tile;
+  }
+}
+
+class _SettingsInfoTooltip extends StatelessWidget {
+  const _SettingsInfoTooltip({
+    required this.message,
+    required this.child,
+  });
+
+  final String message;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: message,
+      margin: const EdgeInsets.symmetric(horizontal: 16.0),
+      showDuration: const Duration(seconds: 4),
+      child: child,
+    );
+  }
+}
+
+class _SettingsTitle extends StatelessWidget {
+  const _SettingsTitle({
+    required this.title,
+    this.additionalInfo,
+  });
+
+  final Widget title;
+  final String? additionalInfo;
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTextStyle.merge(
+      maxLines: 2,
+      child: additionalInfo != null
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                title,
+                const SizedBox(width: 5.0),
+                Icon(
+                  defaultTargetPlatform == TargetPlatform.iOS
+                      ? CupertinoIcons.info
+                      : Icons.info_outline,
+                ),
+              ],
+            )
+          : title,
     );
   }
 }
@@ -104,7 +178,7 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
   });
 
   final List<T> choices;
-  final Enum selectedItem;
+  final T selectedItem;
   final Widget Function(T choice) titleBuilder;
   final Widget Function(T choice)? subtitleBuilder;
   final Widget Function(T choice)? leadingBuilder;

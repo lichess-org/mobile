@@ -189,10 +189,10 @@ packages:
     dependency: "direct main"
     description:
       name: chessground
-      sha256: b2a8f247ffc0d6ce757cd770c5ea5091a1a2fb6d043bf8e08168dfd3b4efcf4f
+      sha256: "4104165818cbe2b6ce9e15481afdee4e3cb791a59cbb98b755f7ee1e1a1bf671"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.3"
+    version: "1.6.1"
   ci:
     dependency: transitive
     description:

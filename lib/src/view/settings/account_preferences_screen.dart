@@ -57,6 +57,55 @@ class _Body extends ConsumerWidget {
             children: [
               ListSection(
                 header: Text(
+                  context.l10n.preferencesDisplay,
+                ),
+                hasLeading: false,
+                children: [
+                  SettingsListTile(
+                    settingsLabel: Text(
+                      context.l10n.preferencesZenMode,
+                    ),
+                    settingsValue: data.zenMode.label(context),
+                    showCupertinoTrailingValue: false,
+                    onTap: () {
+                      if (defaultTargetPlatform == TargetPlatform.android) {
+                        showChoicePicker(
+                          context,
+                          choices: Zen.values,
+                          selectedItem: data.zenMode,
+                          labelBuilder: (t) => Text(t.label(context)),
+                          onSelectedItemChanged: (Zen? value) {
+                            ref
+                                .read(accountPreferencesProvider.notifier)
+                                .setZen(value ?? data.zenMode);
+                          },
+                        );
+                      } else {
+                        pushPlatformRoute(
+                          context,
+                          title: context.l10n.preferencesZenMode,
+                          builder: (context) => const ZenSettingsScreen(),
+                        );
+                      }
+                    },
+                  ),
+                  SwitchSettingTile(
+                    title: Text(
+                      context.l10n.preferencesShowPlayerRatings,
+                    ),
+                    value: data.showRatings.value,
+                    onChanged: (value) {
+                      ref
+                          .read(accountPreferencesProvider.notifier)
+                          .setShowRatings(BooleanPref(value));
+                    },
+                    additionalInfo:
+                        context.l10n.preferencesExplainShowPlayerRatings,
+                  ),
+                ],
+              ),
+              ListSection(
+                header: Text(
                   context.l10n.preferencesGameBehavior,
                 ),
                 hasLeading: false,
@@ -64,7 +113,6 @@ class _Body extends ConsumerWidget {
                   SwitchSettingTile(
                     title: Text(
                       context.l10n.preferencesPremovesPlayingDuringOpponentTurn,
-                      maxLines: 2,
                     ),
                     value: data.premove.value,
                     onChanged: (value) {
@@ -76,7 +124,6 @@ class _Body extends ConsumerWidget {
                   SwitchSettingTile(
                     title: Text(
                       context.l10n.preferencesConfirmResignationAndDrawOffers,
-                      maxLines: 2,
                     ),
                     value: data.confirmResign.value,
                     onChanged: (value) {
@@ -88,7 +135,6 @@ class _Body extends ConsumerWidget {
                   SettingsListTile(
                     settingsLabel: Text(
                       context.l10n.preferencesTakebacksWithOpponentApproval,
-                      maxLines: 2,
                     ),
                     settingsValue: data.takeback.label(context),
                     showCupertinoTrailingValue: false,
@@ -118,7 +164,6 @@ class _Body extends ConsumerWidget {
                   SettingsListTile(
                     settingsLabel: Text(
                       context.l10n.preferencesPromoteToQueenAutomatically,
-                      maxLines: 2,
                     ),
                     settingsValue: data.autoQueen.label(context),
                     showCupertinoTrailingValue: false,
@@ -149,7 +194,6 @@ class _Body extends ConsumerWidget {
                     settingsLabel: Text(
                       context.l10n
                           .preferencesClaimDrawOnThreefoldRepetitionAutomatically,
-                      maxLines: 2,
                     ),
                     settingsValue: data.autoThreefold.label(context),
                     showCupertinoTrailingValue: false,
@@ -180,7 +224,6 @@ class _Body extends ConsumerWidget {
                   SettingsListTile(
                     settingsLabel: Text(
                       context.l10n.preferencesMoveConfirmation,
-                      maxLines: 2,
                     ),
                     settingsValue: data.submitMove.label(context),
                     showCupertinoTrailingValue: false,
@@ -198,6 +241,8 @@ class _Body extends ConsumerWidget {
                         }
                       });
                     },
+                    additionalInfo: context
+                        .l10n.preferencesExplainCanThenBeTemporarilyDisabled,
                   ),
                 ],
               ),
@@ -210,7 +255,6 @@ class _Body extends ConsumerWidget {
                   SettingsListTile(
                     settingsLabel: Text(
                       context.l10n.preferencesGiveMoreTime,
-                      maxLines: 2,
                     ),
                     settingsValue: data.moretime.label(context),
                     showCupertinoTrailingValue: false,
@@ -239,6 +283,46 @@ class _Body extends ConsumerWidget {
                 ],
               ),
             ],
+          ),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Center(child: Text(err.toString())),
+    );
+  }
+}
+
+class ZenSettingsScreen extends ConsumerWidget {
+  const ZenSettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final accountPrefs = ref.watch(accountPreferencesProvider);
+    return accountPrefs.when(
+      data: (data) {
+        if (data == null) {
+          return const Center(
+            child: Text('You must be logged in to view this page.'),
+          );
+        }
+
+        return CupertinoPageScaffold(
+          navigationBar: const CupertinoNavigationBar(),
+          child: SafeArea(
+            child: ListView(
+              children: [
+                ChoicePicker(
+                  choices: Zen.values,
+                  selectedItem: data.zenMode,
+                  titleBuilder: (t) => Text(t.label(context)),
+                  onSelectedItemChanged: (Zen? v) {
+                    ref
+                        .read(accountPreferencesProvider.notifier)
+                        .setZen(v ?? data.zenMode);
+                  },
+                ),
+              ],
+            ),
           ),
         );
       },

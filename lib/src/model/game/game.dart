@@ -121,10 +121,12 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
 }
 
 typedef GamePrefs = ({
+  bool showRatings,
   bool enablePremove,
   AutoQueen autoQueen,
   bool confirmResign,
   bool submitMove,
+  Zen zenMode,
 });
 
 enum GameSource {

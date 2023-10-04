@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -23,7 +24,6 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/wakelock.dart';
@@ -31,6 +31,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
 import 'game_screen_providers.dart';
+import 'game_player.dart';
 import 'ping_rating.dart';
 import 'lobby_game_loading_board.dart';
 import 'game_settings.dart';
@@ -257,18 +258,30 @@ class _Body extends ConsumerWidget {
         ref: ref,
       ),
     );
+    final shouldShowMaterialDiff = ref.watch(
+      boardPreferencesProvider.select(
+        (prefs) => prefs.showMaterialDifference,
+      ),
+    );
+    final blindfoldMode = ref.watch(
+      boardPreferencesProvider.select(
+        (prefs) => prefs.blindfoldMode,
+      ),
+    );
 
     final position = gameState.game.positionAt(gameState.stepCursor);
     final sideToMove = position.turn;
     final youAre = gameState.game.youAre ?? Side.white;
 
-    final black = BoardPlayer(
+    final black = GamePlayer(
       player: gameState.game.black,
-      materialDiff:
-          gameState.game.materialDiffAt(gameState.stepCursor, Side.black),
+      materialDiff: shouldShowMaterialDiff
+          ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
+          : null,
       timeToMove: sideToMove == Side.black ? gameState.timeToMove : null,
       shouldLinkToUserProfile: youAre != Side.black,
       mePlaying: youAre == Side.black,
+      zenMode: gameState.isZenModeEnabled,
       confirmMoveCallbacks:
           youAre == Side.black && gameState.moveToConfirm != null
               ? (
@@ -292,13 +305,15 @@ class _Body extends ConsumerWidget {
             )
           : null,
     );
-    final white = BoardPlayer(
+    final white = GamePlayer(
       player: gameState.game.white,
-      materialDiff:
-          gameState.game.materialDiffAt(gameState.stepCursor, Side.white),
+      materialDiff: shouldShowMaterialDiff
+          ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
+          : null,
       timeToMove: sideToMove == Side.white ? gameState.timeToMove : null,
       shouldLinkToUserProfile: youAre != Side.white,
       mePlaying: youAre == Side.white,
+      zenMode: gameState.isZenModeEnabled,
       confirmMoveCallbacks:
           youAre == Side.white && gameState.moveToConfirm != null
               ? (
@@ -336,6 +351,7 @@ class _Body extends ConsumerWidget {
               boardSettingsOverrides: BoardSettingsOverrides(
                 autoQueenPromotion: gameState.canAutoQueen,
                 autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
+                blindfoldMode: blindfoldMode,
               ),
               onMove: (move, {isDrop, isPremove}) {
                 ref.read(ctrlProvider.notifier).onUserMove(
