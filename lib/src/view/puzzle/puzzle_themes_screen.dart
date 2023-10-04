@@ -69,44 +69,16 @@ class _Body extends ConsumerWidget {
     final newThemes = ref.watch(puzzleThemeProvider);
 
     return SafeArea(
-      child: savedThemesConnectivity.when(
+      child: newThemes.when(
         data: (data) {
           return SingleChildScrollView(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final crossAxisCount =
-                    math.min(3, (constraints.maxWidth / 300).floor());
-                return savedThemesConnectivity.when(
-                  data: (data) {
-                    return LayoutGrid(
-                      columnSizes: List.generate(
-                        crossAxisCount,
-                        (_) => 1.fr,
-                      ),
-                      rowSizes: List.generate(
-                        (list.length / crossAxisCount).ceil(),
-                        (_) => auto,
-                      ),
-                      children: [
-                        for (final category in list)
-                          _Category(
-                            category: category,
-                            savedThemes: data.$2,
-                            isOnline: data.$1,
-                          ),
-                      ],
-                    );
-                  },
-                  loading: () => const Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Center(child: CircularProgressIndicator.adaptive()),
-                    ],
+            child: Column(
+              children: [
+                for (final category in data)
+                  _Category2(
+                    category: category,
                   ),
-                  error: (error, stack) =>
-                      const Center(child: Text('Could not load saved themes.')),
-                );
-              },
+              ],
             ),
           );
         },
@@ -179,6 +151,27 @@ class _Category extends ConsumerWidget {
                   : null,
             ),
           ),
+      ],
+    );
+  }
+}
+
+class _Category2 extends ConsumerWidget {
+  const _Category2({
+    required this.category,
+  });
+
+  final PuzzleThemeFamily category;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ExpansionTile(
+      title: Text(category.name),
+      children: [
+        ListSection(
+          children: category.themes
+              .map((theme) => PlatformListTile(title: Text(theme.name)))
+              .toList(),
+        ),
       ],
     );
   }
