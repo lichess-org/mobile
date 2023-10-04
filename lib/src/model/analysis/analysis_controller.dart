@@ -36,7 +36,7 @@ class AnalysisOptions with _$AnalysisOptions {
 class AnalysisController extends _$AnalysisController {
   late Root _root;
 
-  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
+  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 500));
 
   Timer? _startEngineEvalTimer;
 
@@ -79,7 +79,7 @@ class AnalysisController extends _$AnalysisController {
     );
 
     _startEngineEvalTimer = Timer(const Duration(milliseconds: 200), () {
-      _startEngineEval();
+      _debouncedStartEngineEval();
     });
 
     return AnalysisState(
@@ -240,7 +240,7 @@ class AnalysisController extends _$AnalysisController {
     }
 
     if (pathChange) {
-      _startEngineEval();
+      _debouncedStartEngineEval();
     }
   }
 
@@ -265,21 +265,25 @@ class AnalysisController extends _$AnalysisController {
 
   void _startEngineEval() {
     if (!state.isEngineAvailable) return;
-    _engineEvalDebounce(
-      () => ref
-          .read(
-            engineEvaluationProvider(state.evaluationContext).notifier,
-          )
-          .start(
-            state.currentPath,
-            _root.nodesOn(state.currentPath).map(Step.fromNode),
-            state.currentNode.position,
-            shouldEmit: (work) => work.path == state.currentPath,
-          )
-          ?.forEach(
-            (t) => _root.updateAt(t.$1.path, (node) => node.eval = t.$2),
-          ),
-    );
+    ref
+        .read(
+          engineEvaluationProvider(state.evaluationContext).notifier,
+        )
+        .start(
+          state.currentPath,
+          _root.nodesOn(state.currentPath).map(Step.fromNode),
+          state.currentNode.position,
+          shouldEmit: (work) => work.path == state.currentPath,
+        )
+        ?.forEach(
+          (t) => _root.updateAt(t.$1.path, (node) => node.eval = t.$2),
+        );
+  }
+
+  void _debouncedStartEngineEval() {
+    _engineEvalDebounce(() {
+      _startEngineEval();
+    });
   }
 
   void _stopEngineEval() {
