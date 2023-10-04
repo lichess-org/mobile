@@ -695,10 +695,8 @@ class _AnalysisSettings extends ConsumerWidget {
             title: Text(context.l10n.toggleLocalEvaluation),
             value: prefs.enableLocalEvaluation,
             onChanged: state.isLocalEvaluationAllowed
-                ? (value) {
-                    ref
-                        .read(ctrlProvider.notifier)
-                        .toggleLocalEvaluation(value);
+                ? (_) {
+                    ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
                   }
                 : null,
           ),

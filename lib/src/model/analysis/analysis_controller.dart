@@ -125,14 +125,16 @@ class AnalysisController extends _$AnalysisController {
     _setPath(path);
   }
 
-  void toggleLocalEvaluation(bool value) {
+  void toggleLocalEvaluation() {
     ref
         .read(analysisPreferencesProvider.notifier)
         .toggleEnableLocalEvaluation();
 
-    state = state.copyWith(isLocalEvaluationEnabled: value);
+    state = state.copyWith(
+      isLocalEvaluationEnabled: !state.isLocalEvaluationEnabled,
+    );
 
-    if (value) {
+    if (state.isEngineAvailable) {
       _startEngineEval();
     } else {
       _stopEngineEval();
@@ -261,11 +263,8 @@ class AnalysisController extends _$AnalysisController {
     }
   }
 
-  bool get _isEngineEnabled =>
-      ref.read(analysisPreferencesProvider).enableLocalEvaluation;
-
   void _startEngineEval() {
-    if (!_isEngineEnabled || !state.isEngineAvailable) return;
+    if (!state.isEngineAvailable) return;
     _engineEvalDebounce(
       () => ref
           .read(
