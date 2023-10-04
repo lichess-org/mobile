@@ -114,10 +114,7 @@ PlayableGameMeta _playableGameMetaFromPick(RequiredPick pick) {
 
 GamePrefs _gamePrefsFromPick(RequiredPick pick) {
   return (
-    showMaterialDiff: pick('showCaptured').asBoolOrFalse(),
     showRatings: pick('showRatings').asBoolOrFalse(),
-    showMoveList: pick('showReplay').asBoolOrFalse(),
-    blindfold: pick('blindfold').asBoolOrFalse(),
     enablePremove: pick('enablePremove').asBoolOrFalse(),
     autoQueen: AutoQueen.fromInt(pick('autoQueen').asIntOrThrow()),
     confirmResign: pick('confirmResign').asBoolOrFalse(),

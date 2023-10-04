@@ -122,9 +122,6 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
 
 typedef GamePrefs = ({
   bool showRatings,
-  bool showMaterialDiff,
-  bool showMoveList,
-  bool blindfold,
   bool enablePremove,
   AutoQueen autoQueen,
   bool confirmResign,

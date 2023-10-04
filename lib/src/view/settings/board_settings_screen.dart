@@ -60,7 +60,6 @@ class _Body extends ConsumerWidget {
               SwitchSettingTile(
                 title: Text(
                   context.l10n.preferencesPieceDestinations,
-                  maxLines: 2,
                 ),
                 value: boardPrefs.showLegalMoves,
                 onChanged: (value) {
@@ -72,7 +71,6 @@ class _Body extends ConsumerWidget {
               SwitchSettingTile(
                 title: Text(
                   context.l10n.preferencesBoardHighlights,
-                  maxLines: 2,
                 ),
                 value: boardPrefs.boardHighlights,
                 onChanged: (value) {
@@ -84,7 +82,6 @@ class _Body extends ConsumerWidget {
               SwitchSettingTile(
                 title: Text(
                   context.l10n.preferencesBoardCoordinates,
-                  maxLines: 2,
                 ),
                 value: boardPrefs.coordinates,
                 onChanged: (value) {
@@ -96,13 +93,34 @@ class _Body extends ConsumerWidget {
               SwitchSettingTile(
                 title: Text(
                   context.l10n.preferencesPieceAnimation,
-                  maxLines: 2,
                 ),
                 value: boardPrefs.pieceAnimation,
                 onChanged: (value) {
                   ref
                       .read(boardPreferencesProvider.notifier)
                       .togglePieceAnimation();
+                },
+              ),
+              SwitchSettingTile(
+                title: Text(
+                  context.l10n.preferencesMaterialDifference,
+                ),
+                value: boardPrefs.showMaterialDifference,
+                onChanged: (value) {
+                  ref
+                      .read(boardPreferencesProvider.notifier)
+                      .toggleShowMaterialDifference();
+                },
+              ),
+              SwitchSettingTile(
+                title: Text(
+                  context.l10n.preferencesBlindfoldChess,
+                ),
+                value: boardPrefs.blindfoldMode,
+                onChanged: (value) {
+                  ref
+                      .read(boardPreferencesProvider.notifier)
+                      .toggleBlindfoldMode();
                 },
               ),
             ],

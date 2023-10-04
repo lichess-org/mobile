@@ -12,11 +12,8 @@ part 'account_preferences.g.dart';
 
 typedef AccountPrefState = ({
   // game display
-  BooleanPref materialDifference,
-  MoveList moveList,
   Zen zenMode,
   BooleanPref showRatings,
-  BooleanPref blindfold,
   // game behavior
   BooleanPref premove,
   AutoQueen autoQueen,
@@ -37,11 +34,8 @@ final showRatingsPrefProvider = FutureProvider<bool>((ref) async {
 });
 
 final defaultAccountPreferences = (
-  materialDifference: const BooleanPref(true),
-  moveList: MoveList.always,
   zenMode: Zen.no,
   showRatings: const BooleanPref(true),
-  blindfold: const BooleanPref(false),
   premove: const BooleanPref(true),
   autoQueen: AutoQueen.premove,
   autoThreefold: AutoThreefold.always,
@@ -78,12 +72,8 @@ class AccountPreferences extends _$AccountPreferences {
     );
   }
 
-  Future<void> setMaterialDiff(BooleanPref value) =>
-      _setPref('captured', value);
-  Future<void> setMoveList(MoveList value) => _setPref('replay', value);
   Future<void> setZen(Zen value) => _setPref('zen', value);
   Future<void> setShowRatings(BooleanPref value) => _setPref('ratings', value);
-  Future<void> setBlindfold(BooleanPref value) => _setPref('blindfold', value);
 
   Future<void> setPremove(BooleanPref value) => _setPref('premove', value);
   Future<void> setTakeback(Takeback value) => _setPref('takeback', value);
@@ -125,44 +115,6 @@ class BooleanPref implements AccountPref<bool> {
         return const BooleanPref(false);
       default:
         throw Exception('Invalid value for BooleanPref');
-    }
-  }
-}
-
-enum MoveList implements AccountPref<int> {
-  never(0),
-  slow(1),
-  always(2);
-
-  const MoveList(this.value);
-
-  @override
-  final int value;
-
-  @override
-  String get toFormData => value.toString();
-
-  String label(BuildContext context) {
-    switch (this) {
-      case MoveList.never:
-        return context.l10n.never;
-      case MoveList.slow:
-        return context.l10n.onSlowGames;
-      case MoveList.always:
-        return context.l10n.always;
-    }
-  }
-
-  static MoveList fromInt(int value) {
-    switch (value) {
-      case 0:
-        return MoveList.never;
-      case 1:
-        return MoveList.slow;
-      case 2:
-        return MoveList.always;
-      default:
-        throw Exception('Invalid value for MoveList');
     }
   }
 }

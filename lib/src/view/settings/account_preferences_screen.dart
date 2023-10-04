@@ -61,45 +61,6 @@ class _Body extends ConsumerWidget {
                 ),
                 hasLeading: false,
                 children: [
-                  SwitchSettingTile(
-                    title: Text(
-                      context.l10n.preferencesMaterialDifference,
-                    ),
-                    value: data.materialDifference.value,
-                    onChanged: (value) {
-                      ref
-                          .read(accountPreferencesProvider.notifier)
-                          .setMaterialDiff(BooleanPref(value));
-                    },
-                  ),
-                  SettingsListTile(
-                    settingsLabel: Text(
-                      context.l10n.preferencesMoveListWhilePlaying,
-                    ),
-                    settingsValue: data.moveList.label(context),
-                    showCupertinoTrailingValue: false,
-                    onTap: () {
-                      if (defaultTargetPlatform == TargetPlatform.android) {
-                        showChoicePicker(
-                          context,
-                          choices: MoveList.values,
-                          selectedItem: data.moveList,
-                          labelBuilder: (t) => Text(t.label(context)),
-                          onSelectedItemChanged: (MoveList? value) {
-                            ref
-                                .read(accountPreferencesProvider.notifier)
-                                .setMoveList(value ?? data.moveList);
-                          },
-                        );
-                      } else {
-                        pushPlatformRoute(
-                          context,
-                          title: context.l10n.preferencesMoveListWhilePlaying,
-                          builder: (context) => const MoveListSettingsScreen(),
-                        );
-                      }
-                    },
-                  ),
                   SettingsListTile(
                     settingsLabel: Text(
                       context.l10n.preferencesZenMode,
@@ -126,17 +87,6 @@ class _Body extends ConsumerWidget {
                           builder: (context) => const ZenSettingsScreen(),
                         );
                       }
-                    },
-                  ),
-                  SwitchSettingTile(
-                    title: Text(
-                      context.l10n.preferencesBlindfoldChess,
-                    ),
-                    value: data.blindfold.value,
-                    onChanged: (value) {
-                      ref
-                          .read(accountPreferencesProvider.notifier)
-                          .setBlindfold(BooleanPref(value));
                     },
                   ),
                   SwitchSettingTile(
@@ -333,46 +283,6 @@ class _Body extends ConsumerWidget {
                 ],
               ),
             ],
-          ),
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Center(child: Text(err.toString())),
-    );
-  }
-}
-
-class MoveListSettingsScreen extends ConsumerWidget {
-  const MoveListSettingsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final accountPrefs = ref.watch(accountPreferencesProvider);
-    return accountPrefs.when(
-      data: (data) {
-        if (data == null) {
-          return const Center(
-            child: Text('You must be logged in to view this page.'),
-          );
-        }
-
-        return CupertinoPageScaffold(
-          navigationBar: const CupertinoNavigationBar(),
-          child: SafeArea(
-            child: ListView(
-              children: [
-                ChoicePicker(
-                  choices: MoveList.values,
-                  selectedItem: data.moveList,
-                  titleBuilder: (t) => Text(t.label(context)),
-                  onSelectedItemChanged: (MoveList? v) {
-                    ref
-                        .read(accountPreferencesProvider.notifier)
-                        .setMoveList(v ?? data.moveList);
-                  },
-                ),
-              ],
-            ),
           ),
         );
       },

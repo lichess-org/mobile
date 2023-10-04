@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -257,6 +258,16 @@ class _Body extends ConsumerWidget {
         ref: ref,
       ),
     );
+    final shouldShowMaterialDiff = ref.watch(
+      boardPreferencesProvider.select(
+        (prefs) => prefs.showMaterialDifference,
+      ),
+    );
+    final blindfoldMode = ref.watch(
+      boardPreferencesProvider.select(
+        (prefs) => prefs.blindfoldMode,
+      ),
+    );
 
     final position = gameState.game.positionAt(gameState.stepCursor);
     final sideToMove = position.turn;
@@ -264,7 +275,7 @@ class _Body extends ConsumerWidget {
 
     final black = GamePlayer(
       player: gameState.game.black,
-      materialDiff: gameState.shouldShowMaterialDiff
+      materialDiff: shouldShowMaterialDiff
           ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
           : null,
       timeToMove: sideToMove == Side.black ? gameState.timeToMove : null,
@@ -296,7 +307,7 @@ class _Body extends ConsumerWidget {
     );
     final white = GamePlayer(
       player: gameState.game.white,
-      materialDiff: gameState.shouldShowMaterialDiff
+      materialDiff: shouldShowMaterialDiff
           ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
           : null,
       timeToMove: sideToMove == Side.white ? gameState.timeToMove : null,
@@ -340,7 +351,7 @@ class _Body extends ConsumerWidget {
               boardSettingsOverrides: BoardSettingsOverrides(
                 autoQueenPromotion: gameState.canAutoQueen,
                 autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
-                blindfoldMode: gameState.blindfoldMode,
+                blindfoldMode: blindfoldMode,
               ),
               onMove: (move, {isDrop, isPremove}) {
                 ref.read(ctrlProvider.notifier).onUserMove(
@@ -376,14 +387,11 @@ class _Body extends ConsumerWidget {
                       duration: gameState.opponentLeftCountdown!,
                     )
                   : bottomPlayer,
-              moves: gameState.shouldShowMoveList
-                  ? gameState.game.steps
-                      .skip(1)
-                      .map((e) => e.sanMove!.san)
-                      .toList(growable: false)
-                  : null,
-              currentMoveIndex:
-                  gameState.shouldShowMoveList ? gameState.stepCursor : null,
+              moves: gameState.game.steps
+                  .skip(1)
+                  .map((e) => e.sanMove!.san)
+                  .toList(growable: false),
+              currentMoveIndex: gameState.stepCursor,
               onSelectMove: (moveIndex) {
                 ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
               },

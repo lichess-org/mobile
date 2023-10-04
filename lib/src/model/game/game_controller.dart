@@ -753,11 +753,8 @@ class GameState with _$GameState {
   }) = _GameState;
 
   // preferences
-  bool get shouldShowMaterialDiff => game.prefs?.showMaterialDiff ?? true;
-  bool get shouldShowMoveList => game.prefs?.showMoveList ?? true;
   bool get isZenModeEnabled =>
       zenModeGameSetting ?? game.prefs?.zenMode == Zen.yes;
-  bool get blindfoldMode => game.prefs?.blindfold ?? false;
   bool get canPremove => game.prefs?.enablePremove ?? true;
   bool get canAutoQueen => game.prefs?.autoQueen == AutoQueen.always;
   bool get canAutoQueenOnPremove => game.prefs?.autoQueen == AutoQueen.premove;
