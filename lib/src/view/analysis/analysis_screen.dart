@@ -606,6 +606,8 @@ class _EngineDepth extends ConsumerWidget {
                         CupertinoColors.tertiarySystemBackground,
                         context,
                       ),
+                transitionDuration: Duration.zero,
+                popoverTransitionBuilder: (_, child) => child,
               );
             },
             child: Container(
