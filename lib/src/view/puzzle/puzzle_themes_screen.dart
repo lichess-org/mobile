@@ -66,6 +66,7 @@ class _Body extends ConsumerWidget {
     // skip recommended category since we display it on the puzzle tab screen
     final list = ref.watch(puzzleThemeCategoriesProvider).skip(1).toList();
     final savedThemesConnectivity = ref.watch(_savedThemesConnectivityProvider);
+    final newThemes = ref.watch(puzzleThemeProvider);
 
     return SafeArea(
       child: savedThemesConnectivity.when(

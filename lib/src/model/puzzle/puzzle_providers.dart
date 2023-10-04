@@ -87,3 +87,9 @@ Future<StormDashboard> stormDashboard(StormDashboardRef ref) {
   final repo = ref.watch(puzzleRepositoryProvider);
   return Result.release(repo.stormDashboard(session!.user.id));
 }
+
+@Riverpod(keepAlive: true)
+Future<IList<PuzzleThemeFamily>> puzzleTheme(PuzzleThemeRef ref) {
+  final repo = ref.watch(puzzleRepositoryProvider);
+  return Result.release(repo.puzzleTheme());
+}

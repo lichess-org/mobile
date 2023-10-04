@@ -1,11 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 part 'puzzle_theme.g.dart';
+part 'puzzle_theme.freezed.dart';
 
 enum PuzzleTheme {
   mix,
@@ -508,4 +509,32 @@ PuzzleThemeL10n puzzleThemeL10n(BuildContext context, PuzzleTheme theme) {
         description: context.l10n.puzzleThemeZugzwangDescription,
       );
   }
+}
+
+@freezed
+class PuzzleThemeFamily with _$PuzzleThemeFamily {
+  const factory PuzzleThemeFamily({
+    required String name,
+    required IList<PuzzleTheme2> themes,
+  }) = _PuzzleThemeFamily;
+}
+
+@freezed
+class PuzzleTheme2 with _$PuzzleTheme2 {
+  const factory PuzzleTheme2({
+    required int count,
+    required String? desc,
+    required String key,
+    required String name,
+  }) = _PuzzleTheme2;
+}
+
+@freezed
+class PuzzleOpeningFamily with _$PuzzleOpeningFamily {
+  const factory PuzzleOpeningFamily({
+    required String key,
+    required String name,
+    required String count,
+    required IList<PuzzleTheme2> openings,
+  }) = _PuzzleOpeningFamily;
 }

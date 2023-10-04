@@ -230,6 +230,19 @@ class PuzzleRepository {
         );
   }
 
+  FutureResult<IList<PuzzleThemeFamily>> puzzleTheme() {
+    return apiClient.get(
+      Uri.parse('$kLichessHost/training/themes'),
+      headers: {"Accept": "application/json"},
+    ).flatMap(
+      (response) => readJsonObject(
+        response,
+        mapper: _puzzleThemeFromJson,
+        logger: _log,
+      ),
+    );
+  }
+
   Result<PuzzleBatchResponse> _decodeBatchResponse(http.Response response) {
     return readJsonObject(
       response,
@@ -308,6 +321,9 @@ Puzzle _puzzleFromPick(RequiredPick pick) {
 
 StormDashboard _stormDashboardFromJson(Map<String, dynamic> json) =>
     _stormDashboardFromPick(pick(json).required());
+
+IList<PuzzleThemeFamily> _puzzleThemeFromJson(Map<String, dynamic> json) =>
+    _puzzleThemeFromPick(pick(json).required());
 
 StormDashboard _stormDashboardFromPick(RequiredPick pick) {
   final dateFormat = DateFormat('yyyy/M/d');
@@ -449,3 +465,17 @@ PuzzleDashboardData _puzzleDashboardDataFromPick(
       performance: results('performance').asIntOrThrow(),
       theme: puzzleThemeNameMap.get(themeKey) ?? PuzzleTheme.mix,
     );
+
+IList<PuzzleThemeFamily> _puzzleThemeFromPick(RequiredPick pick) {
+  return pick('themes').asMapOrThrow().keys.map((key) {
+    final themes = pick('themes', key.toString()).asListOrThrow((listPick) {
+      return PuzzleTheme2(
+        count: listPick('count').asIntOrThrow(),
+        desc: listPick('desc').asStringOrThrow(),
+        key: listPick('key').asStringOrThrow(),
+        name: listPick('name').asStringOrThrow(),
+      );
+    }).toIList();
+    return PuzzleThemeFamily(name: key.toString(), themes: themes);
+  }).toIList();
+}
