@@ -182,6 +182,9 @@ class _WatchTvWidget extends ConsumerWidget {
 
     return featuredChannels.when(
       data: (data) {
+        if (data.isEmpty) {
+          return const SizedBox.shrink();
+        }
         return ListSection(
           header: const Text('Lichess TV'),
           hasLeading: true,
