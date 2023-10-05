@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 
 part 'analysis_controller.g.dart';
@@ -26,8 +25,10 @@ class AnalysisOptions with _$AnalysisOptions {
     required ID id,
     required bool isLocalEvaluationAllowed,
     required Variant variant,
-    required IList<GameStep> steps,
     required Side orientation,
+    required String initialFen,
+    required int initialPly,
+    required IList<Move> moves,
     LightOpening? opening,
   }) = _AnalysisOptions;
 }
@@ -46,21 +47,33 @@ class AnalysisController extends _$AnalysisController {
       _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
     });
-    _root = Root(
-      ply: options.steps[0].ply,
-      position: options.steps[0].position,
+
+    final initialPosition = Position.setupPosition(
+      options.variant.rules,
+      Setup.parseFen(options.initialFen),
     );
 
+    _root = Root(
+      ply: options.initialPly,
+      position: initialPosition,
+    );
+
+    int ply = options.initialPly;
+    Position position = initialPosition;
     Node current = _root;
-    options.steps.skip(1).forEach((step) {
+    for (final move in options.moves) {
+      final (newPos, san) = position.playToSan(move);
+      position = newPos;
+      ply++;
+
       final nextNode = Branch(
-        ply: step.ply,
-        sanMove: step.sanMove!,
-        position: step.position,
+        ply: ply,
+        sanMove: SanMove(san, move),
+        position: position,
       );
       current.addChild(nextNode);
       current = nextNode;
-    });
+    }
 
     final currentPath = _root.mainlinePath;
 

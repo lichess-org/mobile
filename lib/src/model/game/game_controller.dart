@@ -6,6 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:logging/logging.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -827,7 +828,13 @@ class GameState with _$GameState {
   AnalysisOptions get analysisOptions => AnalysisOptions(
         isLocalEvaluationAllowed: true,
         variant: game.meta.variant,
-        steps: game.steps,
+        initialFen: game.initialPosition.fen,
+        initialPly: game.initialPly,
+        moves: IList(
+          game.steps
+              .where((e) => e.sanMove != null)
+              .map((e) => e.sanMove!.move),
+        ),
         orientation: game.youAre ?? Side.white,
         id: game.meta.id,
       );

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -240,24 +241,33 @@ class _BottomBar extends ConsumerWidget {
             BottomBarIconButton(
               semanticsLabel: context.l10n.gameAnalysis,
               onPressed: ref.read(gameCursorProvider(gameData.id)).hasValue
-                  ? () => pushPlatformRoute(
+                  ? () {
+                      final game = ref
+                          .read(gameCursorProvider(gameData.id))
+                          .requireValue
+                          .$1;
+
+                      pushPlatformRoute(
                         context,
                         builder: (context) => AnalysisScreen(
                           title: context.l10n.gameAnalysis,
                           options: AnalysisOptions(
                             isLocalEvaluationAllowed: true,
                             variant: gameData.variant,
-                            steps: ref
-                                .read(gameCursorProvider(gameData.id))
-                                .requireValue
-                                .$1
-                                .steps,
+                            initialFen: game.initialPosition.fen,
+                            initialPly: game.initialPly,
+                            moves: IList(
+                              game.steps
+                                  .where((e) => e.sanMove != null)
+                                  .map((e) => e.sanMove!.move),
+                            ),
                             orientation: orientation,
                             id: gameData.id,
                             opening: gameData.opening,
                           ),
                         ),
-                      )
+                      );
+                    }
                   : null,
               icon: const Icon(Icons.biotech),
             ),

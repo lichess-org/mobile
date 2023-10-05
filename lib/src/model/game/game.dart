@@ -43,6 +43,9 @@ mixin IndexableSteps on BaseGame {
     return steps.last.sanMove?.move;
   }
 
+  Position get initialPosition => steps.first.position;
+  int get initialPly => steps.first.ply;
+
   Position get lastPosition => steps.last.position;
 
   int get lastPly => steps.last.ply;

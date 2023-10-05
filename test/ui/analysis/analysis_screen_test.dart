@@ -21,25 +21,15 @@ import '../../test_app.dart';
 
 void main() {
   // ignore: avoid_dynamic_calls
-  final moves = jsonDecode(gameResponse)['moves'].split(' ') as List<String>;
+  final sanMoves = jsonDecode(gameResponse)['moves'].split(' ') as List<String>;
   Position position = Chess.initial;
-  int index = 0;
-  final List<GameStep> steps = [GameStep(ply: index, position: position)];
+  final List<Move> moves = [];
 
-  for (final san in moves) {
-    index++;
+  for (final san in sanMoves) {
     final move = position.parseSan(san);
     position = position.playUnchecked(move!);
-    steps.add(
-      GameStep(
-        ply: index,
-        sanMove: SanMove(san, move),
-        position: position,
-      ),
-    );
+    moves.add(move);
   }
-
-  final gameStep = steps.toIList();
 
   group('Analysis Screen', () {
     testWidgets('displays correct move and position', (tester) async {
@@ -49,7 +39,9 @@ void main() {
           options: AnalysisOptions(
             isLocalEvaluationAllowed: false,
             variant: Variant.standard,
-            steps: gameStep,
+            initialFen: Chess.initial.fen,
+            initialPly: 0,
+            moves: moves.toIList(),
             orientation: Side.white,
             id: gameData.id,
           ),
@@ -75,7 +67,9 @@ void main() {
           options: AnalysisOptions(
             isLocalEvaluationAllowed: false,
             variant: Variant.standard,
-            steps: gameStep,
+            initialFen: Chess.initial.fen,
+            initialPly: 0,
+            moves: moves.toIList(),
             orientation: Side.white,
             id: gameData.id,
           ),
