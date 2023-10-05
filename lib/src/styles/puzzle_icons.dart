@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-class PuzzleIcon {
-  PuzzleIcon._();
+class PuzzleIcons {
+  PuzzleIcons._();
 
   static const _kFontFam = 'LichessPuzzleIcons';
   static const String? _kFontPkg = null;

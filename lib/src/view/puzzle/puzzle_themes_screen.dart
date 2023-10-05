@@ -76,7 +76,7 @@ class _Body extends ConsumerWidget {
             child: Column(
               children: [
                 for (final category in data)
-                  _Category2(
+                  _CategoryOnline(
                     category: category,
                   ),
               ],
@@ -157,8 +157,8 @@ class _Category extends ConsumerWidget {
   }
 }
 
-class _Category2 extends ConsumerWidget {
-  const _Category2({
+class _CategoryOnline extends ConsumerWidget {
+  const _CategoryOnline({
     required this.category,
   });
 
@@ -178,7 +178,29 @@ class _Category2 extends ConsumerWidget {
         children: [
           ListSection(
             children: category.themes
-                .map((theme) => PlatformListTile(title: Text(theme.name)))
+                .map(
+                  (theme) => PlatformListTile(
+                    leading: Icon(puzzleThemeIcon(theme.key)),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(puzzleThemeL10n(context, theme.key).name),
+                        Text(
+                          '${theme.count}',
+                          style: TextStyle(
+                            color: textShade(context, 0.5),
+                          ),
+                        ),
+                      ],
+                    ),
+                    subtitle: Text(
+                      puzzleThemeL10n(context, theme.key).description,
+                      maxLines: 5,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    isThreeLine: true,
+                  ),
+                )
                 .toList(),
           ),
         ],

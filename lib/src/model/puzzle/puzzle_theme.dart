@@ -515,127 +515,127 @@ PuzzleThemeL10n puzzleThemeL10n(BuildContext context, PuzzleTheme theme) {
 IconData puzzleThemeIcon(PuzzleTheme theme) {
   switch (theme) {
     case PuzzleTheme.mix:
-      return PuzzleIcon.mix;
+      return PuzzleIcons.mix;
     case PuzzleTheme.advancedPawn:
-      return PuzzleIcon.advancedPawn;
+      return PuzzleIcons.advancedPawn;
     case PuzzleTheme.advantage:
-      return PuzzleIcon.advantage;
+      return PuzzleIcons.advantage;
     case PuzzleTheme.anastasiaMate:
-      return PuzzleIcon.anastasiaMate;
+      return PuzzleIcons.anastasiaMate;
     case PuzzleTheme.arabianMate:
-      return PuzzleIcon.arabianMate;
+      return PuzzleIcons.arabianMate;
     case PuzzleTheme.attackingF2F7:
-      return PuzzleIcon.attackingF2F7;
+      return PuzzleIcons.attackingF2F7;
     case PuzzleTheme.attraction:
-      return PuzzleIcon.attraction;
+      return PuzzleIcons.attraction;
     case PuzzleTheme.backRankMate:
-      return PuzzleIcon.backRankMate;
+      return PuzzleIcons.backRankMate;
     case PuzzleTheme.bishopEndgame:
-      return PuzzleIcon.bishopEndgame;
+      return PuzzleIcons.bishopEndgame;
     case PuzzleTheme.bodenMate:
-      return PuzzleIcon.bodenMate;
+      return PuzzleIcons.bodenMate;
     case PuzzleTheme.capturingDefender:
-      return PuzzleIcon.capturingDefender;
+      return PuzzleIcons.capturingDefender;
     case PuzzleTheme.castling:
-      return PuzzleIcon.castling;
+      return PuzzleIcons.castling;
     case PuzzleTheme.clearance:
-      return PuzzleIcon.clearance;
+      return PuzzleIcons.clearance;
     case PuzzleTheme.crushing:
-      return PuzzleIcon.crushing;
+      return PuzzleIcons.crushing;
     case PuzzleTheme.defensiveMove:
-      return PuzzleIcon.defensiveMove;
+      return PuzzleIcons.defensiveMove;
     case PuzzleTheme.deflection:
-      return PuzzleIcon.deflection;
+      return PuzzleIcons.deflection;
     case PuzzleTheme.discoveredAttack:
-      return PuzzleIcon.discoveredAttack;
+      return PuzzleIcons.discoveredAttack;
     case PuzzleTheme.doubleBishopMate:
-      return PuzzleIcon.doubleBishopMate;
+      return PuzzleIcons.doubleBishopMate;
     case PuzzleTheme.doubleCheck:
-      return PuzzleIcon.doubleCheck;
+      return PuzzleIcons.doubleCheck;
     case PuzzleTheme.dovetailMate:
-      return PuzzleIcon.dovetailMate;
+      return PuzzleIcons.dovetailMate;
     case PuzzleTheme.equality:
-      return PuzzleIcon.equality;
+      return PuzzleIcons.equality;
     case PuzzleTheme.endgame:
-      return PuzzleIcon.endgame;
+      return PuzzleIcons.endgame;
     case PuzzleTheme.enPassant:
-      return PuzzleIcon.enPassant;
+      return PuzzleIcons.enPassant;
     case PuzzleTheme.exposedKing:
-      return PuzzleIcon.exposedKing;
+      return PuzzleIcons.exposedKing;
     case PuzzleTheme.fork:
-      return PuzzleIcon.fork;
+      return PuzzleIcons.fork;
     case PuzzleTheme.hangingPiece:
-      return PuzzleIcon.hangingPiece;
+      return PuzzleIcons.hangingPiece;
     case PuzzleTheme.hookMate:
-      return PuzzleIcon.hookMate;
+      return PuzzleIcons.hookMate;
     case PuzzleTheme.interference:
-      return PuzzleIcon.interference;
+      return PuzzleIcons.interference;
     case PuzzleTheme.intermezzo:
-      return PuzzleIcon.intermezzo;
+      return PuzzleIcons.intermezzo;
     case PuzzleTheme.kingsideAttack:
-      return PuzzleIcon.kingsideAttack;
+      return PuzzleIcons.kingsideAttack;
     case PuzzleTheme.knightEndgame:
-      return PuzzleIcon.knightEndgame;
+      return PuzzleIcons.knightEndgame;
     case PuzzleTheme.long:
-      return PuzzleIcon.long;
+      return PuzzleIcons.long;
     case PuzzleTheme.master:
-      return PuzzleIcon.master;
+      return PuzzleIcons.master;
     case PuzzleTheme.masterVsMaster:
-      return PuzzleIcon.masterVsMaster;
+      return PuzzleIcons.masterVsMaster;
     case PuzzleTheme.mate:
-      return PuzzleIcon.mate;
+      return PuzzleIcons.mate;
     case PuzzleTheme.mateIn1:
-      return PuzzleIcon.mate;
+      return PuzzleIcons.mate;
     case PuzzleTheme.mateIn2:
-      return PuzzleIcon.mate;
+      return PuzzleIcons.mate;
     case PuzzleTheme.mateIn3:
-      return PuzzleIcon.mate;
+      return PuzzleIcons.mate;
     case PuzzleTheme.mateIn4:
-      return PuzzleIcon.mate;
+      return PuzzleIcons.mate;
     case PuzzleTheme.mateIn5:
-      return PuzzleIcon.mate;
+      return PuzzleIcons.mate;
     case PuzzleTheme.smotheredMate:
-      return PuzzleIcon.smotheredMate;
+      return PuzzleIcons.smotheredMate;
     case PuzzleTheme.middlegame:
-      return PuzzleIcon.middlegame;
+      return PuzzleIcons.middlegame;
     case PuzzleTheme.oneMove:
-      return PuzzleIcon.oneMove;
+      return PuzzleIcons.oneMove;
     case PuzzleTheme.opening:
-      return PuzzleIcon.opening;
+      return PuzzleIcons.opening;
     case PuzzleTheme.pawnEndgame:
-      return PuzzleIcon.pawnEndgame;
+      return PuzzleIcons.pawnEndgame;
     case PuzzleTheme.pin:
-      return PuzzleIcon.pin;
+      return PuzzleIcons.pin;
     case PuzzleTheme.promotion:
-      return PuzzleIcon.promotion;
+      return PuzzleIcons.promotion;
     case PuzzleTheme.queenEndgame:
-      return PuzzleIcon.queenEndgame;
+      return PuzzleIcons.queenEndgame;
     case PuzzleTheme.queenRookEndgame:
-      return PuzzleIcon.queenRookEndgame;
+      return PuzzleIcons.queenRookEndgame;
     case PuzzleTheme.queensideAttack:
-      return PuzzleIcon.queensideAttack;
+      return PuzzleIcons.queensideAttack;
     case PuzzleTheme.quietMove:
-      return PuzzleIcon.quietMove;
+      return PuzzleIcons.quietMove;
     case PuzzleTheme.rookEndgame:
-      return PuzzleIcon.rookEndgame;
+      return PuzzleIcons.rookEndgame;
     case PuzzleTheme.sacrifice:
-      return PuzzleIcon.sacrifice;
+      return PuzzleIcons.sacrifice;
     case PuzzleTheme.short:
-      return PuzzleIcon.short;
+      return PuzzleIcons.short;
     case PuzzleTheme.skewer:
-      return PuzzleIcon.skewer;
+      return PuzzleIcons.skewer;
     case PuzzleTheme.superGM:
-      return PuzzleIcon.superGM;
+      return PuzzleIcons.superGM;
     case PuzzleTheme.trappedPiece:
-      return PuzzleIcon.trappedPiece;
+      return PuzzleIcons.trappedPiece;
     case PuzzleTheme.underPromotion:
-      return PuzzleIcon.underPromotion;
+      return PuzzleIcons.underPromotion;
     case PuzzleTheme.veryLong:
-      return PuzzleIcon.veryLong;
+      return PuzzleIcons.veryLong;
     case PuzzleTheme.xRayAttack:
-      return PuzzleIcon.xRayAttack;
+      return PuzzleIcons.xRayAttack;
     case PuzzleTheme.zugzwang:
-      return PuzzleIcon.zugzwang;
+      return PuzzleIcons.zugzwang;
   }
 }
 
