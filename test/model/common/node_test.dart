@@ -156,7 +156,8 @@ void main() {
       );
 
       final eval = ClientEval(
-        fen: 'fen2',
+        ply: branch.ply,
+        position: branch.position,
         maxDepth: 20,
         cp: 100,
         depth: 10,
@@ -165,7 +166,6 @@ void main() {
         pvs: IList([
           PvData(moves: IList(const ['e2e4'])),
         ]),
-        position: branch.position,
         isComputing: false,
       );
 

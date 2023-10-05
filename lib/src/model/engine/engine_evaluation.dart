@@ -26,7 +26,7 @@ class EvaluationContext with _$EvaluationContext {
     /// and a new engine instance is created per context (puzzle, game, etc).
     required ID contextId,
     required Variant variant,
-    required String initialFen,
+    required Position initialPosition,
     required int multiPv,
     required int cores,
   }) = _EvaluationContext;
@@ -73,9 +73,8 @@ class EngineEvaluation extends _$EngineEvaluation {
       maxDepth: kMaxEngineDepth,
       multiPv: context.multiPv,
       path: path,
-      initialFen: context.initialFen,
+      initialPosition: context.initialPosition,
       steps: IList(steps),
-      currentPosition: position,
     );
 
     // cancel evaluation if we already have a cached eval at max depth

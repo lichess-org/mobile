@@ -343,9 +343,9 @@ class _EngineLines extends ConsumerWidget {
         (p) => p.numEvalLines,
       ),
     );
-    final eval =
-        ref.watch(engineEvaluationProvider(analysisState.evaluationContext)) ??
-            analysisState.currentNode.eval;
+    final engineEval =
+        ref.watch(engineEvaluationProvider(analysisState.evaluationContext));
+    final eval = engineEval ?? analysisState.currentNode.eval;
 
     final emptyLines = List.filled(
       numEvalLines,
@@ -357,12 +357,8 @@ class _EngineLines extends ConsumerWidget {
             ? eval.pvs
                 .take(numEvalLines)
                 .map(
-                  (pv) => _Engineline(
-                    ctrlProvider,
-                    pv.sanMoves(eval.position),
-                    analysisState.currentNode.ply,
-                    pv,
-                  ),
+                  (pv) =>
+                      _Engineline(ctrlProvider, eval.position, eval.ply, pv),
                 )
                 .toList()
             : emptyLines)
@@ -393,34 +389,34 @@ class _EngineLines extends ConsumerWidget {
 class _Engineline extends ConsumerWidget {
   const _Engineline(
     this.ctrlProvider,
-    this.moves,
-    this.initialPly,
+    this.fromPosition,
+    this.fromPly,
     this.pvData,
   );
 
   const _Engineline.empty(this.ctrlProvider)
-      : moves = const [],
-        pvData = const PvData(moves: IListConst([])),
-        initialPly = 0;
+      : pvData = const PvData(moves: IListConst([])),
+        fromPosition = Chess.initial,
+        fromPly = 0;
 
   final AnalysisControllerProvider ctrlProvider;
-  final List<String> moves;
-  final int initialPly;
+  final Position fromPosition;
+  final int fromPly;
   final PvData pvData;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (moves.isEmpty) {
+    if (pvData.moves.isEmpty) {
       return const SizedBox(
         height: kEvalGaugeSize,
         child: SizedBox.shrink(),
       );
     }
 
-    final builder = StringBuffer();
-    var ply = initialPly + 1;
-    moves.forEachIndexed((i, s) {
-      builder.write(
+    final lineBuffer = StringBuffer();
+    int ply = fromPly + 1;
+    pvData.sanMoves(fromPosition).forEachIndexed((i, s) {
+      lineBuffer.write(
         ply.isOdd
             ? '${(ply / 2).ceil()}. $s '
             : i == 0
@@ -471,7 +467,7 @@ class _Engineline extends ConsumerWidget {
               const SizedBox(width: 8.0),
               Expanded(
                 child: Text(
-                  builder.toString(),
+                  lineBuffer.toString(),
                   maxLines: 1,
                   softWrap: false,
                   style: const TextStyle(

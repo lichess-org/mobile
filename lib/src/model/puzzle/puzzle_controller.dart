@@ -86,7 +86,7 @@ class PuzzleController extends _$PuzzleController {
       puzzle: context.puzzle,
       glicko: context.glicko,
       mode: PuzzleMode.load,
-      initialFen: _gameTree.fen,
+      initialPosition: _gameTree.position,
       initialPath: initialPath,
       currentPath: UciPath.empty,
       node: _gameTree.view,
@@ -511,7 +511,7 @@ class PuzzleState with _$PuzzleState {
     required Puzzle puzzle,
     required PuzzleGlicko? glicko,
     required PuzzleMode mode,
-    required String initialFen,
+    required Position initialPosition,
     required UciPath initialPath,
     required UciPath currentPath,
     required Side pov,
@@ -537,7 +537,7 @@ class PuzzleState with _$PuzzleState {
 
   EvaluationContext get evaluationContext => EvaluationContext(
         variant: Variant.standard,
-        initialFen: initialFen,
+        initialPosition: initialPosition,
         contextId: puzzle.puzzle.id,
         multiPv: 1,
         cores: maxEngineCores,

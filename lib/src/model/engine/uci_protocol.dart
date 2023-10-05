@@ -156,7 +156,8 @@ class UCIProtocol {
 
       if (multiPv == 1) {
         _currentEval = ClientEval(
-          fen: _work!.fen,
+          ply: _work!.ply,
+          position: _work!.position,
           maxDepth: _work!.maxDepth,
           depth: depth,
           nodes: nodes,
@@ -164,7 +165,6 @@ class UCIProtocol {
           mate: isMate ? ev : null,
           pvs: IList([pvData]),
           millis: elapsedMs,
-          position: _work!.currentPosition,
           isComputing: true,
         );
       } else if (_currentEval != null) {
@@ -218,7 +218,7 @@ class UCIProtocol {
       _sendAndLog(
         [
           'position fen',
-          _work!.initialFen,
+          _work!.initialPosition.fen,
           'moves',
           ..._work!.steps.map(
             (s) => _work!.variant == Variant.chess960

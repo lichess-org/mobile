@@ -24,13 +24,11 @@ class Work with _$Work {
     required int maxDepth,
     required int multiPv,
     bool? threatMode,
-    required String initialFen,
+    required Position initialPosition,
     required IList<Step> steps,
-    required Position currentPosition,
   }) = _Work;
 
-  /// The work position FEN.
-  String get fen => steps.lastOrNull?.fen ?? initialFen;
+  Position get position => steps.lastOrNull?.position ?? initialPosition;
 
   /// The work ply.
   int get ply => steps.lastOrNull?.ply ?? 0;
@@ -45,7 +43,7 @@ class Step with _$Step {
 
   const factory Step({
     required int ply,
-    required String fen,
+    required Position position,
     required SanMove sanMove,
     ClientEval? eval,
   }) = _Step;
@@ -53,7 +51,7 @@ class Step with _$Step {
   factory Step.fromNode(ViewBranch node) {
     return Step(
       ply: node.ply,
-      fen: node.fen,
+      position: node.position,
       sanMove: node.sanMove,
       eval: node.eval,
     );

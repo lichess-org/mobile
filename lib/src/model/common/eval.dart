@@ -12,13 +12,13 @@ class ClientEval with _$ClientEval {
   const ClientEval._();
 
   const factory ClientEval({
-    required String fen,
+    required int ply,
+    required Position position,
     required int depth,
     required int nodes,
     required IList<PvData> pvs,
     required int millis,
     required int maxDepth,
-    required Position position,
 
     /// Whether the engine is still computing.
     ///
@@ -83,10 +83,10 @@ class PvData with _$PvData {
     }
   }
 
-  List<String> sanMoves(Position currentPosition) {
-    var pos = currentPosition;
+  List<String> sanMoves(Position fromPosition) {
+    Position pos = fromPosition;
     final List<String> res = [];
-    for (final move in moves) {
+    for (final move in moves.sublist(0, math.min(12, moves.length))) {
       final (newPos, san) = pos.playToSan(Move.fromUci(move)!);
       res.add(san);
       pos = newPos;

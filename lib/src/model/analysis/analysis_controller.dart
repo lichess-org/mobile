@@ -72,14 +72,14 @@ class AnalysisController extends _$AnalysisController {
 
     final evalContext = EvaluationContext(
       variant: options.variant,
-      initialFen: _root.fen,
+      initialPosition: _root.position,
       contextId: options.id,
       multiPv: prefs.numEvalLines,
       cores: prefs.numEngineCores,
     );
 
-    _startEngineEvalTimer = Timer(const Duration(milliseconds: 200), () {
-      _debouncedStartEngineEval();
+    _startEngineEvalTimer = Timer(const Duration(milliseconds: 300), () {
+      _startEngineEval();
     });
 
     return AnalysisState(
@@ -322,7 +322,7 @@ class AnalysisState with _$AnalysisState {
       );
 
   Position get position => currentNode.position;
-  String get fen => currentNode.position.fen;
+  String get fen => currentNode.fen;
   bool get canGoNext => currentNode.children.isNotEmpty;
   bool get canGoBack => currentPath.size > initialPath.size;
 }
