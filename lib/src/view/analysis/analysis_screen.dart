@@ -241,7 +241,7 @@ class _Board extends ConsumerWidget {
             : analysisState.position.turn == Side.white
                 ? cg.InteractableSide.white
                 : cg.InteractableSide.black,
-        fen: analysisState.fen,
+        fen: analysisState.position.fen,
         isCheck: analysisState.position.isCheck,
         lastMove: analysisState.lastMove?.cg,
         sideToMove: analysisState.position.turn.cg,

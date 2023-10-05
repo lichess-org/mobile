@@ -24,14 +24,12 @@ part 'node.freezed.dart';
 abstract class Node {
   Node({
     required this.ply,
-    required this.fen,
     required this.position,
     this.eval,
     this.opening,
   });
 
   final int ply;
-  final String fen;
   final Position position;
 
   /// The evaluation of the position.
@@ -172,7 +170,6 @@ abstract class Node {
     final newNode = Branch(
       ply: 2 * (newPos.fullmoves - 1) + (newPos.turn == Side.white ? 0 : 1),
       sanMove: SanMove(newSan, move),
-      fen: newPos.fen,
       position: newPos,
     );
     return addNodeAt(path, newNode, prepend: prepend);
@@ -217,7 +214,6 @@ abstract class Node {
 class Branch extends Node {
   Branch({
     required super.ply,
-    required super.fen,
     required super.position,
     super.eval,
     super.opening,
@@ -233,7 +229,6 @@ class Branch extends Node {
   @override
   ViewBranch get view => ViewBranch(
         ply: ply,
-        fen: fen,
         position: position,
         sanMove: sanMove,
         eval: eval,
@@ -247,7 +242,7 @@ class Branch extends Node {
 
   @override
   String toString() {
-    return 'Branch(id: $id, ply: $ply, fen: $fen, sanMove: $sanMove, eval: $eval, children: $children)';
+    return 'Branch(id: $id, ply: $ply, fen: ${position.fen}, sanMove: $sanMove, eval: $eval, children: $children)';
   }
 }
 
@@ -257,7 +252,6 @@ class Branch extends Node {
 class Root extends Node {
   Root({
     required super.ply,
-    required super.fen,
     required super.position,
     super.eval,
   });
@@ -265,7 +259,6 @@ class Root extends Node {
   @override
   ViewRoot get view => ViewRoot(
         ply: ply,
-        fen: fen,
         position: position,
         eval: eval,
         children: IList(children.map((child) => child.view)),
@@ -279,7 +272,6 @@ class Root extends Node {
     Position position = Chess.initial;
     final root = Root(
       ply: ply,
-      fen: kInitialFEN,
       position: position,
     );
     Node current = root;
@@ -291,7 +283,6 @@ class Root extends Node {
       final nextNode = Branch(
         ply: ply,
         sanMove: SanMove(san, move),
-        fen: position.fen,
         position: position,
       );
       current.addChild(nextNode);
@@ -306,7 +297,6 @@ abstract class ViewNode {
   UciCharPair? get id;
   SanMove? get sanMove;
   int get ply;
-  String get fen;
   Position get position;
   IList<ViewBranch> get children;
   ClientEval? get eval;
@@ -319,7 +309,6 @@ class ViewRoot with _$ViewRoot implements ViewNode {
   const ViewRoot._();
   const factory ViewRoot({
     required int ply,
-    required String fen,
     required Position position,
     required IList<ViewBranch> children,
     ClientEval? eval,
@@ -343,7 +332,6 @@ class ViewBranch with _$ViewBranch implements ViewNode {
   const factory ViewBranch({
     required SanMove sanMove,
     required int ply,
-    required String fen,
     required Position position,
     Opening? opening,
     required IList<ViewBranch> children,

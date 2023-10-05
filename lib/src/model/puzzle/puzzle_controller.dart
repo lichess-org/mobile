@@ -485,7 +485,6 @@ class PuzzleController extends _$PuzzleController {
           nodes.add(
             Branch(
               ply: fromPly + index + 1,
-              fen: newPos.fen,
               position: newPos,
               sanMove: SanMove(newSan, move),
             ),
@@ -544,7 +543,7 @@ class PuzzleState with _$PuzzleState {
       );
 
   Position get position => node.position;
-  String get fen => node.fen;
+  String get fen => node.position.fen;
   bool get canGoNext => mode == PuzzleMode.view && node.children.isNotEmpty;
   bool get canGoBack =>
       mode == PuzzleMode.view && currentPath.size > initialPath.size;

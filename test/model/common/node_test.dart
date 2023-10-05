@@ -12,7 +12,6 @@ void main() {
     test('Root.fromPgn', () {
       final root = Root.fromPgn('e4 e5');
       expect(root.ply, equals(0));
-      expect(root.fen, equals(kInitialFEN));
       expect(root.position, equals(Chess.initial));
       expect(root.children.length, equals(1));
       final child = root.children.first;
@@ -20,7 +19,7 @@ void main() {
       expect(child.ply, equals(1));
       expect(child.sanMove, equals(SanMove('e4', Move.fromUci('e2e4')!)));
       expect(
-        child.fen,
+        child.position.fen,
         equals('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1'),
       );
       expect(
@@ -76,13 +75,11 @@ void main() {
     test('add child', () {
       final root = Root(
         ply: 0,
-        fen: 'fen',
         position: Chess.initial,
       );
       final child = Branch(
         ply: 1,
         sanMove: SanMove('e4', Move.fromUci('e2e4')!),
-        fen: 'fen2',
         position: Chess.initial,
       );
       root.addChild(child);
@@ -95,7 +92,6 @@ void main() {
       final child = Branch(
         ply: 1,
         sanMove: SanMove('d4', Move.fromUci('d2d4')!),
-        fen: 'fen2',
         position: Chess.initial,
       );
       root.prependChild(child);
@@ -140,7 +136,6 @@ void main() {
       final branch = Branch(
         ply: 2,
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
-        fen: 'fen2',
         position: Chess.initial,
       );
 
@@ -187,7 +182,6 @@ void main() {
       final branch = Branch(
         ply: 2,
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
-        fen: 'fen2',
         position: Chess.initial,
       );
       final (newPath, isNewNode) =
@@ -214,7 +208,6 @@ void main() {
       final branch = Branch(
         ply: 2,
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
-        fen: 'fen2',
         position: Chess.initial,
       );
       root.addNodeAt(
@@ -233,7 +226,6 @@ void main() {
       final branch = Branch(
         ply: 2,
         sanMove: SanMove('e5', Move.fromUci('e7e5')!),
-        fen: 'fen2',
         position: Chess.initial,
       );
       final (newPath, isNewNode) =
@@ -262,13 +254,11 @@ void main() {
       final branch = Branch(
         ply: 2,
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
-        fen: 'fen2',
         position: Chess.initial,
       );
       final branch2 = Branch(
         ply: 3,
         sanMove: SanMove('Na6', Move.fromUci('b8a6')!),
-        fen: 'fen3',
         position: Chess.initial,
       );
       root.addNodesAt(
@@ -298,7 +288,7 @@ void main() {
       expect(newNode?.ply, equals(3));
       expect(newNode?.sanMove, equals(SanMove('Nc3', move)));
       expect(
-        newNode?.fen,
+        newNode?.position.fen,
         equals(
           'rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2',
         ),
@@ -308,7 +298,7 @@ void main() {
       expect(testNode.children.length, equals(1));
       expect(testNode.children.first.sanMove, equals(SanMove('Nc3', move)));
       expect(
-        testNode.children.first.fen,
+        testNode.children.first.position.fen,
         equals(
           'rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2',
         ),

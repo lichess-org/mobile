@@ -48,7 +48,6 @@ class AnalysisController extends _$AnalysisController {
     });
     _root = Root(
       ply: options.steps[0].ply,
-      fen: options.steps[0].position.fen,
       position: options.steps[0].position,
     );
 
@@ -57,7 +56,6 @@ class AnalysisController extends _$AnalysisController {
       final nextNode = Branch(
         ply: step.ply,
         sanMove: step.sanMove!,
-        fen: step.position.fen,
         position: step.position,
       );
       current.addChild(nextNode);
@@ -86,7 +84,6 @@ class AnalysisController extends _$AnalysisController {
       id: options.id,
       isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
-      initialFen: _root.fen,
       initialPath: UciPath.empty,
       currentPath: currentPath,
       root: _root.view,
@@ -298,7 +295,6 @@ class AnalysisState with _$AnalysisState {
   const factory AnalysisState({
     required ViewRoot root,
     required ViewNode currentNode,
-    required String initialFen,
     required UciPath initialPath,
     required UciPath currentPath,
     required ID id,
@@ -322,7 +318,6 @@ class AnalysisState with _$AnalysisState {
       );
 
   Position get position => currentNode.position;
-  String get fen => currentNode.fen;
   bool get canGoNext => currentNode.children.isNotEmpty;
   bool get canGoBack => currentPath.size > initialPath.size;
 }
