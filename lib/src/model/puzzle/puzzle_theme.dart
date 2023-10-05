@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
 
 part 'puzzle_theme.g.dart';
 part 'puzzle_theme.freezed.dart';
@@ -511,22 +512,149 @@ PuzzleThemeL10n puzzleThemeL10n(BuildContext context, PuzzleTheme theme) {
   }
 }
 
+IconData puzzleThemeIcon(PuzzleTheme theme) {
+  switch (theme) {
+    case PuzzleTheme.mix:
+      return PuzzleIcon.mix;
+    case PuzzleTheme.advancedPawn:
+      return PuzzleIcon.advancedPawn;
+    case PuzzleTheme.advantage:
+      return PuzzleIcon.advantage;
+    case PuzzleTheme.anastasiaMate:
+      return PuzzleIcon.anastasiaMate;
+    case PuzzleTheme.arabianMate:
+      return PuzzleIcon.arabianMate;
+    case PuzzleTheme.attackingF2F7:
+      return PuzzleIcon.attackingF2F7;
+    case PuzzleTheme.attraction:
+      return PuzzleIcon.attraction;
+    case PuzzleTheme.backRankMate:
+      return PuzzleIcon.backRankMate;
+    case PuzzleTheme.bishopEndgame:
+      return PuzzleIcon.bishopEndgame;
+    case PuzzleTheme.bodenMate:
+      return PuzzleIcon.bodenMate;
+    case PuzzleTheme.capturingDefender:
+      return PuzzleIcon.capturingDefender;
+    case PuzzleTheme.castling:
+      return PuzzleIcon.castling;
+    case PuzzleTheme.clearance:
+      return PuzzleIcon.clearance;
+    case PuzzleTheme.crushing:
+      return PuzzleIcon.crushing;
+    case PuzzleTheme.defensiveMove:
+      return PuzzleIcon.defensiveMove;
+    case PuzzleTheme.deflection:
+      return PuzzleIcon.deflection;
+    case PuzzleTheme.discoveredAttack:
+      return PuzzleIcon.discoveredAttack;
+    case PuzzleTheme.doubleBishopMate:
+      return PuzzleIcon.doubleBishopMate;
+    case PuzzleTheme.doubleCheck:
+      return PuzzleIcon.doubleCheck;
+    case PuzzleTheme.dovetailMate:
+      return PuzzleIcon.dovetailMate;
+    case PuzzleTheme.equality:
+      return PuzzleIcon.equality;
+    case PuzzleTheme.endgame:
+      return PuzzleIcon.endgame;
+    case PuzzleTheme.enPassant:
+      return PuzzleIcon.enPassant;
+    case PuzzleTheme.exposedKing:
+      return PuzzleIcon.exposedKing;
+    case PuzzleTheme.fork:
+      return PuzzleIcon.fork;
+    case PuzzleTheme.hangingPiece:
+      return PuzzleIcon.hangingPiece;
+    case PuzzleTheme.hookMate:
+      return PuzzleIcon.hookMate;
+    case PuzzleTheme.interference:
+      return PuzzleIcon.interference;
+    case PuzzleTheme.intermezzo:
+      return PuzzleIcon.intermezzo;
+    case PuzzleTheme.kingsideAttack:
+      return PuzzleIcon.kingsideAttack;
+    case PuzzleTheme.knightEndgame:
+      return PuzzleIcon.knightEndgame;
+    case PuzzleTheme.long:
+      return PuzzleIcon.long;
+    case PuzzleTheme.master:
+      return PuzzleIcon.master;
+    case PuzzleTheme.masterVsMaster:
+      return PuzzleIcon.masterVsMaster;
+    case PuzzleTheme.mate:
+      return PuzzleIcon.mate;
+    case PuzzleTheme.mateIn1:
+      return PuzzleIcon.mate;
+    case PuzzleTheme.mateIn2:
+      return PuzzleIcon.mate;
+    case PuzzleTheme.mateIn3:
+      return PuzzleIcon.mate;
+    case PuzzleTheme.mateIn4:
+      return PuzzleIcon.mate;
+    case PuzzleTheme.mateIn5:
+      return PuzzleIcon.mate;
+    case PuzzleTheme.smotheredMate:
+      return PuzzleIcon.smotheredMate;
+    case PuzzleTheme.middlegame:
+      return PuzzleIcon.middlegame;
+    case PuzzleTheme.oneMove:
+      return PuzzleIcon.oneMove;
+    case PuzzleTheme.opening:
+      return PuzzleIcon.opening;
+    case PuzzleTheme.pawnEndgame:
+      return PuzzleIcon.pawnEndgame;
+    case PuzzleTheme.pin:
+      return PuzzleIcon.pin;
+    case PuzzleTheme.promotion:
+      return PuzzleIcon.promotion;
+    case PuzzleTheme.queenEndgame:
+      return PuzzleIcon.queenEndgame;
+    case PuzzleTheme.queenRookEndgame:
+      return PuzzleIcon.queenRookEndgame;
+    case PuzzleTheme.queensideAttack:
+      return PuzzleIcon.queensideAttack;
+    case PuzzleTheme.quietMove:
+      return PuzzleIcon.quietMove;
+    case PuzzleTheme.rookEndgame:
+      return PuzzleIcon.rookEndgame;
+    case PuzzleTheme.sacrifice:
+      return PuzzleIcon.sacrifice;
+    case PuzzleTheme.short:
+      return PuzzleIcon.short;
+    case PuzzleTheme.skewer:
+      return PuzzleIcon.skewer;
+    case PuzzleTheme.superGM:
+      return PuzzleIcon.superGM;
+    case PuzzleTheme.trappedPiece:
+      return PuzzleIcon.trappedPiece;
+    case PuzzleTheme.underPromotion:
+      return PuzzleIcon.underPromotion;
+    case PuzzleTheme.veryLong:
+      return PuzzleIcon.veryLong;
+    case PuzzleTheme.xRayAttack:
+      return PuzzleIcon.xRayAttack;
+    case PuzzleTheme.zugzwang:
+      return PuzzleIcon.zugzwang;
+  }
+}
+
 @freezed
 class PuzzleThemeFamily with _$PuzzleThemeFamily {
   const factory PuzzleThemeFamily({
     required String name,
-    required IList<PuzzleTheme2> themes,
+    required IList<PuzzleThemeData> themes,
   }) = _PuzzleThemeFamily;
 }
 
 @freezed
-class PuzzleTheme2 with _$PuzzleTheme2 {
-  const factory PuzzleTheme2({
+class PuzzleThemeData with _$PuzzleThemeData {
+  const factory PuzzleThemeData({
     required int count,
     required String? desc,
-    required String key,
+    required PuzzleTheme key,
     required String name,
-  }) = _PuzzleTheme2;
+  }) = _PuzzleThemeData;
 }
 
 @freezed
@@ -535,6 +663,6 @@ class PuzzleOpeningFamily with _$PuzzleOpeningFamily {
     required String key,
     required String name,
     required String count,
-    required IList<PuzzleTheme2> openings,
+    required IList<PuzzleThemeData> openings,
   }) = _PuzzleOpeningFamily;
 }

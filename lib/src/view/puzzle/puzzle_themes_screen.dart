@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
@@ -164,15 +165,24 @@ class _Category2 extends ConsumerWidget {
   final PuzzleThemeFamily category;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ExpansionTile(
-      title: Text(category.name),
-      children: [
-        ListSection(
-          children: category.themes
-              .map((theme) => PlatformListTile(title: Text(theme.name)))
-              .toList(),
-        ),
-      ],
+    final expansionTileColor = defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoColors.secondaryLabel.resolveFrom(context)
+        : null;
+
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        iconColor: expansionTileColor,
+        collapsedIconColor: expansionTileColor,
+        title: Text(category.name),
+        children: [
+          ListSection(
+            children: category.themes
+                .map((theme) => PlatformListTile(title: Text(theme.name)))
+                .toList(),
+          ),
+        ],
+      ),
     );
   }
 }

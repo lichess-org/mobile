@@ -467,15 +467,16 @@ PuzzleDashboardData _puzzleDashboardDataFromPick(
     );
 
 IList<PuzzleThemeFamily> _puzzleThemeFromPick(RequiredPick pick) {
-  return pick('themes').asMapOrThrow().keys.map((key) {
-    final themes = pick('themes', key.toString()).asListOrThrow((listPick) {
-      return PuzzleTheme2(
+  final themeMap = puzzleThemeNameMap;
+  return pick('themes').asMapOrThrow<String, dynamic>().keys.map((key) {
+    final themes = pick('themes', key).asListOrThrow((listPick) {
+      return PuzzleThemeData(
         count: listPick('count').asIntOrThrow(),
         desc: listPick('desc').asStringOrThrow(),
-        key: listPick('key').asStringOrThrow(),
+        key: themeMap[listPick('key').asStringOrThrow()]!,
         name: listPick('name').asStringOrThrow(),
       );
     }).toIList();
-    return PuzzleThemeFamily(name: key.toString(), themes: themes);
+    return PuzzleThemeFamily(name: key, themes: themes);
   }).toIList();
 }
