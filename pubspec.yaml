@@ -106,6 +106,9 @@ flutter:
     - family: ChessFont
       fonts: 
         - asset: assets/fonts/ChessSansPiratf.ttf
+    - family: LichessPuzzleIcons
+      fonts:
+        - asset: assets/fonts/PuzzleIcons.ttf
 
   # Enable generation of localized Strings from arb files.
   generate: true
