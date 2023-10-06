@@ -125,7 +125,6 @@ class _Body extends ConsumerWidget {
                     channel: game.channel,
                     initialGame: (game.id, game.orientation),
                   ),
-                  rootNavigator: true,
                 );
               },
               orientation: game.orientation.cg,

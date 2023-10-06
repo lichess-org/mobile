@@ -209,7 +209,6 @@ class _WatchTvWidget extends ConsumerWidget {
               onTap: () => pushPlatformRoute(
                 context,
                 builder: (context) => TvScreen(channel: snapshot.channel),
-                rootNavigator: true,
               ).then((_) => _refreshData(ref)),
             );
           }).toList(growable: false),
