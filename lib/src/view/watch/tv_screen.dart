@@ -17,9 +17,6 @@ import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
-final RouteObserver<PageRoute<void>> tvRouteObserver =
-    RouteObserver<PageRoute<void>>();
-
 class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({required this.channel, this.initialGame, super.key});
 
@@ -90,14 +87,14 @@ class _TvScreenState extends ConsumerState<TvScreen>
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      tvRouteObserver.subscribe(this, route);
+      watchTabRouteObserver.subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    tvRouteObserver.unsubscribe(this);
+    watchTabRouteObserver.unsubscribe(this);
     super.dispose();
   }
 

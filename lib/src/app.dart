@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/wakelock.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
-import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 
 class App extends ConsumerStatefulWidget {
   const App({super.key});
@@ -91,7 +90,6 @@ class _AppState extends ConsumerState<App> {
       navigatorObservers: [
         immersiveModeRouteObserver,
         wakelockRouteObserver,
-        tvRouteObserver,
       ],
     );
   }

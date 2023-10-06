@@ -94,6 +94,11 @@ class BoardTable extends ConsumerWidget {
             ? defaultBoardSize - kTabletBoardTableSidePadding * 2
             : defaultBoardSize;
 
+        // vertical space left on portrait mode to check if we can display the
+        // move list
+        final verticalSpaceLeftBoardOnPortrait =
+            constraints.biggest.height - boardSize;
+
         final error = errorMessage != null
             ? SizedBox.square(
                 dimension: boardSize,
@@ -238,14 +243,16 @@ class BoardTable extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (slicedMoves != null)
+                  if (slicedMoves != null &&
+                      verticalSpaceLeftBoardOnPortrait >= 130)
                     MoveList(
                       type: MoveListType.inline,
                       slicedMoves: slicedMoves,
                       currentMoveIndex: currentMoveIndex ?? 0,
                       onSelectMove: onSelectMove,
                     )
-                  else if (showMoveListPlaceholder)
+                  else if (showMoveListPlaceholder &&
+                      verticalSpaceLeftBoardOnPortrait >= 130)
                     const SizedBox(height: 40),
                   Expanded(
                     child: Padding(
