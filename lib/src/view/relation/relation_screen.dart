@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
-class FriendsScreen extends StatelessWidget {
-  const FriendsScreen({super.key});
+class RelationScreen extends StatelessWidget {
+  const RelationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

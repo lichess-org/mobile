@@ -32,7 +32,7 @@ import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
-import 'package:lichess_mobile/src/view/friends/friends_screen.dart';
+import 'package:lichess_mobile/src/view/relation/relation_screen.dart';
 
 final RouteObserver<PageRoute<void>> homeRouteObserver =
     RouteObserver<PageRoute<void>>();
@@ -126,7 +126,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 SignInWidget(),
               ]
             : const [
-                _FriendsButton(),
+                _RelationButton(),
               ],
       ),
       body: RefreshIndicator(
@@ -163,7 +163,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               ),
               trailing: session == null
                   ? const SignInWidget()
-                  : const _FriendsButton(),
+                  : const _RelationButton(),
             ),
             CupertinoSliverRefreshControl(
               onRefresh: () => _refreshData(session?.user),
@@ -568,8 +568,8 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
   }
 }
 
-class _FriendsButton extends StatelessWidget {
-  const _FriendsButton();
+class _RelationButton extends StatelessWidget {
+  const _RelationButton();
 
   @override
   Widget build(BuildContext context) {
@@ -580,7 +580,8 @@ class _FriendsButton extends StatelessWidget {
         pushPlatformRoute(
           context,
           title: context.l10n.friends,
-          builder: (_) => const FriendsScreen(),
+          builder: (_) => const RelationScreen(),
+          fullscreenDialog: true,
         );
       },
     );
