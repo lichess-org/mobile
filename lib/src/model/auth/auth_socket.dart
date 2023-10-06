@@ -30,6 +30,11 @@ const _kPingDelay = Duration(milliseconds: 2500);
 const _kPingMaxLag = Duration(seconds: 9);
 const _kAutoReconnectDelay = Duration(milliseconds: 3500);
 
+/// The delay before closing the socket if idle (no subscription).
+///
+/// This is a short delay to allow for reconnections when changing screen.
+const _kIdleTimeout = Duration(seconds: 5);
+
 /// Socket Random Identifier.
 @Riverpod(keepAlive: true)
 String sri(SriRef ref) {
@@ -154,18 +159,30 @@ class AuthSocket {
   }
 
   /// Closes the WebSocket connection if open.
-  void close({Duration? delay}) {
+  ///
+  /// If a delay is provided, the connection will be closed after the delay.
+  /// If a new connection is created before the delay, the close will be cancelled.
+  ///
+  /// Returns a [Future] that completes when the connection is closed.
+  /// The future might never complete if the socket or the stream controller
+  /// cannot be closed.
+  Future<void> close({Duration? delay}) {
     _log.info(
       'Closing WebSocket connection ${delay == null ? 'now' : 'in ${delay.inSeconds}s'}.',
     );
+    final completer = Completer<void>();
     _closeTimer?.cancel();
     _closeTimer = Timer(
       delay ?? Duration.zero,
       () => _closeCurrent(() {
-        _connection?.streamController.close();
+        _connection?.streamController.close().then((_) {
+          completer.complete();
+          _log.info('WebSocket connection closed.');
+        });
         _connection = null;
       }),
     );
+    return completer.future;
   }
 
   /// Sends a message to the websocket.
@@ -250,7 +267,10 @@ class AuthSocket {
       route: route,
       channel: channel,
       streamController: _connection?.streamController ??
-          StreamController<SocketEvent>.broadcast(),
+          StreamController<SocketEvent>.broadcast(
+            onListen: _onStreamListen,
+            onCancel: _onStreamCancel,
+          ),
       readyCompleter: Completer<void>(),
     );
 
@@ -273,6 +293,18 @@ class AuthSocket {
     );
 
     return _connection!;
+  }
+
+  /// Called when the first listener is added to the socket stream.
+  void _onStreamListen() {
+    _log.info('WebSocket connection subscribed.');
+    _closeTimer?.cancel();
+  }
+
+  /// Called when the last listener is removed from the socket stream.
+  void _onStreamCancel() {
+    _log.info('WebSocket connection idle, closing.');
+    close(delay: _kIdleTimeout);
   }
 
   void _handleEvent(SocketEvent event) {
@@ -356,12 +388,12 @@ class AuthSocket {
   }
 
   /// Closes current connection, but keep the streamController open to allow for reconnections
-  void _closeCurrent([void Function()? callback]) {
+  void _closeCurrent([void Function()? afterClose]) {
     _sink?.close();
     _streamSubscription?.cancel();
     _pingTimer?.cancel();
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
-    callback?.call();
+    afterClose?.call();
   }
 }

@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
@@ -75,7 +74,6 @@ class _TvScreenState extends ConsumerState<TvScreen>
       ref.read(_tvGameCtrl.notifier).startWatching();
     } else {
       ref.read(_tvGameCtrl.notifier).stopWatching();
-      ref.read(authSocketProvider).close();
     }
   }
 
@@ -111,17 +109,6 @@ class _TvScreenState extends ConsumerState<TvScreen>
   void didPopNext() {
     ref.read(_tvGameCtrl.notifier).startWatching();
     super.didPopNext();
-  }
-
-  @override
-  void didPop() {
-    ref.read(_tvGameCtrl.notifier).stopWatching();
-    final navState = ref.read(currentNavigatorKeyProvider).currentState;
-    // only close the socket if we're going back to the root screen
-    if (navState != null && !navState.canPop()) {
-      ref.read(authSocketProvider).close();
-    }
-    super.didPop();
   }
 }
 

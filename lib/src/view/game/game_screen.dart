@@ -74,7 +74,6 @@ class _GameScreenState extends ConsumerState<GameScreen>
     ref.invalidate(userRecentGamesProvider);
     ref.invalidate(accountProvider);
     ref.invalidate(userActivityProvider);
-    ref.read(authSocketProvider).close();
   }
 
   @override
