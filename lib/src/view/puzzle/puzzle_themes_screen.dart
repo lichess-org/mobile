@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:lichess_mobile/src/view/puzzle/opening_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:lichess_mobile/src/utils/connectivity.dart';
@@ -75,6 +76,20 @@ class _Body extends ConsumerWidget {
           return SingleChildScrollView(
             child: Column(
               children: [
+                Theme(
+                  data: Theme.of(context)
+                      .copyWith(dividerColor: Colors.transparent),
+                  child: ExpansionTile(
+                    title: const Text('By game opening'),
+                    trailing: const Icon(Icons.keyboard_arrow_right),
+                    onExpansionChanged: (expanded) {
+                      pushPlatformRoute(
+                        context,
+                        builder: (ctx) => const OpeningThemeScreen(),
+                      );
+                    },
+                  ),
+                ),
                 for (final category in data)
                   _CategoryOnline(
                     category: category,
@@ -173,7 +188,6 @@ class _CategoryOnline extends ConsumerWidget {
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         iconColor: expansionTileColor,
-        collapsedIconColor: expansionTileColor,
         title: Text(category.name),
         children: [
           ListSection(

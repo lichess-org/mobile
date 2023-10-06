@@ -662,7 +662,16 @@ class PuzzleOpeningFamily with _$PuzzleOpeningFamily {
   const factory PuzzleOpeningFamily({
     required String key,
     required String name,
-    required String count,
-    required IList<PuzzleThemeData> openings,
+    required int count,
+    required IList<PuzzleOpeningData> openings,
   }) = _PuzzleOpeningFamily;
+}
+
+@freezed
+class PuzzleOpeningData with _$PuzzleOpeningData {
+  const factory PuzzleOpeningData({
+    required String key,
+    required String name,
+    required int count,
+  }) = _PuzzleOpeningData;
 }

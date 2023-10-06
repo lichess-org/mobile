@@ -93,3 +93,9 @@ Future<IList<PuzzleThemeFamily>> puzzleTheme(PuzzleThemeRef ref) {
   final repo = ref.watch(puzzleRepositoryProvider);
   return Result.release(repo.puzzleTheme());
 }
+
+@Riverpod(keepAlive: true)
+Future<IList<PuzzleOpeningFamily>> puzzleOpening(PuzzleOpeningRef ref) {
+  final repo = ref.watch(puzzleRepositoryProvider);
+  return Result.release(repo.puzzleOpenings());
+}

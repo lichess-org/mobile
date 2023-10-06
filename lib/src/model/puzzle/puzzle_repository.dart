@@ -243,6 +243,19 @@ class PuzzleRepository {
     );
   }
 
+  FutureResult<IList<PuzzleOpeningFamily>> puzzleOpenings() {
+    return apiClient.get(
+      Uri.parse('$kLichessHost/training/openings'),
+      headers: {"Accept": "application/json"},
+    ).flatMap(
+      (response) => readJsonObject(
+        response,
+        mapper: _puzzleOpeningFromJson,
+        logger: _log,
+      ),
+    );
+  }
+
   Result<PuzzleBatchResponse> _decodeBatchResponse(http.Response response) {
     return readJsonObject(
       response,
@@ -312,6 +325,12 @@ Puzzle _puzzleFromJson(Map<String, dynamic> json) =>
 PuzzleDashboard _puzzleDashboardFromJson(Map<String, dynamic> json) =>
     _puzzleDashboardFromPick(pick(json).required());
 
+IList<PuzzleThemeFamily> _puzzleThemeFromJson(Map<String, dynamic> json) =>
+    _puzzleThemeFromPick(pick(json).required());
+
+IList<PuzzleOpeningFamily> _puzzleOpeningFromJson(Map<String, dynamic> json) =>
+    _puzzleOpeningFromPick(pick(json).required());
+
 Puzzle _puzzleFromPick(RequiredPick pick) {
   return Puzzle(
     puzzle: pick('puzzle').letOrThrow(_puzzleDatafromPick),
@@ -321,9 +340,6 @@ Puzzle _puzzleFromPick(RequiredPick pick) {
 
 StormDashboard _stormDashboardFromJson(Map<String, dynamic> json) =>
     _stormDashboardFromPick(pick(json).required());
-
-IList<PuzzleThemeFamily> _puzzleThemeFromJson(Map<String, dynamic> json) =>
-    _puzzleThemeFromPick(pick(json).required());
 
 StormDashboard _stormDashboardFromPick(RequiredPick pick) {
   final dateFormat = DateFormat('yyyy/M/d');
@@ -478,5 +494,26 @@ IList<PuzzleThemeFamily> _puzzleThemeFromPick(RequiredPick pick) {
       );
     }).toIList();
     return PuzzleThemeFamily(name: key, themes: themes);
+  }).toIList();
+}
+
+IList<PuzzleOpeningFamily> _puzzleOpeningFromPick(RequiredPick pick) {
+  return pick('openings').asListOrThrow((openingPick) {
+    final familyPick = openingPick('family');
+    final openingsPick = openingPick('openings');
+    final openings = openingsPick('openings').asListOrNull(
+      (openingPick) => PuzzleOpeningData(
+        key: openingPick('key').asStringOrThrow(),
+        name: openingPick('name').asStringOrThrow(),
+        count: openingPick('count').asIntOrThrow(),
+      ),
+    );
+
+    return PuzzleOpeningFamily(
+      key: familyPick('key').asStringOrThrow(),
+      name: familyPick('name').asStringOrThrow(),
+      count: familyPick('count').asIntOrThrow(),
+      openings: openings != null ? openings.toIList() : IList(const []),
+    );
   }).toIList();
 }
