@@ -35,7 +35,7 @@ dependencies:
   deep_pick: ^1.0.0
   timeago: ^3.3.0
   collection: ^1.16.0
-  fast_immutable_collections: ^9.0.0
+  fast_immutable_collections: ^9.1.6
   result_extensions: ^0.1.0
   async: ^2.10.0
   package_info_plus: ^4.0.0
