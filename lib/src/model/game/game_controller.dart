@@ -843,6 +843,7 @@ class GameState with _$GameState {
               .where((e) => e.sanMove != null)
               .map((e) => e.sanMove!.move),
         ),
+        initialMoveCursor: stepCursor,
         orientation: game.youAre ?? Side.white,
         id: game.meta.id,
       );

@@ -242,10 +242,9 @@ class _BottomBar extends ConsumerWidget {
               semanticsLabel: context.l10n.gameAnalysis,
               onPressed: ref.read(gameCursorProvider(gameData.id)).hasValue
                   ? () {
-                      final game = ref
+                      final (game, cursor) = ref
                           .read(gameCursorProvider(gameData.id))
-                          .requireValue
-                          .$1;
+                          .requireValue;
 
                       pushPlatformRoute(
                         context,
@@ -261,6 +260,7 @@ class _BottomBar extends ConsumerWidget {
                                   .where((e) => e.sanMove != null)
                                   .map((e) => e.sanMove!.move),
                             ),
+                            initialMoveCursor: cursor,
                             orientation: orientation,
                             id: gameData.id,
                             opening: gameData.opening,
