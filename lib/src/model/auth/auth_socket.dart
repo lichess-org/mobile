@@ -75,7 +75,6 @@ typedef CurrentConnection = ({
   Uri route,
   IOWebSocketChannel channel,
   StreamController<SocketEvent> streamController,
-  Completer<void> readyCompleter,
 });
 
 /// Lichess websocket client.
@@ -178,7 +177,7 @@ class AuthSocket {
         route == _connection!.route) {
       return (
         _connection!.streamController.stream,
-        _connection!.readyCompleter.future
+        _connection!.channel.ready,
       );
     }
 
@@ -198,7 +197,7 @@ class AuthSocket {
         }
         return true;
       }),
-      connection.readyCompleter.future
+      connection.channel.ready,
     );
   }
 
@@ -318,12 +317,10 @@ class AuthSocket {
             onListen: _onStreamListen,
             onCancel: _onStreamCancel,
           ),
-      readyCompleter: Completer<void>(),
     );
 
     channel.ready.then(
       (_) {
-        _connection?.readyCompleter.complete();
         _log.info('WebSocket connection established.');
         _ref.read(averageLagProvider.notifier).reset();
         _sendPing();
