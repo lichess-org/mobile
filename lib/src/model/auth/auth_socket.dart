@@ -92,7 +92,8 @@ typedef CurrentConnection = ({
 /// are properly cancelled at the time they are no longer needed.
 ///
 /// This class uses a single stream controller to broadcast events to all listeners,
-/// which is filtered to only send events for the current route.
+/// which stays alive as long as there are subscriptions, and which is filtered
+/// to only send events for the current route.
 class AuthSocket {
   AuthSocket(this._ref, this._log);
 
@@ -217,27 +218,21 @@ class AuthSocket {
   ///
   /// If a delay is provided, the connection will be closed after the delay.
   /// If a new connection is created before the delay, the close will be cancelled.
-  ///
-  /// Returns a [Future] that completes when the connection is closed.
-  /// The future might never complete if the socket or the stream controller
-  /// cannot be closed.
-  Future<void> _close({Duration? delay}) {
-    _log.info(
+  void _close({Duration? delay}) {
+    _log.fine(
       'Closing WebSocket connection ${delay == null ? 'now' : 'in ${delay.inSeconds}s'}.',
     );
-    final completer = Completer<void>();
     _closeTimer?.cancel();
     _closeTimer = Timer(
       delay ?? Duration.zero,
       () => _closeCurrent(() {
         _connection?.streamController.close().then((_) {
-          completer.complete();
+          _log.fine('WebSocket stream controller properly closed.');
         });
         _log.info('WebSocket connection closed.');
         _connection = null;
       }),
     );
-    return completer.future;
   }
 
   /// Connect or reconnect the WebSocket.
@@ -315,13 +310,13 @@ class AuthSocket {
 
   /// Called when the first listener is added to the socket stream.
   void _onStreamListen() {
-    _log.info('WebSocket connection subscribed.');
+    _log.fine('WebSocket connection subscribed.');
     _closeTimer?.cancel();
   }
 
   /// Called when the last listener is removed from the socket stream.
   void _onStreamCancel() {
-    _log.info('WebSocket connection idle, closing.');
+    _log.fine('WebSocket connection idle, closing.');
     _close(delay: _kIdleTimeout);
   }
 
