@@ -19,8 +19,8 @@ class SettingsListTile extends StatelessWidget {
 
   final Icon? icon;
 
-  /// The label of the settings value, typically a [Text] widget.
-  final Widget settingsLabel;
+  /// The label of the settings value.
+  final Text settingsLabel;
 
   final String settingsValue;
   final void Function() onTap;
@@ -79,7 +79,7 @@ class SwitchSettingTile extends StatelessWidget {
     super.key,
   });
 
-  final Widget title;
+  final Text title;
   final Widget? subtitle;
   final String? additionalInfo;
   final bool value;
@@ -136,27 +136,32 @@ class _SettingsTitle extends StatelessWidget {
     this.additionalInfo,
   });
 
-  final Widget title;
+  final Text title;
   final String? additionalInfo;
 
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle.merge(
       maxLines: 2,
-      child: additionalInfo != null
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                title,
-                const SizedBox(width: 5.0),
-                Icon(
-                  defaultTargetPlatform == TargetPlatform.iOS
-                      ? CupertinoIcons.info
-                      : Icons.info_outline,
+      overflow: TextOverflow.ellipsis,
+      child: Text.rich(
+        TextSpan(
+          children: [
+            title.textSpan ?? TextSpan(text: title.data),
+            if (additionalInfo != null)
+              WidgetSpan(
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 5.0),
+                  child: Icon(
+                    defaultTargetPlatform == TargetPlatform.iOS
+                        ? CupertinoIcons.info
+                        : Icons.info_outline,
+                  ),
                 ),
-              ],
-            )
-          : title,
+              ),
+          ],
+        ),
+      ),
     );
   }
 }
