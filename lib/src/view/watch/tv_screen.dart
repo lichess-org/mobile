@@ -107,6 +107,12 @@ class _TvScreenState extends ConsumerState<TvScreen>
     ref.read(_tvGameCtrl.notifier).startWatching();
     super.didPopNext();
   }
+
+  @override
+  void didPop() {
+    ref.read(_tvGameCtrl.notifier).stopWatching();
+    super.didPop();
+  }
 }
 
 class _Body extends ConsumerWidget {

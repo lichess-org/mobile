@@ -96,6 +96,12 @@ class _TvChannelsScreenState extends ConsumerState<LiveTvChannelsScreen>
     ref.read(liveTvChannelsProvider.notifier).startWatching();
     super.didPopNext();
   }
+
+  @override
+  void didPop() {
+    ref.read(liveTvChannelsProvider.notifier).stopWatching();
+    super.didPop();
+  }
 }
 
 class _Body extends ConsumerWidget {

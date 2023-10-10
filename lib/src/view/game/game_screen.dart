@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
