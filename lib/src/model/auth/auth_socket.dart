@@ -119,7 +119,7 @@ class AuthSocket {
   /// Returns the socket event broadcast stream filtered on the given route if connected.
   Stream<SocketEvent>? getStreamOnRoute(Uri route) =>
       _connection?.streamController.stream
-          .where((event) => event.route == route);
+          .where((event) => event.path == route.path);
 
   /// The Socket Random Identifier.
   String get sri => _ref.read(sriProvider);
@@ -156,9 +156,9 @@ class AuthSocket {
 
     return (
       connection.streamController.stream.where((event) {
-        if (event.route != null && event.route != route) {
+        if (event.path != route.path) {
           _log.warning(
-            'Received event for route $route on route ${event.route}. Have you forgotten to cancel a subscription?',
+            'Received event for route $route on route ${event.path}. Have you forgotten to cancel a subscription?',
           );
           return false;
         }

@@ -410,6 +410,7 @@ class GameController extends _$GameController {
           final reloadEvent = SocketEvent(
             topic: data['t'] as String,
             data: data['d'],
+            path: event.path,
           );
           _handleSocketTopic(reloadEvent);
         } else {
