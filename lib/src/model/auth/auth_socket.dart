@@ -75,17 +75,24 @@ typedef CurrentConnection = ({
 
 /// Lichess websocket client.
 ///
-/// This class can only create one single connection, because we never want to
-/// have more than one connection open at a time.
-/// Calling several times [connect] will return the same stream.
-///
 /// Handles authentication:
 ///  - automatically generate a new SRI for each connection.
 ///  - adds the following headers on connect:
 ///   - Authorization header when a token has been stored,
 ///   - User-Agent header
 ///
-/// Handles low-level ping/pong protocol and message acks.
+/// Handles low-level ping/pong protocol, message acks, and automatic reconnections.
+///
+/// This class can only create one single connection, because we never want to
+/// have more than one connection open at a time.
+/// Calling several times [connect] will return the same stream.
+///
+/// The socket will close itself after a short delay if no subscription is active.
+/// A caller cannot close itself the connection, to ensure that all subscriptions
+/// are properly cancelled at the time they are no longer needed.
+///
+/// This class uses a single stream controller to broadcast events to all listeners,
+/// which is filtered to only send events for the current route.
 class AuthSocket {
   AuthSocket(this._ref, this._log);
 
