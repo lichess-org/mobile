@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/widgets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
@@ -35,6 +36,10 @@ const _kAutoReconnectDelay = Duration(milliseconds: 3500);
 /// This is a short delay to allow for reconnections when changing screen.
 const _kIdleTimeout = Duration(seconds: 5);
 
+/// The delay before closing the socket if the app is in background and the socket
+/// is still connected (this is the case when playing a game).
+const _kDisconnectOnBackgroundTimeout = Duration(minutes: 20);
+
 /// Socket Random Identifier.
 @Riverpod(keepAlive: true)
 String sri(SriRef ref) {
@@ -47,7 +52,7 @@ String sri(SriRef ref) {
 AuthSocket authSocket(AuthSocketRef ref) {
   final authSocket = AuthSocket(ref, Logger('AuthSocket'));
   ref.onDispose(() {
-    authSocket._close();
+    authSocket.dispose();
   });
   return authSocket;
 }
@@ -95,7 +100,27 @@ typedef CurrentConnection = ({
 /// which stays alive as long as there are subscriptions, and which is filtered
 /// to only send events for the current route.
 class AuthSocket {
-  AuthSocket(this._ref, this._log);
+  AuthSocket(this._ref, this._log) {
+    _appLifecycleListener = AppLifecycleListener(
+      onHide: () {
+        _closeInBackgroundTimer?.cancel();
+        _closeInBackgroundTimer = Timer(
+          _kDisconnectOnBackgroundTimeout,
+          () {
+            _log.info(
+              'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, closing socket.',
+            );
+            _close();
+          },
+        );
+      },
+      onShow: () {
+        _closeInBackgroundTimer?.cancel();
+      },
+    );
+  }
+
+  late final AppLifecycleListener _appLifecycleListener;
 
   final Logger _log;
   final AuthSocketRef _ref;
@@ -104,6 +129,7 @@ class AuthSocket {
   Timer? _reconnectTimer;
   Timer? _ackResendTimer;
   Timer? _closeTimer;
+  Timer? _closeInBackgroundTimer;
   int _pongCount = 0;
   DateTime _lastPing = DateTime.now();
 
@@ -214,7 +240,12 @@ class AuthSocket {
     _sink?.add(jsonEncode(message));
   }
 
-  /// Closes the WebSocket connection if open.
+  void dispose() {
+    _close();
+    _appLifecycleListener.dispose();
+  }
+
+  /// Closes the WebSocket connection.
   ///
   /// If a delay is provided, the connection will be closed after the delay.
   /// If a new connection is created before the delay, the close will be cancelled.
@@ -226,6 +257,9 @@ class AuthSocket {
     _closeTimer = Timer(
       delay ?? Duration.zero,
       () => _closeCurrent(() {
+        if (_connection == null) {
+          return;
+        }
         _connection?.streamController.close().then((_) {
           _log.fine('WebSocket stream controller properly closed.');
         });
