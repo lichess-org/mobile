@@ -98,14 +98,14 @@ class _TvScreenState extends ConsumerState<TvScreen>
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      watchTabRouteObserver.subscribe(this, route);
+      tvRouteObserver.subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    watchTabRouteObserver.unsubscribe(this);
+    tvRouteObserver.unsubscribe(this);
     super.dispose();
   }
 
@@ -143,10 +143,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentBottomTab = ref.watch(currentBottomTabProvider);
-    final asyncGame = currentBottomTab == BottomTab.watch
-        ? ref.watch(tvControllerProvider(channel, initialGame))
-        : const AsyncLoading<TvState>();
+    final asyncGame = ref.watch(tvControllerProvider(channel, initialGame));
 
     return SafeArea(
       child: Center(

@@ -90,6 +90,7 @@ class _AppState extends ConsumerState<App> {
       navigatorObservers: [
         immersiveModeRouteObserver,
         wakelockRouteObserver,
+        tvRouteObserver,
       ],
     );
   }

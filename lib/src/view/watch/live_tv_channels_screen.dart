@@ -74,14 +74,14 @@ class _TvChannelsScreenState extends ConsumerState<LiveTvChannelsScreen>
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      watchTabRouteObserver.subscribe(this, route);
+      tvRouteObserver.subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    watchTabRouteObserver.unsubscribe(this);
+    tvRouteObserver.unsubscribe(this);
     super.dispose();
   }
 
@@ -109,10 +109,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentBottomTab = ref.watch(currentBottomTabProvider);
-    final gamesAsync = currentBottomTab == BottomTab.watch
-        ? ref.watch(liveTvChannelsProvider)
-        : const AsyncLoading<LiveTvChannelsState>();
+    final gamesAsync = ref.watch(liveTvChannelsProvider);
     return gamesAsync.when(
       data: (games) {
         final list = [
@@ -127,6 +124,7 @@ class _Body extends ConsumerWidget {
               onTap: () {
                 pushPlatformRoute(
                   context,
+                  rootNavigator: true,
                   builder: (_) => TvScreen(
                     channel: game.channel,
                     initialGame: (game.id, game.orientation),

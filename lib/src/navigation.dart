@@ -79,7 +79,7 @@ final puzzlesScrollController = ScrollController(debugLabel: 'PuzzlesScroll');
 final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
 final profileScrollController = ScrollController(debugLabel: 'ProfileScroll');
 
-final RouteObserver<PageRoute<void>> watchTabRouteObserver =
+final RouteObserver<PageRoute<void>> tvRouteObserver =
     RouteObserver<PageRoute<void>>();
 
 final tabsProvider = Provider<List<_Tab>>((ref) {
@@ -201,7 +201,6 @@ class BottomNavScaffold extends ConsumerWidget {
       case 2:
         return _MaterialTabView(
           navigatorKey: watchNavigatorKey,
-          navigatorObservers: [watchTabRouteObserver],
           builder: (context) => const WatchTabScreen(),
         );
       case 3:
@@ -234,7 +233,6 @@ class BottomNavScaffold extends ConsumerWidget {
         return CupertinoTabView(
           defaultTitle: context.l10n.watch,
           navigatorKey: watchNavigatorKey,
-          navigatorObservers: [watchTabRouteObserver],
           builder: (context) => const WatchTabScreen(),
         );
       case 3:
