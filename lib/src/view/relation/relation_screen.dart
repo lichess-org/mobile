@@ -6,6 +6,8 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 
 class RelationScreen extends ConsumerStatefulWidget {
   const RelationScreen({super.key});
@@ -90,16 +92,24 @@ class _OnlineFriendsWidget extends ConsumerWidget {
           ],
         );
       },
-      loading: () {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
       error: (error, stackTrace) {
-        return Center(
-          child: Text('$error'),
+        debugPrint(
+          'SEVERE: [OnlineFriendsWidget] could not lead leaderboard data; $error\n $stackTrace',
+        );
+        return Padding(
+          padding: Styles.bodySectionPadding,
+          child: const Text('Could not load online friends'),
         );
       },
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(
+            itemsNumber: 3,
+            header: true,
+          ),
+        ),
+      ),
     );
   }
 }
