@@ -31,6 +31,9 @@ class _TvScreenState extends ConsumerState<TvScreen>
   TvControllerProvider get _tvGameCtrl =>
       tvControllerProvider(widget.channel, widget.initialGame);
 
+  final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnTvScreen');
+  final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnTvScreen');
+
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(
@@ -49,7 +52,12 @@ class _TvScreenState extends ConsumerState<TvScreen>
           ToggleSoundButton(),
         ],
       ),
-      body: _Body(widget.channel, widget.initialGame),
+      body: _Body(
+        widget.channel,
+        widget.initialGame,
+        whiteClockKey: _whiteClockKey,
+        blackClockKey: _blackClockKey,
+      ),
     );
   }
 
@@ -61,7 +69,12 @@ class _TvScreenState extends ConsumerState<TvScreen>
         middle: Text('${widget.channel.label} TV'),
         trailing: ToggleSoundButton(),
       ),
-      child: _Body(widget.channel, widget.initialGame),
+      child: _Body(
+        widget.channel,
+        widget.initialGame,
+        whiteClockKey: _whiteClockKey,
+        blackClockKey: _blackClockKey,
+      ),
     );
   }
 
@@ -116,10 +129,17 @@ class _TvScreenState extends ConsumerState<TvScreen>
 }
 
 class _Body extends ConsumerWidget {
-  const _Body(this.channel, this.initialGame);
+  const _Body(
+    this.channel,
+    this.initialGame, {
+    required this.whiteClockKey,
+    required this.blackClockKey,
+  });
 
   final TvChannel channel;
   final (GameId id, Side orientation)? initialGame;
+  final GlobalKey whiteClockKey;
+  final GlobalKey blackClockKey;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -145,6 +165,7 @@ class _Body extends ConsumerWidget {
               player: game.black.setOnGame(true),
               clock: gameState.game.clock != null
                   ? CountdownClock(
+                      key: blackClockKey,
                       duration: gameState.game.clock!.black,
                       active: gameState.activeClockSide == Side.black,
                     )
@@ -155,6 +176,7 @@ class _Body extends ConsumerWidget {
               player: game.white.setOnGame(true),
               clock: gameState.game.clock != null
                   ? CountdownClock(
+                      key: whiteClockKey,
                       duration: gameState.game.clock!.white,
                       active: gameState.activeClockSide == Side.white,
                     )
