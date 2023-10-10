@@ -3,6 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_repository_providers.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/tv/featured_player.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
@@ -13,6 +14,7 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/watch/broadcast_tile.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
@@ -104,7 +106,11 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
                 return orientation == Orientation.portrait
                     ? ListView(
                         controller: watchScrollController,
-                        children: const [_WatchTvWidget(), _StreamerWidget()],
+                        children: const [
+                          _BroadcastWidget(),
+                          _WatchTvWidget(),
+                          _StreamerWidget(),
+                        ],
                       )
                     : GridView(
                         controller: watchScrollController,
@@ -113,7 +119,11 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
                           crossAxisCount: 2,
                           childAspectRatio: 0.92,
                         ),
-                        children: const [_WatchTvWidget(), _StreamerWidget()],
+                        children: const [
+                          _BroadcastWidget(),
+                          _WatchTvWidget(),
+                          _StreamerWidget(),
+                        ],
                       );
               },
             ),
@@ -179,6 +189,53 @@ Future<void> _refreshData(WidgetRef ref) {
     ref.refresh(featuredChannelsProvider.future),
     ref.refresh(liveStreamersProvider.future),
   ]);
+}
+
+class _BroadcastWidget extends ConsumerWidget {
+  const _BroadcastWidget();
+
+  static const int numberOfItems = 10;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final broadcastList = ref.watch(broadcastsProvider);
+
+    return broadcastList.when(
+      data: (data) {
+        return ListSection(
+          header: const Text('Tournament broadcasts'),
+          hasLeading: true,
+          headerTrailing: NoPaddingTextButton(
+            onPressed: () {},
+            child: Text(
+              context.l10n.more,
+            ),
+          ),
+          children: [
+            ...data.take(numberOfItems).map((e) => BroadcastTile(broadcast: e)),
+          ],
+        );
+      },
+      error: (error, stackTrace) {
+        debugPrint(
+          'SEVERE: [BroadcastWidget] could not load broadcast data; $error\n $stackTrace',
+        );
+        return Padding(
+          padding: Styles.bodySectionPadding,
+          child: const Text('Could not load broadcasts'),
+        );
+      },
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(
+            itemsNumber: numberOfItems,
+            header: true,
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _WatchTvWidget extends ConsumerWidget {
