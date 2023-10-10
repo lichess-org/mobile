@@ -26,7 +26,7 @@ class TvController extends _$TvController {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   /// Last socket version received
-  int _socketEventVersion = 0;
+  int? _socketEventVersion;
 
   @override
   Future<TvState> build(
@@ -77,12 +77,12 @@ class TvController extends _$TvController {
     );
 
     _socketSubscription?.cancel();
+    _socketEventVersion = null;
+    _socketSubscription = stream.listen(_handleSocketEvent);
 
     return stream.firstWhere((e) => e.topic == 'full').then((event) {
       final fullEvent =
           GameFullEvent.fromJson(event.data as Map<String, dynamic>);
-
-      _socketSubscription = stream.listen(_handleSocketEvent);
 
       _socketEventVersion = fullEvent.socketEventVersion;
 
@@ -100,14 +100,21 @@ class TvController extends _$TvController {
   }
 
   void _handleSocketEvent(SocketEvent event) {
+    final currentEventVersion = _socketEventVersion;
+
+    /// We don't have a version yet, let's wait for the full event
+    if (currentEventVersion == null) {
+      return;
+    }
+
     if (event.version != null) {
-      if (event.version! <= _socketEventVersion) {
+      if (event.version! <= currentEventVersion) {
         return;
       }
-      if (event.version! > _socketEventVersion + 1) {
+      if (event.version! > currentEventVersion + 1) {
         _connectWebsocket(null);
       }
-      _socketEventVersion = event.version!;
+      _socketEventVersion = event.version;
     }
 
     _handleSocketTopic(event);

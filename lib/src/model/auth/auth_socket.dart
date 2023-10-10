@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/widgets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
@@ -30,6 +31,15 @@ const _kPingDelay = Duration(milliseconds: 2500);
 const _kPingMaxLag = Duration(seconds: 9);
 const _kAutoReconnectDelay = Duration(milliseconds: 3500);
 
+/// The delay before closing the socket if idle (no subscription).
+///
+/// This is a short delay to allow for reconnections when changing screen.
+const _kIdleTimeout = Duration(seconds: 5);
+
+/// The delay before closing the socket if the app is in background and the socket
+/// is still connected (this is the case when playing a game).
+const _kDisconnectOnBackgroundTimeout = Duration(minutes: 20);
+
 /// Socket Random Identifier.
 @Riverpod(keepAlive: true)
 String sri(SriRef ref) {
@@ -42,7 +52,7 @@ String sri(SriRef ref) {
 AuthSocket authSocket(AuthSocketRef ref) {
   final authSocket = AuthSocket(ref, Logger('AuthSocket'));
   ref.onDispose(() {
-    authSocket.close();
+    authSocket.dispose();
   });
   return authSocket;
 }
@@ -70,19 +80,47 @@ typedef CurrentConnection = ({
 
 /// Lichess websocket client.
 ///
-/// This class can only create one single connection, because we never want to
-/// have more than one connection open at a time.
-/// Calling several times [connect] will return the same stream.
-///
 /// Handles authentication:
 ///  - automatically generate a new SRI for each connection.
 ///  - adds the following headers on connect:
 ///   - Authorization header when a token has been stored,
 ///   - User-Agent header
 ///
-/// Handles low-level ping/pong protocol and message acks.
+/// Handles low-level ping/pong protocol, message acks, and automatic reconnections.
+///
+/// This class can only create one single connection, because we never want to
+/// have more than one connection open at a time.
+/// Calling several times [connect] will return the same stream.
+///
+/// The socket will close itself after a short delay if no subscription is active.
+/// A caller cannot close itself the connection, to ensure that all subscriptions
+/// are properly cancelled at the time they are no longer needed.
+///
+/// This class uses a single stream controller to broadcast events to all listeners,
+/// which stays alive as long as there are subscriptions, and which is filtered
+/// to only send events for the current route.
 class AuthSocket {
-  AuthSocket(this._ref, this._log);
+  AuthSocket(this._ref, this._log) {
+    _appLifecycleListener = AppLifecycleListener(
+      onHide: () {
+        _closeInBackgroundTimer?.cancel();
+        _closeInBackgroundTimer = Timer(
+          _kDisconnectOnBackgroundTimeout,
+          () {
+            _log.info(
+              'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, closing socket.',
+            );
+            _close();
+          },
+        );
+      },
+      onShow: () {
+        _closeInBackgroundTimer?.cancel();
+      },
+    );
+  }
+
+  late final AppLifecycleListener _appLifecycleListener;
 
   final Logger _log;
   final AuthSocketRef _ref;
@@ -91,10 +129,11 @@ class AuthSocket {
   Timer? _reconnectTimer;
   Timer? _ackResendTimer;
   Timer? _closeTimer;
+  Timer? _closeInBackgroundTimer;
   int _pongCount = 0;
   DateTime _lastPing = DateTime.now();
 
-  StreamSubscription<SocketEvent>? _streamSubscription;
+  StreamSubscription<SocketEvent>? _socketStreamSubscription;
 
   /// The list of acknowledgeable messages.
   List<(DateTime, int, Map<String, dynamic>)> _acks = [];
@@ -111,8 +150,10 @@ class AuthSocket {
   /// The current socket route if connected.
   Uri? get route => _connection?.route;
 
-  /// Returns the current socket stream if connected.
-  Stream<SocketEvent>? get stream => _connection?.streamController.stream;
+  /// Returns the socket event broadcast stream filtered on the given route if connected.
+  Stream<SocketEvent>? getStreamOnRoute(Uri route) =>
+      _connection?.streamController.stream
+          .where((event) => event.path == route.path);
 
   /// The Socket Random Identifier.
   String get sri => _ref.read(sriProvider);
@@ -124,7 +165,7 @@ class AuthSocket {
   /// An optional `forceReconnect` boolean can be provided to force a reconnection.
   ///
   /// Returns a tuple of:
-  ///  - the socket event [Stream]
+  ///  - the socket event broadcast [Stream]
   ///  - a [Future] that completes when the socket is ready. The future might never
   /// complete if the socket fails to connect because it tries to reconnect automatically.
   (Stream<SocketEvent>, Future<void>) connect(
@@ -148,23 +189,16 @@ class AuthSocket {
     final connection = _doConnect(route);
 
     return (
-      connection.streamController.stream,
-      connection.readyCompleter.future
-    );
-  }
-
-  /// Closes the WebSocket connection if open.
-  void close({Duration? delay}) {
-    _log.info(
-      'Closing WebSocket connection ${delay == null ? 'now' : 'in ${delay.inSeconds}s'}.',
-    );
-    _closeTimer?.cancel();
-    _closeTimer = Timer(
-      delay ?? Duration.zero,
-      () => _closeCurrent(() {
-        _connection?.streamController.close();
-        _connection = null;
+      connection.streamController.stream.where((event) {
+        if (event.path != route.path) {
+          _log.warning(
+            'Received event for route $route on route ${event.path}. Have you forgotten to cancel a subscription?',
+          );
+          return false;
+        }
+        return true;
       }),
+      connection.readyCompleter.future
     );
   }
 
@@ -206,6 +240,35 @@ class AuthSocket {
     _sink?.add(jsonEncode(message));
   }
 
+  void dispose() {
+    _close();
+    _appLifecycleListener.dispose();
+  }
+
+  /// Closes the WebSocket connection.
+  ///
+  /// If a delay is provided, the connection will be closed after the delay.
+  /// If a new connection is created before the delay, the close will be cancelled.
+  void _close({Duration? delay}) {
+    _log.fine(
+      'Closing WebSocket connection ${delay == null ? 'now' : 'in ${delay.inSeconds}s'}.',
+    );
+    _closeTimer?.cancel();
+    _closeTimer = Timer(
+      delay ?? Duration.zero,
+      () => _closeCurrent(() {
+        if (_connection == null) {
+          return;
+        }
+        _connection?.streamController.close().then((_) {
+          _log.fine('WebSocket stream controller properly closed.');
+        });
+        _log.info('WebSocket connection closed.');
+        _connection = null;
+      }),
+    );
+  }
+
   /// Connect or reconnect the WebSocket.
   CurrentConnection _doConnect(Uri route) {
     _closeCurrent();
@@ -236,13 +299,14 @@ class AuthSocket {
       headers: headers,
     );
 
-    _streamSubscription?.cancel();
-    _streamSubscription = channel.stream.map((raw) {
+    _socketStreamSubscription?.cancel();
+    _socketStreamSubscription = channel.stream.map((raw) {
       if (raw == '0') {
         return SocketEvent.pong;
       }
       return SocketEvent.fromJson(
         jsonDecode(raw as String) as Map<String, dynamic>,
+        route,
       );
     }).listen(_handleEvent);
 
@@ -250,7 +314,10 @@ class AuthSocket {
       route: route,
       channel: channel,
       streamController: _connection?.streamController ??
-          StreamController<SocketEvent>.broadcast(),
+          StreamController<SocketEvent>.broadcast(
+            onListen: _onStreamListen,
+            onCancel: _onStreamCancel,
+          ),
       readyCompleter: Completer<void>(),
     );
 
@@ -273,6 +340,18 @@ class AuthSocket {
     );
 
     return _connection!;
+  }
+
+  /// Called when the first listener is added to the socket stream.
+  void _onStreamListen() {
+    _log.fine('WebSocket connection subscribed.');
+    _closeTimer?.cancel();
+  }
+
+  /// Called when the last listener is removed from the socket stream.
+  void _onStreamCancel() {
+    _log.fine('WebSocket connection idle, closing.');
+    _close(delay: _kIdleTimeout);
   }
 
   void _handleEvent(SocketEvent event) {
@@ -356,12 +435,12 @@ class AuthSocket {
   }
 
   /// Closes current connection, but keep the streamController open to allow for reconnections
-  void _closeCurrent([void Function()? callback]) {
+  void _closeCurrent([void Function()? afterClose]) {
     _sink?.close();
-    _streamSubscription?.cancel();
+    _socketStreamSubscription?.cancel();
     _pingTimer?.cancel();
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
-    callback?.call();
+    afterClose?.call();
   }
 }

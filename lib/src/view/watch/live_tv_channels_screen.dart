@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/tv/live_tv_channels.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -67,7 +66,6 @@ class _TvChannelsScreenState extends ConsumerState<LiveTvChannelsScreen>
       ref.read(liveTvChannelsProvider.notifier).startWatching();
     } else {
       ref.read(liveTvChannelsProvider.notifier).stopWatching();
-      ref.read(authSocketProvider).close();
     }
   }
 
@@ -97,6 +95,12 @@ class _TvChannelsScreenState extends ConsumerState<LiveTvChannelsScreen>
   void didPopNext() {
     ref.read(liveTvChannelsProvider.notifier).startWatching();
     super.didPopNext();
+  }
+
+  @override
+  void didPop() {
+    ref.read(liveTvChannelsProvider.notifier).stopWatching();
+    super.didPop();
   }
 }
 

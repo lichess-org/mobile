@@ -47,7 +47,7 @@ class GameController extends _$GameController {
   final _onFlagThrottler = Throttler(const Duration(milliseconds: 500));
 
   /// Last socket version received
-  int _socketEventVersion = 0;
+  int? _socketEventVersion;
 
   /// Last move time
   DateTime? _lastMoveTime;
@@ -56,12 +56,19 @@ class GameController extends _$GameController {
   Future<GameState> build(GameFullId gameFullId) {
     final socket = ref.watch(authSocketProvider);
     final (stream, _) = socket.connect(Uri(path: '/play/$gameFullId/v6'));
+    _socketEventVersion = null;
+    _socketSubscription?.cancel();
+    _socketSubscription = stream.listen(_handleSocketEvent);
 
-    final state = stream.firstWhere((e) => e.topic == 'full').then((event) {
+    ref.onDispose(() {
+      _socketSubscription?.cancel();
+      _opponentLeftCountdownTimer?.cancel();
+      _transientMoveTimer?.cancel();
+    });
+
+    return stream.firstWhere((e) => e.topic == 'full').then((event) {
       final fullEvent =
           GameFullEvent.fromJson(event.data as Map<String, dynamic>);
-
-      _socketSubscription = stream.listen(_handleSocketEvent);
 
       _socketEventVersion = fullEvent.socketEventVersion;
 
@@ -71,14 +78,6 @@ class GameController extends _$GameController {
         stopClockWaitingForServerAck: false,
       );
     });
-
-    ref.onDispose(() {
-      _socketSubscription?.cancel();
-      _opponentLeftCountdownTimer?.cancel();
-      _transientMoveTimer?.cancel();
-    });
-
-    return state;
   }
 
   void onUserMove(Move move, {bool? isDrop, bool? isPremove}) {
@@ -364,18 +363,25 @@ class GameController extends _$GameController {
   }
 
   void _handleSocketEvent(SocketEvent event) {
+    final currentEventVersion = _socketEventVersion;
+
+    /// We don't have a version yet, let's wait for the full event
+    if (currentEventVersion == null) {
+      return;
+    }
+
     if (event.version != null) {
-      if (event.version! <= _socketEventVersion) {
+      if (event.version! <= currentEventVersion) {
         _logger.fine('Already handled event ${event.version}');
         return;
       }
-      if (event.version! > _socketEventVersion + 1) {
+      if (event.version! > currentEventVersion + 1) {
         _logger.warning(
-          'Event gap detected from $_socketEventVersion to ${event.version}',
+          'Event gap detected from $currentEventVersion to ${event.version}',
         );
         _resyncGameData();
       }
-      _socketEventVersion = event.version!;
+      _socketEventVersion = event.version;
     }
 
     _handleSocketTopic(event);
@@ -404,6 +410,7 @@ class GameController extends _$GameController {
           final reloadEvent = SocketEvent(
             topic: data['t'] as String,
             data: data['d'],
+            path: event.path,
           );
           _handleSocketTopic(reloadEvent);
         } else {
@@ -415,7 +422,8 @@ class GameController extends _$GameController {
         final fullEvent =
             GameFullEvent.fromJson(event.data as Map<String, dynamic>);
 
-        if (fullEvent.socketEventVersion < _socketEventVersion) {
+        if (_socketEventVersion != null &&
+            fullEvent.socketEventVersion < _socketEventVersion!) {
           return;
         }
         _socketEventVersion = fullEvent.socketEventVersion;

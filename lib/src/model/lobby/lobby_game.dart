@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/game/create_game_service.dart';
 
 import 'game_seek.dart';
@@ -45,4 +48,33 @@ class LobbyGame extends _$LobbyGame {
   }
 
   CreateGameService get _service => ref.read(createGameServiceProvider);
+}
+
+@riverpod
+class LobbyNumbers extends _$LobbyNumbers {
+  StreamSubscription<SocketEvent>? _socketSubscription;
+
+  @override
+  ({int nbPlayers, int nbGames})? build() {
+    final socket = ref.watch(authSocketProvider);
+    final stream = socket.getStreamOnRoute(Uri(path: '/lobby/socket/v5')) ??
+        const Stream.empty();
+
+    ref.onDispose(() {
+      _socketSubscription?.cancel();
+    });
+
+    _socketSubscription?.cancel();
+    _socketSubscription = stream.listen((event) {
+      if (event.topic == 'n') {
+        final data = event.data as Map<String, int>;
+        state = (
+          nbPlayers: data['nbPlayers']!,
+          nbGames: data['nbGames']!,
+        );
+      }
+    });
+
+    return null;
+  }
 }
