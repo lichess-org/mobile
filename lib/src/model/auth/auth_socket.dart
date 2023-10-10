@@ -89,15 +89,17 @@ typedef CurrentConnection = ({
 ///
 /// This class can only create one single connection, because we never want to
 /// have more than one connection open at a time.
-/// Calling several times [connect] will return the same stream.
+/// Calling several times [connect] will return the same [Stream].
 ///
-/// The socket will close itself after a short delay if no subscription is active.
-/// A caller cannot close itself the connection, to ensure that all subscriptions
-/// are properly cancelled at the time they are no longer needed.
+/// A single [StreamController] is responsible to broadcast events that are
+/// then filtered if they don't match the called route. This helps detecting when a
+/// subscription is not cancelled properly and targeting a no longer active route.
 ///
-/// This class uses a single stream controller to broadcast events to all listeners,
-/// which stays alive as long as there are subscriptions, and which is filtered
-/// to only send events for the current route.
+/// The caller cannot close the connection.
+/// This is the responsibility of the caller to cancel the subscription(s) when
+/// the route changes, or when the socket is no longer needed.
+/// The socket will close itself after a short delay when there are no more
+/// subscriptions.
 class AuthSocket {
   AuthSocket(this._ref, this._log) {
     _appLifecycleListener = AppLifecycleListener(
@@ -191,7 +193,7 @@ class AuthSocket {
       connection.streamController.stream.where((event) {
         if (event.path != route.path) {
           _log.warning(
-            'Received event for route $route on route ${event.path}. Have you forgotten to cancel a subscription?',
+            'Received event for route $route on active route ${event.path}. Have you forgotten to cancel a subscription?',
           );
           return false;
         }
