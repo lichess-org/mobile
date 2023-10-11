@@ -40,37 +40,6 @@ const _kIdleTimeout = Duration(seconds: 5);
 /// is still connected (this is the case when playing a game).
 const _kDisconnectOnBackgroundTimeout = Duration(minutes: 20);
 
-/// Socket Random Identifier.
-@Riverpod(keepAlive: true)
-String sri(SriRef ref) {
-  // requireValue is possible because appDependenciesProvider is loaded before
-  // anything. See: lib/src/app.dart
-  return ref.read(appDependenciesProvider).requireValue.sri;
-}
-
-@Riverpod(keepAlive: true)
-AuthSocket authSocket(AuthSocketRef ref) {
-  final authSocket = AuthSocket(ref, Logger('AuthSocket'));
-  ref.onDispose(() {
-    authSocket.dispose();
-  });
-  return authSocket;
-}
-
-@riverpod
-class AverageLag extends _$AverageLag {
-  @override
-  Duration build() => Duration.zero;
-
-  void reset() {
-    state = Duration.zero;
-  }
-
-  void add(Duration currentLag, double mix) {
-    state += (currentLag - state) * mix;
-  }
-}
-
 typedef CurrentConnection = ({
   Uri route,
   IOWebSocketChannel channel,
@@ -154,7 +123,7 @@ class AuthSocket {
   /// Returns the socket event broadcast stream filtered on the given route if connected.
   Stream<SocketEvent>? getStreamOnRoute(Uri route) =>
       _connection?.streamController.stream
-          .where((event) => event.path == route.path);
+          .where((_) => route == _connection?.route);
 
   /// The Socket Random Identifier.
   String get sri => _ref.read(sriProvider);
@@ -190,10 +159,10 @@ class AuthSocket {
     final connection = _doConnect(route);
 
     return (
-      connection.streamController.stream.where((event) {
-        if (event.path != route.path) {
+      connection.streamController.stream.where((_) {
+        if (route != _connection?.route) {
           _log.warning(
-            'Received event for route $route on active route ${event.path}. Have you forgotten to cancel a subscription?',
+            'Received event for route $route on active route ${_connection?.route}. Have you forgotten to cancel a subscription?',
           );
           return false;
         }
@@ -307,7 +276,6 @@ class AuthSocket {
       }
       return SocketEvent.fromJson(
         jsonDecode(raw as String) as Map<String, dynamic>,
-        route,
       );
     }).listen(_handleEvent);
 
@@ -441,5 +409,37 @@ class AuthSocket {
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
     afterClose?.call();
+  }
+}
+
+@Riverpod(keepAlive: true)
+AuthSocket authSocket(AuthSocketRef ref) {
+  final authSocket = AuthSocket(ref, Logger('AuthSocket'));
+  ref.onDispose(() {
+    authSocket.dispose();
+  });
+  return authSocket;
+}
+
+/// Socket Random Identifier.
+@Riverpod(keepAlive: true)
+String sri(SriRef ref) {
+  // requireValue is possible because appDependenciesProvider is loaded before
+  // anything. See: lib/src/app.dart
+  return ref.read(appDependenciesProvider).requireValue.sri;
+}
+
+/// Average lag computed from WebSocket ping/pong protocol.
+@riverpod
+class AverageLag extends _$AverageLag {
+  @override
+  Duration build() => Duration.zero;
+
+  void reset() {
+    state = Duration.zero;
+  }
+
+  void add(Duration currentLag, double mix) {
+    state += (currentLag - state) * mix;
   }
 }
