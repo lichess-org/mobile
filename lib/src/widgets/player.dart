@@ -4,34 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-
-class PlayerRating extends StatelessWidget {
-  const PlayerRating({
-    required this.rating,
-    required this.deviation,
-    this.provisional,
-    this.style,
-    super.key,
-  });
-
-  final num rating;
-  final num deviation;
-  final bool? provisional;
-
-  final TextStyle? style;
-
-  @override
-  Widget build(BuildContext context) {
-    final ratingStr =
-        rating is double ? rating.toStringAsFixed(2) : rating.toString();
-    return Text(
-      '$ratingStr${provisional == true || deviation > kProvisionalDeviation ? '?' : ''}',
-      style: style,
-    );
-  }
-}
 
 /// Displays a player's name and title with an optional rating.
 class PlayerTitle extends ConsumerWidget {

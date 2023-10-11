@@ -59,6 +59,13 @@ class LobbyGameLoadingBoard extends StatelessWidget {
                           ),
                         ],
                       ),
+                      if (seek.ratingRange != null) ...[
+                        const SizedBox(height: 8.0),
+                        Text(
+                          '${seek.ratingRange!.$1}-${seek.ratingRange!.$2}',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ],
                       const SizedBox(height: 16.0),
                       _LobbyNumbers(),
                     ],

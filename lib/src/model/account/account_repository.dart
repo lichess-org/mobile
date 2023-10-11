@@ -26,7 +26,7 @@ AccountRepository accountRepository(AccountRepositoryRef ref) {
 @riverpod
 Future<User?> account(AccountRef ref) async {
   final session = ref.watch(authSessionProvider);
-  final link = ref.cacheFor(const Duration(minutes: 5));
+  final link = ref.cacheFor(const Duration(hours: 1));
   final repo = ref.watch(accountRepositoryProvider);
   if (session != null) {
     final result = await repo.getProfile();
