@@ -191,6 +191,7 @@ class _WatchTvWidget extends ConsumerWidget {
           headerTrailing: NoPaddingTextButton(
             onPressed: () => pushPlatformRoute(
               context,
+              rootNavigator: true,
               builder: (context) => const LiveTvChannelsScreen(),
             ).then((_) => _refreshData(ref)),
             child: Text(
@@ -208,8 +209,8 @@ class _WatchTvWidget extends ConsumerWidget {
               ),
               onTap: () => pushPlatformRoute(
                 context,
-                builder: (context) => TvScreen(channel: snapshot.channel),
                 rootNavigator: true,
+                builder: (context) => TvScreen(channel: snapshot.channel),
               ).then((_) => _refreshData(ref)),
             );
           }).toList(growable: false),

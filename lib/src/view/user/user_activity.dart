@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
@@ -108,7 +108,7 @@ class UserActivityEntry extends ConsumerWidget {
               subtitle: RatingPrefAware(
                 child: Row(
                   children: [
-                    PlayerRating(
+                    RatingWidget(
                       deviation: 0,
                       rating: gameEntry.value.ratingAfter,
                     ),
@@ -167,7 +167,7 @@ class UserActivityEntry extends ConsumerWidget {
             subtitle: RatingPrefAware(
               child: Row(
                 children: [
-                  PlayerRating(
+                  RatingWidget(
                     deviation: 0,
                     rating: entry.puzzles!.ratingAfter,
                   ),

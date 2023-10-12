@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 
@@ -224,7 +225,7 @@ class PerfCards extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.baseline,
                             textBaseline: TextBaseline.alphabetic,
                             children: [
-                              PlayerRating(
+                              RatingWidget(
                                 rating: userPerf.rating,
                                 deviation: userPerf.ratingDeviation,
                                 provisional: userPerf.provisional,

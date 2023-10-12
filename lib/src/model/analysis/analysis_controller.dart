@@ -29,6 +29,7 @@ class AnalysisOptions with _$AnalysisOptions {
     required String initialFen,
     required int initialPly,
     required IList<Move> moves,
+    int? initialMoveCursor,
     LightOpening? opening,
   }) = _AnalysisOptions;
 }
@@ -61,6 +62,7 @@ class AnalysisController extends _$AnalysisController {
     int ply = options.initialPly;
     Position position = initialPosition;
     Node current = _root;
+    UciPath path = UciPath.empty;
     for (final move in options.moves) {
       final (newPos, san) = position.playToSan(move);
       position = newPos;
@@ -73,9 +75,15 @@ class AnalysisController extends _$AnalysisController {
       );
       current.addChild(nextNode);
       current = nextNode;
+      if (options.initialMoveCursor != null &&
+          ply <= options.initialMoveCursor!) {
+        path = path + nextNode.id;
+      }
     }
 
-    final currentPath = _root.mainlinePath;
+    final currentPath =
+        options.initialMoveCursor == null ? _root.mainlinePath : path;
+    final currentNode = _root.nodeAt(currentPath);
 
     // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
@@ -100,7 +108,7 @@ class AnalysisController extends _$AnalysisController {
       initialPath: UciPath.empty,
       currentPath: currentPath,
       root: _root.view,
-      currentNode: current.view,
+      currentNode: currentNode.view,
       pov: options.orientation,
       evaluationContext: evalContext,
       contextOpening: options.opening,

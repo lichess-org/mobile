@@ -23,6 +23,8 @@ Some of the planned features are also described in [Issues](https://github.com/l
 - non visual board play
 - standalone analysis board
 - puzzles by opening
+- push notifications
+- deep links
 
 ## Lower priority
 

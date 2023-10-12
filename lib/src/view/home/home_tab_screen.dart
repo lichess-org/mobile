@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
@@ -394,9 +395,22 @@ class _CreateAGame extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final playPrefs = ref.watch(playPreferencesProvider);
     final session = ref.watch(authSessionProvider);
-    final seek = playPrefs.seekMode == SeekMode.fast
-        ? GameSeek.fastPairingFromPrefs(playPrefs, session)
-        : GameSeek.customFromPrefs(playPrefs, session);
+
+    GameSeek seek = GameSeek.fastPairingFromPrefs(playPrefs, session);
+
+    if (playPrefs.seekMode == SeekMode.custom) {
+      final account = ref.watch(accountProvider);
+      final UserPerf? userPerf = account.maybeWhen(
+        data: (data) {
+          if (data == null) {
+            return null;
+          }
+          return data.perfs[playPrefs.perfFromCustom];
+        },
+        orElse: () => null,
+      );
+      seek = GameSeek.customFromPrefs(playPrefs, session, userPerf);
+    }
 
     final mode =
         seek.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
@@ -412,18 +426,30 @@ class _CreateAGame extends ConsumerWidget {
             context.l10n.createAGame,
             style: Styles.boardPreviewTitle,
           ),
-          Row(
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
-                seek.perf.icon,
-                size: 20,
-                color: DefaultTextStyle.of(context).style.color,
+              Row(
+                children: [
+                  Icon(
+                    seek.perf.icon,
+                    size: 20,
+                    color: DefaultTextStyle.of(context).style.color,
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    '${seek.timeIncrement.display}$mode',
+                    style: Styles.timeControl,
+                  ),
+                ],
               ),
-              const SizedBox(width: 5),
-              Text(
-                '${seek.timeIncrement.display}$mode',
-                style: Styles.timeControl,
-              ),
+              if (seek.ratingRange != null) ...[
+                const SizedBox(height: 8.0),
+                Text(
+                  '${seek.ratingRange!.$1}-${seek.ratingRange!.$2}',
+                ),
+              ],
             ],
           ),
         ],

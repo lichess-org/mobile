@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -54,6 +53,9 @@ class GameScreen extends ConsumerStatefulWidget {
 
 class _GameScreenState extends ConsumerState<GameScreen>
     with AndroidImmersiveMode, RouteAware, Wakelock {
+  final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
+  final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -74,7 +76,6 @@ class _GameScreenState extends ConsumerState<GameScreen>
     ref.invalidate(userRecentGamesProvider);
     ref.invalidate(accountProvider);
     ref.invalidate(userActivityProvider);
-    ref.read(authSocketProvider).close();
   }
 
   @override
@@ -92,6 +93,8 @@ class _GameScreenState extends ConsumerState<GameScreen>
               gameState: state,
               ctrlProvider: ctrlProvider,
               gameProvider: gameProvider,
+              whiteClockKey: _whiteClockKey,
+              blackClockKey: _blackClockKey,
             );
             return PlatformWidget(
               androidBuilder: (context) => _androidBuilder(
@@ -241,11 +244,15 @@ class _Body extends ConsumerWidget {
     required this.gameState,
     required this.ctrlProvider,
     required this.gameProvider,
+    required this.whiteClockKey,
+    required this.blackClockKey,
   });
 
   final GameState gameState;
   final GameControllerProvider ctrlProvider;
   final LobbyGameProvider gameProvider;
+  final GlobalKey whiteClockKey;
+  final GlobalKey blackClockKey;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -295,6 +302,7 @@ class _Body extends ConsumerWidget {
               : null,
       clock: gameState.game.clock != null
           ? CountdownClock(
+              key: blackClockKey,
               duration: gameState.game.clock!.black,
               active: gameState.activeClockSide == Side.black,
               emergencyThreshold:
@@ -327,6 +335,7 @@ class _Body extends ConsumerWidget {
               : null,
       clock: gameState.game.clock != null
           ? CountdownClock(
+              key: whiteClockKey,
               duration: gameState.game.clock!.white,
               active: gameState.activeClockSide == Side.white,
               emergencyThreshold:

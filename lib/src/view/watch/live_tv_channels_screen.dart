@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/tv/live_tv_channels.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -67,7 +66,6 @@ class _TvChannelsScreenState extends ConsumerState<LiveTvChannelsScreen>
       ref.read(liveTvChannelsProvider.notifier).startWatching();
     } else {
       ref.read(liveTvChannelsProvider.notifier).stopWatching();
-      ref.read(authSocketProvider).close();
     }
   }
 
@@ -76,14 +74,14 @@ class _TvChannelsScreenState extends ConsumerState<LiveTvChannelsScreen>
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      watchTabRouteObserver.subscribe(this, route);
+      tvRouteObserver.subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    watchTabRouteObserver.unsubscribe(this);
+    tvRouteObserver.unsubscribe(this);
     super.dispose();
   }
 
@@ -98,6 +96,12 @@ class _TvChannelsScreenState extends ConsumerState<LiveTvChannelsScreen>
     ref.read(liveTvChannelsProvider.notifier).startWatching();
     super.didPopNext();
   }
+
+  @override
+  void didPop() {
+    ref.read(liveTvChannelsProvider.notifier).stopWatching();
+    super.didPop();
+  }
 }
 
 class _Body extends ConsumerWidget {
@@ -105,10 +109,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentBottomTab = ref.watch(currentBottomTabProvider);
-    final gamesAsync = currentBottomTab == BottomTab.watch
-        ? ref.watch(liveTvChannelsProvider)
-        : const AsyncLoading<LiveTvChannelsState>();
+    final gamesAsync = ref.watch(liveTvChannelsProvider);
     return gamesAsync.when(
       data: (games) {
         final list = [
@@ -123,11 +124,11 @@ class _Body extends ConsumerWidget {
               onTap: () {
                 pushPlatformRoute(
                   context,
+                  rootNavigator: true,
                   builder: (_) => TvScreen(
                     channel: game.channel,
                     initialGame: (game.id, game.orientation),
                   ),
-                  rootNavigator: true,
                 );
               },
               orientation: game.orientation.cg,

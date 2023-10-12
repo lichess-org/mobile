@@ -90,9 +90,7 @@ class _Body extends ConsumerWidget {
                     },
                   ),
                   SwitchSettingTile(
-                    title: Text(
-                      context.l10n.preferencesShowPlayerRatings,
-                    ),
+                    title: Text(context.l10n.preferencesShowPlayerRatings),
                     value: data.showRatings.value,
                     onChanged: (value) {
                       ref

@@ -214,6 +214,7 @@ class PlatformListTile extends StatelessWidget {
     this.selected = false,
     this.isThreeLine = false,
     this.visualDensity,
+    this.harmonizeCupertinoTitleStyle = false,
   });
 
   final Widget? leading;
@@ -223,6 +224,9 @@ class PlatformListTile extends StatelessWidget {
 
   /// only on iOS
   final Widget? additionalInfo;
+
+  /// Useful on some screens where ListTiles with and without subtitle are mixed.
+  final bool harmonizeCupertinoTitleStyle;
 
   // only on android
   final bool selected;
@@ -267,7 +271,16 @@ class PlatformListTile extends StatelessWidget {
           ),
           child: CupertinoListTile.notched(
             leading: leading,
-            title: title,
+            title: harmonizeCupertinoTitleStyle
+                ? DefaultTextStyle.merge(
+                    // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.0,
+                    ),
+                    child: title,
+                  )
+                : title,
             subtitle: subtitle,
             trailing: trailing,
             additionalInfo: additionalInfo,

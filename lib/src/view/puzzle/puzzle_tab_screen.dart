@@ -329,7 +329,7 @@ class _PuzzleButton extends StatelessWidget {
       icon: const Icon(
         LichessIcons.target,
         size: 44,
-        color: LichessColors.secondary,
+        color: LichessColors.brag,
       ),
       title: Text(
         'Puzzle training',

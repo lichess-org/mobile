@@ -15,6 +15,7 @@ class SocketEvent with _$SocketEvent {
     int? version,
   }) = _SocketEvent;
 
+  /// A special internal pong event that should never be accessible to the subscribers.
   static const pong = SocketEvent(topic: '_pong');
 
   factory SocketEvent.fromJson(Map<String, dynamic> json) {

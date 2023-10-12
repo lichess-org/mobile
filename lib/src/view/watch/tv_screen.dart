@@ -11,14 +11,10 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
-
-final RouteObserver<PageRoute<void>> tvRouteObserver =
-    RouteObserver<PageRoute<void>>();
 
 class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({required this.channel, this.initialGame, super.key});
@@ -34,6 +30,9 @@ class _TvScreenState extends ConsumerState<TvScreen>
     with RouteAware, WidgetsBindingObserver {
   TvControllerProvider get _tvGameCtrl =>
       tvControllerProvider(widget.channel, widget.initialGame);
+
+  final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnTvScreen');
+  final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnTvScreen');
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,12 @@ class _TvScreenState extends ConsumerState<TvScreen>
           ToggleSoundButton(),
         ],
       ),
-      body: _Body(widget.channel, widget.initialGame),
+      body: _Body(
+        widget.channel,
+        widget.initialGame,
+        whiteClockKey: _whiteClockKey,
+        blackClockKey: _blackClockKey,
+      ),
     );
   }
 
@@ -65,7 +69,12 @@ class _TvScreenState extends ConsumerState<TvScreen>
         middle: Text('${widget.channel.label} TV'),
         trailing: ToggleSoundButton(),
       ),
-      child: _Body(widget.channel, widget.initialGame),
+      child: _Body(
+        widget.channel,
+        widget.initialGame,
+        whiteClockKey: _whiteClockKey,
+        blackClockKey: _blackClockKey,
+      ),
     );
   }
 
@@ -75,7 +84,6 @@ class _TvScreenState extends ConsumerState<TvScreen>
       ref.read(_tvGameCtrl.notifier).startWatching();
     } else {
       ref.read(_tvGameCtrl.notifier).stopWatching();
-      ref.read(authSocketProvider).close();
     }
   }
 
@@ -116,27 +124,26 @@ class _TvScreenState extends ConsumerState<TvScreen>
   @override
   void didPop() {
     ref.read(_tvGameCtrl.notifier).stopWatching();
-    final navState = ref.read(currentNavigatorKeyProvider).currentState;
-    // only close the socket if we're going back to the root screen
-    if (navState != null && !navState.canPop()) {
-      ref.read(authSocketProvider).close();
-    }
     super.didPop();
   }
 }
 
 class _Body extends ConsumerWidget {
-  const _Body(this.channel, this.initialGame);
+  const _Body(
+    this.channel,
+    this.initialGame, {
+    required this.whiteClockKey,
+    required this.blackClockKey,
+  });
 
   final TvChannel channel;
   final (GameId id, Side orientation)? initialGame;
+  final GlobalKey whiteClockKey;
+  final GlobalKey blackClockKey;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentBottomTab = ref.watch(currentBottomTabProvider);
-    final asyncGame = currentBottomTab == BottomTab.watch
-        ? ref.watch(tvControllerProvider(channel, initialGame))
-        : const AsyncLoading<TvState>();
+    final asyncGame = ref.watch(tvControllerProvider(channel, initialGame));
 
     return SafeArea(
       child: Center(
@@ -155,6 +162,7 @@ class _Body extends ConsumerWidget {
               player: game.black.setOnGame(true),
               clock: gameState.game.clock != null
                   ? CountdownClock(
+                      key: blackClockKey,
                       duration: gameState.game.clock!.black,
                       active: gameState.activeClockSide == Side.black,
                     )
@@ -165,6 +173,7 @@ class _Body extends ConsumerWidget {
               player: game.white.setOnGame(true),
               clock: gameState.game.clock != null
                   ? CountdownClock(
+                      key: whiteClockKey,
                       duration: gameState.game.clock!.white,
                       active: gameState.activeClockSide == Side.white,
                     )

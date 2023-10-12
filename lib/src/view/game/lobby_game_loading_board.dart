@@ -2,37 +2,17 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-
-part 'lobby_game_loading_board.g.dart';
-
-@riverpod
-Stream<({int nbPlayers, int nbGames})> lobbyNumbers(
-  LobbyNumbersRef ref,
-) async* {
-  final socket = ref.watch(authSocketProvider);
-  final stream = socket.stream ?? const Stream.empty();
-  await for (final msg in stream) {
-    if (msg.topic == 'n') {
-      final data = msg.data as Map<String, int>;
-      yield (
-        nbPlayers: data['nbPlayers']!,
-        nbGames: data['nbGames']!,
-      );
-    }
-  }
-}
 
 class LobbyGameLoadingBoard extends StatelessWidget {
   const LobbyGameLoadingBoard(this.seek);
@@ -79,6 +59,13 @@ class LobbyGameLoadingBoard extends StatelessWidget {
                           ),
                         ],
                       ),
+                      if (seek.ratingRange != null) ...[
+                        const SizedBox(height: 8.0),
+                        Text(
+                          '${seek.ratingRange!.$1}-${seek.ratingRange!.$2}',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ],
                       const SizedBox(height: 16.0),
                       _LobbyNumbers(),
                     ],
@@ -173,21 +160,9 @@ class _LobbyNumbers extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final lobbyNumbers = ref.watch(lobbyNumbersProvider);
-    return lobbyNumbers.when(
-      data: (numbers) => Column(
-        children: [
-          _AnimatedLobbyNumber(
-            labelBuilder: (nb) => context.l10n.nbPlayers(nb),
-            value: numbers.nbPlayers,
-          ),
-          const SizedBox(height: 8.0),
-          _AnimatedLobbyNumber(
-            labelBuilder: (nb) => context.l10n.nbGamesInPlay(nb),
-            value: numbers.nbGames,
-          ),
-        ],
-      ),
-      loading: () => Column(
+
+    if (lobbyNumbers == null) {
+      return Column(
         children: [
           Text(
             context.l10n.nbPlayers(0).replaceAll('0', '...'),
@@ -197,11 +172,23 @@ class _LobbyNumbers extends ConsumerWidget {
             context.l10n.nbGamesInPlay(0).replaceAll('0', '...'),
           ),
         ],
-      ),
-      error: (err, __) {
-        return const SizedBox.shrink();
-      },
-    );
+      );
+    } else {
+      final (:nbPlayers, :nbGames) = lobbyNumbers;
+      return Column(
+        children: [
+          _AnimatedLobbyNumber(
+            labelBuilder: (nb) => context.l10n.nbPlayers(nb),
+            value: nbPlayers,
+          ),
+          const SizedBox(height: 8.0),
+          _AnimatedLobbyNumber(
+            labelBuilder: (nb) => context.l10n.nbGamesInPlay(nb),
+            value: nbGames,
+          ),
+        ],
+      );
+    }
   }
 }
 

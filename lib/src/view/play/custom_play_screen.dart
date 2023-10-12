@@ -9,10 +9,14 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/expanded_section.dart';
+import 'package:lichess_mobile/src/widgets/rating.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 
 class CustomPlayScreen extends StatelessWidget {
@@ -45,22 +49,31 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final account = ref.watch(accountProvider);
     final preferences = ref.watch(playPreferencesProvider);
     final session = ref.watch(authSessionProvider);
     final isValidTimeControl = preferences.customTimeSeconds > 0 ||
         preferences.customIncrementSeconds > 0;
+
+    final UserPerf? userPerf = account.maybeWhen(
+      data: (data) {
+        if (data == null) {
+          return null;
+        }
+        return data.perfs[preferences.perfFromCustom];
+      },
+      orElse: () => null,
+    );
 
     return Center(
       child: ListView(
         shrinkWrap: true,
         children: [
           PlatformListTile(
+            harmonizeCupertinoTitleStyle: true,
             title: Text.rich(
               TextSpan(
                 text: '${context.l10n.minutesPerSide}: ',
-                style: const TextStyle(
-                  fontWeight: FontWeight.normal,
-                ),
                 children: [
                   TextSpan(
                     style: const TextStyle(
@@ -84,11 +97,9 @@ class _Body extends ConsumerWidget {
             ),
           ),
           PlatformListTile(
+            harmonizeCupertinoTitleStyle: true,
             title: Text.rich(
               TextSpan(
-                style: const TextStyle(
-                  fontWeight: FontWeight.normal,
-                ),
                 text: '${context.l10n.incrementInSeconds}: ',
                 children: [
                   TextSpan(
@@ -112,6 +123,7 @@ class _Body extends ConsumerWidget {
             ),
           ),
           PlatformListTile(
+            harmonizeCupertinoTitleStyle: true,
             title: Text(context.l10n.variant),
             trailing: AdaptiveTextButton(
               onPressed: () {
@@ -130,20 +142,10 @@ class _Body extends ConsumerWidget {
               child: Text(preferences.customVariant.label),
             ),
           ),
-          if (session != null)
-            PlatformListTile(
-              title: Text(context.l10n.rated),
-              trailing: Switch.adaptive(
-                value: preferences.customRated,
-                onChanged: (bool value) {
-                  ref
-                      .read(playPreferencesProvider.notifier)
-                      .setCustomRated(value);
-                },
-              ),
-            ),
-          if (preferences.customRated == false)
-            PlatformListTile(
+          ExpandedSection(
+            expand: preferences.customRated == false,
+            child: PlatformListTile(
+              harmonizeCupertinoTitleStyle: true,
               title: Text(context.l10n.side),
               trailing: AdaptiveTextButton(
                 onPressed: () {
@@ -163,6 +165,100 @@ class _Body extends ConsumerWidget {
                 child: Text(_customSideLabel(context, preferences.customSide)),
               ),
             ),
+          ),
+          if (session != null)
+            PlatformListTile(
+              harmonizeCupertinoTitleStyle: true,
+              title: Text(context.l10n.rated),
+              trailing: Switch.adaptive(
+                value: preferences.customRated,
+                onChanged: (bool value) {
+                  ref
+                      .read(playPreferencesProvider.notifier)
+                      .setCustomRated(value);
+                },
+              ),
+            ),
+          if (userPerf != null)
+            Builder(
+              builder: (context) {
+                final (subtract, add) = preferences.customRatingRange;
+
+                return Opacity(
+                  opacity: preferences.isCustomRatingRangeAvailable ? 1 : 0.5,
+                  child: PlatformListTile(
+                    harmonizeCupertinoTitleStyle: true,
+                    title: Text(
+                      context.l10n.ratingRange,
+                    ),
+                    subtitle: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Flexible(
+                          child: Column(
+                            children: [
+                              NonLinearSlider(
+                                value: subtract,
+                                values: kSubtractingRatingRange,
+                                onChangeEnd: preferences
+                                        .isCustomRatingRangeAvailable
+                                    ? (num value) {
+                                        ref
+                                            .read(
+                                              playPreferencesProvider.notifier,
+                                            )
+                                            .setCustomRatingRange(
+                                              value.toInt(),
+                                              add,
+                                            );
+                                      }
+                                    : null,
+                              ),
+                              Center(
+                                child: Text('$subtract'),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        RatingWidget(
+                          rating: userPerf.rating,
+                          deviation: userPerf.ratingDeviation,
+                          provisional: userPerf.provisional,
+                        ),
+                        const SizedBox(width: 5),
+                        Flexible(
+                          child: Column(
+                            children: [
+                              NonLinearSlider(
+                                value: add,
+                                values: kAddingRatingRange,
+                                onChangeEnd: preferences
+                                        .isCustomRatingRangeAvailable
+                                    ? (num value) {
+                                        ref
+                                            .read(
+                                              playPreferencesProvider.notifier,
+                                            )
+                                            .setCustomRatingRange(
+                                              subtract,
+                                              value.toInt(),
+                                            );
+                                      }
+                                    : null,
+                              ),
+                              Center(
+                                child: Text('+$add'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -181,6 +277,7 @@ class _Body extends ConsumerWidget {
                             seek: GameSeek.customFromPrefs(
                               preferences,
                               session,
+                              userPerf,
                             ),
                           );
                         },

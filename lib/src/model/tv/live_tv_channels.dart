@@ -26,7 +26,6 @@ class LiveTvChannels extends _$LiveTvChannels {
   Future<LiveTvChannelsState> build() async {
     ref.onDispose(() {
       _socketSubscription?.cancel();
-      _socket.close();
     });
 
     return _doStartWatching();
