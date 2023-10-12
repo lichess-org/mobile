@@ -96,11 +96,9 @@ class _OnlineFriendsWidget extends ConsumerWidget {
               PlatformListTile(
                 title: Padding(
                   padding: const EdgeInsets.only(right: 5.0),
-                  child: Flexible(
-                    child: Text(
-                      username.toString(),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                  child: Text(
+                    username.toString(),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
