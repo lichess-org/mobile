@@ -8,12 +8,14 @@ class AdaptiveTextField extends StatelessWidget {
     this.maxLines,
     this.placeholder,
     this.onChanged,
+    this.enableSuggestions = false,
     super.key,
   });
 
   final int? maxLines;
   final String? placeholder;
   final void Function(String)? onChanged;
+  final bool enableSuggestions;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class AdaptiveTextField extends StatelessWidget {
           maxLines: maxLines,
           placeholder: placeholder,
           onChanged: onChanged,
+          enableSuggestions: enableSuggestions,
         );
       default:
         return TextField(
@@ -36,6 +39,7 @@ class AdaptiveTextField extends StatelessWidget {
             hintText: placeholder,
           ),
           onChanged: onChanged,
+          enableSuggestions: enableSuggestions,
         );
     }
   }
