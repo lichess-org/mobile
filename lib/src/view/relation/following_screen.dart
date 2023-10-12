@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository_providers.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
@@ -59,35 +60,50 @@ class _Body extends ConsumerWidget {
               ListSection(
                 children: [
                   for (final user in data)
-                    PlatformListTile(
-                      onTap: () => {
-                        pushPlatformRoute(
-                          context,
-                          builder: (context) =>
-                              UserScreen(user: user.lightUser),
-                        ),
-                      },
-                      title: Padding(
-                        padding: const EdgeInsets.only(right: 5.0),
-                        child: Row(
-                          children: [
-                            if (user.title != null) ...[
-                              Text(
-                                user.title!,
-                                style: const TextStyle(
-                                  color: LichessColors.brag,
-                                  fontWeight: FontWeight.bold,
+                    Slidable(
+                      endActionPane: const ActionPane(
+                        motion: ScrollMotion(),
+                        extentRatio: 0.3,
+                        children: [
+                          SlidableAction(
+                            onPressed: null,
+                            backgroundColor: Color(0xFFFE4A49),
+                            foregroundColor: Colors.white,
+                            icon: Icons.person_remove,
+                            label: 'Unfollow',
+                          ),
+                        ],
+                      ),
+                      child: PlatformListTile(
+                        onTap: () => {
+                          pushPlatformRoute(
+                            context,
+                            builder: (context) =>
+                                UserScreen(user: user.lightUser),
+                          ),
+                        },
+                        title: Padding(
+                          padding: const EdgeInsets.only(right: 5.0),
+                          child: Row(
+                            children: [
+                              if (user.title != null) ...[
+                                Text(
+                                  user.title!,
+                                  style: const TextStyle(
+                                    color: LichessColors.brag,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                              ],
+                              Flexible(
+                                child: Text(
+                                  user.username,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              const SizedBox(width: 5),
                             ],
-                            Flexible(
-                              child: Text(
-                                user.username,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
