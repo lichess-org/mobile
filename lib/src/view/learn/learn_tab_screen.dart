@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_position_choice_screen.dart';
 
 class LearnTabScreen extends StatelessWidget {
   const LearnTabScreen({super.key});
@@ -73,18 +74,7 @@ class _Body extends StatelessWidget {
           onTap: () => pushPlatformRoute(
             context,
             rootNavigator: true,
-            builder: (context) => AnalysisScreen(
-              title: context.l10n.analysis,
-              options: AnalysisOptions(
-                isLocalEvaluationAllowed: true,
-                variant: Variant.standard,
-                initialFen: kInitialEPD,
-                initialPly: 0,
-                moves: IList(),
-                orientation: Side.white,
-                id: const ValueId('standalone_analysis'),
-              ),
-            ),
+            builder: (context) => const AnalysisPositionChoiceScreen(),
           ),
         ),
       ),

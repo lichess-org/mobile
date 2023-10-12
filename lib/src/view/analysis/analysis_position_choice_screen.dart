@@ -1,0 +1,215 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+
+class AnalysisPositionChoiceScreen extends StatelessWidget {
+  const AnalysisPositionChoiceScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformWidget(
+      androidBuilder: _androidBuilder,
+      iosBuilder: _iosBuilder,
+    );
+  }
+
+  Widget _androidBuilder(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(context.l10n.analysis),
+      ),
+      body: const _Body(),
+    );
+  }
+
+  Widget _iosBuilder(BuildContext context) {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(context.l10n.analysis),
+      ),
+      child: const _Body(),
+    );
+  }
+}
+
+class _Body extends StatefulWidget {
+  const _Body();
+
+  @override
+  State<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<_Body> {
+  String? textInput;
+  Variant variant = Variant.standard;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Column(
+        children: [
+          Padding(
+            padding: Styles.bodySectionPadding,
+            child: CupertinoTextField(
+              decoration: const BoxDecoration(
+                color: CupertinoColors.secondarySystemGroupedBackground,
+                border: _kDefaultRoundedBorder,
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              ),
+              maxLines: 15,
+              placeholder:
+                  '${context.l10n.pasteTheFenStringHere} / ${context.l10n.pasteThePgnStringHere}\n\nLeave empty for initial position',
+              onChanged: (value) {
+                setState(() {
+                  textInput = value;
+                });
+              },
+            ),
+          ),
+          Padding(
+            padding: Styles.bodySectionPadding,
+            child: Column(
+              children: [
+                SecondaryButton(
+                  semanticsLabel: variant.label,
+                  onPressed: () {
+                    showChoicePicker(
+                      context,
+                      choices: supportedVariants
+                          .remove(Variant.fromPosition)
+                          .toList(),
+                      selectedItem: variant,
+                      labelBuilder: (v) => Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(v.icon),
+                          const SizedBox(width: 5.0),
+                          Text(v.label),
+                        ],
+                      ),
+                      onSelectedItemChanged: (Variant variant) {
+                        setState(() {
+                          this.variant = variant;
+                        });
+                      },
+                    );
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(variant.icon),
+                      const SizedBox(width: 5.0),
+                      Text(variant.label),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8.0),
+                FatButton(
+                  semanticsLabel: context.l10n.analysis,
+                  onPressed: parsedInput != null
+                      ? () => pushPlatformRoute(
+                            context,
+                            rootNavigator: true,
+                            builder: (context) => AnalysisScreen(
+                              options: parsedInput!,
+                            ),
+                          )
+                      : null,
+                  child: Text(context.l10n.analysis),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  AnalysisOptions? get parsedInput {
+    if (textInput == null || textInput!.trim().isEmpty) {
+      return AnalysisOptions(
+        isLocalEvaluationAllowed: true,
+        variant: variant,
+        initialFen: Position.initialPosition(variant.rules).fen,
+        initialPly: 0,
+        moves: IList(),
+        orientation: Side.white,
+        id: const ValueId('standalone_analysis'),
+      );
+    }
+
+    // try to parse as FEN first
+    try {
+      final pos = Position.setupPosition(
+        variant.rules,
+        Setup.parseFen(textInput!.trim()),
+      );
+      return AnalysisOptions(
+        isLocalEvaluationAllowed: true,
+        variant: variant,
+        initialFen: pos.fen,
+        initialPly: 0,
+        moves: IList(),
+        orientation: Side.white,
+        id: const ValueId('standalone_analysis'),
+      );
+    } catch (_, __) {}
+
+    // try to parse as PGN
+    try {
+      final game = PgnGame.parsePgn(textInput!);
+      final initialPosition = PgnGame.startingPosition(game.headers);
+      final List<Move> moves = [];
+      Position position = initialPosition;
+      for (final node in game.moves.mainline()) {
+        final move = position.parseSan(node.san);
+        if (move == null) break; // Illegal move
+        moves.add(move);
+        position = position.play(move);
+      }
+
+      if (moves.isEmpty) return null;
+
+      return AnalysisOptions(
+        isLocalEvaluationAllowed: true,
+        variant: variant,
+        initialFen: initialPosition.fen,
+        initialPly: 0,
+        moves: IList(moves),
+        initialMoveCursor: 0,
+        orientation: Side.white,
+        id: const ValueId('standalone_analysis'),
+      );
+    } catch (_, __) {}
+
+    return null;
+  }
+}
+
+// taken from https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/text_field.dart
+// Value inspected from Xcode 11 & iOS 13.0 Simulator.
+const BorderSide _kDefaultRoundedBorderSide = BorderSide(
+  color: CupertinoDynamicColor.withBrightness(
+    color: Color(0x33000000),
+    darkColor: Color(0x33FFFFFF),
+  ),
+  width: 0.0,
+);
+const Border _kDefaultRoundedBorder = Border(
+  top: _kDefaultRoundedBorderSide,
+  bottom: _kDefaultRoundedBorderSide,
+  left: _kDefaultRoundedBorderSide,
+  right: _kDefaultRoundedBorderSide,
+);

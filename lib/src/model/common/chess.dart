@@ -1,7 +1,10 @@
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 
 part 'chess.freezed.dart';
 part 'chess.g.dart';
@@ -51,20 +54,21 @@ const ISet<Variant> supportedVariants = ISetConst({
 });
 
 enum Variant {
-  standard('Standard'),
-  chess960('Chess960'),
-  fromPosition('From Position'),
-  antichess('Antichess'),
-  kingOfTheHill('King of the Hill'),
-  threeCheck('Three Check'),
-  atomic('Atomic'),
-  horde('Horde'),
-  racingKings('Racing Kings'),
-  crazyhouse('Crazyhouse');
+  standard('Standard', LichessIcons.crown),
+  chess960('Chess960', LichessIcons.die_six),
+  fromPosition('From Position', LichessIcons.feather),
+  antichess('Antichess', LichessIcons.antichess),
+  kingOfTheHill('King of the Hill', LichessIcons.flag),
+  threeCheck('Three Check', LichessIcons.three_check),
+  atomic('Atomic', LichessIcons.atom),
+  horde('Horde', LichessIcons.horde),
+  racingKings('Racing Kings', LichessIcons.racing_kings),
+  crazyhouse('Crazyhouse', LichessIcons.h_square);
 
-  const Variant(this.label);
+  const Variant(this.label, this.icon);
 
   final String label;
+  final IconData icon;
 
   bool get isSupported => supportedVariants.contains(this);
 

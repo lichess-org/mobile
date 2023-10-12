@@ -54,7 +54,7 @@ class AnalysisScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(title ?? context.l10n.analysis),
+        title: _Title(options: options, title: title),
         actions: [
           _EngineDepth(ctrlProvider),
           SettingsButton(
@@ -75,7 +75,7 @@ class AnalysisScreen extends ConsumerWidget {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(title ?? context.l10n.analysis),
+        middle: _Title(options: options, title: title),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -92,6 +92,29 @@ class AnalysisScreen extends ConsumerWidget {
       ),
       child: _Body(ctrlProvider: ctrlProvider),
     );
+  }
+}
+
+class _Title extends StatelessWidget {
+  const _Title({
+    required this.options,
+    this.title,
+  });
+  final AnalysisOptions options;
+  final String? title;
+
+  @override
+  Widget build(BuildContext context) {
+    return title != null
+        ? Text(title!)
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(options.variant.icon),
+              const SizedBox(width: 5.0),
+              Text(context.l10n.analysis),
+            ],
+          );
   }
 }
 
