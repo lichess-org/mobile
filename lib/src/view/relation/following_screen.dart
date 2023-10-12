@@ -8,6 +8,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/user/user_screen.dart';
 
 class FollowingScreen extends StatelessWidget {
   const FollowingScreen({super.key});
@@ -52,35 +54,45 @@ class _Body extends ConsumerWidget {
           );
         }
         return SafeArea(
-          child: ListSection(
+          child: ListView(
             children: [
-              for (final user in data)
-                PlatformListTile(
-                  onTap: () => {},
-                  title: Padding(
-                    padding: const EdgeInsets.only(right: 5.0),
-                    child: Row(
-                      children: [
-                        if (user.title != null) ...[
-                          Text(
-                            user.title!,
-                            style: const TextStyle(
-                              color: LichessColors.brag,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                        ],
-                        Flexible(
-                          child: Text(
-                            user.username,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+              ListSection(
+                children: [
+                  for (final user in data)
+                    PlatformListTile(
+                      onTap: () => {
+                        pushPlatformRoute(
+                          context,
+                          builder: (context) =>
+                              UserScreen(user: user.lightUser),
                         ),
-                      ],
+                      },
+                      title: Padding(
+                        padding: const EdgeInsets.only(right: 5.0),
+                        child: Row(
+                          children: [
+                            if (user.title != null) ...[
+                              Text(
+                                user.title!,
+                                style: const TextStyle(
+                                  color: LichessColors.brag,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 5),
+                            ],
+                            Flexible(
+                              child: Text(
+                                user.username,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                ],
+              ),
             ],
           ),
         );
@@ -96,7 +108,6 @@ class _Body extends ConsumerWidget {
           isLoading: true,
           child: ListSection.loading(
             itemsNumber: 10,
-            header: true,
           ),
         ),
       ),

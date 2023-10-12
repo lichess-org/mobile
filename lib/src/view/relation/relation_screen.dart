@@ -53,7 +53,11 @@ class _RelationScreenState extends ConsumerState<RelationScreen>
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SafeArea(child: _OnlineFriendsWidget());
+    return SafeArea(
+      child: ListView(
+        children: [_OnlineFriendsWidget()],
+      ),
+    );
   }
 }
 
@@ -67,7 +71,7 @@ class _OnlineFriendsWidget extends ConsumerWidget {
       data: (data) {
         return ListSection(
           header: Text(
-            '${data.followingOnlines.length} Online ${context.l10n.friends}', // TODO: we need good translations for this
+            '${data.followingOnlines.length} online friends', // TODO: we need good translations for this
           ),
           headerTrailing: data.followingOnlines.isEmpty
               ? null
