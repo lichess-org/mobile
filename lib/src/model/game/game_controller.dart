@@ -532,6 +532,7 @@ class GameController extends _$GameController {
               ratingDiff: endData.ratingDiff?.black,
             ),
           ),
+          premove: null,
         );
 
         if (endData.clock != null) {
