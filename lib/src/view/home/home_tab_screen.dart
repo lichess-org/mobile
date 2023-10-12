@@ -556,8 +556,8 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const Text(
-                'Puzzle training',
+              Text(
+                context.l10n.puzzleDesc,
                 style: Styles.boardPreviewTitle,
               ),
               Text(
