@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -58,17 +59,12 @@ class _BodyState extends State<_Body> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(
+      child: ListView(
         children: [
           Padding(
             padding: Styles.bodySectionPadding,
-            child: CupertinoTextField(
-              decoration: const BoxDecoration(
-                color: CupertinoColors.secondarySystemGroupedBackground,
-                border: _kDefaultRoundedBorder,
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              ),
-              maxLines: 15,
+            child: AdaptiveTextField(
+              maxLines: 10,
               placeholder:
                   '${context.l10n.pasteTheFenStringHere} / ${context.l10n.pasteThePgnStringHere}\n\nLeave empty for initial position',
               onChanged: (value) {
@@ -197,19 +193,3 @@ class _BodyState extends State<_Body> {
     return null;
   }
 }
-
-// taken from https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/text_field.dart
-// Value inspected from Xcode 11 & iOS 13.0 Simulator.
-const BorderSide _kDefaultRoundedBorderSide = BorderSide(
-  color: CupertinoDynamicColor.withBrightness(
-    color: Color(0x33000000),
-    darkColor: Color(0x33FFFFFF),
-  ),
-  width: 0.0,
-);
-const Border _kDefaultRoundedBorder = Border(
-  top: _kDefaultRoundedBorderSide,
-  bottom: _kDefaultRoundedBorderSide,
-  left: _kDefaultRoundedBorderSide,
-  right: _kDefaultRoundedBorderSide,
-);
