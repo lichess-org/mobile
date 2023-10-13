@@ -63,6 +63,7 @@ class AnalysisController extends _$AnalysisController {
     Position position = initialPosition;
     Node current = _root;
     UciPath path = UciPath.empty;
+    Move? lastMove;
     for (final move in options.moves) {
       final (newPos, san) = position.playToSan(move);
       position = newPos;
@@ -78,6 +79,7 @@ class AnalysisController extends _$AnalysisController {
       if (options.initialMoveCursor != null &&
           ply <= options.initialMoveCursor!) {
         path = path + nextNode.id;
+        lastMove = move;
       }
     }
 
@@ -109,6 +111,7 @@ class AnalysisController extends _$AnalysisController {
       currentPath: currentPath,
       root: _root.view,
       currentNode: currentNode.view,
+      lastMove: lastMove,
       pov: options.orientation,
       evaluationContext: evalContext,
       contextOpening: options.opening,
