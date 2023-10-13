@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dartchess/dartchess.dart';
@@ -53,8 +54,26 @@ class _Body extends StatefulWidget {
 }
 
 class _BodyState extends State<_Body> {
+  final _controller = TextEditingController();
+
   String? textInput;
   Variant variant = Variant.standard;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      setState(() {
+        textInput = _controller.text;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +86,9 @@ class _BodyState extends State<_Body> {
               maxLines: 10,
               placeholder:
                   '${context.l10n.pasteTheFenStringHere} / ${context.l10n.pasteThePgnStringHere}\n\nLeave empty for initial position',
-              onChanged: (value) {
-                setState(() {
-                  textInput = value;
-                });
-              },
+              controller: _controller,
+              readOnly: true,
+              onTap: _getClipboardData,
             ),
           ),
           Padding(
@@ -133,6 +150,13 @@ class _BodyState extends State<_Body> {
     );
   }
 
+  Future<void> _getClipboardData() async {
+    final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+    if (data != null) {
+      _controller.text = data.text!;
+    }
+  }
+
   AnalysisOptions? get parsedInput {
     if (textInput == null || textInput!.trim().isEmpty) {
       return AnalysisOptions(
@@ -184,7 +208,7 @@ class _BodyState extends State<_Body> {
         initialFen: initialPosition.fen,
         initialPly: 0,
         moves: IList(moves),
-        initialMoveCursor: 0,
+        initialMoveCursor: 1,
         orientation: Side.white,
         id: const ValueId('standalone_analysis'),
       );

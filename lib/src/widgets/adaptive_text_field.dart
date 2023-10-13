@@ -7,8 +7,11 @@ class AdaptiveTextField extends StatelessWidget {
   const AdaptiveTextField({
     this.maxLines,
     this.placeholder,
+    this.controller,
     this.onChanged,
     this.onSubmitted,
+    this.onTap,
+    this.readOnly = false,
     this.enableSuggestions = false,
     super.key,
   });
@@ -16,8 +19,11 @@ class AdaptiveTextField extends StatelessWidget {
   final int? maxLines;
   final String? placeholder;
   final bool enableSuggestions;
+  final bool readOnly;
+  final TextEditingController? controller;
   final void Function(String)? onChanged;
   final void Function(String)? onSubmitted;
+  final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +37,11 @@ class AdaptiveTextField extends StatelessWidget {
           ),
           maxLines: maxLines,
           placeholder: placeholder,
+          controller: controller,
           onChanged: onChanged,
           onSubmitted: onSubmitted,
+          onTap: onTap,
+          readOnly: readOnly,
           enableSuggestions: enableSuggestions,
         );
       default:
@@ -41,8 +50,11 @@ class AdaptiveTextField extends StatelessWidget {
           decoration: InputDecoration(
             hintText: placeholder,
           ),
+          controller: controller,
           onChanged: onChanged,
           onSubmitted: onSubmitted,
+          onTap: onTap,
+          readOnly: readOnly,
           enableSuggestions: enableSuggestions,
         );
     }
