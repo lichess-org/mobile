@@ -81,6 +81,10 @@ class AnalysisController extends _$AnalysisController {
         path = path + nextNode.id;
         lastMove = move;
       }
+
+      if (options.opening == null && ply <= 10) {
+        _fetchOpening(path);
+      }
     }
 
     final currentPath =
