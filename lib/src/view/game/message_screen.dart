@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -61,14 +63,16 @@ class MessageScreen extends StatelessWidget {
   }
 }
 
-class _MessageBubble extends StatelessWidget {
+class _MessageBubble extends ConsumerWidget {
   final bool you;
   final String message;
 
   const _MessageBubble({required this.you, required this.message});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final brightness = ref.watch(currentBrightnessProvider);
+
     return FractionallySizedBox(
       alignment: you ? Alignment.centerRight : Alignment.centerLeft,
       widthFactor: 0.9,
@@ -81,7 +85,9 @@ class _MessageBubble extends StatelessWidget {
             borderRadius: BorderRadius.circular(20.0),
             color: you
                 ? Theme.of(context).colorScheme.surfaceVariant
-                : LichessColors.grey,
+                : brightness == Brightness.light
+                    ? lighten(LichessColors.grey)
+                    : darken(LichessColors.grey, 0.5),
           ),
           child: Text(
             message,
