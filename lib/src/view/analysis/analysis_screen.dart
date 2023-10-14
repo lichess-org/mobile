@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:popover/popover.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
@@ -30,7 +31,7 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
 import 'tree_view.dart';
 import 'analysis_settings.dart';
-import 'analysis_game_tags.dart';
+import 'analysis_pgn_tags.dart';
 
 class AnalysisScreen extends ConsumerWidget {
   const AnalysisScreen({
@@ -541,15 +542,16 @@ class _BottomBar extends ConsumerWidget {
             if (analysisState.pgnHeaders != null &&
                 analysisState.pgnHeaders!.isNotEmpty)
               BottomBarIconButton(
-                semanticsLabel: 'Tags',
+                semanticsLabel: context.l10n.studyPgnTags,
                 onPressed: () {
                   showAdaptiveBottomSheet<void>(
                     context: context,
                     isScrollControlled: true,
-                    builder: (_) => AnalysisGameTags(ctrlProvider),
+                    showDragHandle: true,
+                    builder: (_) => AnalysisPgnTags(ctrlProvider),
                   );
                 },
-                icon: const Icon(CupertinoIcons.tags_solid),
+                icon: const Icon(LichessIcons.tags, size: 20.0),
               ),
             RepeatButton(
               onLongPress:

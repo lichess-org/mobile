@@ -85,6 +85,8 @@ class LichessIcons {
       IconData(0xe81a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData lichess =
       IconData(0xe81b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData tags =
+      IconData(0xf02c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData step_backward =
       IconData(0xf048, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData fast_backward =

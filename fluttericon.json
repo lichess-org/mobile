@@ -453,6 +453,12 @@
       "search": [
         "lichess"
       ]
+    },
+    {
+      "uid": "6f50db2f2fedbef2169c25553039e9f7",
+      "css": "tags",
+      "code": 61484,
+      "src": "fontawesome5"
     }
   ]
 }
