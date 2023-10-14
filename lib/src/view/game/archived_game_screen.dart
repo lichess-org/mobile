@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -255,11 +254,7 @@ class _BottomBar extends ConsumerWidget {
                             variant: gameData.variant,
                             initialFen: game.initialPosition.fen,
                             initialPly: game.initialPly,
-                            moves: IList(
-                              game.steps
-                                  .where((e) => e.sanMove != null)
-                                  .map((e) => e.sanMove!.move),
-                            ),
+                            pgn: game.pgnMoves,
                             initialMoveCursor: cursor,
                             orientation: orientation,
                             id: gameData.id,

@@ -30,6 +30,7 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
 import 'tree_view.dart';
 import 'analysis_settings.dart';
+import 'analysis_game_tags.dart';
 
 class AnalysisScreen extends ConsumerWidget {
   const AnalysisScreen({
@@ -527,7 +528,7 @@ class _BottomBar extends ConsumerWidget {
       child: SafeArea(
         top: false,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             BottomBarIconButton(
               semanticsLabel: context.l10n.menu,
@@ -536,7 +537,20 @@ class _BottomBar extends ConsumerWidget {
               },
               icon: const Icon(Icons.menu),
             ),
-            const Spacer(),
+            const SizedBox(width: 40.0),
+            if (analysisState.pgnHeaders != null &&
+                analysisState.pgnHeaders!.isNotEmpty)
+              BottomBarIconButton(
+                semanticsLabel: 'Tags',
+                onPressed: () {
+                  showAdaptiveBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (_) => AnalysisGameTags(ctrlProvider),
+                  );
+                },
+                icon: const Icon(CupertinoIcons.tags_solid),
+              ),
             RepeatButton(
               onLongPress:
                   analysisState.canGoBack ? () => _moveBackward(ref) : null,
@@ -550,7 +564,6 @@ class _BottomBar extends ConsumerWidget {
                 showAndroidTooltip: false,
               ),
             ),
-            const SizedBox(width: 40),
             RepeatButton(
               onLongPress:
                   analysisState.canGoNext ? () => _moveForward(ref) : null,

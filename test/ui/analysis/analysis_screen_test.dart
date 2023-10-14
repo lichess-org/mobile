@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -21,15 +20,7 @@ import '../../test_app.dart';
 
 void main() {
   // ignore: avoid_dynamic_calls
-  final sanMoves = jsonDecode(gameResponse)['moves'].split(' ') as List<String>;
-  Position position = Chess.initial;
-  final List<Move> moves = [];
-
-  for (final san in sanMoves) {
-    final move = position.parseSan(san);
-    position = position.playUnchecked(move!);
-    moves.add(move);
-  }
+  final sanMoves = jsonDecode(gameResponse)['moves'] as String;
 
   group('Analysis Screen', () {
     testWidgets('displays correct move and position', (tester) async {
@@ -41,7 +32,7 @@ void main() {
             variant: Variant.standard,
             initialFen: Chess.initial.fen,
             initialPly: 0,
-            moves: moves.toIList(),
+            pgn: sanMoves,
             orientation: Side.white,
             id: gameData.id,
           ),
@@ -69,7 +60,7 @@ void main() {
             variant: Variant.standard,
             initialFen: Chess.initial.fen,
             initialPly: 0,
-            moves: moves.toIList(),
+            pgn: sanMoves,
             orientation: Side.white,
             id: gameData.id,
           ),

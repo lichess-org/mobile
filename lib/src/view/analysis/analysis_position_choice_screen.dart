@@ -2,7 +2,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -164,7 +163,6 @@ class _BodyState extends State<_Body> {
         variant: variant,
         initialFen: Position.initialPosition(variant.rules).fen,
         initialPly: 0,
-        moves: IList(),
         orientation: Side.white,
         id: const ValueId('standalone_analysis'),
       );
@@ -181,7 +179,6 @@ class _BodyState extends State<_Body> {
         variant: variant,
         initialFen: pos.fen,
         initialPly: 0,
-        moves: IList(),
         orientation: Side.white,
         id: const ValueId('standalone_analysis'),
       );
@@ -197,7 +194,7 @@ class _BodyState extends State<_Body> {
         final move = position.parseSan(node.san);
         if (move == null) break; // Illegal move
         moves.add(move);
-        position = position.play(move);
+        position = position.playUnchecked(move);
       }
 
       if (moves.isEmpty) return null;
@@ -207,7 +204,7 @@ class _BodyState extends State<_Body> {
         variant: variant,
         initialFen: initialPosition.fen,
         initialPly: 0,
-        moves: IList(moves),
+        pgn: textInput,
         initialMoveCursor: 1,
         orientation: Side.white,
         id: const ValueId('standalone_analysis'),

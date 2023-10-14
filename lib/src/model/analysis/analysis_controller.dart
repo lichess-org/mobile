@@ -28,7 +28,7 @@ class AnalysisOptions with _$AnalysisOptions {
     required Side orientation,
     required String initialFen,
     required int initialPly,
-    required IList<Move> moves,
+    String? pgn,
     int? initialMoveCursor,
     LightOpening? opening,
   }) = _AnalysisOptions;
@@ -64,26 +64,36 @@ class AnalysisController extends _$AnalysisController {
     Node current = _root;
     UciPath path = UciPath.empty;
     Move? lastMove;
-    for (final move in options.moves) {
-      final (newPos, san) = position.playToSan(move);
-      position = newPos;
-      ply++;
+    IMap<String, String>? pgnHeaders =
+        options.id is GameId ? null : IMap(PgnGame.defaultHeaders());
 
-      final nextNode = Branch(
-        ply: ply,
-        sanMove: SanMove(san, move),
-        position: position,
-      );
-      current.addChild(nextNode);
-      current = nextNode;
-      if (options.initialMoveCursor != null &&
-          ply <= options.initialMoveCursor!) {
-        path = path + nextNode.id;
-        lastMove = move;
+    if (options.pgn != null) {
+      final game = PgnGame.parsePgn(options.pgn!);
+      // only include headers if the game is not an online lichess game
+      if (options.id is! GameId) {
+        pgnHeaders = pgnHeaders?.addMap(game.headers) ?? IMap(game.headers);
       }
+      for (final node in game.moves.mainline()) {
+        final move = position.parseSan(node.san);
+        if (move == null) break;
+        ply++;
+        position = position.playUnchecked(move);
+        final nextNode = Branch(
+          ply: ply,
+          sanMove: SanMove(node.san, move),
+          position: position,
+        );
+        current.addChild(nextNode);
+        current = nextNode;
+        if (options.initialMoveCursor != null &&
+            ply <= options.initialMoveCursor!) {
+          path = path + nextNode.id;
+          lastMove = move;
+        }
 
-      if (options.opening == null && ply <= 10) {
-        _fetchOpening(path);
+        if (options.opening == null && ply <= 10) {
+          _fetchOpening(path);
+        }
       }
     }
 
@@ -115,6 +125,7 @@ class AnalysisController extends _$AnalysisController {
       currentPath: currentPath,
       root: _root.view,
       currentNode: currentNode.view,
+      pgnHeaders: pgnHeaders,
       lastMove: lastMove,
       pov: options.orientation,
       evaluationContext: evalContext,
@@ -333,6 +344,7 @@ class AnalysisState with _$AnalysisState {
     Move? lastMove,
     Opening? contextOpening,
     Opening? currentBranchOpening,
+    IMap<String, String>? pgnHeaders,
   }) = _AnalysisState;
 
   IMap<String, ISet<String>> get validMoves =>

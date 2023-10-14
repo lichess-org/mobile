@@ -22,6 +22,11 @@ abstract mixin class BaseGame {
 
 /// A mixin that provides methods to access game data at a specific step.
 mixin IndexableSteps on BaseGame {
+  String get pgnMoves => steps
+      .where((e) => e.sanMove != null)
+      .map((e) => e.sanMove!.san)
+      .join(' ');
+
   MaterialDiffSide? materialDiffAt(int cursor, Side side) =>
       steps[cursor].diff?.bySide(side);
 
