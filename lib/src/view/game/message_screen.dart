@@ -45,10 +45,15 @@ class MessageScreen extends StatelessWidget {
                     (index) => r.nextInt(33) + 89,
                   ),
                 );
-                return _MessageBubble(
-                  you: index.remainder(2) == 0,
-                  message: message,
-                );
+                return index.remainder(7) == 0
+                    ? _MessageAction(
+                        you: index.remainder(2) == 0,
+                        message: message.substring(0, 15),
+                      )
+                    : _MessageBubble(
+                        you: index.remainder(2) == 0,
+                        message: message,
+                      );
               },
             ),
           ),
@@ -91,6 +96,31 @@ class _MessageBubble extends ConsumerWidget {
           ),
           child: Text(
             message,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MessageAction extends StatelessWidget {
+  final bool you;
+  final String message;
+
+  const _MessageAction({required this.you, required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return FractionallySizedBox(
+      alignment: you ? Alignment.centerRight : Alignment.centerLeft,
+      widthFactor: 0.9,
+      child: Align(
+        alignment: you ? Alignment.centerRight : Alignment.centerLeft,
+        child: Container(
+          margin: const EdgeInsets.all(10.0),
+          child: Text(
+            message,
+            style: const TextStyle(fontStyle: FontStyle.italic),
           ),
         ),
       ),
