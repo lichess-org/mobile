@@ -69,7 +69,7 @@ class _Body extends ConsumerWidget {
     final list = ref.watch(puzzleThemeCategoriesProvider).skip(1).toList();
     final savedThemesConnectivity = ref.watch(_savedThemesConnectivityProvider);
     final onlineThemes = ref.watch(puzzleThemeProvider);
-
+    // show online thems if online otherwise show offline themes
     return SafeArea(
       child: savedThemesConnectivity.when(
         data: (data) {
@@ -99,17 +99,8 @@ class _Body extends ConsumerWidget {
                         ),
                     ],
                   );
-                } else {
-                  return Column(
-                    children: [
-                      for (final category in list)
-                        _CategoryOffline(
-                          category: category,
-                          savedThemes: data.$2,
-                        ),
-                    ],
-                  );
                 }
+                return _OfflineThemeBuilder(list, data.$2);
               },
               loading: () => const Column(
                 mainAxisSize: MainAxisSize.min,
@@ -117,15 +108,8 @@ class _Body extends ConsumerWidget {
                   Center(child: CircularProgressIndicator.adaptive()),
                 ],
               ),
-              error: (_, __) => Column(
-                children: [
-                  for (final category in list)
-                    _CategoryOffline(
-                      category: category,
-                      savedThemes: data.$2,
-                    ),
-                ],
-              ),
+              // show offline themes if error in fetching themes
+              error: (_, __) => _OfflineThemeBuilder(list, data.$2),
             ),
           );
         },
@@ -138,6 +122,42 @@ class _Body extends ConsumerWidget {
         error: (error, stack) =>
             const Center(child: Text('Could not load saved themes.')),
       ),
+    );
+  }
+}
+
+class _OfflineThemeBuilder extends StatelessWidget {
+  const _OfflineThemeBuilder(
+    this.themeList,
+    this.savedThemes,
+  );
+  final ISet<PuzzleTheme> savedThemes;
+  final List<(String, List<PuzzleTheme>)> themeList;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final crossAxisCount =
+            math.min(3, (constraints.maxWidth / 300).floor());
+        return LayoutGrid(
+          columnSizes: List.generate(
+            crossAxisCount,
+            (_) => 1.fr,
+          ),
+          rowSizes: List.generate(
+            (themeList.length / crossAxisCount).ceil(),
+            (_) => auto,
+          ),
+          children: [
+            for (final category in themeList)
+              _CategoryOffline(
+                category: category,
+                savedThemes: savedThemes,
+              ),
+          ],
+        );
+      },
     );
   }
 }
@@ -158,7 +178,8 @@ class _CategoryOffline extends ConsumerWidget {
       header: Text(categoryTitle, style: Styles.sectionTitle),
       showDivider: true,
       children: [
-        for (final theme in themes)
+        for (final theme
+            in themes.where((theme) => savedThemes.contains(theme)))
           Tooltip(
             message: puzzleThemeL10n(context, theme).description,
             triggerMode: TooltipTriggerMode.longPress,
@@ -166,12 +187,6 @@ class _CategoryOffline extends ConsumerWidget {
             child: PlatformListTile(
               title: Text(
                 puzzleThemeL10n(context, theme).name,
-                style: TextStyle(
-                  color: textShade(
-                    context,
-                    savedThemes.contains(theme) ? 1 : 0.3,
-                  ),
-                ),
               ),
               subtitle: Text(
                 puzzleThemeL10n(context, theme).description,
@@ -180,22 +195,20 @@ class _CategoryOffline extends ConsumerWidget {
                 style: TextStyle(
                   color: textShade(
                     context,
-                    savedThemes.contains(theme) ? Styles.subtitleOpacity : 0.3,
+                    Styles.subtitleOpacity,
                   ),
                 ),
               ),
               isThreeLine: true,
-              onTap: savedThemes.contains(theme)
-                  ? () {
-                      pushPlatformRoute(
-                        context,
-                        rootNavigator: true,
-                        builder: (context) => PuzzleScreen(
-                          theme: theme,
-                        ),
-                      );
-                    }
-                  : null,
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  rootNavigator: true,
+                  builder: (context) => PuzzleScreen(
+                    theme: theme,
+                  ),
+                );
+              },
             ),
           ),
       ],
@@ -242,8 +255,23 @@ class _CategoryOnline extends ConsumerWidget {
                       puzzleThemeL10n(context, theme.key).description,
                       maxLines: 5,
                       overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: textShade(
+                          context,
+                          Styles.subtitleOpacity,
+                        ),
+                      ),
                     ),
                     isThreeLine: true,
+                    onTap: () {
+                      pushPlatformRoute(
+                        context,
+                        rootNavigator: true,
+                        builder: (context) => PuzzleScreen(
+                          theme: theme.key,
+                        ),
+                      );
+                    },
                   ),
                 )
                 .toList(),
