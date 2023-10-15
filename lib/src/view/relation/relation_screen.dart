@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 
 class RelationScreen extends ConsumerStatefulWidget {
@@ -17,8 +16,7 @@ class RelationScreen extends ConsumerStatefulWidget {
   ConsumerState<RelationScreen> createState() => _RelationScreenState();
 }
 
-class _RelationScreenState extends ConsumerState<RelationScreen>
-    with RouteAware {
+class _RelationScreenState extends ConsumerState<RelationScreen> {
   @override
   void initState() {
     super.initState();
@@ -64,8 +62,7 @@ class _Body extends ConsumerWidget {
 class _OnlineFriendsWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = relationCtrlProvider;
-    final relationState = ref.watch(ctrlProvider);
+    final relationState = ref.watch(relationCtrlProvider);
 
     return relationState.when(
       data: (data) {
@@ -109,9 +106,8 @@ class _OnlineFriendsWidget extends ConsumerWidget {
         debugPrint(
           'SEVERE: [RelationScreen] could not lead online friends data; $error\n $stackTrace',
         );
-        return Padding(
-          padding: Styles.bodySectionPadding,
-          child: const Text('Could not load online friends'),
+        return const Center(
+          child: Text('Could not load online friends'),
         );
       },
       loading: () => Shimmer(

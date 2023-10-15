@@ -3,7 +3,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:logging/logging.dart';
 
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
-import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'relation_repository.dart';
 
@@ -20,11 +19,7 @@ RelationRepository relationRepository(RelationRepositoryRef ref) {
 
 @riverpod
 Future<IList<User>> following(FollowingRef ref) async {
-  final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(relationRepositoryProvider);
   final result = await repo.getFollowing();
-  if (result.isError) {
-    link.close();
-  }
   return result.asFuture;
 }
