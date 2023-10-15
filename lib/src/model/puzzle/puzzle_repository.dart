@@ -500,12 +500,11 @@ IList<PuzzleThemeFamily> _puzzleThemeFromPick(RequiredPick pick) {
 IList<PuzzleOpeningFamily> _puzzleOpeningFromPick(RequiredPick pick) {
   return pick('openings').asListOrThrow((openingPick) {
     final familyPick = openingPick('family');
-    final openingsPick = openingPick('openings');
-    final openings = openingsPick('openings').asListOrNull(
-      (openingPick) => PuzzleOpeningData(
-        key: openingPick('key').asStringOrThrow(),
-        name: openingPick('name').asStringOrThrow(),
-        count: openingPick('count').asIntOrThrow(),
+    final openings = openingPick('openings').asListOrNull(
+      (openPick) => PuzzleOpeningData(
+        key: openPick('key').asStringOrThrow(),
+        name: openPick('name').asStringOrThrow(),
+        count: openPick('count').asIntOrThrow(),
       ),
     );
 

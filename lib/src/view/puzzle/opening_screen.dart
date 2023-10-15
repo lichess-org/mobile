@@ -58,7 +58,6 @@ class _Body extends ConsumerWidget {
           );
         },
         error: (error, stack) {
-          print(stack);
           return const Center(child: Text('Could not load openings.'));
         },
         loading: () =>
@@ -79,42 +78,53 @@ class _OpeningFamily extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: ExpansionTile(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(openingFamily.name),
-            Text(
-              '${openingFamily.count}',
-              style: TextStyle(
-                color: textShade(context, 0.5),
+      child: openingFamily.openings.isNotEmpty
+          ? ExpansionTile(
+              title: Text(
+                openingFamily.name,
+                overflow: TextOverflow.ellipsis,
               ),
-            ),
-          ],
-        ),
-        children: [
-          ListSection(
-            children: openingFamily.openings
-                .map(
-                  (opening) => PlatformListTile(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(opening.name),
-                        Text(
-                          '${opening.count}',
-                          style: TextStyle(
-                            color: textShade(context, 0.5),
+              subtitle: Text(
+                '${openingFamily.count}',
+                style: TextStyle(
+                  color: textShade(context, 0.5),
+                ),
+              ),
+              children: [
+                ListSection(
+                  children: openingFamily.openings
+                      .map(
+                        (opening) => PlatformListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(opening.name),
+                              Text(
+                                '${opening.count}',
+                                style: TextStyle(
+                                  color: textShade(context, 0.5),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
-        ],
-      ),
+                      )
+                      .toList(),
+                ),
+              ],
+            )
+          : PlatformListTile(
+              title: Text(
+                openingFamily.name,
+                overflow: TextOverflow.ellipsis,
+              ),
+              subtitle: Text(
+                '${openingFamily.count}',
+                style: TextStyle(
+                  color: textShade(context, 0.5),
+                ),
+              ),
+            ),
     );
   }
 }

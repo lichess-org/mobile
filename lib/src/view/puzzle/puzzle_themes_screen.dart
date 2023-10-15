@@ -68,38 +68,73 @@ class _Body extends ConsumerWidget {
     // skip recommended category since we display it on the puzzle tab screen
     final list = ref.watch(puzzleThemeCategoriesProvider).skip(1).toList();
     final savedThemesConnectivity = ref.watch(_savedThemesConnectivityProvider);
-    final newThemes = ref.watch(puzzleThemeProvider);
+    final onlineThemes = ref.watch(puzzleThemeProvider);
 
     return SafeArea(
-      child: newThemes.when(
+      child: savedThemesConnectivity.when(
         data: (data) {
           return SingleChildScrollView(
-            child: Column(
-              children: [
-                Theme(
-                  data: Theme.of(context)
-                      .copyWith(dividerColor: Colors.transparent),
-                  child: ExpansionTile(
-                    title: const Text('By game opening'),
-                    trailing: const Icon(Icons.keyboard_arrow_right),
-                    onExpansionChanged: (expanded) {
-                      pushPlatformRoute(
-                        context,
-                        builder: (ctx) => const OpeningThemeScreen(),
-                      );
-                    },
-                  ),
-                ),
-                for (final category in data)
-                  _CategoryOnline(
-                    category: category,
-                  ),
-              ],
+            child: onlineThemes.when(
+              data: (oThemes) {
+                if (data.$1) {
+                  return Column(
+                    children: [
+                      Theme(
+                        data: Theme.of(context)
+                            .copyWith(dividerColor: Colors.transparent),
+                        child: ExpansionTile(
+                          title: const Text('By game opening'),
+                          trailing: const Icon(Icons.keyboard_arrow_right),
+                          onExpansionChanged: (expanded) {
+                            pushPlatformRoute(
+                              context,
+                              builder: (ctx) => const OpeningThemeScreen(),
+                            );
+                          },
+                        ),
+                      ),
+                      for (final category in oThemes.skip(1))
+                        _CategoryOnline(
+                          category: category,
+                        ),
+                    ],
+                  );
+                } else {
+                  return Column(
+                    children: [
+                      for (final category in list)
+                        _CategoryOffline(
+                          category: category,
+                          savedThemes: data.$2,
+                        ),
+                    ],
+                  );
+                }
+              },
+              loading: () => const Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(child: CircularProgressIndicator.adaptive()),
+                ],
+              ),
+              error: (_, __) => Column(
+                children: [
+                  for (final category in list)
+                    _CategoryOffline(
+                      category: category,
+                      savedThemes: data.$2,
+                    ),
+                ],
+              ),
             ),
           );
         },
-        loading: () =>
-            const Center(child: CircularProgressIndicator.adaptive()),
+        loading: () => const Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Center(child: CircularProgressIndicator.adaptive()),
+          ],
+        ),
         error: (error, stack) =>
             const Center(child: Text('Could not load saved themes.')),
       ),
@@ -107,16 +142,14 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _Category extends ConsumerWidget {
-  const _Category({
+class _CategoryOffline extends ConsumerWidget {
+  const _CategoryOffline({
     required this.category,
     required this.savedThemes,
-    required this.isOnline,
   });
 
   final PuzzleThemeCategory category;
   final ISet<PuzzleTheme> savedThemes;
-  final bool isOnline;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -136,7 +169,7 @@ class _Category extends ConsumerWidget {
                 style: TextStyle(
                   color: textShade(
                     context,
-                    isOnline || savedThemes.contains(theme) ? 1 : 0.3,
+                    savedThemes.contains(theme) ? 1 : 0.3,
                   ),
                 ),
               ),
@@ -147,14 +180,12 @@ class _Category extends ConsumerWidget {
                 style: TextStyle(
                   color: textShade(
                     context,
-                    isOnline || savedThemes.contains(theme)
-                        ? Styles.subtitleOpacity
-                        : 0.3,
+                    savedThemes.contains(theme) ? Styles.subtitleOpacity : 0.3,
                   ),
                 ),
               ),
               isThreeLine: true,
-              onTap: isOnline || savedThemes.contains(theme)
+              onTap: savedThemes.contains(theme)
                   ? () {
                       pushPlatformRoute(
                         context,
