@@ -9,6 +9,43 @@ import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
 part 'puzzle_theme.g.dart';
 part 'puzzle_theme.freezed.dart';
 
+@freezed
+class PuzzleThemeFamily with _$PuzzleThemeFamily {
+  const factory PuzzleThemeFamily({
+    required String name,
+    required IList<PuzzleThemeData> themes,
+  }) = _PuzzleThemeFamily;
+}
+
+@freezed
+class PuzzleThemeData with _$PuzzleThemeData {
+  const factory PuzzleThemeData({
+    required int count,
+    required String? desc,
+    required PuzzleTheme key,
+    required String name,
+  }) = _PuzzleThemeData;
+}
+
+@freezed
+class PuzzleOpeningFamily with _$PuzzleOpeningFamily {
+  const factory PuzzleOpeningFamily({
+    required String key,
+    required String name,
+    required int count,
+    required IList<PuzzleOpeningData> openings,
+  }) = _PuzzleOpeningFamily;
+}
+
+@freezed
+class PuzzleOpeningData with _$PuzzleOpeningData {
+  const factory PuzzleOpeningData({
+    required String key,
+    required String name,
+    required int count,
+  }) = _PuzzleOpeningData;
+}
+
 enum PuzzleTheme {
   mix,
   advancedPawn,
@@ -637,41 +674,4 @@ IconData puzzleThemeIcon(PuzzleTheme theme) {
     case PuzzleTheme.zugzwang:
       return PuzzleIcons.zugzwang;
   }
-}
-
-@freezed
-class PuzzleThemeFamily with _$PuzzleThemeFamily {
-  const factory PuzzleThemeFamily({
-    required String name,
-    required IList<PuzzleThemeData> themes,
-  }) = _PuzzleThemeFamily;
-}
-
-@freezed
-class PuzzleThemeData with _$PuzzleThemeData {
-  const factory PuzzleThemeData({
-    required int count,
-    required String? desc,
-    required PuzzleTheme key,
-    required String name,
-  }) = _PuzzleThemeData;
-}
-
-@freezed
-class PuzzleOpeningFamily with _$PuzzleOpeningFamily {
-  const factory PuzzleOpeningFamily({
-    required String key,
-    required String name,
-    required int count,
-    required IList<PuzzleOpeningData> openings,
-  }) = _PuzzleOpeningFamily;
-}
-
-@freezed
-class PuzzleOpeningData with _$PuzzleOpeningData {
-  const factory PuzzleOpeningData({
-    required String key,
-    required String name,
-    required int count,
-  }) = _PuzzleOpeningData;
 }

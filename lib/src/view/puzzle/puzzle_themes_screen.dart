@@ -69,7 +69,11 @@ class _Body extends ConsumerWidget {
     final list = ref.watch(puzzleThemeCategoriesProvider).skip(1).toList();
     final savedThemesConnectivity = ref.watch(_savedThemesConnectivityProvider);
     final onlineThemes = ref.watch(puzzleThemeProvider);
-    // show online thems if online otherwise show offline themes
+    final expansionTileColor = defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoColors.secondaryLabel.resolveFrom(context)
+        : null;
+
+    // show online themes if online otherwise show offline themes
     return SafeArea(
       child: savedThemesConnectivity.when(
         data: (data) {
@@ -83,6 +87,8 @@ class _Body extends ConsumerWidget {
                         data: Theme.of(context)
                             .copyWith(dividerColor: Colors.transparent),
                         child: ExpansionTile(
+                          iconColor: expansionTileColor,
+                          collapsedIconColor: expansionTileColor,
                           title: const Text('By game opening'),
                           trailing: const Icon(Icons.keyboard_arrow_right),
                           onExpansionChanged: (expanded) {
@@ -178,8 +184,7 @@ class _CategoryOffline extends ConsumerWidget {
       header: Text(categoryTitle, style: Styles.sectionTitle),
       showDivider: true,
       children: [
-        for (final theme
-            in themes.where((theme) => savedThemes.contains(theme)))
+        for (final theme in themes)
           Tooltip(
             message: puzzleThemeL10n(context, theme).description,
             triggerMode: TooltipTriggerMode.longPress,
@@ -187,6 +192,12 @@ class _CategoryOffline extends ConsumerWidget {
             child: PlatformListTile(
               title: Text(
                 puzzleThemeL10n(context, theme).name,
+                style: TextStyle(
+                  color: textShade(
+                    context,
+                    savedThemes.contains(theme) ? Styles.subtitleOpacity : 0.3,
+                  ),
+                ),
               ),
               subtitle: Text(
                 puzzleThemeL10n(context, theme).description,
@@ -195,20 +206,22 @@ class _CategoryOffline extends ConsumerWidget {
                 style: TextStyle(
                   color: textShade(
                     context,
-                    Styles.subtitleOpacity,
+                    savedThemes.contains(theme) ? Styles.subtitleOpacity : 0.3,
                   ),
                 ),
               ),
               isThreeLine: true,
-              onTap: () {
-                pushPlatformRoute(
-                  context,
-                  rootNavigator: true,
-                  builder: (context) => PuzzleScreen(
-                    theme: theme,
-                  ),
-                );
-              },
+              onTap: savedThemes.contains(theme)
+                  ? () {
+                      pushPlatformRoute(
+                        context,
+                        rootNavigator: true,
+                        builder: (context) => PuzzleScreen(
+                          theme: theme,
+                        ),
+                      );
+                    }
+                  : null,
             ),
           ),
       ],
@@ -232,6 +245,7 @@ class _CategoryOnline extends ConsumerWidget {
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         iconColor: expansionTileColor,
+        collapsedIconColor: expansionTileColor,
         title: Text(category.name),
         children: [
           ListSection(
@@ -242,7 +256,17 @@ class _CategoryOnline extends ConsumerWidget {
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(puzzleThemeL10n(context, theme.key).name),
+                        Text(
+                          puzzleThemeL10n(context, theme.key).name,
+                          style: defaultTargetPlatform == TargetPlatform.iOS
+                              ? TextStyle(
+                                  color: CupertinoTheme.of(context)
+                                      .textTheme
+                                      .textStyle
+                                      .color,
+                                )
+                              : null,
+                        ),
                         Text(
                           '${theme.count}',
                           style: TextStyle(

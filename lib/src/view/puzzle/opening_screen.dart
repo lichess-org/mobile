@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -6,7 +7,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
+
 
 class OpeningThemeScreen extends StatelessWidget {
   const OpeningThemeScreen({super.key});
@@ -75,13 +76,27 @@ class _OpeningFamily extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final expansionTileColor = defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoColors.secondaryLabel.resolveFrom(context)
+        : null;
+
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: openingFamily.openings.isNotEmpty
           ? ExpansionTile(
+              iconColor: expansionTileColor,
+              collapsedIconColor: expansionTileColor,
               title: Text(
                 openingFamily.name,
                 overflow: TextOverflow.ellipsis,
+                style: defaultTargetPlatform == TargetPlatform.iOS
+                    ? TextStyle(
+                        color: CupertinoTheme.of(context)
+                            .textTheme
+                            .textStyle
+                            .color,
+                      )
+                    : null,
               ),
               subtitle: Text(
                 '${openingFamily.count}',
@@ -97,7 +112,18 @@ class _OpeningFamily extends ConsumerWidget {
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(opening.name),
+                              Text(
+                                opening.name,
+                                style:
+                                    defaultTargetPlatform == TargetPlatform.iOS
+                                        ? TextStyle(
+                                            color: CupertinoTheme.of(context)
+                                                .textTheme
+                                                .textStyle
+                                                .color,
+                                          )
+                                        : null,
+                              ),
                               Text(
                                 '${opening.count}',
                                 style: TextStyle(
