@@ -237,15 +237,18 @@ class _CategoryOnline extends ConsumerWidget {
   final PuzzleThemeFamily category;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final expansionTileColor = defaultTargetPlatform == TargetPlatform.iOS
+    final collapsedIconColor = defaultTargetPlatform == TargetPlatform.iOS
         ? CupertinoColors.secondaryLabel.resolveFrom(context)
+        : null;
+    final tileColor = defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoColors.systemBlue.resolveFrom(context)
         : null;
 
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
-        iconColor: expansionTileColor,
-        collapsedIconColor: expansionTileColor,
+        iconColor: tileColor,
+        collapsedIconColor: collapsedIconColor,
         title: Text(category.name),
         children: [
           ListSection(

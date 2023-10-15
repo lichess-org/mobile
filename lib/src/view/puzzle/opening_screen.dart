@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-
 class OpeningThemeScreen extends StatelessWidget {
   const OpeningThemeScreen({super.key});
 
@@ -76,16 +75,19 @@ class _OpeningFamily extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final expansionTileColor = defaultTargetPlatform == TargetPlatform.iOS
+    final collapsedIconColor = defaultTargetPlatform == TargetPlatform.iOS
         ? CupertinoColors.secondaryLabel.resolveFrom(context)
+        : null;
+    final tileColor = defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoColors.systemBlue.resolveFrom(context)
         : null;
 
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: openingFamily.openings.isNotEmpty
           ? ExpansionTile(
-              iconColor: expansionTileColor,
-              collapsedIconColor: expansionTileColor,
+              iconColor: tileColor,
+              collapsedIconColor: collapsedIconColor,
               title: Text(
                 openingFamily.name,
                 overflow: TextOverflow.ellipsis,
@@ -109,28 +111,24 @@ class _OpeningFamily extends ConsumerWidget {
                   children: openingFamily.openings
                       .map(
                         (opening) => PlatformListTile(
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                opening.name,
-                                style:
-                                    defaultTargetPlatform == TargetPlatform.iOS
-                                        ? TextStyle(
-                                            color: CupertinoTheme.of(context)
-                                                .textTheme
-                                                .textStyle
-                                                .color,
-                                          )
-                                        : null,
-                              ),
-                              Text(
-                                '${opening.count}',
-                                style: TextStyle(
-                                  color: textShade(context, 0.5),
-                                ),
-                              ),
-                            ],
+                          leading: const SizedBox.shrink(),
+                          title: Text(
+                            opening.name,
+                            overflow: TextOverflow.ellipsis,
+                            style: defaultTargetPlatform == TargetPlatform.iOS
+                                ? TextStyle(
+                                    color: CupertinoTheme.of(context)
+                                        .textTheme
+                                        .textStyle
+                                        .color,
+                                  )
+                                : null,
+                          ),
+                          subtitle: Text(
+                            '${opening.count}',
+                            style: TextStyle(
+                              color: textShade(context, 0.5),
+                            ),
                           ),
                         ),
                       )
@@ -142,6 +140,14 @@ class _OpeningFamily extends ConsumerWidget {
               title: Text(
                 openingFamily.name,
                 overflow: TextOverflow.ellipsis,
+                style: defaultTargetPlatform == TargetPlatform.iOS
+                    ? TextStyle(
+                        color: CupertinoTheme.of(context)
+                            .textTheme
+                            .textStyle
+                            .color,
+                      )
+                    : null,
               ),
               subtitle: Text(
                 '${openingFamily.count}',
