@@ -80,6 +80,7 @@ class _Body extends ConsumerWidget {
                                         'Unfollow ${user.username}?',
                                       ),
                                       onAccept: () async {
+                                        final oldState = followingUsers;
                                         setState(() {
                                           followingUsers = followingUsers
                                               .where(
@@ -94,7 +95,7 @@ class _Body extends ConsumerWidget {
                                             .unfollow(user.username);
                                         if (res.isError) {
                                           setState(() {
-                                            followingUsers = data;
+                                            followingUsers = oldState;
                                           });
                                         }
                                       },
