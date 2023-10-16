@@ -67,7 +67,6 @@ class _Body extends StatelessWidget {
           ),
           onTap: () => pushPlatformRoute(
             context,
-            rootNavigator: true,
             builder: (context) => const AnalysisPositionChoiceScreen(),
           ),
         ),

@@ -55,6 +55,7 @@ class AnalysisScreen extends ConsumerWidget {
     final ctrlProvider = analysisControllerProvider(options);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: _Title(options: options, title: title),
         actions: [
@@ -68,7 +69,7 @@ class AnalysisScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: _Body(ctrlProvider: ctrlProvider),
+      body: _Body(options: options, ctrlProvider: ctrlProvider),
     );
   }
 
@@ -76,6 +77,7 @@ class AnalysisScreen extends ConsumerWidget {
     final ctrlProvider = analysisControllerProvider(options);
 
     return CupertinoPageScaffold(
+      resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         middle: _Title(options: options, title: title),
         trailing: Row(
@@ -92,7 +94,7 @@ class AnalysisScreen extends ConsumerWidget {
           ],
         ),
       ),
-      child: _Body(ctrlProvider: ctrlProvider),
+      child: _Body(options: options, ctrlProvider: ctrlProvider),
     );
   }
 }
@@ -122,9 +124,11 @@ class _Title extends StatelessWidget {
 
 class _Body extends ConsumerStatefulWidget {
   const _Body({
+    required this.options,
     required this.ctrlProvider,
   });
 
+  final AnalysisOptions options;
   final AnalysisControllerProvider ctrlProvider;
 
   @override
@@ -225,7 +229,7 @@ class _BodyState extends ConsumerState<_Body> {
             ),
           ),
         ),
-        _BottomBar(ctrlProvider: widget.ctrlProvider),
+        _BottomBar(options: widget.options),
       ],
     );
   }
@@ -512,13 +516,14 @@ class _Engineline extends ConsumerWidget {
 
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({
-    required this.ctrlProvider,
+    required this.options,
   });
 
-  final AnalysisControllerProvider ctrlProvider;
+  final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = analysisControllerProvider(options);
     final analysisState = ref.watch(ctrlProvider);
 
     return Container(
@@ -546,9 +551,9 @@ class _BottomBar extends ConsumerWidget {
                 onPressed: () {
                   showAdaptiveBottomSheet<void>(
                     context: context,
-                    isScrollControlled: true,
                     showDragHandle: true,
-                    builder: (_) => AnalysisPgnTags(ctrlProvider),
+                    isScrollControlled: true,
+                    builder: (_) => AnalysisPgnTags(options: options),
                   );
                 },
                 icon: const Icon(LichessIcons.tags, size: 20.0),
@@ -585,9 +590,9 @@ class _BottomBar extends ConsumerWidget {
   }
 
   void _moveForward(WidgetRef ref) =>
-      ref.read(ctrlProvider.notifier).userNext();
+      ref.read(analysisControllerProvider(options).notifier).userNext();
   void _moveBackward(WidgetRef ref) =>
-      ref.read(ctrlProvider.notifier).userPrevious();
+      ref.read(analysisControllerProvider(options).notifier).userPrevious();
 
   Future<void> _showGameMenu(BuildContext context, WidgetRef ref) {
     return showAdaptiveActionSheet(
@@ -596,7 +601,9 @@ class _BottomBar extends ConsumerWidget {
         BottomSheetAction(
           label: Text(context.l10n.flipBoard),
           onPressed: (context) {
-            ref.read(ctrlProvider.notifier).toggleBoard();
+            ref
+                .read(analysisControllerProvider(options).notifier)
+                .toggleBoard();
           },
         ),
       ],

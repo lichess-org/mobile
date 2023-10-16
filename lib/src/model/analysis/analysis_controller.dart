@@ -212,6 +212,11 @@ class AnalysisController extends _$AnalysisController {
     _startEngineEval();
   }
 
+  void updatePgnHeader(String key, String value) {
+    final headers = state.pgnHeaders?.add(key, value) ?? IMap({key: value});
+    state = state.copyWith(pgnHeaders: headers);
+  }
+
   /// Gets the node and maybe the associated branch opening at the given path.
   (Node, Opening?) _nodeOpeningAt(Node node, UciPath path, [Opening? opening]) {
     if (path.isEmpty) return (node, opening);

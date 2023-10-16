@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 /// A simple text field that adapts to the platform it's running on.
 class AdaptiveTextField extends StatelessWidget {
   const AdaptiveTextField({
-    this.maxLines,
     this.placeholder,
     this.controller,
     this.onChanged,
     this.onSubmitted,
     this.onTap,
+    this.maxLines = 1,
     this.readOnly = false,
     this.enableSuggestions = false,
+    this.autofocus = false,
     super.key,
   });
 
@@ -20,6 +21,7 @@ class AdaptiveTextField extends StatelessWidget {
   final String? placeholder;
   final bool enableSuggestions;
   final bool readOnly;
+  final bool autofocus;
   final TextEditingController? controller;
   final void Function(String)? onChanged;
   final void Function(String)? onSubmitted;
@@ -43,6 +45,7 @@ class AdaptiveTextField extends StatelessWidget {
           onTap: onTap,
           readOnly: readOnly,
           enableSuggestions: enableSuggestions,
+          autofocus: autofocus,
         );
       default:
         return TextField(
@@ -56,6 +59,7 @@ class AdaptiveTextField extends StatelessWidget {
           onTap: onTap,
           readOnly: readOnly,
           enableSuggestions: enableSuggestions,
+          autofocus: autofocus,
         );
     }
   }
