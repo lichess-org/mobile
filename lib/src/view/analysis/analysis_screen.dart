@@ -13,6 +13,7 @@ import 'package:popover/popover.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -114,8 +115,10 @@ class _Title extends StatelessWidget {
         : Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(options.variant.icon),
-              const SizedBox(width: 5.0),
+              if (options.variant != Variant.standard) ...[
+                Icon(options.variant.icon),
+                const SizedBox(width: 5.0),
+              ],
               Text(context.l10n.analysis),
             ],
           );

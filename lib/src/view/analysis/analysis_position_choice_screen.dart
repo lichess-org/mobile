@@ -100,14 +100,17 @@ class _BodyState extends State<_Body> {
                     showChoicePicker(
                       context,
                       choices: supportedVariants
+                          .remove(Variant.chess960)
                           .remove(Variant.fromPosition)
                           .toList(),
                       selectedItem: variant,
                       labelBuilder: (v) => Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(v.icon),
-                          const SizedBox(width: 5.0),
+                          if (v != Variant.standard) ...[
+                            Icon(v.icon),
+                            const SizedBox(width: 5.0),
+                          ],
                           Text(v.label),
                         ],
                       ),
@@ -121,8 +124,10 @@ class _BodyState extends State<_Body> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(variant.icon),
-                      const SizedBox(width: 5.0),
+                      if (variant != Variant.standard) ...[
+                        Icon(variant.icon),
+                        const SizedBox(width: 5.0),
+                      ],
                       Text(variant.label),
                     ],
                   ),
