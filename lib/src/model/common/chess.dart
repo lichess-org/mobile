@@ -40,7 +40,6 @@ const altCastles = {
   'e8h8': 'e8g8',
 };
 
-// crazyhouse is implemented in dartchess, but not supported by the ui yet
 const ISet<Variant> supportedVariants = ISetConst({
   Variant.standard,
   Variant.chess960,
@@ -48,7 +47,6 @@ const ISet<Variant> supportedVariants = ISetConst({
   Variant.antichess,
   Variant.kingOfTheHill,
   Variant.threeCheck,
-  Variant.atomic,
   Variant.racingKings,
   Variant.horde,
 });
