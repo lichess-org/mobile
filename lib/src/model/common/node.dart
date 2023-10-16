@@ -166,7 +166,7 @@ abstract class Node {
     bool prepend = false,
   }) {
     final pos = nodeAt(path).position;
-    final (newPos, newSan) = pos.playToSan(move);
+    final (newPos, newSan) = pos.makeSan(move);
     final newNode = Branch(
       ply: 2 * (newPos.fullmoves - 1) + (newPos.turn == Side.white ? 0 : 1),
       sanMove: SanMove(newSan, move),

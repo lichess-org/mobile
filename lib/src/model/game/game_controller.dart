@@ -82,7 +82,7 @@ class GameController extends _$GameController {
   void onUserMove(Move move, {bool? isDrop, bool? isPremove}) {
     final curState = state.requireValue;
 
-    final (newPos, newSan) = curState.game.lastPosition.playToSan(move);
+    final (newPos, newSan) = curState.game.lastPosition.makeSan(move);
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
       ply: curState.game.lastPly + 1,

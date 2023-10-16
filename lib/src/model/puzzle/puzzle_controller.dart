@@ -479,7 +479,7 @@ class PuzzleController extends _$PuzzleController {
       (index, previous, uci) {
         final move = Move.fromUci(uci);
         final (pos, nodes) = previous;
-        final (newPos, newSan) = pos.playToSan(move!);
+        final (newPos, newSan) = pos.makeSan(move!);
         return (
           newPos,
           nodes.add(
