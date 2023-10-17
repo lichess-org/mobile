@@ -389,8 +389,7 @@ class _EngineLines extends ConsumerWidget {
             ? eval.pvs
                 .take(numEvalLines)
                 .map(
-                  (pv) =>
-                      _Engineline(ctrlProvider, eval.position, eval.ply, pv),
+                  (pv) => _Engineline(ctrlProvider, eval.position, pv),
                 )
                 .toList()
             : emptyLines)
@@ -422,18 +421,15 @@ class _Engineline extends ConsumerWidget {
   const _Engineline(
     this.ctrlProvider,
     this.fromPosition,
-    this.fromPly,
     this.pvData,
   );
 
   const _Engineline.empty(this.ctrlProvider)
       : pvData = const PvData(moves: IListConst([])),
-        fromPosition = Chess.initial,
-        fromPly = 0;
+        fromPosition = Chess.initial;
 
   final AnalysisControllerProvider ctrlProvider;
   final Position fromPosition;
-  final int fromPly;
   final PvData pvData;
 
   @override
@@ -446,7 +442,7 @@ class _Engineline extends ConsumerWidget {
     }
 
     final lineBuffer = StringBuffer();
-    int ply = fromPly + 1;
+    int ply = fromPosition.ply + 1;
     pvData.sanMoves(fromPosition).forEachIndexed((i, s) {
       lineBuffer.write(
         ply.isOdd

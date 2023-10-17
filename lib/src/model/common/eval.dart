@@ -12,7 +12,6 @@ class ClientEval with _$ClientEval {
   const ClientEval._();
 
   const factory ClientEval({
-    required int ply,
     required Position position,
     required int depth,
     required int nodes,

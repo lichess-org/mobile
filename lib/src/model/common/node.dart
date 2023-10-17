@@ -14,22 +14,17 @@ part 'node.freezed.dart';
 /// The tree is implemented with a linked list of nodes, using mutable [List] of
 /// children.
 ///
-/// It has an optional [eval] field, which is the evaluation of the position. This
-/// field is mutable so it can be updated efficiently when the evaluation changes.
-///
 /// It cannot be directly used in a riverpod state, because it is mutable, and
 /// riverpod relies on object reference equality to detect changes and emit new
 /// states. Therefore, it must be converted into a [ViewNode], which is immutable,
 /// using the [view] getter.
 abstract class Node {
   Node({
-    required this.ply,
     required this.position,
     this.eval,
     this.opening,
   });
 
-  final int ply;
   final Position position;
 
   /// The evaluation of the position.
@@ -168,7 +163,6 @@ abstract class Node {
     final pos = nodeAt(path).position;
     final (newPos, newSan) = pos.makeSan(move);
     final newNode = Branch(
-      ply: 2 * (newPos.fullmoves - 1) + (newPos.turn == Side.white ? 0 : 1),
       sanMove: SanMove(newSan, move),
       position: newPos,
     );
@@ -213,11 +207,14 @@ abstract class Node {
 /// It has an associated [SanMove] and an id to identify it using an [UciPath].
 class Branch extends Node {
   Branch({
-    required super.ply,
     required super.position,
     super.eval,
     super.opening,
     required this.sanMove,
+    // below are fields from dartchess [PgnNodeData]
+    this.startingComments,
+    this.comments,
+    this.nags,
   });
 
   /// The id of the branch, using a concise notation of associated move.
@@ -226,9 +223,17 @@ class Branch extends Node {
   /// The associated move.
   final SanMove sanMove;
 
+  /// PGN comments before the move.
+  final List<String>? startingComments;
+
+  /// PGN comments after the move.
+  final List<String>? comments;
+
+  /// Numeric Annotation Glyphs for the move.
+  final List<int>? nags;
+
   @override
   ViewBranch get view => ViewBranch(
-        ply: ply,
         position: position,
         sanMove: sanMove,
         eval: eval,
@@ -242,7 +247,7 @@ class Branch extends Node {
 
   @override
   String toString() {
-    return 'Branch(id: $id, ply: $ply, fen: ${position.fen}, sanMove: $sanMove, eval: $eval, children: $children)';
+    return 'Branch(id: $id, fen: ${position.fen}, sanMove: $sanMove, eval: $eval, children: $children)';
   }
 }
 
@@ -251,14 +256,12 @@ class Branch extends Node {
 /// Represents the initial position, where no move has been played yet.
 class Root extends Node {
   Root({
-    required super.ply,
     required super.position,
     super.eval,
   });
 
   @override
   ViewRoot get view => ViewRoot(
-        ply: ply,
         position: position,
         eval: eval,
         children: IList(children.map((child) => child.view)),
@@ -268,20 +271,16 @@ class Root extends Node {
   ///
   /// Assumes that the PGN string is valid and that the moves are legal.
   factory Root.fromPgn(String pgn) {
-    int ply = 0;
     Position position = Chess.initial;
     final root = Root(
-      ply: ply,
       position: position,
     );
     Node current = root;
     final moves = pgn.split(' ');
     for (final san in moves) {
-      ply++;
       final move = position.parseSan(san);
       position = position.playUnchecked(move!);
       final nextNode = Branch(
-        ply: ply,
         sanMove: SanMove(san, move),
         position: position,
       );
@@ -296,7 +295,6 @@ class Root extends Node {
 abstract class ViewNode {
   UciCharPair? get id;
   SanMove? get sanMove;
-  int get ply;
   Position get position;
   IList<ViewBranch> get children;
   ClientEval? get eval;
@@ -308,7 +306,6 @@ abstract class ViewNode {
 class ViewRoot with _$ViewRoot implements ViewNode {
   const ViewRoot._();
   const factory ViewRoot({
-    required int ply,
     required Position position,
     required IList<ViewBranch> children,
     ClientEval? eval,
@@ -331,7 +328,6 @@ class ViewBranch with _$ViewBranch implements ViewNode {
 
   const factory ViewBranch({
     required SanMove sanMove,
-    required int ply,
     required Position position,
     Opening? opening,
     required IList<ViewBranch> children,

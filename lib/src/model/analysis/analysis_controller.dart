@@ -55,11 +55,9 @@ class AnalysisController extends _$AnalysisController {
     );
 
     _root = Root(
-      ply: options.initialPly,
       position: initialPosition,
     );
 
-    int ply = options.initialPly;
     Position position = initialPosition;
     Node current = _root;
     UciPath path = UciPath.empty;
@@ -76,22 +74,20 @@ class AnalysisController extends _$AnalysisController {
       for (final node in game.moves.mainline()) {
         final move = position.parseSan(node.san);
         if (move == null) break;
-        ply++;
         position = position.playUnchecked(move);
         final nextNode = Branch(
-          ply: ply,
           sanMove: SanMove(node.san, move),
           position: position,
         );
         current.addChild(nextNode);
         current = nextNode;
         if (options.initialMoveCursor != null &&
-            ply <= options.initialMoveCursor!) {
+            position.ply <= options.initialMoveCursor!) {
           path = path + nextNode.id;
           lastMove = move;
         }
 
-        if (options.opening == null && ply <= 10) {
+        if (options.opening == null && position.ply <= 10) {
           _fetchOpening(path);
         }
       }
@@ -258,7 +254,7 @@ class AnalysisController extends _$AnalysisController {
         }
       }
 
-      if (currentNode.opening == null && currentNode.ply <= 20) {
+      if (currentNode.opening == null && currentNode.position.ply <= 20) {
         _fetchOpening(path);
       }
 

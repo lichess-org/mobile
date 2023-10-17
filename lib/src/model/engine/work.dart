@@ -31,7 +31,7 @@ class Work with _$Work {
   Position get position => steps.lastOrNull?.position ?? initialPosition;
 
   /// The work ply.
-  int get ply => steps.lastOrNull?.ply ?? 0;
+  int get ply => steps.lastOrNull?.position.ply ?? 0;
 
   /// Cached eval for the work position.
   ClientEval? get evalCache => steps.lastOrNull?.eval;
@@ -42,7 +42,6 @@ class Step with _$Step {
   const Step._();
 
   const factory Step({
-    required int ply,
     required Position position,
     required SanMove sanMove,
     ClientEval? eval,
@@ -50,7 +49,6 @@ class Step with _$Step {
 
   factory Step.fromNode(ViewBranch node) {
     return Step(
-      ply: node.ply,
       position: node.position,
       sanMove: node.sanMove,
       eval: node.eval,

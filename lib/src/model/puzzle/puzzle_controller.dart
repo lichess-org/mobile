@@ -90,7 +90,9 @@ class PuzzleController extends _$PuzzleController {
       initialPath: initialPath,
       currentPath: UciPath.empty,
       node: _gameTree.view,
-      pov: _gameTree.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
+      pov: _gameTree.nodeAt(initialPath).position.ply.isEven
+          ? Side.white
+          : Side.black,
       canViewSolution: false,
       resultSent: false,
       isChangingDifficulty: false,
@@ -473,7 +475,6 @@ class PuzzleController extends _$PuzzleController {
 
   void _mergeSolution() {
     final initialNode = _gameTree.nodeAt(state.initialPath);
-    final fromPly = initialNode.ply;
     final (_, newNodes) = state.puzzle.puzzle.solution.foldIndexed(
       (initialNode.position, IList<Branch>(const [])),
       (index, previous, uci) {
@@ -484,7 +485,6 @@ class PuzzleController extends _$PuzzleController {
           newPos,
           nodes.add(
             Branch(
-              ply: fromPly + index + 1,
               position: newPos,
               sanMove: SanMove(newSan, move),
             ),

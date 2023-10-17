@@ -11,12 +11,10 @@ void main() {
   group('Node', () {
     test('Root.fromPgn', () {
       final root = Root.fromPgn('e4 e5');
-      expect(root.ply, equals(0));
       expect(root.position, equals(Chess.initial));
       expect(root.children.length, equals(1));
       final child = root.children.first;
       expect(child.id, equals(UciCharPair.fromMove(Move.fromUci('e2e4')!)));
-      expect(child.ply, equals(1));
       expect(child.sanMove, equals(SanMove('e4', Move.fromUci('e2e4')!)));
       expect(
         child.position.fen,
@@ -74,11 +72,9 @@ void main() {
 
     test('add child', () {
       final root = Root(
-        ply: 0,
         position: Chess.initial,
       );
       final child = Branch(
-        ply: 1,
         sanMove: SanMove('e4', Move.fromUci('e2e4')!),
         position: Chess.initial,
       );
@@ -90,7 +86,6 @@ void main() {
     test('prepend child', () {
       final root = Root.fromPgn('e4 e5');
       final child = Branch(
-        ply: 1,
         sanMove: SanMove('d4', Move.fromUci('d2d4')!),
         position: Chess.initial,
       );
@@ -134,7 +129,6 @@ void main() {
     test('updateAt', () {
       final root = Root.fromPgn('e4 e5');
       final branch = Branch(
-        ply: 2,
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
         position: Chess.initial,
       );
@@ -151,7 +145,6 @@ void main() {
       );
 
       final eval = ClientEval(
-        ply: branch.ply,
         position: branch.position,
         maxDepth: 20,
         cp: 100,
@@ -180,7 +173,6 @@ void main() {
     test('addNodeAt', () {
       final root = Root.fromPgn('e4 e5');
       final branch = Branch(
-        ply: 2,
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
         position: Chess.initial,
       );
@@ -206,7 +198,6 @@ void main() {
     test('addNodeAt, prepend', () {
       final root = Root.fromPgn('e4 e5');
       final branch = Branch(
-        ply: 2,
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
         position: Chess.initial,
       );
@@ -224,7 +215,6 @@ void main() {
     test('addNodeAt, with an existing node at path', () {
       final root = Root.fromPgn('e4 e5');
       final branch = Branch(
-        ply: 2,
         sanMove: SanMove('e5', Move.fromUci('e7e5')!),
         position: Chess.initial,
       );
@@ -252,12 +242,10 @@ void main() {
     test('addNodesAt', () {
       final root = Root.fromPgn('e4 e5');
       final branch = Branch(
-        ply: 2,
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
         position: Chess.initial,
       );
       final branch2 = Branch(
-        ply: 3,
         sanMove: SanMove('Na6', Move.fromUci('b8a6')!),
         position: Chess.initial,
       );
@@ -285,7 +273,7 @@ void main() {
         equals(currentPath + UciCharPair.fromMove(move)),
       );
       final newNode = root.branchAt(newPath!);
-      expect(newNode?.ply, equals(3));
+      expect(newNode?.position.ply, equals(3));
       expect(newNode?.sanMove, equals(SanMove('Nc3', move)));
       expect(
         newNode?.position.fen,

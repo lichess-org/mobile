@@ -149,7 +149,7 @@ class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
         ctrlProvider,
         path: newPath,
         move: nodes[0].sanMove,
-        ply: nodes[0].ply,
+        ply: nodes[0].position.ply,
         isCurrentMove: currentMove,
         key: currentMove ? currentMoveKey : null,
         isSideline: !inMainline,

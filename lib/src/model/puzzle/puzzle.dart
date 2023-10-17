@@ -134,7 +134,7 @@ class PuzzlePreview with _$PuzzlePreview {
     final root = Root.fromPgn(puzzle.game.pgn);
     final node = root.nodeAt(root.mainlinePath) as Branch;
     return PuzzlePreview(
-      orientation: node.ply.isEven ? Side.white : Side.black,
+      orientation: node.position.ply.isEven ? Side.white : Side.black,
       initialFen: node.position.fen,
       initialMove: node.sanMove.move,
     );
