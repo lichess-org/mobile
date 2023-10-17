@@ -67,9 +67,8 @@ class _OnlineFriendsWidget extends ConsumerWidget {
     return relationState.when(
       data: (data) {
         return ListSection(
-          header: Text(
-            '${data.followingOnlines.length} online friends', // TODO: we need good translations for this
-          ),
+          header:
+              Text(context.l10n.nbFriendsOnline(data.followingOnlines.length)),
           headerTrailing: data.followingOnlines.isEmpty
               ? null
               : NoPaddingTextButton(
@@ -81,9 +80,7 @@ class _OnlineFriendsWidget extends ConsumerWidget {
           children: [
             if (data.followingOnlines.isEmpty)
               PlatformListTile(
-                title: const Text(
-                  "Following",
-                ),
+                title: Text(context.l10n.following),
                 trailing: const Icon(
                   Icons.chevron_right,
                 ),
@@ -125,7 +122,7 @@ class _OnlineFriendsWidget extends ConsumerWidget {
   void _handleTap(BuildContext context) {
     pushPlatformRoute(
       context,
-      title: "Following",
+      title: context.l10n.following,
       builder: (_) => const FollowingScreen(),
     );
   }

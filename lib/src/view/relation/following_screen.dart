@@ -24,19 +24,16 @@ class FollowingScreen extends StatelessWidget {
   }
 
   Widget _buildIos(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        previousPageTitle: context.l10n.friends,
-        middle: const Text("Following"),
-      ),
-      child: const _Body(),
+    return const CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(),
+      child: _Body(),
     );
   }
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.leaderboard),
+        title: Text(context.l10n.following),
       ),
       body: const _Body(),
     );
@@ -102,7 +99,7 @@ class _Body extends ConsumerWidget {
                                     ),
                                   );
                                 },
-                                backgroundColor: const Color(0xFFFE4A49),
+                                backgroundColor: LichessColors.red,
                                 foregroundColor: Colors.white,
                                 icon: Icons.person_remove,
                                 label: 'Unfollow',
