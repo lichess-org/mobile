@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 
 class RelationScreen extends ConsumerStatefulWidget {
   const RelationScreen({super.key});
@@ -86,13 +87,29 @@ class _OnlineFriendsWidget extends ConsumerWidget {
                 ),
                 onTap: () => _handleTap(context),
               ),
-            for (final username in data.followingOnlines)
+            for (final user in data.followingOnlines)
               PlatformListTile(
                 title: Padding(
                   padding: const EdgeInsets.only(right: 5.0),
-                  child: Text(
-                    username.toString(),
-                    overflow: TextOverflow.ellipsis,
+                  child: Row(
+                    children: [
+                      if (user.title != null) ...[
+                        Text(
+                          user.title!,
+                          style: const TextStyle(
+                            color: LichessColors.brag,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                      ],
+                      Flexible(
+                        child: Text(
+                          user.name,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
