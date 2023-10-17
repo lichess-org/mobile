@@ -36,7 +36,7 @@ class AnalysisOptions with _$AnalysisOptions {
 
 @riverpod
 class AnalysisController extends _$AnalysisController {
-  late Root _root;
+  late final Root _root;
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 500));
 
@@ -58,8 +58,6 @@ class AnalysisController extends _$AnalysisController {
       position: initialPosition,
     );
 
-    Position position = initialPosition;
-    Node current = _root;
     UciPath path = UciPath.empty;
     Move? lastMove;
     IMap<String, String>? pgnHeaders =
@@ -71,24 +69,39 @@ class AnalysisController extends _$AnalysisController {
       if (options.id is! GameId) {
         pgnHeaders = pgnHeaders?.addMap(game.headers) ?? IMap(game.headers);
       }
-      for (final node in game.moves.mainline()) {
-        final move = position.parseSan(node.san);
-        if (move == null) break;
-        position = position.playUnchecked(move);
-        final nextNode = Branch(
-          sanMove: SanMove(node.san, move),
-          position: position,
-        );
-        current.addChild(nextNode);
-        current = nextNode;
-        if (options.initialMoveCursor != null &&
-            position.ply <= options.initialMoveCursor!) {
-          path = path + nextNode.id;
-          lastMove = move;
-        }
 
-        if (options.opening == null && position.ply <= 10) {
-          _fetchOpening(path);
+      final List<({PgnNode<PgnNodeData> from, Node to})> stack = [
+        (from: game.moves, to: _root),
+      ];
+      while (stack.isNotEmpty) {
+        final frame = stack.removeLast();
+        for (int childIdx = 0;
+            childIdx < frame.from.children.length;
+            childIdx++) {
+          final childFrom = frame.from.children[childIdx];
+          final move = frame.to.position.parseSan(childFrom.data.san);
+          if (move != null) {
+            final newPos = frame.to.position.play(move);
+            final nextNode = Branch(
+              sanMove: SanMove(childFrom.data.san, move),
+              position: newPos,
+              startingComments: childFrom.data.startingComments,
+              comments: childFrom.data.comments,
+              nags: childFrom.data.nags,
+            );
+
+            frame.to.addChild(nextNode);
+            stack.add((from: childFrom, to: nextNode));
+
+            if (options.initialMoveCursor != null &&
+                newPos.ply <= options.initialMoveCursor!) {
+              path = path + nextNode.id;
+              lastMove = move;
+            }
+            if (options.opening == null && newPos.ply <= 10) {
+              _fetchOpening(path);
+            }
+          }
         }
       }
     }

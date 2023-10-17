@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
@@ -27,14 +26,8 @@ class AnalysisPgnTags extends ConsumerWidget {
         SafeArea(
           child: DataTable(
             columns: [
-              DataColumn(
-                label: Text(
-                  context.l10n.studyPgnTags,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                  ),
-                ),
+              const DataColumn(
+                label: Text('PGN Tag'),
               ),
               DataColumn(
                 label: Icon(Icons.edit, color: Colors.grey.withOpacity(0.5)),

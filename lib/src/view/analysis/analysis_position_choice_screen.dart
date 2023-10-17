@@ -193,16 +193,11 @@ class _BodyState extends State<_Body> {
     try {
       final game = PgnGame.parsePgn(textInput!);
       final initialPosition = PgnGame.startingPosition(game.headers);
-      final List<Move> moves = [];
-      Position position = initialPosition;
-      for (final node in game.moves.mainline()) {
-        final move = position.parseSan(node.san);
-        if (move == null) break; // Illegal move
-        moves.add(move);
-        position = position.playUnchecked(move);
-      }
 
-      if (moves.isEmpty) return null;
+      // require at least 1 valid move
+      if (game.moves.mainline().isEmpty) return null;
+      final move = initialPosition.parseSan(game.moves.mainline().first.san);
+      if (move == null) return null;
 
       return AnalysisOptions(
         isLocalEvaluationAllowed: true,
