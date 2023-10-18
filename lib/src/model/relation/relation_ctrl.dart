@@ -56,22 +56,17 @@ class RelationCtrl extends _$RelationCtrl {
       case 'following_enters':
         final data = _parseFriendToLightUser(event.data.toString());
         state = AsyncValue.data(
-          (state as AsyncData<RelationCtrlState>).requireValue.copyWith(
-                followingOnlines: [
-                  ...state.requireValue.followingOnlines,
-                  data,
-                ].toIList(),
-              ),
+          state.requireValue.copyWith(
+            followingOnlines: state.requireValue.followingOnlines.add(data),
+          ),
         );
 
       case 'following_leaves':
         final data = _parseFriendToLightUser(event.data.toString());
         state = AsyncValue.data(
-          (state as AsyncData<RelationCtrlState>).requireValue.copyWith(
-                followingOnlines: state.requireValue.followingOnlines
-                    .where((e) => e.id != data.id)
-                    .toIList(),
-              ),
+          state.requireValue.copyWith(
+            followingOnlines: state.requireValue.followingOnlines.remove(data),
+          ),
         );
     }
   }
