@@ -131,7 +131,7 @@ class PuzzlePreview with _$PuzzlePreview {
   }) = _PuzzlePreview;
 
   factory PuzzlePreview.fromPuzzle(Puzzle puzzle) {
-    final root = Root.fromPgn(puzzle.game.pgn);
+    final root = Root.fromPgnMoves(puzzle.game.pgn);
     final node = root.nodeAt(root.mainlinePath) as Branch;
     return PuzzlePreview(
       orientation: node.position.ply.isEven ? Side.white : Side.black,

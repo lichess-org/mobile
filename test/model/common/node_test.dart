@@ -9,8 +9,8 @@ import 'package:lichess_mobile/src/model/common/node.dart';
 
 void main() {
   group('Node', () {
-    test('Root.fromPgn', () {
-      final root = Root.fromPgn('e4 e5');
+    test('Root.fromPgnMoves', () {
+      final root = Root.fromPgnMoves('e4 e5');
       expect(root.position, equals(Chess.initial));
       expect(root.children.length, equals(1));
       final child = root.children.first;
@@ -27,7 +27,7 @@ void main() {
     });
 
     test('nodesOn, simple', () {
-      final root = Root.fromPgn('e4 e5');
+      final root = Root.fromPgnMoves('e4 e5');
       final path = UciPath.fromId(UciCharPair.fromUci('e2e4'));
       final nodeList = root.nodesOn(path);
       expect(nodeList.length, equals(1));
@@ -38,7 +38,7 @@ void main() {
     });
 
     test('nodesOn, with variation', () {
-      final root = Root.fromPgn('e4 e5 Nf3');
+      final root = Root.fromPgnMoves('e4 e5 Nf3');
       final move = Move.fromUci('b1c3')!;
       final (newPath, _) = root.addMoveAt(
         UciPath.fromIds(
@@ -61,7 +61,7 @@ void main() {
     });
 
     test('mainline', () {
-      final root = Root.fromPgn('e4 e5');
+      final root = Root.fromPgnMoves('e4 e5');
       final mainline = root.mainline;
 
       expect(mainline.length, equals(2));
@@ -84,7 +84,7 @@ void main() {
     });
 
     test('prepend child', () {
-      final root = Root.fromPgn('e4 e5');
+      final root = Root.fromPgnMoves('e4 e5');
       final child = Branch(
         sanMove: SanMove('d4', Move.fromUci('d2d4')!),
         position: Chess.initial,
@@ -96,13 +96,13 @@ void main() {
     });
 
     test('nodeAt', () {
-      final root = Root.fromPgn('e4 e5');
+      final root = Root.fromPgnMoves('e4 e5');
       final branch = root.nodeAt(UciPath.fromId(UciCharPair.fromUci('e2e4')));
       expect(branch, equals(root.children.first));
     });
 
     test('nodeAtOrNull', () {
-      final root = Root.fromPgn('e4 e5');
+      final root = Root.fromPgnMoves('e4 e5');
       final branch =
           root.nodeAtOrNull(UciPath.fromId(UciCharPair.fromUci('e2e4')));
       expect(branch, equals(root.children.first));
@@ -113,13 +113,13 @@ void main() {
     });
 
     test('branchAt from root', () {
-      final root = Root.fromPgn('e4 e5');
+      final root = Root.fromPgnMoves('e4 e5');
       final branch = root.branchAt(UciPath.fromId(UciCharPair.fromUci('e2e4')));
       expect(branch, equals(root.children.first));
     });
 
     test('branchAt from branch', () {
-      final root = Root.fromPgn('e4 e5 Nf3');
+      final root = Root.fromPgnMoves('e4 e5 Nf3');
       final branch = root.branchAt(UciPath.fromId(UciCharPair.fromUci('e2e4')));
       final branch2 =
           branch!.branchAt(UciPath.fromId(UciCharPair.fromUci('e7e5')));
@@ -127,7 +127,7 @@ void main() {
     });
 
     test('updateAt', () {
-      final root = Root.fromPgn('e4 e5');
+      final root = Root.fromPgnMoves('e4 e5');
       final branch = Branch(
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
         position: Chess.initial,
@@ -171,7 +171,7 @@ void main() {
     });
 
     test('addNodeAt', () {
-      final root = Root.fromPgn('e4 e5');
+      final root = Root.fromPgnMoves('e4 e5');
       final branch = Branch(
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
         position: Chess.initial,
@@ -196,7 +196,7 @@ void main() {
     });
 
     test('addNodeAt, prepend', () {
-      final root = Root.fromPgn('e4 e5');
+      final root = Root.fromPgnMoves('e4 e5');
       final branch = Branch(
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
         position: Chess.initial,
@@ -213,7 +213,7 @@ void main() {
     });
 
     test('addNodeAt, with an existing node at path', () {
-      final root = Root.fromPgn('e4 e5');
+      final root = Root.fromPgnMoves('e4 e5');
       final branch = Branch(
         sanMove: SanMove('e5', Move.fromUci('e7e5')!),
         position: Chess.initial,
@@ -240,7 +240,7 @@ void main() {
     });
 
     test('addNodesAt', () {
-      final root = Root.fromPgn('e4 e5');
+      final root = Root.fromPgnMoves('e4 e5');
       final branch = Branch(
         sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
         position: Chess.initial,
@@ -261,7 +261,7 @@ void main() {
     });
 
     test('addMoveAt', () {
-      final root = Root.fromPgn('e4 e5');
+      final root = Root.fromPgnMoves('e4 e5');
       final move = Move.fromUci('b1c3')!;
       final path = UciPath.fromIds(
         [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,

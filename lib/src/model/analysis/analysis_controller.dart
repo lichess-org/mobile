@@ -54,10 +54,7 @@ class AnalysisController extends _$AnalysisController {
       Setup.parseFen(options.initialFen),
     );
 
-    _root = Root(
-      position: initialPosition,
-    );
-
+    Root root = Root(position: initialPosition);
     UciPath path = UciPath.empty;
     Move? lastMove;
     IMap<String, String>? pgnHeaders =
@@ -70,44 +67,20 @@ class AnalysisController extends _$AnalysisController {
         pgnHeaders = pgnHeaders?.addMap(game.headers) ?? IMap(game.headers);
       }
 
-      final List<({PgnNode<PgnNodeData> from, Node to})> stack = [
-        (from: game.moves, to: _root),
-      ];
-      while (stack.isNotEmpty) {
-        final frame = stack.removeLast();
-        for (int childIdx = 0;
-            childIdx < frame.from.children.length;
-            childIdx++) {
-          final childFrom = frame.from.children[childIdx];
-          final move = frame.to.position.parseSan(childFrom.data.san);
-          if (move != null) {
-            final newPos = frame.to.position.play(move);
-            final nextNode = Branch(
-              sanMove: SanMove(childFrom.data.san, move),
-              position: newPos,
-              startingComments: childFrom.data.startingComments,
-              comments: childFrom.data.comments,
-              nags: childFrom.data.nags,
-            );
-
-            frame.to.addChild(nextNode);
-            stack.add((from: childFrom, to: nextNode));
-
-            final isMainline = stack.length == 1;
-
-            if (isMainline &&
-                options.initialMoveCursor != null &&
-                newPos.ply <= options.initialMoveCursor!) {
-              path = path + nextNode.id;
-              lastMove = move;
-            }
-            if (isMainline && options.opening == null && newPos.ply <= 10) {
-              _fetchOpening(path);
-            }
-          }
+      root = Root.fromPgnGame(game, (root, branch, isMainline) {
+        if (isMainline &&
+            options.initialMoveCursor != null &&
+            branch.position.ply <= options.initialMoveCursor!) {
+          path = path + branch.id;
+          lastMove = branch.sanMove.move;
         }
-      }
+        if (isMainline && options.opening == null && branch.position.ply <= 2) {
+          _fetchOpening(root, path);
+        }
+      });
     }
+
+    _root = root;
 
     final currentPath =
         options.initialMoveCursor == null ? _root.mainlinePath : path;
@@ -240,6 +213,10 @@ class AnalysisController extends _$AnalysisController {
     }
   }
 
+  String makeGamePgn() {
+    return _root.makePgn(state.pgnHeaders);
+  }
+
   void _setPath(
     UciPath path, {
     bool isNewNode = false,
@@ -271,7 +248,7 @@ class AnalysisController extends _$AnalysisController {
       }
 
       if (currentNode.opening == null && currentNode.position.ply <= 40) {
-        _fetchOpening(path);
+        _fetchOpening(_root, path);
       }
 
       state = state.copyWith(
@@ -297,10 +274,10 @@ class AnalysisController extends _$AnalysisController {
     }
   }
 
-  Future<void> _fetchOpening(UciPath path) async {
+  Future<void> _fetchOpening(Node fromNode, UciPath path) async {
     if (!kOpeningAllowedVariants.contains(options.variant)) return;
 
-    final moves = _root.nodesOn(path).map((node) => node.sanMove.move);
+    final moves = fromNode.nodesOn(path).map((node) => node.sanMove.move);
     if (moves.isEmpty) return;
     if (moves.length > 40) return;
 
@@ -308,10 +285,10 @@ class AnalysisController extends _$AnalysisController {
         await ref.read(openingServiceProvider).fetchFromMoves(moves);
 
     if (opening != null) {
-      _root.updateAt(path, (node) => node.opening = opening);
+      fromNode.updateAt(path, (node) => node.opening = opening);
 
       if (state.currentPath == path) {
-        state = state.copyWith(currentNode: _root.nodeAt(path).view);
+        state = state.copyWith(currentNode: fromNode.nodeAt(path).view);
       }
     }
   }

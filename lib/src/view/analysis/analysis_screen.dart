@@ -9,10 +9,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:popover/popover.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
@@ -619,6 +621,17 @@ class _BottomBar extends ConsumerWidget {
                 .toggleBoard();
           },
         ),
+        if (options.id is! GameId)
+          BottomSheetAction(
+            label: const Text('Share PGN'),
+            onPressed: (_) {
+              Share.share(
+                ref
+                    .read(analysisControllerProvider(options).notifier)
+                    .makeGamePgn(),
+              );
+            },
+          ),
       ],
     );
   }

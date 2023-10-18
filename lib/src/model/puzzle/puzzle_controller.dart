@@ -60,7 +60,7 @@ class PuzzleController extends _$PuzzleController {
     PuzzleContext context,
     PuzzleStreak? streak,
   ) {
-    final root = Root.fromPgn(context.puzzle.game.pgn);
+    final root = Root.fromPgnMoves(context.puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Branch;
 
     // play first move after 1 second

@@ -267,10 +267,10 @@ class Root extends Node {
         children: IList(children.map((child) => child.view)),
       );
 
-  /// Creates a game tree from a PGN string.
+  /// Creates a flat game tree from a PGN string.
   ///
   /// Assumes that the PGN string is valid and that the moves are legal.
-  factory Root.fromPgn(String pgn) {
+  factory Root.fromPgnMoves(String pgn) {
     Position position = Chess.initial;
     final root = Root(
       position: position,
@@ -288,6 +288,82 @@ class Root extends Node {
       current = nextNode;
     }
     return root;
+  }
+
+  /// Creates a game tree from a PGN game.
+  ///
+  /// Any non legal move will be ignored.
+  /// An optional callback can be provided to be called on each visited node.
+  factory Root.fromPgnGame(
+    PgnGame game, [
+    void Function(Root root, Branch branch, bool isMainline)? onVisitNode,
+  ]) {
+    final root = Root(
+      position: PgnGame.startingPosition(game.headers),
+    );
+
+    final List<({PgnNode<PgnNodeData> from, Node to})> stack = [
+      (from: game.moves, to: root),
+    ];
+    while (stack.isNotEmpty) {
+      final frame = stack.removeLast();
+      for (int childIdx = 0;
+          childIdx < frame.from.children.length;
+          childIdx++) {
+        final childFrom = frame.from.children[childIdx];
+        final move = frame.to.position.parseSan(childFrom.data.san);
+        if (move != null) {
+          final newPos = frame.to.position.play(move);
+          final branch = Branch(
+            sanMove: SanMove(childFrom.data.san, move),
+            position: newPos,
+            startingComments: childFrom.data.startingComments,
+            comments: childFrom.data.comments,
+            nags: childFrom.data.nags,
+          );
+
+          frame.to.addChild(branch);
+          stack.add((from: childFrom, to: branch));
+
+          onVisitNode?.call(root, branch, stack.length == 1);
+        }
+      }
+    }
+    return root;
+  }
+
+  String makePgn(IMap<String, String>? headers) {
+    final pgnNode = PgnNode<PgnNodeData>();
+    final List<({Node from, PgnNode<PgnNodeData> to})> stack = [
+      (from: this, to: pgnNode),
+    ];
+
+    while (stack.isNotEmpty) {
+      final frame = stack.removeLast();
+      for (int childIdx = 0;
+          childIdx < frame.from.children.length;
+          childIdx++) {
+        final childFrom = frame.from.children[childIdx];
+        final childTo = PgnChildNode(
+          PgnNodeData(
+            san: childFrom.sanMove.san,
+            startingComments: childFrom.startingComments,
+            comments: childFrom.comments,
+            nags: childFrom.nags,
+          ),
+        );
+        frame.to.children.add(childTo);
+        stack.add((from: childFrom, to: childTo));
+      }
+    }
+
+    final pgnGame = PgnGame(
+      headers: headers?.unlock ?? PgnGame.defaultHeaders(),
+      moves: pgnNode,
+      comments: [],
+    );
+
+    return pgnGame.makePgn();
   }
 }
 
