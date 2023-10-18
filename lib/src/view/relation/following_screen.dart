@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:lichess_mobile/src/model/relation/relation_ctrl.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository_providers.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -79,12 +80,10 @@ class _Body extends ConsumerWidget {
                                       onAccept: () async {
                                         final oldState = followingUsers;
                                         setState(() {
-                                          followingUsers = followingUsers
-                                              .where(
-                                                (u) =>
-                                                    u.username != user.username,
-                                              )
-                                              .toIList();
+                                          followingUsers =
+                                              followingUsers.removeWhere(
+                                            (v) => v.id == user.id,
+                                          );
                                         });
 
                                         final res = await ref
@@ -94,6 +93,12 @@ class _Body extends ConsumerWidget {
                                           setState(() {
                                             followingUsers = oldState;
                                           });
+                                        } else {
+                                          ref
+                                              .read(
+                                                relationCtrlProvider.notifier,
+                                              )
+                                              .getFollowingOnlines();
                                         }
                                       },
                                     ),
