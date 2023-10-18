@@ -93,12 +93,15 @@ class AnalysisController extends _$AnalysisController {
             frame.to.addChild(nextNode);
             stack.add((from: childFrom, to: nextNode));
 
-            if (options.initialMoveCursor != null &&
+            final isMainline = stack.length == 1;
+
+            if (isMainline &&
+                options.initialMoveCursor != null &&
                 newPos.ply <= options.initialMoveCursor!) {
               path = path + nextNode.id;
               lastMove = move;
             }
-            if (options.opening == null && newPos.ply <= 10) {
+            if (isMainline && options.opening == null && newPos.ply <= 10) {
               _fetchOpening(path);
             }
           }
@@ -267,7 +270,7 @@ class AnalysisController extends _$AnalysisController {
         }
       }
 
-      if (currentNode.opening == null && currentNode.position.ply <= 20) {
+      if (currentNode.opening == null && currentNode.position.ply <= 40) {
         _fetchOpening(path);
       }
 
@@ -299,7 +302,7 @@ class AnalysisController extends _$AnalysisController {
 
     final moves = _root.nodesOn(path).map((node) => node.sanMove.move);
     if (moves.isEmpty) return;
-    if (moves.length > 20) return;
+    if (moves.length > 40) return;
 
     final opening =
         await ref.read(openingServiceProvider).fetchFromMoves(moves);
