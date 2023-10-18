@@ -12,7 +12,6 @@ import 'package:popover/popover.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -544,35 +543,7 @@ class _BottomBar extends ConsumerWidget {
               },
               icon: const Icon(Icons.menu),
             ),
-            const SizedBox(width: 40.0),
-            if (analysisState.pgnHeaders != null &&
-                analysisState.pgnHeaders!.isNotEmpty)
-              BottomBarIconButton(
-                semanticsLabel: context.l10n.studyPgnTags,
-                onPressed: () {
-                  showAdaptiveBottomSheet<void>(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (_) => DraggableScrollableSheet(
-                      expand: false,
-                      snap: true,
-                      minChildSize: 0.4,
-                      maxChildSize: 0.9,
-                      builder: (context, controller) {
-                        return SafeArea(
-                          child: SingleChildScrollView(
-                            controller: controller,
-                            child: AnalysisPgnTags(
-                              options: options,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
-                icon: const Icon(LichessIcons.tags, size: 20.0),
-              ),
+            const Spacer(),
             RepeatButton(
               onLongPress:
                   analysisState.canGoBack ? () => _moveBackward(ref) : null,
@@ -586,6 +557,7 @@ class _BottomBar extends ConsumerWidget {
                 showAndroidTooltip: false,
               ),
             ),
+            const SizedBox(width: 16.0),
             RepeatButton(
               onLongPress:
                   analysisState.canGoNext ? () => _moveForward(ref) : null,
@@ -623,12 +595,43 @@ class _BottomBar extends ConsumerWidget {
         ),
         if (options.id is! GameId)
           BottomSheetAction(
-            label: const Text('Share PGN'),
+            label: Text(context.l10n.studyShareAndExport),
             onPressed: (_) {
-              Share.share(
-                ref
-                    .read(analysisControllerProvider(options).notifier)
-                    .makeGamePgn(),
+              showAdaptiveBottomSheet<void>(
+                context: context,
+                showDragHandle: true,
+                isScrollControlled: true,
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.9,
+                ),
+                builder: (_) => SafeArea(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      AnalysisPgnTags(
+                        options: options,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: FatButton(
+                          semanticsLabel: 'Share PGN',
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Share.share(
+                              ref
+                                  .read(
+                                    analysisControllerProvider(options)
+                                        .notifier,
+                                  )
+                                  .makeGamePgn(),
+                            );
+                          },
+                          child: const Text('Share PGN'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               );
             },
           ),

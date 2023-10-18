@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -28,12 +29,12 @@ class AnalysisPgnTags extends ConsumerWidget {
     return SizedBox(
       width: double.infinity,
       child: DataTable(
-        columns: [
-          const DataColumn(
-            label: Text('PGN Tag'),
+        columns: const [
+          DataColumn(
+            label: Icon(LichessIcons.tags, color: Colors.grey, size: 20),
           ),
           DataColumn(
-            label: Icon(Icons.edit, color: Colors.grey.withOpacity(0.5)),
+            label: Icon(Icons.edit, color: Colors.grey),
           ),
         ],
         rows: pgnHeaders.entries.map((e) {

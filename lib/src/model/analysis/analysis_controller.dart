@@ -362,8 +362,8 @@ const IMap<String, String> _defaultPgnHeaders = IMapConst({
   'Date': '????.??.??',
   'Round': '?',
   'White': '?',
-  'WhiteElo': '?',
   'Black': '?',
-  'BlackElo': '?',
   'Result': '*',
+  'WhiteElo': '?',
+  'BlackElo': '?',
 });
