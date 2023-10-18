@@ -2,9 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_date_picker.dart';
+
+final _dateFormat = DateFormat('yyyy.MM.dd');
 
 class AnalysisPgnTags extends ConsumerWidget {
   const AnalysisPgnTags({required this.options});
@@ -20,45 +25,75 @@ class AnalysisPgnTags extends ConsumerWidget {
       return const Center(child: Text('Nothin to show'));
     }
 
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        SafeArea(
-          child: DataTable(
-            columns: [
-              const DataColumn(
-                label: Text('PGN Tag'),
+    return SizedBox(
+      width: double.infinity,
+      child: DataTable(
+        columns: [
+          const DataColumn(
+            label: Text('PGN Tag'),
+          ),
+          DataColumn(
+            label: Icon(Icons.edit, color: Colors.grey.withOpacity(0.5)),
+          ),
+        ],
+        rows: pgnHeaders.entries.map((e) {
+          return DataRow(
+            cells: [
+              DataCell(
+                Text(
+                  e.key,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
-              DataColumn(
-                label: Icon(Icons.edit, color: Colors.grey.withOpacity(0.5)),
+              DataCell(
+                Text(e.value),
+                onTap: () {
+                  if (e.key == 'Result') {
+                    showChoicePicker(
+                      context,
+                      choices: ['1-0', '0-1', '1/2-1/2', '*'],
+                      selectedItem: e.value,
+                      labelBuilder: (choice) => Text(choice),
+                      onSelectedItemChanged: (choice) {
+                        ref
+                            .read(ctrlProvider.notifier)
+                            .updatePgnHeader(e.key, choice);
+                      },
+                    );
+                  } else if (e.key == 'Date') {
+                    DateTime date;
+                    try {
+                      date = _dateFormat.parse(e.value);
+                    } catch (_) {
+                      date = DateTime.now();
+                    }
+                    showAdaptiveDatePicker(
+                      context,
+                      initialDate: date,
+                      firstDate: date.subtract(const Duration(days: 365 * 10)),
+                      lastDate: date.add(const Duration(days: 365 * 10)),
+                      onDateTimeChanged: (date) {
+                        if (date != null) {
+                          ref.read(ctrlProvider.notifier).updatePgnHeader(
+                                e.key,
+                                _dateFormat.format(date),
+                              );
+                        }
+                      },
+                    );
+                  } else {
+                    showAdaptiveDialog<void>(
+                      context: context,
+                      builder: (context) =>
+                          _EditDialog(e.key, e.value, options: options),
+                    );
+                  }
+                },
               ),
             ],
-            rows: pgnHeaders.entries.map((e) {
-              return DataRow(
-                cells: [
-                  DataCell(
-                    Text(
-                      e.key,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  DataCell(
-                    Text(e.value),
-                    onTap: () {
-                      showAdaptiveDialog<void>(
-                        context: context,
-                        builder: (context) =>
-                            _EditDialog(e.key, e.value, options: options),
-                        barrierDismissible: false,
-                      );
-                    },
-                  ),
-                ],
-              );
-            }).toList(),
-          ),
-        ),
-      ],
+          );
+        }).toList(),
+      ),
     );
   }
 }

@@ -550,9 +550,23 @@ class _BottomBar extends ConsumerWidget {
                 onPressed: () {
                   showAdaptiveBottomSheet<void>(
                     context: context,
-                    showDragHandle: true,
                     isScrollControlled: true,
-                    builder: (_) => AnalysisPgnTags(options: options),
+                    builder: (_) => DraggableScrollableSheet(
+                      expand: false,
+                      snap: true,
+                      minChildSize: 0.4,
+                      maxChildSize: 0.9,
+                      builder: (context, controller) {
+                        return SafeArea(
+                          child: SingleChildScrollView(
+                            controller: controller,
+                            child: AnalysisPgnTags(
+                              options: options,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   );
                 },
                 icon: const Icon(LichessIcons.tags, size: 20.0),
