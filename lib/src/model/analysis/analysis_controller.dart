@@ -247,7 +247,7 @@ class AnalysisController extends _$AnalysisController {
         }
       }
 
-      if (currentNode.opening == null && currentNode.position.ply <= 40) {
+      if (currentNode.opening == null && currentNode.position.ply <= 30) {
         _fetchOpening(_root, path);
       }
 

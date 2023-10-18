@@ -21,6 +21,10 @@ import '../../test_app.dart';
 void main() {
   // ignore: avoid_dynamic_calls
   final sanMoves = jsonDecode(gameResponse)['moves'] as String;
+  const opening = LightOpening(
+    eco: 'C20',
+    name: "King's Pawn Game: Wayward Queen Attack, Kiddie Countergambit",
+  );
 
   group('Analysis Screen', () {
     testWidgets('displays correct move and position', (tester) async {
@@ -33,6 +37,7 @@ void main() {
             initialFen: Chess.initial.fen,
             initialPly: 0,
             pgn: sanMoves,
+            opening: opening,
             orientation: Side.white,
             id: gameData.id,
           ),
@@ -61,6 +66,7 @@ void main() {
             initialFen: Chess.initial.fen,
             initialPly: 0,
             pgn: sanMoves,
+            opening: opening,
             orientation: Side.white,
             id: gameData.id,
           ),
