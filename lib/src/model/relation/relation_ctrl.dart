@@ -24,8 +24,7 @@ class RelationCtrl extends _$RelationCtrl {
       (event) {
         _socketSubscription = stream.listen(_handleSocketTopic);
         return RelationCtrlState(
-          followingOnlines:
-              _parseFriendsListToLightUserIList(event.data as List<dynamic>),
+          followingOnlines: _parseFriendsList(event.data as List<dynamic>),
         );
       },
     );
@@ -48,13 +47,12 @@ class RelationCtrl extends _$RelationCtrl {
       case 'following_onlines':
         state = AsyncValue.data(
           RelationCtrlState(
-            followingOnlines:
-                _parseFriendsListToLightUserIList(event.data as List<dynamic>),
+            followingOnlines: _parseFriendsList(event.data as List<dynamic>),
           ),
         );
 
       case 'following_enters':
-        final data = _parseFriendToLightUser(event.data.toString());
+        final data = _parseFriend(event.data.toString());
         state = AsyncValue.data(
           state.requireValue.copyWith(
             followingOnlines: state.requireValue.followingOnlines.add(data),
@@ -62,10 +60,11 @@ class RelationCtrl extends _$RelationCtrl {
         );
 
       case 'following_leaves':
-        final data = _parseFriendToLightUser(event.data.toString());
+        final data = _parseFriend(event.data.toString());
         state = AsyncValue.data(
           state.requireValue.copyWith(
-            followingOnlines: state.requireValue.followingOnlines.remove(data),
+            followingOnlines: state.requireValue.followingOnlines
+                .removeWhere((v) => v.id == data.id),
           ),
         );
     }
@@ -73,7 +72,7 @@ class RelationCtrl extends _$RelationCtrl {
 
   AuthSocket get _socket => ref.read(authSocketProvider);
 
-  LightUser _parseFriendToLightUser(String friend) {
+  LightUser _parseFriend(String friend) {
     final splitted = friend.split(' ');
     final name = splitted.length > 1 ? splitted[1] : splitted[0];
     final title = splitted.length > 1 ? splitted[0] : null;
@@ -84,8 +83,8 @@ class RelationCtrl extends _$RelationCtrl {
     );
   }
 
-  IList<LightUser> _parseFriendsListToLightUserIList(List<dynamic> friends) {
-    return friends.map((v) => _parseFriendToLightUser(v.toString())).toIList();
+  IList<LightUser> _parseFriendsList(List<dynamic> friends) {
+    return friends.map((v) => _parseFriend(v.toString())).toIList();
   }
 }
 
