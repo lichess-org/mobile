@@ -67,6 +67,10 @@ class AnalysisPgnTags extends ConsumerWidget {
                       date = _dateFormat.parse(e.value);
                     } catch (_) {
                       date = DateTime.now();
+                      ref.read(ctrlProvider.notifier).updatePgnHeader(
+                            e.key,
+                            _dateFormat.format(date),
+                          );
                     }
                     showAdaptiveDatePicker(
                       context,
