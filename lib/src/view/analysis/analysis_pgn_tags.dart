@@ -112,6 +112,9 @@ class _EditDialog extends ConsumerWidget {
       children: [
         AdaptiveTextField(
           autofocus: true,
+          keyboardType: fieldKey == 'WhiteElo' || fieldKey == 'BlackElo'
+              ? TextInputType.number
+              : TextInputType.text,
           controller: TextEditingController.fromValue(
             TextEditingValue(
               text: fieldValue,

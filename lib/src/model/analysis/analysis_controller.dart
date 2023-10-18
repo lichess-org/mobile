@@ -61,7 +61,7 @@ class AnalysisController extends _$AnalysisController {
     UciPath path = UciPath.empty;
     Move? lastMove;
     IMap<String, String>? pgnHeaders =
-        options.id is GameId ? null : IMap(PgnGame.defaultHeaders());
+        options.id is GameId ? null : _defaultPgnHeaders;
 
     if (options.pgn != null) {
       final game = PgnGame.parsePgn(options.pgn!);
@@ -378,3 +378,15 @@ class AnalysisState with _$AnalysisState {
   bool get canGoNext => currentNode.children.isNotEmpty;
   bool get canGoBack => currentPath.size > initialPath.size;
 }
+
+const IMap<String, String> _defaultPgnHeaders = IMapConst({
+  'Event': '?',
+  'Site': '?',
+  'Date': '????.??.??',
+  'Round': '?',
+  'White': '?',
+  'WhiteElo': '?',
+  'Black': '?',
+  'BlackElo': '?',
+  'Result': '*',
+});

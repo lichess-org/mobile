@@ -11,6 +11,7 @@ class AdaptiveTextField extends StatelessWidget {
     this.onSubmitted,
     this.onTap,
     this.maxLines = 1,
+    this.keyboardType,
     this.readOnly = false,
     this.enableSuggestions = false,
     this.autofocus = false,
@@ -22,6 +23,7 @@ class AdaptiveTextField extends StatelessWidget {
   final bool enableSuggestions;
   final bool readOnly;
   final bool autofocus;
+  final TextInputType? keyboardType;
   final TextEditingController? controller;
   final void Function(String)? onChanged;
   final void Function(String)? onSubmitted;
@@ -40,6 +42,7 @@ class AdaptiveTextField extends StatelessWidget {
           maxLines: maxLines,
           placeholder: placeholder,
           controller: controller,
+          keyboardType: keyboardType,
           onChanged: onChanged,
           onSubmitted: onSubmitted,
           onTap: onTap,
@@ -54,6 +57,7 @@ class AdaptiveTextField extends StatelessWidget {
             hintText: placeholder,
           ),
           controller: controller,
+          keyboardType: keyboardType,
           onChanged: onChanged,
           onSubmitted: onSubmitted,
           onTap: onTap,
