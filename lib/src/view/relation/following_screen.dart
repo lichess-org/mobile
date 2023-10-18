@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/relation/relation_ctrl.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository_providers.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
@@ -19,7 +20,12 @@ import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
 class FollowingScreen extends StatelessWidget {
-  const FollowingScreen({super.key});
+  const FollowingScreen({
+    required this.followingOnlines,
+    super.key,
+  });
+
+  final IList<LightUser> followingOnlines;
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +33,9 @@ class FollowingScreen extends StatelessWidget {
   }
 
   Widget _buildIos(BuildContext context) {
-    return const CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(),
-      child: _Body(),
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(),
+      child: _Body(followingOnlines: followingOnlines),
     );
   }
 
@@ -38,13 +44,17 @@ class FollowingScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(context.l10n.following),
       ),
-      body: const _Body(),
+      body: _Body(followingOnlines: followingOnlines),
     );
   }
 }
 
 class _Body extends ConsumerWidget {
-  const _Body();
+  const _Body({
+    required this.followingOnlines,
+  });
+
+  final IList<LightUser> followingOnlines;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -64,6 +74,7 @@ class _Body extends ConsumerWidget {
               child: ListView(
                 children: [
                   ListSection(
+                    hasLeading: true,
                     children: [
                       for (final user in followingUsers)
                         Slidable(
@@ -121,6 +132,11 @@ class _Body extends ConsumerWidget {
                                     UserScreen(user: user.lightUser),
                               ),
                             },
+                            leading: _OnlineOrPatron(
+                              patron: user.isPatron,
+                              user: user,
+                              followingOnlines: followingOnlines,
+                            ),
                             title: Padding(
                               padding: const EdgeInsets.only(right: 5.0),
                               child: Row(
@@ -250,5 +266,37 @@ class _UnfollowDialog extends StatelessWidget {
         ],
       );
     }
+  }
+}
+
+class _OnlineOrPatron extends StatelessWidget {
+  const _OnlineOrPatron({
+    this.patron,
+    required this.user,
+    required this.followingOnlines,
+  });
+
+  final bool? patron;
+  final User user;
+  final IList<LightUser> followingOnlines;
+
+  @override
+  Widget build(BuildContext context) {
+    if (patron != null) {
+      return Icon(
+        LichessIcons.patron,
+        color: _isOnline() ? LichessColors.good : LichessColors.grey,
+      );
+    } else {
+      return Icon(
+        CupertinoIcons.circle_fill,
+        size: 20,
+        color: _isOnline() ? LichessColors.good : LichessColors.grey,
+      );
+    }
+  }
+
+  bool _isOnline() {
+    return followingOnlines.any((v) => v.id == user.id);
   }
 }

@@ -1,7 +1,9 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/relation/relation_ctrl.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/relation/following_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -73,7 +75,7 @@ class _OnlineFriendsWidget extends ConsumerWidget {
           headerTrailing: data.followingOnlines.isEmpty
               ? null
               : NoPaddingTextButton(
-                  onPressed: () => _handleTap(context),
+                  onPressed: () => _handleTap(context, data.followingOnlines),
                   child: Text(
                     context.l10n.more,
                   ),
@@ -85,7 +87,7 @@ class _OnlineFriendsWidget extends ConsumerWidget {
                 trailing: const Icon(
                   Icons.chevron_right,
                 ),
-                onTap: () => _handleTap(context),
+                onTap: () => _handleTap(context, data.followingOnlines),
               ),
             for (final user in data.followingOnlines)
               PlatformListTile(
@@ -136,11 +138,11 @@ class _OnlineFriendsWidget extends ConsumerWidget {
     );
   }
 
-  void _handleTap(BuildContext context) {
+  void _handleTap(BuildContext context, IList<LightUser> followingOnlines) {
     pushPlatformRoute(
       context,
       title: context.l10n.following,
-      builder: (_) => const FollowingScreen(),
+      builder: (_) => FollowingScreen(followingOnlines: followingOnlines),
     );
   }
 }
