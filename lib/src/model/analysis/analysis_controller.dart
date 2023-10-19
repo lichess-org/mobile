@@ -24,12 +24,14 @@ class AnalysisOptions with _$AnalysisOptions {
   const factory AnalysisOptions({
     required ID id,
     required bool isLocalEvaluationAllowed,
-    required Variant variant,
     required Side orientation,
+    required Variant variant,
 
-    /// The PGN of the game to analyze. It can contain a FEN header, and the move
-    /// list can be empty.
-    String? pgn,
+    /// The PGN of the game to analyze.
+    /// The move list can be empty.
+    /// It can contain a FEN header for initial position.
+    /// If it contains a Variant header, it will be ignored.
+    required String pgn,
     int? initialMoveCursor,
     LightOpening? opening,
   }) = _AnalysisOptions;
@@ -50,35 +52,30 @@ class AnalysisController extends _$AnalysisController {
       _engineEvalDebounce.dispose();
     });
 
-    Root root = Root(position: Chess.initial);
     UciPath path = UciPath.empty;
     Move? lastMove;
     IMap<String, String>? pgnHeaders =
         options.id is GameId ? null : _defaultPgnHeaders;
     IList<String>? rootComments;
 
-    if (options.pgn != null) {
-      final game = PgnGame.parsePgn(options.pgn!);
-      // only include headers if the game is not an online lichess game
-      if (options.id is! GameId) {
-        pgnHeaders = pgnHeaders?.addMap(game.headers) ?? IMap(game.headers);
-        rootComments = IList(game.comments);
-      }
-
-      root = Root.fromPgnGame(game, (root, branch, isMainline) {
-        if (isMainline &&
-            options.initialMoveCursor != null &&
-            branch.position.ply <= options.initialMoveCursor!) {
-          path = path + branch.id;
-          lastMove = branch.sanMove.move;
-        }
-        if (isMainline && options.opening == null && branch.position.ply <= 2) {
-          _fetchOpening(root, path);
-        }
-      });
+    final game = PgnGame.parsePgn(options.pgn);
+    // only include headers if the game is not an online lichess game
+    if (options.id is! GameId) {
+      pgnHeaders = pgnHeaders?.addMap(game.headers) ?? IMap(game.headers);
+      rootComments = IList(game.comments);
     }
 
-    _root = root;
+    _root = Root.fromPgnGame(game, (root, branch, isMainline) {
+      if (isMainline &&
+          options.initialMoveCursor != null &&
+          branch.position.ply <= options.initialMoveCursor!) {
+        path = path + branch.id;
+        lastMove = branch.sanMove.move;
+      }
+      if (isMainline && options.opening == null && branch.position.ply <= 2) {
+        _fetchOpening(root, path);
+      }
+    });
 
     final currentPath =
         options.initialMoveCursor == null ? _root.mainlinePath : path;

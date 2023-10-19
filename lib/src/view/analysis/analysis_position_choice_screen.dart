@@ -127,6 +127,7 @@ class _BodyState extends State<_Body> {
         isLocalEvaluationAllowed: true,
         variant: Variant.standard,
         orientation: Side.white,
+        pgn: '',
         id: ValueId('standalone_analysis'),
       );
     }
@@ -157,7 +158,7 @@ class _BodyState extends State<_Body> {
       return AnalysisOptions(
         isLocalEvaluationAllowed: true,
         variant: rules != null ? Variant.fromRules(rules) : Variant.standard,
-        pgn: textInput,
+        pgn: textInput!,
         initialMoveCursor: 1,
         orientation: Side.white,
         id: const ValueId('standalone_analysis'),
