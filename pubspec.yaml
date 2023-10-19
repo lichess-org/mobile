@@ -43,9 +43,9 @@ dependencies:
   flutter_layout_grid: ^2.0.1
   sqflite: ^2.2.5
   path: ^1.8.2
-  connectivity_plus: ^4.0.0
+  connectivity_plus: ^5.0.0
   share_plus: ^7.0.0
-  fl_chart: ^0.63.0
+  fl_chart: ^0.64.0
   stream_transform: ^2.1.0
   flutter_native_splash: ^2.2.19
   stockfish:
