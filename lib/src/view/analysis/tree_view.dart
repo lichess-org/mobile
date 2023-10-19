@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
@@ -16,45 +17,20 @@ const kFastReplayDebounceDelay = Duration(milliseconds: 100);
 const kOpeningHeaderHeight = 32.0;
 const kInlineMoveSpacing = 5.0;
 
-class AnalysisTreeView extends ConsumerWidget {
-  const AnalysisTreeView(this.ctrlProvider, this.displayMode);
-
-  final AnalysisControllerProvider ctrlProvider;
-  final Orientation displayMode;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final root = ref.watch(ctrlProvider.select((value) => value.root));
-    final currentPath =
-        ref.watch(ctrlProvider.select((value) => value.currentPath));
-
-    return _InlineTreeView(
-      ctrlProvider,
-      root,
-      currentPath,
-      displayMode,
-    );
-  }
-}
-
-class _InlineTreeView extends ConsumerStatefulWidget {
-  const _InlineTreeView(
-    this.ctrlProvider,
-    this.root,
-    this.currentPath,
+class AnalysisTreeView extends ConsumerStatefulWidget {
+  const AnalysisTreeView(
+    this.options,
     this.displayMode,
   );
 
-  final AnalysisControllerProvider ctrlProvider;
-  final ViewRoot root;
-  final UciPath currentPath;
+  final AnalysisOptions options;
   final Orientation displayMode;
 
   @override
-  ConsumerState<_InlineTreeView> createState() => _InlineTreeViewState();
+  ConsumerState<AnalysisTreeView> createState() => _InlineTreeViewState();
 }
 
-class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
+class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
   final currentMoveKey = GlobalKey();
   final _debounce = Debouncer(kFastReplayDebounceDelay);
 
@@ -79,7 +55,7 @@ class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
   }
 
   @override
-  void didUpdateWidget(covariant _InlineTreeView oldWidget) {
+  void didUpdateWidget(covariant AnalysisTreeView oldWidget) {
     super.didUpdateWidget(oldWidget);
     _debounce(() {
       if (currentMoveKey.currentContext != null) {
@@ -96,14 +72,19 @@ class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
 
   @override
   Widget build(BuildContext context) {
+    final ctrlProvider = analysisControllerProvider(widget.options);
+    final root = ref.watch(ctrlProvider.select((value) => value.root));
+    final currentPath =
+        ref.watch(ctrlProvider.select((value) => value.currentPath));
     final content = CustomScrollView(
       slivers: [
-        SliverPersistentHeader(
-          delegate: _OpeningHeaderDelegate(
-            widget.ctrlProvider,
-            displayMode: widget.displayMode,
+        if (kOpeningAllowedVariants.contains(widget.options.variant))
+          SliverPersistentHeader(
+            delegate: _OpeningHeaderDelegate(
+              ctrlProvider,
+              displayMode: widget.displayMode,
+            ),
           ),
-        ),
         SliverFillRemaining(
           hasScrollBody: false,
           child: Padding(
@@ -111,12 +92,12 @@ class _InlineTreeViewState extends ConsumerState<_InlineTreeView> {
             child: Wrap(
               spacing: kInlineMoveSpacing,
               children: _buildTreeWidget(
-                widget.ctrlProvider,
-                nodes: widget.root.children,
+                ctrlProvider,
+                nodes: root.children,
                 inMainline: true,
                 startSideline: false,
                 initialPath: UciPath.empty,
-                currentPath: widget.currentPath,
+                currentPath: currentPath,
               ),
             ),
           ),

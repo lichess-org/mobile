@@ -198,7 +198,7 @@ class _BodyState extends ConsumerState<_Body> {
                                     ),
                                     semanticContainer: false,
                                     child: AnalysisTreeView(
-                                      widget.ctrlProvider,
+                                      widget.options,
                                       Orientation.landscape,
                                     ),
                                   ),
@@ -224,7 +224,7 @@ class _BodyState extends ConsumerState<_Body> {
                           else
                             _Board(widget.ctrlProvider, boardSize),
                           AnalysisTreeView(
-                            widget.ctrlProvider,
+                            widget.options,
                             Orientation.portrait,
                           ),
                         ],

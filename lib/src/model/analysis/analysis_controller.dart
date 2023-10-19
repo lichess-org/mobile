@@ -26,6 +26,9 @@ class AnalysisOptions with _$AnalysisOptions {
     required bool isLocalEvaluationAllowed,
     required Variant variant,
     required Side orientation,
+
+    /// The PGN of the game to analyze. It can contain a FEN header, and the move
+    /// list can be empty.
     String? pgn,
     int? initialMoveCursor,
     LightOpening? opening,
