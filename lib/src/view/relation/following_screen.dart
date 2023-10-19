@@ -61,114 +61,98 @@ class _Body extends ConsumerWidget {
     final following = ref.watch(followingProvider);
 
     return following.when(
-      data: (data) {
-        IList<User> followingUsers = data;
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            if (followingUsers.isEmpty) {
-              return const Center(
-                child: Text("You are not following any user"),
-              );
-            }
-            return SafeArea(
-              child: ListView(
+      data: (followingUsers) {
+        if (followingUsers.isEmpty) {
+          return const Center(
+            child: Text("You are not following any user"),
+          );
+        }
+        return SafeArea(
+          child: ListView(
+            children: [
+              ListSection(
+                hasLeading: true,
                 children: [
-                  ListSection(
-                    hasLeading: true,
-                    children: [
-                      for (final user in followingUsers)
-                        Slidable(
-                          endActionPane: ActionPane(
-                            motion: const ScrollMotion(),
-                            extentRatio: 0.3,
-                            children: [
-                              SlidableAction(
-                                onPressed: (BuildContext context) {
-                                  showAdaptiveDialog<void>(
-                                    context: context,
-                                    builder: (context) => _UnfollowDialog(
-                                      title: Text(
-                                        'Unfollow ${user.username}?',
-                                      ),
-                                      onAccept: () async {
-                                        final oldState = followingUsers;
-                                        setState(() {
-                                          followingUsers =
-                                              followingUsers.removeWhere(
-                                            (v) => v.id == user.id,
-                                          );
-                                        });
+                  for (final user in followingUsers)
+                    Slidable(
+                      endActionPane: ActionPane(
+                        motion: const ScrollMotion(),
+                        extentRatio: 0.3,
+                        children: [
+                          SlidableAction(
+                            onPressed: (BuildContext context) {
+                              showAdaptiveDialog<void>(
+                                context: context,
+                                builder: (context) => _UnfollowDialog(
+                                  title: Text(
+                                    'Unfollow ${user.username}?',
+                                  ),
+                                  onAccept: () async {
+                                    final res = await ref
+                                        .read(relationRepositoryProvider)
+                                        .unfollow(user.username);
+                                    if (!res.isError && _isOnline(user)) {
+                                      ref
+                                          .read(
+                                            relationCtrlProvider.notifier,
+                                          )
+                                          .getFollowingOnlines();
+                                    }
 
-                                        final res = await ref
-                                            .read(relationRepositoryProvider)
-                                            .unfollow(user.username);
-                                        if (res.isError) {
-                                          setState(() {
-                                            followingUsers = oldState;
-                                          });
-                                        } else {
-                                          ref
-                                              .read(
-                                                relationCtrlProvider.notifier,
-                                              )
-                                              .getFollowingOnlines();
-                                        }
-                                      },
-                                    ),
-                                  );
-                                },
-                                backgroundColor: LichessColors.red,
-                                foregroundColor: Colors.white,
-                                icon: Icons.person_remove,
-                                label: 'Unfollow',
+                                    ref.invalidate(followingProvider);
+                                  },
+                                ),
+                              );
+                            },
+                            backgroundColor: LichessColors.red,
+                            foregroundColor: Colors.white,
+                            icon: Icons.person_remove,
+                            label: 'Unfollow',
+                          ),
+                        ],
+                      ),
+                      child: PlatformListTile(
+                        onTap: () => {
+                          pushPlatformRoute(
+                            context,
+                            builder: (context) =>
+                                UserScreen(user: user.lightUser),
+                          ),
+                        },
+                        leading: _OnlineOrPatron(
+                          patron: user.isPatron,
+                          online: _isOnline(user),
+                        ),
+                        title: Padding(
+                          padding: const EdgeInsets.only(right: 5.0),
+                          child: Row(
+                            children: [
+                              if (user.title != null) ...[
+                                Text(
+                                  user.title!,
+                                  style: const TextStyle(
+                                    color: LichessColors.brag,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                              ],
+                              Flexible(
+                                child: Text(
+                                  user.username,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ],
                           ),
-                          child: PlatformListTile(
-                            onTap: () => {
-                              pushPlatformRoute(
-                                context,
-                                builder: (context) =>
-                                    UserScreen(user: user.lightUser),
-                              ),
-                            },
-                            leading: _OnlineOrPatron(
-                              patron: user.isPatron,
-                              user: user,
-                              followingOnlines: followingOnlines,
-                            ),
-                            title: Padding(
-                              padding: const EdgeInsets.only(right: 5.0),
-                              child: Row(
-                                children: [
-                                  if (user.title != null) ...[
-                                    Text(
-                                      user.title!,
-                                      style: const TextStyle(
-                                        color: LichessColors.brag,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5),
-                                  ],
-                                  Flexible(
-                                    child: Text(
-                                      user.username,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            subtitle: _UserRating(user: user),
-                          ),
                         ),
-                    ],
-                  ),
+                        subtitle: _UserRating(user: user),
+                      ),
+                    ),
                 ],
               ),
-            );
-          },
+            ],
+          ),
         );
       },
       error: (error, stackTrace) {
@@ -179,6 +163,10 @@ class _Body extends ConsumerWidget {
       },
       loading: () => const CenterLoadingIndicator(),
     );
+  }
+
+  bool _isOnline(User user) {
+    return followingOnlines.any((v) => v.id == user.id);
   }
 }
 
@@ -272,31 +260,25 @@ class _UnfollowDialog extends StatelessWidget {
 class _OnlineOrPatron extends StatelessWidget {
   const _OnlineOrPatron({
     this.patron,
-    required this.user,
-    required this.followingOnlines,
+    required this.online,
   });
 
   final bool? patron;
-  final User user;
-  final IList<LightUser> followingOnlines;
+  final bool online;
 
   @override
   Widget build(BuildContext context) {
     if (patron != null) {
       return Icon(
         LichessIcons.patron,
-        color: _isOnline() ? LichessColors.good : LichessColors.grey,
+        color: online ? LichessColors.good : LichessColors.grey,
       );
     } else {
       return Icon(
         CupertinoIcons.circle_fill,
         size: 20,
-        color: _isOnline() ? LichessColors.good : LichessColors.grey,
+        color: online ? LichessColors.good : LichessColors.grey,
       );
     }
-  }
-
-  bool _isOnline() {
-    return followingOnlines.any((v) => v.id == user.id);
   }
 }
