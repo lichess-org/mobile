@@ -835,9 +835,7 @@ class GameState with _$GameState {
   AnalysisOptions get analysisOptions => AnalysisOptions(
         isLocalEvaluationAllowed: true,
         variant: game.meta.variant,
-        initialFen: game.initialPosition.fen,
-        initialPly: game.initialPly,
-        pgn: game.pgnMoves,
+        pgn: game.pgn,
         initialMoveCursor: stepCursor,
         orientation: game.youAre ?? Side.white,
         id: game.meta.id,

@@ -26,6 +26,27 @@ void main() {
       );
     });
 
+    test('Root.fromPgnGame, flat', () {
+      final pgnGame = PgnGame.parsePgn(fisherSpasskyPgn);
+      final root = Root.fromPgnGame(pgnGame);
+      expect(root.position, equals(Chess.initial));
+      expect(root.children.length, equals(1));
+      expect(root.mainline.length, equals(85));
+    });
+
+    test('Root.fromPgnGame, with variations', () {
+      const pgn = '1. e4 d5 2. exd5 Qxd5 (2... Nf6 3. c4 (3. Nc3)) 3. Nc3';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      expect(root.position, equals(Chess.initial));
+      expect(root.children.length, equals(1));
+      expect(root.mainline.length, equals(5));
+      final nodeWithVariation =
+          root.nodeAt(UciPath.fromUciMoves(['e2e4', 'd7d5', 'e4d5']));
+      expect(nodeWithVariation.children.length, 2);
+      expect(nodeWithVariation.children[1].sanMove.san, equals('Nf6'));
+      expect(nodeWithVariation.children[1].children.length, 2);
+    });
+
     test('nodesOn, simple', () {
       final root = Root.fromPgnMoves('e4 e5');
       final path = UciPath.fromId(UciCharPair.fromUci('e2e4'));
@@ -294,3 +315,21 @@ void main() {
     });
   });
 }
+
+const fisherSpasskyPgn = '''
+[Event "F/S Return Match"]
+[Site "Belgrade, Serbia Yugoslavia|JUG"]
+[Date "1992.11.04"]
+[Round "29"]
+[White "Fischer, Robert J."]
+[Black "Spassky, Boris V."]
+[Result "1/2-1/2"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 {This opening is called the Ruy Lopez.} 3... a6
+4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Nb8  10. d4 Nbd7
+11. c4 c6 12. cxb5 axb5 13. Nc3 Bb7 14. Bg5 b4 15. Nb1 h6 16. Bh4 c5 17. dxe5
+Nxe4 18. Bxe7 Qxe7 19. exd6 Qf6 20. Nbd2 Nxd6 21. Nc4 Nxc4 22. Bxc4 Nb6
+23. Ne5 Rae8 24. Bxf7+ Rxf7 25. Nxf7 Rxe1+ 26. Qxe1 Kxf7 27. Qe3 Qg5 28. Qxg5
+hxg5 29. b3 Ke6 30. a3 Kd6 31. axb4 cxb4 32. Ra5 Nd5 33. f3 Bc8 34. Kf2 Bf5
+35. Ra7 g6 36. Ra6+ Kc5 37. Ke1 Nf4 38. g3 Nxh3 39. Kd2 Kb5 40. Rd6 Kc5 41. Ra6
+Nf2 42. g4 Bd3 43. Re6 1/2-1/2''';

@@ -252,9 +252,7 @@ class _BottomBar extends ConsumerWidget {
                           options: AnalysisOptions(
                             isLocalEvaluationAllowed: true,
                             variant: gameData.variant,
-                            initialFen: game.initialPosition.fen,
-                            initialPly: game.initialPly,
-                            pgn: game.pgnMoves,
+                            pgn: game.pgn,
                             initialMoveCursor: cursor,
                             orientation: orientation,
                             id: gameData.id,

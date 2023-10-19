@@ -26,8 +26,6 @@ class AnalysisOptions with _$AnalysisOptions {
     required bool isLocalEvaluationAllowed,
     required Variant variant,
     required Side orientation,
-    required String initialFen,
-    required int initialPly,
     String? pgn,
     int? initialMoveCursor,
     LightOpening? opening,
@@ -49,22 +47,19 @@ class AnalysisController extends _$AnalysisController {
       _engineEvalDebounce.dispose();
     });
 
-    final initialPosition = Position.setupPosition(
-      options.variant.rules,
-      Setup.parseFen(options.initialFen),
-    );
-
-    Root root = Root(position: initialPosition);
+    Root root = Root(position: Chess.initial);
     UciPath path = UciPath.empty;
     Move? lastMove;
     IMap<String, String>? pgnHeaders =
         options.id is GameId ? null : _defaultPgnHeaders;
+    IList<String>? rootComments;
 
     if (options.pgn != null) {
       final game = PgnGame.parsePgn(options.pgn!);
       // only include headers if the game is not an online lichess game
       if (options.id is! GameId) {
         pgnHeaders = pgnHeaders?.addMap(game.headers) ?? IMap(game.headers);
+        rootComments = IList(game.comments);
       }
 
       root = Root.fromPgnGame(game, (root, branch, isMainline) {
@@ -111,6 +106,7 @@ class AnalysisController extends _$AnalysisController {
       root: _root.view,
       currentNode: currentNode.view,
       pgnHeaders: pgnHeaders,
+      pgnRootComments: rootComments,
       lastMove: lastMove,
       pov: options.orientation,
       evaluationContext: evalContext,
@@ -214,7 +210,7 @@ class AnalysisController extends _$AnalysisController {
   }
 
   String makeGamePgn() {
-    return _root.makePgn(state.pgnHeaders);
+    return _root.makePgn(state.pgnHeaders, state.pgnRootComments);
   }
 
   void _setPath(
@@ -339,6 +335,7 @@ class AnalysisState with _$AnalysisState {
     Opening? contextOpening,
     Opening? currentBranchOpening,
     IMap<String, String>? pgnHeaders,
+    IList<String>? pgnRootComments,
   }) = _AnalysisState;
 
   IMap<String, ISet<String>> get validMoves =>

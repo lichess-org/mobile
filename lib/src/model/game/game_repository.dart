@@ -85,14 +85,17 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
     (p0) => Duration(milliseconds: p0.asIntOrThrow() * 10),
   );
 
+  final initialFen = pick('initialFen').asStringOrNull();
+
   return ArchivedGame(
     data: data,
+    initialFen: initialFen,
     steps: pick('moves').letOrThrow((it) {
       final moves = it.asStringOrThrow().split(' ');
       // assume lichess always send initialFen with fromPosition and chess960
       Position position = (data.variant == Variant.fromPosition ||
               data.variant == Variant.chess960)
-          ? Chess.fromSetup(Setup.parseFen(data.initialFen!))
+          ? Chess.fromSetup(Setup.parseFen(initialFen!))
           : data.variant.initialPosition;
       int index = 0;
       final List<GameStep> steps = [GameStep(ply: index, position: position)];
@@ -136,7 +139,6 @@ ArchivedGameData _archivedGameDataFromPick(RequiredPick pick) {
     black: pick('players', 'black').letOrThrow(_playerFromUserGamePick),
     winner: pick('winner').asSideOrNull(),
     variant: pick('variant').asVariantOrThrow(),
-    initialFen: pick('initialFen').asStringOrNull(),
     lastFen: pick('lastFen').asStringOrNull(),
     clock: pick('clock').letOrNull(_clockDataFromPick),
     opening: pick('opening').letOrNull(_openingFromPick),

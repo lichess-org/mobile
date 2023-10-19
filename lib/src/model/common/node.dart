@@ -332,7 +332,10 @@ class Root extends Node {
     return root;
   }
 
-  String makePgn(IMap<String, String>? headers) {
+  /// Export the game tree to a PGN string.
+  ///
+  /// Optionally, headers and initial game comments can be provided.
+  String makePgn([IMap<String, String>? headers, IList<String>? rootComments]) {
     final pgnNode = PgnNode<PgnNodeData>();
     final List<({Node from, PgnNode<PgnNodeData> to})> stack = [
       (from: this, to: pgnNode),
@@ -360,7 +363,7 @@ class Root extends Node {
     final pgnGame = PgnGame(
       headers: headers?.unlock ?? PgnGame.defaultHeaders(),
       moves: pgnNode,
-      comments: [],
+      comments: rootComments?.unlock ?? [],
     );
 
     return pgnGame.makePgn();

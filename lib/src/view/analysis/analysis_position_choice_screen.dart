@@ -6,7 +6,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -56,7 +55,6 @@ class _BodyState extends State<_Body> {
   final _controller = TextEditingController();
 
   String? textInput;
-  Variant variant = Variant.standard;
 
   @override
   void initState() {
@@ -94,44 +92,6 @@ class _BodyState extends State<_Body> {
             padding: Styles.bodySectionPadding,
             child: Column(
               children: [
-                SecondaryButton(
-                  semanticsLabel: variant.label,
-                  onPressed: () {
-                    showChoicePicker(
-                      context,
-                      choices: supportedVariants
-                          .remove(Variant.chess960)
-                          .remove(Variant.fromPosition)
-                          .toList(),
-                      selectedItem: variant,
-                      labelBuilder: (v) => Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (v != Variant.standard) ...[
-                            Icon(v.icon),
-                            const SizedBox(width: 5.0),
-                          ],
-                          Text(v.label),
-                        ],
-                      ),
-                      onSelectedItemChanged: (Variant variant) {
-                        setState(() {
-                          this.variant = variant;
-                        });
-                      },
-                    );
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (variant != Variant.standard) ...[
-                        Icon(variant.icon),
-                        const SizedBox(width: 5.0),
-                      ],
-                      Text(variant.label),
-                    ],
-                  ),
-                ),
                 const SizedBox(height: 8.0),
                 FatButton(
                   semanticsLabel: context.l10n.analysis,
@@ -163,28 +123,22 @@ class _BodyState extends State<_Body> {
 
   AnalysisOptions? get parsedInput {
     if (textInput == null || textInput!.trim().isEmpty) {
-      return AnalysisOptions(
+      return const AnalysisOptions(
         isLocalEvaluationAllowed: true,
-        variant: variant,
-        initialFen: Position.initialPosition(variant.rules).fen,
-        initialPly: 0,
+        variant: Variant.standard,
         orientation: Side.white,
-        id: const ValueId('standalone_analysis'),
+        id: ValueId('standalone_analysis'),
       );
     }
 
     // try to parse as FEN first
     try {
-      final pos = Position.setupPosition(
-        variant.rules,
-        Setup.parseFen(textInput!.trim()),
-      );
+      final pos = Chess.fromSetup(Setup.parseFen(textInput!.trim()));
       return AnalysisOptions(
         isLocalEvaluationAllowed: true,
-        variant: variant,
-        initialFen: pos.fen,
-        initialPly: 0,
+        variant: Variant.standard,
         orientation: Side.white,
+        pgn: '[FEN "${pos.fen}"]',
         id: const ValueId('standalone_analysis'),
       );
     } catch (_, __) {}
@@ -193,6 +147,7 @@ class _BodyState extends State<_Body> {
     try {
       final game = PgnGame.parsePgn(textInput!);
       final initialPosition = PgnGame.startingPosition(game.headers);
+      final rules = Rules.fromPgn(game.headers['Variant']);
 
       // require at least 1 valid move
       if (game.moves.mainline().isEmpty) return null;
@@ -201,9 +156,7 @@ class _BodyState extends State<_Body> {
 
       return AnalysisOptions(
         isLocalEvaluationAllowed: true,
-        variant: variant,
-        initialFen: initialPosition.fen,
-        initialPly: 0,
+        variant: rules != null ? Variant.fromRules(rules) : Variant.standard,
         pgn: textInput,
         initialMoveCursor: 1,
         orientation: Side.white,

@@ -34,8 +34,6 @@ void main() {
           options: AnalysisOptions(
             isLocalEvaluationAllowed: false,
             variant: Variant.standard,
-            initialFen: Chess.initial.fen,
-            initialPly: 0,
             pgn: sanMoves,
             opening: opening,
             orientation: Side.white,
@@ -63,8 +61,6 @@ void main() {
           options: AnalysisOptions(
             isLocalEvaluationAllowed: false,
             variant: Variant.standard,
-            initialFen: Chess.initial.fen,
-            initialPly: 0,
             pgn: sanMoves,
             opening: opening,
             orientation: Side.white,

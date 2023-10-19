@@ -32,12 +32,14 @@ class GameFullEvent with _$GameFullEvent {
 }
 
 PlayableGame _playableGameFromPick(RequiredPick pick) {
-  final meta = _playableGameMetaFromPick(pick('game').required());
+  final requiredGamePick = pick('game').required();
+  final meta = _playableGameMetaFromPick(requiredGamePick);
+  final initialFen = requiredGamePick('initialFen').asStringOrNull();
 
   // assume lichess always send initialFen with fromPosition and chess960
   Position position =
       (meta.variant == Variant.fromPosition || meta.variant == Variant.chess960)
-          ? Chess.fromSetup(Setup.parseFen(meta.initialFen!))
+          ? Chess.fromSetup(Setup.parseFen(initialFen!))
           : meta.variant.initialPosition;
 
   int ply = 0;
@@ -63,6 +65,7 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
 
   return PlayableGame(
     meta: meta,
+    initialFen: initialFen,
     steps: steps.toIList(),
     white: pick('white').letOrThrow(_playerFromUserGamePick),
     black: pick('black').letOrThrow(_playerFromUserGamePick),
@@ -100,7 +103,6 @@ PlayableGameMeta _playableGameMetaFromPick(RequiredPick pick) {
       (pick) =>
           GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
     ),
-    initialFen: pick('initialFen').asStringOrNull(),
     startedAtTurn: pick('startedAtTurn').asIntOrNull(),
     rules: pick('rules').letOrNull(
       (it) => ISet(

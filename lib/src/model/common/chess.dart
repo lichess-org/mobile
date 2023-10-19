@@ -72,6 +72,27 @@ enum Variant {
 
   static final IMap<String, Variant> nameMap = IMap(values.asNameMap());
 
+  static Variant fromRules(Rules rules) {
+    switch (rules) {
+      case Rules.chess:
+        return Variant.standard;
+      case Rules.antichess:
+        return Variant.antichess;
+      case Rules.kingofthehill:
+        return Variant.kingOfTheHill;
+      case Rules.threecheck:
+        return Variant.threeCheck;
+      case Rules.atomic:
+        return Variant.atomic;
+      case Rules.horde:
+        return Variant.horde;
+      case Rules.racingKings:
+        return Variant.racingKings;
+      case Rules.crazyhouse:
+        return Variant.crazyhouse;
+    }
+  }
+
   /// Returns the initial position for this [Variant].
   ///
   /// Will throw an [ArgumentError] if called on [Variant.chess960] or [Variant.fromPosition].
