@@ -55,23 +55,26 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
   }
 
   @override
-  void didUpdateWidget(covariant AnalysisTreeView oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _debounce(() {
-      if (currentMoveKey.currentContext != null) {
-        Scrollable.ensureVisible(
-          currentMoveKey.currentContext!,
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeIn,
-          alignment: 0.5,
-          alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
-        );
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    ref.listen(
+      analysisControllerProvider(widget.options),
+      (prev, state) {
+        if (prev?.currentPath != state.currentPath) {
+          _debounce(() {
+            if (currentMoveKey.currentContext != null) {
+              Scrollable.ensureVisible(
+                currentMoveKey.currentContext!,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeIn,
+                alignment: 0.5,
+                alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
+              );
+            }
+          });
+        }
+      },
+    );
+
     final ctrlProvider = analysisControllerProvider(widget.options);
     final root = ref.watch(ctrlProvider.select((value) => value.root));
     final currentPath =
