@@ -31,7 +31,7 @@ class AnalysisPgnTags extends ConsumerWidget {
       child: DataTable(
         columns: const [
           DataColumn(
-            label: Icon(LichessIcons.tags, color: Colors.grey, size: 20),
+            label: Icon(LichessIcons.tag, color: Colors.grey, size: 20),
           ),
           DataColumn(
             label: Icon(Icons.edit, color: Colors.grey),

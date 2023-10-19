@@ -100,10 +100,7 @@ final tabsProvider = Provider<List<_Tab>>((ref) {
       label: tab.label(l10n.strings),
       icon: Icon(
         tab.icon,
-        size: defaultTargetPlatform == TargetPlatform.iOS &&
-                tab == BottomTab.tools
-            ? 24
-            : null,
+        size: tab == BottomTab.tools ? 22 : null,
       ),
     );
   }).toList();
