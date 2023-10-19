@@ -11,8 +11,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_position_choice_screen.dart';
 
-class LearnTabScreen extends StatelessWidget {
-  const LearnTabScreen({super.key});
+class ToolsTabScreen extends StatelessWidget {
+  const ToolsTabScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class LearnTabScreen extends StatelessWidget {
         controller: puzzlesScrollController,
         slivers: [
           CupertinoSliverNavigationBar(
-            largeTitle: Text(context.l10n.learnMenu),
+            largeTitle: Text(context.l10n.tools),
           ),
           const SliverSafeArea(
             top: false,

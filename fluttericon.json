@@ -459,6 +459,18 @@
       "css": "tags",
       "code": 61484,
       "src": "fontawesome5"
+    },
+    {
+      "uid": "d69240efde42eb7d81a8890120a81c3a",
+      "css": "tag",
+      "code": 61483,
+      "src": "fontawesome5"
+    },
+    {
+      "uid": "2f347bb985ef64c3ec82cd51b92b6baf",
+      "css": "tools",
+      "code": 63449,
+      "src": "fontawesome5"
     }
   ]
 }

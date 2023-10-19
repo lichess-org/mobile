@@ -11,14 +11,14 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/account/profile_tab_screen.dart';
-import 'package:lichess_mobile/src/view/learn/learn_tab_screen.dart';
+import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 
 enum BottomTab {
   home(Icons.home),
   puzzles(LichessIcons.target),
-  learn(Icons.school),
+  tools(LichessIcons.tools),
   watch(Icons.live_tv),
   profile(CupertinoIcons.profile_circled);
 
@@ -32,8 +32,8 @@ enum BottomTab {
         return 'Home';
       case BottomTab.puzzles:
         return strings.puzzles;
-      case BottomTab.learn:
-        return strings.learnMenu;
+      case BottomTab.tools:
+        return strings.tools;
       case BottomTab.watch:
         return strings.watch;
       case BottomTab.profile:
@@ -52,8 +52,8 @@ final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
       return homeNavigatorKey;
     case BottomTab.puzzles:
       return puzzlesNavigatorKey;
-    case BottomTab.learn:
-      return learnNavigatorKey;
+    case BottomTab.tools:
+      return toolsNavigatorKey;
     case BottomTab.watch:
       return watchNavigatorKey;
     case BottomTab.profile:
@@ -68,8 +68,8 @@ final currentRootScrollControllerProvider = Provider<ScrollController>((ref) {
       return homeScrollController;
     case BottomTab.puzzles:
       return puzzlesScrollController;
-    case BottomTab.learn:
-      return learnScrollController;
+    case BottomTab.tools:
+      return toolsScrollController;
     case BottomTab.watch:
       return watchScrollController;
     case BottomTab.profile:
@@ -79,13 +79,13 @@ final currentRootScrollControllerProvider = Provider<ScrollController>((ref) {
 
 final homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
 final puzzlesNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'puzzles');
-final learnNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'learn');
+final toolsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'tools');
 final watchNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'watch');
 final profileNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'profile');
 
 final homeScrollController = ScrollController(debugLabel: 'HomeScroll');
 final puzzlesScrollController = ScrollController(debugLabel: 'PuzzlesScroll');
-final learnScrollController = ScrollController(debugLabel: 'LearnScroll');
+final toolsScrollController = ScrollController(debugLabel: 'ToolsScroll');
 final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
 final profileScrollController = ScrollController(debugLabel: 'ProfileScroll');
 
@@ -98,7 +98,13 @@ final tabsProvider = Provider<List<_Tab>>((ref) {
   return BottomTab.values.map((tab) {
     return _Tab(
       label: tab.label(l10n.strings),
-      icon: Icon(tab.icon),
+      icon: Icon(
+        tab.icon,
+        size: defaultTargetPlatform == TargetPlatform.iOS &&
+                tab == BottomTab.tools
+            ? 24
+            : null,
+      ),
     );
   }).toList();
 });
@@ -210,8 +216,8 @@ class BottomNavScaffold extends ConsumerWidget {
         );
       case 2:
         return _MaterialTabView(
-          navigatorKey: learnNavigatorKey,
-          builder: (context) => const LearnTabScreen(),
+          navigatorKey: toolsNavigatorKey,
+          builder: (context) => const ToolsTabScreen(),
         );
       case 3:
         return _MaterialTabView(
@@ -246,9 +252,9 @@ class BottomNavScaffold extends ConsumerWidget {
         );
       case 2:
         return CupertinoTabView(
-          defaultTitle: context.l10n.learnMenu,
-          navigatorKey: learnNavigatorKey,
-          builder: (context) => const LearnTabScreen(),
+          defaultTitle: context.l10n.tools,
+          navigatorKey: toolsNavigatorKey,
+          builder: (context) => const ToolsTabScreen(),
         );
       case 3:
         return CupertinoTabView(
