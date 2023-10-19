@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -69,58 +70,96 @@ class _Body extends ConsumerWidget {
       child: ListView(
         shrinkWrap: true,
         children: [
-          PlatformListTile(
-            harmonizeCupertinoTitleStyle: true,
-            title: Text.rich(
-              TextSpan(
-                text: '${context.l10n.minutesPerSide}: ',
-                children: [
-                  TextSpan(
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+          Builder(
+            builder: (context) {
+              int customTimeSeconds = preferences.customTimeSeconds;
+              return StatefulBuilder(
+                builder: (context, setState) {
+                  return PlatformListTile(
+                    harmonizeCupertinoTitleStyle: true,
+                    title: Text.rich(
+                      TextSpan(
+                        text: '${context.l10n.minutesPerSide}: ',
+                        children: [
+                          TextSpan(
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                            text: _clockTimeLabel(customTimeSeconds),
+                          ),
+                        ],
+                      ),
                     ),
-                    text: _clockTimeLabel(preferences.customTimeSeconds),
-                  ),
-                ],
-              ),
-            ),
-            subtitle: NonLinearSlider(
-              value: preferences.customTimeSeconds,
-              values: kAvailableTimesInSeconds,
-              labelBuilder: _clockTimeLabel,
-              onChangeEnd: (num value) {
-                ref
-                    .read(playPreferencesProvider.notifier)
-                    .setCustomTimeSeconds(value.toInt());
-              },
-            ),
+                    subtitle: NonLinearSlider(
+                      value: customTimeSeconds,
+                      values: kAvailableTimesInSeconds,
+                      labelBuilder: _clockTimeLabel,
+                      onChange: defaultTargetPlatform == TargetPlatform.iOS
+                          ? (num value) {
+                              setState(() {
+                                customTimeSeconds = value.toInt();
+                              });
+                            }
+                          : null,
+                      onChangeEnd: (num value) {
+                        setState(() {
+                          customTimeSeconds = value.toInt();
+                        });
+                        ref
+                            .read(playPreferencesProvider.notifier)
+                            .setCustomTimeSeconds(value.toInt());
+                      },
+                    ),
+                  );
+                },
+              );
+            },
           ),
-          PlatformListTile(
-            harmonizeCupertinoTitleStyle: true,
-            title: Text.rich(
-              TextSpan(
-                text: '${context.l10n.incrementInSeconds}: ',
-                children: [
-                  TextSpan(
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+          Builder(
+            builder: (context) {
+              int customIncrementSeconds = preferences.customIncrementSeconds;
+              return StatefulBuilder(
+                builder: (context, setState) {
+                  return PlatformListTile(
+                    harmonizeCupertinoTitleStyle: true,
+                    title: Text.rich(
+                      TextSpan(
+                        text: '${context.l10n.incrementInSeconds}: ',
+                        children: [
+                          TextSpan(
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                            text: customIncrementSeconds.toString(),
+                          ),
+                        ],
+                      ),
                     ),
-                    text: preferences.customIncrementSeconds.toString(),
-                  ),
-                ],
-              ),
-            ),
-            subtitle: NonLinearSlider(
-              value: preferences.customIncrementSeconds,
-              values: kAvailableIncrementsInSeconds,
-              onChangeEnd: (num value) {
-                ref
-                    .read(playPreferencesProvider.notifier)
-                    .setCustomIncrementSeconds(value.toInt());
-              },
-            ),
+                    subtitle: NonLinearSlider(
+                      value: customIncrementSeconds,
+                      values: kAvailableIncrementsInSeconds,
+                      onChange: defaultTargetPlatform == TargetPlatform.iOS
+                          ? (num value) {
+                              setState(() {
+                                customIncrementSeconds = value.toInt();
+                              });
+                            }
+                          : null,
+                      onChangeEnd: (num value) {
+                        setState(() {
+                          customIncrementSeconds = value.toInt();
+                        });
+                        ref
+                            .read(playPreferencesProvider.notifier)
+                            .setCustomIncrementSeconds(value.toInt());
+                      },
+                    ),
+                  );
+                },
+              );
+            },
           ),
           PlatformListTile(
             harmonizeCupertinoTitleStyle: true,
