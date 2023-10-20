@@ -180,19 +180,33 @@ class _MessageAction extends StatelessWidget {
   }
 }
 
-class _GameBottomBar extends StatelessWidget {
+class _GameBottomBar extends StatefulWidget {
   final void Function(String message) onMessage;
+
+  const _GameBottomBar({required this.onMessage});
+
+  @override
+  State<StatefulWidget> createState() => _GameBottomBarState();
+}
+
+class _GameBottomBarState extends State<_GameBottomBar> {
   final _textController = TextEditingController();
 
-  _GameBottomBar({required this.onMessage});
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Theme.of(context).colorScheme.outline),
+        borderRadius: BorderRadius.circular(40.0),
         color: Theme.of(context).bottomAppBarTheme.color,
       ),
+      margin: const EdgeInsets.all(10.0),
       padding: Styles.horizontalBodyPadding,
       child: SafeArea(
         top: false,
@@ -207,13 +221,18 @@ class _GameBottomBar extends StatelessWidget {
                 minLines: 1,
                 maxLines: 4,
                 decoration: InputDecoration(
-                  suffixIcon: PlatformIconButton(
-                    onTap: () {
-                      onMessage(_textController.text);
-                      _textController.clear();
-                    },
-                    icon: Icons.send,
-                    semanticsLabel: 'Send',
+                  suffixIcon: ValueListenableBuilder<TextEditingValue>(
+                    valueListenable: _textController,
+                    builder: (context, value, child) => PlatformIconButton(
+                      onTap: value.text.isNotEmpty
+                          ? () {
+                              widget.onMessage(_textController.text);
+                              _textController.clear();
+                            }
+                          : null,
+                      icon: Icons.send,
+                      semanticsLabel: 'Send',
+                    ),
                   ),
                   border: InputBorder.none,
                   hintText: "Be nice in the chat",
