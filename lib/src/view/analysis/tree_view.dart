@@ -319,7 +319,8 @@ class InlineMove extends ConsumerWidget {
                   )
                 : null,
             child: Text(
-              move.san,
+              move.san +
+                  (branch.nags != null ? _displayNags(branch.nags!) : ''),
               style: isCurrentMove
                   ? textStyle.copyWith(
                       color: _textColor(context, 1),
@@ -340,6 +341,22 @@ class InlineMove extends ConsumerWidget {
       ],
     );
   }
+}
+
+String _displayNags(Iterable<int> nags) {
+  return nags
+      .map(
+        (nag) => switch (nag) {
+          1 => '!',
+          2 => '?',
+          3 => '‼',
+          4 => '⁇',
+          5 => '⁉',
+          6 => '⁈',
+          int() => '',
+        },
+      )
+      .join('');
 }
 
 class _Comments extends StatelessWidget {
