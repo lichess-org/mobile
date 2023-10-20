@@ -95,6 +95,14 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
       currentPath: currentPath,
     );
 
+    // trick to make auto-scroll work when returning to the root position
+    if (currentPath.isEmpty) {
+      moveWidgets.insert(
+        0,
+        SizedBox.shrink(key: currentMoveKey),
+      );
+    }
+
     if (shouldShowComments && rootComments?.isNotEmpty == true) {
       moveWidgets.insert(
         0,
