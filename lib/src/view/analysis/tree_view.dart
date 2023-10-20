@@ -4,18 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 
-const kChessNotationFontSize = 13.0;
 const kFastReplayDebounceDelay = Duration(milliseconds: 100);
 const kOpeningHeaderHeight = 32.0;
-const kInlineMoveSpacing = 5.0;
+const kInlineMoveSpacing = 3.0;
 
 class AnalysisTreeView extends ConsumerStatefulWidget {
   const AnalysisTreeView(
@@ -79,6 +78,33 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     final root = ref.watch(ctrlProvider.select((value) => value.root));
     final currentPath =
         ref.watch(ctrlProvider.select((value) => value.currentPath));
+    final rootComments = ref.watch(
+      ctrlProvider.select((value) => value.pgnRootComments),
+    );
+    final shouldShowComments = ref.watch(
+      ctrlProvider.select((value) => value.shouldShowComments),
+    );
+
+    final List<Widget> moveWidgets = _buildTreeWidget(
+      ctrlProvider,
+      nodes: root.children,
+      shouldShowComments: shouldShowComments,
+      inMainline: true,
+      startSideline: false,
+      initialPath: UciPath.empty,
+      currentPath: currentPath,
+    );
+
+    if (shouldShowComments && rootComments?.isNotEmpty == true) {
+      moveWidgets.insert(
+        0,
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: _Comments(rootComments!),
+        ),
+      );
+    }
+
     final content = CustomScrollView(
       slivers: [
         if (kOpeningAllowedVariants.contains(widget.options.variant))
@@ -94,14 +120,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             child: Wrap(
               spacing: kInlineMoveSpacing,
-              children: _buildTreeWidget(
-                ctrlProvider,
-                nodes: root.children,
-                inMainline: true,
-                startSideline: false,
-                initialPath: UciPath.empty,
-                currentPath: currentPath,
-              ),
+              children: moveWidgets,
             ),
           ),
         ),
@@ -119,26 +138,27 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     required IList<ViewBranch> nodes,
     required bool inMainline,
     required bool startSideline,
+    required bool shouldShowComments,
     required UciPath initialPath,
     required UciPath currentPath,
   }) {
     if (nodes.isEmpty) return [];
     final List<Widget> widgets = [];
 
-    // add the node[0]
-    final newPath = initialPath + nodes[0].id;
+    // add the first node
+    final newPath = initialPath + nodes.first.id;
     final currentMove = newPath == currentPath;
     widgets.add(
       InlineMove(
         ctrlProvider,
         path: newPath,
-        move: nodes[0].sanMove,
-        ply: nodes[0].position.ply,
+        branch: nodes.first,
         isCurrentMove: currentMove,
         key: currentMove ? currentMoveKey : null,
+        shouldShowComments: shouldShowComments,
         isSideline: !inMainline,
         startSideline: startSideline,
-        endSideline: !inMainline && nodes[0].children.isEmpty,
+        endSideline: !inMainline && nodes.first.children.isEmpty,
       ),
     );
 
@@ -154,6 +174,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
               children: _buildTreeWidget(
                 ctrlProvider,
                 nodes: IList([nodes[i]]),
+                shouldShowComments: shouldShowComments,
                 inMainline: false,
                 startSideline: true,
                 initialPath: initialPath,
@@ -167,6 +188,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
           _buildTreeWidget(
             ctrlProvider,
             nodes: IList([nodes[i]]),
+            shouldShowComments: shouldShowComments,
             inMainline: false,
             startSideline: true,
             initialPath: initialPath,
@@ -180,7 +202,8 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     widgets.addAll(
       _buildTreeWidget(
         ctrlProvider,
-        nodes: nodes[0].children,
+        nodes: nodes.first.children,
+        shouldShowComments: shouldShowComments,
         inMainline: inMainline,
         startSideline: false,
         initialPath: newPath,
@@ -192,12 +215,22 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
   }
 }
 
+Color? _textColor(BuildContext context, double opacity) {
+  return defaultTargetPlatform == TargetPlatform.android
+      ? Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(opacity)
+      : CupertinoTheme.of(context)
+          .textTheme
+          .textStyle
+          .color
+          ?.withOpacity(opacity);
+}
+
 class InlineMove extends ConsumerWidget {
   const InlineMove(
     this.ctrlProvider, {
     required this.path,
-    required this.move,
-    required this.ply,
+    required this.branch,
+    required this.shouldShowComments,
     required this.isCurrentMove,
     required this.isSideline,
     super.key,
@@ -207,8 +240,8 @@ class InlineMove extends ConsumerWidget {
 
   final AnalysisControllerProvider ctrlProvider;
   final UciPath path;
-  final SanMove move;
-  final int ply;
+  final ViewBranch branch;
+  final bool shouldShowComments;
   final bool isCurrentMove;
   final bool isSideline;
   final bool startSideline;
@@ -217,26 +250,16 @@ class InlineMove extends ConsumerWidget {
   static const borderRadius = BorderRadius.all(Radius.circular(4.0));
   static const baseTextStyle = TextStyle(
     fontFamily: 'ChessFont',
-    fontSize: kChessNotationFontSize,
     height: 1.5,
   );
 
-  Color? _textColor(BuildContext context, double opacity) {
-    return defaultTargetPlatform == TargetPlatform.android
-        ? Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(opacity)
-        : CupertinoTheme.of(context)
-            .textTheme
-            .textStyle
-            .color
-            ?.withOpacity(opacity);
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final move = branch.sanMove;
+    final ply = branch.position.ply;
     final textStyle = isSideline
         ? TextStyle(
             fontFamily: 'ChessFont',
-            fontSize: kChessNotationFontSize,
             color: _textColor(context, 0.6),
           )
         : baseTextStyle;
@@ -260,14 +283,26 @@ class InlineMove extends ConsumerWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (startSideline) Text('(', style: textStyle),
+        if (startSideline)
+          Padding(
+            padding: const EdgeInsets.only(right: 4.0),
+            child: Text('(', style: textStyle),
+          ),
+        if (shouldShowComments && branch.startingComments?.isNotEmpty == true)
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child:
+                  _Comments(branch.startingComments!, isSideline: isSideline),
+            ),
+          ),
         if (indexWidget != null) indexWidget,
         if (indexWidget != null) const SizedBox(width: 1),
         AdaptiveInkWell(
           borderRadius: borderRadius,
           onTap: () => ref.read(ctrlProvider.notifier).userJump(path),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 2),
+            padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
             decoration: isCurrentMove
                 ? BoxDecoration(
                     color: Theme.of(context).focusColor,
@@ -286,8 +321,67 @@ class InlineMove extends ConsumerWidget {
             ),
           ),
         ),
+        if (shouldShowComments && branch.comments?.isNotEmpty == true)
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: _Comments(branch.comments!, isSideline: isSideline),
+            ),
+          ),
         if (endSideline) Text(')', style: textStyle),
       ],
+    );
+  }
+}
+
+class _Comments extends StatelessWidget {
+  _Comments(this.comments, {this.isSideline = false})
+      : assert(comments.isNotEmpty);
+
+  final Iterable<String> comments;
+  final bool isSideline;
+
+  @override
+  Widget build(BuildContext context) {
+    return AdaptiveInkWell(
+      onTap: () {
+        showAdaptiveBottomSheet<void>(
+          context: context,
+          isDismissible: true,
+          isScrollControlled: true,
+          builder: (context) => DraggableScrollableSheet(
+            maxChildSize: 0.7,
+            initialChildSize: 0.3,
+            expand: false,
+            builder: (context, scrollController) => SingleChildScrollView(
+              controller: scrollController,
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: comments.map(
+                    (comment) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: Text(comment.replaceAll('\n', ' ')),
+                      );
+                    },
+                  ).toList(),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+      child: Text(
+        comments.join(' ').replaceAll('\n', ' '),
+        maxLines: 3,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          fontStyle: FontStyle.italic,
+          color: isSideline ? _textColor(context, 0.6) : null,
+        ),
+      ),
     );
   }
 }
@@ -360,7 +454,6 @@ class _Opening extends ConsumerWidget {
               child: Center(
                 child: Text(
                   opening.name,
-                  style: const TextStyle(fontSize: kChessNotationFontSize),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),

@@ -126,7 +126,7 @@ class _Title extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
+class _Body extends ConsumerWidget {
   const _Body({
     required this.options,
     required this.ctrlProvider,
@@ -136,14 +136,14 @@ class _Body extends ConsumerStatefulWidget {
   final AnalysisControllerProvider ctrlProvider;
 
   @override
-  ConsumerState<_Body> createState() => _BodyState();
-}
-
-class _BodyState extends ConsumerState<_Body> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final showEvaluationGauge = ref.watch(
       analysisPreferencesProvider.select((value) => value.showEvaluationGauge),
+    );
+    final isEngineAvailable = ref.watch(
+      ctrlProvider.select(
+        (value) => value.isEngineAvailable,
+      ),
     );
 
     return Column(
@@ -176,9 +176,9 @@ class _BodyState extends ConsumerState<_Body> {
                             ),
                             child: Row(
                               children: [
-                                _Board(widget.ctrlProvider, boardSize),
-                                if (showEvaluationGauge)
-                                  _EngineGaugeVertical(widget.ctrlProvider),
+                                _Board(ctrlProvider, boardSize),
+                                if (isEngineAvailable && showEvaluationGauge)
+                                  _EngineGaugeVertical(ctrlProvider),
                               ],
                             ),
                           ),
@@ -187,10 +187,11 @@ class _BodyState extends ConsumerState<_Body> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                _EngineLines(
-                                  widget.ctrlProvider,
-                                  isLandscape: true,
-                                ),
+                                if (isEngineAvailable)
+                                  _EngineLines(
+                                    ctrlProvider,
+                                    isLandscape: true,
+                                  ),
                                 Expanded(
                                   child: PlatformCard(
                                     margin: const EdgeInsets.all(
@@ -198,7 +199,7 @@ class _BodyState extends ConsumerState<_Body> {
                                     ),
                                     semanticContainer: false,
                                     child: AnalysisTreeView(
-                                      widget.options,
+                                      options,
                                       Orientation.landscape,
                                     ),
                                   ),
@@ -213,18 +214,18 @@ class _BodyState extends ConsumerState<_Body> {
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          _ColumnTopTable(widget.ctrlProvider),
+                          _ColumnTopTable(ctrlProvider),
                           if (isTablet)
                             Padding(
                               padding: const EdgeInsets.all(
                                 kTabletBoardTableSidePadding,
                               ),
-                              child: _Board(widget.ctrlProvider, boardSize),
+                              child: _Board(ctrlProvider, boardSize),
                             )
                           else
-                            _Board(widget.ctrlProvider, boardSize),
+                            _Board(ctrlProvider, boardSize),
                           AnalysisTreeView(
-                            widget.options,
+                            options,
                             Orientation.portrait,
                           ),
                         ],
@@ -233,7 +234,7 @@ class _BodyState extends ConsumerState<_Body> {
             ),
           ),
         ),
-        _BottomBar(options: widget.options),
+        _BottomBar(options: options),
       ],
     );
   }
@@ -501,7 +502,6 @@ class _Engineline extends ConsumerWidget {
                   softWrap: false,
                   style: const TextStyle(
                     fontFamily: 'ChessFont',
-                    fontSize: kChessNotationFontSize,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -524,7 +524,10 @@ class _BottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
-    final analysisState = ref.watch(ctrlProvider);
+    final canGoBack =
+        ref.watch(ctrlProvider.select((value) => value.canGoBack));
+    final canGoNext =
+        ref.watch(ctrlProvider.select((value) => value.canGoNext));
 
     return Container(
       padding: Styles.horizontalBodyPadding,
@@ -539,34 +542,31 @@ class _BottomBar extends ConsumerWidget {
             BottomBarIconButton(
               semanticsLabel: context.l10n.menu,
               onPressed: () {
-                _showGameMenu(context, ref);
+                _showAnalysisMenu(context, ref);
               },
               icon: const Icon(Icons.menu),
             ),
             const Spacer(),
             RepeatButton(
-              onLongPress:
-                  analysisState.canGoBack ? () => _moveBackward(ref) : null,
+              onLongPress: canGoBack ? () => _moveBackward(ref) : null,
               child: BottomBarButton(
                 key: const ValueKey('goto-previous'),
-                onTap:
-                    analysisState.canGoBack ? () => _moveBackward(ref) : null,
+                onTap: canGoBack ? () => _moveBackward(ref) : null,
                 label: 'Previous',
                 shortLabel: 'Previous',
                 icon: CupertinoIcons.chevron_back,
                 showAndroidTooltip: false,
               ),
             ),
-            const SizedBox(width: 16.0),
+            const SizedBox(width: 36.0),
             RepeatButton(
-              onLongPress:
-                  analysisState.canGoNext ? () => _moveForward(ref) : null,
+              onLongPress: canGoNext ? () => _moveForward(ref) : null,
               child: BottomBarButton(
                 key: const ValueKey('goto-next'),
                 icon: CupertinoIcons.chevron_forward,
                 label: context.l10n.next,
                 shortLabel: context.l10n.next,
-                onTap: analysisState.canGoNext ? () => _moveForward(ref) : null,
+                onTap: canGoNext ? () => _moveForward(ref) : null,
                 showAndroidTooltip: false,
               ),
             ),
@@ -581,7 +581,9 @@ class _BottomBar extends ConsumerWidget {
   void _moveBackward(WidgetRef ref) =>
       ref.read(analysisControllerProvider(options).notifier).userPrevious();
 
-  Future<void> _showGameMenu(BuildContext context, WidgetRef ref) {
+  Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
+    final areCommentsEnabled =
+        ref.read(analysisControllerProvider(options)).shouldShowComments;
     return showAdaptiveActionSheet(
       context: context,
       actions: [
@@ -591,6 +593,14 @@ class _BottomBar extends ConsumerWidget {
             ref
                 .read(analysisControllerProvider(options).notifier)
                 .toggleBoard();
+          },
+        ),
+        BottomSheetAction(
+          label: Text(areCommentsEnabled ? 'Hide comments' : 'Show comments'),
+          onPressed: (context) {
+            ref
+                .read(analysisControllerProvider(options).notifier)
+                .toggleComments();
           },
         ),
         if (options.id is! GameId)

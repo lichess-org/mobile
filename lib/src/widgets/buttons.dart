@@ -527,6 +527,7 @@ class AdaptiveInkWell extends StatefulWidget {
     required this.child,
     this.onTap,
     this.borderRadius,
+    super.key,
   });
 
   final Widget child;

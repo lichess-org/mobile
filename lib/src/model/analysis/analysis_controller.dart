@@ -101,6 +101,7 @@ class AnalysisController extends _$AnalysisController {
       id: options.id,
       isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
+      shouldShowComments: true,
       initialPath: UciPath.empty,
       currentPath: currentPath,
       root: _root.view,
@@ -128,6 +129,10 @@ class AnalysisController extends _$AnalysisController {
       state.currentPath + state.currentNode.children.first.id,
       replaying: true,
     );
+  }
+
+  void toggleComments() {
+    state = state.copyWith(shouldShowComments: !state.shouldShowComments);
   }
 
   void toggleBoard() {
@@ -331,6 +336,7 @@ class AnalysisState with _$AnalysisState {
     required EvaluationContext evaluationContext,
     required bool isLocalEvaluationAllowed,
     required bool isLocalEvaluationEnabled,
+    required bool shouldShowComments,
     Move? lastMove,
     Opening? contextOpening,
     Opening? currentBranchOpening,
@@ -343,10 +349,10 @@ class AnalysisState with _$AnalysisState {
 
   bool get isEngineAvailable =>
       isLocalEvaluationAllowed &&
-      isLocalEvaluationEnabled &&
       engineSupportedVariants.contains(
         evaluationContext.variant,
-      );
+      ) &&
+      isLocalEvaluationEnabled;
 
   Position get position => currentNode.position;
   bool get canGoNext => currentNode.children.isNotEmpty;

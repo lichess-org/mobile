@@ -239,6 +239,9 @@ class Branch extends Node {
         eval: eval,
         opening: opening,
         children: IList(children.map((child) => child.view)),
+        startingComments: startingComments?.lock,
+        comments: comments?.lock,
+        nags: nags?.lock,
       );
 
   /// Gets the branch at the given path
@@ -378,6 +381,9 @@ abstract class ViewNode {
   IList<ViewBranch> get children;
   ClientEval? get eval;
   Opening? get opening;
+  IList<String>? get startingComments;
+  IList<String>? get comments;
+  IList<int>? get nags;
 }
 
 /// An immutable view of a [Root] node.
@@ -398,6 +404,15 @@ class ViewRoot with _$ViewRoot implements ViewNode {
 
   @override
   Opening? get opening => null;
+
+  @override
+  IList<String>? get startingComments => null;
+
+  @override
+  IList<String>? get comments => null;
+
+  @override
+  IList<int>? get nags => null;
 }
 
 /// An immutable view of a [Branch] node.
@@ -411,6 +426,9 @@ class ViewBranch with _$ViewBranch implements ViewNode {
     Opening? opening,
     required IList<ViewBranch> children,
     ClientEval? eval,
+    IList<String>? startingComments,
+    IList<String>? comments,
+    IList<int>? nags,
   }) = _ViewBranch;
 
   @override
