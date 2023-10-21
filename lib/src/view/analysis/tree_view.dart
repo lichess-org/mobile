@@ -62,6 +62,10 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
   // This is the most expensive part of the analysis view because of the tree
   // that may be very large.
   // Great care must be taken to avoid unnecessary rebuilds.
+  // This should actually rebuild only when the current path changes or a new node
+  // is added.
+  // Debouncing the current path change is necessary to avoid rebuilding when
+  // using the fast replay buttons.
   @override
   Widget build(BuildContext context) {
     ref.listen(
