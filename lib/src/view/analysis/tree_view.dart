@@ -171,20 +171,22 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     if (nodes.isEmpty) return [];
     final List<Widget> widgets = [];
 
-    // add the first node
-    final newPath = initialPath + nodes.first.id;
+    final firstChild = nodes.first;
+    final newPath = initialPath + firstChild.id;
     final currentMove = newPath == currentPath;
+
+    // add the first child
     widgets.add(
       InlineMove(
         ctrlProvider,
         path: newPath,
-        branch: nodes.first,
+        branch: firstChild,
         isCurrentMove: currentMove,
         key: currentMove ? currentMoveKey : null,
         shouldShowComments: shouldShowComments,
         isSideline: !inMainline,
         startSideline: startSideline,
-        endSideline: !inMainline && nodes.first.children.isEmpty,
+        endSideline: !inMainline && firstChild.children.isEmpty,
       ),
     );
 
@@ -226,7 +228,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     widgets.addAll(
       _buildTreeWidget(
         ctrlProvider,
-        nodes: nodes.first.children,
+        nodes: firstChild.children,
         shouldShowComments: shouldShowComments,
         inMainline: inMainline,
         startSideline: false,
