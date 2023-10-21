@@ -261,8 +261,10 @@ class _Board extends ConsumerWidget {
           .select((e) => e?.bestMoves),
     );
 
-    final bestMoves =
-        evalBestMoves ?? analysisState.currentNode.eval?.bestMoves;
+    final currentNode = analysisState.currentNode;
+    final annotation = _annotationFrom(currentNode.nags);
+
+    final bestMoves = evalBestMoves ?? currentNode.eval?.bestMoves;
 
     return cg.Board(
       size: boardSize,
@@ -294,6 +296,9 @@ class _Board extends ConsumerWidget {
                     ),
               )
             : null,
+        annotations: currentNode.sanMove != null && annotation != null
+            ? IMap({currentNode.sanMove!.move.cg.to: annotation})
+            : null,
       ),
       settings: cg.BoardSettings(
         pieceAssets: boardPrefs.pieceSet.assets,
@@ -305,6 +310,40 @@ class _Board extends ConsumerWidget {
       ),
     );
   }
+}
+
+cg.Annotation? _annotationFrom(Iterable<int>? nags) {
+  final nag = nags?.firstOrNull;
+  if (nag == null) {
+    return null;
+  }
+  return switch (nag) {
+    1 => const cg.Annotation(
+        symbol: '!',
+        color: Colors.lightGreen,
+      ),
+    2 => const cg.Annotation(
+        symbol: '?',
+        color: Colors.orange,
+      ),
+    3 => const cg.Annotation(
+        symbol: '!!',
+        color: Colors.teal,
+      ),
+    4 => const cg.Annotation(
+        symbol: '??',
+        color: Colors.red,
+      ),
+    5 => const cg.Annotation(
+        symbol: '!?',
+        color: Colors.lightBlue,
+      ),
+    6 => const cg.Annotation(
+        symbol: '?!',
+        color: Colors.amber,
+      ),
+    int() => null,
+  };
 }
 
 class _EngineGaugeVertical extends ConsumerWidget {
