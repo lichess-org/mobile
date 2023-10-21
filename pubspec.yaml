@@ -25,7 +25,7 @@ dependencies:
   logging: ^1.1.0
   shared_preferences: ^2.1.0
   cached_network_image: ^3.2.2
-  dartchess: ^0.1.0
+  dartchess: ^0.5.0
   chessground: ^1.6.1
   soundpool:
     git:

@@ -60,7 +60,7 @@ class PuzzleController extends _$PuzzleController {
     PuzzleContext context,
     PuzzleStreak? streak,
   ) {
-    final root = Root.fromPgn(context.puzzle.game.pgn);
+    final root = Root.fromPgnMoves(context.puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Branch;
 
     // play first move after 1 second
@@ -90,7 +90,9 @@ class PuzzleController extends _$PuzzleController {
       initialPath: initialPath,
       currentPath: UciPath.empty,
       node: _gameTree.view,
-      pov: _gameTree.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
+      pov: _gameTree.nodeAt(initialPath).position.ply.isEven
+          ? Side.white
+          : Side.black,
       canViewSolution: false,
       resultSent: false,
       isChangingDifficulty: false,
@@ -473,18 +475,16 @@ class PuzzleController extends _$PuzzleController {
 
   void _mergeSolution() {
     final initialNode = _gameTree.nodeAt(state.initialPath);
-    final fromPly = initialNode.ply;
     final (_, newNodes) = state.puzzle.puzzle.solution.foldIndexed(
       (initialNode.position, IList<Branch>(const [])),
       (index, previous, uci) {
         final move = Move.fromUci(uci);
         final (pos, nodes) = previous;
-        final (newPos, newSan) = pos.playToSan(move!);
+        final (newPos, newSan) = pos.makeSan(move!);
         return (
           newPos,
           nodes.add(
             Branch(
-              ply: fromPly + index + 1,
               position: newPos,
               sanMove: SanMove(newSan, move),
             ),

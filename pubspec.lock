@@ -325,10 +325,10 @@ packages:
     dependency: "direct main"
     description:
       name: dartchess
-      sha256: "13c75e333212871fee385c31b7702a0e769177a7e294c79d343442e1e670c676"
+      sha256: e5439cc1b537d3e1d01ff699e9971cd53384c2fb95a31806f7f6fc0a64028ce5
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.5.0"
   dbus:
     dependency: transitive
     description:

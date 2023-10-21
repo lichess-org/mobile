@@ -1478,6 +1478,7 @@
   "agreementPolicy": "I agree that I will follow all Lichess policies.",
   "searchOrStartNewDiscussion": "Search or start new conversation",
   "edit": "Edit",
+  "blitz": "Blitz",
   "rapid": "Rapid",
   "classical": "Classical",
   "ultraBulletDesc": "Insanely fast games: less than 30 seconds",
@@ -2726,6 +2727,244 @@
       },
       "param2": {
         "type": "String"
+      }
+    }
+  },
+  "studyPrivate": "Private",
+  "studyMyStudies": "My studies",
+  "studyStudiesIContributeTo": "Studies I contribute to",
+  "studyMyPublicStudies": "My public studies",
+  "studyMyPrivateStudies": "My private studies",
+  "studyMyFavoriteStudies": "My favourite studies",
+  "studyWhatAreStudies": "What are studies?",
+  "studyAllStudies": "All studies",
+  "studyStudiesCreatedByX": "Studies created by {param}",
+  "@studyStudiesCreatedByX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "studyNoneYet": "None yet.",
+  "studyHot": "Hot",
+  "studyDateAddedNewest": "Date added (newest)",
+  "studyDateAddedOldest": "Date added (oldest)",
+  "studyRecentlyUpdated": "Recently updated",
+  "studyMostPopular": "Most popular",
+  "studyAlphabetical": "Alphabetical",
+  "studyAddNewChapter": "Add a new chapter",
+  "studyAddMembers": "Add members",
+  "studyInviteToTheStudy": "Invite to the study",
+  "studyPleaseOnlyInvitePeopleYouKnow": "Please only invite people you know, and who actively want to join this study.",
+  "studySearchByUsername": "Search by username",
+  "studySpectator": "Spectator",
+  "studyContributor": "Contributor",
+  "studyKick": "Kick",
+  "studyLeaveTheStudy": "Leave the study",
+  "studyYouAreNowAContributor": "You are now a contributor",
+  "studyYouAreNowASpectator": "You are now a spectator",
+  "studyPgnTags": "PGN tags",
+  "studyLike": "Like",
+  "studyUnlike": "Unlike",
+  "studyNewTag": "New tag",
+  "studyCommentThisPosition": "Comment on this position",
+  "studyCommentThisMove": "Comment on this move",
+  "studyAnnotateWithGlyphs": "Annotate with glyphs",
+  "studyTheChapterIsTooShortToBeAnalysed": "The chapter is too short to be analysed.",
+  "studyOnlyContributorsCanRequestAnalysis": "Only the study contributors can request a computer analysis.",
+  "studyGetAFullComputerAnalysis": "Get a full server-side computer analysis of the mainline.",
+  "studyMakeSureTheChapterIsComplete": "Make sure the chapter is complete. You can only request analysis once.",
+  "studyAllSyncMembersRemainOnTheSamePosition": "All SYNC members remain on the same position",
+  "studyShareChanges": "Share changes with spectators and save them on the server",
+  "studyPlaying": "Playing",
+  "studyFirst": "First",
+  "studyPrevious": "Previous",
+  "studyNext": "Next",
+  "studyLast": "Last",
+  "studyShareAndExport": "Share & export",
+  "studyCloneStudy": "Clone",
+  "studyStudyPgn": "Study PGN",
+  "studyDownloadAllGames": "Download all games",
+  "studyChapterPgn": "Chapter PGN",
+  "studyCopyChapterPgn": "Copy PGN",
+  "studyCopyChapterPgnDescription": "Copy chapter PGN to clipboard.",
+  "studyDownloadGame": "Download game",
+  "studyStudyUrl": "Study URL",
+  "studyCurrentChapterUrl": "Current chapter URL",
+  "studyYouCanPasteThisInTheForumToEmbed": "You can paste this in the forum or your Lichess blog to embed",
+  "studyStartAtInitialPosition": "Start at initial position",
+  "studyStartAtX": "Start at {param}",
+  "@studyStartAtX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "studyEmbedInYourWebsite": "Embed in your website",
+  "studyReadMoreAboutEmbedding": "Read more about embedding",
+  "studyOnlyPublicStudiesCanBeEmbedded": "Only public studies can be embedded!",
+  "studyOpen": "Open",
+  "studyXBroughtToYouByY": "{param1}, brought to you by {param2}",
+  "@studyXBroughtToYouByY": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "studyStudyNotFound": "Study not found",
+  "studyEditChapter": "Edit chapter",
+  "studyNewChapter": "New chapter",
+  "studyImportFromChapterX": "Import from {param}",
+  "@studyImportFromChapterX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "studyOrientation": "Orientation",
+  "studyAnalysisMode": "Analysis mode",
+  "studyPinnedChapterComment": "Pinned chapter comment",
+  "studySaveChapter": "Save chapter",
+  "studyClearAnnotations": "Clear annotations",
+  "studyClearVariations": "Clear variations",
+  "studyDeleteChapter": "Delete chapter",
+  "studyDeleteThisChapter": "Delete this chapter. There is no going back!",
+  "studyClearAllCommentsInThisChapter": "Clear all comments, glyphs and drawn shapes in this chapter",
+  "studyRightUnderTheBoard": "Right under the board",
+  "studyNoPinnedComment": "None",
+  "studyNormalAnalysis": "Normal analysis",
+  "studyHideNextMoves": "Hide next moves",
+  "studyInteractiveLesson": "Interactive lesson",
+  "studyChapterX": "Chapter {param}",
+  "@studyChapterX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "studyEmpty": "Empty",
+  "studyStartFromInitialPosition": "Start from initial position",
+  "studyEditor": "Editor",
+  "studyStartFromCustomPosition": "Start from custom position",
+  "studyLoadAGameByUrl": "Load games by URLs",
+  "studyLoadAPositionFromFen": "Load a position from FEN",
+  "studyLoadAGameFromPgn": "Load games from PGN",
+  "studyAutomatic": "Automatic",
+  "studyUrlOfTheGame": "URL of the games, one per line",
+  "studyLoadAGameFromXOrY": "Load games from {param1} or {param2}",
+  "@studyLoadAGameFromXOrY": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "studyCreateChapter": "Create chapter",
+  "studyCreateStudy": "Create study",
+  "studyEditStudy": "Edit study",
+  "studyVisibility": "Visibility",
+  "studyPublic": "Public",
+  "studyUnlisted": "Unlisted",
+  "studyInviteOnly": "Invite only",
+  "studyAllowCloning": "Allow cloning",
+  "studyNobody": "Nobody",
+  "studyOnlyMe": "Only me",
+  "studyContributors": "Contributors",
+  "studyMembers": "Members",
+  "studyEveryone": "Everyone",
+  "studyEnableSync": "Enable sync",
+  "studyYesKeepEveryoneOnTheSamePosition": "Yes: keep everyone on the same position",
+  "studyNoLetPeopleBrowseFreely": "No: let people browse freely",
+  "studyPinnedStudyComment": "Pinned study comment",
+  "studyStart": "Start",
+  "studySave": "Save",
+  "studyClearChat": "Clear chat",
+  "studyDeleteTheStudyChatHistory": "Delete the study chat history? There is no going back!",
+  "studyDeleteStudy": "Delete study",
+  "studyConfirmDeleteStudy": "Delete the entire study? There is no going back! Type the name of the study to confirm: {param}",
+  "@studyConfirmDeleteStudy": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "studyWhereDoYouWantToStudyThat": "Where do you want to study that?",
+  "studyGoodMove": "Good move",
+  "studyMistake": "Mistake",
+  "studyBrilliantMove": "Brilliant move",
+  "studyBlunder": "Blunder",
+  "studyInterestingMove": "Interesting move",
+  "studyDubiousMove": "Dubious move",
+  "studyOnlyMove": "Only move",
+  "studyZugzwang": "Zugzwang",
+  "studyEqualPosition": "Equal position",
+  "studyUnclearPosition": "Unclear position",
+  "studyWhiteIsSlightlyBetter": "White is slightly better",
+  "studyBlackIsSlightlyBetter": "Black is slightly better",
+  "studyWhiteIsBetter": "White is better",
+  "studyBlackIsBetter": "Black is better",
+  "studyWhiteIsWinning": "White is winning",
+  "studyBlackIsWinning": "Black is winning",
+  "studyNovelty": "Novelty",
+  "studyDevelopment": "Development",
+  "studyInitiative": "Initiative",
+  "studyAttack": "Attack",
+  "studyCounterplay": "Counterplay",
+  "studyTimeTrouble": "Time trouble",
+  "studyWithCompensation": "With compensation",
+  "studyWithTheIdea": "With the idea",
+  "studyNextChapter": "Next chapter",
+  "studyPrevChapter": "Previous chapter",
+  "studyStudyActions": "Study actions",
+  "studyTopics": "Topics",
+  "studyMyTopics": "My topics",
+  "studyPopularTopics": "Popular topics",
+  "studyManageTopics": "Manage topics",
+  "studyBack": "Back",
+  "studyPlayAgain": "Play again",
+  "studyWhatWouldYouPlay": "What would you play in this position?",
+  "studyYouCompletedThisLesson": "Congratulations! You completed this lesson.",
+  "studyNbChapters": "{count, plural, =0{{count} Chapter} =1{{count} Chapter} other{{count} Chapters}}",
+  "@studyNbChapters": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studyNbGames": "{count, plural, =0{{count} Game} =1{{count} Game} other{{count} Games}}",
+  "@studyNbGames": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studyNbMembers": "{count, plural, =0{{count} Member} =1{{count} Member} other{{count} Members}}",
+  "@studyNbMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =0{Paste your PGN text here, up to {count} game} =1{Paste your PGN text here, up to {count} game} other{Paste your PGN text here, up to {count} games}}",
+  "@studyPasteYourPgnTextHereUpToNbGames": {
+    "placeholders": {
+      "count": {
+        "type": "int"
       }
     }
   }

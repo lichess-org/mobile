@@ -184,6 +184,8 @@ class ListSection extends StatelessWidget {
                         ),
                       ),
                     CupertinoListSection.insetGrouped(
+                      backgroundColor:
+                          CupertinoTheme.of(context).scaffoldBackgroundColor,
                       margin: EdgeInsets.zero,
                       hasLeading: hasLeading,
                       additionalDividerMargin: cupertinoAdditionalDividerMargin,
