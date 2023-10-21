@@ -100,10 +100,6 @@ class AnalysisController extends _$AnalysisController {
 
     return AnalysisState(
       id: options.id,
-      isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
-      isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
-      shouldShowComments: true,
-      initialPath: UciPath.empty,
       currentPath: currentPath,
       root: _root.view,
       currentNode: AnalysisCurrentNode.fromNode(currentNode),
@@ -113,6 +109,9 @@ class AnalysisController extends _$AnalysisController {
       pov: options.orientation,
       evaluationContext: evalContext,
       contextOpening: options.opening,
+      isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
+      isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
+      shouldShowComments: true,
     );
   }
 
@@ -125,7 +124,7 @@ class AnalysisController extends _$AnalysisController {
   }
 
   void userNext() {
-    if (!state.currentNode.hasChildren) return;
+    if (!state.currentNode.hasChild) return;
     _setPath(
       state.currentPath + _root.nodeAt(state.currentPath).children.first.id,
       replaying: true,
@@ -331,20 +330,54 @@ class AnalysisState with _$AnalysisState {
   const AnalysisState._();
 
   const factory AnalysisState({
+    /// Immutable view of the whole tree
     required ViewRoot root,
+
+    /// The current node in the analysis view.
+    ///
+    /// This is an immutable copy of the actual [Node] at the `currentPath`.
+    /// We don't want to use [Node.view] here because it'd copy the whole tree
+    /// under the current node and it's expensive.
     required AnalysisCurrentNode currentNode,
-    required UciPath initialPath,
+
+    /// The path to the current node in the analysis view.
     required UciPath currentPath,
+
+    /// Analysis ID, useful for the evaluation context.
     required ID id,
+
+    /// The side to display the board from.
     required Side pov,
+
+    /// Context for engine evaluation.
     required EvaluationContext evaluationContext,
+
+    /// Whether local evaluation is allowed for this analysis.
     required bool isLocalEvaluationAllowed,
+
+    /// Whether the user has enabled local evaluation.
     required bool isLocalEvaluationEnabled,
+
+    /// Whether to show PGN comments in the tree view.
     required bool shouldShowComments,
+
+    /// The last move played.
     Move? lastMove,
+
+    /// Opening of the analysis context (from lichess archived games).
     Opening? contextOpening,
+
+    /// The opening of the current branch.
     Opening? currentBranchOpening,
+
+    /// The PGN headers of the game.
+    ///
+    /// This field is only used with user submitted PGNS.
     IMap<String, String>? pgnHeaders,
+
+    /// The PGN comments of the game.
+    ///
+    /// This field is only used with user submitted PGNS.
     IList<String>? pgnRootComments,
   }) = _AnalysisState;
 
@@ -359,15 +392,15 @@ class AnalysisState with _$AnalysisState {
       isLocalEvaluationEnabled;
 
   Position get position => currentNode.position;
-  bool get canGoNext => currentNode.hasChildren;
-  bool get canGoBack => currentPath.size > initialPath.size;
+  bool get canGoNext => currentNode.hasChild;
+  bool get canGoBack => currentPath.size > UciPath.empty.size;
 }
 
 @freezed
 class AnalysisCurrentNode with _$AnalysisCurrentNode {
   const factory AnalysisCurrentNode({
     required Position position,
-    required bool hasChildren,
+    required bool hasChild,
     SanMove? sanMove,
     Opening? opening,
     ClientEval? eval,
@@ -381,7 +414,7 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
       return AnalysisCurrentNode(
         sanMove: node.sanMove,
         position: node.position,
-        hasChildren: node.children.isNotEmpty,
+        hasChild: node.children.isNotEmpty,
         opening: node.opening,
         eval: node.eval,
         startingComments: IList(node.startingComments),
@@ -391,7 +424,7 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
     } else {
       return AnalysisCurrentNode(
         position: node.position,
-        hasChildren: node.children.isNotEmpty,
+        hasChild: node.children.isNotEmpty,
         opening: node.opening,
         eval: node.eval,
       );
