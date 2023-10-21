@@ -12,7 +12,9 @@ import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 
-const kFastReplayDebounceDelay = Duration(milliseconds: 100);
+// fast replay debounce delay, same as piece animation duration, to avoid piece
+// animation jank at the end of the replay
+const kFastReplayDebounceDelay = Duration(milliseconds: 150);
 const kOpeningHeaderHeight = 32.0;
 const kInlineMoveSpacing = 3.0;
 
