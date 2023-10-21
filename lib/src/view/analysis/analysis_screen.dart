@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -757,7 +756,7 @@ class _StockfishInfo extends ConsumerWidget {
   const _StockfishInfo(this.evalContext, this.currentNode);
 
   final EvaluationContext evalContext;
-  final ViewNode currentNode;
+  final AnalysisCurrentNode currentNode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

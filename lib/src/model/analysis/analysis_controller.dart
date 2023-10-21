@@ -7,6 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -105,7 +106,7 @@ class AnalysisController extends _$AnalysisController {
       initialPath: UciPath.empty,
       currentPath: currentPath,
       root: _root.view,
-      currentNode: currentNode.view,
+      currentNode: AnalysisCurrentNode.fromNode(currentNode),
       pgnHeaders: pgnHeaders,
       pgnRootComments: rootComments,
       lastMove: lastMove,
@@ -124,9 +125,9 @@ class AnalysisController extends _$AnalysisController {
   }
 
   void userNext() {
-    if (state.currentNode.children.isEmpty) return;
+    if (!state.currentNode.hasChildren) return;
     _setPath(
-      state.currentPath + state.currentNode.children.first.id,
+      state.currentPath + _root.nodeAt(state.currentPath).children.first.id,
       replaying: true,
     );
   }
@@ -176,7 +177,8 @@ class AnalysisController extends _$AnalysisController {
       evaluationContext: state.evaluationContext.copyWith(
         multiPv: numEvalLines,
       ),
-      currentNode: _root.nodeAt(state.currentPath).view,
+      currentNode:
+          AnalysisCurrentNode.fromNode(_root.nodeAt(state.currentPath)),
     );
 
     _startEngineEval();
@@ -254,7 +256,7 @@ class AnalysisController extends _$AnalysisController {
 
       state = state.copyWith(
         currentPath: path,
-        currentNode: currentNode.view,
+        currentNode: AnalysisCurrentNode.fromNode(currentNode),
         lastMove: currentNode.sanMove.move,
         currentBranchOpening: opening,
         // root view is only used to display move list, so we need to
@@ -264,7 +266,7 @@ class AnalysisController extends _$AnalysisController {
     } else {
       state = state.copyWith(
         currentPath: path,
-        currentNode: state.root,
+        currentNode: AnalysisCurrentNode.fromNode(currentNode),
         currentBranchOpening: opening,
         lastMove: null,
       );
@@ -289,7 +291,9 @@ class AnalysisController extends _$AnalysisController {
       fromNode.updateAt(path, (node) => node.opening = opening);
 
       if (state.currentPath == path) {
-        state = state.copyWith(currentNode: fromNode.nodeAt(path).view);
+        state = state.copyWith(
+          currentNode: AnalysisCurrentNode.fromNode(fromNode.nodeAt(path)),
+        );
       }
     }
   }
@@ -328,7 +332,7 @@ class AnalysisState with _$AnalysisState {
 
   const factory AnalysisState({
     required ViewRoot root,
-    required ViewNode currentNode,
+    required AnalysisCurrentNode currentNode,
     required UciPath initialPath,
     required UciPath currentPath,
     required ID id,
@@ -355,8 +359,44 @@ class AnalysisState with _$AnalysisState {
       isLocalEvaluationEnabled;
 
   Position get position => currentNode.position;
-  bool get canGoNext => currentNode.children.isNotEmpty;
+  bool get canGoNext => currentNode.hasChildren;
   bool get canGoBack => currentPath.size > initialPath.size;
+}
+
+@freezed
+class AnalysisCurrentNode with _$AnalysisCurrentNode {
+  const factory AnalysisCurrentNode({
+    required Position position,
+    required bool hasChildren,
+    SanMove? sanMove,
+    Opening? opening,
+    ClientEval? eval,
+    IList<String>? startingComments,
+    IList<String>? comments,
+    IList<int>? nags,
+  }) = _AnalysisCurrentNode;
+
+  factory AnalysisCurrentNode.fromNode(Node node) {
+    if (node is Branch) {
+      return AnalysisCurrentNode(
+        sanMove: node.sanMove,
+        position: node.position,
+        hasChildren: node.children.isNotEmpty,
+        opening: node.opening,
+        eval: node.eval,
+        startingComments: IList(node.startingComments),
+        comments: IList(node.comments),
+        nags: IList(node.nags),
+      );
+    } else {
+      return AnalysisCurrentNode(
+        position: node.position,
+        hasChildren: node.children.isNotEmpty,
+        opening: node.opening,
+        eval: node.eval,
+      );
+    }
+  }
 }
 
 const IMap<String, String> _defaultPgnHeaders = IMapConst({
