@@ -85,10 +85,16 @@ class PvData with _$PvData {
   List<String> sanMoves(Position fromPosition) {
     Position pos = fromPosition;
     final List<String> res = [];
-    for (final move in moves.sublist(0, math.min(12, moves.length))) {
-      final (newPos, san) = pos.makeSan(Move.fromUci(move)!);
-      res.add(san);
-      pos = newPos;
+    for (final uciMove in moves.sublist(0, math.min(12, moves.length))) {
+      // assume uciMove string is valid as it comes from stockfish
+      final move = Move.fromUci(uciMove)!;
+      if (pos.isLegal(move)) {
+        final (newPos, san) = pos.makeSanUnchecked(move);
+        res.add(san);
+        pos = newPos;
+      } else {
+        break;
+      }
     }
     return res;
   }
