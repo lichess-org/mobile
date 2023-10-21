@@ -32,10 +32,16 @@ class AnalysisTreeView extends ConsumerStatefulWidget {
 class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
   final currentMoveKey = GlobalKey();
   final _debounce = Debouncer(kFastReplayDebounceDelay);
+  late UciPath currentPath;
 
   @override
   void initState() {
     super.initState();
+    currentPath = ref.read(
+      analysisControllerProvider(widget.options).select(
+        (value) => value.currentPath,
+      ),
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (currentMoveKey.currentContext != null) {
         Scrollable.ensureVisible(
@@ -53,22 +59,32 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     super.dispose();
   }
 
+  // This is the most expensive part of the analysis view because of the tree
+  // that may be very large.
+  // Great care must be taken to avoid unnecessary rebuilds.
   @override
   Widget build(BuildContext context) {
     ref.listen(
       analysisControllerProvider(widget.options),
       (prev, state) {
         if (prev?.currentPath != state.currentPath) {
+          // debouncing the current path change to avoid rebuilding when using
+          // the fast replay buttons
           _debounce(() {
-            if (currentMoveKey.currentContext != null) {
-              Scrollable.ensureVisible(
-                currentMoveKey.currentContext!,
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeIn,
-                alignment: 0.5,
-                alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
-              );
-            }
+            setState(() {
+              currentPath = state.currentPath;
+            });
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (currentMoveKey.currentContext != null) {
+                Scrollable.ensureVisible(
+                  currentMoveKey.currentContext!,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeIn,
+                  alignment: 0.5,
+                  alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
+                );
+              }
+            });
           });
         }
       },
@@ -76,8 +92,6 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
 
     final ctrlProvider = analysisControllerProvider(widget.options);
     final root = ref.watch(ctrlProvider.select((value) => value.root));
-    final currentPath =
-        ref.watch(ctrlProvider.select((value) => value.currentPath));
     final rootComments = ref.watch(
       ctrlProvider.select((value) => value.pgnRootComments),
     );
@@ -92,16 +106,15 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
       inMainline: true,
       startSideline: false,
       initialPath: UciPath.empty,
-      currentPath: currentPath,
     );
 
     // trick to make auto-scroll work when returning to the root position
-    if (currentPath.isEmpty) {
-      moveWidgets.insert(
-        0,
-        SizedBox.shrink(key: currentMoveKey),
-      );
-    }
+    moveWidgets.insert(
+      0,
+      currentPath.isEmpty
+          ? SizedBox.shrink(key: currentMoveKey)
+          : const SizedBox.shrink(),
+    );
 
     if (shouldShowComments && rootComments?.isNotEmpty == true) {
       moveWidgets.insert(
@@ -148,7 +161,6 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     required bool startSideline,
     required bool shouldShowComments,
     required UciPath initialPath,
-    required UciPath currentPath,
   }) {
     if (nodes.isEmpty) return [];
     final List<Widget> widgets = [];
@@ -181,12 +193,11 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
               spacing: kInlineMoveSpacing,
               children: _buildTreeWidget(
                 ctrlProvider,
-                nodes: IList([nodes[i]]),
+                nodes: [nodes[i]].lockUnsafe,
                 shouldShowComments: shouldShowComments,
                 inMainline: false,
                 startSideline: true,
                 initialPath: initialPath,
-                currentPath: currentPath,
               ),
             ),
           ),
@@ -195,12 +206,11 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
         widgets.addAll(
           _buildTreeWidget(
             ctrlProvider,
-            nodes: IList([nodes[i]]),
+            nodes: [nodes[i]].lockUnsafe,
             shouldShowComments: shouldShowComments,
             inMainline: false,
             startSideline: true,
             initialPath: initialPath,
-            currentPath: currentPath,
           ),
         );
       }
@@ -215,7 +225,6 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
         inMainline: inMainline,
         startSideline: false,
         initialPath: newPath,
-        currentPath: currentPath,
       ),
     );
 

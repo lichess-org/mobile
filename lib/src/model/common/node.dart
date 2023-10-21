@@ -35,7 +35,7 @@ abstract class Node {
 
   final List<Branch> children = [];
 
-  /// Immutable view of this node.
+  /// Immutable view of this node. Use sparingly, as it is expensive to compute.
   ViewNode get view;
 
   /// Adds a child to this node.
