@@ -75,38 +75,37 @@ class _BodyState extends State<_Body> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: ListView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.max,
         children: [
-          Padding(
-            padding: Styles.bodySectionPadding,
-            child: AdaptiveTextField(
-              maxLines: 10,
-              placeholder:
-                  '${context.l10n.pasteTheFenStringHere} / ${context.l10n.pasteThePgnStringHere}\n\nLeave empty for initial position',
-              controller: _controller,
-              readOnly: true,
-              onTap: _getClipboardData,
+          Expanded(
+            child: Padding(
+              padding: Styles.bodySectionPadding,
+              child: AdaptiveTextField(
+                maxLines: 500,
+                placeholder:
+                    '${context.l10n.pasteTheFenStringHere}\n\n${context.l10n.pasteThePgnStringHere}\n\nLeave empty for initial position',
+                controller: _controller,
+                readOnly: true,
+                onTap: _getClipboardData,
+              ),
             ),
           ),
           Padding(
-            padding: Styles.bodySectionPadding,
-            child: Column(
-              children: [
-                const SizedBox(height: 8.0),
-                FatButton(
-                  semanticsLabel: context.l10n.analysis,
-                  onPressed: parsedInput != null
-                      ? () => pushPlatformRoute(
-                            context,
-                            rootNavigator: true,
-                            builder: (context) => AnalysisScreen(
-                              options: parsedInput!,
-                            ),
-                          )
-                      : null,
-                  child: Text(context.l10n.analysis),
-                ),
-              ],
+            padding: Styles.bodySectionBottomPadding,
+            child: FatButton(
+              semanticsLabel: context.l10n.analysis,
+              onPressed: parsedInput != null
+                  ? () => pushPlatformRoute(
+                        context,
+                        rootNavigator: true,
+                        builder: (context) => AnalysisScreen(
+                          options: parsedInput!,
+                        ),
+                      )
+                  : null,
+              child: Text(context.l10n.studyStart),
             ),
           ),
         ],
