@@ -6,9 +6,11 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 
@@ -465,13 +467,21 @@ class _Opening extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isRootNode = ref.watch(
+      ctrlProvider.select((s) => s.currentNode.isRoot),
+    );
     final nodeOpening =
         ref.watch(ctrlProvider.select((s) => s.currentNode.opening));
     final branchOpening =
         ref.watch(ctrlProvider.select((s) => s.currentBranchOpening));
     final contextOpening =
         ref.watch(ctrlProvider.select((s) => s.contextOpening));
-    final opening = nodeOpening ?? branchOpening ?? contextOpening;
+    final opening = isRootNode
+        ? LightOpening(
+            eco: '',
+            name: context.l10n.startPosition,
+          )
+        : nodeOpening ?? branchOpening ?? contextOpening;
 
     return opening != null
         ? Container(

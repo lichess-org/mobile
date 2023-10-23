@@ -401,6 +401,7 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
   const factory AnalysisCurrentNode({
     required Position position,
     required bool hasChild,
+    required bool isRoot,
     SanMove? sanMove,
     Opening? opening,
     ClientEval? eval,
@@ -414,6 +415,7 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
       return AnalysisCurrentNode(
         sanMove: node.sanMove,
         position: node.position,
+        isRoot: node is Root,
         hasChild: node.children.isNotEmpty,
         opening: node.opening,
         eval: node.eval,
@@ -425,6 +427,7 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
       return AnalysisCurrentNode(
         position: node.position,
         hasChild: node.children.isNotEmpty,
+        isRoot: node is Root,
         opening: node.opening,
         eval: node.eval,
       );
