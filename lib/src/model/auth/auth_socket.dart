@@ -80,7 +80,7 @@ class AuthSocket {
           _log.info(
             'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, closing socket.',
           );
-          _close();
+          _closeAndForget();
         },
       );
     },
@@ -214,16 +214,18 @@ class AuthSocket {
   }
 
   void dispose() {
-    _close();
+    _closeAndForget();
     _streamController.close();
     _appLifecycleListener.dispose();
   }
 
-  /// Closes the WebSocket connection.
+  /// Closes and forget the WebSocket connection.
+  ///
+  /// This should be called when the socket is no longer needed.
   ///
   /// If a delay is provided, the connection will be closed after the delay.
   /// If a new connection is created before the delay, the close will be cancelled.
-  void _close({Duration? delay}) {
+  void _closeAndForget({Duration? delay}) {
     _log.fine(
       'Closing WebSocket connection ${delay == null ? 'now' : 'in ${delay.inSeconds}s'}.',
     );
@@ -315,7 +317,7 @@ class AuthSocket {
   /// Called when the last listener is removed from the socket stream.
   void _onStreamCancel() {
     _log.fine('WebSocket connection idle, closing.');
-    _close(delay: _kIdleTimeout);
+    _closeAndForget(delay: _kIdleTimeout);
   }
 
   void _handleEvent(SocketEvent event) {
