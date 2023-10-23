@@ -43,7 +43,6 @@ const _kDisconnectOnBackgroundTimeout = Duration(minutes: 20);
 typedef CurrentConnection = ({
   Uri route,
   IOWebSocketChannel channel,
-  StreamController<SocketEvent> streamController,
 });
 
 /// Lichess websocket client.
@@ -70,27 +69,31 @@ typedef CurrentConnection = ({
 /// The socket will close itself after a short delay when there are no more
 /// subscriptions.
 class AuthSocket {
-  AuthSocket(this._ref, this._log) {
-    _appLifecycleListener = AppLifecycleListener(
-      onHide: () {
-        _closeInBackgroundTimer?.cancel();
-        _closeInBackgroundTimer = Timer(
-          _kDisconnectOnBackgroundTimeout,
-          () {
-            _log.info(
-              'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, closing socket.',
-            );
-            _close();
-          },
-        );
-      },
-      onShow: () {
-        _closeInBackgroundTimer?.cancel();
-      },
-    );
-  }
+  AuthSocket(this._ref, this._log);
 
-  late final AppLifecycleListener _appLifecycleListener;
+  late final AppLifecycleListener _appLifecycleListener = AppLifecycleListener(
+    onHide: () {
+      _closeInBackgroundTimer?.cancel();
+      _closeInBackgroundTimer = Timer(
+        _kDisconnectOnBackgroundTimeout,
+        () {
+          _log.info(
+            'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, closing socket.',
+          );
+          _close();
+        },
+      );
+    },
+    onShow: () {
+      _closeInBackgroundTimer?.cancel();
+    },
+  );
+
+  late final StreamController<SocketEvent> _streamController =
+      StreamController<SocketEvent>.broadcast(
+    onListen: _onStreamListen,
+    onCancel: _onStreamCancel,
+  );
 
   final Logger _log;
   final AuthSocketRef _ref;
@@ -120,10 +123,8 @@ class AuthSocket {
   /// The current socket route if connected.
   Uri? get route => _connection?.route;
 
-  /// Returns the socket event broadcast stream filtered on the given route if connected.
-  Stream<SocketEvent>? getStreamOnRoute(Uri route) =>
-      _connection?.streamController.stream
-          .where((_) => route == _connection?.route);
+  /// The socket broadcast stream.
+  Stream<SocketEvent> get stream => _streamController.stream;
 
   /// The Socket Random Identifier.
   String get sri => _ref.read(sriProvider);
@@ -135,19 +136,29 @@ class AuthSocket {
   /// An optional `forceReconnect` boolean can be provided to force a reconnection.
   ///
   /// Returns a tuple of:
-  ///  - the socket event broadcast [Stream]
+  ///  - the socket event broadcast [Stream] filtered by the route,
   ///  - a [Future] that completes when the socket is ready. The future might never
   /// complete if the socket fails to connect because it tries to reconnect automatically.
   (Stream<SocketEvent>, Future<void>) connect(
     Uri route, {
     bool? forceReconnect = false,
   }) {
+    final filteredStream = _streamController.stream.where((_) {
+      if (route != _connection?.route) {
+        _log.warning(
+          'Received event for route $route on active route ${_connection?.route}. Have you forgotten to cancel a subscription?',
+        );
+        return false;
+      }
+      return true;
+    });
+
     if (forceReconnect == false &&
         _connection != null &&
         _connection!.channel.closeCode == null &&
         route == _connection!.route) {
       return (
-        _connection!.streamController.stream,
+        filteredStream,
         _connection!.channel.ready,
       );
     }
@@ -159,15 +170,7 @@ class AuthSocket {
     final connection = _doConnect(route);
 
     return (
-      connection.streamController.stream.where((_) {
-        if (route != _connection?.route) {
-          _log.warning(
-            'Received event for route $route on active route ${_connection?.route}. Have you forgotten to cancel a subscription?',
-          );
-          return false;
-        }
-        return true;
-      }),
+      filteredStream,
       connection.channel.ready,
     );
   }
@@ -212,6 +215,7 @@ class AuthSocket {
 
   void dispose() {
     _close();
+    _streamController.close();
     _appLifecycleListener.dispose();
   }
 
@@ -226,16 +230,14 @@ class AuthSocket {
     _closeTimer?.cancel();
     _closeTimer = Timer(
       delay ?? Duration.zero,
-      () => _closeCurrent(() {
+      () {
+        _closeCurrent();
         if (_connection == null) {
           return;
         }
-        _connection?.streamController.close().then((_) {
-          _log.fine('WebSocket stream controller properly closed.');
-        });
         _log.info('WebSocket connection closed.');
         _connection = null;
-      }),
+      },
     );
   }
 
@@ -282,11 +284,6 @@ class AuthSocket {
     _connection = (
       route: route,
       channel: channel,
-      streamController: _connection?.streamController ??
-          StreamController<SocketEvent>.broadcast(
-            onListen: _onStreamListen,
-            onCancel: _onStreamCancel,
-          ),
     );
 
     channel.ready.then(
@@ -331,7 +328,7 @@ class AuthSocket {
     }
 
     if (event != SocketEvent.pong) {
-      _connection?.streamController.add(event);
+      _streamController.add(event);
     }
   }
 
@@ -401,14 +398,13 @@ class AuthSocket {
     }
   }
 
-  /// Closes current connection, but keep the streamController open to allow for reconnections
-  void _closeCurrent([void Function()? afterClose]) {
+  /// Closes websocket connection but keeps the reference to the current connection.
+  void _closeCurrent() {
     _sink?.close();
     _socketStreamSubscription?.cancel();
     _pingTimer?.cancel();
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
-    afterClose?.call();
   }
 }
 
