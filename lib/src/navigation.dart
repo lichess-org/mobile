@@ -18,7 +18,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 enum BottomTab {
   home(Icons.home),
   puzzles(LichessIcons.target),
-  tools(LichessIcons.tools),
+  tools(CupertinoIcons.wrench),
   watch(Icons.live_tv),
   profile(CupertinoIcons.profile_circled);
 
