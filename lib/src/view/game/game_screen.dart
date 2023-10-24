@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
@@ -85,13 +86,13 @@ class _GameScreenState extends ConsumerState<GameScreen>
                 context: context,
                 body: body,
                 gameState: state,
-                ctrlProvider: ctrlProvider,
+                id: id,
               ),
               iosBuilder: (context) => _iosBuilder(
                 context: context,
                 body: body,
                 gameState: state,
-                ctrlProvider: ctrlProvider,
+                id: id,
               ),
             );
           },
@@ -143,7 +144,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
   Widget _androidBuilder({
     required BuildContext context,
     required Widget body,
-    GameControllerProvider? ctrlProvider,
+    GameFullId? id,
     GameState? gameState,
   }) {
     return Scaffold(
@@ -160,7 +161,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               isScrollControlled: true,
-              builder: (_) => GameSettings(ctrlProvider),
+              builder: (_) => GameSettings(id),
             ),
           ),
         ],
@@ -172,7 +173,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
   Widget _iosBuilder({
     required BuildContext context,
     required Widget body,
-    GameControllerProvider? ctrlProvider,
+    GameFullId? id,
     GameState? gameState,
   }) {
     return CupertinoPageScaffold(
@@ -189,7 +190,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
           onPressed: () => showAdaptiveBottomSheet<void>(
             context: context,
             isScrollControlled: true,
-            builder: (_) => GameSettings(ctrlProvider),
+            builder: (_) => GameSettings(id),
           ),
         ),
       ),

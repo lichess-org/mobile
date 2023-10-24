@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -11,9 +12,9 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 class GameSettings extends ConsumerWidget {
-  const GameSettings(this.ctrlProvider, {super.key});
+  const GameSettings(this.id, {super.key});
 
-  final GameControllerProvider? ctrlProvider;
+  final GameFullId? id;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,8 +24,9 @@ class GameSettings extends ConsumerWidget {
       ),
     );
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final ctrlProvider = id != null ? gameControllerProvider(id!) : null;
     final gameState = ctrlProvider != null
-        ? ref.watch(ctrlProvider!)
+        ? ref.watch(ctrlProvider)
         : const AsyncValue<GameState>.loading();
 
     return ModalSheetScaffold(
