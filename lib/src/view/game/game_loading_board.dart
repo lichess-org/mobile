@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/constants.dart';
@@ -13,6 +14,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
 class LobbyGameLoadingBoard extends StatelessWidget {
   const LobbyGameLoadingBoard(this.seek);
@@ -72,6 +74,89 @@ class LobbyGameLoadingBoard extends StatelessWidget {
                   ),
                 ),
               ),
+            ),
+          ),
+        ),
+        _BottomBar(
+          children: [
+            BottomBarButton(
+              onTap: () => Navigator.of(context).pop(),
+              label: context.l10n.cancel,
+              shortLabel: context.l10n.cancel,
+              icon: CupertinoIcons.xmark,
+              showAndroidShortLabel: true,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class StandaloneGameLoadingBoard extends StatelessWidget {
+  const StandaloneGameLoadingBoard({
+    required this.orientation,
+    this.initialFen,
+    this.lastMove,
+  });
+
+  final Side orientation;
+  final String? initialFen;
+  final Move? lastMove;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: SafeArea(
+            bottom: false,
+            child: BoardTable(
+              boardData: cg.BoardData(
+                interactableSide: cg.InteractableSide.none,
+                orientation: orientation.cg,
+                fen: initialFen ?? kEmptyFen,
+                lastMove: lastMove?.cg,
+              ),
+              topTable: const SizedBox.shrink(),
+              bottomTable: const SizedBox.shrink(),
+              showMoveListPlaceholder: true,
+            ),
+          ),
+        ),
+        const _BottomBar(
+          children: [],
+        ),
+      ],
+    );
+  }
+}
+
+class LoadGameError extends StatelessWidget {
+  const LoadGameError({
+    this.initialFen,
+  });
+
+  final String? initialFen;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: SafeArea(
+            bottom: false,
+            child: BoardTable(
+              boardData: cg.BoardData(
+                interactableSide: cg.InteractableSide.none,
+                orientation: cg.Side.white,
+                fen: initialFen ?? kEmptyFen,
+              ),
+              topTable: const SizedBox.shrink(),
+              bottomTable: const SizedBox.shrink(),
+              showMoveListPlaceholder: true,
+              errorMessage:
+                  'Sorry, we could not load the game. Please try again later.',
             ),
           ),
         ),

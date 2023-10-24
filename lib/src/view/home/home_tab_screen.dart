@@ -35,7 +35,8 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
-import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 
 final RouteObserver<PageRoute<void>> homeRouteObserver =
     RouteObserver<PageRoute<void>>();
@@ -466,7 +467,7 @@ class _CreateAGame extends ConsumerWidget {
           context,
           rootNavigator: true,
           builder: (BuildContext context) {
-            return GameScreen(
+            return LobbyGameScreen(
               seek: seek,
             );
           },
@@ -628,15 +629,15 @@ class _OngoingGamePreview extends ConsumerWidget {
             ],
           ),
           onTap: () {
-            // pushPlatformRoute(
-            //   context,
-            //   rootNavigator: true,
-            //   builder: (context) => GameScreen(
-            //     // fullId: game.fullId,
-            //     // orientation: orientation,
-            //     // initialFen: fen,
-            //   ),
-            // );
+            pushPlatformRoute(
+              context,
+              rootNavigator: true,
+              builder: (context) => StandaloneGameScreen(
+                id: game.fullId,
+                orientation: game.orientation,
+                initialFen: game.fen,
+              ),
+            );
           },
         );
       },

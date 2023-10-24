@@ -18,7 +18,7 @@ import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
 
 class CustomPlayScreen extends StatelessWidget {
   const CustomPlayScreen();
@@ -312,7 +312,7 @@ class _Body extends ConsumerWidget {
                         context,
                         rootNavigator: true,
                         builder: (BuildContext context) {
-                          return GameScreen(
+                          return LobbyGameScreen(
                             seek: GameSeek.customFromPrefs(
                               preferences,
                               session,

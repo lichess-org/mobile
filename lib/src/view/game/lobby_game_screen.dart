@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
@@ -18,14 +19,16 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 import 'game_body.dart';
 import 'ping_rating.dart';
-import 'lobby_game_loading_board.dart';
+import 'game_loading_board.dart';
 import 'game_settings.dart';
 
-final RouteObserver<PageRoute<void>> gameRouteObserver =
-    RouteObserver<PageRoute<void>>();
-
-class GameScreen extends ConsumerStatefulWidget {
-  const GameScreen({
+/// Screen for games loaded from the lobby.
+///
+/// This screen watches the [lobbyGameProvider] for the game id. A new game is
+/// created upon entering the screen, and each time the "new opponent" button
+/// is pressed.
+class LobbyGameScreen extends ConsumerStatefulWidget {
+  const LobbyGameScreen({
     required this.seek,
     super.key,
   });
@@ -33,10 +36,10 @@ class GameScreen extends ConsumerStatefulWidget {
   final GameSeek seek;
 
   @override
-  ConsumerState<GameScreen> createState() => _GameScreenState();
+  ConsumerState<LobbyGameScreen> createState() => _GameScreenState();
 }
 
-class _GameScreenState extends ConsumerState<GameScreen>
+class _GameScreenState extends ConsumerState<LobbyGameScreen>
     with AndroidImmersiveMode, RouteAware, Wakelock {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
@@ -99,7 +102,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
           loading: () => _loadingContent(),
           error: (e, s) {
             debugPrint(
-              'SEVERE: [GameScreen] could not load game data; $e\n$s',
+              'SEVERE: [LobbyGameScreen] could not load game data; $e\n$s',
             );
             return _errorContent();
           },
@@ -108,7 +111,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
       loading: () => _loadingContent(),
       error: (e, s) {
         debugPrint(
-          'SEVERE: [GameScreen] could not create game; $e\n$s',
+          'SEVERE: [LobbyGameScreen] could not create game; $e\n$s',
         );
         return _errorContent();
       },
