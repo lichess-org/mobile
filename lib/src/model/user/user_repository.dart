@@ -23,7 +23,7 @@ class UserRepository {
   FutureResult<User> getUser(UserId id) {
     return apiClient.get(Uri.parse('$kLichessHost/api/user/$id')).then(
           (result) => result.flatMap(
-            (response) => readJsonObject(
+            (response) => readJsonObjectFromResponse(
               response,
               mapper: User.fromJson,
               logger: _log,
@@ -37,7 +37,7 @@ class UserRepository {
         .get(Uri.parse('$kLichessHost/api/user/$id/perf/${perf.name}'))
         .then(
           (result) => result.flatMap(
-            (response) => readJsonObject(
+            (response) => readJsonObjectFromResponse(
               response,
               mapper: _userPerfStatsFromJson,
               logger: _log,
@@ -51,7 +51,7 @@ class UserRepository {
         .get(Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'))
         .then(
           (result) => result.flatMap(
-            (response) => readJsonListOfObjects(
+            (response) => readJsonListOfObjectsFromResponse(
               response,
               mapper: UserStatus.fromJson,
               logger: _log,
@@ -63,7 +63,7 @@ class UserRepository {
   FutureResult<IList<UserActivity>> getUserActivity(UserId id) {
     return apiClient.get(Uri.parse('$kLichessHost/api/user/$id/activity')).then(
           (result) => result.flatMap(
-            (response) => readJsonListOfObjects(
+            (response) => readJsonListOfObjectsFromResponse(
               response,
               mapper: _userActivityFromJson,
               logger: _log,
@@ -76,7 +76,7 @@ class UserRepository {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/streamer/live'))
         .flatMap((response) {
-      return readJsonListOfObjects(
+      return readJsonListOfObjectsFromResponse(
         response,
         mapper: _streamersFromJson,
         logger: _log,
@@ -88,7 +88,7 @@ class UserRepository {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/player/top/1/standard'))
         .flatMap((response) {
-      return readJsonObject(
+      return readJsonObjectFromResponse(
         response,
         mapper: _top1FromJson,
         logger: _log,
@@ -100,7 +100,7 @@ class UserRepository {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/player'))
         .flatMap((response) {
-      return readJsonObject(
+      return readJsonObjectFromResponse(
         response,
         mapper: _leaderboardFromJson,
         logger: _log,

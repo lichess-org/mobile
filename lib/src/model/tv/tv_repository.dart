@@ -37,7 +37,7 @@ class TvRepository {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/tv/channels'))
         .flatMap((response) {
-      return readJsonObject(
+      return readJsonObjectFromResponse(
         response,
         mapper: _tvGamesFromJson,
         logger: _log,

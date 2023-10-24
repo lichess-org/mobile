@@ -31,7 +31,7 @@ class GameRepository {
       Uri.parse('$kLichessHost/game/export/$id'),
       headers: {'Accept': 'application/json'},
     ).flatMap((response) {
-      return readJsonObject(
+      return readJsonObjectFromResponse(
         response,
         mapper: _makeArchivedGameFromJson,
         logger: _log,
@@ -47,7 +47,7 @@ class GameRepository {
       ),
       headers: {'Accept': 'application/x-ndjson'},
     ).flatMap(
-      (r) => readNdJsonList(
+      (r) => readNdJsonListFromResponse(
         r,
         mapper: _makeArchivedGameDataFromJson,
         logger: _log,
@@ -65,7 +65,7 @@ class GameRepository {
           body: ids.join(','),
         )
         .flatMap(
-          (r) => readNdJsonList(
+          (r) => readNdJsonListFromResponse(
             r,
             mapper: _makeArchivedGameDataFromJson,
             logger: _log,
