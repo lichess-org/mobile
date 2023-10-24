@@ -24,7 +24,7 @@ class ToolsTabScreen extends StatelessWidget {
 
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.puzzles)),
+      appBar: AppBar(title: Text(context.l10n.tools)),
       body: const Center(child: _Body()),
     );
   }
