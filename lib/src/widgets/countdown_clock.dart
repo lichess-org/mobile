@@ -110,7 +110,8 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
 
   @override
   Widget build(BuildContext context) {
-    final min = timeLeft.inMinutes.remainder(60);
+    final hours = timeLeft.inHours;
+    final mins = timeLeft.inMinutes.remainder(60);
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
     final showTenths = timeLeft < const Duration(seconds: 10);
     final isEmergency = widget.emergencyThreshold != null &&
@@ -120,7 +121,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
         ? ClockStyle.darkThemeStyle
         : ClockStyle.lightThemeStyle;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
-    final remaingHeight = estimateRemainingHeightLeftBoard(context);
+    final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
     return RepaintBoundary(
       child: Container(
@@ -143,7 +144,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
             ),
             child: RichText(
               text: TextSpan(
-                text: '$min:$secs',
+                text: hours > 0 ? '$hours' : '$mins:$secs',
                 style: TextStyle(
                   color: widget.active
                       ? isEmergency
@@ -152,7 +153,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
                       : clockStyle.textColor,
                   fontSize: 26,
                   height:
-                      remaingHeight < kSmallRemainingHeightLeftBoardThreshold
+                      remainingHeight < kSmallRemainingHeightLeftBoardThreshold
                           ? 1.0
                           : null,
                   fontFeatures: const [
@@ -160,6 +161,18 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
                   ],
                 ),
                 children: [
+                  if (hours > 0) ...[
+                    TextSpan(
+                      text: ':',
+                      style: TextStyle(
+                        color: widget.active &&
+                                timeLeft.inSeconds.remainder(2) == 0
+                            ? clockStyle.activeTextColor.withOpacity(0.5)
+                            : null,
+                      ),
+                    ),
+                    TextSpan(text: mins.toString().padLeft(2, '0')),
+                  ],
                   if (showTenths)
                     TextSpan(
                       text:
