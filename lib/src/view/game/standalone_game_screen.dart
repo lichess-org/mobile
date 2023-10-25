@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/model/game/online_game.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -22,17 +23,24 @@ import 'game_loading_board.dart';
 import 'ping_rating.dart';
 import 'game_settings.dart';
 
+/// Screen for already created games loaded directly from the game id.
+///
+/// Such games are issued from challenges, tournaments, or any other source which
+/// provides a game id.
+/// There is no way to get a new opponent from this screen.
+///
+/// This screen watches the [onlineGameProvider] for the game id.
 class StandaloneGameScreen extends ConsumerStatefulWidget {
   const StandaloneGameScreen({
-    required this.id,
-    required this.orientation,
+    required this.initialId,
+    required this.initialOrientation,
     this.initialFen,
     this.lastMove,
     super.key,
   });
 
-  final GameFullId id;
-  final Side orientation;
+  final GameFullId initialId;
+  final Side initialOrientation;
   final String? initialFen;
   final Move? lastMove;
 
@@ -70,13 +78,14 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
 
   @override
   Widget build(BuildContext context) {
-    final ctrlProvider = gameControllerProvider(widget.id);
-    final gameState = ref.watch(ctrlProvider);
+    final gameId = ref.watch(onlineGameProvider(widget.initialId));
+    final gameState = ref.watch(gameControllerProvider(gameId));
 
     return gameState.when(
       data: (state) {
         final body = GameBody(
-          id: widget.id,
+          initialStandAloneId: widget.initialId,
+          id: gameId,
           gameState: state,
           whiteClockKey: _whiteClockKey,
           blackClockKey: _blackClockKey,
@@ -85,11 +94,13 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
         return PlatformWidget(
           androidBuilder: (context) => _androidBuilder(
             context: context,
+            gameId: gameId,
             body: body,
             gameState: state,
           ),
           iosBuilder: (context) => _iosBuilder(
             context: context,
+            gameId: gameId,
             body: body,
             gameState: state,
           ),
@@ -102,7 +113,7 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
             body: WillPopScope(
               onWillPop: () async => false,
               child: StandaloneGameLoadingBoard(
-                orientation: widget.orientation,
+                orientation: widget.initialOrientation,
                 initialFen: widget.initialFen,
                 lastMove: widget.lastMove,
               ),
@@ -113,7 +124,7 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
             body: WillPopScope(
               onWillPop: () async => false,
               child: StandaloneGameLoadingBoard(
-                orientation: widget.orientation,
+                orientation: widget.initialOrientation,
                 initialFen: widget.initialFen,
                 lastMove: widget.lastMove,
               ),
@@ -136,6 +147,7 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
   Widget _androidBuilder({
     required BuildContext context,
     required Widget body,
+    GameFullId? gameId,
     GameState? gameState,
   }) {
     return Scaffold(
@@ -152,7 +164,7 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               isScrollControlled: true,
-              builder: (_) => GameSettings(widget.id),
+              builder: (_) => GameSettings(gameId),
             ),
           ),
         ],
@@ -164,6 +176,7 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
   Widget _iosBuilder({
     required BuildContext context,
     required Widget body,
+    GameFullId? gameId,
     GameState? gameState,
   }) {
     return CupertinoPageScaffold(
@@ -180,7 +193,7 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
           onPressed: () => showAdaptiveBottomSheet<void>(
             context: context,
             isScrollControlled: true,
-            builder: (_) => GameSettings(widget.id),
+            builder: (_) => GameSettings(gameId),
           ),
         ),
       ),

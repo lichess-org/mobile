@@ -9,6 +9,7 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/game/online_game.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -27,16 +28,39 @@ import 'game_screen_providers.dart';
 import 'game_player.dart';
 import 'status_l10n.dart';
 
+/// Common body for the [LobbyGameScreen] and [StandaloneGameScreen].
+///
+/// This widget is responsible for displaying the board, the clocks, the players,
+/// and the bottom bar.
+///
+/// The [seek] parameter is only used in the [LobbyGameScreen]. If [seek] is not
+/// null, it will display a button to get a new opponent and the game
+/// provider will be [lobbyGameProvider].
+/// If [seek] is null the game provider will be the [onlineGameProvider] parameterized
+/// with the [initialStandAloneId].
 class GameBody extends ConsumerWidget {
+  /// Constructs a [GameBody].
+  ///
+  /// You must provide either [seek] or [initialStandAloneId], but not both.
   const GameBody({
     this.seek,
+    this.initialStandAloneId,
     required this.id,
     required this.gameState,
     required this.whiteClockKey,
     required this.blackClockKey,
-  });
+  }) : assert(
+          (seek != null || initialStandAloneId != null) &&
+              !(seek != null && initialStandAloneId != null),
+          'Either seek or initialStandAloneId must be provided, but not both.',
+        );
 
+  /// The [GameSeek] used to get a new opponent when the game is coming from lobby.
   final GameSeek? seek;
+
+  /// The initial game id when the game was loaded from the [StandAloneGameScreen].
+  final GameFullId? initialStandAloneId;
+
   final GameFullId id;
   final GameState gameState;
   final GlobalKey whiteClockKey;
@@ -244,12 +268,18 @@ class GameBody extends ConsumerWidget {
         }
       }
 
-      if (seek != null && state.requireValue.redirectGameId != null) {
+      if (state.requireValue.redirectGameId != null) {
         // Be sure to pop any dialogs that might be on top of the game screen.
         Navigator.of(context).popUntil((route) => route is! RawDialogRoute);
-        ref
-            .read(lobbyGameProvider(seek!).notifier)
-            .rematch(state.requireValue.redirectGameId!);
+        if (seek != null) {
+          ref
+              .read(lobbyGameProvider(seek!).notifier)
+              .rematch(state.requireValue.redirectGameId!);
+        } else if (initialStandAloneId != null) {
+          ref
+              .read(onlineGameProvider(initialStandAloneId!).notifier)
+              .rematch(state.requireValue.redirectGameId!);
+        }
       }
     }
   }

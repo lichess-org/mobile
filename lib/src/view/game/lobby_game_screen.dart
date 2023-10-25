@@ -22,7 +22,7 @@ import 'ping_rating.dart';
 import 'game_loading_board.dart';
 import 'game_settings.dart';
 
-/// Screen for games loaded from the lobby.
+/// Screen for games created from the lobby.
 ///
 /// This screen watches the [lobbyGameProvider] for the game id. A new game is
 /// created upon entering the screen, and each time the "new opponent" button
@@ -72,7 +72,8 @@ class _GameScreenState extends ConsumerState<LobbyGameScreen>
     final gameId = ref.watch(gameProvider);
 
     return gameId.when(
-      data: (id) {
+      data: (data) {
+        final (id, fromRematch: fromRematch) = data;
         final ctrlProvider = gameControllerProvider(id);
         final gameState = ref.watch(ctrlProvider);
         return gameState.when(
@@ -99,7 +100,7 @@ class _GameScreenState extends ConsumerState<LobbyGameScreen>
               ),
             );
           },
-          loading: () => _loadingContent(),
+          loading: () => _loadingContent(isRematch: fromRematch),
           error: (e, s) {
             debugPrint(
               'SEVERE: [LobbyGameScreen] could not load game data; $e\n$s',
@@ -118,15 +119,15 @@ class _GameScreenState extends ConsumerState<LobbyGameScreen>
     );
   }
 
-  Widget _loadingContent() {
+  Widget _loadingContent({bool isRematch = false}) {
     return PlatformWidget(
       androidBuilder: (context) => _androidBuilder(
         context: context,
-        body: LobbyGameLoadingBoard(widget.seek),
+        body: LobbyGameLoadingBoard(widget.seek, isRematch: isRematch),
       ),
       iosBuilder: (context) => _iosBuilder(
         context: context,
-        body: LobbyGameLoadingBoard(widget.seek),
+        body: LobbyGameLoadingBoard(widget.seek, isRematch: isRematch),
       ),
     );
   }
