@@ -221,80 +221,101 @@ class _Body extends ConsumerWidget {
           if (userPerf != null)
             Builder(
               builder: (context) {
-                final (subtract, add) = preferences.customRatingRange;
+                final isRatingRangeAvailable = userPerf.provisional != true;
+                var (subtract, add) = preferences.customRatingRange;
 
-                return Opacity(
-                  opacity: preferences.isCustomRatingRangeAvailable ? 1 : 0.5,
-                  child: PlatformListTile(
-                    harmonizeCupertinoTitleStyle: true,
-                    title: Text(
-                      context.l10n.ratingRange,
-                    ),
-                    subtitle: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Flexible(
-                          child: Column(
-                            children: [
-                              NonLinearSlider(
-                                value: subtract,
-                                values: kSubtractingRatingRange,
-                                onChangeEnd: preferences
-                                        .isCustomRatingRangeAvailable
-                                    ? (num value) {
-                                        ref
-                                            .read(
-                                              playPreferencesProvider.notifier,
-                                            )
-                                            .setCustomRatingRange(
-                                              value.toInt(),
-                                              add,
-                                            );
-                                      }
-                                    : null,
-                              ),
-                              Center(
-                                child: Text('$subtract'),
-                              ),
-                            ],
-                          ),
+                return StatefulBuilder(
+                  builder: (context, setState) {
+                    return Opacity(
+                      opacity: isRatingRangeAvailable ? 1 : 0.5,
+                      child: PlatformListTile(
+                        harmonizeCupertinoTitleStyle: true,
+                        title: Text(
+                          context.l10n.ratingRange,
                         ),
-                        const SizedBox(width: 5),
-                        RatingWidget(
-                          rating: userPerf.rating,
-                          deviation: userPerf.ratingDeviation,
-                          provisional: userPerf.provisional,
-                        ),
-                        const SizedBox(width: 5),
-                        Flexible(
-                          child: Column(
-                            children: [
-                              NonLinearSlider(
-                                value: add,
-                                values: kAddingRatingRange,
-                                onChangeEnd: preferences
-                                        .isCustomRatingRangeAvailable
-                                    ? (num value) {
-                                        ref
-                                            .read(
-                                              playPreferencesProvider.notifier,
-                                            )
-                                            .setCustomRatingRange(
-                                              subtract,
-                                              value.toInt(),
-                                            );
-                                      }
-                                    : null,
+                        subtitle: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Flexible(
+                              child: Column(
+                                children: [
+                                  NonLinearSlider(
+                                    value: subtract,
+                                    values: kSubtractingRatingRange,
+                                    onChange: defaultTargetPlatform ==
+                                            TargetPlatform.iOS
+                                        ? (num value) {
+                                            setState(() {
+                                              subtract = value.toInt();
+                                            });
+                                          }
+                                        : null,
+                                    onChangeEnd: isRatingRangeAvailable
+                                        ? (num value) {
+                                            ref
+                                                .read(
+                                                  playPreferencesProvider
+                                                      .notifier,
+                                                )
+                                                .setCustomRatingRange(
+                                                  value.toInt(),
+                                                  add,
+                                                );
+                                          }
+                                        : null,
+                                  ),
+                                  Center(
+                                    child: Text('$subtract'),
+                                  ),
+                                ],
                               ),
-                              Center(
-                                child: Text('+$add'),
+                            ),
+                            const SizedBox(width: 5),
+                            RatingWidget(
+                              rating: userPerf.rating,
+                              deviation: userPerf.ratingDeviation,
+                              provisional: userPerf.provisional,
+                            ),
+                            const SizedBox(width: 5),
+                            Flexible(
+                              child: Column(
+                                children: [
+                                  NonLinearSlider(
+                                    value: add,
+                                    values: kAddingRatingRange,
+                                    onChange: defaultTargetPlatform ==
+                                            TargetPlatform.iOS
+                                        ? (num value) {
+                                            setState(() {
+                                              add = value.toInt();
+                                            });
+                                          }
+                                        : null,
+                                    onChangeEnd: isRatingRangeAvailable
+                                        ? (num value) {
+                                            ref
+                                                .read(
+                                                  playPreferencesProvider
+                                                      .notifier,
+                                                )
+                                                .setCustomRatingRange(
+                                                  subtract,
+                                                  value.toInt(),
+                                                );
+                                          }
+                                        : null,
+                                  ),
+                                  Center(
+                                    child: Text('+$add'),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
+                    );
+                  },
                 );
               },
             ),

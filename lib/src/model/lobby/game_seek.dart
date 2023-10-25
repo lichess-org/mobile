@@ -52,7 +52,7 @@ class GameSeek with _$GameSeek {
           : playPref.customSide == PlayableSide.white
               ? Side.white
               : Side.black,
-      ratingRange: playPref.isCustomRatingRangeAvailable && userPerf != null
+      ratingRange: userPerf != null && userPerf.provisional != true
           ? (
               math.max(0, userPerf.rating + playPref.customRatingRange.$1),
               userPerf.rating + playPref.customRatingRange.$2
