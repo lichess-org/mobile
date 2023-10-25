@@ -36,8 +36,8 @@ import 'status_l10n.dart';
 /// The [seek] parameter is only used in the [LobbyGameScreen]. If [seek] is not
 /// null, it will display a button to get a new opponent and the game
 /// provider will be [lobbyGameProvider].
-/// If [seek] is null the game provider will be the [onlineGameProvider] parameterized
-/// with the [initialStandAloneId].
+/// If [seek] is null the game provider will be the [onlineGameProvider]
+/// parameterized with the [initialStandAloneId].
 class GameBody extends ConsumerWidget {
   /// Constructs a [GameBody].
   ///
@@ -316,19 +316,6 @@ class _GameBottomBar extends ConsumerWidget {
               },
               icon: Icons.menu,
             ),
-            if (gameState.game.finished)
-              BottomBarButton(
-                label: context.l10n.gameAnalysis,
-                shortLabel: 'Analysis',
-                icon: Icons.biotech,
-                onTap: () => pushPlatformRoute(
-                  context,
-                  builder: (_) => AnalysisScreen(
-                    options: gameState.analysisOptions,
-                    title: context.l10n.gameAnalysis,
-                  ),
-                ),
-              ),
             if (gameState.game.playable &&
                 gameState.game.opponent?.offeringDraw == true)
               BottomBarButton(
@@ -398,10 +385,24 @@ class _GameBottomBar extends ConsumerWidget {
                 },
                 icon: CupertinoIcons.arrowshape_turn_up_left,
               )
+            else if (gameState.game.finished)
+              BottomBarButton(
+                label: context.l10n.gameAnalysis,
+                shortLabel: 'Analysis',
+                icon: Icons.biotech,
+                onTap: () => pushPlatformRoute(
+                  context,
+                  builder: (_) => AnalysisScreen(
+                    options: gameState.analysisOptions,
+                    title: context.l10n.gameAnalysis,
+                  ),
+                ),
+              )
             else
               const SizedBox(
                 width: 44.0,
               ),
+            // TODO replace this space with chat button
             const SizedBox(
               width: 44.0,
             ),
@@ -575,6 +576,17 @@ class _GameBottomBar extends ConsumerWidget {
             label: Text(context.l10n.newOpponent),
             onPressed: (_) {
               ref.read(lobbyGameProvider(seek!).notifier).newOpponent();
+            },
+          ),
+        if (gameState.game.finished)
+          BottomSheetAction(
+            label: const Text('Show result'),
+            onPressed: (_) {
+              showAdaptiveDialog<void>(
+                context: context,
+                builder: (context) => _GameEndDialog(id: id, seek: seek),
+                barrierDismissible: true,
+              );
             },
           ),
       ],
