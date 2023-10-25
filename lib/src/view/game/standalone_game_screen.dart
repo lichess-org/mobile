@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/online_game.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
@@ -19,9 +18,9 @@ import 'package:lichess_mobile/src/utils/wakelock.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 import 'game_body.dart';
-import 'game_loading_board.dart';
 import 'ping_rating.dart';
 import 'game_settings.dart';
+import 'game_screen_providers.dart';
 
 /// Screen for already created games loaded directly from the game id.
 ///
@@ -79,159 +78,123 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
   @override
   Widget build(BuildContext context) {
     final gameId = ref.watch(onlineGameProvider(widget.initialId));
-    final gameState = ref.watch(gameControllerProvider(gameId));
-
-    return gameState.when(
-      data: (state) {
-        final body = GameBody(
-          initialStandAloneId: widget.initialId,
-          id: gameId,
-          gameState: state,
-          whiteClockKey: _whiteClockKey,
-          blackClockKey: _blackClockKey,
-        );
-
-        return PlatformWidget(
-          androidBuilder: (context) => _androidBuilder(
-            context: context,
-            gameId: gameId,
-            body: body,
-            gameState: state,
-          ),
-          iosBuilder: (context) => _iosBuilder(
-            context: context,
-            gameId: gameId,
-            body: body,
-            gameState: state,
-          ),
-        );
-      },
-      loading: () {
-        return PlatformWidget(
-          androidBuilder: (context) => _androidBuilder(
-            context: context,
-            body: WillPopScope(
-              onWillPop: () async => false,
-              child: StandaloneGameLoadingBoard(
-                orientation: widget.initialOrientation,
-                initialFen: widget.initialFen,
-                lastMove: widget.lastMove,
-              ),
-            ),
-          ),
-          iosBuilder: (context) => _iosBuilder(
-            context: context,
-            body: WillPopScope(
-              onWillPop: () async => false,
-              child: StandaloneGameLoadingBoard(
-                orientation: widget.initialOrientation,
-                initialFen: widget.initialFen,
-                lastMove: widget.lastMove,
-              ),
-            ),
-          ),
-        );
-      },
-      error: (e, s) {
-        debugPrint(
-          'SEVERE: [StandaloneGameScreen] could not load game data; $e\n$s',
-        );
-        return WillPopScope(
-          onWillPop: () async => true,
-          child: LoadGameError(initialFen: widget.initialFen),
-        );
-      },
+    return PlatformWidget(
+      androidBuilder: (context) => _androidBuilder(
+        context,
+        gameId: gameId,
+      ),
+      iosBuilder: (context) => _iosBuilder(
+        context,
+        gameId: gameId,
+      ),
     );
   }
 
-  Widget _androidBuilder({
-    required BuildContext context,
-    required Widget body,
-    GameFullId? gameId,
-    GameState? gameState,
+  Widget _androidBuilder(
+    BuildContext context, {
+    required GameFullId gameId,
   }) {
+    final isPlayableAsync = ref.watch(gameIsPlayableProvider(gameId));
+    const pingRating = Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
+      child: PingRating(size: 24.0),
+    );
     return Scaffold(
       appBar: AppBar(
-        leading: gameState == null || gameState.game.playable == true
-            ? const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
-                child: PingRating(size: 24.0),
-              )
-            : null,
-        title: _GameTitle(gameState: gameState),
+        leading: isPlayableAsync.maybeWhen<Widget?>(
+          data: (isPlayable) => isPlayable ? pingRating : null,
+          orElse: () => pingRating,
+        ),
+        title: _GameTitle(id: gameId),
         actions: [
           SettingsButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               isScrollControlled: true,
-              builder: (_) => GameSettings(gameId),
+              builder: (_) => GameSettings(id: gameId),
             ),
           ),
         ],
       ),
-      body: body,
+      body: GameBody(
+        initialStandAloneId: widget.initialId,
+        id: gameId,
+        whiteClockKey: _whiteClockKey,
+        blackClockKey: _blackClockKey,
+      ),
     );
   }
 
-  Widget _iosBuilder({
-    required BuildContext context,
-    required Widget body,
-    GameFullId? gameId,
-    GameState? gameState,
+  Widget _iosBuilder(
+    BuildContext context, {
+    required GameFullId gameId,
   }) {
+    final isPlayableAsync = ref.watch(gameIsPlayableProvider(gameId));
+    const pingRating = Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      child: PingRating(size: 24.0),
+    );
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 16.0),
-        leading: gameState == null || gameState.game.playable == true
-            ? const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                child: PingRating(size: 24.0),
-              )
-            : null,
-        middle: _GameTitle(gameState: gameState),
+        leading: isPlayableAsync.maybeWhen<Widget?>(
+          data: (isPlayable) => isPlayable ? pingRating : null,
+          orElse: () => pingRating,
+        ),
+        middle: _GameTitle(id: gameId),
         trailing: SettingsButton(
           onPressed: () => showAdaptiveBottomSheet<void>(
             context: context,
             isScrollControlled: true,
-            builder: (_) => GameSettings(gameId),
+            builder: (_) => GameSettings(id: gameId),
           ),
         ),
       ),
-      child: body,
+      child: GameBody(
+        initialStandAloneId: widget.initialId,
+        id: gameId,
+        whiteClockKey: _whiteClockKey,
+        blackClockKey: _blackClockKey,
+      ),
     );
   }
 }
 
 class _GameTitle extends ConsumerWidget {
   const _GameTitle({
-    required this.gameState,
+    required this.id,
   });
 
-  final GameState? gameState;
+  final GameFullId id;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final meta = gameState?.game.meta;
-    if (meta == null) {
-      return const SizedBox.shrink();
-    }
-    final mode =
-        meta.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          meta.perf.icon,
-          color: DefaultTextStyle.of(context).style.color,
-        ),
-        const SizedBox(width: 4.0),
-        if (gameState?.game.clock != null)
-          Text(
-            '${TimeIncrement(gameState!.game.clock!.initial.inSeconds, gameState!.game.clock!.increment.inSeconds).display}$mode',
-          )
-        else
-          Text('${meta.perf.title}$mode'),
-      ],
+    final metaAsync = ref.watch(gameMetaProvider(id));
+    return metaAsync.maybeWhen<Widget>(
+      data: (data) {
+        final (meta, clock) = data;
+
+        final mode = meta.rated
+            ? ' • ${context.l10n.rated}'
+            : ' • ${context.l10n.casual}';
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              meta.perf.icon,
+              color: DefaultTextStyle.of(context).style.color,
+            ),
+            const SizedBox(width: 4.0),
+            if (clock != null)
+              Text(
+                '${TimeIncrement(clock.initial.inSeconds, clock.increment.inSeconds).display}$mode',
+              )
+            else
+              Text('${meta.perf.title}$mode'),
+          ],
+        );
+      },
+      orElse: () => const SizedBox.shrink(),
     );
   }
 }

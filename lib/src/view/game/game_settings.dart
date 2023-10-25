@@ -5,15 +5,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
-class GameSettings extends ConsumerWidget {
-  const GameSettings(this.id, {super.key});
+import 'game_screen_providers.dart';
 
+class GameSettings extends ConsumerWidget {
+  const GameSettings({this.id, this.seek, super.key})
+      : assert(
+          (seek != null || id != null) && !(seek != null && id != null),
+          'Either seek or id must be provided, but not both.',
+        );
+
+  final GameSeek? seek;
   final GameFullId? id;
 
   @override
@@ -24,10 +33,9 @@ class GameSettings extends ConsumerWidget {
       ),
     );
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final ctrlProvider = id != null ? gameControllerProvider(id!) : null;
-    final gameState = ctrlProvider != null
-        ? ref.watch(ctrlProvider)
-        : const AsyncValue<GameState>.loading();
+    final gameIdAsync = seek != null
+        ? ref.watch(lobbyGameProvider(seek!))
+        : AsyncValue.data((id!, fromRematch: false));
 
     return ModalSheetScaffold(
       title: Text(context.l10n.settingsSettings),
@@ -63,33 +71,42 @@ class GameSettings extends ConsumerWidget {
                   .togglePieceAnimation();
             },
           ),
-          ...gameState.when(
+          ...gameIdAsync.maybeWhen(
             data: (data) {
-              return [
-                if (data.game.prefs?.submitMove == true)
-                  SwitchSettingTile(
-                    title: Text(
-                      context.l10n.preferencesMoveConfirmation,
-                    ),
-                    value: data.shouldConfirmMove,
-                    onChanged: (value) {
-                      ref.read(ctrlProvider!.notifier).toggleMoveConfirmation();
-                    },
-                  ),
-                if (data.game.prefs?.zenMode == Zen.gameAuto)
-                  SwitchSettingTile(
-                    title: Text(
-                      context.l10n.preferencesZenMode,
-                    ),
-                    value: data.isZenModeEnabled,
-                    onChanged: (value) {
-                      ref.read(ctrlProvider!.notifier).toggleZenMode();
-                    },
-                  ),
-              ];
+              final (gameId, fromRematch: _) = data;
+              final ctrlProvider = gameControllerProvider(gameId);
+              final prefsAsync = ref.watch(gamePrefsProvider(gameId));
+              return prefsAsync.maybeWhen(
+                data: (data) {
+                  return [
+                    if (data.prefs?.submitMove == true)
+                      SwitchSettingTile(
+                        title: Text(
+                          context.l10n.preferencesMoveConfirmation,
+                        ),
+                        value: data.shouldConfirmMove,
+                        onChanged: (value) {
+                          ref
+                              .read(ctrlProvider.notifier)
+                              .toggleMoveConfirmation();
+                        },
+                      ),
+                    if (data.prefs?.zenMode == Zen.gameAuto)
+                      SwitchSettingTile(
+                        title: Text(
+                          context.l10n.preferencesZenMode,
+                        ),
+                        value: data.isZenModeEnabled,
+                        onChanged: (value) {
+                          ref.read(ctrlProvider.notifier).toggleZenMode();
+                        },
+                      ),
+                  ];
+                },
+                orElse: () => [],
+              );
             },
-            loading: () => [const SizedBox.shrink()],
-            error: (e, s) => [const SizedBox.shrink()],
+            orElse: () => const [SizedBox.shrink()],
           ),
           const SizedBox(height: 16.0),
         ],

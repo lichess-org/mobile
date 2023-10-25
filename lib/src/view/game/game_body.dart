@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
 import 'game_screen_providers.dart';
+import 'game_loading_board.dart';
 import 'game_player.dart';
 import 'status_l10n.dart';
 
@@ -46,9 +47,9 @@ class GameBody extends ConsumerWidget {
     this.seek,
     this.initialStandAloneId,
     required this.id,
-    required this.gameState,
     required this.whiteClockKey,
     required this.blackClockKey,
+    this.isRematch = false,
   }) : assert(
           (seek != null || initialStandAloneId != null) &&
               !(seek != null && initialStandAloneId != null),
@@ -62,9 +63,13 @@ class GameBody extends ConsumerWidget {
   final GameFullId? initialStandAloneId;
 
   final GameFullId id;
-  final GameState gameState;
   final GlobalKey whiteClockKey;
   final GlobalKey blackClockKey;
+
+  /// Whether this game is a rematch.
+  ///
+  /// Only useful for the loading screen from lobby.
+  final bool isRematch;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -79,6 +84,7 @@ class GameBody extends ConsumerWidget {
         ref: ref,
       ),
     );
+
     final shouldShowMaterialDiff = ref.watch(
       boardPreferencesProvider.select(
         (prefs) => prefs.showMaterialDifference,
@@ -90,148 +96,172 @@ class GameBody extends ConsumerWidget {
       ),
     );
 
-    final position = gameState.game.positionAt(gameState.stepCursor);
-    final sideToMove = position.turn;
-    final youAre = gameState.game.youAre ?? Side.white;
+    final gameStateAsync = ref.watch(ctrlProvider);
 
-    final black = GamePlayer(
-      player: gameState.game.black,
-      materialDiff: shouldShowMaterialDiff
-          ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
-          : null,
-      timeToMove: sideToMove == Side.black ? gameState.timeToMove : null,
-      shouldLinkToUserProfile: youAre != Side.black,
-      mePlaying: youAre == Side.black,
-      zenMode: gameState.isZenModeEnabled,
-      confirmMoveCallbacks:
-          youAre == Side.black && gameState.moveToConfirm != null
-              ? (
-                  confirm: () {
-                    ref.read(ctrlProvider.notifier).confirmMove();
-                  },
-                  cancel: () {
-                    ref.read(ctrlProvider.notifier).cancelMove();
-                  },
-                )
+    return gameStateAsync.when(
+      data: (gameState) {
+        final position = gameState.game.positionAt(gameState.stepCursor);
+        final sideToMove = position.turn;
+        final youAre = gameState.game.youAre ?? Side.white;
+
+        final black = GamePlayer(
+          player: gameState.game.black,
+          materialDiff: shouldShowMaterialDiff
+              ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
               : null,
-      clock: gameState.game.clock != null
-          ? CountdownClock(
-              key: blackClockKey,
-              duration: gameState.game.clock!.black,
-              active: gameState.activeClockSide == Side.black,
-              emergencyThreshold:
-                  youAre == Side.black ? gameState.game.clock?.emergency : null,
-              onFlag: youAre == Side.black
-                  ? () => ref.read(ctrlProvider.notifier).onFlag()
-                  : null,
-            )
-          : null,
-    );
-    final white = GamePlayer(
-      player: gameState.game.white,
-      materialDiff: shouldShowMaterialDiff
-          ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
-          : null,
-      timeToMove: sideToMove == Side.white ? gameState.timeToMove : null,
-      shouldLinkToUserProfile: youAre != Side.white,
-      mePlaying: youAre == Side.white,
-      zenMode: gameState.isZenModeEnabled,
-      confirmMoveCallbacks:
-          youAre == Side.white && gameState.moveToConfirm != null
-              ? (
-                  confirm: () {
-                    ref.read(ctrlProvider.notifier).confirmMove();
-                  },
-                  cancel: () {
-                    ref.read(ctrlProvider.notifier).cancelMove();
-                  },
-                )
-              : null,
-      clock: gameState.game.clock != null
-          ? CountdownClock(
-              key: whiteClockKey,
-              duration: gameState.game.clock!.white,
-              active: gameState.activeClockSide == Side.white,
-              emergencyThreshold:
-                  youAre == Side.white ? gameState.game.clock?.emergency : null,
-              onFlag: youAre == Side.white
-                  ? () => ref.read(ctrlProvider.notifier).onFlag()
-                  : null,
-            )
-          : null,
-    );
-
-    final topPlayer = youAre == Side.white ? black : white;
-    final bottomPlayer = youAre == Side.white ? white : black;
-    final isBoardTurned = ref.watch(isBoardTurnedProvider);
-
-    final content = Column(
-      children: [
-        Expanded(
-          child: SafeArea(
-            bottom: false,
-            child: BoardTable(
-              boardSettingsOverrides: BoardSettingsOverrides(
-                autoQueenPromotion: gameState.canAutoQueen,
-                autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
-                blindfoldMode: blindfoldMode,
-              ),
-              onMove: (move, {isDrop, isPremove}) {
-                ref.read(ctrlProvider.notifier).onUserMove(
-                      Move.fromUci(move.uci)!,
-                      isPremove: isPremove,
-                      isDrop: isDrop,
-                    );
-              },
-              onPremove: gameState.canPremove
-                  ? (move) {
-                      ref.read(ctrlProvider.notifier).setPremove(move);
-                    }
-                  : null,
-              boardData: cg.BoardData(
-                interactableSide:
-                    gameState.game.playable && !gameState.isReplaying
-                        ? youAre == Side.white
-                            ? cg.InteractableSide.white
-                            : cg.InteractableSide.black
-                        : cg.InteractableSide.none,
-                orientation: isBoardTurned ? youAre.opposite.cg : youAre.cg,
-                fen: position.fen,
-                lastMove: gameState.game.moveAt(gameState.stepCursor)?.cg,
-                isCheck: position.isCheck,
-                sideToMove: sideToMove.cg,
-                validMoves: algebraicLegalMoves(position),
-                premove: gameState.premove,
-              ),
-              topTable: topPlayer,
-              bottomTable: gameState.canShowClaimWinCountdown &&
-                      gameState.opponentLeftCountdown != null
-                  ? _ClaimWinCountdown(
-                      duration: gameState.opponentLeftCountdown!,
+          timeToMove: sideToMove == Side.black ? gameState.timeToMove : null,
+          shouldLinkToUserProfile: youAre != Side.black,
+          mePlaying: youAre == Side.black,
+          zenMode: gameState.isZenModeEnabled,
+          confirmMoveCallbacks:
+              youAre == Side.black && gameState.moveToConfirm != null
+                  ? (
+                      confirm: () {
+                        ref.read(ctrlProvider.notifier).confirmMove();
+                      },
+                      cancel: () {
+                        ref.read(ctrlProvider.notifier).cancelMove();
+                      },
                     )
-                  : bottomPlayer,
-              moves: gameState.game.steps
-                  .skip(1)
-                  .map((e) => e.sanMove!.san)
-                  .toList(growable: false),
-              currentMoveIndex: gameState.stepCursor,
-              onSelectMove: (moveIndex) {
-                ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
-              },
-            ),
-          ),
-        ),
-        _GameBottomBar(
-          seek: seek,
-          id: id,
-          gameState: gameState,
-        ),
-      ],
-    );
+                  : null,
+          clock: gameState.game.clock != null
+              ? CountdownClock(
+                  key: blackClockKey,
+                  duration: gameState.game.clock!.black,
+                  active: gameState.activeClockSide == Side.black,
+                  emergencyThreshold: youAre == Side.black
+                      ? gameState.game.clock?.emergency
+                      : null,
+                  onFlag: youAre == Side.black
+                      ? () => ref.read(ctrlProvider.notifier).onFlag()
+                      : null,
+                )
+              : null,
+        );
+        final white = GamePlayer(
+          player: gameState.game.white,
+          materialDiff: shouldShowMaterialDiff
+              ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
+              : null,
+          timeToMove: sideToMove == Side.white ? gameState.timeToMove : null,
+          shouldLinkToUserProfile: youAre != Side.white,
+          mePlaying: youAre == Side.white,
+          zenMode: gameState.isZenModeEnabled,
+          confirmMoveCallbacks:
+              youAre == Side.white && gameState.moveToConfirm != null
+                  ? (
+                      confirm: () {
+                        ref.read(ctrlProvider.notifier).confirmMove();
+                      },
+                      cancel: () {
+                        ref.read(ctrlProvider.notifier).cancelMove();
+                      },
+                    )
+                  : null,
+          clock: gameState.game.clock != null
+              ? CountdownClock(
+                  key: whiteClockKey,
+                  duration: gameState.game.clock!.white,
+                  active: gameState.activeClockSide == Side.white,
+                  emergencyThreshold: youAre == Side.white
+                      ? gameState.game.clock?.emergency
+                      : null,
+                  onFlag: youAre == Side.white
+                      ? () => ref.read(ctrlProvider.notifier).onFlag()
+                      : null,
+                )
+              : null,
+        );
 
-    return WillPopScope(
-      onWillPop: gameState.game.playable ? () async => false : null,
-      child: content,
+        final topPlayer = youAre == Side.white ? black : white;
+        final bottomPlayer = youAre == Side.white ? white : black;
+        final isBoardTurned = ref.watch(isBoardTurnedProvider);
+
+        final content = Column(
+          children: [
+            Expanded(
+              child: SafeArea(
+                bottom: false,
+                child: BoardTable(
+                  boardSettingsOverrides: BoardSettingsOverrides(
+                    autoQueenPromotion: gameState.canAutoQueen,
+                    autoQueenPromotionOnPremove:
+                        gameState.canAutoQueenOnPremove,
+                    blindfoldMode: blindfoldMode,
+                  ),
+                  onMove: (move, {isDrop, isPremove}) {
+                    ref.read(ctrlProvider.notifier).onUserMove(
+                          Move.fromUci(move.uci)!,
+                          isPremove: isPremove,
+                          isDrop: isDrop,
+                        );
+                  },
+                  onPremove: gameState.canPremove
+                      ? (move) {
+                          ref.read(ctrlProvider.notifier).setPremove(move);
+                        }
+                      : null,
+                  boardData: cg.BoardData(
+                    interactableSide:
+                        gameState.game.playable && !gameState.isReplaying
+                            ? youAre == Side.white
+                                ? cg.InteractableSide.white
+                                : cg.InteractableSide.black
+                            : cg.InteractableSide.none,
+                    orientation: isBoardTurned ? youAre.opposite.cg : youAre.cg,
+                    fen: position.fen,
+                    lastMove: gameState.game.moveAt(gameState.stepCursor)?.cg,
+                    isCheck: position.isCheck,
+                    sideToMove: sideToMove.cg,
+                    validMoves: algebraicLegalMoves(position),
+                    premove: gameState.premove,
+                  ),
+                  topTable: topPlayer,
+                  bottomTable: gameState.canShowClaimWinCountdown &&
+                          gameState.opponentLeftCountdown != null
+                      ? _ClaimWinCountdown(
+                          duration: gameState.opponentLeftCountdown!,
+                        )
+                      : bottomPlayer,
+                  moves: gameState.game.steps
+                      .skip(1)
+                      .map((e) => e.sanMove!.san)
+                      .toList(growable: false),
+                  currentMoveIndex: gameState.stepCursor,
+                  onSelectMove: (moveIndex) {
+                    ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
+                  },
+                ),
+              ),
+            ),
+            _GameBottomBar(
+              seek: seek,
+              id: id,
+              gameState: gameState,
+            ),
+          ],
+        );
+
+        return WillPopScope(
+          onWillPop: gameState.game.playable ? () async => false : null,
+          child: content,
+        );
+      },
+      loading: () => WillPopScope(
+        onWillPop: () async => false,
+        child: seek != null
+            ? LobbyGameLoadingBoard(seek!, isRematch: isRematch)
+            : const StandaloneGameLoadingBoard(),
+      ),
+      error: (e, s) {
+        debugPrint(
+          'SEVERE: [GameBody] could not load game data; $e\n$s',
+        );
+        return const WillPopScope(
+          onWillPop: null,
+          child: LoadGameError(),
+        );
+      },
     );
   }
 

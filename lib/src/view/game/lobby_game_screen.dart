@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/navigation.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
@@ -21,6 +19,7 @@ import 'game_body.dart';
 import 'ping_rating.dart';
 import 'game_loading_board.dart';
 import 'game_settings.dart';
+import 'game_screen_providers.dart';
 
 /// Screen for games created from the lobby.
 ///
@@ -68,137 +67,113 @@ class _GameScreenState extends ConsumerState<LobbyGameScreen>
 
   @override
   Widget build(BuildContext context) {
-    final gameProvider = lobbyGameProvider(widget.seek);
-    final gameId = ref.watch(gameProvider);
-
-    return gameId.when(
-      data: (data) {
-        final (id, fromRematch: fromRematch) = data;
-        final ctrlProvider = gameControllerProvider(id);
-        final gameState = ref.watch(ctrlProvider);
-        return gameState.when(
-          data: (state) {
-            final body = GameBody(
-              seek: widget.seek,
-              id: id,
-              gameState: state,
-              whiteClockKey: _whiteClockKey,
-              blackClockKey: _blackClockKey,
-            );
-            return PlatformWidget(
-              androidBuilder: (context) => _androidBuilder(
-                context: context,
-                body: body,
-                gameState: state,
-                id: id,
-              ),
-              iosBuilder: (context) => _iosBuilder(
-                context: context,
-                body: body,
-                gameState: state,
-                id: id,
-              ),
-            );
-          },
-          loading: () => _loadingContent(isRematch: fromRematch),
-          error: (e, s) {
-            debugPrint(
-              'SEVERE: [LobbyGameScreen] could not load game data; $e\n$s',
-            );
-            return _errorContent();
-          },
-        );
-      },
-      loading: () => _loadingContent(),
-      error: (e, s) {
-        debugPrint(
-          'SEVERE: [LobbyGameScreen] could not create game; $e\n$s',
-        );
-        return _errorContent();
-      },
-    );
-  }
-
-  Widget _loadingContent({bool isRematch = false}) {
     return PlatformWidget(
-      androidBuilder: (context) => _androidBuilder(
-        context: context,
-        body: LobbyGameLoadingBoard(widget.seek, isRematch: isRematch),
-      ),
-      iosBuilder: (context) => _iosBuilder(
-        context: context,
-        body: LobbyGameLoadingBoard(widget.seek, isRematch: isRematch),
-      ),
+      androidBuilder: _androidBuilder,
+      iosBuilder: _iosBuilder,
     );
   }
 
-  Widget _errorContent() {
-    return PlatformWidget(
-      androidBuilder: (context) => _androidBuilder(
-        context: context,
-        body: const CreateGameError(),
-      ),
-      iosBuilder: (context) => _iosBuilder(
-        context: context,
-        body: const CreateGameError(),
-      ),
+  Widget _androidBuilder(BuildContext context) {
+    final isPlayableAsync = ref.watch(lobbyGameIsPlayableProvider(widget.seek));
+    const pingRating = Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
+      child: PingRating(size: 24.0),
     );
-  }
-
-  Widget _androidBuilder({
-    required BuildContext context,
-    required Widget body,
-    GameFullId? id,
-    GameState? gameState,
-  }) {
     return Scaffold(
       appBar: AppBar(
-        leading: gameState == null || gameState.game.playable == true
-            ? const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
-                child: PingRating(size: 24.0),
-              )
-            : null,
+        leading: isPlayableAsync.maybeWhen<Widget?>(
+          data: (isPlayable) => isPlayable ? pingRating : null,
+          orElse: () => pingRating,
+        ),
         title: _GameTitle(seek: widget.seek),
         actions: [
           SettingsButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               isScrollControlled: true,
-              builder: (_) => GameSettings(id),
+              builder: (_) => GameSettings(seek: widget.seek),
             ),
           ),
         ],
       ),
-      body: body,
+      body: _LoadLobbyGame(
+        seek: widget.seek,
+        whiteClockKey: _whiteClockKey,
+        blackClockKey: _blackClockKey,
+      ),
     );
   }
 
-  Widget _iosBuilder({
-    required BuildContext context,
-    required Widget body,
-    GameFullId? id,
-    GameState? gameState,
-  }) {
+  Widget _iosBuilder(BuildContext context) {
+    final isPlayableAsync = ref.watch(lobbyGameIsPlayableProvider(widget.seek));
+    const pingRating = Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      child: PingRating(size: 24.0),
+    );
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 16.0),
-        leading: gameState == null || gameState.game.playable == true
-            ? const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                child: PingRating(size: 24.0),
-              )
-            : null,
+        leading: isPlayableAsync.maybeWhen<Widget?>(
+          data: (isPlayable) => isPlayable ? pingRating : null,
+          orElse: () => pingRating,
+        ),
         middle: _GameTitle(seek: widget.seek),
         trailing: SettingsButton(
           onPressed: () => showAdaptiveBottomSheet<void>(
             context: context,
             isScrollControlled: true,
-            builder: (_) => GameSettings(id),
+            builder: (_) => GameSettings(seek: widget.seek),
           ),
         ),
       ),
-      child: body,
+      child: _LoadLobbyGame(
+        seek: widget.seek,
+        whiteClockKey: _whiteClockKey,
+        blackClockKey: _blackClockKey,
+      ),
+    );
+  }
+}
+
+class _LoadLobbyGame extends ConsumerWidget {
+  const _LoadLobbyGame({
+    required this.seek,
+    required this.whiteClockKey,
+    required this.blackClockKey,
+  });
+
+  final GameSeek seek;
+  final GlobalKey whiteClockKey;
+  final GlobalKey blackClockKey;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final gameIdAsync = ref.watch(lobbyGameProvider(seek));
+    return gameIdAsync.when(
+      data: (data) {
+        final (gameId, fromRematch: isRematch) = data;
+        return GameBody(
+          seek: seek,
+          id: gameId,
+          whiteClockKey: whiteClockKey,
+          blackClockKey: blackClockKey,
+          isRematch: isRematch,
+        );
+      },
+      loading: () => WillPopScope(
+        onWillPop: () async => false,
+        child: LobbyGameLoadingBoard(seek),
+      ),
+      error: (e, s) {
+        debugPrint(
+          'SEVERE: [GameBody] could not load game data; $e\n$s',
+        );
+        return const WillPopScope(
+          onWillPop: null,
+          child: LoadGameError(),
+        );
+      },
     );
   }
 }
