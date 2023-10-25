@@ -637,7 +637,9 @@ class _OngoingGamePreview extends ConsumerWidget {
                 initialOrientation: game.orientation,
                 initialFen: game.fen,
               ),
-            );
+            ).then((_) {
+              ref.invalidate(ongoingGamesProvider);
+            });
           },
         );
       },
