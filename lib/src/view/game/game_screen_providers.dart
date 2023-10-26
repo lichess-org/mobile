@@ -43,7 +43,8 @@ Future<bool> gameIsPlayable(
 }
 
 @riverpod
-Future<({GamePrefs? prefs, bool shouldConfirmMove, bool isZenModeEnabled})> gamePrefs(
+Future<({GamePrefs? prefs, bool shouldConfirmMove, bool isZenModeEnabled})>
+    gamePrefs(
   GamePrefsRef ref,
   GameFullId gameId,
 ) async {
