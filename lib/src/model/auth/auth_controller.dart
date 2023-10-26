@@ -36,7 +36,8 @@ class AuthController extends _$AuthController {
                   'Bearer ${signBearerToken(oAuthResp.accessToken!)}',
             },
           ).flatMap((response) {
-            return readJsonObject(response, mapper: User.fromJson).map((user) {
+            return readJsonObjectFromResponse(response, mapper: User.fromJson)
+                .map((user) {
               return AuthSessionState(
                 token: oAuthResp.accessToken!,
                 user: user.lightUser,

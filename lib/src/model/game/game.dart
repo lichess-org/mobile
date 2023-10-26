@@ -140,15 +140,6 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
       (meta.rules == null || !meta.rules!.contains(GameRule.noClaimWin));
 }
 
-typedef GamePrefs = ({
-  bool showRatings,
-  bool enablePremove,
-  AutoQueen autoQueen,
-  bool confirmResign,
-  bool submitMove,
-  Zen zenMode,
-});
-
 enum GameSource {
   lobby,
   friend,
@@ -174,6 +165,20 @@ enum GameRule {
   unknown;
 
   static final nameMap = IMap(GameRule.values.asNameMap());
+}
+
+@freezed
+class GamePrefs with _$GamePrefs {
+  const GamePrefs._();
+
+  const factory GamePrefs({
+    required bool showRatings,
+    required bool enablePremove,
+    required AutoQueen autoQueen,
+    required bool confirmResign,
+    required bool submitMove,
+    required Zen zenMode,
+  }) = _GamePrefs;
 }
 
 @freezed

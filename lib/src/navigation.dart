@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
-import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/account/profile_tab_screen.dart';
 import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
@@ -90,6 +89,9 @@ final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
 final profileScrollController = ScrollController(debugLabel: 'ProfileScroll');
 
 final RouteObserver<PageRoute<void>> tvRouteObserver =
+    RouteObserver<PageRoute<void>>();
+
+final RouteObserver<PageRoute<void>> gameRouteObserver =
     RouteObserver<PageRoute<void>>();
 
 final tabsProvider = Provider<List<_Tab>>((ref) {

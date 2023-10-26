@@ -6,256 +6,75 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/model/game/online_game.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
-import 'package:lichess_mobile/src/utils/immersive_mode.dart';
-import 'package:lichess_mobile/src/utils/wakelock.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
 import 'game_screen_providers.dart';
+import 'game_loading_board.dart';
 import 'game_player.dart';
-import 'ping_rating.dart';
-import 'lobby_game_loading_board.dart';
-import 'game_settings.dart';
 import 'status_l10n.dart';
 
-final RouteObserver<PageRoute<void>> gameRouteObserver =
-    RouteObserver<PageRoute<void>>();
-
-class GameScreen extends ConsumerStatefulWidget {
-  const GameScreen({
-    required this.seek,
-    super.key,
-  });
-
-  final GameSeek seek;
-
-  @override
-  ConsumerState<GameScreen> createState() => _GameScreenState();
-}
-
-class _GameScreenState extends ConsumerState<GameScreen>
-    with AndroidImmersiveMode, RouteAware, Wakelock {
-  final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
-  final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final route = ModalRoute.of(context);
-    if (route != null && route is PageRoute) {
-      gameRouteObserver.subscribe(this, route);
-    }
-  }
-
-  @override
-  void dispose() {
-    gameRouteObserver.unsubscribe(this);
-    super.dispose();
-  }
-
-  @override
-  void didPop() {
-    ref.invalidate(userRecentGamesProvider);
-    ref.invalidate(accountProvider);
-    ref.invalidate(userActivityProvider);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final gameProvider = lobbyGameProvider(widget.seek);
-    final gameId = ref.watch(gameProvider);
-
-    return gameId.when(
-      data: (id) {
-        final ctrlProvider = gameControllerProvider(id);
-        final gameState = ref.watch(ctrlProvider);
-        return gameState.when(
-          data: (state) {
-            final body = _Body(
-              gameState: state,
-              ctrlProvider: ctrlProvider,
-              gameProvider: gameProvider,
-              whiteClockKey: _whiteClockKey,
-              blackClockKey: _blackClockKey,
-            );
-            return PlatformWidget(
-              androidBuilder: (context) => _androidBuilder(
-                context: context,
-                body: body,
-                gameState: state,
-                ctrlProvider: ctrlProvider,
-              ),
-              iosBuilder: (context) => _iosBuilder(
-                context: context,
-                body: body,
-                gameState: state,
-                ctrlProvider: ctrlProvider,
-              ),
-            );
-          },
-          loading: () => _loadingContent(),
-          error: (e, s) {
-            debugPrint(
-              'SEVERE: [GameScreen] could not load game data; $e\n$s',
-            );
-            return _errorContent();
-          },
-        );
-      },
-      loading: () => _loadingContent(),
-      error: (e, s) {
-        debugPrint(
-          'SEVERE: [GameScreen] could not create game; $e\n$s',
-        );
-        return _errorContent();
-      },
-    );
-  }
-
-  Widget _loadingContent() {
-    return PlatformWidget(
-      androidBuilder: (context) => _androidBuilder(
-        context: context,
-        body: LobbyGameLoadingBoard(widget.seek),
-      ),
-      iosBuilder: (context) => _iosBuilder(
-        context: context,
-        body: LobbyGameLoadingBoard(widget.seek),
-      ),
-    );
-  }
-
-  Widget _errorContent() {
-    return PlatformWidget(
-      androidBuilder: (context) => _androidBuilder(
-        context: context,
-        body: const CreateGameError(),
-      ),
-      iosBuilder: (context) => _iosBuilder(
-        context: context,
-        body: const CreateGameError(),
-      ),
-    );
-  }
-
-  Widget _androidBuilder({
-    required BuildContext context,
-    required Widget body,
-    GameControllerProvider? ctrlProvider,
-    GameState? gameState,
-  }) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: gameState == null || gameState.game.playable == true
-            ? const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
-                child: PingRating(size: 24.0),
-              )
-            : null,
-        title: _GameTitle(seek: widget.seek),
-        actions: [
-          SettingsButton(
-            onPressed: () => showAdaptiveBottomSheet<void>(
-              context: context,
-              isScrollControlled: true,
-              builder: (_) => GameSettings(ctrlProvider),
-            ),
-          ),
-        ],
-      ),
-      body: body,
-    );
-  }
-
-  Widget _iosBuilder({
-    required BuildContext context,
-    required Widget body,
-    GameControllerProvider? ctrlProvider,
-    GameState? gameState,
-  }) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        padding: const EdgeInsetsDirectional.only(end: 16.0),
-        leading: gameState == null || gameState.game.playable == true
-            ? const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                child: PingRating(size: 24.0),
-              )
-            : null,
-        middle: _GameTitle(seek: widget.seek),
-        trailing: SettingsButton(
-          onPressed: () => showAdaptiveBottomSheet<void>(
-            context: context,
-            isScrollControlled: true,
-            builder: (_) => GameSettings(ctrlProvider),
-          ),
-        ),
-      ),
-      child: body,
-    );
-  }
-}
-
-class _GameTitle extends ConsumerWidget {
-  const _GameTitle({
-    required this.seek,
-  });
-
-  final GameSeek seek;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final mode =
-        seek.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          seek.perf.icon,
-          color: DefaultTextStyle.of(context).style.color,
-        ),
-        const SizedBox(width: 4.0),
-        Text('${seek.timeIncrement.display}$mode'),
-      ],
-    );
-  }
-}
-
-class _Body extends ConsumerWidget {
-  const _Body({
-    required this.gameState,
-    required this.ctrlProvider,
-    required this.gameProvider,
+/// Common body for the [LobbyGameScreen] and [StandaloneGameScreen].
+///
+/// This widget is responsible for displaying the board, the clocks, the players,
+/// and the bottom bar.
+///
+/// The [seek] parameter is only used in the [LobbyGameScreen]. If [seek] is not
+/// null, it will display a button to get a new opponent and the game
+/// provider will be [lobbyGameProvider].
+/// If [seek] is null the game provider will be the [onlineGameProvider]
+/// parameterized with the [initialStandAloneId].
+class GameBody extends ConsumerWidget {
+  /// Constructs a [GameBody].
+  ///
+  /// You must provide either [seek] or [initialStandAloneId], but not both.
+  const GameBody({
+    this.seek,
+    this.initialStandAloneId,
+    required this.id,
     required this.whiteClockKey,
     required this.blackClockKey,
-  });
+    this.isRematch = false,
+  }) : assert(
+          (seek != null || initialStandAloneId != null) &&
+              !(seek != null && initialStandAloneId != null),
+          'Either seek or initialStandAloneId must be provided, but not both.',
+        );
 
-  final GameState gameState;
-  final GameControllerProvider ctrlProvider;
-  final LobbyGameProvider gameProvider;
+  /// The [GameSeek] used to get a new opponent when the game is coming from lobby.
+  final GameSeek? seek;
+
+  /// The initial game id when the game was loaded from the [StandAloneGameScreen].
+  final GameFullId? initialStandAloneId;
+
+  final GameFullId id;
   final GlobalKey whiteClockKey;
   final GlobalKey blackClockKey;
 
+  /// Whether this game is a rematch.
+  ///
+  /// Only useful for the loading screen from lobby.
+  final bool isRematch;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = gameControllerProvider(id);
+
     ref.listen(
       ctrlProvider,
       (prev, state) => _stateListener(
@@ -265,6 +84,7 @@ class _Body extends ConsumerWidget {
         ref: ref,
       ),
     );
+
     final shouldShowMaterialDiff = ref.watch(
       boardPreferencesProvider.select(
         (prefs) => prefs.showMaterialDifference,
@@ -276,148 +96,172 @@ class _Body extends ConsumerWidget {
       ),
     );
 
-    final position = gameState.game.positionAt(gameState.stepCursor);
-    final sideToMove = position.turn;
-    final youAre = gameState.game.youAre ?? Side.white;
+    final gameStateAsync = ref.watch(ctrlProvider);
 
-    final black = GamePlayer(
-      player: gameState.game.black,
-      materialDiff: shouldShowMaterialDiff
-          ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
-          : null,
-      timeToMove: sideToMove == Side.black ? gameState.timeToMove : null,
-      shouldLinkToUserProfile: youAre != Side.black,
-      mePlaying: youAre == Side.black,
-      zenMode: gameState.isZenModeEnabled,
-      confirmMoveCallbacks:
-          youAre == Side.black && gameState.moveToConfirm != null
-              ? (
-                  confirm: () {
-                    ref.read(ctrlProvider.notifier).confirmMove();
-                  },
-                  cancel: () {
-                    ref.read(ctrlProvider.notifier).cancelMove();
-                  },
-                )
+    return gameStateAsync.when(
+      data: (gameState) {
+        final position = gameState.game.positionAt(gameState.stepCursor);
+        final sideToMove = position.turn;
+        final youAre = gameState.game.youAre ?? Side.white;
+
+        final black = GamePlayer(
+          player: gameState.game.black,
+          materialDiff: shouldShowMaterialDiff
+              ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
               : null,
-      clock: gameState.game.clock != null
-          ? CountdownClock(
-              key: blackClockKey,
-              duration: gameState.game.clock!.black,
-              active: gameState.activeClockSide == Side.black,
-              emergencyThreshold:
-                  youAre == Side.black ? gameState.game.clock?.emergency : null,
-              onFlag: youAre == Side.black
-                  ? () => ref.read(ctrlProvider.notifier).onFlag()
-                  : null,
-            )
-          : null,
-    );
-    final white = GamePlayer(
-      player: gameState.game.white,
-      materialDiff: shouldShowMaterialDiff
-          ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
-          : null,
-      timeToMove: sideToMove == Side.white ? gameState.timeToMove : null,
-      shouldLinkToUserProfile: youAre != Side.white,
-      mePlaying: youAre == Side.white,
-      zenMode: gameState.isZenModeEnabled,
-      confirmMoveCallbacks:
-          youAre == Side.white && gameState.moveToConfirm != null
-              ? (
-                  confirm: () {
-                    ref.read(ctrlProvider.notifier).confirmMove();
-                  },
-                  cancel: () {
-                    ref.read(ctrlProvider.notifier).cancelMove();
-                  },
-                )
-              : null,
-      clock: gameState.game.clock != null
-          ? CountdownClock(
-              key: whiteClockKey,
-              duration: gameState.game.clock!.white,
-              active: gameState.activeClockSide == Side.white,
-              emergencyThreshold:
-                  youAre == Side.white ? gameState.game.clock?.emergency : null,
-              onFlag: youAre == Side.white
-                  ? () => ref.read(ctrlProvider.notifier).onFlag()
-                  : null,
-            )
-          : null,
-    );
-
-    final topPlayer = youAre == Side.white ? black : white;
-    final bottomPlayer = youAre == Side.white ? white : black;
-    final isBoardTurned = ref.watch(isBoardTurnedProvider);
-
-    final content = Column(
-      children: [
-        Expanded(
-          child: SafeArea(
-            bottom: false,
-            child: BoardTable(
-              boardSettingsOverrides: BoardSettingsOverrides(
-                autoQueenPromotion: gameState.canAutoQueen,
-                autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
-                blindfoldMode: blindfoldMode,
-              ),
-              onMove: (move, {isDrop, isPremove}) {
-                ref.read(ctrlProvider.notifier).onUserMove(
-                      Move.fromUci(move.uci)!,
-                      isPremove: isPremove,
-                      isDrop: isDrop,
-                    );
-              },
-              onPremove: gameState.canPremove
-                  ? (move) {
-                      ref.read(ctrlProvider.notifier).setPremove(move);
-                    }
-                  : null,
-              boardData: cg.BoardData(
-                interactableSide:
-                    gameState.game.playable && !gameState.isReplaying
-                        ? youAre == Side.white
-                            ? cg.InteractableSide.white
-                            : cg.InteractableSide.black
-                        : cg.InteractableSide.none,
-                orientation: isBoardTurned ? youAre.opposite.cg : youAre.cg,
-                fen: position.fen,
-                lastMove: gameState.game.moveAt(gameState.stepCursor)?.cg,
-                isCheck: position.isCheck,
-                sideToMove: sideToMove.cg,
-                validMoves: algebraicLegalMoves(position),
-                premove: gameState.premove,
-              ),
-              topTable: topPlayer,
-              bottomTable: gameState.canShowClaimWinCountdown &&
-                      gameState.opponentLeftCountdown != null
-                  ? _ClaimWinCountdown(
-                      duration: gameState.opponentLeftCountdown!,
+          timeToMove: sideToMove == Side.black ? gameState.timeToMove : null,
+          shouldLinkToUserProfile: youAre != Side.black,
+          mePlaying: youAre == Side.black,
+          zenMode: gameState.isZenModeEnabled,
+          confirmMoveCallbacks:
+              youAre == Side.black && gameState.moveToConfirm != null
+                  ? (
+                      confirm: () {
+                        ref.read(ctrlProvider.notifier).confirmMove();
+                      },
+                      cancel: () {
+                        ref.read(ctrlProvider.notifier).cancelMove();
+                      },
                     )
-                  : bottomPlayer,
-              moves: gameState.game.steps
-                  .skip(1)
-                  .map((e) => e.sanMove!.san)
-                  .toList(growable: false),
-              currentMoveIndex: gameState.stepCursor,
-              onSelectMove: (moveIndex) {
-                ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
-              },
-            ),
-          ),
-        ),
-        _GameBottomBar(
-          gameState: gameState,
-          ctrlProvider: ctrlProvider,
-          gameProvider: gameProvider,
-        ),
-      ],
-    );
+                  : null,
+          clock: gameState.game.clock != null
+              ? CountdownClock(
+                  key: blackClockKey,
+                  duration: gameState.game.clock!.black,
+                  active: gameState.activeClockSide == Side.black,
+                  emergencyThreshold: youAre == Side.black
+                      ? gameState.game.clock?.emergency
+                      : null,
+                  onFlag: youAre == Side.black
+                      ? () => ref.read(ctrlProvider.notifier).onFlag()
+                      : null,
+                )
+              : null,
+        );
+        final white = GamePlayer(
+          player: gameState.game.white,
+          materialDiff: shouldShowMaterialDiff
+              ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
+              : null,
+          timeToMove: sideToMove == Side.white ? gameState.timeToMove : null,
+          shouldLinkToUserProfile: youAre != Side.white,
+          mePlaying: youAre == Side.white,
+          zenMode: gameState.isZenModeEnabled,
+          confirmMoveCallbacks:
+              youAre == Side.white && gameState.moveToConfirm != null
+                  ? (
+                      confirm: () {
+                        ref.read(ctrlProvider.notifier).confirmMove();
+                      },
+                      cancel: () {
+                        ref.read(ctrlProvider.notifier).cancelMove();
+                      },
+                    )
+                  : null,
+          clock: gameState.game.clock != null
+              ? CountdownClock(
+                  key: whiteClockKey,
+                  duration: gameState.game.clock!.white,
+                  active: gameState.activeClockSide == Side.white,
+                  emergencyThreshold: youAre == Side.white
+                      ? gameState.game.clock?.emergency
+                      : null,
+                  onFlag: youAre == Side.white
+                      ? () => ref.read(ctrlProvider.notifier).onFlag()
+                      : null,
+                )
+              : null,
+        );
 
-    return WillPopScope(
-      onWillPop: gameState.game.playable ? () async => false : null,
-      child: content,
+        final topPlayer = youAre == Side.white ? black : white;
+        final bottomPlayer = youAre == Side.white ? white : black;
+        final isBoardTurned = ref.watch(isBoardTurnedProvider);
+
+        final content = Column(
+          children: [
+            Expanded(
+              child: SafeArea(
+                bottom: false,
+                child: BoardTable(
+                  boardSettingsOverrides: BoardSettingsOverrides(
+                    autoQueenPromotion: gameState.canAutoQueen,
+                    autoQueenPromotionOnPremove:
+                        gameState.canAutoQueenOnPremove,
+                    blindfoldMode: blindfoldMode,
+                  ),
+                  onMove: (move, {isDrop, isPremove}) {
+                    ref.read(ctrlProvider.notifier).onUserMove(
+                          Move.fromUci(move.uci)!,
+                          isPremove: isPremove,
+                          isDrop: isDrop,
+                        );
+                  },
+                  onPremove: gameState.canPremove
+                      ? (move) {
+                          ref.read(ctrlProvider.notifier).setPremove(move);
+                        }
+                      : null,
+                  boardData: cg.BoardData(
+                    interactableSide:
+                        gameState.game.playable && !gameState.isReplaying
+                            ? youAre == Side.white
+                                ? cg.InteractableSide.white
+                                : cg.InteractableSide.black
+                            : cg.InteractableSide.none,
+                    orientation: isBoardTurned ? youAre.opposite.cg : youAre.cg,
+                    fen: position.fen,
+                    lastMove: gameState.game.moveAt(gameState.stepCursor)?.cg,
+                    isCheck: position.isCheck,
+                    sideToMove: sideToMove.cg,
+                    validMoves: algebraicLegalMoves(position),
+                    premove: gameState.premove,
+                  ),
+                  topTable: topPlayer,
+                  bottomTable: gameState.canShowClaimWinCountdown &&
+                          gameState.opponentLeftCountdown != null
+                      ? _ClaimWinCountdown(
+                          duration: gameState.opponentLeftCountdown!,
+                        )
+                      : bottomPlayer,
+                  moves: gameState.game.steps
+                      .skip(1)
+                      .map((e) => e.sanMove!.san)
+                      .toList(growable: false),
+                  currentMoveIndex: gameState.stepCursor,
+                  onSelectMove: (moveIndex) {
+                    ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
+                  },
+                ),
+              ),
+            ),
+            _GameBottomBar(
+              seek: seek,
+              id: id,
+              gameState: gameState,
+            ),
+          ],
+        );
+
+        return WillPopScope(
+          onWillPop: gameState.game.playable ? () async => false : null,
+          child: content,
+        );
+      },
+      loading: () => WillPopScope(
+        onWillPop: () async => false,
+        child: seek != null
+            ? LobbyGameLoadingBoard(seek!, isRematch: isRematch)
+            : const StandaloneGameLoadingBoard(),
+      ),
+      error: (e, s) {
+        debugPrint(
+          'SEVERE: [GameBody] could not load game data; $e\n$s',
+        );
+        return const WillPopScope(
+          onWillPop: null,
+          child: LoadGameError(),
+        );
+      },
     );
   }
 
@@ -435,10 +279,7 @@ class _Body extends ConsumerWidget {
           if (context.mounted) {
             showAdaptiveDialog<void>(
               context: context,
-              builder: (context) => _GameEndDialog(
-                ctrlProvider: ctrlProvider,
-                gameProvider: gameProvider,
-              ),
+              builder: (context) => _GameEndDialog(id: id, seek: seek),
               barrierDismissible: true,
             );
           }
@@ -451,9 +292,7 @@ class _Body extends ConsumerWidget {
         if (context.mounted) {
           showAdaptiveDialog<void>(
             context: context,
-            builder: (context) => _ClaimWinDialog(
-              ctrlProvider: ctrlProvider,
-            ),
+            builder: (context) => _ClaimWinDialog(id: id),
             barrierDismissible: true,
           );
         }
@@ -462,9 +301,15 @@ class _Body extends ConsumerWidget {
       if (state.requireValue.redirectGameId != null) {
         // Be sure to pop any dialogs that might be on top of the game screen.
         Navigator.of(context).popUntil((route) => route is! RawDialogRoute);
-        ref
-            .read(gameProvider.notifier)
-            .rematch(state.requireValue.redirectGameId!);
+        if (seek != null) {
+          ref
+              .read(lobbyGameProvider(seek!).notifier)
+              .rematch(state.requireValue.redirectGameId!);
+        } else if (initialStandAloneId != null) {
+          ref
+              .read(onlineGameProvider(initialStandAloneId!).notifier)
+              .rematch(state.requireValue.redirectGameId!);
+        }
       }
     }
   }
@@ -472,14 +317,14 @@ class _Body extends ConsumerWidget {
 
 class _GameBottomBar extends ConsumerWidget {
   const _GameBottomBar({
+    this.seek,
+    required this.id,
     required this.gameState,
-    required this.ctrlProvider,
-    required this.gameProvider,
   });
 
+  final GameSeek? seek;
+  final GameFullId id;
   final GameState gameState;
-  final GameControllerProvider ctrlProvider;
-  final LobbyGameProvider gameProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -501,19 +346,6 @@ class _GameBottomBar extends ConsumerWidget {
               },
               icon: Icons.menu,
             ),
-            if (gameState.game.finished)
-              BottomBarButton(
-                label: context.l10n.gameAnalysis,
-                shortLabel: 'Analysis',
-                icon: Icons.biotech,
-                onTap: () => pushPlatformRoute(
-                  context,
-                  builder: (_) => AnalysisScreen(
-                    options: gameState.analysisOptions,
-                    title: context.l10n.gameAnalysis,
-                  ),
-                ),
-              ),
             if (gameState.game.playable &&
                 gameState.game.opponent?.offeringDraw == true)
               BottomBarButton(
@@ -526,10 +358,14 @@ class _GameBottomBar extends ConsumerWidget {
                     builder: (context) => _GameNegotiationDialog(
                       title: Text(context.l10n.yourOpponentOffersADraw),
                       onAccept: () {
-                        ref.read(ctrlProvider.notifier).offerOrAcceptDraw();
+                        ref
+                            .read(gameControllerProvider(id).notifier)
+                            .offerOrAcceptDraw();
                       },
                       onDecline: () {
-                        ref.read(ctrlProvider.notifier).cancelOrDeclineDraw();
+                        ref
+                            .read(gameControllerProvider(id).notifier)
+                            .cancelOrDeclineDraw();
                       },
                     ),
                     barrierDismissible: true,
@@ -546,8 +382,7 @@ class _GameBottomBar extends ConsumerWidget {
                 onTap: () {
                   showAdaptiveDialog<void>(
                     context: context,
-                    builder: (context) =>
-                        _ThreefoldDialog(ctrlProvider: ctrlProvider),
+                    builder: (context) => _ThreefoldDialog(id: id),
                     barrierDismissible: true,
                   );
                 },
@@ -565,11 +400,13 @@ class _GameBottomBar extends ConsumerWidget {
                     builder: (context) => _GameNegotiationDialog(
                       title: Text(context.l10n.yourOpponentProposesATakeback),
                       onAccept: () {
-                        ref.read(ctrlProvider.notifier).acceptTakeback();
+                        ref
+                            .read(gameControllerProvider(id).notifier)
+                            .acceptTakeback();
                       },
                       onDecline: () {
                         ref
-                            .read(ctrlProvider.notifier)
+                            .read(gameControllerProvider(id).notifier)
                             .cancelOrDeclineTakeback();
                       },
                     ),
@@ -578,10 +415,24 @@ class _GameBottomBar extends ConsumerWidget {
                 },
                 icon: CupertinoIcons.arrowshape_turn_up_left,
               )
+            else if (gameState.game.finished)
+              BottomBarButton(
+                label: context.l10n.gameAnalysis,
+                shortLabel: 'Analysis',
+                icon: Icons.biotech,
+                onTap: () => pushPlatformRoute(
+                  context,
+                  builder: (_) => AnalysisScreen(
+                    options: gameState.analysisOptions,
+                    title: context.l10n.gameAnalysis,
+                  ),
+                ),
+              )
             else
               const SizedBox(
                 width: 44.0,
               ),
+            // TODO replace this space with chat button
             const SizedBox(
               width: 44.0,
             ),
@@ -615,11 +466,11 @@ class _GameBottomBar extends ConsumerWidget {
   }
 
   void _moveForward(WidgetRef ref) {
-    ref.read(ctrlProvider.notifier).cursorForward();
+    ref.read(gameControllerProvider(id).notifier).cursorForward();
   }
 
   void _moveBackward(WidgetRef ref) {
-    ref.read(ctrlProvider.notifier).cursorBackward();
+    ref.read(gameControllerProvider(id).notifier).cursorBackward();
   }
 
   Future<void> _showGameMenu(BuildContext context, WidgetRef ref) {
@@ -636,7 +487,7 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             label: Text(context.l10n.abortGame),
             onPressed: (context) {
-              ref.read(ctrlProvider.notifier).abortGame();
+              ref.read(gameControllerProvider(id).notifier).abortGame();
             },
           ),
         if (gameState.game.clock != null && gameState.game.canGiveTime)
@@ -647,14 +498,14 @@ class _GameBottomBar extends ConsumerWidget {
               ),
             ),
             onPressed: (context) {
-              ref.read(ctrlProvider.notifier).moreTime();
+              ref.read(gameControllerProvider(id).notifier).moreTime();
             },
           ),
         if (gameState.game.canTakeback)
           BottomSheetAction(
             label: Text(context.l10n.takeback),
             onPressed: (context) {
-              ref.read(ctrlProvider.notifier).offerTakeback();
+              ref.read(gameControllerProvider(id).notifier).offerTakeback();
             },
           ),
         if (gameState.game.player?.proposingTakeback == true)
@@ -662,7 +513,9 @@ class _GameBottomBar extends ConsumerWidget {
             label: const Text('Cancel takeback offer'),
             isDestructiveAction: true,
             onPressed: (context) {
-              ref.read(ctrlProvider.notifier).cancelOrDeclineTakeback();
+              ref
+                  .read(gameControllerProvider(id).notifier)
+                  .cancelOrDeclineTakeback();
             },
           ),
         if (gameState.game.player?.offeringDraw == true)
@@ -670,7 +523,9 @@ class _GameBottomBar extends ConsumerWidget {
             label: const Text('Cancel draw offer'),
             isDestructiveAction: true,
             onPressed: (context) {
-              ref.read(ctrlProvider.notifier).cancelOrDeclineDraw();
+              ref
+                  .read(gameControllerProvider(id).notifier)
+                  .cancelOrDeclineDraw();
             },
           )
         else if (gameState.canOfferDraw)
@@ -681,11 +536,15 @@ class _GameBottomBar extends ConsumerWidget {
                       context,
                       description: Text(context.l10n.offerDraw),
                       onConfirm: () {
-                        ref.read(ctrlProvider.notifier).offerOrAcceptDraw();
+                        ref
+                            .read(gameControllerProvider(id).notifier)
+                            .offerOrAcceptDraw();
                       },
                     )
                 : (context) {
-                    ref.read(ctrlProvider.notifier).offerOrAcceptDraw();
+                    ref
+                        .read(gameControllerProvider(id).notifier)
+                        .offerOrAcceptDraw();
                   },
           ),
         if (gameState.game.resignable)
@@ -697,11 +556,13 @@ class _GameBottomBar extends ConsumerWidget {
                       context,
                       description: Text(context.l10n.resignTheGame),
                       onConfirm: () {
-                        ref.read(ctrlProvider.notifier).resignGame();
+                        ref
+                            .read(gameControllerProvider(id).notifier)
+                            .resignGame();
                       },
                     )
                 : (context) {
-                    ref.read(ctrlProvider.notifier).resignGame();
+                    ref.read(gameControllerProvider(id).notifier).resignGame();
                   },
           ),
         if (gameState.game.canClaimWin) ...[
@@ -709,14 +570,14 @@ class _GameBottomBar extends ConsumerWidget {
             label: Text(context.l10n.forceDraw),
             dismissOnPress: true,
             onPressed: (context) {
-              ref.read(ctrlProvider.notifier).forceDraw();
+              ref.read(gameControllerProvider(id).notifier).forceDraw();
             },
           ),
           BottomSheetAction(
             label: Text(context.l10n.forceResignation),
             dismissOnPress: true,
             onPressed: (context) {
-              ref.read(ctrlProvider.notifier).forceResign();
+              ref.read(gameControllerProvider(id).notifier).forceResign();
             },
           ),
         ],
@@ -726,7 +587,7 @@ class _GameBottomBar extends ConsumerWidget {
             dismissOnPress: true,
             isDestructiveAction: true,
             onPressed: (context) {
-              ref.read(ctrlProvider.notifier).declineRematch();
+              ref.read(gameControllerProvider(id).notifier).declineRematch();
             },
           )
         else if (gameState.canOfferRematch &&
@@ -735,14 +596,27 @@ class _GameBottomBar extends ConsumerWidget {
             label: Text(context.l10n.rematch),
             dismissOnPress: true,
             onPressed: (context) {
-              ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
+              ref
+                  .read(gameControllerProvider(id).notifier)
+                  .proposeOrAcceptRematch();
             },
           ),
-        if (gameState.canGetNewOpponent)
+        if (gameState.canGetNewOpponent && seek != null)
           BottomSheetAction(
             label: Text(context.l10n.newOpponent),
             onPressed: (_) {
-              ref.read(gameProvider.notifier).newOpponent();
+              ref.read(lobbyGameProvider(seek!).notifier).newOpponent();
+            },
+          ),
+        if (gameState.game.finished)
+          BottomSheetAction(
+            label: const Text('Show result'),
+            onPressed: (_) {
+              showAdaptiveDialog<void>(
+                context: context,
+                builder: (context) => _GameEndDialog(id: id, seek: seek),
+                barrierDismissible: true,
+              );
             },
           ),
       ],
@@ -775,13 +649,10 @@ class _GameBottomBar extends ConsumerWidget {
 }
 
 class _GameEndDialog extends ConsumerStatefulWidget {
-  const _GameEndDialog({
-    required this.ctrlProvider,
-    required this.gameProvider,
-  });
+  const _GameEndDialog({required this.id, this.seek});
 
-  final GameControllerProvider ctrlProvider;
-  final LobbyGameProvider gameProvider;
+  final GameFullId id;
+  final GameSeek? seek;
 
   @override
   ConsumerState<_GameEndDialog> createState() => _GameEndDialogState();
@@ -811,7 +682,8 @@ class _GameEndDialogState extends ConsumerState<_GameEndDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final gameState = ref.watch(widget.ctrlProvider).requireValue;
+    final ctrlProvider = gameControllerProvider(widget.id);
+    final gameState = ref.watch(ctrlProvider).requireValue;
 
     final showWinner = gameState.game.winner != null
         ? ' • ${gameState.game.winner == Side.white ? context.l10n.whiteIsVictorious : context.l10n.blackIsVictorious}'
@@ -847,36 +719,37 @@ class _GameEndDialogState extends ConsumerState<_GameEndDialog> {
           SecondaryButton(
             semanticsLabel: context.l10n.cancelRematchOffer,
             onPressed: () {
-              ref.read(widget.ctrlProvider.notifier).declineRematch();
+              ref.read(ctrlProvider.notifier).declineRematch();
             },
             child: Text(context.l10n.cancelRematchOffer),
           )
         else if (gameState.canOfferRematch)
           SecondaryButton(
             semanticsLabel: context.l10n.rematch,
-            onPressed:
-                _activateButtons && gameState.game.opponent?.onGame == true
-                    ? () {
-                        ref
-                            .read(widget.ctrlProvider.notifier)
-                            .proposeOrAcceptRematch();
-                      }
-                    : null,
+            onPressed: _activateButtons &&
+                    gameState.game.opponent?.onGame == true
+                ? () {
+                    ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
+                  }
+                : null,
             glowing: gameState.game.opponent?.offeringRematch == true,
             child: Text(context.l10n.rematch),
           ),
-        SecondaryButton(
-          semanticsLabel: context.l10n.newOpponent,
-          onPressed: _activateButtons
-              ? () {
-                  ref.read(widget.gameProvider.notifier).newOpponent();
-                  // Other alert dialogs may be shown before this one, so be sure to pop them all
-                  Navigator.of(context)
-                      .popUntil((route) => route is! RawDialogRoute);
-                }
-              : null,
-          child: Text(context.l10n.newOpponent),
-        ),
+        if (gameState.canGetNewOpponent && widget.seek != null)
+          SecondaryButton(
+            semanticsLabel: context.l10n.newOpponent,
+            onPressed: _activateButtons
+                ? () {
+                    ref
+                        .read(lobbyGameProvider(widget.seek!).notifier)
+                        .newOpponent();
+                    // Other alert dialogs may be shown before this one, so be sure to pop them all
+                    Navigator.of(context)
+                        .popUntil((route) => route is! RawDialogRoute);
+                  }
+                : null,
+            child: Text(context.l10n.newOpponent),
+          ),
         SecondaryButton(
           semanticsLabel: context.l10n.analysis,
           onPressed: () => pushPlatformRoute(
@@ -963,10 +836,10 @@ class _GameNegotiationDialog extends StatelessWidget {
 
 class _ThreefoldDialog extends ConsumerWidget {
   const _ThreefoldDialog({
-    required this.ctrlProvider,
+    required this.id,
   });
 
-  final GameControllerProvider ctrlProvider;
+  final GameFullId id;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -978,7 +851,7 @@ class _ThreefoldDialog extends ConsumerWidget {
 
     void accept() {
       Navigator.of(context).pop();
-      ref.read(ctrlProvider.notifier).claimDraw();
+      ref.read(gameControllerProvider(id).notifier).claimDraw();
     }
 
     if (defaultTargetPlatform == TargetPlatform.iOS) {
@@ -1015,13 +888,14 @@ class _ThreefoldDialog extends ConsumerWidget {
 
 class _ClaimWinDialog extends ConsumerWidget {
   const _ClaimWinDialog({
-    required this.ctrlProvider,
+    required this.id,
   });
 
-  final GameControllerProvider ctrlProvider;
+  final GameFullId id;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = gameControllerProvider(id);
     final gameState = ref.watch(ctrlProvider).requireValue;
 
     final content = Text(context.l10n.opponentLeftChoices);
