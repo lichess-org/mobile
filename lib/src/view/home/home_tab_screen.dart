@@ -26,7 +26,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
@@ -179,7 +178,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
 
   Future<void> _refreshData(AuthSessionState? session) {
     return Future.wait([
-      ref.refresh(top1Provider.future),
       if (session != null) ...[
         ref.refresh(userRecentGamesProvider(userId: session.user.id).future),
         ref.refresh(ongoingGamesProvider.future),
