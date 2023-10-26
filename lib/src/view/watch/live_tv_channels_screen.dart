@@ -74,14 +74,14 @@ class _TvChannelsScreenState extends ConsumerState<LiveTvChannelsScreen>
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      tvRouteObserver.subscribe(this, route);
+      rootNavPageRouteObserver.subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    tvRouteObserver.unsubscribe(this);
+    rootNavPageRouteObserver.unsubscribe(this);
     super.dispose();
   }
 

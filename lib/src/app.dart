@@ -12,8 +12,6 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/utils/immersive_mode.dart';
-import 'package:lichess_mobile/src/utils/wakelock.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 
 class App extends ConsumerStatefulWidget {
@@ -88,8 +86,7 @@ class _AppState extends ConsumerState<App> {
       },
       home: const BottomNavScaffold(),
       navigatorObservers: [
-        gameRouteObserver,
-        tvRouteObserver,
+        rootNavPageRouteObserver,
       ],
     );
   }

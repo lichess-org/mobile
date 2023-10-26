@@ -8,6 +8,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -22,20 +23,17 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
-import 'package:lichess_mobile/src/utils/wakelock.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
 import 'puzzle_feedback_widget.dart';
 import 'puzzle_session_widget.dart';
-
-final RouteObserver<PageRoute<void>> puzzleRouteObserver =
-    RouteObserver<PageRoute<void>>();
 
 class PuzzleScreen extends ConsumerStatefulWidget {
   const PuzzleScreen({
@@ -51,27 +49,31 @@ class PuzzleScreen extends ConsumerStatefulWidget {
   ConsumerState<PuzzleScreen> createState() => _PuzzleScreenState();
 }
 
-class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
+class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
+    with RouteAware, ImmersiveMode {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      puzzleRouteObserver.subscribe(this, route);
+      rootNavPageRouteObserver.subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
-    puzzleRouteObserver.unsubscribe(this);
+    rootNavPageRouteObserver.unsubscribe(this);
     super.dispose();
   }
 
   @override
   void didPop() {
-    print('didPop puzzle');
+    super.didPop();
+    ref.invalidate(nextPuzzleProvider(widget.theme));
     ref.invalidate(accountProvider);
     ref.invalidate(accountActivityProvider);
+    ref.invalidate(puzzleDashboardProvider);
+    ref.invalidate(puzzleRecentActivityProvider);
   }
 
   @override
@@ -163,7 +165,7 @@ class _LoadPuzzle extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
+class _Body extends ConsumerWidget {
   const _Body({
     required this.initialPuzzleContext,
   });
@@ -171,14 +173,8 @@ class _Body extends ConsumerStatefulWidget {
   final PuzzleContext initialPuzzleContext;
 
   @override
-  ConsumerState<_Body> createState() => _BodyState();
-}
-
-class _BodyState extends ConsumerState<_Body>
-    with AndroidImmersiveMode, Wakelock {
-  @override
-  Widget build(BuildContext context) {
-    final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
 
     final currentEvalBest = ref.watch(
@@ -276,7 +272,7 @@ class _BodyState extends ConsumerState<_Body>
                         ),
                       ),
                     PuzzleSessionWidget(
-                      initialPuzzleContext: widget.initialPuzzleContext,
+                      initialPuzzleContext: initialPuzzleContext,
                       ctrlProvider: ctrlProvider,
                     ),
                   ],
@@ -286,7 +282,7 @@ class _BodyState extends ConsumerState<_Body>
           ),
         ),
         _BottomBar(
-          initialPuzzleContext: widget.initialPuzzleContext,
+          initialPuzzleContext: initialPuzzleContext,
           ctrlProvider: ctrlProvider,
         ),
       ],

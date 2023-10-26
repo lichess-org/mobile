@@ -4,13 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
-import 'package:lichess_mobile/src/utils/wakelock.dart';
 
 import 'game_body.dart';
 import 'game_common_widgets.dart';
@@ -34,7 +31,7 @@ class LobbyGameScreen extends ConsumerStatefulWidget {
 }
 
 class _GameScreenState extends ConsumerState<LobbyGameScreen>
-    with AndroidImmersiveMode, RouteAware, Wakelock {
+    with RouteAware, ImmersiveMode {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
 
@@ -43,21 +40,22 @@ class _GameScreenState extends ConsumerState<LobbyGameScreen>
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      gameRouteObserver.subscribe(this, route);
+      rootNavPageRouteObserver.subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
-    gameRouteObserver.unsubscribe(this);
+    rootNavPageRouteObserver.unsubscribe(this);
     super.dispose();
   }
 
   @override
   void didPop() {
-    ref.invalidate(userRecentGamesProvider);
+    super.didPop();
     ref.invalidate(accountProvider);
-    ref.invalidate(userActivityProvider);
+    ref.invalidate(accountRecentGamesProvider);
+    ref.invalidate(accountActivityProvider);
   }
 
   @override
