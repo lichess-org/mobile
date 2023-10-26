@@ -5,22 +5,16 @@ import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/online_game.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/wakelock.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 import 'game_body.dart';
-import 'ping_rating.dart';
-import 'game_settings.dart';
-import 'game_screen_providers.dart';
+import 'game_common_widgets.dart';
 
 /// Screen for already created games loaded directly from the game id.
 ///
@@ -94,28 +88,8 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
     BuildContext context, {
     required GameFullId gameId,
   }) {
-    final isPlayableAsync = ref.watch(gameIsPlayableProvider(gameId));
-    const pingRating = Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
-      child: PingRating(size: 24.0),
-    );
     return Scaffold(
-      appBar: AppBar(
-        leading: isPlayableAsync.maybeWhen<Widget?>(
-          data: (isPlayable) => isPlayable ? pingRating : null,
-          orElse: () => pingRating,
-        ),
-        title: _GameTitle(id: gameId),
-        actions: [
-          SettingsButton(
-            onPressed: () => showAdaptiveBottomSheet<void>(
-              context: context,
-              isScrollControlled: true,
-              builder: (_) => GameSettings(id: gameId),
-            ),
-          ),
-        ],
-      ),
+      appBar: GameAppBar(id: gameId),
       body: GameBody(
         initialStandAloneId: widget.initialId,
         id: gameId,
@@ -129,72 +103,14 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
     BuildContext context, {
     required GameFullId gameId,
   }) {
-    final isPlayableAsync = ref.watch(gameIsPlayableProvider(gameId));
-    const pingRating = Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-      child: PingRating(size: 24.0),
-    );
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        padding: const EdgeInsetsDirectional.only(end: 16.0),
-        leading: isPlayableAsync.maybeWhen<Widget?>(
-          data: (isPlayable) => isPlayable ? pingRating : null,
-          orElse: () => pingRating,
-        ),
-        middle: _GameTitle(id: gameId),
-        trailing: SettingsButton(
-          onPressed: () => showAdaptiveBottomSheet<void>(
-            context: context,
-            isScrollControlled: true,
-            builder: (_) => GameSettings(id: gameId),
-          ),
-        ),
-      ),
+      navigationBar: GameCupertinoNavBar(id: gameId),
       child: GameBody(
         initialStandAloneId: widget.initialId,
         id: gameId,
         whiteClockKey: _whiteClockKey,
         blackClockKey: _blackClockKey,
       ),
-    );
-  }
-}
-
-class _GameTitle extends ConsumerWidget {
-  const _GameTitle({
-    required this.id,
-  });
-
-  final GameFullId id;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final metaAsync = ref.watch(gameMetaProvider(id));
-    return metaAsync.maybeWhen<Widget>(
-      data: (data) {
-        final (meta, clock) = data;
-
-        final mode = meta.rated
-            ? ' • ${context.l10n.rated}'
-            : ' • ${context.l10n.casual}';
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              meta.perf.icon,
-              color: DefaultTextStyle.of(context).style.color,
-            ),
-            const SizedBox(width: 4.0),
-            if (clock != null)
-              Text(
-                '${TimeIncrement(clock.initial.inSeconds, clock.increment.inSeconds).display}$mode',
-              )
-            else
-              Text('${meta.perf.title}$mode'),
-          ],
-        );
-      },
-      orElse: () => const SizedBox.shrink(),
     );
   }
 }
