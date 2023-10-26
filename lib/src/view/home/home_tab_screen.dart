@@ -18,7 +18,6 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
@@ -61,8 +60,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
 
         if (!hasRefreshed && !wasOnline && isNowOnline) {
           hasRefreshed = true;
-          final session = ref.read(authSessionProvider);
-          _refreshData(session?.user);
+          _refreshData();
         }
 
         wasOnline = isNowOnline;
@@ -103,7 +101,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }
 
   Widget _androidBuilder(BuildContext context) {
-    final session = ref.watch(authSessionProvider);
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -127,7 +124,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       ),
       body: RefreshIndicator(
         key: _androidRefreshKey,
-        onRefresh: () => _refreshData(session?.user),
+        onRefresh: () => _refreshData(),
         child: const _HomeScaffold(
           child: _HomeBody(),
         ),
@@ -136,7 +133,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }
 
   Widget _iosBuilder(BuildContext context) {
-    final session = ref.watch(authSessionProvider);
     return CupertinoPageScaffold(
       child: _HomeScaffold(
         child: CustomScrollView(
@@ -160,7 +156,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               trailing: const SignInWidget(),
             ),
             CupertinoSliverRefreshControl(
-              onRefresh: () => _refreshData(session?.user),
+              onRefresh: () => _refreshData(),
             ),
             const SliverToBoxAdapter(child: _ConnectivityBanner()),
             const SliverSafeArea(
@@ -173,11 +169,10 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     );
   }
 
-  Future<void> _refreshData(LightUser? user) {
+  Future<void> _refreshData() {
     return Future.wait([
       ref.refresh(top1Provider.future),
-      if (user != null)
-        ref.refresh(userRecentGamesProvider(userId: user.id).future),
+      ref.refresh(accountRecentGamesProvider.future),
     ]);
   }
 }
@@ -295,7 +290,6 @@ class _HomeBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivity = ref.watch(connectivityChangesProvider);
-    final session = ref.watch(authSessionProvider);
     return connectivity.when(
       data: (data) {
         if (data.isOnline) {
@@ -305,7 +299,7 @@ class _HomeBody extends ConsumerWidget {
                   children: [
                     const _CreateAGame(),
                     const _DailyPuzzle(),
-                    if (session != null) RecentGames(user: session.user),
+                    const RecentGames(),
                     RatingPrefAware(child: LeaderboardWidget()),
                   ],
                 )
@@ -313,7 +307,7 @@ class _HomeBody extends ConsumerWidget {
                   delegate: SliverChildListDelegate([
                     const _CreateAGame(),
                     const _DailyPuzzle(),
-                    if (session != null) RecentGames(user: session.user),
+                    const RecentGames(),
                     RatingPrefAware(child: LeaderboardWidget()),
                   ]),
                 );

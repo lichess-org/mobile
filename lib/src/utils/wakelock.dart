@@ -33,6 +33,7 @@ mixin Wakelock<T extends StatefulWidget> on State<T> implements RouteAware {
 
   @override
   void didPop() {
+    print('didPop wakelock');
     WakelockPlus.disable();
   }
 

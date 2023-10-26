@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/view/account/profile_tab_screen.dart';
 import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 
 enum BottomTab {
   home(Icons.home),
@@ -90,6 +91,9 @@ final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
 final profileScrollController = ScrollController(debugLabel: 'ProfileScroll');
 
 final RouteObserver<PageRoute<void>> tvRouteObserver =
+    RouteObserver<PageRoute<void>>();
+
+final RouteObserver<PageRoute<void>> gameRouteObserver =
     RouteObserver<PageRoute<void>>();
 
 final tabsProvider = Provider<List<_Tab>>((ref) {
@@ -209,6 +213,7 @@ class BottomNavScaffold extends ConsumerWidget {
       case 1:
         return _MaterialTabView(
           navigatorKey: puzzlesNavigatorKey,
+          navigatorObservers: [puzzleRouteObserver],
           builder: (context) => const PuzzleTabScreen(),
         );
       case 2:
@@ -244,6 +249,7 @@ class BottomNavScaffold extends ConsumerWidget {
       case 1:
         return CupertinoTabView(
           defaultTitle: context.l10n.puzzles,
+          navigatorObservers: [puzzleRouteObserver],
           navigatorKey: puzzlesNavigatorKey,
           builder: (context) => const PuzzleTabScreen(),
         );

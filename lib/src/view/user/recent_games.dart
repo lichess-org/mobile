@@ -7,6 +7,8 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -18,13 +20,17 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 
 class RecentGames extends ConsumerWidget {
-  const RecentGames({required this.user, super.key});
+  const RecentGames({this.user, super.key});
 
-  final LightUser user;
+  final LightUser? user;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final recentGames = ref.watch(userRecentGamesProvider(userId: user.id));
+    final recentGames = user != null
+        ? ref.watch(userRecentGamesProvider(userId: user!.id))
+        : ref.watch(accountRecentGamesProvider);
+
+    final userId = user?.id ?? ref.watch(authSessionProvider)?.user.id;
 
     Widget getResultIcon(ArchivedGameData game, Side mySide) {
       if (game.status == GameStatus.aborted ||
@@ -60,9 +66,9 @@ class RecentGames extends ConsumerWidget {
           header: Text(context.l10n.recentGames, style: Styles.sectionTitle),
           hasLeading: true,
           children: data.map((game) {
-            final mySide = game.white.id == user.id ? Side.white : Side.black;
-            final me = game.white.id == user.id ? game.white : game.black;
-            final opponent = game.white.id == user.id ? game.black : game.white;
+            final mySide = game.white.id == userId ? Side.white : Side.black;
+            final me = game.white.id == userId ? game.white : game.black;
+            final opponent = game.white.id == userId ? game.black : game.white;
 
             return GameListTile(
               onTap: game.variant.isSupported
@@ -72,9 +78,8 @@ class RecentGames extends ConsumerWidget {
                         rootNavigator: true,
                         builder: (context) => ArchivedGameScreen(
                           gameData: game,
-                          orientation: user.id == game.white.id
-                              ? Side.white
-                              : Side.black,
+                          orientation:
+                              userId == game.white.id ? Side.white : Side.black,
                         ),
                       );
                     }

@@ -88,8 +88,7 @@ class _AppState extends ConsumerState<App> {
       },
       home: const BottomNavScaffold(),
       navigatorObservers: [
-        immersiveModeRouteObserver,
-        wakelockRouteObserver,
+        gameRouteObserver,
         tvRouteObserver,
       ],
     );

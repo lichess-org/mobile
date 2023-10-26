@@ -42,6 +42,7 @@ mixin AndroidImmersiveMode<T extends StatefulWidget> on State<T>
 
   @override
   void didPop() {
+    print('didPop immersive mode');
     _disableImmersiveMode();
   }
 

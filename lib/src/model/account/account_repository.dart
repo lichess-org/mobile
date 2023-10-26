@@ -2,11 +2,15 @@ import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 
@@ -36,6 +40,39 @@ Future<User?> account(AccountRef ref) async {
     return result.asFuture;
   }
   return null;
+}
+
+@riverpod
+Future<IList<UserActivity>> accountActivity(AccountActivityRef ref) async {
+  final session = ref.watch(authSessionProvider);
+  final link = ref.cacheFor(const Duration(hours: 1));
+  final repo = ref.watch(userRepositoryProvider);
+  if (session != null) {
+    final result = await repo.getUserActivity(session.user.id);
+    if (result.isError) {
+      link.close();
+    }
+    return result.asFuture;
+  }
+  return IList();
+}
+
+@riverpod
+Future<IList<ArchivedGameData>> accountRecentGames(
+  AccountRecentGamesRef ref,
+) async {
+  final session = ref.watch(authSessionProvider);
+  final link = ref.cacheFor(const Duration(hours: 1));
+  final repo = ref.watch(gameRepositoryProvider);
+  if (session != null) {
+    final result = await repo.getUserGames(session.user.id);
+    if (result.isError) {
+      link.close();
+    }
+    return result.asFuture;
+  }
+
+  return IList();
 }
 
 class AccountRepository {

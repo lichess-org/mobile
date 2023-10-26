@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
@@ -33,7 +34,10 @@ import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'puzzle_feedback_widget.dart';
 import 'puzzle_session_widget.dart';
 
-class PuzzleScreen extends StatelessWidget {
+final RouteObserver<PageRoute<void>> puzzleRouteObserver =
+    RouteObserver<PageRoute<void>>();
+
+class PuzzleScreen extends ConsumerStatefulWidget {
   const PuzzleScreen({
     required this.theme,
     this.initialPuzzleContext,
@@ -42,6 +46,33 @@ class PuzzleScreen extends StatelessWidget {
 
   final PuzzleTheme theme;
   final PuzzleContext? initialPuzzleContext;
+
+  @override
+  ConsumerState<PuzzleScreen> createState() => _PuzzleScreenState();
+}
+
+class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null && route is PageRoute) {
+      puzzleRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    puzzleRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPop() {
+    print('didPop puzzle');
+    ref.invalidate(accountProvider);
+    ref.invalidate(accountActivityProvider);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +88,11 @@ class PuzzleScreen extends StatelessWidget {
         actions: [ToggleSoundButton()],
         title: Text(context.l10n.puzzleDesc),
       ),
-      body: initialPuzzleContext != null
+      body: widget.initialPuzzleContext != null
           ? _Body(
-              initialPuzzleContext: initialPuzzleContext!,
+              initialPuzzleContext: widget.initialPuzzleContext!,
             )
-          : _LoadPuzzle(theme: theme),
+          : _LoadPuzzle(theme: widget.theme),
     );
   }
 
@@ -71,11 +102,11 @@ class PuzzleScreen extends StatelessWidget {
         middle: Text(context.l10n.puzzleDesc),
         trailing: ToggleSoundButton(),
       ),
-      child: initialPuzzleContext != null
+      child: widget.initialPuzzleContext != null
           ? _Body(
-              initialPuzzleContext: initialPuzzleContext!,
+              initialPuzzleContext: widget.initialPuzzleContext!,
             )
-          : _LoadPuzzle(theme: theme),
+          : _LoadPuzzle(theme: widget.theme),
     );
   }
 }
