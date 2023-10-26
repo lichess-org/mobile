@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
-import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
 
 import './time_control_modal.dart';
 import './custom_play_screen.dart';
@@ -73,7 +73,7 @@ class _Body extends ConsumerWidget {
                   context,
                   rootNavigator: true,
                   builder: (BuildContext context) {
-                    return GameScreen(
+                    return LobbyGameScreen(
                       seek: GameSeek.fastPairingFromPrefs(playPrefs, session),
                     );
                   },
