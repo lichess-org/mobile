@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 import 'game_screen_providers.dart';
 
+/// Common settings widget for the [LobbyGameScreen] and [StandaloneGameScreen].
 class GameSettings extends ConsumerWidget {
   const GameSettings({this.id, this.seek, super.key})
       : assert(
