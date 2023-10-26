@@ -80,13 +80,14 @@ class LobbyGameLoadingBoard extends StatelessWidget {
         ),
         _BottomBar(
           children: [
-            BottomBarButton(
-              onTap: () => Navigator.of(context).pop(),
-              label: context.l10n.cancel,
-              shortLabel: context.l10n.cancel,
-              icon: CupertinoIcons.xmark,
-              showAndroidShortLabel: true,
-            ),
+            if (isRematch == false)
+              BottomBarButton(
+                onTap: () => Navigator.of(context).pop(),
+                label: context.l10n.cancel,
+                shortLabel: context.l10n.cancel,
+                icon: CupertinoIcons.xmark,
+                showAndroidShortLabel: true,
+              ),
           ],
         ),
       ],
