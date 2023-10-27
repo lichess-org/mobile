@@ -48,15 +48,15 @@ class LiveTvChannels extends _$LiveTvChannels {
   }
 
   Future<IMap<TvChannel, TvGameSnapshot>> _doStartWatching() async {
-    final (stream, readyStream) =
-        _socket.connect(Uri(path: kDefaultSocketRoute));
     _socketSubscription?.cancel();
-    _socketSubscription = stream.listen(_handleSocketEvent);
+    _socketReadySubscription?.cancel();
 
     final repo = ref.read(tvRepositoryProvider);
     final repoGames = await Result.release(repo.channels());
 
-    _socketReadySubscription?.cancel();
+    final (stream, readyStream) =
+        _socket.connect(Uri(path: kDefaultSocketRoute));
+    _socketSubscription = stream.listen(_handleSocketEvent);
     _socketReadySubscription = readyStream.listen((_) {
       _socket.send('startWatchingTvChannels', null);
       _socket.send(
