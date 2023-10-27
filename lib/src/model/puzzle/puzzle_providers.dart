@@ -44,13 +44,18 @@ Future<PuzzleStormResponse> storm(StormRef ref) {
   return Result.release(repo.storm());
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 Future<Puzzle> puzzle(PuzzleRef ref, PuzzleId id) async {
   final puzzleStorage = ref.watch(puzzleStorageProvider);
   final puzzle = await puzzleStorage.fetch(puzzleId: id);
   if (puzzle != null) return puzzle;
+  final link = ref.cacheFor(const Duration(minutes: 30));
   final repo = ref.watch(puzzleRepositoryProvider);
-  return Result.release(repo.fetch(id));
+  final result = await repo.fetch(id);
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
 @Riverpod(keepAlive: true)
