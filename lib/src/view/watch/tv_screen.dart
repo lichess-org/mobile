@@ -155,6 +155,7 @@ class _Body extends ConsumerWidget {
               interactableSide: cg.InteractableSide.none,
               orientation: gameState.orientation.cg,
               fen: game.lastPosition.fen,
+              sideToMove: game.lastPosition.turn.cg,
               lastMove: game.lastMove?.cg,
               isCheck: game.lastPosition.isCheck,
             );
