@@ -120,7 +120,7 @@ class _OnlineFriendsWidget extends ConsumerWidget {
       },
       error: (error, stackTrace) {
         debugPrint(
-          'SEVERE: [RelationScreen] could not lead online friends data; $error\n $stackTrace',
+          'SEVERE: [RelationScreen] could not load following online users; $error\n $stackTrace',
         );
         return const Center(
           child: Text('Could not load online friends'),
@@ -142,7 +142,7 @@ class _OnlineFriendsWidget extends ConsumerWidget {
     pushPlatformRoute(
       context,
       title: context.l10n.following,
-      builder: (_) => FollowingScreen(followingOnlines: followingOnlines),
+      builder: (_) => const FollowingScreen(),
     );
   }
 }

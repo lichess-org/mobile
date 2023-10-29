@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/account/profile_tab_screen.dart';
+import 'package:lichess_mobile/src/view/relation/following_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
@@ -188,7 +189,11 @@ class BottomNavScaffold extends ConsumerWidget {
       case 0:
         return _MaterialTabView(
           navigatorKey: homeNavigatorKey,
-          navigatorObservers: [homeRouteObserver, gameRouteObserver],
+          navigatorObservers: [
+            homeRouteObserver,
+            gameRouteObserver,
+            followingRouteObserver,
+          ],
           builder: (context) => const HomeTabScreen(),
         );
       case 1:
@@ -219,7 +224,11 @@ class BottomNavScaffold extends ConsumerWidget {
         return CupertinoTabView(
           defaultTitle: 'Home',
           navigatorKey: homeNavigatorKey,
-          navigatorObservers: [homeRouteObserver, gameRouteObserver],
+          navigatorObservers: [
+            homeRouteObserver,
+            gameRouteObserver,
+            followingRouteObserver,
+          ],
           builder: (context) => const HomeTabScreen(),
         );
       case 1:

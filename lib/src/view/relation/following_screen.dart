@@ -19,23 +19,55 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
-class FollowingScreen extends StatelessWidget {
-  const FollowingScreen({
-    required this.followingOnlines,
-    super.key,
-  });
+final RouteObserver<PageRoute<void>> followingRouteObserver =
+    RouteObserver<PageRoute<void>>();
 
-  final IList<LightUser> followingOnlines;
+final isInvalidFollowingCacheProvider = StateProvider<bool>((ref) => false);
 
+class FollowingScreen extends ConsumerStatefulWidget {
+  const FollowingScreen({super.key});
+  @override
+  ConsumerState<FollowingScreen> createState() => _FollowingScreenState();
+}
+
+class _FollowingScreenState extends ConsumerState<FollowingScreen>
+    with RouteAware {
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null && route is PageRoute) {
+      followingRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    followingRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPop() {
+    _invalidateFollowingCache();
+    super.didPopNext();
+  }
+
+  @override
+  void didPushNext() {
+    _invalidateFollowingCache();
+    super.didPopNext();
+  }
+
   Widget _buildIos(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: _Body(followingOnlines: followingOnlines),
+    return const CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(),
+      child: _Body(),
     );
   }
 
@@ -44,128 +76,174 @@ class FollowingScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(context.l10n.following),
       ),
-      body: _Body(followingOnlines: followingOnlines),
+      body: const _Body(),
     );
+  }
+
+  void _invalidateFollowingCache() {
+    if (ref.read(isInvalidFollowingCacheProvider.notifier).state) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        ref.invalidate(followingProvider);
+      });
+      ref.read(isInvalidFollowingCacheProvider.notifier).state = false;
+    }
   }
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({
-    required this.followingOnlines,
-  });
-
-  final IList<LightUser> followingOnlines;
+  const _Body();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final following = ref.watch(followingProvider);
+    final relationState = ref.watch(relationCtrlProvider);
+    final followingOnlines = relationState.when(
+      data: (data) => data.followingOnlines,
+      error: (error, stackTrace) {
+        debugPrint(
+          'SEVERE: [FollowingScreen] could not load following online users; $error\n$stackTrace',
+        );
+        return List<LightUser>.empty().toIList();
+      },
+      loading: () {
+        return List<LightUser>.empty().toIList();
+      },
+    );
 
     return following.when(
-      data: (followingUsers) {
-        if (followingUsers.isEmpty) {
-          return const Center(
-            child: Text("You are not following any user"),
-          );
-        }
-        return SafeArea(
-          child: ListView(
-            children: [
-              ListSection(
-                hasLeading: true,
+      data: (data) {
+        IList<User> followingUsers = data;
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            if (followingUsers.isEmpty) {
+              return const Center(
+                child: Text("You are not following any user"),
+              );
+            }
+            return SafeArea(
+              child: ListView(
                 children: [
-                  for (final user in followingUsers)
-                    Slidable(
-                      endActionPane: ActionPane(
-                        motion: const ScrollMotion(),
-                        extentRatio: 0.3,
-                        children: [
-                          SlidableAction(
-                            onPressed: (BuildContext context) {
-                              showAdaptiveDialog<void>(
-                                context: context,
-                                builder: (context) => _UnfollowDialog(
-                                  title: Text(
-                                    'Unfollow ${user.username}?',
-                                  ),
-                                  onAccept: () async {
-                                    final res = await ref
-                                        .read(relationRepositoryProvider)
-                                        .unfollow(user.username);
-                                    if (!res.isError && _isOnline(user)) {
-                                      ref
-                                          .read(
-                                            relationCtrlProvider.notifier,
-                                          )
-                                          .getFollowingOnlines();
-                                    }
-
-                                    ref.invalidate(followingProvider);
-                                  },
-                                ),
-                              );
-                            },
-                            backgroundColor: LichessColors.red,
-                            foregroundColor: Colors.white,
-                            icon: Icons.person_remove,
-                            label: 'Unfollow',
-                          ),
-                        ],
-                      ),
-                      child: PlatformListTile(
-                        onTap: () => {
-                          pushPlatformRoute(
-                            context,
-                            builder: (context) =>
-                                UserScreen(user: user.lightUser),
-                          ),
-                        },
-                        leading: _OnlineOrPatron(
-                          patron: user.isPatron,
-                          online: _isOnline(user),
-                        ),
-                        title: Padding(
-                          padding: const EdgeInsets.only(right: 5.0),
-                          child: Row(
+                  ListSection(
+                    hasLeading: true,
+                    children: [
+                      for (final user in followingUsers)
+                        Slidable(
+                          endActionPane: ActionPane(
+                            motion: const ScrollMotion(),
+                            extentRatio: 0.3,
                             children: [
-                              if (user.title != null) ...[
-                                Text(
-                                  user.title!,
-                                  style: const TextStyle(
-                                    color: LichessColors.brag,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(width: 5),
-                              ],
-                              Flexible(
-                                child: Text(
-                                  user.username,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                              SlidableAction(
+                                onPressed: (BuildContext context) {
+                                  showAdaptiveDialog<void>(
+                                    context: context,
+                                    builder: (context) => _UnfollowDialog(
+                                      title: Text(
+                                        'Unfollow ${user.username}?',
+                                      ),
+                                      onAccept: () async {
+                                        final oldState = followingUsers;
+                                        setState(() {
+                                          followingUsers =
+                                              followingUsers.removeWhere(
+                                            (v) => v.id == user.id,
+                                          );
+                                        });
+
+                                        final res = await ref
+                                            .read(relationRepositoryProvider)
+                                            .unfollow(user.username);
+                                        if (res.isError) {
+                                          setState(() {
+                                            followingUsers = oldState;
+                                          });
+                                        } else {
+                                          ref
+                                              .read(
+                                                isInvalidFollowingCacheProvider
+                                                    .notifier,
+                                              )
+                                              .state = true;
+                                          if (_isOnline(
+                                            user,
+                                            followingOnlines,
+                                          )) {
+                                            ref
+                                                .read(
+                                                  relationCtrlProvider.notifier,
+                                                )
+                                                .getFollowingOnlines();
+                                          }
+                                        }
+                                      },
+                                    ),
+                                  );
+                                },
+                                backgroundColor: LichessColors.red,
+                                foregroundColor: Colors.white,
+                                icon: Icons.person_remove,
+                                label: 'Unfollow',
                               ),
                             ],
                           ),
+                          child: PlatformListTile(
+                            onTap: () => {
+                              pushPlatformRoute(
+                                context,
+                                builder: (context) =>
+                                    UserScreen(user: user.lightUser),
+                              ),
+                            },
+                            leading: _OnlineOrPatron(
+                              patron: user.isPatron,
+                              online: _isOnline(user, followingOnlines),
+                            ),
+                            title: Padding(
+                              padding: const EdgeInsets.only(right: 5.0),
+                              child: Row(
+                                children: [
+                                  if (user.title != null) ...[
+                                    Text(
+                                      user.title!,
+                                      style: const TextStyle(
+                                        color: LichessColors.brag,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                  ],
+                                  Flexible(
+                                    child: Text(
+                                      user.username,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            subtitle: _UserRating(user: user),
+                          ),
                         ),
-                        subtitle: _UserRating(user: user),
-                      ),
-                    ),
+                    ],
+                  ),
                 ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
       error: (error, stackTrace) {
         debugPrint(
-          'SEVERE: [FollowingScreen] could not following users; $error\n$stackTrace',
+          'SEVERE: [FollowingScreen] could not load following users; $error\n$stackTrace',
         );
-        return const Center(child: Text('Could not load following users.'));
+        return FullScreenRetryRequest(
+          onRetry: () => ref.invalidate(followingProvider),
+        );
       },
       loading: () => const CenterLoadingIndicator(),
     );
   }
 
-  bool _isOnline(User user) {
+  bool _isOnline(User user, IList<LightUser> followingOnlines) {
     return followingOnlines.any((v) => v.id == user.id);
   }
 }
