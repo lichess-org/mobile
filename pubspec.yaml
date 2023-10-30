@@ -33,7 +33,7 @@ dependencies:
      ref: 3900871fd9b6eec4a2437dbdc2946c96ca1f58fd
   meta: ^1.8.0
   deep_pick: ^1.0.0
-  timeago: ^3.3.0
+  timeago: ^3.6.0
   collection: ^1.16.0
   fast_immutable_collections: ^9.0.0
   result_extensions: ^0.1.0
