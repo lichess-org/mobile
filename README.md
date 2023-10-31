@@ -39,7 +39,7 @@ The mobile application is configured by default to target `http://127.0.0.1:9663
 
 First run the code generator:
 
-```
+```sh
 flutter pub get
 dart run build_runner watch
 ```
@@ -48,14 +48,14 @@ Check you have some connected device with: `flutter devices`.
 
 If you target an android device you need to run these commands so the device can reach the local lila instance:
 
-```
+```sh
 adb reverse tcp:9663 tcp:9663
 adb reverse tcp:9664 tcp:9664
 ```
 
 Then run on your device:
 
-```
+```sh
 flutter run -d <my_device>
 ```
 
