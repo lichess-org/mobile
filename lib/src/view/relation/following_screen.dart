@@ -23,6 +23,7 @@ final RouteObserver<PageRoute<void>> followingRouteObserver =
     RouteObserver<PageRoute<void>>();
 
 final isInvalidFollowingCacheProvider = StateProvider<bool>((ref) => false);
+final isInvalidFollowingOnlines = StateProvider<bool>((ref) => false);
 
 class FollowingScreen extends ConsumerStatefulWidget {
   const FollowingScreen({super.key});
@@ -54,14 +55,22 @@ class _FollowingScreenState extends ConsumerState<FollowingScreen>
 
   @override
   void didPop() {
+    if (ref.read(isInvalidFollowingOnlines.notifier).state) {
+      ref
+          .read(
+            relationCtrlProvider.notifier,
+          )
+          .getFollowingOnlines();
+      ref.read(isInvalidFollowingOnlines.notifier).state = false;
+    }
     _invalidateFollowingCache();
-    super.didPopNext();
+    super.didPop();
   }
 
   @override
   void didPushNext() {
     _invalidateFollowingCache();
-    super.didPopNext();
+    super.didPushNext();
   }
 
   Widget _buildIos(BuildContext context) {
@@ -169,9 +178,10 @@ class _Body extends ConsumerWidget {
                                           )) {
                                             ref
                                                 .read(
-                                                  relationCtrlProvider.notifier,
+                                                  isInvalidFollowingOnlines
+                                                      .notifier,
                                                 )
-                                                .getFollowingOnlines();
+                                                .state = true;
                                           }
                                         }
                                       },
