@@ -236,7 +236,7 @@ class PuzzleRepository {
       Uri.parse('$kLichessHost/training/themes'),
       headers: {"Accept": "application/json"},
     ).flatMap(
-      (response) => readJsonObject(
+      (response) => readJsonObjectFromResponse(
         response,
         mapper: _puzzleThemeFromJson,
         logger: _log,
@@ -249,7 +249,7 @@ class PuzzleRepository {
       Uri.parse('$kLichessHost/training/openings'),
       headers: {"Accept": "application/json"},
     ).flatMap(
-      (response) => readJsonObject(
+      (response) => readJsonObjectFromResponse(
         response,
         mapper: _puzzleOpeningFromJson,
         logger: _log,

@@ -32,6 +32,10 @@ void main() async {
           record.loggerName == 'AuthSocket') {
         debugPrint(record.message);
       }
+
+      if (record.level >= Level.SEVERE) {
+        debugPrint(record.message);
+      }
     });
   }
 
