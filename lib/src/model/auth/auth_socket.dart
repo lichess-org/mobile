@@ -249,6 +249,7 @@ class AuthSocket {
       delay ?? Duration.zero,
       () {
         _disconnect();
+        _ref.read(averageLagProvider.notifier).reset();
         if (_connection == null) {
           return;
         }
