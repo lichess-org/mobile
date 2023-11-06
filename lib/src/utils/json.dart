@@ -12,17 +12,11 @@ typedef Mapper<T> = T Function(Map<String, dynamic>);
 
 /// Reads a [T] object from a JSON object.
 Result<T> readJsonObject<T>(
-  dynamic obj, {
+  Map<String, dynamic> obj, {
   required Mapper<T> mapper,
   Logger? logger,
 }) {
-  final result = Result(() {
-    if (obj is! Map<String, dynamic>) {
-      logger?.severe('Could not read json object as $T: expected an object.');
-      throw DataFormatException();
-    }
-    return mapper(obj);
-  });
+  final result = Result(() => mapper(obj));
   result.match(
     onError: (error, st) {
       logger?.severe('Could not read json object as $T: $error\n$st');
@@ -37,11 +31,12 @@ Result<T> readJsonObjectFromResponse<T>(
   required Mapper<T> mapper,
   Logger? logger,
 }) {
-  return readJsonObject(
-    jsonDecode(utf8.decode(response.bodyBytes)),
-    mapper: mapper,
-    logger: logger,
-  );
+  final json = jsonDecode(utf8.decode(response.bodyBytes));
+  if (json is! Map<String, dynamic>) {
+    logger?.severe('Could not read json object as $T: expected an object.');
+    throw DataFormatException();
+  }
+  return readJsonObject(json, mapper: mapper, logger: logger);
 }
 
 /// Reads a list of [T] objects from a JSON array.
