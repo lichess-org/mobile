@@ -22,7 +22,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -37,12 +37,12 @@ import 'puzzle_session_widget.dart';
 
 class PuzzleScreen extends ConsumerStatefulWidget {
   const PuzzleScreen({
-    required this.theme,
+    required this.angle,
     this.initialPuzzleContext,
     super.key,
   });
 
-  final PuzzleThemeKey theme;
+  final PuzzleAngle angle;
   final PuzzleContext? initialPuzzleContext;
 
   @override
@@ -69,7 +69,7 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
   @override
   void didPop() {
     super.didPop();
-    ref.invalidate(nextPuzzleProvider(widget.theme));
+    ref.invalidate(nextPuzzleProvider(widget.angle));
     ref.invalidate(accountProvider);
     ref.invalidate(accountActivityProvider);
     ref.invalidate(puzzleDashboardProvider);
@@ -94,7 +94,7 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
           ? _Body(
               initialPuzzleContext: widget.initialPuzzleContext!,
             )
-          : _LoadPuzzle(theme: widget.theme),
+          : _LoadPuzzle(angle: widget.angle),
     );
   }
 
@@ -108,19 +108,19 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
           ? _Body(
               initialPuzzleContext: widget.initialPuzzleContext!,
             )
-          : _LoadPuzzle(theme: widget.theme),
+          : _LoadPuzzle(angle: widget.angle),
     );
   }
 }
 
 class _LoadPuzzle extends ConsumerWidget {
-  const _LoadPuzzle({required this.theme});
+  const _LoadPuzzle({required this.angle});
 
-  final PuzzleThemeKey theme;
+  final PuzzleAngle angle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final nextPuzzle = ref.watch(nextPuzzleProvider(theme));
+    final nextPuzzle = ref.watch(nextPuzzleProvider(angle));
 
     return nextPuzzle.when(
       data: (data) {

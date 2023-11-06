@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import '../../test_container.dart';
 
@@ -30,10 +31,17 @@ void main() {
 
       final storage = container.read(puzzleBatchStorageProvider);
 
-      await storage.save(userId: null, angle: PuzzleThemeKey.mix, data: data);
+      await storage.save(
+        userId: null,
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        data: data,
+      );
 
       expect(
-        storage.fetch(userId: null, angle: PuzzleThemeKey.mix),
+        storage.fetch(
+          userId: null,
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        ),
         completion(equals(data)),
       );
     });
@@ -52,15 +60,19 @@ void main() {
 
       final storage = container.read(puzzleBatchStorageProvider);
 
-      await storage.save(userId: null, angle: PuzzleThemeKey.mix, data: data);
       await storage.save(
         userId: null,
-        angle: PuzzleThemeKey.rookEndgame,
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
         data: data,
       );
       await storage.save(
         userId: null,
-        angle: PuzzleThemeKey.doubleBishopMate,
+        angle: const PuzzleTheme(PuzzleThemeKey.rookEndgame),
+        data: data,
+      );
+      await storage.save(
+        userId: null,
+        angle: const PuzzleTheme(PuzzleThemeKey.doubleBishopMate),
         data: data,
       );
 

@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 
 part 'puzzle_session.freezed.dart';
@@ -19,14 +20,14 @@ class PuzzleSession extends _$PuzzleSession {
   static const maxSize = 150;
 
   @override
-  PuzzleSessionData build(UserId? userId, PuzzleThemeKey theme) {
+  PuzzleSessionData build(UserId? userId, PuzzleAngle angle) {
     final data = _stored;
     if (data != null &&
-        data.theme == theme &&
+        data.angle == angle &&
         data.lastUpdatedAt.isAfter(DateTime.now().subtract(maxAge))) {
       return data;
     }
-    return PuzzleSessionData.initial(theme: theme);
+    return PuzzleSessionData.initial(angle: angle);
   }
 
   Future<void> addAttempt(PuzzleId id, {required bool win}) async {
@@ -68,7 +69,7 @@ class PuzzleSession extends _$PuzzleSession {
   PuzzleSessionData? get _stored {
     final stored = _store.getString(_storageKey);
     if (stored == null) {
-      return PuzzleSessionData.initial(theme: theme);
+      return PuzzleSessionData.initial(angle: angle);
     }
     return PuzzleSessionData.fromJson(
       jsonDecode(stored) as Map<String, dynamic>,
@@ -82,23 +83,30 @@ class PuzzleSession extends _$PuzzleSession {
 @Freezed(fromJson: true, toJson: true)
 class PuzzleSessionData with _$PuzzleSessionData {
   const factory PuzzleSessionData({
-    required PuzzleThemeKey theme,
+    required PuzzleAngle angle,
     required IList<PuzzleAttempt> attempts,
     required DateTime lastUpdatedAt,
   }) = _PuzzleSession;
 
   factory PuzzleSessionData.initial({
-    required PuzzleThemeKey theme,
+    required PuzzleAngle angle,
   }) {
     return PuzzleSessionData(
-      theme: theme,
+      angle: angle,
       attempts: IList(const []),
       lastUpdatedAt: DateTime.now(),
     );
   }
 
-  factory PuzzleSessionData.fromJson(Map<String, dynamic> json) =>
-      _$PuzzleSessionDataFromJson(json);
+  factory PuzzleSessionData.fromJson(Map<String, dynamic> json) {
+    try {
+      return _$PuzzleSessionDataFromJson(json);
+    } catch (e) {
+      return PuzzleSessionData.initial(
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
+      );
+    }
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)

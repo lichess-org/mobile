@@ -12,6 +12,7 @@ import 'puzzle_batch_storage.dart';
 import 'puzzle_repository.dart';
 import 'puzzle.dart';
 import 'puzzle_theme.dart';
+import 'puzzle_angle.dart';
 import 'puzzle_preferences.dart';
 
 part 'puzzle_service.g.dart';
@@ -44,7 +45,7 @@ final defaultPuzzleServiceProvider = puzzleServiceProvider(
 class PuzzleContext with _$PuzzleContext {
   const factory PuzzleContext({
     required Puzzle puzzle,
-    required PuzzleThemeKey theme,
+    required PuzzleAngle angle,
     required UserId? userId,
 
     /// Current Glicko rating of the user if available.
@@ -78,14 +79,14 @@ class PuzzleService {
   /// This future should never fail on network errors.
   Future<PuzzleContext?> nextPuzzle({
     required UserId? userId,
-    PuzzleThemeKey angle = PuzzleThemeKey.mix,
+    PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
   }) {
     return Result.release(
       _syncAndLoadData(userId, angle).map(
         (data) => data.$1 != null && data.$1!.unsolved.isNotEmpty
             ? PuzzleContext(
                 puzzle: data.$1!.unsolved[0],
-                theme: angle,
+                angle: angle,
                 userId: userId,
                 glicko: data.$2,
                 rounds: data.$3,
@@ -103,7 +104,7 @@ class PuzzleService {
     required UserId? userId,
     required PuzzleSolution solution,
     required Puzzle puzzle,
-    PuzzleThemeKey angle = PuzzleThemeKey.mix,
+    PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
   }) async {
     puzzleStorage.save(puzzle: puzzle);
     final data = await batchStorage.fetch(
@@ -128,7 +129,7 @@ class PuzzleService {
   /// Clears the current puzzle batch, fetches a new one and returns the next puzzle.
   Future<PuzzleContext?> resetBatch({
     required UserId? userId,
-    PuzzleThemeKey angle = PuzzleThemeKey.mix,
+    PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
   }) async {
     await batchStorage.delete(userId: userId, angle: angle);
     return nextPuzzle(userId: userId, angle: angle);
@@ -145,7 +146,7 @@ class PuzzleService {
   FutureResult<(PuzzleBatch?, PuzzleGlicko?, IList<PuzzleRound>?)>
       _syncAndLoadData(
     UserId? userId,
-    PuzzleThemeKey angle,
+    PuzzleAngle angle,
   ) async {
     final data = await batchStorage.fetch(
       userId: userId,

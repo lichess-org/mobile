@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -94,7 +95,7 @@ class _Load extends ConsumerWidget {
         return _Body(
           initialPuzzleContext: PuzzleContext(
             puzzle: data.puzzle,
-            theme: PuzzleThemeKey.mix,
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
             userId: session?.user.id,
           ),
           streak: PuzzleStreak(

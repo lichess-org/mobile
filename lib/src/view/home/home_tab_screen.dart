@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -499,15 +500,17 @@ class _DailyPuzzle extends ConsumerWidget {
               context,
               rootNavigator: true,
               builder: (context) => PuzzleScreen(
-                theme: PuzzleThemeKey.mix,
+                angle: const PuzzleTheme(PuzzleThemeKey.mix),
                 initialPuzzleContext: PuzzleContext(
-                  theme: PuzzleThemeKey.mix,
+                  angle: const PuzzleTheme(PuzzleThemeKey.mix),
                   puzzle: data,
                   userId: session?.user.id,
                 ),
               ),
             ).then((_) {
-              ref.invalidate(nextPuzzleProvider(PuzzleThemeKey.mix));
+              ref.invalidate(
+                nextPuzzleProvider(const PuzzleTheme(PuzzleThemeKey.mix)),
+              );
             });
           },
         );
@@ -540,7 +543,8 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzle = ref.watch(nextPuzzleProvider(PuzzleThemeKey.mix));
+    final puzzle =
+        ref.watch(nextPuzzleProvider(const PuzzleTheme(PuzzleThemeKey.mix)));
     return puzzle.maybeWhen(
       data: (data) {
         final preview =
@@ -569,11 +573,13 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
                     context,
                     rootNavigator: true,
                     builder: (context) => PuzzleScreen(
-                      theme: PuzzleThemeKey.mix,
+                      angle: const PuzzleTheme(PuzzleThemeKey.mix),
                       initialPuzzleContext: data,
                     ),
                   ).then((_) {
-                    ref.invalidate(nextPuzzleProvider(PuzzleThemeKey.mix));
+                    ref.invalidate(
+                      nextPuzzleProvider(const PuzzleTheme(PuzzleThemeKey.mix)),
+                    );
                   });
                 }
               : null,

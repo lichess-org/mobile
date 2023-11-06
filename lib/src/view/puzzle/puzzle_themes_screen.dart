@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 
@@ -217,7 +218,7 @@ class _CategoryOffline extends ConsumerWidget {
                         context,
                         rootNavigator: true,
                         builder: (context) => PuzzleScreen(
-                          theme: theme,
+                          angle: PuzzleTheme(theme),
                         ),
                       );
                     }
@@ -295,7 +296,7 @@ class _CategoryOnline extends ConsumerWidget {
                         context,
                         rootNavigator: true,
                         builder: (context) => PuzzleScreen(
-                          theme: theme.key,
+                          angle: PuzzleTheme(theme.key),
                         ),
                       );
                     },

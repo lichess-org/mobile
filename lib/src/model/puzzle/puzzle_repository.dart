@@ -20,6 +20,7 @@ import 'puzzle.dart';
 import 'storm.dart';
 import 'puzzle_streak.dart';
 import 'puzzle_theme.dart';
+import 'puzzle_angle.dart';
 import 'puzzle_difficulty.dart';
 
 part 'puzzle_repository.freezed.dart';
@@ -43,13 +44,13 @@ class PuzzleRepository {
 
   FutureResult<PuzzleBatchResponse> selectBatch({
     required int nb,
-    PuzzleThemeKey angle = PuzzleThemeKey.mix,
+    PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
     PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) {
     return apiClient
         .get(
           Uri.parse(
-            '$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb&difficulty=${difficulty.name}',
+            '$kLichessHost/api/puzzle/batch/${angle.key}?nb=$nb&difficulty=${difficulty.name}',
           ),
           retryOnError: false,
         )
@@ -59,13 +60,13 @@ class PuzzleRepository {
   FutureResult<PuzzleBatchResponse> solveBatch({
     required int nb,
     required IList<PuzzleSolution> solved,
-    PuzzleThemeKey angle = PuzzleThemeKey.mix,
+    PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
     PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) {
     return apiClient
         .post(
           Uri.parse(
-            '$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb&difficulty=${difficulty.name}',
+            '$kLichessHost/api/puzzle/batch/${angle.key}?nb=$nb&difficulty=${difficulty.name}',
           ),
           headers: {'Content-type': 'application/json'},
           body: jsonEncode({

@@ -9,6 +9,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
@@ -20,7 +21,7 @@ part 'puzzle_providers.g.dart';
 @riverpod
 Future<PuzzleContext?> nextPuzzle(
   NextPuzzleRef ref,
-  PuzzleThemeKey theme,
+  PuzzleAngle angle,
 ) {
   final session = ref.watch(authSessionProvider);
   // ignore: avoid_manual_providers_as_generated_provider_dependency
@@ -28,7 +29,7 @@ Future<PuzzleContext?> nextPuzzle(
   final userId = session?.user.id;
   return puzzleService.nextPuzzle(
     userId: userId,
-    angle: theme,
+    angle: angle,
   );
 }
 

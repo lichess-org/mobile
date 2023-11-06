@@ -62,7 +62,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
     final session = ref.watch(
       puzzleSessionProvider(
         widget.initialPuzzleContext.userId,
-        widget.initialPuzzleContext.theme,
+        widget.initialPuzzleContext.angle,
       ),
     );
     final puzzleState = ref.watch(widget.ctrlProvider);
@@ -112,7 +112,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
                                 final puzzle = await ref.read(provider.future);
                                 final nextContext = PuzzleContext(
                                   userId: widget.initialPuzzleContext.userId,
-                                  theme: widget.initialPuzzleContext.theme,
+                                  angle: widget.initialPuzzleContext.angle,
                                   puzzle: puzzle,
                                 );
 

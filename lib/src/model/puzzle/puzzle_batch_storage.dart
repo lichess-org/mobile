@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 
 import 'puzzle.dart';
+import 'puzzle_angle.dart';
 import 'puzzle_theme.dart';
 
 part 'puzzle_batch_storage.freezed.dart';
@@ -31,7 +32,7 @@ class PuzzleBatchStorage {
 
   Future<PuzzleBatch?> fetch({
     required UserId? userId,
-    PuzzleThemeKey angle = PuzzleThemeKey.mix,
+    PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
   }) async {
     final list = await _db.query(
       _tableName,
@@ -41,7 +42,7 @@ class PuzzleBatchStorage {
     ''',
       whereArgs: [
         userId?.value ?? _anonUserKey,
-        angle.name,
+        angle.key,
       ],
     );
 
@@ -62,13 +63,13 @@ class PuzzleBatchStorage {
   Future<void> save({
     required UserId? userId,
     required PuzzleBatch data,
-    PuzzleThemeKey angle = PuzzleThemeKey.mix,
+    PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
   }) async {
     await _db.insert(
       _tableName,
       {
         'userId': userId?.value ?? _anonUserKey,
-        'angle': angle.name,
+        'angle': angle.key,
         'data': jsonEncode(data.toJson()),
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
@@ -77,7 +78,7 @@ class PuzzleBatchStorage {
 
   Future<void> delete({
     required UserId? userId,
-    PuzzleThemeKey angle = PuzzleThemeKey.mix,
+    PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
   }) async {
     await _db.delete(
       _tableName,
@@ -87,7 +88,7 @@ class PuzzleBatchStorage {
     ''',
       whereArgs: [
         userId?.value ?? _anonUserKey,
-        angle.name,
+        angle.key,
       ],
     );
   }
