@@ -99,11 +99,13 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
     GameId? rematch,
   }) = _PlayableGame;
 
-  /// The side that the current player is playing as. Null if spectating.
-  Player? get player => youAre == Side.white ? white : black;
+  /// Player of the playing point of view. Null if spectating.
+  Player? get me => youAre == Side.white ? white : black;
 
-  /// The side that the current player is playing against. Null if spectating.
+  /// Opponent from the playing point of view. Null if spectating.
   Player? get opponent => youAre == Side.white ? black : white;
+
+  Side get sideToMove => lastPosition.turn;
 
   bool get hasAI => white.isAI || black.isAI;
 
@@ -121,7 +123,7 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
   bool get drawable =>
       playable &&
       lastPosition.fullmoves >= 2 &&
-      !(player?.offeringDraw == true) &&
+      !(me?.offeringDraw == true) &&
       !hasAI;
   bool get rematchable =>
       meta.rules == null || !meta.rules!.contains(GameRule.noRematch);
@@ -129,7 +131,7 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
       takebackable &&
       playable &&
       lastPosition.fullmoves >= 2 &&
-      !(player?.proposingTakeback == true) &&
+      !(me?.proposingTakeback == true) &&
       !(opponent?.proposingTakeback == true);
   bool get canGiveTime => moretimeable && playable && clock != null;
 

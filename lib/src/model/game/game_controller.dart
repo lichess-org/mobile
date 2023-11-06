@@ -235,7 +235,7 @@ class GameController extends _$GameController {
   void onFlag() {
     _onFlagThrottler(() {
       if (state.hasValue) {
-        _socket.send('flag', state.requireValue.game.youAre?.name);
+        _socket.send('flag', state.requireValue.game.sideToMove.name);
       }
     });
   }

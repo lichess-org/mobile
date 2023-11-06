@@ -132,9 +132,7 @@ class GameBody extends ConsumerWidget {
                   emergencyThreshold: youAre == Side.black
                       ? gameState.game.clock?.emergency
                       : null,
-                  onFlag: youAre == Side.black
-                      ? () => ref.read(ctrlProvider.notifier).onFlag()
-                      : null,
+                  onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
               : null,
         );
@@ -166,9 +164,7 @@ class GameBody extends ConsumerWidget {
                   emergencyThreshold: youAre == Side.white
                       ? gameState.game.clock?.emergency
                       : null,
-                  onFlag: youAre == Side.white
-                      ? () => ref.read(ctrlProvider.notifier).onFlag()
-                      : null,
+                  onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
               : null,
         );
@@ -508,7 +504,7 @@ class _GameBottomBar extends ConsumerWidget {
               ref.read(gameControllerProvider(id).notifier).offerTakeback();
             },
           ),
-        if (gameState.game.player?.proposingTakeback == true)
+        if (gameState.game.me?.proposingTakeback == true)
           BottomSheetAction(
             label: const Text('Cancel takeback offer'),
             isDestructiveAction: true,
@@ -518,7 +514,7 @@ class _GameBottomBar extends ConsumerWidget {
                   .cancelOrDeclineTakeback();
             },
           ),
-        if (gameState.game.player?.offeringDraw == true)
+        if (gameState.game.me?.offeringDraw == true)
           BottomSheetAction(
             label: const Text('Cancel draw offer'),
             isDestructiveAction: true,
@@ -581,7 +577,7 @@ class _GameBottomBar extends ConsumerWidget {
             },
           ),
         ],
-        if (gameState.game.player?.offeringRematch == true)
+        if (gameState.game.me?.offeringRematch == true)
           BottomSheetAction(
             label: Text(context.l10n.cancelRematchOffer),
             dismissOnPress: true,
@@ -715,7 +711,7 @@ class _GameEndDialogState extends ConsumerState<_GameEndDialog> {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 16.0),
-        if (gameState.game.player?.offeringRematch == true)
+        if (gameState.game.me?.offeringRematch == true)
           SecondaryButton(
             semanticsLabel: context.l10n.cancelRematchOffer,
             onPressed: () {
