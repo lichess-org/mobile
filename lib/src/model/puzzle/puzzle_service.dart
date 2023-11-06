@@ -44,7 +44,7 @@ final defaultPuzzleServiceProvider = puzzleServiceProvider(
 class PuzzleContext with _$PuzzleContext {
   const factory PuzzleContext({
     required Puzzle puzzle,
-    required PuzzleTheme theme,
+    required PuzzleThemeKey theme,
     required UserId? userId,
 
     /// Current Glicko rating of the user if available.
@@ -78,7 +78,7 @@ class PuzzleService {
   /// This future should never fail on network errors.
   Future<PuzzleContext?> nextPuzzle({
     required UserId? userId,
-    PuzzleTheme angle = PuzzleTheme.mix,
+    PuzzleThemeKey angle = PuzzleThemeKey.mix,
   }) {
     return Result.release(
       _syncAndLoadData(userId, angle).map(
@@ -103,7 +103,7 @@ class PuzzleService {
     required UserId? userId,
     required PuzzleSolution solution,
     required Puzzle puzzle,
-    PuzzleTheme angle = PuzzleTheme.mix,
+    PuzzleThemeKey angle = PuzzleThemeKey.mix,
   }) async {
     puzzleStorage.save(puzzle: puzzle);
     final data = await batchStorage.fetch(
@@ -128,7 +128,7 @@ class PuzzleService {
   /// Clears the current puzzle batch, fetches a new one and returns the next puzzle.
   Future<PuzzleContext?> resetBatch({
     required UserId? userId,
-    PuzzleTheme angle = PuzzleTheme.mix,
+    PuzzleThemeKey angle = PuzzleThemeKey.mix,
   }) async {
     await batchStorage.delete(userId: userId, angle: angle);
     return nextPuzzle(userId: userId, angle: angle);
@@ -145,7 +145,7 @@ class PuzzleService {
   FutureResult<(PuzzleBatch?, PuzzleGlicko?, IList<PuzzleRound>?)>
       _syncAndLoadData(
     UserId? userId,
-    PuzzleTheme angle,
+    PuzzleThemeKey angle,
   ) async {
     final data = await batchStorage.fetch(
       userId: userId,

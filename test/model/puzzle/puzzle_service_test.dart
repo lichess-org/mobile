@@ -218,14 +218,14 @@ void main() {
       );
 
       final next = await service.nextPuzzle(
-        angle: PuzzleTheme.opening,
+        angle: PuzzleThemeKey.opening,
         userId: null,
       );
       expect(next?.puzzle.puzzle.id, equals(const PuzzleId('20yWT')));
       expect(nbReq, equals(1));
 
       final data =
-          await storage.fetch(userId: null, angle: PuzzleTheme.opening);
+          await storage.fetch(userId: null, angle: PuzzleThemeKey.opening);
       expect(
         data?.unsolved.length,
         equals(1),

@@ -30,10 +30,10 @@ void main() {
 
       final storage = container.read(puzzleBatchStorageProvider);
 
-      await storage.save(userId: null, angle: PuzzleTheme.mix, data: data);
+      await storage.save(userId: null, angle: PuzzleThemeKey.mix, data: data);
 
       expect(
-        storage.fetch(userId: null, angle: PuzzleTheme.mix),
+        storage.fetch(userId: null, angle: PuzzleThemeKey.mix),
         completion(equals(data)),
       );
     });
@@ -52,15 +52,15 @@ void main() {
 
       final storage = container.read(puzzleBatchStorageProvider);
 
-      await storage.save(userId: null, angle: PuzzleTheme.mix, data: data);
+      await storage.save(userId: null, angle: PuzzleThemeKey.mix, data: data);
       await storage.save(
         userId: null,
-        angle: PuzzleTheme.rookEndgame,
+        angle: PuzzleThemeKey.rookEndgame,
         data: data,
       );
       await storage.save(
         userId: null,
-        angle: PuzzleTheme.doubleBishopMate,
+        angle: PuzzleThemeKey.doubleBishopMate,
         data: data,
       );
 
@@ -69,9 +69,9 @@ void main() {
         completion(
           equals(
             ISet(const [
-              PuzzleTheme.mix,
-              PuzzleTheme.rookEndgame,
-              PuzzleTheme.doubleBishopMate,
+              PuzzleThemeKey.mix,
+              PuzzleThemeKey.rookEndgame,
+              PuzzleThemeKey.doubleBishopMate,
             ]),
           ),
         ),

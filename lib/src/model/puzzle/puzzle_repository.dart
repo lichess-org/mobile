@@ -43,7 +43,7 @@ class PuzzleRepository {
 
   FutureResult<PuzzleBatchResponse> selectBatch({
     required int nb,
-    PuzzleTheme angle = PuzzleTheme.mix,
+    PuzzleThemeKey angle = PuzzleThemeKey.mix,
     PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) {
     return apiClient
@@ -59,7 +59,7 @@ class PuzzleRepository {
   FutureResult<PuzzleBatchResponse> solveBatch({
     required int nb,
     required IList<PuzzleSolution> solved,
-    PuzzleTheme angle = PuzzleTheme.mix,
+    PuzzleThemeKey angle = PuzzleThemeKey.mix,
     PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) {
     return apiClient
@@ -456,7 +456,7 @@ PuzzleDashboard _puzzleDashboardFromPick(RequiredPick pick) => PuzzleDashboard(
         firstWins: pick('global')('firstWins').asIntOrThrow(),
         replayWins: pick('global')('replayWins').asIntOrThrow(),
         performance: pick('global')('performance').asIntOrThrow(),
-        theme: PuzzleTheme.mix,
+        theme: PuzzleThemeKey.mix,
       ),
       themes: pick('themes')
           .asMapOrThrow<String, Map<String, dynamic>>()
@@ -479,7 +479,7 @@ PuzzleDashboardData _puzzleDashboardDataFromPick(
       firstWins: results('firstWins').asIntOrThrow(),
       replayWins: results('replayWins').asIntOrThrow(),
       performance: results('performance').asIntOrThrow(),
-      theme: puzzleThemeNameMap.get(themeKey) ?? PuzzleTheme.mix,
+      theme: puzzleThemeNameMap.get(themeKey) ?? PuzzleThemeKey.mix,
     );
 
 IList<PuzzleThemeFamily> _puzzleThemeFromPick(RequiredPick pick) {

@@ -499,15 +499,15 @@ class _DailyPuzzle extends ConsumerWidget {
               context,
               rootNavigator: true,
               builder: (context) => PuzzleScreen(
-                theme: PuzzleTheme.mix,
+                theme: PuzzleThemeKey.mix,
                 initialPuzzleContext: PuzzleContext(
-                  theme: PuzzleTheme.mix,
+                  theme: PuzzleThemeKey.mix,
                   puzzle: data,
                   userId: session?.user.id,
                 ),
               ),
             ).then((_) {
-              ref.invalidate(nextPuzzleProvider(PuzzleTheme.mix));
+              ref.invalidate(nextPuzzleProvider(PuzzleThemeKey.mix));
             });
           },
         );
@@ -540,7 +540,7 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzle = ref.watch(nextPuzzleProvider(PuzzleTheme.mix));
+    final puzzle = ref.watch(nextPuzzleProvider(PuzzleThemeKey.mix));
     return puzzle.maybeWhen(
       data: (data) {
         final preview =
@@ -569,11 +569,11 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
                     context,
                     rootNavigator: true,
                     builder: (context) => PuzzleScreen(
-                      theme: PuzzleTheme.mix,
+                      theme: PuzzleThemeKey.mix,
                       initialPuzzleContext: data,
                     ),
                   ).then((_) {
-                    ref.invalidate(nextPuzzleProvider(PuzzleTheme.mix));
+                    ref.invalidate(nextPuzzleProvider(PuzzleThemeKey.mix));
                   });
                 }
               : null,

@@ -94,7 +94,7 @@ class _Load extends ConsumerWidget {
         return _Body(
           initialPuzzleContext: PuzzleContext(
             puzzle: data.puzzle,
-            theme: PuzzleTheme.mix,
+            theme: PuzzleThemeKey.mix,
             userId: session?.user.id,
           ),
           streak: PuzzleStreak(

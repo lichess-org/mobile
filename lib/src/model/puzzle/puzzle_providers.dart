@@ -20,7 +20,7 @@ part 'puzzle_providers.g.dart';
 @riverpod
 Future<PuzzleContext?> nextPuzzle(
   NextPuzzleRef ref,
-  PuzzleTheme theme,
+  PuzzleThemeKey theme,
 ) {
   final session = ref.watch(authSessionProvider);
   // ignore: avoid_manual_providers_as_generated_provider_dependency
@@ -60,7 +60,7 @@ Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
 }
 
 @riverpod
-Future<ISet<PuzzleTheme>> savedThemes(SavedThemesRef ref) {
+Future<ISet<PuzzleThemeKey>> savedThemes(SavedThemesRef ref) {
   final session = ref.watch(authSessionProvider);
   final storage = ref.watch(puzzleBatchStorageProvider);
   return storage.fetchSavedThemes(userId: session?.user.id);

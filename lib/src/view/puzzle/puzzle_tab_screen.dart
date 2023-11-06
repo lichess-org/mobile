@@ -100,7 +100,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const theme = PuzzleTheme.mix;
+    const theme = PuzzleThemeKey.mix;
     final nextPuzzle = ref.watch(nextPuzzleProvider(theme));
     final connectivity = ref.watch(connectivityChangesProvider);
 
@@ -316,7 +316,7 @@ class _PuzzleButton extends StatelessWidget {
     this.subtitle,
   });
 
-  final PuzzleTheme theme;
+  final PuzzleThemeKey theme;
   final VoidCallback? onTap;
   final String? subtitle;
 

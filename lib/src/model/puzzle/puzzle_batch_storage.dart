@@ -31,7 +31,7 @@ class PuzzleBatchStorage {
 
   Future<PuzzleBatch?> fetch({
     required UserId? userId,
-    PuzzleTheme angle = PuzzleTheme.mix,
+    PuzzleThemeKey angle = PuzzleThemeKey.mix,
   }) async {
     final list = await _db.query(
       _tableName,
@@ -62,7 +62,7 @@ class PuzzleBatchStorage {
   Future<void> save({
     required UserId? userId,
     required PuzzleBatch data,
-    PuzzleTheme angle = PuzzleTheme.mix,
+    PuzzleThemeKey angle = PuzzleThemeKey.mix,
   }) async {
     await _db.insert(
       _tableName,
@@ -77,7 +77,7 @@ class PuzzleBatchStorage {
 
   Future<void> delete({
     required UserId? userId,
-    PuzzleTheme angle = PuzzleTheme.mix,
+    PuzzleThemeKey angle = PuzzleThemeKey.mix,
   }) async {
     await _db.delete(
       _tableName,
@@ -92,7 +92,7 @@ class PuzzleBatchStorage {
     );
   }
 
-  Future<ISet<PuzzleTheme>> fetchSavedThemes({
+  Future<ISet<PuzzleThemeKey>> fetchSavedThemes({
     required UserId? userId,
   }) async {
     final list = await _db.query(
@@ -103,8 +103,8 @@ class PuzzleBatchStorage {
       ],
     );
 
-    return list.fold<ISet<PuzzleTheme>>(
-      ISet<PuzzleTheme>(const {}),
+    return list.fold<ISet<PuzzleThemeKey>>(
+      ISet<PuzzleThemeKey>(const {}),
       (set, map) {
         final angle = map['angle'] as String?;
         final theme = angle != null ? puzzleThemeNameMap.get(angle) : null;

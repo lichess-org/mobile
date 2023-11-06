@@ -22,7 +22,7 @@ import 'puzzle_screen.dart';
 part 'puzzle_themes_screen.g.dart';
 
 @riverpod
-Future<(bool, ISet<PuzzleTheme>)> _savedThemesConnectivity(
+Future<(bool, ISet<PuzzleThemeKey>)> _savedThemesConnectivity(
   _SavedThemesConnectivityRef ref,
 ) async {
   final connectivity = await ref.watch(connectivityProvider.future);
@@ -137,8 +137,8 @@ class _OfflineThemeBuilder extends StatelessWidget {
     this.themeList,
     this.savedThemes,
   );
-  final ISet<PuzzleTheme> savedThemes;
-  final List<(String, List<PuzzleTheme>)> themeList;
+  final ISet<PuzzleThemeKey> savedThemes;
+  final List<(String, List<PuzzleThemeKey>)> themeList;
 
   @override
   Widget build(BuildContext context) {
@@ -175,7 +175,7 @@ class _CategoryOffline extends ConsumerWidget {
   });
 
   final PuzzleThemeCategory category;
-  final ISet<PuzzleTheme> savedThemes;
+  final ISet<PuzzleThemeKey> savedThemes;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

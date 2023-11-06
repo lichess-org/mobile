@@ -42,7 +42,7 @@ class PuzzleScreen extends ConsumerStatefulWidget {
     super.key,
   });
 
-  final PuzzleTheme theme;
+  final PuzzleThemeKey theme;
   final PuzzleContext? initialPuzzleContext;
 
   @override
@@ -116,7 +116,7 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
 class _LoadPuzzle extends ConsumerWidget {
   const _LoadPuzzle({required this.theme});
 
-  final PuzzleTheme theme;
+  final PuzzleThemeKey theme;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -73,9 +73,9 @@ class _PuzzleHistoryState extends ConsumerState<PuzzleHistoryBoards> {
                             context,
                             rootNavigator: true,
                             builder: (_) => PuzzleScreen(
-                              theme: PuzzleTheme.mix,
+                              theme: PuzzleThemeKey.mix,
                               initialPuzzleContext: PuzzleContext(
-                                theme: PuzzleTheme.mix,
+                                theme: PuzzleThemeKey.mix,
                                 puzzle: puzzle!,
                                 userId: session?.user.id,
                               ),

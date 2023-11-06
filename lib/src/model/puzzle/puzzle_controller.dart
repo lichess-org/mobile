@@ -269,7 +269,7 @@ class PuzzleController extends _$PuzzleController {
     return streak.nextId != null
         ? ref.read(puzzleRepositoryProvider).fetch(streak.nextId!).map(
               (puzzle) => PuzzleContext(
-                theme: PuzzleTheme.mix,
+                theme: PuzzleThemeKey.mix,
                 puzzle: puzzle,
                 userId: initialContext.userId,
               ),

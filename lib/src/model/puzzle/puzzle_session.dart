@@ -19,7 +19,7 @@ class PuzzleSession extends _$PuzzleSession {
   static const maxSize = 150;
 
   @override
-  PuzzleSessionData build(UserId? userId, PuzzleTheme theme) {
+  PuzzleSessionData build(UserId? userId, PuzzleThemeKey theme) {
     final data = _stored;
     if (data != null &&
         data.theme == theme &&
@@ -82,13 +82,13 @@ class PuzzleSession extends _$PuzzleSession {
 @Freezed(fromJson: true, toJson: true)
 class PuzzleSessionData with _$PuzzleSessionData {
   const factory PuzzleSessionData({
-    required PuzzleTheme theme,
+    required PuzzleThemeKey theme,
     required IList<PuzzleAttempt> attempts,
     required DateTime lastUpdatedAt,
   }) = _PuzzleSession;
 
   factory PuzzleSessionData.initial({
-    required PuzzleTheme theme,
+    required PuzzleThemeKey theme,
   }) {
     return PuzzleSessionData(
       theme: theme,

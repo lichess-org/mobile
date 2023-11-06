@@ -198,10 +198,10 @@ class _HistoryBoard extends ConsumerWidget {
                     context,
                     rootNavigator: true,
                     builder: (ctx) => PuzzleScreen(
-                      theme: PuzzleTheme.mix,
+                      theme: PuzzleThemeKey.mix,
                       initialPuzzleContext: PuzzleContext(
                         puzzle: puzzleData!,
-                        theme: PuzzleTheme.mix,
+                        theme: PuzzleThemeKey.mix,
                         userId: session?.user.id,
                       ),
                     ),
