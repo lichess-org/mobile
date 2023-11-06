@@ -52,7 +52,7 @@ dependencies:
    git:
      url: https://github.com/lichess-org/dart-stockfish.git
      ref: dc160c6ae339e4aa0b64ce50980a1b5ca5597d42
-  firebase_crashlytics: ^3.3.4
+  firebase_crashlytics: ^3.4.3
   firebase_core: ^2.15.0
   flutter_displaymode: ^0.6.0
   web_socket_channel: ^2.4.0
