@@ -49,13 +49,8 @@ Future<Puzzle> puzzle(PuzzleRef ref, PuzzleId id) async {
   final puzzleStorage = ref.watch(puzzleStorageProvider);
   final puzzle = await puzzleStorage.fetch(puzzleId: id);
   if (puzzle != null) return puzzle;
-  final link = ref.cacheFor(const Duration(minutes: 30));
   final repo = ref.watch(puzzleRepositoryProvider);
-  final result = await repo.fetch(id);
-  if (result.isError) {
-    link.close();
-  }
-  return result.asFuture;
+  return Result.release(repo.fetch(id));
 }
 
 @Riverpod(keepAlive: true)
