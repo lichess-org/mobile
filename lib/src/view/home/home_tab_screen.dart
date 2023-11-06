@@ -34,7 +34,6 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
-import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/relation/relation_screen.dart';
 import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
@@ -107,6 +106,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }
 
   Widget _androidBuilder(BuildContext context) {
+    final session = ref.watch(authSessionProvider);
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -143,6 +143,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }
 
   Widget _iosBuilder(BuildContext context) {
+    final session = ref.watch(authSessionProvider);
     return CupertinoPageScaffold(
       child: _HomeScaffold(
         child: CustomScrollView(
@@ -592,7 +593,7 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
     );
   }
 }
-      
+
 class _OngoingGamePreview extends ConsumerWidget {
   const _OngoingGamePreview();
 
@@ -646,7 +647,7 @@ class _OngoingGamePreview extends ConsumerWidget {
     );
   }
 }
-      
+
 class _RelationButton extends StatelessWidget {
   const _RelationButton();
 

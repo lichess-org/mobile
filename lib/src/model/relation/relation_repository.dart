@@ -20,7 +20,7 @@ class RelationRepository {
       headers: {'Accept': 'application/x-ndjson'},
     ).then(
       (result) => result.flatMap(
-        (response) => readNdJsonList(
+        (response) => readNdJsonListFromResponse<User>(
           response,
           mapper: (json) => User.fromJson(json),
           logger: _log,
