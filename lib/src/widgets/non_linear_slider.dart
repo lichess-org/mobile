@@ -7,6 +7,7 @@ class NonLinearSlider extends StatefulWidget {
     required this.value,
     required this.values,
     this.labelBuilder,
+    this.onChange,
     this.onChangeEnd,
     super.key,
   })  : assert(values.length > 1),
@@ -14,7 +15,14 @@ class NonLinearSlider extends StatefulWidget {
 
   final num value;
   final List<num> values;
+
+  /// Called during a drag when the user is selecting a new value.
+  final void Function(num)? onChange;
+
+  /// Called when the user is done selecting a value. If null, the widget will
+  /// be disabled.
   final ValueChanged<num>? onChangeEnd;
+
   final String Function(num)? labelBuilder;
 
   @override
@@ -38,35 +46,32 @@ class _NonLinearSliderState extends State<NonLinearSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return Slider.adaptive(
-      value: _index.toDouble(),
-      min: 0,
-      max: widget.values.length.toDouble() - 1,
-      divisions: widget.values.length - 1,
-      label: widget.labelBuilder?.call(widget.values[_index]) ??
-          widget.values[_index].toString(),
-      onChanged: (double value) {
-        final currentIndex = _index;
-        final newIndex = value.toInt();
-        setState(() {
-          _index = newIndex;
-        });
+    return Opacity(
+      opacity: defaultTargetPlatform != TargetPlatform.iOS ||
+              widget.onChangeEnd != null
+          ? 1
+          : 0.5,
+      child: Slider.adaptive(
+        value: _index.toDouble(),
+        min: 0,
+        max: widget.values.length.toDouble() - 1,
+        divisions: widget.values.length - 1,
+        label: widget.labelBuilder?.call(widget.values[_index]) ??
+            widget.values[_index].toString(),
+        onChanged: widget.onChangeEnd != null
+            ? (double value) {
+                final newIndex = value.toInt();
+                setState(() {
+                  _index = newIndex;
+                });
 
-        // iOS doesn't show a label when sliding, so we need to manually
-        // call the callback when the value changes.
-        if (defaultTargetPlatform == TargetPlatform.iOS &&
-            currentIndex != newIndex &&
-            widget.onChangeEnd != null) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            widget.onChangeEnd?.call(widget.values[_index]);
-          });
-        }
-      },
-      onChangeEnd: (double value) {
-        if (defaultTargetPlatform != TargetPlatform.iOS) {
+                widget.onChange?.call(widget.values[_index]);
+              }
+            : null,
+        onChangeEnd: (double value) {
           widget.onChangeEnd?.call(widget.values[_index]);
-        }
-      },
+        },
+      ),
     );
   }
 }

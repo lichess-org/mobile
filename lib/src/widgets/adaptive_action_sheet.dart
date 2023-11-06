@@ -52,10 +52,10 @@ Future<T?> showCupertinoActionSheet<T>({
             .map(
               (action) => CupertinoActionSheetAction(
                 onPressed: () {
-                  action.onPressed(context);
                   if (action.dismissOnPress) {
                     Navigator.of(context).pop();
                   }
+                  action.onPressed(context);
                 },
                 isDestructiveAction: action.isDestructiveAction,
                 child: action.label,
@@ -109,10 +109,10 @@ Future<T?> showMaterialActionSheet<T>({
                     ),
                   ),
                   onTap: () {
-                    action.onPressed(context);
                     if (action.dismissOnPress) {
                       Navigator.of(context).pop();
                     }
+                    action.onPressed(context);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),

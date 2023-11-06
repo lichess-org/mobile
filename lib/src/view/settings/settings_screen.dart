@@ -27,6 +27,7 @@ import './sound_settings_screen.dart';
 import './piece_set_screen.dart';
 import './board_theme_screen.dart';
 import './board_settings_screen.dart';
+import './account_preferences_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -85,7 +86,7 @@ class _Body extends ConsumerWidget {
             children: [
               SettingsListTile(
                 icon: const Icon(Icons.music_note),
-                settingsLabel: context.l10n.sound,
+                settingsLabel: Text(context.l10n.sound),
                 settingsValue: soundThemeL10n(context, soundTheme),
                 onTap: () {
                   if (defaultTargetPlatform == TargetPlatform.android) {
@@ -115,7 +116,7 @@ class _Body extends ConsumerWidget {
               ),
               SettingsListTile(
                 icon: const Icon(Icons.brightness_medium),
-                settingsLabel: context.l10n.background,
+                settingsLabel: Text(context.l10n.background),
                 settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
                 onTap: () {
                   if (defaultTargetPlatform == TargetPlatform.android) {
@@ -140,7 +141,7 @@ class _Body extends ConsumerWidget {
               ),
               SettingsListTile(
                 icon: const Icon(LichessIcons.chess_board),
-                settingsLabel: context.l10n.boardTheme,
+                settingsLabel: Text(context.l10n.boardTheme),
                 settingsValue: boardPrefs.boardTheme.label,
                 onTap: () {
                   pushPlatformRoute(
@@ -152,7 +153,7 @@ class _Body extends ConsumerWidget {
               ),
               SettingsListTile(
                 icon: const Icon(LichessIcons.chess_knight),
-                settingsLabel: context.l10n.pieceSet,
+                settingsLabel: Text(context.l10n.pieceSet),
                 settingsValue: boardPrefs.pieceSet.label,
                 onTap: () {
                   pushPlatformRoute(
@@ -162,12 +163,6 @@ class _Body extends ConsumerWidget {
                   );
                 },
               ),
-            ],
-          ),
-          ListSection(
-            hasLeading: true,
-            showDivider: true,
-            children: [
               PlatformListTile(
                 leading: const Icon(LichessIcons.chess_board),
                 title: const Text('Chessboard'),
@@ -184,6 +179,27 @@ class _Body extends ConsumerWidget {
               ),
             ],
           ),
+          if (userSession != null)
+            ListSection(
+              hasLeading: true,
+              showDivider: true,
+              children: [
+                PlatformListTile(
+                  leading: const Icon(Icons.person),
+                  title: const Text('Account preferences'),
+                  trailing: defaultTargetPlatform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  onTap: () {
+                    pushPlatformRoute(
+                      context,
+                      title: 'Account preferences',
+                      builder: (context) => const AccountPreferencesScreen(),
+                    );
+                  },
+                ),
+              ],
+            ),
           if (userSession != null)
             if (authController.isLoading)
               const ListSection(

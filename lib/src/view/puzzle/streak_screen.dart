@@ -8,6 +8,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:result_extensions/result_extensions.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -16,21 +17,40 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_ctrl.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
-import 'package:lichess_mobile/src/utils/wakelock.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
 import 'puzzle_feedback_widget.dart';
 
-class StreakScreen extends StatelessWidget {
+class StreakScreen extends StatefulWidget {
   const StreakScreen({super.key});
+
+  @override
+  State<StreakScreen> createState() => _StreakScreenState();
+}
+
+class _StreakScreenState extends State<StreakScreen> with ImmersiveMode {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null && route is PageRoute) {
+      rootNavPageRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    rootNavPageRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +127,7 @@ class _Load extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
+class _Body extends ConsumerWidget {
   const _Body({
     required this.initialPuzzleContext,
     required this.streak,
@@ -119,16 +139,10 @@ class _Body extends ConsumerStatefulWidget {
   static const streakColor = LichessColors.brag;
 
   @override
-  ConsumerState<_Body> createState() => _BodyState();
-}
-
-class _BodyState extends ConsumerState<_Body>
-    with AndroidImmersiveMode, Wakelock {
-  @override
-  Widget build(BuildContext context) {
-    final ctrlProvider = puzzleCtrlProvider(
-      widget.initialPuzzleContext,
-      initialStreak: widget.streak,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = puzzleControllerProvider(
+      initialPuzzleContext,
+      initialStreak: streak,
     );
     final puzzleState = ref.watch(ctrlProvider);
 
@@ -150,9 +164,15 @@ class _BodyState extends ConsumerState<_Body>
           child: Center(
             child: SafeArea(
               child: BoardTable(
+                onMove: (move, {isDrop, isPremove}) {
+                  ref
+                      .read(ctrlProvider.notifier)
+                      .onUserMove(Move.fromUci(move.uci)!);
+                },
                 boardData: cg.BoardData(
                   orientation: puzzleState.pov.cg,
-                  interactableSide: puzzleState.position.isGameOver
+                  interactableSide: puzzleState.mode == PuzzleMode.load ||
+                          puzzleState.position.isGameOver
                       ? cg.InteractableSide.none
                       : puzzleState.mode == PuzzleMode.view
                           ? cg.InteractableSide.both
@@ -164,11 +184,6 @@ class _BodyState extends ConsumerState<_Body>
                   lastMove: puzzleState.lastMove?.cg,
                   sideToMove: puzzleState.position.turn.cg,
                   validMoves: puzzleState.validMoves,
-                  onMove: (move, {isDrop, isPremove}) {
-                    ref
-                        .read(ctrlProvider.notifier)
-                        .onUserMove(Move.fromUci(move.uci)!);
-                  },
                 ),
                 topTable: Center(
                   child: Padding(
@@ -222,16 +237,16 @@ class _BodyState extends ConsumerState<_Body>
           ),
         ),
         _BottomBar(
-          initialPuzzleContext: widget.initialPuzzleContext,
+          initialPuzzleContext: initialPuzzleContext,
           ctrlProvider: ctrlProvider,
         ),
       ],
     );
 
-    return puzzleState.streak!.index == 0 || puzzleState.streak!.finished
-        ? content
-        : WillPopScope(
-            onWillPop: () async {
+    return WillPopScope(
+      onWillPop: puzzleState.streak!.index == 0 || puzzleState.streak!.finished
+          ? null
+          : () async {
               final result = await showAdaptiveDialog<bool>(
                 context: context,
                 builder: (context) => YesNoDialog(
@@ -248,8 +263,8 @@ class _BodyState extends ConsumerState<_Body>
               );
               return result ?? false;
             },
-            child: content,
-          );
+      child: content,
+    );
   }
 }
 
@@ -260,7 +275,7 @@ class _BottomBar extends ConsumerWidget {
   });
 
   final PuzzleContext initialPuzzleContext;
-  final PuzzleCtrlProvider ctrlProvider;
+  final PuzzleControllerProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -377,7 +392,7 @@ class _RetryFetchPuzzleDialog extends ConsumerWidget {
     required this.ctrlProvider,
   });
 
-  final PuzzleCtrlProvider ctrlProvider;
+  final PuzzleControllerProvider ctrlProvider;
 
   static const title = 'Could not fetch the puzzle';
   static const content = 'Please check your internet connection and try again.';

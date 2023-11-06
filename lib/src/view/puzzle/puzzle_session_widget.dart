@@ -3,14 +3,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_ctrl.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
+import 'package:lichess_mobile/src/utils/layout.dart';
+import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 
 class PuzzleSessionWidget extends ConsumerStatefulWidget {
   const PuzzleSessionWidget({
@@ -19,7 +20,7 @@ class PuzzleSessionWidget extends ConsumerStatefulWidget {
   });
 
   final PuzzleContext initialPuzzleContext;
-  final PuzzleCtrlProvider ctrlProvider;
+  final PuzzleControllerProvider ctrlProvider;
 
   @override
   ConsumerState<PuzzleSessionWidget> createState() =>
@@ -74,7 +75,8 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: OrientationBuilder(
         builder: (context, orientation) {
-          final estimatedTableHeight = estimateTableHeight(context);
+          final remainingSpace = estimateRemainingHeightLeftBoard(context);
+          final estimatedTableHeight = remainingSpace / 2;
           const estimatedRatingWidgetHeight = 33.0;
           final estimatedWidgetHeight =
               estimatedTableHeight - estimatedRatingWidgetHeight;
@@ -204,16 +206,27 @@ class _SessionItem extends StatelessWidget {
                 ),
               )
             : attempt?.ratingDiff != null && attempt!.ratingDiff != 0
-                ? Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: FittedBox(
-                      fit: BoxFit.cover,
-                      child: Text(
-                        attempt!.ratingDiffString!,
-                        maxLines: 1,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          height: 1,
+                ? RatingPrefAware(
+                    orElse: Icon(
+                      attempt != null
+                          ? attempt!.win
+                              ? Icons.check
+                              : Icons.close
+                          : null,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: Text(
+                          attempt!.ratingDiffString!,
+                          maxLines: 1,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            height: 1,
+                          ),
                         ),
                       ),
                     ),

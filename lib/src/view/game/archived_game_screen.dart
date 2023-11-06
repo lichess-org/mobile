@@ -1,19 +1,24 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/game/game_player.dart';
 
 import 'archived_game_screen_providers.dart';
 
@@ -48,7 +53,8 @@ class ArchivedGameScreen extends ConsumerWidget {
         gameData: gameData,
         orientation: orientation,
       ),
-      bottomNavigationBar: _BottomBar(gameData: gameData),
+      bottomNavigationBar:
+          _BottomBar(gameData: gameData, orientation: orientation),
     );
   }
 
@@ -60,6 +66,7 @@ class ArchivedGameScreen extends ConsumerWidget {
         trailing: ToggleSoundButton(),
       ),
       child: SafeArea(
+        bottom: false,
         child: Column(
           children: [
             Expanded(
@@ -68,7 +75,7 @@ class ArchivedGameScreen extends ConsumerWidget {
                 orientation: orientation,
               ),
             ),
-            _BottomBar(gameData: gameData),
+            _BottomBar(gameData: gameData, orientation: orientation),
           ],
         ),
       ),
@@ -114,11 +121,11 @@ class _BoardBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
-    final black = BoardPlayer(
+    final black = GamePlayer(
       key: const ValueKey('black-player'),
       player: gameData.black,
     );
-    final white = BoardPlayer(
+    final white = GamePlayer(
       key: const ValueKey('white-player'),
       player: gameData.white,
     );
@@ -140,7 +147,7 @@ class _BoardBody extends ConsumerWidget {
         final (game, cursor) = data;
         final whiteClock = game.whiteClockAt(cursor);
         final blackClock = game.blackClockAt(cursor);
-        final black = BoardPlayer(
+        final black = GamePlayer(
           key: const ValueKey('black-player'),
           player: gameData.black,
           clock: blackClock != null
@@ -151,7 +158,7 @@ class _BoardBody extends ConsumerWidget {
               : null,
           materialDiff: game.materialDiffAt(cursor, Side.black),
         );
-        final white = BoardPlayer(
+        final white = GamePlayer(
           key: const ValueKey('white-player'),
           player: gameData.white,
           clock: whiteClock != null
@@ -203,8 +210,9 @@ class _BoardBody extends ConsumerWidget {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.gameData});
+  const _BottomBar({required this.gameData, required this.orientation});
 
+  final Side orientation;
   final ArchivedGameData gameData;
 
   @override
@@ -212,47 +220,80 @@ class _BottomBar extends ConsumerWidget {
     final canGoForward = ref.watch(canGoForwardProvider(gameData.id));
     final canGoBackward = ref.watch(canGoBackwardProvider(gameData.id));
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          BottomBarIconButton(
-            semanticsLabel: context.l10n.menu,
-            onPressed: () {
-              _showGameMenu(context, ref);
-            },
-            icon: const Icon(Icons.menu),
-          ),
-          const SizedBox(
-            width: 44.0,
-          ),
-          const SizedBox(
-            width: 44.0,
-          ),
-          RepeatButton(
-            onLongPress: canGoBackward ? () => _cursorBackward(ref) : null,
-            child: BottomBarIconButton(
-              key: const ValueKey('cursor-back'),
-              // TODO add translation
-              semanticsLabel: 'Backward',
-              showTooltip: false,
-              onPressed: canGoBackward ? () => _cursorBackward(ref) : null,
-              icon: const Icon(CupertinoIcons.chevron_back),
+    return Container(
+      padding: Styles.horizontalBodyPadding,
+      color: defaultTargetPlatform == TargetPlatform.iOS
+          ? CupertinoTheme.of(context).barBackgroundColor
+          : Theme.of(context).bottomAppBarTheme.color,
+      child: SafeArea(
+        top: false,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            BottomBarIconButton(
+              semanticsLabel: context.l10n.menu,
+              onPressed: () {
+                _showGameMenu(context, ref);
+              },
+              icon: const Icon(Icons.menu),
             ),
-          ),
-          RepeatButton(
-            onLongPress: canGoForward ? () => _cursorForward(ref) : null,
-            child: BottomBarIconButton(
-              key: const ValueKey('cursor-forward'),
-              // TODO add translation
-              semanticsLabel: 'Forward',
-              showTooltip: false,
-              onPressed: canGoForward ? () => _cursorForward(ref) : null,
-              icon: const Icon(CupertinoIcons.chevron_forward),
+            BottomBarIconButton(
+              semanticsLabel: context.l10n.gameAnalysis,
+              onPressed: ref.read(gameCursorProvider(gameData.id)).hasValue
+                  ? () {
+                      final (game, cursor) = ref
+                          .read(gameCursorProvider(gameData.id))
+                          .requireValue;
+
+                      pushPlatformRoute(
+                        context,
+                        builder: (context) => AnalysisScreen(
+                          title: context.l10n.gameAnalysis,
+                          options: AnalysisOptions(
+                            isLocalEvaluationAllowed: true,
+                            variant: gameData.variant,
+                            pgn: game.pgn,
+                            initialMoveCursor: cursor,
+                            orientation: orientation,
+                            id: gameData.id,
+                            opening: gameData.opening,
+                          ),
+                        ),
+                      );
+                    }
+                  : null,
+              icon: const Icon(Icons.biotech),
             ),
-          ),
-        ],
+            const SizedBox(
+              width: 44.0,
+            ),
+            const SizedBox(
+              width: 44.0,
+            ),
+            RepeatButton(
+              onLongPress: canGoBackward ? () => _cursorBackward(ref) : null,
+              child: BottomBarIconButton(
+                key: const ValueKey('cursor-back'),
+                // TODO add translation
+                semanticsLabel: 'Backward',
+                showTooltip: false,
+                onPressed: canGoBackward ? () => _cursorBackward(ref) : null,
+                icon: const Icon(CupertinoIcons.chevron_back),
+              ),
+            ),
+            RepeatButton(
+              onLongPress: canGoForward ? () => _cursorForward(ref) : null,
+              child: BottomBarIconButton(
+                key: const ValueKey('cursor-forward'),
+                // TODO add translation
+                semanticsLabel: 'Forward',
+                showTooltip: false,
+                onPressed: canGoForward ? () => _cursorForward(ref) : null,
+                icon: const Icon(CupertinoIcons.chevron_forward),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -270,7 +311,6 @@ class _BottomBar extends ConsumerWidget {
       context: context,
       actions: [
         BottomSheetAction(
-          leading: const Icon(Icons.swap_vert),
           label: Text(context.l10n.flipBoard),
           onPressed: (context) {
             ref.read(isBoardTurnedProvider.notifier).toggle();

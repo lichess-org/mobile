@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
@@ -19,20 +20,18 @@ class Work with _$Work {
     required Variant variant,
     required int threads,
     int? hashSize,
-    bool? stopRequested,
     required UciPath path,
     required int maxDepth,
     required int multiPv,
     bool? threatMode,
-    required String initialFen,
+    required Position initialPosition,
     required IList<Step> steps,
   }) = _Work;
 
-  /// The work position FEN.
-  String get fen => steps.lastOrNull?.fen ?? initialFen;
+  Position get position => steps.lastOrNull?.position ?? initialPosition;
 
   /// The work ply.
-  int get ply => steps.lastOrNull?.ply ?? 0;
+  int get ply => steps.lastOrNull?.position.ply ?? 0;
 
   /// Cached eval for the work position.
   ClientEval? get evalCache => steps.lastOrNull?.eval;
@@ -43,16 +42,14 @@ class Step with _$Step {
   const Step._();
 
   const factory Step({
-    required int ply,
-    required String fen,
+    required Position position,
     required SanMove sanMove,
     ClientEval? eval,
   }) = _Step;
 
   factory Step.fromNode(ViewBranch node) {
     return Step(
-      ply: node.ply,
-      fen: node.fen,
+      position: node.position,
       sanMove: node.sanMove,
       eval: node.eval,
     );

@@ -1,9 +1,10 @@
-import 'dart:math' as math;
-import 'dart:io';
+import 'package:dartchess/dartchess.dart';
+import 'package:flutter/foundation.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:lichess_mobile/src/app_dependencies.dart';
 
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -16,22 +17,25 @@ import 'work.dart';
 part 'engine_evaluation.g.dart';
 part 'engine_evaluation.freezed.dart';
 
-// TODO: make this configurable
-const kMaxDepth = 22;
-
-final maxCores = math.max(1, Platform.numberOfProcessors - 1);
+const kMaxEngineDepth = 22;
 
 @freezed
 class EvaluationContext with _$EvaluationContext {
   const factory EvaluationContext({
-    required Variant variant,
-    required String initialFen,
-
     /// Unique ID to ensure engine is properly disposed when no more needed
     /// and a new engine instance is created per context (puzzle, game, etc).
     required ID contextId,
+    required Variant variant,
+    required Position initialPosition,
+    required int multiPv,
+    required int cores,
   }) = _EvaluationContext;
 }
+
+const engineSupportedVariants = {
+  Variant.standard,
+  Variant.chess960,
+};
 
 @riverpod
 class EngineEvaluation extends _$EngineEvaluation {
@@ -42,30 +46,40 @@ class EngineEvaluation extends _$EngineEvaluation {
     ref.onDispose(() {
       _engine?.dispose();
     });
-
     return null;
   }
 
   Stream<EvalResult>? start(
     UciPath path,
-    Iterable<Step> steps, {
+    Iterable<Step> steps,
+    Position position, {
     required bool Function(Work work) shouldEmit,
   }) {
+    if (!engineSupportedVariants.contains(context.variant)) {
+      return null;
+    }
+
     _engine ??= StockfishEngine();
+
+    // requireValue is possible because appDependenciesProvider is loaded before
+    // anything. See: lib/src/app.dart
+    final maxMemory =
+        ref.read(appDependenciesProvider).requireValue.engineMaxMemoryInMb;
 
     final work = Work(
       variant: context.variant,
-      threads: maxCores,
-      maxDepth: kMaxDepth,
-      multiPv: 1,
+      threads: context.cores,
+      hashSize: maxMemory,
+      maxDepth: kMaxEngineDepth,
+      multiPv: context.multiPv,
       path: path,
-      initialFen: context.initialFen,
+      initialPosition: context.initialPosition,
       steps: IList(steps),
     );
 
     // cancel evaluation if we already have a cached eval at max depth
     final cachedEval = work.evalCache;
-    if (cachedEval != null && cachedEval.depth >= kMaxDepth) {
+    if (cachedEval != null && cachedEval.depth >= kMaxEngineDepth) {
       state = null;
       return null;
     }

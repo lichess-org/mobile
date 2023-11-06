@@ -175,8 +175,6 @@ class _ChoiceChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cupertinoBrightness =
-        CupertinoTheme.maybeBrightnessOf(context) ?? Brightness.light;
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return ChoiceChip(
@@ -188,9 +186,8 @@ class _ChoiceChip extends StatelessWidget {
       case TargetPlatform.iOS:
         return Container(
           decoration: BoxDecoration(
-            color: cupertinoBrightness == Brightness.light
-                ? CupertinoColors.systemBackground
-                : CupertinoColors.tertiarySystemBackground.resolveFrom(context),
+            color: CupertinoColors.secondarySystemGroupedBackground
+                .resolveFrom(context),
             borderRadius: const BorderRadius.all(Radius.circular(5.0)),
             border: selected
                 ? Border.fromBorderSide(

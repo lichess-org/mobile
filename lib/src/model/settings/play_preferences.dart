@@ -5,6 +5,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 
 part 'play_preferences.freezed.dart';
 part 'play_preferences.g.dart';
@@ -56,6 +58,10 @@ class PlayPreferences extends _$PlayPreferences {
     return _save(state.copyWith(seekMode: mode));
   }
 
+  Future<void> setCustomRatingRange(int min, int max) {
+    return _save(state.copyWith(customRatingRange: (min, max)));
+  }
+
   Future<void> _save(PlayPrefs newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(
@@ -80,6 +86,7 @@ class PlayPrefs with _$PlayPrefs {
     required Variant customVariant,
     required bool customRated,
     required PlayableSide customSide,
+    required (int, int) customRatingRange,
 
     // prefered seek mode, set after a seek is made
     required SeekMode seekMode,
@@ -92,8 +99,21 @@ class PlayPrefs with _$PlayPrefs {
     customVariant: Variant.standard,
     customRated: false,
     customSide: PlayableSide.random,
+    customRatingRange: (-500, 500),
     seekMode: SeekMode.fast,
   );
+
+  Speed get speedFromCustom => Speed.fromTimeIncrement(
+        TimeIncrement(
+          customTimeSeconds,
+          customIncrementSeconds,
+        ),
+      );
+
+  Perf get perfFromCustom => Perf.fromVariantAndSpeed(
+        customVariant,
+        speedFromCustom,
+      );
 
   factory PlayPrefs.fromJson(Map<String, dynamic> json) {
     try {
@@ -103,6 +123,32 @@ class PlayPrefs with _$PlayPrefs {
     }
   }
 }
+
+const kSubtractingRatingRange = [
+  -500,
+  -450,
+  -400,
+  -350,
+  -300,
+  -250,
+  -200,
+  -150,
+  -100,
+  -50,
+];
+
+const kAddingRatingRange = [
+  50,
+  100,
+  150,
+  200,
+  250,
+  300,
+  350,
+  400,
+  450,
+  500,
+];
 
 const kAvailableTimesInSeconds = [
   0,

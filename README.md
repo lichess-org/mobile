@@ -11,13 +11,20 @@ If you want to contribute, please read the [contributing guide](./CONTRIBUTING.m
 
 ## Setup
 
-Follow the [flutter guide](https://docs.flutter.dev/get-started/install)
-to install flutter on your operating system.
+Follow the [official flutter guide](https://docs.flutter.dev/get-started/install).
+
+**Note, if you're on Linux**, you should install flutter manually because there is an [issue](https://github.com/lichess-org/mobile/issues/123) with snapd when building Stockfish.
 
 This project is meant to run on iOS and Android, so you need to follow the
 "Platform setup" section of that guide to install the iOS and/or Android platform.
 
 Note that this project is not meant to be run on web platform.
+
+### Using FVM for Flutter Version Management
+
+If you want to use FVM to manage your Flutter versions effectively, please consult the [FVM (Flutter Version Management) guide](https://fvm.app/docs/getting_started/installation) for comprehensive instructions on installing Flutter on your specific operating system.
+
+**Pro Tip:** Remember to prepend the 'flutter' prefix when using FVM commands, like this: `fvm flutter [command]`.
 
 ### Local lila
 
@@ -32,7 +39,7 @@ The mobile application is configured by default to target `http://127.0.0.1:9663
 
 First run the code generator:
 
-```
+```sh
 flutter pub get
 dart run build_runner watch
 ```
@@ -40,14 +47,15 @@ dart run build_runner watch
 Check you have some connected device with: `flutter devices`.
 
 If you target an android device you need to run these commands so the device can reach the local lila instance:
-```
+
+```sh
 adb reverse tcp:9663 tcp:9663
 adb reverse tcp:9664 tcp:9664
 ```
 
 Then run on your device:
 
-```
+```sh
 flutter run -d <my_device>
 ```
 
@@ -55,9 +63,17 @@ You can find more information about emulators [in the wiki](https://github.com/l
 
 You can find more information about the `flutter run` command by running `flutter run --help`.
 
+### Logging
+
+```sh
+dart devtools
+```
+
+Then run the app with the `flutter run` command above, and a link to the logging page will be printed in the console.
+
 ## Internationalisation
 
-Do not edit the `app_en.arb` file by hand, this file is generated. 
+Do not edit the `app_en.arb` file by hand, this file is generated.
 More information [in the wiki](https://github.com/lichess-org/mobile/wiki/About-internationalisation).
 
 ## Releasing

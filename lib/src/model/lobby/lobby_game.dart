@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/game/create_game_service.dart';
 
 import 'game_seek.dart';
@@ -18,20 +21,20 @@ class LobbyGame extends _$LobbyGame {
   late Object? _key;
 
   @override
-  Future<GameFullId> build(GameSeek seek) {
+  Future<(GameFullId, {bool fromRematch})> build(GameSeek seek) {
     _key = Object();
     ref.onDispose(() {
       _service.cancel();
       _key = null;
     });
-    return _service.newLobbyGame(seek);
+    return _service.newLobbyGame(seek).then((id) => (id, fromRematch: false));
   }
 
   Future<void> newOpponent() async {
     final key = _key;
     state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(() {
-      return _service.newLobbyGame(seek);
+      return _service.newLobbyGame(seek).then((id) => (id, fromRematch: false));
     });
     // mounted property check logic from:
     // https://github.com/rrousselGit/riverpod/issues/1879#issuecomment-1303189191
@@ -41,8 +44,35 @@ class LobbyGame extends _$LobbyGame {
   }
 
   void rematch(GameFullId id) {
-    state = AsyncValue.data(id);
+    state = AsyncValue.data((id, fromRematch: true));
   }
 
   CreateGameService get _service => ref.read(createGameServiceProvider);
+}
+
+@riverpod
+class LobbyNumbers extends _$LobbyNumbers {
+  StreamSubscription<SocketEvent>? _socketSubscription;
+
+  @override
+  ({int nbPlayers, int nbGames})? build() {
+    final stream = ref.watch(authSocketProvider).stream;
+
+    ref.onDispose(() {
+      _socketSubscription?.cancel();
+    });
+
+    _socketSubscription?.cancel();
+    _socketSubscription = stream.listen((event) {
+      if (event.topic == 'n') {
+        final data = event.data as Map<String, int>;
+        state = (
+          nbPlayers: data['nbPlayers']!,
+          nbGames: data['nbGames']!,
+        );
+      }
+    });
+
+    return null;
+  }
 }

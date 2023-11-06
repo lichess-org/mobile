@@ -15,8 +15,6 @@ import 'platform.dart';
 const _scrollAnimationDuration = Duration(milliseconds: 200);
 const _moveListOpacity = 0.6;
 
-const _tabletPadding = 16.0;
-
 /// Board layout that adapts to screen size and aspect ratio.
 ///
 /// On portrait mode, the board will be displayed in the middle of the screen,
@@ -29,6 +27,8 @@ const _tabletPadding = 16.0;
 /// An optional overlay or error message can be displayed on top of the board.
 class BoardTable extends ConsumerWidget {
   const BoardTable({
+    this.onMove,
+    this.onPremove,
     required this.boardData,
     this.boardSettingsOverrides,
     required this.topTable,
@@ -45,6 +45,9 @@ class BoardTable extends ConsumerWidget {
           moves == null || currentMoveIndex != null,
           'You must provide `currentMoveIndex` along with `moves`',
         );
+
+  final void Function(Move, {bool? isDrop, bool? isPremove})? onMove;
+  final void Function(Move?)? onPremove;
 
   final BoardData boardData;
 
@@ -87,8 +90,14 @@ class BoardTable extends ConsumerWidget {
         final defaultBoardSize = constraints.biggest.shortestSide;
 
         final isTablet = defaultBoardSize > kTabletThreshold;
-        final boardSize =
-            isTablet ? defaultBoardSize - _tabletPadding * 2 : defaultBoardSize;
+        final boardSize = isTablet
+            ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+            : defaultBoardSize;
+
+        // vertical space left on portrait mode to check if we can display the
+        // move list
+        final verticalSpaceLeftBoardOnPortrait =
+            constraints.biggest.height - boardSize;
 
         final error = errorMessage != null
             ? SizedBox.square(
@@ -125,13 +134,16 @@ class BoardTable extends ConsumerWidget {
         );
 
         final settings = boardSettingsOverrides != null
-            ? defaultSettings.copyWith(
-                animationDuration: boardSettingsOverrides!.animationDuration,
-              )
+            ? boardSettingsOverrides!.merge(defaultSettings)
             : defaultSettings;
 
-        final board =
-            Board(size: boardSize, data: boardData, settings: settings);
+        final board = Board(
+          size: boardSize,
+          data: boardData,
+          settings: settings,
+          onMove: onMove,
+          onPremove: onPremove,
+        );
 
         Widget boardWidget = board;
 
@@ -175,9 +187,9 @@ class BoardTable extends ConsumerWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(
-                      left: _tabletPadding,
-                      top: _tabletPadding,
-                      bottom: _tabletPadding,
+                      left: kTabletBoardTableSidePadding,
+                      top: kTabletBoardTableSidePadding,
+                      bottom: kTabletBoardTableSidePadding,
                     ),
                     child: Row(
                       children: [
@@ -193,7 +205,8 @@ class BoardTable extends ConsumerWidget {
                   Flexible(
                     fit: FlexFit.loose,
                     child: Padding(
-                      padding: const EdgeInsets.all(_tabletPadding),
+                      padding:
+                          const EdgeInsets.all(kTabletBoardTableSidePadding),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -230,19 +243,22 @@ class BoardTable extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (slicedMoves != null)
+                  if (slicedMoves != null &&
+                      verticalSpaceLeftBoardOnPortrait >= 130)
                     MoveList(
                       type: MoveListType.inline,
                       slicedMoves: slicedMoves,
                       currentMoveIndex: currentMoveIndex ?? 0,
                       onSelectMove: onSelectMove,
                     )
-                  else if (showMoveListPlaceholder)
+                  else if (showMoveListPlaceholder &&
+                      verticalSpaceLeftBoardOnPortrait >= 130)
                     const SizedBox(height: 40),
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: isTablet ? _tabletPadding : 12.0,
+                        horizontal:
+                            isTablet ? kTabletBoardTableSidePadding : 12.0,
                       ),
                       child: topTable,
                     ),
@@ -251,7 +267,7 @@ class BoardTable extends ConsumerWidget {
                     Padding(
                       padding: isTablet
                           ? const EdgeInsets.symmetric(
-                              horizontal: _tabletPadding,
+                              horizontal: kTabletBoardTableSidePadding,
                             )
                           : EdgeInsets.zero,
                       child: EngineGauge(
@@ -263,7 +279,8 @@ class BoardTable extends ConsumerWidget {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: isTablet ? _tabletPadding : 12.0,
+                        horizontal:
+                            isTablet ? kTabletBoardTableSidePadding : 12.0,
                       ),
                       child: bottomTable,
                     ),
@@ -278,9 +295,24 @@ class BoardTable extends ConsumerWidget {
 class BoardSettingsOverrides {
   const BoardSettingsOverrides({
     this.animationDuration,
+    this.autoQueenPromotion,
+    this.autoQueenPromotionOnPremove,
+    this.blindfoldMode,
   });
 
   final Duration? animationDuration;
+  final bool? autoQueenPromotion;
+  final bool? autoQueenPromotionOnPremove;
+  final bool? blindfoldMode;
+
+  BoardSettings merge(BoardSettings settings) {
+    return settings.copyWith(
+      animationDuration: animationDuration,
+      autoQueenPromotion: autoQueenPromotion,
+      autoQueenPromotionOnPremove: autoQueenPromotionOnPremove,
+      blindfoldMode: blindfoldMode,
+    );
+  }
 }
 
 enum MoveListType { inline, stacked }
@@ -540,13 +572,4 @@ class StackedMoveItem extends StatelessWidget {
       ),
     );
   }
-}
-
-/// Returns the estimated height of spaces around the board.
-double estimateTableHeight(BuildContext context) {
-  final size = MediaQuery.sizeOf(context);
-  final padding = MediaQuery.paddingOf(context);
-  final safeHeight = size.height - padding.top - padding.bottom;
-  // viewport height - board size - app bar height - bottom bar height
-  return (safeHeight - size.width - 50 - 56) / 2;
 }

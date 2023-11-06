@@ -1,7 +1,10 @@
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 
 part 'chess.freezed.dart';
 part 'chess.g.dart';
@@ -12,6 +15,7 @@ typedef UCIMove = String;
 /// Represents a [Move] with its associated SAN.
 @Freezed(fromJson: true, toJson: true)
 class SanMove with _$SanMove {
+  const SanMove._();
   const factory SanMove(
     String san,
     @JsonKey(fromJson: _moveFromJson, toJson: _moveToJson) Move move,
@@ -19,6 +23,9 @@ class SanMove with _$SanMove {
 
   factory SanMove.fromJson(Map<String, dynamic> json) =>
       _$SanMoveFromJson(json);
+
+  bool get isCheck => san.contains('+');
+  bool get isCapture => san.contains('x');
 }
 
 String _moveToJson(Move move) => move.uci;
@@ -33,7 +40,6 @@ const altCastles = {
   'e8h8': 'e8g8',
 };
 
-// crazyhouse is implemented in dartchess, but not supported by the ui yet
 const ISet<Variant> supportedVariants = ISetConst({
   Variant.standard,
   Variant.chess960,
@@ -41,30 +47,51 @@ const ISet<Variant> supportedVariants = ISetConst({
   Variant.antichess,
   Variant.kingOfTheHill,
   Variant.threeCheck,
-  Variant.atomic,
   Variant.racingKings,
   Variant.horde,
 });
 
 enum Variant {
-  standard('Standard'),
-  chess960('Chess960'),
-  fromPosition('From Position'),
-  antichess('Antichess'),
-  kingOfTheHill('King of the Hill'),
-  threeCheck('Three Check'),
-  atomic('Atomic'),
-  horde('Horde'),
-  racingKings('Racing Kings'),
-  crazyhouse('Crazyhouse');
+  standard('Standard', LichessIcons.crown),
+  chess960('Chess960', LichessIcons.die_six),
+  fromPosition('From Position', LichessIcons.feather),
+  antichess('Antichess', LichessIcons.antichess),
+  kingOfTheHill('King of the Hill', LichessIcons.flag),
+  threeCheck('Three Check', LichessIcons.three_check),
+  atomic('Atomic', LichessIcons.atom),
+  horde('Horde', LichessIcons.horde),
+  racingKings('Racing Kings', LichessIcons.racing_kings),
+  crazyhouse('Crazyhouse', LichessIcons.h_square);
 
-  const Variant(this.label);
+  const Variant(this.label, this.icon);
 
   final String label;
+  final IconData icon;
 
   bool get isSupported => supportedVariants.contains(this);
 
   static final IMap<String, Variant> nameMap = IMap(values.asNameMap());
+
+  static Variant fromRules(Rules rules) {
+    switch (rules) {
+      case Rules.chess:
+        return Variant.standard;
+      case Rules.antichess:
+        return Variant.antichess;
+      case Rules.kingofthehill:
+        return Variant.kingOfTheHill;
+      case Rules.threecheck:
+        return Variant.threeCheck;
+      case Rules.atomic:
+        return Variant.atomic;
+      case Rules.horde:
+        return Variant.horde;
+      case Rules.racingKings:
+        return Variant.racingKings;
+      case Rules.crazyhouse:
+        return Variant.crazyhouse;
+    }
+  }
 
   /// Returns the initial position for this [Variant].
   ///
@@ -115,6 +142,33 @@ enum Variant {
         return Rules.crazyhouse;
     }
   }
+}
+
+/// Represents a chess opening.
+sealed class Opening {
+  String get eco;
+  String get name;
+}
+
+@freezed
+class LightOpening with _$LightOpening implements Opening {
+  const LightOpening._();
+  const factory LightOpening({
+    required String eco,
+    required String name,
+  }) = _LightOpening;
+}
+
+@freezed
+class FullOpening with _$FullOpening implements Opening {
+  const FullOpening._();
+  const factory FullOpening({
+    required String eco,
+    required String name,
+    required String fen,
+    required String pgnMoves,
+    required String uciMoves,
+  }) = _FullOpening;
 }
 
 extension ChessExtension on Pick {

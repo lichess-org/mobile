@@ -20,15 +20,16 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
+import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 
-part 'puzzle_ctrl.g.dart';
-part 'puzzle_ctrl.freezed.dart';
+part 'puzzle_controller.g.dart';
+part 'puzzle_controller.freezed.dart';
 
 @riverpod
-class PuzzleCtrl extends _$PuzzleCtrl {
+class PuzzleController extends _$PuzzleController {
   // ignore: avoid-late-keyword
   late Branch _gameTree;
   Timer? _firstMoveTimer;
@@ -41,7 +42,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 100));
 
   @override
-  PuzzleCtrlState build(
+  PuzzleState build(
     PuzzleContext initialContext, {
     PuzzleStreak? initialStreak,
   }) {
@@ -55,16 +56,16 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     return _loadNewContext(initialContext, initialStreak);
   }
 
-  PuzzleCtrlState _loadNewContext(
+  PuzzleState _loadNewContext(
     PuzzleContext context,
     PuzzleStreak? streak,
   ) {
-    final root = Root.fromPgn(context.puzzle.game.pgn);
+    final root = Root.fromPgnMoves(context.puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Branch;
 
     // play first move after 1 second
     _firstMoveTimer = Timer(const Duration(seconds: 1), () {
-      _setPath(state.initialPath);
+      _setPath(state.initialPath, firstMove: true);
     });
 
     // enable solution button after 4 seconds
@@ -81,15 +82,17 @@ class PuzzleCtrl extends _$PuzzleCtrl {
       _nextPuzzleFuture = _fetchNextStreakPuzzle(streak);
     }
 
-    return PuzzleCtrlState(
+    return PuzzleState(
       puzzle: context.puzzle,
       glicko: context.glicko,
-      mode: PuzzleMode.play,
-      initialFen: _gameTree.fen,
+      mode: PuzzleMode.load,
+      initialPosition: _gameTree.position,
       initialPath: initialPath,
       currentPath: UciPath.empty,
       node: _gameTree.view,
-      pov: _gameTree.nodeAt(initialPath).ply.isEven ? Side.white : Side.black,
+      pov: _gameTree.nodeAt(initialPath).position.ply.isEven
+          ? Side.white
+          : Side.black,
       canViewSolution: false,
       resultSent: false,
       isChangingDifficulty: false,
@@ -383,15 +386,19 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     }
   }
 
-  void _setPath(UciPath path, {bool replaying = false}) {
+  void _setPath(
+    UciPath path, {
+    bool replaying = false,
+    bool firstMove = false,
+  }) {
     final pathChange = state.currentPath != path;
     final newNode = _gameTree.branchAt(path).view;
     final sanMove = newNode.sanMove;
     if (!replaying) {
       final isForward = path.size > state.currentPath.size;
       if (isForward) {
-        final isCheck = sanMove.san.contains('+');
-        if (sanMove.san.contains('x')) {
+        final isCheck = sanMove.isCheck;
+        if (sanMove.isCapture) {
           ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
         } else {
           ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
@@ -400,13 +407,14 @@ class PuzzleCtrl extends _$PuzzleCtrl {
     } else {
       // when replaying moves fast we don't want haptic feedback
       final soundService = ref.read(soundServiceProvider);
-      if (sanMove.san.contains('x')) {
+      if (sanMove.isCapture) {
         soundService.play(Sound.capture);
       } else {
         soundService.play(Sound.move);
       }
     }
     state = state.copyWith(
+      mode: firstMove ? PuzzleMode.play : state.mode,
       currentPath: path,
       node: newNode,
       lastMove: sanMove.move,
@@ -442,6 +450,7 @@ class PuzzleCtrl extends _$PuzzleCtrl {
           .start(
             state.currentPath,
             _gameTree.nodesOn(state.currentPath).map(Step.fromNode),
+            state.node.position,
             shouldEmit: (work) => work.path == state.currentPath,
           )
           ?.forEach((t) {
@@ -466,19 +475,16 @@ class PuzzleCtrl extends _$PuzzleCtrl {
 
   void _mergeSolution() {
     final initialNode = _gameTree.nodeAt(state.initialPath);
-    final fromPly = initialNode.ply;
     final (_, newNodes) = state.puzzle.puzzle.solution.foldIndexed(
       (initialNode.position, IList<Branch>(const [])),
       (index, previous, uci) {
         final move = Move.fromUci(uci);
         final (pos, nodes) = previous;
-        final (newPos, newSan) = pos.playToSan(move!);
+        final (newPos, newSan) = pos.makeSan(move!);
         return (
           newPos,
           nodes.add(
             Branch(
-              ply: fromPly + index + 1,
-              fen: newPos.fen,
               position: newPos,
               sanMove: SanMove(newSan, move),
             ),
@@ -490,21 +496,21 @@ class PuzzleCtrl extends _$PuzzleCtrl {
   }
 }
 
-enum PuzzleMode { play, view }
+enum PuzzleMode { load, play, view }
 
 enum PuzzleResult { win, lose }
 
 enum PuzzleFeedback { good, bad }
 
 @freezed
-class PuzzleCtrlState with _$PuzzleCtrlState {
-  const PuzzleCtrlState._();
+class PuzzleState with _$PuzzleState {
+  const PuzzleState._();
 
-  const factory PuzzleCtrlState({
+  const factory PuzzleState({
     required Puzzle puzzle,
     required PuzzleGlicko? glicko,
     required PuzzleMode mode,
-    required String initialFen,
+    required Position initialPosition,
     required UciPath initialPath,
     required UciPath currentPath,
     required Side pov,
@@ -522,7 +528,7 @@ class PuzzleCtrlState with _$PuzzleCtrlState {
     // we will make the user retry
     required bool nextPuzzleStreakFetchError,
     required bool nextPuzzleStreakFetchIsRetrying,
-  }) = _PuzzleScreenState;
+  }) = _PuzzleState;
 
   bool get isEngineEnabled {
     return mode == PuzzleMode.view && isLocalEvalEnabled;
@@ -530,12 +536,14 @@ class PuzzleCtrlState with _$PuzzleCtrlState {
 
   EvaluationContext get evaluationContext => EvaluationContext(
         variant: Variant.standard,
-        initialFen: initialFen,
+        initialPosition: initialPosition,
         contextId: puzzle.puzzle.id,
+        multiPv: 1,
+        cores: maxEngineCores,
       );
 
   Position get position => node.position;
-  String get fen => node.fen;
+  String get fen => node.position.fen;
   bool get canGoNext => mode == PuzzleMode.view && node.children.isNotEmpty;
   bool get canGoBack =>
       mode == PuzzleMode.view && currentPath.size > initialPath.size;

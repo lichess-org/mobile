@@ -4,7 +4,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_ctrl.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 class PuzzleFeedbackWidget extends StatelessWidget {
@@ -15,7 +15,7 @@ class PuzzleFeedbackWidget extends StatelessWidget {
   });
 
   final Puzzle puzzle;
-  final PuzzleCtrlState state;
+  final PuzzleState state;
   final bool onStreak;
 
   @override
@@ -48,6 +48,7 @@ class PuzzleFeedbackWidget extends StatelessWidget {
               ? null
               : Text('$puzzleRating. $playedXTimes.'),
         );
+      case PuzzleMode.load:
       case PuzzleMode.play:
         if (state.feedback == PuzzleFeedback.bad) {
           return _FeedbackTile(

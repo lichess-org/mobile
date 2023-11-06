@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 
 part 'uci.freezed.dart';
@@ -14,6 +15,9 @@ class UciCharPair with _$UciCharPair {
 
   const factory UciCharPair(String a, String b) = _UciCharPair;
 
+  /// Creates a UciCharPair from a UCI move.
+  ///
+  /// Throws an [ArgumentError] if the move is invalid.
   factory UciCharPair.fromUci(String uci) {
     final move = Move.fromUci(uci);
     if (move == null) {
@@ -77,6 +81,17 @@ class UciPath with _$UciPath {
     final path = StringBuffer();
     for (final node in nodeList) {
       path.write(node.id);
+    }
+    return UciPath(path.toString());
+  }
+
+  /// Creates a UciPath from a list of UCI moves.
+  ///
+  /// Throws an [ArgumentError] if any of the moves is invalid.
+  factory UciPath.fromUciMoves(Iterable<UCIMove> moves) {
+    final path = StringBuffer();
+    for (final move in moves) {
+      path.write(UciCharPair.fromUci(move));
     }
     return UciPath(path.toString());
   }

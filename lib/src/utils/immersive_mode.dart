@@ -2,52 +2,44 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-
-final RouteObserver<PageRoute<void>> immersiveModeRouteObserver =
-    RouteObserver<PageRoute<void>>();
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 final _deviceInfoPlugin = DeviceInfoPlugin();
 
-/// State mixin that sets immersive mode on Android 10 and above.
+/// State mixin that sets immersive mode for board screens.
+///
+/// Mixin user must subscribe to the [NavigatorObserver] and call `super`.
+///
+/// Immersive mode is a way to hide the system UI (status bar and navigation bar)
+/// on Android 10 and above, and to force the device to stay awake.
 ///
 /// Navigation gestures start with Android 10 (API 29).
 /// They conflict with board game gestures, and we must set immersive mode
 /// to disable them.
-mixin AndroidImmersiveMode<T extends StatefulWidget> on State<T>
+mixin ImmersiveMode<T extends StatefulWidget> on State<T>
     implements RouteAware {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final route = ModalRoute.of(context);
-    if (route != null && route is PageRoute) {
-      immersiveModeRouteObserver.subscribe(this, route);
-    }
-  }
-
-  @override
-  void dispose() {
-    immersiveModeRouteObserver.unsubscribe(this);
-    super.dispose();
-  }
-
   @override
   void didPopNext() {
     _setImmersiveMode();
+    WakelockPlus.enable();
   }
 
   @override
   void didPush() {
     _setImmersiveMode();
+    WakelockPlus.enable();
   }
 
   @override
   void didPop() {
     _disableImmersiveMode();
+    WakelockPlus.disable();
   }
 
   @override
   void didPushNext() {
     _disableImmersiveMode();
+    WakelockPlus.disable();
   }
 
   Future<void> _setImmersiveMode() async {

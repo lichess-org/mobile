@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
+import 'package:lichess_mobile/src/widgets/rating.dart';
 
 final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
 
@@ -131,7 +132,7 @@ class _Body extends ConsumerWidget {
                           '${context.l10n.rating} ',
                           style: Styles.sectionTitle,
                         ),
-                        PlayerRating(
+                        RatingWidget(
                           rating: data.rating,
                           deviation: data.deviation,
                           provisional: data.provisional,

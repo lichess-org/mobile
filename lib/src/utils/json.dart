@@ -10,14 +10,13 @@ import 'package:lichess_mobile/src/model/common/errors.dart';
 
 typedef Mapper<T> = T Function(Map<String, dynamic>);
 
-/// Reads a [T] object from a [Response] returning a JSON object.
+/// Reads a [T] object from a JSON object.
 Result<T> readJsonObject<T>(
-  Response response, {
+  dynamic obj, {
   required Mapper<T> mapper,
   Logger? logger,
 }) {
   final result = Result(() {
-    final dynamic obj = jsonDecode(utf8.decode(response.bodyBytes));
     if (obj is! Map<String, dynamic>) {
       logger?.severe('Could not read json object as $T: expected an object.');
       throw DataFormatException();
@@ -32,18 +31,26 @@ Result<T> readJsonObject<T>(
   return result;
 }
 
-/// Reads a list of [T] objects from a [Response] returning a JSON array.
-Result<IList<T>> readJsonListOfObjects<T>(
+/// Reads a [T] object from a [Response] returning a JSON object.
+Result<T> readJsonObjectFromResponse<T>(
   Response response, {
   required Mapper<T> mapper,
   Logger? logger,
 }) {
+  return readJsonObject(
+    jsonDecode(utf8.decode(response.bodyBytes)),
+    mapper: mapper,
+    logger: logger,
+  );
+}
+
+/// Reads a list of [T] objects from a JSON array.
+Result<IList<T>> readJsonListOfObjects<T>(
+  List<dynamic> list, {
+  required Mapper<T> mapper,
+  Logger? logger,
+}) {
   final result = Result(() {
-    final dynamic list = jsonDecode(utf8.decode(response.bodyBytes));
-    if (list is! List<dynamic>) {
-      logger?.severe('Received json is not a list');
-      throw DataFormatException();
-    }
     return IList(
       list.map((e) {
         if (e is! Map<String, dynamic>) {
@@ -61,8 +68,30 @@ Result<IList<T>> readJsonListOfObjects<T>(
   return result;
 }
 
+/// Reads a list of [T] objects from a [Response] returning a JSON array.
+Result<IList<T>> readJsonListOfObjectsFromResponse<T>(
+  Response response, {
+  required Mapper<T> mapper,
+  Logger? logger,
+}) {
+  return Result(() {
+    final dynamic list = jsonDecode(utf8.decode(response.bodyBytes));
+    if (list is! List<dynamic>) {
+      logger?.severe('Received json is not a list');
+      throw DataFormatException();
+    }
+    return list;
+  }).flatMap(
+    (list) => readJsonListOfObjects(
+      list,
+      mapper: mapper,
+      logger: logger,
+    ),
+  );
+}
+
 /// Reads a list of [T] objects from a newline-delimited json [Response].
-Result<IList<T>> readNdJsonList<T>(
+Result<IList<T>> readNdJsonListFromResponse<T>(
   Response response, {
   required Mapper<T> mapper,
   Logger? logger,

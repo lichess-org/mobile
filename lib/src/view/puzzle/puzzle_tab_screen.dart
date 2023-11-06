@@ -124,7 +124,7 @@ class _Body extends ConsumerWidget {
                 onTap: () {
                   pushPlatformRoute(
                     context,
-                    title: 'Puzzle training',
+                    title: context.l10n.puzzleDesc,
                     rootNavigator: true,
                     builder: (context) => PuzzleScreen(
                       theme: theme,
@@ -132,9 +132,6 @@ class _Body extends ConsumerWidget {
                     ),
                   ).then((_) {
                     ref.invalidate(nextPuzzleProvider(theme));
-                    ref.invalidate(
-                      puzzleDashboardProvider(ref.read(daysProvider).days),
-                    );
                   });
                 },
               );
@@ -329,10 +326,10 @@ class _PuzzleButton extends StatelessWidget {
       icon: const Icon(
         LichessIcons.target,
         size: 44,
-        color: LichessColors.secondary,
+        color: LichessColors.brag,
       ),
       title: Text(
-        'Puzzle training',
+        context.l10n.puzzleDesc,
         style: Styles.sectionTitle,
       ),
       subtitle: Text(

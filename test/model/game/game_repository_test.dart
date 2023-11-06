@@ -36,7 +36,7 @@ void main() {
       when(
         () => mockAuthClient.get(
           Uri.parse(
-            '$kLichessHost/api/games/user/testUser?max=10&moves=false&lastFen=true&accuracy=true',
+            '$kLichessHost/api/games/user/testUser?max=10&moves=false&lastFen=true&accuracy=true&opening=true',
           ),
           headers: {'Accept': 'application/x-ndjson'},
         ),
@@ -96,6 +96,11 @@ void main() {
       final result = await repo.getGame(const GameId('qVChCOTc'));
 
       expect(result.isValue, true);
+
+      final game = result.asValue!.value;
+
+      expect(game.data.id, const GameId('qVChCOTc'));
+      expect(game.data.opening?.eco, 'C20');
     });
 
     test('game with analysis', () async {

@@ -169,6 +169,12 @@ void main() {
         expect(find.byType(cg.Board), findsOneWidget);
         expect(find.text('Your turn'), findsOneWidget);
 
+        // before the first move is played, puzzle is not interactable
+        expect(find.byKey(const Key('g4-blackRook')), findsOneWidget);
+        await tester.tap(find.byKey(const Key('g4-blackRook')));
+        await tester.pump();
+        expect(find.byKey(const Key('g4-selected')), findsNothing);
+
         const orientation = cg.Side.black;
 
         // await for first move to be played

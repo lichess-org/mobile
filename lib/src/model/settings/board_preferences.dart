@@ -51,6 +51,16 @@ class BoardPreferences extends _$BoardPreferences {
     return _save(state.copyWith(pieceAnimation: !state.pieceAnimation));
   }
 
+  Future<void> toggleShowMaterialDifference() {
+    return _save(
+      state.copyWith(showMaterialDifference: !state.showMaterialDifference),
+    );
+  }
+
+  Future<void> toggleBlindfoldMode() {
+    return _save(state.copyWith(blindfoldMode: !state.blindfoldMode));
+  }
+
   Future<void> _save(BoardPrefs newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(
@@ -73,6 +83,8 @@ class BoardPrefs with _$BoardPrefs {
     required bool boardHighlights,
     required bool coordinates,
     required bool pieceAnimation,
+    required bool showMaterialDifference,
+    required bool blindfoldMode,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -83,6 +95,8 @@ class BoardPrefs with _$BoardPrefs {
     boardHighlights: true,
     coordinates: true,
     pieceAnimation: true,
+    showMaterialDifference: true,
+    blindfoldMode: false,
   );
 
   factory BoardPrefs.fromJson(Map<String, dynamic> json) {

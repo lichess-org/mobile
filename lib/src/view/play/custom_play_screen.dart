@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,11 +10,15 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/expanded_section.dart';
+import 'package:lichess_mobile/src/widgets/rating.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
 
 class CustomPlayScreen extends StatelessWidget {
   const CustomPlayScreen();
@@ -45,73 +50,119 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final account = ref.watch(accountProvider);
     final preferences = ref.watch(playPreferencesProvider);
     final session = ref.watch(authSessionProvider);
     final isValidTimeControl = preferences.customTimeSeconds > 0 ||
         preferences.customIncrementSeconds > 0;
 
+    final UserPerf? userPerf = account.maybeWhen(
+      data: (data) {
+        if (data == null) {
+          return null;
+        }
+        return data.perfs[preferences.perfFromCustom];
+      },
+      orElse: () => null,
+    );
+
     return Center(
       child: ListView(
         shrinkWrap: true,
         children: [
-          PlatformListTile(
-            title: Text.rich(
-              TextSpan(
-                text: '${context.l10n.minutesPerSide}: ',
-                style: const TextStyle(
-                  fontWeight: FontWeight.normal,
-                ),
-                children: [
-                  TextSpan(
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+          Builder(
+            builder: (context) {
+              int customTimeSeconds = preferences.customTimeSeconds;
+              return StatefulBuilder(
+                builder: (context, setState) {
+                  return PlatformListTile(
+                    harmonizeCupertinoTitleStyle: true,
+                    title: Text.rich(
+                      TextSpan(
+                        text: '${context.l10n.minutesPerSide}: ',
+                        children: [
+                          TextSpan(
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                            text: _clockTimeLabel(customTimeSeconds),
+                          ),
+                        ],
+                      ),
                     ),
-                    text: _clockTimeLabel(preferences.customTimeSeconds),
-                  ),
-                ],
-              ),
-            ),
-            subtitle: NonLinearSlider(
-              value: preferences.customTimeSeconds,
-              values: kAvailableTimesInSeconds,
-              labelBuilder: _clockTimeLabel,
-              onChangeEnd: (num value) {
-                ref
-                    .read(playPreferencesProvider.notifier)
-                    .setCustomTimeSeconds(value.toInt());
-              },
-            ),
+                    subtitle: NonLinearSlider(
+                      value: customTimeSeconds,
+                      values: kAvailableTimesInSeconds,
+                      labelBuilder: _clockTimeLabel,
+                      onChange: defaultTargetPlatform == TargetPlatform.iOS
+                          ? (num value) {
+                              setState(() {
+                                customTimeSeconds = value.toInt();
+                              });
+                            }
+                          : null,
+                      onChangeEnd: (num value) {
+                        setState(() {
+                          customTimeSeconds = value.toInt();
+                        });
+                        ref
+                            .read(playPreferencesProvider.notifier)
+                            .setCustomTimeSeconds(value.toInt());
+                      },
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+          Builder(
+            builder: (context) {
+              int customIncrementSeconds = preferences.customIncrementSeconds;
+              return StatefulBuilder(
+                builder: (context, setState) {
+                  return PlatformListTile(
+                    harmonizeCupertinoTitleStyle: true,
+                    title: Text.rich(
+                      TextSpan(
+                        text: '${context.l10n.incrementInSeconds}: ',
+                        children: [
+                          TextSpan(
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                            text: customIncrementSeconds.toString(),
+                          ),
+                        ],
+                      ),
+                    ),
+                    subtitle: NonLinearSlider(
+                      value: customIncrementSeconds,
+                      values: kAvailableIncrementsInSeconds,
+                      onChange: defaultTargetPlatform == TargetPlatform.iOS
+                          ? (num value) {
+                              setState(() {
+                                customIncrementSeconds = value.toInt();
+                              });
+                            }
+                          : null,
+                      onChangeEnd: (num value) {
+                        setState(() {
+                          customIncrementSeconds = value.toInt();
+                        });
+                        ref
+                            .read(playPreferencesProvider.notifier)
+                            .setCustomIncrementSeconds(value.toInt());
+                      },
+                    ),
+                  );
+                },
+              );
+            },
           ),
           PlatformListTile(
-            title: Text.rich(
-              TextSpan(
-                style: const TextStyle(
-                  fontWeight: FontWeight.normal,
-                ),
-                text: '${context.l10n.incrementInSeconds}: ',
-                children: [
-                  TextSpan(
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                    text: preferences.customIncrementSeconds.toString(),
-                  ),
-                ],
-              ),
-            ),
-            subtitle: NonLinearSlider(
-              value: preferences.customIncrementSeconds,
-              values: kAvailableIncrementsInSeconds,
-              onChangeEnd: (num value) {
-                ref
-                    .read(playPreferencesProvider.notifier)
-                    .setCustomIncrementSeconds(value.toInt());
-              },
-            ),
-          ),
-          PlatformListTile(
+            harmonizeCupertinoTitleStyle: true,
             title: Text(context.l10n.variant),
             trailing: AdaptiveTextButton(
               onPressed: () {
@@ -130,20 +181,10 @@ class _Body extends ConsumerWidget {
               child: Text(preferences.customVariant.label),
             ),
           ),
-          if (session != null)
-            PlatformListTile(
-              title: Text(context.l10n.rated),
-              trailing: Switch.adaptive(
-                value: preferences.customRated,
-                onChanged: (bool value) {
-                  ref
-                      .read(playPreferencesProvider.notifier)
-                      .setCustomRated(value);
-                },
-              ),
-            ),
-          if (preferences.customRated == false)
-            PlatformListTile(
+          ExpandedSection(
+            expand: preferences.customRated == false,
+            child: PlatformListTile(
+              harmonizeCupertinoTitleStyle: true,
               title: Text(context.l10n.side),
               trailing: AdaptiveTextButton(
                 onPressed: () {
@@ -163,6 +204,121 @@ class _Body extends ConsumerWidget {
                 child: Text(_customSideLabel(context, preferences.customSide)),
               ),
             ),
+          ),
+          if (session != null)
+            PlatformListTile(
+              harmonizeCupertinoTitleStyle: true,
+              title: Text(context.l10n.rated),
+              trailing: Switch.adaptive(
+                value: preferences.customRated,
+                onChanged: (bool value) {
+                  ref
+                      .read(playPreferencesProvider.notifier)
+                      .setCustomRated(value);
+                },
+              ),
+            ),
+          if (userPerf != null)
+            Builder(
+              builder: (context) {
+                final isRatingRangeAvailable = userPerf.provisional != true;
+                var (subtract, add) = preferences.customRatingRange;
+
+                return StatefulBuilder(
+                  builder: (context, setState) {
+                    return Opacity(
+                      opacity: isRatingRangeAvailable ? 1 : 0.5,
+                      child: PlatformListTile(
+                        harmonizeCupertinoTitleStyle: true,
+                        title: Text(
+                          context.l10n.ratingRange,
+                        ),
+                        subtitle: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Flexible(
+                              child: Column(
+                                children: [
+                                  NonLinearSlider(
+                                    value: subtract,
+                                    values: kSubtractingRatingRange,
+                                    onChange: defaultTargetPlatform ==
+                                            TargetPlatform.iOS
+                                        ? (num value) {
+                                            setState(() {
+                                              subtract = value.toInt();
+                                            });
+                                          }
+                                        : null,
+                                    onChangeEnd: isRatingRangeAvailable
+                                        ? (num value) {
+                                            ref
+                                                .read(
+                                                  playPreferencesProvider
+                                                      .notifier,
+                                                )
+                                                .setCustomRatingRange(
+                                                  value.toInt(),
+                                                  add,
+                                                );
+                                          }
+                                        : null,
+                                  ),
+                                  Center(
+                                    child: Text('$subtract'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            RatingWidget(
+                              rating: userPerf.rating,
+                              deviation: userPerf.ratingDeviation,
+                              provisional: userPerf.provisional,
+                            ),
+                            const SizedBox(width: 5),
+                            Flexible(
+                              child: Column(
+                                children: [
+                                  NonLinearSlider(
+                                    value: add,
+                                    values: kAddingRatingRange,
+                                    onChange: defaultTargetPlatform ==
+                                            TargetPlatform.iOS
+                                        ? (num value) {
+                                            setState(() {
+                                              add = value.toInt();
+                                            });
+                                          }
+                                        : null,
+                                    onChangeEnd: isRatingRangeAvailable
+                                        ? (num value) {
+                                            ref
+                                                .read(
+                                                  playPreferencesProvider
+                                                      .notifier,
+                                                )
+                                                .setCustomRatingRange(
+                                                  subtract,
+                                                  value.toInt(),
+                                                );
+                                          }
+                                        : null,
+                                  ),
+                                  Center(
+                                    child: Text('+$add'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -177,10 +333,11 @@ class _Body extends ConsumerWidget {
                         context,
                         rootNavigator: true,
                         builder: (BuildContext context) {
-                          return GameScreen(
+                          return LobbyGameScreen(
                             seek: GameSeek.customFromPrefs(
                               preferences,
                               session,
+                              userPerf,
                             ),
                           );
                         },

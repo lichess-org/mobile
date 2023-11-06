@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
@@ -31,12 +32,14 @@ class GameFullEvent with _$GameFullEvent {
 }
 
 PlayableGame _playableGameFromPick(RequiredPick pick) {
-  final meta = _playableGameMetaFromPick(pick('game').required());
+  final requiredGamePick = pick('game').required();
+  final meta = _playableGameMetaFromPick(requiredGamePick);
+  final initialFen = requiredGamePick('initialFen').asStringOrNull();
 
   // assume lichess always send initialFen with fromPosition and chess960
   Position position =
       (meta.variant == Variant.fromPosition || meta.variant == Variant.chess960)
-          ? Chess.fromSetup(Setup.parseFen(meta.initialFen!))
+          ? Chess.fromSetup(Setup.parseFen(initialFen!))
           : meta.variant.initialPosition;
 
   int ply = 0;
@@ -62,6 +65,7 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
 
   return PlayableGame(
     meta: meta,
+    initialFen: initialFen,
     steps: steps.toIList(),
     white: pick('white').letOrThrow(_playerFromUserGamePick),
     black: pick('black').letOrThrow(_playerFromUserGamePick),
@@ -70,7 +74,10 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
     winner: pick('game', 'winner').asSideOrNull(),
     boosted: pick('game', 'boosted').asBoolOrNull(),
     isThreefoldRepetition: pick('game', 'threefold').asBoolOrNull(),
+    moretimeable: pick('moretimeable').asBoolOrFalse(),
+    takebackable: pick('takebackable').asBoolOrFalse(),
     youAre: pick('youAre').asSideOrNull(),
+    prefs: pick('prefs').letOrNull(_gamePrefsFromPick),
     expiration: pick('expiration').letOrNull(
       (it) {
         final idle = it('idleMillis').asDurationFromMilliSecondsOrThrow();
@@ -96,7 +103,6 @@ PlayableGameMeta _playableGameMetaFromPick(RequiredPick pick) {
       (pick) =>
           GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
     ),
-    initialFen: pick('initialFen').asStringOrNull(),
     startedAtTurn: pick('startedAtTurn').asIntOrNull(),
     rules: pick('rules').letOrNull(
       (it) => ISet(
@@ -105,6 +111,17 @@ PlayableGameMeta _playableGameMetaFromPick(RequiredPick pick) {
         ),
       ),
     ),
+  );
+}
+
+GamePrefs _gamePrefsFromPick(RequiredPick pick) {
+  return GamePrefs(
+    showRatings: pick('showRatings').asBoolOrFalse(),
+    enablePremove: pick('enablePremove').asBoolOrFalse(),
+    autoQueen: AutoQueen.fromInt(pick('autoQueen').asIntOrThrow()),
+    confirmResign: pick('confirmResign').asBoolOrFalse(),
+    submitMove: pick('submitMove').asBoolOrFalse(),
+    zenMode: Zen.fromInt(pick('zen').asIntOrThrow()),
   );
 }
 

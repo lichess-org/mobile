@@ -12,20 +12,35 @@ class SettingsListTile extends StatelessWidget {
     required this.settingsLabel,
     required this.settingsValue,
     required this.onTap,
+    this.additionalInfo,
+    this.showCupertinoTrailingValue = true,
     super.key,
   });
 
   final Icon? icon;
-  final String settingsLabel;
+
+  /// The label of the settings value.
+  final Text settingsLabel;
+
   final String settingsValue;
   final void Function() onTap;
+
+  final String? additionalInfo;
+
+  /// Whether to show the value in the trailing position on iOS.
+  ///
+  /// True by default, can be disabled for long settings names.
+  final bool showCupertinoTrailingValue;
 
   @override
   Widget build(BuildContext context) {
     final tile = PlatformListTile(
       leading: icon,
-      title: Text(settingsLabel),
-      additionalInfo: Text(settingsValue),
+      title: _SettingsTitle(
+        title: settingsLabel,
+        additionalInfo: additionalInfo,
+      ),
+      additionalInfo: showCupertinoTrailingValue ? Text(settingsValue) : null,
       subtitle: defaultTargetPlatform == TargetPlatform.android
           ? Text(
               settingsValue,
@@ -43,7 +58,12 @@ class SettingsListTile extends StatelessWidget {
       button: true,
       label: '$settingsLabel: $settingsValue',
       excludeSemantics: true,
-      child: tile,
+      child: additionalInfo != null
+          ? _SettingsInfoTooltip(
+              message: additionalInfo!,
+              child: tile,
+            )
+          : tile,
     );
   }
 }
@@ -53,32 +73,100 @@ class SwitchSettingTile extends StatelessWidget {
     required this.title,
     this.subtitle,
     required this.value,
-    required this.onChanged,
+    this.additionalInfo,
+    this.onChanged,
     this.leading,
     super.key,
   });
 
-  final Widget title;
+  final Text title;
   final Widget? subtitle;
+  final String? additionalInfo;
   final bool value;
-  final void Function(bool value) onChanged;
+  final void Function(bool value)? onChanged;
   final Widget? leading;
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
+    final tile = PlatformListTile(
       leading: leading,
-      title: title,
+      title: _SettingsTitle(
+        title: title,
+        additionalInfo: additionalInfo,
+      ),
       subtitle: subtitle,
       trailing: Switch.adaptive(
         value: value,
         onChanged: onChanged,
       ),
     );
+
+    return additionalInfo != null
+        ? _SettingsInfoTooltip(
+            message: additionalInfo!,
+            child: tile,
+          )
+        : tile;
   }
 }
 
-/// A platform agnostic choice picker.
+class _SettingsInfoTooltip extends StatelessWidget {
+  const _SettingsInfoTooltip({
+    required this.message,
+    required this.child,
+  });
+
+  final String message;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: message,
+      margin: const EdgeInsets.symmetric(horizontal: 16.0),
+      showDuration: const Duration(seconds: 4),
+      child: child,
+    );
+  }
+}
+
+class _SettingsTitle extends StatelessWidget {
+  const _SettingsTitle({
+    required this.title,
+    this.additionalInfo,
+  });
+
+  final Text title;
+  final String? additionalInfo;
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTextStyle.merge(
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+      child: Text.rich(
+        TextSpan(
+          children: [
+            title.textSpan ?? TextSpan(text: title.data),
+            if (additionalInfo != null)
+              WidgetSpan(
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 5.0),
+                  child: Icon(
+                    defaultTargetPlatform == TargetPlatform.iOS
+                        ? CupertinoIcons.info
+                        : Icons.info_outline,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A platform agnostic choice picker
 class ChoicePicker<T extends Enum> extends StatelessWidget {
   const ChoicePicker({
     super.key,
@@ -95,7 +183,7 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
   });
 
   final List<T> choices;
-  final Enum selectedItem;
+  final T selectedItem;
   final Widget Function(T choice) titleBuilder;
   final Widget Function(T choice)? subtitleBuilder;
   final Widget Function(T choice)? leadingBuilder;

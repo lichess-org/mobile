@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 
@@ -7,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'game_seek.freezed.dart';
 
@@ -20,6 +22,7 @@ class GameSeek with _$GameSeek {
     required bool rated,
     Variant? variant,
     Side? side,
+    (int, int)? ratingRange,
   }) = _GameSeek;
 
   factory GameSeek.fastPairingFromPrefs(
@@ -36,6 +39,7 @@ class GameSeek with _$GameSeek {
   factory GameSeek.customFromPrefs(
     PlayPrefs playPref,
     AuthSessionState? session,
+    UserPerf? userPerf,
   ) {
     return GameSeek(
       time: Duration(seconds: playPref.customTimeSeconds),
@@ -48,6 +52,12 @@ class GameSeek with _$GameSeek {
           : playPref.customSide == PlayableSide.white
               ? Side.white
               : Side.black,
+      ratingRange: userPerf != null && userPerf.provisional != true
+          ? (
+              math.max(0, userPerf.rating + playPref.customRatingRange.$1),
+              userPerf.rating + playPref.customRatingRange.$2
+            )
+          : null,
     );
   }
 
@@ -67,5 +77,7 @@ class GameSeek with _$GameSeek {
         'rated': rated.toString(),
         if (variant != null) 'variant': variant!.name,
         if (side != null) 'color': side!.name,
+        if (ratingRange != null)
+          'ratingRange': '${ratingRange!.$1}-${ratingRange!.$2}',
       };
 }

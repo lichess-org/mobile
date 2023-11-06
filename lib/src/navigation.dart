@@ -9,16 +9,16 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
-import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/account/profile_tab_screen.dart';
 import 'package:lichess_mobile/src/view/relation/following_screen.dart';
+import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
-import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 
 enum BottomTab {
   home(Icons.home),
   puzzles(LichessIcons.target),
+  tools(CupertinoIcons.wrench),
   watch(Icons.live_tv),
   profile(CupertinoIcons.profile_circled);
 
@@ -32,6 +32,8 @@ enum BottomTab {
         return 'Home';
       case BottomTab.puzzles:
         return strings.puzzles;
+      case BottomTab.tools:
+        return strings.tools;
       case BottomTab.watch:
         return strings.watch;
       case BottomTab.profile:
@@ -50,6 +52,8 @@ final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
       return homeNavigatorKey;
     case BottomTab.puzzles:
       return puzzlesNavigatorKey;
+    case BottomTab.tools:
+      return toolsNavigatorKey;
     case BottomTab.watch:
       return watchNavigatorKey;
     case BottomTab.profile:
@@ -64,6 +68,8 @@ final currentRootScrollControllerProvider = Provider<ScrollController>((ref) {
       return homeScrollController;
     case BottomTab.puzzles:
       return puzzlesScrollController;
+    case BottomTab.tools:
+      return toolsScrollController;
     case BottomTab.watch:
       return watchScrollController;
     case BottomTab.profile:
@@ -73,13 +79,18 @@ final currentRootScrollControllerProvider = Provider<ScrollController>((ref) {
 
 final homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
 final puzzlesNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'puzzles');
+final toolsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'tools');
 final watchNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'watch');
 final profileNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'profile');
 
 final homeScrollController = ScrollController(debugLabel: 'HomeScroll');
 final puzzlesScrollController = ScrollController(debugLabel: 'PuzzlesScroll');
+final toolsScrollController = ScrollController(debugLabel: 'ToolsScroll');
 final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
 final profileScrollController = ScrollController(debugLabel: 'ProfileScroll');
+
+final RouteObserver<PageRoute<void>> rootNavPageRouteObserver =
+    RouteObserver<PageRoute<void>>();
 
 final tabsProvider = Provider<List<_Tab>>((ref) {
   final l10n = ref.watch(l10nProvider);
@@ -87,7 +98,10 @@ final tabsProvider = Provider<List<_Tab>>((ref) {
   return BottomTab.values.map((tab) {
     return _Tab(
       label: tab.label(l10n.strings),
-      icon: Icon(tab.icon),
+      icon: Icon(
+        tab.icon,
+        size: tab == BottomTab.tools ? 22 : null,
+      ),
     );
   }).toList();
 });
@@ -191,7 +205,6 @@ class BottomNavScaffold extends ConsumerWidget {
           navigatorKey: homeNavigatorKey,
           navigatorObservers: [
             homeRouteObserver,
-            gameRouteObserver,
             followingRouteObserver,
           ],
           builder: (context) => const HomeTabScreen(),
@@ -203,11 +216,15 @@ class BottomNavScaffold extends ConsumerWidget {
         );
       case 2:
         return _MaterialTabView(
-          navigatorKey: watchNavigatorKey,
-          navigatorObservers: [tvRouteObserver],
-          builder: (context) => const WatchTabScreen(),
+          navigatorKey: toolsNavigatorKey,
+          builder: (context) => const ToolsTabScreen(),
         );
       case 3:
+        return _MaterialTabView(
+          navigatorKey: watchNavigatorKey,
+          builder: (context) => const WatchTabScreen(),
+        );
+      case 4:
         return _MaterialTabView(
           navigatorKey: profileNavigatorKey,
           builder: (context) => const ProfileTabScreen(),
@@ -226,7 +243,6 @@ class BottomNavScaffold extends ConsumerWidget {
           navigatorKey: homeNavigatorKey,
           navigatorObservers: [
             homeRouteObserver,
-            gameRouteObserver,
             followingRouteObserver,
           ],
           builder: (context) => const HomeTabScreen(),
@@ -239,12 +255,17 @@ class BottomNavScaffold extends ConsumerWidget {
         );
       case 2:
         return CupertinoTabView(
-          defaultTitle: context.l10n.watch,
-          navigatorKey: watchNavigatorKey,
-          navigatorObservers: [tvRouteObserver],
-          builder: (context) => const WatchTabScreen(),
+          defaultTitle: context.l10n.tools,
+          navigatorKey: toolsNavigatorKey,
+          builder: (context) => const ToolsTabScreen(),
         );
       case 3:
+        return CupertinoTabView(
+          defaultTitle: context.l10n.watch,
+          navigatorKey: watchNavigatorKey,
+          builder: (context) => const WatchTabScreen(),
+        );
+      case 4:
         return CupertinoTabView(
           defaultTitle: context.l10n.profile,
           navigatorKey: profileNavigatorKey,

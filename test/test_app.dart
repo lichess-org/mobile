@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import './model/common/service/fake_sound_service.dart';
 import './model/auth/fake_auth_repository.dart';
 import './model/auth/fake_session_storage.dart';
@@ -43,7 +44,9 @@ Future<Widget> buildTestApp(
   AuthSessionState? userSession,
 }) async {
   await tester.binding.setSurfaceSize(kTestSurfaceSize);
+
   SharedPreferences.setMockInitialValues({});
+
   final sharedPreferences = await SharedPreferences.getInstance();
 
   FlutterSecureStorage.setMockInitialValues({
@@ -64,6 +67,10 @@ Future<Widget> buildTestApp(
 
   return ProviderScope(
     overrides: [
+      // ignore: scoped_providers_should_specify_dependencies
+      showRatingsPrefProvider.overrideWith((ref) {
+        return true;
+      }),
       // ignore: scoped_providers_should_specify_dependencies
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       // ignore: scoped_providers_should_specify_dependencies
@@ -97,6 +104,7 @@ Future<Widget> buildTestApp(
           userSession: userSession,
           database: MockDatabase(),
           sri: 'test',
+          engineMaxMemoryInMb: 16,
         );
       }),
       ...overrides ?? [],

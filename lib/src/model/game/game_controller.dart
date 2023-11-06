@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:chessground/chessground.dart' as cg;
 import 'package:logging/logging.dart';
 import 'package:deep_pick/deep_pick.dart';
 
@@ -12,6 +13,8 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
@@ -19,12 +22,12 @@ import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 
-part 'game_ctrl.freezed.dart';
-part 'game_ctrl.g.dart';
+part 'game_controller.freezed.dart';
+part 'game_controller.g.dart';
 
 @riverpod
-class GameCtrl extends _$GameCtrl {
-  final _logger = Logger('GameCtrl');
+class GameController extends _$GameController {
+  final _logger = Logger('GameController');
 
   StreamSubscription<SocketEvent>? _socketSubscription;
 
@@ -43,30 +46,18 @@ class GameCtrl extends _$GameCtrl {
   final _onFlagThrottler = Throttler(const Duration(milliseconds: 500));
 
   /// Last socket version received
-  int _socketEventVersion = 0;
+  int? _socketEventVersion;
 
   /// Last move time
   DateTime? _lastMoveTime;
 
   @override
-  Future<GameCtrlState> build(GameFullId gameFullId) {
+  Future<GameState> build(GameFullId gameFullId) {
     final socket = ref.watch(authSocketProvider);
     final (stream, _) = socket.connect(Uri(path: '/play/$gameFullId/v6'));
-
-    final state = stream.firstWhere((e) => e.topic == 'full').then((event) {
-      final fullEvent =
-          GameFullEvent.fromJson(event.data as Map<String, dynamic>);
-
-      _socketSubscription = stream.listen(_handleSocketEvent);
-
-      _socketEventVersion = fullEvent.socketEventVersion;
-
-      return GameCtrlState(
-        game: fullEvent.game,
-        stepCursor: fullEvent.game.steps.length - 1,
-        stopClockWaitingForServerAck: false,
-      );
-    });
+    _socketEventVersion = null;
+    _socketSubscription?.cancel();
+    _socketSubscription = stream.listen(_handleSocketEvent);
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
@@ -74,13 +65,24 @@ class GameCtrl extends _$GameCtrl {
       _transientMoveTimer?.cancel();
     });
 
-    return state;
+    return stream.firstWhere((e) => e.topic == 'full').then((event) {
+      final fullEvent =
+          GameFullEvent.fromJson(event.data as Map<String, dynamic>);
+
+      _socketEventVersion = fullEvent.socketEventVersion;
+
+      return GameState(
+        game: fullEvent.game,
+        stepCursor: fullEvent.game.steps.length - 1,
+        stopClockWaitingForServerAck: false,
+      );
+    });
   }
 
   void onUserMove(Move move, {bool? isDrop, bool? isPremove}) {
     final curState = state.requireValue;
 
-    final (newPos, newSan) = curState.game.lastPosition.playToSan(move);
+    final (newPos, newSan) = curState.game.lastPosition.makeSan(move);
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
       ply: curState.game.lastPly + 1,
@@ -89,28 +91,85 @@ class GameCtrl extends _$GameCtrl {
       diff: MaterialDiff.fromBoard(newPos.board),
     );
 
+    final shouldConfirmMove = curState.shouldConfirmMove && isPremove != true;
+
     state = AsyncValue.data(
       curState.copyWith(
         game: curState.game.copyWith(
           steps: curState.game.steps.add(newStep),
         ),
         stepCursor: curState.stepCursor + 1,
-        stopClockWaitingForServerAck: true,
+        stopClockWaitingForServerAck: !shouldConfirmMove,
+        moveToConfirm: shouldConfirmMove ? move : null,
       ),
     );
 
-    _sendMove(
-      move,
-      isPremove: isPremove ?? false,
+    _playMoveFeedback(sanMove, skipAnimationDelay: isDrop ?? false);
+
+    if (!shouldConfirmMove) {
+      _sendMoveToSocket(
+        move,
+        isPremove: isPremove ?? false,
+        hasClock: curState.game.clock != null,
+        // same logic as web client
+        // we want to send client lag only at the beginning of the game when the clock is not running yet
+        withLag:
+            curState.game.clock != null && curState.activeClockSide == null,
+      );
+    }
+  }
+
+  /// Called if the player cancels the move when confirm move preference is enabled
+  void cancelMove() {
+    final curState = state.requireValue;
+    if (curState.game.steps.isEmpty) {
+      assert(false, 'game steps cannot be empty on cancel move');
+      return;
+    }
+    state = AsyncValue.data(
+      curState.copyWith(
+        game: curState.game.copyWith(
+          steps: curState.game.steps.removeLast(),
+        ),
+        stepCursor: curState.stepCursor - 1,
+        moveToConfirm: null,
+      ),
+    );
+  }
+
+  /// Called if the player confirms the move when confirm move preference is enabled
+  void confirmMove() {
+    final curState = state.requireValue;
+    final moveToConfirm = curState.moveToConfirm;
+    if (moveToConfirm == null) {
+      assert(false, 'moveToConfirm must not be null on confirm move');
+      return;
+    }
+
+    state = AsyncValue.data(
+      curState.copyWith(
+        stopClockWaitingForServerAck: true,
+        moveToConfirm: null,
+      ),
+    );
+    _sendMoveToSocket(
+      moveToConfirm,
+      isPremove: false,
       hasClock: curState.game.clock != null,
       // same logic as web client
       // we want to send client lag only at the beginning of the game when the clock is not running yet
       withLag: curState.game.clock != null && curState.activeClockSide == null,
     );
+  }
 
-    _playMoveFeedback(sanMove, skipAnimationDelay: isDrop ?? false);
-
-    _transientMoveTimer = Timer(const Duration(seconds: 10), _resyncGameData);
+  /// Set or unset a premove.
+  void setPremove(cg.Move? move) {
+    final curState = state.requireValue;
+    state = AsyncValue.data(
+      curState.copyWith(
+        premove: move,
+      ),
+    );
   }
 
   void cursorAt(int cursor) {
@@ -127,11 +186,14 @@ class GameCtrl extends _$GameCtrl {
   void cursorForward() {
     if (state.hasValue) {
       final curState = state.requireValue;
-      final newCursor = curState.stepCursor + 1;
-      state = AsyncValue.data(curState.copyWith(stepCursor: newCursor));
-      final san = curState.game.stepAt(newCursor).sanMove?.san;
-      if (san != null) {
-        _playReplayMoveSound(san);
+      if (curState.stepCursor < curState.game.steps.length - 1) {
+        state = AsyncValue.data(
+          curState.copyWith(stepCursor: curState.stepCursor + 1),
+        );
+        final san = curState.game.stepAt(curState.stepCursor + 1).sanMove?.san;
+        if (san != null) {
+          _playReplayMoveSound(san);
+        }
       }
     }
   }
@@ -139,19 +201,41 @@ class GameCtrl extends _$GameCtrl {
   void cursorBackward() {
     if (state.hasValue) {
       final curState = state.requireValue;
-      final newCursor = curState.stepCursor - 1;
-      state = AsyncValue.data(curState.copyWith(stepCursor: newCursor));
-      final san = curState.game.stepAt(newCursor).sanMove?.san;
-      if (san != null) {
-        _playReplayMoveSound(san);
+      if (curState.stepCursor > 0) {
+        state = AsyncValue.data(
+          curState.copyWith(stepCursor: curState.stepCursor - 1),
+        );
+        final san = curState.game.stepAt(curState.stepCursor - 1).sanMove?.san;
+        if (san != null) {
+          _playReplayMoveSound(san);
+        }
       }
     }
+  }
+
+  void toggleMoveConfirmation() {
+    final curState = state.requireValue;
+    state = AsyncValue.data(
+      curState.copyWith(
+        moveConfirmSettingOverride:
+            !(curState.moveConfirmSettingOverride ?? true),
+      ),
+    );
+  }
+
+  void toggleZenMode() {
+    final curState = state.requireValue;
+    state = AsyncValue.data(
+      curState.copyWith(
+        zenModeGameSetting: !(curState.zenModeGameSetting ?? false),
+      ),
+    );
   }
 
   void onFlag() {
     _onFlagThrottler(() {
       if (state.hasValue) {
-        _socket.send('flag', state.requireValue.game.youAre?.name);
+        _socket.send('flag', state.requireValue.game.sideToMove.name);
       }
     });
   }
@@ -188,8 +272,13 @@ class GameCtrl extends _$GameCtrl {
     _socket.send('draw-no', null);
   }
 
-  void offerOrAcceptTakeback() {
+  void offerTakeback() {
     _socket.send('takeback-yes', null);
+  }
+
+  void acceptTakeback() {
+    _socket.send('takeback-yes', null);
+    setPremove(null);
   }
 
   void cancelOrDeclineTakeback() {
@@ -204,7 +293,7 @@ class GameCtrl extends _$GameCtrl {
     _socket.send('rematch-no', null);
   }
 
-  void _sendMove(
+  void _sendMoveToSocket(
     Move move, {
     required bool isPremove,
     required bool hasClock,
@@ -227,6 +316,8 @@ class GameCtrl extends _$GameCtrl {
       ackable: true,
       withLag: hasClock && (moveTime == null || withLag),
     );
+
+    _transientMoveTimer = Timer(const Duration(seconds: 10), _resyncGameData);
   }
 
   /// Move feedback while playing
@@ -271,18 +362,25 @@ class GameCtrl extends _$GameCtrl {
   }
 
   void _handleSocketEvent(SocketEvent event) {
+    final currentEventVersion = _socketEventVersion;
+
+    /// We don't have a version yet, let's wait for the full event
+    if (currentEventVersion == null) {
+      return;
+    }
+
     if (event.version != null) {
-      if (event.version! <= _socketEventVersion) {
+      if (event.version! <= currentEventVersion) {
         _logger.fine('Already handled event ${event.version}');
         return;
       }
-      if (event.version! > _socketEventVersion + 1) {
+      if (event.version! > currentEventVersion + 1) {
         _logger.warning(
-          'Event gap detected from $_socketEventVersion to ${event.version}',
+          'Event gap detected from $currentEventVersion to ${event.version}',
         );
         _resyncGameData();
       }
-      _socketEventVersion = event.version!;
+      _socketEventVersion = event.version;
     }
 
     _handleSocketTopic(event);
@@ -290,7 +388,7 @@ class GameCtrl extends _$GameCtrl {
 
   void _handleSocketTopic(SocketEvent event) {
     if (!state.hasValue) {
-      assert(false, 'received a game SocketEvent while GameCtrlState is null');
+      assert(false, 'received a game SocketEvent while GameState is null');
       return;
     }
 
@@ -317,22 +415,26 @@ class GameCtrl extends _$GameCtrl {
           _resyncGameData();
         }
 
-      // Full game data, received after switching route to /play/<gameId>
+      // Full game data, received after a (re)connection to game socket
       case 'full':
         final fullEvent =
             GameFullEvent.fromJson(event.data as Map<String, dynamic>);
 
-        if (fullEvent.socketEventVersion < _socketEventVersion) {
+        if (_socketEventVersion != null &&
+            fullEvent.socketEventVersion < _socketEventVersion!) {
           return;
         }
         _socketEventVersion = fullEvent.socketEventVersion;
         _lastMoveTime = null;
 
         state = AsyncValue.data(
-          GameCtrlState(
+          GameState(
             game: fullEvent.game,
             stepCursor: fullEvent.game.steps.length - 1,
             stopClockWaitingForServerAck: false,
+            // cancel the premove to avoid playing wrong premove when the full
+            // game data is reloaded
+            premove: null,
           ),
         );
 
@@ -343,7 +445,7 @@ class GameCtrl extends _$GameCtrl {
         final data = MoveEvent.fromJson(event.data as Map<String, dynamic>);
         final playedSide = data.ply.isOdd ? Side.white : Side.black;
 
-        GameCtrlState newState = curState.copyWith(
+        GameState newState = curState.copyWith(
           game: curState.game.copyWith(
             isThreefoldRepetition: data.threefold,
             winner: data.winner,
@@ -417,7 +519,7 @@ class GameCtrl extends _$GameCtrl {
         final endData =
             GameEndEvent.fromJson(event.data as Map<String, dynamic>);
         final curState = state.requireValue;
-        GameCtrlState newState = curState.copyWith(
+        GameState newState = curState.copyWith(
           game: curState.game.copyWith(
             status: endData.status,
             winner: endData.winner,
@@ -429,6 +531,7 @@ class GameCtrl extends _$GameCtrl {
               ratingDiff: endData.ratingDiff?.black,
             ),
           ),
+          premove: null,
         );
 
         if (endData.clock != null) {
@@ -469,7 +572,7 @@ class GameCtrl extends _$GameCtrl {
         final blackOnGame = data['black'] as bool?;
         final curState = state.requireValue;
         final opponent = curState.game.youAre?.opposite;
-        GameCtrlState newState = curState;
+        GameState newState = curState;
         if (whiteOnGame != null) {
           newState = newState.copyWith.game(
             white: newState.game.white.setOnGame(whiteOnGame),
@@ -499,7 +602,7 @@ class GameCtrl extends _$GameCtrl {
       case 'gone':
         final isGone = event.data as bool;
         _opponentLeftCountdownTimer?.cancel();
-        GameCtrlState newState = state.requireValue;
+        GameState newState = state.requireValue;
         final youAre = newState.game.youAre;
         newState = newState.copyWith.game(
           white: youAre == Side.white
@@ -633,20 +736,41 @@ class GameCtrl extends _$GameCtrl {
 }
 
 @freezed
-class GameCtrlState with _$GameCtrlState {
-  const GameCtrlState._();
+class GameState with _$GameState {
+  const GameState._();
 
-  const factory GameCtrlState({
+  const factory GameState({
     required PlayableGame game,
     required int stepCursor,
     int? lastDrawOfferAtPly,
     Duration? opponentLeftCountdown,
     required bool stopClockWaitingForServerAck,
+    cg.Move? premove,
+
+    /// Game only setting to override the account preference
+    bool? moveConfirmSettingOverride,
+
+    /// Zen mode setting if account preference is set to [Zen.gameAuto]
+    bool? zenModeGameSetting,
+
+    /// Set if confirm move preference is enabled and player played a move
+    Move? moveToConfirm,
 
     /// Game full id used to redirect to the new game of the rematch
     GameFullId? redirectGameId,
-  }) = _GameCtrlState;
+  }) = _GameState;
 
+  // preferences
+  bool get isZenModeEnabled =>
+      zenModeGameSetting ?? game.prefs?.zenMode == Zen.yes;
+  bool get canPremove => game.prefs?.enablePremove ?? true;
+  bool get canAutoQueen => game.prefs?.autoQueen == AutoQueen.always;
+  bool get canAutoQueenOnPremove => game.prefs?.autoQueen == AutoQueen.premove;
+  bool get shouldConfirmResignAndDrawOffer => game.prefs?.confirmResign ?? true;
+  bool get shouldConfirmMove =>
+      moveConfirmSettingOverride ?? game.prefs?.submitMove ?? false;
+
+  // game state
   bool get isReplaying => stepCursor < game.steps.length - 1;
   bool get canGoForward => stepCursor < game.steps.length - 1;
   bool get canGoBackward => stepCursor > 0;
@@ -701,10 +825,19 @@ class GameCtrlState with _$GameCtrlState {
     if (game.status == GameStatus.started) {
       final pos = game.lastPosition;
       if (pos.fullmoves > 1) {
-        return pos.turn;
+        return moveToConfirm != null ? pos.turn.opposite : pos.turn;
       }
     }
 
     return null;
   }
+
+  AnalysisOptions get analysisOptions => AnalysisOptions(
+        isLocalEvaluationAllowed: true,
+        variant: game.meta.variant,
+        pgn: game.pgn,
+        initialMoveCursor: stepCursor,
+        orientation: game.youAre ?? Side.white,
+        id: game.meta.id,
+      );
 }

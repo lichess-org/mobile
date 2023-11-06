@@ -6,23 +6,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
 
 class UserActivityWidget extends ConsumerWidget {
-  const UserActivityWidget({required this.user, super.key});
+  const UserActivityWidget({this.user, super.key});
 
-  final User user;
+  final User? user;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final activity = ref.watch(userActivityProvider(id: user.id));
+    final activity = user != null
+        ? ref.watch(userActivityProvider(id: user!.id))
+        : ref.watch(accountActivityProvider);
 
     return activity.when(
       data: (data) {
@@ -104,45 +108,47 @@ class UserActivityEntry extends ConsumerWidget {
                   gameEntry.key.title,
                 ),
               ),
-              subtitle: Row(
-                children: [
-                  PlayerRating(
-                    deviation: 0,
-                    rating: gameEntry.value.ratingAfter,
-                  ),
-                  const SizedBox(width: 3),
-                  if (gameEntry.value.ratingAfter -
-                          gameEntry.value.ratingBefore !=
-                      0) ...[
-                    Icon(
-                      gameEntry.value.ratingAfter -
-                                  gameEntry.value.ratingBefore >
-                              0
-                          ? LichessIcons.arrow_full_upperright
-                          : LichessIcons.arrow_full_lowerright,
-                      color: gameEntry.value.ratingAfter -
-                                  gameEntry.value.ratingBefore >
-                              0
-                          ? LichessColors.good
-                          : LichessColors.red,
-                      size: 12,
+              subtitle: RatingPrefAware(
+                child: Row(
+                  children: [
+                    RatingWidget(
+                      deviation: 0,
+                      rating: gameEntry.value.ratingAfter,
                     ),
-                    Text(
-                      (gameEntry.value.ratingAfter -
-                              gameEntry.value.ratingBefore)
-                          .abs()
-                          .toString(),
-                      style: TextStyle(
+                    const SizedBox(width: 3),
+                    if (gameEntry.value.ratingAfter -
+                            gameEntry.value.ratingBefore !=
+                        0) ...[
+                      Icon(
+                        gameEntry.value.ratingAfter -
+                                    gameEntry.value.ratingBefore >
+                                0
+                            ? LichessIcons.arrow_full_upperright
+                            : LichessIcons.arrow_full_lowerright,
                         color: gameEntry.value.ratingAfter -
                                     gameEntry.value.ratingBefore >
                                 0
                             ? LichessColors.good
                             : LichessColors.red,
-                        fontSize: 11,
+                        size: 12,
                       ),
-                    ),
+                      Text(
+                        (gameEntry.value.ratingAfter -
+                                gameEntry.value.ratingBefore)
+                            .abs()
+                            .toString(),
+                        style: TextStyle(
+                          color: gameEntry.value.ratingAfter -
+                                      gameEntry.value.ratingBefore >
+                                  0
+                              ? LichessColors.good
+                              : LichessColors.red,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
               trailing: BriefGameResultBox(
                 win: gameEntry.value.win,
@@ -161,41 +167,45 @@ class UserActivityEntry extends ConsumerWidget {
                 entry.puzzles!.win + entry.puzzles!.loss,
               ),
             ),
-            subtitle: Row(
-              children: [
-                PlayerRating(
-                  deviation: 0,
-                  rating: entry.puzzles!.ratingAfter,
-                ),
-                const SizedBox(width: 3),
-                if (entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore !=
-                    0) ...[
-                  Icon(
-                    entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore > 0
-                        ? LichessIcons.arrow_full_upperright
-                        : LichessIcons.arrow_full_lowerright,
-                    color: entry.puzzles!.ratingAfter -
-                                entry.puzzles!.ratingBefore >
-                            0
-                        ? LichessColors.good
-                        : LichessColors.red,
-                    size: 12,
+            subtitle: RatingPrefAware(
+              child: Row(
+                children: [
+                  RatingWidget(
+                    deviation: 0,
+                    rating: entry.puzzles!.ratingAfter,
                   ),
-                  Text(
-                    (entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore)
-                        .abs()
-                        .toString(),
-                    style: TextStyle(
+                  const SizedBox(width: 3),
+                  if (entry.puzzles!.ratingAfter -
+                          entry.puzzles!.ratingBefore !=
+                      0) ...[
+                    Icon(
+                      entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore >
+                              0
+                          ? LichessIcons.arrow_full_upperright
+                          : LichessIcons.arrow_full_lowerright,
                       color: entry.puzzles!.ratingAfter -
                                   entry.puzzles!.ratingBefore >
                               0
                           ? LichessColors.good
                           : LichessColors.red,
-                      fontSize: 11,
+                      size: 12,
                     ),
-                  ),
+                    Text(
+                      (entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore)
+                          .abs()
+                          .toString(),
+                      style: TextStyle(
+                        color: entry.puzzles!.ratingAfter -
+                                    entry.puzzles!.ratingBefore >
+                                0
+                            ? LichessColors.good
+                            : LichessColors.red,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
             trailing: BriefGameResultBox(
               win: entry.puzzles!.win,

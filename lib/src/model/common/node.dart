@@ -14,30 +14,28 @@ part 'node.freezed.dart';
 /// The tree is implemented with a linked list of nodes, using mutable [List] of
 /// children.
 ///
-/// It has an optional [eval] field, which is the evaluation of the position. This
-/// field is mutable so it can be updated efficiently when the evaluation changes.
-///
 /// It cannot be directly used in a riverpod state, because it is mutable, and
 /// riverpod relies on object reference equality to detect changes and emit new
 /// states. Therefore, it must be converted into a [ViewNode], which is immutable,
 /// using the [view] getter.
 abstract class Node {
   Node({
-    required this.ply,
-    required this.fen,
     required this.position,
     this.eval,
+    this.opening,
   });
 
-  final int ply;
-  final String fen;
   final Position position;
 
+  /// The evaluation of the position.
   ClientEval? eval;
+
+  /// The opening associated with this node.
+  Opening? opening;
 
   final List<Branch> children = [];
 
-  /// Immutable view of this node.
+  /// Immutable view of this node. Use sparingly, as it is expensive to compute.
   ViewNode get view;
 
   /// Adds a child to this node.
@@ -98,10 +96,28 @@ abstract class Node {
     return null;
   }
 
+  /// Updates all nodes.
+  void updateAll(void Function(Branch node) update) {
+    switch (this) {
+      case final Branch branch:
+        update(branch);
+    }
+    for (final child in children) {
+      child.updateAll(update);
+    }
+  }
+
   /// Adds a new node at the given path and returns the new path.
   ///
+  /// Returns a tuple of the new path and whether the node was added.
+  /// Returns null if the node at path does not exist.
+  ///
   /// If the node already exists, it is not added again.
-  UciPath? addNodeAt(UciPath path, Branch newNode, {bool prepend = false}) {
+  (UciPath?, bool) addNodeAt(
+    UciPath path,
+    Branch newNode, {
+    bool prepend = false,
+  }) {
     final newPath = path + newNode.id;
     final node = nodeAtOrNull(path);
     if (node != null) {
@@ -113,9 +129,9 @@ abstract class Node {
           node.addChild(newNode);
         }
       }
-      return newPath;
+      return (newPath, !existing);
     } else {
-      return null;
+      return (null, false);
     }
   }
 
@@ -127,7 +143,7 @@ abstract class Node {
   }) {
     final node = newNodes.elementAtOrNull(0);
     if (node == null) return path;
-    final newPath = addNodeAt(path, node, prepend: prepend);
+    final (newPath, _) = addNodeAt(path, node, prepend: prepend);
     return newPath != null
         ? addNodesAt(newPath, newNodes.skip(1), prepend: prepend)
         : null;
@@ -135,23 +151,22 @@ abstract class Node {
 
   /// Adds a new node with that [Move] at the given path.
   ///
-  /// Returns the new path and the new node.
+  /// Returns a tuple of the new path and whether the node was added.
+  /// Returns null if the node at path does not exist.
+  ///
   /// If the node already exists, it is not added again.
-  (UciPath?, Branch?) addMoveAt(
+  (UciPath?, bool) addMoveAt(
     UciPath path,
     Move move, {
     bool prepend = false,
   }) {
     final pos = nodeAt(path).position;
-    final (newPos, newSan) = pos.playToSan(move);
+    final (newPos, newSan) = pos.makeSan(move);
     final newNode = Branch(
-      ply: 2 * (newPos.fullmoves - 1) + (newPos.turn == Side.white ? 0 : 1),
       sanMove: SanMove(newSan, move),
-      fen: newPos.fen,
       position: newPos,
     );
-    final newPath = addNodeAt(path, newNode, prepend: prepend);
-    return (newPath, newPath != null ? newNode : null);
+    return addNodeAt(path, newNode, prepend: prepend);
   }
 
   /// Gets the node at the given path.
@@ -192,11 +207,14 @@ abstract class Node {
 /// It has an associated [SanMove] and an id to identify it using an [UciPath].
 class Branch extends Node {
   Branch({
-    required super.ply,
-    required super.fen,
     required super.position,
     super.eval,
+    super.opening,
     required this.sanMove,
+    // below are fields from dartchess [PgnNodeData]
+    this.startingComments,
+    this.comments,
+    this.nags,
   });
 
   /// The id of the branch, using a concise notation of associated move.
@@ -205,14 +223,25 @@ class Branch extends Node {
   /// The associated move.
   final SanMove sanMove;
 
+  /// PGN comments before the move.
+  final List<String>? startingComments;
+
+  /// PGN comments after the move.
+  final List<String>? comments;
+
+  /// Numeric Annotation Glyphs for the move.
+  final List<int>? nags;
+
   @override
   ViewBranch get view => ViewBranch(
-        ply: ply,
-        fen: fen,
         position: position,
         sanMove: sanMove,
         eval: eval,
+        opening: opening,
         children: IList(children.map((child) => child.view)),
+        startingComments: startingComments?.lock,
+        comments: comments?.lock,
+        nags: nags?.lock,
       );
 
   /// Gets the branch at the given path
@@ -221,7 +250,7 @@ class Branch extends Node {
 
   @override
   String toString() {
-    return 'Branch(id: $id, ply: $ply, fen: $fen, sanMove: $sanMove, eval: $eval, children: $children)';
+    return 'Branch(id: $id, fen: ${position.fen}, sanMove: $sanMove, eval: $eval, children: $children)';
   }
 }
 
@@ -230,42 +259,32 @@ class Branch extends Node {
 /// Represents the initial position, where no move has been played yet.
 class Root extends Node {
   Root({
-    required super.ply,
-    required super.fen,
     required super.position,
     super.eval,
   });
 
   @override
   ViewRoot get view => ViewRoot(
-        ply: ply,
-        fen: fen,
         position: position,
         eval: eval,
         children: IList(children.map((child) => child.view)),
       );
 
-  /// Creates a game tree from a PGN string.
+  /// Creates a flat game tree from a PGN string.
   ///
   /// Assumes that the PGN string is valid and that the moves are legal.
-  factory Root.fromPgn(String pgn) {
-    int ply = 0;
+  factory Root.fromPgnMoves(String pgn) {
     Position position = Chess.initial;
     final root = Root(
-      ply: ply,
-      fen: kInitialFEN,
       position: position,
     );
     Node current = root;
     final moves = pgn.split(' ');
     for (final san in moves) {
-      ply++;
       final move = position.parseSan(san);
       position = position.playUnchecked(move!);
       final nextNode = Branch(
-        ply: ply,
         sanMove: SanMove(san, move),
-        fen: position.fen,
         position: position,
       );
       current.addChild(nextNode);
@@ -273,17 +292,98 @@ class Root extends Node {
     }
     return root;
   }
+
+  /// Creates a game tree from a PGN game.
+  ///
+  /// Any non legal move will be ignored.
+  /// An optional callback can be provided to be called on each visited node.
+  factory Root.fromPgnGame(
+    PgnGame game, [
+    void Function(Root root, Branch branch, bool isMainline)? onVisitNode,
+  ]) {
+    final root = Root(
+      position: PgnGame.startingPosition(game.headers),
+    );
+
+    final List<({PgnNode<PgnNodeData> from, Node to})> stack = [
+      (from: game.moves, to: root),
+    ];
+    while (stack.isNotEmpty) {
+      final frame = stack.removeLast();
+      for (int childIdx = 0;
+          childIdx < frame.from.children.length;
+          childIdx++) {
+        final childFrom = frame.from.children[childIdx];
+        final move = frame.to.position.parseSan(childFrom.data.san);
+        if (move != null) {
+          final newPos = frame.to.position.play(move);
+          final branch = Branch(
+            sanMove: SanMove(childFrom.data.san, move),
+            position: newPos,
+            startingComments: childFrom.data.startingComments,
+            comments: childFrom.data.comments,
+            nags: childFrom.data.nags,
+          );
+
+          frame.to.addChild(branch);
+          stack.add((from: childFrom, to: branch));
+
+          onVisitNode?.call(root, branch, stack.length == 1);
+        }
+      }
+    }
+    return root;
+  }
+
+  /// Export the game tree to a PGN string.
+  ///
+  /// Optionally, headers and initial game comments can be provided.
+  String makePgn([IMap<String, String>? headers, IList<String>? rootComments]) {
+    final pgnNode = PgnNode<PgnNodeData>();
+    final List<({Node from, PgnNode<PgnNodeData> to})> stack = [
+      (from: this, to: pgnNode),
+    ];
+
+    while (stack.isNotEmpty) {
+      final frame = stack.removeLast();
+      for (int childIdx = 0;
+          childIdx < frame.from.children.length;
+          childIdx++) {
+        final childFrom = frame.from.children[childIdx];
+        final childTo = PgnChildNode(
+          PgnNodeData(
+            san: childFrom.sanMove.san,
+            startingComments: childFrom.startingComments,
+            comments: childFrom.comments,
+            nags: childFrom.nags,
+          ),
+        );
+        frame.to.children.add(childTo);
+        stack.add((from: childFrom, to: childTo));
+      }
+    }
+
+    final pgnGame = PgnGame(
+      headers: headers?.unlock ?? PgnGame.defaultHeaders(),
+      moves: pgnNode,
+      comments: rootComments?.unlock ?? [],
+    );
+
+    return pgnGame.makePgn();
+  }
 }
 
 /// An immutable view of a [Node].
 abstract class ViewNode {
   UciCharPair? get id;
   SanMove? get sanMove;
-  int get ply;
-  String get fen;
   Position get position;
   IList<ViewBranch> get children;
   ClientEval? get eval;
+  Opening? get opening;
+  IList<String>? get startingComments;
+  IList<String>? get comments;
+  IList<int>? get nags;
 }
 
 /// An immutable view of a [Root] node.
@@ -291,8 +391,6 @@ abstract class ViewNode {
 class ViewRoot with _$ViewRoot implements ViewNode {
   const ViewRoot._();
   const factory ViewRoot({
-    required int ply,
-    required String fen,
     required Position position,
     required IList<ViewBranch> children,
     ClientEval? eval,
@@ -303,6 +401,18 @@ class ViewRoot with _$ViewRoot implements ViewNode {
 
   @override
   SanMove? get sanMove => null;
+
+  @override
+  Opening? get opening => null;
+
+  @override
+  IList<String>? get startingComments => null;
+
+  @override
+  IList<String>? get comments => null;
+
+  @override
+  IList<int>? get nags => null;
 }
 
 /// An immutable view of a [Branch] node.
@@ -312,11 +422,13 @@ class ViewBranch with _$ViewBranch implements ViewNode {
 
   const factory ViewBranch({
     required SanMove sanMove,
-    required int ply,
-    required String fen,
     required Position position,
+    Opening? opening,
     required IList<ViewBranch> children,
     ClientEval? eval,
+    IList<String>? startingComments,
+    IList<String>? comments,
+    IList<int>? nags,
   }) = _ViewBranch;
 
   @override

@@ -3,12 +3,12 @@ import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
-import 'package:lichess_mobile/src/model/game/game_ctrl.dart';
+import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 String gameStatusL10n(
   BuildContext context,
-  GameCtrlState gameState,
+  GameState gameState,
 ) {
   final winner = gameState.game.winner;
 

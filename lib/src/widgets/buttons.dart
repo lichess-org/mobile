@@ -347,6 +347,7 @@ class BottomBarButton extends StatelessWidget {
     this.showAndroidTooltip = true,
     this.highlighted = false,
     this.showAndroidShortLabel = false,
+    super.key,
   });
 
   final IconData icon;
@@ -434,13 +435,13 @@ class CardButton extends StatefulWidget {
     super.key,
     required this.icon,
     required this.title,
-    required this.subtitle,
+    this.subtitle,
     required this.onTap,
   });
 
   final Widget icon;
   final Widget title;
-  final Widget subtitle;
+  final Widget? subtitle;
   final VoidCallback? onTap;
 
   @override
@@ -526,6 +527,7 @@ class AdaptiveInkWell extends StatefulWidget {
     required this.child,
     this.onTap,
     this.borderRadius,
+    super.key,
   });
 
   final Widget child;
@@ -591,7 +593,7 @@ class RepeatButton extends StatefulWidget {
       Duration(milliseconds: 300),
       Duration(milliseconds: 150),
     ],
-    this.holdDelay = const Duration(milliseconds: 50),
+    this.holdDelay = const Duration(milliseconds: 30),
   });
 
   final Widget child;
@@ -665,13 +667,22 @@ class PlatformIconButton extends StatelessWidget {
     required this.icon,
     required this.semanticsLabel,
     required this.onTap,
-    this.highlighted = true,
-  });
+    this.highlighted = false,
+    this.color,
+    this.iconSize,
+    this.padding,
+  }) : assert(
+          color == null || !highlighted,
+          'Cannot provide both color and highlighted',
+        );
 
   final IconData icon;
   final String semanticsLabel;
   final VoidCallback? onTap;
   final bool highlighted;
+  final Color? color;
+  final double? iconSize;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -684,7 +695,9 @@ class PlatformIconButton extends StatelessWidget {
             onPressed: onTap,
             icon: Icon(icon),
             tooltip: semanticsLabel,
-            color: highlighted ? themeData.colorScheme.primary : null,
+            color: highlighted ? themeData.colorScheme.primary : color,
+            iconSize: iconSize,
+            padding: padding,
           ),
         );
       case TargetPlatform.iOS:
@@ -696,9 +709,11 @@ class PlatformIconButton extends StatelessWidget {
           child: CupertinoIconButton(
             onPressed: onTap,
             semanticsLabel: semanticsLabel,
+            padding: padding,
             icon: Icon(
               icon,
-              color: highlighted ? themeData.primaryColor : null,
+              color: highlighted ? themeData.primaryColor : color,
+              size: iconSize,
             ),
           ),
         );

@@ -2,45 +2,26 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
-part 'game_loader.g.dart';
-
-@riverpod
-Stream<({int nbPlayers, int nbGames})> lobbyNumbers(
-  LobbyNumbersRef ref,
-) async* {
-  final socket = ref.watch(authSocketProvider);
-  final stream = socket.stream ?? const Stream.empty();
-  await for (final msg in stream) {
-    if (msg.topic == 'n') {
-      final data = msg.data as Map<String, int>;
-      yield (
-        nbPlayers: data['nbPlayers']!,
-        nbGames: data['nbGames']!,
-      );
-    }
-  }
-}
-
-class GameLoader extends ConsumerWidget {
-  const GameLoader(this.seek);
+class LobbyGameLoadingBoard extends StatelessWidget {
+  const LobbyGameLoadingBoard(this.seek, {this.isRematch = false});
 
   final GameSeek seek;
+  final bool isRematch;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Expanded(
@@ -63,24 +44,33 @@ class GameLoader extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text('${context.l10n.waitingForOpponent}...'),
-                      const SizedBox(height: 26.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            seek.perf.icon,
-                            color: DefaultTextStyle.of(context).style.color,
-                          ),
-                          const SizedBox(width: 8.0),
+                      if (isRematch == false) ...[
+                        const SizedBox(height: 26.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              seek.perf.icon,
+                              color: DefaultTextStyle.of(context).style.color,
+                            ),
+                            const SizedBox(width: 8.0),
+                            Text(
+                              seek.timeIncrement.display,
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                          ],
+                        ),
+                        if (seek.ratingRange != null) ...[
+                          const SizedBox(height: 8.0),
                           Text(
-                            seek.timeIncrement.display,
-                            style: Theme.of(context).textTheme.titleLarge,
+                            '${seek.ratingRange!.$1}-${seek.ratingRange!.$2}',
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ],
-                      ),
-                      const SizedBox(height: 16.0),
-                      _LobbyNumbers(),
+                        const SizedBox(height: 16.0),
+                        _LobbyNumbers(),
+                      ],
                     ],
                   ),
                 ),
@@ -90,13 +80,14 @@ class GameLoader extends ConsumerWidget {
         ),
         _BottomBar(
           children: [
-            BottomBarButton(
-              onTap: () => Navigator.of(context).pop(),
-              label: context.l10n.cancel,
-              shortLabel: context.l10n.cancel,
-              icon: CupertinoIcons.xmark,
-              showAndroidShortLabel: true,
-            ),
+            if (isRematch == false)
+              BottomBarButton(
+                onTap: () => Navigator.of(context).pop(),
+                label: context.l10n.cancel,
+                shortLabel: context.l10n.cancel,
+                icon: CupertinoIcons.xmark,
+                showAndroidShortLabel: true,
+              ),
           ],
         ),
       ],
@@ -104,8 +95,50 @@ class GameLoader extends ConsumerWidget {
   }
 }
 
-class CreateGameError extends StatelessWidget {
-  const CreateGameError();
+class StandaloneGameLoadingBoard extends StatelessWidget {
+  const StandaloneGameLoadingBoard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: SafeArea(
+            bottom: false,
+            child: BoardTable(
+              boardData: const cg.BoardData(
+                interactableSide: cg.InteractableSide.none,
+                orientation: cg.Side.white,
+                fen: kEmptyFen,
+              ),
+              topTable: const SizedBox.shrink(),
+              bottomTable: const SizedBox.shrink(),
+              showMoveListPlaceholder: true,
+              boardOverlay: PlatformCard(
+                elevation: 2.0,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('${context.l10n.waitingForOpponent}...'),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        const _BottomBar(
+          children: [],
+        ),
+      ],
+    );
+  }
+}
+
+class LoadGameError extends StatelessWidget {
+  const LoadGameError();
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +157,7 @@ class CreateGameError extends StatelessWidget {
               bottomTable: SizedBox.shrink(),
               showMoveListPlaceholder: true,
               errorMessage:
-                  'Sorry, we could not create the game. Please try again later.',
+                  'Sorry, we could not load the game. Please try again later.',
             ),
           ),
         ),
@@ -173,21 +206,9 @@ class _LobbyNumbers extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final lobbyNumbers = ref.watch(lobbyNumbersProvider);
-    return lobbyNumbers.when(
-      data: (numbers) => Column(
-        children: [
-          _AnimatedLobbyNumber(
-            labelBuilder: (nb) => context.l10n.nbPlayers(nb),
-            value: numbers.nbPlayers,
-          ),
-          const SizedBox(height: 8.0),
-          _AnimatedLobbyNumber(
-            labelBuilder: (nb) => context.l10n.nbGamesInPlay(nb),
-            value: numbers.nbGames,
-          ),
-        ],
-      ),
-      loading: () => Column(
+
+    if (lobbyNumbers == null) {
+      return Column(
         children: [
           Text(
             context.l10n.nbPlayers(0).replaceAll('0', '...'),
@@ -197,11 +218,23 @@ class _LobbyNumbers extends ConsumerWidget {
             context.l10n.nbGamesInPlay(0).replaceAll('0', '...'),
           ),
         ],
-      ),
-      error: (err, __) {
-        return const SizedBox.shrink();
-      },
-    );
+      );
+    } else {
+      final (:nbPlayers, :nbGames) = lobbyNumbers;
+      return Column(
+        children: [
+          _AnimatedLobbyNumber(
+            labelBuilder: (nb) => context.l10n.nbPlayers(nb),
+            value: nbPlayers,
+          ),
+          const SizedBox(height: 8.0),
+          _AnimatedLobbyNumber(
+            labelBuilder: (nb) => context.l10n.nbGamesInPlay(nb),
+            value: nbGames,
+          ),
+        ],
+      );
+    }
   }
 }
 
