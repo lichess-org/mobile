@@ -30,9 +30,12 @@ extension LightUserExtension on Pick {
       return value;
     }
     if (value is Map<String, dynamic>) {
+      final name = requiredPick('username').asStringOrNull() ??
+          requiredPick('name').asStringOrThrow();
+
       return LightUser(
         id: requiredPick('id').asUserIdOrThrow(),
-        name: requiredPick('name').asStringOrThrow(),
+        name: name,
         title: requiredPick('title').asStringOrNull(),
         isPatron: requiredPick('patron').asBoolOrNull(),
       );

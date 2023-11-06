@@ -2,12 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -16,14 +18,13 @@ import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
@@ -32,7 +33,8 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
-import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 
 final RouteObserver<PageRoute<void>> homeRouteObserver =
     RouteObserver<PageRoute<void>>();
@@ -61,8 +63,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
 
         if (!hasRefreshed && !wasOnline && isNowOnline) {
           hasRefreshed = true;
-          final session = ref.read(authSessionProvider);
-          _refreshData(session?.user);
+          _refreshData();
         }
 
         wasOnline = isNowOnline;
@@ -103,7 +104,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }
 
   Widget _androidBuilder(BuildContext context) {
-    final session = ref.watch(authSessionProvider);
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -127,7 +127,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       ),
       body: RefreshIndicator(
         key: _androidRefreshKey,
-        onRefresh: () => _refreshData(session?.user),
+        onRefresh: () => _refreshData(),
         child: const _HomeScaffold(
           child: _HomeBody(),
         ),
@@ -136,7 +136,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }
 
   Widget _iosBuilder(BuildContext context) {
-    final session = ref.watch(authSessionProvider);
     return CupertinoPageScaffold(
       child: _HomeScaffold(
         child: CustomScrollView(
@@ -160,7 +159,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               trailing: const SignInWidget(),
             ),
             CupertinoSliverRefreshControl(
-              onRefresh: () => _refreshData(session?.user),
+              onRefresh: () => _refreshData(),
             ),
             const SliverToBoxAdapter(child: _ConnectivityBanner()),
             const SliverSafeArea(
@@ -173,11 +172,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     );
   }
 
-  Future<void> _refreshData(LightUser? user) {
+  Future<void> _refreshData() {
     return Future.wait([
-      ref.refresh(top1Provider.future),
-      if (user != null)
-        ref.refresh(userRecentGamesProvider(userId: user.id).future),
+      ref.refresh(accountRecentGamesProvider.future),
     ]);
   }
 }
@@ -295,7 +292,6 @@ class _HomeBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivity = ref.watch(connectivityChangesProvider);
-    final session = ref.watch(authSessionProvider);
     return connectivity.when(
       data: (data) {
         if (data.isOnline) {
@@ -303,17 +299,19 @@ class _HomeBody extends ConsumerWidget {
               ? ListView(
                   controller: homeScrollController,
                   children: [
+                    const _OngoingGamePreview(),
                     const _CreateAGame(),
                     const _DailyPuzzle(),
-                    if (session != null) RecentGames(user: session.user),
+                    const RecentGames(),
                     RatingPrefAware(child: LeaderboardWidget()),
                   ],
                 )
               : SliverList(
                   delegate: SliverChildListDelegate([
+                    const _OngoingGamePreview(),
                     const _CreateAGame(),
                     const _DailyPuzzle(),
-                    if (session != null) RecentGames(user: session.user),
+                    const RecentGames(),
                     RatingPrefAware(child: LeaderboardWidget()),
                   ]),
                 );
@@ -459,7 +457,7 @@ class _CreateAGame extends ConsumerWidget {
           context,
           rootNavigator: true,
           builder: (BuildContext context) {
-            return GameScreen(
+            return LobbyGameScreen(
               seek: seek,
             );
           },
@@ -556,8 +554,8 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const Text(
-                'Puzzle training',
+              Text(
+                context.l10n.puzzleDesc,
                 style: Styles.boardPreviewTitle,
               ),
               Text(
@@ -579,6 +577,60 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
                   });
                 }
               : null,
+        );
+      },
+      orElse: () => const SizedBox.shrink(),
+    );
+  }
+}
+
+class _OngoingGamePreview extends ConsumerWidget {
+  const _OngoingGamePreview();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ongoingGames = ref.watch(ongoingGamesProvider);
+    return ongoingGames.maybeWhen(
+      data: (data) {
+        if (data.isEmpty) {
+          return const SizedBox.shrink();
+        }
+        // correspondence is not supported yet
+        final game =
+            data.firstWhereOrNull((e) => e.speed != Speed.correspondence);
+        if (game == null) {
+          return const SizedBox.shrink();
+        }
+        final opponent = game.opponent;
+        return SmallBoardPreview(
+          orientation: game.orientation.cg,
+          lastMove: game.lastMove?.cg,
+          fen: game.fen,
+          description: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                context.l10n.gameInProgress(opponent.name),
+                style: Styles.boardPreviewTitle.copyWith(
+                  color: LichessColors.brag,
+                ),
+              ),
+            ],
+          ),
+          onTap: () {
+            pushPlatformRoute(
+              context,
+              rootNavigator: true,
+              builder: (context) => StandaloneGameScreen(
+                initialId: game.fullId,
+                initialOrientation: game.orientation,
+                initialFen: game.fen,
+              ),
+            ).then((_) {
+              ref.invalidate(ongoingGamesProvider);
+            });
+          },
         );
       },
       orElse: () => const SizedBox.shrink(),

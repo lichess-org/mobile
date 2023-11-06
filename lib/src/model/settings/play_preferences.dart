@@ -115,9 +115,6 @@ class PlayPrefs with _$PlayPrefs {
         speedFromCustom,
       );
 
-  bool get isCustomRatingRangeAvailable =>
-      Enum.compareByIndex(speedFromCustom, Speed.bullet) > 0;
-
   factory PlayPrefs.fromJson(Map<String, dynamic> json) {
     try {
       return _$PlayPrefsFromJson(json);

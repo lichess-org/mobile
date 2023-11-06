@@ -32,7 +32,7 @@ class CreateGameService {
 
     final socket = ref.read(authSocketProvider);
     final lobbyRepo = ref.read(lobbyRepositoryProvider);
-    final (stream, socketReady) = socket.connect(Uri(path: '/lobby/socket/v5'));
+    final (stream, readyStream) = socket.connect(Uri(path: '/lobby/socket/v5'));
     final completer = Completer<GameFullId>();
 
     _socketSubscription = stream.listen((event) {
@@ -46,7 +46,7 @@ class CreateGameService {
 
     _log.info('Creating new online game');
 
-    await socketReady;
+    await readyStream.first;
 
     await Result.release(
       lobbyRepo.createSeek(

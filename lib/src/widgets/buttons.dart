@@ -435,13 +435,13 @@ class CardButton extends StatefulWidget {
     super.key,
     required this.icon,
     required this.title,
-    required this.subtitle,
+    this.subtitle,
     required this.onTap,
   });
 
   final Widget icon;
   final Widget title;
-  final Widget subtitle;
+  final Widget? subtitle;
   final VoidCallback? onTap;
 
   @override
@@ -527,6 +527,7 @@ class AdaptiveInkWell extends StatefulWidget {
     required this.child,
     this.onTap,
     this.borderRadius,
+    super.key,
   });
 
   final Widget child;

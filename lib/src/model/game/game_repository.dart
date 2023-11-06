@@ -31,7 +31,7 @@ class GameRepository {
       Uri.parse('$kLichessHost/game/export/$id'),
       headers: {'Accept': 'application/json'},
     ).flatMap((response) {
-      return readJsonObject(
+      return readJsonObjectFromResponse(
         response,
         mapper: _makeArchivedGameFromJson,
         logger: _log,
@@ -47,7 +47,7 @@ class GameRepository {
       ),
       headers: {'Accept': 'application/x-ndjson'},
     ).flatMap(
-      (r) => readNdJsonList(
+      (r) => readNdJsonListFromResponse(
         r,
         mapper: _makeArchivedGameDataFromJson,
         logger: _log,
@@ -65,7 +65,7 @@ class GameRepository {
           body: ids.join(','),
         )
         .flatMap(
-          (r) => readNdJsonList(
+          (r) => readNdJsonListFromResponse(
             r,
             mapper: _makeArchivedGameDataFromJson,
             logger: _log,
@@ -85,14 +85,17 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
     (p0) => Duration(milliseconds: p0.asIntOrThrow() * 10),
   );
 
+  final initialFen = pick('initialFen').asStringOrNull();
+
   return ArchivedGame(
     data: data,
+    initialFen: initialFen,
     steps: pick('moves').letOrThrow((it) {
       final moves = it.asStringOrThrow().split(' ');
       // assume lichess always send initialFen with fromPosition and chess960
       Position position = (data.variant == Variant.fromPosition ||
               data.variant == Variant.chess960)
-          ? Chess.fromSetup(Setup.parseFen(data.initialFen!))
+          ? Chess.fromSetup(Setup.parseFen(initialFen!))
           : data.variant.initialPosition;
       int index = 0;
       final List<GameStep> steps = [GameStep(ply: index, position: position)];
@@ -136,7 +139,6 @@ ArchivedGameData _archivedGameDataFromPick(RequiredPick pick) {
     black: pick('players', 'black').letOrThrow(_playerFromUserGamePick),
     winner: pick('winner').asSideOrNull(),
     variant: pick('variant').asVariantOrThrow(),
-    initialFen: pick('initialFen').asStringOrNull(),
     lastFen: pick('lastFen').asStringOrNull(),
     clock: pick('clock').letOrNull(_clockDataFromPick),
     opening: pick('opening').letOrNull(_openingFromPick),

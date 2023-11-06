@@ -6,7 +6,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:logging/logging.dart';
 import 'package:deep_pick/deep_pick.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -83,7 +82,7 @@ class GameController extends _$GameController {
   void onUserMove(Move move, {bool? isDrop, bool? isPremove}) {
     final curState = state.requireValue;
 
-    final (newPos, newSan) = curState.game.lastPosition.playToSan(move);
+    final (newPos, newSan) = curState.game.lastPosition.makeSan(move);
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
       ply: curState.game.lastPly + 1,
@@ -236,7 +235,7 @@ class GameController extends _$GameController {
   void onFlag() {
     _onFlagThrottler(() {
       if (state.hasValue) {
-        _socket.send('flag', state.requireValue.game.youAre?.name);
+        _socket.send('flag', state.requireValue.game.sideToMove.name);
       }
     });
   }
@@ -836,13 +835,7 @@ class GameState with _$GameState {
   AnalysisOptions get analysisOptions => AnalysisOptions(
         isLocalEvaluationAllowed: true,
         variant: game.meta.variant,
-        initialFen: game.initialPosition.fen,
-        initialPly: game.initialPly,
-        moves: IList(
-          game.steps
-              .where((e) => e.sanMove != null)
-              .map((e) => e.sanMove!.move),
-        ),
+        pgn: game.pgn,
         initialMoveCursor: stepCursor,
         orientation: game.youAre ?? Side.white,
         id: game.meta.id,

@@ -13,6 +13,7 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
@@ -30,13 +31,32 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import "package:lichess_mobile/src/utils/l10n_context.dart";
 import "package:lichess_mobile/src/utils/immersive_mode.dart";
-import 'package:lichess_mobile/src/utils/wakelock.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
 import 'history_boards.dart';
 
-class StormScreen extends StatelessWidget {
+class StormScreen extends StatefulWidget {
   const StormScreen({super.key});
+
+  @override
+  State<StormScreen> createState() => _StormScreenState();
+}
+
+class _StormScreenState extends State<StormScreen> with ImmersiveMode {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null && route is PageRoute) {
+      rootNavPageRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    rootNavPageRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,19 +122,13 @@ class _Load extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
+class _Body extends ConsumerWidget {
   const _Body({required this.data});
   final PuzzleStormResponse data;
 
   @override
-  ConsumerState<_Body> createState() => _BodyState();
-}
-
-class _BodyState extends ConsumerState<_Body>
-    with AndroidImmersiveMode, Wakelock {
-  @override
-  Widget build(BuildContext context) {
-    final ctrlProvider = stormControllerProvider(widget.data.puzzles);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = stormControllerProvider(data.puzzles);
     final puzzleState = ref.watch(ctrlProvider);
     ref.listen(ctrlProvider.select((state) => state.runOver), (_, s) {
       if (s) {

@@ -21,11 +21,13 @@ typedef LiveTvChannelsState = IMap<TvChannel, TvGameSnapshot>;
 @riverpod
 class LiveTvChannels extends _$LiveTvChannels {
   StreamSubscription<SocketEvent>? _socketSubscription;
+  StreamSubscription<void>? _socketReadySubscription;
 
   @override
   Future<LiveTvChannelsState> build() async {
     ref.onDispose(() {
       _socketSubscription?.cancel();
+      _socketReadySubscription?.cancel();
     });
 
     return _doStartWatching();
@@ -42,25 +44,29 @@ class LiveTvChannels extends _$LiveTvChannels {
   /// Stop watching the TV games.
   void stopWatching() {
     _socketSubscription?.cancel();
+    _socketReadySubscription?.cancel();
   }
 
   Future<IMap<TvChannel, TvGameSnapshot>> _doStartWatching() async {
-    final (stream, _) = _socket.connect(Uri(path: kDefaultSocketRoute));
     _socketSubscription?.cancel();
-    _socketSubscription = stream.listen(_handleSocketEvent);
+    _socketReadySubscription?.cancel();
 
     final repo = ref.read(tvRepositoryProvider);
     final repoGames = await Result.release(repo.channels());
 
-    _socket.send(
-      'startWatching',
-      repoGames.entries
-          .where((e) => TvChannel.values.contains(e.key))
-          .map((e) => e.value.id)
-          .join(' '),
-    );
-
-    _socket.send('startWatchingTvChannels', null);
+    final (stream, readyStream) =
+        _socket.connect(Uri(path: kDefaultSocketRoute));
+    _socketSubscription = stream.listen(_handleSocketEvent);
+    _socketReadySubscription = readyStream.listen((_) {
+      _socket.send('startWatchingTvChannels', null);
+      _socket.send(
+        'startWatching',
+        repoGames.entries
+            .where((e) => TvChannel.values.contains(e.key))
+            .map((e) => e.value.id)
+            .join(' '),
+      );
+    });
 
     return repoGames.map((channel, game) {
       return MapEntry(

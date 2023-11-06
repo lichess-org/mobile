@@ -54,7 +54,14 @@ class UserScreen extends ConsumerWidget {
       ),
       body: asyncUser.when(
         data: (user) {
-          return ListView(children: buildUserScreenList(user));
+          return ListView(
+            children: [
+              UserProfile(user: user),
+              PerfCards(user: user),
+              UserActivityWidget(user: user),
+              RecentGames(user: user.lightUser),
+            ],
+          );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) {
@@ -78,7 +85,14 @@ class UserScreen extends ConsumerWidget {
       ),
       child: asyncUser.when(
         data: (user) => SafeArea(
-          child: ListView(children: buildUserScreenList(user)),
+          child: ListView(
+            children: [
+              UserProfile(user: user),
+              PerfCards(user: user),
+              UserActivityWidget(user: user),
+              RecentGames(user: user.lightUser),
+            ],
+          ),
         ),
         loading: () =>
             const Center(child: CircularProgressIndicator.adaptive()),
@@ -92,21 +106,10 @@ class UserScreen extends ConsumerWidget {
   }
 }
 
-// ignore: avoid-returning-widgets
-/// Common content for [UserScreen] and [ProfileScreen].
-List<Widget> buildUserScreenList(User user) {
-  return [
-    _Profile(user: user),
-    PerfCards(user: user),
-    UserActivityWidget(user: user),
-    RecentGames(user: user.lightUser),
-  ];
-}
-
 const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 
-class _Profile extends StatelessWidget {
-  const _Profile({
+class UserProfile extends StatelessWidget {
+  const UserProfile({
     required this.user,
   });
 

@@ -29,13 +29,18 @@ class OpeningService {
 
   Future<FullOpening?> fetchFromMoves(Iterable<Move> moves) async {
     final db = await _db;
-    final movesString = moves.map((move) => move.uci).join(' ');
+    final movesString = moves
+        .map(
+          (move) => altCastles.containsKey(move.uci)
+              ? altCastles[move.uci]
+              : move.uci,
+        )
+        .join(' ');
     final list = await db.query(
       'openings',
       where: 'uci = ?',
       whereArgs: [movesString],
     );
-
     final first = list.firstOrNull;
 
     if (first != null) {

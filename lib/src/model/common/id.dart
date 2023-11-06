@@ -11,8 +11,6 @@ abstract class ID {
   @override
   String toString() => value;
 
-  Map<String, dynamic> toJson();
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -20,6 +18,11 @@ abstract class ID {
 
   @override
   int get hashCode => value.hashCode;
+}
+
+/// An ID that uses a particular value to identify itself.
+class ValueId extends ID {
+  const ValueId(super.value);
 }
 
 @JsonSerializable()
@@ -33,7 +36,6 @@ class GameAnyId extends ID {
   factory GameAnyId.fromJson(Map<String, dynamic> json) =>
       _$GameAnyIdFromJson(json);
 
-  @override
   Map<String, dynamic> toJson() => _$GameAnyIdToJson(this);
 }
 
@@ -43,7 +45,6 @@ class GameId extends ID {
 
   factory GameId.fromJson(Map<String, dynamic> json) => _$GameIdFromJson(json);
 
-  @override
   Map<String, dynamic> toJson() => _$GameIdToJson(this);
 }
 
@@ -54,7 +55,6 @@ class GameFullId extends ID {
   factory GameFullId.fromJson(Map<String, dynamic> json) =>
       _$GameFullIdFromJson(json);
 
-  @override
   Map<String, dynamic> toJson() => _$GameFullIdToJson(this);
 }
 
@@ -65,7 +65,6 @@ class GamePlayerId extends ID {
   factory GamePlayerId.fromJson(Map<String, dynamic> json) =>
       _$GamePlayerIdFromJson(json);
 
-  @override
   Map<String, dynamic> toJson() => _$GamePlayerIdToJson(this);
 }
 
@@ -76,7 +75,6 @@ class PuzzleId extends ID {
   factory PuzzleId.fromJson(Map<String, dynamic> json) =>
       _$PuzzleIdFromJson(json);
 
-  @override
   Map<String, dynamic> toJson() => _$PuzzleIdToJson(this);
 }
 
@@ -89,7 +87,6 @@ class UserId extends ID {
 
   factory UserId.fromJson(Map<String, dynamic> json) => _$UserIdFromJson(json);
 
-  @override
   Map<String, dynamic> toJson() => _$UserIdToJson(this);
 }
 

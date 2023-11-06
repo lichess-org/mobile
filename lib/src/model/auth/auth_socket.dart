@@ -40,12 +40,6 @@ const _kIdleTimeout = Duration(seconds: 5);
 /// is still connected (this is the case when playing a game).
 const _kDisconnectOnBackgroundTimeout = Duration(minutes: 20);
 
-typedef CurrentConnection = ({
-  Uri route,
-  IOWebSocketChannel channel,
-  StreamController<SocketEvent> streamController,
-});
-
 /// Lichess websocket client.
 ///
 /// Handles authentication:
@@ -58,8 +52,6 @@ typedef CurrentConnection = ({
 ///
 /// This class can only create one single connection, because we never want to
 /// have more than one connection open at a time.
-/// Calling several times [connect] will return the same [Stream].
-///
 /// A single [StreamController] is responsible to broadcast events that are
 /// then filtered if they don't match the called route. This helps detecting when a
 /// subscription is not cancelled properly and targeting a no longer active route.
@@ -70,27 +62,34 @@ typedef CurrentConnection = ({
 /// The socket will close itself after a short delay when there are no more
 /// subscriptions.
 class AuthSocket {
-  AuthSocket(this._ref, this._log) {
-    _appLifecycleListener = AppLifecycleListener(
-      onHide: () {
-        _closeInBackgroundTimer?.cancel();
-        _closeInBackgroundTimer = Timer(
-          _kDisconnectOnBackgroundTimeout,
-          () {
-            _log.info(
-              'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, closing socket.',
-            );
-            _close();
-          },
-        );
-      },
-      onShow: () {
-        _closeInBackgroundTimer?.cancel();
-      },
-    );
-  }
+  AuthSocket(this._ref, this._log);
 
-  late final AppLifecycleListener _appLifecycleListener;
+  late final AppLifecycleListener _appLifecycleListener = AppLifecycleListener(
+    onHide: () {
+      _closeInBackgroundTimer?.cancel();
+      _closeInBackgroundTimer = Timer(
+        _kDisconnectOnBackgroundTimeout,
+        () {
+          _log.info(
+            'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, closing socket.',
+          );
+          _closeAndForget();
+        },
+      );
+    },
+    onShow: () {
+      _closeInBackgroundTimer?.cancel();
+    },
+  );
+
+  late final StreamController<SocketEvent> _streamController =
+      StreamController<SocketEvent>.broadcast(
+    onListen: _onStreamListen,
+    onCancel: _onStreamCancel,
+  );
+
+  late final StreamController<Uri> _readyStreamController =
+      StreamController<Uri>.broadcast();
 
   final Logger _log;
   final AuthSocketRef _ref;
@@ -112,43 +111,69 @@ class AuthSocket {
   int _ackId = 1;
 
   /// The current connection.
-  CurrentConnection? _connection;
+  ({
+    Uri route,
+    IOWebSocketChannel channel,
+  })? _connection;
 
   /// Gets the current WebSocket sink
   WebSocketSink? get _sink => _connection?.channel.sink;
 
-  /// The current socket route if connected.
+  /// The current socket route if a connection is active.
   Uri? get route => _connection?.route;
 
-  /// Returns the socket event broadcast stream filtered on the given route if connected.
-  Stream<SocketEvent>? getStreamOnRoute(Uri route) =>
-      _connection?.streamController.stream
-          .where((_) => route == _connection?.route);
+  /// The socket events broadcast stream.
+  Stream<SocketEvent> get stream => _streamController.stream;
+
+  /// The socket connection ready broadcast stream.
+  ///
+  /// This stream emits each time a new websocket is connected.
+  Stream<void> get readyStream => _readyStreamController.stream;
 
   /// The Socket Random Identifier.
   String get sri => _ref.read(sriProvider);
 
   /// Creates a new WebSocket channel.
   ///
-  /// If a connection already exists it will keep the current connection.
-  ///
-  /// An optional `forceReconnect` boolean can be provided to force a reconnection.
+  /// Calling several times [connect] with the same route will not re-create a new
+  /// connection unless `forceReconnect` is set to `true`.
   ///
   /// Returns a tuple of:
-  ///  - the socket event broadcast [Stream]
-  ///  - a [Future] that completes when the socket is ready. The future might never
-  /// complete if the socket fails to connect because it tries to reconnect automatically.
-  (Stream<SocketEvent>, Future<void>) connect(
+  ///  - the socket event [Stream]
+  ///  - the channel ready [Stream], which emits each time a new websocket is connected.
+  ///    Use [Stream.first] to wait for the first connection, or subscribe to this
+  ///    stream to be notified of reconnections.
+  (Stream<SocketEvent>, Stream<void>) connect(
     Uri route, {
     bool? forceReconnect = false,
   }) {
+    final filteredStream = _streamController.stream.where((_) {
+      if (route != _connection?.route) {
+        _log.warning(
+          'Received event for route $route on active route ${_connection?.route}. Have you forgotten to cancel a subscription?',
+        );
+        return false;
+      }
+      return true;
+    });
+
+    final filteredReadyStream = _readyStreamController.stream.where((Uri uri) {
+      if (uri != route) {
+        _log.warning(
+          'Received ready event for route $route on active route $uri. Have you forgotten to cancel a subscription?',
+        );
+        return false;
+      }
+      return true;
+    });
+
     if (forceReconnect == false &&
         _connection != null &&
         _connection!.channel.closeCode == null &&
         route == _connection!.route) {
       return (
-        _connection!.streamController.stream,
-        _connection!.channel.ready,
+        filteredStream,
+        filteredReadyStream,
       );
     }
 
@@ -156,19 +181,11 @@ class AuthSocket {
     _acks = [];
     _ackId = 1;
 
-    final connection = _doConnect(route);
+    _doConnect(route);
 
     return (
-      connection.streamController.stream.where((_) {
-        if (route != _connection?.route) {
-          _log.warning(
-            'Received event for route $route on active route ${_connection?.route}. Have you forgotten to cancel a subscription?',
-          );
-          return false;
-        }
-        return true;
-      }),
-      connection.channel.ready,
+      filteredStream,
+      filteredReadyStream,
     );
   }
 
@@ -211,37 +228,40 @@ class AuthSocket {
   }
 
   void dispose() {
-    _close();
+    _closeAndForget();
+    _streamController.close();
+    _readyStreamController.close();
     _appLifecycleListener.dispose();
   }
 
-  /// Closes the WebSocket connection.
+  /// Closes and forget the WebSocket connection.
+  ///
+  /// This should be called when the socket is no longer needed.
   ///
   /// If a delay is provided, the connection will be closed after the delay.
   /// If a new connection is created before the delay, the close will be cancelled.
-  void _close({Duration? delay}) {
+  void _closeAndForget({Duration? delay}) {
     _log.fine(
       'Closing WebSocket connection ${delay == null ? 'now' : 'in ${delay.inSeconds}s'}.',
     );
     _closeTimer?.cancel();
     _closeTimer = Timer(
       delay ?? Duration.zero,
-      () => _closeCurrent(() {
+      () {
+        _disconnect();
+        _ref.read(averageLagProvider.notifier).reset();
         if (_connection == null) {
           return;
         }
-        _connection?.streamController.close().then((_) {
-          _log.fine('WebSocket stream controller properly closed.');
-        });
         _log.info('WebSocket connection closed.');
         _connection = null;
-      }),
+      },
     );
   }
 
   /// Connect or reconnect the WebSocket.
-  CurrentConnection _doConnect(Uri route) {
-    _closeCurrent();
+  void _doConnect(Uri route) {
+    _disconnect();
     _pongCount = 0;
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
@@ -282,11 +302,6 @@ class AuthSocket {
     _connection = (
       route: route,
       channel: channel,
-      streamController: _connection?.streamController ??
-          StreamController<SocketEvent>.broadcast(
-            onListen: _onStreamListen,
-            onCancel: _onStreamCancel,
-          ),
     );
 
     channel.ready.then(
@@ -294,8 +309,9 @@ class AuthSocket {
         _log.info('WebSocket connection established.');
         _ref.read(averageLagProvider.notifier).reset();
         _sendPing();
-        _resendAcks();
         _schedulePing(_kPingDelay);
+        _readyStreamController.add(route);
+        _resendAcks();
       },
       onError: (Object e) {
         _log.severe('WebSocket connection failed.', e);
@@ -305,8 +321,6 @@ class AuthSocket {
         }
       },
     );
-
-    return _connection!;
   }
 
   /// Called when the first listener is added to the socket stream.
@@ -318,7 +332,7 @@ class AuthSocket {
   /// Called when the last listener is removed from the socket stream.
   void _onStreamCancel() {
     _log.fine('WebSocket connection idle, closing.');
-    _close(delay: _kIdleTimeout);
+    _closeAndForget(delay: _kIdleTimeout);
   }
 
   void _handleEvent(SocketEvent event) {
@@ -331,7 +345,7 @@ class AuthSocket {
     }
 
     if (event != SocketEvent.pong) {
-      _connection?.streamController.add(event);
+      _streamController.add(event);
     }
   }
 
@@ -401,14 +415,13 @@ class AuthSocket {
     }
   }
 
-  /// Closes current connection, but keep the streamController open to allow for reconnections
-  void _closeCurrent([void Function()? afterClose]) {
+  /// Disconnects websocket connection and keeps the reference to the current connection.
+  void _disconnect() {
     _sink?.close();
     _socketStreamSubscription?.cancel();
     _pingTimer?.cancel();
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
-    afterClose?.call();
   }
 }
 
@@ -430,6 +443,8 @@ String sri(SriRef ref) {
 }
 
 /// Average lag computed from WebSocket ping/pong protocol.
+///
+/// An empty duration means the socket is not connected.
 @riverpod
 class AverageLag extends _$AverageLag {
   @override

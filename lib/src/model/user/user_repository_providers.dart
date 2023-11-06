@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
+
 import 'user_repository.dart';
 import 'user.dart';
 import 'streamer.dart';
@@ -84,20 +85,16 @@ Future<IList<Streamer>> liveStreamers(LiveStreamersRef ref) async {
   return result.asFuture;
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<IMap<Perf, LeaderboardUser>> top1(Top1Ref ref) async {
-  final link = ref.cacheFor(const Duration(minutes: 10));
   final repo = ref.watch(userRepositoryProvider);
   final result = await repo.getTop1();
-  if (result.isError) {
-    link.close();
-  }
   return result.asFuture;
 }
 
 @riverpod
 Future<Leaderboard> leaderboard(LeaderboardRef ref) async {
-  final link = ref.cacheFor(const Duration(minutes: 5));
+  final link = ref.cacheFor(const Duration(hours: 2));
   final repo = ref.watch(userRepositoryProvider);
   final result = await repo.getLeaderboard();
   if (result.isError) {

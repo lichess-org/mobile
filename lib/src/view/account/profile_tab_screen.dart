@@ -5,11 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/user/recent_games.dart';
+import 'package:lichess_mobile/src/view/user/user_activity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -53,10 +52,15 @@ class _ProfileScreenState extends ConsumerState<ProfileTabScreen> {
                 ),
                 body: RefreshIndicator(
                   key: _androidRefreshKey,
-                  onRefresh: () => _refreshData(data),
+                  onRefresh: () => _refreshData(),
                   child: ListView(
                     controller: profileScrollController,
-                    children: buildUserScreenList(data),
+                    children: [
+                      UserProfile(user: data),
+                      PerfCards(user: data),
+                      const UserActivityWidget(),
+                      const RecentGames(),
+                    ],
                   ),
                 ),
               )
@@ -104,13 +108,18 @@ class _ProfileScreenState extends ConsumerState<ProfileTabScreen> {
                       trailing: const _SettingsButton(),
                     ),
                     CupertinoSliverRefreshControl(
-                      onRefresh: () => _refreshData(data),
+                      onRefresh: () => _refreshData(),
                     ),
                     SliverSafeArea(
                       top: false,
                       sliver: SliverList(
                         delegate: SliverChildListDelegate(
-                          buildUserScreenList(data),
+                          [
+                            UserProfile(user: data),
+                            PerfCards(user: data),
+                            const UserActivityWidget(),
+                            const RecentGames(),
+                          ],
                         ),
                       ),
                     ),
@@ -140,11 +149,11 @@ class _ProfileScreenState extends ConsumerState<ProfileTabScreen> {
     );
   }
 
-  Future<void> _refreshData(User account) {
+  Future<void> _refreshData() {
     return Future.wait([
-      ref.refresh(userRecentGamesProvider(userId: account.id).future),
-      ref.refresh(userActivityProvider(id: account.id).future),
       ref.refresh(accountProvider.future),
+      ref.refresh(accountRecentGamesProvider.future),
+      ref.refresh(accountActivityProvider.future),
     ]);
   }
 }

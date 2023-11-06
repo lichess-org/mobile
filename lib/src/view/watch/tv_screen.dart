@@ -98,14 +98,14 @@ class _TvScreenState extends ConsumerState<TvScreen>
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      tvRouteObserver.subscribe(this, route);
+      rootNavPageRouteObserver.subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    tvRouteObserver.unsubscribe(this);
+    rootNavPageRouteObserver.unsubscribe(this);
     super.dispose();
   }
 
@@ -155,6 +155,7 @@ class _Body extends ConsumerWidget {
               interactableSide: cg.InteractableSide.none,
               orientation: gameState.orientation.cg,
               fen: game.lastPosition.fen,
+              sideToMove: game.lastPosition.turn.cg,
               lastMove: game.lastMove?.cg,
               isCheck: game.lastPosition.isCheck,
             );

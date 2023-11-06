@@ -18,10 +18,26 @@ part 'game.freezed.dart';
 abstract mixin class BaseGame {
   /// Game steps, cannot be empty.
   IList<GameStep> get steps;
+  String? get initialFen;
 }
 
 /// A mixin that provides methods to access game data at a specific step.
 mixin IndexableSteps on BaseGame {
+  /// Internal PGN representation of the game.
+  ///
+  /// Contains the initial FEN if available. This is not meant to be used for
+  /// exporting the game.
+  String get pgn {
+    final moves = steps
+        .where((e) => e.sanMove != null)
+        .map((e) => e.sanMove!.san)
+        .join(' ');
+
+    final fenHeader = initialFen != null ? '[FEN "$initialFen"]' : '';
+
+    return '$fenHeader\n$moves';
+  }
+
   MaterialDiffSide? materialDiffAt(int cursor, Side side) =>
       steps[cursor].diff?.bySide(side);
 
@@ -62,6 +78,7 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
   factory PlayableGame({
     required PlayableGameMeta meta,
     required IList<GameStep> steps,
+    String? initialFen,
     required Player white,
     required Player black,
     required GameStatus status,
@@ -82,11 +99,13 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
     GameId? rematch,
   }) = _PlayableGame;
 
-  /// The side that the current player is playing as. Null if spectating.
-  Player? get player => youAre == Side.white ? white : black;
+  /// Player of the playing point of view. Null if spectating.
+  Player? get me => youAre == Side.white ? white : black;
 
-  /// The side that the current player is playing against. Null if spectating.
+  /// Opponent from the playing point of view. Null if spectating.
   Player? get opponent => youAre == Side.white ? black : white;
+
+  Side get sideToMove => lastPosition.turn;
 
   bool get hasAI => white.isAI || black.isAI;
 
@@ -104,7 +123,7 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
   bool get drawable =>
       playable &&
       lastPosition.fullmoves >= 2 &&
-      !(player?.offeringDraw == true) &&
+      !(me?.offeringDraw == true) &&
       !hasAI;
   bool get rematchable =>
       meta.rules == null || !meta.rules!.contains(GameRule.noRematch);
@@ -112,7 +131,7 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
       takebackable &&
       playable &&
       lastPosition.fullmoves >= 2 &&
-      !(player?.proposingTakeback == true) &&
+      !(me?.proposingTakeback == true) &&
       !(opponent?.proposingTakeback == true);
   bool get canGiveTime => moretimeable && playable && clock != null;
 
@@ -122,15 +141,6 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
       resignable &&
       (meta.rules == null || !meta.rules!.contains(GameRule.noClaimWin));
 }
-
-typedef GamePrefs = ({
-  bool showRatings,
-  bool enablePremove,
-  AutoQueen autoQueen,
-  bool confirmResign,
-  bool submitMove,
-  Zen zenMode,
-});
 
 enum GameSource {
   lobby,
@@ -160,6 +170,20 @@ enum GameRule {
 }
 
 @freezed
+class GamePrefs with _$GamePrefs {
+  const GamePrefs._();
+
+  const factory GamePrefs({
+    required bool showRatings,
+    required bool enablePremove,
+    required AutoQueen autoQueen,
+    required bool confirmResign,
+    required bool submitMove,
+    required Zen zenMode,
+  }) = _GamePrefs;
+}
+
+@freezed
 class PlayableGameMeta with _$PlayableGameMeta {
   const PlayableGameMeta._();
 
@@ -170,7 +194,6 @@ class PlayableGameMeta with _$PlayableGameMeta {
     required Speed speed,
     required Perf perf,
     required GameSource source,
-    String? initialFen,
     int? startedAtTurn,
     ISet<GameRule>? rules,
   }) = _PlayableGameMeta;
@@ -209,7 +232,6 @@ class ArchivedGameData with _$ArchivedGameData {
     required Player black,
     required Variant variant,
     LightOpening? opening,
-    String? initialFen,
     String? lastFen,
     Side? winner,
     ClockData? clock,
@@ -231,6 +253,7 @@ class ArchivedGame with _$ArchivedGame, BaseGame, IndexableSteps {
   factory ArchivedGame({
     required ArchivedGameData data,
     required IList<GameStep> steps,
+    String? initialFen,
     // IList<MoveAnalysis>? analysis,
   }) = _ArchivedGame;
 }

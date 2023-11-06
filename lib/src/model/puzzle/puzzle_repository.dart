@@ -86,7 +86,7 @@ class PuzzleRepository {
 
   FutureResult<Puzzle> fetch(PuzzleId id) {
     return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/$id')).flatMap(
-          (response) => readJsonObject(
+          (response) => readJsonObjectFromResponse(
             response,
             mapper: _puzzleFromJson,
             logger: _log,
@@ -98,7 +98,7 @@ class PuzzleRepository {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/streak'))
         .flatMap((response) {
-      return readJsonObject(
+      return readJsonObjectFromResponse(
         response,
         mapper: (Map<String, dynamic> json) {
           return PuzzleStreakResponse(
@@ -124,7 +124,7 @@ class PuzzleRepository {
   FutureResult<PuzzleStormResponse> storm() {
     return apiClient.get(Uri.parse('$kLichessHost/api/storm')).flatMap(
       (response) {
-        return readJsonObject(
+        return readJsonObjectFromResponse(
           response,
           mapper: (Map<String, dynamic> json) {
             return PuzzleStormResponse(
@@ -159,7 +159,7 @@ class PuzzleRepository {
       body: body,
     )
         .flatMap((response) {
-      return readJsonObject(
+      return readJsonObjectFromResponse(
         response,
         mapper: (Map<String, dynamic> json) {
           return pick(json['newHigh']).letOrNull(
@@ -175,7 +175,7 @@ class PuzzleRepository {
 
   FutureResult<Puzzle> daily() {
     return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/daily')).flatMap(
-          (response) => readJsonObject(
+          (response) => readJsonObjectFromResponse(
             response,
             mapper: _puzzleFromJson,
             logger: _log,
@@ -191,7 +191,7 @@ class PuzzleRepository {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/puzzle/dashboard/$days'))
         .flatMap((response) {
-      return readJsonObject(
+      return readJsonObjectFromResponse(
         response,
         mapper: _puzzleDashboardFromJson,
         logger: _log,
@@ -210,7 +210,7 @@ class PuzzleRepository {
           Uri.parse('$kLichessHost/api/puzzle/activity?max=$max$beforeQuery'),
         )
         .flatMap(
-          (response) => readNdJsonList(
+          (response) => readNdJsonListFromResponse(
             response,
             mapper: _puzzleActivityFromJson,
             logger: _log,
@@ -222,7 +222,7 @@ class PuzzleRepository {
     return apiClient
         .get(Uri.parse('$kLichessHost/api/storm/dashboard/${userId.value}'))
         .flatMap(
-          (response) => readJsonObject(
+          (response) => readJsonObjectFromResponse(
             response,
             mapper: _stormDashboardFromJson,
             logger: _log,
@@ -257,7 +257,7 @@ class PuzzleRepository {
   }
 
   Result<PuzzleBatchResponse> _decodeBatchResponse(http.Response response) {
-    return readJsonObject(
+    return readJsonObjectFromResponse(
       response,
       mapper: (Map<String, dynamic> json) {
         final puzzles = json['puzzles'];

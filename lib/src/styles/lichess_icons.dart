@@ -85,6 +85,10 @@ class LichessIcons {
       IconData(0xe81a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData lichess =
       IconData(0xe81b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData tag =
+      IconData(0xf02b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData tags =
+      IconData(0xf02c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData step_backward =
       IconData(0xf048, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData fast_backward =
@@ -109,4 +113,6 @@ class LichessIcons {
       IconData(0xf445, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData chess_rook =
       IconData(0xf447, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData tools =
+      IconData(0xf7d9, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

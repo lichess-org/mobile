@@ -8,6 +8,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:result_extensions/result_extensions.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -22,15 +23,34 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
-import 'package:lichess_mobile/src/utils/wakelock.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 
 import 'puzzle_feedback_widget.dart';
 
-class StreakScreen extends StatelessWidget {
+class StreakScreen extends StatefulWidget {
   const StreakScreen({super.key});
+
+  @override
+  State<StreakScreen> createState() => _StreakScreenState();
+}
+
+class _StreakScreenState extends State<StreakScreen> with ImmersiveMode {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null && route is PageRoute) {
+      rootNavPageRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    rootNavPageRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +127,7 @@ class _Load extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
+class _Body extends ConsumerWidget {
   const _Body({
     required this.initialPuzzleContext,
     required this.streak,
@@ -119,16 +139,10 @@ class _Body extends ConsumerStatefulWidget {
   static const streakColor = LichessColors.brag;
 
   @override
-  ConsumerState<_Body> createState() => _BodyState();
-}
-
-class _BodyState extends ConsumerState<_Body>
-    with AndroidImmersiveMode, Wakelock {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = puzzleControllerProvider(
-      widget.initialPuzzleContext,
-      initialStreak: widget.streak,
+      initialPuzzleContext,
+      initialStreak: streak,
     );
     final puzzleState = ref.watch(ctrlProvider);
 
@@ -223,7 +237,7 @@ class _BodyState extends ConsumerState<_Body>
           ),
         ),
         _BottomBar(
-          initialPuzzleContext: widget.initialPuzzleContext,
+          initialPuzzleContext: initialPuzzleContext,
           ctrlProvider: ctrlProvider,
         ),
       ],

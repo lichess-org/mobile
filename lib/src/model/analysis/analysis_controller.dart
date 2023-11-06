@@ -7,6 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -24,11 +25,14 @@ class AnalysisOptions with _$AnalysisOptions {
   const factory AnalysisOptions({
     required ID id,
     required bool isLocalEvaluationAllowed,
-    required Variant variant,
     required Side orientation,
-    required String initialFen,
-    required int initialPly,
-    required IList<Move> moves,
+    required Variant variant,
+
+    /// The PGN of the game to analyze.
+    /// The move list can be empty.
+    /// It can contain a FEN header for initial position.
+    /// If it contains a Variant header, it will be ignored.
+    required String pgn,
     int? initialMoveCursor,
     LightOpening? opening,
   }) = _AnalysisOptions;
@@ -36,7 +40,7 @@ class AnalysisOptions with _$AnalysisOptions {
 
 @riverpod
 class AnalysisController extends _$AnalysisController {
-  late Root _root;
+  late final Root _root;
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 500));
 
@@ -49,37 +53,30 @@ class AnalysisController extends _$AnalysisController {
       _engineEvalDebounce.dispose();
     });
 
-    final initialPosition = Position.setupPosition(
-      options.variant.rules,
-      Setup.parseFen(options.initialFen),
-    );
-
-    _root = Root(
-      ply: options.initialPly,
-      position: initialPosition,
-    );
-
-    int ply = options.initialPly;
-    Position position = initialPosition;
-    Node current = _root;
     UciPath path = UciPath.empty;
-    for (final move in options.moves) {
-      final (newPos, san) = position.playToSan(move);
-      position = newPos;
-      ply++;
+    Move? lastMove;
+    IMap<String, String>? pgnHeaders =
+        options.id is GameId ? null : _defaultPgnHeaders;
+    IList<String>? rootComments;
 
-      final nextNode = Branch(
-        ply: ply,
-        sanMove: SanMove(san, move),
-        position: position,
-      );
-      current.addChild(nextNode);
-      current = nextNode;
-      if (options.initialMoveCursor != null &&
-          ply <= options.initialMoveCursor!) {
-        path = path + nextNode.id;
-      }
+    final game = PgnGame.parsePgn(options.pgn);
+    // only include headers if the game is not an online lichess game
+    if (options.id is! GameId) {
+      pgnHeaders = pgnHeaders?.addMap(game.headers) ?? IMap(game.headers);
+      rootComments = IList(game.comments);
     }
+
+    _root = Root.fromPgnGame(game, (root, branch, isMainline) {
+      if (isMainline &&
+          options.initialMoveCursor != null &&
+          branch.position.ply <= options.initialMoveCursor!) {
+        path = path + branch.id;
+        lastMove = branch.sanMove.move;
+      }
+      if (isMainline && options.opening == null && branch.position.ply <= 2) {
+        _fetchOpening(root, path);
+      }
+    });
 
     final currentPath =
         options.initialMoveCursor == null ? _root.mainlinePath : path;
@@ -103,15 +100,18 @@ class AnalysisController extends _$AnalysisController {
 
     return AnalysisState(
       id: options.id,
-      isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
-      isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
-      initialPath: UciPath.empty,
       currentPath: currentPath,
       root: _root.view,
-      currentNode: currentNode.view,
+      currentNode: AnalysisCurrentNode.fromNode(currentNode),
+      pgnHeaders: pgnHeaders,
+      pgnRootComments: rootComments,
+      lastMove: lastMove,
       pov: options.orientation,
       evaluationContext: evalContext,
       contextOpening: options.opening,
+      isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
+      isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
+      shouldShowComments: true,
     );
   }
 
@@ -124,11 +124,15 @@ class AnalysisController extends _$AnalysisController {
   }
 
   void userNext() {
-    if (state.currentNode.children.isEmpty) return;
+    if (!state.currentNode.hasChild) return;
     _setPath(
-      state.currentPath + state.currentNode.children.first.id,
+      state.currentPath + _root.nodeAt(state.currentPath).children.first.id,
       replaying: true,
     );
+  }
+
+  void toggleComments() {
+    state = state.copyWith(shouldShowComments: !state.shouldShowComments);
   }
 
   void toggleBoard() {
@@ -172,7 +176,8 @@ class AnalysisController extends _$AnalysisController {
       evaluationContext: state.evaluationContext.copyWith(
         multiPv: numEvalLines,
       ),
-      currentNode: _root.nodeAt(state.currentPath).view,
+      currentNode:
+          AnalysisCurrentNode.fromNode(_root.nodeAt(state.currentPath)),
     );
 
     _startEngineEval();
@@ -194,6 +199,11 @@ class AnalysisController extends _$AnalysisController {
     _startEngineEval();
   }
 
+  void updatePgnHeader(String key, String value) {
+    final headers = state.pgnHeaders?.add(key, value) ?? IMap({key: value});
+    state = state.copyWith(pgnHeaders: headers);
+  }
+
   /// Gets the node and maybe the associated branch opening at the given path.
   (Node, Opening?) _nodeOpeningAt(Node node, UciPath path, [Opening? opening]) {
     if (path.isEmpty) return (node, opening);
@@ -203,6 +213,10 @@ class AnalysisController extends _$AnalysisController {
     } else {
       return (node, opening);
     }
+  }
+
+  String makeGamePgn() {
+    return _root.makePgn(state.pgnHeaders, state.pgnRootComments);
   }
 
   void _setPath(
@@ -235,13 +249,13 @@ class AnalysisController extends _$AnalysisController {
         }
       }
 
-      if (currentNode.opening == null && currentNode.ply <= 20) {
-        _fetchOpening(path);
+      if (currentNode.opening == null && currentNode.position.ply <= 30) {
+        _fetchOpening(_root, path);
       }
 
       state = state.copyWith(
         currentPath: path,
-        currentNode: currentNode.view,
+        currentNode: AnalysisCurrentNode.fromNode(currentNode),
         lastMove: currentNode.sanMove.move,
         currentBranchOpening: opening,
         // root view is only used to display move list, so we need to
@@ -251,7 +265,7 @@ class AnalysisController extends _$AnalysisController {
     } else {
       state = state.copyWith(
         currentPath: path,
-        currentNode: state.root,
+        currentNode: AnalysisCurrentNode.fromNode(currentNode),
         currentBranchOpening: opening,
         lastMove: null,
       );
@@ -262,21 +276,23 @@ class AnalysisController extends _$AnalysisController {
     }
   }
 
-  Future<void> _fetchOpening(UciPath path) async {
+  Future<void> _fetchOpening(Node fromNode, UciPath path) async {
     if (!kOpeningAllowedVariants.contains(options.variant)) return;
 
-    final moves = _root.nodesOn(path).map((node) => node.sanMove.move);
+    final moves = fromNode.nodesOn(path).map((node) => node.sanMove.move);
     if (moves.isEmpty) return;
-    if (moves.length > 20) return;
+    if (moves.length > 40) return;
 
     final opening =
         await ref.read(openingServiceProvider).fetchFromMoves(moves);
 
     if (opening != null) {
-      _root.updateAt(path, (node) => node.opening = opening);
+      fromNode.updateAt(path, (node) => node.opening = opening);
 
       if (state.currentPath == path) {
-        state = state.copyWith(currentNode: _root.nodeAt(path).view);
+        state = state.copyWith(
+          currentNode: AnalysisCurrentNode.fromNode(fromNode.nodeAt(path)),
+        );
       }
     }
   }
@@ -314,18 +330,55 @@ class AnalysisState with _$AnalysisState {
   const AnalysisState._();
 
   const factory AnalysisState({
+    /// Immutable view of the whole tree
     required ViewRoot root,
-    required ViewNode currentNode,
-    required UciPath initialPath,
+
+    /// The current node in the analysis view.
+    ///
+    /// This is an immutable copy of the actual [Node] at the `currentPath`.
+    /// We don't want to use [Node.view] here because it'd copy the whole tree
+    /// under the current node and it's expensive.
+    required AnalysisCurrentNode currentNode,
+
+    /// The path to the current node in the analysis view.
     required UciPath currentPath,
+
+    /// Analysis ID, useful for the evaluation context.
     required ID id,
+
+    /// The side to display the board from.
     required Side pov,
+
+    /// Context for engine evaluation.
     required EvaluationContext evaluationContext,
+
+    /// Whether local evaluation is allowed for this analysis.
     required bool isLocalEvaluationAllowed,
+
+    /// Whether the user has enabled local evaluation.
     required bool isLocalEvaluationEnabled,
+
+    /// Whether to show PGN comments in the tree view.
+    required bool shouldShowComments,
+
+    /// The last move played.
     Move? lastMove,
+
+    /// Opening of the analysis context (from lichess archived games).
     Opening? contextOpening,
+
+    /// The opening of the current branch.
     Opening? currentBranchOpening,
+
+    /// The PGN headers of the game.
+    ///
+    /// This field is only used with user submitted PGNS.
+    IMap<String, String>? pgnHeaders,
+
+    /// The PGN comments of the game.
+    ///
+    /// This field is only used with user submitted PGNS.
+    IList<String>? pgnRootComments,
   }) = _AnalysisState;
 
   IMap<String, ISet<String>> get validMoves =>
@@ -333,12 +386,63 @@ class AnalysisState with _$AnalysisState {
 
   bool get isEngineAvailable =>
       isLocalEvaluationAllowed &&
-      isLocalEvaluationEnabled &&
       engineSupportedVariants.contains(
         evaluationContext.variant,
-      );
+      ) &&
+      isLocalEvaluationEnabled;
 
   Position get position => currentNode.position;
-  bool get canGoNext => currentNode.children.isNotEmpty;
-  bool get canGoBack => currentPath.size > initialPath.size;
+  bool get canGoNext => currentNode.hasChild;
+  bool get canGoBack => currentPath.size > UciPath.empty.size;
 }
+
+@freezed
+class AnalysisCurrentNode with _$AnalysisCurrentNode {
+  const factory AnalysisCurrentNode({
+    required Position position,
+    required bool hasChild,
+    required bool isRoot,
+    SanMove? sanMove,
+    Opening? opening,
+    ClientEval? eval,
+    IList<String>? startingComments,
+    IList<String>? comments,
+    IList<int>? nags,
+  }) = _AnalysisCurrentNode;
+
+  factory AnalysisCurrentNode.fromNode(Node node) {
+    if (node is Branch) {
+      return AnalysisCurrentNode(
+        sanMove: node.sanMove,
+        position: node.position,
+        isRoot: node is Root,
+        hasChild: node.children.isNotEmpty,
+        opening: node.opening,
+        eval: node.eval,
+        startingComments: IList(node.startingComments),
+        comments: IList(node.comments),
+        nags: IList(node.nags),
+      );
+    } else {
+      return AnalysisCurrentNode(
+        position: node.position,
+        hasChild: node.children.isNotEmpty,
+        isRoot: node is Root,
+        opening: node.opening,
+        eval: node.eval,
+      );
+    }
+  }
+}
+
+const IMap<String, String> _defaultPgnHeaders = IMapConst({
+  'Event': '?',
+  'Site': '?',
+  'Date': '????.??.??',
+  'Round': '?',
+  'White': '?',
+  'Black': '?',
+  'Result': '*',
+  'WhiteElo': '?',
+  'BlackElo': '?',
+});

@@ -26,7 +26,6 @@ If you want to use FVM to manage your Flutter versions effectively, please consu
 
 **Pro Tip:** Remember to prepend the 'flutter' prefix when using FVM commands, like this: `fvm flutter [command]`.
 
-
 ### Local lila
 
 You will need a local [lila](https://github.com/lichess-org/lila) (lichess server scala app) instance to work on this
@@ -40,7 +39,7 @@ The mobile application is configured by default to target `http://127.0.0.1:9663
 
 First run the code generator:
 
-```
+```sh
 flutter pub get
 dart run build_runner watch
 ```
@@ -48,20 +47,29 @@ dart run build_runner watch
 Check you have some connected device with: `flutter devices`.
 
 If you target an android device you need to run these commands so the device can reach the local lila instance:
-```
+
+```sh
 adb reverse tcp:9663 tcp:9663
 adb reverse tcp:9664 tcp:9664
 ```
 
 Then run on your device:
 
-```
+```sh
 flutter run -d <my_device>
 ```
 
 You can find more information about emulators [in the wiki](https://github.com/lichess-org/mobile/wiki/Setting-up-device-emulators).
 
 You can find more information about the `flutter run` command by running `flutter run --help`.
+
+### Logging
+
+```sh
+dart devtools
+```
+
+Then run the app with the `flutter run` command above, and a link to the logging page will be printed in the console.
 
 ## Internationalisation
 
