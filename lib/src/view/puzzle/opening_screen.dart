@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 class OpeningThemeScreen extends StatelessWidget {
   const OpeningThemeScreen({super.key});
@@ -22,18 +24,18 @@ class OpeningThemeScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('By game Opening'),
+        title: Text(context.l10n.puzzlePuzzlesByOpenings),
       ),
       body: const _Body(),
     );
   }
 
   Widget _iosBuilder(BuildContext context) {
-    return const CupertinoPageScaffold(
+    return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text('By game Opening'),
+        middle: Text(context.l10n.puzzlePuzzlesByOpenings),
       ),
-      child: _Body(),
+      child: const _Body(),
     );
   }
 }

@@ -236,6 +236,7 @@ class _CategoryOnline extends ConsumerWidget {
   });
 
   final PuzzleThemeFamily category;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final collapsedIconColor = defaultTargetPlatform == TargetPlatform.iOS
@@ -257,36 +258,37 @@ class _CategoryOnline extends ConsumerWidget {
                 .map(
                   (theme) => PlatformListTile(
                     leading: Icon(puzzleThemeIcon(theme.key)),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          puzzleThemeL10n(context, theme.key).name,
-                          style: defaultTargetPlatform == TargetPlatform.iOS
-                              ? TextStyle(
-                                  color: CupertinoTheme.of(context)
-                                      .textTheme
-                                      .textStyle
-                                      .color,
-                                )
-                              : null,
-                        ),
-                        Text(
-                          '${theme.count}',
-                          style: TextStyle(
-                            color: textShade(context, 0.5),
-                          ),
-                        ),
-                      ],
+                    trailing: Padding(
+                      padding: const EdgeInsets.only(left: 6.0),
+                      child: Text('${theme.count}'),
                     ),
-                    subtitle: Text(
-                      puzzleThemeL10n(context, theme.key).description,
-                      maxLines: 5,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: textShade(
-                          context,
-                          Styles.subtitleOpacity,
+                    title: Padding(
+                      padding: defaultTargetPlatform == TargetPlatform.iOS
+                          ? const EdgeInsets.only(top: 6.0)
+                          : EdgeInsets.zero,
+                      child: Text(
+                        puzzleThemeL10n(context, theme.key).name,
+                        style: defaultTargetPlatform == TargetPlatform.iOS
+                            ? TextStyle(
+                                color: CupertinoTheme.of(context)
+                                    .textTheme
+                                    .textStyle
+                                    .color,
+                              )
+                            : null,
+                      ),
+                    ),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(bottom: 6.0),
+                      child: Text(
+                        puzzleThemeL10n(context, theme.key).description,
+                        maxLines: 5,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: textShade(
+                            context,
+                            Styles.subtitleOpacity,
+                          ),
                         ),
                       ),
                     ),
