@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:async/async.dart';
+import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -20,6 +21,8 @@ import 'puzzle.dart';
 import 'storm.dart';
 import 'puzzle_streak.dart';
 import 'puzzle_theme.dart';
+import 'puzzle_opening.dart';
+import 'puzzle_angle.dart';
 import 'puzzle_difficulty.dart';
 
 part 'puzzle_repository.freezed.dart';
@@ -43,13 +46,13 @@ class PuzzleRepository {
 
   FutureResult<PuzzleBatchResponse> selectBatch({
     required int nb,
-    PuzzleTheme angle = PuzzleTheme.mix,
+    PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
     PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) {
     return apiClient
         .get(
           Uri.parse(
-            '$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb&difficulty=${difficulty.name}',
+            '$kLichessHost/api/puzzle/batch/${angle.key}?nb=$nb&difficulty=${difficulty.name}',
           ),
           retryOnError: false,
         )
@@ -59,13 +62,13 @@ class PuzzleRepository {
   FutureResult<PuzzleBatchResponse> solveBatch({
     required int nb,
     required IList<PuzzleSolution> solved,
-    PuzzleTheme angle = PuzzleTheme.mix,
+    PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
     PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) {
     return apiClient
         .post(
           Uri.parse(
-            '$kLichessHost/api/puzzle/batch/${angle.name}?nb=$nb&difficulty=${difficulty.name}',
+            '$kLichessHost/api/puzzle/batch/${angle.key}?nb=$nb&difficulty=${difficulty.name}',
           ),
           headers: {'Content-type': 'application/json'},
           body: jsonEncode({
@@ -230,6 +233,32 @@ class PuzzleRepository {
         );
   }
 
+  FutureResult<IMap<PuzzleThemeKey, PuzzleThemeData>> puzzleTheme() {
+    return apiClient.get(
+      Uri.parse('$kLichessHost/training/themes'),
+      headers: {'Accept': 'application/json'},
+    ).flatMap(
+      (response) => readJsonObjectFromResponse(
+        response,
+        mapper: _puzzleThemeFromJson,
+        logger: _log,
+      ),
+    );
+  }
+
+  FutureResult<IList<PuzzleOpeningFamily>> puzzleOpenings() {
+    return apiClient.get(
+      Uri.parse('$kLichessHost/training/openings'),
+      headers: {'Accept': 'application/json'},
+    ).flatMap(
+      (response) => readJsonObjectFromResponse(
+        response,
+        mapper: _puzzleOpeningFromJson,
+        logger: _log,
+      ),
+    );
+  }
+
   Result<PuzzleBatchResponse> _decodeBatchResponse(http.Response response) {
     return readJsonObjectFromResponse(
       response,
@@ -298,6 +327,14 @@ Puzzle _puzzleFromJson(Map<String, dynamic> json) =>
 
 PuzzleDashboard _puzzleDashboardFromJson(Map<String, dynamic> json) =>
     _puzzleDashboardFromPick(pick(json).required());
+
+IMap<PuzzleThemeKey, PuzzleThemeData> _puzzleThemeFromJson(
+  Map<String, dynamic> json,
+) =>
+    _puzzleThemeFromPick(pick(json).required());
+
+IList<PuzzleOpeningFamily> _puzzleOpeningFromJson(Map<String, dynamic> json) =>
+    _puzzleOpeningFromPick(pick(json).required());
 
 Puzzle _puzzleFromPick(RequiredPick pick) {
   return Puzzle(
@@ -424,7 +461,7 @@ PuzzleDashboard _puzzleDashboardFromPick(RequiredPick pick) => PuzzleDashboard(
         firstWins: pick('global')('firstWins').asIntOrThrow(),
         replayWins: pick('global')('replayWins').asIntOrThrow(),
         performance: pick('global')('performance').asIntOrThrow(),
-        theme: PuzzleTheme.mix,
+        theme: PuzzleThemeKey.mix,
       ),
       themes: pick('themes')
           .asMapOrThrow<String, Map<String, dynamic>>()
@@ -447,5 +484,48 @@ PuzzleDashboardData _puzzleDashboardDataFromPick(
       firstWins: results('firstWins').asIntOrThrow(),
       replayWins: results('replayWins').asIntOrThrow(),
       performance: results('performance').asIntOrThrow(),
-      theme: puzzleThemeNameMap.get(themeKey) ?? PuzzleTheme.mix,
+      theme: puzzleThemeNameMap.get(themeKey) ?? PuzzleThemeKey.mix,
     );
+
+IMap<PuzzleThemeKey, PuzzleThemeData> _puzzleThemeFromPick(RequiredPick pick) {
+  final themeMap = puzzleThemeNameMap;
+  final Map<PuzzleThemeKey, PuzzleThemeData> result = {};
+  pick('themes').asMapOrThrow<String, dynamic>().keys.forEach((name) {
+    pick('themes', name)
+        .asListOrThrow((listPick) {
+          return PuzzleThemeData(
+            count: listPick('count').asIntOrThrow(),
+            desc: listPick('desc').asStringOrThrow(),
+            key: themeMap[listPick('key').asStringOrThrow()] ??
+                PuzzleThemeKey.unsupported,
+            name: listPick('name').asStringOrThrow(),
+          );
+        })
+        .whereNot((e) => e.key == PuzzleThemeKey.unsupported)
+        .forEach((e) {
+          result[e.key] = e;
+        });
+  });
+
+  return result.lock;
+}
+
+IList<PuzzleOpeningFamily> _puzzleOpeningFromPick(RequiredPick pick) {
+  return pick('openings').asListOrThrow((openingPick) {
+    final familyPick = openingPick('family');
+    final openings = openingPick('openings').asListOrNull(
+      (openPick) => PuzzleOpeningData(
+        key: openPick('key').asStringOrThrow(),
+        name: openPick('name').asStringOrThrow(),
+        count: openPick('count').asIntOrThrow(),
+      ),
+    );
+
+    return PuzzleOpeningFamily(
+      key: familyPick('key').asStringOrThrow(),
+      name: familyPick('name').asStringOrThrow(),
+      count: familyPick('count').asIntOrThrow(),
+      openings: openings != null ? openings.toIList() : IList(const []),
+    );
+  }).toIList();
+}

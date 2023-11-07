@@ -178,7 +178,7 @@ class PuzzleDashboardData with _$PuzzleDashboardData {
     required int firstWins,
     required int replayWins,
     required int performance,
-    required PuzzleTheme theme,
+    required PuzzleThemeKey theme,
   }) = _PuzzleDashboardData;
 }
 

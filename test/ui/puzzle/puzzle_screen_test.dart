@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
@@ -46,10 +47,10 @@ void main() {
         final app = await buildTestApp(
           tester,
           home: PuzzleScreen(
-            theme: PuzzleTheme.mix,
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
             initialPuzzleContext: PuzzleContext(
               puzzle: puzzle,
-              theme: PuzzleTheme.mix,
+              angle: const PuzzleTheme(PuzzleThemeKey.mix),
               userId: null,
             ),
           ),
@@ -71,10 +72,10 @@ void main() {
         final app = await buildTestApp(
           tester,
           home: PuzzleScreen(
-            theme: PuzzleTheme.mix,
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
             initialPuzzleContext: PuzzleContext(
               puzzle: puzzle,
-              theme: PuzzleTheme.mix,
+              angle: const PuzzleTheme(PuzzleThemeKey.mix),
               userId: null,
             ),
           ),
@@ -93,7 +94,7 @@ void main() {
       final app = await buildTestApp(
         tester,
         home: const PuzzleScreen(
-          theme: PuzzleTheme.mix,
+          angle: PuzzleTheme(PuzzleThemeKey.mix),
         ),
         overrides: [
           puzzleBatchStorageProvider.overrideWith((ref) {
@@ -103,8 +104,12 @@ void main() {
         ],
       );
 
-      when(() => mockBatchStorage.fetch(userId: null, angle: PuzzleTheme.mix))
-          .thenAnswer((_) async => batch);
+      when(
+        () => mockBatchStorage.fetch(
+          userId: null,
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        ),
+      ).thenAnswer((_) async => batch);
 
       when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle')))
           .thenAnswer((_) async {});
@@ -134,10 +139,10 @@ void main() {
         final app = await buildTestApp(
           tester,
           home: PuzzleScreen(
-            theme: PuzzleTheme.mix,
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
             initialPuzzleContext: PuzzleContext(
               puzzle: puzzle2,
-              theme: PuzzleTheme.mix,
+              angle: const PuzzleTheme(PuzzleThemeKey.mix),
               userId: null,
             ),
           ),
@@ -154,12 +159,16 @@ void main() {
 
         Future<void> saveDBReq() => mockBatchStorage.save(
               userId: null,
-              angle: PuzzleTheme.mix,
+              angle: const PuzzleTheme(PuzzleThemeKey.mix),
               data: any(named: 'data'),
             );
         when(saveDBReq).thenAnswer((_) async {});
-        when(() => mockBatchStorage.fetch(userId: null, angle: PuzzleTheme.mix))
-            .thenAnswer((_) async => batch);
+        when(
+          () => mockBatchStorage.fetch(
+            userId: null,
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          ),
+        ).thenAnswer((_) async => batch);
 
         when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle')))
             .thenAnswer((_) async {});
@@ -242,10 +251,10 @@ void main() {
         final app = await buildTestApp(
           tester,
           home: PuzzleScreen(
-            theme: PuzzleTheme.mix,
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
             initialPuzzleContext: PuzzleContext(
               puzzle: puzzle2,
-              theme: PuzzleTheme.mix,
+              angle: const PuzzleTheme(PuzzleThemeKey.mix),
               userId: null,
             ),
           ),
@@ -265,12 +274,16 @@ void main() {
 
         Future<void> saveDBReq() => mockBatchStorage.save(
               userId: null,
-              angle: PuzzleTheme.mix,
+              angle: const PuzzleTheme(PuzzleThemeKey.mix),
               data: any(named: 'data'),
             );
         when(saveDBReq).thenAnswer((_) async {});
-        when(() => mockBatchStorage.fetch(userId: null, angle: PuzzleTheme.mix))
-            .thenAnswer((_) async => batch);
+        when(
+          () => mockBatchStorage.fetch(
+            userId: null,
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          ),
+        ).thenAnswer((_) async => batch);
 
         await tester.pumpWidget(app);
 
@@ -339,10 +352,10 @@ void main() {
         final app = await buildTestApp(
           tester,
           home: PuzzleScreen(
-            theme: PuzzleTheme.mix,
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
             initialPuzzleContext: PuzzleContext(
               puzzle: puzzle2,
-              theme: PuzzleTheme.mix,
+              angle: const PuzzleTheme(PuzzleThemeKey.mix),
               userId: null,
             ),
           ),
@@ -362,12 +375,16 @@ void main() {
 
         Future<void> saveDBReq() => mockBatchStorage.save(
               userId: null,
-              angle: PuzzleTheme.mix,
+              angle: const PuzzleTheme(PuzzleThemeKey.mix),
               data: any(named: 'data'),
             );
         when(saveDBReq).thenAnswer((_) async {});
-        when(() => mockBatchStorage.fetch(userId: null, angle: PuzzleTheme.mix))
-            .thenAnswer((_) async => batch);
+        when(
+          () => mockBatchStorage.fetch(
+            userId: null,
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          ),
+        ).thenAnswer((_) async => batch);
 
         await tester.pumpWidget(app);
 

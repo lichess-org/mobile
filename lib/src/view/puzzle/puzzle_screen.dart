@@ -22,7 +22,9 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_opening.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -37,12 +39,12 @@ import 'puzzle_session_widget.dart';
 
 class PuzzleScreen extends ConsumerStatefulWidget {
   const PuzzleScreen({
-    required this.theme,
+    required this.angle,
     this.initialPuzzleContext,
     super.key,
   });
 
-  final PuzzleTheme theme;
+  final PuzzleAngle angle;
   final PuzzleContext? initialPuzzleContext;
 
   @override
@@ -69,7 +71,7 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
   @override
   void didPop() {
     super.didPop();
-    ref.invalidate(nextPuzzleProvider(widget.theme));
+    ref.invalidate(nextPuzzleProvider(widget.angle));
     ref.invalidate(accountProvider);
     ref.invalidate(accountActivityProvider);
     ref.invalidate(puzzleDashboardProvider);
@@ -88,39 +90,65 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
     return Scaffold(
       appBar: AppBar(
         actions: [ToggleSoundButton()],
-        title: Text(context.l10n.puzzleDesc),
+        title: _Title(angle: widget.angle),
       ),
       body: widget.initialPuzzleContext != null
           ? _Body(
               initialPuzzleContext: widget.initialPuzzleContext!,
             )
-          : _LoadPuzzle(theme: widget.theme),
+          : _LoadPuzzle(angle: widget.angle),
     );
   }
 
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(context.l10n.puzzleDesc),
+        middle: _Title(angle: widget.angle),
         trailing: ToggleSoundButton(),
       ),
       child: widget.initialPuzzleContext != null
           ? _Body(
               initialPuzzleContext: widget.initialPuzzleContext!,
             )
-          : _LoadPuzzle(theme: widget.theme),
+          : _LoadPuzzle(angle: widget.angle),
     );
   }
 }
 
-class _LoadPuzzle extends ConsumerWidget {
-  const _LoadPuzzle({required this.theme});
+class _Title extends ConsumerWidget {
+  const _Title({
+    required this.angle,
+  });
 
-  final PuzzleTheme theme;
+  final PuzzleAngle angle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final nextPuzzle = ref.watch(nextPuzzleProvider(theme));
+    return switch (angle) {
+      PuzzleTheme(themeKey: final key) => key == PuzzleThemeKey.mix
+          ? Text(context.l10n.puzzleDesc)
+          : Text(puzzleThemeL10n(context, key).name),
+      PuzzleOpening(key: final key) => ref
+          .watch(
+            puzzleOpeningNameProvider(key),
+          )
+          .when(
+            data: (data) => Text(data),
+            loading: () => const SizedBox.shrink(),
+            error: (_, __) => const SizedBox.shrink(),
+          ),
+    };
+  }
+}
+
+class _LoadPuzzle extends ConsumerWidget {
+  const _LoadPuzzle({required this.angle});
+
+  final PuzzleAngle angle;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final nextPuzzle = ref.watch(nextPuzzleProvider(angle));
 
     return nextPuzzle.when(
       data: (data) {

@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -73,9 +74,9 @@ class _PuzzleHistoryState extends ConsumerState<PuzzleHistoryBoards> {
                             context,
                             rootNavigator: true,
                             builder: (_) => PuzzleScreen(
-                              theme: PuzzleTheme.mix,
+                              angle: const PuzzleTheme(PuzzleThemeKey.mix),
                               initialPuzzleContext: PuzzleContext(
-                                theme: PuzzleTheme.mix,
+                                angle: const PuzzleTheme(PuzzleThemeKey.mix),
                                 puzzle: puzzle!,
                                 userId: session?.user.id,
                               ),

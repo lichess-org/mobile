@@ -9,7 +9,9 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_opening.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
@@ -20,7 +22,7 @@ part 'puzzle_providers.g.dart';
 @riverpod
 Future<PuzzleContext?> nextPuzzle(
   NextPuzzleRef ref,
-  PuzzleTheme theme,
+  PuzzleAngle angle,
 ) {
   final session = ref.watch(authSessionProvider);
   // ignore: avoid_manual_providers_as_generated_provider_dependency
@@ -28,7 +30,7 @@ Future<PuzzleContext?> nextPuzzle(
   final userId = session?.user.id;
   return puzzleService.nextPuzzle(
     userId: userId,
-    angle: theme,
+    angle: angle,
   );
 }
 
@@ -60,7 +62,7 @@ Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
 }
 
 @riverpod
-Future<ISet<PuzzleTheme>> savedThemes(SavedThemesRef ref) {
+Future<IMap<PuzzleThemeKey, int>> savedThemes(SavedThemesRef ref) {
   final session = ref.watch(authSessionProvider);
   final storage = ref.watch(puzzleBatchStorageProvider);
   return storage.fetchSavedThemes(userId: session?.user.id);
@@ -86,4 +88,16 @@ Future<StormDashboard> stormDashboard(StormDashboardRef ref) {
   final session = ref.watch(authSessionProvider);
   final repo = ref.watch(puzzleRepositoryProvider);
   return Result.release(repo.stormDashboard(session!.user.id));
+}
+
+@Riverpod(keepAlive: true)
+Future<IMap<PuzzleThemeKey, PuzzleThemeData>> puzzleTheme(PuzzleThemeRef ref) {
+  final repo = ref.watch(puzzleRepositoryProvider);
+  return Result.release(repo.puzzleTheme());
+}
+
+@Riverpod(keepAlive: true)
+Future<IList<PuzzleOpeningFamily>> puzzleOpening(PuzzleOpeningRef ref) {
+  final repo = ref.watch(puzzleRepositoryProvider);
+  return Result.release(repo.puzzleOpenings());
 }

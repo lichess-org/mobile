@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import '../../test_utils.dart';
 import '../../test_container.dart';
 
@@ -218,14 +219,16 @@ void main() {
       );
 
       final next = await service.nextPuzzle(
-        angle: PuzzleTheme.opening,
+        angle: const PuzzleTheme(PuzzleThemeKey.opening),
         userId: null,
       );
       expect(next?.puzzle.puzzle.id, equals(const PuzzleId('20yWT')));
       expect(nbReq, equals(1));
 
-      final data =
-          await storage.fetch(userId: null, angle: PuzzleTheme.opening);
+      final data = await storage.fetch(
+        userId: null,
+        angle: const PuzzleTheme(PuzzleThemeKey.opening),
+      );
       expect(
         data?.unsolved.length,
         equals(1),

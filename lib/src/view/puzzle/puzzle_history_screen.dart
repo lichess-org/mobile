@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart' as cg;
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -198,10 +199,10 @@ class _HistoryBoard extends ConsumerWidget {
                     context,
                     rootNavigator: true,
                     builder: (ctx) => PuzzleScreen(
-                      theme: PuzzleTheme.mix,
+                      angle: const PuzzleTheme(PuzzleThemeKey.mix),
                       initialPuzzleContext: PuzzleContext(
                         puzzle: puzzleData!,
-                        theme: PuzzleTheme.mix,
+                        angle: const PuzzleTheme(PuzzleThemeKey.mix),
                         userId: session?.user.id,
                       ),
                     ),

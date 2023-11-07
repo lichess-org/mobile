@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
@@ -205,7 +206,7 @@ class PuzzleController extends _$PuzzleController {
     // ignore: avoid_manual_providers_as_generated_provider_dependency
     final nextPuzzle = await ref.read(defaultPuzzleServiceProvider).resetBatch(
           userId: initialContext.userId,
-          angle: initialContext.theme,
+          angle: initialContext.angle,
         );
 
     state = state.copyWith(
@@ -269,7 +270,7 @@ class PuzzleController extends _$PuzzleController {
     return streak.nextId != null
         ? ref.read(puzzleRepositoryProvider).fetch(streak.nextId!).map(
               (puzzle) => PuzzleContext(
-                theme: PuzzleTheme.mix,
+                angle: const PuzzleTheme(PuzzleThemeKey.mix),
                 puzzle: puzzle,
                 userId: initialContext.userId,
               ),
@@ -305,7 +306,7 @@ class PuzzleController extends _$PuzzleController {
     );
 
     final sessionNotifier =
-        puzzleSessionProvider(initialContext.userId, initialContext.theme)
+        puzzleSessionProvider(initialContext.userId, initialContext.angle)
             .notifier;
 
     // ignore: avoid_manual_providers_as_generated_provider_dependency
@@ -315,7 +316,7 @@ class PuzzleController extends _$PuzzleController {
     if (state.streak == null) {
       final next = await service.solve(
         userId: initialContext.userId,
-        angle: initialContext.theme,
+        angle: initialContext.angle,
         puzzle: state.puzzle,
         solution: PuzzleSolution(
           id: state.puzzle.puzzle.id,

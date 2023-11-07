@@ -6,10 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
@@ -100,13 +102,9 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const theme = PuzzleTheme.mix;
-    final nextPuzzle = ref.watch(nextPuzzleProvider(theme));
+    const angle = PuzzleTheme(PuzzleThemeKey.mix);
+    final nextPuzzle = ref.watch(nextPuzzleProvider(angle));
     final connectivity = ref.watch(connectivityChangesProvider);
-
-    final expansionTileColor = defaultTargetPlatform == TargetPlatform.iOS
-        ? CupertinoColors.secondaryLabel.resolveFrom(context)
-        : null;
 
     final content = [
       Padding(
@@ -115,34 +113,32 @@ class _Body extends ConsumerWidget {
           data: (data) {
             if (data == null) {
               return const _PuzzleButton(
-                theme: theme,
                 subtitle: 'Could not find any puzzle! Go online to get more.',
               );
             } else {
               return _PuzzleButton(
-                theme: theme,
                 onTap: () {
                   pushPlatformRoute(
                     context,
                     title: context.l10n.puzzleDesc,
                     rootNavigator: true,
                     builder: (context) => PuzzleScreen(
-                      theme: theme,
+                      angle: angle,
                       initialPuzzleContext: data,
                     ),
                   ).then((_) {
-                    ref.invalidate(nextPuzzleProvider(theme));
+                    ref.invalidate(nextPuzzleProvider(angle));
                   });
                 },
               );
             }
           },
-          loading: () => const _PuzzleButton(theme: theme),
+          loading: () => const _PuzzleButton(),
           error: (e, s) {
             debugPrint(
               'SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s',
             );
-            return const _PuzzleButton(theme: theme);
+            return const _PuzzleButton();
           },
         ),
       ),
@@ -180,7 +176,7 @@ class _Body extends ConsumerWidget {
         ),
       ),
       Padding(
-        padding: Styles.horizontalBodyPadding,
+        padding: Styles.bodySectionBottomPadding,
         child: CardButton(
           icon: const Icon(
             LichessIcons.storm,
@@ -208,38 +204,23 @@ class _Body extends ConsumerWidget {
           ),
         ),
       ),
-      Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
+      Padding(
+        padding: Styles.bodySectionBottomPadding,
+        child: CardButton(
+          icon: const Icon(PuzzleIcons.mix, size: 44),
           title: Text(
-            context.l10n.more,
+            context.l10n.puzzlePuzzleThemes,
+            style: Styles.sectionTitle,
           ),
-          iconColor: expansionTileColor,
-          collapsedIconColor: expansionTileColor,
-          textColor: expansionTileColor,
-          collapsedTextColor: expansionTileColor,
-          controlAffinity: ListTileControlAffinity.leading,
-          children: [
-            Padding(
-              padding: Styles.bodySectionBottomPadding,
-              child: CardButton(
-                icon: const Icon(LichessIcons.target, size: 44),
-                title: Text(
-                  context.l10n.puzzlePuzzleThemes,
-                  style: Styles.sectionTitle,
-                ),
-                subtitle: const Text(
-                  'Choose puzzles by theme.',
-                ),
-                onTap: () {
-                  pushPlatformRoute(
-                    context,
-                    builder: (context) => const PuzzleThemesScreen(),
-                  );
-                },
-              ),
-            ),
-          ],
+          subtitle: const Text(
+            'Choose puzzles by theme or opening.',
+          ),
+          onTap: () {
+            pushPlatformRoute(
+              context,
+              builder: (context) => const PuzzleThemesScreen(),
+            );
+          },
         ),
       ),
       if (session != null) ...[PuzzleDashboardWidget(), PuzzleHistoryWidget()],
@@ -311,12 +292,10 @@ class PuzzleHistoryWidget extends ConsumerWidget {
 
 class _PuzzleButton extends StatelessWidget {
   const _PuzzleButton({
-    required this.theme,
     this.onTap,
     this.subtitle,
   });
 
-  final PuzzleTheme theme;
   final VoidCallback? onTap;
   final String? subtitle;
 
@@ -324,7 +303,7 @@ class _PuzzleButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CardButton(
       icon: const Icon(
-        LichessIcons.target,
+        PuzzleIcons.mix,
         size: 44,
         color: LichessColors.brag,
       ),
