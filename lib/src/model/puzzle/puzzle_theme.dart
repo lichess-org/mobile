@@ -10,14 +10,6 @@ part 'puzzle_theme.g.dart';
 part 'puzzle_theme.freezed.dart';
 
 @freezed
-class PuzzleThemeFamily with _$PuzzleThemeFamily {
-  const factory PuzzleThemeFamily({
-    required String name,
-    required IList<PuzzleThemeData> themes,
-  }) = _PuzzleThemeFamily;
-}
-
-@freezed
 class PuzzleThemeData with _$PuzzleThemeData {
   const factory PuzzleThemeData({
     required int count,
