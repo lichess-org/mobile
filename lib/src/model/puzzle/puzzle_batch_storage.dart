@@ -93,7 +93,7 @@ class PuzzleBatchStorage {
     );
   }
 
-  Future<ISet<PuzzleThemeKey>> fetchSavedThemes({
+  Future<IMap<PuzzleThemeKey, int>> fetchSavedThemes({
     required UserId? userId,
   }) async {
     final list = await _db.query(
@@ -104,12 +104,27 @@ class PuzzleBatchStorage {
       ],
     );
 
-    return list.fold<ISet<PuzzleThemeKey>>(
-      ISet<PuzzleThemeKey>(const {}),
-      (set, map) {
+    return list.fold<IMap<PuzzleThemeKey, int>>(
+      IMap<PuzzleThemeKey, int>(const {}),
+      (acc, map) {
         final angle = map['angle'] as String?;
+        final raw = map['data'] as String?;
+
         final theme = angle != null ? puzzleThemeNameMap.get(angle) : null;
-        return theme != null ? set.add(theme) : set;
+
+        int? count;
+        if (raw != null) {
+          final json = jsonDecode(raw);
+          if (json is! Map<String, dynamic>) {
+            throw const FormatException(
+              '[PuzzleBatchStorage] cannot fetch puzzles: expected an object',
+            );
+          }
+          final data = PuzzleBatch.fromJson(json);
+          count = data.unsolved.length;
+        }
+
+        return theme != null && count != null ? acc.add(theme, count) : acc;
       },
     );
   }

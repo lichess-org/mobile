@@ -1,9 +1,7 @@
-import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/view/puzzle/opening_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -23,12 +21,23 @@ import 'puzzle_screen.dart';
 part 'puzzle_themes_screen.g.dart';
 
 @riverpod
-Future<(bool, ISet<PuzzleThemeKey>)> _savedThemesConnectivity(
-  _SavedThemesConnectivityRef ref,
+Future<
+    (
+      bool,
+      IMap<PuzzleThemeKey, int>,
+      IMap<PuzzleThemeKey, PuzzleThemeData>?
+    )> _themes(
+  _ThemesRef ref,
 ) async {
   final connectivity = await ref.watch(connectivityProvider.future);
-  final themes = await ref.watch(savedThemesProvider.future);
-  return (connectivity.isOnline, themes);
+  final savedThemes = await ref.watch(savedThemesProvider.future);
+  IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
+  try {
+    onlineThemes = await ref.watch(puzzleThemeProvider.future);
+  } catch (e) {
+    onlineThemes = null;
+  }
+  return (connectivity.isOnline, savedThemes, onlineThemes);
 }
 
 class PuzzleThemesScreen extends StatelessWidget {
@@ -68,55 +77,47 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // skip recommended category since we display it on the puzzle tab screen
     final list = ref.watch(puzzleThemeCategoriesProvider).skip(1).toList();
-    final savedThemesConnectivity = ref.watch(_savedThemesConnectivityProvider);
-    final onlineThemes = ref.watch(puzzleThemeProvider);
+    final themes = ref.watch(_themesProvider);
     final expansionTileColor = defaultTargetPlatform == TargetPlatform.iOS
         ? CupertinoColors.secondaryLabel.resolveFrom(context)
         : null;
 
-    // show online themes if online otherwise show offline themes
     return SafeArea(
-      child: savedThemesConnectivity.when(
+      child: themes.when(
         data: (data) {
+          final (hasConnectivity, savedThemes, onlineThemes) = data;
           return SingleChildScrollView(
-            child: onlineThemes.when(
-              data: (oThemes) {
-                if (data.$1) {
-                  return Column(
-                    children: [
-                      Theme(
-                        data: Theme.of(context)
-                            .copyWith(dividerColor: Colors.transparent),
-                        child: ExpansionTile(
-                          iconColor: expansionTileColor,
-                          collapsedIconColor: expansionTileColor,
-                          title: const Text('By game opening'),
-                          trailing: const Icon(Icons.keyboard_arrow_right),
-                          onExpansionChanged: (expanded) {
-                            pushPlatformRoute(
-                              context,
-                              builder: (ctx) => const OpeningThemeScreen(),
-                            );
-                          },
-                        ),
-                      ),
-                      for (final category in oThemes.skip(1))
-                        _CategoryOnline(
-                          category: category,
-                        ),
-                    ],
-                  );
-                }
-                return _OfflineThemeBuilder(list, data.$2);
-              },
-              loading: () => const Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Center(child: CircularProgressIndicator.adaptive()),
-                ],
-              ),
-              // show offline themes if error in fetching themes
-              error: (_, __) => _OfflineThemeBuilder(list, data.$2),
+            child: Column(
+              children: [
+                Theme(
+                  data: Theme.of(context)
+                      .copyWith(dividerColor: Colors.transparent),
+                  child: Opacity(
+                    opacity: hasConnectivity ? 1 : 0.5,
+                    child: ExpansionTile(
+                      iconColor: expansionTileColor,
+                      collapsedIconColor: expansionTileColor,
+                      title: Text(context.l10n.puzzleByOpenings),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                      onExpansionChanged: hasConnectivity
+                          ? (expanded) {
+                              pushPlatformRoute(
+                                context,
+                                builder: (ctx) => const OpeningThemeScreen(),
+                              );
+                            }
+                          : null,
+                    ),
+                  ),
+                ),
+                for (final category in list)
+                  _Category(
+                    hasConnectivity: hasConnectivity,
+                    category: category,
+                    onlineThemes: onlineThemes,
+                    savedThemes: savedThemes,
+                  ),
+              ],
             ),
           );
         },
@@ -127,115 +128,24 @@ class _Body extends ConsumerWidget {
           ],
         ),
         error: (error, stack) =>
-            const Center(child: Text('Could not load saved themes.')),
+            const Center(child: Text('Could not load themes.')),
       ),
     );
   }
 }
 
-class _OfflineThemeBuilder extends StatelessWidget {
-  const _OfflineThemeBuilder(
-    this.themeList,
-    this.savedThemes,
-  );
-  final ISet<PuzzleThemeKey> savedThemes;
-  final List<(String, List<PuzzleThemeKey>)> themeList;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final crossAxisCount =
-            math.min(3, (constraints.maxWidth / 300).floor());
-        return LayoutGrid(
-          columnSizes: List.generate(
-            crossAxisCount,
-            (_) => 1.fr,
-          ),
-          rowSizes: List.generate(
-            (themeList.length / crossAxisCount).ceil(),
-            (_) => auto,
-          ),
-          children: [
-            for (final category in themeList)
-              _CategoryOffline(
-                category: category,
-                savedThemes: savedThemes,
-              ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-class _CategoryOffline extends ConsumerWidget {
-  const _CategoryOffline({
+class _Category extends ConsumerWidget {
+  const _Category({
+    required this.hasConnectivity,
     required this.category,
+    required this.onlineThemes,
     required this.savedThemes,
   });
 
+  final bool hasConnectivity;
   final PuzzleThemeCategory category;
-  final ISet<PuzzleThemeKey> savedThemes;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final (categoryTitle, themes) = category;
-    return ListSection(
-      header: Text(categoryTitle, style: Styles.sectionTitle),
-      showDivider: true,
-      children: [
-        for (final theme in themes)
-          Tooltip(
-            message: puzzleThemeL10n(context, theme).description,
-            triggerMode: TooltipTriggerMode.longPress,
-            showDuration: const Duration(seconds: 7),
-            child: PlatformListTile(
-              title: Text(
-                puzzleThemeL10n(context, theme).name,
-                style: TextStyle(
-                  color: textShade(
-                    context,
-                    savedThemes.contains(theme) ? Styles.subtitleOpacity : 0.3,
-                  ),
-                ),
-              ),
-              subtitle: Text(
-                puzzleThemeL10n(context, theme).description,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: textShade(
-                    context,
-                    savedThemes.contains(theme) ? Styles.subtitleOpacity : 0.3,
-                  ),
-                ),
-              ),
-              isThreeLine: true,
-              onTap: savedThemes.contains(theme)
-                  ? () {
-                      pushPlatformRoute(
-                        context,
-                        rootNavigator: true,
-                        builder: (context) => PuzzleScreen(
-                          angle: PuzzleTheme(theme),
-                        ),
-                      );
-                    }
-                  : null,
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class _CategoryOnline extends ConsumerWidget {
-  const _CategoryOnline({
-    required this.category,
-  });
-
-  final PuzzleThemeFamily category;
+  final IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
+  final IMap<PuzzleThemeKey, int> savedThemes;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -246,37 +156,57 @@ class _CategoryOnline extends ConsumerWidget {
         ? CupertinoColors.systemBlue.resolveFrom(context)
         : null;
 
+    final themeCountStyle = TextStyle(
+      fontSize: 12,
+      color: textShade(
+        context,
+        Styles.subtitleOpacity,
+      ),
+    );
+
+    final (categoryName, themes) = category;
+
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         iconColor: tileColor,
         collapsedIconColor: collapsedIconColor,
-        title: Text(category.name),
+        title: Text(categoryName),
         children: [
           ListSection(
-            children: category.themes
-                .map(
-                  (theme) => PlatformListTile(
-                    leading: Icon(puzzleThemeIcon(theme.key)),
-                    trailing: Padding(
-                      padding: const EdgeInsets.only(left: 6.0),
-                      child: Text(
-                        '${theme.count}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: textShade(
-                            context,
-                            Styles.subtitleOpacity,
-                          ),
-                        ),
-                      ),
-                    ),
+            children: themes.map(
+              (theme) {
+                final isThemeAvailable =
+                    hasConnectivity || savedThemes.containsKey(theme);
+
+                return Opacity(
+                  opacity: isThemeAvailable ? 1 : 0.5,
+                  child: PlatformListTile(
+                    leading: Icon(puzzleThemeIcon(theme)),
+                    trailing: hasConnectivity &&
+                            onlineThemes?.containsKey(theme) == true
+                        ? Padding(
+                            padding: const EdgeInsets.only(left: 6.0),
+                            child: Text(
+                              '${onlineThemes![theme]!.count}',
+                              style: themeCountStyle,
+                            ),
+                          )
+                        : savedThemes.containsKey(theme)
+                            ? Padding(
+                                padding: const EdgeInsets.only(left: 6.0),
+                                child: Text(
+                                  '${savedThemes[theme]!}',
+                                  style: themeCountStyle,
+                                ),
+                              )
+                            : null,
                     title: Padding(
                       padding: defaultTargetPlatform == TargetPlatform.iOS
                           ? const EdgeInsets.only(top: 6.0)
                           : EdgeInsets.zero,
                       child: Text(
-                        puzzleThemeL10n(context, theme.key).name,
+                        puzzleThemeL10n(context, theme).name,
                         style: defaultTargetPlatform == TargetPlatform.iOS
                             ? TextStyle(
                                 color: CupertinoTheme.of(context)
@@ -290,7 +220,7 @@ class _CategoryOnline extends ConsumerWidget {
                     subtitle: Padding(
                       padding: const EdgeInsets.only(bottom: 6.0),
                       child: Text(
-                        puzzleThemeL10n(context, theme.key).description,
+                        puzzleThemeL10n(context, theme).description,
                         maxLines: 10,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -302,18 +232,21 @@ class _CategoryOnline extends ConsumerWidget {
                       ),
                     ),
                     isThreeLine: true,
-                    onTap: () {
-                      pushPlatformRoute(
-                        context,
-                        rootNavigator: true,
-                        builder: (context) => PuzzleScreen(
-                          angle: PuzzleTheme(theme.key),
-                        ),
-                      );
-                    },
+                    onTap: isThemeAvailable
+                        ? () {
+                            pushPlatformRoute(
+                              context,
+                              rootNavigator: true,
+                              builder: (context) => PuzzleScreen(
+                                angle: PuzzleTheme(theme),
+                              ),
+                            );
+                          }
+                        : null,
                   ),
-                )
-                .toList(),
+                );
+              },
+            ).toList(),
           ),
         ],
       ),

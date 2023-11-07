@@ -90,6 +90,9 @@ enum PuzzleThemeKey {
   xRayAttack,
   zugzwang,
   // checkFirst,
+
+  // used internally to filter out unsupported keys
+  unsupported,
 }
 
 final IMap<String, PuzzleThemeKey> puzzleThemeNameMap =
@@ -223,6 +226,7 @@ class PuzzleThemeL10n {
 PuzzleThemeL10n puzzleThemeL10n(BuildContext context, PuzzleThemeKey theme) {
   switch (theme) {
     case PuzzleThemeKey.mix:
+    case PuzzleThemeKey.unsupported:
       return PuzzleThemeL10n(
         name: context.l10n.puzzleThemeHealthyMix,
         description: context.l10n.puzzleThemeHealthyMixDescription,
@@ -533,6 +537,7 @@ PuzzleThemeL10n puzzleThemeL10n(BuildContext context, PuzzleThemeKey theme) {
 IconData puzzleThemeIcon(PuzzleThemeKey theme) {
   switch (theme) {
     case PuzzleThemeKey.mix:
+    case PuzzleThemeKey.unsupported:
       return PuzzleIcons.mix;
     case PuzzleThemeKey.advancedPawn:
       return PuzzleIcons.advancedPawn;

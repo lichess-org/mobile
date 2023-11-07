@@ -80,11 +80,11 @@ void main() {
         storage.fetchSavedThemes(userId: null),
         completion(
           equals(
-            ISet(const [
-              PuzzleThemeKey.mix,
-              PuzzleThemeKey.rookEndgame,
-              PuzzleThemeKey.doubleBishopMate,
-            ]),
+            IMap(const {
+              PuzzleThemeKey.mix: 1,
+              PuzzleThemeKey.rookEndgame: 1,
+              PuzzleThemeKey.doubleBishopMate: 1,
+            }),
           ),
         ),
       );

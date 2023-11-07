@@ -62,7 +62,7 @@ Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
 }
 
 @riverpod
-Future<ISet<PuzzleThemeKey>> savedThemes(SavedThemesRef ref) {
+Future<IMap<PuzzleThemeKey, int>> savedThemes(SavedThemesRef ref) {
   final session = ref.watch(authSessionProvider);
   final storage = ref.watch(puzzleBatchStorageProvider);
   return storage.fetchSavedThemes(userId: session?.user.id);
@@ -91,7 +91,7 @@ Future<StormDashboard> stormDashboard(StormDashboardRef ref) {
 }
 
 @Riverpod(keepAlive: true)
-Future<IList<PuzzleThemeFamily>> puzzleTheme(PuzzleThemeRef ref) {
+Future<IMap<PuzzleThemeKey, PuzzleThemeData>> puzzleTheme(PuzzleThemeRef ref) {
   final repo = ref.watch(puzzleRepositoryProvider);
   return Result.release(repo.puzzleTheme());
 }
