@@ -13,10 +13,10 @@ packages:
     dependency: transitive
     description:
       name: _flutterfire_internals
-      sha256: "7bcb5c5d62b3907fb4a269c0f0843df46760d38e12829a715f2ff1fb492f19ef"
+      sha256: "5dadadeecceac19d6a63c9d2e037bb8df58ddd4aedb94e8a056af2f39ee50f9d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.10"
+    version: "1.3.11"
   analyzer:
     dependency: transitive
     description:
@@ -53,10 +53,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: "7e0d52067d05f2e0324268097ba723b71cb41ac8a6a2b24d1edf9c536b987b03"
+      sha256: "0da817eab9833cc222ee5575789664e99f60fe0c554be55dc1979f9b4ec6dd73"
       url: "https://pub.dev"
     source: hosted
-    version: "3.4.6"
+    version: "3.4.8"
   args:
     dependency: transitive
     description:
@@ -141,10 +141,10 @@ packages:
     dependency: transitive
     description:
       name: built_value
-      sha256: a8de5955205b4d1dbbbc267daddf2178bd737e4bab8987c04a500478c9651e74
+      sha256: "723b4021e903217dfc445ec4cf5b42e27975aece1fc4ebbc1ca6329c2d9fb54e"
       url: "https://pub.dev"
     source: hosted
-    version: "8.6.3"
+    version: "8.7.0"
   cached_network_image:
     dependency: "direct main"
     description:
@@ -293,26 +293,26 @@ packages:
     dependency: "direct dev"
     description:
       name: custom_lint
-      sha256: "68671c7b9cad03029c0270119169e32e801f8d87cec00367f233f4408d8913bd"
+      sha256: f9a828b696930cf8307f9a3617b2b65c9b370e484dc845d69100cadb77506778
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.5"
+    version: "0.5.6"
   custom_lint_builder:
     dependency: transitive
     description:
       name: custom_lint_builder
-      sha256: cdaa0174851ef27698a3b41a31c9e63bc0385fe399ae40ea7fb53edf03b0d043
+      sha256: c6f656a4d83385fc0656ae60410ed06bb382898c45627bfb8bbaa323aea97883
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.5"
+    version: "0.5.6"
   custom_lint_core:
     dependency: transitive
     description:
       name: custom_lint_core
-      sha256: ae59cf9f211d22fe092ae1817243600ae7b5b815dc3b1985cefd7e5a9f41188c
+      sha256: e20a67737adcf0cf2465e734dd624af535add11f9edd1f2d444909b5b0749650
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.5"
+    version: "0.5.6"
   dart_style:
     dependency: transitive
     description:
@@ -405,10 +405,10 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_core
-      sha256: "37299e4907391d7fac8c7ea059bb3292768cc07b72b6c6c777675cc58da2ef4d"
+      sha256: "7706f4ade6cc2698c70074083bc262586a185047f6bfdd53938dcc35d35cbb9e"
       url: "https://pub.dev"
     source: hosted
-    version: "2.20.0"
+    version: "2.21.0"
   firebase_core_platform_interface:
     dependency: transitive
     description:
@@ -429,18 +429,18 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_crashlytics
-      sha256: d279ec1a3377df3762778e55ded07fe6d169d216713a44bbc624ae6218e35c3c
+      sha256: c1f6b7a75df5f83af187b396d763de0e7673fcb358093e04be68e82e6d80d41a
       url: "https://pub.dev"
     source: hosted
-    version: "3.4.2"
+    version: "3.4.3"
   firebase_crashlytics_platform_interface:
     dependency: transitive
     description:
       name: firebase_crashlytics_platform_interface
-      sha256: "8a82ce2879e359134f5ce786048737b6385a65ec696d68cf0c27134a1c933676"
+      sha256: "08f0a3a99a12a31a47a08ccb268efe163c2f0d89fec74eb5b8a86b219611175c"
       url: "https://pub.dev"
     source: hosted
-    version: "3.6.10"
+    version: "3.6.11"
   fixnum:
     dependency: transitive
     description:
@@ -1151,18 +1151,18 @@ packages:
     dependency: transitive
     description:
       name: sqflite_common
-      sha256: "1b92f368f44b0dee2425bb861cfa17b6f6cf3961f762ff6f941d20b33355660a"
+      sha256: "8ed044102f3135add97be8653662052838859f5400075ef227f8ad72ae320803"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.0"
+    version: "2.5.0+1"
   sqflite_common_ffi:
     dependency: "direct dev"
     description:
       name: sqflite_common_ffi
-      sha256: "0d5cc1be2eb18400ac6701c31211d44164393aa75886093002ecdd947be04f93"
+      sha256: "198b40b4a7ba58cca18d7837d0246859b7b4c8b007d2902634fc26dec57fa3f1"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.0+2"
+    version: "2.3.0+3"
   sqlite3:
     dependency: transitive
     description:
