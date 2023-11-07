@@ -260,7 +260,16 @@ class _CategoryOnline extends ConsumerWidget {
                     leading: Icon(puzzleThemeIcon(theme.key)),
                     trailing: Padding(
                       padding: const EdgeInsets.only(left: 6.0),
-                      child: Text('${theme.count}'),
+                      child: Text(
+                        '${theme.count}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: textShade(
+                            context,
+                            Styles.subtitleOpacity,
+                          ),
+                        ),
+                      ),
                     ),
                     title: Padding(
                       padding: defaultTargetPlatform == TargetPlatform.iOS
@@ -282,7 +291,7 @@ class _CategoryOnline extends ConsumerWidget {
                       padding: const EdgeInsets.only(bottom: 6.0),
                       child: Text(
                         puzzleThemeL10n(context, theme.key).description,
-                        maxLines: 5,
+                        maxLines: 10,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: textShade(

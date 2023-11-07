@@ -20,6 +20,7 @@ import 'puzzle.dart';
 import 'storm.dart';
 import 'puzzle_streak.dart';
 import 'puzzle_theme.dart';
+import 'puzzle_opening.dart';
 import 'puzzle_angle.dart';
 import 'puzzle_difficulty.dart';
 

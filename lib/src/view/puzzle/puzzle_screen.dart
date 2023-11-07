@@ -23,6 +23,8 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_opening.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -88,7 +90,7 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
     return Scaffold(
       appBar: AppBar(
         actions: [ToggleSoundButton()],
-        title: Text(context.l10n.puzzleDesc),
+        title: _Title(angle: widget.angle),
       ),
       body: widget.initialPuzzleContext != null
           ? _Body(
@@ -101,7 +103,7 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(context.l10n.puzzleDesc),
+        middle: _Title(angle: widget.angle),
         trailing: ToggleSoundButton(),
       ),
       child: widget.initialPuzzleContext != null
@@ -110,6 +112,32 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
             )
           : _LoadPuzzle(angle: widget.angle),
     );
+  }
+}
+
+class _Title extends ConsumerWidget {
+  const _Title({
+    required this.angle,
+  });
+
+  final PuzzleAngle angle;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return switch (angle) {
+      PuzzleTheme(themeKey: final key) => key == PuzzleThemeKey.mix
+          ? Text(context.l10n.puzzleDesc)
+          : Text(puzzleThemeL10n(context, key).name),
+      PuzzleOpening(key: final key) => ref
+          .watch(
+            puzzleOpeningNameProvider(key),
+          )
+          .when(
+            data: (data) => Text(data),
+            loading: () => const SizedBox.shrink(),
+            error: (_, __) => const SizedBox.shrink(),
+          ),
+    };
   }
 }
 

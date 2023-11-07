@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/account/profile_tab_screen.dart';
@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 
 enum BottomTab {
   home(Icons.home),
-  puzzles(LichessIcons.target),
+  puzzles(PuzzleIcons.mix),
   tools(CupertinoIcons.wrench),
   watch(Icons.live_tv),
   profile(CupertinoIcons.profile_circled);
