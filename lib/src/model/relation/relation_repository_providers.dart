@@ -17,7 +17,7 @@ RelationRepository relationRepository(RelationRepositoryRef ref) {
   );
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 Future<IList<User>> following(FollowingRef ref) async {
   final repo = ref.watch(relationRepositoryProvider);
   final result = await repo.getFollowing();

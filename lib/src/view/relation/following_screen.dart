@@ -18,12 +18,21 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'following_screen.g.dart';
+
+@riverpod
+Future<(IList<User>, IList<LightUser>)> _getFollowingAndOnlines(
+  _GetFollowingAndOnlinesRef ref,
+) async {
+  final following = await ref.watch(followingProvider.future);
+  final onlines = await ref.watch(relationCtrlProvider.future);
+  return (following, onlines.followingOnlines);
+}
 
 final RouteObserver<PageRoute<void>> followingRouteObserver =
     RouteObserver<PageRoute<void>>();
-
-final isInvalidFollowingCacheProvider = StateProvider<bool>((ref) => false);
-final isInvalidFollowingOnlines = StateProvider<bool>((ref) => false);
 
 class FollowingScreen extends ConsumerStatefulWidget {
   const FollowingScreen({super.key});
@@ -33,11 +42,6 @@ class FollowingScreen extends ConsumerStatefulWidget {
 
 class _FollowingScreenState extends ConsumerState<FollowingScreen>
     with RouteAware {
-  @override
-  Widget build(BuildContext context) {
-    return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
-  }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -55,22 +59,13 @@ class _FollowingScreenState extends ConsumerState<FollowingScreen>
 
   @override
   void didPop() {
-    if (ref.read(isInvalidFollowingOnlines.notifier).state) {
-      ref
-          .read(
-            relationCtrlProvider.notifier,
-          )
-          .getFollowingOnlines();
-      ref.read(isInvalidFollowingOnlines.notifier).state = false;
-    }
-    _invalidateFollowingCache();
+    ref.read(relationCtrlProvider.notifier).getFollowingOnlines();
     super.didPop();
   }
 
   @override
-  void didPushNext() {
-    _invalidateFollowingCache();
-    super.didPushNext();
+  Widget build(BuildContext context) {
+    return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
   }
 
   Widget _buildIos(BuildContext context) {
@@ -88,15 +83,6 @@ class _FollowingScreenState extends ConsumerState<FollowingScreen>
       body: const _Body(),
     );
   }
-
-  void _invalidateFollowingCache() {
-    if (ref.read(isInvalidFollowingCacheProvider.notifier).state) {
-      Future.delayed(const Duration(milliseconds: 500), () {
-        ref.invalidate(followingProvider);
-      });
-      ref.read(isInvalidFollowingCacheProvider.notifier).state = false;
-    }
-  }
 }
 
 class _Body extends ConsumerWidget {
@@ -104,27 +90,16 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final following = ref.watch(followingProvider);
-    final relationState = ref.watch(relationCtrlProvider);
-    final followingOnlines = relationState.when(
-      data: (data) => data.followingOnlines,
-      error: (error, stackTrace) {
-        debugPrint(
-          'SEVERE: [FollowingScreen] could not load following online users; $error\n$stackTrace',
-        );
-        return List<LightUser>.empty().toIList();
-      },
-      loading: () {
-        return List<LightUser>.empty().toIList();
-      },
+    final followingAndOnlines = ref.watch(
+      _getFollowingAndOnlinesProvider,
     );
 
-    return following.when(
+    return followingAndOnlines.when(
       data: (data) {
-        IList<User> followingUsers = data;
+        IList<User> following = data.$1;
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            if (followingUsers.isEmpty) {
+            if (following.isEmpty) {
               return const Center(
                 child: Text("You are not following any user"),
               );
@@ -135,7 +110,7 @@ class _Body extends ConsumerWidget {
                   ListSection(
                     hasLeading: true,
                     children: [
-                      for (final user in followingUsers)
+                      for (final user in following)
                         Slidable(
                           endActionPane: ActionPane(
                             motion: const ScrollMotion(),
@@ -147,13 +122,12 @@ class _Body extends ConsumerWidget {
                                     context: context,
                                     builder: (context) => _UnfollowDialog(
                                       title: Text(
-                                        'Unfollow ${user.username}?',
+                                        'Are you sure you want to unfollow ${user.username}?',
                                       ),
                                       onAccept: () async {
-                                        final oldState = followingUsers;
+                                        final oldState = following;
                                         setState(() {
-                                          followingUsers =
-                                              followingUsers.removeWhere(
+                                          following = following.removeWhere(
                                             (v) => v.id == user.id,
                                           );
                                         });
@@ -163,26 +137,8 @@ class _Body extends ConsumerWidget {
                                             .unfollow(user.username);
                                         if (res.isError) {
                                           setState(() {
-                                            followingUsers = oldState;
+                                            following = oldState;
                                           });
-                                        } else {
-                                          ref
-                                              .read(
-                                                isInvalidFollowingCacheProvider
-                                                    .notifier,
-                                              )
-                                              .state = true;
-                                          if (_isOnline(
-                                            user,
-                                            followingOnlines,
-                                          )) {
-                                            ref
-                                                .read(
-                                                  isInvalidFollowingOnlines
-                                                      .notifier,
-                                                )
-                                                .state = true;
-                                          }
                                         }
                                       },
                                     ),
@@ -205,7 +161,7 @@ class _Body extends ConsumerWidget {
                             },
                             leading: _OnlineOrPatron(
                               patron: user.isPatron,
-                              online: _isOnline(user, followingOnlines),
+                              online: _isOnline(user, data.$2),
                             ),
                             title: Padding(
                               padding: const EdgeInsets.only(right: 5.0),
@@ -318,10 +274,12 @@ class _UnfollowDialog extends StatelessWidget {
         content: title,
         actions: [
           CupertinoDialogAction(
+            isDestructiveAction: true,
             onPressed: accept,
             child: Text(context.l10n.accept),
           ),
           CupertinoDialogAction(
+            isDefaultAction: true,
             onPressed: decline,
             child: Text(context.l10n.decline),
           ),
