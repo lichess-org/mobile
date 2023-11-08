@@ -340,13 +340,13 @@ class _HomeBody extends ConsumerWidget {
         const child = CenterLoadingIndicator();
         return defaultTargetPlatform == TargetPlatform.android
             ? child
-            : const SliverToBoxAdapter(child: child);
+            : const SliverFillRemaining(child: child);
       },
       error: (error, stack) {
         const child = SizedBox.shrink();
         return defaultTargetPlatform == TargetPlatform.android
             ? child
-            : const SliverToBoxAdapter(child: child);
+            : const SliverFillRemaining(child: child);
       },
     );
   }

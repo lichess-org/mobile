@@ -53,13 +53,11 @@ class _Body extends ConsumerWidget {
     return SafeArea(
       child: openings.when(
         data: (data) {
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                for (final openingFamily in data)
-                  _OpeningFamily(openingFamily: openingFamily),
-              ],
-            ),
+          return ListView(
+            children: [
+              for (final openingFamily in data)
+                _OpeningFamily(openingFamily: openingFamily),
+            ],
           );
         },
         error: (error, stack) {

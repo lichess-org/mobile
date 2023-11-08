@@ -86,47 +86,41 @@ class _Body extends ConsumerWidget {
       child: themes.when(
         data: (data) {
           final (hasConnectivity, savedThemes, onlineThemes) = data;
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                Theme(
-                  data: Theme.of(context)
-                      .copyWith(dividerColor: Colors.transparent),
-                  child: Opacity(
-                    opacity: hasConnectivity ? 1 : 0.5,
-                    child: ExpansionTile(
-                      iconColor: expansionTileColor,
-                      collapsedIconColor: expansionTileColor,
-                      title: Text(context.l10n.puzzleByOpenings),
-                      trailing: const Icon(Icons.keyboard_arrow_right),
-                      onExpansionChanged: hasConnectivity
-                          ? (expanded) {
-                              pushPlatformRoute(
-                                context,
-                                builder: (ctx) => const OpeningThemeScreen(),
-                              );
-                            }
-                          : null,
-                    ),
+          return ListView(
+            children: [
+              Theme(
+                data: Theme.of(context)
+                    .copyWith(dividerColor: Colors.transparent),
+                child: Opacity(
+                  opacity: hasConnectivity ? 1 : 0.5,
+                  child: ExpansionTile(
+                    iconColor: expansionTileColor,
+                    collapsedIconColor: expansionTileColor,
+                    title: Text(context.l10n.puzzleByOpenings),
+                    trailing: const Icon(Icons.keyboard_arrow_right),
+                    onExpansionChanged: hasConnectivity
+                        ? (expanded) {
+                            pushPlatformRoute(
+                              context,
+                              builder: (ctx) => const OpeningThemeScreen(),
+                            );
+                          }
+                        : null,
                   ),
                 ),
-                for (final category in list)
-                  _Category(
-                    hasConnectivity: hasConnectivity,
-                    category: category,
-                    onlineThemes: onlineThemes,
-                    savedThemes: savedThemes,
-                  ),
-              ],
-            ),
+              ),
+              for (final category in list)
+                _Category(
+                  hasConnectivity: hasConnectivity,
+                  category: category,
+                  onlineThemes: onlineThemes,
+                  savedThemes: savedThemes,
+                ),
+            ],
           );
         },
-        loading: () => const Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Center(child: CircularProgressIndicator.adaptive()),
-          ],
-        ),
+        loading: () =>
+            const Center(child: CircularProgressIndicator.adaptive()),
         error: (error, stack) =>
             const Center(child: Text('Could not load themes.')),
       ),
