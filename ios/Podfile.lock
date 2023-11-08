@@ -8,6 +8,8 @@ PODS:
   - connectivity_plus (0.0.1):
     - Flutter
     - ReachabilitySwift
+  - cupertino_http (0.0.1):
+    - Flutter
   - device_info_plus (0.0.1):
     - Flutter
   - Firebase/CoreOnly (10.16.0):
@@ -15,10 +17,10 @@ PODS:
   - Firebase/Crashlytics (10.16.0):
     - Firebase/CoreOnly
     - FirebaseCrashlytics (~> 10.16.0)
-  - firebase_core (2.20.0):
+  - firebase_core (2.21.0):
     - Firebase/CoreOnly (= 10.16.0)
     - Flutter
-  - firebase_crashlytics (3.4.2):
+  - firebase_crashlytics (3.4.3):
     - Firebase/Crashlytics (= 10.16.0)
     - firebase_core
     - Flutter
@@ -108,6 +110,7 @@ PODS:
 
 DEPENDENCIES:
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
+  - cupertino_http (from `.symlinks/plugins/cupertino_http/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
@@ -147,6 +150,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/ios"
+  cupertino_http:
+    :path: ".symlinks/plugins/cupertino_http/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   firebase_core:
@@ -185,10 +190,11 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
   connectivity_plus: bf0076dd84a130856aa636df1c71ccaff908fa1d
+  cupertino_http: 5f8b1161107fe6c8d94a0c618735a033d93fa7db
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   Firebase: 25899099b77d255a636e3579c3d9dce10ec150d5
-  firebase_core: 2e0e89436a00b664a23bebb08859e5fede7215e9
-  firebase_crashlytics: e262018554857dc5f082085d7f903b4ceb359727
+  firebase_core: 68027ba03585e3efe1608e35d3ab2777a64eabe9
+  firebase_crashlytics: 8ca79ecf4713767f49730568dfc2f02ceaab52fd
   FirebaseCore: 65a801af84cca84361ef9eac3fd868656968a53b
   FirebaseCoreExtension: 2dbc745b337eb99d2026a7a309ae037bd873f45e
   FirebaseCoreInternal: 26233f705cc4531236818a07ac84d20c333e505a

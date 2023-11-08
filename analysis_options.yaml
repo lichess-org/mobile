@@ -30,5 +30,5 @@ linter:
     directives_ordering: false
     always_use_package_imports: false
     avoid_redundant_argument_values: false
-    sort_pub_dependencies: false
+    sort_pub_dependencies: true
     sort_unnamed_constructors_first: false

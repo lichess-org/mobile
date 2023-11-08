@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:http/http.dart';
+import 'package:cupertino_http/cupertino_http.dart';
 
 import 'package:lichess_mobile/src/model/user/user.dart';
 
@@ -9,7 +11,9 @@ part 'http_client.g.dart';
 
 @Riverpod(keepAlive: true)
 Client httpClient(HttpClientRef ref) {
-  final client = Client();
+  final client = defaultTargetPlatform == TargetPlatform.iOS
+      ? CupertinoClient.defaultSessionConfiguration()
+      : Client();
   ref.onDispose(() {
     client.close();
   });
