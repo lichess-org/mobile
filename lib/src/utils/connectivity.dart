@@ -49,16 +49,24 @@ Stream<ConnectivityStatus> connectivityChanges(ConnectivityChangesRef ref) {
       .startWithStream(firstCheck);
 }
 
+final _internetCheckUris = [
+  Uri.parse('http://www.gstatic.com/generate_204'),
+  Uri.parse('https://lichess1.org/assets/logo/lichess-favicon-32.png'),
+];
+
 Future<bool> isOnline(Client client) async {
   try {
-    final response =
-        await client.head(Uri.parse('https://lichess.org/api/status')).timeout(
-              const Duration(seconds: 5),
-            );
-    if (response.statusCode == HttpStatus.ok) {
-      return true;
-    }
-    return false;
+    final result = await Future.wait(
+      _internetCheckUris.map(
+        (uri) => client.head(uri).then(
+              (response) => true,
+              onError: (_) => false,
+            ),
+      ),
+    ).timeout(
+      const Duration(seconds: 5),
+    );
+    return result.any((e) => e);
   } catch (_) {
     return false;
   }
