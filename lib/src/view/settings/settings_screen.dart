@@ -27,7 +27,7 @@ import './sound_settings_screen.dart';
 import './piece_set_screen.dart';
 import './board_theme_screen.dart';
 import './board_settings_screen.dart';
-import './account_preferences_screen.dart';
+import './profile_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -186,15 +186,15 @@ class _Body extends ConsumerWidget {
               children: [
                 PlatformListTile(
                   leading: const Icon(Icons.person),
-                  title: const Text('Account preferences'),
+                  title: Text(context.l10n.profile),
                   trailing: defaultTargetPlatform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
                       : null,
                   onTap: () {
                     pushPlatformRoute(
                       context,
-                      title: 'Account preferences',
-                      builder: (context) => const AccountPreferencesScreen(),
+                      title: context.l10n.profile,
+                      builder: (context) => const ProfileScreen(),
                     );
                   },
                 ),

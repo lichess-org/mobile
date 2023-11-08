@@ -25,7 +25,7 @@ class AccountPreferencesScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Account preferences'),
+        title: Text(context.l10n.preferencesPreferences),
       ),
       body: _Body(),
     );
