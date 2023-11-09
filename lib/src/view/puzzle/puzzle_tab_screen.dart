@@ -148,7 +148,6 @@ class _Body extends ConsumerWidget {
           icon: const Icon(
             LichessIcons.streak,
             size: 44,
-            color: LichessColors.brag,
           ),
           title: Text(
             'Puzzle Streak',
@@ -181,7 +180,6 @@ class _Body extends ConsumerWidget {
           icon: const Icon(
             LichessIcons.storm,
             size: 44,
-            color: LichessColors.brag,
           ),
           title: Text(
             'Puzzle Storm',

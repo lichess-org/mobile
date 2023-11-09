@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -110,22 +111,23 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }
 
   Widget _androidBuilder(BuildContext context) {
+    final accountUserAsync = ref.watch(accountUserProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              String.fromCharCode(LichessIcons.lichess.codePoint),
-              style: TextStyle(
-                fontFamily: LichessIcons.lichess.fontFamily,
-                fontSize: 26.0,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            const SizedBox(width: 8.0),
-            const Text('lichess.org'),
-          ],
+        title: accountUserAsync.when(
+          data: (user) {
+            if (user != null) {
+              return PlayerTitle(
+                userName: user.name,
+                title: user.title,
+                isPatron: user.isPatron,
+              );
+            } else {
+              return const _LichessTitle();
+            }
+          },
+          loading: () => const SizedBox.shrink(),
+          error: (error, stack) => const _LichessTitle(),
         ),
         actions: const [
           SignInWidget(),
@@ -143,25 +145,27 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }
 
   Widget _iosBuilder(BuildContext context) {
+    final accountUserAsync = ref.watch(accountUserProvider);
     return CupertinoPageScaffold(
       child: _HomeScaffold(
         child: CustomScrollView(
           controller: homeScrollController,
           slivers: [
             CupertinoSliverNavigationBar(
-              largeTitle: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    String.fromCharCode(LichessIcons.lichess.codePoint),
-                    style: TextStyle(
-                      fontFamily: LichessIcons.lichess.fontFamily,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  const SizedBox(width: 8.0),
-                  const Text('lichess.org'),
-                ],
+              largeTitle: accountUserAsync.when(
+                data: (user) {
+                  if (user != null) {
+                    return PlayerTitle(
+                      userName: user.name,
+                      title: user.title,
+                      isPatron: user.isPatron,
+                    );
+                  } else {
+                    return const _LichessTitle();
+                  }
+                },
+                loading: () => const SizedBox.shrink(),
+                error: (error, stack) => const _LichessTitle(),
               ),
               leading: const SignInWidget(),
               trailing: const _SettingsButton(),
@@ -184,6 +188,28 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     return Future.wait([
       ref.refresh(accountRecentGamesProvider.future),
     ]);
+  }
+}
+
+class _LichessTitle extends StatelessWidget {
+  const _LichessTitle();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          String.fromCharCode(LichessIcons.lichess.codePoint),
+          style: TextStyle(
+            fontFamily: LichessIcons.lichess.fontFamily,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        const SizedBox(width: 8.0),
+        const Text('lichess.org'),
+      ],
+    );
   }
 }
 

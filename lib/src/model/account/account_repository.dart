@@ -51,6 +51,11 @@ Future<User?> account(AccountRef ref) async {
 }
 
 @riverpod
+Future<LightUser?> accountUser(AccountUserRef ref) async {
+  return ref.watch(accountProvider.selectAsync((user) => user?.lightUser));
+}
+
+@riverpod
 Future<IList<UserActivity>> accountActivity(AccountActivityRef ref) async {
   final session = ref.watch(authSessionProvider);
   final link = ref.cacheFor(const Duration(hours: 1));
