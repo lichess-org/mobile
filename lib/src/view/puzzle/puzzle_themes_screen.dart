@@ -25,19 +25,26 @@ Future<
     (
       bool,
       IMap<PuzzleThemeKey, int>,
-      IMap<PuzzleThemeKey, PuzzleThemeData>?
+      IMap<PuzzleThemeKey, PuzzleThemeData>?,
+      bool,
     )> _themes(
   _ThemesRef ref,
 ) async {
   final connectivity = await ref.watch(connectivityProvider.future);
-  final savedThemes = await ref.watch(savedThemesProvider.future);
+  final savedThemes = await ref.watch(savedThemeBatchesProvider.future);
   IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
   try {
     onlineThemes = await ref.watch(puzzleThemesProvider.future);
   } catch (e) {
     onlineThemes = null;
   }
-  return (connectivity.isOnline, savedThemes, onlineThemes);
+  final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
+  return (
+    connectivity.isOnline,
+    savedThemes,
+    onlineThemes,
+    savedOpenings.isNotEmpty
+  );
 }
 
 class PuzzleThemesScreen extends StatelessWidget {
@@ -85,20 +92,21 @@ class _Body extends ConsumerWidget {
     return SafeArea(
       child: themes.when(
         data: (data) {
-          final (hasConnectivity, savedThemes, onlineThemes) = data;
+          final (hasConnectivity, savedThemes, onlineThemes, hasSavedOpenings) =
+              data;
           return ListView(
             children: [
               Theme(
                 data: Theme.of(context)
                     .copyWith(dividerColor: Colors.transparent),
                 child: Opacity(
-                  opacity: hasConnectivity ? 1 : 0.5,
+                  opacity: hasSavedOpenings ? 1 : 0.5,
                   child: ExpansionTile(
                     iconColor: expansionTileColor,
                     collapsedIconColor: expansionTileColor,
                     title: Text(context.l10n.puzzleByOpenings),
                     trailing: const Icon(Icons.keyboard_arrow_right),
-                    onExpansionChanged: hasConnectivity
+                    onExpansionChanged: hasSavedOpenings
                         ? (expanded) {
                             pushPlatformRoute(
                               context,

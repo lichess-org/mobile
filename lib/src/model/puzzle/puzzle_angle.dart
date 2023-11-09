@@ -8,7 +8,7 @@ sealed class PuzzleAngle {
   String get key;
   String toJson();
 
-  static PuzzleAngle byKey(String key) {
+  static PuzzleAngle fromKey(String key) {
     final theme = puzzleThemeNameMap.get(key);
     if (theme != null) {
       return PuzzleTheme(theme);
@@ -18,7 +18,7 @@ sealed class PuzzleAngle {
   }
 
   factory PuzzleAngle.fromJson(dynamic json) {
-    return byKey(json as String);
+    return fromKey(json as String);
   }
 }
 

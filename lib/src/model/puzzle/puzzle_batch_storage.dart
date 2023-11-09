@@ -112,19 +112,66 @@ class PuzzleBatchStorage {
 
         final theme = angle != null ? puzzleThemeNameMap.get(angle) : null;
 
-        int? count;
-        if (raw != null) {
-          final json = jsonDecode(raw);
-          if (json is! Map<String, dynamic>) {
-            throw const FormatException(
-              '[PuzzleBatchStorage] cannot fetch puzzles: expected an object',
-            );
+        if (theme != null) {
+          int? count;
+          if (raw != null) {
+            final json = jsonDecode(raw);
+            if (json is! Map<String, dynamic>) {
+              throw const FormatException(
+                '[PuzzleBatchStorage] cannot fetch puzzles: expected an object',
+              );
+            }
+            final data = PuzzleBatch.fromJson(json);
+            count = data.unsolved.length;
           }
-          final data = PuzzleBatch.fromJson(json);
-          count = data.unsolved.length;
+          return count != null ? acc.add(theme, count) : acc;
         }
 
-        return theme != null && count != null ? acc.add(theme, count) : acc;
+        return acc;
+      },
+    );
+  }
+
+  Future<IMap<String, int>> fetchSavedOpenings({
+    required UserId? userId,
+  }) async {
+    final list = await _db.query(
+      _tableName,
+      where: 'userId = ?',
+      whereArgs: [
+        userId?.value ?? _anonUserKey,
+      ],
+    );
+
+    return list.fold<IMap<String, int>>(
+      IMap<String, int>(const {}),
+      (acc, map) {
+        final angle = map['angle'] as String?;
+        final raw = map['data'] as String?;
+
+        final openingKey = angle != null
+            ? switch (PuzzleAngle.fromKey(angle)) {
+                PuzzleTheme(themeKey: _) => null,
+                PuzzleOpening(key: final key) => key,
+              }
+            : null;
+
+        if (openingKey != null) {
+          int? count;
+          if (raw != null) {
+            final json = jsonDecode(raw);
+            if (json is! Map<String, dynamic>) {
+              throw const FormatException(
+                '[PuzzleBatchStorage] cannot fetch puzzles: expected an object',
+              );
+            }
+            final data = PuzzleBatch.fromJson(json);
+            count = data.unsolved.length;
+          }
+          return count != null ? acc.add(openingKey, count) : acc;
+        }
+
+        return acc;
       },
     );
   }

@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
 
 part 'puzzle_opening.g.dart';
 part 'puzzle_opening.freezed.dart';
@@ -30,6 +31,7 @@ class PuzzleOpeningData with _$PuzzleOpeningData {
 Future<IList<PuzzleOpeningData>> _flatOpeningsList(
   _FlatOpeningsListRef ref,
 ) async {
+  ref.cacheFor(const Duration(days: 1));
   final families = await ref.watch(puzzleOpeningsProvider.future);
   return families
       .map(

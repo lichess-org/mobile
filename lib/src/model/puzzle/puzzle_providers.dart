@@ -67,10 +67,19 @@ Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) async {
 }
 
 @riverpod
-Future<IMap<PuzzleThemeKey, int>> savedThemes(SavedThemesRef ref) {
+Future<IMap<PuzzleThemeKey, int>> savedThemeBatches(SavedThemeBatchesRef ref) {
   final session = ref.watch(authSessionProvider);
   final storage = ref.watch(puzzleBatchStorageProvider);
   return storage.fetchSavedThemes(userId: session?.user.id);
+}
+
+@riverpod
+Future<IMap<String, int>> savedOpeningBatches(
+  SavedOpeningBatchesRef ref,
+) async {
+  final session = ref.watch(authSessionProvider);
+  final storage = ref.watch(puzzleBatchStorageProvider);
+  return storage.fetchSavedOpenings(userId: session?.user.id);
 }
 
 @riverpod
