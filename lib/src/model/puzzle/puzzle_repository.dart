@@ -233,7 +233,7 @@ class PuzzleRepository {
         );
   }
 
-  FutureResult<IMap<PuzzleThemeKey, PuzzleThemeData>> puzzleTheme() {
+  FutureResult<IMap<PuzzleThemeKey, PuzzleThemeData>> puzzleThemes() {
     return apiClient.get(
       Uri.parse('$kLichessHost/training/themes'),
       headers: {'Accept': 'application/json'},

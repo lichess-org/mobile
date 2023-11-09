@@ -55,10 +55,15 @@ Future<Puzzle> puzzle(PuzzleRef ref, PuzzleId id) async {
   return Result.release(repo.fetch(id));
 }
 
-@Riverpod(keepAlive: true)
-Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
+@riverpod
+Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) async {
+  final link = ref.cacheFor(const Duration(days: 1));
   final repo = ref.watch(puzzleRepositoryProvider);
-  return Result.release(repo.daily());
+  final result = await repo.daily();
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
 @riverpod
@@ -83,21 +88,37 @@ Future<PuzzleDashboard> puzzleDashboard(
 }
 
 @riverpod
-Future<StormDashboard> stormDashboard(StormDashboardRef ref) {
-  ref.cacheFor(const Duration(minutes: 30));
+Future<StormDashboard> stormDashboard(StormDashboardRef ref) async {
+  final link = ref.cacheFor(const Duration(minutes: 30));
   final session = ref.watch(authSessionProvider);
   final repo = ref.watch(puzzleRepositoryProvider);
-  return Result.release(repo.stormDashboard(session!.user.id));
+  final result = await repo.stormDashboard(session!.user.id);
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
-@Riverpod(keepAlive: true)
-Future<IMap<PuzzleThemeKey, PuzzleThemeData>> puzzleTheme(PuzzleThemeRef ref) {
+@riverpod
+Future<IMap<PuzzleThemeKey, PuzzleThemeData>> puzzleThemes(
+  PuzzleThemesRef ref,
+) async {
+  final link = ref.cacheFor(const Duration(days: 1));
   final repo = ref.watch(puzzleRepositoryProvider);
-  return Result.release(repo.puzzleTheme());
+  final result = await repo.puzzleThemes();
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }
 
-@Riverpod(keepAlive: true)
-Future<IList<PuzzleOpeningFamily>> puzzleOpening(PuzzleOpeningRef ref) {
+@riverpod
+Future<IList<PuzzleOpeningFamily>> puzzleOpenings(PuzzleOpeningsRef ref) async {
+  final link = ref.cacheFor(const Duration(days: 1));
   final repo = ref.watch(puzzleRepositoryProvider);
-  return Result.release(repo.puzzleOpenings());
+  final result = await repo.puzzleOpenings();
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
 }

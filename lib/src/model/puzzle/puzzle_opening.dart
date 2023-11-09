@@ -26,11 +26,11 @@ class PuzzleOpeningData with _$PuzzleOpeningData {
   }) = _PuzzleOpeningData;
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 Future<IList<PuzzleOpeningData>> _flatOpeningsList(
   _FlatOpeningsListRef ref,
 ) async {
-  final families = await ref.watch(puzzleOpeningProvider.future);
+  final families = await ref.watch(puzzleOpeningsProvider.future);
   return families
       .map(
         (f) => [

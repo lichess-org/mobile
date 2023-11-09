@@ -49,7 +49,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final openings = ref.watch(puzzleOpeningProvider);
+    final openings = ref.watch(puzzleOpeningsProvider);
     return SafeArea(
       child: openings.when(
         data: (data) {

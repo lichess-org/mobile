@@ -33,7 +33,7 @@ Future<
   final savedThemes = await ref.watch(savedThemesProvider.future);
   IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
   try {
-    onlineThemes = await ref.watch(puzzleThemeProvider.future);
+    onlineThemes = await ref.watch(puzzleThemesProvider.future);
   } catch (e) {
     onlineThemes = null;
   }
