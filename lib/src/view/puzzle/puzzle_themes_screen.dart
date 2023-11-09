@@ -94,19 +94,21 @@ class _Body extends ConsumerWidget {
         data: (data) {
           final (hasConnectivity, savedThemes, onlineThemes, hasSavedOpenings) =
               data;
+
+          final openingsAvailable = hasConnectivity || hasSavedOpenings;
           return ListView(
             children: [
               Theme(
                 data: Theme.of(context)
                     .copyWith(dividerColor: Colors.transparent),
                 child: Opacity(
-                  opacity: hasSavedOpenings ? 1 : 0.5,
+                  opacity: openingsAvailable ? 1 : 0.5,
                   child: ExpansionTile(
                     iconColor: expansionTileColor,
                     collapsedIconColor: expansionTileColor,
                     title: Text(context.l10n.puzzleByOpenings),
                     trailing: const Icon(Icons.keyboard_arrow_right),
-                    onExpansionChanged: hasSavedOpenings
+                    onExpansionChanged: openingsAvailable
                         ? (expanded) {
                             pushPlatformRoute(
                               context,
