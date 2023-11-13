@@ -15,7 +15,9 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
@@ -237,32 +239,75 @@ class _BottomBar extends ConsumerWidget {
               },
               icon: const Icon(Icons.menu),
             ),
-            BottomBarIconButton(
-              semanticsLabel: context.l10n.gameAnalysis,
-              onPressed: ref.read(gameCursorProvider(gameData.id)).hasValue
-                  ? () {
-                      final (game, cursor) = ref
-                          .read(gameCursorProvider(gameData.id))
-                          .requireValue;
+            Builder(
+              builder: (context) {
+                bool isLoading = false;
+                return StatefulBuilder(
+                  builder: (context, setState) {
+                    return BottomBarIconButton(
+                      semanticsLabel: context.l10n.gameAnalysis,
+                      onPressed: isLoading
+                          ? null
+                          : ref.read(gameCursorProvider(gameData.id)).hasValue
+                              ? () async {
+                                  final (game, cursor) = ref
+                                      .read(gameCursorProvider(gameData.id))
+                                      .requireValue;
 
-                      pushPlatformRoute(
-                        context,
-                        builder: (context) => AnalysisScreen(
-                          title: context.l10n.gameAnalysis,
-                          options: AnalysisOptions(
-                            isLocalEvaluationAllowed: true,
-                            variant: gameData.variant,
-                            pgn: game.pgn,
-                            initialMoveCursor: cursor,
-                            orientation: orientation,
-                            id: gameData.id,
-                            opening: gameData.opening,
-                          ),
-                        ),
-                      );
-                    }
-                  : null,
-              icon: const Icon(Icons.biotech),
+                                  String? pgn;
+                                  try {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    pgn = await (game.data.hasServerAnalysis
+                                        ? ref.read(
+                                            gameAnalysisPgnProvider(
+                                              id: gameData.id,
+                                            ).future,
+                                          )
+                                        : game.pgn);
+                                  } catch (e) {
+                                    if (context.mounted) {
+                                      showPlatformSnackbar(
+                                        context,
+                                        e.toString(),
+                                      );
+                                    }
+                                  } finally {
+                                    if (context.mounted) {
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                      if (pgn != null) {
+                                        pushPlatformRoute(
+                                          context,
+                                          builder: (context) => AnalysisScreen(
+                                            title: context.l10n.gameAnalysis,
+                                            options: AnalysisOptions(
+                                              isLocalEvaluationAllowed: true,
+                                              variant: gameData.variant,
+                                              pgn: pgn!,
+                                              initialMoveCursor: cursor,
+                                              orientation: orientation,
+                                              id: gameData.id,
+                                              opening: gameData.opening,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  }
+
+                                  if (context.mounted && pgn != null) {}
+                                }
+                              : null,
+                      icon: isLoading
+                          ? const ButtonLoadingIndicator()
+                          : const Icon(Icons.biotech),
+                    );
+                  },
+                );
+              },
             ),
             const SizedBox(
               width: 44.0,

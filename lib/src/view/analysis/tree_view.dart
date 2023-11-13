@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
@@ -124,7 +125,8 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
           : const SizedBox.shrink(),
     );
 
-    if (shouldShowComments && rootComments?.isNotEmpty == true) {
+    if (shouldShowComments &&
+        rootComments?.any((c) => c.text?.isNotEmpty == true) == true) {
       moveWidgets.insert(
         0,
         Padding(
@@ -315,7 +317,7 @@ class InlineMove extends ConsumerWidget {
             padding: const EdgeInsets.only(right: 4.0),
             child: Text('(', style: textStyle),
           ),
-        if (shouldShowComments && branch.startingComments?.isNotEmpty == true)
+        if (shouldShowComments && branch.hasStartingTextComment)
           Flexible(
             child: Padding(
               padding: const EdgeInsets.only(right: 8.0),
@@ -349,7 +351,7 @@ class InlineMove extends ConsumerWidget {
             ),
           ),
         ),
-        if (shouldShowComments && branch.comments?.isNotEmpty == true)
+        if (shouldShowComments && branch.hasTextComment)
           Flexible(
             child: Padding(
               padding: const EdgeInsets.only(left: 8.0),
@@ -380,9 +382,9 @@ String _displayNags(Iterable<int> nags) {
 
 class _Comments extends StatelessWidget {
   _Comments(this.comments, {this.isSideline = false})
-      : assert(comments.isNotEmpty);
+      : assert(comments.any((c) => c.text?.isNotEmpty == true));
 
-  final Iterable<String> comments;
+  final Iterable<PgnComment> comments;
   final bool isSideline;
 
   @override
@@ -405,9 +407,12 @@ class _Comments extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: comments.map(
                     (comment) {
+                      if (comment.text == null || comment.text!.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16.0),
-                        child: Text(comment.replaceAll('\n', ' ')),
+                        child: Text(comment.text!.replaceAll('\n', ' ')),
                       );
                     },
                   ).toList(),
@@ -418,7 +423,7 @@ class _Comments extends StatelessWidget {
         );
       },
       child: Text(
-        comments.join(' ').replaceAll('\n', ' '),
+        comments.map((c) => c.text ?? '').join(' ').replaceAll('\n', ' '),
         maxLines: 3,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(

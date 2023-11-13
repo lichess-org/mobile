@@ -224,10 +224,10 @@ class Branch extends Node {
   final SanMove sanMove;
 
   /// PGN comments before the move.
-  final List<String>? startingComments;
+  final List<PgnComment>? startingComments;
 
   /// PGN comments after the move.
-  final List<String>? comments;
+  final List<PgnComment>? comments;
 
   /// Numeric Annotation Glyphs for the move.
   final List<int>? nags;
@@ -320,8 +320,16 @@ class Root extends Node {
           final branch = Branch(
             sanMove: SanMove(childFrom.data.san, move),
             position: newPos,
-            startingComments: childFrom.data.startingComments,
-            comments: childFrom.data.comments,
+            startingComments: childFrom.data.startingComments
+                ?.map(
+                  (c) => PgnComment.fromPgn(c),
+                )
+                .toList(growable: false),
+            comments: childFrom.data.comments
+                ?.map(
+                  (c) => PgnComment.fromPgn(c),
+                )
+                .toList(growable: false),
             nags: childFrom.data.nags,
           );
 
@@ -338,7 +346,10 @@ class Root extends Node {
   /// Export the game tree to a PGN string.
   ///
   /// Optionally, headers and initial game comments can be provided.
-  String makePgn([IMap<String, String>? headers, IList<String>? rootComments]) {
+  String makePgn([
+    IMap<String, String>? headers,
+    IList<PgnComment>? rootComments,
+  ]) {
     final pgnNode = PgnNode<PgnNodeData>();
     final List<({Node from, PgnNode<PgnNodeData> to})> stack = [
       (from: this, to: pgnNode),
@@ -353,8 +364,32 @@ class Root extends Node {
         final childTo = PgnChildNode(
           PgnNodeData(
             san: childFrom.sanMove.san,
-            startingComments: childFrom.startingComments,
-            comments: childFrom.comments,
+            startingComments: childFrom.startingComments
+                ?.map((c) => c.makeComment())
+                .toList(growable: false),
+            comments: childFrom.comments?.map(
+              (c) {
+                final eval = childFrom.eval;
+                final pgnEval = eval?.cp != null
+                    ? PgnEvaluation.pawns(
+                        pawns: evalFromCp(eval!.cp!),
+                        depth: eval.depth,
+                      )
+                    : eval?.mate != null
+                        ? PgnEvaluation.mate(
+                            mate: eval!.mate,
+                            depth: eval.depth,
+                          )
+                        : c.eval;
+                return PgnComment(
+                  text: c.text,
+                  shapes: c.shapes,
+                  clock: c.clock,
+                  emt: c.emt,
+                  eval: pgnEval,
+                ).makeComment();
+              },
+            ).toList(growable: false),
             nags: childFrom.nags,
           ),
         );
@@ -366,7 +401,9 @@ class Root extends Node {
     final pgnGame = PgnGame(
       headers: headers?.unlock ?? PgnGame.defaultHeaders(),
       moves: pgnNode,
-      comments: rootComments?.unlock ?? [],
+      comments:
+          rootComments?.map((c) => c.makeComment()).toList(growable: false) ??
+              [],
     );
 
     return pgnGame.makePgn();
@@ -381,8 +418,8 @@ abstract class ViewNode {
   IList<ViewBranch> get children;
   ClientEval? get eval;
   Opening? get opening;
-  IList<String>? get startingComments;
-  IList<String>? get comments;
+  IList<PgnComment>? get startingComments;
+  IList<PgnComment>? get comments;
   IList<int>? get nags;
 }
 
@@ -406,10 +443,10 @@ class ViewRoot with _$ViewRoot implements ViewNode {
   Opening? get opening => null;
 
   @override
-  IList<String>? get startingComments => null;
+  IList<PgnComment>? get startingComments => null;
 
   @override
-  IList<String>? get comments => null;
+  IList<PgnComment>? get comments => null;
 
   @override
   IList<int>? get nags => null;
@@ -426,10 +463,18 @@ class ViewBranch with _$ViewBranch implements ViewNode {
     Opening? opening,
     required IList<ViewBranch> children,
     ClientEval? eval,
-    IList<String>? startingComments,
-    IList<String>? comments,
+    IList<PgnComment>? startingComments,
+    IList<PgnComment>? comments,
     IList<int>? nags,
   }) = _ViewBranch;
+
+  /// Has at least one non empty starting comment text.
+  bool get hasStartingTextComment =>
+      startingComments?.any((c) => c.text?.isNotEmpty == true) == true;
+
+  /// Has at least one non empty comment text.
+  bool get hasTextComment =>
+      comments?.any((c) => c.text?.isNotEmpty == true) == true;
 
   @override
   UciCharPair get id => UciCharPair.fromMove(sanMove.move);

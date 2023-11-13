@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
@@ -37,6 +38,13 @@ class GameRepository {
         logger: _log,
       );
     });
+  }
+
+  FutureResult<String> getGameAnalysisPgn(GameId id) {
+    return apiClient.get(
+      Uri.parse('$kLichessHost/game/export/$id?literate=1&clocks=0'),
+      headers: {'Accept': 'application/x-chess-pgn'},
+    ).map((r) => utf8.decode(r.bodyBytes));
   }
 
   // TODO parameters

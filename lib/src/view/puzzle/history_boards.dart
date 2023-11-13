@@ -68,20 +68,22 @@ class _PuzzleHistoryState extends ConsumerState<PuzzleHistoryBoards> {
                           );
                         }
                       } finally {
-                        if (mounted && puzzle != null) {
+                        if (mounted) {
                           setState(() => isLoading = false);
-                          pushPlatformRoute(
-                            context,
-                            rootNavigator: true,
-                            builder: (_) => PuzzleScreen(
-                              angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                              initialPuzzleContext: PuzzleContext(
+                          if (puzzle != null) {
+                            pushPlatformRoute(
+                              context,
+                              rootNavigator: true,
+                              builder: (_) => PuzzleScreen(
                                 angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                                puzzle: puzzle!,
-                                userId: session?.user.id,
+                                initialPuzzleContext: PuzzleContext(
+                                  angle: const PuzzleTheme(PuzzleThemeKey.mix),
+                                  puzzle: puzzle!,
+                                  userId: session?.user.id,
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          }
                         }
                       }
                     },

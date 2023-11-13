@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -57,14 +58,15 @@ class AnalysisController extends _$AnalysisController {
     Move? lastMove;
     IMap<String, String>? pgnHeaders =
         options.id is GameId ? null : _defaultPgnHeaders;
-    IList<String>? rootComments;
 
     final game = PgnGame.parsePgn(options.pgn);
-    // only include headers if the game is not an online lichess game
+    // only merge headers if the game is not an online lichess game
     if (options.id is! GameId) {
       pgnHeaders = pgnHeaders?.addMap(game.headers) ?? IMap(game.headers);
-      rootComments = IList(game.comments);
+    } else {
+      pgnHeaders = IMap(game.headers);
     }
+    final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
     _root = Root.fromPgnGame(game, (root, branch, isMainline) {
       if (isMainline &&
@@ -378,11 +380,13 @@ class AnalysisState with _$AnalysisState {
     /// The PGN comments of the game.
     ///
     /// This field is only used with user submitted PGNS.
-    IList<String>? pgnRootComments,
+    IList<PgnComment>? pgnRootComments,
   }) = _AnalysisState;
 
   IMap<String, ISet<String>> get validMoves =>
       algebraicLegalMoves(currentNode.position);
+
+  bool get hasEval => isEngineAvailable || currentNode.pgnEval != null;
 
   bool get isEngineAvailable =>
       isLocalEvaluationAllowed &&
@@ -398,6 +402,8 @@ class AnalysisState with _$AnalysisState {
 
 @freezed
 class AnalysisCurrentNode with _$AnalysisCurrentNode {
+  const AnalysisCurrentNode._();
+
   const factory AnalysisCurrentNode({
     required Position position,
     required bool hasChild,
@@ -405,8 +411,8 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
     SanMove? sanMove,
     Opening? opening,
     ClientEval? eval,
-    IList<String>? startingComments,
-    IList<String>? comments,
+    IList<PgnComment>? startingComments,
+    IList<PgnComment>? comments,
     IList<int>? nags,
   }) = _AnalysisCurrentNode;
 
@@ -433,6 +439,9 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
       );
     }
   }
+
+  PgnEvaluation? get pgnEval =>
+      comments?.firstWhereOrNull((c) => c.eval != null)?.eval;
 }
 
 const IMap<String, String> _defaultPgnHeaders = IMapConst({

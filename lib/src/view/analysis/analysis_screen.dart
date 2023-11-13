@@ -139,11 +139,14 @@ class _Body extends ConsumerWidget {
     final showEvaluationGauge = ref.watch(
       analysisPreferencesProvider.select((value) => value.showEvaluationGauge),
     );
+
     final isEngineAvailable = ref.watch(
       ctrlProvider.select(
         (value) => value.isEngineAvailable,
       ),
     );
+
+    final hasEval = ref.watch(ctrlProvider.select((value) => value.hasEval));
 
     return Column(
       children: [
@@ -176,7 +179,7 @@ class _Body extends ConsumerWidget {
                             child: Row(
                               children: [
                                 _Board(ctrlProvider, boardSize),
-                                if (isEngineAvailable && showEvaluationGauge)
+                                if (hasEval && showEvaluationGauge)
                                   _EngineGaugeVertical(ctrlProvider),
                               ],
                             ),
@@ -380,7 +383,7 @@ class _ColumnTopTable extends ConsumerWidget {
       analysisPreferencesProvider.select((p) => p.showEvaluationGauge),
     );
 
-    return analysisState.isEngineAvailable
+    return analysisState.hasEval
         ? Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -392,10 +395,18 @@ class _ColumnTopTable extends ConsumerWidget {
                     orientation: analysisState.pov,
                     evaluationContext: analysisState.evaluationContext,
                     position: analysisState.position,
-                    savedEval: analysisState.currentNode.eval,
+                    savedEval: analysisState.currentNode.eval ??
+                        (analysisState.currentNode.pgnEval != null
+                            ? ServerEval(
+                                eval: analysisState.currentNode.pgnEval!.pawns,
+                                mate: analysisState.currentNode.pgnEval!.mate,
+                                depth: analysisState.currentNode.pgnEval!.depth,
+                              )
+                            : null),
                   ),
                 ),
-              _EngineLines(ctrlProvider, isLandscape: false),
+              if (analysisState.isEngineAvailable)
+                _EngineLines(ctrlProvider, isLandscape: false),
             ],
           )
         : kEmptyWidget;
@@ -641,48 +652,46 @@ class _BottomBar extends ConsumerWidget {
                 .toggleComments();
           },
         ),
-        if (options.id is! GameId)
-          BottomSheetAction(
-            label: Text(context.l10n.studyShareAndExport),
-            onPressed: (_) {
-              showAdaptiveBottomSheet<void>(
-                context: context,
-                showDragHandle: true,
-                isScrollControlled: true,
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.9,
-                ),
-                builder: (_) => SafeArea(
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      AnalysisPgnTags(
-                        options: options,
+        BottomSheetAction(
+          label: Text(context.l10n.studyShareAndExport),
+          onPressed: (_) {
+            showAdaptiveBottomSheet<void>(
+              context: context,
+              showDragHandle: true,
+              isScrollControlled: true,
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.9,
+              ),
+              builder: (_) => SafeArea(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    AnalysisPgnTags(
+                      options: options,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: FatButton(
+                        semanticsLabel: 'Share PGN',
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Share.share(
+                            ref
+                                .read(
+                                  analysisControllerProvider(options).notifier,
+                                )
+                                .makeGamePgn(),
+                          );
+                        },
+                        child: const Text('Share PGN'),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(24.0),
-                        child: FatButton(
-                          semanticsLabel: 'Share PGN',
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            Share.share(
-                              ref
-                                  .read(
-                                    analysisControllerProvider(options)
-                                        .notifier,
-                                  )
-                                  .makeGamePgn(),
-                            );
-                          },
-                          child: const Text('Share PGN'),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
+        ),
       ],
     );
   }

@@ -24,6 +24,12 @@ Future<ArchivedGame> archivedGame(ArchivedGameRef ref, {required GameId id}) {
 }
 
 @riverpod
+Future<String> gameAnalysisPgn(GameAnalysisPgnRef ref, {required GameId id}) {
+  final repo = ref.watch(gameRepositoryProvider);
+  return Result.release(repo.getGameAnalysisPgn(id));
+}
+
+@riverpod
 Future<IList<ArchivedGameData>> userRecentGames(
   UserRecentGamesRef ref, {
   required UserId userId,

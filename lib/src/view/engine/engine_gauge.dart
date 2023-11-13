@@ -35,7 +35,7 @@ class EngineGaugeParams with _$EngineGaugeParams {
     required Position position,
 
     /// Saved evaluation to display when the current evaluation is not available.
-    ClientEval? savedEval,
+    Eval? savedEval,
   }) = _EngineGaugeParams;
 }
 
@@ -101,7 +101,7 @@ class _EvalGauge extends ConsumerStatefulWidget {
 
   final EngineGaugeDisplayMode displayMode;
   final Position position;
-  final ClientEval? eval;
+  final Eval? eval;
   final Side orientation;
 
   double get whiteWinningChances => eval?.winningChances(Side.white) ?? 0.0;

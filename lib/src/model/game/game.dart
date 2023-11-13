@@ -243,6 +243,9 @@ class ArchivedGameData with _$ArchivedGameData {
       clock?.increment.inSeconds ?? 0,
     ).display;
   }
+
+  bool get hasServerAnalysis =>
+      white.analysis != null || black.analysis != null;
 }
 
 @freezed
@@ -254,7 +257,6 @@ class ArchivedGame with _$ArchivedGame, BaseGame, IndexableSteps {
     required ArchivedGameData data,
     required IList<GameStep> steps,
     String? initialFen,
-    // IList<MoveAnalysis>? analysis,
   }) = _ArchivedGame;
 }
 
@@ -280,22 +282,4 @@ class GameStep with _$GameStep {
     /// The remaining black clock time at this step. Only for archived game.
     Duration? blackClock,
   }) = _GameStep;
-}
-
-@freezed
-class MoveAnalysis with _$MoveAnalysis {
-  const factory MoveAnalysis({
-    int? eval,
-    UCIMove? best,
-    String? variation,
-    AnalysisJudgment? judgment,
-  }) = _MoveAnalysis;
-}
-
-@freezed
-class AnalysisJudgment with _$AnalysisJudgment {
-  const factory AnalysisJudgment({
-    required String name,
-    required String comment,
-  }) = _AnalysisJugdment;
 }
