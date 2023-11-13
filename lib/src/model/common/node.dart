@@ -14,10 +14,8 @@ part 'node.freezed.dart';
 /// The tree is implemented with a linked list of nodes, using mutable [List] of
 /// children.
 ///
-/// It cannot be directly used in a riverpod state, because it is mutable, and
-/// riverpod relies on object reference equality to detect changes and emit new
-/// states. Therefore, it must be converted into a [ViewNode], which is immutable,
-/// using the [view] getter.
+/// It should not be directly used in a riverpod state, because it is mutable.
+/// It can be converted into an immutable [ViewNode], using the [view] getter.
 abstract class Node {
   Node({
     required this.position,
@@ -35,7 +33,9 @@ abstract class Node {
 
   final List<Branch> children = [];
 
-  /// Immutable view of this node. Use sparingly, as it is expensive to compute.
+  /// Immutable view of this node.
+  ///
+  /// Use sparingly, it is relatively expensive to compute.
   ViewNode get view;
 
   /// Adds a child to this node.
@@ -50,17 +50,17 @@ abstract class Node {
   }
 
   /// An iterable of all nodes on the mainline.
-  Iterable<ViewBranch> get mainline sync* {
+  Iterable<Branch> get mainline sync* {
     Node current = this;
     while (current.children.isNotEmpty) {
       final child = current.children.first;
-      yield child.view;
+      yield child;
       current = child;
     }
   }
 
   /// Selects all nodes on that path.
-  Iterable<ViewBranch> nodesOn(UciPath path) sync* {
+  Iterable<Branch> nodesOn(UciPath path) sync* {
     UciPath currentPath = path;
 
     Branch? pickChild(Node node) {
@@ -75,7 +75,7 @@ abstract class Node {
     Branch? child;
 
     while ((child = pickChild(current)) != null) {
-      yield child!.view;
+      yield child!;
       current = child;
       currentPath = currentPath.tail;
     }

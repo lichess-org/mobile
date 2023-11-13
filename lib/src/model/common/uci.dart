@@ -77,7 +77,7 @@ class UciPath with _$UciPath {
   factory UciPath.fromIds(IList<UciCharPair> ids) =>
       UciPath(ids.map((id) => id.toString()).join(''));
 
-  factory UciPath.fromNodeList(Iterable<ViewNode> nodeList) {
+  factory UciPath.fromNodeList(Iterable<Branch> nodeList) {
     final path = StringBuffer();
     for (final node in nodeList) {
       path.write(node.id);

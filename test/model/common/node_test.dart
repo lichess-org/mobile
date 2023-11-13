@@ -54,7 +54,7 @@ void main() {
       expect(nodeList.length, equals(1));
       expect(
         nodeList.first,
-        equals((root.nodeAt(path) as Branch).view),
+        equals(root.nodeAt(path) as Branch),
       );
     });
 
@@ -73,12 +73,12 @@ void main() {
       expect(root.mainline.length, equals(3));
       expect(
         root.mainline.last,
-        equals((root.nodeAt(root.mainlinePath) as Branch).view),
+        equals(root.nodeAt(root.mainlinePath) as Branch),
       );
 
       final nodeList = root.nodesOn(newPath);
       expect(nodeList.length, equals(3));
-      expect(nodeList.last, equals(newNode.view));
+      expect(nodeList.last, equals(newNode));
     });
 
     test('mainline', () {
@@ -160,8 +160,8 @@ void main() {
       expect(
         root.nodesOn(nodePath!),
         equals([
-          root.children.first.view,
-          branch.view,
+          root.children.first,
+          branch,
         ]),
       );
 
@@ -185,8 +185,8 @@ void main() {
       expect(
         root.nodesOn(nodePath),
         equals([
-          root.children.first.view,
-          newNode!.view,
+          root.children.first,
+          newNode!,
         ]),
       );
     });

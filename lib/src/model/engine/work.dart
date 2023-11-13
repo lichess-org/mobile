@@ -47,7 +47,7 @@ class Step with _$Step {
     ClientEval? eval,
   }) = _Step;
 
-  factory Step.fromNode(ViewBranch node) {
+  factory Step.fromNode(Branch node) {
     return Step(
       position: node.position,
       sanMove: node.sanMove,

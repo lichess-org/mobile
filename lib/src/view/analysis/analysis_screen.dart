@@ -393,7 +393,7 @@ class _ColumnTopTable extends ConsumerWidget {
                     position: analysisState.position,
                     savedEval: analysisState.currentNode.eval ??
                         (analysisState.currentNode.pgnEval != null
-                            ? ServerEval(
+                            ? ExternalEval(
                                 eval: analysisState.currentNode.pgnEval!.pawns,
                                 mate: analysisState.currentNode.pgnEval!.mate,
                                 depth: analysisState.currentNode.pgnEval!.depth,
@@ -782,3 +782,13 @@ class _StockfishInfo extends ConsumerWidget {
     );
   }
 }
+
+// class AcplChart extends StatelessWidget {
+//   const AcplChart(this.data);
+
+//   final List<Eval> data;
+
+//   @override
+//   Widget build(BuildContext context) {
+//   }
+// }

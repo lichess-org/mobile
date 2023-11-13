@@ -13,10 +13,10 @@ sealed class Eval {
 }
 
 @freezed
-class ServerEval with _$ServerEval implements Eval {
-  const ServerEval._();
+class ExternalEval with _$ExternalEval implements Eval {
+  const ExternalEval._();
 
-  const factory ServerEval({
+  const factory ExternalEval({
     required double? eval,
     required int? mate,
     required int? depth,
