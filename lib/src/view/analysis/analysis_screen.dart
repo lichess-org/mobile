@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:popover/popover.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -144,6 +145,10 @@ class _Body extends ConsumerWidget {
 
     final hasEval = ref.watch(ctrlProvider.select((value) => value.hasEval));
 
+    final showAcplChart = ref.watch(
+      ctrlProvider.select((value) => value.showAcplChart),
+    );
+
     return Column(
       children: [
         Expanded(
@@ -222,10 +227,13 @@ class _Body extends ConsumerWidget {
                             )
                           else
                             _Board(ctrlProvider, boardSize),
-                          AnalysisTreeView(
-                            options,
-                            Orientation.portrait,
-                          ),
+                          if (showAcplChart)
+                            AcplChart(options)
+                          else
+                            AnalysisTreeView(
+                              options,
+                              Orientation.portrait,
+                            ),
                         ],
                       );
               },
@@ -584,14 +592,23 @@ class _BottomBar extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            BottomBarIconButton(
-              semanticsLabel: context.l10n.menu,
-              onPressed: () {
+            BottomBarButton(
+              label: context.l10n.menu,
+              shortLabel: context.l10n.menu,
+              onTap: () {
                 _showAnalysisMenu(context, ref);
               },
-              icon: const Icon(Icons.menu),
+              icon: Icons.menu,
             ),
-            const Spacer(),
+            if (options.hasLichessServerAnalysis == true)
+              BottomBarButton(
+                label: context.l10n.computerAnalysis,
+                shortLabel: 'Summary',
+                onTap: () {
+                  ref.read(ctrlProvider.notifier).toggleAcplChart();
+                },
+                icon: Icons.area_chart,
+              ),
             RepeatButton(
               onLongPress: canGoBack ? () => _moveBackward(ref) : null,
               child: BottomBarButton(
@@ -603,7 +620,6 @@ class _BottomBar extends ConsumerWidget {
                 showAndroidTooltip: false,
               ),
             ),
-            const SizedBox(width: 36.0),
             RepeatButton(
               onLongPress: canGoNext ? () => _moveForward(ref) : null,
               child: BottomBarButton(
@@ -783,12 +799,69 @@ class _StockfishInfo extends ConsumerWidget {
   }
 }
 
-// class AcplChart extends StatelessWidget {
-//   const AcplChart(this.data);
+class AcplChart extends ConsumerWidget {
+  const AcplChart(this.options);
 
-//   final List<Eval> data;
+  final AnalysisOptions options;
 
-//   @override
-//   Widget build(BuildContext context) {
-//   }
-// }
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    const mainLineColor = Colors.orange;
+    // yes it looks like below/above are inverted in fl_chart
+    final belowLineColor = Colors.white.withOpacity(0.7);
+    final aboveLineColor = Colors.grey.shade800.withOpacity(0.9);
+
+    final data = ref.watch(
+      analysisControllerProvider(options)
+          .select((value) => value.acplChartData),
+    );
+
+    if (data == null) {
+      return const SizedBox.shrink();
+    }
+
+    final spots = data
+        .mapIndexed(
+          (i, e) => FlSpot(i.toDouble(), e.winningChances(Side.white)),
+        )
+        .toList(growable: false);
+
+    return AspectRatio(
+      aspectRatio: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: LineChart(
+          LineChartData(
+            lineTouchData: const LineTouchData(enabled: false),
+            minY: -1.0,
+            maxY: 1.0,
+            lineBarsData: [
+              LineChartBarData(
+                spots: spots,
+                isCurved: true,
+                barWidth: 1,
+                color: mainLineColor,
+                aboveBarData: BarAreaData(
+                  show: true,
+                  color: aboveLineColor,
+                  applyCutOffY: true,
+                ),
+                belowBarData: BarAreaData(
+                  show: true,
+                  color: belowLineColor,
+                  applyCutOffY: true,
+                ),
+                dotData: const FlDotData(
+                  show: false,
+                ),
+              ),
+            ],
+            gridData: const FlGridData(show: false),
+            borderData: FlBorderData(show: false),
+            titlesData: const FlTitlesData(show: false),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -36,6 +36,7 @@ class AnalysisOptions with _$AnalysisOptions {
     required String pgn,
     int? initialMoveCursor,
     LightOpening? opening,
+    bool? hasLichessServerAnalysis,
   }) = _AnalysisOptions;
 }
 
@@ -96,6 +97,23 @@ class AnalysisController extends _$AnalysisController {
       cores: prefs.numEngineCores,
     );
 
+    final acplChartData = options.hasLichessServerAnalysis == true
+        ? _root.mainline
+            .map(
+              (node) =>
+                  node.comments?.firstWhereOrNull((c) => c.eval != null)?.eval,
+            )
+            .whereNotNull()
+            .map(
+              (eval) => ExternalEval(
+                eval: eval.pawns,
+                mate: eval.mate,
+                depth: eval.depth,
+              ),
+            )
+            .toList(growable: false)
+        : null;
+
     _startEngineEvalTimer = Timer(const Duration(milliseconds: 300), () {
       _startEngineEval();
     });
@@ -113,6 +131,8 @@ class AnalysisController extends _$AnalysisController {
       contextOpening: options.opening,
       isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
+      showAcplChart: false,
+      acplChartData: acplChartData?.lock,
     );
   }
 
@@ -199,6 +219,10 @@ class AnalysisController extends _$AnalysisController {
   void updatePgnHeader(String key, String value) {
     final headers = state.pgnHeaders?.add(key, value) ?? IMap({key: value});
     state = state.copyWith(pgnHeaders: headers);
+  }
+
+  void toggleAcplChart() {
+    state = state.copyWith(showAcplChart: !state.showAcplChart);
   }
 
   /// Gets the node and maybe the associated branch opening at the given path.
@@ -355,6 +379,9 @@ class AnalysisState with _$AnalysisState {
     /// Whether the user has enabled local evaluation.
     required bool isLocalEvaluationEnabled,
 
+    /// Whether to show the ACPL chart instead of tree view.
+    required bool showAcplChart,
+
     /// The last move played.
     Move? lastMove,
 
@@ -363,6 +390,9 @@ class AnalysisState with _$AnalysisState {
 
     /// The opening of the current branch.
     Opening? currentBranchOpening,
+
+    /// Optional ACPL chart data of the game.
+    IList<Eval>? acplChartData,
 
     /// The PGN headers of the game.
     ///

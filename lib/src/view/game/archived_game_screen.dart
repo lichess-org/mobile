@@ -291,6 +291,8 @@ class _BottomBar extends ConsumerWidget {
                                               orientation: orientation,
                                               id: gameData.id,
                                               opening: gameData.opening,
+                                              hasLichessServerAnalysis:
+                                                  game.data.hasServerAnalysis,
                                             ),
                                           ),
                                         );
