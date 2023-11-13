@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
+import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -105,7 +106,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
       ctrlProvider.select((value) => value.pgnRootComments),
     );
     final shouldShowComments = ref.watch(
-      ctrlProvider.select((value) => value.shouldShowComments),
+      analysisPreferencesProvider.select((value) => value.showPgnComments),
     );
 
     final List<Widget> moveWidgets = _buildTreeWidget(

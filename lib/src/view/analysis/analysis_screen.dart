@@ -13,7 +13,6 @@ import 'package:share_plus/share_plus.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -65,12 +64,12 @@ class AnalysisScreen extends ConsumerWidget {
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               isScrollControlled: true,
-              builder: (_) => AnalysisSettings(ctrlProvider),
+              builder: (_) => AnalysisSettings(options),
             ),
           ),
         ],
       ),
-      body: _Body(options: options, ctrlProvider: ctrlProvider),
+      body: _Body(options: options),
     );
   }
 
@@ -89,13 +88,13 @@ class AnalysisScreen extends ConsumerWidget {
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
                 isScrollControlled: true,
-                builder: (_) => AnalysisSettings(ctrlProvider),
+                builder: (_) => AnalysisSettings(options),
               ),
             ),
           ],
         ),
       ),
-      child: _Body(options: options, ctrlProvider: ctrlProvider),
+      child: _Body(options: options),
     );
   }
 }
@@ -126,16 +125,13 @@ class _Title extends StatelessWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({
-    required this.options,
-    required this.ctrlProvider,
-  });
+  const _Body({required this.options});
 
   final AnalysisOptions options;
-  final AnalysisControllerProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = analysisControllerProvider(options);
     final showEvaluationGauge = ref.watch(
       analysisPreferencesProvider.select((value) => value.showEvaluationGauge),
     );
@@ -631,8 +627,6 @@ class _BottomBar extends ConsumerWidget {
       ref.read(analysisControllerProvider(options).notifier).userPrevious();
 
   Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
-    final areCommentsEnabled =
-        ref.read(analysisControllerProvider(options)).shouldShowComments;
     return showAdaptiveActionSheet(
       context: context,
       actions: [
@@ -642,14 +636,6 @@ class _BottomBar extends ConsumerWidget {
             ref
                 .read(analysisControllerProvider(options).notifier)
                 .toggleBoard();
-          },
-        ),
-        BottomSheetAction(
-          label: Text(areCommentsEnabled ? 'Hide comments' : 'Show comments'),
-          onPressed: (context) {
-            ref
-                .read(analysisControllerProvider(options).notifier)
-                .toggleComments();
           },
         ),
         BottomSheetAction(

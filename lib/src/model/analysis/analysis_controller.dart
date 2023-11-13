@@ -113,7 +113,6 @@ class AnalysisController extends _$AnalysisController {
       contextOpening: options.opening,
       isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
-      shouldShowComments: true,
     );
   }
 
@@ -131,10 +130,6 @@ class AnalysisController extends _$AnalysisController {
       state.currentPath + _root.nodeAt(state.currentPath).children.first.id,
       replaying: true,
     );
-  }
-
-  void toggleComments() {
-    state = state.copyWith(shouldShowComments: !state.shouldShowComments);
   }
 
   void toggleBoard() {
@@ -359,9 +354,6 @@ class AnalysisState with _$AnalysisState {
 
     /// Whether the user has enabled local evaluation.
     required bool isLocalEvaluationEnabled,
-
-    /// Whether to show PGN comments in the tree view.
-    required bool shouldShowComments,
 
     /// The last move played.
     Move? lastMove,
