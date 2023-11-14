@@ -132,7 +132,7 @@ class AnalysisController extends _$AnalysisController {
       contextOpening: options.opening,
       isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
-      showAcplChart: false,
+      displayMode: DisplayMode.moves,
       acplChartData: acplChartData?.lock,
     );
   }
@@ -222,8 +222,12 @@ class AnalysisController extends _$AnalysisController {
     state = state.copyWith(pgnHeaders: headers);
   }
 
-  void toggleAcplChart() {
-    state = state.copyWith(showAcplChart: !state.showAcplChart);
+  void toggleDisplayMode() {
+    state = state.copyWith(
+      displayMode: state.displayMode == DisplayMode.moves
+          ? DisplayMode.summary
+          : DisplayMode.moves,
+    );
   }
 
   /// Gets the node and maybe the associated branch opening at the given path.
@@ -349,6 +353,11 @@ class AnalysisController extends _$AnalysisController {
   }
 }
 
+enum DisplayMode {
+  moves,
+  summary,
+}
+
 @freezed
 class AnalysisState with _$AnalysisState {
   const AnalysisState._();
@@ -386,7 +395,7 @@ class AnalysisState with _$AnalysisState {
     required bool isLocalEvaluationEnabled,
 
     /// Whether to show the ACPL chart instead of tree view.
-    required bool showAcplChart,
+    required DisplayMode displayMode,
 
     /// The last move played.
     Move? lastMove,

@@ -13,6 +13,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
@@ -148,7 +149,9 @@ class _Body extends ConsumerWidget {
 
     final showAcplChart = ref.watch(
       ctrlProvider.select(
-        (value) => value.acplChartData != null && value.showAcplChart,
+        (value) =>
+            value.acplChartData != null &&
+            value.displayMode == DisplayMode.summary,
       ),
     );
 
@@ -588,6 +591,9 @@ class _BottomBar extends ConsumerWidget {
         ref.watch(ctrlProvider.select((value) => value.canGoBack));
     final canGoNext =
         ref.watch(ctrlProvider.select((value) => value.canGoNext));
+    final displayMode = ref.watch(
+      ctrlProvider.select((value) => value.displayMode),
+    );
 
     return Container(
       padding: Styles.horizontalBodyPadding,
@@ -610,11 +616,14 @@ class _BottomBar extends ConsumerWidget {
             if (options.hasLichessServerAnalysis == true)
               BottomBarButton(
                 label: context.l10n.computerAnalysis,
-                shortLabel: 'Summary',
+                shortLabel:
+                    displayMode == DisplayMode.summary ? 'Moves' : 'Summary',
                 onTap: () {
-                  ref.read(ctrlProvider.notifier).toggleAcplChart();
+                  ref.read(ctrlProvider.notifier).toggleDisplayMode();
                 },
-                icon: Icons.area_chart,
+                icon: displayMode == DisplayMode.summary
+                    ? LichessIcons.flow_cascade
+                    : Icons.area_chart,
               ),
             RepeatButton(
               onLongPress: canGoBack ? () => _moveBackward(ref) : null,
