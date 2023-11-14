@@ -852,6 +852,9 @@ class _PlayerStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final playerTitle = side == Side.white
+        ? pgnHeaders.get('WhiteTitle')
+        : pgnHeaders.get('BlackTitle');
     final playerName = side == Side.white
         ? pgnHeaders.get('White') ?? context.l10n.white
         : pgnHeaders.get('Black') ?? context.l10n.black;
@@ -863,7 +866,7 @@ class _PlayerStats extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            playerName,
+            '${playerTitle != null ? '$playerTitle ' : ''}$playerName',
             style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
@@ -891,7 +894,7 @@ class AcplChart extends ConsumerWidget {
     const mainLineColor = Colors.orange;
     // yes it looks like below/above are inverted in fl_chart
     final belowLineColor = Colors.white.withOpacity(0.7);
-    final aboveLineColor = Colors.grey.shade800.withOpacity(0.9);
+    final aboveLineColor = Colors.grey.shade800.withOpacity(0.8);
 
     final data = ref.watch(
       analysisControllerProvider(options)
