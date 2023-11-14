@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -147,7 +148,7 @@ class _Body extends ConsumerWidget {
     final hasEval =
         ref.watch(ctrlProvider.select((value) => value.hasAvailableEval));
 
-    final showAcplChart = ref.watch(
+    final showAnalysisSummary = ref.watch(
       ctrlProvider.select(
         (value) =>
             value.acplChartData != null &&
@@ -207,8 +208,8 @@ class _Body extends ConsumerWidget {
                                       kTabletBoardTableSidePadding,
                                     ),
                                     semanticContainer: false,
-                                    child: showAcplChart
-                                        ? AcplChart(options)
+                                    child: showAnalysisSummary
+                                        ? ServerAnalysisSummary(options)
                                         : AnalysisTreeView(
                                             options,
                                             Orientation.landscape,
@@ -235,8 +236,8 @@ class _Body extends ConsumerWidget {
                             )
                           else
                             _Board(ctrlProvider, boardSize),
-                          if (showAcplChart)
-                            Expanded(child: AcplChart(options))
+                          if (showAnalysisSummary)
+                            Expanded(child: ServerAnalysisSummary(options))
                           else
                             Expanded(
                               child: AnalysisTreeView(
@@ -613,7 +614,7 @@ class _BottomBar extends ConsumerWidget {
               },
               icon: Icons.menu,
             ),
-            if (options.hasLichessServerAnalysis == true)
+            if (options.serverAnalysis != null)
               BottomBarButton(
                 label: context.l10n.computerAnalysis,
                 shortLabel:
@@ -811,6 +812,71 @@ class _StockfishInfo extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class ServerAnalysisSummary extends ConsumerWidget {
+  const ServerAnalysisSummary(this.options);
+
+  final AnalysisOptions options;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final serverAnalysis = options.serverAnalysis;
+    final pgnHeaders = ref.watch(
+      analysisControllerProvider(options).select((value) => value.pgnHeaders),
+    );
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AcplChart(options),
+          if (serverAnalysis != null) ...[
+            const SizedBox(height: 16.0),
+            _PlayerStats(Side.white, serverAnalysis.white, pgnHeaders),
+            _PlayerStats(Side.black, serverAnalysis.black, pgnHeaders),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _PlayerStats extends StatelessWidget {
+  const _PlayerStats(this.side, this.data, this.pgnHeaders);
+
+  final Side side;
+  final PlayerAnalysis data;
+  final IMap<String, String> pgnHeaders;
+
+  @override
+  Widget build(BuildContext context) {
+    final playerName = side == Side.white
+        ? pgnHeaders.get('White') ?? context.l10n.white
+        : pgnHeaders.get('Black') ?? context.l10n.black;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            playerName,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(context.l10n.nbInaccuracies(data.inaccuracies)),
+          Text(context.l10n.nbMistakes(data.mistakes)),
+          Text(context.l10n.nbBlunders(data.blunders)),
+          if (data.acpl != null)
+            Text('${data.acpl} ${context.l10n.averageCentipawnLoss}'),
+          if (data.accuracy != null)
+            Text('${data.accuracy}% ${context.l10n.accuracy}'),
+        ],
+      ),
     );
   }
 }

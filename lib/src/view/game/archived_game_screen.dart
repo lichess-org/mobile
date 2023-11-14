@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
+import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 
 import 'archived_game_screen_providers.dart';
 
@@ -121,6 +122,17 @@ class _BoardBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // ref.listen(gameCursorProvider(gameData.id), (prev, state) {
+    //   if (prev == const AsyncLoading<(ArchivedGame, int)>() && state.hasValue) {
+    //     showAdaptiveDialog<void>(
+    //       context: context,
+    //       builder: (context) =>
+    //           ArchivedGameResultDialog(game: state.requireValue.$1),
+    //       barrierDismissible: true,
+    //     );
+    //   }
+    // });
+
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
     final black = GamePlayer(
@@ -259,7 +271,7 @@ class _BottomBar extends ConsumerWidget {
                                     setState(() {
                                       isLoading = true;
                                     });
-                                    pgn = await (game.data.hasServerAnalysis
+                                    pgn = await (game.serverAnalysis != null
                                         ? ref.read(
                                             gameAnalysisPgnProvider(
                                               id: gameData.id,
@@ -291,16 +303,14 @@ class _BottomBar extends ConsumerWidget {
                                               orientation: orientation,
                                               id: gameData.id,
                                               opening: gameData.opening,
-                                              hasLichessServerAnalysis:
-                                                  game.data.hasServerAnalysis,
+                                              serverAnalysis:
+                                                  game.serverAnalysis,
                                             ),
                                           ),
                                         );
                                       }
                                     }
                                   }
-
-                                  if (context.mounted && pgn != null) {}
                                 }
                               : null,
                       icon: isLoading
@@ -354,6 +364,7 @@ class _BottomBar extends ConsumerWidget {
   }
 
   Future<void> _showGameMenu(BuildContext context, WidgetRef ref) {
+    final game = ref.read(gameCursorProvider(gameData.id)).valueOrNull?.$1;
     return showAdaptiveActionSheet(
       context: context,
       actions: [
@@ -363,6 +374,17 @@ class _BottomBar extends ConsumerWidget {
             ref.read(isBoardTurnedProvider.notifier).toggle();
           },
         ),
+        if (game != null)
+          BottomSheetAction(
+            label: const Text('Show result'),
+            onPressed: (context) {
+              showAdaptiveDialog<void>(
+                context: context,
+                builder: (context) => ArchivedGameResultDialog(game: game),
+                barrierDismissible: true,
+              );
+            },
+          ),
       ],
     );
   }

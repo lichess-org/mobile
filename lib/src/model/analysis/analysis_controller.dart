@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
@@ -36,7 +37,9 @@ class AnalysisOptions with _$AnalysisOptions {
     required String pgn,
     int? initialMoveCursor,
     LightOpening? opening,
-    bool? hasLichessServerAnalysis,
+
+    /// Optional server analysis to display player stats.
+    ({PlayerAnalysis white, PlayerAnalysis black})? serverAnalysis,
   }) = _AnalysisOptions;
 }
 
@@ -97,7 +100,11 @@ class AnalysisController extends _$AnalysisController {
       cores: prefs.numEngineCores,
     );
 
-    final acplChartData = options.hasLichessServerAnalysis == true
+    // We know ACPL chart data is available in the PGN if the server analysis is
+    // available.
+    // Works only for lichess games.
+    // TODO use another way to detect if the PGN contains ACPL data
+    final acplChartData = options.serverAnalysis != null
         ? _root.mainline
             .map(
               (node) =>
@@ -218,7 +225,7 @@ class AnalysisController extends _$AnalysisController {
   }
 
   void updatePgnHeader(String key, String value) {
-    final headers = state.pgnHeaders?.add(key, value) ?? IMap({key: value});
+    final headers = state.pgnHeaders.add(key, value);
     state = state.copyWith(pgnHeaders: headers);
   }
 
@@ -410,9 +417,7 @@ class AnalysisState with _$AnalysisState {
     IList<Eval>? acplChartData,
 
     /// The PGN headers of the game.
-    ///
-    /// This field is only used with user submitted PGNS.
-    IMap<String, String>? pgnHeaders,
+    required IMap<String, String> pgnHeaders,
 
     /// The PGN comments of the game.
     ///

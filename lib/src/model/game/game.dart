@@ -15,10 +15,47 @@ import 'material_diff.dart';
 
 part 'game.freezed.dart';
 
+/// Common interface for playable and archived games.
 abstract mixin class BaseGame {
   /// Game steps, cannot be empty.
   IList<GameStep> get steps;
+
+  Side? get youAre;
+
   String? get initialFen;
+
+  GameStatus get status;
+  Side? get winner;
+
+  bool? get isThreefoldRepetition;
+
+  Variant get variant;
+  Speed get speed;
+  Perf get perf;
+
+  Player get white;
+  Player get black;
+
+  Position get lastPosition;
+
+  Side? playerSideOf(UserId id) {
+    if (white.id == id) {
+      return Side.white;
+    } else if (black.id == id) {
+      return Side.black;
+    } else {
+      return null;
+    }
+  }
+
+  Player playerOf(Side side) {
+    return side == Side.white ? white : black;
+  }
+
+  ({PlayerAnalysis white, PlayerAnalysis black})? get serverAnalysis =>
+      white.analysis != null && black.analysis != null
+          ? (white: white.analysis!, black: black.analysis!)
+          : null;
 }
 
 /// A mixin that provides methods to access game data at a specific step.
@@ -62,6 +99,7 @@ mixin IndexableSteps on BaseGame {
   Position get initialPosition => steps.first.position;
   int get initialPly => steps.first.ply;
 
+  @override
   Position get lastPosition => steps.last.position;
 
   int get lastPly => steps.last.ply;
@@ -71,7 +109,9 @@ mixin IndexableSteps on BaseGame {
 }
 
 @freezed
-class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
+class PlayableGame
+    with _$PlayableGame, BaseGame, IndexableSteps
+    implements BaseGame {
   const PlayableGame._();
 
   @Assert('steps.isNotEmpty')
@@ -79,9 +119,13 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
     required PlayableGameMeta meta,
     required IList<GameStep> steps,
     String? initialFen,
+    required GameStatus status,
+    Side? winner,
+    required Variant variant,
+    required Speed speed,
+    required Perf perf,
     required Player white,
     required Player black,
-    required GameStatus status,
     required bool moretimeable,
     required bool takebackable,
 
@@ -92,7 +136,6 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps {
     PlayableClockData? clock,
     bool? boosted,
     bool? isThreefoldRepetition,
-    Side? winner,
     ({Duration idle, Duration timeToMove, DateTime movedAt})? expiration,
 
     /// The game id of the next game if a rematch has been accepted.
@@ -243,13 +286,12 @@ class ArchivedGameData with _$ArchivedGameData {
       clock?.increment.inSeconds ?? 0,
     ).display;
   }
-
-  bool get hasServerAnalysis =>
-      white.analysis != null || black.analysis != null;
 }
 
 @freezed
-class ArchivedGame with _$ArchivedGame, BaseGame, IndexableSteps {
+class ArchivedGame
+    with _$ArchivedGame, BaseGame, IndexableSteps
+    implements BaseGame {
   const ArchivedGame._();
 
   @Assert('steps.isNotEmpty')
@@ -257,6 +299,15 @@ class ArchivedGame with _$ArchivedGame, BaseGame, IndexableSteps {
     required ArchivedGameData data,
     required IList<GameStep> steps,
     String? initialFen,
+    required GameStatus status,
+    Side? winner,
+    bool? isThreefoldRepetition,
+    required Variant variant,
+    required Speed speed,
+    required Perf perf,
+    required Player white,
+    required Player black,
+    Side? youAre,
   }) = _ArchivedGame;
 }
 
