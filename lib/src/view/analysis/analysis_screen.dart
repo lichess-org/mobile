@@ -143,10 +143,13 @@ class _Body extends ConsumerWidget {
       ),
     );
 
-    final hasEval = ref.watch(ctrlProvider.select((value) => value.hasEval));
+    final hasEval =
+        ref.watch(ctrlProvider.select((value) => value.hasAvailableEval));
 
     final showAcplChart = ref.watch(
-      ctrlProvider.select((value) => value.showAcplChart),
+      ctrlProvider.select(
+        (value) => value.acplChartData != null && value.showAcplChart,
+      ),
     );
 
     return Column(
@@ -201,10 +204,12 @@ class _Body extends ConsumerWidget {
                                       kTabletBoardTableSidePadding,
                                     ),
                                     semanticContainer: false,
-                                    child: AnalysisTreeView(
-                                      options,
-                                      Orientation.landscape,
-                                    ),
+                                    child: showAcplChart
+                                        ? AcplChart(options)
+                                        : AnalysisTreeView(
+                                            options,
+                                            Orientation.landscape,
+                                          ),
                                   ),
                                 ),
                               ],
@@ -228,11 +233,13 @@ class _Body extends ConsumerWidget {
                           else
                             _Board(ctrlProvider, boardSize),
                           if (showAcplChart)
-                            AcplChart(options)
+                            Expanded(child: AcplChart(options))
                           else
-                            AnalysisTreeView(
-                              options,
-                              Orientation.portrait,
+                            Expanded(
+                              child: AnalysisTreeView(
+                                options,
+                                Orientation.portrait,
+                              ),
                             ),
                         ],
                       );
@@ -387,7 +394,7 @@ class _ColumnTopTable extends ConsumerWidget {
       analysisPreferencesProvider.select((p) => p.showEvaluationGauge),
     );
 
-    return analysisState.hasEval
+    return analysisState.hasAvailableEval
         ? Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -816,6 +823,14 @@ class AcplChart extends ConsumerWidget {
           .select((value) => value.acplChartData),
     );
 
+    final currentNode = ref.watch(
+      analysisControllerProvider(options).select((value) => value.currentNode),
+    );
+
+    final isOnMainline = ref.watch(
+      analysisControllerProvider(options).select((value) => value.isOnMainline),
+    );
+
     if (data == null) {
       return const SizedBox.shrink();
     }
@@ -826,39 +841,51 @@ class AcplChart extends ConsumerWidget {
         )
         .toList(growable: false);
 
-    return AspectRatio(
-      aspectRatio: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: LineChart(
-          LineChartData(
-            lineTouchData: const LineTouchData(enabled: false),
-            minY: -1.0,
-            maxY: 1.0,
-            lineBarsData: [
-              LineChartBarData(
-                spots: spots,
-                isCurved: true,
-                barWidth: 1,
-                color: mainLineColor,
-                aboveBarData: BarAreaData(
-                  show: true,
-                  color: aboveLineColor,
-                  applyCutOffY: true,
+    return Center(
+      child: AspectRatio(
+        aspectRatio: 2.3,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: LineChart(
+            LineChartData(
+              lineTouchData: const LineTouchData(enabled: false),
+              minY: -1.0,
+              maxY: 1.0,
+              lineBarsData: [
+                LineChartBarData(
+                  spots: spots,
+                  isCurved: true,
+                  barWidth: 1,
+                  color: mainLineColor,
+                  aboveBarData: BarAreaData(
+                    show: true,
+                    color: aboveLineColor,
+                    applyCutOffY: true,
+                  ),
+                  belowBarData: BarAreaData(
+                    show: true,
+                    color: belowLineColor,
+                    applyCutOffY: true,
+                  ),
+                  dotData: const FlDotData(
+                    show: false,
+                  ),
                 ),
-                belowBarData: BarAreaData(
-                  show: true,
-                  color: belowLineColor,
-                  applyCutOffY: true,
-                ),
-                dotData: const FlDotData(
-                  show: false,
-                ),
+              ],
+              extraLinesData: ExtraLinesData(
+                verticalLines: [
+                  if (isOnMainline)
+                    VerticalLine(
+                      x: (currentNode.position.ply - 1).toDouble(),
+                      color: Colors.orange,
+                      strokeWidth: 1.0,
+                    ),
+                ],
               ),
-            ],
-            gridData: const FlGridData(show: false),
-            borderData: FlBorderData(show: false),
-            titlesData: const FlTitlesData(show: false),
+              gridData: const FlGridData(show: false),
+              borderData: FlBorderData(show: false),
+              titlesData: const FlTitlesData(show: false),
+            ),
           ),
         ),
       ),

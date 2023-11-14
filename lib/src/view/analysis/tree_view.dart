@@ -137,7 +137,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
       );
     }
 
-    final content = CustomScrollView(
+    return CustomScrollView(
       slivers: [
         if (kOpeningAllowedVariants.contains(widget.options.variant))
           SliverPersistentHeader(
@@ -158,11 +158,6 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
         ),
       ],
     );
-
-    return switch (widget.displayMode) {
-      Orientation.landscape => content,
-      Orientation.portrait => Expanded(child: content)
-    };
   }
 
   List<Widget> _buildTreeWidget(

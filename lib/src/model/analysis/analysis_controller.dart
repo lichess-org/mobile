@@ -121,6 +121,7 @@ class AnalysisController extends _$AnalysisController {
     return AnalysisState(
       id: options.id,
       currentPath: currentPath,
+      isOnMainline: _root.isOnMainline(currentPath),
       root: _root.view,
       currentNode: AnalysisCurrentNode.fromNode(currentNode),
       pgnHeaders: pgnHeaders,
@@ -276,6 +277,7 @@ class AnalysisController extends _$AnalysisController {
 
       state = state.copyWith(
         currentPath: path,
+        isOnMainline: _root.isOnMainline(path),
         currentNode: AnalysisCurrentNode.fromNode(currentNode),
         lastMove: currentNode.sanMove.move,
         currentBranchOpening: opening,
@@ -286,6 +288,7 @@ class AnalysisController extends _$AnalysisController {
     } else {
       state = state.copyWith(
         currentPath: path,
+        isOnMainline: _root.isOnMainline(path),
         currentNode: AnalysisCurrentNode.fromNode(currentNode),
         currentBranchOpening: opening,
         lastMove: null,
@@ -364,6 +367,9 @@ class AnalysisState with _$AnalysisState {
     /// The path to the current node in the analysis view.
     required UciPath currentPath,
 
+    /// Whether the current path is on the mainline.
+    required bool isOnMainline,
+
     /// Analysis ID, useful for the evaluation context.
     required ID id,
 
@@ -408,7 +414,8 @@ class AnalysisState with _$AnalysisState {
   IMap<String, ISet<String>> get validMoves =>
       algebraicLegalMoves(currentNode.position);
 
-  bool get hasEval => isEngineAvailable || currentNode.pgnEval != null;
+  /// Whether an evaluation can be available
+  bool get hasAvailableEval => isEngineAvailable || acplChartData != null;
 
   bool get isEngineAvailable =>
       isLocalEvaluationAllowed &&

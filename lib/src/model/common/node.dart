@@ -59,6 +59,17 @@ abstract class Node {
     }
   }
 
+  bool isOnMainline(UciPath path) {
+    if (path.isEmpty) return true;
+    final pathId = path.head;
+    final child = children.firstOrNull;
+    if (child != null && child.id == pathId) {
+      return child.isOnMainline(path.tail);
+    } else {
+      return false;
+    }
+  }
+
   /// Selects all nodes on that path.
   Iterable<Branch> nodesOn(UciPath path) sync* {
     UciPath currentPath = path;

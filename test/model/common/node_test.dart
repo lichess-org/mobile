@@ -91,6 +91,22 @@ void main() {
       expect(list[1].sanMove, equals(SanMove('e5', Move.fromUci('e7e5')!)));
     });
 
+    test('isOnMainline', () {
+      final root = Root.fromPgnMoves('e4 e5 Nf3');
+      final path = UciPath.fromId(UciCharPair.fromUci('e2e4'));
+      expect(root.isOnMainline(path), isTrue);
+
+      final move = Move.fromUci('b1c3')!;
+      final (newPath, _) = root.addMoveAt(
+        UciPath.fromIds(
+          [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,
+        ),
+        move,
+      );
+
+      expect(root.isOnMainline(newPath!), isFalse);
+    });
+
     test('add child', () {
       final root = Root(
         position: Chess.initial,
