@@ -122,17 +122,6 @@ class _BoardBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // ref.listen(gameCursorProvider(gameData.id), (prev, state) {
-    //   if (prev == const AsyncLoading<(ArchivedGame, int)>() && state.hasValue) {
-    //     showAdaptiveDialog<void>(
-    //       context: context,
-    //       builder: (context) =>
-    //           ArchivedGameResultDialog(game: state.requireValue.$1),
-    //       barrierDismissible: true,
-    //     );
-    //   }
-    // });
-
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
     final black = GamePlayer(
