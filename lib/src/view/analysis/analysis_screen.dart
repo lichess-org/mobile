@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:popover/popover.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -877,7 +878,22 @@ class _PlayerStats extends StatelessWidget {
           if (data.acpl != null)
             Text('${data.acpl} ${context.l10n.averageCentipawnLoss}'),
           if (data.accuracy != null)
-            Text('${data.accuracy}% ${context.l10n.accuracy}'),
+            Row(
+              children: [
+                Text('${data.accuracy}% ${context.l10n.accuracy}'),
+                const SizedBox(width: 8.0),
+                PlatformIconButton(
+                  icon: Icons.info_outline_rounded,
+                  semanticsLabel: 'More info',
+                  padding: EdgeInsets.zero,
+                  onTap: () async {
+                    await launchUrl(
+                      Uri.parse('https://lichess.org/page/accuracy'),
+                    );
+                  },
+                ),
+              ],
+            ),
         ],
       ),
     );
@@ -891,7 +907,9 @@ class AcplChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const mainLineColor = Colors.orange;
+    final mainLineColor = defaultTargetPlatform == TargetPlatform.iOS
+        ? Colors.orange
+        : Theme.of(context).colorScheme.secondary;
     // yes it looks like below/above are inverted in fl_chart
     final belowLineColor = Colors.white.withOpacity(0.7);
     final aboveLineColor = Colors.grey.shade800.withOpacity(0.8);
@@ -955,7 +973,7 @@ class AcplChart extends ConsumerWidget {
                   if (isOnMainline)
                     VerticalLine(
                       x: (currentNode.position.ply - 1).toDouble(),
-                      color: Colors.orange,
+                      color: mainLineColor,
                       strokeWidth: 1.0,
                     ),
                 ],

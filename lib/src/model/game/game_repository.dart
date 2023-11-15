@@ -29,7 +29,7 @@ class GameRepository {
 
   FutureResult<ArchivedGame> getGame(GameId id) {
     return apiClient.get(
-      Uri.parse('$kLichessHost/game/export/$id'),
+      Uri.parse('$kLichessHost/game/export/$id?accuracy=1&clocks=1'),
       headers: {'Accept': 'application/json'},
     ).flatMap((response) {
       return readJsonObjectFromResponse(
