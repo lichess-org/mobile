@@ -22,10 +22,6 @@ class AnalysisPgnTags extends ConsumerWidget {
     final ctrlProvider = analysisControllerProvider(options);
     final pgnHeaders = ref.watch(ctrlProvider.select((c) => c.pgnHeaders));
 
-    if (pgnHeaders == null) {
-      return const Center(child: Text('Nothin to show'));
-    }
-
     return SizedBox(
       width: double.infinity,
       child: DataTable(

@@ -60,16 +60,25 @@ class AnalysisController extends _$AnalysisController {
 
     UciPath path = UciPath.empty;
     Move? lastMove;
-    IMap<String, String>? pgnHeaders =
-        options.id is GameId ? null : _defaultPgnHeaders;
 
-    final game = PgnGame.parsePgn(options.pgn);
-    // only merge headers if the game is not an online lichess game
-    if (options.id is! GameId) {
-      pgnHeaders = pgnHeaders?.addMap(game.headers) ?? IMap(game.headers);
-    } else {
-      pgnHeaders = IMap(game.headers);
-    }
+    final game = PgnGame.parsePgn(
+      options.pgn,
+      initHeaders: () => options.id is GameId
+          ? {}
+          : {
+              'Event': '?',
+              'Site': '?',
+              'Date': '????.??.??',
+              'Round': '?',
+              'White': '?',
+              'Black': '?',
+              'Result': '*',
+              'WhiteElo': '?',
+              'BlackElo': '?',
+            },
+    );
+
+    final pgnHeaders = IMap(game.headers);
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
     _root = Root.fromPgnGame(game, (root, branch, isMainline) {
@@ -486,15 +495,3 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
   PgnEvaluation? get pgnEval =>
       comments?.firstWhereOrNull((c) => c.eval != null)?.eval;
 }
-
-const IMap<String, String> _defaultPgnHeaders = IMapConst({
-  'Event': '?',
-  'Site': '?',
-  'Date': '????.??.??',
-  'Round': '?',
-  'White': '?',
-  'Black': '?',
-  'Result': '*',
-  'WhiteElo': '?',
-  'BlackElo': '?',
-});
