@@ -300,10 +300,12 @@ class _PuzzleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CardButton(
-      icon: const Icon(
+      icon: Icon(
         PuzzleIcons.mix,
         size: 44,
-        color: LichessColors.brag,
+        color: defaultTargetPlatform == TargetPlatform.iOS
+            ? LichessColors.brag
+            : Theme.of(context).colorScheme.primary,
       ),
       title: Text(
         context.l10n.puzzleDesc,

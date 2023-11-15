@@ -9,6 +9,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -72,6 +73,9 @@ class _AppState extends ConsumerState<App> {
       builder: (context, child) {
         return CupertinoTheme(
           data: CupertinoThemeData(
+            primaryColor: brightness == Brightness.light
+                ? LichessColors.primary
+                : const Color(0xFF3692E7),
             brightness: brightness,
             barBackgroundColor: const CupertinoDynamicColor.withBrightness(
               color: Color(0xC8F9F9F9),
