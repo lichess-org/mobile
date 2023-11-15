@@ -180,6 +180,25 @@ abstract class Node {
     return addNodeAt(path, newNode, prepend: prepend);
   }
 
+  /// Deletes the node at the given path.
+  void deleteAt(UciPath path) {
+    parentAt(path).children.removeWhere((child) => child.id == path.last);
+  }
+
+  /// Promotes the node at the given path.
+  void promoteAt(UciPath path, {required bool toMainline}) {
+    final nodes = nodesOn(path).toList();
+    for (int i = nodes.length - 2; i >= 0; i--) {
+      final node = nodes[i + 1];
+      final parent = nodes[i];
+      if (parent.children[0].id != node.id) {
+        parent.children.remove(node);
+        parent.children.insert(0, node);
+        if (!toMainline) break;
+      }
+    }
+  }
+
   /// Gets the node at the given path.
   Node nodeAt(UciPath path) {
     if (path.isEmpty) return this;
@@ -210,6 +229,12 @@ abstract class Node {
     } else {
       return null;
     }
+  }
+
+  /// Gets the parent node at the given path
+  Node parentAt(UciPath path) {
+    final parentPath = path.penultimate;
+    return nodeAt(parentPath);
   }
 }
 
@@ -410,7 +435,7 @@ class Root extends Node {
     }
 
     final pgnGame = PgnGame(
-      headers: headers?.unlock ?? PgnGame.defaultHeaders(),
+      headers: headers?.unlock ?? {},
       moves: pgnNode,
       comments:
           rootComments?.map((c) => c.makeComment()).toList(growable: false) ??

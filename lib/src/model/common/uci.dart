@@ -74,7 +74,7 @@ class UciPath with _$UciPath {
   const factory UciPath(String value) = _UciPath;
 
   factory UciPath.fromId(UciCharPair id) => UciPath(id.toString());
-  factory UciPath.fromIds(IList<UciCharPair> ids) =>
+  factory UciPath.fromIds(Iterable<UciCharPair> ids) =>
       UciPath(ids.map((id) => id.toString()).join(''));
 
   factory UciPath.fromNodeList(Iterable<Branch> nodeList) {

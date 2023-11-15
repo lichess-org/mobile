@@ -329,6 +329,65 @@ void main() {
         ),
       );
     });
+
+    test('deleteAt', () {
+      final root = Root.fromPgnMoves('e4 e5 Nf3');
+      final path = UciPath.fromIds(
+        [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')],
+      );
+      root.deleteAt(path);
+      expect(root.mainline.length, equals(1));
+      expect(root.mainline.last, equals(root.children.first));
+    });
+
+    test('promoteAt', () {
+      const pgn = '1. e4 d5 2. exd5 Qxd5 (2... Nf6 3. c4 (3. Nc3)) 3. Nc3';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      final path = UciPath.fromUciMoves(['e2e4', 'd7d5', 'e4d5', 'g8f6']);
+      expect(root.nodeAt(path), isNotNull);
+      root.promoteAt(path, toMainline: false);
+      expect(
+        root.mainline.map((n) => n.sanMove.san).toList(),
+        equals([
+          'e4',
+          'd5',
+          'exd5',
+          'Nf6',
+          'c4',
+        ]),
+      );
+      expect(
+        root.makePgn(),
+        equals(
+          '1. e4 d5 2. exd5 Nf6 ( 2... Qxd5 3. Nc3 ) 3. c4 ( 3. Nc3 ) *\n',
+        ),
+      );
+    });
+
+    test('promoteAt, to mainline', () {
+      const pgn = '1. e4 d5 2. exd5 Qxd5 (2... Nf6 3. c4 (3. Nc3)) 3. Nc3';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      final path =
+          UciPath.fromUciMoves(['e2e4', 'd7d5', 'e4d5', 'g8f6', 'b1c3']);
+      expect(root.nodeAt(path), isNotNull);
+      root.promoteAt(path, toMainline: true);
+      expect(
+        root.mainline.map((n) => n.sanMove.san).toList(),
+        equals([
+          'e4',
+          'd5',
+          'exd5',
+          'Nf6',
+          'Nc3',
+        ]),
+      );
+      expect(
+        root.makePgn(),
+        equals(
+          '1. e4 d5 2. exd5 Nf6 ( 2... Qxd5 3. Nc3 ) 3. Nc3 ( 3. c4 ) *\n',
+        ),
+      );
+    });
   });
 }
 
