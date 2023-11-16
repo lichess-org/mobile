@@ -2,17 +2,17 @@ import 'package:flutter/widgets.dart';
 import 'package:dartchess/dartchess.dart';
 
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
-import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 String gameStatusL10n(
   BuildContext context,
-  GameState gameState,
+  BaseGame game,
 ) {
-  final winner = gameState.game.winner;
+  final winner = game.winner;
 
-  switch (gameState.game.status) {
+  switch (game.status) {
     case GameStatus.started:
       return context.l10n.playingRightNow;
     case GameStatus.aborted:
@@ -27,23 +27,23 @@ String gameStatusL10n(
       return context.l10n.stalemate;
     case GameStatus.timeout:
       return winner == null
-          ? gameState.game.lastPosition.turn == Side.white
+          ? game.lastPosition.turn == Side.white
               ? '${context.l10n.whiteLeftTheGame} • ${context.l10n.draw}'
               : '${context.l10n.blackLeftTheGame} • ${context.l10n.draw}'
           : winner == Side.black
               ? context.l10n.whiteLeftTheGame
               : context.l10n.blackLeftTheGame;
     case GameStatus.draw:
-      if (gameState.game.lastPosition.isInsufficientMaterial) {
+      if (game.lastPosition.isInsufficientMaterial) {
         return '${context.l10n.insufficientMaterial} • ${context.l10n.draw}';
-      } else if (gameState.game.isThreefoldRepetition == true) {
+      } else if (game.isThreefoldRepetition == true) {
         return '${context.l10n.threefoldRepetition} • ${context.l10n.draw}';
       } else {
         return context.l10n.draw;
       }
     case GameStatus.outoftime:
       return winner == null
-          ? gameState.game.lastPosition.turn == Side.white
+          ? game.lastPosition.turn == Side.white
               ? '${context.l10n.whiteTimeOut} • ${context.l10n.draw}'
               : '${context.l10n.blackTimeOut} • ${context.l10n.draw}'
           : winner == Side.black
@@ -58,7 +58,7 @@ String gameStatusL10n(
     case GameStatus.cheat:
       return context.l10n.cheatDetected;
     case GameStatus.variantEnd:
-      switch (gameState.game.meta.variant) {
+      switch (game.variant) {
         case Variant.kingOfTheHill:
           return context.l10n.kingInTheCenter;
         case Variant.threeCheck:
@@ -67,6 +67,6 @@ String gameStatusL10n(
           return context.l10n.variantEnding;
       }
     default:
-      return gameState.game.status.toString();
+      return game.status.toString();
   }
 }

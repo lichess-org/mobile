@@ -10,11 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:popover/popover.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -65,12 +68,12 @@ class AnalysisScreen extends ConsumerWidget {
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               isScrollControlled: true,
-              builder: (_) => AnalysisSettings(ctrlProvider),
+              builder: (_) => AnalysisSettings(options),
             ),
           ),
         ],
       ),
-      body: _Body(options: options, ctrlProvider: ctrlProvider),
+      body: _Body(options: options),
     );
   }
 
@@ -89,13 +92,13 @@ class AnalysisScreen extends ConsumerWidget {
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
                 isScrollControlled: true,
-                builder: (_) => AnalysisSettings(ctrlProvider),
+                builder: (_) => AnalysisSettings(options),
               ),
             ),
           ],
         ),
       ),
-      child: _Body(options: options, ctrlProvider: ctrlProvider),
+      child: _Body(options: options),
     );
   }
 }
@@ -126,22 +129,31 @@ class _Title extends StatelessWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({
-    required this.options,
-    required this.ctrlProvider,
-  });
+  const _Body({required this.options});
 
   final AnalysisOptions options;
-  final AnalysisControllerProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = analysisControllerProvider(options);
     final showEvaluationGauge = ref.watch(
       analysisPreferencesProvider.select((value) => value.showEvaluationGauge),
     );
+
     final isEngineAvailable = ref.watch(
       ctrlProvider.select(
         (value) => value.isEngineAvailable,
+      ),
+    );
+
+    final hasEval =
+        ref.watch(ctrlProvider.select((value) => value.hasAvailableEval));
+
+    final showAnalysisSummary = ref.watch(
+      ctrlProvider.select(
+        (value) =>
+            value.acplChartData != null &&
+            value.displayMode == DisplayMode.summary,
       ),
     );
 
@@ -176,7 +188,7 @@ class _Body extends ConsumerWidget {
                             child: Row(
                               children: [
                                 _Board(ctrlProvider, boardSize),
-                                if (isEngineAvailable && showEvaluationGauge)
+                                if (hasEval && showEvaluationGauge)
                                   _EngineGaugeVertical(ctrlProvider),
                               ],
                             ),
@@ -197,10 +209,12 @@ class _Body extends ConsumerWidget {
                                       kTabletBoardTableSidePadding,
                                     ),
                                     semanticContainer: false,
-                                    child: AnalysisTreeView(
-                                      options,
-                                      Orientation.landscape,
-                                    ),
+                                    child: showAnalysisSummary
+                                        ? ServerAnalysisSummary(options)
+                                        : AnalysisTreeView(
+                                            options,
+                                            Orientation.landscape,
+                                          ),
                                   ),
                                 ),
                               ],
@@ -223,10 +237,15 @@ class _Body extends ConsumerWidget {
                             )
                           else
                             _Board(ctrlProvider, boardSize),
-                          AnalysisTreeView(
-                            options,
-                            Orientation.portrait,
-                          ),
+                          if (showAnalysisSummary)
+                            Expanded(child: ServerAnalysisSummary(options))
+                          else
+                            Expanded(
+                              child: AnalysisTreeView(
+                                options,
+                                Orientation.portrait,
+                              ),
+                            ),
                         ],
                       );
               },
@@ -380,7 +399,7 @@ class _ColumnTopTable extends ConsumerWidget {
       analysisPreferencesProvider.select((p) => p.showEvaluationGauge),
     );
 
-    return analysisState.isEngineAvailable
+    return analysisState.hasAvailableEval
         ? Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -392,10 +411,18 @@ class _ColumnTopTable extends ConsumerWidget {
                     orientation: analysisState.pov,
                     evaluationContext: analysisState.evaluationContext,
                     position: analysisState.position,
-                    savedEval: analysisState.currentNode.eval,
+                    savedEval: analysisState.currentNode.eval ??
+                        (analysisState.currentNode.pgnEval != null
+                            ? ExternalEval(
+                                eval: analysisState.currentNode.pgnEval!.pawns,
+                                mate: analysisState.currentNode.pgnEval!.mate,
+                                depth: analysisState.currentNode.pgnEval!.depth,
+                              )
+                            : null),
                   ),
                 ),
-              _EngineLines(ctrlProvider, isLandscape: false),
+              if (analysisState.isEngineAvailable)
+                _EngineLines(ctrlProvider, isLandscape: false),
             ],
           )
         : kEmptyWidget;
@@ -566,6 +593,9 @@ class _BottomBar extends ConsumerWidget {
         ref.watch(ctrlProvider.select((value) => value.canGoBack));
     final canGoNext =
         ref.watch(ctrlProvider.select((value) => value.canGoNext));
+    final displayMode = ref.watch(
+      ctrlProvider.select((value) => value.displayMode),
+    );
 
     return Container(
       padding: Styles.horizontalBodyPadding,
@@ -577,14 +607,26 @@ class _BottomBar extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            BottomBarIconButton(
-              semanticsLabel: context.l10n.menu,
-              onPressed: () {
+            BottomBarButton(
+              label: context.l10n.menu,
+              shortLabel: context.l10n.menu,
+              onTap: () {
                 _showAnalysisMenu(context, ref);
               },
-              icon: const Icon(Icons.menu),
+              icon: Icons.menu,
             ),
-            const Spacer(),
+            if (options.serverAnalysis != null)
+              BottomBarButton(
+                label: context.l10n.computerAnalysis,
+                shortLabel:
+                    displayMode == DisplayMode.summary ? 'Moves' : 'Summary',
+                onTap: () {
+                  ref.read(ctrlProvider.notifier).toggleDisplayMode();
+                },
+                icon: displayMode == DisplayMode.summary
+                    ? LichessIcons.flow_cascade
+                    : Icons.area_chart,
+              ),
             RepeatButton(
               onLongPress: canGoBack ? () => _moveBackward(ref) : null,
               child: BottomBarButton(
@@ -596,7 +638,6 @@ class _BottomBar extends ConsumerWidget {
                 showAndroidTooltip: false,
               ),
             ),
-            const SizedBox(width: 36.0),
             RepeatButton(
               onLongPress: canGoNext ? () => _moveForward(ref) : null,
               child: BottomBarButton(
@@ -620,8 +661,6 @@ class _BottomBar extends ConsumerWidget {
       ref.read(analysisControllerProvider(options).notifier).userPrevious();
 
   Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
-    final areCommentsEnabled =
-        ref.read(analysisControllerProvider(options)).shouldShowComments;
     return showAdaptiveActionSheet(
       context: context,
       actions: [
@@ -634,55 +673,45 @@ class _BottomBar extends ConsumerWidget {
           },
         ),
         BottomSheetAction(
-          label: Text(areCommentsEnabled ? 'Hide comments' : 'Show comments'),
-          onPressed: (context) {
-            ref
-                .read(analysisControllerProvider(options).notifier)
-                .toggleComments();
+          label: Text(context.l10n.studyShareAndExport),
+          onPressed: (_) {
+            showAdaptiveBottomSheet<void>(
+              context: context,
+              showDragHandle: true,
+              isScrollControlled: true,
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.9,
+              ),
+              builder: (_) => SafeArea(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    AnalysisPgnTags(
+                      options: options,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: FatButton(
+                        semanticsLabel: 'Share PGN',
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Share.share(
+                            ref
+                                .read(
+                                  analysisControllerProvider(options).notifier,
+                                )
+                                .makeGamePgn(),
+                          );
+                        },
+                        child: const Text('Share PGN'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
           },
         ),
-        if (options.id is! GameId)
-          BottomSheetAction(
-            label: Text(context.l10n.studyShareAndExport),
-            onPressed: (_) {
-              showAdaptiveBottomSheet<void>(
-                context: context,
-                showDragHandle: true,
-                isScrollControlled: true,
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.9,
-                ),
-                builder: (_) => SafeArea(
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      AnalysisPgnTags(
-                        options: options,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(24.0),
-                        child: FatButton(
-                          semanticsLabel: 'Share PGN',
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            Share.share(
-                              ref
-                                  .read(
-                                    analysisControllerProvider(options)
-                                        .notifier,
-                                  )
-                                  .makeGamePgn(),
-                            );
-                          },
-                          child: const Text('Share PGN'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
       ],
     );
   }
@@ -784,6 +813,178 @@ class _StockfishInfo extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class ServerAnalysisSummary extends ConsumerWidget {
+  const ServerAnalysisSummary(this.options);
+
+  final AnalysisOptions options;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final serverAnalysis = options.serverAnalysis;
+    final pgnHeaders = ref.watch(
+      analysisControllerProvider(options).select((value) => value.pgnHeaders),
+    );
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AcplChart(options),
+          if (serverAnalysis != null) ...[
+            const SizedBox(height: 16.0),
+            _PlayerStats(Side.white, serverAnalysis.white, pgnHeaders),
+            _PlayerStats(Side.black, serverAnalysis.black, pgnHeaders),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _PlayerStats extends StatelessWidget {
+  const _PlayerStats(this.side, this.data, this.pgnHeaders);
+
+  final Side side;
+  final PlayerAnalysis data;
+  final IMap<String, String> pgnHeaders;
+
+  @override
+  Widget build(BuildContext context) {
+    final playerTitle = side == Side.white
+        ? pgnHeaders.get('WhiteTitle')
+        : pgnHeaders.get('BlackTitle');
+    final playerName = side == Side.white
+        ? pgnHeaders.get('White') ?? context.l10n.white
+        : pgnHeaders.get('Black') ?? context.l10n.black;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${playerTitle != null ? '$playerTitle ' : ''}$playerName',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(context.l10n.nbInaccuracies(data.inaccuracies)),
+          Text(context.l10n.nbMistakes(data.mistakes)),
+          Text(context.l10n.nbBlunders(data.blunders)),
+          if (data.acpl != null)
+            Text('${data.acpl} ${context.l10n.averageCentipawnLoss}'),
+          if (data.accuracy != null)
+            Row(
+              children: [
+                Text('${data.accuracy}% ${context.l10n.accuracy}'),
+                const SizedBox(width: 8.0),
+                PlatformIconButton(
+                  icon: Icons.info_outline_rounded,
+                  semanticsLabel: 'More info',
+                  padding: EdgeInsets.zero,
+                  onTap: () async {
+                    await launchUrl(
+                      Uri.parse('https://lichess.org/page/accuracy'),
+                    );
+                  },
+                ),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class AcplChart extends ConsumerWidget {
+  const AcplChart(this.options);
+
+  final AnalysisOptions options;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mainLineColor = defaultTargetPlatform == TargetPlatform.iOS
+        ? Colors.orange
+        : Theme.of(context).colorScheme.secondary;
+    // yes it looks like below/above are inverted in fl_chart
+    final belowLineColor = Colors.white.withOpacity(0.7);
+    final aboveLineColor = Colors.grey.shade800.withOpacity(0.8);
+
+    final data = ref.watch(
+      analysisControllerProvider(options)
+          .select((value) => value.acplChartData),
+    );
+
+    final currentNode = ref.watch(
+      analysisControllerProvider(options).select((value) => value.currentNode),
+    );
+
+    final isOnMainline = ref.watch(
+      analysisControllerProvider(options).select((value) => value.isOnMainline),
+    );
+
+    if (data == null) {
+      return const SizedBox.shrink();
+    }
+
+    final spots = data
+        .mapIndexed(
+          (i, e) => FlSpot(i.toDouble(), e.winningChances(Side.white)),
+        )
+        .toList(growable: false);
+
+    return Center(
+      child: AspectRatio(
+        aspectRatio: 2.3,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: LineChart(
+            LineChartData(
+              lineTouchData: const LineTouchData(enabled: false),
+              minY: -1.0,
+              maxY: 1.0,
+              lineBarsData: [
+                LineChartBarData(
+                  spots: spots,
+                  isCurved: true,
+                  barWidth: 1,
+                  color: mainLineColor,
+                  aboveBarData: BarAreaData(
+                    show: true,
+                    color: aboveLineColor,
+                    applyCutOffY: true,
+                  ),
+                  belowBarData: BarAreaData(
+                    show: true,
+                    color: belowLineColor,
+                    applyCutOffY: true,
+                  ),
+                  dotData: const FlDotData(
+                    show: false,
+                  ),
+                ),
+              ],
+              extraLinesData: ExtraLinesData(
+                verticalLines: [
+                  if (isOnMainline)
+                    VerticalLine(
+                      x: (currentNode.position.ply - 1).toDouble(),
+                      color: mainLineColor,
+                      strokeWidth: 1.0,
+                    ),
+                ],
+              ),
+              gridData: const FlGridData(show: false),
+              borderData: FlBorderData(show: false),
+              titlesData: const FlTitlesData(show: false),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

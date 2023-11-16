@@ -27,7 +27,6 @@ import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
@@ -335,10 +334,9 @@ class _HomeBody extends ConsumerWidget {
           final onlineWidgets = [
             const _OngoingGamePreview(),
             const _CreateAGame(),
-            const _DailyPuzzle(),
             const _PerfCards(),
-            const UserActivityWidget(),
             const RecentGames(),
+            const UserActivityWidget(),
             RatingPrefAware(child: LeaderboardWidget()),
           ];
 
@@ -513,76 +511,6 @@ class _CreateAGame extends ConsumerWidget {
           },
         );
       },
-    );
-  }
-}
-
-class _DailyPuzzle extends ConsumerWidget {
-  const _DailyPuzzle();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final puzzle = ref.watch(dailyPuzzleProvider);
-    return puzzle.when(
-      data: (data) {
-        final preview = PuzzlePreview.fromPuzzle(data);
-        return SmallBoardPreview(
-          orientation: preview.orientation.cg,
-          fen: preview.initialFen,
-          lastMove: preview.initialMove.cg,
-          description: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
-                context.l10n.puzzlePuzzleOfTheDay,
-                style: Styles.boardPreviewTitle,
-              ),
-              Text(
-                context.l10n.puzzlePlayedXTimes(data.puzzle.plays),
-              ),
-            ],
-          ),
-          onTap: () {
-            final session = ref.read(authSessionProvider);
-            pushPlatformRoute(
-              context,
-              rootNavigator: true,
-              builder: (context) => PuzzleScreen(
-                angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                initialPuzzleContext: PuzzleContext(
-                  angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                  puzzle: data,
-                  userId: session?.user.id,
-                ),
-              ),
-            ).then((_) {
-              ref.invalidate(
-                nextPuzzleProvider(const PuzzleTheme(PuzzleThemeKey.mix)),
-              );
-            });
-          },
-        );
-      },
-      loading: () => SmallBoardPreview(
-        orientation: Side.white.cg,
-        fen: kEmptyFen,
-        description: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              context.l10n.puzzlePuzzleOfTheDay,
-              style: Styles.boardPreviewTitle,
-            ),
-            const Text(''),
-          ],
-        ),
-      ),
-      error: (error, stack) => Padding(
-        padding: Styles.bodySectionPadding,
-        child: const Text('Could not load the daily puzzle.'),
-      ),
     );
   }
 }

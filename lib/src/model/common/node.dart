@@ -14,10 +14,8 @@ part 'node.freezed.dart';
 /// The tree is implemented with a linked list of nodes, using mutable [List] of
 /// children.
 ///
-/// It cannot be directly used in a riverpod state, because it is mutable, and
-/// riverpod relies on object reference equality to detect changes and emit new
-/// states. Therefore, it must be converted into a [ViewNode], which is immutable,
-/// using the [view] getter.
+/// It should not be directly used in a riverpod state, because it is mutable.
+/// It can be converted into an immutable [ViewNode], using the [view] getter.
 abstract class Node {
   Node({
     required this.position,
@@ -35,7 +33,9 @@ abstract class Node {
 
   final List<Branch> children = [];
 
-  /// Immutable view of this node. Use sparingly, as it is expensive to compute.
+  /// Immutable view of this node.
+  ///
+  /// Use sparingly, it is relatively expensive to compute.
   ViewNode get view;
 
   /// Adds a child to this node.
@@ -50,17 +50,28 @@ abstract class Node {
   }
 
   /// An iterable of all nodes on the mainline.
-  Iterable<ViewBranch> get mainline sync* {
+  Iterable<Branch> get mainline sync* {
     Node current = this;
     while (current.children.isNotEmpty) {
       final child = current.children.first;
-      yield child.view;
+      yield child;
       current = child;
     }
   }
 
+  bool isOnMainline(UciPath path) {
+    if (path.isEmpty) return true;
+    final pathId = path.head;
+    final child = children.firstOrNull;
+    if (child != null && child.id == pathId) {
+      return child.isOnMainline(path.tail);
+    } else {
+      return false;
+    }
+  }
+
   /// Selects all nodes on that path.
-  Iterable<ViewBranch> nodesOn(UciPath path) sync* {
+  Iterable<Branch> nodesOn(UciPath path) sync* {
     UciPath currentPath = path;
 
     Branch? pickChild(Node node) {
@@ -75,7 +86,7 @@ abstract class Node {
     Branch? child;
 
     while ((child = pickChild(current)) != null) {
-      yield child!.view;
+      yield child!;
       current = child;
       currentPath = currentPath.tail;
     }
@@ -169,6 +180,25 @@ abstract class Node {
     return addNodeAt(path, newNode, prepend: prepend);
   }
 
+  /// Deletes the node at the given path.
+  void deleteAt(UciPath path) {
+    parentAt(path).children.removeWhere((child) => child.id == path.last);
+  }
+
+  /// Promotes the node at the given path.
+  void promoteAt(UciPath path, {required bool toMainline}) {
+    final nodes = nodesOn(path).toList();
+    for (int i = nodes.length - 2; i >= 0; i--) {
+      final node = nodes[i + 1];
+      final parent = nodes[i];
+      if (parent.children[0].id != node.id) {
+        parent.children.remove(node);
+        parent.children.insert(0, node);
+        if (!toMainline) break;
+      }
+    }
+  }
+
   /// Gets the node at the given path.
   Node nodeAt(UciPath path) {
     if (path.isEmpty) return this;
@@ -200,6 +230,12 @@ abstract class Node {
       return null;
     }
   }
+
+  /// Gets the parent node at the given path
+  Node parentAt(UciPath path) {
+    final parentPath = path.penultimate;
+    return nodeAt(parentPath);
+  }
 }
 
 /// A branch node of a game tree
@@ -224,10 +260,10 @@ class Branch extends Node {
   final SanMove sanMove;
 
   /// PGN comments before the move.
-  final List<String>? startingComments;
+  final List<PgnComment>? startingComments;
 
   /// PGN comments after the move.
-  final List<String>? comments;
+  final List<PgnComment>? comments;
 
   /// Numeric Annotation Glyphs for the move.
   final List<int>? nags;
@@ -320,8 +356,16 @@ class Root extends Node {
           final branch = Branch(
             sanMove: SanMove(childFrom.data.san, move),
             position: newPos,
-            startingComments: childFrom.data.startingComments,
-            comments: childFrom.data.comments,
+            startingComments: childFrom.data.startingComments
+                ?.map(
+                  (c) => PgnComment.fromPgn(c),
+                )
+                .toList(growable: false),
+            comments: childFrom.data.comments
+                ?.map(
+                  (c) => PgnComment.fromPgn(c),
+                )
+                .toList(growable: false),
             nags: childFrom.data.nags,
           );
 
@@ -338,7 +382,10 @@ class Root extends Node {
   /// Export the game tree to a PGN string.
   ///
   /// Optionally, headers and initial game comments can be provided.
-  String makePgn([IMap<String, String>? headers, IList<String>? rootComments]) {
+  String makePgn([
+    IMap<String, String>? headers,
+    IList<PgnComment>? rootComments,
+  ]) {
     final pgnNode = PgnNode<PgnNodeData>();
     final List<({Node from, PgnNode<PgnNodeData> to})> stack = [
       (from: this, to: pgnNode),
@@ -353,8 +400,32 @@ class Root extends Node {
         final childTo = PgnChildNode(
           PgnNodeData(
             san: childFrom.sanMove.san,
-            startingComments: childFrom.startingComments,
-            comments: childFrom.comments,
+            startingComments: childFrom.startingComments
+                ?.map((c) => c.makeComment())
+                .toList(growable: false),
+            comments: childFrom.comments?.map(
+              (c) {
+                final eval = childFrom.eval;
+                final pgnEval = eval?.cp != null
+                    ? PgnEvaluation.pawns(
+                        pawns: evalFromCp(eval!.cp!),
+                        depth: eval.depth,
+                      )
+                    : eval?.mate != null
+                        ? PgnEvaluation.mate(
+                            mate: eval!.mate,
+                            depth: eval.depth,
+                          )
+                        : c.eval;
+                return PgnComment(
+                  text: c.text,
+                  shapes: c.shapes,
+                  clock: c.clock,
+                  emt: c.emt,
+                  eval: pgnEval,
+                ).makeComment();
+              },
+            ).toList(growable: false),
             nags: childFrom.nags,
           ),
         );
@@ -364,9 +435,11 @@ class Root extends Node {
     }
 
     final pgnGame = PgnGame(
-      headers: headers?.unlock ?? PgnGame.defaultHeaders(),
+      headers: headers?.unlock ?? {},
       moves: pgnNode,
-      comments: rootComments?.unlock ?? [],
+      comments:
+          rootComments?.map((c) => c.makeComment()).toList(growable: false) ??
+              [],
     );
 
     return pgnGame.makePgn();
@@ -381,8 +454,8 @@ abstract class ViewNode {
   IList<ViewBranch> get children;
   ClientEval? get eval;
   Opening? get opening;
-  IList<String>? get startingComments;
-  IList<String>? get comments;
+  IList<PgnComment>? get startingComments;
+  IList<PgnComment>? get comments;
   IList<int>? get nags;
 }
 
@@ -406,10 +479,10 @@ class ViewRoot with _$ViewRoot implements ViewNode {
   Opening? get opening => null;
 
   @override
-  IList<String>? get startingComments => null;
+  IList<PgnComment>? get startingComments => null;
 
   @override
-  IList<String>? get comments => null;
+  IList<PgnComment>? get comments => null;
 
   @override
   IList<int>? get nags => null;
@@ -426,10 +499,18 @@ class ViewBranch with _$ViewBranch implements ViewNode {
     Opening? opening,
     required IList<ViewBranch> children,
     ClientEval? eval,
-    IList<String>? startingComments,
-    IList<String>? comments,
+    IList<PgnComment>? startingComments,
+    IList<PgnComment>? comments,
     IList<int>? nags,
   }) = _ViewBranch;
+
+  /// Has at least one non empty starting comment text.
+  bool get hasStartingTextComment =>
+      startingComments?.any((c) => c.text?.isNotEmpty == true) == true;
+
+  /// Has at least one non empty comment text.
+  bool get hasTextComment =>
+      comments?.any((c) => c.text?.isNotEmpty == true) == true;
 
   @override
   UciCharPair get id => UciCharPair.fromMove(sanMove.move);

@@ -66,6 +66,9 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
   return PlayableGame(
     meta: meta,
     initialFen: initialFen,
+    perf: meta.perf,
+    speed: meta.speed,
+    variant: meta.variant,
     steps: steps.toIList(),
     white: pick('white').letOrThrow(_playerFromUserGamePick),
     black: pick('black').letOrThrow(_playerFromUserGamePick),

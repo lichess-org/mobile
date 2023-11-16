@@ -71,9 +71,9 @@ class Player with _$Player {
 @freezed
 class PlayerAnalysis with _$PlayerAnalysis {
   const factory PlayerAnalysis({
-    required int inaccuracy,
-    required int mistake,
-    required int blunder,
+    required int inaccuracies,
+    required int mistakes,
+    required int blunders,
     int? acpl,
     int? accuracy,
   }) = _PlayerAnalysis;

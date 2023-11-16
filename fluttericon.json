@@ -471,6 +471,12 @@
       "css": "tools",
       "code": 63449,
       "src": "fontawesome5"
+    },
+    {
+      "uid": "898ddc67cb7d9ae53dbd4cce78043e9e",
+      "css": "flow-cascade",
+      "code": 59421,
+      "src": "entypo"
     }
   ]
 }
