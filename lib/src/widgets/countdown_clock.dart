@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/services.dart';
@@ -120,7 +119,6 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
     final clockStyle = brightness == Brightness.dark
         ? ClockStyle.darkThemeStyle
         : ClockStyle.lightThemeStyle;
-    final MediaQueryData mediaQueryData = MediaQuery.of(context);
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
     return RepaintBoundary(
@@ -135,13 +133,8 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
-          child: MediaQuery(
-            data: mediaQueryData.copyWith(
-              textScaleFactor: math.min(
-                mediaQueryData.textScaleFactor,
-                kMaxClockTextScaleFactor,
-              ),
-            ),
+          child: MediaQuery.withClampedTextScaling(
+            maxScaleFactor: kMaxClockTextScaleFactor,
             child: RichText(
               text: TextSpan(
                 text: hours > 0 ? '$hours' : '$mins:$secs',

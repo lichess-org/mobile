@@ -525,8 +525,12 @@ class _ComboState extends ConsumerState<_Combo>
                           alignment: Alignment.center,
                           curve: Curves.easeIn,
                           duration: const Duration(milliseconds: 1000),
-                          width: 28 * MediaQuery.textScaleFactorOf(context),
-                          height: 24 * MediaQuery.textScaleFactorOf(context),
+                          width: 28 *
+                              MediaQuery.textScalerOf(context).scale(14) /
+                              14,
+                          height: 24 *
+                              MediaQuery.textScalerOf(context).scale(14) /
+                              14,
                           decoration: isCurrentLevel
                               ? BoxDecoration(
                                   color: comboShades[index],
