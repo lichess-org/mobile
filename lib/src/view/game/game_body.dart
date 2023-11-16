@@ -238,13 +238,13 @@ class GameBody extends ConsumerWidget {
           ],
         );
 
-        return WillPopScope(
-          onWillPop: gameState.game.playable ? () async => false : null,
+        return PopScope(
+          canPop: !gameState.game.playable,
           child: content,
         );
       },
-      loading: () => WillPopScope(
-        onWillPop: () async => false,
+      loading: () => PopScope(
+        canPop: false,
         child: seek != null
             ? LobbyGameLoadingBoard(seek!, isRematch: isRematch)
             : const StandaloneGameLoadingBoard(),
@@ -253,8 +253,7 @@ class GameBody extends ConsumerWidget {
         debugPrint(
           'SEVERE: [GameBody] could not load game data; $e\n$s',
         );
-        return const WillPopScope(
-          onWillPop: null,
+        return const PopScope(
           child: LoadGameError(),
         );
       },

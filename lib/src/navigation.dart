@@ -113,11 +113,10 @@ class BottomNavScaffold extends ConsumerWidget {
 
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return WillPopScope(
-          onWillPop: () async {
+        return NavigatorPopHandler(
+          onPop: () async {
             final navState = ref.read(currentNavigatorKeyProvider).currentState;
-            final popResult = await navState?.maybePop();
-            return popResult != null && !popResult;
+            return navState?.pop();
           },
           child: Scaffold(
             body: _TabSwitchingView(

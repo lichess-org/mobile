@@ -244,26 +244,31 @@ class _Body extends ConsumerWidget {
       ],
     );
 
-    return WillPopScope(
-      onWillPop: puzzleState.streak!.index == 0 || puzzleState.streak!.finished
-          ? null
-          : () async {
-              final result = await showAdaptiveDialog<bool>(
-                context: context,
-                builder: (context) => YesNoDialog(
-                  title: const Text('Are you sure?'),
-                  content: const Text(
-                    'You will lose your current streak and your score will be saved.',
-                  ),
-                  onYes: () {
-                    ref.read(ctrlProvider.notifier).sendStreakResult();
-                    return Navigator.of(context).pop(true);
-                  },
-                  onNo: () => Navigator.of(context).pop(false),
-                ),
-              );
-              return result ?? false;
+    return PopScope(
+      canPop: puzzleState.streak!.index == 0 || puzzleState.streak!.finished,
+      onPopInvoked: (bool didPop) async {
+        if (didPop) {
+          return;
+        }
+        final NavigatorState navigator = Navigator.of(context);
+        final shouldPop = await showAdaptiveDialog<bool>(
+          context: context,
+          builder: (context) => YesNoDialog(
+            title: const Text('Are you sure?'),
+            content: const Text(
+              'You will lose your current streak and your score will be saved.',
+            ),
+            onYes: () {
+              ref.read(ctrlProvider.notifier).sendStreakResult();
+              return Navigator.of(context).pop(true);
             },
+            onNo: () => Navigator.of(context).pop(false),
+          ),
+        );
+        if (shouldPop ?? false) {
+          navigator.pop();
+        }
+      },
       child: content,
     );
   }
