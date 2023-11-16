@@ -171,6 +171,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               ),
               leading: const SignInWidget(),
               trailing: const Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   _RelationButton(),
                   _SettingsButton(),
@@ -752,10 +753,10 @@ class _RelationButton extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    return PlatformIconButton(
-      icon: Icons.people,
+    return AppBarIconButton(
+      icon: const Icon(Icons.people),
       semanticsLabel: context.l10n.friends,
-      onTap: () {
+      onPressed: () {
         pushPlatformRoute(
           context,
           title: context.l10n.friends,

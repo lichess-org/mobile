@@ -140,6 +140,7 @@ class _SecondaryButtonState extends State<SecondaryButton>
   }
 }
 
+/// Platform agnostic text button to appear in the app bar.
 class AppBarTextButton extends StatelessWidget {
   const AppBarTextButton({
     required this.child,
@@ -165,6 +166,36 @@ class AppBarTextButton extends StatelessWidget {
   }
 }
 
+/// Platform agnostic icon button to appear in the app bar.
+class AppBarIconButton extends StatelessWidget {
+  const AppBarIconButton({
+    required this.icon,
+    required this.onPressed,
+    required this.semanticsLabel,
+    super.key,
+  });
+
+  final Widget icon;
+  final VoidCallback? onPressed;
+  final String semanticsLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoIconButton(
+            padding: EdgeInsets.zero,
+            semanticsLabel: semanticsLabel,
+            onPressed: onPressed,
+            icon: icon,
+          )
+        : IconButton(
+            tooltip: semanticsLabel,
+            icon: icon,
+            onPressed: onPressed,
+          );
+  }
+}
+
 /// A cogs icon button in the app bar
 class SettingsButton extends StatelessWidget {
   const SettingsButton({
@@ -176,18 +207,11 @@ class SettingsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return defaultTargetPlatform == TargetPlatform.iOS
-        ? CupertinoIconButton(
-            padding: EdgeInsets.zero,
-            semanticsLabel: context.l10n.settingsSettings,
-            onPressed: onPressed,
-            icon: const Icon(Icons.settings),
-          )
-        : IconButton(
-            tooltip: context.l10n.settingsSettings,
-            icon: const Icon(Icons.settings),
-            onPressed: onPressed,
-          );
+    return AppBarIconButton(
+      onPressed: onPressed,
+      semanticsLabel: context.l10n.settingsSettings,
+      icon: const Icon(Icons.settings),
+    );
   }
 }
 
