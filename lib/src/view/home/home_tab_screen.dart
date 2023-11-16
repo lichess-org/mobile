@@ -252,20 +252,23 @@ class _HomeScaffold extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 15.0)
                   .add(Styles.horizontalBodyPadding),
-              child: CupertinoButton.filled(
-                child: DefaultTextStyle.merge(
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
+              child: MediaQuery.withClampedTextScaling(
+                maxScaleFactor: 1.1,
+                child: CupertinoButton.filled(
+                  child: DefaultTextStyle.merge(
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    child: Text(context.l10n.play),
                   ),
-                  child: Text(context.l10n.play),
+                  onPressed: () {
+                    pushPlatformRoute(
+                      context,
+                      title: context.l10n.play,
+                      builder: (_) => const PlayScreen(),
+                    );
+                  },
                 ),
-                onPressed: () {
-                  pushPlatformRoute(
-                    context,
-                    title: context.l10n.play,
-                    builder: (_) => const PlayScreen(),
-                  );
-                },
               ),
             ),
           ),
