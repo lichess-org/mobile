@@ -160,6 +160,7 @@ class _TimeControlButton extends ConsumerWidget {
     showAdaptiveBottomSheet<void>(
       context: context,
       isScrollControlled: true,
+      showDragHandle: true,
       constraints: BoxConstraints(
         maxHeight: screenHeight - (screenHeight / 10),
       ),

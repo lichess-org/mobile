@@ -27,8 +27,8 @@ class TimeControlModal extends ConsumerWidget {
     return SafeArea(
       child: Padding(
         padding: Styles.bodyPadding,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: ListView(
+          shrinkWrap: true,
           children: [
             Text(
               context.l10n.timeControl,
