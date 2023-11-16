@@ -97,6 +97,10 @@ class _Body extends ConsumerWidget {
     return followingAndOnlines.when(
       data: (data) {
         IList<User> following = data.$1;
+        // following = following.addAll([
+        //   following.first.copyWith(username: 'toto'),
+        //   following.first.copyWith(username: 'tata')
+        // ]);
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             if (following.isEmpty) {
@@ -105,93 +109,84 @@ class _Body extends ConsumerWidget {
               );
             }
             return SafeArea(
-              child: ListView(
-                children: [
-                  ListSection(
-                    hasLeading: true,
-                    children: [
-                      for (final user in following)
-                        Slidable(
-                          endActionPane: ActionPane(
-                            motion: const ScrollMotion(),
-                            extentRatio: 0.3,
-                            children: [
-                              SlidableAction(
-                                onPressed: (BuildContext context) {
-                                  showAdaptiveDialog<void>(
-                                    context: context,
-                                    builder: (context) => _UnfollowDialog(
-                                      title: Text(
-                                        'Are you sure you want to unfollow ${user.username}?',
-                                      ),
-                                      onAccept: () async {
-                                        final oldState = following;
-                                        setState(() {
-                                          following = following.removeWhere(
-                                            (v) => v.id == user.id,
-                                          );
-                                        });
+              child: ListView.separated(
+                itemCount: following.length,
+                separatorBuilder: (context, index) =>
+                    const PlatformDivider(height: 1, cupertinoHasLeading: true),
+                itemBuilder: (context, index) {
+                  final user = following[index];
+                  return Slidable(
+                    endActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      extentRatio: 0.3,
+                      children: [
+                        SlidableAction(
+                          onPressed: (BuildContext context) async {
+                            final oldState = following;
+                            setState(() {
+                              following = following.removeWhere(
+                                (v) => v.id == user.id,
+                              );
+                            });
 
-                                        final res = await ref
-                                            .read(relationRepositoryProvider)
-                                            .unfollow(user.username);
-                                        if (res.isError) {
-                                          setState(() {
-                                            following = oldState;
-                                          });
-                                        }
-                                      },
-                                    ),
-                                  );
-                                },
-                                backgroundColor: LichessColors.red,
-                                foregroundColor: Colors.white,
-                                icon: Icons.person_remove,
-                                label: 'Unfollow',
-                              ),
-                            ],
-                          ),
-                          child: PlatformListTile(
-                            onTap: () => {
-                              pushPlatformRoute(
-                                context,
-                                builder: (context) =>
-                                    UserScreen(user: user.lightUser),
-                              ),
-                            },
-                            leading: _OnlineOrPatron(
-                              patron: user.isPatron,
-                              online: _isOnline(user, data.$2),
-                            ),
-                            title: Padding(
-                              padding: const EdgeInsets.only(right: 5.0),
-                              child: Row(
-                                children: [
-                                  if (user.title != null) ...[
-                                    Text(
-                                      user.title!,
-                                      style: const TextStyle(
-                                        color: LichessColors.brag,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5),
-                                  ],
-                                  Flexible(
-                                    child: Text(
-                                      user.username,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            subtitle: _UserRating(user: user),
-                          ),
+                            final res = await ref
+                                .read(relationRepositoryProvider)
+                                .unfollow(user.username);
+                            if (res.isError) {
+                              setState(() {
+                                following = oldState;
+                              });
+                            }
+                          },
+                          backgroundColor: LichessColors.red,
+                          foregroundColor: Colors.white,
+                          icon: Icons.person_remove,
+                          label: 'Unfollow',
                         ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                    child: PlatformListTile(
+                      onTap: () => {
+                        pushPlatformRoute(
+                          context,
+                          builder: (context) =>
+                              UserScreen(user: user.lightUser),
+                        ),
+                      },
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16,
+                      ),
+                      leading: _OnlineOrPatron(
+                        patron: user.isPatron,
+                        online: _isOnline(user, data.$2),
+                      ),
+                      title: Padding(
+                        padding: const EdgeInsets.only(right: 5.0),
+                        child: Row(
+                          children: [
+                            if (user.title != null) ...[
+                              Text(
+                                user.title!,
+                                style: const TextStyle(
+                                  color: LichessColors.brag,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 5),
+                            ],
+                            Flexible(
+                              child: Text(
+                                user.username,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      subtitle: _UserRating(user: user),
+                    ),
+                  );
+                },
               ),
             );
           },

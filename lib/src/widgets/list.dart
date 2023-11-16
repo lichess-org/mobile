@@ -201,6 +201,52 @@ class ListSection extends StatelessWidget {
   }
 }
 
+/// Platform agnostic divider widget.
+///
+/// Useful to show a divider between [PlatformListTile] widgets when using the
+/// [ListView.separated] constructor.
+class PlatformDivider extends StatelessWidget {
+  const PlatformDivider({
+    this.height,
+    this.thickness,
+    this.indent,
+    this.endIndent,
+    this.cupertinoHasLeading = false,
+  });
+
+  final double? height;
+  final double? thickness;
+  final double? indent;
+  final double? endIndent;
+
+  /// Set to true if the cupertino tiles have a leading widget, to adapt the
+  /// divider margin.
+  final bool cupertinoHasLeading;
+
+  @override
+  Widget build(BuildContext context) {
+    return defaultTargetPlatform == TargetPlatform.android
+        ? Divider(
+            height: height,
+            thickness: thickness,
+            indent: indent,
+            endIndent: endIndent,
+          )
+        : Divider(
+            height: height,
+            thickness: thickness,
+            // see:
+            // https://github.com/flutter/flutter/blob/bff6b93683de8be01d53a39b6183f230518541ac/packages/flutter/lib/src/cupertino/list_section.dart#L53
+            indent: indent ?? (cupertinoHasLeading ? 44.0 : 14.0),
+            endIndent: endIndent,
+            color: CupertinoDynamicColor.resolve(
+              CupertinoColors.separator,
+              context,
+            ),
+          );
+  }
+}
+
 /// Platform agnostic list tile widget.
 ///
 /// Will use [ListTile] on android and [CupertinoListTile] on iOS.
@@ -215,6 +261,7 @@ class PlatformListTile extends StatelessWidget {
     this.onTap,
     this.selected = false,
     this.isThreeLine = false,
+    this.padding,
     this.visualDensity,
     this.harmonizeCupertinoTitleStyle = false,
   });
@@ -223,6 +270,8 @@ class PlatformListTile extends StatelessWidget {
   final Widget title;
   final Widget? subtitle;
   final Widget? trailing;
+
+  final EdgeInsetsGeometry? padding;
 
   /// only on iOS
   final Widget? additionalInfo;
@@ -265,6 +314,7 @@ class PlatformListTile extends StatelessWidget {
           onTap: onTap,
           selected: selected,
           isThreeLine: isThreeLine,
+          contentPadding: padding,
         );
       case TargetPlatform.iOS:
         return IconTheme(
@@ -286,6 +336,7 @@ class PlatformListTile extends StatelessWidget {
             subtitle: subtitle,
             trailing: trailing,
             additionalInfo: additionalInfo,
+            padding: padding,
             onTap: onTap,
           ),
         );
