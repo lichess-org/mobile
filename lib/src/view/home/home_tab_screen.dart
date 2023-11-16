@@ -15,9 +15,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -39,6 +39,7 @@ import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/view/user/perf_cards.dart';
 import 'package:lichess_mobile/src/view/user/user_activity.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
+import 'package:lichess_mobile/src/view/relation/relation_screen.dart';
 import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
@@ -131,6 +132,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         ),
         actions: const [
           SignInWidget(),
+          _RelationButton(),
           _SettingsButton(),
         ],
       ),
@@ -168,7 +170,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 error: (error, stack) => const _LichessTitle(),
               ),
               leading: const SignInWidget(),
-              trailing: const _SettingsButton(),
+              trailing: const Row(
+                children: [
+                  _RelationButton(),
+                  _SettingsButton(),
+                ],
+              ),
             ),
             CupertinoSliverRefreshControl(
               onRefresh: () => _refreshData(),
@@ -730,6 +737,32 @@ class _PerfCards extends ConsumerWidget {
         ),
       ),
       error: (error, stack) => const SizedBox.shrink(),
+    );
+  }
+}
+
+class _RelationButton extends ConsumerWidget {
+  const _RelationButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+
+    if (session == null) {
+      return const SizedBox.shrink();
+    }
+
+    return PlatformIconButton(
+      icon: Icons.people,
+      semanticsLabel: context.l10n.friends,
+      onTap: () {
+        pushPlatformRoute(
+          context,
+          title: context.l10n.friends,
+          builder: (_) => const RelationScreen(),
+          fullscreenDialog: true,
+        );
+      },
     );
   }
 }
