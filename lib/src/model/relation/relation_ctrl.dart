@@ -26,6 +26,8 @@ class RelationCtrl extends _$RelationCtrl {
           ),
         );
 
+    _socketSubscription = stream.listen(_handleSocketTopic);
+
     readyStream.forEach((_) {
       _socket.send('following_onlines', null);
     });
