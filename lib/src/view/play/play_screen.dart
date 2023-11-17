@@ -35,7 +35,7 @@ class PlayScreen extends StatelessWidget {
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.play),
+        title: Text(context.l10n.createAGame),
       ),
       body: const _Body(),
     );
@@ -160,6 +160,7 @@ class _TimeControlButton extends ConsumerWidget {
     showAdaptiveBottomSheet<void>(
       context: context,
       isScrollControlled: true,
+      showDragHandle: true,
       constraints: BoxConstraints(
         maxHeight: screenHeight - (screenHeight / 10),
       ),

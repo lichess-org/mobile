@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -105,20 +104,14 @@ class _ClockState extends ConsumerState<StormClockWidget>
     final clockStyle = brightness == Brightness.dark
         ? _ClockStyle.darkThemeStyle
         : _ClockStyle.lightThemeStyle;
-    final MediaQueryData mediaQueryData = MediaQuery.of(context);
 
     final minutes = time.inMinutes.remainder(60).toString().padLeft(2, '0');
     final seconds = time.inSeconds.remainder(60).toString().padLeft(2, '0');
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
-      child: MediaQuery(
-        data: mediaQueryData.copyWith(
-          textScaleFactor: math.min(
-            mediaQueryData.textScaleFactor,
-            kMaxClockTextScaleFactor,
-          ),
-        ),
+      child: MediaQuery.withClampedTextScaling(
+        maxScaleFactor: kMaxClockTextScaleFactor,
         child: Stack(
           children: [
             if (currentBonusSeconds != null)

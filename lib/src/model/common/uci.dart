@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
@@ -74,10 +73,10 @@ class UciPath with _$UciPath {
   const factory UciPath(String value) = _UciPath;
 
   factory UciPath.fromId(UciCharPair id) => UciPath(id.toString());
-  factory UciPath.fromIds(IList<UciCharPair> ids) =>
+  factory UciPath.fromIds(Iterable<UciCharPair> ids) =>
       UciPath(ids.map((id) => id.toString()).join(''));
 
-  factory UciPath.fromNodeList(Iterable<ViewNode> nodeList) {
+  factory UciPath.fromNodeList(Iterable<Branch> nodeList) {
     final path = StringBuffer();
     for (final node in nodeList) {
       path.write(node.id);

@@ -15,8 +15,17 @@ import 'firebase_options.dart';
 import 'src/constants.dart';
 import 'src/app.dart';
 
+// to see http requests and websocket connections in terminal since we're not
+// always using the browser devtools
+const _loggersToShowInTerminal = {
+  'AuthClient',
+  'LobbyAuthClient',
+  'AuthSocket',
+};
+
 void main() async {
   if (kDebugMode) {
+    Logger.root.level = Level.FINE;
     Logger.root.onRecord.listen((record) {
       developer.log(
         record.message,
@@ -27,14 +36,14 @@ void main() async {
         stackTrace: record.stackTrace,
       );
 
-      if (record.loggerName == 'AuthClient' ||
-          record.loggerName == 'LobbyAuthClient' ||
-          record.loggerName == 'AuthSocket') {
-        debugPrint(record.message);
+      if (_loggersToShowInTerminal.contains(record.loggerName) &&
+          record.level >= Level.INFO) {
+        debugPrint('[${record.loggerName}] ${record.message}');
       }
 
-      if (record.level >= Level.SEVERE) {
-        debugPrint(record.message);
+      if (!_loggersToShowInTerminal.contains(record.loggerName) &&
+          record.level >= Level.SEVERE) {
+        debugPrint('[${record.loggerName}] ${record.message}');
       }
     });
   }

@@ -178,25 +178,30 @@ class _Body extends ConsumerWidget {
       ],
     );
 
-    return WillPopScope(
-      onWillPop: puzzleState.clock.isActive
-          ? () async {
-              final result = await showAdaptiveDialog<bool>(
-                context: context,
-                builder: (context) => YesNoDialog(
-                  title: const Text('Are you sure?'),
-                  content: const Text(
-                    'Do you want to end this run?',
-                  ),
-                  onYes: () {
-                    return Navigator.of(context).pop(true);
-                  },
-                  onNo: () => Navigator.of(context).pop(false),
-                ),
-              );
-              return result ?? false;
-            }
-          : null,
+    return PopScope(
+      canPop: !puzzleState.clock.isActive,
+      onPopInvoked: (bool didPop) async {
+        if (didPop) {
+          return;
+        }
+        final NavigatorState navigator = Navigator.of(context);
+        final shouldPop = await showAdaptiveDialog<bool>(
+          context: context,
+          builder: (context) => YesNoDialog(
+            title: const Text('Are you sure?'),
+            content: const Text(
+              'Do you want to end this run?',
+            ),
+            onYes: () {
+              return Navigator.of(context).pop(true);
+            },
+            onNo: () => Navigator.of(context).pop(false),
+          ),
+        );
+        if (shouldPop ?? false) {
+          navigator.pop();
+        }
+      },
       child: content,
     );
   }
@@ -520,8 +525,12 @@ class _ComboState extends ConsumerState<_Combo>
                           alignment: Alignment.center,
                           curve: Curves.easeIn,
                           duration: const Duration(milliseconds: 1000),
-                          width: 28 * MediaQuery.textScaleFactorOf(context),
-                          height: 24 * MediaQuery.textScaleFactorOf(context),
+                          width: 28 *
+                              MediaQuery.textScalerOf(context).scale(14) /
+                              14,
+                          height: 24 *
+                              MediaQuery.textScalerOf(context).scale(14) /
+                              14,
                           decoration: isCurrentLevel
                               ? BoxDecoration(
                                   color: comboShades[index],

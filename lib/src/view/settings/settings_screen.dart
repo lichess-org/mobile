@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -27,7 +26,7 @@ import './sound_settings_screen.dart';
 import './piece_set_screen.dart';
 import './board_theme_screen.dart';
 import './board_settings_screen.dart';
-import './profile_screen.dart';
+import './settings_profile_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -194,7 +193,7 @@ class _Body extends ConsumerWidget {
                     pushPlatformRoute(
                       context,
                       title: context.l10n.profile,
-                      builder: (context) => const ProfileScreen(),
+                      builder: (context) => const SettingsProfileScreen(),
                     );
                   },
                 ),
@@ -217,7 +216,7 @@ class _Body extends ConsumerWidget {
                     leading: const Icon(Icons.exit_to_app),
                     title: Text(context.l10n.logOut),
                     onTap: () {
-                      _showExitConfirmDialog(context, ref);
+                      _showSignOutConfirmDialog(context, ref);
                     },
                   ),
                 ],
@@ -234,7 +233,7 @@ class _Body extends ConsumerWidget {
     );
   }
 
-  Future<void> _showExitConfirmDialog(BuildContext context, WidgetRef ref) {
+  Future<void> _showSignOutConfirmDialog(BuildContext context, WidgetRef ref) {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       return showCupertinoActionSheet(
         context: context,
@@ -244,9 +243,6 @@ class _Body extends ConsumerWidget {
             isDestructiveAction: true,
             onPressed: (context) async {
               await ref.read(authControllerProvider.notifier).signOut();
-
-              ref.read(currentBottomTabProvider.notifier).state =
-                  BottomTab.home;
             },
           ),
         ],
@@ -275,9 +271,6 @@ class _Body extends ConsumerWidget {
                 onPressed: () async {
                   Navigator.of(context).pop();
                   await ref.read(authControllerProvider.notifier).signOut();
-
-                  ref.read(currentBottomTabProvider.notifier).state =
-                      BottomTab.home;
                 },
               ),
             ],

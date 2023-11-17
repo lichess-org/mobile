@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
@@ -28,7 +29,7 @@ class GameRepository {
 
   FutureResult<ArchivedGame> getGame(GameId id) {
     return apiClient.get(
-      Uri.parse('$kLichessHost/game/export/$id'),
+      Uri.parse('$kLichessHost/game/export/$id?accuracy=1&clocks=1'),
       headers: {'Accept': 'application/json'},
     ).flatMap((response) {
       return readJsonObjectFromResponse(
@@ -37,6 +38,13 @@ class GameRepository {
         logger: _log,
       );
     });
+  }
+
+  FutureResult<String> getGameAnalysisPgn(GameId id) {
+    return apiClient.get(
+      Uri.parse('$kLichessHost/game/export/$id?literate=1&clocks=0'),
+      headers: {'Accept': 'application/x-chess-pgn'},
+    ).map((r) => utf8.decode(r.bodyBytes));
   }
 
   // TODO parameters
@@ -89,7 +97,15 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
 
   return ArchivedGame(
     data: data,
+    perf: data.perf,
+    speed: data.speed,
+    status: data.status,
+    winner: data.winner,
+    variant: data.variant,
     initialFen: initialFen,
+    isThreefoldRepetition: pick('threefold').asBoolOrNull(),
+    white: data.white,
+    black: data.black,
     steps: pick('moves').letOrThrow((it) {
       final moves = it.asStringOrThrow().split(' ');
       // assume lichess always send initialFen with fromPosition and chess960
@@ -174,28 +190,10 @@ Player _playerFromUserGamePick(RequiredPick pick) {
 
 PlayerAnalysis _playerAnalysisFromPick(RequiredPick pick) {
   return PlayerAnalysis(
-    inaccuracy: pick('inaccuracy').asIntOrThrow(),
-    mistake: pick('mistake').asIntOrThrow(),
-    blunder: pick('blunder').asIntOrThrow(),
+    inaccuracies: pick('inaccuracy').asIntOrThrow(),
+    mistakes: pick('mistake').asIntOrThrow(),
+    blunders: pick('blunder').asIntOrThrow(),
     acpl: pick('acpl').asIntOrNull(),
     accuracy: pick('accuracy').asIntOrNull(),
   );
 }
-
-// Will be needed later
-
-// MoveAnalysis _moveAnalysisFromPick(RequiredPick pick) {
-//   return MoveAnalysis(
-//     eval: pick('eval').asIntOrNull(),
-//     best: pick('best').asStringOrNull(),
-//     variation: pick('variant').asStringOrNull(),
-//     judgment: pick('judgment').letOrNull(_analysisJudgmentFromPick),
-//   );
-// }
-
-// AnalysisJudgment _analysisJudgmentFromPick(RequiredPick pick) {
-//   return AnalysisJudgment(
-//     name: pick('name').asStringOrThrow(),
-//     comment: pick('comment').asStringOrThrow(),
-//   );
-// }

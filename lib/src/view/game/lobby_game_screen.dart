@@ -114,16 +114,15 @@ class _LoadLobbyGame extends ConsumerWidget {
           isRematch: isRematch,
         );
       },
-      loading: () => WillPopScope(
-        onWillPop: () async => false,
+      loading: () => PopScope(
+        canPop: false,
         child: LobbyGameLoadingBoard(seek),
       ),
       error: (e, s) {
         debugPrint(
           'SEVERE: [GameBody] could not load game data; $e\n$s',
         );
-        return const WillPopScope(
-          onWillPop: null,
+        return const PopScope(
           child: LoadGameError(),
         );
       },

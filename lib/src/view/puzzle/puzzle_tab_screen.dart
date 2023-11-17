@@ -2,7 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dartchess/dartchess.dart';
 
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -11,11 +13,15 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -107,6 +113,13 @@ class _Body extends ConsumerWidget {
     final connectivity = ref.watch(connectivityChangesProvider);
 
     final content = [
+      connectivity.when(
+        data: (data) => data.isOnline
+            ? const _DailyPuzzle()
+            : const _OfflinePuzzlePreview(),
+        loading: () => const SizedBox.shrink(),
+        error: (_, __) => const SizedBox.shrink(),
+      ),
       Padding(
         padding: Styles.bodySectionPadding,
         child: nextPuzzle.when(
@@ -370,5 +383,127 @@ String _daysL10n(BuildContext context, Days day) {
       return context.l10n.nbDays(60);
     case Days.threemonths:
       return context.l10n.nbDays(90);
+  }
+}
+
+class _DailyPuzzle extends ConsumerWidget {
+  const _DailyPuzzle();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final puzzle = ref.watch(dailyPuzzleProvider);
+    return puzzle.when(
+      data: (data) {
+        final preview = PuzzlePreview.fromPuzzle(data);
+        return SmallBoardPreview(
+          orientation: preview.orientation.cg,
+          fen: preview.initialFen,
+          lastMove: preview.initialMove.cg,
+          description: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                context.l10n.puzzlePuzzleOfTheDay,
+                style: Styles.boardPreviewTitle,
+              ),
+              Text(
+                context.l10n.puzzlePlayedXTimes(data.puzzle.plays),
+              ),
+            ],
+          ),
+          onTap: () {
+            final session = ref.read(authSessionProvider);
+            pushPlatformRoute(
+              context,
+              rootNavigator: true,
+              builder: (context) => PuzzleScreen(
+                angle: const PuzzleTheme(PuzzleThemeKey.mix),
+                initialPuzzleContext: PuzzleContext(
+                  angle: const PuzzleTheme(PuzzleThemeKey.mix),
+                  puzzle: data,
+                  userId: session?.user.id,
+                ),
+              ),
+            ).then((_) {
+              ref.invalidate(
+                nextPuzzleProvider(const PuzzleTheme(PuzzleThemeKey.mix)),
+              );
+            });
+          },
+        );
+      },
+      loading: () => SmallBoardPreview(
+        orientation: Side.white.cg,
+        fen: kEmptyFen,
+        description: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              context.l10n.puzzlePuzzleOfTheDay,
+              style: Styles.boardPreviewTitle,
+            ),
+            const Text(''),
+          ],
+        ),
+      ),
+      error: (error, stack) => Padding(
+        padding: Styles.bodySectionPadding,
+        child: const Text('Could not load the daily puzzle.'),
+      ),
+    );
+  }
+}
+
+class _OfflinePuzzlePreview extends ConsumerWidget {
+  const _OfflinePuzzlePreview();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final puzzle =
+        ref.watch(nextPuzzleProvider(const PuzzleTheme(PuzzleThemeKey.mix)));
+    return puzzle.maybeWhen(
+      data: (data) {
+        final preview =
+            data != null ? PuzzlePreview.fromPuzzle(data.puzzle) : null;
+        return SmallBoardPreview(
+          orientation: preview?.orientation.cg ?? Side.white.cg,
+          fen: preview?.initialFen ?? kEmptyFen,
+          lastMove: preview?.initialMove.cg,
+          description: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                context.l10n.puzzleDesc,
+                style: Styles.boardPreviewTitle,
+              ),
+              Text(
+                context.l10n.puzzlePlayedXTimes(data?.puzzle.puzzle.plays ?? 0),
+              ),
+            ],
+          ),
+          onTap: data != null
+              ? () {
+                  pushPlatformRoute(
+                    context,
+                    rootNavigator: true,
+                    builder: (context) => PuzzleScreen(
+                      angle: const PuzzleTheme(PuzzleThemeKey.mix),
+                      initialPuzzleContext: data,
+                    ),
+                  ).then((_) {
+                    ref.invalidate(
+                      nextPuzzleProvider(const PuzzleTheme(PuzzleThemeKey.mix)),
+                    );
+                  });
+                }
+              : null,
+        );
+      },
+      orElse: () => const SizedBox.shrink(),
+    );
   }
 }

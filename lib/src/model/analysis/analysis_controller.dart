@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -11,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
@@ -35,6 +37,9 @@ class AnalysisOptions with _$AnalysisOptions {
     required String pgn,
     int? initialMoveCursor,
     LightOpening? opening,
+
+    /// Optional server analysis to display player stats.
+    ({PlayerAnalysis white, PlayerAnalysis black})? serverAnalysis,
   }) = _AnalysisOptions;
 }
 
@@ -55,16 +60,26 @@ class AnalysisController extends _$AnalysisController {
 
     UciPath path = UciPath.empty;
     Move? lastMove;
-    IMap<String, String>? pgnHeaders =
-        options.id is GameId ? null : _defaultPgnHeaders;
-    IList<String>? rootComments;
 
-    final game = PgnGame.parsePgn(options.pgn);
-    // only include headers if the game is not an online lichess game
-    if (options.id is! GameId) {
-      pgnHeaders = pgnHeaders?.addMap(game.headers) ?? IMap(game.headers);
-      rootComments = IList(game.comments);
-    }
+    final game = PgnGame.parsePgn(
+      options.pgn,
+      initHeaders: () => options.id is GameId
+          ? {}
+          : {
+              'Event': '?',
+              'Site': '?',
+              'Date': '????.??.??',
+              'Round': '?',
+              'White': '?',
+              'Black': '?',
+              'Result': '*',
+              'WhiteElo': '?',
+              'BlackElo': '?',
+            },
+    );
+
+    final pgnHeaders = IMap(game.headers);
+    final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
     _root = Root.fromPgnGame(game, (root, branch, isMainline) {
       if (isMainline &&
@@ -94,6 +109,27 @@ class AnalysisController extends _$AnalysisController {
       cores: prefs.numEngineCores,
     );
 
+    // We know ACPL chart data is available in the PGN if the server analysis is
+    // available.
+    // Works only for lichess games.
+    // TODO use another way to detect if the PGN contains ACPL data
+    final acplChartData = options.serverAnalysis != null
+        ? _root.mainline
+            .map(
+              (node) =>
+                  node.comments?.firstWhereOrNull((c) => c.eval != null)?.eval,
+            )
+            .whereNotNull()
+            .map(
+              (eval) => ExternalEval(
+                eval: eval.pawns,
+                mate: eval.mate,
+                depth: eval.depth,
+              ),
+            )
+            .toList(growable: false)
+        : null;
+
     _startEngineEvalTimer = Timer(const Duration(milliseconds: 300), () {
       _startEngineEval();
     });
@@ -101,6 +137,7 @@ class AnalysisController extends _$AnalysisController {
     return AnalysisState(
       id: options.id,
       currentPath: currentPath,
+      isOnMainline: _root.isOnMainline(currentPath),
       root: _root.view,
       currentNode: AnalysisCurrentNode.fromNode(currentNode),
       pgnHeaders: pgnHeaders,
@@ -111,7 +148,8 @@ class AnalysisController extends _$AnalysisController {
       contextOpening: options.opening,
       isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
-      shouldShowComments: true,
+      displayMode: DisplayMode.moves,
+      acplChartData: acplChartData?.lock,
     );
   }
 
@@ -129,10 +167,6 @@ class AnalysisController extends _$AnalysisController {
       state.currentPath + _root.nodeAt(state.currentPath).children.first.id,
       replaying: true,
     );
-  }
-
-  void toggleComments() {
-    state = state.copyWith(shouldShowComments: !state.shouldShowComments);
   }
 
   void toggleBoard() {
@@ -200,8 +234,16 @@ class AnalysisController extends _$AnalysisController {
   }
 
   void updatePgnHeader(String key, String value) {
-    final headers = state.pgnHeaders?.add(key, value) ?? IMap({key: value});
+    final headers = state.pgnHeaders.add(key, value);
     state = state.copyWith(pgnHeaders: headers);
+  }
+
+  void toggleDisplayMode() {
+    state = state.copyWith(
+      displayMode: state.displayMode == DisplayMode.moves
+          ? DisplayMode.summary
+          : DisplayMode.moves,
+    );
   }
 
   /// Gets the node and maybe the associated branch opening at the given path.
@@ -255,6 +297,7 @@ class AnalysisController extends _$AnalysisController {
 
       state = state.copyWith(
         currentPath: path,
+        isOnMainline: _root.isOnMainline(path),
         currentNode: AnalysisCurrentNode.fromNode(currentNode),
         lastMove: currentNode.sanMove.move,
         currentBranchOpening: opening,
@@ -265,6 +308,7 @@ class AnalysisController extends _$AnalysisController {
     } else {
       state = state.copyWith(
         currentPath: path,
+        isOnMainline: _root.isOnMainline(path),
         currentNode: AnalysisCurrentNode.fromNode(currentNode),
         currentBranchOpening: opening,
         lastMove: null,
@@ -325,6 +369,11 @@ class AnalysisController extends _$AnalysisController {
   }
 }
 
+enum DisplayMode {
+  moves,
+  summary,
+}
+
 @freezed
 class AnalysisState with _$AnalysisState {
   const AnalysisState._();
@@ -343,6 +392,9 @@ class AnalysisState with _$AnalysisState {
     /// The path to the current node in the analysis view.
     required UciPath currentPath,
 
+    /// Whether the current path is on the mainline.
+    required bool isOnMainline,
+
     /// Analysis ID, useful for the evaluation context.
     required ID id,
 
@@ -358,8 +410,8 @@ class AnalysisState with _$AnalysisState {
     /// Whether the user has enabled local evaluation.
     required bool isLocalEvaluationEnabled,
 
-    /// Whether to show PGN comments in the tree view.
-    required bool shouldShowComments,
+    /// Whether to show the ACPL chart instead of tree view.
+    required DisplayMode displayMode,
 
     /// The last move played.
     Move? lastMove,
@@ -370,19 +422,23 @@ class AnalysisState with _$AnalysisState {
     /// The opening of the current branch.
     Opening? currentBranchOpening,
 
+    /// Optional ACPL chart data of the game.
+    IList<Eval>? acplChartData,
+
     /// The PGN headers of the game.
-    ///
-    /// This field is only used with user submitted PGNS.
-    IMap<String, String>? pgnHeaders,
+    required IMap<String, String> pgnHeaders,
 
     /// The PGN comments of the game.
     ///
     /// This field is only used with user submitted PGNS.
-    IList<String>? pgnRootComments,
+    IList<PgnComment>? pgnRootComments,
   }) = _AnalysisState;
 
   IMap<String, ISet<String>> get validMoves =>
       algebraicLegalMoves(currentNode.position);
+
+  /// Whether an evaluation can be available
+  bool get hasAvailableEval => isEngineAvailable || acplChartData != null;
 
   bool get isEngineAvailable =>
       isLocalEvaluationAllowed &&
@@ -398,6 +454,8 @@ class AnalysisState with _$AnalysisState {
 
 @freezed
 class AnalysisCurrentNode with _$AnalysisCurrentNode {
+  const AnalysisCurrentNode._();
+
   const factory AnalysisCurrentNode({
     required Position position,
     required bool hasChild,
@@ -405,8 +463,8 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
     SanMove? sanMove,
     Opening? opening,
     ClientEval? eval,
-    IList<String>? startingComments,
-    IList<String>? comments,
+    IList<PgnComment>? startingComments,
+    IList<PgnComment>? comments,
     IList<int>? nags,
   }) = _AnalysisCurrentNode;
 
@@ -433,16 +491,7 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
       );
     }
   }
-}
 
-const IMap<String, String> _defaultPgnHeaders = IMapConst({
-  'Event': '?',
-  'Site': '?',
-  'Date': '????.??.??',
-  'Round': '?',
-  'White': '?',
-  'Black': '?',
-  'Result': '*',
-  'WhiteElo': '?',
-  'BlackElo': '?',
-});
+  PgnEvaluation? get pgnEval =>
+      comments?.firstWhereOrNull((c) => c.eval != null)?.eval;
+}

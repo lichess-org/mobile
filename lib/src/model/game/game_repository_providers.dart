@@ -17,13 +17,16 @@ GameRepository gameRepository(GameRepositoryRef ref) {
   return GameRepository(Logger('GameRepository'), apiClient: apiClient);
 }
 
-@Riverpod(keepAlive: true)
-Future<ArchivedGame> archivedGame(
-  ArchivedGameRef ref, {
-  required GameId id,
-}) {
+@riverpod
+Future<ArchivedGame> archivedGame(ArchivedGameRef ref, {required GameId id}) {
   final repo = ref.watch(gameRepositoryProvider);
   return Result.release(repo.getGame(id));
+}
+
+@riverpod
+Future<String> gameAnalysisPgn(GameAnalysisPgnRef ref, {required GameId id}) {
+  final repo = ref.watch(gameRepositoryProvider);
+  return Result.release(repo.getGameAnalysisPgn(id));
 }
 
 @riverpod
@@ -40,11 +43,11 @@ Future<IList<ArchivedGameData>> userRecentGames(
   return result.asFuture;
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 Future<IList<ArchivedGameData>> gamesById(
   GamesByIdRef ref, {
   required ISet<GameId> ids,
-}) {
+}) async {
   final repo = ref.watch(gameRepositoryProvider);
   return Result.release(repo.getGamesByIds(ids));
 }

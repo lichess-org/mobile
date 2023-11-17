@@ -12,13 +12,18 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class AnalysisSettings extends ConsumerWidget {
-  const AnalysisSettings(this.ctrlProvider);
+  const AnalysisSettings(this.options);
 
-  final AnalysisControllerProvider ctrlProvider;
+  final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(ctrlProvider);
+    final ctrlProvider = analysisControllerProvider(options);
+    final isLocalEvaluationAllowed =
+        ref.watch(ctrlProvider.select((s) => s.isLocalEvaluationAllowed));
+    final isEngineAvailable = ref.watch(
+      ctrlProvider.select((s) => s.isEngineAvailable),
+    );
     final prefs = ref.watch(analysisPreferencesProvider);
     final isSoundEnabled = ref.watch(
       generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
@@ -33,7 +38,7 @@ class AnalysisSettings extends ConsumerWidget {
           SwitchSettingTile(
             title: Text(context.l10n.toggleLocalEvaluation),
             value: prefs.enableLocalEvaluation,
-            onChanged: state.isLocalEvaluationAllowed
+            onChanged: isLocalEvaluationAllowed
                 ? (_) {
                     ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
                   }
@@ -60,7 +65,7 @@ class AnalysisSettings extends ConsumerWidget {
             subtitle: NonLinearSlider(
               value: prefs.numEvalLines,
               values: const [1, 2, 3],
-              onChangeEnd: state.isEngineAvailable
+              onChangeEnd: isEngineAvailable
                   ? (value) => ref
                       .read(ctrlProvider.notifier)
                       .setNumEvalLines(value.toInt())
@@ -89,7 +94,7 @@ class AnalysisSettings extends ConsumerWidget {
               subtitle: NonLinearSlider(
                 value: prefs.numEngineCores,
                 values: List.generate(maxEngineCores, (index) => index + 1),
-                onChangeEnd: state.isEngineAvailable
+                onChangeEnd: isEngineAvailable
                     ? (value) => ref
                         .read(ctrlProvider.notifier)
                         .setEngineCores(value.toInt())
@@ -99,7 +104,7 @@ class AnalysisSettings extends ConsumerWidget {
           SwitchSettingTile(
             title: Text(context.l10n.bestMoveArrow),
             value: prefs.showBestMoveArrow,
-            onChanged: state.isEngineAvailable
+            onChanged: isEngineAvailable
                 ? (value) => ref
                     .read(analysisPreferencesProvider.notifier)
                     .toggleShowBestMoveArrow()
@@ -108,11 +113,16 @@ class AnalysisSettings extends ConsumerWidget {
           SwitchSettingTile(
             title: Text(context.l10n.evaluationGauge),
             value: prefs.showEvaluationGauge,
-            onChanged: state.isEngineAvailable
-                ? (value) => ref
-                    .read(analysisPreferencesProvider.notifier)
-                    .toggleShowEvaluationGauge()
-                : null,
+            onChanged: (value) => ref
+                .read(analysisPreferencesProvider.notifier)
+                .toggleShowEvaluationGauge(),
+          ),
+          SwitchSettingTile(
+            title: const Text('Show comments'),
+            value: prefs.showPgnComments,
+            onChanged: (_) => ref
+                .read(analysisPreferencesProvider.notifier)
+                .togglePgnComments(),
           ),
           SwitchSettingTile(
             title: Text(context.l10n.sound),

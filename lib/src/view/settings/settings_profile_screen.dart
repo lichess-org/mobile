@@ -12,8 +12,8 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 
 import 'account_preferences_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class SettingsProfileScreen extends StatelessWidget {
+  const SettingsProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

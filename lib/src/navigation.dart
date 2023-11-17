@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 
 enum BottomTab {
-  home(Icons.home),
+  play(Icons.home),
   puzzles(PuzzleIcons.mix),
   tools(CupertinoIcons.wrench),
   watch(Icons.live_tv);
@@ -26,8 +26,8 @@ enum BottomTab {
 
   String label(AppLocalizations strings) {
     switch (this) {
-      case BottomTab.home:
-        return 'Home';
+      case BottomTab.play:
+        return strings.play;
       case BottomTab.puzzles:
         return strings.puzzles;
       case BottomTab.tools:
@@ -39,12 +39,12 @@ enum BottomTab {
 }
 
 final currentBottomTabProvider =
-    StateProvider<BottomTab>((ref) => BottomTab.home);
+    StateProvider<BottomTab>((ref) => BottomTab.play);
 
 final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
   final currentTab = ref.watch(currentBottomTabProvider);
   switch (currentTab) {
-    case BottomTab.home:
+    case BottomTab.play:
       return homeNavigatorKey;
     case BottomTab.puzzles:
       return puzzlesNavigatorKey;
@@ -58,7 +58,7 @@ final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
 final currentRootScrollControllerProvider = Provider<ScrollController>((ref) {
   final currentTab = ref.watch(currentBottomTabProvider);
   switch (currentTab) {
-    case BottomTab.home:
+    case BottomTab.play:
       return homeScrollController;
     case BottomTab.puzzles:
       return puzzlesScrollController;
@@ -110,15 +110,14 @@ class BottomNavScaffold extends ConsumerWidget {
     final currentTab = ref.watch(currentBottomTabProvider);
     final isHomeRoot = ref.watch(isHomeRootProvider);
     final tabs = ref.watch(tabsProvider);
-    final shouldRemoveTabBarBorder = currentTab == BottomTab.home && isHomeRoot;
+    final shouldRemoveTabBarBorder = currentTab == BottomTab.play && isHomeRoot;
 
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return WillPopScope(
-          onWillPop: () async {
+        return NavigatorPopHandler(
+          onPop: () async {
             final navState = ref.read(currentNavigatorKeyProvider).currentState;
-            final popResult = await navState?.maybePop();
-            return popResult != null && !popResult;
+            return navState?.pop();
           },
           child: Scaffold(
             body: _TabSwitchingView(
@@ -224,7 +223,7 @@ class BottomNavScaffold extends ConsumerWidget {
     switch (index) {
       case 0:
         return CupertinoTabView(
-          defaultTitle: 'Home',
+          defaultTitle: context.l10n.play,
           navigatorKey: homeNavigatorKey,
           navigatorObservers: [
             homeRouteObserver,

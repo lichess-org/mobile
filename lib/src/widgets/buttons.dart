@@ -613,8 +613,8 @@ class RepeatButton extends StatefulWidget {
     required this.onLongPress,
     required this.child,
     this.triggerDelays = const [
-      Duration(milliseconds: 500),
-      Duration(milliseconds: 300),
+      Duration(milliseconds: 400),
+      Duration(milliseconds: 250),
       Duration(milliseconds: 150),
     ],
     this.holdDelay = const Duration(milliseconds: 30),
@@ -652,6 +652,7 @@ class _RepeatButtonState extends State<RepeatButton> {
     HapticFeedback.selectionClick();
 
     widget.onLongPress?.call();
+
     for (final time in widget.triggerDelays) {
       await Future.delayed(time, () {});
       if (!_isPressed) return;

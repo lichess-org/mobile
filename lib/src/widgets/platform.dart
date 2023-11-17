@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -90,16 +89,10 @@ class PlatformCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MediaQueryData mediaQueryData = MediaQuery.of(context);
     final cupertinoBrightness =
         CupertinoTheme.maybeBrightnessOf(context) ?? Brightness.light;
-    return MediaQuery(
-      data: mediaQueryData.copyWith(
-        textScaleFactor: math.min(
-          mediaQueryData.textScaleFactor,
-          kCardTextScaleFactor,
-        ),
-      ),
+    return MediaQuery.withClampedTextScaling(
+      maxScaleFactor: kCardTextScaleFactor,
       child: defaultTargetPlatform == TargetPlatform.iOS
           ? Card(
               margin: margin ?? EdgeInsets.zero,

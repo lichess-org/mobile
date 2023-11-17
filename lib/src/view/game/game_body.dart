@@ -8,7 +8,6 @@ import 'package:chessground/chessground.dart' as cg;
 
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
-import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/online_game.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
@@ -27,7 +26,7 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'game_screen_providers.dart';
 import 'game_loading_board.dart';
 import 'game_player.dart';
-import 'status_l10n.dart';
+import 'game_result_dialog.dart';
 
 /// Common body for the [LobbyGameScreen] and [StandaloneGameScreen].
 ///
@@ -238,13 +237,13 @@ class GameBody extends ConsumerWidget {
           ],
         );
 
-        return WillPopScope(
-          onWillPop: gameState.game.playable ? () async => false : null,
+        return PopScope(
+          canPop: !gameState.game.playable,
           child: content,
         );
       },
-      loading: () => WillPopScope(
-        onWillPop: () async => false,
+      loading: () => PopScope(
+        canPop: false,
         child: seek != null
             ? LobbyGameLoadingBoard(seek!, isRematch: isRematch)
             : const StandaloneGameLoadingBoard(),
@@ -253,8 +252,7 @@ class GameBody extends ConsumerWidget {
         debugPrint(
           'SEVERE: [GameBody] could not load game data; $e\n$s',
         );
-        return const WillPopScope(
-          onWillPop: null,
+        return const PopScope(
           child: LoadGameError(),
         );
       },
@@ -275,7 +273,7 @@ class GameBody extends ConsumerWidget {
           if (context.mounted) {
             showAdaptiveDialog<void>(
               context: context,
-              builder: (context) => _GameEndDialog(id: id, seek: seek),
+              builder: (context) => GameResultDialog(id: id, seek: seek),
               barrierDismissible: true,
             );
           }
@@ -610,7 +608,7 @@ class _GameBottomBar extends ConsumerWidget {
             onPressed: (_) {
               showAdaptiveDialog<void>(
                 context: context,
-                builder: (context) => _GameEndDialog(id: id, seek: seek),
+                builder: (context) => GameResultDialog(id: id, seek: seek),
                 barrierDismissible: true,
               );
             },
@@ -640,137 +638,6 @@ class _GameBottomBar extends ConsumerWidget {
       if (result == true) {
         onConfirm();
       }
-    }
-  }
-}
-
-class _GameEndDialog extends ConsumerStatefulWidget {
-  const _GameEndDialog({required this.id, this.seek});
-
-  final GameFullId id;
-  final GameSeek? seek;
-
-  @override
-  ConsumerState<_GameEndDialog> createState() => _GameEndDialogState();
-}
-
-class _GameEndDialogState extends ConsumerState<_GameEndDialog> {
-  late Timer _buttonActivationTimer;
-  bool _activateButtons = false;
-
-  @override
-  void initState() {
-    _buttonActivationTimer = Timer(const Duration(milliseconds: 1000), () {
-      if (mounted) {
-        setState(() {
-          _activateButtons = true;
-        });
-      }
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _buttonActivationTimer.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final ctrlProvider = gameControllerProvider(widget.id);
-    final gameState = ref.watch(ctrlProvider).requireValue;
-
-    final showWinner = gameState.game.winner != null
-        ? ' • ${gameState.game.winner == Side.white ? context.l10n.whiteIsVictorious : context.l10n.blackIsVictorious}'
-        : '';
-
-    final content = Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (gameState.game.status.value >= GameStatus.mate.value)
-          Text(
-            gameState.game.winner == null
-                ? '½-½'
-                : gameState.game.winner == Side.white
-                    ? '1-0'
-                    : '0-1',
-            style: const TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        const SizedBox(height: 6.0),
-        Text(
-          '${gameStatusL10n(context, gameState)}$showWinner',
-          style: const TextStyle(
-            fontStyle: FontStyle.italic,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 16.0),
-        if (gameState.game.me?.offeringRematch == true)
-          SecondaryButton(
-            semanticsLabel: context.l10n.cancelRematchOffer,
-            onPressed: () {
-              ref.read(ctrlProvider.notifier).declineRematch();
-            },
-            child: Text(context.l10n.cancelRematchOffer),
-          )
-        else if (gameState.canOfferRematch)
-          SecondaryButton(
-            semanticsLabel: context.l10n.rematch,
-            onPressed: _activateButtons &&
-                    gameState.game.opponent?.onGame == true
-                ? () {
-                    ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
-                  }
-                : null,
-            glowing: gameState.game.opponent?.offeringRematch == true,
-            child: Text(context.l10n.rematch),
-          ),
-        if (gameState.canGetNewOpponent && widget.seek != null)
-          SecondaryButton(
-            semanticsLabel: context.l10n.newOpponent,
-            onPressed: _activateButtons
-                ? () {
-                    ref
-                        .read(lobbyGameProvider(widget.seek!).notifier)
-                        .newOpponent();
-                    // Other alert dialogs may be shown before this one, so be sure to pop them all
-                    Navigator.of(context)
-                        .popUntil((route) => route is! RawDialogRoute);
-                  }
-                : null,
-            child: Text(context.l10n.newOpponent),
-          ),
-        SecondaryButton(
-          semanticsLabel: context.l10n.analysis,
-          onPressed: () => pushPlatformRoute(
-            context,
-            builder: (_) => AnalysisScreen(
-              options: gameState.analysisOptions,
-              title: context.l10n.gameAnalysis,
-            ),
-          ),
-          child: Text(context.l10n.analysis),
-        ),
-      ],
-    );
-
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return CupertinoAlertDialog(
-        content: content,
-      );
-    } else {
-      return Dialog(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: content,
-        ),
-      );
     }
   }
 }
