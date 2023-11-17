@@ -62,9 +62,7 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
   @override
   void didPop() {
     super.didPop();
-    ref.invalidate(accountProvider);
     ref.invalidate(accountRecentGamesProvider);
-    ref.invalidate(accountActivityProvider);
   }
 
   @override

@@ -53,9 +53,7 @@ class _GameScreenState extends ConsumerState<LobbyGameScreen>
   @override
   void didPop() {
     super.didPop();
-    ref.invalidate(accountProvider);
     ref.invalidate(accountRecentGamesProvider);
-    ref.invalidate(accountActivityProvider);
   }
 
   @override

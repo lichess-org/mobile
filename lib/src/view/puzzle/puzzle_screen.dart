@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
@@ -72,8 +71,6 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
   void didPop() {
     super.didPop();
     ref.invalidate(nextPuzzleProvider(widget.angle));
-    ref.invalidate(accountProvider);
-    ref.invalidate(accountActivityProvider);
     ref.invalidate(puzzleDashboardProvider);
     ref.invalidate(puzzleRecentActivityProvider);
   }
