@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -241,60 +240,6 @@ class _UserRating extends StatelessWidget {
         Text(rating),
       ],
     );
-  }
-}
-
-class _UnfollowDialog extends StatelessWidget {
-  const _UnfollowDialog({
-    required this.title,
-    required this.onAccept,
-  });
-
-  final Widget title;
-  final VoidCallback onAccept;
-
-  @override
-  Widget build(BuildContext context) {
-    void decline() {
-      Navigator.of(context).pop();
-    }
-
-    void accept() {
-      Navigator.of(context).pop();
-      onAccept();
-    }
-
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return CupertinoAlertDialog(
-        content: title,
-        actions: [
-          CupertinoDialogAction(
-            isDestructiveAction: true,
-            onPressed: accept,
-            child: Text(context.l10n.accept),
-          ),
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            onPressed: decline,
-            child: Text(context.l10n.decline),
-          ),
-        ],
-      );
-    } else {
-      return AlertDialog(
-        content: title,
-        actions: [
-          TextButton(
-            onPressed: accept,
-            child: Text(context.l10n.accept),
-          ),
-          TextButton(
-            onPressed: decline,
-            child: Text(context.l10n.decline),
-          ),
-        ],
-      );
-    }
   }
 }
 
