@@ -113,7 +113,13 @@ class _Body extends ConsumerWidget {
     final connectivity = ref.watch(connectivityChangesProvider);
 
     final content = [
-      const _DailyPuzzle(),
+      connectivity.when(
+        data: (data) => data.isOnline
+            ? const _DailyPuzzle()
+            : const _OfflinePuzzlePreview(),
+        loading: () => const SizedBox.shrink(),
+        error: (_, __) => const SizedBox.shrink(),
+      ),
       Padding(
         padding: Styles.bodySectionPadding,
         child: nextPuzzle.when(
@@ -446,6 +452,58 @@ class _DailyPuzzle extends ConsumerWidget {
         padding: Styles.bodySectionPadding,
         child: const Text('Could not load the daily puzzle.'),
       ),
+    );
+  }
+}
+
+class _OfflinePuzzlePreview extends ConsumerWidget {
+  const _OfflinePuzzlePreview();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final puzzle =
+        ref.watch(nextPuzzleProvider(const PuzzleTheme(PuzzleThemeKey.mix)));
+    return puzzle.maybeWhen(
+      data: (data) {
+        final preview =
+            data != null ? PuzzlePreview.fromPuzzle(data.puzzle) : null;
+        return SmallBoardPreview(
+          orientation: preview?.orientation.cg ?? Side.white.cg,
+          fen: preview?.initialFen ?? kEmptyFen,
+          lastMove: preview?.initialMove.cg,
+          description: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                context.l10n.puzzleDesc,
+                style: Styles.boardPreviewTitle,
+              ),
+              Text(
+                context.l10n.puzzlePlayedXTimes(data?.puzzle.puzzle.plays ?? 0),
+              ),
+            ],
+          ),
+          onTap: data != null
+              ? () {
+                  pushPlatformRoute(
+                    context,
+                    rootNavigator: true,
+                    builder: (context) => PuzzleScreen(
+                      angle: const PuzzleTheme(PuzzleThemeKey.mix),
+                      initialPuzzleContext: data,
+                    ),
+                  ).then((_) {
+                    ref.invalidate(
+                      nextPuzzleProvider(const PuzzleTheme(PuzzleThemeKey.mix)),
+                    );
+                  });
+                }
+              : null,
+        );
+      },
+      orElse: () => const SizedBox.shrink(),
     );
   }
 }

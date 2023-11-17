@@ -35,7 +35,7 @@ class PlayScreen extends StatelessWidget {
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.play),
+        title: Text(context.l10n.createAGame),
       ),
       body: const _Body(),
     );

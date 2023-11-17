@@ -5,10 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -18,24 +16,17 @@ import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
+import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_widget.dart';
-import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
-import 'package:lichess_mobile/src/view/user/perf_cards.dart';
-import 'package:lichess_mobile/src/view/user/user_activity.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
 import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
@@ -109,11 +100,22 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }
 
   Widget _androidBuilder(BuildContext context) {
+    final session = ref.watch(authSessionProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const _LichessTitle(),
+        title: const Text('lichess.org'),
+        leading: session == null
+            ? const SignInWidget()
+            : IconButton(
+                icon: const Icon(Icons.person),
+                tooltip: context.l10n.profile,
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (context) => const ProfileScreen(),
+                  ),
+                ),
+              ),
         actions: const [
-          SignInWidget(),
           _SettingsButton(),
         ],
       ),
@@ -128,15 +130,27 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }
 
   Widget _iosBuilder(BuildContext context) {
+    final session = ref.watch(authSessionProvider);
     return CupertinoPageScaffold(
       child: _HomeScaffold(
         child: CustomScrollView(
           controller: homeScrollController,
           slivers: [
-            const CupertinoSliverNavigationBar(
-              largeTitle: _LichessTitle(),
-              leading: SignInWidget(),
-              trailing: _SettingsButton(),
+            CupertinoSliverNavigationBar(
+              largeTitle: Text(context.l10n.play),
+              leading: session == null
+                  ? const SignInWidget()
+                  : CupertinoIconButton(
+                      padding: EdgeInsets.zero,
+                      semanticsLabel: context.l10n.profile,
+                      icon: const Icon(CupertinoIcons.profile_circled),
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (context) => const ProfileScreen(),
+                        ),
+                      ),
+                    ),
+              trailing: const _SettingsButton(),
             ),
             CupertinoSliverRefreshControl(
               onRefresh: () => _refreshData(),
@@ -156,28 +170,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     return Future.wait([
       ref.refresh(accountRecentGamesProvider.future),
     ]);
-  }
-}
-
-class _LichessTitle extends StatelessWidget {
-  const _LichessTitle();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          String.fromCharCode(LichessIcons.lichess.codePoint),
-          style: TextStyle(
-            fontFamily: LichessIcons.lichess.fontFamily,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-        const SizedBox(width: 8.0),
-        const Text('lichess.org'),
-      ],
-    );
   }
 }
 
@@ -227,12 +219,12 @@ class _HomeScaffold extends StatelessWidget {
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
-                    child: Text(context.l10n.play),
+                    child: Text(context.l10n.createAGame),
                   ),
                   onPressed: () {
                     pushPlatformRoute(
                       context,
-                      title: context.l10n.play,
+                      title: context.l10n.createAGame,
                       builder: (_) => const PlayScreen(),
                     );
                   },
@@ -274,7 +266,7 @@ class _HomeScaffold extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  child: Text(context.l10n.play),
+                  child: Text(context.l10n.createAGame),
                   onPressed: () {
                     pushPlatformRoute(
                       context,
@@ -302,10 +294,8 @@ class _HomeBody extends ConsumerWidget {
         if (data.isOnline) {
           final onlineWidgets = [
             const _OngoingGamePreview(),
-            const _CreateAGame(),
-            const _PerfCards(),
+            const _PreferredSetup(),
             const RecentGames(),
-            const UserActivityWidget(),
             RatingPrefAware(child: LeaderboardWidget()),
           ];
 
@@ -321,14 +311,10 @@ class _HomeBody extends ConsumerWidget {
           return defaultTargetPlatform == TargetPlatform.android
               ? ListView(
                   controller: homeScrollController,
-                  children: const [
-                    _OfflinePuzzlePreview(),
-                  ],
+                  children: const [],
                 )
               : SliverList(
-                  delegate: SliverChildListDelegate([
-                    const _OfflinePuzzlePreview(),
-                  ]),
+                  delegate: SliverChildListDelegate([]),
                 );
         }
       },
@@ -403,8 +389,8 @@ class _ConnectivityBanner extends ConsumerWidget {
   }
 }
 
-class _CreateAGame extends ConsumerWidget {
-  const _CreateAGame();
+class _PreferredSetup extends ConsumerWidget {
+  const _PreferredSetup();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -431,20 +417,28 @@ class _CreateAGame extends ConsumerWidget {
         seek.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
 
     return SmallBoardPreview(
-      orientation: Side.white.cg,
+      orientation: seek.side?.cg ?? Side.white.cg,
       fen: kInitialFEN,
       description: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Text(
-            context.l10n.createAGame,
+          const Text(
+            'Play online now',
             style: Styles.boardPreviewTitle,
           ),
           Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                seek.side == null
+                    ? context.l10n.randomColor
+                    : seek.side == Side.white
+                        ? context.l10n.white
+                        : context.l10n.black,
+              ),
+              const SizedBox(height: 8.0),
               Row(
                 children: [
                   Icon(
@@ -480,58 +474,6 @@ class _CreateAGame extends ConsumerWidget {
           },
         );
       },
-    );
-  }
-}
-
-class _OfflinePuzzlePreview extends ConsumerWidget {
-  const _OfflinePuzzlePreview();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final puzzle =
-        ref.watch(nextPuzzleProvider(const PuzzleTheme(PuzzleThemeKey.mix)));
-    return puzzle.maybeWhen(
-      data: (data) {
-        final preview =
-            data != null ? PuzzlePreview.fromPuzzle(data.puzzle) : null;
-        return SmallBoardPreview(
-          orientation: preview?.orientation.cg ?? Side.white.cg,
-          fen: preview?.initialFen ?? kEmptyFen,
-          lastMove: preview?.initialMove.cg,
-          description: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
-                context.l10n.puzzleDesc,
-                style: Styles.boardPreviewTitle,
-              ),
-              Text(
-                context.l10n.puzzlePlayedXTimes(data?.puzzle.puzzle.plays ?? 0),
-              ),
-            ],
-          ),
-          onTap: data != null
-              ? () {
-                  pushPlatformRoute(
-                    context,
-                    rootNavigator: true,
-                    builder: (context) => PuzzleScreen(
-                      angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                      initialPuzzleContext: data,
-                    ),
-                  ).then((_) {
-                    ref.invalidate(
-                      nextPuzzleProvider(const PuzzleTheme(PuzzleThemeKey.mix)),
-                    );
-                  });
-                }
-              : null,
-        );
-      },
-      orElse: () => const SizedBox.shrink(),
     );
   }
 }
@@ -586,50 +528,6 @@ class _OngoingGamePreview extends ConsumerWidget {
         );
       },
       orElse: () => const SizedBox.shrink(),
-    );
-  }
-}
-
-class _PerfCards extends ConsumerWidget {
-  const _PerfCards();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final account = ref.watch(accountProvider);
-    return account.when(
-      data: (user) {
-        if (user != null) {
-          return PerfCards(user: user);
-        } else {
-          return const SizedBox.shrink();
-        }
-      },
-      loading: () => Shimmer(
-        child: Padding(
-          padding: Styles.bodySectionPadding,
-          child: SizedBox(
-            height: 106,
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(vertical: 3.0),
-              scrollDirection: Axis.horizontal,
-              itemCount: 5,
-              separatorBuilder: (context, index) => const SizedBox(width: 10),
-              itemBuilder: (context, index) => ShimmerLoading(
-                isLoading: true,
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-      error: (error, stack) => const SizedBox.shrink(),
     );
   }
 }
