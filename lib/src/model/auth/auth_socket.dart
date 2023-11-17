@@ -71,7 +71,7 @@ class AuthSocket {
         _kDisconnectOnBackgroundTimeout,
         () {
           _log.info(
-            'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, closing socket.',
+            'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, terminating socket.',
           );
           _closeAndForget();
         },
@@ -110,17 +110,17 @@ class AuthSocket {
   /// The current ack id. Incremented for each ack.
   int _ackId = 1;
 
-  /// The current connection.
-  ({
-    Uri route,
-    IOWebSocketChannel channel,
-  })? _connection;
+  /// The current route the websocket is connected to.
+  Uri? _route;
+
+  /// The current WebSocket channel.
+  IOWebSocketChannel? _channel;
 
   /// Gets the current WebSocket sink
-  WebSocketSink? get _sink => _connection?.channel.sink;
+  WebSocketSink? get _sink => _channel?.sink;
 
   /// The current socket route if a connection is active.
-  Uri? get route => _connection?.route;
+  Uri? get route => _route;
 
   /// The socket events broadcast stream.
   Stream<SocketEvent> get stream => _streamController.stream;
@@ -139,7 +139,7 @@ class AuthSocket {
   /// connection unless `forceReconnect` is set to `true`.
   ///
   /// Returns a tuple of:
-  ///  - the socket event [Stream]
+  ///  - the socket event [Stream] for the given route.
   ///  - the channel ready [Stream], which emits each time a new websocket is connected.
   ///    Use [Stream.first] to wait for the first connection, or subscribe to this
   ///    stream to be notified of reconnections.
@@ -148,9 +148,9 @@ class AuthSocket {
     bool? forceReconnect = false,
   }) {
     final filteredStream = _streamController.stream.where((_) {
-      if (route != _connection?.route) {
+      if (route != _route) {
         _log.warning(
-          'Received event for route $route on active route ${_connection?.route}. Have you forgotten to cancel a subscription?',
+          'Received event for route $route on active route $_route. Have you forgotten to cancel a subscription?',
         );
         return false;
       }
@@ -168,9 +168,9 @@ class AuthSocket {
     });
 
     if (forceReconnect == false &&
-        _connection != null &&
-        _connection!.channel.closeCode == null &&
-        route == _connection!.route) {
+        _channel != null &&
+        _channel!.closeCode == null &&
+        route == _route) {
       return (
         filteredStream,
         filteredReadyStream,
@@ -242,7 +242,7 @@ class AuthSocket {
   /// If a new connection is created before the delay, the close will be cancelled.
   void _closeAndForget({Duration? delay}) {
     _log.fine(
-      'Closing WebSocket connection ${delay == null ? 'now' : 'in ${delay.inSeconds}s'}.',
+      'Terminating connection ${delay == null ? 'now' : 'in ${delay.inSeconds}s'}.',
     );
     _closeTimer?.cancel();
     _closeTimer = Timer(
@@ -250,17 +250,17 @@ class AuthSocket {
       () {
         _disconnect();
         _ref.read(averageLagProvider.notifier).reset();
-        if (_connection == null) {
+        if (_route == null) {
           return;
         }
-        _log.info('WebSocket connection closed.');
-        _connection = null;
+        _log.info('Connection terminated.');
+        _route = null;
       },
     );
   }
 
   /// Connect or reconnect the WebSocket.
-  void _doConnect(Uri route) {
+  Future<void> _doConnect(Uri route) async {
     _disconnect();
     _pongCount = 0;
     _reconnectTimer?.cancel();
@@ -282,56 +282,48 @@ class AuthSocket {
     WebSocket.userAgent = userAgent(pInfo, deviceInfo, sri, session?.user);
 
     _log.info('Creating WebSocket connection to $uri');
+    _route = route;
 
-    final channel = IOWebSocketChannel.connect(
-      uri,
-      connectTimeout: _kDefaultConnectTimeout,
-      headers: headers,
-    );
+    try {
+      final socket = await WebSocket.connect(uri.toString(), headers: headers)
+          .timeout(_kDefaultConnectTimeout);
 
-    _socketStreamSubscription?.cancel();
-    _socketStreamSubscription = channel.stream.map((raw) {
-      if (raw == '0') {
-        return SocketEvent.pong;
-      }
-      return SocketEvent.fromJson(
-        jsonDecode(raw as String) as Map<String, dynamic>,
-      );
-    }).listen(_handleEvent);
+      final channel = IOWebSocketChannel(socket);
 
-    _connection = (
-      route: route,
-      channel: channel,
-    );
+      _channel = channel;
 
-    channel.ready.then(
-      (_) {
-        _log.info('WebSocket connection established.');
-        _ref.read(averageLagProvider.notifier).reset();
-        _sendPing();
-        _schedulePing(_kPingDelay);
-        _readyStreamController.add(route);
-        _resendAcks();
-      },
-      onError: (Object e) {
-        _log.severe('WebSocket connection failed.', e);
-        _ref.read(averageLagProvider.notifier).reset();
-        if (_connection != null) {
-          _scheduleReconnect(_kAutoReconnectDelay, _connection!.route);
+      _socketStreamSubscription?.cancel();
+      _socketStreamSubscription = channel.stream.map((raw) {
+        if (raw == '0') {
+          return SocketEvent.pong;
         }
-      },
-    );
+        return SocketEvent.fromJson(
+          jsonDecode(raw as String) as Map<String, dynamic>,
+        );
+      }).listen(_handleEvent);
+
+      _log.info('WebSocket connection established.');
+      _ref.read(averageLagProvider.notifier).reset();
+      _sendPing();
+      _schedulePing(_kPingDelay);
+      _readyStreamController.add(route);
+      _resendAcks();
+    } catch (error) {
+      _log.severe('WebSocket connection failed.', error);
+      _ref.read(averageLagProvider.notifier).reset();
+      _scheduleReconnect(_kAutoReconnectDelay);
+    }
   }
 
   /// Called when the first listener is added to the socket stream.
   void _onStreamListen() {
-    _log.fine('WebSocket connection subscribed.');
+    _log.fine('WebSocket event stream subscribed.');
     _closeTimer?.cancel();
   }
 
   /// Called when the last listener is removed from the socket stream.
   void _onStreamCancel() {
-    _log.fine('WebSocket connection idle, closing.');
+    _log.fine('WebSocket event stream idle, closing.');
     _closeAndForget(delay: _kIdleTimeout);
   }
 
@@ -365,9 +357,7 @@ class AuthSocket {
           : 'p',
     );
     _lastPing = DateTime.now();
-    if (_connection != null) {
-      _scheduleReconnect(_kPingMaxLag, _connection!.route);
-    }
+    _scheduleReconnect(_kPingMaxLag);
   }
 
   void _handlePong(Duration pingDelay) {
@@ -387,13 +377,13 @@ class AuthSocket {
     _ref.read(averageLagProvider.notifier).add(currentLag, mix);
   }
 
-  void _scheduleReconnect(Duration delay, Uri route) {
+  void _scheduleReconnect(Duration delay) {
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(delay, () {
-      if (_connection != null) {
+      if (_route != null) {
         _ref.read(averageLagProvider.notifier).reset();
         _log.info('Reconnecting WebSocket.');
-        _doConnect(route);
+        _doConnect(_route!);
       }
     });
   }
@@ -415,9 +405,14 @@ class AuthSocket {
     }
   }
 
-  /// Disconnects websocket connection and keeps the reference to the current connection.
+  /// Disconnects websocket connection but keeps the reference to the current route.
   void _disconnect() {
-    _sink?.close();
+    _sink?.close().then((_) {
+      _log.fine('WebSocket connection was closed by client.');
+    }).catchError((Object? error) {
+      _log.warning('WebSocket connection could not be closed.', error);
+    });
+    _channel = null;
     _socketStreamSubscription?.cancel();
     _pingTimer?.cancel();
     _reconnectTimer?.cancel();
