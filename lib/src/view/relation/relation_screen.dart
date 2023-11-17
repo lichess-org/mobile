@@ -5,13 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/relation/relation_ctrl.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/relation/following_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 
 class RelationScreen extends ConsumerStatefulWidget {
   const RelationScreen({super.key});
@@ -93,25 +94,17 @@ class _OnlineFriendsWidget extends ConsumerWidget {
               PlatformListTile(
                 title: Padding(
                   padding: const EdgeInsets.only(right: 5.0),
-                  child: Row(
-                    children: [
-                      if (user.title != null) ...[
-                        Text(
-                          user.title!,
-                          style: const TextStyle(
-                            color: LichessColors.brag,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(width: 5),
-                      ],
-                      Flexible(
-                        child: Text(
-                          user.name,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
+                  child: PlayerTitle(
+                    userName: user.name,
+                    title: user.title,
+                    isPatron: user.isPatron,
+                  ),
+                ),
+                onTap: () => pushPlatformRoute(
+                  context,
+                  title: user.name,
+                  builder: (_) => UserScreen(
+                    user: user,
                   ),
                 ),
               ),
