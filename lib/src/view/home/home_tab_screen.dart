@@ -33,9 +33,6 @@ import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 
-final RouteObserver<PageRoute<void>> homeRouteObserver =
-    RouteObserver<PageRoute<void>>();
-
 final isHomeRootProvider = StateProvider<bool>((ref) => true);
 
 class HomeTabScreen extends ConsumerStatefulWidget {

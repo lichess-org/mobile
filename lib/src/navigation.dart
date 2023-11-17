@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
-import 'package:lichess_mobile/src/view/relation/following_screen.dart';
 import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
@@ -80,6 +79,9 @@ final toolsScrollController = ScrollController(debugLabel: 'ToolsScroll');
 final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
 
 final RouteObserver<PageRoute<void>> rootNavPageRouteObserver =
+    RouteObserver<PageRoute<void>>();
+
+final RouteObserver<PageRoute<void>> homeRouteObserver =
     RouteObserver<PageRoute<void>>();
 
 final tabsProvider = Provider<List<_Tab>>((ref) {
@@ -194,7 +196,6 @@ class BottomNavScaffold extends ConsumerWidget {
           navigatorKey: homeNavigatorKey,
           navigatorObservers: [
             homeRouteObserver,
-            followingRouteObserver,
           ],
           builder: (context) => const HomeTabScreen(),
         );
@@ -227,7 +228,6 @@ class BottomNavScaffold extends ConsumerWidget {
           navigatorKey: homeNavigatorKey,
           navigatorObservers: [
             homeRouteObserver,
-            followingRouteObserver,
           ],
           builder: (context) => const HomeTabScreen(),
         );

@@ -1,7 +1,9 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/model/relation/relation_ctrl.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/relation/following_screen.dart';
@@ -16,17 +18,13 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 
 class RelationScreen extends ConsumerStatefulWidget {
   const RelationScreen({super.key});
+
   @override
   ConsumerState<RelationScreen> createState() => _RelationScreenState();
 }
 
-class _RelationScreenState extends ConsumerState<RelationScreen> {
-  @override
-  void initState() {
-    super.initState();
-    ref.read(relationCtrlProvider.notifier).getFollowingOnlines();
-  }
-
+class _RelationScreenState extends ConsumerState<RelationScreen>
+    with RouteAware {
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(
@@ -50,11 +48,38 @@ class _RelationScreenState extends ConsumerState<RelationScreen> {
       child: _Body(),
     );
   }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null && route is PageRoute) {
+      homeRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    homeRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPushNext() {
+    ref.read(relationCtrlProvider.notifier).stopWatchingFriends();
+    super.didPushNext();
+  }
+
+  @override
+  void didPopNext() {
+    ref.read(relationCtrlProvider.notifier).startWatchingFriends();
+    super.didPopNext();
+  }
 }
 
-class _Body extends ConsumerWidget {
+class _Body extends StatelessWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return SafeArea(
       child: ListView(
         children: [_OnlineFriendsWidget()],

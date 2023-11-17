@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/relation/relation_ctrl.dart';
@@ -10,7 +11,6 @@ import 'package:lichess_mobile/src/model/relation/relation_repository_providers.
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -30,9 +30,6 @@ Future<(IList<User>, IList<LightUser>)> _getFollowingAndOnlines(
   return (following, onlines.followingOnlines);
 }
 
-final RouteObserver<PageRoute<void>> followingRouteObserver =
-    RouteObserver<PageRoute<void>>();
-
 class FollowingScreen extends ConsumerStatefulWidget {
   const FollowingScreen({super.key});
   @override
@@ -41,27 +38,6 @@ class FollowingScreen extends ConsumerStatefulWidget {
 
 class _FollowingScreenState extends ConsumerState<FollowingScreen>
     with RouteAware {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final route = ModalRoute.of(context);
-    if (route != null && route is PageRoute) {
-      followingRouteObserver.subscribe(this, route);
-    }
-  }
-
-  @override
-  void dispose() {
-    followingRouteObserver.unsubscribe(this);
-    super.dispose();
-  }
-
-  @override
-  void didPop() {
-    ref.read(relationCtrlProvider.notifier).getFollowingOnlines();
-    super.didPop();
-  }
-
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);

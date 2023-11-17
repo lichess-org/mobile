@@ -171,6 +171,9 @@ class AuthSocket {
         _channel != null &&
         _channel!.closeCode == null &&
         route == _route) {
+      // Already connected to the given route, we still want to notify the caller
+      // that the socket is ready.
+      _readyStreamController.add(route);
       return (
         filteredStream,
         filteredReadyStream,

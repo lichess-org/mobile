@@ -17,17 +17,18 @@ class RelationCtrl extends _$RelationCtrl {
 
   @override
   Future<RelationCtrlState> build() {
-    final socket = ref.watch(authSocketProvider);
-    final (stream, _) = socket.connect(Uri(path: '/lobby/socket/v5'));
+    final (stream, readyStream) =
+        _socket.connect(Uri(path: '/lobby/socket/v5'));
 
     final state = stream.firstWhere((e) => e.topic == 'following_onlines').then(
-      (event) {
-        _socketSubscription = stream.listen(_handleSocketTopic);
-        return RelationCtrlState(
-          followingOnlines: _parseFriendsList(event.data as List<dynamic>),
+          (event) => RelationCtrlState(
+            followingOnlines: _parseFriendsList(event.data as List<dynamic>),
+          ),
         );
-      },
-    );
+
+    readyStream.forEach((_) {
+      _socket.send('following_onlines', null);
+    });
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
@@ -36,8 +37,18 @@ class RelationCtrl extends _$RelationCtrl {
     return state;
   }
 
-  void getFollowingOnlines() {
-    _socket.send('following_onlines', null);
+  void startWatchingFriends() {
+    final (stream, readyStream) =
+        _socket.connect(Uri(path: '/lobby/socket/v5'));
+    _socketSubscription?.cancel();
+    _socketSubscription = stream.listen(_handleSocketTopic);
+    readyStream.forEach((_) {
+      _socket.send('following_onlines', null);
+    });
+  }
+
+  void stopWatchingFriends() {
+    _socketSubscription?.cancel();
   }
 
   void _handleSocketTopic(SocketEvent event) {
