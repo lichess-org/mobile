@@ -18,7 +18,6 @@ import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -110,24 +109,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }
 
   Widget _androidBuilder(BuildContext context) {
-    final accountUserAsync = ref.watch(accountUserProvider);
     return Scaffold(
       appBar: AppBar(
-        title: accountUserAsync.when(
-          data: (user) {
-            if (user != null) {
-              return PlayerTitle(
-                userName: user.name,
-                title: user.title,
-                isPatron: user.isPatron,
-              );
-            } else {
-              return const _LichessTitle();
-            }
-          },
-          loading: () => const SizedBox.shrink(),
-          error: (error, stack) => const _LichessTitle(),
-        ),
+        title: const _LichessTitle(),
         actions: const [
           SignInWidget(),
           _SettingsButton(),
@@ -144,30 +128,15 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }
 
   Widget _iosBuilder(BuildContext context) {
-    final accountUserAsync = ref.watch(accountUserProvider);
     return CupertinoPageScaffold(
       child: _HomeScaffold(
         child: CustomScrollView(
           controller: homeScrollController,
           slivers: [
-            CupertinoSliverNavigationBar(
-              largeTitle: accountUserAsync.when(
-                data: (user) {
-                  if (user != null) {
-                    return PlayerTitle(
-                      userName: user.name,
-                      title: user.title,
-                      isPatron: user.isPatron,
-                    );
-                  } else {
-                    return const _LichessTitle();
-                  }
-                },
-                loading: () => const SizedBox.shrink(),
-                error: (error, stack) => const _LichessTitle(),
-              ),
-              leading: const SignInWidget(),
-              trailing: const _SettingsButton(),
+            const CupertinoSliverNavigationBar(
+              largeTitle: _LichessTitle(),
+              leading: SignInWidget(),
+              trailing: _SettingsButton(),
             ),
             CupertinoSliverRefreshControl(
               onRefresh: () => _refreshData(),
