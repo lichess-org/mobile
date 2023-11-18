@@ -63,6 +63,15 @@ You can find more information about emulators [in the wiki](https://github.com/l
 
 You can find more information about the `flutter run` command by running `flutter run --help`.
 
+### Test
+
+Before submitting a pull request, please run the tests:
+
+```sh
+flutter analyze
+flutter test
+```
+
 ### Logging
 
 ```sh
