@@ -13,9 +13,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -28,12 +28,10 @@ import 'package:lichess_mobile/src/view/auth/sign_in_widget.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
+import 'package:lichess_mobile/src/view/relation/relation_screen.dart';
 import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
-
-final RouteObserver<PageRoute<void>> homeRouteObserver =
-    RouteObserver<PageRoute<void>>();
 
 final isHomeRootProvider = StateProvider<bool>((ref) => true);
 
@@ -116,6 +114,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 ),
               ),
         actions: const [
+          _RelationButton(),
           _SettingsButton(),
         ],
       ),
@@ -150,7 +149,13 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                         ),
                       ),
                     ),
-              trailing: const _SettingsButton(),
+              trailing: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _RelationButton(),
+                  _SettingsButton(),
+                ],
+              ),
             ),
             CupertinoSliverRefreshControl(
               onRefresh: () => _refreshData(),
@@ -528,6 +533,32 @@ class _OngoingGamePreview extends ConsumerWidget {
         );
       },
       orElse: () => const SizedBox.shrink(),
+    );
+  }
+}
+
+class _RelationButton extends ConsumerWidget {
+  const _RelationButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+
+    if (session == null) {
+      return const SizedBox.shrink();
+    }
+
+    return AppBarIconButton(
+      icon: const Icon(Icons.people),
+      semanticsLabel: context.l10n.friends,
+      onPressed: () {
+        pushPlatformRoute(
+          context,
+          title: context.l10n.friends,
+          builder: (_) => const RelationScreen(),
+          fullscreenDialog: true,
+        );
+      },
     );
   }
 }

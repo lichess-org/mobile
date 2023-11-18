@@ -579,6 +579,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  flutter_slidable:
+    dependency: "direct main"
+    description:
+      name: flutter_slidable
+      sha256: "19ed4813003a6ff4e9c6bcce37e792a2a358919d7603b2b31ff200229191e44c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   flutter_spinkit:
     dependency: "direct main"
     description:
