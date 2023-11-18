@@ -82,7 +82,7 @@ class GameCupertinoNavBar extends ConsumerWidget
         : lobbyGameIsPlayableProvider(seek!);
     final isPlayableAsync = ref.watch(isPlayableProvider);
     return CupertinoNavigationBar(
-      padding: const EdgeInsetsDirectional.only(end: 16.0),
+      padding: EdgeInsetsDirectional.zero,
       leading: isPlayableAsync.maybeWhen<Widget?>(
         data: (isPlayable) => isPlayable ? pingRating : null,
         orElse: () => pingRating,

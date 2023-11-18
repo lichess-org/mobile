@@ -113,9 +113,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                   ),
                 ),
               ),
-        actions: const [
-          _RelationButton(),
-          _SettingsButton(),
+        actions: [
+          if (session != null) const _RelationButton(),
+          const _SettingsButton(),
         ],
       ),
       body: RefreshIndicator(
@@ -136,24 +136,26 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
           controller: homeScrollController,
           slivers: [
             CupertinoSliverNavigationBar(
+              padding: const EdgeInsetsDirectional.only(start: 16.0, end: 0),
               largeTitle: Text(context.l10n.play),
               leading: session == null
                   ? const SignInWidget()
-                  : CupertinoIconButton(
-                      padding: EdgeInsets.zero,
-                      semanticsLabel: context.l10n.profile,
-                      icon: const Icon(CupertinoIcons.profile_circled),
+                  : AppBarTextButton(
                       onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute<void>(
+                        CupertinoPageRoute<void>(
                           builder: (context) => const ProfileScreen(),
                         ),
                       ),
+                      child: Text(session.user.name),
                     ),
-              trailing: const Row(
+              trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _RelationButton(),
-                  _SettingsButton(),
+                  if (session != null) ...[
+                    const _RelationButton(),
+                    const SizedBox(width: 6.0),
+                  ],
+                  const _SettingsButton(),
                 ],
               ),
             ),
@@ -542,12 +544,6 @@ class _RelationButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
-
-    if (session == null) {
-      return const SizedBox.shrink();
-    }
-
     return AppBarIconButton(
       icon: const Icon(Icons.people),
       semanticsLabel: context.l10n.friends,
