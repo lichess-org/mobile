@@ -83,6 +83,7 @@ class AnalysisScreen extends ConsumerWidget {
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
+        padding: EdgeInsetsDirectional.zero,
         middle: _Title(options: options, title: title),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -724,6 +725,11 @@ class _EngineDepth extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isEngineAvailable = ref.watch(
+      ctrlProvider.select(
+        (value) => value.isEngineAvailable,
+      ),
+    );
     final evalContext = ref.watch(
       ctrlProvider.select((value) => value.evaluationContext),
     );
@@ -735,7 +741,7 @@ class _EngineDepth extends ConsumerWidget {
         ) ??
         currentNode.eval?.depth;
 
-    return depth != null
+    return isEngineAvailable && depth != null
         ? AppBarTextButton(
             onPressed: () {
               showPopover(

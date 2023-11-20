@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -32,6 +33,7 @@ class GameResultDialog extends ConsumerStatefulWidget {
 class _GameEndDialogState extends ConsumerState<GameResultDialog> {
   late Timer _buttonActivationTimer;
   bool _activateButtons = false;
+  Future<void>? _pendingPgnFuture;
 
   @override
   void initState() {
@@ -99,16 +101,38 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
                 : null,
             child: Text(context.l10n.newOpponent),
           ),
-        SecondaryButton(
-          semanticsLabel: context.l10n.analysis,
-          onPressed: () => pushPlatformRoute(
-            context,
-            builder: (_) => AnalysisScreen(
-              options: gameState.analysisOptions,
-              title: context.l10n.gameAnalysis,
-            ),
-          ),
-          child: Text(context.l10n.analysis),
+        FutureBuilder(
+          future: _pendingPgnFuture,
+          builder: (context, snapshot) {
+            return SecondaryButton(
+              semanticsLabel: context.l10n.analysis,
+              onPressed: snapshot.connectionState == ConnectionState.waiting
+                  ? null
+                  : () async {
+                      final future = ref.read(
+                        gameAnalysisPgnProvider(
+                          id: gameState.game.id,
+                        ).future,
+                      );
+                      setState(() {
+                        _pendingPgnFuture = future;
+                      });
+                      final pgn = await future;
+                      if (context.mounted) {
+                        pushPlatformRoute(
+                          context,
+                          builder: (_) => AnalysisScreen(
+                            options: gameState.analysisOptions.copyWith(
+                              pgn: pgn,
+                            ),
+                            title: context.l10n.gameAnalysis,
+                          ),
+                        );
+                      }
+                    },
+              child: Text(context.l10n.analysis),
+            );
+          },
         ),
       ],
     );

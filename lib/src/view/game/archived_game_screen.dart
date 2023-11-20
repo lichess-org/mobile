@@ -280,13 +280,10 @@ class _BottomBar extends ConsumerWidget {
                                     setState(() {
                                       isLoading = true;
                                     });
-                                    pgn = await (game.serverAnalysis != null
-                                        ? ref.read(
-                                            gameAnalysisPgnProvider(
-                                              id: gameData.id,
-                                            ).future,
-                                          )
-                                        : game.pgn);
+                                    pgn = await ref.read(
+                                      gameAnalysisPgnProvider(id: gameData.id)
+                                          .future,
+                                    );
                                   } catch (e) {
                                     if (context.mounted) {
                                       showPlatformErrorSnackbar(

@@ -9,6 +9,7 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/online_game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -411,17 +412,50 @@ class _GameBottomBar extends ConsumerWidget {
                 icon: CupertinoIcons.arrowshape_turn_up_left,
               )
             else if (gameState.game.finished)
-              BottomBarButton(
-                label: context.l10n.gameAnalysis,
-                shortLabel: 'Analysis',
-                icon: Icons.biotech,
-                onTap: () => pushPlatformRoute(
-                  context,
-                  builder: (_) => AnalysisScreen(
-                    options: gameState.analysisOptions,
-                    title: context.l10n.gameAnalysis,
-                  ),
-                ),
+              Builder(
+                builder: (context) {
+                  Future<void>? pendingPgn;
+                  return StatefulBuilder(
+                    builder: (context, setState) {
+                      return FutureBuilder(
+                        future: pendingPgn,
+                        builder: (context, snapshot) {
+                          return BottomBarButton(
+                            label: context.l10n.gameAnalysis,
+                            shortLabel: 'Analysis',
+                            icon: Icons.biotech,
+                            onTap: snapshot.connectionState ==
+                                    ConnectionState.waiting
+                                ? null
+                                : () async {
+                                    final future = ref.read(
+                                      gameAnalysisPgnProvider(
+                                        id: gameState.game.id,
+                                      ).future,
+                                    );
+                                    setState(() {
+                                      pendingPgn = future;
+                                    });
+                                    final pgn = await future;
+                                    if (context.mounted) {
+                                      pushPlatformRoute(
+                                        context,
+                                        builder: (_) => AnalysisScreen(
+                                          options: gameState.analysisOptions
+                                              .copyWith(
+                                            pgn: pgn,
+                                          ),
+                                          title: context.l10n.gameAnalysis,
+                                        ),
+                                      );
+                                    }
+                                  },
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
               )
             else
               const SizedBox(
