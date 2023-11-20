@@ -1,13 +1,22 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dartchess/dartchess.dart';
 
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'ping_rating.dart';
 import 'game_screen_providers.dart';
@@ -110,6 +119,138 @@ class GameCupertinoNavBar extends ConsumerWidget
     final Color backgroundColor = CupertinoTheme.of(context).barBackgroundColor;
     return backgroundColor.alpha == 0xFF;
   }
+}
+
+List<BottomSheetAction> makeFinishedGameShareActions(
+  BaseGame game, {
+  required Position currentGamePosition,
+  required Side orientation,
+  Move? lastMove,
+  required BuildContext context,
+  required WidgetRef ref,
+}) {
+  final boardTheme = ref.read(boardPreferencesProvider).boardTheme;
+  final pieceTheme = ref.read(boardPreferencesProvider).pieceSet;
+  return [
+    BottomSheetAction(
+      label: const Text('Share game URL'),
+      onPressed: (context) {
+        Share.shareUri(
+          Uri.parse('$kLichessHost/${game.id}'),
+        );
+      },
+    ),
+    BottomSheetAction(
+      label: Text(context.l10n.gameAsGIF),
+      onPressed: (context) async {
+        try {
+          final resp = await ref
+              .read(httpClientProvider)
+              .get(
+                Uri.parse(
+                  '$kLichessCDNHost/game/export/gif/${orientation.name}/${game.id}.gif?theme=${boardTheme.name}&piece=${pieceTheme.name}',
+                ),
+              )
+              .timeout(const Duration(seconds: 1));
+
+          if (resp.statusCode != 200) {
+            throw Exception('Failed to get GIF');
+          }
+          final gif = XFile.fromData(resp.bodyBytes, mimeType: 'image/gif');
+          Share.shareXFiles([gif]);
+        } catch (e) {
+          debugPrint(e.toString());
+          if (context.mounted) {
+            showPlatformErrorSnackbar(
+              context,
+              'Failed to get GIF',
+            );
+          }
+        }
+      },
+    ),
+    if (lastMove != null)
+      BottomSheetAction(
+        label: Text(context.l10n.screenshotCurrentPosition),
+        onPressed: (context) async {
+          try {
+            final resp = await ref
+                .read(httpClientProvider)
+                .get(
+                  Uri.parse(
+                    '$kLichessCDNHost/export/fen.gif?fen=${Uri.encodeComponent(currentGamePosition.fen)}&color=${orientation.name}&lastMove=${lastMove.uci}&theme=${boardTheme.name}&piece=${pieceTheme.name}',
+                  ),
+                )
+                .timeout(const Duration(seconds: 1));
+            if (resp.statusCode != 200) {
+              throw Exception('Failed to get GIF');
+            }
+            Share.shareXFiles(
+              [XFile.fromData(resp.bodyBytes, mimeType: 'image/gif')],
+            );
+          } catch (e) {
+            if (context.mounted) {
+              showPlatformErrorSnackbar(
+                context,
+                'Failed to get GIF',
+              );
+            }
+          }
+        },
+      ),
+    BottomSheetAction(
+      label: Text('PGN: ${context.l10n.downloadAnnotated}'),
+      onPressed: (context) async {
+        try {
+          final resp = await ref
+              .read(httpClientProvider)
+              .get(
+                Uri.parse(
+                  '$kLichessHost/game/export/${game.id}?literate=1',
+                ),
+              )
+              .timeout(const Duration(seconds: 1));
+          if (resp.statusCode != 200) {
+            throw Exception('Failed to get PGN');
+          }
+          Share.share(utf8.decode(resp.bodyBytes));
+        } catch (e) {
+          if (context.mounted) {
+            showPlatformErrorSnackbar(
+              context,
+              'Failed to get PGN',
+            );
+          }
+        }
+      },
+    ),
+    BottomSheetAction(
+      label: Text('PGN: ${context.l10n.downloadRaw}'),
+      onPressed: (context) async {
+        try {
+          final resp = await ref
+              .read(httpClientProvider)
+              .get(
+                Uri.parse(
+                  '$kLichessHost/game/export/${game.id}?evals=0&clocks=0',
+                ),
+              )
+              .timeout(const Duration(seconds: 1));
+          if (resp.statusCode != 200) {
+            throw Exception('Failed to get PGN');
+          }
+          Share.share(utf8.decode(resp.bodyBytes));
+        } catch (e) {
+          if (context.mounted) {
+            showPlatformErrorSnackbar(
+              context,
+              'Failed to get PGN',
+            );
+          }
+        }
+      },
+    ),
+  ];
 }
 
 class _LobbyGameTitle extends ConsumerWidget {

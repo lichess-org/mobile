@@ -93,7 +93,7 @@ class _BodyState extends ConsumerState<_Body> {
         _hasMore = state.hasMore;
         _isLoading = state.isLoading;
         if (state.hasError) {
-          showPlatformSnackbar(context, 'Error loading history');
+          showPlatformErrorSnackbar(context, 'Error loading history');
         }
         final crossAxisCount =
             MediaQuery.sizeOf(context).width > kTabletThreshold ? 4 : 2;

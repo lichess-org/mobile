@@ -96,6 +96,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
   final initialFen = pick('initialFen').asStringOrNull();
 
   return ArchivedGame(
+    id: data.id,
     data: data,
     perf: data.perf,
     speed: data.speed,

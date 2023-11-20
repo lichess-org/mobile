@@ -27,6 +27,7 @@ import 'game_screen_providers.dart';
 import 'game_loading_board.dart';
 import 'game_player.dart';
 import 'game_result_dialog.dart';
+import 'game_common_widgets.dart';
 
 /// Common body for the [LobbyGameScreen] and [StandaloneGameScreen].
 ///
@@ -612,6 +613,16 @@ class _GameBottomBar extends ConsumerWidget {
                 barrierDismissible: true,
               );
             },
+          ),
+        if (gameState.game.finished)
+          ...makeFinishedGameShareActions(
+            gameState.game,
+            currentGamePosition:
+                gameState.game.positionAt(gameState.stepCursor),
+            lastMove: gameState.game.moveAt(gameState.stepCursor),
+            orientation: gameState.game.youAre ?? Side.white,
+            context: context,
+            ref: ref,
           ),
       ],
     );

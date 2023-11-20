@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
+import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 
 import 'archived_game_screen_providers.dart';
 
@@ -222,6 +223,7 @@ class _BottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final canGoForward = ref.watch(canGoForwardProvider(gameData.id));
     final canGoBackward = ref.watch(canGoBackwardProvider(gameData.id));
+    final gameCursor = ref.watch(gameCursorProvider(gameData.id));
 
     return Container(
       padding: Styles.horizontalBodyPadding,
@@ -239,6 +241,24 @@ class _BottomBar extends ConsumerWidget {
                 _showGameMenu(context, ref);
               },
               icon: const Icon(Icons.menu),
+            ),
+            gameCursor.when(
+              data: (data) {
+                return BottomBarIconButton(
+                  semanticsLabel: 'Show result',
+                  icon: const Icon(Icons.info_outline),
+                  onPressed: () {
+                    showAdaptiveDialog<void>(
+                      context: context,
+                      builder: (context) =>
+                          ArchivedGameResultDialog(game: data.$1),
+                      barrierDismissible: true,
+                    );
+                  },
+                );
+              },
+              loading: () => const SizedBox.shrink(),
+              error: (_, __) => const SizedBox.shrink(),
             ),
             Builder(
               builder: (context) {
@@ -269,7 +289,7 @@ class _BottomBar extends ConsumerWidget {
                                         : game.pgn);
                                   } catch (e) {
                                     if (context.mounted) {
-                                      showPlatformSnackbar(
+                                      showPlatformErrorSnackbar(
                                         context,
                                         e.toString(),
                                       );
@@ -310,12 +330,6 @@ class _BottomBar extends ConsumerWidget {
                 );
               },
             ),
-            const SizedBox(
-              width: 44.0,
-            ),
-            const SizedBox(
-              width: 44.0,
-            ),
             RepeatButton(
               onLongPress: canGoBackward ? () => _cursorBackward(ref) : null,
               child: BottomBarIconButton(
@@ -354,6 +368,7 @@ class _BottomBar extends ConsumerWidget {
 
   Future<void> _showGameMenu(BuildContext context, WidgetRef ref) {
     final game = ref.read(gameCursorProvider(gameData.id)).valueOrNull?.$1;
+    final cursor = ref.read(gameCursorProvider(gameData.id)).valueOrNull?.$2;
     return showAdaptiveActionSheet(
       context: context,
       actions: [
@@ -363,16 +378,14 @@ class _BottomBar extends ConsumerWidget {
             ref.read(isBoardTurnedProvider.notifier).toggle();
           },
         ),
-        if (game != null)
-          BottomSheetAction(
-            label: const Text('Show result'),
-            onPressed: (context) {
-              showAdaptiveDialog<void>(
-                context: context,
-                builder: (context) => ArchivedGameResultDialog(game: game),
-                barrierDismissible: true,
-              );
-            },
+        if (game != null && cursor != null)
+          ...makeFinishedGameShareActions(
+            game,
+            context: context,
+            ref: ref,
+            currentGamePosition: game.positionAt(cursor),
+            orientation: orientation,
+            lastMove: game.moveAt(cursor),
           ),
       ],
     );

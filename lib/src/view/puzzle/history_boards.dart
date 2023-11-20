@@ -62,7 +62,7 @@ class _PuzzleHistoryState extends ConsumerState<PuzzleHistoryBoards> {
                         puzzle = await ref.read(puzzleProvider(e.id).future);
                       } catch (e) {
                         if (mounted) {
-                          showPlatformSnackbar(
+                          showPlatformErrorSnackbar(
                             context,
                             e.toString(),
                           );

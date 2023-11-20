@@ -64,6 +64,7 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
   }
 
   return PlayableGame(
+    id: requiredGamePick('id').asGameIdOrThrow(),
     meta: meta,
     initialFen: initialFen,
     perf: meta.perf,
@@ -97,7 +98,6 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
 
 PlayableGameMeta _playableGameMetaFromPick(RequiredPick pick) {
   return PlayableGameMeta(
-    id: pick('id').asGameIdOrThrow(),
     rated: pick('rated').asBoolOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),
     perf: pick('perf').asPerfOrThrow(),

@@ -838,6 +838,6 @@ class GameState with _$GameState {
         pgn: game.pgn,
         initialMoveCursor: stepCursor,
         orientation: game.youAre ?? Side.white,
-        id: game.meta.id,
+        id: game.id,
       );
 }

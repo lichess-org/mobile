@@ -17,6 +17,8 @@ part 'game.freezed.dart';
 
 /// Common interface for playable and archived games.
 abstract mixin class BaseGame {
+  GameId get id;
+
   /// Game steps, cannot be empty.
   IList<GameStep> get steps;
 
@@ -116,6 +118,7 @@ class PlayableGame
 
   @Assert('steps.isNotEmpty')
   factory PlayableGame({
+    required GameId id,
     required PlayableGameMeta meta,
     required IList<GameStep> steps,
     String? initialFen,
@@ -231,7 +234,6 @@ class PlayableGameMeta with _$PlayableGameMeta {
   const PlayableGameMeta._();
 
   const factory PlayableGameMeta({
-    required GameId id,
     required bool rated,
     required Variant variant,
     required Speed speed,
@@ -296,6 +298,7 @@ class ArchivedGame
 
   @Assert('steps.isNotEmpty')
   factory ArchivedGame({
+    required GameId id,
     required ArchivedGameData data,
     required IList<GameStep> steps,
     String? initialFen,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 
 /// A adaptive circular progress indicator which size is constrained so it can fit
 /// in buttons.
@@ -68,11 +69,14 @@ class FullScreenRetryRequest extends StatelessWidget {
   }
 }
 
-void showPlatformSnackbar(BuildContext context, String message) {
+void showPlatformErrorSnackbar(BuildContext context, String message) {
   switch (defaultTargetPlatform) {
     case TargetPlatform.android:
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
+        SnackBar(
+          content: Text(message, style: const TextStyle(color: Colors.white)),
+          backgroundColor: LichessColors.red,
+        ),
       );
     case TargetPlatform.iOS:
       showCupertinoErrorSnackBar(
@@ -103,7 +107,7 @@ void showCupertinoErrorSnackBar({
     duration + _snackBarAnimationDuration * 2,
     overlayEntry.remove,
   );
-  Overlay.of(Navigator.of(context).context).insert(overlayEntry);
+  Overlay.of(context).insert(overlayEntry);
 }
 
 const _snackBarAnimationDuration = Duration(milliseconds: 400);

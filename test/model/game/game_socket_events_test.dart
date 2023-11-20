@@ -8,7 +8,7 @@ void main() {
   test('decode game full event from websocket json', () {
     final json = jsonDecode(_gameJson) as Map<String, dynamic>;
     final fullEvent = GameFullEvent.fromJson(json);
-    expect(fullEvent.game.meta.id, const GameId('nV3DaALy'));
+    expect(fullEvent.game.id, const GameId('nV3DaALy'));
   });
 }
 
