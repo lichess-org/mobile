@@ -66,6 +66,7 @@ class _TvScreenState extends ConsumerState<TvScreen>
   ) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        padding: EdgeInsetsDirectional.zero,
         middle: Text('${widget.channel.label} TV'),
         trailing: ToggleSoundButton(),
       ),
