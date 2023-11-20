@@ -187,7 +187,7 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
   final Widget Function(T choice) titleBuilder;
   final Widget Function(T choice)? subtitleBuilder;
   final Widget Function(T choice)? leadingBuilder;
-  final void Function(T choice) onSelectedItemChanged;
+  final void Function(T choice)? onSelectedItemChanged;
 
   /// Only on android.
   final bool showDividerBetweenTiles;
@@ -213,38 +213,48 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
             title: titleBuilder(value),
             subtitle: subtitleBuilder?.call(value),
             leading: leadingBuilder?.call(value),
-            onTap: () => onSelectedItemChanged(value),
+            onTap: onSelectedItemChanged != null
+                ? () => onSelectedItemChanged!(value)
+                : null,
           );
         });
-        return Column(
-          children: [
-            if (showDividerBetweenTiles)
-              ...ListTile.divideTiles(
-                context: context,
-                tiles: tiles,
-              )
-            else
-              ...tiles,
-          ],
+        return Opacity(
+          opacity: onSelectedItemChanged != null ? 1.0 : 0.5,
+          child: Column(
+            children: [
+              if (showDividerBetweenTiles)
+                ...ListTile.divideTiles(
+                  context: context,
+                  tiles: tiles,
+                )
+              else
+                ...tiles,
+            ],
+          ),
         );
       case TargetPlatform.iOS:
         final tileConstructor =
             notchedTile ? CupertinoListTile.notched : CupertinoListTile.new;
-        return CupertinoListSection.insetGrouped(
-          additionalDividerMargin: notchedTile ? null : 6.0,
-          hasLeading: leadingBuilder != null,
-          margin: margin,
-          children: choices.map((value) {
-            return tileConstructor(
-              trailing: selectedItem == value
-                  ? const Icon(CupertinoIcons.check_mark_circled_solid)
-                  : null,
-              title: titleBuilder(value),
-              subtitle: subtitleBuilder?.call(value),
-              leading: leadingBuilder?.call(value),
-              onTap: () => onSelectedItemChanged(value),
-            );
-          }).toList(growable: false),
+        return Opacity(
+          opacity: onSelectedItemChanged != null ? 1.0 : 0.5,
+          child: CupertinoListSection.insetGrouped(
+            additionalDividerMargin: notchedTile ? null : 6.0,
+            hasLeading: leadingBuilder != null,
+            margin: margin,
+            children: choices.map((value) {
+              return tileConstructor(
+                trailing: selectedItem == value
+                    ? const Icon(CupertinoIcons.check_mark_circled_solid)
+                    : null,
+                title: titleBuilder(value),
+                subtitle: subtitleBuilder?.call(value),
+                leading: leadingBuilder?.call(value),
+                onTap: onSelectedItemChanged != null
+                    ? () => onSelectedItemChanged!(value)
+                    : null,
+              );
+            }).toList(growable: false),
+          ),
         );
       default:
         assert(false, 'Unexpected platform $defaultTargetPlatform');

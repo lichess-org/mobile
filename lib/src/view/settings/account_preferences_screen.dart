@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -11,40 +11,49 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 
-class AccountPreferencesScreen extends StatelessWidget {
+final spinKit = defaultTargetPlatform == TargetPlatform.iOS
+    ? const SizedBox(
+        width: 35,
+        child: SpinKitThreeBounce(
+          color: Colors.grey,
+          size: 15,
+        ),
+      )
+    : const SpinKitThreeBounce(
+        color: Colors.grey,
+        size: 30,
+      );
+
+class AccountPreferencesScreen extends ConsumerStatefulWidget {
   const AccountPreferencesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.preferencesPreferences),
-      ),
-      body: _Body(),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: _Body(),
-    );
-  }
+  ConsumerState<AccountPreferencesScreen> createState() =>
+      _AccountPreferencesScreenState();
 }
 
-class _Body extends ConsumerWidget {
+class _AccountPreferencesScreenState
+    extends ConsumerState<AccountPreferencesScreen> {
+  bool isLoading = false;
+
+  Future<void> _setPref(Future<void> Function() f) async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      await f();
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final accountPrefs = ref.watch(accountPreferencesProvider);
 
-    return accountPrefs.when(
+    final content = accountPrefs.when(
       data: (data) {
         if (data == null) {
           return const Center(
@@ -74,11 +83,17 @@ class _Body extends ConsumerWidget {
                           choices: Zen.values,
                           selectedItem: data.zenMode,
                           labelBuilder: (t) => Text(t.label(context)),
-                          onSelectedItemChanged: (Zen? value) {
-                            ref
-                                .read(accountPreferencesProvider.notifier)
-                                .setZen(value ?? data.zenMode);
-                          },
+                          onSelectedItemChanged: isLoading
+                              ? null
+                              : (Zen? value) {
+                                  _setPref(
+                                    () => ref
+                                        .read(
+                                          accountPreferencesProvider.notifier,
+                                        )
+                                        .setZen(value ?? data.zenMode),
+                                  );
+                                },
                         );
                       } else {
                         pushPlatformRoute(
@@ -92,11 +107,15 @@ class _Body extends ConsumerWidget {
                   SwitchSettingTile(
                     title: Text(context.l10n.preferencesShowPlayerRatings),
                     value: data.showRatings.value,
-                    onChanged: (value) {
-                      ref
-                          .read(accountPreferencesProvider.notifier)
-                          .setShowRatings(BooleanPref(value));
-                    },
+                    onChanged: isLoading
+                        ? null
+                        : (value) {
+                            _setPref(
+                              () => ref
+                                  .read(accountPreferencesProvider.notifier)
+                                  .setShowRatings(BooleanPref(value)),
+                            );
+                          },
                     additionalInfo:
                         context.l10n.preferencesExplainShowPlayerRatings,
                   ),
@@ -113,22 +132,30 @@ class _Body extends ConsumerWidget {
                       context.l10n.preferencesPremovesPlayingDuringOpponentTurn,
                     ),
                     value: data.premove.value,
-                    onChanged: (value) {
-                      ref
-                          .read(accountPreferencesProvider.notifier)
-                          .setPremove(BooleanPref(value));
-                    },
+                    onChanged: isLoading
+                        ? null
+                        : (value) {
+                            _setPref(
+                              () => ref
+                                  .read(accountPreferencesProvider.notifier)
+                                  .setPremove(BooleanPref(value)),
+                            );
+                          },
                   ),
                   SwitchSettingTile(
                     title: Text(
                       context.l10n.preferencesConfirmResignationAndDrawOffers,
                     ),
                     value: data.confirmResign.value,
-                    onChanged: (value) {
-                      ref
-                          .read(accountPreferencesProvider.notifier)
-                          .setConfirmResign(BooleanPref(value));
-                    },
+                    onChanged: isLoading
+                        ? null
+                        : (value) {
+                            _setPref(
+                              () => ref
+                                  .read(accountPreferencesProvider.notifier)
+                                  .setConfirmResign(BooleanPref(value)),
+                            );
+                          },
                   ),
                   SettingsListTile(
                     settingsLabel: Text(
@@ -143,11 +170,17 @@ class _Body extends ConsumerWidget {
                           choices: Takeback.values,
                           selectedItem: data.takeback,
                           labelBuilder: (t) => Text(t.label(context)),
-                          onSelectedItemChanged: (Takeback? value) {
-                            ref
-                                .read(accountPreferencesProvider.notifier)
-                                .setTakeback(value ?? data.takeback);
-                          },
+                          onSelectedItemChanged: isLoading
+                              ? null
+                              : (Takeback? value) {
+                                  _setPref(
+                                    () => ref
+                                        .read(
+                                          accountPreferencesProvider.notifier,
+                                        )
+                                        .setTakeback(value ?? data.takeback),
+                                  );
+                                },
                         );
                       } else {
                         pushPlatformRoute(
@@ -172,11 +205,17 @@ class _Body extends ConsumerWidget {
                           choices: AutoQueen.values,
                           selectedItem: data.autoQueen,
                           labelBuilder: (t) => Text(t.label(context)),
-                          onSelectedItemChanged: (AutoQueen? value) {
-                            ref
-                                .read(accountPreferencesProvider.notifier)
-                                .setAutoQueen(value ?? data.autoQueen);
-                          },
+                          onSelectedItemChanged: isLoading
+                              ? null
+                              : (AutoQueen? value) {
+                                  _setPref(
+                                    () => ref
+                                        .read(
+                                          accountPreferencesProvider.notifier,
+                                        )
+                                        .setAutoQueen(value ?? data.autoQueen),
+                                  );
+                                },
                         );
                       } else {
                         pushPlatformRoute(
@@ -202,11 +241,19 @@ class _Body extends ConsumerWidget {
                           choices: AutoThreefold.values,
                           selectedItem: data.autoThreefold,
                           labelBuilder: (t) => Text(t.label(context)),
-                          onSelectedItemChanged: (AutoThreefold? value) {
-                            ref
-                                .read(accountPreferencesProvider.notifier)
-                                .setAutoThreefold(value ?? data.autoThreefold);
-                          },
+                          onSelectedItemChanged: isLoading
+                              ? null
+                              : (AutoThreefold? value) {
+                                  _setPref(
+                                    () => ref
+                                        .read(
+                                          accountPreferencesProvider.notifier,
+                                        )
+                                        .setAutoThreefold(
+                                          value ?? data.autoThreefold,
+                                        ),
+                                  );
+                                },
                         );
                       } else {
                         pushPlatformRoute(
@@ -233,9 +280,11 @@ class _Body extends ConsumerWidget {
                         labelBuilder: (t) => Text(t.label(context)),
                       ).then((value) {
                         if (value != null) {
-                          ref
-                              .read(accountPreferencesProvider.notifier)
-                              .setSubmitMove(SubmitMove(value));
+                          _setPref(
+                            () => ref
+                                .read(accountPreferencesProvider.notifier)
+                                .setSubmitMove(SubmitMove(value)),
+                          );
                         }
                       });
                     },
@@ -263,11 +312,17 @@ class _Body extends ConsumerWidget {
                           choices: Moretime.values,
                           selectedItem: data.moretime,
                           labelBuilder: (t) => Text(t.label(context)),
-                          onSelectedItemChanged: (Moretime? value) {
-                            ref
-                                .read(accountPreferencesProvider.notifier)
-                                .setMoretime(value ?? data.moretime);
-                          },
+                          onSelectedItemChanged: isLoading
+                              ? null
+                              : (Moretime? value) {
+                                  _setPref(
+                                    () => ref
+                                        .read(
+                                          accountPreferencesProvider.notifier,
+                                        )
+                                        .setMoretime(value ?? data.moretime),
+                                  );
+                                },
                         );
                       } else {
                         pushPlatformRoute(
@@ -287,14 +342,39 @@ class _Body extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, stack) => Center(child: Text(err.toString())),
     );
+
+    return defaultTargetPlatform == TargetPlatform.android
+        ? Scaffold(
+            appBar: AppBar(
+              title: isLoading
+                  ? spinKit
+                  : Text(context.l10n.preferencesPreferences),
+            ),
+            body: content,
+          )
+        : CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              middle: isLoading
+                  ? spinKit
+                  : Text(context.l10n.preferencesPreferences),
+            ),
+            child: content,
+          );
   }
 }
 
-class ZenSettingsScreen extends ConsumerWidget {
+class ZenSettingsScreen extends ConsumerStatefulWidget {
   const ZenSettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ZenSettingsScreen> createState() => _ZenSettingsScreenState();
+}
+
+class _ZenSettingsScreenState extends ConsumerState<ZenSettingsScreen> {
+  bool isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
     final accountPrefs = ref.watch(accountPreferencesProvider);
     return accountPrefs.when(
       data: (data) {
@@ -305,7 +385,9 @@ class ZenSettingsScreen extends ConsumerWidget {
         }
 
         return CupertinoPageScaffold(
-          navigationBar: const CupertinoNavigationBar(),
+          navigationBar: CupertinoNavigationBar(
+            middle: isLoading ? spinKit : Text(context.l10n.preferencesZenMode),
+          ),
           child: SafeArea(
             child: ListView(
               children: [
@@ -313,11 +395,22 @@ class ZenSettingsScreen extends ConsumerWidget {
                   choices: Zen.values,
                   selectedItem: data.zenMode,
                   titleBuilder: (t) => Text(t.label(context)),
-                  onSelectedItemChanged: (Zen? v) {
-                    ref
-                        .read(accountPreferencesProvider.notifier)
-                        .setZen(v ?? data.zenMode);
-                  },
+                  onSelectedItemChanged: isLoading
+                      ? null
+                      : (Zen? v) async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          try {
+                            await ref
+                                .read(accountPreferencesProvider.notifier)
+                                .setZen(v ?? data.zenMode);
+                          } finally {
+                            setState(() {
+                              isLoading = false;
+                            });
+                          }
+                        },
                 ),
               ],
             ),
@@ -330,11 +423,20 @@ class ZenSettingsScreen extends ConsumerWidget {
   }
 }
 
-class TakebackSettingsScreen extends ConsumerWidget {
+class TakebackSettingsScreen extends ConsumerStatefulWidget {
   const TakebackSettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TakebackSettingsScreen> createState() =>
+      _TakebackSettingsScreenState();
+}
+
+class _TakebackSettingsScreenState
+    extends ConsumerState<TakebackSettingsScreen> {
+  bool isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
     final accountPrefs = ref.watch(accountPreferencesProvider);
     return accountPrefs.when(
       data: (data) {
@@ -345,7 +447,13 @@ class TakebackSettingsScreen extends ConsumerWidget {
         }
 
         return CupertinoPageScaffold(
-          navigationBar: const CupertinoNavigationBar(),
+          navigationBar: CupertinoNavigationBar(
+            middle: isLoading
+                ? spinKit
+                : Text(
+                    context.l10n.preferencesTakebacksWithOpponentApproval,
+                  ),
+          ),
           child: SafeArea(
             child: ListView(
               children: [
@@ -353,11 +461,22 @@ class TakebackSettingsScreen extends ConsumerWidget {
                   choices: Takeback.values,
                   selectedItem: data.takeback,
                   titleBuilder: (t) => Text(t.label(context)),
-                  onSelectedItemChanged: (Takeback? v) {
-                    ref
-                        .read(accountPreferencesProvider.notifier)
-                        .setTakeback(v ?? data.takeback);
-                  },
+                  onSelectedItemChanged: isLoading
+                      ? null
+                      : (Takeback? v) async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          try {
+                            await ref
+                                .read(accountPreferencesProvider.notifier)
+                                .setTakeback(v ?? data.takeback);
+                          } finally {
+                            setState(() {
+                              isLoading = false;
+                            });
+                          }
+                        },
                 ),
               ],
             ),
@@ -370,11 +489,20 @@ class TakebackSettingsScreen extends ConsumerWidget {
   }
 }
 
-class AutoQueenSettingsScreen extends ConsumerWidget {
+class AutoQueenSettingsScreen extends ConsumerStatefulWidget {
   const AutoQueenSettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AutoQueenSettingsScreen> createState() =>
+      _AutoQueenSettingsScreenState();
+}
+
+class _AutoQueenSettingsScreenState
+    extends ConsumerState<AutoQueenSettingsScreen> {
+  Future<void>? _pendingSetAutoQueen;
+
+  @override
+  Widget build(BuildContext context) {
     final accountPrefs = ref.watch(accountPreferencesProvider);
     return accountPrefs.when(
       data: (data) {
@@ -384,24 +512,41 @@ class AutoQueenSettingsScreen extends ConsumerWidget {
           );
         }
 
-        return CupertinoPageScaffold(
-          navigationBar: const CupertinoNavigationBar(),
-          child: SafeArea(
-            child: ListView(
-              children: [
-                ChoicePicker(
-                  choices: AutoQueen.values,
-                  selectedItem: data.autoQueen,
-                  titleBuilder: (t) => Text(t.label(context)),
-                  onSelectedItemChanged: (AutoQueen? v) {
-                    ref
-                        .read(accountPreferencesProvider.notifier)
-                        .setAutoQueen(v ?? data.autoQueen);
-                  },
+        return FutureBuilder(
+          future: _pendingSetAutoQueen,
+          builder: (context, snapshot) {
+            return CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                middle: snapshot.connectionState == ConnectionState.waiting
+                    ? spinKit
+                    : Text(
+                        context.l10n.preferencesPromoteToQueenAutomatically,
+                      ),
+              ),
+              child: SafeArea(
+                child: ListView(
+                  children: [
+                    ChoicePicker(
+                      choices: AutoQueen.values,
+                      selectedItem: data.autoQueen,
+                      titleBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged:
+                          snapshot.connectionState == ConnectionState.waiting
+                              ? null
+                              : (AutoQueen? v) {
+                                  final future = ref
+                                      .read(accountPreferencesProvider.notifier)
+                                      .setAutoQueen(v ?? data.autoQueen);
+                                  setState(() {
+                                    _pendingSetAutoQueen = future;
+                                  });
+                                },
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -410,11 +555,20 @@ class AutoQueenSettingsScreen extends ConsumerWidget {
   }
 }
 
-class AutoThreefoldSettingsScreen extends ConsumerWidget {
+class AutoThreefoldSettingsScreen extends ConsumerStatefulWidget {
   const AutoThreefoldSettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AutoThreefoldSettingsScreen> createState() =>
+      _AutoThreefoldSettingsScreenState();
+}
+
+class _AutoThreefoldSettingsScreenState
+    extends ConsumerState<AutoThreefoldSettingsScreen> {
+  Future<void>? _pendingSetAutoThreefold;
+
+  @override
+  Widget build(BuildContext context) {
     final accountPrefs = ref.watch(accountPreferencesProvider);
     return accountPrefs.when(
       data: (data) {
@@ -424,24 +578,42 @@ class AutoThreefoldSettingsScreen extends ConsumerWidget {
           );
         }
 
-        return CupertinoPageScaffold(
-          navigationBar: const CupertinoNavigationBar(),
-          child: SafeArea(
-            child: ListView(
-              children: [
-                ChoicePicker(
-                  choices: AutoThreefold.values,
-                  selectedItem: data.autoThreefold,
-                  titleBuilder: (t) => Text(t.label(context)),
-                  onSelectedItemChanged: (AutoThreefold? v) {
-                    ref
-                        .read(accountPreferencesProvider.notifier)
-                        .setAutoThreefold(v ?? data.autoThreefold);
-                  },
+        return FutureBuilder(
+          future: _pendingSetAutoThreefold,
+          builder: (context, snapshot) {
+            return CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                middle: snapshot.connectionState == ConnectionState.waiting
+                    ? spinKit
+                    : Text(
+                        context.l10n
+                            .preferencesClaimDrawOnThreefoldRepetitionAutomatically,
+                      ),
+              ),
+              child: SafeArea(
+                child: ListView(
+                  children: [
+                    ChoicePicker(
+                      choices: AutoThreefold.values,
+                      selectedItem: data.autoThreefold,
+                      titleBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged: snapshot.connectionState ==
+                              ConnectionState.waiting
+                          ? null
+                          : (AutoThreefold? v) {
+                              final future = ref
+                                  .read(accountPreferencesProvider.notifier)
+                                  .setAutoThreefold(v ?? data.autoThreefold);
+                              setState(() {
+                                _pendingSetAutoThreefold = future;
+                              });
+                            },
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -450,11 +622,20 @@ class AutoThreefoldSettingsScreen extends ConsumerWidget {
   }
 }
 
-class MoretimeSettingsScreen extends ConsumerWidget {
+class MoretimeSettingsScreen extends ConsumerStatefulWidget {
   const MoretimeSettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MoretimeSettingsScreen> createState() =>
+      _MoretimeSettingsScreenState();
+}
+
+class _MoretimeSettingsScreenState
+    extends ConsumerState<MoretimeSettingsScreen> {
+  Future<void>? _pendingSetMoretime;
+
+  @override
+  Widget build(BuildContext context) {
     final accountPrefs = ref.watch(accountPreferencesProvider);
     return accountPrefs.when(
       data: (data) {
@@ -464,24 +645,40 @@ class MoretimeSettingsScreen extends ConsumerWidget {
           );
         }
 
-        return CupertinoPageScaffold(
-          navigationBar: const CupertinoNavigationBar(),
-          child: SafeArea(
-            child: ListView(
-              children: [
-                ChoicePicker(
-                  choices: Moretime.values,
-                  selectedItem: data.moretime,
-                  titleBuilder: (t) => Text(t.label(context)),
-                  onSelectedItemChanged: (Moretime? v) {
-                    ref
-                        .read(accountPreferencesProvider.notifier)
-                        .setMoretime(v ?? data.moretime);
-                  },
+        return FutureBuilder(
+          future: _pendingSetMoretime,
+          builder: (context, snapshot) {
+            return CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                middle: snapshot.connectionState == ConnectionState.waiting
+                    ? spinKit
+                    : Text(
+                        context.l10n.preferencesGiveMoreTime,
+                      ),
+              ),
+              child: SafeArea(
+                child: ListView(
+                  children: [
+                    ChoicePicker(
+                      choices: Moretime.values,
+                      selectedItem: data.moretime,
+                      titleBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged: snapshot.connectionState ==
+                              ConnectionState.waiting
+                          ? null
+                          : (Moretime? v) {
+                              setState(() {
+                                _pendingSetMoretime = ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setMoretime(v ?? data.moretime);
+                              });
+                            },
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
