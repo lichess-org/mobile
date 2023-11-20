@@ -262,41 +262,34 @@ class _BottomBar extends ConsumerWidget {
             ),
             Builder(
               builder: (context) {
-                bool isLoading = false;
+                Future<void>? pgnFuture;
                 return StatefulBuilder(
                   builder: (context, setState) {
-                    return BottomBarIconButton(
-                      semanticsLabel: context.l10n.gameAnalysis,
-                      onPressed: isLoading
-                          ? null
-                          : ref.read(gameCursorProvider(gameData.id)).hasValue
-                              ? () async {
-                                  final (game, cursor) = ref
+                    return FutureBuilder(
+                      future: pgnFuture,
+                      builder: (context, snapshot) {
+                        return BottomBarIconButton(
+                          semanticsLabel: context.l10n.gameAnalysis,
+                          onPressed: snapshot.connectionState ==
+                                  ConnectionState.waiting
+                              ? null
+                              : ref
                                       .read(gameCursorProvider(gameData.id))
-                                      .requireValue;
+                                      .hasValue
+                                  ? () async {
+                                      final (game, cursor) = ref
+                                          .read(gameCursorProvider(gameData.id))
+                                          .requireValue;
 
-                                  String? pgn;
-                                  try {
-                                    setState(() {
-                                      isLoading = true;
-                                    });
-                                    pgn = await ref.read(
-                                      gameAnalysisPgnProvider(id: gameData.id)
-                                          .future,
-                                    );
-                                  } catch (e) {
-                                    if (context.mounted) {
-                                      showPlatformErrorSnackbar(
-                                        context,
-                                        e.toString(),
+                                      final future = ref.read(
+                                        gameAnalysisPgnProvider(id: gameData.id)
+                                            .future,
                                       );
-                                    }
-                                  } finally {
-                                    if (context.mounted) {
                                       setState(() {
-                                        isLoading = false;
+                                        pgnFuture = future;
                                       });
-                                      if (pgn != null) {
+                                      final pgn = await future;
+                                      if (context.mounted) {
                                         pushPlatformRoute(
                                           context,
                                           builder: (context) => AnalysisScreen(
@@ -304,7 +297,7 @@ class _BottomBar extends ConsumerWidget {
                                             options: AnalysisOptions(
                                               isLocalEvaluationAllowed: true,
                                               variant: gameData.variant,
-                                              pgn: pgn!,
+                                              pgn: pgn,
                                               initialMoveCursor: cursor,
                                               orientation: orientation,
                                               id: gameData.id,
@@ -316,12 +309,10 @@ class _BottomBar extends ConsumerWidget {
                                         );
                                       }
                                     }
-                                  }
-                                }
-                              : null,
-                      icon: isLoading
-                          ? const ButtonLoadingIndicator()
-                          : const Icon(Icons.biotech),
+                                  : null,
+                          icon: const Icon(Icons.biotech),
+                        );
+                      },
                     );
                   },
                 );
