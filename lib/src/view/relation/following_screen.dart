@@ -72,10 +72,6 @@ class _Body extends ConsumerWidget {
     return followingAndOnlines.when(
       data: (data) {
         IList<User> following = data.$1;
-        // following = following.addAll([
-        //   following.first.copyWith(username: 'toto'),
-        //   following.first.copyWith(username: 'tata')
-        // ]);
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             if (following.isEmpty) {

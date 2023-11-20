@@ -431,7 +431,7 @@ class _PreferredSetup extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           const Text(
-            'Play online now',
+            'Play online',
             style: Styles.boardPreviewTitle,
           ),
           Column(
