@@ -120,8 +120,8 @@ UserActivity _userActivityFromPick(RequiredPick pick) {
 
   final games = IMap({
     for (final entry in receivedGamesMap.entries)
-      if (perfNameMap.containsKey(entry.key))
-        perfNameMap.get(entry.key)!: UserActivityScore.fromJson(entry.value),
+      if (Perf.nameMap.containsKey(entry.key))
+        Perf.nameMap.get(entry.key)!: UserActivityScore.fromJson(entry.value),
   });
 
   final bestTour = pick('tournaments', 'best')
@@ -316,10 +316,10 @@ IMap<Perf, LeaderboardUser> _top1FromJson(Map<String, dynamic> json) {
   final map = pick(json).asMapOrEmpty<String, Map<String, dynamic>>();
   return IMap({
     for (final entry in map.entries)
-      if (perfNameMap.containsKey(entry.key))
-        perfNameMap.get(entry.key)!: _top1userFromPick(
+      if (Perf.nameMap.containsKey(entry.key))
+        Perf.nameMap.get(entry.key)!: _top1userFromPick(
           pick(map[entry.key]).required(),
-          perfNameMap.get(entry.key)!,
+          Perf.nameMap.get(entry.key)!,
         ),
   });
 }

@@ -69,9 +69,9 @@ enum Perf {
         return Perf.crazyhouse;
     }
   }
-}
 
-final IMap<String, Perf> perfNameMap = IMap(Perf.values.asNameMap());
+  static IMap<String, Perf> nameMap = IMap(Perf.values.asNameMap());
+}
 
 extension PerfExtension on Pick {
   Perf asPerfOrThrow() {
@@ -80,8 +80,13 @@ extension PerfExtension on Pick {
       return value;
     }
     if (value is String) {
-      if (perfNameMap.containsKey(value)) {
-        return perfNameMap[value]!;
+      if (Perf.nameMap.containsKey(value)) {
+        return Perf.nameMap[value]!;
+      }
+    } else if (value is Map<String, dynamic>) {
+      final perf = Perf.nameMap[value['key'] as String];
+      if (perf != null) {
+        return perf;
       }
     }
     throw PickException(

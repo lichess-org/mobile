@@ -91,8 +91,8 @@ class User with _$User {
       profile: pick('profile').letOrNull(Profile.fromPick),
       perfs: IMap({
         for (final entry in receivedPerfsMap.entries)
-          if (perfNameMap.containsKey(entry.key) && entry.key != 'storm')
-            perfNameMap.get(entry.key)!: UserPerf.fromJson(entry.value),
+          if (Perf.nameMap.containsKey(entry.key) && entry.key != 'storm')
+            Perf.nameMap.get(entry.key)!: UserPerf.fromJson(entry.value),
       }),
     );
   }

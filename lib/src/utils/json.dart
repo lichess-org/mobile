@@ -57,8 +57,9 @@ Result<IList<T>> readJsonListOfObjects<T>(
     );
   });
   result.match(
-    onError: (error, st) =>
-        logger?.severe('Could not read json as list of $T: $error\n$st'),
+    onError: (error, st) {
+      logger?.severe('Could not read json as list of $T: $error\n$st');
+    },
   );
   return result;
 }
