@@ -38,6 +38,14 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
   }
 
   @override
+  void didUpdateWidget(PlayRatingRange oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final (subtract, add) = widget.ratingRange;
+    _subtract = subtract;
+    _add = add;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final isRatingRangeAvailable = widget.perf.provisional != true;
     return Opacity(
