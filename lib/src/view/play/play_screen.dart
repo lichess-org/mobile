@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
 
 import './time_control_modal.dart';
 import './custom_play_screen.dart';
+import './correspondence_play_screen.dart';
 
 class PlayScreen extends StatelessWidget {
   const PlayScreen();
@@ -72,11 +73,9 @@ class _Body extends ConsumerWidget {
                 pushPlatformRoute(
                   context,
                   rootNavigator: true,
-                  builder: (BuildContext context) {
-                    return LobbyGameScreen(
-                      seek: GameSeek.fastPairingFromPrefs(playPrefs, session),
-                    );
-                  },
+                  builder: (_) => LobbyGameScreen(
+                    seek: GameSeek.fastPairingFromPrefs(playPrefs, session),
+                  ),
                 );
               },
               child: Text(context.l10n.quickPairing),
@@ -91,12 +90,25 @@ class _Body extends ConsumerWidget {
                 pushPlatformRoute(
                   context,
                   title: context.l10n.custom,
-                  builder: (BuildContext context) {
-                    return const CustomPlayScreen();
-                  },
+                  builder: (_) => const CustomPlayScreen(),
                 );
               },
               child: Text(context.l10n.custom),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: SecondaryButton(
+              semanticsLabel: context.l10n.correspondence,
+              onPressed: () {
+                pushPlatformRoute(
+                  context,
+                  title: context.l10n.correspondence,
+                  builder: (_) => const CorrespondencePlayScreen(),
+                );
+              },
+              child: Text(context.l10n.correspondence),
             ),
           ),
         ],

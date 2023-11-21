@@ -62,6 +62,26 @@ class PlayPreferences extends _$PlayPreferences {
     return _save(state.copyWith(customRatingRange: (min, max)));
   }
 
+  Future<void> setCorrespondenceDaysPerTurn(int? days) {
+    return _save(state.copyWith(correspondenceDaysPerTurn: days));
+  }
+
+  Future<void> setCorrespondenceVariant(Variant variant) {
+    return _save(state.copyWith(correspondenceVariant: variant));
+  }
+
+  Future<void> setCorrespondenceRated(bool rated) {
+    return _save(state.copyWith(correspondenceRated: rated));
+  }
+
+  Future<void> setCorrespondenceSide(PlayableSide side) {
+    return _save(state.copyWith(correspondenceSide: side));
+  }
+
+  Future<void> setCorrespondenceRatingRange(int min, int max) {
+    return _save(state.copyWith(correspondenceRatingRange: (min, max)));
+  }
+
   Future<void> _save(PlayPrefs newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(
@@ -88,6 +108,13 @@ class PlayPrefs with _$PlayPrefs {
     required PlayableSide customSide,
     required (int, int) customRatingRange,
 
+    // correspondence game prefs
+    int? correspondenceDaysPerTurn,
+    required Variant correspondenceVariant,
+    required bool correspondenceRated,
+    required PlayableSide correspondenceSide,
+    required (int, int) correspondenceRatingRange,
+
     // prefered seek mode, set after a seek is made
     required SeekMode seekMode,
   }) = _PlayPrefs;
@@ -100,6 +127,11 @@ class PlayPrefs with _$PlayPrefs {
     customRated: false,
     customSide: PlayableSide.random,
     customRatingRange: (-500, 500),
+    correspondenceDaysPerTurn: 3,
+    correspondenceVariant: Variant.standard,
+    correspondenceRated: false,
+    correspondenceSide: PlayableSide.random,
+    correspondenceRatingRange: (-500, 500),
     seekMode: SeekMode.fast,
   );
 
@@ -225,3 +257,5 @@ const kAvailableIncrementsInSeconds = [
   150,
   180,
 ];
+
+const kAvailableDaysPerTurn = [1, 2, 3, 5, 7, 10, 14, -1];

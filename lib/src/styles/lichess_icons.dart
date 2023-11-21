@@ -89,6 +89,8 @@ class LichessIcons {
       IconData(0xe81a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData lichess =
       IconData(0xe81b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData adjust =
+      IconData(0xe81c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData flow_cascade =
       IconData(0xe81d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData tag =
@@ -103,6 +105,10 @@ class LichessIcons {
       IconData(0xf050, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData step_forward =
       IconData(0xf051, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData circle_empty =
+      IconData(0xf10c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData circle =
+      IconData(0xf111, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData chess =
       IconData(0xf439, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData chess_bishop =

@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:http/http.dart' as http;
@@ -40,6 +41,14 @@ LobbyRepository lobbyRepository(LobbyRepositoryRef ref) {
   );
 }
 
+@riverpod
+Future<IList<CorrespondenceSeek>> correspondenceSeeks(
+  CorrespondenceSeeksRef ref,
+) {
+  final lobbyRepository = ref.watch(lobbyRepositoryProvider);
+  return Result.release(lobbyRepository.getCorrespondenceSeeks());
+}
+
 class LobbyRepository {
   const LobbyRepository({
     required this.authClient,
@@ -59,13 +68,16 @@ class LobbyRepository {
   }
 
   FutureResult<IList<CorrespondenceSeek>> getCorrespondenceSeeks() {
-    return authClient.get(Uri.parse('$kLichessHost/lobby/seeks')).flatMap(
-          (response) => readJsonListOfObjectsFromResponse(
-            response,
-            mapper: _correspondenceSeekFromJson,
-            logger: _log,
-          ),
-        );
+    return authClient.get(
+      Uri.parse('$kLichessHost/lobby/seeks'),
+      headers: {'Accept': 'application/json'},
+    ).flatMap(
+      (response) => readJsonListOfObjectsFromResponse(
+        response,
+        mapper: _correspondenceSeekFromJson,
+        logger: _log,
+      ),
+    );
   }
 }
 
@@ -77,6 +89,7 @@ CorrespondenceSeek _correspondenceSeekFromPick(RequiredPick pick) {
   return CorrespondenceSeek(
     id: pick('id').asGameIdOrThrow(),
     username: pick('username').asStringOrThrow(),
+    title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrThrow(),
     variant: pick('variant').asVariantOrNull(),
     perf: pick('perf').asPerfOrThrow(),

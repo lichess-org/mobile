@@ -13,6 +13,7 @@ class PlayerTitle extends ConsumerWidget {
     this.title,
     this.rating,
     this.isPatron,
+    this.provisional,
     this.style,
     super.key,
   });
@@ -21,11 +22,14 @@ class PlayerTitle extends ConsumerWidget {
   final String? title;
   final int? rating;
   final bool? isPatron;
+  final bool? provisional;
   final TextStyle? style;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final nameAndRating = userName + (rating != null ? ' ($rating)' : '');
+    final provisionalStr = provisional == true ? '?' : '';
+    final nameAndRating =
+        userName + (rating != null ? ' ($rating$provisionalStr)' : '');
     final showRatingAsync = ref.watch(showRatingsPrefProvider);
     return Row(
       mainAxisSize: MainAxisSize.min,

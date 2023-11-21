@@ -12,6 +12,7 @@ class CorrespondenceSeek with _$CorrespondenceSeek {
   const factory CorrespondenceSeek({
     required GameId id,
     required String username,
+    String? title,
     required int rating,
     Variant? variant,
     required Perf perf,

@@ -24,7 +24,7 @@ abstract class Styles {
 
   // padding
   static const bodyPadding =
-      EdgeInsets.symmetric(vertical: 16.0, horizontal: 14.0);
+      EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0);
 
   static const verticalBodyPadding = EdgeInsets.symmetric(vertical: 16.0);
 

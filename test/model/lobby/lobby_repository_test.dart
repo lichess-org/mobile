@@ -57,7 +57,10 @@ void main() {
 ]
 ''';
       when(
-        () => mockAuthClient.get(Uri.parse('$kLichessHost/lobby/seeks')),
+        () => mockAuthClient.get(
+          Uri.parse('$kLichessHost/lobby/seeks'),
+          headers: any(named: 'headers'),
+        ),
       ).thenAnswer(
         (_) async => Result.value(http.Response(response, 200)),
       );
