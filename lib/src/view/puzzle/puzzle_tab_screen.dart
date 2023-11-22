@@ -218,7 +218,8 @@ class _Body extends ConsumerWidget {
                   style: Styles.sectionTitle,
                 ),
                 subtitle: const Text(
-                    'Solve as many puzzles as possible in 3 minutes.'),
+                  'Solve as many puzzles as possible in 3 minutes.',
+                ),
                 onTap: connectivity.when(
                   data: (data) => data.isOnline
                       ? () {
