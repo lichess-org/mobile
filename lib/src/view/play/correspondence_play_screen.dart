@@ -187,6 +187,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
               return StandaloneGameScreen(initialId: gameFullId);
             },
           );
+          _socketSubscription?.cancel();
 
         case 'reload_seeks':
           ref.invalidate(correspondenceChallengesProvider);
