@@ -58,6 +58,19 @@ class CreateGameService {
     return completer.future;
   }
 
+  Future<void> newCorrespondenceGame(GameSeek seek) async {
+    final lobbyRepo = ref.read(lobbyRepositoryProvider);
+
+    _log.info('Creating new correspondence game');
+
+    await Result.release(
+      lobbyRepo.createSeek(
+        seek,
+        sri: ref.read(authSocketProvider).sri,
+      ),
+    );
+  }
+
   /// Cancel the current game creation.
   void cancel() {
     _socketSubscription?.cancel();

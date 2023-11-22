@@ -528,7 +528,6 @@ class _OngoingGamePreview extends ConsumerWidget {
               rootNavigator: true,
               builder: (context) => StandaloneGameScreen(
                 initialId: game.fullId,
-                initialOrientation: game.orientation,
                 initialFen: game.fen,
               ),
             ).then((_) {

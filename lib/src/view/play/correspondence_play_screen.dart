@@ -1,31 +1,42 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:deep_pick/deep_pick.dart';
 
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
+import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
+import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/model/game/create_game_service.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
 
 import 'common_play_widgets.dart';
+
+enum _ViewMode { create, challenges }
 
 class CorrespondencePlayScreen extends StatelessWidget {
   const CorrespondencePlayScreen();
@@ -85,16 +96,18 @@ class _AndroidBodyState extends State<_AndroidBody>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: const <Widget>[
-          _CreateGameBody(),
-          _ChallengesBody(),
+        children: <Widget>[
+          _CreateGameBody(
+            setViewMode: (mode) => mode == _ViewMode.create
+                ? _tabController.animateTo(0)
+                : _tabController.animateTo(1),
+          ),
+          const _ChallengesBody(),
         ],
       ),
     );
   }
 }
-
-enum View { create, challenges }
 
 class _CupertinoBody extends StatefulWidget {
   const _CupertinoBody();
@@ -104,7 +117,7 @@ class _CupertinoBody extends StatefulWidget {
 }
 
 class _CupertinoBodyState extends State<_CupertinoBody> {
-  View _selectedSegment = View.create;
+  _ViewMode _selectedSegment = _ViewMode.create;
 
   @override
   Widget build(BuildContext context) {
@@ -115,13 +128,14 @@ class _CupertinoBodyState extends State<_CupertinoBody> {
         children: [
           Padding(
             padding: Styles.bodyPadding,
-            child: CupertinoSlidingSegmentedControl<View>(
+            child: CupertinoSlidingSegmentedControl<_ViewMode>(
               groupValue: _selectedSegment,
               children: {
-                View.create: Text(context.l10n.createAGame),
-                View.challenges: Text(context.l10n.preferencesNotifyChallenge),
+                _ViewMode.create: Text(context.l10n.createAGame),
+                _ViewMode.challenges:
+                    Text(context.l10n.preferencesNotifyChallenge),
               },
-              onValueChanged: (View? view) {
+              onValueChanged: (_ViewMode? view) {
                 if (view != null) {
                   setState(() {
                     _selectedSegment = view;
@@ -131,8 +145,12 @@ class _CupertinoBodyState extends State<_CupertinoBody> {
             ),
           ),
           Expanded(
-            child: _selectedSegment == View.create
-                ? const _CreateGameBody()
+            child: _selectedSegment == _ViewMode.create
+                ? _CreateGameBody(
+                    setViewMode: (mode) => setState(() {
+                      _selectedSegment = mode;
+                    }),
+                  )
                 : const _ChallengesBody(),
           ),
         ],
@@ -149,6 +167,41 @@ class _ChallengesBody extends ConsumerStatefulWidget {
 }
 
 class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
+  StreamSubscription<SocketEvent>? _socketSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    final (stream, _) = _socket.connect(Uri(path: '/lobby/socket/v5'));
+
+    _socketSubscription = stream.listen((event) {
+      switch (event.topic) {
+        // redirect after accepting a correpondence challenge
+        case 'redirect':
+          final data = event.data as Map<String, dynamic>;
+          final gameFullId = pick(data['id']).asGameFullIdOrThrow();
+          pushPlatformRoute(
+            context,
+            rootNavigator: true,
+            builder: (BuildContext context) {
+              return StandaloneGameScreen(initialId: gameFullId);
+            },
+          );
+
+        case 'reload_seeks':
+          ref.invalidate(correspondenceChallengesProvider);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _socketSubscription?.cancel();
+    super.dispose();
+  }
+
+  AuthSocket get _socket => ref.read(authSocketProvider);
+
   @override
   Widget build(BuildContext context) {
     final challengesAsync = ref.watch(correspondenceChallengesProvider);
@@ -180,7 +233,12 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                         extentRatio: 0.3,
                         children: [
                           SlidableAction(
-                            onPressed: (BuildContext context) async {},
+                            onPressed: (BuildContext context) {
+                              _socket.send(
+                                'cancelSeek',
+                                challenge.id.toString(),
+                              );
+                            },
                             backgroundColor: LichessColors.red,
                             foregroundColor: Colors.white,
                             icon: Icons.cancel,
@@ -188,19 +246,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                           ),
                         ],
                       )
-                    : ActionPane(
-                        motion: const ScrollMotion(),
-                        extentRatio: 0.3,
-                        children: [
-                          SlidableAction(
-                            onPressed: (BuildContext context) async {},
-                            backgroundColor: LichessColors.green,
-                            foregroundColor: Colors.white,
-                            icon: Icons.check,
-                            label: context.l10n.accept,
-                          ),
-                        ],
-                      ),
+                    : null,
                 child: PlatformListTile(
                   padding: Styles.bodyPadding,
                   leading: Icon(challenge.perf.icon),
@@ -218,7 +264,21 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                     provisional: challenge.provisional,
                   ),
                   subtitle: Text(subtitle),
-                  onTap: isMySeek ? null : () {},
+                  onTap: isMySeek
+                      ? null
+                      : () {
+                          showConfirmDialog<void>(
+                            context,
+                            title: Text(context.l10n.accept),
+                            isDestructiveAction: true,
+                            onConfirm: (_) {
+                              _socket.send(
+                                'joinSeek',
+                                challenge.id.toString(),
+                              );
+                            },
+                          );
+                        },
                 ),
               ),
             );
@@ -234,11 +294,20 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
   }
 }
 
-class _CreateGameBody extends ConsumerWidget {
-  const _CreateGameBody();
+class _CreateGameBody extends ConsumerStatefulWidget {
+  const _CreateGameBody({required this.setViewMode});
+
+  final void Function(_ViewMode) setViewMode;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_CreateGameBody> createState() => _CreateGameBodyState();
+}
+
+class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
+  Future<void>? _pendingCreateGame;
+
+  @override
+  Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
     final preferences = ref.watch(playPreferencesProvider);
     final session = ref.watch(authSessionProvider);
@@ -375,13 +444,33 @@ class _CreateGameBody extends ConsumerWidget {
               },
             ),
           const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: FatButton(
-              semanticsLabel: context.l10n.createAGame,
-              onPressed: () {},
-              child: Text(context.l10n.createAGame),
-            ),
+          FutureBuilder(
+            future: _pendingCreateGame,
+            builder: (context, snapshot) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: FatButton(
+                  semanticsLabel: context.l10n.createAGame,
+                  onPressed: snapshot.connectionState == ConnectionState.waiting
+                      ? null
+                      : () async {
+                          _pendingCreateGame = ref
+                              .read(createGameServiceProvider)
+                              .newCorrespondenceGame(
+                                GameSeek.correspondenceFromPrefs(
+                                  preferences,
+                                  session,
+                                  userPerf,
+                                ),
+                              );
+
+                          await _pendingCreateGame;
+                          widget.setViewMode(_ViewMode.challenges);
+                        },
+                  child: Text(context.l10n.createAGame),
+                ),
+              );
+            },
           ),
         ],
       ),

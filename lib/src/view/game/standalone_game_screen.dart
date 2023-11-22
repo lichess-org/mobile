@@ -23,14 +23,12 @@ import 'game_common_widgets.dart';
 class StandaloneGameScreen extends ConsumerStatefulWidget {
   const StandaloneGameScreen({
     required this.initialId,
-    required this.initialOrientation,
     this.initialFen,
     this.lastMove,
     super.key,
   });
 
   final GameFullId initialId;
-  final Side initialOrientation;
   final String? initialFen;
   final Move? lastMove;
 

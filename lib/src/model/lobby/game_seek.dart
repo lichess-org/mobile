@@ -66,6 +66,33 @@ class GameSeek with _$GameSeek {
     );
   }
 
+  factory GameSeek.correspondenceFromPrefs(
+    PlayPrefs playPref,
+    AuthSessionState? session,
+    UserPerf? userPerf,
+  ) {
+    return GameSeek(
+      days: playPref.correspondenceDaysPerTurn,
+      rated: session != null && playPref.correspondenceRated,
+      variant: playPref.correspondenceVariant,
+      side: playPref.correspondenceRated == true ||
+              playPref.correspondenceSide == PlayableSide.random
+          ? null
+          : playPref.correspondenceSide == PlayableSide.white
+              ? Side.white
+              : Side.black,
+      ratingRange: userPerf != null && userPerf.provisional != true
+          ? (
+              math.max(
+                0,
+                userPerf.rating + playPref.correspondenceRatingRange.$1,
+              ),
+              userPerf.rating + playPref.correspondenceRatingRange.$2
+            )
+          : null,
+    );
+  }
+
   TimeIncrement? get timeIncrement => clock != null
       ? TimeIncrement(
           clock!.$1.inSeconds,
