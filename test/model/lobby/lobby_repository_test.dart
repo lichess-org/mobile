@@ -65,7 +65,7 @@ void main() {
         (_) async => Result.value(http.Response(response, 200)),
       );
 
-      final result = await repo.getCorrespondenceSeeks();
+      final result = await repo.getCorrespondenceChallenges();
 
       expect(result.isValue, true);
     });

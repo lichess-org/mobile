@@ -16,9 +16,10 @@ part 'game_seek.freezed.dart';
 class GameSeek with _$GameSeek {
   const GameSeek._();
 
+  @Assert('clock != null || days != null')
   const factory GameSeek({
-    required Duration time,
-    required Duration increment,
+    (Duration time, Duration increment)? clock,
+    int? days,
     required bool rated,
     Variant? variant,
     Side? side,
@@ -30,8 +31,10 @@ class GameSeek with _$GameSeek {
     AuthSessionState? session,
   ) {
     return GameSeek(
-      time: Duration(seconds: playPref.timeIncrement.time),
-      increment: Duration(seconds: playPref.timeIncrement.increment),
+      clock: (
+        Duration(seconds: playPref.timeIncrement.time),
+        Duration(seconds: playPref.timeIncrement.increment),
+      ),
       rated: session != null,
     );
   }
@@ -42,8 +45,10 @@ class GameSeek with _$GameSeek {
     UserPerf? userPerf,
   ) {
     return GameSeek(
-      time: Duration(seconds: playPref.customTimeSeconds),
-      increment: Duration(seconds: playPref.customIncrementSeconds),
+      clock: (
+        Duration(seconds: playPref.customTimeSeconds),
+        Duration(seconds: playPref.customIncrementSeconds),
+      ),
       rated: session != null && playPref.customRated,
       variant: playPref.customVariant,
       side: playPref.customRated == true ||
@@ -61,19 +66,24 @@ class GameSeek with _$GameSeek {
     );
   }
 
-  TimeIncrement get timeIncrement => TimeIncrement(
-        time.inSeconds,
-        increment.inSeconds,
-      );
+  TimeIncrement? get timeIncrement => clock != null
+      ? TimeIncrement(
+          clock!.$1.inSeconds,
+          clock!.$2.inSeconds,
+        )
+      : null;
 
   Perf get perf => Perf.fromVariantAndSpeed(
         variant ?? Variant.standard,
-        Speed.fromTimeIncrement(timeIncrement),
+        timeIncrement != null
+            ? Speed.fromTimeIncrement(timeIncrement!)
+            : Speed.correspondence,
       );
 
   Map<String, String> get requestBody => {
-        'time': (time.inSeconds / 60).toString(),
-        'increment': increment.inSeconds.toString(),
+        if (clock != null) 'time': (clock!.$1.inSeconds / 60).toString(),
+        if (clock != null) 'increment': clock!.$2.inSeconds.toString(),
+        if (days != null) 'days': days.toString(),
         'rated': rated.toString(),
         if (variant != null) 'variant': variant!.name,
         if (side != null) 'color': side!.name,

@@ -272,7 +272,7 @@ class _LobbyGameTitle extends ConsumerWidget {
           color: DefaultTextStyle.of(context).style.color,
         ),
         const SizedBox(width: 4.0),
-        Text('${seek.timeIncrement.display}$mode'),
+        Text('${seek.timeIncrement?.display}$mode'),
       ],
     );
   }

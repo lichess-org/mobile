@@ -421,6 +421,8 @@ class _PreferredSetup extends ConsumerWidget {
       seek = GameSeek.customFromPrefs(playPrefs, session, userPerf);
     }
 
+    final timeControl = seek.timeIncrement?.display ??
+        '${context.l10n.daysPerTurn}: ${seek.days}';
     final mode =
         seek.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
 
@@ -456,7 +458,7 @@ class _PreferredSetup extends ConsumerWidget {
                   ),
                   const SizedBox(width: 5),
                   Text(
-                    '${seek.timeIncrement.display}$mode',
+                    '$timeControl$mode',
                     style: Styles.timeControl,
                   ),
                 ],

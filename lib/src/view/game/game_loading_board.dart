@@ -56,7 +56,8 @@ class LobbyGameLoadingBoard extends StatelessWidget {
                             ),
                             const SizedBox(width: 8.0),
                             Text(
-                              seek.timeIncrement.display,
+                              seek.timeIncrement?.display ??
+                                  '${context.l10n.daysPerTurn}: ${seek.days}',
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                           ],

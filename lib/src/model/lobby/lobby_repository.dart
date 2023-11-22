@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
 import 'game_seek.dart';
-import 'correspondence_seek.dart';
+import 'correspondence_challenge.dart';
 
 part 'lobby_repository.g.dart';
 
@@ -42,11 +42,11 @@ LobbyRepository lobbyRepository(LobbyRepositoryRef ref) {
 }
 
 @riverpod
-Future<IList<CorrespondenceSeek>> correspondenceSeeks(
-  CorrespondenceSeeksRef ref,
+Future<IList<CorrespondenceChallenge>> correspondenceChallenges(
+  CorrespondenceChallengesRef ref,
 ) {
   final lobbyRepository = ref.watch(lobbyRepositoryProvider);
-  return Result.release(lobbyRepository.getCorrespondenceSeeks());
+  return Result.release(lobbyRepository.getCorrespondenceChallenges());
 }
 
 class LobbyRepository {
@@ -67,7 +67,7 @@ class LobbyRepository {
     );
   }
 
-  FutureResult<IList<CorrespondenceSeek>> getCorrespondenceSeeks() {
+  FutureResult<IList<CorrespondenceChallenge>> getCorrespondenceChallenges() {
     return authClient.get(
       Uri.parse('$kLichessHost/lobby/seeks'),
       headers: {'Accept': 'application/json'},
@@ -81,12 +81,12 @@ class LobbyRepository {
   }
 }
 
-CorrespondenceSeek _correspondenceSeekFromJson(Map<String, dynamic> json) {
+CorrespondenceChallenge _correspondenceSeekFromJson(Map<String, dynamic> json) {
   return _correspondenceSeekFromPick(pick(json).required());
 }
 
-CorrespondenceSeek _correspondenceSeekFromPick(RequiredPick pick) {
-  return CorrespondenceSeek(
+CorrespondenceChallenge _correspondenceSeekFromPick(RequiredPick pick) {
+  return CorrespondenceChallenge(
     id: pick('id').asGameIdOrThrow(),
     username: pick('username').asStringOrThrow(),
     title: pick('title').asStringOrNull(),

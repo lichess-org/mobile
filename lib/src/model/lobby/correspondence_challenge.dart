@@ -5,11 +5,11 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 
-part 'correspondence_seek.freezed.dart';
+part 'correspondence_challenge.freezed.dart';
 
 @freezed
-class CorrespondenceSeek with _$CorrespondenceSeek {
-  const factory CorrespondenceSeek({
+class CorrespondenceChallenge with _$CorrespondenceChallenge {
+  const factory CorrespondenceChallenge({
     required GameId id,
     required String username,
     String? title,
@@ -20,5 +20,5 @@ class CorrespondenceSeek with _$CorrespondenceSeek {
     int? days,
     Side? side,
     bool? provisional,
-  }) = _CorrespondenceSeek;
+  }) = _CorrespondenceChallenge;
 }

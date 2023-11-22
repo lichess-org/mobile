@@ -151,25 +151,25 @@ class _ChallengesBody extends ConsumerStatefulWidget {
 class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
   @override
   Widget build(BuildContext context) {
-    final seeksAsync = ref.watch(correspondenceSeeksProvider);
+    final challengesAsync = ref.watch(correspondenceChallengesProvider);
     final session = ref.watch(authSessionProvider);
 
-    return seeksAsync.when(
-      data: (seeks) {
+    return challengesAsync.when(
+      data: (challenges) {
         return ListView.separated(
-          itemCount: seeks.length,
+          itemCount: challenges.length,
           separatorBuilder: (context, index) =>
               const PlatformDivider(height: 1, cupertinoHasLeading: true),
           itemBuilder: (context, index) {
-            final seek = seeks[index];
-            final time = seek.days == null
+            final challenge = challenges[index];
+            final time = challenge.days == null
                 ? '∞'
-                : '${context.l10n.daysPerTurn}: ${seek.days}';
-            final subtitle = seek.rated
+                : '${context.l10n.daysPerTurn}: ${challenge.days}';
+            final subtitle = challenge.rated
                 ? '${context.l10n.rated} • $time'
                 : '${context.l10n.casual} • $time';
             final isMySeek =
-                UserId.fromUserName(seek.username) == session?.user.id;
+                UserId.fromUserName(challenge.username) == session?.user.id;
 
             return Container(
               color: isMySeek ? LichessColors.green.withOpacity(0.2) : null,
@@ -203,19 +203,19 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                       ),
                 child: PlatformListTile(
                   padding: Styles.bodyPadding,
-                  leading: Icon(seek.perf.icon),
+                  leading: Icon(challenge.perf.icon),
                   trailing: Icon(
-                    seek.side == null
+                    challenge.side == null
                         ? LichessIcons.adjust
-                        : seek.side == Side.white
+                        : challenge.side == Side.white
                             ? LichessIcons.circle
                             : LichessIcons.circle_empty,
                   ),
                   title: PlayerTitle(
-                    userName: seek.username,
-                    title: seek.title,
-                    rating: seek.rating,
-                    provisional: seek.provisional,
+                    userName: challenge.username,
+                    title: challenge.title,
+                    rating: challenge.rating,
+                    provisional: challenge.provisional,
                   ),
                   subtitle: Text(subtitle),
                   onTap: isMySeek ? null : () {},
