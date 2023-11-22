@@ -112,6 +112,10 @@ class _Body extends ConsumerWidget {
     final nextPuzzle = ref.watch(nextPuzzleProvider(angle));
     final connectivity = ref.watch(connectivityChangesProvider);
 
+    final expansionTileColor = defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoColors.secondaryLabel.resolveFrom(context)
+        : null;
+
     final content = [
       connectivity.when(
         data: (data) => data.isOnline
@@ -121,7 +125,7 @@ class _Body extends ConsumerWidget {
         error: (_, __) => const SizedBox.shrink(),
       ),
       Padding(
-        padding: Styles.bodySectionPadding,
+        padding: Styles.horizontalBodyPadding,
         child: nextPuzzle.when(
           data: (data) {
             if (data == null) {
@@ -155,83 +159,101 @@ class _Body extends ConsumerWidget {
           },
         ),
       ),
-      Padding(
-        padding: Styles.bodySectionBottomPadding,
-        child: CardButton(
-          icon: const Icon(
-            LichessIcons.streak,
-            size: 44,
-          ),
+      Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
           title: Text(
-            'Puzzle Streak',
-            style: Styles.sectionTitle,
+            context.l10n.more,
           ),
-          subtitle: Text(
-            context.l10n.puzzleStreakDescription.characters
-                    .takeWhile((c) => c != '.')
-                    .toString() +
-                (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
-          ),
-          onTap: connectivity.when(
-            data: (data) => data.isOnline
-                ? () {
-                    pushPlatformRoute(
-                      context,
-                      rootNavigator: true,
-                      builder: (context) => const StreakScreen(),
-                    );
-                  }
-                : null,
-            loading: () => null,
-            error: (_, __) => null,
-          ),
-        ),
-      ),
-      Padding(
-        padding: Styles.bodySectionBottomPadding,
-        child: CardButton(
-          icon: const Icon(
-            LichessIcons.storm,
-            size: 44,
-          ),
-          title: Text(
-            'Puzzle Storm',
-            style: Styles.sectionTitle,
-          ),
-          subtitle:
-              const Text('Solve as many puzzles as possible in 3 minutes.'),
-          onTap: connectivity.when(
-            data: (data) => data.isOnline
-                ? () {
-                    pushPlatformRoute(
-                      context,
-                      rootNavigator: true,
-                      builder: (context) => const StormScreen(),
-                    );
-                  }
-                : null,
-            loading: () => null,
-            error: (_, __) => null,
-          ),
-        ),
-      ),
-      Padding(
-        padding: Styles.bodySectionBottomPadding,
-        child: CardButton(
-          icon: const Icon(PuzzleIcons.mix, size: 44),
-          title: Text(
-            context.l10n.puzzlePuzzleThemes,
-            style: Styles.sectionTitle,
-          ),
-          subtitle: const Text(
-            'Choose puzzles by theme or opening.',
-          ),
-          onTap: () {
-            pushPlatformRoute(
-              context,
-              builder: (context) => const PuzzleThemesScreen(),
-            );
-          },
+          tilePadding: Styles.horizontalBodyPadding,
+          iconColor: expansionTileColor,
+          collapsedIconColor: expansionTileColor,
+          textColor: expansionTileColor,
+          collapsedTextColor: expansionTileColor,
+          controlAffinity: ListTileControlAffinity.leading,
+          children: [
+            Padding(
+              padding: Styles.bodySectionBottomPadding,
+              child: CardButton(
+                icon: const Icon(
+                  LichessIcons.streak,
+                  size: 44,
+                ),
+                title: Text(
+                  'Puzzle Streak',
+                  style: Styles.sectionTitle,
+                ),
+                subtitle: Text(
+                  context.l10n.puzzleStreakDescription.characters
+                          .takeWhile((c) => c != '.')
+                          .toString() +
+                      (context.l10n.puzzleStreakDescription.contains('.')
+                          ? '.'
+                          : ''),
+                ),
+                onTap: connectivity.when(
+                  data: (data) => data.isOnline
+                      ? () {
+                          pushPlatformRoute(
+                            context,
+                            rootNavigator: true,
+                            builder: (context) => const StreakScreen(),
+                          );
+                        }
+                      : null,
+                  loading: () => null,
+                  error: (_, __) => null,
+                ),
+              ),
+            ),
+            Padding(
+              padding: Styles.bodySectionBottomPadding,
+              child: CardButton(
+                icon: const Icon(
+                  LichessIcons.storm,
+                  size: 44,
+                ),
+                title: Text(
+                  'Puzzle Storm',
+                  style: Styles.sectionTitle,
+                ),
+                subtitle: const Text(
+                    'Solve as many puzzles as possible in 3 minutes.'),
+                onTap: connectivity.when(
+                  data: (data) => data.isOnline
+                      ? () {
+                          pushPlatformRoute(
+                            context,
+                            rootNavigator: true,
+                            builder: (context) => const StormScreen(),
+                          );
+                        }
+                      : null,
+                  loading: () => null,
+                  error: (_, __) => null,
+                ),
+              ),
+            ),
+            Padding(
+              padding: Styles.bodySectionBottomPadding,
+              child: CardButton(
+                icon: const Icon(PuzzleIcons.mix, size: 44),
+                title: Text(
+                  context.l10n.puzzlePuzzleThemes,
+                  style: Styles.sectionTitle,
+                ),
+                subtitle: const Text(
+                  'Choose puzzles by theme or opening.',
+                ),
+                onTap: () {
+                  pushPlatformRoute(
+                    context,
+                    builder: (context) => const PuzzleThemesScreen(),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
       if (session != null) ...[PuzzleDashboardWidget(), PuzzleHistoryWidget()],
