@@ -141,11 +141,16 @@ class _CupertinoBodyState extends State<_CupertinoBody> {
   }
 }
 
-class _ChallengesBody extends ConsumerWidget {
+class _ChallengesBody extends ConsumerStatefulWidget {
   const _ChallengesBody();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_ChallengesBody> createState() => _ChallengesBodyState();
+}
+
+class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
+  @override
+  Widget build(BuildContext context) {
     final seeksAsync = ref.watch(correspondenceSeeksProvider);
     final session = ref.watch(authSessionProvider);
 
@@ -183,7 +188,19 @@ class _ChallengesBody extends ConsumerWidget {
                           ),
                         ],
                       )
-                    : null,
+                    : ActionPane(
+                        motion: const ScrollMotion(),
+                        extentRatio: 0.3,
+                        children: [
+                          SlidableAction(
+                            onPressed: (BuildContext context) async {},
+                            backgroundColor: LichessColors.green,
+                            foregroundColor: Colors.white,
+                            icon: Icons.check,
+                            label: context.l10n.accept,
+                          ),
+                        ],
+                      ),
                 child: PlatformListTile(
                   padding: Styles.bodyPadding,
                   leading: Icon(seek.perf.icon),
