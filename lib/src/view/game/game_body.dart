@@ -424,6 +424,24 @@ class _GameBottomBar extends ConsumerWidget {
                 },
                 icon: CupertinoIcons.arrowshape_turn_up_left,
               )
+            else if (gameState.game.playable &&
+                gameState.game.speed == Speed.correspondence)
+              BottomBarButton(
+                label: context.l10n.analysis,
+                shortLabel: 'Analysis',
+                icon: Icons.biotech,
+                onTap: () {
+                  pushPlatformRoute(
+                    context,
+                    builder: (_) => AnalysisScreen(
+                      options: gameState.analysisOptions.copyWith(
+                        isLocalEvaluationAllowed: false,
+                      ),
+                      title: context.l10n.analysis,
+                    ),
+                  );
+                },
+              )
             else if (gameState.game.finished)
               Builder(
                 builder: (context) {
