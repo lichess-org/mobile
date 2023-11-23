@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
+import 'package:lichess_mobile/src/view/watch/broadcast_tile.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -63,6 +66,16 @@ Future<IList<TvGameSnapshot>> featuredChannels(FeaturedChannelsRef ref) async {
   );
 }
 
+@riverpod
+Future<IList<Broadcast>> broadcasts(BroadcastsRef ref) async {
+  final repo = ref.watch(broadcastRepositoryProvider);
+  final result = await repo.getBroadcasts();
+  return result.fold(
+    (value) => value,
+    (Object error, _) => throw error,
+  );
+}
+
 class WatchTabScreen extends ConsumerStatefulWidget {
   const WatchTabScreen({super.key});
 
@@ -102,7 +115,11 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
               return orientation == Orientation.portrait
                   ? ListView(
                       controller: watchScrollController,
-                      children: const [_WatchTvWidget(), _StreamerWidget()],
+                      children: const [
+                        _WatchTvWidget(),
+                        _StreamerWidget(),
+                        _BroadcastWidget(),
+                      ],
                     )
                   : GridView(
                       controller: watchScrollController,
@@ -278,6 +295,53 @@ class _StreamerWidget extends ConsumerWidget {
         return Padding(
           padding: Styles.bodySectionPadding,
           child: const Text('Could not load live streamers'),
+        );
+      },
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(
+            itemsNumber: numberOfItems,
+            header: true,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BroadcastWidget extends ConsumerWidget {
+  const _BroadcastWidget();
+
+  static const int numberOfItems = 10;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final broadcastList = ref.watch(broadcastsProvider);
+
+    return broadcastList.when(
+      data: (data) {
+        return ListSection(
+          header: const Text("Tournament broadcasts"),
+          hasLeading: true,
+          headerTrailing: NoPaddingTextButton(
+            onPressed: () {},
+            child: Text(
+              context.l10n.more,
+            ),
+          ),
+          children: [
+            ...data.take(numberOfItems).map((e) => BroadcastTile(broadcast: e)),
+          ],
+        );
+      },
+      error: (error, stackTrace) {
+        debugPrint(
+          'SEVERE: [BroadcastWidget] could not load broadcast data; $error\n $stackTrace',
+        );
+        return Padding(
+          padding: Styles.bodySectionPadding,
+          child: const Text('Could not load broadcasts'),
         );
       },
       loading: () => Shimmer(
