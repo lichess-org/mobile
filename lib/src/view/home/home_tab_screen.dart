@@ -455,10 +455,7 @@ class _PreferredSetup extends ConsumerWidget {
                     color: DefaultTextStyle.of(context).style.color,
                   ),
                   const SizedBox(width: 5),
-                  Text(
-                    '$timeControl$mode',
-                    style: Styles.timeControl,
-                  ),
+                  Text('$timeControl$mode'),
                 ],
               ),
               if (seek.ratingRange != null) ...[
