@@ -172,11 +172,8 @@ class ListSection extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            DefaultTextStyle(
-                              style: CupertinoTheme.of(context)
-                                  .textTheme
-                                  .textStyle
-                                  .merge(Styles.sectionTitle),
+                            DefaultTextStyle.merge(
+                              style: Styles.sectionTitle,
                               child: header!,
                             ),
                             if (headerTrailing != null) headerTrailing!,
