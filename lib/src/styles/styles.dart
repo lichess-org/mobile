@@ -11,6 +11,10 @@ abstract class Styles {
   );
   static TextStyle get sectionTitle => TextStyle(
         fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
+        fontFamily:
+            defaultTargetPlatform == TargetPlatform.iOS ? '.SF Pro Text' : null,
+        letterSpacing:
+            defaultTargetPlatform == TargetPlatform.iOS ? -0.4 : null,
         fontWeight: FontWeight.bold,
       );
   static const boardPreviewTitle = TextStyle(
