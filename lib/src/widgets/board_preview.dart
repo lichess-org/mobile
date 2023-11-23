@@ -12,6 +12,7 @@ class SmallBoardPreview extends ConsumerStatefulWidget {
     required this.orientation,
     required this.fen,
     required this.description,
+    this.padding,
     this.lastMove,
     this.onTap,
   });
@@ -28,6 +29,8 @@ class SmallBoardPreview extends ConsumerStatefulWidget {
   final Widget description;
 
   final GestureTapCallback? onTap;
+
+  final EdgeInsetsGeometry? padding;
 
   @override
   ConsumerState<SmallBoardPreview> createState() => _SmallBoardPreviewState();
@@ -53,7 +56,9 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
                 : null,
           ),
           child: Padding(
-            padding: Styles.bodySectionPadding,
+            padding: widget.padding ??
+                Styles.horizontalBodyPadding
+                    .add(const EdgeInsets.symmetric(vertical: 8.0)),
             child: SizedBox(
               height: boardSize,
               child: Row(

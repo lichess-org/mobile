@@ -1,37 +1,33 @@
-import 'package:flutter/foundation.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:collection/collection.dart';
-import 'package:dartchess/dartchess.dart';
-
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_widget.dart';
+import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
+import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
+import 'package:lichess_mobile/src/view/play/play_screen.dart';
+import 'package:lichess_mobile/src/view/relation/relation_screen.dart';
+import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
+import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
+import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
-import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
-import 'package:lichess_mobile/src/view/account/profile_screen.dart';
-import 'package:lichess_mobile/src/view/auth/sign_in_widget.dart';
-import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
-import 'package:lichess_mobile/src/view/user/recent_games.dart';
-import 'package:lichess_mobile/src/view/play/play_screen.dart';
-import 'package:lichess_mobile/src/view/relation/relation_screen.dart';
-import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
-import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
-import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 
 final isHomeRootProvider = StateProvider<bool>((ref) => true);
 
@@ -301,8 +297,9 @@ class _HomeBody extends ConsumerWidget {
       data: (data) {
         if (data.isOnline) {
           final onlineWidgets = [
-            const _OngoingGamePreview(),
+            const SizedBox(height: 8.0),
             const _PreferredSetup(),
+            const _OngoingGamePreview(),
             const RecentGames(),
             RatingPrefAware(child: LeaderboardWidget()),
           ];
@@ -496,44 +493,47 @@ class _OngoingGamePreview extends ConsumerWidget {
     final ongoingGames = ref.watch(ongoingGamesProvider);
     return ongoingGames.maybeWhen(
       data: (data) {
-        if (data.isEmpty) {
-          return const SizedBox.shrink();
-        }
-        // correspondence is not supported yet
-        final game =
-            data.firstWhereOrNull((e) => e.speed != Speed.correspondence);
+        final game = data.firstOrNull;
         if (game == null) {
           return const SizedBox.shrink();
         }
-        final opponent = game.opponent;
-        return SmallBoardPreview(
-          orientation: game.orientation.cg,
-          lastMove: game.lastMove?.cg,
-          fen: game.fen,
-          description: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
-                context.l10n.gameInProgress(opponent.name),
-                style: Styles.boardPreviewTitle.copyWith(
-                  color: LichessColors.brag,
-                ),
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: Styles.horizontalBodyPadding.add(
+                const EdgeInsets.only(top: 16.0),
               ),
-            ],
-          ),
-          onTap: () {
-            pushPlatformRoute(
-              context,
-              rootNavigator: true,
-              builder: (context) => StandaloneGameScreen(
-                initialId: game.fullId,
-                initialFen: game.fen,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      context.l10n.nbGamesInPlay(data.length),
+                      style: Styles.sectionTitle,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (data.length > 1) ...[
+                    const SizedBox(width: 6.0),
+                    NoPaddingTextButton(
+                      onPressed: () {
+                        pushPlatformRoute(
+                          context,
+                          title: context.l10n.nbGamesInPlay(data.length),
+                          builder: (_) => OngoingGamesScreen(),
+                        );
+                      },
+                      child: Text(context.l10n.more),
+                    ),
+                  ],
+                ],
               ),
-            ).then((_) {
-              ref.invalidate(ongoingGamesProvider);
-            });
-          },
+            ),
+            OngoingGamePreview(game: game),
+          ],
         );
       },
       orElse: () => const SizedBox.shrink(),

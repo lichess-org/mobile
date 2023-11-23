@@ -117,6 +117,7 @@ class _Body extends ConsumerWidget {
         : null;
 
     final content = [
+      const SizedBox(height: 8.0),
       connectivity.when(
         data: (data) => data.isOnline
             ? const _DailyPuzzle()
@@ -125,7 +126,8 @@ class _Body extends ConsumerWidget {
         error: (_, __) => const SizedBox.shrink(),
       ),
       Padding(
-        padding: Styles.horizontalBodyPadding,
+        padding:
+            Styles.horizontalBodyPadding.add(const EdgeInsets.only(top: 8.0)),
         child: nextPuzzle.when(
           data: (data) {
             if (data == null) {
