@@ -27,10 +27,10 @@ class CorrespondenceGameScreen extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<CorrespondenceGameScreen> createState() =>
-      _StandaloneGameScreenState();
+      _CorrespondenceGameScreenState();
 }
 
-class _StandaloneGameScreenState
+class _CorrespondenceGameScreenState
     extends ConsumerState<CorrespondenceGameScreen> {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
