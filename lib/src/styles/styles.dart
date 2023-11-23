@@ -23,6 +23,11 @@ abstract class Styles {
   );
 
   // padding
+  static const cupertinoAppBarTrailingWidgetPadding =
+      EdgeInsetsDirectional.only(
+    end: 4.0,
+  );
+
   static const bodyPadding =
       EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0);
 

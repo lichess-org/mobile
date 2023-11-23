@@ -486,12 +486,21 @@ class GameController extends _$GameController {
         }
 
         // TODO handle delay
-        if (newState.game.clock != null && data.clock != null) {
+        if (data.clock != null) {
           _lastMoveTime = DateTime.now();
-          newState = newState.copyWith.game.clock!(
-            white: data.clock!.white,
-            black: data.clock!.black,
-          );
+
+          if (newState.game.clock != null) {
+            newState = newState.copyWith.game.clock!(
+              white: data.clock!.white,
+              black: data.clock!.black,
+            );
+          } else if (newState.game.correspondenceClock != null) {
+            newState = newState.copyWith.game.correspondenceClock!(
+              white: data.clock!.white,
+              black: data.clock!.black,
+            );
+          }
+
           newState = newState.copyWith(
             stopClockWaitingForServerAck: false,
           );
@@ -814,14 +823,12 @@ class GameState with _$GameState {
   }
 
   Side? get activeClockSide {
-    if (game.clock == null) {
+    if (game.clock == null && game.correspondenceClock == null) {
       return null;
     }
-
     if (stopClockWaitingForServerAck) {
       return null;
     }
-
     if (game.status == GameStatus.started) {
       final pos = game.lastPosition;
       if (pos.fullmoves > 1) {

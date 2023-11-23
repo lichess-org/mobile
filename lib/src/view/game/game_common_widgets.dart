@@ -1,26 +1,27 @@
 import 'dart:convert';
+
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dartchess/dartchess.dart';
-
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:share_plus/share_plus.dart';
 
-import 'ping_rating.dart';
 import 'game_screen_providers.dart';
 import 'game_settings.dart';
+import 'ping_rating.dart';
 
 class GameAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const GameAppBar({this.id, this.seek, super.key})
@@ -51,7 +52,7 @@ class GameAppBar extends ConsumerWidget implements PreferredSizeWidget {
       ),
       title: seek != null
           ? _LobbyGameTitle(seek: seek!)
-          : _StandaloneGameTitle(id: id!),
+          : StandaloneGameTitle(id: id!),
       actions: [
         SettingsButton(
           onPressed: () => showAdaptiveBottomSheet<void>(
@@ -91,14 +92,14 @@ class GameCupertinoNavBar extends ConsumerWidget
         : lobbyGameIsPlayableProvider(seek!);
     final isPlayableAsync = ref.watch(isPlayableProvider);
     return CupertinoNavigationBar(
-      padding: EdgeInsetsDirectional.zero,
+      padding: Styles.cupertinoAppBarTrailingWidgetPadding,
       leading: isPlayableAsync.maybeWhen<Widget?>(
         data: (isPlayable) => isPlayable ? pingRating : null,
         orElse: () => pingRating,
       ),
       middle: seek != null
           ? _LobbyGameTitle(seek: seek!)
-          : _StandaloneGameTitle(id: id!),
+          : StandaloneGameTitle(id: id!),
       trailing: SettingsButton(
         onPressed: () => showAdaptiveBottomSheet<void>(
           context: context,
@@ -278,8 +279,8 @@ class _LobbyGameTitle extends ConsumerWidget {
   }
 }
 
-class _StandaloneGameTitle extends ConsumerWidget {
-  const _StandaloneGameTitle({
+class StandaloneGameTitle extends ConsumerWidget {
+  const StandaloneGameTitle({
     required this.id,
   });
 
@@ -290,7 +291,7 @@ class _StandaloneGameTitle extends ConsumerWidget {
     final metaAsync = ref.watch(gameMetaProvider(id));
     return metaAsync.maybeWhen<Widget>(
       data: (data) {
-        final (meta, clock) = data;
+        final (meta, clock, corresClock) = data;
 
         final mode = meta.rated
             ? ' • ${context.l10n.rated}'
@@ -306,6 +307,10 @@ class _StandaloneGameTitle extends ConsumerWidget {
             if (clock != null)
               Text(
                 '${TimeIncrement(clock.initial.inSeconds, clock.increment.inSeconds).display}$mode',
+              )
+            else if (corresClock != null)
+              Text(
+                '${context.l10n.nbDays(corresClock.daysPerTurn)}$mode',
               )
             else
               Text('${meta.perf.title}$mode'),

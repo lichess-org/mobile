@@ -137,6 +137,7 @@ class PlayableGame
     Side? youAre,
     GamePrefs? prefs,
     PlayableClockData? clock,
+    CorrespondenceClockData? correspondenceClock,
     bool? boosted,
     bool? isThreefoldRepetition,
     ({Duration idle, Duration timeToMove, DateTime movedAt})? expiration,
@@ -259,6 +260,15 @@ class PlayableClockData with _$PlayableClockData {
     /// Time added to the clock by the "add more time" button.
     Duration? moreTime,
   }) = _PlayableClockData;
+}
+
+@freezed
+class CorrespondenceClockData with _$CorrespondenceClockData {
+  const factory CorrespondenceClockData({
+    required int daysPerTurn,
+    required Duration white,
+    required Duration black,
+  }) = _CorrespondenceClockData;
 }
 
 @freezed

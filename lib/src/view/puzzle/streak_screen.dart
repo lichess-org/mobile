@@ -74,7 +74,7 @@ class _StreakScreenState extends State<StreakScreen> with ImmersiveMode {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        padding: EdgeInsetsDirectional.zero,
+        padding: Styles.cupertinoAppBarTrailingWidgetPadding,
         middle: const Text('Puzzle Streak'),
         trailing: ToggleSoundButton(),
       ),

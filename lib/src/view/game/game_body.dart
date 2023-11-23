@@ -1,34 +1,36 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+
+import 'package:chessground/chessground.dart' as cg;
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dartchess/dartchess.dart';
-import 'package:chessground/chessground.dart' as cg;
-
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
-import 'package:lichess_mobile/src/model/game/online_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
-import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
+import 'package:lichess_mobile/src/model/game/online_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
-import 'game_screen_providers.dart';
+import 'game_common_widgets.dart';
 import 'game_loading_board.dart';
 import 'game_player.dart';
 import 'game_result_dialog.dart';
-import 'game_common_widgets.dart';
+import 'game_screen_providers.dart';
 
 /// Common body for the [LobbyGameScreen] and [StandaloneGameScreen].
 ///
@@ -135,7 +137,12 @@ class GameBody extends ConsumerWidget {
                       : null,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
-              : null,
+              : gameState.game.correspondenceClock != null
+                  ? CorrespondenceClock(
+                      duration: gameState.game.correspondenceClock!.black,
+                      active: gameState.activeClockSide == Side.black,
+                    )
+                  : null,
         );
         final white = GamePlayer(
           player: gameState.game.white,
@@ -167,7 +174,12 @@ class GameBody extends ConsumerWidget {
                       : null,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
-              : null,
+              : gameState.game.correspondenceClock != null
+                  ? CorrespondenceClock(
+                      duration: gameState.game.correspondenceClock!.white,
+                      active: gameState.activeClockSide == Side.white,
+                    )
+                  : null,
         );
 
         final topPlayer = youAre == Side.white ? black : white;
@@ -240,12 +252,13 @@ class GameBody extends ConsumerWidget {
         );
 
         return PopScope(
-          canPop: !gameState.game.playable,
+          canPop: gameState.game.speed == Speed.correspondence ||
+              !gameState.game.playable,
           child: content,
         );
       },
       loading: () => PopScope(
-        canPop: false,
+        canPop: true,
         child: seek != null
             ? LobbyGameLoadingBoard(seek!, isRematch: isRematch)
             : const StandaloneGameLoadingBoard(),

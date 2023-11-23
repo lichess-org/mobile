@@ -74,6 +74,8 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
     white: pick('white').letOrThrow(_playerFromUserGamePick),
     black: pick('black').letOrThrow(_playerFromUserGamePick),
     clock: pick('clock').letOrNull(_playableClockDataFromPick),
+    correspondenceClock:
+        pick('correspondence').letOrNull(_correspondenceClockDataFromPick),
     status: pick('game', 'status').asGameStatusOrThrow(),
     winner: pick('game', 'winner').asSideOrNull(),
     boosted: pick('game', 'boosted').asBoolOrNull(),
@@ -155,6 +157,14 @@ PlayableClockData _playableClockDataFromPick(RequiredPick pick) {
     black: pick('black').asDurationFromSecondsOrThrow(),
     emergency: pick('emerg').asDurationFromSecondsOrNull(),
     moreTime: pick('moretime').asDurationFromSecondsOrNull(),
+  );
+}
+
+CorrespondenceClockData _correspondenceClockDataFromPick(RequiredPick pick) {
+  return CorrespondenceClockData(
+    daysPerTurn: pick('daysPerTurn').asIntOrThrow(),
+    white: pick('white').asDurationFromSecondsOrThrow(),
+    black: pick('black').asDurationFromSecondsOrThrow(),
   );
 }
 

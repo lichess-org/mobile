@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart' as cg;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/game/correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -96,10 +98,15 @@ class OngoingGamePreview extends ConsumerWidget {
         pushPlatformRoute(
           context,
           rootNavigator: true,
-          builder: (context) => StandaloneGameScreen(
-            initialId: game.fullId,
-            initialFen: game.fen,
-          ),
+          builder: (context) => game.speed == Speed.correspondence
+              ? CorrespondenceGameScreen(
+                  initialId: game.fullId,
+                  initialFen: game.fen,
+                )
+              : StandaloneGameScreen(
+                  initialId: game.fullId,
+                  initialFen: game.fen,
+                ),
         ).then((_) {
           ref.invalidate(ongoingGamesProvider);
         });

@@ -79,7 +79,7 @@ class _StormScreenState extends State<StormScreen> with ImmersiveMode {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        padding: EdgeInsetsDirectional.zero,
+        padding: Styles.cupertinoAppBarTrailingWidgetPadding,
         middle: const Text('Puzzle Storm'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
