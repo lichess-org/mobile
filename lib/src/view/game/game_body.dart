@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:chessground/chessground.dart' as cg;
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
@@ -245,6 +247,7 @@ class GameBody extends ConsumerWidget {
             ),
             _GameBottomBar(
               seek: seek,
+              initialStandAloneId: initialStandAloneId,
               id: id,
               gameState: gameState,
             ),
@@ -317,7 +320,7 @@ class GameBody extends ConsumerWidget {
         } else if (initialStandAloneId != null) {
           ref
               .read(onlineGameProvider(initialStandAloneId!).notifier)
-              .rematch(state.requireValue.redirectGameId!);
+              .newGame(state.requireValue.redirectGameId!);
         }
       }
     }
@@ -327,16 +330,20 @@ class GameBody extends ConsumerWidget {
 class _GameBottomBar extends ConsumerWidget {
   const _GameBottomBar({
     this.seek,
+    required this.initialStandAloneId,
     required this.id,
     required this.gameState,
   });
 
   final GameSeek? seek;
+  final GameFullId? initialStandAloneId;
   final GameFullId id;
   final GameState gameState;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ongoingGames = ref.watch(ongoingGamesProvider);
+
     return Container(
       padding: Styles.horizontalBodyPadding,
       color: defaultTargetPlatform == TargetPlatform.iOS
@@ -491,6 +498,31 @@ class _GameBottomBar extends ConsumerWidget {
             else
               const SizedBox(
                 width: 44.0,
+              ),
+            if (gameState.game.speed == Speed.correspondence &&
+                initialStandAloneId != null)
+              BottomBarButton(
+                label: 'Go to the next game',
+                shortLabel: 'Next game',
+                icon: Icons.skip_next,
+                onTap: ongoingGames.maybeWhen(
+                  data: (games) {
+                    final nextTurn = games
+                        .whereNot((g) => g.fullId == id)
+                        .firstWhereOrNull((g) => g.isMyTurn);
+                    return nextTurn != null
+                        ? () {
+                            ref
+                                .read(
+                                  onlineGameProvider(initialStandAloneId!)
+                                      .notifier,
+                                )
+                                .newGame(nextTurn.fullId);
+                          }
+                        : null;
+                  },
+                  orElse: () => null,
+                ),
               ),
             // TODO replace this space with chat button
             const SizedBox(

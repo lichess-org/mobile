@@ -1,26 +1,28 @@
 import 'dart:async';
+
+import 'package:chessground/chessground.dart' as cg;
+import 'package:dartchess/dartchess.dart';
+import 'package:deep_pick/deep_pick.dart';
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:dartchess/dartchess.dart';
-import 'package:chessground/chessground.dart' as cg;
-import 'package:logging/logging.dart';
-import 'package:deep_pick/deep_pick.dart';
-
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
+import 'package:logging/logging.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_controller.freezed.dart';
 part 'game_controller.g.dart';
@@ -444,6 +446,10 @@ class GameController extends _$GameController {
         final curState = state.requireValue;
         final data = MoveEvent.fromJson(event.data as Map<String, dynamic>);
         final playedSide = data.ply.isOdd ? Side.white : Side.black;
+
+        if (curState.game.speed == Speed.correspondence) {
+          ref.invalidate(ongoingGamesProvider);
+        }
 
         GameState newState = curState.copyWith(
           game: curState.game.copyWith(

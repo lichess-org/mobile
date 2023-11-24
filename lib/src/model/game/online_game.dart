@@ -14,7 +14,7 @@ class OnlineGame extends _$OnlineGame {
   }
 
   // ignore: use_setters_to_change_properties
-  void rematch(GameFullId id) {
+  void newGame(GameFullId id) {
     state = id;
   }
 }

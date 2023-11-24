@@ -215,13 +215,19 @@ OngoingGame _ongoingGameFromJson(Map<String, dynamic> json) {
 
 OngoingGame _ongoingGameFromPick(RequiredPick pick) {
   return OngoingGame(
+    id: GameId(pick('gameId').asStringOrThrow()),
     fullId: GameFullId(pick('fullId').asStringOrThrow()),
     orientation: pick('color').asSideOrThrow(),
     fen: pick('fen').asStringOrThrow(),
     lastMove: pick('lastMove').asUciMoveOrNull(),
     perf: pick('perf').asPerfOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),
+    source: pick('source').letOrThrow(
+      (pick) =>
+          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
+    ),
     opponent: pick('opponent').asLightUserOrThrow(),
     secondsLeft: pick('secondsLeft').asIntOrNull(),
+    isMyTurn: pick('isMyTurn').asBoolOrThrow(),
   );
 }
