@@ -5,7 +5,8 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 part 'online_game.g.dart';
 
 /// The [OnlineGame] provider is used by [StandAloneGameScreen] to provide the game
-/// and optionally next games if there are rematches.
+/// and optionally next games if there are rematches, or a tournament, or if the
+/// user switches to another correspondence game.
 @riverpod
 class OnlineGame extends _$OnlineGame {
   @override
