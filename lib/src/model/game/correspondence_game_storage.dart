@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/correspondence_game.dart';
@@ -13,14 +14,47 @@ CorrespondenceGameStorage correspondenceGameStorage(
   CorrespondenceGameStorageRef ref,
 ) {
   final db = ref.watch(databaseProvider);
-  return CorrespondenceGameStorage(db);
+  return CorrespondenceGameStorage(db, ref);
+}
+
+@riverpod
+Future<IList<CorrespondenceGame>> offlineOngoingCorrespondenceGames(
+  OfflineOngoingCorrespondenceGamesRef ref,
+) async {
+  final storage = ref.watch(correspondenceGameStorageProvider);
+  return storage.fetchOngoingGames();
 }
 
 const _tableName = 'correspondence_game';
 
 class CorrespondenceGameStorage {
-  const CorrespondenceGameStorage(this._db);
+  const CorrespondenceGameStorage(this._db, this.ref);
   final Database _db;
+  final CorrespondenceGameStorageRef ref;
+
+  Future<IList<CorrespondenceGame>> fetchOngoingGames() async {
+    final list = await _db.query(
+      _tableName,
+      where: 'data LIKE ?',
+      whereArgs: ['%"status":"started"%'],
+    );
+
+    return list.map((e) {
+      final raw = e['data'] as String?;
+      if (raw != null) {
+        final json = jsonDecode(raw);
+        if (json is! Map<String, dynamic>) {
+          throw const FormatException(
+            '[CorrespondenceGameStorage] cannot fetch game: expected an object',
+          );
+        }
+        return CorrespondenceGame.fromJson(json);
+      }
+      throw const FormatException(
+        '[CorrespondenceGameStorage] cannot fetch game: expected an object',
+      );
+    }).toIList();
+  }
 
   Future<CorrespondenceGame?> fetch({
     required GameId gameId,
@@ -45,9 +79,7 @@ class CorrespondenceGameStorage {
     return null;
   }
 
-  Future<void> save({
-    required CorrespondenceGame game,
-  }) async {
+  Future<void> save(CorrespondenceGame game) async {
     await _db.insert(
       _tableName,
       {
@@ -57,5 +89,6 @@ class CorrespondenceGameStorage {
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    ref.invalidate(offlineOngoingCorrespondenceGamesProvider);
   }
 }

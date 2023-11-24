@@ -15,6 +15,8 @@ import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/correspondence_game.dart';
+import 'package:lichess_mobile/src/model/game/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -447,8 +449,28 @@ class GameController extends _$GameController {
         final data = MoveEvent.fromJson(event.data as Map<String, dynamic>);
         final playedSide = data.ply.isOdd ? Side.white : Side.black;
 
-        if (curState.game.speed == Speed.correspondence) {
+        if (curState.game.speed == Speed.correspondence &&
+            curState.game.correspondenceClock != null &&
+            curState.game.youAre != null) {
           ref.invalidate(ongoingGamesProvider);
+          ref.read(correspondenceGameStorageProvider).save(
+                CorrespondenceGame(
+                  id: curState.game.id,
+                  lastModified: DateTime.now(),
+                  steps: curState.game.steps,
+                  initialFen: curState.game.initialFen,
+                  status: curState.game.status,
+                  variant: curState.game.meta.variant,
+                  speed: curState.game.speed,
+                  perf: curState.game.meta.perf,
+                  white: curState.game.white,
+                  black: curState.game.black,
+                  youAre: curState.game.youAre!,
+                  daysPerTurn: curState.game.correspondenceClock!.daysPerTurn,
+                  winner: curState.game.winner,
+                  isThreefoldRepetition: curState.game.isThreefoldRepetition,
+                ),
+              );
         }
 
         GameState newState = curState.copyWith(

@@ -1,22 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
-import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/correspondence_game.dart';
+import 'package:lichess_mobile/src/model/game/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart' as cg;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/game/correspondence_game_screen.dart';
-import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class OngoingGamesScreen extends ConsumerWidget {
-  const OngoingGamesScreen({super.key});
+class OfflineCorrespondenceGamesScreen extends ConsumerWidget {
+  const OfflineCorrespondenceGamesScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,9 +31,9 @@ class OngoingGamesScreen extends ConsumerWidget {
   }
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
-    final ongoingGames = ref.watch(ongoingGamesProvider);
+    final offlineGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
     return Scaffold(
-      appBar: ongoingGames.maybeWhen(
+      appBar: offlineGames.maybeWhen(
         data: (data) =>
             AppBar(title: Text(context.l10n.nbGamesInPlay(data.length))),
         orElse: () => AppBar(title: const SizedBox.shrink()),
@@ -50,12 +46,12 @@ class OngoingGamesScreen extends ConsumerWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ongoingGames = ref.watch(ongoingGamesProvider);
-    return ongoingGames.maybeWhen(
+    final offlineGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
+    return offlineGames.maybeWhen(
       data: (data) => ListView(
         children: [
           const SizedBox(height: 8.0),
-          ...data.map((game) => OngoingGamePreview(game: game)),
+          ...data.map((game) => OfflineCorrespondenceGamePreview(game: game)),
         ],
       ),
       orElse: () => const SizedBox.shrink(),
@@ -63,32 +59,31 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class OngoingGamePreview extends ConsumerWidget {
-  const OngoingGamePreview({required this.game, super.key});
-  final OngoingGame game;
+class OfflineCorrespondenceGamePreview extends ConsumerWidget {
+  const OfflineCorrespondenceGamePreview({required this.game, super.key});
+  final CorrespondenceGame game;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SmallBoardPreview(
       orientation: game.orientation.cg,
       lastMove: game.lastMove?.cg,
-      fen: game.fen,
+      fen: game.lastPosition.fen,
       description: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           PlayerTitle(
-            userName: game.opponent.name,
+            userName: game.opponent.name ?? context.l10n.anonymous,
             title: game.opponent.title,
-            isPatron: game.opponent.isPatron,
+            isPatron: game.opponent.patron,
             style: Styles.boardPreviewTitle,
           ),
-          if (game.secondsLeft != null)
-            Text(
-              timeago.format(
-                DateTime.now().add(Duration(seconds: game.secondsLeft!)),
-                allowFromNow: true,
-              ),
+          Text(
+            timeago.format(
+              DateTime.now().add(game.estimatedTimeLeft),
+              allowFromNow: true,
             ),
+          ),
           Icon(
             game.perf.icon,
             size: 40,
@@ -96,23 +91,7 @@ class OngoingGamePreview extends ConsumerWidget {
           ),
         ],
       ),
-      onTap: () {
-        pushPlatformRoute(
-          context,
-          rootNavigator: true,
-          builder: (context) => game.speed == Speed.correspondence
-              ? CorrespondenceGameScreen(
-                  initialId: game.fullId,
-                  initialFen: game.fen,
-                )
-              : StandaloneGameScreen(
-                  initialId: game.fullId,
-                  initialFen: game.fen,
-                ),
-        ).then((_) {
-          ref.invalidate(ongoingGamesProvider);
-        });
-      },
+      onTap: () {},
     );
   }
 }

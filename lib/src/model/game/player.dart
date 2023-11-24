@@ -6,8 +6,9 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 part 'player.freezed.dart';
+part 'player.g.dart';
 
-@freezed
+@Freezed(fromJson: true, toJson: true)
 class Player with _$Player {
   const Player._();
 
@@ -36,6 +37,8 @@ class Player with _$Player {
     /// Post game player analysis summary
     PlayerAnalysis? analysis,
   }) = _Player;
+
+  factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
 
   LightUser? get lightUser => id != null
       ? LightUser(
@@ -68,7 +71,7 @@ class Player with _$Player {
   }
 }
 
-@freezed
+@Freezed(fromJson: true, toJson: true)
 class PlayerAnalysis with _$PlayerAnalysis {
   const factory PlayerAnalysis({
     required int inaccuracies,
@@ -77,4 +80,7 @@ class PlayerAnalysis with _$PlayerAnalysis {
     int? acpl,
     int? accuracy,
   }) = _PlayerAnalysis;
+
+  factory PlayerAnalysis.fromJson(Map<String, dynamic> json) =>
+      _$PlayerAnalysisFromJson(json);
 }
