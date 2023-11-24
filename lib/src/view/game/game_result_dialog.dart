@@ -192,8 +192,7 @@ class PlayerSummary extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
-    final youAre = game.youAre ??
-        (session != null ? game.playerSideOf(session.user.id) : null);
+    final youAre = session != null ? game.playerSideOf(session.user.id) : null;
     final me = youAre == null ? null : game.playerOf(youAre);
 
     if (me == null || me.analysis == null) {

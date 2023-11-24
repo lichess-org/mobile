@@ -22,8 +22,6 @@ abstract mixin class BaseGame {
   /// Game steps, cannot be empty.
   IList<GameStep> get steps;
 
-  Side? get youAre;
-
   String? get initialFen;
 
   GameStatus get status;
@@ -147,10 +145,18 @@ class PlayableGame
   }) = _PlayableGame;
 
   /// Player of the playing point of view. Null if spectating.
-  Player? get me => youAre == Side.white ? white : black;
+  Player? get me => youAre == null
+      ? null
+      : youAre == Side.white
+          ? white
+          : black;
 
   /// Opponent from the playing point of view. Null if spectating.
-  Player? get opponent => youAre == Side.white ? black : white;
+  Player? get opponent => youAre == null
+      ? null
+      : youAre == Side.white
+          ? black
+          : white;
 
   Side get sideToMove => lastPosition.turn;
 
@@ -320,7 +326,6 @@ class ArchivedGame
     required Perf perf,
     required Player white,
     required Player black,
-    Side? youAre,
   }) = _ArchivedGame;
 }
 
