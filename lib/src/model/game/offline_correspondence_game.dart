@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -8,23 +9,24 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/material_diff.dart';
 
 import 'player.dart';
 import 'game.dart';
 import 'game_status.dart';
 
-part 'correspondence_game.freezed.dart';
-part 'correspondence_game.g.dart';
+part 'offline_correspondence_game.freezed.dart';
+part 'offline_correspondence_game.g.dart';
 
 /// An offline correspondence game.
 @Freezed(fromJson: true, toJson: true)
-class CorrespondenceGame
-    with _$CorrespondenceGame, BaseGame, IndexableSteps
+class OfflineCorrespondenceGame
+    with _$OfflineCorrespondenceGame, BaseGame, IndexableSteps
     implements BaseGame {
-  const CorrespondenceGame._();
+  const OfflineCorrespondenceGame._();
 
   @Assert('steps.isNotEmpty')
-  factory CorrespondenceGame({
+  factory OfflineCorrespondenceGame({
     required GameId id,
     required DateTime lastModified,
     @JsonKey(fromJson: _stepsFromJson, toJson: _stepsToJson)
@@ -42,8 +44,8 @@ class CorrespondenceGame
     bool? isThreefoldRepetition,
   }) = _CorrespondenceGame;
 
-  factory CorrespondenceGame.fromJson(Map<String, dynamic> json) =>
-      _$CorrespondenceGameFromJson(json);
+  factory OfflineCorrespondenceGame.fromJson(Map<String, dynamic> json) =>
+      _$OfflineCorrespondenceGameFromJson(json);
 
   Side get orientation => youAre;
 
@@ -65,9 +67,10 @@ class CorrespondenceGame
 
 String _stepsToJson(IList<GameStep> steps) {
   final objs = steps
-      .map(
-        (e) => {
-          'fen': e.position.fen,
+      .mapIndexed(
+        (i, e) => {
+          if (i == 0) 'fen': e.position.fen,
+          if (i == 0) 'rule': e.position.rule.name,
           'uci': e.sanMove?.move.uci,
           'san': e.sanMove?.san,
         },
@@ -76,29 +79,31 @@ String _stepsToJson(IList<GameStep> steps) {
   return jsonEncode(objs);
 }
 
-// TODO support other rules
 IList<GameStep> _stepsFromJson(String json) {
-  final objs = jsonDecode(json) as List<Map<String, dynamic>>;
-  final initialFen = objs.first['fen'] as String?;
-  if (initialFen == null) {
-    throw const FormatException(
-      '[CorrespondenceGame] steps: expected a fen',
-    );
-  }
-  Position position = Chess.fromSetup(Setup.parseFen(initialFen));
+  final objs = jsonDecode(json) as List<dynamic>;
+  final first = objs.first as Map<String, dynamic>;
+  final initialFen = first['fen'] as String;
+  final rule = Rule.values.byName(first['rule'] as String);
+  Position position = Position.setupPosition(rule, Setup.parseFen(initialFen));
   int ply = 0;
   final List<GameStep> steps = [GameStep(position: position, ply: ply)];
   for (final obj in objs.skip(1)) {
     ply++;
-    final uci = obj['uci'] as String?;
-    final san = obj['san'] as String?;
+    final step = obj as Map<String, dynamic>;
+    final uci = step['uci'] as String?;
+    final san = step['san'] as String?;
     if (uci == null || san == null) {
       break;
     }
     final move = Move.fromUci(uci)!;
     position = position.playUnchecked(move);
     steps.add(
-      GameStep(position: position, ply: ply, sanMove: SanMove(san, move)),
+      GameStep(
+        position: position,
+        ply: ply,
+        sanMove: SanMove(san, move),
+        diff: MaterialDiff.fromBoard(position.board),
+      ),
     );
   }
   return steps.toIList();

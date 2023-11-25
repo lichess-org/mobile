@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/game/correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/correspondence_game_storage.dart';
+import 'package:lichess_mobile/src/model/game/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart' as cg;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -61,7 +61,7 @@ class _Body extends ConsumerWidget {
 
 class OfflineCorrespondenceGamePreview extends ConsumerWidget {
   const OfflineCorrespondenceGamePreview({required this.game, super.key});
-  final CorrespondenceGame game;
+  final OfflineCorrespondenceGame game;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SmallBoardPreview(
