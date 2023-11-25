@@ -56,7 +56,7 @@ adb reverse tcp:9664 tcp:9664
 Then run on your device:
 
 ```sh
-flutter run -d <my_device>
+flutter run -d <my_device> --flavor dev
 ```
 
 You can find more information about emulators [in the wiki](https://github.com/lichess-org/mobile/wiki/Setting-up-device-emulators).

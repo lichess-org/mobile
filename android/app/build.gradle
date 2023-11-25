@@ -54,7 +54,6 @@ android {
     }
 
     defaultConfig {
-        applicationId "org.lichess.mobileV2"
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
@@ -76,6 +75,21 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
+        }
+    }
+
+    flavorDimensions "env"
+
+    productFlavors {
+        dev {
+            dimension "env"
+            resValue "string", "app_name", "Lichess Dev"
+            applicationId "dev.lichess.mobileV2"
+        }
+        beta {
+            dimension "env"
+            resValue "string", "app_name", "Lichess Beta"
+            applicationId "org.lichess.mobileV2"
         }
     }
 }
