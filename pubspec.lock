@@ -333,10 +333,10 @@ packages:
     dependency: "direct main"
     description:
       name: dartchess
-      sha256: "2a740efe00e2bff2dd4a06dd19f1903a7784a7002d8af59c9e2ec282330406bb"
+      sha256: c79e79f279e09b3b6e4cb870ea0b178964d6e4cde6190d100f690dbff196527a
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.1"
+    version: "0.6.0"
   dbus:
     dependency: transitive
     description:

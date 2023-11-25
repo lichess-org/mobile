@@ -72,23 +72,23 @@ enum Variant {
 
   static final IMap<String, Variant> nameMap = IMap(values.asNameMap());
 
-  static Variant fromRules(Rules rules) {
-    switch (rules) {
-      case Rules.chess:
+  static Variant fromRule(Rule rule) {
+    switch (rule) {
+      case Rule.chess:
         return Variant.standard;
-      case Rules.antichess:
+      case Rule.antichess:
         return Variant.antichess;
-      case Rules.kingofthehill:
+      case Rule.kingofthehill:
         return Variant.kingOfTheHill;
-      case Rules.threecheck:
+      case Rule.threecheck:
         return Variant.threeCheck;
-      case Rules.atomic:
+      case Rule.atomic:
         return Variant.atomic;
-      case Rules.horde:
+      case Rule.horde:
         return Variant.horde;
-      case Rules.racingKings:
+      case Rule.racingKings:
         return Variant.racingKings;
-      case Rules.crazyhouse:
+      case Rule.crazyhouse:
         return Variant.crazyhouse;
     }
   }
@@ -120,26 +120,26 @@ enum Variant {
     }
   }
 
-  Rules get rules {
+  Rule get rule {
     switch (this) {
       case Variant.standard:
       case Variant.chess960:
       case Variant.fromPosition:
-        return Rules.chess;
+        return Rule.chess;
       case Variant.antichess:
-        return Rules.antichess;
+        return Rule.antichess;
       case Variant.kingOfTheHill:
-        return Rules.kingofthehill;
+        return Rule.kingofthehill;
       case Variant.threeCheck:
-        return Rules.threecheck;
+        return Rule.threecheck;
       case Variant.atomic:
-        return Rules.atomic;
+        return Rule.atomic;
       case Variant.horde:
-        return Rules.horde;
+        return Rule.horde;
       case Variant.racingKings:
-        return Rules.racingKings;
+        return Rule.racingKings;
       case Variant.crazyhouse:
-        return Rules.crazyhouse;
+        return Rule.crazyhouse;
     }
   }
 }
