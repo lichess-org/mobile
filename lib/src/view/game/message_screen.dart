@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -9,8 +10,8 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class MessageScreen extends StatelessWidget {
-  final String? name;
-  const MessageScreen({this.name});
+  final Player? opponent;
+  const MessageScreen({this.opponent});
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +22,31 @@ class MessageScreen extends StatelessWidget {
   }
 
   Widget _androidBuilder({required BuildContext context}) {
+    final title = opponent?.title != null
+        ? Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: opponent!.title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: LichessColors.brag,
+                  ),
+                ),
+                const TextSpan(text: " "),
+                TextSpan(text: opponent!.name),
+              ],
+            ),
+          )
+        : Text(opponent?.name ?? "Chat room");
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(name ?? "Chat room"),
+        title: title,
         centerTitle: true,
       ),
       body: Column(

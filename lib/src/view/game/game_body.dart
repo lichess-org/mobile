@@ -533,9 +533,7 @@ class _GameBottomBar extends ConsumerWidget {
                     pushPlatformRoute(
                       context,
                       builder: (BuildContext context) {
-                        return MessageScreen(
-                          name: gameState.game.opponent?.name,
-                        );
+                        return MessageScreen(opponent: gameState.game.opponent);
                       },
                     );
                   },
