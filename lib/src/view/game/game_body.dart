@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
+import 'package:lichess_mobile/src/view/game/message_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -523,9 +524,46 @@ class _GameBottomBar extends ConsumerWidget {
                   orElse: () => null,
                 ),
               ),
-            // TODO replace this space with chat button
-            const SizedBox(
-              width: 44.0,
+            Stack(
+              children: [
+                BottomBarButton(
+                  label: context.l10n.yourOpponentProposesATakeback,
+                  shortLabel: context.l10n.takeback,
+                  onTap: () {
+                    pushPlatformRoute(
+                      context,
+                      builder: (BuildContext context) {
+                        return MessageScreen(
+                          name: gameState.game.opponent?.name,
+                        );
+                      },
+                    );
+                  },
+                  icon: CupertinoIcons.chat_bubble,
+                ),
+                const Positioned(
+                  top: 9.0,
+                  right: 6.0,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Icon(
+                        Icons.brightness_1,
+                        size: 16.0,
+                      ),
+                      Text(
+                        '99',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 8.0,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
             RepeatButton(
               onLongPress:
