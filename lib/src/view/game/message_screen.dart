@@ -159,7 +159,7 @@ class _Body extends StatelessWidget {
             },
           ),
         ),
-        _GameBottomBar(onMessage: onMessage),
+        _ChatBottomBar(onMessage: onMessage),
       ],
     );
   }
@@ -223,16 +223,16 @@ class _MessageAction extends StatelessWidget {
   }
 }
 
-class _GameBottomBar extends StatefulWidget {
+class _ChatBottomBar extends StatefulWidget {
   final void Function(String message) onMessage;
 
-  const _GameBottomBar({required this.onMessage});
+  const _ChatBottomBar({required this.onMessage});
 
   @override
-  State<StatefulWidget> createState() => _GameBottomBarState();
+  State<StatefulWidget> createState() => _ChatBottomBarState();
 }
 
-class _GameBottomBarState extends State<_GameBottomBar> {
+class _ChatBottomBarState extends State<_ChatBottomBar> {
   final _textController = TextEditingController();
 
   @override
