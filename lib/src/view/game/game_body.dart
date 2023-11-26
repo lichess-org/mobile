@@ -527,18 +527,13 @@ class _GameBottomBar extends ConsumerWidget {
             Stack(
               children: [
                 BottomBarButton(
-                  label: context.l10n.yourOpponentProposesATakeback,
-                  shortLabel: context.l10n.takeback,
+                  label: context.l10n.chat,
+                  shortLabel: context.l10n.chat,
                   onTap: () {
                     pushPlatformRoute(
                       context,
                       builder: (BuildContext context) {
                         return MessageScreen(
-                          onMessage: (message) {
-                            ref
-                                .read(gameControllerProvider(id).notifier)
-                                .onUserMessage(message);
-                          },
                           ctrlProvider: gameControllerProvider(id),
                         );
                       },

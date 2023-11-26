@@ -1,4 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
@@ -7,16 +8,15 @@ import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/message.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class MessageScreen extends ConsumerStatefulWidget {
   final GameControllerProvider ctrlProvider;
-  final void Function(String message) onMessage;
   const MessageScreen({
     required this.ctrlProvider,
-    required this.onMessage,
   });
 
   @override
@@ -48,21 +48,65 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     final gameState = ref.watch(widget.ctrlProvider).requireValue;
+    final opponent = gameState.game.opponent!;
+    final body = _Body(
+      messages: gameState.messages,
+      onMessage: (message) {
+        ref.read(widget.ctrlProvider.notifier).onUserMessage(message);
+      },
+    );
 
     return PlatformWidget(
       androidBuilder: (context) =>
-          _androidBuilder(context: context, gameState: gameState),
-      iosBuilder: (context) => _iosBuilder(),
+          _androidBuilder(context: context, opponent: opponent, body: body),
+      iosBuilder: (context) =>
+          _iosBuilder(context: context, opponent: opponent, body: body),
     );
   }
 
   Widget _androidBuilder({
     required BuildContext context,
-    required GameState gameState,
+    required Widget body,
+    required Player opponent,
   }) {
-    final IList<Message> messages = gameState.messages;
-    final Player opponent = gameState.game.opponent!;
-    final title = opponent.user?.title != null
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: _ChatTitle(opponent: opponent),
+        centerTitle: true,
+      ),
+      body: body,
+    );
+  }
+
+  Widget _iosBuilder({
+    required BuildContext context,
+    required Widget body,
+    required Player opponent,
+  }) {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        middle: _ChatTitle(opponent: opponent),
+      ),
+      child: body,
+    );
+  }
+}
+
+class _ChatTitle extends StatelessWidget {
+  final Player opponent;
+  const _ChatTitle({required this.opponent});
+
+  @override
+  Widget build(BuildContext context) {
+    return opponent.user?.title != null
         ? Text.rich(
             TextSpan(
               children: [
@@ -79,46 +123,45 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
             ),
           )
         : Text(opponent.displayName(context));
-
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: title,
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              reverse: true,
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                final message = messages[messages.length - index - 1];
-                return switch (message.sender) {
-                  Sender.server => _MessageAction(message: message.message),
-                  Sender.player => _MessageBubble(
-                      you: true,
-                      message: message.message,
-                    ),
-                  Sender.opponent => _MessageBubble(
-                      you: false,
-                      message: message.message,
-                    )
-                };
-              },
-            ),
-          ),
-          _GameBottomBar(onMessage: widget.onMessage),
-        ],
-      ),
-    );
   }
+}
 
-  Widget _iosBuilder() {
-    return const SizedBox.shrink();
+class _Body extends StatelessWidget {
+  final IList<Message> messages;
+  final void Function(String message) onMessage;
+
+  const _Body({
+    required this.messages,
+    required this.onMessage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            reverse: true,
+            itemCount: messages.length,
+            itemBuilder: (context, index) {
+              final message = messages[messages.length - index - 1];
+              return switch (message.sender) {
+                Sender.server => _MessageAction(message: message.message),
+                Sender.player => _MessageBubble(
+                    you: true,
+                    message: message.message,
+                  ),
+                Sender.opponent => _MessageBubble(
+                    you: false,
+                    message: message.message,
+                  )
+              };
+            },
+          ),
+        ),
+        _GameBottomBar(onMessage: onMessage),
+      ],
+    );
   }
 }
 
@@ -231,11 +274,11 @@ class _GameBottomBarState extends State<_GameBottomBar> {
                             }
                           : null,
                       icon: Icons.send,
-                      semanticsLabel: 'Send',
+                      semanticsLabel: context.l10n.send,
                     ),
                   ),
                   border: InputBorder.none,
-                  hintText: "Be nice in the chat",
+                  hintText: context.l10n.talkInChat,
                 ),
               ),
             ),
