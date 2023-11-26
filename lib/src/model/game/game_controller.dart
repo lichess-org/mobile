@@ -461,8 +461,8 @@ class GameController extends _$GameController {
           GameState(
             game: fullEvent.game,
             stepCursor: fullEvent.game.steps.length - 1,
-            messages: IList(),
-            unreadMessages: 0,
+            messages: state.requireValue.messages,
+            unreadMessages: state.requireValue.unreadMessages,
             stopClockWaitingForServerAck: false,
             // cancel the premove to avoid playing wrong premove when the full
             // game data is reloaded
@@ -745,27 +745,34 @@ class GameController extends _$GameController {
           ),
         );
 
+      // Event sent when a message is received
       case 'message':
         final data = event.data as Map<String, dynamic>;
         final message = data["t"] as String;
         final username = data["u"] as String;
         final curState = state.requireValue;
         final player = curState.game.me!.user?.name;
-        state = AsyncValue.data(
-          curState.copyWith(
-            messages: curState.messages.add(
-              Message(
-                message: message,
-                sender: username == "lichess"
-                    ? Sender.server
-                    : username == player
-                        ? Sender.player
-                        : Sender.opponent,
+        final opponent = curState.game.me!.user?.name;
+        final sender = username == "lichess"
+            ? Sender.server
+            : username == player
+                ? Sender.player
+                : username == opponent
+                    ? Sender.opponent
+                    : null;
+        if (sender != null) {
+          state = AsyncValue.data(
+            curState.copyWith(
+              messages: curState.messages.add(
+                Message(
+                  message: message,
+                  sender: sender,
+                ),
               ),
+              unreadMessages: curState.unreadMessages + 1,
             ),
-            unreadMessages: curState.unreadMessages + 1,
-          ),
-        );
+          );
+        }
 
       // Event sent when a player adds or cancels a rematch offer
       case 'rematchOffer':
