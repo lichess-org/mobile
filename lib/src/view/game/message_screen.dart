@@ -1,44 +1,84 @@
-import 'dart:math';
-
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
+import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/view/game/message.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-class MessageScreen extends StatelessWidget {
-  final Player? opponent;
-  const MessageScreen({this.opponent});
+class MessageScreen extends ConsumerStatefulWidget {
+  final GameControllerProvider ctrlProvider;
+  final void Function(String message) onMessage;
+  const MessageScreen({
+    required this.ctrlProvider,
+    required this.onMessage,
+  });
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _MessageScreenState();
+}
+
+class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null && route is PageRoute) {
+      rootNavPageRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    rootNavPageRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPop() {
+    ref.read(widget.ctrlProvider.notifier).resetUnreadMessages();
+    super.didPop();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final gameState = ref.watch(widget.ctrlProvider).requireValue;
+
     return PlatformWidget(
-      androidBuilder: (context) => _androidBuilder(context: context),
+      androidBuilder: (context) =>
+          _androidBuilder(context: context, gameState: gameState),
       iosBuilder: (context) => _iosBuilder(),
     );
   }
 
-  Widget _androidBuilder({required BuildContext context}) {
-    final title = opponent?.title != null
+  Widget _androidBuilder({
+    required BuildContext context,
+    required GameState gameState,
+  }) {
+    final IList<Message> messages = gameState.messages;
+    final Player opponent = gameState.game.opponent!;
+    final title = opponent.user?.title != null
         ? Text.rich(
             TextSpan(
               children: [
                 TextSpan(
-                  text: opponent!.title,
+                  text: opponent.user!.title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: LichessColors.brag,
                   ),
                 ),
                 const TextSpan(text: " "),
-                TextSpan(text: opponent!.name),
+                TextSpan(text: opponent.displayName(context)),
               ],
             ),
           )
-        : Text(opponent?.name ?? "Chat room");
+        : Text(opponent.displayName(context));
 
     return Scaffold(
       appBar: AppBar(
@@ -54,29 +94,24 @@ class MessageScreen extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               reverse: true,
-              itemCount: 30,
+              itemCount: messages.length,
               itemBuilder: (context, index) {
-                // generate random messages
-                final r = Random();
-                final message = String.fromCharCodes(
-                  List.generate(
-                    r.nextInt(100) + 5,
-                    (index) => r.nextInt(33) + 89,
-                  ),
-                );
-                return index.remainder(7) == 0
-                    ? _MessageAction(
-                        you: index.remainder(2) == 0,
-                        message: message.substring(0, 15),
-                      )
-                    : _MessageBubble(
-                        you: index.remainder(2) == 0,
-                        message: message,
-                      );
+                final message = messages[messages.length - index - 1];
+                return switch (message.sender) {
+                  Sender.server => _MessageAction(message: message.message),
+                  Sender.player => _MessageBubble(
+                      you: true,
+                      message: message.message,
+                    ),
+                  Sender.opponent => _MessageBubble(
+                      you: false,
+                      message: message.message,
+                    )
+                };
               },
             ),
           ),
-          _GameBottomBar(),
+          _GameBottomBar(onMessage: widget.onMessage),
         ],
       ),
     );
@@ -123,22 +158,20 @@ class _MessageBubble extends ConsumerWidget {
 }
 
 class _MessageAction extends StatelessWidget {
-  final bool you;
   final String message;
 
-  const _MessageAction({required this.you, required this.message});
+  const _MessageAction({required this.message});
 
   @override
   Widget build(BuildContext context) {
     return FractionallySizedBox(
-      alignment: you ? Alignment.centerRight : Alignment.centerLeft,
-      widthFactor: 0.9,
-      child: Align(
-        alignment: you ? Alignment.centerRight : Alignment.centerLeft,
+      widthFactor: 0.8,
+      child: Center(
         child: Container(
           margin: const EdgeInsets.all(10.0),
           child: Text(
             message,
+            textAlign: TextAlign.center,
             style: const TextStyle(fontStyle: FontStyle.italic),
           ),
         ),
@@ -148,6 +181,11 @@ class _MessageAction extends StatelessWidget {
 }
 
 class _GameBottomBar extends StatelessWidget {
+  final void Function(String message) onMessage;
+  final _textController = TextEditingController();
+
+  _GameBottomBar({required this.onMessage});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -163,13 +201,17 @@ class _GameBottomBar extends StatelessWidget {
           children: [
             Expanded(
               child: TextField(
+                controller: _textController,
                 textAlignVertical: TextAlignVertical.center,
                 style: Theme.of(context).textTheme.bodyLarge,
                 minLines: 1,
                 maxLines: 4,
                 decoration: InputDecoration(
                   suffixIcon: PlatformIconButton(
-                    onTap: () {},
+                    onTap: () {
+                      onMessage(_textController.text);
+                      _textController.clear();
+                    },
                     icon: Icons.send,
                     semanticsLabel: 'Send',
                   ),

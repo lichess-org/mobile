@@ -533,34 +533,42 @@ class _GameBottomBar extends ConsumerWidget {
                     pushPlatformRoute(
                       context,
                       builder: (BuildContext context) {
-                        return MessageScreen(opponent: gameState.game.opponent);
+                        return MessageScreen(
+                          onMessage: (message) {
+                            ref
+                                .read(gameControllerProvider(id).notifier)
+                                .onUserMessage(message);
+                          },
+                          ctrlProvider: gameControllerProvider(id),
+                        );
                       },
                     );
                   },
                   icon: CupertinoIcons.chat_bubble,
                 ),
-                const Positioned(
-                  top: 9.0,
-                  right: 6.0,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Icon(
-                        Icons.brightness_1,
-                        size: 16.0,
-                      ),
-                      Text(
-                        '99',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 8.0,
-                          fontWeight: FontWeight.w500,
+                if (gameState.unreadMessages > 0)
+                  Positioned(
+                    top: 9.0,
+                    right: 6.0,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        const Icon(
+                          Icons.brightness_1,
+                          size: 16.0,
                         ),
-                      ),
-                    ],
+                        Text(
+                          gameState.unreadMessages.toString(),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 8.0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
               ],
             ),
             RepeatButton(
