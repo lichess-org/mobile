@@ -6,6 +6,8 @@ import 'package:lichess_mobile/src/model/game/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart' as cg;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/game/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
@@ -78,12 +80,13 @@ class OfflineCorrespondenceGamePreview extends ConsumerWidget {
             isPatron: game.opponent.patron,
             style: Styles.boardPreviewTitle,
           ),
-          Text(
-            timeago.format(
-              DateTime.now().add(game.estimatedTimeLeft),
-              allowFromNow: true,
+          if (game.estimatedTimeLeft != null)
+            Text(
+              timeago.format(
+                DateTime.now().add(game.estimatedTimeLeft!),
+                allowFromNow: true,
+              ),
             ),
-          ),
           Icon(
             game.perf.icon,
             size: 40,
@@ -91,7 +94,13 @@ class OfflineCorrespondenceGamePreview extends ConsumerWidget {
           ),
         ],
       ),
-      onTap: () {},
+      onTap: () {
+        pushPlatformRoute(
+          context,
+          rootNavigator: true,
+          builder: (_) => OfflineCorrespondenceGameScreen(game: game),
+        );
+      },
     );
   }
 }

@@ -448,30 +448,6 @@ class GameController extends _$GameController {
         final data = MoveEvent.fromJson(event.data as Map<String, dynamic>);
         final playedSide = data.ply.isOdd ? Side.white : Side.black;
 
-        if (curState.game.speed == Speed.correspondence &&
-            curState.game.meta.daysPerTurn != null &&
-            curState.game.youAre != null) {
-          ref.invalidate(ongoingGamesProvider);
-          ref.read(correspondenceGameStorageProvider).save(
-                OfflineCorrespondenceGame(
-                  id: curState.game.id,
-                  lastModified: DateTime.now(),
-                  steps: curState.game.steps,
-                  initialFen: curState.game.initialFen,
-                  status: curState.game.status,
-                  variant: curState.game.meta.variant,
-                  speed: curState.game.speed,
-                  perf: curState.game.meta.perf,
-                  white: curState.game.white,
-                  black: curState.game.black,
-                  youAre: curState.game.youAre!,
-                  daysPerTurn: curState.game.meta.daysPerTurn!,
-                  winner: curState.game.winner,
-                  isThreefoldRepetition: curState.game.isThreefoldRepetition,
-                ),
-              );
-        }
-
         GameState newState = curState.copyWith(
           game: curState.game.copyWith(
             isThreefoldRepetition: data.threefold,
@@ -547,6 +523,12 @@ class GameController extends _$GameController {
             );
           }
         }
+
+        if (curState.game.speed == Speed.correspondence) {
+          ref.invalidate(ongoingGamesProvider);
+          _saveCorrespondenceGameState(newState);
+        }
+
         state = AsyncValue.data(newState);
 
       // End game event
@@ -581,6 +563,12 @@ class GameController extends _$GameController {
             ref.read(soundServiceProvider).play(Sound.dong);
           });
         }
+
+        if (curState.game.speed == Speed.correspondence) {
+          ref.invalidate(ongoingGamesProvider);
+          _saveCorrespondenceGameState(newState);
+        }
+
         state = AsyncValue.data(newState);
 
       case 'clockInc':
@@ -764,6 +752,30 @@ class GameController extends _$GameController {
             redirectGameId: fullId,
           ),
         );
+    }
+  }
+
+  void _saveCorrespondenceGameState(GameState state) {
+    if (state.game.youAre != null) {
+      ref.read(correspondenceGameStorageProvider).save(
+            OfflineCorrespondenceGame(
+              id: state.game.id,
+              lastModified: DateTime.now(),
+              rated: state.game.meta.rated,
+              steps: state.game.steps,
+              initialFen: state.game.initialFen,
+              status: state.game.status,
+              variant: state.game.meta.variant,
+              speed: state.game.speed,
+              perf: state.game.meta.perf,
+              white: state.game.white,
+              black: state.game.black,
+              youAre: state.game.youAre!,
+              daysPerTurn: state.game.meta.daysPerTurn,
+              winner: state.game.winner,
+              isThreefoldRepetition: state.game.isThreefoldRepetition,
+            ),
+          );
     }
   }
 

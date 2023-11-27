@@ -32,6 +32,7 @@ class OfflineCorrespondenceGame
     @JsonKey(fromJson: _stepsFromJson, toJson: _stepsToJson)
     required IList<GameStep> steps,
     String? initialFen,
+    required bool rated,
     required GameStatus status,
     required Variant variant,
     required Speed speed,
@@ -39,9 +40,10 @@ class OfflineCorrespondenceGame
     required Player white,
     required Player black,
     required Side youAre,
-    required int daysPerTurn,
+    int? daysPerTurn,
     Side? winner,
     bool? isThreefoldRepetition,
+    (int, UCIMove)? registeredMoveAtPly,
   }) = _CorrespondenceGame;
 
   factory OfflineCorrespondenceGame.fromJson(Map<String, dynamic> json) =>
@@ -54,13 +56,15 @@ class OfflineCorrespondenceGame
 
   Side get sideToMove => lastPosition.turn;
 
-  Duration get estimatedTimeLeft {
+  Duration? get estimatedTimeLeft {
+    if (daysPerTurn == null) return null;
     final elapsed = DateTime.now().difference(lastModified);
-    final duration = Duration(days: daysPerTurn) - elapsed;
+    final duration = Duration(days: daysPerTurn!) - elapsed;
     return duration > Duration.zero ? duration : Duration.zero;
   }
 
   bool get isPlayerTurn => lastPosition.turn == youAre;
+  bool get playable => status.value < GameStatus.aborted.value;
   bool get playing => status.value > GameStatus.started.value;
   bool get finished => status.value >= GameStatus.mate.value;
 }

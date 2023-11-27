@@ -33,7 +33,7 @@ class GameFullEvent with _$GameFullEvent {
 
 PlayableGame _playableGameFromPick(RequiredPick pick) {
   final requiredGamePick = pick('game').required();
-  final meta = _playableGameMetaFromPick(requiredGamePick);
+  final meta = _playableGameMetaFromPick(pick);
   final initialFen = requiredGamePick('initialFen').asStringOrNull();
 
   // assume lichess always send initialFen with fromPosition and chess960
@@ -97,11 +97,11 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
 
 PlayableGameMeta _playableGameMetaFromPick(RequiredPick pick) {
   return PlayableGameMeta(
-    rated: pick('rated').asBoolOrThrow(),
-    speed: pick('speed').asSpeedOrThrow(),
-    perf: pick('perf').asPerfOrThrow(),
-    variant: pick('variant').asVariantOrThrow(),
-    source: pick('source').letOrThrow(
+    rated: pick('game', 'rated').asBoolOrThrow(),
+    speed: pick('game', 'speed').asSpeedOrThrow(),
+    perf: pick('game', 'perf').asPerfOrThrow(),
+    variant: pick('game', 'variant').asVariantOrThrow(),
+    source: pick('game', 'source').letOrThrow(
       (pick) =>
           GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
     ),
@@ -115,8 +115,8 @@ PlayableGameMeta _playableGameMetaFromPick(RequiredPick pick) {
     ),
     daysPerTurn: pick('correspondence')
         .letOrNull((ccPick) => ccPick('daysPerTurn').asIntOrThrow()),
-    startedAtTurn: pick('startedAtTurn').asIntOrNull(),
-    rules: pick('rules').letOrNull(
+    startedAtTurn: pick('game', 'startedAtTurn').asIntOrNull(),
+    rules: pick('game', 'rules').letOrNull(
       (it) => ISet(
         pick.asListOrThrow(
           (e) => GameRule.nameMap[e.asStringOrThrow()] ?? GameRule.unknown,

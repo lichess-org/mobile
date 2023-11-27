@@ -70,6 +70,7 @@ final corresGame = OfflineCorrespondenceGame(
   steps: _makeSteps(
     'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
   ),
+  rated: true,
   status: GameStatus.started,
   variant: Variant.standard,
   speed: Speed.correspondence,
