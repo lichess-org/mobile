@@ -138,7 +138,6 @@ class TvController extends _$TvController {
         final sanMove = SanMove(data.san, move);
         final newPos = lastPos.playUnchecked(move);
         final newStep = GameStep(
-          ply: data.ply,
           sanMove: sanMove,
           position: newPos,
           diff: MaterialDiff.fromBoard(newPos.board),

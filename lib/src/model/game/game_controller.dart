@@ -89,7 +89,6 @@ class GameController extends _$GameController {
     final (newPos, newSan) = curState.game.lastPosition.makeSan(move);
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
-      ply: curState.game.lastPly + 1,
       position: newPos,
       sanMove: sanMove,
       diff: MaterialDiff.fromBoard(newPos.board),
@@ -492,7 +491,6 @@ class GameController extends _$GameController {
           final sanMove = SanMove(data.san, move);
           final newPos = lastPos.playUnchecked(move);
           final newStep = GameStep(
-            ply: data.ply,
             sanMove: sanMove,
             position: newPos,
             diff: MaterialDiff.fromBoard(newPos.board),

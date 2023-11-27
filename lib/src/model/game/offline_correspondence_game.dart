@@ -85,10 +85,8 @@ IList<GameStep> _stepsFromJson(String json) {
   final initialFen = first['fen'] as String;
   final rule = Rule.values.byName(first['rule'] as String);
   Position position = Position.setupPosition(rule, Setup.parseFen(initialFen));
-  int ply = 0;
-  final List<GameStep> steps = [GameStep(position: position, ply: ply)];
+  final List<GameStep> steps = [GameStep(position: position)];
   for (final obj in objs.skip(1)) {
-    ply++;
     final step = obj as Map<String, dynamic>;
     final uci = step['uci'] as String?;
     final san = step['san'] as String?;
@@ -100,7 +98,6 @@ IList<GameStep> _stepsFromJson(String json) {
     steps.add(
       GameStep(
         position: position,
-        ply: ply,
         sanMove: SanMove(san, move),
         diff: MaterialDiff.fromBoard(position.board),
       ),

@@ -97,12 +97,12 @@ mixin IndexableSteps on BaseGame {
   }
 
   Position get initialPosition => steps.first.position;
-  int get initialPly => steps.first.ply;
+  int get initialPly => steps.first.position.ply;
 
   @override
   Position get lastPosition => steps.last.position;
 
-  int get lastPly => steps.last.ply;
+  int get lastPly => steps.last.position.ply;
 
   MaterialDiffSide? lastMaterialDiffAt(Side side) =>
       steps.last.diff?.bySide(side);
@@ -343,7 +343,6 @@ class ClockData with _$ClockData {
 @freezed
 class GameStep with _$GameStep {
   const factory GameStep({
-    required int ply,
     required Position position,
     SanMove? sanMove,
     MaterialDiff? diff,

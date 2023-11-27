@@ -48,15 +48,12 @@ void main() {
 
 IList<GameStep> _makeSteps(String pgn) {
   Position position = Chess.initial;
-  int ply = 0;
-  final steps = <GameStep>[GameStep(ply: ply, position: position)];
+  final steps = <GameStep>[GameStep(position: position)];
   for (final san in pgn.split(' ')) {
-    ply++;
     final move = position.parseSan(san)!;
     position = position.play(move);
     steps.add(
       GameStep(
-        ply: ply,
         position: position,
         sanMove: SanMove(san, move),
         diff: MaterialDiff.fromBoard(position.board),

@@ -42,19 +42,16 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
           ? Chess.fromSetup(Setup.parseFen(initialFen!))
           : meta.variant.initialPosition;
 
-  int ply = 0;
-  final steps = [GameStep(ply: ply, position: position)];
+  final steps = [GameStep(position: position)];
   final pgn = pick('game', 'pgn').asStringOrNull();
   final moves = pgn != null && pgn != '' ? pgn.split(' ') : null;
   if (moves != null && moves.isNotEmpty) {
     for (final san in moves) {
-      ply++;
       final move = position.parseSan(san);
       // assume lichess only sends correct moves
       position = position.playUnchecked(move!);
       steps.add(
         GameStep(
-          ply: ply,
           sanMove: SanMove(san, move),
           position: position,
           diff: MaterialDiff.fromBoard(position.board),

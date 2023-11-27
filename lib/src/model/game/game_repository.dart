@@ -115,7 +115,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
           ? Chess.fromSetup(Setup.parseFen(initialFen!))
           : data.variant.initialPosition;
       int index = 0;
-      final List<GameStep> steps = [GameStep(ply: index, position: position)];
+      final List<GameStep> steps = [GameStep(position: position)];
       Duration? clock = data.clock?.initial;
       for (final san in moves) {
         final stepClock = clocks?[index];
@@ -125,7 +125,6 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
         position = position.playUnchecked(move!);
         steps.add(
           GameStep(
-            ply: index,
             sanMove: SanMove(san, move),
             position: position,
             diff: MaterialDiff.fromBoard(position.board),
