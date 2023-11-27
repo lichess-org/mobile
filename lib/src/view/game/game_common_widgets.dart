@@ -290,9 +290,7 @@ class StandaloneGameTitle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final metaAsync = ref.watch(gameMetaProvider(id));
     return metaAsync.maybeWhen<Widget>(
-      data: (data) {
-        final (meta, clock, corresClock) = data;
-
+      data: (meta) {
         final mode = meta.rated
             ? ' • ${context.l10n.rated}'
             : ' • ${context.l10n.casual}';
@@ -304,13 +302,13 @@ class StandaloneGameTitle extends ConsumerWidget {
               color: DefaultTextStyle.of(context).style.color,
             ),
             const SizedBox(width: 4.0),
-            if (clock != null)
+            if (meta.clock != null)
               Text(
-                '${TimeIncrement(clock.initial.inSeconds, clock.increment.inSeconds).display}$mode',
+                '${TimeIncrement(meta.clock!.initial.inSeconds, meta.clock!.increment.inSeconds).display}$mode',
               )
-            else if (corresClock != null)
+            else if (meta.daysPerTurn != null)
               Text(
-                '${context.l10n.nbDays(corresClock.daysPerTurn)}$mode',
+                '${context.l10n.nbDays(meta.daysPerTurn!)}$mode',
               )
             else
               Text('${meta.perf.title}$mode'),

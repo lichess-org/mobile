@@ -240,12 +240,24 @@ class GamePrefs with _$GamePrefs {
 class PlayableGameMeta with _$PlayableGameMeta {
   const PlayableGameMeta._();
 
+  @Assert('!(clock != null && daysPerTurn != null)')
   const factory PlayableGameMeta({
     required bool rated,
     required Variant variant,
     required Speed speed,
     required Perf perf,
     required GameSource source,
+    ({
+      Duration initial,
+      Duration increment,
+
+      /// Remaining time threshold to switch the clock to "emergency" mode.
+      Duration? emergency,
+
+      /// Time added to the clock by the "add more time" button.
+      Duration? moreTime,
+    })? clock,
+    int? daysPerTurn,
     int? startedAtTurn,
     ISet<GameRule>? rules,
   }) = _PlayableGameMeta;
@@ -254,24 +266,15 @@ class PlayableGameMeta with _$PlayableGameMeta {
 @freezed
 class PlayableClockData with _$PlayableClockData {
   const factory PlayableClockData({
-    required Duration initial,
-    required Duration increment,
     required bool running,
     required Duration white,
     required Duration black,
-
-    /// Remaining time threshold to switch the clock to "emergency" mode.
-    Duration? emergency,
-
-    /// Time added to the clock by the "add more time" button.
-    Duration? moreTime,
   }) = _PlayableClockData;
 }
 
 @freezed
 class CorrespondenceClockData with _$CorrespondenceClockData {
   const factory CorrespondenceClockData({
-    required int daysPerTurn,
     required Duration white,
     required Duration black,
   }) = _CorrespondenceClockData;

@@ -450,7 +450,7 @@ class GameController extends _$GameController {
         final playedSide = data.ply.isOdd ? Side.white : Side.black;
 
         if (curState.game.speed == Speed.correspondence &&
-            curState.game.correspondenceClock != null &&
+            curState.game.meta.daysPerTurn != null &&
             curState.game.youAre != null) {
           ref.invalidate(ongoingGamesProvider);
           ref.read(correspondenceGameStorageProvider).save(
@@ -466,7 +466,7 @@ class GameController extends _$GameController {
                   white: curState.game.white,
                   black: curState.game.black,
                   youAre: curState.game.youAre!,
-                  daysPerTurn: curState.game.correspondenceClock!.daysPerTurn,
+                  daysPerTurn: curState.game.meta.daysPerTurn!,
                   winner: curState.game.winner,
                   isThreefoldRepetition: curState.game.isThreefoldRepetition,
                 ),

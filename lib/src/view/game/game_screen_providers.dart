@@ -68,35 +68,15 @@ Future<({GamePrefs? prefs, bool shouldConfirmMove, bool isZenModeEnabled})>
   );
 }
 
-/// Returns the [GameMeta] and the [ClockData] of a game.
+/// Returns the [PlayableGameMeta].
 ///
-/// This is data won't change during the game.
+/// This is data that won't change during the game.
 @riverpod
-Future<(PlayableGameMeta, ClockData?, ({int daysPerTurn})?)> gameMeta(
+Future<PlayableGameMeta> gameMeta(
   GameMetaRef ref,
   GameFullId gameId,
 ) async {
-  final meta = await ref.watch(
+  return await ref.watch(
     gameControllerProvider(gameId).selectAsync((state) => state.game.meta),
-  );
-  final initial = await ref.watch(
-    gameControllerProvider(gameId)
-        .selectAsync((state) => state.game.clock?.initial),
-  );
-  final increment = await ref.watch(
-    gameControllerProvider(gameId)
-        .selectAsync((state) => state.game.clock?.increment),
-  );
-  final days = await ref.watch(
-    gameControllerProvider(gameId).selectAsync(
-      (state) => state.game.correspondenceClock?.daysPerTurn,
-    ),
-  );
-  return (
-    meta,
-    initial != null && increment != null
-        ? ClockData(initial: initial, increment: increment)
-        : null,
-    days != null ? (daysPerTurn: days) : null,
   );
 }

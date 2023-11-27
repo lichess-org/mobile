@@ -108,6 +108,16 @@ PlayableGameMeta _playableGameMetaFromPick(RequiredPick pick) {
       (pick) =>
           GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
     ),
+    clock: pick('clock').letOrNull(
+      (cPick) => (
+        initial: cPick('initial').asDurationFromSecondsOrThrow(),
+        increment: cPick('increment').asDurationFromSecondsOrThrow(),
+        emergency: pick('emerg').asDurationFromSecondsOrNull(),
+        moreTime: pick('moretime').asDurationFromSecondsOrNull(),
+      ),
+    ),
+    daysPerTurn: pick('correspondence')
+        .letOrNull((ccPick) => ccPick('daysPerTurn').asIntOrThrow()),
     startedAtTurn: pick('startedAtTurn').asIntOrNull(),
     rules: pick('rules').letOrNull(
       (it) => ISet(
@@ -150,19 +160,14 @@ Player _playerFromUserGamePick(RequiredPick pick) {
 
 PlayableClockData _playableClockDataFromPick(RequiredPick pick) {
   return PlayableClockData(
-    initial: pick('initial').asDurationFromSecondsOrThrow(),
-    increment: pick('increment').asDurationFromSecondsOrThrow(),
     running: pick('running').asBoolOrThrow(),
     white: pick('white').asDurationFromSecondsOrThrow(),
     black: pick('black').asDurationFromSecondsOrThrow(),
-    emergency: pick('emerg').asDurationFromSecondsOrNull(),
-    moreTime: pick('moretime').asDurationFromSecondsOrNull(),
   );
 }
 
 CorrespondenceClockData _correspondenceClockDataFromPick(RequiredPick pick) {
   return CorrespondenceClockData(
-    daysPerTurn: pick('daysPerTurn').asIntOrThrow(),
     white: pick('white').asDurationFromSecondsOrThrow(),
     black: pick('black').asDurationFromSecondsOrThrow(),
   );

@@ -129,13 +129,13 @@ class GameBody extends ConsumerWidget {
                       },
                     )
                   : null,
-          clock: gameState.game.clock != null
+          clock: gameState.game.meta.clock != null
               ? CountdownClock(
                   key: blackClockKey,
                   duration: gameState.game.clock!.black,
                   active: gameState.activeClockSide == Side.black,
                   emergencyThreshold: youAre == Side.black
-                      ? gameState.game.clock?.emergency
+                      ? gameState.game.meta.clock?.emergency
                       : null,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
@@ -166,13 +166,13 @@ class GameBody extends ConsumerWidget {
                       },
                     )
                   : null,
-          clock: gameState.game.clock != null
+          clock: gameState.game.meta.clock != null
               ? CountdownClock(
                   key: whiteClockKey,
                   duration: gameState.game.clock!.white,
                   active: gameState.activeClockSide == Side.white,
                   emergencyThreshold: youAre == Side.white
-                      ? gameState.game.clock?.emergency
+                      ? gameState.game.meta.clock?.emergency
                       : null,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
@@ -582,11 +582,11 @@ class _GameBottomBar extends ConsumerWidget {
               ref.read(gameControllerProvider(id).notifier).abortGame();
             },
           ),
-        if (gameState.game.clock != null && gameState.game.canGiveTime)
+        if (gameState.game.meta.clock != null && gameState.game.canGiveTime)
           BottomSheetAction(
             label: Text(
               context.l10n.giveNbSeconds(
-                gameState.game.clock!.moreTime?.inSeconds ?? 15,
+                gameState.game.meta.clock!.moreTime?.inSeconds ?? 15,
               ),
             ),
             onPressed: (context) {
