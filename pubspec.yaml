@@ -32,7 +32,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_native_splash: ^2.3.5
-  flutter_riverpod: ^2.3.4
+  flutter_riverpod: ^2.4.9
   flutter_secure_storage: ^9.0.0
   flutter_slidable: ^3.0.0
   flutter_spinkit: ^5.2.0
