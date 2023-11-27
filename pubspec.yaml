@@ -76,7 +76,7 @@ dev_dependencies:
   lint: ^2.0.1
   mocktail: ^1.0.0
   riverpod_generator: ^2.1.0
-  riverpod_lint: ^2.3.3
+  riverpod_lint: ^2.3.7
   sqflite_common_ffi: ^2.2.3
 
 flutter:
