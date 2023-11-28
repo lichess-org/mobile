@@ -1,19 +1,17 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
-
-import 'player.dart';
-import 'game.dart';
-import 'game_status.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 
 part 'offline_correspondence_game.freezed.dart';
 part 'offline_correspondence_game.g.dart';

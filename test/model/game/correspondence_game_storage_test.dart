@@ -6,11 +6,11 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/game/correspondence_game_storage.dart';
+import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
+import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
-import 'package:lichess_mobile/src/model/game/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
