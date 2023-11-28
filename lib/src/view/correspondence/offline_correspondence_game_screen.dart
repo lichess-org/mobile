@@ -29,10 +29,12 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 class OfflineCorrespondenceGameScreen extends StatelessWidget {
   const OfflineCorrespondenceGameScreen({
     required this.game,
+    required this.lastModified,
     super.key,
   });
 
   final OfflineCorrespondenceGame game;
+  final DateTime lastModified;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,7 @@ class OfflineCorrespondenceGameScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: _Title(game)),
-      body: _Body(game: game),
+      body: _Body(game: game, lastModified: lastModified),
     );
   }
 
@@ -58,7 +60,7 @@ class OfflineCorrespondenceGameScreen extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         middle: _Title(game),
       ),
-      child: _Body(game: game),
+      child: _Body(game: game, lastModified: lastModified),
     );
   }
 }
@@ -93,9 +95,11 @@ class _Title extends StatelessWidget {
 class _Body extends ConsumerStatefulWidget {
   const _Body({
     required this.game,
+    required this.lastModified,
   });
 
   final OfflineCorrespondenceGame game;
+  final DateTime lastModified;
 
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -104,7 +108,7 @@ class _Body extends ConsumerStatefulWidget {
 class _BodyState extends ConsumerState<_Body> {
   late OfflineCorrespondenceGame game;
   int stepCursor = 0;
-  Move? moveToConfirm;
+  (String, Move)? moveToConfirm;
   bool isBoardTurned = false;
 
   bool get isReplaying => stepCursor < game.steps.length - 1;
@@ -143,9 +147,11 @@ class _BodyState extends ConsumerState<_Body> {
               cancel: cancelMove,
             )
           : null,
-      clock: youAre == Side.black && game.estimatedTimeLeft != null
+      clock: youAre == Side.black &&
+              game.estimatedTimeLeft(Side.black, widget.lastModified) != null
           ? CorrespondenceClock(
-              duration: game.estimatedTimeLeft!,
+              duration:
+                  game.estimatedTimeLeft(Side.black, widget.lastModified)!,
               active: activeClockSide == Side.black,
             )
           : null,
@@ -163,9 +169,10 @@ class _BodyState extends ConsumerState<_Body> {
               cancel: cancelMove,
             )
           : null,
-      clock: youAre == Side.white && game.estimatedTimeLeft != null
+      clock: game.estimatedTimeLeft(Side.white, widget.lastModified) != null
           ? CorrespondenceClock(
-              duration: game.estimatedTimeLeft!,
+              duration:
+                  game.estimatedTimeLeft(Side.white, widget.lastModified)!,
               active: activeClockSide == Side.white,
             )
           : null,
@@ -253,7 +260,7 @@ class _BodyState extends ConsumerState<_Body> {
                 BottomBarButton(
                   label: 'Clear saved move',
                   shortLabel: 'Clear move',
-                  onTap: game.registeredMoveAtPly != null
+                  onTap: game.registeredMoveAtPgn != null
                       ? () {
                           showConfirmDialog<void>(
                             context,
@@ -321,11 +328,11 @@ class _BodyState extends ConsumerState<_Body> {
     );
 
     setState(() {
+      moveToConfirm = (game.sanMoves, move);
       game = game.copyWith(
         steps: game.steps.add(newStep),
       );
       stepCursor = stepCursor + 1;
-      moveToConfirm = move;
     });
 
     _moveFeedback(sanMove);
@@ -334,7 +341,7 @@ class _BodyState extends ConsumerState<_Body> {
   void confirmMove() {
     setState(() {
       game = game.copyWith(
-        registeredMoveAtPly: (game.lastPly, moveToConfirm!.uci),
+        registeredMoveAtPgn: (moveToConfirm!.$1, moveToConfirm!.$2.uci),
       );
       moveToConfirm = null;
     });
@@ -357,7 +364,7 @@ class _BodyState extends ConsumerState<_Body> {
       stepCursor = stepCursor - 1;
       game = game.copyWith(
         steps: game.steps.removeLast(),
-        registeredMoveAtPly: null,
+        registeredMoveAtPgn: null,
       );
     });
 

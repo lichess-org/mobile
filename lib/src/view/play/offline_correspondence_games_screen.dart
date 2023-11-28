@@ -53,7 +53,12 @@ class _Body extends ConsumerWidget {
       data: (data) => ListView(
         children: [
           const SizedBox(height: 8.0),
-          ...data.map((game) => OfflineCorrespondenceGamePreview(game: game)),
+          ...data.map(
+            (game) => OfflineCorrespondenceGamePreview(
+              game: game.$2,
+              lastModified: game.$1,
+            ),
+          ),
         ],
       ),
       orElse: () => const SizedBox.shrink(),
@@ -62,7 +67,12 @@ class _Body extends ConsumerWidget {
 }
 
 class OfflineCorrespondenceGamePreview extends ConsumerWidget {
-  const OfflineCorrespondenceGamePreview({required this.game, super.key});
+  const OfflineCorrespondenceGamePreview({
+    required this.game,
+    required this.lastModified,
+    super.key,
+  });
+  final DateTime lastModified;
   final OfflineCorrespondenceGame game;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -80,10 +90,10 @@ class OfflineCorrespondenceGamePreview extends ConsumerWidget {
             isPatron: game.opponent.patron,
             style: Styles.boardPreviewTitle,
           ),
-          if (game.estimatedTimeLeft != null)
+          if (game.myTimeLeft(lastModified) != null)
             Text(
               timeago.format(
-                DateTime.now().add(game.estimatedTimeLeft!),
+                DateTime.now().add(game.myTimeLeft(lastModified)!),
                 allowFromNow: true,
               ),
             ),
@@ -98,7 +108,10 @@ class OfflineCorrespondenceGamePreview extends ConsumerWidget {
         pushPlatformRoute(
           context,
           rootNavigator: true,
-          builder: (_) => OfflineCorrespondenceGameScreen(game: game),
+          builder: (_) => OfflineCorrespondenceGameScreen(
+            game: game,
+            lastModified: lastModified,
+          ),
         );
       },
     );

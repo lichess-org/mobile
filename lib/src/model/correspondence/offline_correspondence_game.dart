@@ -26,9 +26,10 @@ class OfflineCorrespondenceGame
   @Assert('steps.isNotEmpty')
   factory OfflineCorrespondenceGame({
     required GameId id,
-    required DateTime lastModified,
+    required GameFullId fullId,
     @JsonKey(fromJson: _stepsFromJson, toJson: _stepsToJson)
     required IList<GameStep> steps,
+    CorrespondenceClockData? clock,
     String? initialFen,
     required bool rated,
     required GameStatus status,
@@ -41,7 +42,7 @@ class OfflineCorrespondenceGame
     int? daysPerTurn,
     Side? winner,
     bool? isThreefoldRepetition,
-    (int, UCIMove)? registeredMoveAtPly,
+    (String, UCIMove)? registeredMoveAtPgn,
   }) = _CorrespondenceGame;
 
   factory OfflineCorrespondenceGame.fromJson(Map<String, dynamic> json) =>
@@ -54,11 +55,15 @@ class OfflineCorrespondenceGame
 
   Side get sideToMove => lastPosition.turn;
 
-  Duration? get estimatedTimeLeft {
-    if (daysPerTurn == null) return null;
-    final elapsed = DateTime.now().difference(lastModified);
-    final duration = Duration(days: daysPerTurn!) - elapsed;
-    return duration > Duration.zero ? duration : Duration.zero;
+  Duration? myTimeLeft(DateTime lastModifiedTime) =>
+      estimatedTimeLeft(youAre, lastModifiedTime);
+
+  Duration? estimatedTimeLeft(Side side, DateTime lastModifiedTime) {
+    final timeLeft = side == Side.white ? clock?.white : clock?.black;
+    if (timeLeft != null) {
+      return timeLeft - DateTime.now().difference(lastModifiedTime);
+    }
+    return null;
   }
 
   bool get isPlayerTurn => lastPosition.turn == youAre;

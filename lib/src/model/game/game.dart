@@ -14,6 +14,7 @@ import 'game_status.dart';
 import 'material_diff.dart';
 
 part 'game.freezed.dart';
+part 'game.g.dart';
 
 /// Common interface for playable and archived games.
 abstract mixin class BaseGame {
@@ -65,15 +66,15 @@ mixin IndexableSteps on BaseGame {
   /// Contains the initial FEN if available. This is not meant to be used for
   /// exporting the game.
   String get pgn {
-    final moves = steps
-        .where((e) => e.sanMove != null)
-        .map((e) => e.sanMove!.san)
-        .join(' ');
-
     final fenHeader = initialFen != null ? '[FEN "$initialFen"]' : '';
 
-    return '$fenHeader\n$moves';
+    return '$fenHeader\n$sanMoves';
   }
+
+  String get sanMoves => steps
+      .where((e) => e.sanMove != null)
+      .map((e) => e.sanMove!.san)
+      .join(' ');
 
   MaterialDiffSide? materialDiffAt(int cursor, Side side) =>
       steps[cursor].diff?.bySide(side);
@@ -272,12 +273,15 @@ class PlayableClockData with _$PlayableClockData {
   }) = _PlayableClockData;
 }
 
-@freezed
+@Freezed(fromJson: true, toJson: true)
 class CorrespondenceClockData with _$CorrespondenceClockData {
   const factory CorrespondenceClockData({
     required Duration white,
     required Duration black,
   }) = _CorrespondenceClockData;
+
+  factory CorrespondenceClockData.fromJson(Map<String, dynamic> json) =>
+      _$CorrespondenceClockDataFromJson(json);
 }
 
 @freezed

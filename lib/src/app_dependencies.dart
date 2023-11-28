@@ -67,7 +67,8 @@ Future<AppDependencies> appDependencies(
         Uri.parse('$kLichessHost/api/account'),
         headers: {
           'Authorization': 'Bearer ${signBearerToken(storedSession.token)}',
-          'user-agent': userAgent(pInfo, deviceInfo, sri, storedSession.user),
+          'user-agent':
+              makeUserAgent(pInfo, deviceInfo, sri, storedSession.user),
         },
       ).timeout(const Duration(seconds: 3));
       if (response.statusCode == 401) {

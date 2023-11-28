@@ -282,7 +282,7 @@ class AuthSocket {
             'Authorization': 'Bearer ${signBearerToken(session.token)}',
           }
         : {};
-    WebSocket.userAgent = userAgent(pInfo, deviceInfo, sri, session?.user);
+    WebSocket.userAgent = makeUserAgent(pInfo, deviceInfo, sri, session?.user);
 
     _log.info('Creating WebSocket connection to $uri');
     _route = route;

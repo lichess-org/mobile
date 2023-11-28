@@ -31,6 +31,17 @@ AuthClient authClient(AuthClientRef ref) {
   );
 }
 
+@riverpod
+String userAgent(UserAgentRef ref) {
+  final pInfo = ref.read(packageInfoProvider);
+  final deviceInfo = ref.read(deviceInfoProvider);
+  final sri = ref.read(sriProvider);
+
+  final session = ref.watch(authSessionProvider);
+
+  return makeUserAgent(pInfo, deviceInfo, sri, session?.user);
+}
+
 /// HTTP client to communicate with lichess
 ///
 /// This client handles all of the following:
@@ -211,7 +222,7 @@ class _AuthClient extends BaseClient {
     }
 
     request.headers['user-agent'] =
-        userAgent(pInfo, deviceInfo, sri, session?.user);
+        makeUserAgent(pInfo, deviceInfo, sri, session?.user);
 
     _logger.info('${request.method} ${request.url}', request.headers);
 

@@ -760,9 +760,10 @@ class GameController extends _$GameController {
       ref.read(correspondenceGameStorageProvider).save(
             OfflineCorrespondenceGame(
               id: state.game.id,
-              lastModified: DateTime.now(),
+              fullId: gameFullId,
               rated: state.game.meta.rated,
               steps: state.game.steps,
+              clock: state.game.correspondenceClock,
               initialFen: state.game.initialFen,
               status: state.game.status,
               variant: state.game.meta.variant,

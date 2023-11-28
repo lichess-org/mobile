@@ -523,14 +523,17 @@ class _OfflineCorrespondencePreview extends ConsumerWidget {
         ref.watch(offlineOngoingCorrespondenceGamesProvider);
     return offlineCorresGames.maybeWhen(
       data: (data) {
-        final game = data.firstOrNull;
-        if (game == null) {
+        final first = data.firstOrNull;
+        if (first == null) {
           return const SizedBox.shrink();
         }
 
         return _OngoingGamePreview(
-          data: data,
-          child: OfflineCorrespondenceGamePreview(game: game),
+          data: data.map((e) => e.$2).toIList(),
+          child: OfflineCorrespondenceGamePreview(
+            game: first.$2,
+            lastModified: first.$1,
+          ),
           moreScreenBuilder: (_) => const OfflineCorrespondenceGamesScreen(),
         );
       },

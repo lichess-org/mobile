@@ -19,7 +19,8 @@ CorrespondenceGameStorage correspondenceGameStorage(
 }
 
 @riverpod
-Future<IList<OfflineCorrespondenceGame>> offlineOngoingCorrespondenceGames(
+Future<IList<(DateTime, OfflineCorrespondenceGame)>>
+    offlineOngoingCorrespondenceGames(
   OfflineOngoingCorrespondenceGamesRef ref,
 ) async {
   final storage = ref.watch(correspondenceGameStorageProvider);
@@ -33,7 +34,8 @@ class CorrespondenceGameStorage {
   final Database _db;
   final CorrespondenceGameStorageRef ref;
 
-  Future<IList<OfflineCorrespondenceGame>> fetchOngoingGames() async {
+  Future<IList<(DateTime, OfflineCorrespondenceGame)>>
+      fetchOngoingGames() async {
     final list = await _db.query(
       _tableName,
       where: 'data LIKE ?',
@@ -41,15 +43,17 @@ class CorrespondenceGameStorage {
     );
 
     return list.map((e) {
+      final lmString = e['lastModified'] as String?;
       final raw = e['data'] as String?;
-      if (raw != null) {
+      if (raw != null && lmString != null) {
+        final lastModified = DateTime.parse(lmString);
         final json = jsonDecode(raw);
         if (json is! Map<String, dynamic>) {
           throw const FormatException(
             '[CorrespondenceGameStorage] cannot fetch game: expected an object',
           );
         }
-        return OfflineCorrespondenceGame.fromJson(json);
+        return (lastModified, OfflineCorrespondenceGame.fromJson(json));
       }
       throw const FormatException(
         '[CorrespondenceGameStorage] cannot fetch game: expected an object',
