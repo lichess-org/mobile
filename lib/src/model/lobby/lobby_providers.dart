@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
-import 'package:lichess_mobile/src/model/game/create_game_service.dart';
+import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 
 import 'game_seek.dart';
 
