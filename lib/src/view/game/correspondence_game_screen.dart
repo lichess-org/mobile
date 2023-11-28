@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/online_game.dart';
+import 'package:lichess_mobile/src/model/lobby/lobby_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -37,7 +37,7 @@ class _CorrespondenceGameScreenState
 
   @override
   Widget build(BuildContext context) {
-    final gameId = ref.watch(onlineGameProvider(widget.initialId));
+    final gameId = ref.watch(standaloneGameProvider(widget.initialId));
     return PlatformWidget(
       androidBuilder: (context) => _androidBuilder(
         context,

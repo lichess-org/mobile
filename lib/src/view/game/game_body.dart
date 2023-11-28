@@ -12,9 +12,8 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
-import 'package:lichess_mobile/src/model/game/online_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
+import 'package:lichess_mobile/src/model/lobby/lobby_providers.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -319,7 +318,7 @@ class GameBody extends ConsumerWidget {
               .rematch(state.requireValue.redirectGameId!);
         } else if (initialStandAloneId != null) {
           ref
-              .read(onlineGameProvider(initialStandAloneId!).notifier)
+              .read(standaloneGameProvider(initialStandAloneId!).notifier)
               .newGame(state.requireValue.redirectGameId!);
         }
       }
@@ -514,7 +513,7 @@ class _GameBottomBar extends ConsumerWidget {
                         ? () {
                             ref
                                 .read(
-                                  onlineGameProvider(initialStandAloneId!)
+                                  standaloneGameProvider(initialStandAloneId!)
                                       .notifier,
                                 )
                                 .newGame(nextTurn.fullId);
