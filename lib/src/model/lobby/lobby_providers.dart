@@ -4,11 +4,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
-import 'package:lichess_mobile/src/model/game/create_game_service.dart';
+import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 
 import 'game_seek.dart';
 
-part 'lobby_game.g.dart';
+part 'lobby_providers.g.dart';
 
 /// The [LobbyGame] provider is used to create a new online game from the lobby
 /// or pool sources.
@@ -50,6 +50,24 @@ class LobbyGame extends _$LobbyGame {
   CreateGameService get _service => ref.read(createGameServiceProvider);
 }
 
+/// The [StandaloneGame] provider is used by [StandAloneGameScreen] to provide the game
+/// and optionally next games if there are rematches, or a tournament, or if the
+/// user switches to another correspondence game.
+@riverpod
+class StandaloneGame extends _$StandaloneGame {
+  @override
+  GameFullId build(GameFullId initialId) {
+    return initialId;
+  }
+
+  // ignore: use_setters_to_change_properties
+  void newGame(GameFullId id) {
+    state = id;
+  }
+}
+
+/// The [LobbyNumbers] provider is used to display the number of players and
+/// games on lichess in real time.
 @riverpod
 class LobbyNumbers extends _$LobbyNumbers {
   StreamSubscription<SocketEvent>? _socketSubscription;

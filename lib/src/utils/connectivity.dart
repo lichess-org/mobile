@@ -4,6 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/http_client.dart';
 
 part 'connectivity.freezed.dart';
@@ -50,7 +51,7 @@ Stream<ConnectivityStatus> connectivityChanges(ConnectivityChangesRef ref) {
 
 final _internetCheckUris = [
   Uri.parse('http://www.gstatic.com/generate_204'),
-  Uri.parse('https://lichess1.org/assets/logo/lichess-favicon-32.png'),
+  Uri.parse('$kLichessCDNHost/assets/logo/lichess-favicon-32.png'),
 ];
 
 Future<bool> isOnline(Client client) async {

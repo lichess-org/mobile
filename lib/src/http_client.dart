@@ -20,7 +20,7 @@ Client httpClient(HttpClientRef ref) {
   return client;
 }
 
-String userAgent(
+String makeUserAgent(
   PackageInfo info,
   BaseDeviceInfo deviceInfo,
   String sri,

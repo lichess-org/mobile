@@ -33,7 +33,7 @@ class GameFullEvent with _$GameFullEvent {
 
 PlayableGame _playableGameFromPick(RequiredPick pick) {
   final requiredGamePick = pick('game').required();
-  final meta = _playableGameMetaFromPick(requiredGamePick);
+  final meta = _playableGameMetaFromPick(pick);
   final initialFen = requiredGamePick('initialFen').asStringOrNull();
 
   // assume lichess always send initialFen with fromPosition and chess960
@@ -42,19 +42,16 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
           ? Chess.fromSetup(Setup.parseFen(initialFen!))
           : meta.variant.initialPosition;
 
-  int ply = 0;
-  final steps = [GameStep(ply: ply, position: position)];
+  final steps = [GameStep(position: position)];
   final pgn = pick('game', 'pgn').asStringOrNull();
   final moves = pgn != null && pgn != '' ? pgn.split(' ') : null;
   if (moves != null && moves.isNotEmpty) {
     for (final san in moves) {
-      ply++;
       final move = position.parseSan(san);
       // assume lichess only sends correct moves
       position = position.playUnchecked(move!);
       steps.add(
         GameStep(
-          ply: ply,
           sanMove: SanMove(san, move),
           position: position,
           diff: MaterialDiff.fromBoard(position.board),
@@ -74,6 +71,8 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
     white: pick('white').letOrThrow(_playerFromUserGamePick),
     black: pick('black').letOrThrow(_playerFromUserGamePick),
     clock: pick('clock').letOrNull(_playableClockDataFromPick),
+    correspondenceClock:
+        pick('correspondence').letOrNull(_correspondenceClockDataFromPick),
     status: pick('game', 'status').asGameStatusOrThrow(),
     winner: pick('game', 'winner').asSideOrNull(),
     boosted: pick('game', 'boosted').asBoolOrNull(),
@@ -98,16 +97,26 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
 
 PlayableGameMeta _playableGameMetaFromPick(RequiredPick pick) {
   return PlayableGameMeta(
-    rated: pick('rated').asBoolOrThrow(),
-    speed: pick('speed').asSpeedOrThrow(),
-    perf: pick('perf').asPerfOrThrow(),
-    variant: pick('variant').asVariantOrThrow(),
-    source: pick('source').letOrThrow(
+    rated: pick('game', 'rated').asBoolOrThrow(),
+    speed: pick('game', 'speed').asSpeedOrThrow(),
+    perf: pick('game', 'perf').asPerfOrThrow(),
+    variant: pick('game', 'variant').asVariantOrThrow(),
+    source: pick('game', 'source').letOrThrow(
       (pick) =>
           GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
     ),
-    startedAtTurn: pick('startedAtTurn').asIntOrNull(),
-    rules: pick('rules').letOrNull(
+    clock: pick('clock').letOrNull(
+      (cPick) => (
+        initial: cPick('initial').asDurationFromSecondsOrThrow(),
+        increment: cPick('increment').asDurationFromSecondsOrThrow(),
+        emergency: pick('emerg').asDurationFromSecondsOrNull(),
+        moreTime: pick('moretime').asDurationFromSecondsOrNull(),
+      ),
+    ),
+    daysPerTurn: pick('correspondence')
+        .letOrNull((ccPick) => ccPick('daysPerTurn').asIntOrThrow()),
+    startedAtTurn: pick('game', 'startedAtTurn').asIntOrNull(),
+    rules: pick('game', 'rules').letOrNull(
       (it) => ISet(
         pick.asListOrThrow(
           (e) => GameRule.nameMap[e.asStringOrThrow()] ?? GameRule.unknown,
@@ -148,13 +157,16 @@ Player _playerFromUserGamePick(RequiredPick pick) {
 
 PlayableClockData _playableClockDataFromPick(RequiredPick pick) {
   return PlayableClockData(
-    initial: pick('initial').asDurationFromSecondsOrThrow(),
-    increment: pick('increment').asDurationFromSecondsOrThrow(),
     running: pick('running').asBoolOrThrow(),
     white: pick('white').asDurationFromSecondsOrThrow(),
     black: pick('black').asDurationFromSecondsOrThrow(),
-    emergency: pick('emerg').asDurationFromSecondsOrNull(),
-    moreTime: pick('moretime').asDurationFromSecondsOrNull(),
+  );
+}
+
+CorrespondenceClockData _correspondenceClockDataFromPick(RequiredPick pick) {
+  return CorrespondenceClockData(
+    white: pick('white').asDurationFromSecondsOrThrow(),
+    black: pick('black').asDurationFromSecondsOrThrow(),
   );
 }
 

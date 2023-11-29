@@ -83,7 +83,7 @@ class AnalysisScreen extends ConsumerWidget {
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
-        padding: EdgeInsetsDirectional.zero,
+        padding: Styles.cupertinoAppBarTrailingWidgetPadding,
         middle: _Title(options: options, title: title),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,

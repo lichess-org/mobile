@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
+import 'package:lichess_mobile/src/model/lobby/lobby_providers.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
@@ -68,24 +68,15 @@ Future<({GamePrefs? prefs, bool shouldConfirmMove, bool isZenModeEnabled})>
   );
 }
 
-/// Returns the [GameMeta] and the [ClockData] of a game.
+/// Returns the [PlayableGameMeta].
 ///
-/// This is data won't change during the game.
+/// This is data that won't change during the game.
 @riverpod
-Future<(PlayableGameMeta, ClockData?)> gameMeta(
+Future<PlayableGameMeta> gameMeta(
   GameMetaRef ref,
   GameFullId gameId,
 ) async {
-  final meta = await ref.watch(
+  return await ref.watch(
     gameControllerProvider(gameId).selectAsync((state) => state.game.meta),
-  );
-  final clock = await ref.watch(
-    gameControllerProvider(gameId).selectAsync((state) => state.game.clock),
-  );
-  return (
-    meta,
-    clock != null
-        ? ClockData(initial: clock.initial, increment: clock.increment)
-        : null
   );
 }

@@ -100,7 +100,7 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        padding: EdgeInsetsDirectional.zero,
+        padding: Styles.cupertinoAppBarTrailingWidgetPadding,
         middle: _Title(angle: widget.angle),
         trailing: ToggleSoundButton(),
       ),

@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
-import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
@@ -19,6 +18,8 @@ import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
+
+import 'common_play_widgets.dart';
 
 class CustomPlayScreen extends StatelessWidget {
   const CustomPlayScreen();
@@ -219,104 +220,13 @@ class _Body extends ConsumerWidget {
               ),
             ),
           if (userPerf != null)
-            Builder(
-              builder: (context) {
-                final isRatingRangeAvailable = userPerf.provisional != true;
-                var (subtract, add) = preferences.customRatingRange;
-
-                return StatefulBuilder(
-                  builder: (context, setState) {
-                    return Opacity(
-                      opacity: isRatingRangeAvailable ? 1 : 0.5,
-                      child: PlatformListTile(
-                        harmonizeCupertinoTitleStyle: true,
-                        title: Text(
-                          context.l10n.ratingRange,
-                        ),
-                        subtitle: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Flexible(
-                              child: Column(
-                                children: [
-                                  NonLinearSlider(
-                                    value: subtract,
-                                    values: kSubtractingRatingRange,
-                                    onChange: defaultTargetPlatform ==
-                                            TargetPlatform.iOS
-                                        ? (num value) {
-                                            setState(() {
-                                              subtract = value.toInt();
-                                            });
-                                          }
-                                        : null,
-                                    onChangeEnd: isRatingRangeAvailable
-                                        ? (num value) {
-                                            ref
-                                                .read(
-                                                  playPreferencesProvider
-                                                      .notifier,
-                                                )
-                                                .setCustomRatingRange(
-                                                  value.toInt(),
-                                                  add,
-                                                );
-                                          }
-                                        : null,
-                                  ),
-                                  Center(
-                                    child: Text('$subtract'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            RatingWidget(
-                              rating: userPerf.rating,
-                              deviation: userPerf.ratingDeviation,
-                              provisional: userPerf.provisional,
-                            ),
-                            const SizedBox(width: 5),
-                            Flexible(
-                              child: Column(
-                                children: [
-                                  NonLinearSlider(
-                                    value: add,
-                                    values: kAddingRatingRange,
-                                    onChange: defaultTargetPlatform ==
-                                            TargetPlatform.iOS
-                                        ? (num value) {
-                                            setState(() {
-                                              add = value.toInt();
-                                            });
-                                          }
-                                        : null,
-                                    onChangeEnd: isRatingRangeAvailable
-                                        ? (num value) {
-                                            ref
-                                                .read(
-                                                  playPreferencesProvider
-                                                      .notifier,
-                                                )
-                                                .setCustomRatingRange(
-                                                  subtract,
-                                                  value.toInt(),
-                                                );
-                                          }
-                                        : null,
-                                  ),
-                                  Center(
-                                    child: Text('+$add'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
+            PlayRatingRange(
+              perf: userPerf,
+              ratingRange: preferences.customRatingRange,
+              setRatingRange: (int subtract, int add) {
+                ref
+                    .read(playPreferencesProvider.notifier)
+                    .setCustomRatingRange(subtract, add);
               },
             ),
           const SizedBox(height: 20),

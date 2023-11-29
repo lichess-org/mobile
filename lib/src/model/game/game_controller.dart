@@ -1,26 +1,30 @@
 import 'dart:async';
+
+import 'package:chessground/chessground.dart' as cg;
+import 'package:dartchess/dartchess.dart';
+import 'package:deep_pick/deep_pick.dart';
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:dartchess/dartchess.dart';
-import 'package:chessground/chessground.dart' as cg;
-import 'package:logging/logging.dart';
-import 'package:deep_pick/deep_pick.dart';
-
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
+import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
+import 'package:logging/logging.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_controller.freezed.dart';
 part 'game_controller.g.dart';
@@ -85,7 +89,6 @@ class GameController extends _$GameController {
     final (newPos, newSan) = curState.game.lastPosition.makeSan(move);
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
-      ply: curState.game.lastPly + 1,
       position: newPos,
       sanMove: sanMove,
       diff: MaterialDiff.fromBoard(newPos.board),
@@ -464,7 +467,6 @@ class GameController extends _$GameController {
           final sanMove = SanMove(data.san, move);
           final newPos = lastPos.playUnchecked(move);
           final newStep = GameStep(
-            ply: data.ply,
             sanMove: sanMove,
             position: newPos,
             diff: MaterialDiff.fromBoard(newPos.board),
@@ -486,12 +488,21 @@ class GameController extends _$GameController {
         }
 
         // TODO handle delay
-        if (newState.game.clock != null && data.clock != null) {
+        if (data.clock != null) {
           _lastMoveTime = DateTime.now();
-          newState = newState.copyWith.game.clock!(
-            white: data.clock!.white,
-            black: data.clock!.black,
-          );
+
+          if (newState.game.clock != null) {
+            newState = newState.copyWith.game.clock!(
+              white: data.clock!.white,
+              black: data.clock!.black,
+            );
+          } else if (newState.game.correspondenceClock != null) {
+            newState = newState.copyWith.game.correspondenceClock!(
+              white: data.clock!.white,
+              black: data.clock!.black,
+            );
+          }
+
           newState = newState.copyWith(
             stopClockWaitingForServerAck: false,
           );
@@ -512,6 +523,12 @@ class GameController extends _$GameController {
             );
           }
         }
+
+        if (curState.game.speed == Speed.correspondence) {
+          ref.invalidate(ongoingGamesProvider);
+          _saveCorrespondenceGameState(newState);
+        }
+
         state = AsyncValue.data(newState);
 
       // End game event
@@ -546,6 +563,12 @@ class GameController extends _$GameController {
             ref.read(soundServiceProvider).play(Sound.dong);
           });
         }
+
+        if (curState.game.speed == Speed.correspondence) {
+          ref.invalidate(ongoingGamesProvider);
+          _saveCorrespondenceGameState(newState);
+        }
+
         state = AsyncValue.data(newState);
 
       case 'clockInc':
@@ -732,6 +755,31 @@ class GameController extends _$GameController {
     }
   }
 
+  void _saveCorrespondenceGameState(GameState state) {
+    if (state.game.youAre != null) {
+      ref.read(correspondenceGameStorageProvider).save(
+            OfflineCorrespondenceGame(
+              id: state.game.id,
+              fullId: gameFullId,
+              rated: state.game.meta.rated,
+              steps: state.game.steps,
+              clock: state.game.correspondenceClock,
+              initialFen: state.game.initialFen,
+              status: state.game.status,
+              variant: state.game.meta.variant,
+              speed: state.game.speed,
+              perf: state.game.meta.perf,
+              white: state.game.white,
+              black: state.game.black,
+              youAre: state.game.youAre!,
+              daysPerTurn: state.game.meta.daysPerTurn,
+              winner: state.game.winner,
+              isThreefoldRepetition: state.game.isThreefoldRepetition,
+            ),
+          );
+    }
+  }
+
   AuthSocket get _socket => ref.read(authSocketProvider);
 }
 
@@ -814,14 +862,12 @@ class GameState with _$GameState {
   }
 
   Side? get activeClockSide {
-    if (game.clock == null) {
+    if (game.clock == null && game.correspondenceClock == null) {
       return null;
     }
-
     if (stopClockWaitingForServerAck) {
       return null;
     }
-
     if (game.status == GameStatus.started) {
       final pos = game.lastPosition;
       if (pos.fullmoves > 1) {

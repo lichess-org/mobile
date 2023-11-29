@@ -147,7 +147,7 @@ class _BodyState extends State<_Body> {
     try {
       final game = PgnGame.parsePgn(textInput!);
       final initialPosition = PgnGame.startingPosition(game.headers);
-      final rules = Rules.fromPgn(game.headers['Variant']);
+      final rule = Rule.fromPgn(game.headers['Variant']);
 
       // require at least 1 valid move
       if (game.moves.mainline().isEmpty) return null;
@@ -156,7 +156,7 @@ class _BodyState extends State<_Body> {
 
       return AnalysisOptions(
         isLocalEvaluationAllowed: true,
-        variant: rules != null ? Variant.fromRules(rules) : Variant.standard,
+        variant: rule != null ? Variant.fromRule(rule) : Variant.standard,
         pgn: textInput!,
         initialMoveCursor: 1,
         orientation: Side.white,

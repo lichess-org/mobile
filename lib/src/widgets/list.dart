@@ -172,11 +172,8 @@ class ListSection extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            DefaultTextStyle(
-                              style: CupertinoTheme.of(context)
-                                  .textTheme
-                                  .textStyle
-                                  .merge(Styles.sectionTitle),
+                            DefaultTextStyle.merge(
+                              style: Styles.sectionTitle,
                               child: header!,
                             ),
                             if (headerTrailing != null) headerTrailing!,
@@ -237,7 +234,7 @@ class PlatformDivider extends StatelessWidget {
             thickness: thickness,
             // see:
             // https://github.com/flutter/flutter/blob/bff6b93683de8be01d53a39b6183f230518541ac/packages/flutter/lib/src/cupertino/list_section.dart#L53
-            indent: indent ?? (cupertinoHasLeading ? 44.0 : 14.0),
+            indent: indent ?? (cupertinoHasLeading ? 14 + 44.0 : 14.0),
             endIndent: endIndent,
             color: CupertinoDynamicColor.resolve(
               CupertinoColors.separator,

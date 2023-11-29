@@ -5,7 +5,8 @@ import 'package:lichess_mobile/src/app_dependencies.dart';
 
 part 'database.g.dart';
 
-const puzzleStorageTTL = Duration(days: 60);
+const puzzleTTL = Duration(days: 60);
+const corresGameTTL = Duration(days: 60);
 
 @Riverpod(keepAlive: true)
 Database database(DatabaseRef ref) {
@@ -20,30 +21,26 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 2,
+      version: 3,
       onOpen: (db) async {
-        final nDaysAgo = DateTime.now().subtract(puzzleStorageTTL);
-        final tableExists = await db.rawQuery(
-          "SELECT name FROM sqlite_master WHERE type='table' AND name='puzzle'",
-        );
-        if (tableExists.isNotEmpty) {
-          await db.delete(
-            'puzzle',
-            where: 'lastModified < ?',
-            whereArgs: [nDaysAgo.toIso8601String()],
-          );
-        }
+        await _deleteOldEntries(db, 'puzzle', puzzleTTL);
+        await _deleteOldEntries(db, 'correspondence_game', corresGameTTL);
       },
       onCreate: (db, version) async {
         final batch = db.batch();
-        _createPuzzleBatchTableV2(batch);
-        _createPuzzleTableV2(batch);
+        _createPuzzleBatchTableV3(batch);
+        _createPuzzleTableV3(batch);
+        _createCorrespondenceGameTableV3(batch);
         await batch.commit();
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         final batch = db.batch();
         if (oldVersion == 1) {
-          _createPuzzleTableV2(batch);
+          _createPuzzleTableV3(batch);
+          _createCorrespondenceGameTableV3(batch);
+        }
+        if (oldVersion == 2) {
+          _createCorrespondenceGameTableV3(batch);
         }
         await batch.commit();
       },
@@ -51,7 +48,7 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
   );
 }
 
-void _createPuzzleBatchTableV2(Batch batch) {
+void _createPuzzleBatchTableV3(Batch batch) {
   batch.execute('DROP TABLE IF EXISTS puzzle_batchs');
   batch.execute('''
     CREATE TABLE puzzle_batchs(
@@ -63,7 +60,7 @@ void _createPuzzleBatchTableV2(Batch batch) {
     ''');
 }
 
-void _createPuzzleTableV2(Batch batch) {
+void _createPuzzleTableV3(Batch batch) {
   batch.execute('DROP TABLE IF EXISTS puzzle');
   batch.execute('''
     CREATE TABLE puzzle(
@@ -73,4 +70,31 @@ void _createPuzzleTableV2(Batch batch) {
     PRIMARY KEY (puzzleId)
   )
     ''');
+}
+
+void _createCorrespondenceGameTableV3(Batch batch) {
+  batch.execute('DROP TABLE IF EXISTS correspondence_game');
+  batch.execute('''
+    CREATE TABLE correspondence_game(
+    gameId TEXT NOT NULL,
+    lastModified TEXT NOT NULL,
+    data TEXT NOT NULL,
+    PRIMARY KEY (gameId)
+  )
+    ''');
+}
+
+Future<void> _deleteOldEntries(Database db, String table, Duration ttl) async {
+  final date = DateTime.now().subtract(ttl);
+  final tableExists = await db.rawQuery(
+    "SELECT name FROM sqlite_master WHERE type='table' AND name='$table'",
+  );
+  if (tableExists.isEmpty) {
+    return;
+  }
+  await db.delete(
+    table,
+    where: 'lastModified < ?',
+    whereArgs: [date.toIso8601String()],
+  );
 }

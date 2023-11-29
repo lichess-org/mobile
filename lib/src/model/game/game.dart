@@ -14,6 +14,7 @@ import 'game_status.dart';
 import 'material_diff.dart';
 
 part 'game.freezed.dart';
+part 'game.g.dart';
 
 /// Common interface for playable and archived games.
 abstract mixin class BaseGame {
@@ -21,8 +22,6 @@ abstract mixin class BaseGame {
 
   /// Game steps, cannot be empty.
   IList<GameStep> get steps;
-
-  Side? get youAre;
 
   String? get initialFen;
 
@@ -67,15 +66,15 @@ mixin IndexableSteps on BaseGame {
   /// Contains the initial FEN if available. This is not meant to be used for
   /// exporting the game.
   String get pgn {
-    final moves = steps
-        .where((e) => e.sanMove != null)
-        .map((e) => e.sanMove!.san)
-        .join(' ');
-
     final fenHeader = initialFen != null ? '[FEN "$initialFen"]' : '';
 
-    return '$fenHeader\n$moves';
+    return '$fenHeader\n$sanMoves';
   }
+
+  String get sanMoves => steps
+      .where((e) => e.sanMove != null)
+      .map((e) => e.sanMove!.san)
+      .join(' ');
 
   MaterialDiffSide? materialDiffAt(int cursor, Side side) =>
       steps[cursor].diff?.bySide(side);
@@ -99,12 +98,12 @@ mixin IndexableSteps on BaseGame {
   }
 
   Position get initialPosition => steps.first.position;
-  int get initialPly => steps.first.ply;
+  int get initialPly => steps.first.position.ply;
 
   @override
   Position get lastPosition => steps.last.position;
 
-  int get lastPly => steps.last.ply;
+  int get lastPly => steps.last.position.ply;
 
   MaterialDiffSide? lastMaterialDiffAt(Side side) =>
       steps.last.diff?.bySide(side);
@@ -137,6 +136,7 @@ class PlayableGame
     Side? youAre,
     GamePrefs? prefs,
     PlayableClockData? clock,
+    CorrespondenceClockData? correspondenceClock,
     bool? boosted,
     bool? isThreefoldRepetition,
     ({Duration idle, Duration timeToMove, DateTime movedAt})? expiration,
@@ -146,10 +146,18 @@ class PlayableGame
   }) = _PlayableGame;
 
   /// Player of the playing point of view. Null if spectating.
-  Player? get me => youAre == Side.white ? white : black;
+  Player? get me => youAre == null
+      ? null
+      : youAre == Side.white
+          ? white
+          : black;
 
   /// Opponent from the playing point of view. Null if spectating.
-  Player? get opponent => youAre == Side.white ? black : white;
+  Player? get opponent => youAre == null
+      ? null
+      : youAre == Side.white
+          ? black
+          : white;
 
   Side get sideToMove => lastPosition.turn;
 
@@ -233,12 +241,24 @@ class GamePrefs with _$GamePrefs {
 class PlayableGameMeta with _$PlayableGameMeta {
   const PlayableGameMeta._();
 
+  @Assert('!(clock != null && daysPerTurn != null)')
   const factory PlayableGameMeta({
     required bool rated,
     required Variant variant,
     required Speed speed,
     required Perf perf,
     required GameSource source,
+    ({
+      Duration initial,
+      Duration increment,
+
+      /// Remaining time threshold to switch the clock to "emergency" mode.
+      Duration? emergency,
+
+      /// Time added to the clock by the "add more time" button.
+      Duration? moreTime,
+    })? clock,
+    int? daysPerTurn,
     int? startedAtTurn,
     ISet<GameRule>? rules,
   }) = _PlayableGameMeta;
@@ -247,18 +267,21 @@ class PlayableGameMeta with _$PlayableGameMeta {
 @freezed
 class PlayableClockData with _$PlayableClockData {
   const factory PlayableClockData({
-    required Duration initial,
-    required Duration increment,
     required bool running,
     required Duration white,
     required Duration black,
-
-    /// Remaining time threshold to switch the clock to "emergency" mode.
-    Duration? emergency,
-
-    /// Time added to the clock by the "add more time" button.
-    Duration? moreTime,
   }) = _PlayableClockData;
+}
+
+@Freezed(fromJson: true, toJson: true)
+class CorrespondenceClockData with _$CorrespondenceClockData {
+  const factory CorrespondenceClockData({
+    required Duration white,
+    required Duration black,
+  }) = _CorrespondenceClockData;
+
+  factory CorrespondenceClockData.fromJson(Map<String, dynamic> json) =>
+      _$CorrespondenceClockDataFromJson(json);
 }
 
 @freezed
@@ -310,7 +333,6 @@ class ArchivedGame
     required Perf perf,
     required Player white,
     required Player black,
-    Side? youAre,
   }) = _ArchivedGame;
 }
 
@@ -325,7 +347,6 @@ class ClockData with _$ClockData {
 @freezed
 class GameStep with _$GameStep {
   const factory GameStep({
-    required int ply,
     required Position position,
     SanMove? sanMove,
     MaterialDiff? diff,

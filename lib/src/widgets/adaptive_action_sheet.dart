@@ -36,6 +36,58 @@ Future<T?> showAdaptiveActionSheet<T>({
   }
 }
 
+Future<T?> showConfirmDialog<T>(
+  BuildContext context, {
+  required Widget title,
+  required void Function(BuildContext context) onConfirm,
+
+  /// Only for iOS
+  bool isDestructiveAction = false,
+}) {
+  if (defaultTargetPlatform == TargetPlatform.iOS) {
+    return showCupertinoActionSheet(
+      context: context,
+      actions: [
+        BottomSheetAction(
+          label: title,
+          isDestructiveAction: isDestructiveAction,
+          onPressed: onConfirm,
+        ),
+      ],
+    );
+  } else {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: title,
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: Text(context.l10n.cancel),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                onConfirm(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
 Future<T?> showCupertinoActionSheet<T>({
   required BuildContext context,
   Widget? title,

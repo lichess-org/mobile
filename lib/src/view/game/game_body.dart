@@ -1,34 +1,37 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+
+import 'package:chessground/chessground.dart' as cg;
+import 'package:collection/collection.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dartchess/dartchess.dart';
-import 'package:chessground/chessground.dart' as cg;
-
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
-import 'package:lichess_mobile/src/model/game/online_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
-import 'package:lichess_mobile/src/model/lobby/lobby_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/model/lobby/lobby_providers.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 
-import 'game_screen_providers.dart';
+import 'game_common_widgets.dart';
 import 'game_loading_board.dart';
 import 'game_player.dart';
 import 'game_result_dialog.dart';
-import 'game_common_widgets.dart';
+import 'game_screen_providers.dart';
 
 /// Common body for the [LobbyGameScreen] and [StandaloneGameScreen].
 ///
@@ -125,17 +128,22 @@ class GameBody extends ConsumerWidget {
                       },
                     )
                   : null,
-          clock: gameState.game.clock != null
+          clock: gameState.game.meta.clock != null
               ? CountdownClock(
                   key: blackClockKey,
                   duration: gameState.game.clock!.black,
                   active: gameState.activeClockSide == Side.black,
                   emergencyThreshold: youAre == Side.black
-                      ? gameState.game.clock?.emergency
+                      ? gameState.game.meta.clock?.emergency
                       : null,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
-              : null,
+              : gameState.game.correspondenceClock != null
+                  ? CorrespondenceClock(
+                      duration: gameState.game.correspondenceClock!.black,
+                      active: gameState.activeClockSide == Side.black,
+                    )
+                  : null,
         );
         final white = GamePlayer(
           player: gameState.game.white,
@@ -157,17 +165,22 @@ class GameBody extends ConsumerWidget {
                       },
                     )
                   : null,
-          clock: gameState.game.clock != null
+          clock: gameState.game.meta.clock != null
               ? CountdownClock(
                   key: whiteClockKey,
                   duration: gameState.game.clock!.white,
                   active: gameState.activeClockSide == Side.white,
                   emergencyThreshold: youAre == Side.white
-                      ? gameState.game.clock?.emergency
+                      ? gameState.game.meta.clock?.emergency
                       : null,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
-              : null,
+              : gameState.game.correspondenceClock != null
+                  ? CorrespondenceClock(
+                      duration: gameState.game.correspondenceClock!.white,
+                      active: gameState.activeClockSide == Side.white,
+                    )
+                  : null,
         );
 
         final topPlayer = youAre == Side.white ? black : white;
@@ -233,6 +246,7 @@ class GameBody extends ConsumerWidget {
             ),
             _GameBottomBar(
               seek: seek,
+              initialStandAloneId: initialStandAloneId,
               id: id,
               gameState: gameState,
             ),
@@ -240,12 +254,13 @@ class GameBody extends ConsumerWidget {
         );
 
         return PopScope(
-          canPop: !gameState.game.playable,
+          canPop: gameState.game.speed == Speed.correspondence ||
+              !gameState.game.playable,
           child: content,
         );
       },
       loading: () => PopScope(
-        canPop: false,
+        canPop: true,
         child: seek != null
             ? LobbyGameLoadingBoard(seek!, isRematch: isRematch)
             : const StandaloneGameLoadingBoard(),
@@ -303,8 +318,8 @@ class GameBody extends ConsumerWidget {
               .rematch(state.requireValue.redirectGameId!);
         } else if (initialStandAloneId != null) {
           ref
-              .read(onlineGameProvider(initialStandAloneId!).notifier)
-              .rematch(state.requireValue.redirectGameId!);
+              .read(standaloneGameProvider(initialStandAloneId!).notifier)
+              .newGame(state.requireValue.redirectGameId!);
         }
       }
     }
@@ -314,16 +329,20 @@ class GameBody extends ConsumerWidget {
 class _GameBottomBar extends ConsumerWidget {
   const _GameBottomBar({
     this.seek,
+    required this.initialStandAloneId,
     required this.id,
     required this.gameState,
   });
 
   final GameSeek? seek;
+  final GameFullId? initialStandAloneId;
   final GameFullId id;
   final GameState gameState;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ongoingGames = ref.watch(ongoingGamesProvider);
+
     return Container(
       padding: Styles.horizontalBodyPadding,
       color: defaultTargetPlatform == TargetPlatform.iOS
@@ -411,6 +430,24 @@ class _GameBottomBar extends ConsumerWidget {
                 },
                 icon: CupertinoIcons.arrowshape_turn_up_left,
               )
+            else if (gameState.game.playable &&
+                gameState.game.speed == Speed.correspondence)
+              BottomBarButton(
+                label: context.l10n.analysis,
+                shortLabel: 'Analysis',
+                icon: Icons.biotech,
+                onTap: () {
+                  pushPlatformRoute(
+                    context,
+                    builder: (_) => AnalysisScreen(
+                      options: gameState.analysisOptions.copyWith(
+                        isLocalEvaluationAllowed: false,
+                      ),
+                      title: context.l10n.analysis,
+                    ),
+                  );
+                },
+              )
             else if (gameState.game.finished)
               Builder(
                 builder: (context) {
@@ -460,6 +497,31 @@ class _GameBottomBar extends ConsumerWidget {
             else
               const SizedBox(
                 width: 44.0,
+              ),
+            if (gameState.game.speed == Speed.correspondence &&
+                initialStandAloneId != null)
+              BottomBarButton(
+                label: 'Go to the next game',
+                shortLabel: 'Next game',
+                icon: Icons.skip_next,
+                onTap: ongoingGames.maybeWhen(
+                  data: (games) {
+                    final nextTurn = games
+                        .whereNot((g) => g.fullId == id)
+                        .firstWhereOrNull((g) => g.isMyTurn);
+                    return nextTurn != null
+                        ? () {
+                            ref
+                                .read(
+                                  standaloneGameProvider(initialStandAloneId!)
+                                      .notifier,
+                                )
+                                .newGame(nextTurn.fullId);
+                          }
+                        : null;
+                  },
+                  orElse: () => null,
+                ),
               ),
             // TODO replace this space with chat button
             const SizedBox(
@@ -519,11 +581,11 @@ class _GameBottomBar extends ConsumerWidget {
               ref.read(gameControllerProvider(id).notifier).abortGame();
             },
           ),
-        if (gameState.game.clock != null && gameState.game.canGiveTime)
+        if (gameState.game.meta.clock != null && gameState.game.canGiveTime)
           BottomSheetAction(
             label: Text(
               context.l10n.giveNbSeconds(
-                gameState.game.clock!.moreTime?.inSeconds ?? 15,
+                gameState.game.meta.clock!.moreTime?.inSeconds ?? 15,
               ),
             ),
             onPressed: (context) {

@@ -7,11 +7,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 
+/// A board preview with a description.
 class SmallBoardPreview extends ConsumerStatefulWidget {
   const SmallBoardPreview({
     required this.orientation,
     required this.fen,
     required this.description,
+    this.padding,
     this.lastMove,
     this.onTap,
   });
@@ -28,6 +30,8 @@ class SmallBoardPreview extends ConsumerStatefulWidget {
   final Widget description;
 
   final GestureTapCallback? onTap;
+
+  final EdgeInsetsGeometry? padding;
 
   @override
   ConsumerState<SmallBoardPreview> createState() => _SmallBoardPreviewState();
@@ -53,7 +57,9 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
                 : null,
           ),
           child: Padding(
-            padding: Styles.bodySectionPadding,
+            padding: widget.padding ??
+                Styles.horizontalBodyPadding
+                    .add(const EdgeInsets.symmetric(vertical: 8.0)),
             child: SizedBox(
               height: boardSize,
               child: Row(

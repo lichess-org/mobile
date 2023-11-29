@@ -11,6 +11,8 @@ abstract class Styles {
   );
   static TextStyle get sectionTitle => TextStyle(
         fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
+        letterSpacing:
+            defaultTargetPlatform == TargetPlatform.iOS ? -0.41 : null,
         fontWeight: FontWeight.bold,
       );
   static const boardPreviewTitle = TextStyle(
@@ -23,8 +25,13 @@ abstract class Styles {
   );
 
   // padding
+  static const cupertinoAppBarTrailingWidgetPadding =
+      EdgeInsetsDirectional.only(
+    end: 2.0,
+  );
+
   static const bodyPadding =
-      EdgeInsets.symmetric(vertical: 16.0, horizontal: 14.0);
+      EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0);
 
   static const verticalBodyPadding = EdgeInsets.symmetric(vertical: 16.0);
 
