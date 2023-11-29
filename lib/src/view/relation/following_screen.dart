@@ -1,22 +1,23 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/relation/relation_ctrl.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository_providers.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'following_screen.g.dart';
@@ -30,14 +31,8 @@ Future<(IList<User>, IList<LightUser>)> _getFollowingAndOnlines(
   return (following, onlines.followingOnlines);
 }
 
-class FollowingScreen extends ConsumerStatefulWidget {
+class FollowingScreen extends StatelessWidget {
   const FollowingScreen({super.key});
-  @override
-  ConsumerState<FollowingScreen> createState() => _FollowingScreenState();
-}
-
-class _FollowingScreenState extends ConsumerState<FollowingScreen>
-    with RouteAware {
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
@@ -80,84 +75,91 @@ class _Body extends ConsumerWidget {
               );
             }
             return SafeArea(
-              child: ListView.separated(
-                itemCount: following.length,
-                separatorBuilder: (context, index) =>
-                    const PlatformDivider(height: 1, cupertinoHasLeading: true),
-                itemBuilder: (context, index) {
-                  final user = following[index];
-                  return Slidable(
-                    endActionPane: ActionPane(
-                      motion: const ScrollMotion(),
-                      extentRatio: 0.3,
-                      children: [
-                        SlidableAction(
-                          onPressed: (BuildContext context) async {
-                            final oldState = following;
-                            setState(() {
-                              following = following.removeWhere(
-                                (v) => v.id == user.id,
-                              );
-                            });
-
-                            final res = await ref
-                                .read(relationRepositoryProvider)
-                                .unfollow(user.username);
-                            if (res.isError) {
+              child: ColoredBox(
+                color: defaultTargetPlatform == TargetPlatform.iOS
+                    ? CupertinoColors.systemBackground.resolveFrom(context)
+                    : Colors.transparent,
+                child: ListView.separated(
+                  itemCount: following.length,
+                  separatorBuilder: (context, index) => const PlatformDivider(
+                    height: 1,
+                    cupertinoHasLeading: true,
+                  ),
+                  itemBuilder: (context, index) {
+                    final user = following[index];
+                    return Slidable(
+                      endActionPane: ActionPane(
+                        motion: const ScrollMotion(),
+                        extentRatio: 0.3,
+                        children: [
+                          SlidableAction(
+                            onPressed: (BuildContext context) async {
+                              final oldState = following;
                               setState(() {
-                                following = oldState;
+                                following = following.removeWhere(
+                                  (v) => v.id == user.id,
+                                );
                               });
-                            }
-                          },
-                          backgroundColor: LichessColors.red,
-                          foregroundColor: Colors.white,
-                          icon: Icons.person_remove,
-                          label: 'Unfollow',
-                        ),
-                      ],
-                    ),
-                    child: PlatformListTile(
-                      onTap: () => {
-                        pushPlatformRoute(
-                          context,
-                          builder: (context) =>
-                              UserScreen(user: user.lightUser),
-                        ),
-                      },
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16,
+
+                              final res = await ref
+                                  .read(relationRepositoryProvider)
+                                  .unfollow(user.username);
+                              if (res.isError) {
+                                setState(() {
+                                  following = oldState;
+                                });
+                              }
+                            },
+                            backgroundColor: LichessColors.red,
+                            foregroundColor: Colors.white,
+                            icon: Icons.person_remove,
+                            label: 'Unfollow',
+                          ),
+                        ],
                       ),
-                      leading: _OnlineOrPatron(
-                        patron: user.isPatron,
-                        online: _isOnline(user, data.$2),
-                      ),
-                      title: Padding(
-                        padding: const EdgeInsets.only(right: 5.0),
-                        child: Row(
-                          children: [
-                            if (user.title != null) ...[
-                              Text(
-                                user.title!,
-                                style: const TextStyle(
-                                  color: LichessColors.brag,
-                                  fontWeight: FontWeight.bold,
+                      child: PlatformListTile(
+                        onTap: () => {
+                          pushPlatformRoute(
+                            context,
+                            builder: (context) =>
+                                UserScreen(user: user.lightUser),
+                          ),
+                        },
+                        padding: defaultTargetPlatform == TargetPlatform.iOS
+                            ? Styles.bodyPadding
+                            : null,
+                        leading: _OnlineOrPatron(
+                          patron: user.isPatron,
+                          online: _isOnline(user, data.$2),
+                        ),
+                        title: Padding(
+                          padding: const EdgeInsets.only(right: 5.0),
+                          child: Row(
+                            children: [
+                              if (user.title != null) ...[
+                                Text(
+                                  user.title!,
+                                  style: const TextStyle(
+                                    color: LichessColors.brag,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                              ],
+                              Flexible(
+                                child: Text(
+                                  user.username,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              const SizedBox(width: 5),
                             ],
-                            Flexible(
-                              child: Text(
-                                user.username,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
+                        subtitle: _UserRating(user: user),
                       ),
-                      subtitle: _UserRating(user: user),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             );
           },

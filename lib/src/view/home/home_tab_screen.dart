@@ -102,7 +102,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       appBar: AppBar(
         title: const Text('lichess.org'),
         leading: session == null
-            ? const SignInWidget()
+            ? null
             : IconButton(
                 icon: const Icon(Icons.person),
                 tooltip: context.l10n.profile,
@@ -113,7 +113,10 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 ),
               ),
         actions: [
-          if (session != null) const _RelationButton(),
+          if (session != null)
+            const _RelationButton()
+          else
+            const SignInWidget(),
           const _SettingsButton(),
         ],
       ),
