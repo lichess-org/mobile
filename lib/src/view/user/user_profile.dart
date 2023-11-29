@@ -55,8 +55,10 @@ class UserProfile extends StatelessWidget {
           Text(
             '${context.l10n.memberSince} ${DateFormat.yMMMMd().format(user.createdAt)}',
           ),
-          const SizedBox(height: 5),
-          Text(context.l10n.lastSeenActive(timeago.format(user.seenAt))),
+          if (user.seenAt != null) ...[
+            const SizedBox(height: 5),
+            Text(context.l10n.lastSeenActive(timeago.format(user.seenAt!))),
+          ],
           const SizedBox(height: 5),
           if (user.playTime != null)
             Text(

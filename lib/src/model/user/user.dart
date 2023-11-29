@@ -65,7 +65,7 @@ class User with _$User {
     String? title,
     bool? isPatron,
     required DateTime createdAt,
-    required DateTime seenAt,
+    DateTime? seenAt,
     required IMap<Perf, UserPerf> perfs,
     PlayTime? playTime,
     Profile? profile,
@@ -86,7 +86,7 @@ class User with _$User {
       title: pick('title').asStringOrNull(),
       isPatron: pick('patron').asBoolOrNull(),
       createdAt: pick('createdAt').asDateTimeFromMillisecondsOrThrow(),
-      seenAt: pick('seenAt').asDateTimeFromMillisecondsOrThrow(),
+      seenAt: pick('seenAt').asDateTimeFromMillisecondsOrNull(),
       playTime: pick('playTime').letOrNull(PlayTime.fromPick),
       profile: pick('profile').letOrNull(Profile.fromPick),
       perfs: IMap({
