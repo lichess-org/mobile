@@ -422,7 +422,7 @@ class AnalysisState with _$AnalysisState {
     /// The opening of the current branch.
     Opening? currentBranchOpening,
 
-    /// Optional ACPL chart data of the game.
+    /// Optional ACPL chart data of the game, coming from lichess server analysis.
     IList<Eval>? acplChartData,
 
     /// The PGN headers of the game.
@@ -436,6 +436,8 @@ class AnalysisState with _$AnalysisState {
 
   IMap<String, ISet<String>> get validMoves =>
       algebraicLegalMoves(currentNode.position);
+
+  bool get hasServerAnalysis => acplChartData != null;
 
   /// Whether an evaluation can be available
   bool get hasAvailableEval => isEngineAvailable || acplChartData != null;

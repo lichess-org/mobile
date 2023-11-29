@@ -87,6 +87,7 @@ class LichessColors {
 
   static const warn = brag;
 
+  static const cyan = Color(0xFF56B4E9);
   static const blue = Color(0xFF0072B2);
   static const purple = Color(0xFF8572ff);
 }

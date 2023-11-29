@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:popover/popover.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -281,7 +282,10 @@ class _Board extends ConsumerWidget {
     );
 
     final currentNode = analysisState.currentNode;
-    final annotation = _annotationFrom(currentNode.nags);
+    final annotation = _annotationFrom(
+      currentNode.nags,
+      fromLichessAnalysis: analysisState.hasServerAnalysis,
+    );
 
     final bestMoves = evalBestMoves ?? currentNode.eval?.bestMoves;
 
@@ -331,7 +335,10 @@ class _Board extends ConsumerWidget {
   }
 }
 
-cg.Annotation? _annotationFrom(Iterable<int>? nags) {
+cg.Annotation? _annotationFrom(
+  Iterable<int>? nags, {
+  bool fromLichessAnalysis = false,
+}) {
   final nag = nags?.firstOrNull;
   if (nag == null) {
     return null;
@@ -341,25 +348,25 @@ cg.Annotation? _annotationFrom(Iterable<int>? nags) {
         symbol: '!',
         color: Colors.lightGreen,
       ),
-    2 => const cg.Annotation(
-        symbol: '?',
-        color: Colors.orange,
-      ),
     3 => const cg.Annotation(
         symbol: '!!',
         color: Colors.teal,
-      ),
-    4 => const cg.Annotation(
-        symbol: '??',
-        color: Colors.red,
       ),
     5 => const cg.Annotation(
         symbol: '!?',
         color: Colors.lightBlue,
       ),
-    6 => const cg.Annotation(
+    6 => cg.Annotation(
         symbol: '?!',
-        color: Colors.amber,
+        color: fromLichessAnalysis ? LichessColors.cyan : Colors.amber,
+      ),
+    2 => cg.Annotation(
+        symbol: '?',
+        color: fromLichessAnalysis ? const Color(0xFFe69f00) : Colors.orange,
+      ),
+    4 => cg.Annotation(
+        symbol: '??',
+        color: fromLichessAnalysis ? const Color(0xFFdf5353) : Colors.red,
       ),
     int() => null,
   };
