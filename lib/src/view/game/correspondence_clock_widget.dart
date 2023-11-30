@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -98,7 +99,8 @@ class _CorrespondenceClockState extends ConsumerState<CorrespondenceClock> {
             ? context.l10n.oneDay
             : '';
 
-    final hoursStr = hours > 0 ? ' ${context.l10n.nbHours(hours)}' : '';
+    final hoursStr =
+        days > 0 && hours > 0 ? ' ${context.l10n.nbHours(hours)}' : '';
 
     return RepaintBoundary(
       child: Container(
@@ -124,12 +126,15 @@ class _CorrespondenceClockState extends ConsumerState<CorrespondenceClock> {
                       remainingHeight < kSmallRemainingHeightLeftBoardThreshold
                           ? 1.0
                           : null,
+                  fontFeatures: days == 0
+                      ? const [
+                          FontFeature.tabularFigures(),
+                        ]
+                      : null,
                 ),
                 children: [
                   if (days == 0) ...[
                     TextSpan(text: hours.toString().padLeft(2, '0')),
-                    const TextSpan(text: ':'),
-                    TextSpan(text: mins.toString().padLeft(2, '0')),
                     TextSpan(
                       text: ':',
                       style: TextStyle(
@@ -139,7 +144,11 @@ class _CorrespondenceClockState extends ConsumerState<CorrespondenceClock> {
                             : null,
                       ),
                     ),
-                    TextSpan(text: secs),
+                    TextSpan(text: mins.toString().padLeft(2, '0')),
+                    if (hours == 0) ...[
+                      const TextSpan(text: ':'),
+                      TextSpan(text: secs),
+                    ],
                   ],
                 ],
               ),
