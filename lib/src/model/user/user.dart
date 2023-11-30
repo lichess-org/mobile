@@ -15,6 +15,7 @@ class LightUser with _$LightUser {
     required UserId id,
     required String name,
     String? title,
+    String? flair,
     bool? isPatron,
   }) = _LightUser;
 
@@ -63,6 +64,7 @@ class User with _$User {
     required UserId id,
     required String username,
     String? title,
+    String? flair,
     bool? isPatron,
     required DateTime createdAt,
     DateTime? seenAt,
