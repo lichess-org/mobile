@@ -106,11 +106,14 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             : IconButton(
                 icon: const Icon(Icons.person),
                 tooltip: context.l10n.profile,
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (context) => const ProfileScreen(),
-                  ),
-                ),
+                onPressed: () {
+                  ref.invalidate(accountProvider);
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (context) => const ProfileScreen(),
+                    ),
+                  );
+                },
               ),
         actions: [
           if (session != null)
@@ -143,11 +146,14 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               leading: session == null
                   ? const SignInWidget()
                   : AppBarTextButton(
-                      onPressed: () => Navigator.of(context).push(
-                        CupertinoPageRoute<void>(
-                          builder: (context) => const ProfileScreen(),
-                        ),
-                      ),
+                      onPressed: () {
+                        ref.invalidate(accountProvider);
+                        Navigator.of(context).push(
+                          CupertinoPageRoute<void>(
+                            builder: (context) => const ProfileScreen(),
+                          ),
+                        );
+                      },
                       child: Text(session.user.name),
                     ),
               trailing: Row(
