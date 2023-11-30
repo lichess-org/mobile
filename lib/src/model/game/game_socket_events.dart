@@ -1,16 +1,9 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
-import 'package:lichess_mobile/src/model/game/material_diff.dart';
-import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
 part 'game_socket_events.freezed.dart';
@@ -24,149 +17,10 @@ class GameFullEvent with _$GameFullEvent {
 
   factory GameFullEvent.fromJson(Map<String, dynamic> json) {
     return GameFullEvent(
-      game: _playableGameFromPick(pick(json).required()),
+      game: PlayableGame.fromServerJson(json),
       socketEventVersion: json['socket'] as int,
     );
   }
-}
-
-PlayableGame _playableGameFromPick(RequiredPick pick) {
-  final requiredGamePick = pick('game').required();
-  final meta = _playableGameMetaFromPick(pick);
-  final initialFen = requiredGamePick('initialFen').asStringOrNull();
-
-  // assume lichess always send initialFen with fromPosition and chess960
-  Position position =
-      (meta.variant == Variant.fromPosition || meta.variant == Variant.chess960)
-          ? Chess.fromSetup(Setup.parseFen(initialFen!))
-          : meta.variant.initialPosition;
-
-  final steps = [GameStep(position: position)];
-  final pgn = pick('game', 'pgn').asStringOrNull();
-  final moves = pgn != null && pgn != '' ? pgn.split(' ') : null;
-  if (moves != null && moves.isNotEmpty) {
-    for (final san in moves) {
-      final move = position.parseSan(san);
-      // assume lichess only sends correct moves
-      position = position.playUnchecked(move!);
-      steps.add(
-        GameStep(
-          sanMove: SanMove(san, move),
-          position: position,
-          diff: MaterialDiff.fromBoard(position.board),
-        ),
-      );
-    }
-  }
-
-  return PlayableGame(
-    id: requiredGamePick('id').asGameIdOrThrow(),
-    meta: meta,
-    initialFen: initialFen,
-    perf: meta.perf,
-    speed: meta.speed,
-    variant: meta.variant,
-    steps: steps.toIList(),
-    white: pick('white').letOrThrow(_playerFromUserGamePick),
-    black: pick('black').letOrThrow(_playerFromUserGamePick),
-    clock: pick('clock').letOrNull(_playableClockDataFromPick),
-    correspondenceClock:
-        pick('correspondence').letOrNull(_correspondenceClockDataFromPick),
-    status: pick('game', 'status').asGameStatusOrThrow(),
-    winner: pick('game', 'winner').asSideOrNull(),
-    boosted: pick('game', 'boosted').asBoolOrNull(),
-    isThreefoldRepetition: pick('game', 'threefold').asBoolOrNull(),
-    moretimeable: pick('moretimeable').asBoolOrFalse(),
-    takebackable: pick('takebackable').asBoolOrFalse(),
-    youAre: pick('youAre').asSideOrNull(),
-    prefs: pick('prefs').letOrNull(_gamePrefsFromPick),
-    expiration: pick('expiration').letOrNull(
-      (it) {
-        final idle = it('idleMillis').asDurationFromMilliSecondsOrThrow();
-        return (
-          idle: idle,
-          timeToMove: it('millisToMove').asDurationFromMilliSecondsOrThrow(),
-          movedAt: DateTime.now().subtract(idle),
-        );
-      },
-    ),
-    rematch: pick('game', 'rematch').asGameIdOrNull(),
-  );
-}
-
-PlayableGameMeta _playableGameMetaFromPick(RequiredPick pick) {
-  return PlayableGameMeta(
-    rated: pick('game', 'rated').asBoolOrThrow(),
-    speed: pick('game', 'speed').asSpeedOrThrow(),
-    perf: pick('game', 'perf').asPerfOrThrow(),
-    variant: pick('game', 'variant').asVariantOrThrow(),
-    source: pick('game', 'source').letOrThrow(
-      (pick) =>
-          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
-    ),
-    clock: pick('clock').letOrNull(
-      (cPick) => (
-        initial: cPick('initial').asDurationFromSecondsOrThrow(),
-        increment: cPick('increment').asDurationFromSecondsOrThrow(),
-        emergency: pick('emerg').asDurationFromSecondsOrNull(),
-        moreTime: pick('moretime').asDurationFromSecondsOrNull(),
-      ),
-    ),
-    daysPerTurn: pick('correspondence')
-        .letOrNull((ccPick) => ccPick('daysPerTurn').asIntOrThrow()),
-    startedAtTurn: pick('game', 'startedAtTurn').asIntOrNull(),
-    rules: pick('game', 'rules').letOrNull(
-      (it) => ISet(
-        pick.asListOrThrow(
-          (e) => GameRule.nameMap[e.asStringOrThrow()] ?? GameRule.unknown,
-        ),
-      ),
-    ),
-  );
-}
-
-GamePrefs _gamePrefsFromPick(RequiredPick pick) {
-  return GamePrefs(
-    showRatings: pick('showRatings').asBoolOrFalse(),
-    enablePremove: pick('enablePremove').asBoolOrFalse(),
-    autoQueen: AutoQueen.fromInt(pick('autoQueen').asIntOrThrow()),
-    confirmResign: pick('confirmResign').asBoolOrFalse(),
-    submitMove: pick('submitMove').asBoolOrFalse(),
-    zenMode: Zen.fromInt(pick('zen').asIntOrThrow()),
-  );
-}
-
-Player _playerFromUserGamePick(RequiredPick pick) {
-  return Player(
-    id: pick('user', 'id').asUserIdOrNull(),
-    name: pick('user', 'name').asStringOrNull(),
-    patron: pick('user', 'patron').asBoolOrNull(),
-    title: pick('user', 'title').asStringOrNull(),
-    rating: pick('rating').asIntOrNull(),
-    provisional: pick('provisional').asBoolOrNull(),
-    ratingDiff: pick('ratingDiff').asIntOrNull(),
-    aiLevel: pick('aiLevel').asIntOrNull(),
-    onGame: pick('onGame').asBoolOrNull(),
-    isGone: pick('isGone').asBoolOrNull(),
-    offeringDraw: pick('offeringDraw').asBoolOrNull(),
-    offeringRematch: pick('offeringRematch').asBoolOrNull(),
-    proposingTakeback: pick('proposingTakeback').asBoolOrNull(),
-  );
-}
-
-PlayableClockData _playableClockDataFromPick(RequiredPick pick) {
-  return PlayableClockData(
-    running: pick('running').asBoolOrThrow(),
-    white: pick('white').asDurationFromSecondsOrThrow(),
-    black: pick('black').asDurationFromSecondsOrThrow(),
-  );
-}
-
-CorrespondenceClockData _correspondenceClockDataFromPick(RequiredPick pick) {
-  return CorrespondenceClockData(
-    white: pick('white').asDurationFromSecondsOrThrow(),
-    black: pick('black').asDurationFromSecondsOrThrow(),
-  );
 }
 
 @freezed
