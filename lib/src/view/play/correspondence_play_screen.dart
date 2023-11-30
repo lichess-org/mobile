@@ -81,6 +81,14 @@ class _AndroidBodyState extends State<_AndroidBody>
     super.dispose();
   }
 
+  void setViewMode(_ViewMode mode) {
+    if (mode == _ViewMode.create) {
+      _tabController.animateTo(0);
+    } else {
+      _tabController.animateTo(1);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,12 +105,8 @@ class _AndroidBodyState extends State<_AndroidBody>
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          _CreateGameBody(
-            setViewMode: (mode) => mode == _ViewMode.create
-                ? _tabController.animateTo(0)
-                : _tabController.animateTo(1),
-          ),
-          const _ChallengesBody(),
+          _CreateGameBody(setViewMode: setViewMode),
+          _ChallengesBody(setViewMode: setViewMode),
         ],
       ),
     );
@@ -118,6 +122,12 @@ class _CupertinoBody extends StatefulWidget {
 
 class _CupertinoBodyState extends State<_CupertinoBody> {
   _ViewMode _selectedSegment = _ViewMode.create;
+
+  void setViewMode(_ViewMode mode) {
+    setState(() {
+      _selectedSegment = mode;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,12 +156,8 @@ class _CupertinoBodyState extends State<_CupertinoBody> {
           ),
           Expanded(
             child: _selectedSegment == _ViewMode.create
-                ? _CreateGameBody(
-                    setViewMode: (mode) => setState(() {
-                      _selectedSegment = mode;
-                    }),
-                  )
-                : const _ChallengesBody(),
+                ? _CreateGameBody(setViewMode: setViewMode)
+                : _ChallengesBody(setViewMode: setViewMode),
           ),
         ],
       ),
@@ -160,7 +166,9 @@ class _CupertinoBodyState extends State<_CupertinoBody> {
 }
 
 class _ChallengesBody extends ConsumerStatefulWidget {
-  const _ChallengesBody();
+  const _ChallengesBody({required this.setViewMode});
+
+  final void Function(_ViewMode) setViewMode;
 
   @override
   ConsumerState<_ChallengesBody> createState() => _ChallengesBodyState();
@@ -187,7 +195,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
               return CorrespondenceGameScreen(initialId: gameFullId);
             },
           );
-          _socketSubscription?.cancel();
+          widget.setViewMode(_ViewMode.create);
 
         case 'reload_seeks':
           ref.invalidate(correspondenceChallengesProvider);

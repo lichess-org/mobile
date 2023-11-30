@@ -110,7 +110,9 @@ class OngoingGamePreview extends ConsumerWidget {
                   initialFen: game.fen,
                 ),
         ).then((_) {
-          ref.invalidate(ongoingGamesProvider);
+          if (context.mounted) {
+            ref.invalidate(ongoingGamesProvider);
+          }
         });
       },
     );
