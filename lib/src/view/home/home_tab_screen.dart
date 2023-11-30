@@ -138,7 +138,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
           controller: homeScrollController,
           slivers: [
             CupertinoSliverNavigationBar(
-              padding: const EdgeInsetsDirectional.only(start: 16.0, end: 0),
+              padding: const EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
               largeTitle: Text(context.l10n.play),
               leading: session == null
                   ? const SignInWidget()
@@ -153,10 +153,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (session != null) ...[
-                    const _RelationButton(),
-                    const SizedBox(width: 6.0),
-                  ],
+                  if (session != null) const _RelationButton(),
                   const _SettingsButton(),
                 ],
               ),

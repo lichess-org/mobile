@@ -95,7 +95,8 @@ class _Body extends ConsumerWidget {
               child: Text(context.l10n.custom),
             ),
           ),
-          const SizedBox(height: 20),
+          if (defaultTargetPlatform != TargetPlatform.iOS)
+            const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: SecondaryButton(

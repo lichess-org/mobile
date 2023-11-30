@@ -27,7 +27,7 @@ abstract class Styles {
   // padding
   static const cupertinoAppBarTrailingWidgetPadding =
       EdgeInsetsDirectional.only(
-    end: 2.0,
+    end: 8.0,
   );
 
   static const bodyPadding =
