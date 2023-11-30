@@ -170,6 +170,7 @@ class AuthSocket {
     if (forceReconnect == false &&
         _channel != null &&
         _channel!.closeCode == null &&
+        _ref.read(averageLagProvider) != Duration.zero &&
         route == _route) {
       // Already connected to the given route, we still want to notify the caller
       // that the socket is ready.
