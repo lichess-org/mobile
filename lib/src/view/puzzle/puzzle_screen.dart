@@ -205,7 +205,7 @@ class _Body extends ConsumerWidget {
 
     final currentEvalBest = ref.watch(
       engineEvaluationProvider(puzzleState.evaluationContext)
-          .select((e) => e?.bestMove),
+          .select((s) => s.eval?.bestMove),
     );
     final evalBestMove =
         (currentEvalBest ?? puzzleState.node.eval?.bestMove)?.cg;
@@ -250,7 +250,7 @@ class _Body extends ConsumerWidget {
                 engineGauge: puzzleState.isEngineEnabled
                     ? EngineGaugeParams(
                         orientation: puzzleState.pov,
-                        evaluationContext: puzzleState.evaluationContext,
+                        localEvaluationContext: puzzleState.evaluationContext,
                         position: puzzleState.position,
                         savedEval: puzzleState.node.eval,
                       )

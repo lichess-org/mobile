@@ -22,10 +22,13 @@ class UCIProtocol {
   final _log = Logger('UCIProtocol');
   final Map<String, String> _options;
   final _evalController = StreamController<EvalResult>.broadcast();
+  final _isComputingController = StreamController<bool>.broadcast();
+  final _engineNameCompleter = Completer<String>();
 
   Stream<EvalResult> get evalStream => _evalController.stream;
+  Stream<bool> get isComputingStream => _isComputingController.stream;
 
-  String? engineName;
+  Future<String> get engineName => _engineNameCompleter.future;
 
   Work? _work;
   Work? _nextWork;
@@ -67,9 +70,7 @@ class UCIProtocol {
     _sendAndLog('isready');
   }
 
-  bool isComputing() {
-    return _work != null && _stopRequested == false;
-  }
+  bool get isComputing => _work != null;
 
   void received(String line) {
     final parts = line.trim().split(RegExp(r'\s+'));
@@ -84,12 +85,11 @@ class UCIProtocol {
     } else if (parts.first == 'readyok') {
       _swapWork();
     } else if (parts.first == 'id' && parts[1] == 'name') {
-      engineName = parts.sublist(2).join(' ');
+      if (!_engineNameCompleter.isCompleted) {
+        _engineNameCompleter.complete(parts.sublist(2).join(' '));
+      }
     } else if (parts.first == 'bestmove') {
       if (_work != null && _currentEval != null) {
-        _currentEval = _currentEval!.copyWith(
-          isComputing: false,
-        );
         _evalController.sink.add((_work!, _currentEval!));
       }
       _work = null;
@@ -164,7 +164,6 @@ class UCIProtocol {
           mate: isMate ? ev : null,
           pvs: IList([pvData]),
           millis: elapsedMs,
-          isComputing: true,
         );
       } else if (_currentEval != null) {
         _currentEval = _currentEval!.copyWith(
@@ -231,6 +230,9 @@ class UCIProtocol {
             ? 'go depth $maxPlies' // 'go infinite' would not finish even if entire tree search completed
             : 'go movetime 60000',
       );
+      _isComputingController.sink.add(true);
+    } else {
+      _isComputingController.sink.add(false);
     }
   }
 }

@@ -98,9 +98,9 @@ abstract class Node {
   /// Updates the node at the given path.
   ///
   /// Returns the updated node, or null if the node was not found.
-  Branch? updateAt(UciPath path, void Function(Branch node) update) {
+  Node? updateAt(UciPath path, void Function(Node node) update) {
     final node = nodeAtOrNull(path);
-    if (node != null && node is Branch) {
+    if (node != null) {
       update(node);
       return node;
     }
@@ -108,11 +108,8 @@ abstract class Node {
   }
 
   /// Updates all nodes.
-  void updateAll(void Function(Branch node) update) {
-    switch (this) {
-      case final Branch branch:
-        update(branch);
-    }
+  void updateAll(void Function(Node node) update) {
+    update(this);
     for (final child in children) {
       child.updateAll(update);
     }

@@ -1,21 +1,22 @@
-import 'package:dartchess/dartchess.dart';
-import 'package:flutter/foundation.dart';
-import 'package:stream_transform/stream_transform.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:lichess_mobile/src/app_dependencies.dart';
+import 'dart:async';
 
+import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 import 'engine.dart';
 import 'work.dart';
 
-part 'engine_evaluation.g.dart';
 part 'engine_evaluation.freezed.dart';
+part 'engine_evaluation.g.dart';
 
 const kMaxEngineDepth = 22;
 
@@ -37,22 +38,31 @@ const engineSupportedVariants = {
   Variant.chess960,
 };
 
+typedef EngineEvaluationState = ({EngineState state, ClientEval? eval});
+
+/// A provider holds the state of the engine and the current evaluation.
+///
+/// TODO: refactor this to decouple engine from the provider.
+/// Right now this is working but it's not ideal.
 @riverpod
 class EngineEvaluation extends _$EngineEvaluation {
   StockfishEngine? _engine;
+  StreamSubscription<EngineState>? _engineStateSub;
 
   @override
-  ClientEval? build(EvaluationContext context) {
+  EngineEvaluationState build(EvaluationContext context) {
     ref.onDispose(() {
+      _engineStateSub?.cancel();
       _engine?.dispose();
     });
-    return null;
+
+    return (state: EngineState.initial, eval: null);
   }
 
   Stream<EvalResult>? start(
     UciPath path,
-    Iterable<Step> steps,
-    Position position, {
+    Iterable<Step> steps, {
+    ClientEval? initialPositionEval,
     required bool Function(Work work) shouldEmit,
   }) {
     if (!engineSupportedVariants.contains(context.variant)) {
@@ -60,6 +70,9 @@ class EngineEvaluation extends _$EngineEvaluation {
     }
 
     _engine ??= StockfishEngine();
+    _engineStateSub ??= _engine!.stateStream.listen((engineState) {
+      state = (state: engineState, eval: state.eval);
+    });
 
     // requireValue is possible because appDependenciesProvider is loaded before
     // anything. See: lib/src/app.dart
@@ -78,9 +91,10 @@ class EngineEvaluation extends _$EngineEvaluation {
     );
 
     // cancel evaluation if we already have a cached eval at max depth
-    final cachedEval = work.evalCache;
+    final cachedEval =
+        work.steps.isEmpty ? initialPositionEval : work.evalCache;
     if (cachedEval != null && cachedEval.depth >= kMaxEngineDepth) {
-      state = null;
+      state = (state: state.state, eval: cachedEval);
       return null;
     }
 
@@ -92,7 +106,7 @@ class EngineEvaluation extends _$EngineEvaluation {
     evalStream.forEach((t) {
       final (work, eval) = t;
       if (shouldEmit(work)) {
-        state = eval;
+        state = (state: state.state, eval: eval);
       }
     });
 
@@ -100,7 +114,6 @@ class EngineEvaluation extends _$EngineEvaluation {
   }
 
   void stop() {
-    state = null;
     _engine?.stop();
   }
 }

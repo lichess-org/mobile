@@ -26,7 +26,10 @@ enum EngineGaugeDisplayMode {
 @freezed
 class EngineGaugeParams with _$EngineGaugeParams {
   const factory EngineGaugeParams({
-    required EvaluationContext evaluationContext,
+    /// Provide evaluation context if local engine is available.
+    ///
+    /// If null, only saved evaluation will be displayed.
+    EvaluationContext? localEvaluationContext,
 
     /// Only used for vertical display mode.
     required Side orientation,
@@ -67,14 +70,18 @@ class EngineGauge extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final eval = ref.watch(engineEvaluationProvider(params.evaluationContext));
+    final localEval = params.localEvaluationContext != null
+        ? ref
+            .watch(engineEvaluationProvider(params.localEvaluationContext!))
+            .eval
+        : null;
 
-    return eval != null
+    return localEval != null
         ? _EvalGauge(
             displayMode: displayMode,
             position: params.position,
             orientation: params.orientation,
-            eval: eval,
+            eval: localEval,
           )
         : params.savedEval != null
             ? _EvalGauge(

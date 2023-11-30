@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:popover/popover.dart';
 import 'package:share_plus/share_plus.dart';
@@ -278,7 +279,7 @@ class _Board extends ConsumerWidget {
 
     final evalBestMoves = ref.watch(
       engineEvaluationProvider(analysisState.evaluationContext)
-          .select((e) => e?.bestMoves),
+          .select((s) => s.eval?.bestMoves),
     );
 
     final currentNode = analysisState.currentNode;
@@ -381,17 +382,17 @@ class _EngineGaugeVertical extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(ctrlProvider);
 
-    return analysisState.isEngineAvailable
-        ? EngineGauge(
-            displayMode: EngineGaugeDisplayMode.vertical,
-            params: EngineGaugeParams(
-              orientation: analysisState.pov,
-              evaluationContext: analysisState.evaluationContext,
-              position: analysisState.position,
-              savedEval: analysisState.currentNode.eval,
-            ),
-          )
-        : kEmptyWidget;
+    return EngineGauge(
+      displayMode: EngineGaugeDisplayMode.vertical,
+      params: EngineGaugeParams(
+        orientation: analysisState.pov,
+        localEvaluationContext: analysisState.isEngineAvailable
+            ? analysisState.evaluationContext
+            : null,
+        position: analysisState.position,
+        savedEval: analysisState.currentNode.eval,
+      ),
+    );
   }
 }
 
@@ -417,7 +418,9 @@ class _ColumnTopTable extends ConsumerWidget {
                   displayMode: EngineGaugeDisplayMode.horizontal,
                   params: EngineGaugeParams(
                     orientation: analysisState.pov,
-                    evaluationContext: analysisState.evaluationContext,
+                    localEvaluationContext: analysisState.isEngineAvailable
+                        ? analysisState.evaluationContext
+                        : null,
                     position: analysisState.position,
                     savedEval: analysisState.currentNode.eval ??
                         (analysisState.currentNode.pgnEval != null
@@ -450,8 +453,9 @@ class _EngineLines extends ConsumerWidget {
         (p) => p.numEvalLines,
       ),
     );
-    final engineEval =
-        ref.watch(engineEvaluationProvider(analysisState.evaluationContext));
+    final engineEval = ref
+        .watch(engineEvaluationProvider(analysisState.evaluationContext))
+        .eval;
     final eval = engineEval ?? analysisState.currentNode.eval;
 
     final emptyLines = List.filled(
@@ -744,7 +748,8 @@ class _EngineDepth extends ConsumerWidget {
       ctrlProvider.select((value) => value.currentNode),
     );
     final depth = ref.watch(
-          engineEvaluationProvider(evalContext).select((value) => value?.depth),
+          engineEvaluationProvider(evalContext)
+              .select((value) => value.eval?.depth),
         ) ??
         currentNode.eval?.depth;
 
@@ -802,11 +807,15 @@ class _StockfishInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final eval =
-        ref.watch(engineEvaluationProvider(evalContext)) ?? currentNode.eval;
+    final (eval: eval, state: engineState) =
+        ref.watch(engineEvaluationProvider(evalContext));
 
-    final knps = eval?.isComputing == true ? ', ${eval?.knps.round()}kn/s' : '';
-    final depth = eval?.depth ?? 0;
+    final currentEval = eval ?? currentNode.eval;
+
+    final knps = engineState == EngineState.computing
+        ? ', ${eval?.knps.round()}kn/s'
+        : '';
+    final depth = currentEval?.depth ?? 0;
     final maxDepth = math.max(depth, kMaxEngineDepth);
 
     return Column(

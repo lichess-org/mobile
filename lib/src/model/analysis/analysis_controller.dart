@@ -47,7 +47,7 @@ class AnalysisOptions with _$AnalysisOptions {
 class AnalysisController extends _$AnalysisController {
   late final Root _root;
 
-  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 500));
+  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
 
   Timer? _startEngineEvalTimer;
 
@@ -202,8 +202,6 @@ class AnalysisController extends _$AnalysisController {
         .read(analysisPreferencesProvider.notifier)
         .setNumEvalLines(numEvalLines);
 
-    _stopEngineEval();
-
     _root.updateAll((node) => node.eval = null);
 
     state = state.copyWith(
@@ -214,7 +212,10 @@ class AnalysisController extends _$AnalysisController {
           AnalysisCurrentNode.fromNode(_root.nodeAt(state.currentPath)),
     );
 
-    _startEngineEval();
+    _startEngineEvalTimer?.cancel();
+    _startEngineEvalTimer = Timer(const Duration(milliseconds: 200), () {
+      _startEngineEval();
+    });
   }
 
   void setEngineCores(int numEngineCores) {
@@ -222,15 +223,16 @@ class AnalysisController extends _$AnalysisController {
         .read(analysisPreferencesProvider.notifier)
         .setEngineCores(numEngineCores);
 
-    _stopEngineEval();
-
     state = state.copyWith(
       evaluationContext: state.evaluationContext.copyWith(
         cores: numEngineCores,
       ),
     );
 
-    _startEngineEval();
+    _startEngineEvalTimer?.cancel();
+    _startEngineEvalTimer = Timer(const Duration(milliseconds: 200), () {
+      _startEngineEval();
+    });
   }
 
   void updatePgnHeader(String key, String value) {
@@ -350,7 +352,7 @@ class AnalysisController extends _$AnalysisController {
         .start(
           state.currentPath,
           _root.nodesOn(state.currentPath).map(Step.fromNode),
-          state.currentNode.position,
+          initialPositionEval: _root.eval,
           shouldEmit: (work) => work.path == state.currentPath,
         )
         ?.forEach(
@@ -366,6 +368,11 @@ class AnalysisController extends _$AnalysisController {
 
   void _stopEngineEval() {
     ref.read(engineEvaluationProvider(state.evaluationContext).notifier).stop();
+    // update the current node with last cached eval
+    state = state.copyWith(
+      currentNode:
+          AnalysisCurrentNode.fromNode(_root.nodeAt(state.currentPath)),
+    );
   }
 }
 
@@ -442,6 +449,7 @@ class AnalysisState with _$AnalysisState {
   /// Whether an evaluation can be available
   bool get hasAvailableEval => isEngineAvailable || acplChartData != null;
 
+  /// Whether the engine is available for evaluation
   bool get isEngineAvailable =>
       isLocalEvaluationAllowed &&
       engineSupportedVariants.contains(

@@ -191,7 +191,6 @@ void main() {
         pvs: IList([
           PvData(moves: IList(const ['e2e4'])),
         ]),
-        isComputing: false,
       );
 
       final newNode = root.updateAt(nodePath, (node) {
@@ -204,6 +203,36 @@ void main() {
           root.children.first,
           newNode!,
         ]),
+      );
+    });
+
+    test('updateAll', () {
+      final root = Root.fromPgnMoves('e4 e5 Nf3');
+
+      expect(
+        root.mainline.map((n) => n.eval),
+        equals([null, null, null]),
+      );
+
+      final eval = ClientEval(
+        position: root.position,
+        maxDepth: 20,
+        cp: 100,
+        depth: 10,
+        nodes: 1000,
+        millis: 1000,
+        pvs: IList([
+          PvData(moves: IList(const ['e2e4'])),
+        ]),
+      );
+
+      root.updateAll((node) {
+        node.eval = eval;
+      });
+
+      expect(
+        root.mainline.map((n) => n.eval),
+        equals([eval, eval, eval]),
       );
     });
 

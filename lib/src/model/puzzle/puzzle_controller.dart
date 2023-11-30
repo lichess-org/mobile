@@ -451,7 +451,7 @@ class PuzzleController extends _$PuzzleController {
           .start(
             state.currentPath,
             _gameTree.nodesOn(state.currentPath).map(Step.fromNode),
-            state.node.position,
+            initialPositionEval: _gameTree.eval,
             shouldEmit: (work) => work.path == state.currentPath,
           )
           ?.forEach((t) {
