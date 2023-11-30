@@ -23,7 +23,8 @@ Future<IList<(DateTime, OfflineCorrespondenceGame)>>
     offlineOngoingCorrespondenceGames(
   OfflineOngoingCorrespondenceGamesRef ref,
 ) async {
-  final storage = ref.watch(correspondenceGameStorageProvider);
+  // cannot use ref.watch because it would create a circular dependency
+  final storage = ref.read(correspondenceGameStorageProvider);
   return storage.fetchOngoingGames();
 }
 
