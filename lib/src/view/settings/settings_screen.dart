@@ -1,32 +1,31 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/settings.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/utils/package_info.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/package_info.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 
-import './theme_mode_screen.dart';
-import './sound_settings_screen.dart';
-import './piece_set_screen.dart';
-import './board_theme_screen.dart';
 import './board_settings_screen.dart';
+import './board_theme_screen.dart';
+import './piece_set_screen.dart';
 import './settings_profile_screen.dart';
+import './sound_settings_screen.dart';
+import './theme_mode_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});

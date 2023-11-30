@@ -1,22 +1,21 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
-import './time_control_modal.dart';
-import './custom_play_screen.dart';
 import './correspondence_play_screen.dart';
+import './custom_play_screen.dart';
+import './time_control_modal.dart';
 
 class PlayScreen extends StatelessWidget {
   const PlayScreen();

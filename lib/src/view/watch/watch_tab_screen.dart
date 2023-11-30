@@ -1,29 +1,28 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:dartchess/dartchess.dart';
-
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/tv/featured_player.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
+import 'package:lichess_mobile/src/model/tv/tv_game.dart';
+import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
-import 'package:lichess_mobile/src/model/tv/tv_game.dart';
-import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
-import 'package:lichess_mobile/src/model/tv/featured_player.dart';
-import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
-import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:result_extensions/result_extensions.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'watch_tab_screen.g.dart';
 

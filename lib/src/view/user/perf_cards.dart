@@ -1,18 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
+import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
-import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 
 class PerfCards extends StatelessWidget {
   const PerfCards({required this.user, super.key});

@@ -1,13 +1,13 @@
-import 'package:flutter/widgets.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'puzzle_theme.g.dart';
 part 'puzzle_theme.freezed.dart';
+part 'puzzle_theme.g.dart';
 
 @freezed
 class PuzzleThemeData with _$PuzzleThemeData {

@@ -1,19 +1,20 @@
 import 'dart:developer' as developer;
-import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logging/logging.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
+import 'package:logging/logging.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'firebase_options.dart';
-import 'src/constants.dart';
 import 'src/app.dart';
+import 'src/constants.dart';
 
 // to see http requests and websocket connections in terminal since we're not
 // always using the browser devtools

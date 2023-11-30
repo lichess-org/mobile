@@ -1,16 +1,17 @@
-import 'dart:io';
 import 'dart:convert';
-import 'package:flutter_test/flutter_test.dart';
+import 'dart:io';
+
 import 'package:async/async.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:lichess_mobile/src/crashlytics.dart';
+import 'package:lichess_mobile/src/http_client.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:mocktail/mocktail.dart';
 
-import 'package:lichess_mobile/src/http_client.dart';
-import 'package:lichess_mobile/src/crashlytics.dart';
-import 'package:lichess_mobile/src/model/common/errors.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
-import '../../test_container.dart';
 import '../../fake_crashlytics.dart';
+import '../../test_container.dart';
 
 class MockClient extends Mock implements http.Client {}
 

@@ -1,20 +1,19 @@
+import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:dartchess/dartchess.dart';
-
-import 'package:lichess_mobile/src/model/common/node.dart';
-import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/node.dart';
+import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
-import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 // fast replay debounce delay, same as piece animation duration, to avoid piece
 // animation jank at the end of the replay

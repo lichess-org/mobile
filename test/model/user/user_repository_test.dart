@@ -1,15 +1,14 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:async/async.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:http/http.dart' as http;
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/user/user_repository.dart';
 
 class MockAuthClient extends Mock implements AuthClient {}
 

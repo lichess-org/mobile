@@ -1,14 +1,13 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-
-import 'package:url_launcher/url_launcher.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/social_icons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StreamerScreen extends StatelessWidget {
   const StreamerScreen({required this.streamers});

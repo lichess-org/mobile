@@ -1,6 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
-
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 
 part 'featured_player.freezed.dart';

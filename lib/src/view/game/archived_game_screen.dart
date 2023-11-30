@@ -1,27 +1,26 @@
+import 'package:chessground/chessground.dart' as cg;
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dartchess/dartchess.dart';
-import 'package:chessground/chessground.dart' as cg;
-
-import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/board_table.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
-import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
+import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
 import 'archived_game_screen_providers.dart';
 

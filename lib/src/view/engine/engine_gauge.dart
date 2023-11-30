@@ -1,14 +1,13 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dartchess/dartchess.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
+import 'package:lichess_mobile/src/model/settings/brightness.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 part 'engine_gauge.freezed.dart';
 

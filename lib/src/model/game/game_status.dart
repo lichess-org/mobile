@@ -1,5 +1,5 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 enum GameStatus {
   unknown(-1),

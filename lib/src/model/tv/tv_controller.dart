@@ -1,22 +1,22 @@
 import 'dart:async';
+
 import 'package:async/async.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
-
-import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
-import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
-import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
+import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
+import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/tv/tv_socket_events.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'tv_controller.freezed.dart';
 part 'tv_controller.g.dart';

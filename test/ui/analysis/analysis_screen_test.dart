@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:chessground/chessground.dart' as cg;
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:dartchess/dartchess.dart';
-import 'package:chessground/chessground.dart' as cg;
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -11,7 +12,6 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';

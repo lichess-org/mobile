@@ -1,29 +1,30 @@
 import 'dart:convert';
+
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:intl/intl.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:result_extensions/result_extensions.dart';
-import 'package:deep_pick/deep_pick.dart';
-import 'package:http/http.dart' as http;
-import 'package:logging/logging.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
-import 'package:lichess_mobile/src/utils/json.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:logging/logging.dart';
+import 'package:result_extensions/result_extensions.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'puzzle.dart';
-import 'storm.dart';
-import 'puzzle_streak.dart';
-import 'puzzle_theme.dart';
-import 'puzzle_opening.dart';
 import 'puzzle_angle.dart';
 import 'puzzle_difficulty.dart';
+import 'puzzle_opening.dart';
+import 'puzzle_streak.dart';
+import 'puzzle_theme.dart';
+import 'storm.dart';
 
 part 'puzzle_repository.freezed.dart';
 part 'puzzle_repository.g.dart';

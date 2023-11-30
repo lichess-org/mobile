@@ -1,22 +1,22 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dartchess/dartchess.dart';
-
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
-import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
-import 'package:lichess_mobile/src/model/lobby/lobby_providers.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/model/lobby/lobby_providers.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 import 'status_l10n.dart';
 

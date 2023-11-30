@@ -1,23 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:timeago/timeago.dart' as timeago;
-
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class RecentGames extends ConsumerWidget {
   const RecentGames({this.user, super.key});

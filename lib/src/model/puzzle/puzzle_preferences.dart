@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_preferences.freezed.dart';
 part 'puzzle_preferences.g.dart';

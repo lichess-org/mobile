@@ -1,5 +1,5 @@
-import 'package:dartchess/dartchess.dart';
 import 'package:chessground/chessground.dart' as chessground;
+import 'package:dartchess/dartchess.dart';
 
 extension ChessgroundSideCompat on Side {
   chessground.Side get cg =>

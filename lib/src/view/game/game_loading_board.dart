@@ -1,18 +1,18 @@
 import 'dart:ui';
-import 'package:flutter/foundation.dart';
+
+import 'package:chessground/chessground.dart' as cg;
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:chessground/chessground.dart' as cg;
-
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_providers.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class LobbyGameLoadingBoard extends StatelessWidget {
   const LobbyGameLoadingBoard(this.seek, {this.isRematch = false});

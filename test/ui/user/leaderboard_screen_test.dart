@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lichess_mobile/src/view/user/leaderboard_screen.dart';
 import 'package:http/testing.dart';
-
 import 'package:lichess_mobile/src/http_client.dart';
-import '../../test_utils.dart';
+import 'package:lichess_mobile/src/view/user/leaderboard_screen.dart';
+
 import '../../test_app.dart';
+import '../../test_utils.dart';
 
 void main() {
   final mockClient = MockClient((request) {

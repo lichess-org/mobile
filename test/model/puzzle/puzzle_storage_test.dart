@@ -1,13 +1,13 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import 'package:lichess_mobile/src/db/database.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import '../../test_container.dart';
 
 void main() {

@@ -1,6 +1,6 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 
 import 'puzzle.dart';

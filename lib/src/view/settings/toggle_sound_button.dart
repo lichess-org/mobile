@@ -1,10 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class ToggleSoundButton extends ConsumerWidget {
   @override

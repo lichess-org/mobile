@@ -1,10 +1,11 @@
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
+
+import 'package:chessground/chessground.dart' as cg;
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:chessground/chessground.dart' as cg;
 
 const kPlatformVariant =
     TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});

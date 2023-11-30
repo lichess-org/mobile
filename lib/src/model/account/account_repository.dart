@@ -1,25 +1,25 @@
 import 'dart:convert';
+
 import 'package:async/async.dart';
-import 'package:logging/logging.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
+import 'package:logging/logging.dart';
+import 'package:result_extensions/result_extensions.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'account_preferences.dart';
 import 'ongoing_game.dart';

@@ -1,14 +1,14 @@
 import 'dart:async';
-import 'package:async/async.dart';
-import 'package:logging/logging.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:deep_pick/deep_pick.dart';
 
+import 'package:async/async.dart';
+import 'package:deep_pick/deep_pick.dart';
+import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
+import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
+import 'package:logging/logging.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'create_game_service.g.dart';
 

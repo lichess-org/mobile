@@ -1,13 +1,12 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'session_storage.dart';
 
-part 'auth_session.g.dart';
 part 'auth_session.freezed.dart';
+part 'auth_session.g.dart';
 
 @Riverpod(keepAlive: true)
 class AuthSession extends _$AuthSession {

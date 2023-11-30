@@ -1,10 +1,9 @@
-import 'package:flutter/widgets.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:result_extensions/result_extensions.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'account_repository.dart';
 

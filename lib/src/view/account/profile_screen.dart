@@ -1,17 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/view/user/perf_cards.dart';
+import 'package:lichess_mobile/src/view/user/recent_games.dart';
+import 'package:lichess_mobile/src/view/user/user_activity.dart';
+import 'package:lichess_mobile/src/view/user/user_profile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:lichess_mobile/src/view/user/user_profile.dart';
-import 'package:lichess_mobile/src/view/user/recent_games.dart';
-import 'package:lichess_mobile/src/view/user/perf_cards.dart';
-import 'package:lichess_mobile/src/view/user/user_activity.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});

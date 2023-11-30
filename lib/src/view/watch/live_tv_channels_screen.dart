@@ -1,19 +1,18 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/model/tv/live_tv_channels.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/board_preview.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/widgets/board_preview.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/player.dart';
 
 class LiveTvChannelsScreen extends ConsumerStatefulWidget {
   const LiveTvChannelsScreen({super.key});

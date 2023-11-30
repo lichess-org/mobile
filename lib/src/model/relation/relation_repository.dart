@@ -1,11 +1,10 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:logging/logging.dart';
 import 'package:result_extensions/result_extensions.dart';
-
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
-import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/utils/json.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 class RelationRepository {
   const RelationRepository({required this.apiClient, required Logger logger})

@@ -1,17 +1,16 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/l10n.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
-import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 
 enum BottomTab {
   play(Icons.home),

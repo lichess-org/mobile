@@ -1,21 +1,20 @@
 import 'package:async/async.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:result_extensions/result_extensions.dart';
-import 'package:http/http.dart' as http;
-import 'package:logging/logging.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:deep_pick/deep_pick.dart';
-
-import 'package:lichess_mobile/src/crashlytics.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:logging/logging.dart';
+import 'package:result_extensions/result_extensions.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'game_seek.dart';
 import 'correspondence_challenge.dart';
+import 'game_seek.dart';
 
 part 'lobby_repository.g.dart';
 

@@ -1,7 +1,6 @@
+import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
-
-import 'package:lichess_mobile/src/app_dependencies.dart';
 
 part 'database.g.dart';
 

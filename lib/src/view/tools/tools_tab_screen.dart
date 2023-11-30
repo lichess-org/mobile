@@ -1,15 +1,14 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_position_choice_screen.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class ToolsTabScreen extends StatelessWidget {
   const ToolsTabScreen({super.key});

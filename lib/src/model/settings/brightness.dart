@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'brightness.g.dart';
 

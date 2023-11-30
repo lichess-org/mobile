@@ -1,22 +1,22 @@
 import 'dart:convert';
-import 'package:result_extensions/result_extensions.dart';
-import 'package:logging/logging.dart';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:logging/logging.dart';
+import 'package:result_extensions/result_extensions.dart';
 
 import 'game.dart';
 import 'game_status.dart';
-import 'player.dart';
 import 'material_diff.dart';
+import 'player.dart';
 
 class GameRepository {
   const GameRepository(

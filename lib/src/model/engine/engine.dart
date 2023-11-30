@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:stockfish/stockfish.dart';
+
 import 'package:logging/logging.dart';
+import 'package:stockfish/stockfish.dart';
 
 import 'uci_protocol.dart';
 import 'work.dart';

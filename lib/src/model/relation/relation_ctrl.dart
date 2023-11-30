@@ -1,12 +1,12 @@
 import 'dart:async';
+
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import 'package:lichess_mobile/src/model/common/socket.dart';
 
 part 'relation_ctrl.freezed.dart';
 part 'relation_ctrl.g.dart';

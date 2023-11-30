@@ -1,18 +1,17 @@
+import 'package:chessground/chessground.dart' as cg;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:chessground/chessground.dart' as cg;
 import 'package:http/testing.dart';
-
+import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
-import 'package:lichess_mobile/src/http_client.dart';
 
-import '../../test_utils.dart';
 import '../../test_app.dart';
+import '../../test_utils.dart';
 
 void main() {
   final mockClient = MockClient((request) {

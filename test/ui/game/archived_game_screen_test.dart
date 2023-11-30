@@ -1,23 +1,23 @@
-import 'package:flutter/material.dart';
-import 'package:dartchess/dartchess.dart';
-import 'package:http/testing.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:chessground/chessground.dart' as cg;
-
-import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/board_table.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:dartchess/dartchess.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/http_client.dart';
-import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
-import 'package:lichess_mobile/src/view/game/game_player.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
-import '../../test_utils.dart';
+import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_player.dart';
+import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+
 import '../../test_app.dart';
+import '../../test_utils.dart';
 
 void main() {
   final mockClient = MockClient((request) {

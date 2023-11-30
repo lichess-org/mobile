@@ -1,9 +1,8 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
-
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 
 part 'correspondence_challenge.freezed.dart';
 

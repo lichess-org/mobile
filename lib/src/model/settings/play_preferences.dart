@@ -1,12 +1,12 @@
 import 'dart:convert';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
-import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'play_preferences.freezed.dart';
 part 'play_preferences.g.dart';

@@ -1,13 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-
+import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
-import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
 
 class PlayRatingRange extends StatefulWidget {
   const PlayRatingRange({

@@ -1,43 +1,43 @@
 import 'dart:math' as math;
 import 'dart:ui';
+
+import 'package:chessground/chessground.dart' as cg;
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:chessground/chessground.dart' as cg;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/engine/engine.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
-import 'package:popover/popover.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
-import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/game/player.dart';
-import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/engine/engine.dart';
+import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
-import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:popover/popover.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import 'tree_view.dart';
-import 'analysis_settings.dart';
 import 'analysis_pgn_tags.dart';
+import 'analysis_settings.dart';
+import 'tree_view.dart';
 
 class AnalysisScreen extends ConsumerWidget {
   const AnalysisScreen({

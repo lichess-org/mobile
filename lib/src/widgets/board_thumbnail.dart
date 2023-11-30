@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:chessground/chessground.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 
 /// A board thumbnail widget

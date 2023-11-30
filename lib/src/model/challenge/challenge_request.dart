@@ -1,5 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'challenge_request.freezed.dart';
 

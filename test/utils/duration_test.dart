@@ -1,8 +1,7 @@
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
 import 'package:lichess_mobile/src/utils/duration.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockAppLocalizations extends Mock implements AppLocalizations {}
 

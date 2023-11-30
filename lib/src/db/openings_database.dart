@@ -1,8 +1,9 @@
 import 'dart:io';
+
+import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:flutter/services.dart';
 
 part 'openings_database.g.dart';
 

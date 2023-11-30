@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:dartchess/dartchess.dart';
-
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 class PuzzleFeedbackWidget extends StatelessWidget {

@@ -1,6 +1,5 @@
-import 'package:flutter/widgets.dart';
 import 'package:dartchess/dartchess.dart';
-
+import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';

@@ -1,17 +1,17 @@
 import 'package:collection/collection.dart';
-import 'package:logging/logging.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
-import 'user.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:logging/logging.dart';
+import 'package:result_extensions/result_extensions.dart';
+
 import 'streamer.dart';
+import 'user.dart';
 
 class UserRepository {
   const UserRepository({required this.apiClient, required Logger logger})

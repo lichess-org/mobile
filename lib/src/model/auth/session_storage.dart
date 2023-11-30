@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'session_storage.g.dart';
 

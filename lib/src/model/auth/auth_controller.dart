@@ -1,13 +1,12 @@
 import 'package:async/async.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:result_extensions/result_extensions.dart';
-
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:result_extensions/result_extensions.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'auth_repository.dart';
 import 'bearer.dart';

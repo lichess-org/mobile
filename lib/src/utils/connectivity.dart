@@ -1,11 +1,10 @@
-import 'package:http/http.dart';
-import 'package:stream_transform/stream_transform.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:http/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/http_client.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 part 'connectivity.freezed.dart';
 part 'connectivity.g.dart';

@@ -1,6 +1,6 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 enum PuzzleDifficulty {
   easiest(-600),

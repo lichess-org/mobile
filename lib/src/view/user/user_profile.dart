@@ -1,15 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:intl/intl.dart';
-import 'package:timeago/timeago.dart' as timeago;
-
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import 'countries.dart';
 

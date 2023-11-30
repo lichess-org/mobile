@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-
+import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 
 import '../test_utils.dart';

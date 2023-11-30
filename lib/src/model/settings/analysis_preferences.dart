@@ -1,9 +1,9 @@
-import 'dart:io';
 import 'dart:convert';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'dart:io';
 
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'analysis_preferences.freezed.dart';
 part 'analysis_preferences.g.dart';

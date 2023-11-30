@@ -1,24 +1,24 @@
 import 'dart:async';
 import 'dart:core';
 import 'dart:math' as math;
-import 'package:flutter/services.dart';
-import 'package:result_extensions/result_extensions.dart';
-import 'package:dartchess/dartchess.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:chessground/chessground.dart' as cg;
 
+import 'package:chessground/chessground.dart' as cg;
+import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/services.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:result_extensions/result_extensions.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'puzzle.dart';
 import 'puzzle_repository.dart';
 import 'storm.dart';
 
-part 'storm_controller.g.dart';
 part 'storm_controller.freezed.dart';
+part 'storm_controller.g.dart';
 
 const malus = Duration(seconds: 10);
 const moveDelay = Duration(milliseconds: 200);

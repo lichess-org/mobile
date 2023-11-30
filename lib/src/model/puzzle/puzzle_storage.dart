@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:sqflite/sqflite.dart';
 
 part 'puzzle_storage.g.dart';
 

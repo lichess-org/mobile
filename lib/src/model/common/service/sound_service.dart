@@ -1,12 +1,11 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:soundpool/soundpool.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:soundpool/soundpool.dart';
 
 part 'sound_service.g.dart';
 

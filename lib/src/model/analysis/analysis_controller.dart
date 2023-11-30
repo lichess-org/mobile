@@ -1,26 +1,26 @@
 import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
+import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'analysis_controller.g.dart';
 part 'analysis_controller.freezed.dart';
+part 'analysis_controller.g.dart';
 
 @freezed
 class AnalysisOptions with _$AnalysisOptions {

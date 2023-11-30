@@ -1,10 +1,9 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-
-import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/db/openings_database.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:sqflite/sqflite.dart';
 
 part 'opening_service.g.dart';
 

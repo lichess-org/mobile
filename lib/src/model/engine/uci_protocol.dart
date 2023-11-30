@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:logging/logging.dart';
 
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:logging/logging.dart';
 
 import 'work.dart';
 

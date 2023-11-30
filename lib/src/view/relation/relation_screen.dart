@@ -1,20 +1,19 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/model/relation/relation_ctrl.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/relation/following_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/player.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 class RelationScreen extends ConsumerStatefulWidget {
   const RelationScreen({super.key});

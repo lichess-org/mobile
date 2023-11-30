@@ -1,21 +1,21 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:async/async.dart';
-import 'package:logging/logging.dart';
-import 'package:http/http.dart';
-import 'package:result_extensions/result_extensions.dart';
-import 'package:http/retry.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-import 'package:lichess_mobile/src/http_client.dart';
+import 'package:async/async.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart';
+import 'package:http/retry.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
+import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
+import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';
-import 'package:lichess_mobile/src/utils/package_info.dart';
 import 'package:lichess_mobile/src/utils/device_info.dart';
+import 'package:lichess_mobile/src/utils/package_info.dart';
+import 'package:logging/logging.dart';
+import 'package:result_extensions/result_extensions.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_client.g.dart';
 

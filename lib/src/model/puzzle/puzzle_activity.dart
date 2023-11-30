@@ -1,15 +1,16 @@
 import 'dart:async';
+
 import 'package:async/async.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:result_extensions/result_extensions.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:lichess_mobile/src/utils/riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
+import 'package:result_extensions/result_extensions.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'puzzle_activity.g.dart';
 part 'puzzle_activity.freezed.dart';
+part 'puzzle_activity.g.dart';
 
 const _nbPerPage = 50;
 const _maxPuzzles = 500;

@@ -1,9 +1,9 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:logging/logging.dart';
-
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:logging/logging.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'relation_repository.dart';
 
 part 'relation_repository_providers.g.dart';

@@ -1,19 +1,19 @@
 import 'package:async/async.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
-
 import 'package:lichess_mobile/src/http_client.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import '../../test_utils.dart';
+import 'package:mocktail/mocktail.dart';
+
 import '../../test_container.dart';
+import '../../test_utils.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 

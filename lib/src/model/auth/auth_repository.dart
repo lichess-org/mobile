@@ -1,13 +1,12 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter/foundation.dart';
-import 'package:logging/logging.dart';
 import 'package:async/async.dart';
-import 'package:result_extensions/result_extensions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
-
-import 'package:lichess_mobile/src/model/common/errors.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:lichess_mobile/src/model/common/errors.dart';
+import 'package:logging/logging.dart';
+import 'package:result_extensions/result_extensions.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_repository.g.dart';
 

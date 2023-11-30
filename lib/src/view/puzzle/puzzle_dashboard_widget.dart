@@ -1,20 +1,19 @@
 import 'package:collection/collection.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fl_chart/fl_chart.dart';
-
+import 'package:lichess_mobile/src/model/common/errors.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
-import 'package:lichess_mobile/src/model/common/errors.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/stat_card.dart';
-import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/widgets/stat_card.dart';
 
 class PuzzleDashboardWidget extends ConsumerWidget {
   @override

@@ -1,22 +1,23 @@
 import 'dart:math' show max;
+
+import 'package:async/async.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:logging/logging.dart';
-import 'package:async/async.dart';
 import 'package:result_extensions/result_extensions.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-import 'package:lichess_mobile/src/model/common/id.dart';
-import 'puzzle_batch_storage.dart';
-import 'puzzle_repository.dart';
 import 'puzzle.dart';
-import 'puzzle_theme.dart';
 import 'puzzle_angle.dart';
+import 'puzzle_batch_storage.dart';
 import 'puzzle_preferences.dart';
+import 'puzzle_repository.dart';
+import 'puzzle_theme.dart';
 
-part 'puzzle_service.g.dart';
 part 'puzzle_service.freezed.dart';
+part 'puzzle_service.g.dart';
 
 /// Size of puzzle local cache
 const kPuzzleLocalQueueLength = 50;

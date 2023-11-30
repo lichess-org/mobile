@@ -1,21 +1,21 @@
-import 'dart:io';
-import 'dart:math' as math;
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/widgets.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:web_socket_channel/io.dart';
-import 'package:logging/logging.dart';
+import 'dart:io';
+import 'dart:math' as math;
 
+import 'package:flutter/widgets.dart';
+import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/http_client.dart';
-import 'package:lichess_mobile/src/app_dependencies.dart';
-import 'package:lichess_mobile/src/utils/package_info.dart';
-import 'package:lichess_mobile/src/utils/device_info.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/utils/device_info.dart';
+import 'package:lichess_mobile/src/utils/package_info.dart';
+import 'package:logging/logging.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 part 'auth_socket.g.dart';
 

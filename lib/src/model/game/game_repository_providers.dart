@@ -1,11 +1,11 @@
 import 'package:async/async.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:logging/logging.dart';
-
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
+import 'package:logging/logging.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'game.dart';
 import 'game_repository.dart';
 

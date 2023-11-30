@@ -1,15 +1,15 @@
+import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:chessground/chessground.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
+import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+
 import 'platform.dart';
 
 const _scrollAnimationDuration = Duration(milliseconds: 200);

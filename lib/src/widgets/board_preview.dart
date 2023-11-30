@@ -1,11 +1,10 @@
+import 'package:chessground/chessground.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:chessground/chessground.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 
 /// A board preview with a description.
 class SmallBoardPreview extends ConsumerStatefulWidget {

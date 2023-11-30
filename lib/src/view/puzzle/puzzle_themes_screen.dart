@@ -1,20 +1,19 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:lichess_mobile/src/view/puzzle/opening_screen.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import 'package:lichess_mobile/src/utils/connectivity.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/view/puzzle/opening_screen.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'puzzle_screen.dart';
 

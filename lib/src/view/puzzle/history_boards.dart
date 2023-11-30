@@ -1,22 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
+import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 class PuzzleHistoryBoards extends ConsumerStatefulWidget {
   const PuzzleHistoryBoards(this.history, {this.maxRows, super.key});

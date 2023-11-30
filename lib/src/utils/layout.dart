@@ -1,5 +1,5 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
 final _appBarHeight = defaultTargetPlatform == TargetPlatform.iOS ? 44.0 : 56.0;
 

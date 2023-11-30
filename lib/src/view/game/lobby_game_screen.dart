@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/lobby/lobby_providers.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/model/lobby/lobby_providers.dart';
+import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
 import 'game_body.dart';
 import 'game_common_widgets.dart';
