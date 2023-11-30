@@ -2,26 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
-
-final spinKit = defaultTargetPlatform == TargetPlatform.iOS
-    ? const SizedBox(
-        width: 35,
-        child: SpinKitThreeBounce(
-          color: Colors.grey,
-          size: 15,
-        ),
-      )
-    : const SpinKitThreeBounce(
-        color: Colors.grey,
-        size: 30,
-      );
 
 class AccountPreferencesScreen extends ConsumerStatefulWidget {
   const AccountPreferencesScreen({super.key});
@@ -345,17 +331,27 @@ class _AccountPreferencesScreenState
     return defaultTargetPlatform == TargetPlatform.android
         ? Scaffold(
             appBar: AppBar(
-              title: isLoading
-                  ? spinKit
-                  : Text(context.l10n.preferencesPreferences),
+              title: Text(context.l10n.preferencesPreferences),
+              actions: [
+                if (isLoading)
+                  const Padding(
+                    padding: EdgeInsets.only(right: 16),
+                    child: SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
+                    ),
+                  ),
+              ],
             ),
             body: content,
           )
         : CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: isLoading
-                  ? spinKit
-                  : Text(context.l10n.preferencesPreferences),
+              trailing:
+                  isLoading ? const CircularProgressIndicator.adaptive() : null,
             ),
             child: content,
           );
@@ -385,7 +381,8 @@ class _ZenSettingsScreenState extends ConsumerState<ZenSettingsScreen> {
 
         return CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(
-            middle: isLoading ? spinKit : Text(context.l10n.preferencesZenMode),
+            trailing:
+                isLoading ? const CircularProgressIndicator.adaptive() : null,
           ),
           child: SafeArea(
             child: ListView(
@@ -447,11 +444,8 @@ class _TakebackSettingsScreenState
 
         return CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(
-            middle: isLoading
-                ? spinKit
-                : Text(
-                    context.l10n.preferencesTakebacksWithOpponentApproval,
-                  ),
+            trailing:
+                isLoading ? const CircularProgressIndicator.adaptive() : null,
           ),
           child: SafeArea(
             child: ListView(
@@ -516,11 +510,9 @@ class _AutoQueenSettingsScreenState
           builder: (context, snapshot) {
             return CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(
-                middle: snapshot.connectionState == ConnectionState.waiting
-                    ? spinKit
-                    : Text(
-                        context.l10n.preferencesPromoteToQueenAutomatically,
-                      ),
+                trailing: snapshot.connectionState == ConnectionState.waiting
+                    ? const CircularProgressIndicator.adaptive()
+                    : null,
               ),
               child: SafeArea(
                 child: ListView(
@@ -582,12 +574,9 @@ class _AutoThreefoldSettingsScreenState
           builder: (context, snapshot) {
             return CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(
-                middle: snapshot.connectionState == ConnectionState.waiting
-                    ? spinKit
-                    : Text(
-                        context.l10n
-                            .preferencesClaimDrawOnThreefoldRepetitionAutomatically,
-                      ),
+                trailing: snapshot.connectionState == ConnectionState.waiting
+                    ? const CircularProgressIndicator.adaptive()
+                    : null,
               ),
               child: SafeArea(
                 child: ListView(
@@ -649,11 +638,9 @@ class _MoretimeSettingsScreenState
           builder: (context, snapshot) {
             return CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(
-                middle: snapshot.connectionState == ConnectionState.waiting
-                    ? spinKit
-                    : Text(
-                        context.l10n.preferencesGiveMoreTime,
-                      ),
+                trailing: snapshot.connectionState == ConnectionState.waiting
+                    ? const CircularProgressIndicator.adaptive()
+                    : null,
               ),
               child: SafeArea(
                 child: ListView(

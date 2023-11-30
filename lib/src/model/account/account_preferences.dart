@@ -85,7 +85,7 @@ class AccountPreferences extends _$AccountPreferences {
   Future<void> setSubmitMove(SubmitMove value) => _setPref('submitMove', value);
 
   Future<void> _setPref<T>(String key, AccountPref<T> value) async {
-    await Future<void>.delayed(const Duration(milliseconds: 500));
+    await Future<void>.delayed(const Duration(milliseconds: 200));
     await _repo.setPreference(key, value);
     ref.invalidateSelf();
   }
