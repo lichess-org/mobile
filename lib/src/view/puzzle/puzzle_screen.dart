@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
@@ -203,8 +203,7 @@ class _Body extends ConsumerWidget {
     final puzzleState = ref.watch(ctrlProvider);
 
     final currentEvalBest = ref.watch(
-      engineEvaluationProvider(puzzleState.evaluationContext)
-          .select((s) => s.eval?.bestMove),
+      engineEvaluationProvider.select((s) => s.eval?.bestMove),
     );
     final evalBestMove =
         (currentEvalBest ?? puzzleState.node.eval?.bestMove)?.cg;
@@ -249,7 +248,7 @@ class _Body extends ConsumerWidget {
                 engineGauge: puzzleState.isEngineEnabled
                     ? EngineGaugeParams(
                         orientation: puzzleState.pov,
-                        localEvaluationContext: puzzleState.evaluationContext,
+                        isLocalEngineAvailable: true,
                         position: puzzleState.position,
                         savedEval: puzzleState.node.eval,
                       )

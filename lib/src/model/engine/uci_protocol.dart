@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:logging/logging.dart';
@@ -22,11 +23,10 @@ class UCIProtocol {
   final _log = Logger('UCIProtocol');
   final Map<String, String> _options;
   final _evalController = StreamController<EvalResult>.broadcast();
-  final _isComputingController = StreamController<bool>.broadcast();
   final _engineNameCompleter = Completer<String>();
+  final _isComputing = ValueNotifier(false);
 
   Stream<EvalResult> get evalStream => _evalController.stream;
-  Stream<bool> get isComputingStream => _isComputingController.stream;
 
   Future<String> get engineName => _engineNameCompleter.future;
 
@@ -37,19 +37,22 @@ class UCIProtocol {
   ClientEval? _currentEval;
   int _expectedPvs = 1;
 
+  ValueListenable<bool> get isComputing => _isComputing;
+
   void connected(void Function(String command) send) {
     _send = send;
 
     _sendAndLog('uci');
   }
 
-  void disconnected() {
+  void dispose() {
     if (_work != null && _currentEval != null) {
       _evalController.sink.add((_work!, _currentEval!));
     }
     _work = null;
     _send = null;
     _evalController.close();
+    _isComputing.dispose();
   }
 
   void _sendAndLog(String command) {
@@ -69,8 +72,6 @@ class UCIProtocol {
     _stop();
     _sendAndLog('isready');
   }
-
-  bool get isComputing => _work != null;
 
   void received(String line) {
     final parts = line.trim().split(RegExp(r'\s+'));
@@ -230,9 +231,9 @@ class UCIProtocol {
             ? 'go depth $maxPlies' // 'go infinite' would not finish even if entire tree search completed
             : 'go movetime 60000',
       );
-      _isComputingController.sink.add(true);
+      _isComputing.value = true;
     } else {
-      _isComputingController.sink.add(false);
+      _isComputing.value = false;
     }
   }
 }

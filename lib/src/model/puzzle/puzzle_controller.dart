@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -47,11 +46,14 @@ class PuzzleController extends _$PuzzleController {
     PuzzleContext initialContext, {
     PuzzleStreak? initialStreak,
   }) {
+    final evaluationService = ref.read(evaluationServiceProvider);
+
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
       _viewSolutionTimer?.cancel();
       _enableSolutionButtonTimer?.cancel();
       _engineEvalDebounce.dispose();
+      evaluationService.closeEngine();
     });
 
     return _loadNewContext(initialContext, initialStreak);
@@ -431,13 +433,10 @@ class PuzzleController extends _$PuzzleController {
       isLocalEvalEnabled: !state.isLocalEvalEnabled,
     );
     if (state.isLocalEvalEnabled) {
+      ref.read(evaluationServiceProvider).initEngine(state.evaluationContext);
       _startEngineEval();
     } else {
-      ref
-          .read(
-            engineEvaluationProvider(state.evaluationContext).notifier,
-          )
-          .stop();
+      ref.read(evaluationServiceProvider).closeEngine();
     }
   }
 
@@ -445,9 +444,7 @@ class PuzzleController extends _$PuzzleController {
     if (!state.isEngineEnabled) return;
     _engineEvalDebounce(
       () => ref
-          .read(
-            engineEvaluationProvider(state.evaluationContext).notifier,
-          )
+          .read(evaluationServiceProvider)
           .start(
             state.currentPath,
             _gameTree.nodesOn(state.currentPath).map(Step.fromNode),
@@ -538,9 +535,6 @@ class PuzzleState with _$PuzzleState {
   EvaluationContext get evaluationContext => EvaluationContext(
         variant: Variant.standard,
         initialPosition: initialPosition,
-        contextId: puzzle.puzzle.id,
-        multiPv: 1,
-        cores: maxEngineCores,
       );
 
   Position get position => node.position;

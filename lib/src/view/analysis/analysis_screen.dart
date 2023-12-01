@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
-import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -278,8 +278,7 @@ class _Board extends ConsumerWidget {
     );
 
     final evalBestMoves = ref.watch(
-      engineEvaluationProvider(analysisState.evaluationContext)
-          .select((s) => s.eval?.bestMoves),
+      engineEvaluationProvider.select((s) => s.eval?.bestMoves),
     );
 
     final currentNode = analysisState.currentNode;
@@ -386,9 +385,7 @@ class _EngineGaugeVertical extends ConsumerWidget {
       displayMode: EngineGaugeDisplayMode.vertical,
       params: EngineGaugeParams(
         orientation: analysisState.pov,
-        localEvaluationContext: analysisState.isEngineAvailable
-            ? analysisState.evaluationContext
-            : null,
+        isLocalEngineAvailable: analysisState.isEngineAvailable,
         position: analysisState.position,
         savedEval: analysisState.currentNode.eval,
       ),
@@ -418,9 +415,7 @@ class _ColumnTopTable extends ConsumerWidget {
                   displayMode: EngineGaugeDisplayMode.horizontal,
                   params: EngineGaugeParams(
                     orientation: analysisState.pov,
-                    localEvaluationContext: analysisState.isEngineAvailable
-                        ? analysisState.evaluationContext
-                        : null,
+                    isLocalEngineAvailable: analysisState.isEngineAvailable,
                     position: analysisState.position,
                     savedEval: analysisState.currentNode.eval ??
                         (analysisState.currentNode.pgnEval != null
@@ -453,9 +448,7 @@ class _EngineLines extends ConsumerWidget {
         (p) => p.numEvalLines,
       ),
     );
-    final engineEval = ref
-        .watch(engineEvaluationProvider(analysisState.evaluationContext))
-        .eval;
+    final engineEval = ref.watch(engineEvaluationProvider).eval;
     final eval = engineEval ?? analysisState.currentNode.eval;
 
     final emptyLines = List.filled(
@@ -741,15 +734,11 @@ class _EngineDepth extends ConsumerWidget {
         (value) => value.isEngineAvailable,
       ),
     );
-    final evalContext = ref.watch(
-      ctrlProvider.select((value) => value.evaluationContext),
-    );
     final currentNode = ref.watch(
       ctrlProvider.select((value) => value.currentNode),
     );
     final depth = ref.watch(
-          engineEvaluationProvider(evalContext)
-              .select((value) => value.eval?.depth),
+          engineEvaluationProvider.select((value) => value.eval?.depth),
         ) ??
         currentNode.eval?.depth;
 
@@ -759,7 +748,7 @@ class _EngineDepth extends ConsumerWidget {
               showPopover(
                 context: context,
                 bodyBuilder: (context) {
-                  return _StockfishInfo(evalContext, currentNode);
+                  return _StockfishInfo(currentNode);
                 },
                 direction: PopoverDirection.top,
                 width: 240,
@@ -800,15 +789,14 @@ class _EngineDepth extends ConsumerWidget {
 }
 
 class _StockfishInfo extends ConsumerWidget {
-  const _StockfishInfo(this.evalContext, this.currentNode);
+  const _StockfishInfo(this.currentNode);
 
-  final EvaluationContext evalContext;
   final AnalysisCurrentNode currentNode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final (eval: eval, state: engineState) =
-        ref.watch(engineEvaluationProvider(evalContext));
+        ref.watch(engineEvaluationProvider);
 
     final currentEval = eval ?? currentNode.eval;
 

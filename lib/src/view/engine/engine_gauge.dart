@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -25,10 +25,7 @@ enum EngineGaugeDisplayMode {
 @freezed
 class EngineGaugeParams with _$EngineGaugeParams {
   const factory EngineGaugeParams({
-    /// Provide evaluation context if local engine is available.
-    ///
-    /// If null, only saved evaluation will be displayed.
-    EvaluationContext? localEvaluationContext,
+    required bool isLocalEngineAvailable,
 
     /// Only used for vertical display mode.
     required Side orientation,
@@ -69,10 +66,8 @@ class EngineGauge extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final localEval = params.localEvaluationContext != null
-        ? ref
-            .watch(engineEvaluationProvider(params.localEvaluationContext!))
-            .eval
+    final localEval = params.isLocalEngineAvailable
+        ? ref.watch(engineEvaluationProvider).eval
         : null;
 
     return localEval != null

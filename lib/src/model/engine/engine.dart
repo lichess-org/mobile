@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:stockfish/stockfish.dart';
 
@@ -14,8 +15,7 @@ enum EngineState {
 }
 
 abstract class Engine {
-  EngineState get state;
-  Stream<EngineState> get stateStream;
+  ValueListenable<EngineState> get state;
   String get name;
   Stream<EvalResult> start(Work work);
   void stop();
@@ -27,27 +27,15 @@ class StockfishEngine implements Engine {
 
   Stockfish? _stockfish;
   String _name = 'Stockfish';
-  bool _loaded = false;
   StreamSubscription<String>? _stdoutSubscription;
-  StreamSubscription<bool>? _isComputingSubscription;
 
-  final StreamController<EngineState> _stateStreamController =
-      StreamController<EngineState>.broadcast()..add(EngineState.initial);
+  final _state = ValueNotifier(EngineState.initial);
 
   final UCIProtocol _protocol;
   final _log = Logger('StockfishEngine');
 
   @override
-  EngineState get state => _stockfish == null
-      ? EngineState.initial
-      : !_loaded
-          ? EngineState.loading
-          : _protocol.isComputing
-              ? EngineState.computing
-              : EngineState.idle;
-
-  @override
-  Stream<EngineState> get stateStream => _stateStreamController.stream;
+  ValueListenable<EngineState> get state => _state;
 
   @override
   String get name => _name;
@@ -61,17 +49,16 @@ class StockfishEngine implements Engine {
 
     if (_stockfish == null) {
       stockfishAsync().then((stockfish) {
-        _stateStreamController.sink.add(EngineState.loading);
+        _state.value = EngineState.loading;
         _stockfish = stockfish;
         _stdoutSubscription = stockfish.stdout.listen((line) {
           _protocol.received(line);
         });
-        _isComputingSubscription =
-            _protocol.isComputingStream.listen((isComputing) {
-          if (isComputing) {
-            _stateStreamController.sink.add(EngineState.computing);
+        _protocol.isComputing.addListener(() {
+          if (_protocol.isComputing.value) {
+            _state.value = EngineState.computing;
           } else {
-            _stateStreamController.sink.add(EngineState.idle);
+            _state.value = EngineState.idle;
           }
         });
         _protocol.connected((String cmd) {
@@ -79,8 +66,7 @@ class StockfishEngine implements Engine {
         });
         _protocol.engineName.then((name) {
           _name = name;
-          _loaded = true;
-          _stateStreamController.sink.add(EngineState.idle);
+          _state.value = EngineState.idle;
         });
       });
     }
@@ -97,8 +83,8 @@ class StockfishEngine implements Engine {
   void dispose() {
     _log.info('engine disposed');
     _stdoutSubscription?.cancel();
-    _isComputingSubscription?.cancel();
-    _protocol.disconnected();
+    _state.dispose();
+    _protocol.dispose();
     _stockfish?.dispose();
     _stockfish = null;
   }

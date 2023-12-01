@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/engine/engine_evaluation.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
@@ -53,9 +53,12 @@ class AnalysisController extends _$AnalysisController {
 
   @override
   AnalysisState build(AnalysisOptions options) {
+    final evaluationService = ref.read(evaluationServiceProvider);
+
     ref.onDispose(() {
       _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
+      evaluationService.closeEngine();
     });
 
     UciPath path = UciPath.empty;
@@ -101,14 +104,6 @@ class AnalysisController extends _$AnalysisController {
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
 
-    final evalContext = EvaluationContext(
-      variant: options.variant,
-      initialPosition: _root.position,
-      contextId: options.id,
-      multiPv: prefs.numEvalLines,
-      cores: prefs.numEngineCores,
-    );
-
     // We know ACPL chart data is available in the PGN if the server analysis is
     // available.
     // Works only for lichess games.
@@ -130,11 +125,8 @@ class AnalysisController extends _$AnalysisController {
             .toList(growable: false)
         : null;
 
-    _startEngineEvalTimer = Timer(const Duration(milliseconds: 300), () {
-      _startEngineEval();
-    });
-
-    return AnalysisState(
+    final analysisState = AnalysisState(
+      variant: options.variant,
       id: options.id,
       currentPath: currentPath,
       isOnMainline: _root.isOnMainline(currentPath),
@@ -144,14 +136,33 @@ class AnalysisController extends _$AnalysisController {
       pgnRootComments: rootComments,
       lastMove: lastMove,
       pov: options.orientation,
-      evaluationContext: evalContext,
       contextOpening: options.opening,
       isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
       displayMode: DisplayMode.moves,
       acplChartData: acplChartData?.lock,
     );
+
+    if (analysisState.isEngineAvailable) {
+      ref.read(evaluationServiceProvider).initEngine(
+            _evaluationContext,
+            EvaluationOptions(
+              multiPv: prefs.numEvalLines,
+              cores: prefs.numEngineCores,
+            ),
+          );
+      _startEngineEvalTimer = Timer(const Duration(milliseconds: 150), () {
+        _startEngineEval();
+      });
+    }
+
+    return analysisState;
   }
+
+  EvaluationContext get _evaluationContext => EvaluationContext(
+        variant: options.variant,
+        initialPosition: _root.position,
+      );
 
   void onUserMove(Move move) {
     if (!state.position.isLegal(move)) return;
@@ -191,9 +202,18 @@ class AnalysisController extends _$AnalysisController {
     );
 
     if (state.isEngineAvailable) {
+      final prefs = ref.read(analysisPreferencesProvider);
+      ref.read(evaluationServiceProvider).initEngine(
+            _evaluationContext,
+            EvaluationOptions(
+              multiPv: prefs.numEvalLines,
+              cores: prefs.numEngineCores,
+            ),
+          );
       _startEngineEval();
     } else {
       _stopEngineEval();
+      ref.read(evaluationServiceProvider).closeEngine();
     }
   }
 
@@ -202,18 +222,22 @@ class AnalysisController extends _$AnalysisController {
         .read(analysisPreferencesProvider.notifier)
         .setNumEvalLines(numEvalLines);
 
+    ref.read(evaluationServiceProvider).setOptions(
+          EvaluationOptions(
+            multiPv: numEvalLines,
+            cores: ref.read(analysisPreferencesProvider).numEngineCores,
+          ),
+        );
+
     _root.updateAll((node) => node.eval = null);
 
     state = state.copyWith(
-      evaluationContext: state.evaluationContext.copyWith(
-        multiPv: numEvalLines,
-      ),
       currentNode:
           AnalysisCurrentNode.fromNode(_root.nodeAt(state.currentPath)),
     );
 
     _startEngineEvalTimer?.cancel();
-    _startEngineEvalTimer = Timer(const Duration(milliseconds: 200), () {
+    _startEngineEvalTimer = Timer(const Duration(milliseconds: 100), () {
       _startEngineEval();
     });
   }
@@ -223,14 +247,15 @@ class AnalysisController extends _$AnalysisController {
         .read(analysisPreferencesProvider.notifier)
         .setEngineCores(numEngineCores);
 
-    state = state.copyWith(
-      evaluationContext: state.evaluationContext.copyWith(
-        cores: numEngineCores,
-      ),
-    );
+    ref.read(evaluationServiceProvider).setOptions(
+          EvaluationOptions(
+            multiPv: ref.read(analysisPreferencesProvider).numEvalLines,
+            cores: numEngineCores,
+          ),
+        );
 
     _startEngineEvalTimer?.cancel();
-    _startEngineEvalTimer = Timer(const Duration(milliseconds: 200), () {
+    _startEngineEvalTimer = Timer(const Duration(milliseconds: 100), () {
       _startEngineEval();
     });
   }
@@ -346,9 +371,7 @@ class AnalysisController extends _$AnalysisController {
   void _startEngineEval() {
     if (!state.isEngineAvailable) return;
     ref
-        .read(
-          engineEvaluationProvider(state.evaluationContext).notifier,
-        )
+        .read(evaluationServiceProvider)
         .start(
           state.currentPath,
           _root.nodesOn(state.currentPath).map(Step.fromNode),
@@ -367,7 +390,7 @@ class AnalysisController extends _$AnalysisController {
   }
 
   void _stopEngineEval() {
-    ref.read(engineEvaluationProvider(state.evaluationContext).notifier).stop();
+    ref.read(evaluationServiceProvider).stop();
     // update the current node with last cached eval
     state = state.copyWith(
       currentNode:
@@ -386,6 +409,9 @@ class AnalysisState with _$AnalysisState {
   const AnalysisState._();
 
   const factory AnalysisState({
+    /// The variant of the analysis.
+    required Variant variant,
+
     /// Immutable view of the whole tree
     required ViewRoot root,
 
@@ -407,9 +433,6 @@ class AnalysisState with _$AnalysisState {
 
     /// The side to display the board from.
     required Side pov,
-
-    /// Context for engine evaluation.
-    required EvaluationContext evaluationContext,
 
     /// Whether local evaluation is allowed for this analysis.
     required bool isLocalEvaluationAllowed,
@@ -452,9 +475,7 @@ class AnalysisState with _$AnalysisState {
   /// Whether the engine is available for evaluation
   bool get isEngineAvailable =>
       isLocalEvaluationAllowed &&
-      engineSupportedVariants.contains(
-        evaluationContext.variant,
-      ) &&
+      engineSupportedVariants.contains(variant) &&
       isLocalEvaluationEnabled;
 
   Position get position => currentNode.position;
