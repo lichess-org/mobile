@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
@@ -79,6 +80,7 @@ class GameBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = gameControllerProvider(id);
+    ref.watch(chatControllerProvider);
 
     ref.listen(
       ctrlProvider,
@@ -533,37 +535,49 @@ class _GameBottomBar extends ConsumerWidget {
                     pushPlatformRoute(
                       context,
                       builder: (BuildContext context) {
-                        return MessageScreen(
-                          ctrlProvider: gameControllerProvider(id),
-                        );
+                        return MessageScreen(game: gameState.game);
                       },
                     );
                   },
                   icon: CupertinoIcons.chat_bubble,
                 ),
-                if (gameState.unreadMessages > 0)
-                  Positioned(
-                    top: 9.0,
-                    right: 6.0,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        const Icon(
-                          Icons.brightness_1,
-                          size: 16.0,
-                        ),
-                        Text(
-                          gameState.unreadMessages.toString(),
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 8.0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
+                ref.watch(chatControllerProvider).when(
+                      data: (data) {
+                        if (data.unreadMessages > 0) {
+                          return Positioned(
+                            top: 9.0,
+                            right: 6.0,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.brightness_1,
+                                  size: 16.0,
+                                ),
+                                Text(
+                                  data.unreadMessages.toString(),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 8.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      },
+                      loading: () => const SizedBox.shrink(),
+                      error: (error, stackTrace) {
+                        debugPrint(
+                          'SEVERE: [ChatScreen] could not load chat; $error\n$stackTrace',
+                        );
+                        return const SizedBox.shrink();
+                      },
                     ),
-                  ),
               ],
             ),
             RepeatButton(

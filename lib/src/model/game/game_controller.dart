@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -25,7 +24,6 @@ import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:lichess_mobile/src/view/game/message.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -82,8 +80,6 @@ class GameController extends _$GameController {
         return GameState(
           game: fullEvent.game,
           stepCursor: fullEvent.game.steps.length - 1,
-          messages: IList(),
-          unreadMessages: 0,
           stopClockWaitingForServerAck: false,
         );
       },
@@ -242,23 +238,12 @@ class GameController extends _$GameController {
     );
   }
 
-  void resetUnreadMessages() {
-    final curState = state.requireValue;
-    state = AsyncValue.data(
-      curState.copyWith(unreadMessages: 0),
-    );
-  }
-
   void onFlag() {
     _onFlagThrottler(() {
       if (state.hasValue) {
         _socket.send('flag', state.requireValue.game.sideToMove.name);
       }
     });
-  }
-
-  void onUserMessage(String message) {
-    _sendMessageToSocket(message);
   }
 
   void moreTime() {
@@ -339,15 +324,6 @@ class GameController extends _$GameController {
     );
 
     _transientMoveTimer = Timer(const Duration(seconds: 10), _resyncGameData);
-  }
-
-  void _sendMessageToSocket(
-    String message,
-  ) {
-    _socket.send(
-      'talk',
-      message,
-    );
   }
 
   /// Move feedback while playing
@@ -461,8 +437,6 @@ class GameController extends _$GameController {
           GameState(
             game: fullEvent.game,
             stepCursor: fullEvent.game.steps.length - 1,
-            messages: state.requireValue.messages,
-            unreadMessages: state.requireValue.unreadMessages,
             stopClockWaitingForServerAck: false,
             // cancel the premove to avoid playing wrong premove when the full
             // game data is reloaded
@@ -745,35 +719,6 @@ class GameController extends _$GameController {
           ),
         );
 
-      // Event sent when a message is received
-      case 'message':
-        final data = event.data as Map<String, dynamic>;
-        final message = data["t"] as String;
-        final username = data["u"] as String;
-        final curState = state.requireValue;
-        final player = curState.game.me!.user?.name;
-        final opponent = curState.game.me!.user?.name;
-        final sender = username == "lichess"
-            ? Sender.server
-            : username == player
-                ? Sender.player
-                : username == opponent
-                    ? Sender.opponent
-                    : null;
-        if (sender != null) {
-          state = AsyncValue.data(
-            curState.copyWith(
-              messages: curState.messages.add(
-                Message(
-                  message: message,
-                  sender: sender,
-                ),
-              ),
-              unreadMessages: curState.unreadMessages + 1,
-            ),
-          );
-        }
-
       // Event sent when a player adds or cancels a rematch offer
       case 'rematchOffer':
         final side = pick(event.data).asSideOrNull();
@@ -849,8 +794,6 @@ class GameState with _$GameState {
   const factory GameState({
     required PlayableGame game,
     required int stepCursor,
-    required IList<Message> messages,
-    required int unreadMessages,
     int? lastDrawOfferAtPly,
     Duration? opponentLeftCountdown,
     required bool stopClockWaitingForServerAck,

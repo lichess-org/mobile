@@ -1,23 +1,22 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/model/game/chat_controller.dart';
+import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/game/message.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class MessageScreen extends ConsumerStatefulWidget {
-  final GameControllerProvider ctrlProvider;
-  const MessageScreen({
-    required this.ctrlProvider,
-  });
+  final PlayableGame game;
+
+  const MessageScreen({required this.game});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MessageScreenState();
@@ -41,34 +40,26 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
 
   @override
   void didPop() {
-    ref.read(widget.ctrlProvider.notifier).resetUnreadMessages();
+    ref.read(chatControllerProvider.notifier).resetUnreadMessages();
     super.didPop();
   }
 
   @override
   Widget build(BuildContext context) {
-    final gameState = ref.watch(widget.ctrlProvider).requireValue;
-    final opponent = gameState.game.opponent!;
-    final body = _Body(
-      messages: gameState.messages,
-      onMessage: (message) {
-        ref.read(widget.ctrlProvider.notifier).onUserMessage(message);
-      },
-    );
+    final body = _Body(game: widget.game);
 
     return PlatformWidget(
       androidBuilder: (context) =>
-          _androidBuilder(context: context, opponent: opponent, body: body),
-      iosBuilder: (context) =>
-          _iosBuilder(context: context, opponent: opponent, body: body),
+          _androidBuilder(context: context, body: body),
+      iosBuilder: (context) => _iosBuilder(context: context, body: body),
     );
   }
 
   Widget _androidBuilder({
     required BuildContext context,
     required Widget body,
-    required Player opponent,
   }) {
+    final opponent = widget.game.opponent!;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -85,8 +76,8 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
   Widget _iosBuilder({
     required BuildContext context,
     required Widget body,
-    required Player opponent,
   }) {
+    final opponent = widget.game.opponent!;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         leading: IconButton(
@@ -126,41 +117,54 @@ class _ChatTitle extends StatelessWidget {
   }
 }
 
-class _Body extends StatelessWidget {
-  final IList<Message> messages;
-  final void Function(String message) onMessage;
+class _Body extends ConsumerWidget {
+  final PlayableGame game;
 
   const _Body({
-    required this.messages,
-    required this.onMessage,
+    required this.game,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.builder(
-            reverse: true,
-            itemCount: messages.length,
-            itemBuilder: (context, index) {
-              final message = messages[messages.length - index - 1];
-              return switch (message.sender) {
-                Sender.server => _MessageAction(message: message.message),
-                Sender.player => _MessageBubble(
-                    you: true,
-                    message: message.message,
-                  ),
-                Sender.opponent => _MessageBubble(
-                    you: false,
-                    message: message.message,
-                  )
-              };
-            },
+  Widget build(BuildContext context, WidgetRef ref) {
+    final chatState = ref.watch(chatControllerProvider);
+
+    return chatState.when(
+      data: (data) => Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              reverse: true,
+              itemCount: data.messages.length,
+              itemBuilder: (context, index) {
+                final message = data.messages[data.messages.length - index - 1];
+                return (message.username == "lichess")
+                    ? _MessageAction(message: message.message)
+                    : (message.username == game.me?.user?.name)
+                        ? _MessageBubble(
+                            you: true,
+                            message: message.message,
+                          )
+                        : _MessageBubble(
+                            you: false,
+                            message: message.message,
+                          );
+              },
+            ),
           ),
-        ),
-        _ChatBottomBar(onMessage: onMessage),
-      ],
+          _ChatBottomBar(),
+        ],
+      ),
+      loading: () => const CenterLoadingIndicator(),
+      error: (error, stackTrace) {
+        debugPrint(
+          'SEVERE: [ChatScreen] could not load chat; $error\n$stackTrace',
+        );
+        return FullScreenRetryRequest(
+          onRetry: () {
+            ref.invalidate(chatControllerProvider);
+          },
+        );
+      },
     );
   }
 }
@@ -223,16 +227,12 @@ class _MessageAction extends StatelessWidget {
   }
 }
 
-class _ChatBottomBar extends StatefulWidget {
-  final void Function(String message) onMessage;
-
-  const _ChatBottomBar({required this.onMessage});
-
+class _ChatBottomBar extends ConsumerStatefulWidget {
   @override
-  State<StatefulWidget> createState() => _ChatBottomBarState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _ChatBottomBarState();
 }
 
-class _ChatBottomBarState extends State<_ChatBottomBar> {
+class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
   final _textController = TextEditingController();
 
   @override
@@ -269,7 +269,9 @@ class _ChatBottomBarState extends State<_ChatBottomBar> {
                     builder: (context, value, child) => PlatformIconButton(
                       onTap: value.text.isNotEmpty
                           ? () {
-                              widget.onMessage(_textController.text);
+                              ref
+                                  .read(chatControllerProvider.notifier)
+                                  .onUserMessage(_textController.text);
                               _textController.clear();
                             }
                           : null,
