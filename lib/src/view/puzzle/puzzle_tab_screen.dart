@@ -345,11 +345,11 @@ class _PuzzleButton extends StatelessWidget {
             : Theme.of(context).colorScheme.primary,
       ),
       title: Text(
-        context.l10n.puzzleDesc,
+        context.l10n.puzzles,
         style: Styles.sectionTitle,
       ),
       subtitle: Text(
-        subtitle ?? 'Personalized tactical training with no time limit.',
+        subtitle ?? context.l10n.puzzleDesc,
       ),
       onTap: onTap,
     );
