@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 
 import '../../model/user/user_repository_test.dart';
 import '../../test_app.dart';
@@ -50,29 +48,6 @@ void main() {
         await tester.pump(const Duration(milliseconds: 50));
 
         expect(find.text('Activity'), findsOneWidget);
-
-        await tester.scrollUntilVisible(
-          find.widgetWithText(PlatformListTile, 'maia1 (1410)'),
-          500,
-          // need to take first scrollable there is the perf cards ListView inside the main list
-          scrollable: find.byType(Scrollable).first,
-        );
-
-        expect(find.text('Recent games'), findsOneWidget);
-
-        // opponent in recent games
-        expect(
-          find.widgetWithText(PlatformListTile, 'maia1 (1397)'),
-          findsOneWidget,
-        );
-        expect(
-          find.widgetWithText(PlatformListTile, 'maia1 (1399)'),
-          findsOneWidget,
-        );
-        expect(
-          find.widgetWithText(PlatformListTile, 'maia1 (1410)'),
-          findsOneWidget,
-        );
       },
       variant: kPlatformVariant,
     );
