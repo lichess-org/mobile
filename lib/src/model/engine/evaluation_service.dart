@@ -33,7 +33,7 @@ class EvaluationService {
 
   final int maxMemory;
 
-  StockfishEngine? _engine;
+  Engine? _engine;
 
   EvaluationContext? _context;
   EvaluationOptions _options = EvaluationOptions(
@@ -43,12 +43,22 @@ class EvaluationService {
 
   /// Initialize the engine with the given context and options.
   ///
+  /// An optional [engineFactory] can be provided, it defaults to Stockfish.
+  ///
   /// If [options] is not provided, the default options are used.
-  /// It is the caller's responsibility to close the engine.
-  void initEngine(EvaluationContext context, [EvaluationOptions? options]) {
+  /// This method must be called before calling [start]. It is the caller's
+  /// responsibility to close the engine.
+  ///
+  /// If the engine is already initialized, this method does nothing.
+  void initEngine(
+    EvaluationContext context, {
+    Engine Function() engineFactory = StockfishEngine.new,
+    EvaluationOptions? options,
+  }) {
+    if (_engine != null) return;
     _context = context;
     if (options != null) _options = options;
-    _engine = StockfishEngine();
+    _engine = engineFactory.call();
     _engine!.state.addListener(() {
       if (_engine!.state.value == EngineState.initial) {
         ref.read(engineEvaluationProvider.notifier).reset();
@@ -70,7 +80,10 @@ class EvaluationService {
     _context = null;
   }
 
-  /// Start the engine with the given [path] and [steps].
+  /// Start the engine evaluation with the given [path] and [steps].
+  ///
+  /// Returns a stream of [EvalResult]s. The stream is throttled to emit at most
+  /// one value every 200 milliseconds.
   ///
   /// [initEngine] must be called before calling this method.
   Stream<EvalResult>? start(

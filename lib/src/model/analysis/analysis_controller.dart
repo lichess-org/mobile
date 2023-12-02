@@ -146,12 +146,12 @@ class AnalysisController extends _$AnalysisController {
     if (analysisState.isEngineAvailable) {
       ref.read(evaluationServiceProvider).initEngine(
             _evaluationContext,
-            EvaluationOptions(
+            options: EvaluationOptions(
               multiPv: prefs.numEvalLines,
               cores: prefs.numEngineCores,
             ),
           );
-      _startEngineEvalTimer = Timer(const Duration(milliseconds: 150), () {
+      _startEngineEvalTimer = Timer(const Duration(milliseconds: 50), () {
         _startEngineEval();
       });
     }
@@ -205,7 +205,7 @@ class AnalysisController extends _$AnalysisController {
       final prefs = ref.read(analysisPreferencesProvider);
       ref.read(evaluationServiceProvider).initEngine(
             _evaluationContext,
-            EvaluationOptions(
+            options: EvaluationOptions(
               multiPv: prefs.numEvalLines,
               cores: prefs.numEngineCores,
             ),
@@ -236,10 +236,7 @@ class AnalysisController extends _$AnalysisController {
           AnalysisCurrentNode.fromNode(_root.nodeAt(state.currentPath)),
     );
 
-    _startEngineEvalTimer?.cancel();
-    _startEngineEvalTimer = Timer(const Duration(milliseconds: 100), () {
-      _startEngineEval();
-    });
+    _startEngineEval();
   }
 
   void setEngineCores(int numEngineCores) {
@@ -254,10 +251,7 @@ class AnalysisController extends _$AnalysisController {
           ),
         );
 
-    _startEngineEvalTimer?.cancel();
-    _startEngineEvalTimer = Timer(const Duration(milliseconds: 100), () {
-      _startEngineEval();
-    });
+    _startEngineEval();
   }
 
   void updatePgnHeader(String key, String value) {
