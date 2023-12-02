@@ -19,8 +19,8 @@ import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -201,9 +201,9 @@ class _WatchTvWidget extends ConsumerWidget {
             return PlatformListTile(
               leading: Icon(snapshot.channel.icon),
               title: Text(snapshot.channel.label),
-              subtitle: PlayerTitle(
-                userName: snapshot.player.name,
-                title: snapshot.player.title,
+              subtitle: UserFullNameWidget.player(
+                user: snapshot.player.asPlayer.user,
+                aiLevel: snapshot.player.asPlayer.aiLevel,
                 rating: snapshot.player.rating,
               ),
               onTap: () => pushPlatformRoute(

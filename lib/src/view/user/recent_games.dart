@@ -14,8 +14,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class RecentGames extends ConsumerWidget {
@@ -65,9 +65,11 @@ class RecentGames extends ConsumerWidget {
           header: Text(context.l10n.recentGames),
           hasLeading: true,
           children: data.map((game) {
-            final mySide = game.white.id == userId ? Side.white : Side.black;
-            final me = game.white.id == userId ? game.white : game.black;
-            final opponent = game.white.id == userId ? game.black : game.white;
+            final mySide =
+                game.white.user?.id == userId ? Side.white : Side.black;
+            final me = game.white.user?.id == userId ? game.white : game.black;
+            final opponent =
+                game.white.user?.id == userId ? game.black : game.white;
 
             return GameListTile(
               onTap: game.variant.isSupported
@@ -77,16 +79,17 @@ class RecentGames extends ConsumerWidget {
                         rootNavigator: true,
                         builder: (context) => ArchivedGameScreen(
                           gameData: game,
-                          orientation:
-                              userId == game.white.id ? Side.white : Side.black,
+                          orientation: userId == game.white.user?.id
+                              ? Side.white
+                              : Side.black,
                         ),
                       );
                     }
                   : null,
               icon: game.perf.icon,
-              playerTitle: PlayerTitle(
-                userName: opponent.displayName(context),
-                title: opponent.title,
+              playerTitle: UserFullNameWidget.player(
+                user: opponent.user,
+                aiLevel: opponent.aiLevel,
                 rating: opponent.rating,
               ),
               subtitle: Text(

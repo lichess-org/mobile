@@ -33,6 +33,7 @@ class LeaderboardUser with _$LeaderboardUser {
     required String username,
     bool? patron,
     String? title,
+    String? flair,
     bool? online,
     required int rating,
     required int progress,
@@ -42,6 +43,7 @@ class LeaderboardUser with _$LeaderboardUser {
         id: id,
         name: username,
         title: title,
+        flair: flair,
         isPatron: patron,
       );
 }

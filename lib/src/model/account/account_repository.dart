@@ -118,7 +118,7 @@ class AccountRepository {
           (result) => result.flatMap(
             (response) => readJsonObjectFromResponse(
               response,
-              mapper: User.fromJson,
+              mapper: User.fromServerJson,
               logger: _log,
             ),
           ),
@@ -227,6 +227,8 @@ OngoingGame _ongoingGameFromPick(RequiredPick pick) {
           GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
     ),
     opponent: pick('opponent').asLightUserOrThrow(),
+    opponentRating: pick('opponent', 'rating').asIntOrNull(),
+    opponentAiLevel: pick('opponent', 'aiLevel').asIntOrNull(),
     secondsLeft: pick('secondsLeft').asIntOrNull(),
     isMyTurn: pick('isMyTurn').asBoolOrThrow(),
   );

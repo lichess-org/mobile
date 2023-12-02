@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/view/correspondence/correspondence_game_scree
 import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class OngoingGamesScreen extends ConsumerWidget {
@@ -76,10 +76,10 @@ class OngoingGamePreview extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          PlayerTitle(
-            userName: game.opponent.name,
-            title: game.opponent.title,
-            isPatron: game.opponent.isPatron,
+          UserFullNameWidget.player(
+            user: game.opponent,
+            rating: game.opponentRating,
+            aiLevel: game.opponentAiLevel,
             style: Styles.boardPreviewTitle,
           ),
           if (game.secondsLeft != null)

@@ -39,9 +39,9 @@ abstract mixin class BaseGame {
   Position get lastPosition;
 
   Side? playerSideOf(UserId id) {
-    if (white.id == id) {
+    if (white.user?.id == id) {
       return Side.white;
-    } else if (black.id == id) {
+    } else if (black.user?.id == id) {
       return Side.black;
     } else {
       return null;

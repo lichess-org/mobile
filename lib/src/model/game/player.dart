@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
@@ -13,10 +12,7 @@ class Player with _$Player {
   const Player._();
 
   const factory Player({
-    UserId? id,
-    String? name,
-    String? title,
-    bool? patron,
+    LightUser? user,
     int? aiLevel,
     int? rating,
     int? ratingDiff,
@@ -40,19 +36,10 @@ class Player with _$Player {
 
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
 
-  LightUser? get lightUser => id != null
-      ? LightUser(
-          id: id!,
-          name: name ?? id!.value,
-          title: title,
-          isPatron: patron,
-        )
-      : null;
-
   bool get isAI => aiLevel != null;
 
   String displayName(BuildContext context) =>
-      name ??
+      user?.name ??
       (aiLevel != null
           ? context.l10n.aiNameLevelAiLevel(
               'Stockfish',

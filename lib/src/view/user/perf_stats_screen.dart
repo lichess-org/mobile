@@ -21,9 +21,9 @@ import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
 
@@ -81,7 +81,7 @@ class _Title extends StatelessWidget {
     return Row(
       children: [
         Flexible(
-          child: PlayerTitle(userName: user.username, title: user.title),
+          child: UserFullNameWidget(user: user.lightUser),
         ),
         Flexible(
           child: Text(
@@ -610,7 +610,7 @@ class _GameListWidget extends ConsumerWidget {
                     rootNavigator: true,
                     builder: (context) => ArchivedGameScreen(
                       gameData: gameData,
-                      orientation: user.id == gameData.white.id
+                      orientation: user.id == gameData.white.user?.id
                           ? Side.white
                           : Side.black,
                     ),
@@ -618,9 +618,8 @@ class _GameListWidget extends ConsumerWidget {
                 }
               });
             },
-            playerTitle: PlayerTitle(
-              userName: game.opponentName ?? '?',
-              title: game.opponentTitle,
+            playerTitle: UserFullNameWidget(
+              user: game.opponent,
               rating: game.opponentRating,
             ),
             subtitle: Text(

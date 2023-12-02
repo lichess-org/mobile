@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -109,12 +110,14 @@ final gameData = ArchivedGameData(
   createdAt: DateTime.parse('2023-01-11 14:30:22.389'),
   lastMoveAt: DateTime.parse('2023-01-11 14:33:56.416'),
   status: GameStatus.mate,
-  white: const Player(name: 'Stockfish', aiLevel: 1),
+  white: const Player(aiLevel: 1),
   black: const Player(
-    id: UserId('veloce'),
-    name: 'veloce',
+    user: LightUser(
+      id: UserId('veloce'),
+      name: 'veloce',
+      isPatron: true,
+    ),
     rating: 1435,
-    patron: true,
   ),
   variant: Variant.standard,
   lastFen: '1r3rk1/p1pb1ppp/3p4/8/1nBN1P2/1P6/PBPP1nPP/R1K1q3 w - - 4 1',

@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class LiveTvChannelsScreen extends ConsumerStatefulWidget {
   const LiveTvChannelsScreen({super.key});
@@ -147,9 +147,9 @@ class _Body extends ConsumerWidget {
                     color: LichessColors.brag,
                     size: 30,
                   ),
-                  PlayerTitle(
-                    userName: game.player.asPlayer.displayName(context),
-                    title: game.player.title,
+                  UserFullNameWidget.player(
+                    user: game.player.asPlayer.user,
+                    aiLevel: game.player.asPlayer.aiLevel,
                     rating: game.player.rating,
                   ),
                 ],

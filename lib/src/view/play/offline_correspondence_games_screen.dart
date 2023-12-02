@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class OfflineCorrespondenceGamesScreen extends ConsumerWidget {
@@ -84,10 +84,8 @@ class OfflineCorrespondenceGamePreview extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          PlayerTitle(
-            userName: game.opponent.name ?? context.l10n.anonymous,
-            title: game.opponent.title,
-            isPatron: game.opponent.patron,
+          UserFullNameWidget(
+            user: game.opponent.user,
             style: Styles.boardPreviewTitle,
           ),
           if (game.myTimeLeft(lastModified) != null)

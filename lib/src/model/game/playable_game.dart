@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
 import 'game.dart';
@@ -220,10 +221,7 @@ GamePrefs _gamePrefsFromPick(RequiredPick pick) {
 
 Player _playerFromUserGamePick(RequiredPick pick) {
   return Player(
-    id: pick('user', 'id').asUserIdOrNull(),
-    name: pick('user', 'name').asStringOrNull(),
-    patron: pick('user', 'patron').asBoolOrNull(),
-    title: pick('user', 'title').asStringOrNull(),
+    user: pick('user').asLightUserOrNull(),
     rating: pick('rating').asIntOrNull(),
     provisional: pick('provisional').asBoolOrNull(),
     ratingDiff: pick('ratingDiff').asIntOrNull(),

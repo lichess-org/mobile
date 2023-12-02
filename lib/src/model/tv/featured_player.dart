@@ -1,6 +1,8 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'featured_player.freezed.dart';
 
@@ -26,5 +28,9 @@ class FeaturedPlayer with _$FeaturedPlayer {
     );
   }
 
-  Player get asPlayer => Player(name: name, title: title, rating: rating);
+  Player get asPlayer => Player(
+        user:
+            LightUser(id: UserId(name.toLowerCase()), name: name, title: title),
+        rating: rating,
+      );
 }

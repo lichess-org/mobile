@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'countries.dart';
@@ -95,8 +96,4 @@ class Location extends StatelessWidget {
       ],
     );
   }
-}
-
-String lichessFlagSrc(String country) {
-  return '$kLichessHost/assets/images/flags/$country.png';
 }

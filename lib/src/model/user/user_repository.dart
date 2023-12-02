@@ -25,7 +25,7 @@ class UserRepository {
           (result) => result.flatMap(
             (response) => readJsonObjectFromResponse(
               response,
-              mapper: User.fromJson,
+              mapper: User.fromServerJson,
               logger: _log,
             ),
           ),
@@ -299,6 +299,7 @@ LeaderboardUser _leaderboardUserFromPick(RequiredPick pick) {
     id: pick('id').asUserIdOrThrow(),
     username: pick('username').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
+    flair: pick('flair').asStringOrNull(),
     patron: pick('patron').asBoolOrNull(),
     online: pick('online').asBoolOrNull(),
     rating: pick('perfs')
@@ -329,6 +330,7 @@ LeaderboardUser _top1userFromPick(RequiredPick pick, Perf perf) {
     id: pick('id').asUserIdOrThrow(),
     username: pick('username').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
+    flair: pick('flair').asStringOrNull(),
     patron: pick('patron').asBoolOrNull(),
     rating: pick('perfs', perf.name, 'rating').asIntOrThrow(),
     progress: pick('perfs', perf.name, 'progress').asIntOrThrow(),

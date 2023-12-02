@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../../test_container.dart';
@@ -80,13 +81,17 @@ final corresGame = OfflineCorrespondenceGame(
   speed: Speed.correspondence,
   perf: Perf.classical,
   white: const Player(
-    id: UserId('whiteId'),
-    name: 'White',
+    user: LightUser(
+      id: UserId('whiteId'),
+      name: 'White',
+    ),
     rating: 1500,
   ),
   black: const Player(
-    id: UserId('blackId'),
-    name: 'Black',
+    user: LightUser(
+      id: UserId('blackId'),
+      name: 'Black',
+    ),
     rating: 1500,
   ),
   youAre: Side.white,

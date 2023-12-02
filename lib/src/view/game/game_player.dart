@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
+import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
@@ -57,7 +59,7 @@ class GamePlayer extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            if (player.patron == true)
+            if (player.user?.isPatron == true)
               Icon(
                 LichessIcons.patron,
                 size: 14,
@@ -74,9 +76,9 @@ class GamePlayer extends StatelessWidget {
                     player.onGame == true ? LichessColors.green : Colors.grey,
               ),
             const SizedBox(width: 5),
-            if (player.title != null) ...[
+            if (player.user?.title != null) ...[
               Text(
-                player.title!,
+                player.user!.title!,
                 style: TextStyle(
                   fontSize: playerFontSize,
                   fontWeight: FontWeight.bold,
@@ -95,13 +97,21 @@ class GamePlayer extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 5),
+            if (player.user?.flair != null) ...[
+              const SizedBox(width: 5),
+              CachedNetworkImage(
+                imageUrl: lichessFlairSrc(player.user!.flair!),
+                errorWidget: (_, __, ___) => kEmptyWidget,
+                width: 16,
+                height: 16,
+              ),
+            ],
             if (player.rating != null)
               RatingPrefAware(
                 child: Text.rich(
                   TextSpan(
                     text:
-                        '${player.rating}${player.provisional == true ? '?' : ''}',
+                        ' ${player.rating}${player.provisional == true ? '?' : ''}',
                     children: [
                       if (player.ratingDiff != null)
                         TextSpan(
@@ -173,12 +183,12 @@ class GamePlayer extends StatelessWidget {
               padding: const EdgeInsets.only(right: 20),
               child: shouldLinkToUserProfile
                   ? GestureDetector(
-                      onTap: player.lightUser != null
+                      onTap: player.user != null
                           ? () {
                               pushPlatformRoute(
                                 context,
                                 builder: (context) =>
-                                    UserScreen(user: player.lightUser!),
+                                    UserScreen(user: player.user!),
                               );
                             }
                           : null,

@@ -32,7 +32,7 @@ import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 import 'common_play_widgets.dart';
 
@@ -266,9 +266,12 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                             ? LichessIcons.circle
                             : LichessIcons.circle_empty,
                   ),
-                  title: PlayerTitle(
-                    userName: challenge.username,
-                    title: challenge.title,
+                  title: UserFullNameWidget(
+                    user: LightUser(
+                      id: UserId.fromUserName(challenge.username),
+                      name: challenge.username,
+                      title: challenge.title,
+                    ),
                     rating: challenge.rating,
                     provisional: challenge.provisional,
                   ),

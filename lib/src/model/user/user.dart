@@ -37,6 +37,7 @@ extension LightUserExtension on Pick {
         id: requiredPick('id').asUserIdOrThrow(),
         name: name,
         title: requiredPick('title').asStringOrNull(),
+        flair: requiredPick('flair').asStringOrNull(),
         isPatron: requiredPick('patron').asBoolOrNull(),
       );
     }
@@ -72,10 +73,15 @@ class User with _$User {
     Profile? profile,
   }) = _User;
 
-  LightUser get lightUser =>
-      LightUser(id: id, name: username, title: title, isPatron: isPatron);
+  LightUser get lightUser => LightUser(
+        id: id,
+        name: username,
+        title: title,
+        isPatron: isPatron,
+        flair: flair,
+      );
 
-  factory User.fromJson(Map<String, dynamic> json) =>
+  factory User.fromServerJson(Map<String, dynamic> json) =>
       User.fromPick(pick(json).required());
 
   factory User.fromPick(RequiredPick pick) {
@@ -85,6 +91,7 @@ class User with _$User {
       id: pick('id').asUserIdOrThrow(),
       username: pick('username').asStringOrThrow(),
       title: pick('title').asStringOrNull(),
+      flair: pick('flair').asStringOrNull(),
       isPatron: pick('patron').asBoolOrNull(),
       createdAt: pick('createdAt').asDateTimeFromMillisecondsOrThrow(),
       seenAt: pick('seenAt').asDateTimeFromMillisecondsOrNull(),
@@ -345,6 +352,7 @@ class UserStreak with _$UserStreak {
 
 @freezed
 class UserPerfGame with _$UserPerfGame {
+  const UserPerfGame._();
   const factory UserPerfGame({
     required DateTime finishedAt,
     required GameId gameId,
@@ -353,4 +361,12 @@ class UserPerfGame with _$UserPerfGame {
     String? opponentName,
     String? opponentTitle,
   }) = _UserPerfGame;
+
+  LightUser? get opponent => opponentId != null && opponentName != null
+      ? LightUser(
+          id: UserId(opponentId!),
+          name: opponentName!,
+          title: opponentTitle,
+        )
+      : null;
 }

@@ -20,6 +20,8 @@ class OngoingGame with _$OngoingGame {
     required LightUser opponent,
     required GameSource source,
     required bool isMyTurn,
+    int? opponentRating,
+    int? opponentAiLevel,
     Move? lastMove,
     int? secondsLeft,
   }) = _OngoingGame;

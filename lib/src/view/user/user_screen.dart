@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 import 'perf_cards.dart';
 import 'user_activity.dart';
@@ -30,11 +30,7 @@ class UserScreen extends ConsumerWidget {
     final asyncUser = ref.watch(userProvider(id: user.id));
     return Scaffold(
       appBar: AppBar(
-        title: PlayerTitle(
-          userName: user.name,
-          title: user.title,
-          isPatron: user.isPatron,
-        ),
+        title: UserFullNameWidget(user: user),
       ),
       body: asyncUser.when(
         data: (user) {
@@ -61,11 +57,7 @@ class UserScreen extends ConsumerWidget {
     final asyncUser = ref.watch(userProvider(id: user.id));
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: PlayerTitle(
-          userName: user.name,
-          title: user.title,
-          isPatron: user.isPatron,
-        ),
+        middle: UserFullNameWidget(user: user),
       ),
       child: asyncUser.when(
         data: (user) => SafeArea(

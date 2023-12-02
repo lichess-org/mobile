@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:logging/logging.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -177,10 +178,7 @@ ClockData _clockDataFromPick(RequiredPick pick) {
 
 Player _playerFromUserGamePick(RequiredPick pick) {
   return Player(
-    id: pick('user', 'id').asUserIdOrNull(),
-    name: pick('user', 'name').asStringOrNull(),
-    patron: pick('user', 'patron').asBoolOrNull(),
-    title: pick('user', 'title').asStringOrNull(),
+    user: pick('user').asLightUserOrNull(),
     rating: pick('rating').asIntOrNull(),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     aiLevel: pick('aiLevel').asIntOrNull(),

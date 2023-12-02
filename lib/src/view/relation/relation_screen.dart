@@ -12,8 +12,8 @@ import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class RelationScreen extends ConsumerStatefulWidget {
   const RelationScreen({super.key});
@@ -118,11 +118,7 @@ class _OnlineFriendsWidget extends ConsumerWidget {
               PlatformListTile(
                 title: Padding(
                   padding: const EdgeInsets.only(right: 5.0),
-                  child: PlayerTitle(
-                    userName: user.name,
-                    title: user.title,
-                    isPatron: user.isPatron,
-                  ),
+                  child: UserFullNameWidget(user: user),
                 ),
                 onTap: () => pushPlatformRoute(
                   context,

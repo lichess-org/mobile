@@ -21,7 +21,7 @@ class RelationRepository {
       (result) => result.flatMap(
         (response) => readNdJsonListFromResponse<User>(
           response,
-          mapper: (json) => User.fromJson(json),
+          mapper: (json) => User.fromServerJson(json),
           logger: _log,
         ),
       ),

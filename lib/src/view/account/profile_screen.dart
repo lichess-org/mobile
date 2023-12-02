@@ -9,8 +9,8 @@ import 'package:lichess_mobile/src/view/user/user_activity.dart';
 import 'package:lichess_mobile/src/view/user/user_profile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/player.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -31,11 +31,7 @@ class ProfileScreen extends ConsumerWidget {
         title: account.when(
           data: (user) => user == null
               ? const SizedBox.shrink()
-              : PlayerTitle(
-                  userName: user.username,
-                  title: user.title,
-                  isPatron: user.isPatron,
-                ),
+              : UserFullNameWidget(user: user.lightUser),
           loading: () => const SizedBox.shrink(),
           error: (error, _) => const SizedBox.shrink(),
         ),
@@ -73,11 +69,7 @@ class ProfileScreen extends ConsumerWidget {
         middle: account.when(
           data: (user) => user == null
               ? const SizedBox.shrink()
-              : PlayerTitle(
-                  userName: user.username,
-                  title: user.title,
-                  isPatron: user.isPatron,
-                ),
+              : UserFullNameWidget(user: user.lightUser),
           loading: () => const SizedBox.shrink(),
           error: (error, _) => const SizedBox.shrink(),
         ),
