@@ -64,7 +64,7 @@ class EvaluationService {
     _options = options;
   }
 
-  void closeEngine() {
+  void disposeEngine() {
     _engine?.dispose();
     _engine = null;
     _context = null;
@@ -138,7 +138,7 @@ EvaluationService evaluationService(EvaluationServiceRef ref) {
 
   final service = EvaluationService(ref, maxMemory: maxMemory);
   ref.onDispose(() {
-    service.closeEngine();
+    service.disposeEngine();
   });
   return service;
 }

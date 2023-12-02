@@ -58,7 +58,7 @@ class AnalysisController extends _$AnalysisController {
     ref.onDispose(() {
       _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
-      evaluationService.closeEngine();
+      evaluationService.disposeEngine();
     });
 
     UciPath path = UciPath.empty;
@@ -213,7 +213,7 @@ class AnalysisController extends _$AnalysisController {
       _startEngineEval();
     } else {
       _stopEngineEval();
-      ref.read(evaluationServiceProvider).closeEngine();
+      ref.read(evaluationServiceProvider).disposeEngine();
     }
   }
 

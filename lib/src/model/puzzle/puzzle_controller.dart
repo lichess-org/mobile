@@ -53,7 +53,7 @@ class PuzzleController extends _$PuzzleController {
       _viewSolutionTimer?.cancel();
       _enableSolutionButtonTimer?.cancel();
       _engineEvalDebounce.dispose();
-      evaluationService.closeEngine();
+      evaluationService.disposeEngine();
     });
 
     return _loadNewContext(initialContext, initialStreak);
@@ -436,7 +436,7 @@ class PuzzleController extends _$PuzzleController {
       ref.read(evaluationServiceProvider).initEngine(state.evaluationContext);
       _startEngineEval();
     } else {
-      ref.read(evaluationServiceProvider).closeEngine();
+      ref.read(evaluationServiceProvider).disposeEngine();
     }
   }
 
