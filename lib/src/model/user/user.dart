@@ -147,7 +147,8 @@ class Profile with _$Profile {
   }
 
   factory Profile.fromPick(RequiredPick pick) => Profile(
-        country: pick('country').asStringOrNull(),
+        country:
+            pick('flag').asStringOrNull() ?? pick('country').asStringOrNull(),
         location: pick('location').asStringOrNull(),
         bio: pick('bio').asStringOrNull(),
         firstName: pick('firstName').asStringOrNull(),
