@@ -7,6 +7,7 @@ class AdaptiveTextField extends StatelessWidget {
   const AdaptiveTextField({
     this.placeholder,
     this.controller,
+    this.focusNode,
     this.onChanged,
     this.onSubmitted,
     this.onTap,
@@ -17,6 +18,7 @@ class AdaptiveTextField extends StatelessWidget {
     this.readOnly = false,
     this.enableSuggestions = false,
     this.autofocus = false,
+    this.cupertinoDecoration,
     super.key,
   });
 
@@ -27,11 +29,14 @@ class AdaptiveTextField extends StatelessWidget {
   final bool enableSuggestions;
   final bool readOnly;
   final bool autofocus;
+  final FocusNode? focusNode;
   final TextInputType? keyboardType;
   final TextEditingController? controller;
   final void Function(String)? onChanged;
   final void Function(String)? onSubmitted;
   final GestureTapCallback? onTap;
+
+  final BoxDecoration? cupertinoDecoration;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +48,8 @@ class AdaptiveTextField extends StatelessWidget {
           expands: expands,
           placeholder: placeholder,
           controller: controller,
+          focusNode: focusNode,
+          decoration: cupertinoDecoration,
           keyboardType: keyboardType,
           onChanged: onChanged,
           onSubmitted: onSubmitted,
@@ -60,6 +67,7 @@ class AdaptiveTextField extends StatelessWidget {
             hintText: placeholder,
           ),
           controller: controller,
+          focusNode: focusNode,
           keyboardType: keyboardType,
           onChanged: onChanged,
           onSubmitted: onSubmitted,

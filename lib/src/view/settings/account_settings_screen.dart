@@ -10,9 +10,10 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 import 'account_preferences_screen.dart';
+import 'edit_profile_screen.dart';
 
-class SettingsProfileScreen extends StatelessWidget {
-  const SettingsProfileScreen({super.key});
+class AccountSettingsScreen extends StatelessWidget {
+  const AccountSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class SettingsProfileScreen extends StatelessWidget {
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.profile),
+        title: const Text('Account'),
       ),
       body: _Body(),
     );
@@ -52,7 +53,7 @@ class _Body extends ConsumerWidget {
         }
         return ListView(
           children: [
-            UserProfile(user: data),
+            UserProfile(user: data, bioMaxLines: 3),
             ListSection(
               children: [
                 PlatformListTile(
@@ -65,6 +66,18 @@ class _Body extends ConsumerWidget {
                     context,
                     title: context.l10n.preferencesPreferences,
                     builder: (_) => const AccountPreferencesScreen(),
+                  ),
+                ),
+                PlatformListTile(
+                  title: Text(context.l10n.editProfile),
+                  leading: const Icon(Icons.edit),
+                  trailing: defaultTargetPlatform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  onTap: () => pushPlatformRoute(
+                    context,
+                    title: context.l10n.editProfile,
+                    builder: (_) => const EditProfileScreen(),
                   ),
                 ),
               ],

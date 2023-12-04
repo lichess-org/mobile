@@ -23,6 +23,10 @@ abstract class Styles {
   static const timeControl = TextStyle(
     letterSpacing: 1.2,
   );
+  static const formLabel = TextStyle(
+    fontWeight: FontWeight.bold,
+  );
+  static const formDescription = TextStyle(fontSize: 12);
 
   // padding
   static const cupertinoAppBarTrailingWidgetPadding =

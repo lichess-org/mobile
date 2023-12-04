@@ -18,9 +18,12 @@ const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 class UserProfile extends StatelessWidget {
   const UserProfile({
     required this.user,
+    this.bioMaxLines,
   });
 
   final User user;
+
+  final int? bioMaxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +47,8 @@ class UserProfile extends StatelessWidget {
           if (user.profile?.bio != null)
             Text(
               user.profile!.bio!,
+              maxLines: bioMaxLines,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontStyle: FontStyle.italic),
             ),
           const SizedBox(height: 10),
