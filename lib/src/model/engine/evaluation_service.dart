@@ -84,12 +84,17 @@ class EvaluationService {
   ///
   /// Returns a stream of [EvalResult]s. The stream is throttled to emit at most
   /// one value every 200 milliseconds.
+  /// For each evaluation in the stream, if [shouldEmit] returns true, the eval
+  /// is emitted by the [EngineEvaluation] provider.
   ///
   /// [initEngine] must be called before calling this method.
   Stream<EvalResult>? start(
     UciPath path,
     Iterable<Step> steps, {
     ClientEval? initialPositionEval,
+
+    /// A function that returns true if the evaluation should be emitted by the
+    /// [EngineEvaluation] provider.
     required bool Function(Work work) shouldEmit,
   }) {
     final context = _context;
