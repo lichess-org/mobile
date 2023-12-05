@@ -12,9 +12,10 @@ extension AsyncValueUI on AsyncValue<Object?> {
             SnackBar(content: Text(error.toString())),
           );
         case TargetPlatform.iOS:
-          showCupertinoErrorSnackBar(
+          showCupertinoSnackBar(
             context: context,
             message: error.toString(),
+            type: SnackBarType.error,
           );
         default:
           assert(false, 'Unexpected platform $defaultTargetPlatform');

@@ -162,9 +162,10 @@ List<BottomSheetAction> makeFinishedGameShareActions(
         } catch (e) {
           debugPrint(e.toString());
           if (context.mounted) {
-            showPlatformErrorSnackbar(
+            showPlatformSnackbar(
               context,
               'Failed to get GIF',
+              type: SnackBarType.error,
             );
           }
         }
@@ -191,9 +192,10 @@ List<BottomSheetAction> makeFinishedGameShareActions(
             );
           } catch (e) {
             if (context.mounted) {
-              showPlatformErrorSnackbar(
+              showPlatformSnackbar(
                 context,
                 'Failed to get GIF',
+                type: SnackBarType.error,
               );
             }
           }
@@ -217,9 +219,10 @@ List<BottomSheetAction> makeFinishedGameShareActions(
           Share.share(utf8.decode(resp.bodyBytes));
         } catch (e) {
           if (context.mounted) {
-            showPlatformErrorSnackbar(
+            showPlatformSnackbar(
               context,
               'Failed to get PGN',
+              type: SnackBarType.error,
             );
           }
         }
@@ -243,9 +246,10 @@ List<BottomSheetAction> makeFinishedGameShareActions(
           Share.share(utf8.decode(resp.bodyBytes));
         } catch (e) {
           if (context.mounted) {
-            showPlatformErrorSnackbar(
+            showPlatformSnackbar(
               context,
               'Failed to get PGN',
+              type: SnackBarType.error,
             );
           }
         }

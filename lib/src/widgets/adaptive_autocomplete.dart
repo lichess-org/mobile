@@ -7,26 +7,20 @@ class AdaptiveAutoComplete<T extends Object> extends StatelessWidget {
   const AdaptiveAutoComplete({
     this.initialValue,
     required this.optionsBuilder,
+    this.textInputAction,
     this.onSelected,
-    this.displayStringForOption = defaultStringForOption,
+    this.displayStringForOption = RawAutocomplete.defaultStringForOption,
     this.cupertinoDecoration,
     super.key,
   });
 
   final TextEditingValue? initialValue;
+  final TextInputAction? textInputAction;
   final Iterable<T> Function(TextEditingValue) optionsBuilder;
   final String Function(T) displayStringForOption;
   final void Function(T)? onSelected;
 
   final BoxDecoration? cupertinoDecoration;
-
-  /// The default way to convert an option to a string in
-  /// [displayStringForOption].
-  ///
-  /// Uses the `toString` method of the given `option`.
-  static String defaultStringForOption(Object? option) {
-    return option.toString();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +37,7 @@ class AdaptiveAutoComplete<T extends Object> extends StatelessWidget {
               return CupertinoTextField(
                 controller: textEditingController,
                 decoration: cupertinoDecoration,
+                textInputAction: textInputAction,
                 focusNode: focusNode,
                 onSubmitted: (String value) {
                   onFieldSubmitted();
@@ -87,6 +82,21 @@ class AdaptiveAutoComplete<T extends Object> extends StatelessWidget {
             optionsBuilder: optionsBuilder,
             onSelected: onSelected,
             displayStringForOption: displayStringForOption,
+            fieldViewBuilder: (
+              BuildContext context,
+              TextEditingController textEditingController,
+              FocusNode focusNode,
+              VoidCallback onFieldSubmitted,
+            ) {
+              return TextField(
+                controller: textEditingController,
+                textInputAction: textInputAction,
+                focusNode: focusNode,
+                onSubmitted: (String value) {
+                  onFieldSubmitted();
+                },
+              );
+            },
           );
   }
 }

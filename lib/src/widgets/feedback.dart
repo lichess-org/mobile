@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -68,19 +67,33 @@ class FullScreenRetryRequest extends StatelessWidget {
   }
 }
 
-void showPlatformErrorSnackbar(BuildContext context, String message) {
+enum SnackBarType {
+  error,
+  info,
+  success,
+}
+
+void showPlatformSnackbar(
+  BuildContext context,
+  String message, {
+  SnackBarType type = SnackBarType.info,
+}) {
   switch (defaultTargetPlatform) {
     case TargetPlatform.android:
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(message, style: const TextStyle(color: Colors.white)),
-          backgroundColor: LichessColors.red,
+          content: Text(
+            message,
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: type == SnackBarType.error ? Colors.red : null,
         ),
       );
     case TargetPlatform.iOS:
-      showCupertinoErrorSnackBar(
+      showCupertinoSnackBar(
         context: context,
         message: message,
+        type: type,
       );
     default:
       assert(false, 'Unexpected platform $defaultTargetPlatform');
@@ -88,9 +101,10 @@ void showPlatformErrorSnackbar(BuildContext context, String message) {
 }
 
 // TODO add message queue and possibility to clear it
-void showCupertinoErrorSnackBar({
+void showCupertinoSnackBar({
   required BuildContext context,
   required String message,
+  SnackBarType type = SnackBarType.info,
   Duration duration = const Duration(milliseconds: 4000),
 }) {
   final overlayEntry = OverlayEntry(
@@ -99,7 +113,20 @@ void showCupertinoErrorSnackBar({
       bottom: 60.0,
       left: 8.0,
       right: 8.0,
-      child: _CupertinoSnackBar(message: message, duration: duration),
+      child: _CupertinoSnackBarManager(
+        snackBar: CupertinoSnackBar(
+          message: message,
+          backgroundColor: type == SnackBarType.error
+              ? CupertinoColors.systemRed
+              : type == SnackBarType.success
+                  ? CupertinoColors.systemGreen
+                  : CupertinoColors.systemBlue,
+          textStyle: type == SnackBarType.error
+              ? const TextStyle(color: Colors.white)
+              : null,
+        ),
+        duration: duration,
+      ),
     ),
   );
   Future.delayed(
@@ -109,22 +136,55 @@ void showCupertinoErrorSnackBar({
   Overlay.of(context).insert(overlayEntry);
 }
 
+class CupertinoSnackBar extends StatelessWidget {
+  final String message;
+  final TextStyle? textStyle;
+  final Color? backgroundColor;
+
+  const CupertinoSnackBar({
+    required this.message,
+    this.textStyle,
+    this.backgroundColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPopupSurface(
+      isSurfacePainted: true,
+      child: ColoredBox(
+        color: backgroundColor ?? CupertinoColors.systemGrey,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: 12.0,
+          ),
+          child: Text(
+            message,
+            style: textStyle,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 const _snackBarAnimationDuration = Duration(milliseconds: 400);
 
-class _CupertinoSnackBar extends StatefulWidget {
-  final String message;
+class _CupertinoSnackBarManager extends StatefulWidget {
+  final CupertinoSnackBar snackBar;
   final Duration duration;
 
-  const _CupertinoSnackBar({
-    required this.message,
+  const _CupertinoSnackBarManager({
+    required this.snackBar,
     required this.duration,
   });
 
   @override
-  State<_CupertinoSnackBar> createState() => _CupertinoSnackBarState();
+  State<_CupertinoSnackBarManager> createState() => _CupertinoSnackBarState();
 }
 
-class _CupertinoSnackBarState extends State<_CupertinoSnackBar> {
+class _CupertinoSnackBarState extends State<_CupertinoSnackBarManager> {
   bool _show = false;
 
   @override
@@ -147,24 +207,9 @@ class _CupertinoSnackBarState extends State<_CupertinoSnackBar> {
       opacity: _show ? 1.0 : 0,
       duration: _snackBarAnimationDuration,
       child: SafeArea(
-        child: CupertinoPopupSurface(
-          isSurfacePainted: true,
-          child: ColoredBox(
-            color: CupertinoColors.systemRed,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 12.0,
-              ),
-              child: Text(
-                widget.message,
-                style: const TextStyle(
-                  color: CupertinoColors.white,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: widget.snackBar,
         ),
       ),
     );

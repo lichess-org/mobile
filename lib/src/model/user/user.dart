@@ -133,6 +133,8 @@ class Profile with _$Profile {
     String? firstName,
     String? lastName,
     int? fideRating,
+    int? uscfRating,
+    int? ecfRating,
     String? links,
   }) = _Profile;
 
@@ -154,6 +156,8 @@ class Profile with _$Profile {
         firstName: pick('firstName').asStringOrNull(),
         lastName: pick('lastName').asStringOrNull(),
         fideRating: pick('fideRating').asIntOrNull(),
+        uscfRating: pick('uscfRating').asIntOrNull(),
+        ecfRating: pick('ecfRating').asIntOrNull(),
         links: pick('links').asStringOrNull(),
       );
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 
 // ignore: avoid_classes_with_only_static_members
 abstract class Styles {
@@ -25,6 +26,9 @@ abstract class Styles {
   );
   static const formLabel = TextStyle(
     fontWeight: FontWeight.bold,
+  );
+  static const formError = TextStyle(
+    color: LichessColors.red,
   );
   static const formDescription = TextStyle(fontSize: 12);
 
