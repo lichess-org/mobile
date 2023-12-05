@@ -139,7 +139,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Country', style: Styles.formLabel),
+                    Text(context.l10n.countryRegion, style: Styles.formLabel),
                     const SizedBox(height: 6.0),
                     AdaptiveAutoComplete<String>(
                       cupertinoDecoration: _cupertinoTextFieldDecoration,
