@@ -55,12 +55,10 @@ class _Body extends StatelessWidget {
       Padding(
         padding: Styles.bodySectionPadding,
         child: CardButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.biotech,
             size: 44,
-            color: defaultTargetPlatform == TargetPlatform.iOS
-                ? LichessColors.brag
-                : Theme.of(context).colorScheme.primary,
+            color: LichessColors.brag,
           ),
           title: Text(
             context.l10n.analysis,
