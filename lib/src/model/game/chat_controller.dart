@@ -4,7 +4,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'chat_controller.freezed.dart';
@@ -14,32 +13,24 @@ part 'chat_controller.g.dart';
 class ChatController extends _$ChatController {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
-  int? _socketEventVersion;
-
   AuthSocket get _socket => ref.read(authSocketProvider);
 
   @override
-  Future<ChatState> build() {
-    _socketEventVersion = 0;
+  ChatState build() {
     final stream = _socket.stream;
-    stream.listen(_handleSocketTopic);
+    _socketSubscription = stream.listen(_handleSocketTopic);
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
     });
 
-    return stream.firstWhere((e) => e.topic == 'full').then(
-      (event) {
-        final fullEvent =
-            GameFullEvent.fromJson(event.data as Map<String, dynamic>);
+    return state;
+  }
 
-        _socketEventVersion = fullEvent.socketEventVersion;
-
-        return ChatState(
-          messages: fullEvent.game.messages,
-          unreadMessages: 0,
-        );
-      },
+  void setMessages(IList<Message> messages) {
+    state = ChatState(
+      messages: messages,
+      unreadMessages: 0,
     );
   }
 
@@ -51,49 +42,24 @@ class ChatController extends _$ChatController {
   }
 
   void resetUnreadMessages() {
-    final curState = state.requireValue;
-    state = AsyncValue.data(curState.copyWith(unreadMessages: 0));
+    state = state.copyWith(unreadMessages: 0);
   }
 
   void _handleSocketTopic(SocketEvent event) {
-    if (!state.hasValue) return;
-
     switch (event.topic) {
-      // Full game data, received after a (re)connection to game socket
-      case 'full':
-        final fullEvent =
-            GameFullEvent.fromJson(event.data as Map<String, dynamic>);
-
-        if (_socketEventVersion != null &&
-            fullEvent.socketEventVersion < _socketEventVersion!) {
-          return;
-        }
-
-        _socketEventVersion = fullEvent.socketEventVersion;
-
-        state = AsyncValue.data(
-          ChatState(
-            messages: fullEvent.game.messages,
-            unreadMessages: state.requireValue.unreadMessages,
-          ),
-        );
-
-      // Received when opponent send a message
+      // Called when a message is received
       case 'message':
         final data = event.data as Map<String, dynamic>;
         final message = data["t"] as String;
         final username = data["u"] as String;
-        final curState = state.requireValue;
-        state = AsyncValue.data(
-          curState.copyWith(
-            messages: curState.messages.add(
-              Message(
-                message: message,
-                username: username,
-              ),
+        state = state.copyWith(
+          messages: state.messages.add(
+            Message(
+              message: message,
+              username: username,
             ),
-            unreadMessages: curState.unreadMessages + 1,
           ),
+          unreadMessages: state.unreadMessages + 1,
         );
     }
   }

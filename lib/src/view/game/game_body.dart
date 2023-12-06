@@ -80,7 +80,6 @@ class GameBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = gameControllerProvider(id);
-    ref.watch(chatControllerProvider);
 
     ref.listen(
       ctrlProvider,
@@ -345,6 +344,7 @@ class _GameBottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
+    final chatState = ref.watch(chatControllerProvider);
 
     return Container(
       padding: Styles.horizontalBodyPadding,
@@ -541,43 +541,31 @@ class _GameBottomBar extends ConsumerWidget {
                   },
                   icon: CupertinoIcons.chat_bubble,
                 ),
-                ref.watch(chatControllerProvider).when(
-                      data: (data) {
-                        if (data.unreadMessages > 0) {
-                          return Positioned(
-                            top: 9.0,
-                            right: 6.0,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                const Icon(
-                                  Icons.brightness_1,
-                                  size: 16.0,
-                                ),
-                                Text(
-                                  data.unreadMessages.toString(),
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 8.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        } else {
-                          return const SizedBox.shrink();
-                        }
-                      },
-                      loading: () => const SizedBox.shrink(),
-                      error: (error, stackTrace) {
-                        debugPrint(
-                          'SEVERE: [ChatScreen] could not load chat; $error\n$stackTrace',
-                        );
-                        return const SizedBox.shrink();
-                      },
+                if (chatState.unreadMessages > 0)
+                  Positioned(
+                    top: 9.0,
+                    right: 6.0,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        const Icon(
+                          Icons.brightness_1,
+                          size: 16.0,
+                        ),
+                        Text(
+                          chatState.unreadMessages.toString(),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 8.0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
+                  )
+                else
+                  const SizedBox.shrink(),
               ],
             ),
             RepeatButton(

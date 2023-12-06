@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class MessageScreen extends ConsumerStatefulWidget {
@@ -128,43 +127,31 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final chatState = ref.watch(chatControllerProvider);
 
-    return chatState.when(
-      data: (data) => Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              reverse: true,
-              itemCount: data.messages.length,
-              itemBuilder: (context, index) {
-                final message = data.messages[data.messages.length - index - 1];
-                return (message.username == "lichess")
-                    ? _MessageAction(message: message.message)
-                    : (message.username == game.me?.user?.name)
-                        ? _MessageBubble(
-                            you: true,
-                            message: message.message,
-                          )
-                        : _MessageBubble(
-                            you: false,
-                            message: message.message,
-                          );
-              },
-            ),
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            reverse: true,
+            itemCount: chatState.messages.length,
+            itemBuilder: (context, index) {
+              final message =
+                  chatState.messages[chatState.messages.length - index - 1];
+              return (message.username == "lichess")
+                  ? _MessageAction(message: message.message)
+                  : (message.username == game.me?.user?.name)
+                      ? _MessageBubble(
+                          you: true,
+                          message: message.message,
+                        )
+                      : _MessageBubble(
+                          you: false,
+                          message: message.message,
+                        );
+            },
           ),
-          _ChatBottomBar(),
-        ],
-      ),
-      loading: () => const CenterLoadingIndicator(),
-      error: (error, stackTrace) {
-        debugPrint(
-          'SEVERE: [ChatScreen] could not load chat; $error\n$stackTrace',
-        );
-        return FullScreenRetryRequest(
-          onRetry: () {
-            ref.invalidate(chatControllerProvider);
-          },
-        );
-      },
+        ),
+        _ChatBottomBar(),
+      ],
     );
   }
 }
