@@ -39,27 +39,21 @@ class CorrespondenceGameStorage {
       fetchOngoingGames() async {
     final list = await _db.query(
       _tableName,
-      where: 'data LIKE ?',
-      whereArgs: ['%"status":"started"%'],
+      where: "json_extract(data, '\$.status') LIKE ?",
+      whereArgs: ['started%'],
     );
 
-    return list.map((e) {
-      final lmString = e['lastModified'] as String?;
-      final raw = e['data'] as String?;
-      if (raw != null && lmString != null) {
-        final lastModified = DateTime.parse(lmString);
-        final json = jsonDecode(raw);
-        if (json is! Map<String, dynamic>) {
-          throw const FormatException(
-            '[CorrespondenceGameStorage] cannot fetch game: expected an object',
-          );
-        }
-        return (lastModified, OfflineCorrespondenceGame.fromJson(json));
-      }
-      throw const FormatException(
-        '[CorrespondenceGameStorage] cannot fetch game: expected an object',
-      );
-    }).toIList();
+    return _decodeGames(list);
+  }
+
+  Future<IList<(DateTime, OfflineCorrespondenceGame)>>
+      fetchGamesWithRegisteredMove() async {
+    final list = await _db.query(
+      _tableName,
+      where: "json_extract(data, '\$.registeredMoveAtPgn') IS NOT NULL",
+    );
+
+    return _decodeGames(list);
   }
 
   Future<OfflineCorrespondenceGame?> fetch({
@@ -96,5 +90,27 @@ class CorrespondenceGameStorage {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     ref.invalidate(offlineOngoingCorrespondenceGamesProvider);
+  }
+
+  IList<(DateTime, OfflineCorrespondenceGame)> _decodeGames(
+    List<Map<String, Object?>> list,
+  ) {
+    return list.map((e) {
+      final lmString = e['lastModified'] as String?;
+      final raw = e['data'] as String?;
+      if (raw != null && lmString != null) {
+        final lastModified = DateTime.parse(lmString);
+        final json = jsonDecode(raw);
+        if (json is! Map<String, dynamic>) {
+          throw const FormatException(
+            '[CorrespondenceGameStorage] cannot fetch game: expected an object',
+          );
+        }
+        return (lastModified, OfflineCorrespondenceGame.fromJson(json));
+      }
+      throw const FormatException(
+        '[CorrespondenceGameStorage] cannot fetch game: expected an object',
+      );
+    }).toIList();
   }
 }

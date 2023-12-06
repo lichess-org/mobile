@@ -1,14 +1,17 @@
 import 'dart:convert';
 
+import 'package:async/async.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:logging/logging.dart';
@@ -62,6 +65,33 @@ class GameRepository {
         logger: _log,
       ),
     );
+  }
+
+  FutureResult<IList<PlayableGame>> getPlayableGamesByIds(ISet<GameId> ids) {
+    return apiClient
+        .get(
+          Uri.parse(
+            '$kLichessHost/api/mobile/my-games?ids=${ids.join(',')}',
+          ),
+        )
+        .flatMap(
+          (resp) => Result(() {
+            final dynamic list = jsonDecode(utf8.decode(resp.bodyBytes));
+            if (list is! List<dynamic>) {
+              _log.severe(
+                'Could not read games from response: ${resp.body}',
+              );
+              throw DataFormatException();
+            }
+            return list;
+          }).flatMap(
+            (list) => readJsonListOfObjects(
+              list,
+              mapper: PlayableGame.fromServerJson,
+              logger: _log,
+            ),
+          ),
+        );
   }
 
   FutureResult<IList<ArchivedGameData>> getGamesByIds(ISet<GameId> ids) {

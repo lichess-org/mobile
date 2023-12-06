@@ -15,9 +15,8 @@ import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
-import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/chat_controller.dart';
+import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -537,7 +536,9 @@ class GameController extends _$GameController {
 
         if (curState.game.speed == Speed.correspondence) {
           ref.invalidate(ongoingGamesProvider);
-          _saveCorrespondenceGameState(newState);
+          ref
+              .read(correspondenceServiceProvider)
+              .updateGame(gameFullId, newState.game);
         }
 
         state = AsyncValue.data(newState);
@@ -577,7 +578,9 @@ class GameController extends _$GameController {
 
         if (curState.game.speed == Speed.correspondence) {
           ref.invalidate(ongoingGamesProvider);
-          _saveCorrespondenceGameState(newState);
+          ref
+              .read(correspondenceServiceProvider)
+              .updateGame(gameFullId, newState.game);
         }
 
         state = AsyncValue.data(newState);
@@ -763,31 +766,6 @@ class GameController extends _$GameController {
             redirectGameId: fullId,
           ),
         );
-    }
-  }
-
-  void _saveCorrespondenceGameState(GameState state) {
-    if (state.game.youAre != null) {
-      ref.read(correspondenceGameStorageProvider).save(
-            OfflineCorrespondenceGame(
-              id: state.game.id,
-              fullId: gameFullId,
-              rated: state.game.meta.rated,
-              steps: state.game.steps,
-              clock: state.game.correspondenceClock,
-              initialFen: state.game.initialFen,
-              status: state.game.status,
-              variant: state.game.meta.variant,
-              speed: state.game.speed,
-              perf: state.game.meta.perf,
-              white: state.game.white,
-              black: state.game.black,
-              youAre: state.game.youAre!,
-              daysPerTurn: state.game.meta.daysPerTurn,
-              winner: state.game.winner,
-              isThreefoldRepetition: state.game.isThreefoldRepetition,
-            ),
-          );
     }
   }
 

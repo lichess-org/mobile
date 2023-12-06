@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
@@ -10,35 +12,60 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:logging/logging.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'sync_move_service.g.dart';
+part 'correspondence_service.g.dart';
 
 @Riverpod(keepAlive: true)
-CorrespondenceSyncMoveService syncMoveService(SyncMoveServiceRef ref) {
-  return CorrespondenceSyncMoveService(
-    Logger('CorrespondenceSyncMoveService'),
+CorrespondenceService correspondenceService(CorrespondenceServiceRef ref) {
+  return CorrespondenceService(
+    Logger('CorrespondenceService'),
     ref: ref,
   );
 }
 
-class CorrespondenceSyncMoveService {
-  CorrespondenceSyncMoveService(this._log, {required this.ref});
+class CorrespondenceService {
+  CorrespondenceService(this._log, {required this.ref});
 
-  final SyncMoveServiceRef ref;
+  final CorrespondenceServiceRef ref;
   final Logger _log;
 
-  Future<void> run() async {
-    _log.info('Syncing correspondence moves with server...');
+  /// Syncs offline correspondence games with the server.
+  Future<void> syncGames() async {
+    await playRegisteredMoves();
 
-    final games = await _storage.fetchOngoingGames().then(
-          (games) => games
-              .where((game) => game.$2.registeredMoveAtPgn != null)
-              .map((e) => e.$2)
-              .toList(),
+    ref.read(accountRepositoryProvider).getOngoingGames().forEach(
+      (games) {
+        ref
+            .read(gameRepositoryProvider)
+            .getPlayableGamesByIds(
+              ISet(games.map((e) => e.id)),
+            )
+            .forEach((playableGames) {
+          for (final playableGame in playableGames) {
+            final fullId =
+                games.firstWhere((e) => e.id == playableGame.id).fullId;
+
+            updateGame(
+              fullId,
+              playableGame,
+            );
+          }
+        });
+      },
+    );
+  }
+
+  Future<void> playRegisteredMoves() async {
+    _log.info('Playing registered correspondence moves...');
+
+    final games = await _storage.fetchGamesWithRegisteredMove().then(
+          (games) => games.map((e) => e.$2).toList(),
         );
 
     WebSocket.userAgent = ref.read(userAgentProvider);
@@ -66,7 +93,9 @@ class CorrespondenceSyncMoveService {
         final playableGame =
             GameFullEvent.fromJson(fullEvent.data as Map<String, dynamic>).game;
         if (playableGame.sanMoves == gameToSync.registeredMoveAtPgn!.$1) {
-          _log.info('Syncing game ${gameToSync.id} now...');
+          _log.info(
+            'Playing move ${gameToSync.registeredMoveAtPgn!.$2} on game ${gameToSync.id} now...',
+          );
           socket.add(
             jsonEncode({
               't': 'move',
@@ -82,9 +111,9 @@ class CorrespondenceSyncMoveService {
               );
         } else {
           _log.info(
-            'Game ${gameToSync.id} cannot be sync because its state has changed',
+            'Cannot play game ${gameToSync.id} move because its state has changed',
           );
-          _saveCorrespondencePlayableGame(gameToSync.fullId, playableGame);
+          updateGame(gameToSync.fullId, playableGame);
         }
       } catch (e, s) {
         _log.severe(
@@ -98,8 +127,8 @@ class CorrespondenceSyncMoveService {
     }
   }
 
-  void _saveCorrespondencePlayableGame(GameFullId fullId, PlayableGame game) {
-    ref.read(correspondenceGameStorageProvider).save(
+  Future<void> updateGame(GameFullId fullId, PlayableGame game) async {
+    return ref.read(correspondenceGameStorageProvider).save(
           OfflineCorrespondenceGame(
             id: game.id,
             fullId: fullId,
