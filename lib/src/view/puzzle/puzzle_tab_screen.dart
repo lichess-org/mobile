@@ -1,4 +1,5 @@
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -301,7 +302,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
           children: [
             Padding(
               padding: Styles.bodySectionPadding,
-              child: PuzzleHistoryBoards(data),
+              child: PuzzleHistoryBoards(data.take(10).toIList()),
             ),
           ],
         );

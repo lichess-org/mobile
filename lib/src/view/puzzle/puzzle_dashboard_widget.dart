@@ -133,7 +133,7 @@ class PuzzleChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final radarColor =
         Theme.of(context).colorScheme.onBackground.withOpacity(0.5);
-    final chartColor = Theme.of(context).colorScheme.primary;
+    final chartColor = Theme.of(context).colorScheme.tertiary;
     return RadarChart(
       RadarChartData(
         radarBorderData: BorderSide(width: 0.5, color: radarColor),
