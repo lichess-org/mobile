@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_providers.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -535,7 +536,30 @@ class _GameBottomBar extends ConsumerWidget {
                     pushPlatformRoute(
                       context,
                       builder: (BuildContext context) {
-                        return MessageScreen(game: gameState.game);
+                        final opponent = gameState.game.opponent!;
+                        final title = opponent.user?.title != null
+                            ? Text.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: opponent.user!.title,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: LichessColors.brag,
+                                      ),
+                                    ),
+                                    const TextSpan(text: " "),
+                                    TextSpan(
+                                      text: opponent.displayName(context),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Text(opponent.displayName(context));
+                        return MessageScreen(
+                          title: title,
+                          me: gameState.game.me?.user,
+                        );
                       },
                     );
                   },

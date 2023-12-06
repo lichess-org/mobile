@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/game/chat_controller.dart';
-import 'package:lichess_mobile/src/model/game/playable_game.dart';
-import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -13,9 +12,10 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class MessageScreen extends ConsumerStatefulWidget {
-  final PlayableGame game;
+  final Widget title;
+  final LightUser? me;
 
-  const MessageScreen({required this.game});
+  const MessageScreen({required this.title, this.me});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MessageScreenState();
@@ -45,7 +45,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    final body = _Body(game: widget.game);
+    final body = _Body(me: widget.me);
 
     return PlatformWidget(
       androidBuilder: (context) =>
@@ -58,14 +58,13 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
     required BuildContext context,
     required Widget body,
   }) {
-    final opponent = widget.game.opponent!;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: _ChatTitle(opponent: opponent),
+        title: widget.title,
         centerTitle: true,
       ),
       body: body,
@@ -76,51 +75,24 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
     required BuildContext context,
     required Widget body,
   }) {
-    final opponent = widget.game.opponent!;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        middle: _ChatTitle(opponent: opponent),
+        middle: widget.title,
       ),
       child: body,
     );
   }
 }
 
-class _ChatTitle extends StatelessWidget {
-  final Player opponent;
-  const _ChatTitle({required this.opponent});
-
-  @override
-  Widget build(BuildContext context) {
-    return opponent.user?.title != null
-        ? Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                  text: opponent.user!.title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: LichessColors.brag,
-                  ),
-                ),
-                const TextSpan(text: " "),
-                TextSpan(text: opponent.displayName(context)),
-              ],
-            ),
-          )
-        : Text(opponent.displayName(context));
-  }
-}
-
 class _Body extends ConsumerWidget {
-  final PlayableGame game;
+  final LightUser? me;
 
   const _Body({
-    required this.game,
+    required this.me,
   });
 
   @override
@@ -138,7 +110,7 @@ class _Body extends ConsumerWidget {
                   chatState.messages[chatState.messages.length - index - 1];
               return (message.username == "lichess")
                   ? _MessageAction(message: message.message)
-                  : (message.username == game.me?.user?.name)
+                  : (message.username == me?.name)
                       ? _MessageBubble(
                           you: true,
                           message: message.message,
