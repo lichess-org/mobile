@@ -325,8 +325,7 @@ class _HomeBody extends ConsumerWidget {
         } else {
           const offlineWidgets = [
             SizedBox(height: 8.0),
-            // TODO finish offline correspondence
-            // _OfflineCorrespondencePreview(),
+            _OfflineCorrespondencePreview(),
           ];
           return defaultTargetPlatform == TargetPlatform.android
               ? ListView(
@@ -521,8 +520,6 @@ class _MostRecentOngoingGamePreview extends ConsumerWidget {
   }
 }
 
-// TODO finish offline correspondence
-// ignore: unused_element
 class _OfflineCorrespondencePreview extends ConsumerWidget {
   const _OfflineCorrespondencePreview();
 
