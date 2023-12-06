@@ -1,15 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:url_launcher/url_launcher.dart';
 
 import 'countries.dart';
 
@@ -35,7 +37,7 @@ class UserProfile extends StatelessWidget {
         : null;
 
     return Padding(
-      padding: Styles.bodySectionPadding,
+      padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -52,6 +54,27 @@ class UserProfile extends StatelessWidget {
               style: const TextStyle(fontStyle: FontStyle.italic),
             ),
           const SizedBox(height: 10),
+          if (user.profile?.fideRating != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Text(
+                '${context.l10n.xRating('FIDE')}: ${user.profile!.fideRating}',
+              ),
+            ),
+          if (user.profile?.uscfRating != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Text(
+                '${context.l10n.xRating('USCF')}: ${user.profile!.uscfRating}',
+              ),
+            ),
+          if (user.profile?.ecfRating != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Text(
+                '${context.l10n.xRating('ECF')}: ${user.profile!.ecfRating}',
+              ),
+            ),
           if (user.profile != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
@@ -64,16 +87,39 @@ class UserProfile extends StatelessWidget {
             const SizedBox(height: 5),
             Text(context.l10n.lastSeenActive(timeago.format(user.seenAt!))),
           ],
-          const SizedBox(height: 5),
-          if (user.playTime != null)
+          if (user.playTime != null) ...[
+            const SizedBox(height: 5),
             Text(
               context.l10n.tpTimeSpentPlaying(
                 user.playTime!.total
                     .toDaysHoursMinutes(AppLocalizations.of(context)),
               ),
-            )
-          else
-            kEmptyWidget,
+            ),
+          ],
+          if (user.profile?.links != null) ...[
+            const SizedBox(height: 10),
+            Text(
+              context.l10n.socialMediaLinks,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 50,
+              width: double.infinity,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  for (final link in user.profile!.links!)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 5),
+                      child: AdaptiveTextButton(
+                        onPressed: () => launchUrl(link.url),
+                        child: Text(link.site?.title ?? link.url.toString()),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );
