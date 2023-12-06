@@ -527,7 +527,7 @@ class GameController extends _$GameController {
 
         if (curState.game.speed == Speed.correspondence) {
           ref.invalidate(ongoingGamesProvider);
-          _saveCorrespondenceGameState(newState);
+          // _saveCorrespondenceGameState(newState);
         }
 
         state = AsyncValue.data(newState);
@@ -567,7 +567,7 @@ class GameController extends _$GameController {
 
         if (curState.game.speed == Speed.correspondence) {
           ref.invalidate(ongoingGamesProvider);
-          _saveCorrespondenceGameState(newState);
+          // _saveCorrespondenceGameState(newState);
         }
 
         state = AsyncValue.data(newState);
@@ -756,6 +756,7 @@ class GameController extends _$GameController {
     }
   }
 
+  // ignore: unused_element
   void _saveCorrespondenceGameState(GameState state) {
     if (state.game.youAre != null) {
       ref.read(correspondenceGameStorageProvider).save(
