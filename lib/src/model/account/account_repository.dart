@@ -125,6 +125,14 @@ class AccountRepository {
         );
   }
 
+  FutureResult<void> saveProfile(Map<String, String> profile) {
+    return _apiClient.post(
+      Uri.parse('$kLichessHost/account/profile'),
+      headers: {'Accept': 'application/json'},
+      body: profile,
+    );
+  }
+
   FutureResult<IList<OngoingGame>> getOngoingGames() {
     return _apiClient.get(Uri.parse('$kLichessHost/api/account/playing')).then(
           (result) => result.flatMap(

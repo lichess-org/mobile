@@ -7,31 +7,42 @@ class AdaptiveTextField extends StatelessWidget {
   const AdaptiveTextField({
     this.placeholder,
     this.controller,
+    this.focusNode,
+    this.textInputAction,
     this.onChanged,
     this.onSubmitted,
     this.onTap,
     this.minLines,
     this.maxLines = 1,
+    this.maxLength,
     this.keyboardType,
     this.expands = false,
     this.readOnly = false,
     this.enableSuggestions = false,
     this.autofocus = false,
+    this.cupertinoDecoration,
+    this.materialDecoration,
     super.key,
   });
 
   final int? minLines;
   final int? maxLines;
+  final int? maxLength;
   final String? placeholder;
   final bool expands;
   final bool enableSuggestions;
   final bool readOnly;
   final bool autofocus;
+  final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
   final TextInputType? keyboardType;
   final TextEditingController? controller;
   final void Function(String)? onChanged;
   final void Function(String)? onSubmitted;
   final GestureTapCallback? onTap;
+
+  final BoxDecoration? cupertinoDecoration;
+  final InputDecoration? materialDecoration;
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +51,13 @@ class AdaptiveTextField extends StatelessWidget {
         return CupertinoTextField(
           minLines: minLines,
           maxLines: maxLines,
+          maxLength: maxLength,
           expands: expands,
           placeholder: placeholder,
           controller: controller,
+          focusNode: focusNode,
+          textInputAction: textInputAction,
+          decoration: cupertinoDecoration,
           keyboardType: keyboardType,
           onChanged: onChanged,
           onSubmitted: onSubmitted,
@@ -55,11 +70,15 @@ class AdaptiveTextField extends StatelessWidget {
         return TextField(
           minLines: minLines,
           maxLines: maxLines,
+          maxLength: maxLength,
           expands: expands,
-          decoration: InputDecoration(
-            hintText: placeholder,
-          ),
+          decoration: materialDecoration ??
+              InputDecoration(
+                hintText: placeholder,
+              ),
           controller: controller,
+          focusNode: focusNode,
+          textInputAction: textInputAction,
           keyboardType: keyboardType,
           onChanged: onChanged,
           onSubmitted: onSubmitted,

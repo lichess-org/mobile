@@ -5,6 +5,8 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
+import 'profile.dart';
+
 part 'user.freezed.dart';
 part 'user.g.dart';
 
@@ -122,40 +124,6 @@ class PlayTime with _$PlayTime {
       tv: pick('tv').asDurationFromSecondsOrThrow(),
     );
   }
-}
-
-@freezed
-class Profile with _$Profile {
-  const factory Profile({
-    String? country,
-    String? location,
-    String? bio,
-    String? firstName,
-    String? lastName,
-    int? fideRating,
-    String? links,
-  }) = _Profile;
-
-  const Profile._();
-
-  String? get fullName => firstName != null && lastName != null
-      ? '$firstName $lastName'
-      : firstName ?? lastName;
-
-  factory Profile.fromJson(Map<String, dynamic> json) {
-    return Profile.fromPick(pick(json).required());
-  }
-
-  factory Profile.fromPick(RequiredPick pick) => Profile(
-        country:
-            pick('flag').asStringOrNull() ?? pick('country').asStringOrNull(),
-        location: pick('location').asStringOrNull(),
-        bio: pick('bio').asStringOrNull(),
-        firstName: pick('firstName').asStringOrNull(),
-        lastName: pick('lastName').asStringOrNull(),
-        fideRating: pick('fideRating').asIntOrNull(),
-        links: pick('links').asStringOrNull(),
-      );
 }
 
 @freezed

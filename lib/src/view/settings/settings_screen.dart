@@ -20,12 +20,12 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-import './board_settings_screen.dart';
-import './board_theme_screen.dart';
-import './piece_set_screen.dart';
-import './settings_profile_screen.dart';
-import './sound_settings_screen.dart';
-import './theme_mode_screen.dart';
+import 'account_settings_screen.dart';
+import 'board_settings_screen.dart';
+import 'board_theme_screen.dart';
+import 'piece_set_screen.dart';
+import 'sound_settings_screen.dart';
+import 'theme_mode_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -184,15 +184,15 @@ class _Body extends ConsumerWidget {
               children: [
                 PlatformListTile(
                   leading: const Icon(Icons.person),
-                  title: Text(context.l10n.profile),
+                  title: const Text('Account'),
                   trailing: defaultTargetPlatform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
                       : null,
                   onTap: () {
                     pushPlatformRoute(
                       context,
-                      title: context.l10n.profile,
-                      builder: (context) => const SettingsProfileScreen(),
+                      title: 'Account',
+                      builder: (context) => const AccountSettingsScreen(),
                     );
                   },
                 ),

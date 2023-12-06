@@ -392,7 +392,7 @@
   "firstName": "الاسم الأول",
   "lastName": "اسم العائلة",
   "biography": "نبذة عنك",
-  "flag": "العلم",
+  "countryRegion": "البلد أو المنطقة",
   "thankYou": "شكرًا لك!",
   "socialMediaLinks": "روابط وسائل التواصل الاجتماعي",
   "oneUrlPerLine": "رابط واحد لكل سطر",
