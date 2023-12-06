@@ -113,6 +113,9 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
 
   @override
   Widget build(BuildContext context) {
+    final String? initialLinks =
+        widget.user.profile?.links?.map((e) => e.url).join('\r\n');
+
     return Form(
       key: _formKey,
       child: Column(
@@ -239,6 +242,16 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
               return null;
             },
           ),
+          _textField(
+            label: context.l10n.socialMediaLinks,
+            initialValue: initialLinks,
+            formKey: 'links',
+            controller: TextEditingController(text: initialLinks),
+            maxLength: 3000,
+            maxLines: 4,
+            description:
+                'Mastodon, Facebook, GitHub, Chess.com, ...\r\n${context.l10n.oneUrlPerLine}',
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 24.0),
             child: FutureBuilder(
@@ -254,9 +267,13 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                             _formData.removeWhere((key, value) {
                               return value == null;
                             });
-                            final future = ref
-                                .read(accountRepositoryProvider)
-                                .saveProfile(_formData);
+                            final future =
+                                ref.read(accountRepositoryProvider).saveProfile(
+                                      _formData.map(
+                                        (key, value) =>
+                                            MapEntry(key, value.toString()),
+                                      ),
+                                    );
 
                             setState(() {
                               _pendingSaveProfile = future;

@@ -125,7 +125,7 @@ class AccountRepository {
         );
   }
 
-  FutureResult<void> saveProfile(Map<String, dynamic> profile) {
+  FutureResult<void> saveProfile(Map<String, String> profile) {
     return _apiClient.post(
       Uri.parse('$kLichessHost/account/profile'),
       headers: {'Accept': 'application/json'},
