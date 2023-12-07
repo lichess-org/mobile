@@ -78,20 +78,40 @@ class CorrespondenceService {
     for (final gameToSync in games) {
       final uri = Uri.parse('$kLichessWSHost/play/${gameToSync.fullId}/v6');
       WebSocket? socket;
+      StreamSubscription<SocketEvent>? streamSubscription;
       try {
         socket = await WebSocket.connect(uri.toString(), headers: wsHeaders)
             .timeout(const Duration(seconds: 5));
 
-        final fullEvent = await socket
-            .where((e) => e != '0')
-            .map(
+        final eventStream = socket.where((e) => e != '0').map(
               (e) => SocketEvent.fromJson(
                 jsonDecode(e as String) as Map<String, dynamic>,
               ),
-            )
-            .firstWhere((event) => event.topic == 'full');
-        final playableGame =
-            GameFullEvent.fromJson(fullEvent.data as Map<String, dynamic>).game;
+            );
+
+        final Completer<PlayableGame> gameCompleter = Completer();
+        final Completer<void> movePlayedCompleter = Completer();
+
+        streamSubscription = eventStream.listen((event) {
+          switch (event.topic) {
+            case 'full':
+              final playableGame = GameFullEvent.fromJson(
+                event.data as Map<String, dynamic>,
+              ).game;
+              gameCompleter.complete(playableGame);
+
+            case 'move':
+              final moveEvent =
+                  MoveEvent.fromJson(event.data as Map<String, dynamic>);
+              // move acknowledged
+              if (moveEvent.uci == gameToSync.registeredMoveAtPgn!.$1) {
+                movePlayedCompleter.complete();
+                streamSubscription?.cancel();
+              }
+          }
+        });
+
+        final playableGame = await gameCompleter.future;
         if (playableGame.sanMoves == gameToSync.registeredMoveAtPgn!.$1) {
           _log.info(
             'Playing move ${gameToSync.registeredMoveAtPgn!.$2} on game ${gameToSync.id} now...',
@@ -104,6 +124,9 @@ class CorrespondenceService {
               },
             }),
           );
+
+          await movePlayedCompleter.future.timeout(const Duration(seconds: 3));
+
           ref.read(correspondenceGameStorageProvider).save(
                 gameToSync.copyWith(
                   registeredMoveAtPgn: null,
@@ -122,6 +145,7 @@ class CorrespondenceService {
           s,
         );
       } finally {
+        streamSubscription?.cancel();
         socket?.close();
       }
     }
