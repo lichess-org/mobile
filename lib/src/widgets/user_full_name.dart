@@ -57,7 +57,6 @@ class UserFullNameWidget extends ConsumerWidget {
                 aiLevel.toString(),
               )
             : context.l10n.anonymous);
-
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -95,8 +94,8 @@ class UserFullNameWidget extends ConsumerWidget {
           CachedNetworkImage(
             imageUrl: lichessFlairSrc(user!.flair!),
             errorWidget: (_, __, ___) => kEmptyWidget,
-            width: 16,
-            height: 16,
+            width: DefaultTextStyle.of(context).style.fontSize,
+            height: DefaultTextStyle.of(context).style.fontSize,
           ),
         ],
         if (shouldShowRating && ratingStr != null) ...[
