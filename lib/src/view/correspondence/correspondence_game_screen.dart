@@ -1,4 +1,3 @@
-import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,15 +13,11 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class CorrespondenceGameScreen extends ConsumerStatefulWidget {
   const CorrespondenceGameScreen({
-    required this.initialId,
-    this.initialFen,
-    this.lastMove,
+    required this.params,
     super.key,
   });
 
-  final GameFullId initialId;
-  final String? initialFen;
-  final Move? lastMove;
+  final InitialStandaloneGameParams params;
 
   @override
   ConsumerState<CorrespondenceGameScreen> createState() =>
@@ -36,7 +31,7 @@ class _CorrespondenceGameScreenState
 
   @override
   Widget build(BuildContext context) {
-    final gameId = ref.watch(standaloneGameProvider(widget.initialId));
+    final gameId = ref.watch(standaloneGameProvider(widget.params.id));
     return PlatformWidget(
       androidBuilder: (context) => _androidBuilder(
         context,
@@ -67,7 +62,7 @@ class _CorrespondenceGameScreenState
         ],
       ),
       body: GameBody(
-        initialStandAloneId: widget.initialId,
+        initialStandAloneParams: widget.params,
         id: gameId,
         whiteClockKey: _whiteClockKey,
         blackClockKey: _blackClockKey,
@@ -92,7 +87,7 @@ class _CorrespondenceGameScreenState
         ),
       ),
       child: GameBody(
-        initialStandAloneId: widget.initialId,
+        initialStandAloneParams: widget.params,
         id: gameId,
         whiteClockKey: _whiteClockKey,
         blackClockKey: _blackClockKey,
