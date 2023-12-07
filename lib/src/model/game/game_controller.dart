@@ -439,7 +439,7 @@ class GameController extends _$GameController {
         _lastMoveTime = null;
 
         ref
-            .watch(chatControllerProvider.notifier)
+            .read(chatControllerProvider.notifier)
             .setMessages(fullEvent.game.messages);
 
         state = AsyncValue.data(
