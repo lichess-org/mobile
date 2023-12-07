@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -202,48 +203,44 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Theme.of(context).colorScheme.outline),
-        borderRadius: BorderRadius.circular(40.0),
-        color: Theme.of(context).bottomAppBarTheme.color,
+    final sendButton = ValueListenableBuilder<TextEditingValue>(
+      valueListenable: _textController,
+      builder: (context, value, child) => PlatformIconButton(
+        onTap: value.text.isNotEmpty
+            ? () {
+                ref
+                    .read(chatControllerProvider.notifier)
+                    .onUserMessage(_textController.text);
+                _textController.clear();
+              }
+            : null,
+        icon: Icons.send,
+        semanticsLabel: context.l10n.send,
       ),
+    );
+    final borderRadius = BorderRadius.circular(20.0);
+    return Container(
       margin: const EdgeInsets.all(10.0),
-      padding: Styles.horizontalBodyPadding,
       child: SafeArea(
-        top: false,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Expanded(
-              child: TextField(
-                controller: _textController,
-                textAlignVertical: TextAlignVertical.center,
-                style: Theme.of(context).textTheme.bodyLarge,
-                minLines: 1,
-                maxLines: 4,
-                decoration: InputDecoration(
-                  suffixIcon: ValueListenableBuilder<TextEditingValue>(
-                    valueListenable: _textController,
-                    builder: (context, value, child) => PlatformIconButton(
-                      onTap: value.text.isNotEmpty
-                          ? () {
-                              ref
-                                  .read(chatControllerProvider.notifier)
-                                  .onUserMessage(_textController.text);
-                              _textController.clear();
-                            }
-                          : null,
-                      icon: Icons.send,
-                      semanticsLabel: context.l10n.send,
-                    ),
-                  ),
-                  border: InputBorder.none,
-                  hintText: context.l10n.talkInChat,
-                ),
-              ),
-            ),
-          ],
+        child: AdaptiveTextField(
+          materialDecoration: InputDecoration(
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+            suffixIcon: sendButton,
+            border: OutlineInputBorder(borderRadius: borderRadius),
+            hintText: context.l10n.talkInChat,
+          ),
+          cupertinoDecoration: BoxDecoration(
+            border: Border.all(color: Theme.of(context).colorScheme.outline),
+            borderRadius: borderRadius,
+          ),
+          controller: _textController,
+          keyboardType: TextInputType.text,
+          minLines: 1,
+          maxLines: 4,
+          placeholder: context.l10n.talkInChat,
+          suffix: sendButton,
+          enableSuggestions: true,
         ),
       ),
     );
