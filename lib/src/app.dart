@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 
 class App extends ConsumerStatefulWidget {
@@ -29,8 +30,19 @@ class _AppState extends ConsumerState<App> {
       setOptimalDisplayMode();
     }
 
-    // Sync correspondence games on app start, once.
+    // Sync correspondence games on app start, just once.
     ref.read(correspondenceServiceProvider).syncGames();
+
+    // Play registered moves whenever the app comes back online.
+    ref.listenManual(connectivityChangesProvider, (prev, current) {
+      if (prev?.hasValue == true &&
+          !prev!.value!.isOnline &&
+          !current.isRefreshing &&
+          current.hasValue &&
+          current.value!.isOnline) {
+        ref.read(correspondenceServiceProvider).playRegisteredMoves();
+      }
+    });
 
     super.initState();
   }

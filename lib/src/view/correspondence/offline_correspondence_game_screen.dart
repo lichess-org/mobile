@@ -341,7 +341,7 @@ class _BodyState extends ConsumerState<_Body> {
   void confirmMove() {
     setState(() {
       game = game.copyWith(
-        registeredMoveAtPgn: (moveToConfirm!.$1, moveToConfirm!.$2.uci),
+        registeredMoveAtPgn: (moveToConfirm!.$1, moveToConfirm!.$2),
       );
       moveToConfirm = null;
     });

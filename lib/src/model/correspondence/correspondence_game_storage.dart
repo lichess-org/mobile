@@ -92,6 +92,15 @@ class CorrespondenceGameStorage {
     ref.invalidate(offlineOngoingCorrespondenceGamesProvider);
   }
 
+  Future<void> delete(GameId gameId) async {
+    await _db.delete(
+      _tableName,
+      where: 'gameId = ?',
+      whereArgs: [gameId.toString()],
+    );
+    ref.invalidate(offlineOngoingCorrespondenceGamesProvider);
+  }
+
   IList<(DateTime, OfflineCorrespondenceGame)> _decodeGames(
     List<Map<String, Object?>> list,
   ) {

@@ -133,8 +133,14 @@ class AccountRepository {
     );
   }
 
-  FutureResult<IList<OngoingGame>> getOngoingGames() {
-    return _apiClient.get(Uri.parse('$kLichessHost/api/account/playing')).then(
+  FutureResult<IList<OngoingGame>> getOngoingGames({int? nb}) {
+    return _apiClient
+        .get(
+          Uri.parse(
+            '$kLichessHost/api/account/playing${nb != null ? '?nb=$nb' : ''}',
+          ),
+        )
+        .then(
           (result) => result.flatMap(
             (response) => Result(() {
               final dynamic obj = jsonDecode(utf8.decode(response.bodyBytes));

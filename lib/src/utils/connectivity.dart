@@ -63,7 +63,7 @@ Future<bool> isOnline(Client client) async {
             ),
       ),
     ).timeout(
-      const Duration(seconds: 5),
+      const Duration(seconds: 10),
     );
     return result.any((e) => e);
   } catch (_) {

@@ -42,7 +42,7 @@ class OfflineCorrespondenceGame
     int? daysPerTurn,
     Side? winner,
     bool? isThreefoldRepetition,
-    (String, UCIMove)? registeredMoveAtPgn,
+    @MoveConverter() (String, Move)? registeredMoveAtPgn,
   }) = _CorrespondenceGame;
 
   factory OfflineCorrespondenceGame.fromJson(Map<String, dynamic> json) =>
@@ -71,6 +71,10 @@ class OfflineCorrespondenceGame
   bool get playing => status.value > GameStatus.started.value;
   bool get finished => status.value >= GameStatus.mate.value;
 }
+
+String moveToJson(Move move) => move.uci;
+// assume we are serializing only valid uci strings
+Move moveFromJson(String uci) => Move.fromUci(uci)!;
 
 String _stepsToJson(IList<GameStep> steps) {
   final objs = steps

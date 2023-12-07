@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -37,10 +38,26 @@ class CorrespondenceService {
 
   /// Syncs offline correspondence games with the server.
   Future<void> syncGames() async {
+    _log.info('Syncing correspondence games...');
+
     await playRegisteredMoves();
 
-    ref.read(accountRepositoryProvider).getOngoingGames().forEach(
+    final storedOngoingGames = await _storage.fetchOngoingGames();
+
+    // user can have more than 50 ongoing games, but we only sync the 50 most
+    // recent ones
+    ref.read(accountRepositoryProvider).getOngoingGames(nb: 50).forEach(
       (games) {
+        for (final sg in storedOngoingGames) {
+          final game = games.firstWhereOrNull((e) => e.id == sg.$2.id);
+          if (game == null) {
+            _log.info(
+              'Deleting correspondence game ${sg.$2.id} because it is not present on the server anymore',
+            );
+            _storage.delete(sg.$2.id);
+          }
+        }
+
         ref
             .read(gameRepositoryProvider)
             .getPlayableGamesByIds(
@@ -104,7 +121,7 @@ class CorrespondenceService {
               final moveEvent =
                   MoveEvent.fromJson(event.data as Map<String, dynamic>);
               // move acknowledged
-              if (moveEvent.uci == gameToSync.registeredMoveAtPgn!.$1) {
+              if (moveEvent.uci == gameToSync.registeredMoveAtPgn!.$2.uci) {
                 movePlayedCompleter.complete();
                 streamSubscription?.cancel();
               }
@@ -120,7 +137,7 @@ class CorrespondenceService {
             jsonEncode({
               't': 'move',
               'd': {
-                'u': gameToSync.registeredMoveAtPgn!.$2,
+                'u': gameToSync.registeredMoveAtPgn!.$2.uci,
               },
             }),
           );
