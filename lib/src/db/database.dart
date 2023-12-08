@@ -16,6 +16,24 @@ Database database(DatabaseRef ref) {
   return db;
 }
 
+/// Returns the sqlite version as an integer.
+@Riverpod(keepAlive: true)
+Future<int?> sqliteVersion(SqliteVersionRef ref) async {
+  final db = ref.read(databaseProvider);
+  try {
+    final versionStr = (await db.rawQuery('SELECT sqlite_version()'))
+        .first
+        .values
+        .first
+        .toString();
+    final versionCells =
+        versionStr.split('.').map((i) => int.parse(i)).toList();
+    return versionCells[0] * 100000 + versionCells[1] * 1000 + versionCells[2];
+  } catch (_) {
+    return null;
+  }
+}
+
 Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
   return dbFactory.openDatabase(
     path,

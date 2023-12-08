@@ -93,6 +93,9 @@ class CorrespondenceService {
         : {};
 
     for (final gameToSync in games) {
+      if (gameToSync.registeredMoveAtPgn == null) {
+        continue;
+      }
       final uri = Uri.parse('$kLichessWSHost/play/${gameToSync.fullId}/v6');
       WebSocket? socket;
       StreamSubscription<SocketEvent>? streamSubscription;

@@ -107,8 +107,7 @@ class OfflineCorrespondenceGamePreview extends ConsumerWidget {
           context,
           rootNavigator: true,
           builder: (_) => OfflineCorrespondenceGameScreen(
-            game: game,
-            lastModified: lastModified,
+            initialGame: (lastModified, game),
           ),
         );
       },

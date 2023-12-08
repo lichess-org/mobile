@@ -41,8 +41,8 @@ class CorrespondenceGameStorage {
       fetchOngoingGames() async {
     final list = await _db.query(
       _tableName,
-      where: "json_extract(data, '\$.status') LIKE ?",
-      whereArgs: ['started%'],
+      where: 'data LIKE ?',
+      whereArgs: ['%"status":"started"%'],
     );
 
     return _decodeGames(list).sort((a, b) {
@@ -61,12 +61,26 @@ class CorrespondenceGameStorage {
   /// Fetches all correspondence games with a registered move.
   Future<IList<(DateTime, OfflineCorrespondenceGame)>>
       fetchGamesWithRegisteredMove() async {
+    final sqlVersion = await ref.read(sqliteVersionProvider.future);
+    if (sqlVersion != null && sqlVersion >= 338000) {
+      final list = await _db.query(
+        _tableName,
+        where: "json_extract(data, '\$.registeredMoveAtPgn') IS NOT NULL",
+      );
+      return _decodeGames(list);
+    }
+
     final list = await _db.query(
       _tableName,
-      where: "json_extract(data, '\$.registeredMoveAtPgn') IS NOT NULL",
+      // where: "json_extract(data, '\$.registeredMoveAtPgn') IS NOT NULL",
+      where: 'data LIKE ?',
+      whereArgs: ['%status":"started"%'],
     );
 
-    return _decodeGames(list);
+    return _decodeGames(list).where((e) {
+      final (_, game) = e;
+      return game.registeredMoveAtPgn != null;
+    }).toIList();
   }
 
   Future<OfflineCorrespondenceGame?> fetch({
