@@ -24,6 +24,7 @@ Future<IList<(DateTime, OfflineCorrespondenceGame)>>
   OfflineOngoingCorrespondenceGamesRef ref,
 ) async {
   // cannot use ref.watch because it would create a circular dependency
+  // as we invalidate this provider in the storage save and delete methods
   final storage = ref.read(correspondenceGameStorageProvider);
   return storage.fetchOngoingGames();
 }
@@ -35,6 +36,7 @@ class CorrespondenceGameStorage {
   final Database _db;
   final CorrespondenceGameStorageRef ref;
 
+  /// Fetches all ongoing correspondence games, sorted by time left.
   Future<IList<(DateTime, OfflineCorrespondenceGame)>>
       fetchOngoingGames() async {
     final list = await _db.query(
@@ -43,9 +45,20 @@ class CorrespondenceGameStorage {
       whereArgs: ['started%'],
     );
 
-    return _decodeGames(list);
+    return _decodeGames(list).sort((a, b) {
+      final (aLastModified, aGame) = a;
+      final (bLastModified, bGame) = b;
+      final aTimeLeft = aGame.myTimeLeft(aLastModified);
+      final bTimeLeft = bGame.myTimeLeft(bLastModified);
+      if (aTimeLeft == null || bTimeLeft == null) {
+        return 0;
+      } else {
+        return aTimeLeft.compareTo(bTimeLeft);
+      }
+    });
   }
 
+  /// Fetches all correspondence games with a registered move.
   Future<IList<(DateTime, OfflineCorrespondenceGame)>>
       fetchGamesWithRegisteredMove() async {
     final list = await _db.query(
