@@ -169,6 +169,7 @@ class GamePlayer extends StatelessWidget {
       children: [
         if (mePlaying && confirmMoveCallbacks != null)
           Expanded(
+            flex: 7,
             child: Padding(
               padding: const EdgeInsets.only(right: 20),
               child: ConfirmMove(
@@ -179,6 +180,7 @@ class GamePlayer extends StatelessWidget {
           )
         else if (!zenMode || timeToMove != null)
           Expanded(
+            flex: 7,
             child: Padding(
               padding: const EdgeInsets.only(right: 20),
               child: shouldLinkToUserProfile
@@ -197,7 +199,7 @@ class GamePlayer extends StatelessWidget {
                   : playerWidget,
             ),
           ),
-        if (clock != null) clock!,
+        if (clock != null) Flexible(flex: 3, child: clock!),
       ],
     );
   }
