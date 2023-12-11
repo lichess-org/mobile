@@ -62,10 +62,6 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
   }) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
         title: widget.title,
         centerTitle: true,
       ),
