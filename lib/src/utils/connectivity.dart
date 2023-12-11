@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
@@ -49,24 +51,34 @@ Stream<ConnectivityStatus> connectivityChanges(ConnectivityChangesRef ref) {
 }
 
 final _internetCheckUris = [
-  Uri.parse('http://www.gstatic.com/generate_204'),
+  Uri.parse('https://www.gstatic.com/generate_204'),
   Uri.parse('$kLichessCDNHost/assets/logo/lichess-favicon-32.png'),
 ];
 
-Future<bool> isOnline(Client client) async {
+Future<bool> isOnline(Client client) {
+  final completer = Completer<bool>();
   try {
-    final result = await Future.wait(
-      _internetCheckUris.map(
-        (uri) => client.head(uri).then(
-              (response) => true,
-              onError: (_) => false,
-            ),
-      ),
-    ).timeout(
-      const Duration(seconds: 10),
+    int remaining = _internetCheckUris.length;
+    final futures = _internetCheckUris.map(
+      (uri) => client.head(uri).timeout(const Duration(seconds: 10)).then(
+            (response) => true,
+            onError: (_) => false,
+          ),
     );
-    return result.any((e) => e);
+    for (final future in futures) {
+      future.then((value) {
+        remaining--;
+        if (!completer.isCompleted) {
+          if (value == true) {
+            completer.complete(true);
+          } else if (remaining == 0) {
+            completer.complete(false);
+          }
+        }
+      });
+    }
   } catch (_) {
-    return false;
+    completer.complete(false);
   }
+  return completer.future;
 }
