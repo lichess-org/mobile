@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/game/chat_controller.dart';
@@ -78,10 +79,6 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
   }) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
         middle: widget.title,
       ),
       child: body,
@@ -101,6 +98,7 @@ class _Body extends ConsumerWidget {
     final chatState = ref.watch(chatControllerProvider);
 
     return Column(
+      mainAxisSize: MainAxisSize.max,
       children: [
         Expanded(
           child: ListView.builder(
@@ -135,6 +133,17 @@ class _MessageBubble extends ConsumerWidget {
 
   const _MessageBubble({required this.you, required this.message});
 
+  Color _bubbleColor(BuildContext context, Brightness brightness) =>
+      defaultTargetPlatform == TargetPlatform.iOS
+          ? you
+              ? LichessColors.green
+              : CupertinoColors.systemGrey2.resolveFrom(context)
+          : you
+              ? Theme.of(context).colorScheme.surfaceVariant
+              : brightness == Brightness.light
+                  ? lighten(LichessColors.grey)
+                  : darken(LichessColors.grey, 0.5);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final brightness = ref.watch(currentBrightnessProvider);
@@ -145,15 +154,11 @@ class _MessageBubble extends ConsumerWidget {
       child: Align(
         alignment: you ? Alignment.centerRight : Alignment.centerLeft,
         child: Container(
-          margin: const EdgeInsets.all(10.0),
+          margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 10.0),
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.0),
-            color: you
-                ? Theme.of(context).colorScheme.surfaceVariant
-                : brightness == Brightness.light
-                    ? lighten(LichessColors.grey)
-                    : darken(LichessColors.grey, 0.5),
+            borderRadius: BorderRadius.circular(16.0),
+            color: _bubbleColor(context, brightness),
           ),
           child: Text(
             message,
@@ -219,9 +224,10 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
       ),
     );
     final borderRadius = BorderRadius.circular(20.0);
-    return Container(
-      margin: const EdgeInsets.all(10.0),
-      child: SafeArea(
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: AdaptiveTextField(
           materialDecoration: InputDecoration(
             contentPadding:
@@ -231,13 +237,15 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
             hintText: context.l10n.talkInChat,
           ),
           cupertinoDecoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).colorScheme.outline),
+            border: Border.all(
+              color: CupertinoColors.separator.resolveFrom(context),
+            ),
             borderRadius: borderRadius,
           ),
           controller: _textController,
-          keyboardType: TextInputType.text,
+          keyboardType: TextInputType.multiline,
           minLines: 1,
-          maxLines: 4,
+          maxLines: 3,
           placeholder: context.l10n.talkInChat,
           suffix: sendButton,
           enableSuggestions: true,

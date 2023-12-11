@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:chessground/chessground.dart' as cg;
 import 'package:collection/collection.dart';
@@ -535,6 +536,7 @@ class _GameBottomBar extends ConsumerWidget {
                   onTap: () {
                     pushPlatformRoute(
                       context,
+                      fullscreenDialog: true,
                       builder: (BuildContext context) {
                         return MessageScreen(
                           title: UserFullNameWidget(
@@ -549,22 +551,25 @@ class _GameBottomBar extends ConsumerWidget {
                 ),
                 if (chatState.unreadMessages > 0)
                   Positioned(
-                    top: 9.0,
-                    right: 6.0,
+                    top: 2.0,
+                    right: 2.0,
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
                         const Icon(
                           Icons.brightness_1,
-                          size: 16.0,
+                          size: 20.0,
                         ),
-                        Text(
-                          chatState.unreadMessages.toString(),
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 8.0,
-                            fontWeight: FontWeight.w500,
+                        SizedBox(
+                          child: FittedBox(
+                            fit: BoxFit.cover,
+                            child: Text(
+                              math.min(9, chatState.unreadMessages).toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
                       ],
