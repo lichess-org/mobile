@@ -547,7 +547,9 @@ class _GameBottomBar extends ConsumerWidget {
                       },
                     );
                   },
-                  icon: CupertinoIcons.chat_bubble,
+                  icon: defaultTargetPlatform == TargetPlatform.iOS
+                      ? CupertinoIcons.chat_bubble
+                      : Icons.chat_bubble_outline,
                 ),
                 if (chatState.unreadMessages > 0)
                   Positioned(
@@ -556,16 +558,21 @@ class _GameBottomBar extends ConsumerWidget {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.brightness_1,
                           size: 20.0,
+                          color: defaultTargetPlatform == TargetPlatform.iOS
+                              ? CupertinoColors.activeBlue.resolveFrom(context)
+                              : Theme.of(context).colorScheme.primary,
                         ),
                         FittedBox(
                           fit: BoxFit.contain,
                           child: Text(
                             math.min(9, chatState.unreadMessages).toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: defaultTargetPlatform == TargetPlatform.iOS
+                                  ? Colors.white
+                                  : Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
