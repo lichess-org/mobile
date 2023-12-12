@@ -65,6 +65,7 @@ class _GameScreenState extends ConsumerState<LobbyGameScreen>
 
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: GameAppBar(seek: widget.seek),
       body: _LoadLobbyGame(
         seek: widget.seek,
@@ -76,6 +77,7 @@ class _GameScreenState extends ConsumerState<LobbyGameScreen>
 
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
+      resizeToAvoidBottomInset: false,
       navigationBar: GameCupertinoNavBar(seek: widget.seek),
       child: _LoadLobbyGame(
         seek: widget.seek,

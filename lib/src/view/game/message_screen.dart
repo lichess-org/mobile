@@ -140,12 +140,23 @@ class _MessageBubble extends ConsumerWidget {
       defaultTargetPlatform == TargetPlatform.iOS
           ? you
               ? LichessColors.green
-              : CupertinoColors.systemGrey2.resolveFrom(context)
+              : CupertinoColors.systemGrey4.resolveFrom(context)
           : you
               ? Theme.of(context).colorScheme.surfaceVariant
               : brightness == Brightness.light
                   ? lighten(LichessColors.grey)
                   : darken(LichessColors.grey, 0.5);
+
+  Color _textColor(BuildContext context, Brightness brightness) =>
+      defaultTargetPlatform == TargetPlatform.iOS
+          ? you
+              ? Colors.white
+              : CupertinoColors.label.resolveFrom(context)
+          : you
+              ? Theme.of(context).colorScheme.onSurfaceVariant
+              : brightness == Brightness.light
+                  ? Colors.black
+                  : Colors.white;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -157,7 +168,7 @@ class _MessageBubble extends ConsumerWidget {
       child: Align(
         alignment: you ? Alignment.centerRight : Alignment.centerLeft,
         child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 10.0),
+          margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.0),
@@ -165,6 +176,9 @@ class _MessageBubble extends ConsumerWidget {
           ),
           child: Text(
             message,
+            style: TextStyle(
+              color: _textColor(context, brightness),
+            ),
           ),
         ),
       ),
@@ -183,7 +197,7 @@ class _MessageAction extends StatelessWidget {
       widthFactor: 0.8,
       child: Center(
         child: Container(
-          margin: const EdgeInsets.all(10.0),
+          margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           child: Text(
             message,
             textAlign: TextAlign.center,
@@ -223,10 +237,10 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
               }
             : null,
         icon: Icons.send,
+        padding: EdgeInsets.zero,
         semanticsLabel: context.l10n.send,
       ),
     );
-    final borderRadius = BorderRadius.circular(20.0);
     return SafeArea(
       top: false,
       child: Padding(
@@ -236,14 +250,16 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
             suffixIcon: sendButton,
-            border: OutlineInputBorder(borderRadius: borderRadius),
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+            ),
             hintText: context.l10n.talkInChat,
           ),
           cupertinoDecoration: BoxDecoration(
             border: Border.all(
               color: CupertinoColors.separator.resolveFrom(context),
             ),
-            borderRadius: borderRadius,
+            borderRadius: const BorderRadius.all(Radius.circular(30.0)),
           ),
           controller: _textController,
           keyboardType: TextInputType.text,
