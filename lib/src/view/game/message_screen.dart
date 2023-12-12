@@ -142,7 +142,7 @@ class _MessageBubble extends ConsumerWidget {
               ? LichessColors.green
               : CupertinoColors.systemGrey4.resolveFrom(context)
           : you
-              ? Theme.of(context).colorScheme.surfaceVariant
+              ? Theme.of(context).colorScheme.secondaryContainer
               : brightness == Brightness.light
                   ? lighten(LichessColors.grey)
                   : darken(LichessColors.grey, 0.5);
@@ -153,7 +153,7 @@ class _MessageBubble extends ConsumerWidget {
               ? Colors.white
               : CupertinoColors.label.resolveFrom(context)
           : you
-              ? Theme.of(context).colorScheme.onSurfaceVariant
+              ? Theme.of(context).colorScheme.onSecondaryContainer
               : brightness == Brightness.light
                   ? Colors.black
                   : Colors.white;
