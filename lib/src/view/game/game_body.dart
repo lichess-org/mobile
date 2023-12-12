@@ -560,15 +560,13 @@ class _GameBottomBar extends ConsumerWidget {
                           Icons.brightness_1,
                           size: 20.0,
                         ),
-                        SizedBox(
-                          child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              math.min(9, chatState.unreadMessages).toString(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
+                        FittedBox(
+                          fit: BoxFit.contain,
+                          child: Text(
+                            math.min(9, chatState.unreadMessages).toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
