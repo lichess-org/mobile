@@ -264,6 +264,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
           controller: _textController,
           keyboardType: TextInputType.text,
           minLines: 1,
+          maxLines: 4,
           placeholder: context.l10n.talkInChat,
           suffix: sendButton,
           enableSuggestions: true,
