@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -16,15 +17,17 @@ class ChatController extends _$ChatController {
   AuthSocket get _socket => ref.read(authSocketProvider);
 
   @override
-  ChatState build() {
-    final stream = _socket.stream;
-    _socketSubscription = stream.listen(_handleSocketTopic);
+  ChatState build(ID chatContext) {
+    _socketSubscription = _socket.stream.listen(_handleSocketTopic);
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
     });
 
-    return state;
+    return ChatState(
+      messages: IList(),
+      unreadMessages: 0,
+    );
   }
 
   void setMessages(IList<Message> messages) {

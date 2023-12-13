@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -14,10 +15,15 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class MessageScreen extends ConsumerStatefulWidget {
+  final ID chatContext;
   final Widget title;
   final LightUser? me;
 
-  const MessageScreen({required this.title, this.me});
+  const MessageScreen({
+    required this.chatContext,
+    required this.title,
+    this.me,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MessageScreenState();
@@ -41,13 +47,15 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
 
   @override
   void didPop() {
-    ref.read(chatControllerProvider.notifier).resetUnreadMessages();
+    ref
+        .read(chatControllerProvider(widget.chatContext).notifier)
+        .resetUnreadMessages();
     super.didPop();
   }
 
   @override
   Widget build(BuildContext context) {
-    final body = _Body(me: widget.me);
+    final body = _Body(me: widget.me, chatContext: widget.chatContext);
 
     return PlatformWidget(
       androidBuilder: (context) =>
@@ -83,15 +91,17 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
 }
 
 class _Body extends ConsumerWidget {
+  final ID chatContext;
   final LightUser? me;
 
   const _Body({
+    required this.chatContext,
     required this.me,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final chatState = ref.watch(chatControllerProvider);
+    final chatState = ref.watch(chatControllerProvider(chatContext));
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -124,7 +134,7 @@ class _Body extends ConsumerWidget {
             ),
           ),
         ),
-        _ChatBottomBar(),
+        _ChatBottomBar(chatContext: chatContext),
       ],
     );
   }
@@ -210,6 +220,9 @@ class _MessageAction extends StatelessWidget {
 }
 
 class _ChatBottomBar extends ConsumerStatefulWidget {
+  final ID chatContext;
+  const _ChatBottomBar({required this.chatContext});
+
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ChatBottomBarState();
 }
@@ -231,7 +244,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
         onTap: value.text.isNotEmpty
             ? () {
                 ref
-                    .read(chatControllerProvider.notifier)
+                    .read(chatControllerProvider(widget.chatContext).notifier)
                     .onUserMessage(_textController.text);
                 _textController.clear();
               }

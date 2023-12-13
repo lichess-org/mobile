@@ -60,6 +60,7 @@ class GameController extends _$GameController {
   @override
   Future<GameState> build(GameFullId gameFullId) {
     final socket = ref.watch(authSocketProvider);
+    final chatNotifier = ref.watch(chatControllerProvider(gameFullId).notifier);
     final (stream, _) = socket.connect(Uri(path: '/play/$gameFullId/v6'));
     _socketEventVersion = null;
     _socketSubscription?.cancel();
@@ -78,9 +79,7 @@ class GameController extends _$GameController {
 
         _socketEventVersion = fullEvent.socketEventVersion;
 
-        ref
-            .watch(chatControllerProvider.notifier)
-            .setMessages(fullEvent.game.messages);
+        chatNotifier.setMessages(fullEvent.game.messages);
 
         return GameState(
           game: fullEvent.game,
@@ -439,7 +438,7 @@ class GameController extends _$GameController {
         _lastMoveTime = null;
 
         ref
-            .read(chatControllerProvider.notifier)
+            .read(chatControllerProvider(gameFullId).notifier)
             .setMessages(fullEvent.game.messages);
 
         state = AsyncValue.data(

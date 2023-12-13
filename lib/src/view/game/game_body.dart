@@ -346,7 +346,7 @@ class _GameBottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
-    final chatState = ref.watch(chatControllerProvider);
+    final chatState = ref.watch(chatControllerProvider(id));
 
     return Container(
       padding: Styles.horizontalBodyPadding,
@@ -543,6 +543,7 @@ class _GameBottomBar extends ConsumerWidget {
                             user: gameState.game.opponent?.user,
                           ),
                           me: gameState.game.me?.user,
+                          chatContext: id,
                         );
                       },
                     );
