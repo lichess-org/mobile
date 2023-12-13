@@ -48,24 +48,26 @@ class EvaluationService {
   /// If [options] is not provided, the default options are used.
   /// This method must be called before calling [start]. It is the caller's
   /// responsibility to close the engine.
-  ///
-  /// If the engine is already initialized, this method does nothing.
-  void initEngine(
+  Future<void> initEngine(
     EvaluationContext context, {
     Engine Function() engineFactory = StockfishEngine.new,
     EvaluationOptions? options,
-  }) {
-    if (_engine != null) return;
+  }) async {
     _context = context;
     if (options != null) _options = options;
+    await (_engine?.dispose() ?? Future<void>.value());
     _engine = engineFactory.call();
     _engine!.state.addListener(() {
-      if (_engine!.state.value == EngineState.initial) {
+      debugPrint('Engine state: ${_engine?.state.value}');
+      if (_engine?.state.value == EngineState.initial ||
+          _engine?.state.value == EngineState.disposed) {
         ref.read(engineEvaluationProvider.notifier).reset();
       }
-      ref
-          .read(engineEvaluationProvider.notifier)
-          .setEngineState(_engine!.state.value);
+      if (_engine?.state != null) {
+        ref
+            .read(engineEvaluationProvider.notifier)
+            .setEngineState(_engine!.state.value);
+      }
     });
   }
 
@@ -75,8 +77,9 @@ class EvaluationService {
   }
 
   void disposeEngine() {
-    _engine?.dispose();
-    _engine = null;
+    _engine?.dispose().then((_) {
+      _engine = null;
+    });
     _context = null;
   }
 

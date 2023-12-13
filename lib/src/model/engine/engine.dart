@@ -12,6 +12,8 @@ enum EngineState {
   loading,
   idle,
   computing,
+  error,
+  disposed,
 }
 
 abstract class Engine {
@@ -19,7 +21,7 @@ abstract class Engine {
   String get name;
   Stream<EvalResult> start(Work work);
   void stop();
-  void dispose();
+  Future<void> dispose();
 }
 
 class StockfishEngine implements Engine {
@@ -54,6 +56,7 @@ class StockfishEngine implements Engine {
         _stdoutSubscription = stockfish.stdout.listen((line) {
           _protocol.received(line);
         });
+        stockfish.state.addListener(_stockfishStateListener);
         _protocol.isComputing.addListener(() {
           if (_protocol.isComputing.value) {
             _state.value = EngineState.computing;
@@ -66,12 +69,27 @@ class StockfishEngine implements Engine {
         });
         _protocol.engineName.then((name) {
           _name = name;
-          _state.value = EngineState.idle;
         });
+      }).catchError((Object e, StackTrace s) {
+        _log.severe('error loading stockfish', e, s);
+        _state.value = EngineState.error;
       });
     }
 
     return _protocol.evalStream.where((e) => e.$1 == work);
+  }
+
+  void _stockfishStateListener() {
+    if (_stockfish?.state.value case StockfishState.ready) {
+      _state.value = EngineState.idle;
+    } else if (_stockfish?.state.value case StockfishState.error) {
+      _state.value = EngineState.error;
+    } else if (_stockfish?.state.value case StockfishState.disposed) {
+      _log.info('engine disposed');
+      _state.value = EngineState.disposed;
+      _state.dispose();
+      _stockfish?.state.removeListener(_stockfishStateListener);
+    }
   }
 
   @override
@@ -80,12 +98,24 @@ class StockfishEngine implements Engine {
   }
 
   @override
-  void dispose() {
-    _log.info('engine disposed');
+  Future<void> dispose() {
+    _log.fine('disposing engine');
+    if (_stockfish == null ||
+        _stockfish?.state.value == StockfishState.disposed) {
+      return Future.value();
+    }
     _stdoutSubscription?.cancel();
-    _state.dispose();
     _protocol.dispose();
+    final completer = Completer<void>();
+    void stateListener() {
+      if (_stockfish?.state.value case StockfishState.disposed) {
+        _stockfish?.state.removeListener(stateListener);
+        completer.complete();
+      }
+    }
+
+    _stockfish!.state.addListener(stateListener);
     _stockfish?.dispose();
-    _stockfish = null;
+    return completer.future;
   }
 }

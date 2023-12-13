@@ -219,6 +219,8 @@ class PuzzleController extends _$PuzzleController {
   }
 
   void loadPuzzle(PuzzleContext nextContext) {
+    ref.read(evaluationServiceProvider).disposeEngine();
+
     state = _loadNewContext(nextContext, state.streak);
   }
 

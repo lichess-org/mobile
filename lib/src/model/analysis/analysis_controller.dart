@@ -151,7 +151,7 @@ class AnalysisController extends _$AnalysisController {
               cores: prefs.numEngineCores,
             ),
           );
-      _startEngineEvalTimer = Timer(const Duration(milliseconds: 50), () {
+      _startEngineEvalTimer = Timer(const Duration(milliseconds: 200), () {
         _startEngineEval();
       });
     }

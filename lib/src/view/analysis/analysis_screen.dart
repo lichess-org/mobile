@@ -763,6 +763,8 @@ class _EngineDepth extends ConsumerWidget {
               );
             },
             child: Container(
+              width: 20.0,
+              height: 20.0,
               padding: const EdgeInsets.all(2.0),
               decoration: BoxDecoration(
                 color: defaultTargetPlatform == TargetPlatform.android
@@ -770,16 +772,18 @@ class _EngineDepth extends ConsumerWidget {
                     : CupertinoTheme.of(context).primaryColor,
                 borderRadius: BorderRadius.circular(4.0),
               ),
-              child: Text(
-                '$depth',
-                style: TextStyle(
-                  fontSize: 12.0,
-                  color: defaultTargetPlatform == TargetPlatform.android
-                      ? Theme.of(context).colorScheme.onSecondary
-                      : CupertinoTheme.of(context).primaryContrastingColor,
-                  fontFeatures: const [
-                    FontFeature.tabularFigures(),
-                  ],
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: Text(
+                  '${math.min(99, depth)}',
+                  style: TextStyle(
+                    color: defaultTargetPlatform == TargetPlatform.android
+                        ? Theme.of(context).colorScheme.onSecondary
+                        : CupertinoTheme.of(context).primaryContrastingColor,
+                    fontFeatures: const [
+                      FontFeature.tabularFigures(),
+                    ],
+                  ),
                 ),
               ),
             ),
