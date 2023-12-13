@@ -82,6 +82,7 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
     required GameFullId gameId,
   }) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: GameAppBar(id: gameId),
       body: GameBody(
         initialStandAloneId: widget.initialId,
@@ -97,6 +98,7 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
     required GameFullId gameId,
   }) {
     return CupertinoPageScaffold(
+      resizeToAvoidBottomInset: false,
       navigationBar: GameCupertinoNavBar(id: gameId),
       child: GameBody(
         initialStandAloneId: widget.initialId,

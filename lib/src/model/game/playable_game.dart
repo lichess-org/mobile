@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
@@ -38,6 +39,7 @@ class PlayableGame
     required Player black,
     required bool moretimeable,
     required bool takebackable,
+    required IList<Message> messages,
 
     /// The side that the current player is playing as. This is null if viewing
     /// the game as a spectator.
@@ -141,6 +143,7 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
       );
     }
   }
+  final messages = pick('chat', 'lines').asListOrThrow(_messageFromPick);
 
   return PlayableGame(
     id: requiredGamePick('id').asGameIdOrThrow(),
@@ -174,6 +177,7 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
       },
     ),
     rematch: pick('game', 'rematch').asGameIdOrNull(),
+    messages: messages.toIList(),
   );
 }
 
@@ -246,5 +250,12 @@ CorrespondenceClockData _correspondenceClockDataFromPick(RequiredPick pick) {
   return CorrespondenceClockData(
     white: pick('white').asDurationFromSecondsOrThrow(),
     black: pick('black').asDurationFromSecondsOrThrow(),
+  );
+}
+
+Message _messageFromPick(RequiredPick pick) {
+  return Message(
+    message: pick('t').asStringOrThrow(),
+    username: pick('u').asStringOrThrow(),
   );
 }

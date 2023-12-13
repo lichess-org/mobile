@@ -20,6 +20,7 @@ class AdaptiveTextField extends StatelessWidget {
     this.readOnly = false,
     this.enableSuggestions = false,
     this.autofocus = false,
+    this.suffix,
     this.cupertinoDecoration,
     this.materialDecoration,
     super.key,
@@ -40,6 +41,8 @@ class AdaptiveTextField extends StatelessWidget {
   final void Function(String)? onChanged;
   final void Function(String)? onSubmitted;
   final GestureTapCallback? onTap;
+  final Widget?
+      suffix; //used only for iOS, suffix should be put in InputDecoration for android
 
   final BoxDecoration? cupertinoDecoration;
   final InputDecoration? materialDecoration;
@@ -65,6 +68,11 @@ class AdaptiveTextField extends StatelessWidget {
           readOnly: readOnly,
           enableSuggestions: enableSuggestions,
           autofocus: autofocus,
+          suffix: suffix,
+          cursorColor: const CupertinoDynamicColor.withBrightness(
+            color: CupertinoColors.activeBlue,
+            darkColor: CupertinoColors.activeOrange,
+          ),
         );
       default:
         return TextField(

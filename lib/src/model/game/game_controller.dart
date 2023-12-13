@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
+import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -59,6 +60,7 @@ class GameController extends _$GameController {
   @override
   Future<GameState> build(GameFullId gameFullId) {
     final socket = ref.watch(authSocketProvider);
+    final chatNotifier = ref.watch(chatControllerProvider(gameFullId).notifier);
     final (stream, _) = socket.connect(Uri(path: '/play/$gameFullId/v6'));
     _socketEventVersion = null;
     _socketSubscription?.cancel();
@@ -70,18 +72,22 @@ class GameController extends _$GameController {
       _transientMoveTimer?.cancel();
     });
 
-    return stream.firstWhere((e) => e.topic == 'full').then((event) {
-      final fullEvent =
-          GameFullEvent.fromJson(event.data as Map<String, dynamic>);
+    return stream.firstWhere((e) => e.topic == 'full').then(
+      (event) {
+        final fullEvent =
+            GameFullEvent.fromJson(event.data as Map<String, dynamic>);
 
-      _socketEventVersion = fullEvent.socketEventVersion;
+        _socketEventVersion = fullEvent.socketEventVersion;
 
-      return GameState(
-        game: fullEvent.game,
-        stepCursor: fullEvent.game.steps.length - 1,
-        stopClockWaitingForServerAck: false,
-      );
-    });
+        chatNotifier.setMessages(fullEvent.game.messages);
+
+        return GameState(
+          game: fullEvent.game,
+          stepCursor: fullEvent.game.steps.length - 1,
+          stopClockWaitingForServerAck: false,
+        );
+      },
+    );
   }
 
   void onUserMove(Move move, {bool? isDrop, bool? isPremove}) {
@@ -430,6 +436,10 @@ class GameController extends _$GameController {
         }
         _socketEventVersion = fullEvent.socketEventVersion;
         _lastMoveTime = null;
+
+        ref
+            .read(chatControllerProvider(gameFullId).notifier)
+            .setMessages(fullEvent.game.messages);
 
         state = AsyncValue.data(
           GameState(

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:chessground/chessground.dart' as cg;
 import 'package:collection/collection.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
@@ -21,10 +23,12 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
+import 'package:lichess_mobile/src/view/game/message_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 import 'game_common_widgets.dart';
@@ -342,6 +346,7 @@ class _GameBottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
+    final chatState = ref.watch(chatControllerProvider(id));
 
     return Container(
       padding: Styles.horizontalBodyPadding,
@@ -523,9 +528,62 @@ class _GameBottomBar extends ConsumerWidget {
                   orElse: () => null,
                 ),
               ),
-            // TODO replace this space with chat button
-            const SizedBox(
-              width: 44.0,
+            Stack(
+              children: [
+                BottomBarButton(
+                  label: context.l10n.chat,
+                  shortLabel: context.l10n.chat,
+                  onTap: () {
+                    pushPlatformRoute(
+                      context,
+                      fullscreenDialog: true,
+                      builder: (BuildContext context) {
+                        return MessageScreen(
+                          title: UserFullNameWidget(
+                            user: gameState.game.opponent?.user,
+                          ),
+                          me: gameState.game.me?.user,
+                          chatContext: id,
+                        );
+                      },
+                    );
+                  },
+                  icon: defaultTargetPlatform == TargetPlatform.iOS
+                      ? CupertinoIcons.chat_bubble
+                      : Icons.chat_bubble_outline,
+                ),
+                if (chatState.unreadMessages > 0)
+                  Positioned(
+                    top: 2.0,
+                    right: 2.0,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Icon(
+                          Icons.brightness_1,
+                          size: 20.0,
+                          color: defaultTargetPlatform == TargetPlatform.iOS
+                              ? CupertinoColors.activeBlue.resolveFrom(context)
+                              : Theme.of(context).colorScheme.primary,
+                        ),
+                        FittedBox(
+                          fit: BoxFit.contain,
+                          child: Text(
+                            math.min(9, chatState.unreadMessages).toString(),
+                            style: TextStyle(
+                              color: defaultTargetPlatform == TargetPlatform.iOS
+                                  ? Colors.white
+                                  : Theme.of(context).colorScheme.onPrimary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                else
+                  const SizedBox.shrink(),
+              ],
             ),
             RepeatButton(
               onLongPress:

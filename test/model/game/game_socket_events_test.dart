@@ -59,6 +59,20 @@ const _gameJson = '''
   "expiration": {
     "idleMillis": 245,
     "millisToMove": 30000
+  },
+  "chat": {
+    "lines": [
+      {
+        "u": "Zidrox",
+        "t": "Good luck",
+        "f": "people.man-singer"
+      },
+      {
+        "u": "lichess",
+        "t": "Takeback accepted",
+        "f": "activity.lichess"
+      }
+    ]
   }
 }
 ''';
