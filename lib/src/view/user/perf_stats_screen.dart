@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -599,6 +600,7 @@ class _GameListWidget extends ConsumerWidget {
       children: [
         for (final game in games)
           GameListTile(
+            gameId: game.gameId,
             onTap: () {
               final gameIds = ISet(games.map((g) => g.gameId));
               ref.read(gamesByIdProvider(ids: gameIds).future).then((list) {
