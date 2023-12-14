@@ -20,7 +20,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-import 'account_settings_screen.dart';
+import 'account_preferences_screen.dart';
 import 'board_settings_screen.dart';
 import 'board_theme_screen.dart';
 import 'piece_set_screen.dart';
@@ -184,15 +184,15 @@ class _Body extends ConsumerWidget {
               children: [
                 PlatformListTile(
                   leading: const Icon(Icons.person),
-                  title: const Text('Account'),
+                  title: Text(context.l10n.preferencesPreferences),
                   trailing: defaultTargetPlatform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
                       : null,
                   onTap: () {
                     pushPlatformRoute(
                       context,
-                      title: 'Account',
-                      builder: (context) => const AccountSettingsScreen(),
+                      title: context.l10n.preferencesPreferences,
+                      builder: (context) => const AccountPreferencesScreen(),
                     );
                   },
                 ),
