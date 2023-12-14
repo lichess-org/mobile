@@ -136,7 +136,7 @@ class PuzzleRepository {
                 pick(json['puzzles']).asListOrThrow(_litePuzzleFromPick),
               ),
               highscore: pick(json['high']).letOrNull(_stormHighScoreFromPick),
-              key: pick(json["key"]).asStringOrNull(),
+              key: pick(json['key']).asStringOrNull(),
             );
           },
         );
@@ -383,9 +383,9 @@ LitePuzzle _litePuzzleFromPick(RequiredPick pick) {
 PuzzleStormHighScore _stormHighScoreFromPick(RequiredPick pick) {
   return PuzzleStormHighScore(
     allTime: pick('allTime').asIntOrThrow(),
-    day: pick("day").asIntOrThrow(),
-    month: pick("month").asIntOrThrow(),
-    week: pick("week").asIntOrThrow(),
+    day: pick('day').asIntOrThrow(),
+    month: pick('month').asIntOrThrow(),
+    week: pick('week').asIntOrThrow(),
   );
 }
 

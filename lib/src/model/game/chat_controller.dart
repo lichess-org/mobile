@@ -53,8 +53,8 @@ class ChatController extends _$ChatController {
       // Called when a message is received
       case 'message':
         final data = event.data as Map<String, dynamic>;
-        final message = data["t"] as String;
-        final username = data["u"] as String;
+        final message = data['t'] as String;
+        final username = data['u'] as String;
         state = state.copyWith(
           messages: state.messages.add(
             Message(

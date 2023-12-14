@@ -72,7 +72,7 @@ class _Body extends ConsumerWidget {
               child: Stack(
                 children: [
                   Image.asset(
-                    "assets/board-thumbnails/${boardPrefs.boardTheme.name}.jpg",
+                    'assets/board-thumbnails/${boardPrefs.boardTheme.name}.jpg',
                     height: 32,
                     errorBuilder: (context, o, st) => const SizedBox.shrink(),
                   ),

@@ -27,6 +27,7 @@ analyzer:
 
 linter:
   rules:
+    prefer_single_quotes: true
     always_use_package_imports: false
     avoid_redundant_argument_values: false
     sort_pub_dependencies: true

@@ -71,7 +71,7 @@ class _Body extends ConsumerWidget {
           builder: (BuildContext context, StateSetter setState) {
             if (following.isEmpty) {
               return const Center(
-                child: Text("You are not following any user"),
+                child: Text('You are not following any user'),
               );
             }
             return SafeArea(

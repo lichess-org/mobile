@@ -45,7 +45,7 @@ class _Body extends ConsumerWidget {
     final stormDashboard = ref.watch(stormDashboardProvider);
     return stormDashboard.when(
       data: (data) {
-        final dateFormat = DateFormat("MMMM d, yyyy");
+        final dateFormat = DateFormat('MMMM d, yyyy');
         return SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

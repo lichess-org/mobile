@@ -58,7 +58,7 @@ class _Body extends ConsumerWidget {
             subtitleBuilder: (t) => Align(
               alignment: Alignment.topLeft,
               child: Image.asset(
-                "assets/board-thumbnails/${t.name}.jpg",
+                'assets/board-thumbnails/${t.name}.jpg',
                 height: 32,
                 errorBuilder: (context, o, st) => const SizedBox.shrink(),
               ),
