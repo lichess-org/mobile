@@ -2,7 +2,6 @@ import 'dart:developer' as developer;
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +15,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'firebase_options.dart';
 import 'src/app.dart';
 import 'src/constants.dart';
+import 'src/push_notifications.dart' as push_notifications;
 
 // to see http requests and websocket connections in terminal since we're not
 // always using the browser devtools
@@ -62,18 +62,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
-
-    if (message.notification != null) {
-      print('Message also contained a notification: ${message.notification}');
-    }
-  });
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-  print('fcmToken: $fcmToken');
+  // Push notifications
+  await push_notifications.setupPushNotifications();
 
   // Crashlytics
   if (kReleaseMode) {
@@ -105,14 +95,6 @@ void main() async {
       child: const LoadApp(),
     ),
   );
-}
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
-
-  print("Handling a background message: ${message.messageId}");
 }
 
 Future<void> _setupIntl() async {
