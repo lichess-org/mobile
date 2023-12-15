@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
@@ -23,13 +24,16 @@ Future<IList<(DateTime, OfflineCorrespondenceGame)>>
     offlineOngoingCorrespondenceGames(
   OfflineOngoingCorrespondenceGamesRef ref,
 ) async {
+  final session = ref.watch(authSessionProvider);
   // cannot use ref.watch because it would create a circular dependency
   // as we invalidate this provider in the storage save and delete methods
   final storage = ref.read(correspondenceGameStorageProvider);
-  return storage.fetchOngoingGames();
+  return storage.fetchOngoingGames(session?.user.id);
 }
 
 const _tableName = 'correspondence_game';
+
+const _anonymousUserId = '**anonymous**';
 
 class CorrespondenceGameStorage {
   const CorrespondenceGameStorage(this._db, this.ref);
@@ -37,12 +41,13 @@ class CorrespondenceGameStorage {
   final CorrespondenceGameStorageRef ref;
 
   /// Fetches all ongoing correspondence games, sorted by time left.
-  Future<IList<(DateTime, OfflineCorrespondenceGame)>>
-      fetchOngoingGames() async {
+  Future<IList<(DateTime, OfflineCorrespondenceGame)>> fetchOngoingGames(
+    UserId? userId,
+  ) async {
     final list = await _db.query(
       _tableName,
-      where: 'data LIKE ?',
-      whereArgs: ['%"status":"started"%'],
+      where: 'userId = ? AND data LIKE ?',
+      whereArgs: ['${userId ?? _anonymousUserId}', '%"status":"started"%'],
     );
 
     return _decodeGames(list).sort((a, b) {
@@ -60,7 +65,7 @@ class CorrespondenceGameStorage {
 
   /// Fetches all correspondence games with a registered move.
   Future<IList<(DateTime, OfflineCorrespondenceGame)>>
-      fetchGamesWithRegisteredMove() async {
+      fetchGamesWithRegisteredMove(UserId? userId) async {
     final sqlVersion = await ref.read(sqliteVersionProvider.future);
     if (sqlVersion != null && sqlVersion >= 338000) {
       final list = await _db.query(
@@ -73,8 +78,8 @@ class CorrespondenceGameStorage {
     final list = await _db.query(
       _tableName,
       // where: "json_extract(data, '\$.registeredMoveAtPgn') IS NOT NULL",
-      where: 'data LIKE ?',
-      whereArgs: ['%status":"started"%'],
+      where: 'userId = ? AND data LIKE ?',
+      whereArgs: ['${userId ?? _anonymousUserId}', '%status":"started"%'],
     );
 
     return _decodeGames(list).where((e) {
@@ -110,6 +115,7 @@ class CorrespondenceGameStorage {
     await _db.insert(
       _tableName,
       {
+        'userId': game.me.user?.id.toString() ?? _anonymousUserId,
         'gameId': game.id.toString(),
         'lastModified': DateTime.now().toIso8601String(),
         'data': jsonEncode(game.toJson()),

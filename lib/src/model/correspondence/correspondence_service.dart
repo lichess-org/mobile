@@ -42,7 +42,8 @@ class CorrespondenceService {
 
     await playRegisteredMoves();
 
-    final storedOngoingGames = await _storage.fetchOngoingGames();
+    final storedOngoingGames =
+        await _storage.fetchOngoingGames(_session?.user.id);
 
     // user can have more than 50 ongoing games, but we only sync the 50 most
     // recent ones
@@ -81,9 +82,10 @@ class CorrespondenceService {
   Future<void> playRegisteredMoves() async {
     _log.info('Playing registered correspondence moves...');
 
-    final games = await _storage.fetchGamesWithRegisteredMove().then(
-          (games) => games.map((e) => e.$2).toList(),
-        );
+    final games =
+        await _storage.fetchGamesWithRegisteredMove(_session?.user.id).then(
+              (games) => games.map((e) => e.$2).toList(),
+            );
 
     WebSocket.userAgent = ref.read(userAgentProvider);
     final Map<String, String> wsHeaders = _session != null

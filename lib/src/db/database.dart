@@ -38,26 +38,26 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 3,
+      version: 4,
       onOpen: (db) async {
         await _deleteOldEntries(db, 'puzzle', puzzleTTL);
         await _deleteOldEntries(db, 'correspondence_game', corresGameTTL);
       },
       onCreate: (db, version) async {
         final batch = db.batch();
-        _createPuzzleBatchTableV3(batch);
-        _createPuzzleTableV3(batch);
-        _createCorrespondenceGameTableV3(batch);
+        _createPuzzleBatchTableV4(batch);
+        _createPuzzleTableV4(batch);
+        _createCorrespondenceGameTableV4(batch);
         await batch.commit();
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         final batch = db.batch();
         if (oldVersion == 1) {
-          _createPuzzleTableV3(batch);
-          _createCorrespondenceGameTableV3(batch);
+          _createPuzzleTableV4(batch);
+          _createCorrespondenceGameTableV4(batch);
         }
-        if (oldVersion == 2) {
-          _createCorrespondenceGameTableV3(batch);
+        if (oldVersion == 2 || oldVersion == 3) {
+          _createCorrespondenceGameTableV4(batch);
         }
         await batch.commit();
       },
@@ -65,7 +65,7 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
   );
 }
 
-void _createPuzzleBatchTableV3(Batch batch) {
+void _createPuzzleBatchTableV4(Batch batch) {
   batch.execute('DROP TABLE IF EXISTS puzzle_batchs');
   batch.execute('''
     CREATE TABLE puzzle_batchs(
@@ -77,7 +77,7 @@ void _createPuzzleBatchTableV3(Batch batch) {
     ''');
 }
 
-void _createPuzzleTableV3(Batch batch) {
+void _createPuzzleTableV4(Batch batch) {
   batch.execute('DROP TABLE IF EXISTS puzzle');
   batch.execute('''
     CREATE TABLE puzzle(
@@ -89,11 +89,12 @@ void _createPuzzleTableV3(Batch batch) {
     ''');
 }
 
-void _createCorrespondenceGameTableV3(Batch batch) {
+void _createCorrespondenceGameTableV4(Batch batch) {
   batch.execute('DROP TABLE IF EXISTS correspondence_game');
   batch.execute('''
     CREATE TABLE correspondence_game(
     gameId TEXT NOT NULL,
+    userId TEXT NOT NULL,
     lastModified TEXT NOT NULL,
     data TEXT NOT NULL,
     PRIMARY KEY (gameId)
