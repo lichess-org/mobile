@@ -129,7 +129,7 @@ class _AppState extends ConsumerState<App> {
 
   Future<void> setupPushNotifications() async {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      // print('Message data: ${message.data}');
+      debugPrint('Message data: ${message.data}');
     });
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -158,7 +158,7 @@ class _AppState extends ConsumerState<App> {
   }
 
   Future<void> _registerDevice(String token) async {
-    // print('fcmToken: $fcmToken');
+    debugPrint('fcmToken: $token');
     // TODO register device to lichess
   }
 
@@ -223,5 +223,5 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  debugPrint('Handling a background message: ${message.messageId}');
+  debugPrint('Handling a background message: ${message.data}');
 }
