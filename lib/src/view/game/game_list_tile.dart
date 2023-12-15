@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_context_menu.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -80,31 +81,28 @@ class GameListTile extends ConsumerWidget {
       trailing: trailing,
     );
 
-    return CupertinoContextMenu.builder(
+    return AdaptiveContextMenu.builder(
       enableHapticFeedback: true,
       builder: (context, animation) {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (fen != null &&
-                animation.value > CupertinoContextMenu.animationOpensAt)
+                animation.value > AdaptiveContextMenu.animationOpensAt)
               BoardThumbnail(
-                size: MediaQuery.of(context).size.width * 0.7,
+                size: MediaQuery.of(context).size.width - 96.0,
                 fen: fen!,
                 orientation: (orientation ?? Side.white).cg,
                 lastMove: lastMove?.cg,
               ),
-            if (animation.value > CupertinoContextMenu.animationOpensAt)
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.7,
-                child: PlatformCard(
-                  margin: EdgeInsets.zero,
-                  borderRadius: BorderRadius.zero,
-                  child: tile,
-                ),
+            if (animation.value > AdaptiveContextMenu.animationOpensAt)
+              PlatformCard(
+                margin: const EdgeInsets.symmetric(horizontal: 48.0),
+                borderRadius: BorderRadius.zero,
+                child: tile,
               )
             else if (animation.value > 0)
-              PlatformCard(margin: EdgeInsets.zero, child: tile)
+              PlatformCard(margin: EdgeInsets.zero, elevation: 1, child: tile)
             else
               tile,
           ],
@@ -126,6 +124,8 @@ class GameListTile extends ConsumerWidget {
                                 ConnectionState.waiting
                             ? null
                             : () async {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
                                 final future = ref.read(
                                   gameAnalysisPgnProvider(id: gameId).future,
                                 );
@@ -160,6 +160,7 @@ class GameListTile extends ConsumerWidget {
           ),
         CupertinoContextMenuAction(
           onPressed: () async {
+            Navigator.of(context, rootNavigator: true).pop();
             await Clipboard.setData(
               ClipboardData(text: '$kLichessHost/$gameId'),
             );
@@ -172,6 +173,7 @@ class GameListTile extends ConsumerWidget {
             trailingIcon: Icons.gif,
             child: Text(context.l10n.gameAsGIF),
             onPressed: () async {
+              Navigator.of(context, rootNavigator: true).pop();
               try {
                 final resp = await ref
                     .read(httpClientProvider)
@@ -200,40 +202,11 @@ class GameListTile extends ConsumerWidget {
               }
             },
           ),
-        // if (lastMove != null)
-        //   CupertinoContextMenuAction(
-        //     label: Text(context.l10n.screenshotCurrentPosition),
-        //     onPressed: (context) async {
-        //       try {
-        //         final resp = await ref
-        //             .read(httpClientProvider)
-        //             .get(
-        //               Uri.parse(
-        //                 '$kLichessCDNHost/export/fen.gif?fen=${Uri.encodeComponent(currentGamePosition.fen)}&color=${orientation.name}&lastMove=${lastMove.uci}&theme=${boardTheme.name}&piece=${pieceTheme.name}',
-        //               ),
-        //             )
-        //             .timeout(const Duration(seconds: 1));
-        //         if (resp.statusCode != 200) {
-        //           throw Exception('Failed to get GIF');
-        //         }
-        //         Share.shareXFiles(
-        //           [XFile.fromData(resp.bodyBytes, mimeType: 'image/gif')],
-        //         );
-        //       } catch (e) {
-        //         if (context.mounted) {
-        //           showPlatformSnackbar(
-        //             context,
-        //             'Failed to get GIF',
-        //             type: SnackBarType.error,
-        //           );
-        //         }
-        //       }
-        //     },
-        //   ),
         CupertinoContextMenuAction(
           trailingIcon: CupertinoIcons.share,
           child: Text('PGN: ${context.l10n.downloadAnnotated}'),
           onPressed: () async {
+            Navigator.of(context, rootNavigator: true).pop();
             try {
               final resp = await ref
                   .read(httpClientProvider)
@@ -262,6 +235,7 @@ class GameListTile extends ConsumerWidget {
           trailingIcon: CupertinoIcons.share,
           child: Text('PGN: ${context.l10n.downloadRaw}'),
           onPressed: () async {
+            Navigator.of(context, rootNavigator: true).pop();
             try {
               final resp = await ref
                   .read(httpClientProvider)
