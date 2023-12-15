@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +9,7 @@ import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/firebase_options.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
@@ -24,6 +29,8 @@ class App extends ConsumerStatefulWidget {
 }
 
 class _AppState extends ConsumerState<App> {
+  StreamSubscription<String>? _fcmTokenRefreshSubscription;
+
   @override
   void initState() {
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -44,7 +51,16 @@ class _AppState extends ConsumerState<App> {
       }
     });
 
+    // Setup push notifications.
+    setupPushNotifications();
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _fcmTokenRefreshSubscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -111,6 +127,41 @@ class _AppState extends ConsumerState<App> {
     );
   }
 
+  Future<void> setupPushNotifications() async {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      // print('Message data: ${message.data}');
+    });
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+      announcement: false,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+    );
+
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage? message) {
+      if (message != null) {
+        // print('getInitialMessage: ${message.data}');
+      }
+    });
+
+    _fcmTokenRefreshSubscription =
+        FirebaseMessaging.instance.onTokenRefresh.listen((String token) {
+      _registerDevice(token);
+    });
+  }
+
+  Future<void> _registerDevice(String token) async {
+    // print('fcmToken: $fcmToken');
+    // TODO register device to lichess
+  }
+
   // Code taken from https://stackoverflow.com/questions/63631522/flutter-120fps-issue
   /// Enables high refresh rate for devices where it was previously disabled
   Future<void> setOptimalDisplayMode() async {
@@ -163,4 +214,14 @@ class LoadApp extends ConsumerWidget {
       },
     );
   }
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  debugPrint('Handling a background message: ${message.messageId}');
 }

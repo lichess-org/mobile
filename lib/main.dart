@@ -15,7 +15,6 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'firebase_options.dart';
 import 'src/app.dart';
 import 'src/constants.dart';
-import 'src/push_notifications.dart' as push_notifications;
 
 // to see http requests and websocket connections in terminal since we're not
 // always using the browser devtools
@@ -61,9 +60,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  // Push notifications
-  await push_notifications.setupPushNotifications();
 
   // Crashlytics
   if (kReleaseMode) {
