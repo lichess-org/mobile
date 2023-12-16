@@ -115,6 +115,7 @@ class _CorrespondenceClockState extends ConsumerState<CorrespondenceClock> {
           child: MediaQuery.withClampedTextScaling(
             maxScaleFactor: kMaxClockTextScaleFactor,
             child: RichText(
+              textAlign: TextAlign.center,
               maxLines: 2,
               text: TextSpan(
                 text: '$daysStr$hoursStr',
