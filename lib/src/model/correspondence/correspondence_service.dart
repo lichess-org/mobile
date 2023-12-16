@@ -79,7 +79,10 @@ class CorrespondenceService {
     );
   }
 
-  Future<void> playRegisteredMoves() async {
+  /// Plays correspondence moves that were registered while the user was offline.
+  ///
+  /// Returns a [Future] that completes with the number of moves played.
+  Future<int> playRegisteredMoves() async {
     _log.info('Playing registered correspondence moves...');
 
     final games =
@@ -93,6 +96,8 @@ class CorrespondenceService {
             'Authorization': 'Bearer ${signBearerToken(_session!.token)}',
           }
         : {};
+
+    int movesPlayed = 0;
 
     for (final gameToSync in games) {
       if (gameToSync.registeredMoveAtPgn == null) {
@@ -127,6 +132,7 @@ class CorrespondenceService {
                   MoveEvent.fromJson(event.data as Map<String, dynamic>);
               // move acknowledged
               if (moveEvent.uci == gameToSync.registeredMoveAtPgn!.$2.uci) {
+                movesPlayed++;
                 movePlayedCompleter.complete();
                 streamSubscription?.cancel();
               }
@@ -171,6 +177,8 @@ class CorrespondenceService {
         socket?.close();
       }
     }
+
+    return movesPlayed;
   }
 
   Future<void> updateGame(GameFullId fullId, PlayableGame game) async {
@@ -189,6 +197,7 @@ class CorrespondenceService {
             black: game.black,
             youAre: game.youAre!,
             daysPerTurn: game.meta.daysPerTurn,
+            clock: game.correspondenceClock,
             winner: game.winner,
             isThreefoldRepetition: game.isThreefoldRepetition,
           ),

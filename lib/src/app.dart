@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/firebase_options.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
@@ -41,13 +42,17 @@ class _AppState extends ConsumerState<App> {
     ref.read(correspondenceServiceProvider).syncGames();
 
     // Play registered moves whenever the app comes back online.
-    ref.listenManual(connectivityChangesProvider, (prev, current) {
+    ref.listenManual(connectivityChangesProvider, (prev, current) async {
       if (prev?.hasValue == true &&
           !prev!.value!.isOnline &&
           !current.isRefreshing &&
           current.hasValue &&
           current.value!.isOnline) {
-        ref.read(correspondenceServiceProvider).playRegisteredMoves();
+        final nbMovesPlayed =
+            await ref.read(correspondenceServiceProvider).playRegisteredMoves();
+        if (nbMovesPlayed > 0) {
+          ref.invalidate(ongoingGamesProvider);
+        }
       }
     });
 
