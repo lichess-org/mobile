@@ -17,7 +17,7 @@ class SanMove with _$SanMove {
   const SanMove._();
   const factory SanMove(
     String san,
-    @JsonKey(fromJson: _moveFromJson, toJson: _moveToJson) Move move,
+    @MoveConverter() Move move,
   ) = _SanMove;
 
   factory SanMove.fromJson(Map<String, dynamic> json) =>
@@ -27,9 +27,16 @@ class SanMove with _$SanMove {
   bool get isCapture => san.contains('x');
 }
 
-String _moveToJson(Move move) => move.uci;
-// assume we are serializing only valid uci strings
-Move _moveFromJson(String uci) => Move.fromUci(uci)!;
+class MoveConverter implements JsonConverter<Move, String> {
+  const MoveConverter();
+
+  // assume we are serializing only valid uci strings
+  @override
+  Move fromJson(String json) => Move.fromUci(json)!;
+
+  @override
+  String toJson(Move object) => object.uci;
+}
 
 /// Alternative castling uci notations.
 const altCastles = {

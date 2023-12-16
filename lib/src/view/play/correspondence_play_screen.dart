@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/correspondence/correspondence_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_body.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -192,7 +193,11 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
             context,
             rootNavigator: true,
             builder: (BuildContext context) {
-              return CorrespondenceGameScreen(initialId: gameFullId);
+              return CorrespondenceGameScreen(
+                params: InitialStandaloneGameParams(
+                  id: gameFullId,
+                ),
+              );
             },
           );
           widget.setViewMode(_ViewMode.create);

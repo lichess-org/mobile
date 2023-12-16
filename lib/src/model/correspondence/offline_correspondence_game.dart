@@ -42,7 +42,7 @@ class OfflineCorrespondenceGame
     int? daysPerTurn,
     Side? winner,
     bool? isThreefoldRepetition,
-    (String, UCIMove)? registeredMoveAtPgn,
+    @MoveConverter() (String, Move)? registeredMoveAtPgn,
   }) = _CorrespondenceGame;
 
   factory OfflineCorrespondenceGame.fromJson(Map<String, dynamic> json) =>

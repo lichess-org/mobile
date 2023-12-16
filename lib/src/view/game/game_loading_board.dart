@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:chessground/chessground.dart' as cg;
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -97,7 +99,16 @@ class LobbyGameLoadingBoard extends StatelessWidget {
 }
 
 class StandaloneGameLoadingBoard extends StatelessWidget {
-  const StandaloneGameLoadingBoard();
+  const StandaloneGameLoadingBoard({
+    this.fen,
+    this.lastMove,
+    this.orientation,
+    super.key,
+  });
+
+  final String? fen;
+  final Side? orientation;
+  final Move? lastMove;
 
   @override
   Widget build(BuildContext context) {
@@ -107,26 +118,15 @@ class StandaloneGameLoadingBoard extends StatelessWidget {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              boardData: const cg.BoardData(
+              boardData: cg.BoardData(
                 interactableSide: cg.InteractableSide.none,
-                orientation: cg.Side.white,
-                fen: kEmptyFen,
+                orientation: orientation?.cg ?? cg.Side.white,
+                fen: fen ?? kEmptyFen,
+                lastMove: lastMove?.cg,
               ),
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
-              boardOverlay: PlatformCard(
-                elevation: 2.0,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text('${context.l10n.waitingForOpponent}...'),
-                    ],
-                  ),
-                ),
-              ),
             ),
           ),
         ),

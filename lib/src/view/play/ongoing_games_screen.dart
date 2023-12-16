@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart' as cg;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/correspondence/correspondence_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_body.dart';
 import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -102,12 +103,20 @@ class OngoingGamePreview extends ConsumerWidget {
           rootNavigator: true,
           builder: (context) => game.speed == Speed.correspondence
               ? CorrespondenceGameScreen(
-                  initialId: game.fullId,
-                  initialFen: game.fen,
+                  params: InitialStandaloneGameParams(
+                    id: game.fullId,
+                    fen: game.fen,
+                    orientation: game.orientation,
+                    lastMove: game.lastMove,
+                  ),
                 )
               : StandaloneGameScreen(
-                  initialId: game.fullId,
-                  initialFen: game.fen,
+                  params: InitialStandaloneGameParams(
+                    id: game.fullId,
+                    fen: game.fen,
+                    orientation: game.orientation,
+                    lastMove: game.lastMove,
+                  ),
                 ),
         ).then((_) {
           if (context.mounted) {

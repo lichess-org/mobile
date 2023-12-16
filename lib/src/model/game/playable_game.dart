@@ -58,7 +58,7 @@ class PlayableGame
   /// Create a playable game from the lichess api json.
   ///
   /// Currently, those endpoints are supported:
-  /// - https://lichess.org/api#tag/Games/operation/apiUserCurrentGame
+  /// - GET /api/mobile/my-games
   /// - game socket (/play/<gameFullId>/v6) 'full' event
   factory PlayableGame.fromServerJson(Map<String, dynamic> json) {
     return _playableGameFromPick(pick(json).required());

@@ -1,4 +1,5 @@
 import 'package:chessground/chessground.dart' as cg;
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -26,41 +27,66 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-class OfflineCorrespondenceGameScreen extends StatelessWidget {
+class OfflineCorrespondenceGameScreen extends StatefulWidget {
   const OfflineCorrespondenceGameScreen({
-    required this.game,
-    required this.lastModified,
+    required this.initialGame,
     super.key,
   });
 
-  final OfflineCorrespondenceGame game;
-  final DateTime lastModified;
+  final (DateTime, OfflineCorrespondenceGame) initialGame;
+
+  @override
+  State<OfflineCorrespondenceGameScreen> createState() =>
+      _OfflineCorrespondenceGameScreenState();
+}
+
+class _OfflineCorrespondenceGameScreenState
+    extends State<OfflineCorrespondenceGameScreen> {
+  late (DateTime, OfflineCorrespondenceGame) currentGame;
+
+  @override
+  void initState() {
+    currentGame = widget.initialGame;
+    super.initState();
+  }
+
+  void goToNextGame((DateTime, OfflineCorrespondenceGame) nextGame) {
+    setState(() {
+      currentGame = nextGame;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(
-      androidBuilder: (context) => _androidBuilder(
-        context,
-      ),
-      iosBuilder: (context) => _iosBuilder(
-        context,
-      ),
+      androidBuilder: _androidBuilder,
+      iosBuilder: _iosBuilder,
     );
   }
 
   Widget _androidBuilder(BuildContext context) {
+    final (lastModified, game) = currentGame;
     return Scaffold(
       appBar: AppBar(title: _Title(game)),
-      body: _Body(game: game, lastModified: lastModified),
+      body: _Body(
+        game: game,
+        lastModified: lastModified,
+        onGameChanged: goToNextGame,
+      ),
     );
   }
 
   Widget _iosBuilder(BuildContext context) {
+    final (lastModified, game) = currentGame;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: _Title(game),
       ),
-      child: _Body(game: game, lastModified: lastModified),
+      child: _Body(
+        game: game,
+        lastModified: lastModified,
+        onGameChanged: goToNextGame,
+      ),
     );
   }
 }
@@ -96,10 +122,12 @@ class _Body extends ConsumerStatefulWidget {
   const _Body({
     required this.game,
     required this.lastModified,
+    required this.onGameChanged,
   });
 
   final OfflineCorrespondenceGame game;
   final DateTime lastModified;
+  final void Function((DateTime, OfflineCorrespondenceGame)) onGameChanged;
 
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -123,12 +151,26 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   @override
+  void didUpdateWidget(covariant _Body oldWidget) {
+    if (oldWidget.game.id != widget.game.id) {
+      game = widget.game;
+      stepCursor = widget.game.steps.length - 1;
+      moveToConfirm = null;
+      isBoardTurned = false;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final shouldShowMaterialDiff = ref.watch(
       boardPreferencesProvider.select(
         (prefs) => prefs.showMaterialDifference,
       ),
     );
+
+    final offlineOngoingGames =
+        ref.watch(offlineOngoingCorrespondenceGamesProvider);
 
     final position = game.positionAt(stepCursor);
     final sideToMove = position.turn;
@@ -258,6 +300,24 @@ class _BodyState extends ConsumerState<_Body> {
                   icon: Icons.biotech,
                 ),
                 BottomBarButton(
+                  label: 'Go to the next game',
+                  shortLabel: 'Next game',
+                  icon: Icons.skip_next,
+                  onTap: offlineOngoingGames.maybeWhen(
+                    data: (games) {
+                      final nextTurn = games
+                          .whereNot((g) => g.$2.id == game.id)
+                          .firstWhereOrNull((g) => g.$2.isPlayerTurn);
+                      return nextTurn != null
+                          ? () {
+                              widget.onGameChanged(nextTurn);
+                            }
+                          : null;
+                    },
+                    orElse: () => null,
+                  ),
+                ),
+                BottomBarButton(
                   label: 'Clear saved move',
                   shortLabel: 'Clear move',
                   onTap: game.registeredMoveAtPgn != null
@@ -341,7 +401,7 @@ class _BodyState extends ConsumerState<_Body> {
   void confirmMove() {
     setState(() {
       game = game.copyWith(
-        registeredMoveAtPgn: (moveToConfirm!.$1, moveToConfirm!.$2.uci),
+        registeredMoveAtPgn: (moveToConfirm!.$1, moveToConfirm!.$2),
       );
       moveToConfirm = null;
     });

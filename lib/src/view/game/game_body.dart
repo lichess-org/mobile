@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -37,6 +38,18 @@ import 'game_player.dart';
 import 'game_result_dialog.dart';
 import 'game_screen_providers.dart';
 
+part 'game_body.freezed.dart';
+
+@freezed
+class InitialStandaloneGameParams with _$InitialStandaloneGameParams {
+  const factory InitialStandaloneGameParams({
+    required GameFullId id,
+    String? fen,
+    Move? lastMove,
+    Side? orientation,
+  }) = _InitialStandaloneGameParams;
+}
+
 /// Common body for the [LobbyGameScreen] and [StandaloneGameScreen].
 ///
 /// This widget is responsible for displaying the board, the clocks, the players,
@@ -46,29 +59,29 @@ import 'game_screen_providers.dart';
 /// null, it will display a button to get a new opponent and the game
 /// provider will be [lobbyGameProvider].
 /// If [seek] is null the game provider will be the [onlineGameProvider]
-/// parameterized with the [initialStandAloneId].
+/// parameterized with the [initialStandAloneParams.id].
 class GameBody extends ConsumerWidget {
   /// Constructs a [GameBody].
   ///
-  /// You must provide either [seek] or [initialStandAloneId], but not both.
+  /// You must provide either [seek] or [initialStandAloneParams], but not both.
   const GameBody({
     this.seek,
-    this.initialStandAloneId,
+    this.initialStandAloneParams,
     required this.id,
     required this.whiteClockKey,
     required this.blackClockKey,
     this.isRematch = false,
   }) : assert(
-          (seek != null || initialStandAloneId != null) &&
-              !(seek != null && initialStandAloneId != null),
-          'Either seek or initialStandAloneId must be provided, but not both.',
+          (seek != null || initialStandAloneParams != null) &&
+              !(seek != null && initialStandAloneParams != null),
+          'Either seek or initialStandAloneParams must be provided, but not both.',
         );
 
   /// The [GameSeek] used to get a new opponent when the game is coming from lobby.
   final GameSeek? seek;
 
-  /// The initial game id when the game was loaded from the [StandAloneGameScreen].
-  final GameFullId? initialStandAloneId;
+  /// The initial game params when the game was not loaded from lobby.
+  final InitialStandaloneGameParams? initialStandAloneParams;
 
   final GameFullId id;
   final GlobalKey whiteClockKey;
@@ -250,7 +263,7 @@ class GameBody extends ConsumerWidget {
             ),
             _GameBottomBar(
               seek: seek,
-              initialStandAloneId: initialStandAloneId,
+              initialStandAloneId: initialStandAloneParams?.id,
               id: id,
               gameState: gameState,
             ),
@@ -267,7 +280,13 @@ class GameBody extends ConsumerWidget {
         canPop: true,
         child: seek != null
             ? LobbyGameLoadingBoard(seek!, isRematch: isRematch)
-            : const StandaloneGameLoadingBoard(),
+            : id == initialStandAloneParams?.id
+                ? StandaloneGameLoadingBoard(
+                    fen: initialStandAloneParams?.fen,
+                    lastMove: initialStandAloneParams?.lastMove,
+                    orientation: initialStandAloneParams?.orientation,
+                  )
+                : const StandaloneGameLoadingBoard(),
       ),
       error: (e, s) {
         debugPrint(
@@ -286,9 +305,12 @@ class GameBody extends ConsumerWidget {
     required BuildContext context,
     required WidgetRef ref,
   }) {
-    if (prev?.hasValue == true && state.hasValue) {
+    if (state.hasValue) {
       // If the game is no longer playable, show the game end dialog.
-      if (prev!.requireValue.game.playable == true &&
+      // We want to show it only once, whether the game is already finished on
+      // first load or not.
+      if ((prev?.hasValue != true ||
+              prev!.requireValue.game.playable == true) &&
           state.requireValue.game.playable == false) {
         Timer(const Duration(milliseconds: 500), () {
           if (context.mounted) {
@@ -300,9 +322,11 @@ class GameBody extends ConsumerWidget {
           }
         });
       }
+    }
 
+    if (prev?.hasValue == true && state.hasValue) {
       // Opponent is gone long enough to show the claim win dialog.
-      if (!prev.requireValue.game.canClaimWin &&
+      if (!prev!.requireValue.game.canClaimWin &&
           state.requireValue.game.canClaimWin) {
         if (context.mounted) {
           showAdaptiveDialog<void>(
@@ -320,9 +344,11 @@ class GameBody extends ConsumerWidget {
           ref
               .read(lobbyGameProvider(seek!).notifier)
               .rematch(state.requireValue.redirectGameId!);
-        } else if (initialStandAloneId != null) {
+        } else if (initialStandAloneParams != null) {
           ref
-              .read(standaloneGameProvider(initialStandAloneId!).notifier)
+              .read(
+                standaloneGameProvider(initialStandAloneParams!.id).notifier,
+              )
               .newGame(state.requireValue.redirectGameId!);
         }
       }

@@ -56,10 +56,12 @@ void main() async {
 
   _setupTimeago();
 
-  // Crashlytics setup
+  // Firebase setup
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Crashlytics
   if (kReleaseMode) {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
     // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
