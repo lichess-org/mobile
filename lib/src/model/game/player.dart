@@ -38,6 +38,13 @@ class Player with _$Player {
 
   bool get isAI => aiLevel != null;
 
+  /// Returns the name of the player, including title if available
+  String fullName(BuildContext context) {
+    final displayName = this.displayName(context);
+    return user?.title != null ? '${user!.title} $displayName' : displayName;
+  }
+
+  /// Returns the name of the player, without title
   String displayName(BuildContext context) =>
       user?.name ??
       (aiLevel != null

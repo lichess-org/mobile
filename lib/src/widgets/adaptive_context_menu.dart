@@ -100,6 +100,7 @@ class AdaptiveContextMenuAction extends StatelessWidget {
     this.isDestructiveAction = false,
     this.icon,
     this.onPressed,
+    this.closeOnPressed = true,
   });
 
   final IconData? icon;
@@ -107,6 +108,7 @@ class AdaptiveContextMenuAction extends StatelessWidget {
   final Widget child;
   final bool isDefaultAction;
   final bool isDestructiveAction;
+  final bool closeOnPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -115,13 +117,23 @@ class AdaptiveContextMenuAction extends StatelessWidget {
             isDefaultAction: isDefaultAction,
             isDestructiveAction: isDestructiveAction,
             trailingIcon: icon,
-            onPressed: onPressed,
+            onPressed: () {
+              if (closeOnPressed) {
+                Navigator.of(context, rootNavigator: true).pop();
+              }
+              onPressed?.call();
+            },
             child: child,
           )
         : ListTile(
             leading: Icon(icon),
             title: child,
-            onTap: onPressed,
+            onTap: () {
+              if (closeOnPressed) {
+                Navigator.of(context, rootNavigator: true).pop();
+              }
+              onPressed?.call();
+            },
           );
   }
 }

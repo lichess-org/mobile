@@ -25,7 +25,6 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 /// A list tile that shows game info.
 class GameListTile extends ConsumerWidget {
@@ -74,24 +73,37 @@ class GameListTile extends ConsumerWidget {
                 ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 8.0,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      PlatformListTile(
-                        padding: EdgeInsets.zero,
-                        leading: Icon(game.perf.icon),
-                        title: Text(
-                          '${game.clockDisplay} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
-                        ),
-                        subtitle: Text(
-                          timeago.format(game.lastMoveAt),
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            context.l10n.resVsX(
+                              game.white.fullName(context),
+                              game.black.fullName(context),
+                            ),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                          const SizedBox(height: 2.0),
+                          Text(
+                            '${game.clockDisplay} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
+                            style: TextStyle(
+                              color: textShade(
+                                context,
+                                Styles.subtitleOpacity,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       if (game.lastFen != null)
                         Text(
@@ -147,35 +159,34 @@ class GameListTile extends ConsumerWidget {
                 builder: (context, snapshot) {
                   return AdaptiveContextMenuAction(
                     icon: Icons.biotech,
-                    onPressed: snapshot.connectionState ==
-                            ConnectionState.waiting
-                        ? null
-                        : () async {
-                            Navigator.of(context, rootNavigator: true).pop();
-                            final future = ref.read(
-                              gameAnalysisPgnProvider(id: game.id).future,
-                            );
-                            setState(() {
-                              pgnFuture = future;
-                            });
-                            final pgn = await future;
-                            if (context.mounted) {
-                              pushPlatformRoute(
-                                context,
-                                builder: (context) => AnalysisScreen(
-                                  title: context.l10n.gameAnalysis,
-                                  options: AnalysisOptions(
-                                    isLocalEvaluationAllowed: true,
-                                    variant: game.variant,
-                                    pgn: pgn,
-                                    orientation: orientation,
-                                    id: game.id,
-                                    serverAnalysis: serverAnalysis,
-                                  ),
-                                ),
-                              );
-                            }
-                          },
+                    onPressed:
+                        snapshot.connectionState == ConnectionState.waiting
+                            ? null
+                            : () async {
+                                final future = ref.read(
+                                  gameAnalysisPgnProvider(id: game.id).future,
+                                );
+                                setState(() {
+                                  pgnFuture = future;
+                                });
+                                final pgn = await future;
+                                if (context.mounted) {
+                                  pushPlatformRoute(
+                                    context,
+                                    builder: (context) => AnalysisScreen(
+                                      title: context.l10n.gameAnalysis,
+                                      options: AnalysisOptions(
+                                        isLocalEvaluationAllowed: true,
+                                        variant: game.variant,
+                                        pgn: pgn,
+                                        orientation: orientation,
+                                        id: game.id,
+                                        serverAnalysis: serverAnalysis,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
                     child: Text(context.l10n.gameAnalysis),
                   );
                 },
@@ -186,7 +197,6 @@ class GameListTile extends ConsumerWidget {
       ),
       AdaptiveContextMenuAction(
         onPressed: () async {
-          Navigator.of(context, rootNavigator: true).pop();
           await Clipboard.setData(
             ClipboardData(text: '$kLichessHost/${game.id}'),
           );
@@ -198,7 +208,6 @@ class GameListTile extends ConsumerWidget {
         icon: Icons.gif,
         child: Text(context.l10n.gameAsGIF),
         onPressed: () async {
-          Navigator.of(context, rootNavigator: true).pop();
           try {
             final resp = await ref
                 .read(httpClientProvider)
@@ -230,7 +239,6 @@ class GameListTile extends ConsumerWidget {
         icon: CupertinoIcons.share,
         child: Text('PGN: ${context.l10n.downloadAnnotated}'),
         onPressed: () async {
-          Navigator.of(context, rootNavigator: true).pop();
           try {
             final resp = await ref
                 .read(httpClientProvider)
@@ -259,7 +267,6 @@ class GameListTile extends ConsumerWidget {
         icon: CupertinoIcons.share,
         child: Text('PGN: ${context.l10n.downloadRaw}'),
         onPressed: () async {
-          Navigator.of(context, rootNavigator: true).pop();
           try {
             final resp = await ref
                 .read(httpClientProvider)
@@ -291,13 +298,14 @@ class GameListTile extends ConsumerWidget {
       onLongPress: () {
         showModalBottomSheet<void>(
           context: context,
+          useRootNavigator: true,
           isDismissible: true,
           isScrollControlled: true,
           showDragHandle: true,
           builder: (context) => DraggableScrollableSheet(
             initialChildSize: 0.6,
             maxChildSize: 0.95,
-            minChildSize: 0.3,
+            minChildSize: 0.6,
             expand: false,
             snap: true,
             builder: (context, scrollController) => SingleChildScrollView(
@@ -353,7 +361,10 @@ class GameListTile extends ConsumerWidget {
                     children: [
                       PlatformCard(
                         margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: expandedWidget,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: expandedWidget,
+                        ),
                       ),
                     ],
                   ),
