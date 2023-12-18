@@ -252,6 +252,7 @@ class PlatformListTile extends StatelessWidget {
     this.additionalInfo,
     this.dense,
     this.onTap,
+    this.onLongPress,
     this.selected = false,
     this.isThreeLine = false,
     this.padding,
@@ -286,6 +287,9 @@ class PlatformListTile extends StatelessWidget {
 
   final GestureTapCallback? onTap;
 
+  // Only on android
+  final GestureLongPressCallback? onLongPress;
+
   @override
   Widget build(BuildContext context) {
     switch (defaultTargetPlatform) {
@@ -305,6 +309,7 @@ class PlatformListTile extends StatelessWidget {
           dense: dense,
           visualDensity: visualDensity,
           onTap: onTap,
+          onLongPress: onLongPress,
           selected: selected,
           isThreeLine: isThreeLine,
           contentPadding: padding,

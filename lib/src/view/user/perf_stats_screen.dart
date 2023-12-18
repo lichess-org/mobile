@@ -18,7 +18,6 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
-import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -599,8 +598,7 @@ class _GameListWidget extends ConsumerWidget {
       hasLeading: false,
       children: [
         for (final game in games)
-          GameListTile(
-            gameId: game.gameId,
+          _GameListTile(
             onTap: () {
               final gameIds = ISet(games.map((g) => g.gameId));
               ref.read(gamesByIdProvider(ids: gameIds).future).then((list) {
@@ -629,6 +627,34 @@ class _GameListWidget extends ConsumerWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+class _GameListTile extends StatelessWidget {
+  const _GameListTile({
+    required this.playerTitle,
+    this.subtitle,
+    this.onTap,
+  });
+
+  final Widget playerTitle;
+  final Widget? subtitle;
+  final GestureTapCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformListTile(
+      onTap: onTap,
+      title: playerTitle,
+      subtitle: subtitle != null
+          ? DefaultTextStyle.merge(
+              child: subtitle!,
+              style: TextStyle(
+                color: textShade(context, Styles.subtitleOpacity),
+              ),
+            )
+          : null,
     );
   }
 }

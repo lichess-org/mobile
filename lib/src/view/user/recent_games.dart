@@ -73,15 +73,8 @@ class RecentGames extends ConsumerWidget {
                 game.white.user?.id == userId ? game.black : game.white;
 
             return GameListTile(
-              gameId: game.id,
-              variant: game.variant,
-              serverAnalysis: game.white.analysis != null &&
-                      game.black.analysis != null
-                  ? (white: game.white.analysis!, black: game.black.analysis!)
-                  : null,
-              fen: game.lastFen,
-              orientation:
-                  userId == game.white.user?.id ? Side.white : Side.black,
+              game: game,
+              mySide: userId == game.white.user?.id ? Side.white : Side.black,
               onTap: game.variant.isSupported
                   ? () {
                       pushPlatformRoute(

@@ -243,7 +243,14 @@ class GameResult extends StatelessWidget {
           ),
         const SizedBox(height: 6.0),
         Text(
-          '${gameStatusL10n(context, game)}$showWinner',
+          '${gameStatusL10n(
+            context,
+            variant: game.variant,
+            status: game.status,
+            lastPosition: game.lastPosition,
+            winner: game.winner,
+            isThreefoldRepetition: game.isThreefoldRepetition,
+          )}$showWinner',
           style: const TextStyle(
             fontStyle: FontStyle.italic,
           ),
