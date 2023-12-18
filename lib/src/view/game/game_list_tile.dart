@@ -59,77 +59,81 @@ class GameListTile extends ConsumerWidget {
             ? (white: game.white.analysis!, black: game.black.analysis!)
             : null;
 
-    final expandedWidget = IntrinsicHeight(
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          if (game.lastFen != null)
-            BoardThumbnail(
-              size: 150,
-              fen: game.lastFen!,
-              orientation: mySide.cg,
-              // lastMove: game.lastMove?.cg,
-            ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8.0,
-                vertical: 8.0,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  PlatformListTile(
-                    padding: EdgeInsets.zero,
-                    leading: Icon(game.perf.icon),
-                    title: Text(
-                      '${game.clockDisplay} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
-                    ),
-                    subtitle: Text(
-                      timeago.format(game.lastMoveAt),
-                    ),
+    final expandedWidget = LayoutBuilder(
+      builder: (context, constraints) {
+        return IntrinsicHeight(
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              if (game.lastFen != null)
+                BoardThumbnail(
+                  size: constraints.maxWidth - (constraints.maxWidth / 1.618),
+                  fen: game.lastFen!,
+                  orientation: mySide.cg,
+                  // lastMove: game.lastMove?.cg,
+                ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 8.0,
                   ),
-                  if (game.lastFen != null)
-                    Text(
-                      gameStatusL10n(
-                        context,
-                        variant: game.variant,
-                        status: game.status,
-                        lastPosition: Position.setupPosition(
-                          game.variant.rule,
-                          Setup.parseFen(game.lastFen!),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      PlatformListTile(
+                        padding: EdgeInsets.zero,
+                        leading: Icon(game.perf.icon),
+                        title: Text(
+                          '${game.clockDisplay} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
                         ),
-                        winner: game.winner,
-                      ),
-                      style: TextStyle(
-                        color: game.winner == null
-                            ? LichessColors.brag
-                            : game.winner == mySide
-                                ? LichessColors.good
-                                : LichessColors.red,
-                      ),
-                    ),
-                  if (game.opening != null)
-                    Text(
-                      game.opening!.name,
-                      maxLines: 2,
-                      style: TextStyle(
-                        color: textShade(
-                          context,
-                          Styles.subtitleOpacity,
+                        subtitle: Text(
+                          timeago.format(game.lastMoveAt),
                         ),
-                        fontSize: 12,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                ],
+                      if (game.lastFen != null)
+                        Text(
+                          gameStatusL10n(
+                            context,
+                            variant: game.variant,
+                            status: game.status,
+                            lastPosition: Position.setupPosition(
+                              game.variant.rule,
+                              Setup.parseFen(game.lastFen!),
+                            ),
+                            winner: game.winner,
+                          ),
+                          style: TextStyle(
+                            color: game.winner == null
+                                ? LichessColors.brag
+                                : game.winner == mySide
+                                    ? LichessColors.good
+                                    : LichessColors.red,
+                          ),
+                        ),
+                      if (game.opening != null)
+                        Text(
+                          game.opening!.name,
+                          maxLines: 2,
+                          style: TextStyle(
+                            color: textShade(
+                              context,
+                              Styles.subtitleOpacity,
+                            ),
+                            fontSize: 12,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
 
     final actions = [
