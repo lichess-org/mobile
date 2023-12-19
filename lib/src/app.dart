@@ -149,10 +149,10 @@ class _AppState extends ConsumerState<App> {
 
     _fcmTokenRefreshSubscription =
         FirebaseMessaging.instance.onTokenRefresh.listen((String token) {
-      ref.read(firebaseMessagingServiceProvider).registerDevice(token);
+      ref.read(firebaseMessagingServiceProvider).registerToken(token);
     });
 
-    ref.read(firebaseMessagingServiceProvider).registerToken();
+    ref.read(firebaseMessagingServiceProvider).registerDevice();
   }
 
   // Code taken from https://stackoverflow.com/questions/63631522/flutter-120fps-issue

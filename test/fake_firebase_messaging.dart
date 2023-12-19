@@ -9,10 +9,10 @@ class FakeFirebaseMessagingService implements FirebaseMessagingService {
   FirebaseMessagingServiceRef get ref => throw UnimplementedError();
 
   @override
-  Future<void> registerDevice(String token) async {}
+  Future<void> registerToken(String token) async {}
 
   @override
-  Future<void> registerToken() async {}
+  Future<void> registerDevice() async {}
 
   @override
   Future<void> unregister() async {}

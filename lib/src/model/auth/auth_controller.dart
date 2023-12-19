@@ -59,7 +59,7 @@ class AuthController extends _$AuthController {
     state = result.fold(
       (session) {
         ref.read(authSessionProvider.notifier).update(session);
-        ref.read(firebaseMessagingServiceProvider).registerToken();
+        ref.read(firebaseMessagingServiceProvider).registerDevice();
         return const AsyncValue.data(null);
       },
       (e, st) {

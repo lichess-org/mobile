@@ -35,14 +35,14 @@ class FirebaseMessagingService {
   final FirebaseMessagingServiceRef ref;
   final Logger _log;
 
-  Future<void> registerToken() async {
+  Future<void> registerDevice() async {
     final token = await FirebaseMessaging.instance.getToken();
     if (token != null) {
-      await registerDevice(token);
+      await registerToken(token);
     }
   }
 
-  Future<void> registerDevice(String token) async {
+  Future<void> registerToken(String token) async {
     final settings = await FirebaseMessaging.instance.getNotificationSettings();
     if (settings.authorizationStatus == AuthorizationStatus.denied) {
       return;
