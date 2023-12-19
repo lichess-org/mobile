@@ -51,11 +51,10 @@ class GameRepository {
     ).map((r) => utf8.decode(r.bodyBytes));
   }
 
-  // TODO parameters
-  FutureResult<IList<ArchivedGameData>> getUserGames(UserId userId) {
+  FutureResult<IList<ArchivedGameData>> getRecentGames(UserId userId) {
     return apiClient.get(
       Uri.parse(
-        '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true&accuracy=true&opening=true',
+        '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true&lastMove=true&accuracy=true&opening=true',
       ),
       headers: {'Accept': 'application/x-ndjson'},
     ).flatMap(
@@ -187,6 +186,7 @@ ArchivedGameData _archivedGameDataFromPick(RequiredPick pick) {
     winner: pick('winner').asSideOrNull(),
     variant: pick('variant').asVariantOrThrow(),
     lastFen: pick('lastFen').asStringOrNull(),
+    lastMove: pick('lastMove').asUciMoveOrNull(),
     clock: pick('clock').letOrNull(_clockDataFromPick),
     opening: pick('opening').letOrNull(_openingFromPick),
   );

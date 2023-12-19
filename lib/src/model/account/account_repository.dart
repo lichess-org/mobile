@@ -78,7 +78,7 @@ Future<IList<ArchivedGameData>> accountRecentGames(
   final link = ref.cacheFor(const Duration(hours: 1));
   final repo = ref.watch(gameRepositoryProvider);
   if (session != null) {
-    final result = await repo.getUserGames(session.user.id);
+    final result = await repo.getRecentGames(session.user.id);
     if (result.isError) {
       link.close();
     }

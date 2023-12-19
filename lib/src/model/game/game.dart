@@ -213,6 +213,7 @@ class ArchivedGameData with _$ArchivedGameData {
     required Variant variant,
     LightOpening? opening,
     String? lastFen,
+    Move? lastMove,
     Side? winner,
     ClockData? clock,
   }) = _ArchivedGameData;

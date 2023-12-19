@@ -69,7 +69,7 @@ class GameListTile extends ConsumerWidget {
                   size: constraints.maxWidth - (constraints.maxWidth / 1.618),
                   fen: game.lastFen!,
                   orientation: mySide.cg,
-                  // lastMove: game.lastMove?.cg,
+                  lastMove: game.lastMove?.cg,
                 ),
               Expanded(
                 child: Padding(

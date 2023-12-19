@@ -36,7 +36,7 @@ Future<IList<ArchivedGameData>> userRecentGames(
 }) async {
   final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(gameRepositoryProvider);
-  final result = await repo.getUserGames(userId);
+  final result = await repo.getRecentGames(userId);
   if (result.isError) {
     link.close();
   }

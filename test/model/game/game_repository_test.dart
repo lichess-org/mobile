@@ -24,7 +24,7 @@ void main() {
     reset(mockAuthClient);
   });
 
-  group('GameRepository.getUserGames', () {
+  group('GameRepository.getRecentGames', () {
     test('json read, full example', () async {
       const response = '''
 {"id":"Huk88k3D","rated":false,"variant":"fromPosition","speed":"blitz","perf":"blitz","createdAt":1673716450321,"lastMoveAt":1673716450321,"status":"noStart","players":{"white":{"user":{"name":"MightyNanook","id":"mightynanook"},"rating":1116,"provisional":true},"black":{"user":{"name":"Thibault","patron":true,"id":"thibault"},"rating":1772}},"initialFen":"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1","winner":"black","tournament":"ZZQ9tunK","clock":{"initial":300,"increment":0,"totalTime":300},"lastFen":"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1"}
@@ -35,13 +35,13 @@ void main() {
       when(
         () => mockAuthClient.get(
           Uri.parse(
-            '$kLichessHost/api/games/user/testUser?max=10&moves=false&lastFen=true&accuracy=true&opening=true',
+            '$kLichessHost/api/games/user/testUser?max=10&moves=false&lastFen=true&lastMove=true&accuracy=true&opening=true',
           ),
           headers: {'Accept': 'application/x-ndjson'},
         ),
       ).thenAnswer((_) async => Result.value(http.Response(response, 200)));
 
-      final result = await repo.getUserGames(const UserId('testUser'));
+      final result = await repo.getRecentGames(const UserId('testUser'));
 
       expect(result.isValue, true);
     });
