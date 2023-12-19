@@ -78,7 +78,9 @@ class GameController extends _$GameController {
 
         _socketEventVersion = fullEvent.socketEventVersion;
 
-        chatNotifier.setMessages(fullEvent.game.messages);
+        if (fullEvent.game.messages != null) {
+          chatNotifier.setMessages(fullEvent.game.messages!);
+        }
 
         return GameState(
           game: fullEvent.game,
@@ -436,9 +438,11 @@ class GameController extends _$GameController {
         _socketEventVersion = fullEvent.socketEventVersion;
         _lastMoveTime = null;
 
-        ref
-            .read(chatControllerProvider(gameFullId).notifier)
-            .setMessages(fullEvent.game.messages);
+        if (fullEvent.game.messages != null) {
+          ref
+              .read(chatControllerProvider(gameFullId).notifier)
+              .setMessages(fullEvent.game.messages!);
+        }
 
         state = AsyncValue.data(
           GameState(

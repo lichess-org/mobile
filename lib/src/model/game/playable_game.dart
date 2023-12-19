@@ -39,7 +39,7 @@ class PlayableGame
     required Player black,
     required bool moretimeable,
     required bool takebackable,
-    required IList<Message> messages,
+    IList<Message>? messages,
 
     /// The side that the current player is playing as. This is null if viewing
     /// the game as a spectator.
@@ -143,7 +143,6 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
       );
     }
   }
-  final messages = pick('chat', 'lines').asListOrThrow(_messageFromPick);
 
   return PlayableGame(
     id: requiredGamePick('id').asGameIdOrThrow(),
@@ -177,7 +176,7 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
       },
     ),
     rematch: pick('game', 'rematch').asGameIdOrNull(),
-    messages: messages.toIList(),
+    messages: pick('chat', 'lines').asListOrNull(_messageFromPick)?.toIList(),
   );
 }
 

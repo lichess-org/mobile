@@ -38,6 +38,10 @@ class CorrespondenceService {
 
   /// Syncs offline correspondence games with the server.
   Future<void> syncGames() async {
+    if (_session == null) {
+      return;
+    }
+
     _log.info('Syncing correspondence games...');
 
     await playRegisteredMoves();

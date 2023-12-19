@@ -31,9 +31,9 @@ Future<IList<(DateTime, OfflineCorrespondenceGame)>>
   return storage.fetchOngoingGames(session?.user.id);
 }
 
-const _tableName = 'correspondence_game';
+const kCorrespondenceStorageTable = 'correspondence_game';
 
-const _anonymousUserId = '**anonymous**';
+const kCorrespondenceStorageAnonId = '**anonymous**';
 
 class CorrespondenceGameStorage {
   const CorrespondenceGameStorage(this._db, this.ref);
@@ -45,9 +45,12 @@ class CorrespondenceGameStorage {
     UserId? userId,
   ) async {
     final list = await _db.query(
-      _tableName,
+      kCorrespondenceStorageTable,
       where: 'userId = ? AND data LIKE ?',
-      whereArgs: ['${userId ?? _anonymousUserId}', '%"status":"started"%'],
+      whereArgs: [
+        '${userId ?? kCorrespondenceStorageAnonId}',
+        '%"status":"started"%',
+      ],
     );
 
     return _decodeGames(list).sort((a, b) {
@@ -69,17 +72,20 @@ class CorrespondenceGameStorage {
     final sqlVersion = await ref.read(sqliteVersionProvider.future);
     if (sqlVersion != null && sqlVersion >= 338000) {
       final list = await _db.query(
-        _tableName,
+        kCorrespondenceStorageTable,
         where: "json_extract(data, '\$.registeredMoveAtPgn') IS NOT NULL",
       );
       return _decodeGames(list);
     }
 
     final list = await _db.query(
-      _tableName,
+      kCorrespondenceStorageTable,
       // where: "json_extract(data, '\$.registeredMoveAtPgn') IS NOT NULL",
       where: 'userId = ? AND data LIKE ?',
-      whereArgs: ['${userId ?? _anonymousUserId}', '%status":"started"%'],
+      whereArgs: [
+        '${userId ?? kCorrespondenceStorageAnonId}',
+        '%status":"started"%',
+      ],
     );
 
     return _decodeGames(list).where((e) {
@@ -92,7 +98,7 @@ class CorrespondenceGameStorage {
     required GameId gameId,
   }) async {
     final list = await _db.query(
-      _tableName,
+      kCorrespondenceStorageTable,
       where: 'gameId = ?',
       whereArgs: [gameId.toString()],
     );
@@ -113,9 +119,9 @@ class CorrespondenceGameStorage {
 
   Future<void> save(OfflineCorrespondenceGame game) async {
     await _db.insert(
-      _tableName,
+      kCorrespondenceStorageTable,
       {
-        'userId': game.me.user?.id.toString() ?? _anonymousUserId,
+        'userId': game.me.user?.id.toString() ?? kCorrespondenceStorageAnonId,
         'gameId': game.id.toString(),
         'lastModified': DateTime.now().toIso8601String(),
         'data': jsonEncode(game.toJson()),
@@ -127,7 +133,7 @@ class CorrespondenceGameStorage {
 
   Future<void> delete(GameId gameId) async {
     await _db.delete(
-      _tableName,
+      kCorrespondenceStorageTable,
       where: 'gameId = ?',
       whereArgs: [gameId.toString()],
     );
