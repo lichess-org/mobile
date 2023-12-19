@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
+import 'package:lichess_mobile/src/firebase_messaging.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -27,6 +28,7 @@ import './fake_crashlytics.dart';
 import './model/auth/fake_auth_repository.dart';
 import './model/auth/fake_session_storage.dart';
 import './model/common/service/fake_sound_service.dart';
+import 'fake_firebase_messaging.dart';
 
 class MockSoundPool extends Mock implements Soundpool {}
 
@@ -71,6 +73,9 @@ Future<Widget> buildTestApp(
       showRatingsPrefProvider.overrideWith((ref) {
         return true;
       }),
+      // ignore: scoped_providers_should_specify_dependencies
+      firebaseMessagingServiceProvider
+          .overrideWithValue(FakeFirebaseMessagingService()),
       // ignore: scoped_providers_should_specify_dependencies
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       // ignore: scoped_providers_should_specify_dependencies
