@@ -252,6 +252,7 @@ class PlatformListTile extends StatelessWidget {
     this.additionalInfo,
     this.dense,
     this.onTap,
+    this.onLongPress,
     this.selected = false,
     this.isThreeLine = false,
     this.padding,
@@ -286,6 +287,9 @@ class PlatformListTile extends StatelessWidget {
 
   final GestureTapCallback? onTap;
 
+  // Only on android
+  final GestureLongPressCallback? onLongPress;
+
   @override
   Widget build(BuildContext context) {
     switch (defaultTargetPlatform) {
@@ -305,6 +309,7 @@ class PlatformListTile extends StatelessWidget {
           dense: dense,
           visualDensity: visualDensity,
           onTap: onTap,
+          onLongPress: onLongPress,
           selected: selected,
           isThreeLine: isThreeLine,
           contentPadding: padding,
@@ -338,45 +343,5 @@ class PlatformListTile extends StatelessWidget {
         assert(false, 'Unexpected platform $defaultTargetPlatform');
         return const SizedBox.shrink();
     }
-  }
-}
-
-/// A list tile that shows game info.
-class GameListTile extends StatelessWidget {
-  const GameListTile({
-    this.icon,
-    required this.playerTitle,
-    this.subtitle,
-    this.trailing,
-    this.onTap,
-  });
-
-  final IconData? icon;
-  final Widget playerTitle;
-  final Widget? subtitle;
-  final Widget? trailing;
-  final GestureTapCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return PlatformListTile(
-      onTap: onTap,
-      leading: icon != null
-          ? Icon(
-              icon,
-              size: defaultTargetPlatform == TargetPlatform.iOS ? 26.0 : 36.0,
-            )
-          : null,
-      title: playerTitle,
-      subtitle: subtitle != null
-          ? DefaultTextStyle.merge(
-              child: subtitle!,
-              style: TextStyle(
-                color: textShade(context, Styles.subtitleOpacity),
-              ),
-            )
-          : null,
-      trailing: trailing,
-    );
   }
 }

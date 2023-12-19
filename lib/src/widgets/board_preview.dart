@@ -45,7 +45,8 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
 
     final content = LayoutBuilder(
       builder: (context, constraints) {
-        final boardSize = constraints.biggest.shortestSide * 0.40;
+        final boardSize = constraints.biggest.shortestSide -
+            (constraints.biggest.shortestSide / 1.618);
         return Container(
           decoration: BoxDecoration(
             color: _isPressed

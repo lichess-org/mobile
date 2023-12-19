@@ -598,7 +598,7 @@ class _GameListWidget extends ConsumerWidget {
       hasLeading: false,
       children: [
         for (final game in games)
-          GameListTile(
+          _GameListTile(
             onTap: () {
               final gameIds = ISet(games.map((g) => g.gameId));
               ref.read(gamesByIdProvider(ids: gameIds).future).then((list) {
@@ -627,6 +627,34 @@ class _GameListWidget extends ConsumerWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+class _GameListTile extends StatelessWidget {
+  const _GameListTile({
+    required this.playerTitle,
+    this.subtitle,
+    this.onTap,
+  });
+
+  final Widget playerTitle;
+  final Widget? subtitle;
+  final GestureTapCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformListTile(
+      onTap: onTap,
+      title: playerTitle,
+      subtitle: subtitle != null
+          ? DefaultTextStyle.merge(
+              child: subtitle!,
+              style: TextStyle(
+                color: textShade(context, Styles.subtitleOpacity),
+              ),
+            )
+          : null,
     );
   }
 }

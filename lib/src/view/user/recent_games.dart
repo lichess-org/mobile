@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -72,6 +73,8 @@ class RecentGames extends ConsumerWidget {
                 game.white.user?.id == userId ? game.black : game.white;
 
             return GameListTile(
+              game: game,
+              mySide: userId == game.white.user?.id ? Side.white : Side.black,
               onTap: game.variant.isSupported
                   ? () {
                       pushPlatformRoute(
