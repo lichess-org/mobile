@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/firebase_messaging.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
@@ -20,17 +21,47 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/correspondence/correspondence_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_body.dart';
 
-class App extends ConsumerStatefulWidget {
-  const App({super.key});
+class LoadingAppScreen extends ConsumerWidget {
+  const LoadingAppScreen({super.key});
 
   @override
-  ConsumerState<App> createState() => _AppState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<AsyncValue<AppDependencies>>(
+      appDependenciesProvider,
+      (_, state) {
+        if (state.hasValue) {
+          FlutterNativeSplash.remove();
+        }
+      },
+    );
+
+    final appDependencies = ref.watch(appDependenciesProvider);
+    return appDependencies.when(
+      data: (_) => const Application(),
+      // loading screen is handled by the native splash screen
+      loading: () => const SizedBox.shrink(),
+      error: (err, st) {
+        debugPrint(
+          'SEVERE: [App] could not load app dependencies; $err\n$st',
+        );
+        return const SizedBox.shrink();
+      },
+    );
+  }
 }
 
-class _AppState extends ConsumerState<App> {
-  StreamSubscription<String>? _fcmTokenRefreshSubscription;
+class Application extends ConsumerStatefulWidget {
+  const Application({super.key});
 
+  @override
+  ConsumerState<Application> createState() => _AppState();
+}
+
+class _AppState extends ConsumerState<Application> {
   @override
   void initState() {
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -55,16 +86,7 @@ class _AppState extends ConsumerState<App> {
       }
     });
 
-    // Setup push notifications.
-    setupPushNotifications();
-
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _fcmTokenRefreshSubscription?.cancel();
-    super.dispose();
   }
 
   @override
@@ -124,35 +146,11 @@ class _AppState extends ConsumerState<App> {
           child: Material(child: child),
         );
       },
-      home: const BottomNavScaffold(),
+      home: const _EntryPointWidget(),
       navigatorObservers: [
         rootNavPageRouteObserver,
       ],
     );
-  }
-
-  Future<void> setupPushNotifications() async {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      ref.read(firebaseMessagingServiceProvider).processDataMessage(message);
-    });
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
-    await FirebaseMessaging.instance.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-      announcement: false,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-    );
-
-    _fcmTokenRefreshSubscription =
-        FirebaseMessaging.instance.onTokenRefresh.listen((String token) {
-      ref.read(firebaseMessagingServiceProvider).registerToken(token);
-    });
-
-    ref.read(firebaseMessagingServiceProvider).registerDevice();
   }
 
   // Code taken from https://stackoverflow.com/questions/63631522/flutter-120fps-issue
@@ -180,31 +178,96 @@ class _AppState extends ConsumerState<App> {
   }
 }
 
-class LoadApp extends ConsumerWidget {
-  const LoadApp({super.key});
+class _EntryPointWidget extends ConsumerStatefulWidget {
+  const _EntryPointWidget();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AsyncValue<AppDependencies>>(
-      appDependenciesProvider,
-      (_, state) {
-        if (state.hasValue) {
-          FlutterNativeSplash.remove();
-        }
-      },
+  ConsumerState<_EntryPointWidget> createState() => _EntryPointState();
+}
+
+class _EntryPointState extends ConsumerState<_EntryPointWidget> {
+  StreamSubscription<String>? _fcmTokenRefreshSubscription;
+
+  @override
+  Widget build(BuildContext context) {
+    return const BottomNavScaffold();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _setupPushNotifications();
+  }
+
+  @override
+  void dispose() {
+    _fcmTokenRefreshSubscription?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _setupPushNotifications() async {
+    // Listen for incoming messages while the app is in the foreground.
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      ref.read(firebaseMessagingServiceProvider).processDataMessage(message);
+    });
+
+    // Listen for incoming messages while the app is in the background.
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+    // Request permission to receive notifications. Pop-up will appear only
+    // once.
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+      announcement: false,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
     );
 
-    final appDependencies = ref.watch(appDependenciesProvider);
-    return appDependencies.when(
-      data: (_) => const App(),
-      // loading screen is handled by the native splash screen
-      loading: () => const SizedBox.shrink(),
-      error: (err, st) {
-        debugPrint(
-          'SEVERE: [App] could not load app dependencies; $err\n$st',
-        );
-        return const SizedBox.shrink();
-      },
-    );
+    // Listen for token refresh and update the token on the server accordingly.
+    _fcmTokenRefreshSubscription =
+        FirebaseMessaging.instance.onTokenRefresh.listen((String token) {
+      ref.read(firebaseMessagingServiceProvider).registerToken(token);
+    });
+
+    // Register the device with the server.
+    ref.read(firebaseMessagingServiceProvider).registerDevice();
+
+    // Get any messages which caused the application to open from
+    // a terminated state.
+    final RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    // If the message also contains a data property with a "type" of "chat",
+    // navigate to a chat screen
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+    }
+
+    // Also handle any interaction when the app is in the background via a
+    // Stream listener
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  }
+
+  /// Handle a message that caused the application to open
+  ///
+  /// This method must be part of a State object which is a child of [MaterialApp]
+  /// otherwise the [Navigator] will not be accessible.
+  void _handleMessage(RemoteMessage message) {
+    final gameFullId = message.data['lichess.fullId'] as String?;
+    if (gameFullId != null) {
+      pushPlatformRoute(
+        context,
+        rootNavigator: true,
+        builder: (_) => CorrespondenceGameScreen(
+          params: InitialStandaloneGameParams(
+            id: GameFullId(gameFullId),
+          ),
+        ),
+      );
+    }
   }
 }

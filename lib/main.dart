@@ -88,7 +88,7 @@ void main() async {
       observers: [
         ProviderLogger(),
       ],
-      child: const LoadApp(),
+      child: const LoadingAppScreen(),
     ),
   );
 }
