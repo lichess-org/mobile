@@ -35,7 +35,7 @@ void main() {
       when(
         () => mockAuthClient.get(
           Uri.parse(
-            '$kLichessHost/api/games/user/testUser?max=10&moves=false&lastFen=true&lastMove=true&accuracy=true&opening=true',
+            '$kLichessHost/api/games/user/testUser?max=10&moves=false&lastFen=true&accuracy=true&opening=true',
           ),
           headers: {'Accept': 'application/x-ndjson'},
         ),

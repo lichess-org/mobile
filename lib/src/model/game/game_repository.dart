@@ -54,7 +54,7 @@ class GameRepository {
   FutureResult<IList<ArchivedGameData>> getRecentGames(UserId userId) {
     return apiClient.get(
       Uri.parse(
-        '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true&lastMove=true&accuracy=true&opening=true',
+        '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true&accuracy=true&opening=true',
       ),
       headers: {'Accept': 'application/x-ndjson'},
     ).flatMap(
