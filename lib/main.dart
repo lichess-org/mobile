@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,12 +11,67 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
+import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
+import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
+import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:logging/logging.dart';
+import 'package:path/path.dart' as path;
+import 'package:sqflite/sqflite.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'firebase_options.dart';
 import 'src/app.dart';
 import 'src/constants.dart';
+
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  debugPrint('Handling a background message: ${message.data}');
+
+  final gameFullId = message.data['lichess.fullId'] as String?;
+  final round = message.data['lichess.round'] as String?;
+
+  // update correspondence game
+  if (gameFullId != null && round != null) {
+    final dbPath = path.join(await getDatabasesPath(), 'lichess_mobile.db');
+    final db = await openDb(databaseFactory, dbPath);
+    final fullId = GameFullId(gameFullId);
+    final game = PlayableGame.fromServerJson(
+      jsonDecode(round) as Map<String, dynamic>,
+    );
+    final corresGame = OfflineCorrespondenceGame(
+      id: game.id,
+      fullId: fullId,
+      rated: game.meta.rated,
+      steps: game.steps,
+      initialFen: game.initialFen,
+      status: game.status,
+      variant: game.meta.variant,
+      speed: game.speed,
+      perf: game.meta.perf,
+      white: game.white,
+      black: game.black,
+      youAre: game.youAre!,
+      daysPerTurn: game.meta.daysPerTurn,
+      clock: game.correspondenceClock,
+      winner: game.winner,
+      isThreefoldRepetition: game.isThreefoldRepetition,
+    );
+
+    await db.insert(
+      kCorrespondenceStorageTable,
+      {
+        'userId':
+            corresGame.me.user?.id.toString() ?? kCorrespondenceStorageAnonId,
+        'gameId': corresGame.id.toString(),
+        'lastModified': DateTime.now().toIso8601String(),
+        'data': jsonEncode(corresGame.toJson()),
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+}
 
 // to see http requests and websocket connections in terminal since we're not
 // always using the browser devtools
@@ -24,7 +81,7 @@ const _loggersToShowInTerminal = {
   'AuthSocket',
 };
 
-void main() async {
+Future<void> main() async {
   if (kDebugMode) {
     Logger.root.level = Level.FINE;
     Logger.root.onRecord.listen((record) {
