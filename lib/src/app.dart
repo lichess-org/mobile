@@ -257,17 +257,25 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
   /// This method must be part of a State object which is a child of [MaterialApp]
   /// otherwise the [Navigator] will not be accessible.
   void _handleMessage(RemoteMessage message) {
-    final gameFullId = message.data['lichess.fullId'] as String?;
-    if (gameFullId != null) {
-      pushPlatformRoute(
-        context,
-        rootNavigator: true,
-        builder: (_) => CorrespondenceGameScreen(
-          params: InitialStandaloneGameParams(
-            id: GameFullId(gameFullId),
-          ),
-        ),
-      );
+    switch (message.data['lichess.type']) {
+      // correspondence game message types
+      case 'corresAlarm':
+      case 'gameTakebackOffer':
+      case 'gameDrawOffer':
+      case 'gameMove':
+      case 'gameFinish':
+        final gameFullId = message.data['lichess.fullId'] as String?;
+        if (gameFullId != null) {
+          pushPlatformRoute(
+            context,
+            rootNavigator: true,
+            builder: (_) => CorrespondenceGameScreen(
+              params: InitialStandaloneGameParams(
+                id: GameFullId(gameFullId),
+              ),
+            ),
+          );
+        }
     }
   }
 }
