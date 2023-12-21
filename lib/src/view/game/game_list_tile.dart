@@ -235,6 +235,37 @@ class GameListTile extends ConsumerWidget {
           }
         },
       ),
+      if (game.lastFen != null && game.lastMove != null)
+        AdaptiveContextMenuAction(
+          icon: Icons.image,
+          child: Text(context.l10n.screenshotCurrentPosition),
+          onPressed: () async {
+            try {
+              final resp = await ref
+                  .read(httpClientProvider)
+                  .get(
+                    Uri.parse(
+                      '$kLichessCDNHost/export/fen.gif?fen=${Uri.encodeComponent(game.lastFen!)}&color=${orientation.name}&lastMove=${game.lastMove!.uci}&theme=${boardTheme.name}&piece=${pieceTheme.name}',
+                    ),
+                  )
+                  .timeout(const Duration(seconds: 1));
+              if (resp.statusCode != 200) {
+                throw Exception('Failed to get GIF');
+              }
+              Share.shareXFiles(
+                [XFile.fromData(resp.bodyBytes, mimeType: 'image/gif')],
+              );
+            } catch (e) {
+              if (context.mounted) {
+                showPlatformSnackbar(
+                  context,
+                  'Failed to get GIF',
+                  type: SnackBarType.error,
+                );
+              }
+            }
+          },
+        ),
       AdaptiveContextMenuAction(
         icon: CupertinoIcons.share,
         child: Text('PGN: ${context.l10n.downloadAnnotated}'),
