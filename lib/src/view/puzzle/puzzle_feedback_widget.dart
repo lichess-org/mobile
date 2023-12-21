@@ -1,12 +1,16 @@
+import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
-class PuzzleFeedbackWidget extends StatelessWidget {
+class PuzzleFeedbackWidget extends ConsumerWidget {
   const PuzzleFeedbackWidget({
     required this.puzzle,
     required this.state,
@@ -18,7 +22,15 @@ class PuzzleFeedbackWidget extends StatelessWidget {
   final bool onStreak;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pieceSet =
+        ref.watch(boardPreferencesProvider.select((value) => value.pieceSet));
+
+    final piece = state.pov == Side.white
+        ? cg.PieceKind.whiteKing
+        : cg.PieceKind.blackKing;
+    final asset = pieceSet.assets[piece]!;
+
     switch (state.mode) {
       case PuzzleMode.view:
         final puzzleRating =
@@ -68,10 +80,24 @@ class PuzzleFeedbackWidget extends StatelessWidget {
           );
         } else {
           return _FeedbackTile(
-            leading: const Icon(
-              LichessIcons.chess_king,
-              size: 36,
-              color: Colors.grey,
+            leading: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4.0),
+                color: defaultTargetPlatform == TargetPlatform.iOS
+                    ? CupertinoColors.tertiarySystemBackground
+                        .resolveFrom(context)
+                    : Theme.of(context).colorScheme.surfaceVariant,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Image.asset(
+                  asset.assetName,
+                  width: 48,
+                  height: 48,
+                  bundle: asset.bundle,
+                  package: asset.package,
+                ),
+              ),
             ),
             title: Text(context.l10n.yourTurn),
             subtitle: Text(
