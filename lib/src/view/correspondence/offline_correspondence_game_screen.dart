@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -270,7 +271,6 @@ class _BodyState extends ConsumerState<_Body> {
               children: [
                 BottomBarButton(
                   label: context.l10n.flipBoard,
-                  shortLabel: 'Flip',
                   onTap: () {
                     setState(() {
                       isBoardTurned = !isBoardTurned;
@@ -280,7 +280,6 @@ class _BodyState extends ConsumerState<_Body> {
                 ),
                 BottomBarButton(
                   label: context.l10n.analysis,
-                  shortLabel: 'Analysis',
                   onTap: () {
                     pushPlatformRoute(
                       context,
@@ -301,7 +300,6 @@ class _BodyState extends ConsumerState<_Body> {
                 ),
                 BottomBarButton(
                   label: 'Go to the next game',
-                  shortLabel: 'Next game',
                   icon: Icons.skip_next,
                   onTap: offlineOngoingGames.maybeWhen(
                     data: (games) {
@@ -319,7 +317,6 @@ class _BodyState extends ConsumerState<_Body> {
                 ),
                 BottomBarButton(
                   label: 'Clear saved move',
-                  shortLabel: 'Clear move',
                   onTap: game.registeredMoveAtPgn != null
                       ? () {
                           showConfirmDialog<void>(
@@ -337,9 +334,8 @@ class _BodyState extends ConsumerState<_Body> {
                   child: BottomBarButton(
                     onTap: canGoBackward ? () => moveBackward() : null,
                     label: 'Previous',
-                    shortLabel: 'Previous',
                     icon: CupertinoIcons.chevron_back,
-                    showAndroidTooltip: false,
+                    showTooltip: false,
                   ),
                 ),
                 RepeatButton(
@@ -347,9 +343,8 @@ class _BodyState extends ConsumerState<_Body> {
                   child: BottomBarButton(
                     onTap: canGoForward ? () => moveForward() : null,
                     label: context.l10n.next,
-                    shortLabel: context.l10n.next,
                     icon: CupertinoIcons.chevron_forward,
-                    showAndroidTooltip: false,
+                    showTooltip: false,
                   ),
                 ),
               ],

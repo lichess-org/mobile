@@ -319,23 +319,26 @@ class PlatformListTile extends StatelessWidget {
           data: CupertinoIconThemeData(
             color: CupertinoColors.systemGrey.resolveFrom(context),
           ),
-          child: CupertinoListTile.notched(
-            leading: leading,
-            title: harmonizeCupertinoTitleStyle
-                ? DefaultTextStyle.merge(
-                    // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16.0,
-                    ),
-                    child: title,
-                  )
-                : title,
-            subtitle: subtitle,
-            trailing: trailing,
-            additionalInfo: additionalInfo,
-            padding: padding,
-            onTap: onTap,
+          child: GestureDetector(
+            onLongPress: onLongPress,
+            child: CupertinoListTile.notched(
+              leading: leading,
+              title: harmonizeCupertinoTitleStyle
+                  ? DefaultTextStyle.merge(
+                      // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.0,
+                      ),
+                      child: title,
+                    )
+                  : title,
+              subtitle: subtitle,
+              trailing: trailing,
+              additionalInfo: additionalInfo,
+              padding: padding,
+              onTap: onTap,
+            ),
           ),
         );
 

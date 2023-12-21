@@ -21,7 +21,7 @@ import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -288,76 +288,80 @@ class _BottomBar extends ConsumerWidget {
     final puzzleState = ref.watch(ctrlProvider);
 
     return Container(
-      padding: Styles.horizontalBodyPadding,
       color: defaultTargetPlatform == TargetPlatform.iOS
           ? CupertinoTheme.of(context).barBackgroundColor
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
         top: false,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            if (!puzzleState.streak!.finished)
-              BottomBarButton(
-                icon: Icons.info_outline,
-                label: context.l10n.aboutX('Streak'),
-                shortLabel: context.l10n.about,
-                showAndroidShortLabel: true,
-                onTap: () => _streakInfoDialogBuilder(context),
-              ),
-            if (!puzzleState.streak!.finished)
-              BottomBarButton(
-                icon: Icons.skip_next,
-                label: context.l10n.skipThisMove,
-                shortLabel: 'Skip',
-                showAndroidShortLabel: true,
-                onTap: puzzleState.streak!.hasSkipped ||
-                        puzzleState.mode == PuzzleMode.view
-                    ? null
-                    : () => ref.read(ctrlProvider.notifier).skipMove(),
-              ),
-            if (puzzleState.streak!.finished)
-              BottomBarButton(
-                onTap: () {
-                  Share.share(
-                    '$kLichessHost/training/${puzzleState.puzzle.puzzle.id}',
-                  );
-                },
-                label: 'Share this puzzle',
-                shortLabel: 'Share',
-                icon: defaultTargetPlatform == TargetPlatform.iOS
-                    ? CupertinoIcons.share
-                    : Icons.share,
-              ),
-            if (puzzleState.streak!.finished)
-              BottomBarButton(
-                onTap: puzzleState.canGoBack
-                    ? () => ref.read(ctrlProvider.notifier).userPrevious()
-                    : null,
-                label: 'Previous',
-                shortLabel: 'Previous',
-                icon: CupertinoIcons.chevron_back,
-              ),
-            if (puzzleState.streak!.finished)
-              BottomBarButton(
-                onTap: puzzleState.canGoNext
-                    ? () => ref.read(ctrlProvider.notifier).userNext()
-                    : null,
-                label: context.l10n.next,
-                shortLabel: context.l10n.next,
-                icon: CupertinoIcons.chevron_forward,
-              ),
-            if (puzzleState.streak!.finished)
-              BottomBarButton(
-                onTap: ref.read(streakProvider).isLoading == false
-                    ? () => ref.invalidate(streakProvider)
-                    : null,
-                highlighted: true,
-                label: context.l10n.puzzleNewStreak,
-                shortLabel: 'New Streak',
-                icon: CupertinoIcons.play_arrow_solid,
-              ),
-          ],
+        child: SizedBox(
+          height: kBottomBarHeight,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              if (!puzzleState.streak!.finished)
+                BottomBarButton(
+                  icon: Icons.info_outline,
+                  label: context.l10n.aboutX('Streak'),
+                  showLabel: true,
+                  onTap: () => _streakInfoDialogBuilder(context),
+                ),
+              if (!puzzleState.streak!.finished)
+                BottomBarButton(
+                  icon: Icons.skip_next,
+                  label: context.l10n.skipThisMove,
+                  showLabel: true,
+                  onTap: puzzleState.streak!.hasSkipped ||
+                          puzzleState.mode == PuzzleMode.view
+                      ? null
+                      : () => ref.read(ctrlProvider.notifier).skipMove(),
+                ),
+              if (puzzleState.streak!.finished)
+                Expanded(
+                  child: BottomBarButton(
+                    onTap: () {
+                      Share.share(
+                        '$kLichessHost/training/${puzzleState.puzzle.puzzle.id}',
+                      );
+                    },
+                    label: 'Share this puzzle',
+                    icon: defaultTargetPlatform == TargetPlatform.iOS
+                        ? CupertinoIcons.share
+                        : Icons.share,
+                  ),
+                ),
+              if (puzzleState.streak!.finished)
+                Expanded(
+                  child: BottomBarButton(
+                    onTap: puzzleState.canGoBack
+                        ? () => ref.read(ctrlProvider.notifier).userPrevious()
+                        : null,
+                    label: 'Previous',
+                    icon: CupertinoIcons.chevron_back,
+                  ),
+                ),
+              if (puzzleState.streak!.finished)
+                Expanded(
+                  child: BottomBarButton(
+                    onTap: puzzleState.canGoNext
+                        ? () => ref.read(ctrlProvider.notifier).userNext()
+                        : null,
+                    label: context.l10n.next,
+                    icon: CupertinoIcons.chevron_forward,
+                  ),
+                ),
+              if (puzzleState.streak!.finished)
+                Expanded(
+                  child: BottomBarButton(
+                    onTap: ref.read(streakProvider).isLoading == false
+                        ? () => ref.invalidate(streakProvider)
+                        : null,
+                    highlighted: true,
+                    label: context.l10n.puzzleNewStreak,
+                    icon: CupertinoIcons.play_arrow_solid,
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

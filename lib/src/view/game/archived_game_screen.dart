@@ -4,10 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -224,121 +225,139 @@ class _BottomBar extends ConsumerWidget {
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
 
     return Container(
-      padding: Styles.horizontalBodyPadding,
       color: defaultTargetPlatform == TargetPlatform.iOS
           ? CupertinoTheme.of(context).barBackgroundColor
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
         top: false,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            BottomBarIconButton(
-              semanticsLabel: context.l10n.menu,
-              onPressed: () {
-                _showGameMenu(context, ref);
-              },
-              icon: const Icon(Icons.menu),
-            ),
-            gameCursor.when(
-              data: (data) {
-                return BottomBarIconButton(
-                  semanticsLabel: 'Show result',
-                  icon: const Icon(Icons.info_outline),
-                  onPressed: () {
-                    showAdaptiveDialog<void>(
-                      context: context,
-                      builder: (context) =>
-                          ArchivedGameResultDialog(game: data.$1),
-                      barrierDismissible: true,
-                    );
+        child: SizedBox(
+          height: kBottomBarHeight,
+          child: Row(
+            children: [
+              Expanded(
+                child: BottomBarButton(
+                  label: context.l10n.menu,
+                  onTap: () {
+                    _showGameMenu(context, ref);
                   },
-                );
-              },
-              loading: () => const SizedBox.shrink(),
-              error: (_, __) => const SizedBox.shrink(),
-            ),
-            Builder(
-              builder: (context) {
-                Future<void>? pgnFuture;
-                return StatefulBuilder(
-                  builder: (context, setState) {
-                    return FutureBuilder(
-                      future: pgnFuture,
-                      builder: (context, snapshot) {
-                        return BottomBarIconButton(
-                          semanticsLabel: context.l10n.gameAnalysis,
-                          onPressed: snapshot.connectionState ==
-                                  ConnectionState.waiting
-                              ? null
-                              : ref
-                                      .read(gameCursorProvider(gameData.id))
-                                      .hasValue
-                                  ? () async {
-                                      final (game, cursor) = ref
-                                          .read(gameCursorProvider(gameData.id))
-                                          .requireValue;
-
-                                      final future = ref.read(
-                                        gameAnalysisPgnProvider(id: gameData.id)
-                                            .future,
-                                      );
-                                      setState(() {
-                                        pgnFuture = future;
-                                      });
-                                      final pgn = await future;
-                                      if (context.mounted) {
-                                        pushPlatformRoute(
-                                          context,
-                                          builder: (context) => AnalysisScreen(
-                                            title: context.l10n.gameAnalysis,
-                                            options: AnalysisOptions(
-                                              isLocalEvaluationAllowed: true,
-                                              variant: gameData.variant,
-                                              pgn: pgn,
-                                              initialMoveCursor: cursor,
-                                              orientation: orientation,
-                                              id: gameData.id,
-                                              opening: gameData.opening,
-                                              serverAnalysis:
-                                                  game.serverAnalysis,
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                    }
-                                  : null,
-                          icon: const Icon(Icons.biotech),
+                  icon: Icons.menu,
+                ),
+              ),
+              gameCursor.when(
+                data: (data) {
+                  return Expanded(
+                    child: BottomBarButton(
+                      label: 'Show result',
+                      icon: Icons.info_outline,
+                      onTap: () {
+                        showAdaptiveDialog<void>(
+                          context: context,
+                          builder: (context) =>
+                              ArchivedGameResultDialog(game: data.$1),
+                          barrierDismissible: true,
                         );
                       },
-                    );
-                  },
-                );
-              },
-            ),
-            RepeatButton(
-              onLongPress: canGoBackward ? () => _cursorBackward(ref) : null,
-              child: BottomBarIconButton(
-                key: const ValueKey('cursor-back'),
-                // TODO add translation
-                semanticsLabel: 'Backward',
-                showTooltip: false,
-                onPressed: canGoBackward ? () => _cursorBackward(ref) : null,
-                icon: const Icon(CupertinoIcons.chevron_back),
+                    ),
+                  );
+                },
+                loading: () => const SizedBox.shrink(),
+                error: (_, __) => const SizedBox.shrink(),
               ),
-            ),
-            RepeatButton(
-              onLongPress: canGoForward ? () => _cursorForward(ref) : null,
-              child: BottomBarIconButton(
-                key: const ValueKey('cursor-forward'),
-                // TODO add translation
-                semanticsLabel: 'Forward',
-                showTooltip: false,
-                onPressed: canGoForward ? () => _cursorForward(ref) : null,
-                icon: const Icon(CupertinoIcons.chevron_forward),
+              Builder(
+                builder: (context) {
+                  Future<void>? pgnFuture;
+                  return StatefulBuilder(
+                    builder: (context, setState) {
+                      return FutureBuilder(
+                        future: pgnFuture,
+                        builder: (context, snapshot) {
+                          return Expanded(
+                            child: BottomBarButton(
+                              label: context.l10n.gameAnalysis,
+                              onTap: snapshot.connectionState ==
+                                      ConnectionState.waiting
+                                  ? null
+                                  : ref
+                                          .read(gameCursorProvider(gameData.id))
+                                          .hasValue
+                                      ? () async {
+                                          final (game, cursor) = ref
+                                              .read(
+                                                gameCursorProvider(gameData.id),
+                                              )
+                                              .requireValue;
+
+                                          final future = ref.read(
+                                            gameAnalysisPgnProvider(
+                                              id: gameData.id,
+                                            ).future,
+                                          );
+                                          setState(() {
+                                            pgnFuture = future;
+                                          });
+                                          final pgn = await future;
+                                          if (context.mounted) {
+                                            pushPlatformRoute(
+                                              context,
+                                              builder: (context) =>
+                                                  AnalysisScreen(
+                                                title:
+                                                    context.l10n.gameAnalysis,
+                                                options: AnalysisOptions(
+                                                  isLocalEvaluationAllowed:
+                                                      true,
+                                                  variant: gameData.variant,
+                                                  pgn: pgn,
+                                                  initialMoveCursor: cursor,
+                                                  orientation: orientation,
+                                                  id: gameData.id,
+                                                  opening: gameData.opening,
+                                                  serverAnalysis:
+                                                      game.serverAnalysis,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      : null,
+                              icon: Icons.biotech,
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
               ),
-            ),
-          ],
+              Expanded(
+                child: RepeatButton(
+                  onLongPress:
+                      canGoBackward ? () => _cursorBackward(ref) : null,
+                  child: BottomBarButton(
+                    key: const ValueKey('cursor-back'),
+                    // TODO add translation
+                    label: 'Backward',
+                    showTooltip: false,
+                    onTap: canGoBackward ? () => _cursorBackward(ref) : null,
+                    icon: CupertinoIcons.chevron_back,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: RepeatButton(
+                  onLongPress: canGoForward ? () => _cursorForward(ref) : null,
+                  child: BottomBarButton(
+                    key: const ValueKey('cursor-forward'),
+                    // TODO add translation
+                    label: 'Forward',
+                    showTooltip: false,
+                    onTap: canGoForward ? () => _cursorForward(ref) : null,
+                    icon: CupertinoIcons.chevron_forward,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

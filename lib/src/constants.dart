@@ -38,6 +38,7 @@ const kMaxClockTextScaleFactor = 1.94;
 const kEmptyWidget = SizedBox.shrink();
 const kEmptyFen = '8/8/8/8/8/8/8/8 w - - 0 1';
 const kTabletBoardTableSidePadding = 16.0;
+const kBottomBarHeight = 56.0;
 
 /// The threshold to detect screens with a small remaining height left board.
 const kSmallRemainingHeightLeftBoardThreshold = 160;

@@ -9,11 +9,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_providers.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class LobbyGameLoadingBoard extends StatelessWidget {
@@ -87,9 +86,8 @@ class LobbyGameLoadingBoard extends StatelessWidget {
               BottomBarButton(
                 onTap: () => Navigator.of(context).pop(),
                 label: context.l10n.cancel,
-                shortLabel: context.l10n.cancel,
+                showLabel: true,
                 icon: CupertinoIcons.xmark,
-                showAndroidShortLabel: true,
               ),
           ],
         ),
@@ -167,9 +165,8 @@ class LoadGameError extends StatelessWidget {
             BottomBarButton(
               onTap: () => Navigator.of(context).pop(),
               label: context.l10n.cancel,
-              shortLabel: context.l10n.cancel,
               icon: CupertinoIcons.xmark,
-              showAndroidShortLabel: true,
+              showLabel: true,
             ),
           ],
         ),
@@ -188,15 +185,17 @@ class _BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: Styles.horizontalBodyPadding,
       color: defaultTargetPlatform == TargetPlatform.iOS
           ? CupertinoTheme.of(context).barBackgroundColor
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
         top: false,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: children,
+        child: SizedBox(
+          height: kBottomBarHeight,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: children,
+          ),
         ),
       ),
     );

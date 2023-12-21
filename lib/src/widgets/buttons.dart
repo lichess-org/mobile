@@ -306,152 +306,6 @@ class CupertinoIconButton extends StatelessWidget {
   }
 }
 
-class BottomBarIconButton extends StatelessWidget {
-  const BottomBarIconButton({
-    required this.icon,
-    required this.onPressed,
-    required this.semanticsLabel,
-    this.padding,
-    this.showTooltip = true,
-    super.key,
-  });
-
-  final Widget icon;
-  final VoidCallback? onPressed;
-  final String semanticsLabel;
-  final bool showTooltip;
-
-  /// The padding around the button's icon. The entire padded icon will react
-  /// to input gestures.
-  ///
-  /// If null, it defaults to 8.0 padding on all sides on Android and 16.0 on iOS.
-  final EdgeInsetsGeometry? padding;
-
-  @override
-  Widget build(BuildContext context) {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.iOS:
-        final themeData = CupertinoTheme.of(context);
-        return CupertinoTheme(
-          data: themeData.copyWith(
-            primaryColor: themeData.textTheme.textStyle.color,
-          ),
-          child: CupertinoIconButton(
-            onPressed: onPressed,
-            icon: icon,
-            semanticsLabel: semanticsLabel,
-          ),
-        );
-      case TargetPlatform.android:
-        return Theme(
-          data: Theme.of(context),
-          child: IconButton(
-            tooltip: showTooltip ? semanticsLabel : null,
-            padding: padding,
-            onPressed: onPressed,
-            icon: icon,
-          ),
-        );
-      default:
-        assert(false, 'Unexpected platform $defaultTargetPlatform');
-        return const SizedBox.shrink();
-    }
-  }
-}
-
-/// A bottom bar button that can shows an icon and text on iOS and an icon only
-/// on Android.
-class BottomBarButton extends StatelessWidget {
-  const BottomBarButton({
-    required this.icon,
-    required this.label,
-    required this.shortLabel,
-    required this.onTap,
-    this.showAndroidTooltip = true,
-    this.highlighted = false,
-    this.showAndroidShortLabel = false,
-    super.key,
-  });
-
-  final IconData icon;
-  final String label;
-  final String shortLabel;
-  final VoidCallback? onTap;
-  final bool highlighted;
-  final bool showAndroidShortLabel;
-  final bool showAndroidTooltip;
-
-  bool get enabled => onTap != null;
-
-  @override
-  Widget build(BuildContext context) {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-        final themeData = Theme.of(context);
-        return Theme(
-          data: themeData,
-          child: SizedBox(
-            height: 50,
-            child: showAndroidShortLabel
-                ? TextButton.icon(
-                    onPressed: onTap,
-                    icon: Icon(icon),
-                    label: Text(shortLabel),
-                    style: TextButton.styleFrom(
-                      foregroundColor: themeData.colorScheme.onBackground,
-                    ),
-                  )
-                : IconButton(
-                    onPressed: onTap,
-                    icon: Icon(icon),
-                    tooltip: showAndroidTooltip ? label : null,
-                    color: highlighted ? themeData.colorScheme.primary : null,
-                  ),
-          ),
-        );
-      case TargetPlatform.iOS:
-        final themeData = CupertinoTheme.of(context);
-        final hightlightedColor = themeData.primaryColor;
-        return CupertinoTheme(
-          data: themeData.copyWith(
-            primaryColor: themeData.textTheme.textStyle.color,
-          ),
-          child: SizedBox(
-            height: 50,
-            child: Semantics(
-              container: true,
-              enabled: true,
-              button: true,
-              label: label,
-              excludeSemantics: true,
-              child: CupertinoButton(
-                padding: EdgeInsets.zero,
-                onPressed: onTap,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(icon, color: highlighted ? hightlightedColor : null),
-                    Text(
-                      shortLabel,
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: highlighted ? hightlightedColor : null,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      default:
-        assert(false, 'Unexpected platform $defaultTargetPlatform');
-        return const SizedBox.shrink();
-    }
-  }
-}
-
 /// A button that looks like a ListTile on a Card.
 class CardButton extends StatefulWidget {
   const CardButton({
@@ -576,20 +430,23 @@ class _AdaptiveInkWellState extends State<AdaptiveInkWell> {
       case TargetPlatform.iOS:
         return GestureDetector(
           onTap: widget.onTap,
-          onTapDown: (_) => setState(() => _isPressed = true),
+          onTapDown: (_) {
+            if (widget.onTap == null) return;
+            setState(() => _isPressed = true);
+          },
           onTapCancel: () => setState(() => _isPressed = false),
           onTapUp: (_) => setState(() => _isPressed = false),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: widget.borderRadius,
-              color: _isPressed
-                  ? CupertinoDynamicColor.resolve(
-                      CupertinoColors.systemGrey4,
-                      context,
-                    )
-                  : null,
+          child: Semantics(
+            button: true,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: widget.borderRadius,
+                color: _isPressed
+                    ? CupertinoColors.systemGrey5.resolveFrom(context)
+                    : null,
+              ),
+              child: widget.child,
             ),
-            child: widget.child,
           ),
         );
       default:

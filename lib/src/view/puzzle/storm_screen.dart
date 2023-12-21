@@ -26,6 +26,7 @@ import 'package:lichess_mobile/src/view/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -603,52 +604,49 @@ class _BottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzleState = ref.watch(ctrl);
     return Container(
-      padding: Styles.horizontalBodyPadding,
       color: defaultTargetPlatform == TargetPlatform.iOS
           ? CupertinoTheme.of(context).barBackgroundColor
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
         top: false,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            if (!puzzleState.clock.isActive && !puzzleState.runOver)
+        child: SizedBox(
+          height: kBottomBarHeight,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              if (!puzzleState.clock.isActive && !puzzleState.runOver)
+                BottomBarButton(
+                  icon: Icons.info_outline,
+                  label: context.l10n.aboutX('Storm'),
+                  showLabel: true,
+                  onTap: () => _stormInfoDialogBuilder(context),
+                ),
               BottomBarButton(
-                icon: Icons.info_outline,
-                label: context.l10n.aboutX('Storm'),
-                shortLabel: context.l10n.about,
-                showAndroidShortLabel: true,
-                onTap: () => _stormInfoDialogBuilder(context),
+                icon: Icons.delete,
+                label: context.l10n.stormNewRun.split(' ').take(2).join(' '),
+                showLabel: true,
+                onTap: () => ref.invalidate(stormProvider),
               ),
-            BottomBarButton(
-              icon: Icons.delete,
-              label: context.l10n.stormNewRun.split(' ').take(2).join(' '),
-              shortLabel: context.l10n.stormNewRun.split(' ').take(2).join(' '),
-              showAndroidShortLabel: true,
-              onTap: () => ref.invalidate(stormProvider),
-            ),
-            if (puzzleState.clock.isActive)
-              BottomBarButton(
-                icon: LichessIcons.flag,
-                label: context.l10n.stormEndRun.split(' ').take(2).join(' '),
-                shortLabel:
-                    context.l10n.stormEndRun.split(' ').take(2).join(' '),
-                showAndroidShortLabel: true,
-                onTap: () {
-                  if (puzzleState.clock.startAt != null) {
-                    puzzleState.clock.sendEnd();
-                  }
-                },
-              ),
-            if (puzzleState.runOver && puzzleState.stats != null)
-              BottomBarButton(
-                icon: Icons.open_in_new,
-                label: 'Result',
-                shortLabel: 'Result',
-                showAndroidShortLabel: true,
-                onTap: () => _showStats(context, puzzleState.stats!),
-              ),
-          ],
+              if (puzzleState.clock.isActive)
+                BottomBarButton(
+                  icon: LichessIcons.flag,
+                  label: context.l10n.stormEndRun.split(' ').take(2).join(' '),
+                  showLabel: true,
+                  onTap: () {
+                    if (puzzleState.clock.startAt != null) {
+                      puzzleState.clock.sendEnd();
+                    }
+                  },
+                ),
+              if (puzzleState.runOver && puzzleState.stats != null)
+                BottomBarButton(
+                  icon: Icons.open_in_new,
+                  label: 'Result',
+                  showLabel: true,
+                  onTap: () => _showStats(context, puzzleState.stats!),
+                ),
+            ],
+          ),
         ),
       ),
     );
