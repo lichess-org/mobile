@@ -37,15 +37,12 @@ abstract class Styles {
       EdgeInsetsDirectional.only(
     end: 8.0,
   );
-
   static const bodyPadding =
       EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0);
-
   static const verticalBodyPadding = EdgeInsets.symmetric(vertical: 16.0);
 
   /// Gets horizontal padding according to platform.
   static const horizontalBodyPadding = EdgeInsets.symmetric(horizontal: 16.0);
-
   static const sectionBottomPadding = EdgeInsets.only(bottom: 16);
   static const sectionTopPadding = EdgeInsets.only(top: 16);
 
