@@ -106,7 +106,7 @@ class AnalysisPrefState with _$AnalysisPrefState {
     showBestMoveArrow: true,
     showPgnComments: true,
     numEvalLines: 2,
-    numEngineCores: maxEngineCores,
+    numEngineCores: (maxEngineCores / 2).ceil(),
   );
 
   factory AnalysisPrefState.fromJson(Map<String, dynamic> json) {
