@@ -292,20 +292,21 @@ class _ContextMenu extends ConsumerWidget {
     ];
 
     return DraggableScrollableSheet(
-      initialChildSize: 0.6,
-      maxChildSize: 0.95,
-      minChildSize: 0.6,
+      initialChildSize: 0.7,
       expand: false,
       snap: true,
+      snapSizes: const [0.7],
       builder: (context, scrollController) => SingleChildScrollView(
         controller: scrollController,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.only(bottom: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0).add(
+                  const EdgeInsets.only(bottom: 8.0),
+                ),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     return IntrinsicHeight(
@@ -400,7 +401,6 @@ class _ContextMenu extends ConsumerWidget {
                   },
                 ),
               ),
-              const Divider(height: 24.0),
               ...actions,
             ],
           ),
