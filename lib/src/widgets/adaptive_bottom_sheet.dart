@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 
 /// A modal bottom sheet that adapts to the platform (Android/iOS).
 Future<T?> showAdaptiveBottomSheet<T>({
@@ -120,6 +121,34 @@ class ModalSheetScaffold extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class BottomSheetContextMenuAction extends StatelessWidget {
+  const BottomSheetContextMenuAction({
+    required this.child,
+    this.icon,
+    this.onPressed,
+    this.closeOnPressed = true,
+  });
+
+  final IconData? icon;
+  final VoidCallback? onPressed;
+  final Widget child;
+  final bool closeOnPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformListTile(
+      leading: Icon(icon),
+      title: child,
+      onTap: () {
+        if (closeOnPressed) {
+          Navigator.of(context, rootNavigator: true).pop();
+        }
+        onPressed?.call();
+      },
     );
   }
 }
