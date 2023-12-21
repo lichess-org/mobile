@@ -19,15 +19,14 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_context_menu.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:share_plus/share_plus.dart';
 
 /// A list tile that shows game info.
-class GameListTile extends ConsumerWidget {
+class GameListTile extends StatelessWidget {
   const GameListTile({
     required this.game,
     required this.mySide,
@@ -48,6 +47,65 @@ class GameListTile extends ConsumerWidget {
   final GestureTapCallback? onTap;
 
   @override
+  Widget build(BuildContext context) {
+    return PlatformListTile(
+      onTap: onTap,
+      onLongPress: () {
+        showAdaptiveBottomSheet<void>(
+          context: context,
+          useRootNavigator: true,
+          isDismissible: true,
+          isScrollControlled: true,
+          showDragHandle: true,
+          builder: (context) => _ContextMenu(
+            game: game,
+            mySide: mySide,
+            playerTitle: playerTitle,
+            icon: icon,
+            subtitle: subtitle,
+            trailing: trailing,
+          ),
+        );
+      },
+      leading: icon != null
+          ? Icon(
+              icon,
+              size: defaultTargetPlatform == TargetPlatform.iOS ? 26.0 : 36.0,
+            )
+          : null,
+      title: playerTitle,
+      subtitle: subtitle != null
+          ? DefaultTextStyle.merge(
+              child: subtitle!,
+              style: TextStyle(
+                color: textShade(context, Styles.subtitleOpacity),
+              ),
+            )
+          : null,
+      trailing: trailing,
+    );
+  }
+}
+
+class _ContextMenu extends ConsumerWidget {
+  const _ContextMenu({
+    required this.game,
+    required this.mySide,
+    required this.playerTitle,
+    this.icon,
+    this.subtitle,
+    this.trailing,
+  });
+
+  final ArchivedGameData game;
+  final Side mySide;
+
+  final IconData? icon;
+  final Widget playerTitle;
+  final Widget? subtitle;
+  final Widget? trailing;
+
+  @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardTheme = ref.watch(boardPreferencesProvider).boardTheme;
     final pieceTheme = ref.watch(boardPreferencesProvider).pieceSet;
@@ -58,96 +116,6 @@ class GameListTile extends ConsumerWidget {
             ? (white: game.white.analysis!, black: game.black.analysis!)
             : null;
 
-    final expandedWidget = LayoutBuilder(
-      builder: (context, constraints) {
-        return IntrinsicHeight(
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              if (game.lastFen != null)
-                BoardThumbnail(
-                  size: constraints.maxWidth - (constraints.maxWidth / 1.618),
-                  fen: game.lastFen!,
-                  orientation: mySide.cg,
-                  lastMove: game.lastMove?.cg,
-                ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            context.l10n.resVsX(
-                              game.white.fullName(context),
-                              game.black.fullName(context),
-                            ),
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: -0.5,
-                            ),
-                          ),
-                          const SizedBox(height: 2.0),
-                          Text(
-                            '${game.clockDisplay} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
-                            style: TextStyle(
-                              color: textShade(
-                                context,
-                                Styles.subtitleOpacity,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      if (game.lastFen != null)
-                        Text(
-                          gameStatusL10n(
-                            context,
-                            variant: game.variant,
-                            status: game.status,
-                            lastPosition: Position.setupPosition(
-                              game.variant.rule,
-                              Setup.parseFen(game.lastFen!),
-                            ),
-                            winner: game.winner,
-                          ),
-                          style: TextStyle(
-                            color: game.winner == null
-                                ? LichessColors.brag
-                                : game.winner == mySide
-                                    ? LichessColors.good
-                                    : LichessColors.red,
-                          ),
-                        ),
-                      if (game.opening != null)
-                        Text(
-                          game.opening!.name,
-                          maxLines: 2,
-                          style: TextStyle(
-                            color: textShade(
-                              context,
-                              Styles.subtitleOpacity,
-                            ),
-                            fontSize: 12,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-
     final actions = [
       Builder(
         builder: (context) {
@@ -157,37 +125,36 @@ class GameListTile extends ConsumerWidget {
               return FutureBuilder(
                 future: pgnFuture,
                 builder: (context, snapshot) {
-                  return AdaptiveContextMenuAction(
-                    icon: Icons.biotech,
-                    onPressed:
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? null
-                            : () async {
-                                final future = ref.read(
-                                  gameAnalysisPgnProvider(id: game.id).future,
-                                );
-                                setState(() {
-                                  pgnFuture = future;
-                                });
-                                final pgn = await future;
-                                if (context.mounted) {
-                                  pushPlatformRoute(
-                                    context,
-                                    builder: (context) => AnalysisScreen(
-                                      title: context.l10n.gameAnalysis,
-                                      options: AnalysisOptions(
-                                        isLocalEvaluationAllowed: true,
-                                        variant: game.variant,
-                                        pgn: pgn,
-                                        orientation: orientation,
-                                        id: game.id,
-                                        serverAnalysis: serverAnalysis,
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                    child: Text(context.l10n.gameAnalysis),
+                  return PlatformListTile(
+                    leading: const Icon(Icons.biotech),
+                    onTap: snapshot.connectionState == ConnectionState.waiting
+                        ? null
+                        : () async {
+                            final future = ref.read(
+                              gameAnalysisPgnProvider(id: game.id).future,
+                            );
+                            setState(() {
+                              pgnFuture = future;
+                            });
+                            final pgn = await future;
+                            if (context.mounted) {
+                              pushPlatformRoute(
+                                context,
+                                builder: (context) => AnalysisScreen(
+                                  title: context.l10n.gameAnalysis,
+                                  options: AnalysisOptions(
+                                    isLocalEvaluationAllowed: true,
+                                    variant: game.variant,
+                                    pgn: pgn,
+                                    orientation: orientation,
+                                    id: game.id,
+                                    serverAnalysis: serverAnalysis,
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                    title: Text(context.l10n.gameAnalysis),
                   );
                 },
               );
@@ -195,19 +162,19 @@ class GameListTile extends ConsumerWidget {
           );
         },
       ),
-      AdaptiveContextMenuAction(
-        onPressed: () async {
+      PlatformListTile(
+        onTap: () async {
           await Clipboard.setData(
             ClipboardData(text: '$kLichessHost/${game.id}'),
           );
         },
-        icon: CupertinoIcons.link,
-        child: const Text('Copy game URL'),
+        leading: const Icon(CupertinoIcons.link),
+        title: const Text('Copy game URL'),
       ),
-      AdaptiveContextMenuAction(
-        icon: Icons.gif,
-        child: Text(context.l10n.gameAsGIF),
-        onPressed: () async {
+      PlatformListTile(
+        leading: const Icon(Icons.gif),
+        title: Text(context.l10n.gameAsGIF),
+        onTap: () async {
           try {
             final resp = await ref
                 .read(httpClientProvider)
@@ -236,10 +203,10 @@ class GameListTile extends ConsumerWidget {
         },
       ),
       if (game.lastFen != null && game.lastMove != null)
-        AdaptiveContextMenuAction(
-          icon: Icons.image,
-          child: Text(context.l10n.screenshotCurrentPosition),
-          onPressed: () async {
+        PlatformListTile(
+          leading: const Icon(Icons.image),
+          title: Text(context.l10n.screenshotCurrentPosition),
+          onTap: () async {
             try {
               final resp = await ref
                   .read(httpClientProvider)
@@ -266,10 +233,10 @@ class GameListTile extends ConsumerWidget {
             }
           },
         ),
-      AdaptiveContextMenuAction(
-        icon: CupertinoIcons.share,
-        child: Text('PGN: ${context.l10n.downloadAnnotated}'),
-        onPressed: () async {
+      PlatformListTile(
+        leading: const Icon(CupertinoIcons.share),
+        title: Text('PGN: ${context.l10n.downloadAnnotated}'),
+        onTap: () async {
           try {
             final resp = await ref
                 .read(httpClientProvider)
@@ -294,10 +261,10 @@ class GameListTile extends ConsumerWidget {
           }
         },
       ),
-      AdaptiveContextMenuAction(
-        icon: CupertinoIcons.share,
-        child: Text('PGN: ${context.l10n.downloadRaw}'),
-        onPressed: () async {
+      PlatformListTile(
+        leading: const Icon(CupertinoIcons.share),
+        title: Text('PGN: ${context.l10n.downloadRaw}'),
+        onTap: () async {
           try {
             final resp = await ref
                 .read(httpClientProvider)
@@ -324,110 +291,121 @@ class GameListTile extends ConsumerWidget {
       ),
     ];
 
-    final tile = PlatformListTile(
-      onTap: onTap,
-      onLongPress: () {
-        showModalBottomSheet<void>(
-          context: context,
-          useRootNavigator: true,
-          isDismissible: true,
-          isScrollControlled: true,
-          showDragHandle: true,
-          builder: (context) => DraggableScrollableSheet(
-            initialChildSize: 0.6,
-            maxChildSize: 0.95,
-            minChildSize: 0.6,
-            expand: false,
-            snap: true,
-            builder: (context, scrollController) => SingleChildScrollView(
-              controller: scrollController,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: expandedWidget,
-                    ),
-                    const Divider(height: 24.0),
-                    ...actions,
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-      leading: icon != null
-          ? Icon(
-              icon,
-              size: defaultTargetPlatform == TargetPlatform.iOS ? 26.0 : 36.0,
-            )
-          : null,
-      title: playerTitle,
-      subtitle: subtitle != null
-          ? DefaultTextStyle.merge(
-              child: subtitle!,
-              style: TextStyle(
-                color: textShade(context, Styles.subtitleOpacity),
-              ),
-            )
-          : null,
-      trailing: trailing,
-    );
-
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return LichessCupertinoContextMenu.builder(
-        enableHapticFeedback: true,
-        builder: (context, animation) {
-          return (animation.value >
-                          LichessCupertinoContextMenu.animationOpensAt &&
-                      animation.status == AnimationStatus.forward) ||
-                  animation.value == 1
-              ? SingleChildScrollView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      PlatformCard(
-                        margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: expandedWidget,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              : animation.value > 0
-                  ? SingleChildScrollView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
+    return DraggableScrollableSheet(
+      initialChildSize: 0.6,
+      maxChildSize: 0.95,
+      minChildSize: 0.6,
+      expand: false,
+      snap: true,
+      builder: (context, scrollController) => SingleChildScrollView(
+        controller: scrollController,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return IntrinsicHeight(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
                         children: [
-                          PlatformCard(
-                            margin: EdgeInsets.zero,
-                            elevation: 1,
-                            child: tile,
+                          if (game.lastFen != null)
+                            BoardThumbnail(
+                              size: constraints.maxWidth -
+                                  (constraints.maxWidth / 1.618),
+                              fen: game.lastFen!,
+                              orientation: mySide.cg,
+                              lastMove: game.lastMove?.cg,
+                            ),
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        context.l10n.resVsX(
+                                          game.white.fullName(context),
+                                          game.black.fullName(context),
+                                        ),
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          letterSpacing: -0.5,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2.0),
+                                      Text(
+                                        '${game.clockDisplay} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
+                                        style: TextStyle(
+                                          color: textShade(
+                                            context,
+                                            Styles.subtitleOpacity,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  if (game.lastFen != null)
+                                    Text(
+                                      gameStatusL10n(
+                                        context,
+                                        variant: game.variant,
+                                        status: game.status,
+                                        lastPosition: Position.setupPosition(
+                                          game.variant.rule,
+                                          Setup.parseFen(game.lastFen!),
+                                        ),
+                                        winner: game.winner,
+                                      ),
+                                      style: TextStyle(
+                                        color: game.winner == null
+                                            ? LichessColors.brag
+                                            : game.winner == mySide
+                                                ? LichessColors.good
+                                                : LichessColors.red,
+                                      ),
+                                    ),
+                                  if (game.opening != null)
+                                    Text(
+                                      game.opening!.name,
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                        color: textShade(
+                                          context,
+                                          Styles.subtitleOpacity,
+                                        ),
+                                        fontSize: 12,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
-                    )
-                  : SingleChildScrollView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          tile,
-                        ],
-                      ),
                     );
-        },
-        actions: actions,
-      );
-    } else {
-      return tile;
-    }
+                  },
+                ),
+              ),
+              const Divider(height: 24.0),
+              ...actions,
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
