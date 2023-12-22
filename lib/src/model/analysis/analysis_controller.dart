@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
+import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'analysis_controller.freezed.dart';
@@ -475,6 +476,20 @@ class AnalysisState with _$AnalysisState {
   Position get position => currentNode.position;
   bool get canGoNext => currentNode.hasChild;
   bool get canGoBack => currentPath.size > UciPath.empty.size;
+
+  EngineGaugeParams get engineGaugeParams => EngineGaugeParams(
+        orientation: pov,
+        isLocalEngineAvailable: isEngineAvailable,
+        position: position,
+        savedEval: currentNode.eval ??
+            (currentNode.pgnEval != null
+                ? ExternalEval(
+                    eval: currentNode.pgnEval!.pawns,
+                    mate: currentNode.pgnEval!.mate,
+                    depth: currentNode.pgnEval!.depth,
+                  )
+                : null),
+      );
 }
 
 @freezed

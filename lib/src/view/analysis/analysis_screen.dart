@@ -384,12 +384,7 @@ class _EngineGaugeVertical extends ConsumerWidget {
 
     return EngineGauge(
       displayMode: EngineGaugeDisplayMode.vertical,
-      params: EngineGaugeParams(
-        orientation: analysisState.pov,
-        isLocalEngineAvailable: analysisState.isEngineAvailable,
-        position: analysisState.position,
-        savedEval: analysisState.currentNode.eval,
-      ),
+      params: analysisState.engineGaugeParams,
     );
   }
 }
@@ -414,19 +409,7 @@ class _ColumnTopTable extends ConsumerWidget {
               if (showEvaluationGauge)
                 EngineGauge(
                   displayMode: EngineGaugeDisplayMode.horizontal,
-                  params: EngineGaugeParams(
-                    orientation: analysisState.pov,
-                    isLocalEngineAvailable: analysisState.isEngineAvailable,
-                    position: analysisState.position,
-                    savedEval: analysisState.currentNode.eval ??
-                        (analysisState.currentNode.pgnEval != null
-                            ? ExternalEval(
-                                eval: analysisState.currentNode.pgnEval!.pawns,
-                                mate: analysisState.currentNode.pgnEval!.mate,
-                                depth: analysisState.currentNode.pgnEval!.depth,
-                              )
-                            : null),
-                  ),
+                  params: analysisState.engineGaugeParams,
                 ),
               if (analysisState.isEngineAvailable)
                 _EngineLines(ctrlProvider, isLandscape: false),
