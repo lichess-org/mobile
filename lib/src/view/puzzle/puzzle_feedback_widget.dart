@@ -83,10 +83,7 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
             leading: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4.0),
-                color: defaultTargetPlatform == TargetPlatform.iOS
-                    ? CupertinoColors.tertiarySystemBackground
-                        .resolveFrom(context)
-                    : Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.surfaceVariant,
               ),
               child: Padding(
                 padding: const EdgeInsets.all(3.0),
