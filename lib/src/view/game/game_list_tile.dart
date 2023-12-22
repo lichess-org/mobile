@@ -293,10 +293,10 @@ class _ContextMenu extends ConsumerWidget {
     ];
 
     return DraggableScrollableSheet(
-      initialChildSize: 0.7,
+      initialChildSize: .5,
       expand: false,
       snap: true,
-      snapSizes: const [0.7],
+      snapSizes: const [.5, .7],
       builder: (context, scrollController) => SingleChildScrollView(
         controller: scrollController,
         child: Padding(
