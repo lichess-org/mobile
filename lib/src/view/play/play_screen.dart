@@ -28,7 +28,7 @@ class PlayScreen extends StatelessWidget {
   Widget _buildIos(BuildContext context) {
     return const CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(),
-      child: _Body(),
+      child: PlayScreenBody(),
     );
   }
 
@@ -37,13 +37,13 @@ class PlayScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(context.l10n.createAGame),
       ),
-      body: const _Body(),
+      body: const PlayScreenBody(),
     );
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
+class PlayScreenBody extends ConsumerWidget {
+  const PlayScreenBody();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
