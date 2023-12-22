@@ -356,7 +356,7 @@ class _HomeBody extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Expanded(
-              flex: 5,
+              flex: 3,
               child: Column(
                 children: [
                   SizedBox(height: 16.0),
@@ -365,7 +365,7 @@ class _HomeBody extends ConsumerWidget {
               ),
             ),
             Expanded(
-              flex: 8,
+              flex: 4,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -399,7 +399,7 @@ class _HomeBody extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              flex: 5,
+              flex: 3,
               child: Column(
                 children: [
                   SizedBox(height: 16.0),
@@ -408,7 +408,7 @@ class _HomeBody extends ConsumerWidget {
               ),
             ),
             Expanded(
-              flex: 8,
+              flex: 4,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
