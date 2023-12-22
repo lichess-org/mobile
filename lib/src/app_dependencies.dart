@@ -78,7 +78,7 @@ Future<AppDependencies> appDependencies(
     }
   }
 
-  final dbPath = p.join(await getDatabasesPath(), 'lichess_mobile.db');
+  final dbPath = p.join(await getDatabasesPath(), kLichessDatabaseName);
   final db = await openDb(databaseFactory, dbPath);
 
   final physicalMemory = await SystemInfoPlus.physicalMemory ?? 256.0;

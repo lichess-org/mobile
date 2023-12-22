@@ -16,26 +16,36 @@ part 'openings_database.g.dart';
 //   sqlite> .import d.tsv openings
 //   sqlite> .import e.tsv openings
 
-const _kDatabaseName = 'chess_openings.db';
+const _kDatabaseVersion = 2;
+const _kDatabaseName = 'chess_openings$_kDatabaseVersion.db';
 
 @Riverpod(keepAlive: true)
 Future<Database> openingsDatabase(OpeningsDatabaseRef ref) async {
   final dbPath = p.join(await getDatabasesPath(), _kDatabaseName);
-  return openDb(dbPath);
+  return _openDb(dbPath);
 }
 
-Future<Database> openDb(String path) async {
+Future<Database> _openDb(String path) async {
   final exists = await databaseExists(path);
 
   if (!exists) {
+    final directory = Directory(p.dirname(path));
+
     // Make sure the parent directory exists
     try {
-      await Directory(p.dirname(path)).create(recursive: true);
+      await directory.create(recursive: true);
     } catch (_) {}
+
+    // Delete existing previous if any
+    directory.list().forEach((file) async {
+      if (file.path.startsWith('chess_openings')) {
+        deleteDatabase(file.path);
+      }
+    });
 
     // Copy from asset
     final ByteData data =
-        await rootBundle.load(p.url.join('assets', _kDatabaseName));
+        await rootBundle.load(p.url.join('assets', 'chess_openings.db'));
     final List<int> bytes =
         data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 

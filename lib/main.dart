@@ -34,7 +34,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   // update correspondence game
   if (gameFullId != null && round != null) {
-    final dbPath = path.join(await getDatabasesPath(), 'lichess_mobile.db');
+    final dbPath = path.join(await getDatabasesPath(), kLichessDatabaseName);
     final db = await openDb(databaseFactory, dbPath);
     final fullId = GameFullId(gameFullId);
     final game = PlayableGame.fromServerJson(

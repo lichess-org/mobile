@@ -4,6 +4,8 @@ import 'package:sqflite/sqflite.dart';
 
 part 'database.g.dart';
 
+const kLichessDatabaseName = 'lichess_mobile.db';
+
 const puzzleTTL = Duration(days: 60);
 const corresGameTTL = Duration(days: 60);
 
