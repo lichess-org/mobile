@@ -153,56 +153,59 @@ class _EvalGaugeState extends ConsumerState<_EvalGauge> {
         return Semantics(
           label: context.l10n.evaluationGauge,
           value: evalDisplay ?? context.l10n.loadingEngine,
-          child: Container(
-            constraints: widget.displayMode == EngineGaugeDisplayMode.vertical
-                ? const BoxConstraints(
-                    minWidth: kEvalGaugeSize,
-                    minHeight: double.infinity,
-                  )
-                : const BoxConstraints(
-                    minWidth: double.infinity,
-                    minHeight: kEvalGaugeSize,
-                  ),
-            width: widget.displayMode == EngineGaugeDisplayMode.vertical
-                ? kEvalGaugeSize
-                : null,
-            height: widget.displayMode == EngineGaugeDisplayMode.vertical
-                ? null
-                : kEvalGaugeSize,
-            child: CustomPaint(
-              painter: widget.displayMode == EngineGaugeDisplayMode.vertical
-                  ? _EvalGaugeVerticalPainter(
-                      orientation: widget.orientation,
-                      backgroundColor:
-                          EngineGauge.backgroundColor(context, brightness),
-                      valueColor: EngineGauge.valueColor(context, brightness),
-                      value: value,
+          child: RepaintBoundary(
+            child: Container(
+              constraints: widget.displayMode == EngineGaugeDisplayMode.vertical
+                  ? const BoxConstraints(
+                      minWidth: kEvalGaugeSize,
+                      minHeight: double.infinity,
                     )
-                  : _EvalGaugeHorizontalPainter(
-                      backgroundColor:
-                          EngineGauge.backgroundColor(context, brightness),
-                      valueColor: EngineGauge.valueColor(context, brightness),
-                      value: value,
-                      textDirection: textDirection,
+                  : const BoxConstraints(
+                      minWidth: double.infinity,
+                      minHeight: kEvalGaugeSize,
                     ),
-              child: widget.displayMode == EngineGaugeDisplayMode.vertical
-                  ? const SizedBox.shrink()
-                  : Align(
-                      alignment: toValue >= 0.5
-                          ? Alignment.centerLeft
-                          : Alignment.centerRight,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        child: Text(
-                          evalDisplay ?? '',
-                          style: TextStyle(
-                            color: toValue >= 0.5 ? Colors.black : Colors.white,
-                            fontSize: kEvalGaugeFontSize,
-                            fontWeight: FontWeight.bold,
+              width: widget.displayMode == EngineGaugeDisplayMode.vertical
+                  ? kEvalGaugeSize
+                  : null,
+              height: widget.displayMode == EngineGaugeDisplayMode.vertical
+                  ? null
+                  : kEvalGaugeSize,
+              child: CustomPaint(
+                painter: widget.displayMode == EngineGaugeDisplayMode.vertical
+                    ? _EvalGaugeVerticalPainter(
+                        orientation: widget.orientation,
+                        backgroundColor:
+                            EngineGauge.backgroundColor(context, brightness),
+                        valueColor: EngineGauge.valueColor(context, brightness),
+                        value: value,
+                      )
+                    : _EvalGaugeHorizontalPainter(
+                        backgroundColor:
+                            EngineGauge.backgroundColor(context, brightness),
+                        valueColor: EngineGauge.valueColor(context, brightness),
+                        value: value,
+                        textDirection: textDirection,
+                      ),
+                child: widget.displayMode == EngineGaugeDisplayMode.vertical
+                    ? const SizedBox.shrink()
+                    : Align(
+                        alignment: toValue >= 0.5
+                            ? Alignment.centerLeft
+                            : Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          child: Text(
+                            evalDisplay ?? '',
+                            style: TextStyle(
+                              color:
+                                  toValue >= 0.5 ? Colors.black : Colors.white,
+                              fontSize: kEvalGaugeFontSize,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                    ),
+              ),
             ),
           ),
         );
