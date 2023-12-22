@@ -435,7 +435,13 @@ class _AdaptiveInkWellState extends State<AdaptiveInkWell> {
             setState(() => _isPressed = true);
           },
           onTapCancel: () => setState(() => _isPressed = false),
-          onTapUp: (_) => setState(() => _isPressed = false),
+          onTapUp: (_) {
+            Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
+              if (mounted) {
+                setState(() => _isPressed = false);
+              }
+            });
+          },
           child: Semantics(
             button: true,
             child: Container(
