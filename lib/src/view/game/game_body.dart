@@ -467,25 +467,6 @@ class _GameBottomBar extends ConsumerWidget {
                     icon: CupertinoIcons.arrowshape_turn_up_left,
                   ),
                 )
-              else if (gameState.game.playable &&
-                  gameState.game.speed == Speed.correspondence)
-                Expanded(
-                  child: BottomBarButton(
-                    label: context.l10n.analysis,
-                    icon: Icons.biotech,
-                    onTap: () {
-                      pushPlatformRoute(
-                        context,
-                        builder: (_) => AnalysisScreen(
-                          options: gameState.analysisOptions.copyWith(
-                            isLocalEvaluationAllowed: false,
-                          ),
-                          title: context.l10n.analysis,
-                        ),
-                      );
-                    },
-                  ),
-                )
               else if (gameState.game.finished)
                 Builder(
                   builder: (context) {
@@ -564,32 +545,33 @@ class _GameBottomBar extends ConsumerWidget {
                     ),
                   ),
                 ),
-              Expanded(
-                child: BottomBarButton(
-                  label: context.l10n.chat,
-                  onTap: () {
-                    pushPlatformRoute(
-                      context,
-                      fullscreenDialog: true,
-                      builder: (BuildContext context) {
-                        return MessageScreen(
-                          title: UserFullNameWidget(
-                            user: gameState.game.opponent?.user,
-                          ),
-                          me: gameState.game.me?.user,
-                          chatContext: id,
-                        );
-                      },
-                    );
-                  },
-                  icon: defaultTargetPlatform == TargetPlatform.iOS
-                      ? CupertinoIcons.chat_bubble
-                      : Icons.chat_bubble_outline,
-                  chip: chatState.unreadMessages > 0
-                      ? Text(math.min(9, chatState.unreadMessages).toString())
-                      : null,
+              if (!gameState.isZenModeEnabled)
+                Expanded(
+                  child: BottomBarButton(
+                    label: context.l10n.chat,
+                    onTap: () {
+                      pushPlatformRoute(
+                        context,
+                        fullscreenDialog: true,
+                        builder: (BuildContext context) {
+                          return MessageScreen(
+                            title: UserFullNameWidget(
+                              user: gameState.game.opponent?.user,
+                            ),
+                            me: gameState.game.me?.user,
+                            chatContext: id,
+                          );
+                        },
+                      );
+                    },
+                    icon: defaultTargetPlatform == TargetPlatform.iOS
+                        ? CupertinoIcons.chat_bubble
+                        : Icons.chat_bubble_outline,
+                    chip: chatState.unreadMessages > 0
+                        ? Text(math.min(9, chatState.unreadMessages).toString())
+                        : null,
+                  ),
                 ),
-              ),
               Expanded(
                 child: RepeatButton(
                   onLongPress:
@@ -642,6 +624,22 @@ class _GameBottomBar extends ConsumerWidget {
             ref.read(isBoardTurnedProvider.notifier).toggle();
           },
         ),
+        if (gameState.game.playable &&
+            gameState.game.speed == Speed.correspondence)
+          BottomSheetAction(
+            label: Text(context.l10n.analysis),
+            onPressed: (context) {
+              pushPlatformRoute(
+                context,
+                builder: (_) => AnalysisScreen(
+                  options: gameState.analysisOptions.copyWith(
+                    isLocalEvaluationAllowed: false,
+                  ),
+                  title: context.l10n.analysis,
+                ),
+              );
+            },
+          ),
         if (gameState.game.abortable)
           BottomSheetAction(
             label: Text(context.l10n.abortGame),

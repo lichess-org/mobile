@@ -125,36 +125,37 @@ class _ContextMenu extends ConsumerWidget {
               return FutureBuilder(
                 future: pgnFuture,
                 builder: (context, snapshot) {
-                  return PlatformListTile(
-                    leading: const Icon(Icons.biotech),
-                    onTap: snapshot.connectionState == ConnectionState.waiting
-                        ? null
-                        : () async {
-                            final future = ref.read(
-                              gameAnalysisPgnProvider(id: game.id).future,
-                            );
-                            setState(() {
-                              pgnFuture = future;
-                            });
-                            final pgn = await future;
-                            if (context.mounted) {
-                              pushPlatformRoute(
-                                context,
-                                builder: (context) => AnalysisScreen(
-                                  title: context.l10n.gameAnalysis,
-                                  options: AnalysisOptions(
-                                    isLocalEvaluationAllowed: true,
-                                    variant: game.variant,
-                                    pgn: pgn,
-                                    orientation: orientation,
-                                    id: game.id,
-                                    serverAnalysis: serverAnalysis,
-                                  ),
-                                ),
-                              );
-                            }
-                          },
-                    title: Text(context.l10n.gameAnalysis),
+                  return BottomSheetContextMenuAction(
+                    icon: Icons.biotech,
+                    onPressed:
+                        snapshot.connectionState == ConnectionState.waiting
+                            ? null
+                            : () async {
+                                final future = ref.read(
+                                  gameAnalysisPgnProvider(id: game.id).future,
+                                );
+                                setState(() {
+                                  pgnFuture = future;
+                                });
+                                final pgn = await future;
+                                if (context.mounted) {
+                                  pushPlatformRoute(
+                                    context,
+                                    builder: (context) => AnalysisScreen(
+                                      title: context.l10n.gameAnalysis,
+                                      options: AnalysisOptions(
+                                        isLocalEvaluationAllowed: true,
+                                        variant: game.variant,
+                                        pgn: pgn,
+                                        orientation: orientation,
+                                        id: game.id,
+                                        serverAnalysis: serverAnalysis,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                    child: Text(context.l10n.gameAnalysis),
                   );
                 },
               );
@@ -162,19 +163,19 @@ class _ContextMenu extends ConsumerWidget {
           );
         },
       ),
-      PlatformListTile(
-        onTap: () async {
+      BottomSheetContextMenuAction(
+        onPressed: () async {
           await Clipboard.setData(
             ClipboardData(text: '$kLichessHost/${game.id}'),
           );
         },
-        leading: const Icon(CupertinoIcons.link),
-        title: const Text('Copy game URL'),
+        icon: CupertinoIcons.link,
+        child: const Text('Copy game URL'),
       ),
-      PlatformListTile(
-        leading: const Icon(Icons.gif),
-        title: Text(context.l10n.gameAsGIF),
-        onTap: () async {
+      BottomSheetContextMenuAction(
+        icon: Icons.gif,
+        child: Text(context.l10n.gameAsGIF),
+        onPressed: () async {
           try {
             final resp = await ref
                 .read(httpClientProvider)
@@ -203,10 +204,10 @@ class _ContextMenu extends ConsumerWidget {
         },
       ),
       if (game.lastFen != null && game.lastMove != null)
-        PlatformListTile(
-          leading: const Icon(Icons.image),
-          title: Text(context.l10n.screenshotCurrentPosition),
-          onTap: () async {
+        BottomSheetContextMenuAction(
+          icon: Icons.image,
+          child: Text(context.l10n.screenshotCurrentPosition),
+          onPressed: () async {
             try {
               final resp = await ref
                   .read(httpClientProvider)
@@ -233,10 +234,10 @@ class _ContextMenu extends ConsumerWidget {
             }
           },
         ),
-      PlatformListTile(
-        leading: const Icon(CupertinoIcons.share),
-        title: Text('PGN: ${context.l10n.downloadAnnotated}'),
-        onTap: () async {
+      BottomSheetContextMenuAction(
+        icon: CupertinoIcons.share,
+        child: Text('PGN: ${context.l10n.downloadAnnotated}'),
+        onPressed: () async {
           try {
             final resp = await ref
                 .read(httpClientProvider)
@@ -261,10 +262,10 @@ class _ContextMenu extends ConsumerWidget {
           }
         },
       ),
-      PlatformListTile(
-        leading: const Icon(CupertinoIcons.share),
-        title: Text('PGN: ${context.l10n.downloadRaw}'),
-        onTap: () async {
+      BottomSheetContextMenuAction(
+        icon: CupertinoIcons.share,
+        child: Text('PGN: ${context.l10n.downloadRaw}'),
+        onPressed: () async {
           try {
             final resp = await ref
                 .read(httpClientProvider)
@@ -292,20 +293,21 @@ class _ContextMenu extends ConsumerWidget {
     ];
 
     return DraggableScrollableSheet(
-      initialChildSize: 0.6,
-      maxChildSize: 0.95,
-      minChildSize: 0.6,
+      initialChildSize: .5,
       expand: false,
       snap: true,
+      snapSizes: const [.5, .7],
       builder: (context, scrollController) => SingleChildScrollView(
         controller: scrollController,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.only(bottom: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0).add(
+                  const EdgeInsets.only(bottom: 8.0),
+                ),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     return IntrinsicHeight(
@@ -400,7 +402,6 @@ class _ContextMenu extends ConsumerWidget {
                   },
                 ),
               ),
-              const Divider(height: 24.0),
               ...actions,
             ],
           ),

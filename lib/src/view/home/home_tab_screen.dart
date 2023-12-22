@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
@@ -203,6 +204,7 @@ class _HomeScaffold extends StatelessWidget {
   }
 
   Widget _iosBuilder(BuildContext context) {
+    final isHandset = getScreenType(context) == ScreenType.handset;
     return SafeArea(
       top: false,
       child: Column(
@@ -211,40 +213,41 @@ class _HomeScaffold extends StatelessWidget {
           Expanded(
             child: child,
           ),
-          Container(
-            height: 80,
-            decoration: BoxDecoration(
-              color: CupertinoTheme.of(context).barBackgroundColor,
-              border: const Border(
-                top: BorderSide(
-                  color: Styles.cupertinoDefaultTabBarBorderColor,
-                  width: 0.0,
-                ),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15.0)
-                  .add(Styles.horizontalBodyPadding),
-              child: MediaQuery.withClampedTextScaling(
-                maxScaleFactor: 1.1,
-                child: CupertinoButton.filled(
-                  child: DefaultTextStyle.merge(
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    child: Text(context.l10n.createAGame),
+          if (isHandset)
+            Container(
+              height: 80,
+              decoration: BoxDecoration(
+                color: CupertinoTheme.of(context).barBackgroundColor,
+                border: const Border(
+                  top: BorderSide(
+                    color: Styles.cupertinoDefaultTabBarBorderColor,
+                    width: 0.0,
                   ),
-                  onPressed: () {
-                    pushPlatformRoute(
-                      context,
-                      title: context.l10n.createAGame,
-                      builder: (_) => const PlayScreen(),
-                    );
-                  },
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15.0)
+                    .add(Styles.horizontalBodyPadding),
+                child: MediaQuery.withClampedTextScaling(
+                  maxScaleFactor: 1.1,
+                  child: CupertinoButton.filled(
+                    child: DefaultTextStyle.merge(
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      child: Text(context.l10n.createAGame),
+                    ),
+                    onPressed: () {
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n.createAGame,
+                        builder: (_) => const PlayScreen(),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );
@@ -253,6 +256,7 @@ class _HomeScaffold extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     final navigationBarTheme = NavigationBarTheme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final isHandset = getScreenType(context) == ScreenType.handset;
     return SafeArea(
       top: false,
       child: Column(
@@ -261,36 +265,37 @@ class _HomeScaffold extends StatelessWidget {
           Expanded(
             child: child,
           ),
-          Material(
-            color: navigationBarTheme.backgroundColor ?? colorScheme.surface,
-            elevation: navigationBarTheme.elevation ?? 3.0,
-            shadowColor: navigationBarTheme.shadowColor ?? Colors.transparent,
-            surfaceTintColor:
-                navigationBarTheme.surfaceTintColor ?? colorScheme.surfaceTint,
-            child: SizedBox(
-              height: 80,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15.0)
-                    .add(Styles.horizontalBodyPadding),
-                child: FilledButton.tonal(
-                  style: FilledButton.styleFrom(
-                    textStyle: const TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
+          if (isHandset)
+            Material(
+              color: navigationBarTheme.backgroundColor ?? colorScheme.surface,
+              elevation: navigationBarTheme.elevation ?? 3.0,
+              shadowColor: navigationBarTheme.shadowColor ?? Colors.transparent,
+              surfaceTintColor: navigationBarTheme.surfaceTintColor ??
+                  colorScheme.surfaceTint,
+              child: SizedBox(
+                height: 80,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15.0)
+                      .add(Styles.horizontalBodyPadding),
+                  child: FilledButton.tonal(
+                    style: FilledButton.styleFrom(
+                      textStyle: const TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
+                    child: Text(context.l10n.createAGame),
+                    onPressed: () {
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n.createAGame,
+                        builder: (_) => const PlayScreen(),
+                      );
+                    },
                   ),
-                  child: Text(context.l10n.createAGame),
-                  onPressed: () {
-                    pushPlatformRoute(
-                      context,
-                      title: context.l10n.createAGame,
-                      builder: (_) => const PlayScreen(),
-                    );
-                  },
                 ),
               ),
             ),
-          ),
         ],
       ),
     );
@@ -305,14 +310,9 @@ class _HomeBody extends ConsumerWidget {
     final connectivity = ref.watch(connectivityChangesProvider);
     return connectivity.when(
       data: (data) {
+        final isTablet = getScreenType(context) == ScreenType.tablet;
         if (data.isOnline) {
-          final onlineWidgets = [
-            const SizedBox(height: 8.0),
-            const _PreferredSetup(),
-            const _MostRecentOngoingGamePreview(),
-            const RecentGames(),
-            RatingPrefAware(child: LeaderboardWidget()),
-          ];
+          final onlineWidgets = _onlineWidgets(isTablet);
 
           return defaultTargetPlatform == TargetPlatform.android
               ? ListView(
@@ -323,17 +323,14 @@ class _HomeBody extends ConsumerWidget {
                   delegate: SliverChildListDelegate(onlineWidgets),
                 );
         } else {
-          const offlineWidgets = [
-            SizedBox(height: 8.0),
-            _OfflineCorrespondencePreview(),
-          ];
+          final offlineWidgets = _offlineWidgets(isTablet);
           return defaultTargetPlatform == TargetPlatform.android
               ? ListView(
                   controller: homeScrollController,
                   children: offlineWidgets,
                 )
               : SliverList(
-                  delegate: SliverChildListDelegate(offlineWidgets),
+                  delegate: SliverChildListDelegate.fixed(offlineWidgets),
                 );
         }
       },
@@ -350,6 +347,86 @@ class _HomeBody extends ConsumerWidget {
             : const SliverFillRemaining(child: child);
       },
     );
+  }
+
+  List<Widget> _onlineWidgets(bool isTablet) {
+    if (isTablet) {
+      return [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Expanded(
+              flex: 5,
+              child: Column(
+                children: [
+                  SizedBox(height: 16.0),
+                  PlayScreenBody(),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 8,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 8.0),
+                  const _PreferredSetup(),
+                  const _MostRecentOngoingGamePreview(),
+                  const RecentGames(),
+                  RatingPrefAware(child: LeaderboardWidget()),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ];
+    } else {
+      return [
+        const SizedBox(height: 8.0),
+        const _PreferredSetup(),
+        const _MostRecentOngoingGamePreview(),
+        const RecentGames(),
+        RatingPrefAware(child: LeaderboardWidget()),
+      ];
+    }
+  }
+
+  List<Widget> _offlineWidgets(bool isTablet) {
+    if (isTablet) {
+      return const [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 5,
+              child: Column(
+                children: [
+                  SizedBox(height: 16.0),
+                  PlayScreenBody(),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 8,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(height: 8.0),
+                  _OfflineCorrespondencePreview(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ];
+    } else {
+      return const [
+        SizedBox(height: 8.0),
+        _OfflineCorrespondencePreview(),
+      ];
+    }
   }
 }
 

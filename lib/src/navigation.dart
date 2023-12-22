@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
@@ -111,7 +112,9 @@ class BottomNavScaffold extends ConsumerWidget {
     final currentTab = ref.watch(currentBottomTabProvider);
     final isHomeRoot = ref.watch(isHomeRootProvider);
     final tabs = ref.watch(tabsProvider);
-    final shouldRemoveTabBarBorder = currentTab == BottomTab.play && isHomeRoot;
+    final isHandset = getScreenType(context) == ScreenType.handset;
+    final shouldRemoveTabBarBorder =
+        isHandset && currentTab == BottomTab.play && isHomeRoot;
 
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:

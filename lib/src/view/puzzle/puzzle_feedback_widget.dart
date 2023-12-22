@@ -1,7 +1,5 @@
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -83,10 +81,7 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
             leading: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4.0),
-                color: defaultTargetPlatform == TargetPlatform.iOS
-                    ? CupertinoColors.tertiarySystemBackground
-                        .resolveFrom(context)
-                    : Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.surfaceVariant,
               ),
               child: Padding(
                 padding: const EdgeInsets.all(3.0),

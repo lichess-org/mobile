@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/history_boards.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_dashboard_widget.dart';
@@ -108,15 +109,15 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const angle = PuzzleTheme(PuzzleThemeKey.mix);
-    final nextPuzzle = ref.watch(nextPuzzleProvider(angle));
     final connectivity = ref.watch(connectivityChangesProvider);
 
     final expansionTileColor = defaultTargetPlatform == TargetPlatform.iOS
         ? CupertinoColors.secondaryLabel.resolveFrom(context)
         : null;
 
-    final content = [
+    final isTablet = getScreenType(context) == ScreenType.tablet;
+
+    final handsetChildren = [
       const SizedBox(height: 8.0),
       connectivity.when(
         data: (data) => data.isOnline
@@ -125,42 +126,7 @@ class _Body extends ConsumerWidget {
         loading: () => const SizedBox.shrink(),
         error: (_, __) => const SizedBox.shrink(),
       ),
-      Padding(
-        padding:
-            Styles.horizontalBodyPadding.add(const EdgeInsets.only(top: 8.0)),
-        child: nextPuzzle.when(
-          data: (data) {
-            if (data == null) {
-              return const _PuzzleButton(
-                subtitle: 'Could not find any puzzle! Go online to get more.',
-              );
-            } else {
-              return _PuzzleButton(
-                onTap: () {
-                  pushPlatformRoute(
-                    context,
-                    title: context.l10n.puzzleDesc,
-                    rootNavigator: true,
-                    builder: (context) => PuzzleScreen(
-                      angle: angle,
-                      initialPuzzleContext: data,
-                    ),
-                  ).then((_) {
-                    ref.invalidate(nextPuzzleProvider(angle));
-                  });
-                },
-              );
-            }
-          },
-          loading: () => const _PuzzleButton(),
-          error: (e, s) {
-            debugPrint(
-              'SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s',
-            );
-            return const _PuzzleButton();
-          },
-        ),
-      ),
+      PuzzleButton(),
       Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
@@ -174,100 +140,214 @@ class _Body extends ConsumerWidget {
           collapsedTextColor: expansionTileColor,
           controlAffinity: ListTileControlAffinity.leading,
           children: [
-            Padding(
-              padding: Styles.bodySectionBottomPadding,
-              child: CardButton(
-                icon: const Icon(
-                  LichessIcons.streak,
-                  size: 44,
-                ),
-                title: Text(
-                  'Puzzle Streak',
-                  style: Styles.sectionTitle,
-                ),
-                subtitle: Text(
-                  context.l10n.puzzleStreakDescription.characters
-                          .takeWhile((c) => c != '.')
-                          .toString() +
-                      (context.l10n.puzzleStreakDescription.contains('.')
-                          ? '.'
-                          : ''),
-                ),
-                onTap: connectivity.when(
-                  data: (data) => data.isOnline
-                      ? () {
-                          pushPlatformRoute(
-                            context,
-                            rootNavigator: true,
-                            builder: (context) => const StreakScreen(),
-                          );
-                        }
-                      : null,
-                  loading: () => null,
-                  error: (_, __) => null,
-                ),
-              ),
-            ),
-            Padding(
-              padding: Styles.bodySectionBottomPadding,
-              child: CardButton(
-                icon: const Icon(
-                  LichessIcons.storm,
-                  size: 44,
-                ),
-                title: Text(
-                  'Puzzle Storm',
-                  style: Styles.sectionTitle,
-                ),
-                subtitle: const Text(
-                  'Solve as many puzzles as possible in 3 minutes.',
-                ),
-                onTap: connectivity.when(
-                  data: (data) => data.isOnline
-                      ? () {
-                          pushPlatformRoute(
-                            context,
-                            rootNavigator: true,
-                            builder: (context) => const StormScreen(),
-                          );
-                        }
-                      : null,
-                  loading: () => null,
-                  error: (_, __) => null,
-                ),
-              ),
-            ),
-            Padding(
-              padding: Styles.bodySectionBottomPadding,
-              child: CardButton(
-                icon: const Icon(PuzzleIcons.mix, size: 44),
-                title: Text(
-                  context.l10n.puzzlePuzzleThemes,
-                  style: Styles.sectionTitle,
-                ),
-                subtitle: const Text(
-                  'Choose puzzles by theme or opening.',
-                ),
-                onTap: () {
-                  pushPlatformRoute(
-                    context,
-                    builder: (context) => const PuzzleThemesScreen(),
-                  );
-                },
-              ),
-            ),
+            StreakButton(connectivity: connectivity),
+            StormButton(connectivity: connectivity),
+            const PuzzleThemeButton(),
           ],
         ),
       ),
       if (session != null) ...[PuzzleDashboardWidget(), PuzzleHistoryWidget()],
     ];
 
-    return defaultTargetPlatform == TargetPlatform.iOS
-        ? SliverList(delegate: SliverChildListDelegate(content))
+    final tabletChildren = [
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(height: 8.0),
+                connectivity.when(
+                  data: (data) => data.isOnline
+                      ? const _DailyPuzzle()
+                      : const _OfflinePuzzlePreview(),
+                  loading: () => const SizedBox.shrink(),
+                  error: (_, __) => const SizedBox.shrink(),
+                ),
+                PuzzleButton(),
+                const SizedBox(height: 16.0),
+                StreakButton(connectivity: connectivity),
+                StormButton(connectivity: connectivity),
+                const PuzzleThemeButton(),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                if (session != null) ...[
+                  PuzzleDashboardWidget(),
+                  PuzzleHistoryWidget(),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    ];
+
+    final children = isTablet ? tabletChildren : handsetChildren;
+
+    return Theme.of(context).platform == TargetPlatform.iOS
+        ? SliverList(delegate: SliverChildListDelegate.fixed(children))
         : ListView(
             controller: puzzlesScrollController,
-            children: content,
+            children: children,
           );
+  }
+}
+
+class PuzzleButton extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    const angle = PuzzleTheme(PuzzleThemeKey.mix);
+    final nextPuzzle = ref.watch(nextPuzzleProvider(angle));
+    return Padding(
+      padding:
+          Styles.horizontalBodyPadding.add(const EdgeInsets.only(top: 8.0)),
+      child: nextPuzzle.when(
+        data: (data) {
+          if (data == null) {
+            return const _PuzzleButton(
+              subtitle: 'Could not find any puzzle! Go online to get more.',
+            );
+          } else {
+            return _PuzzleButton(
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  title: context.l10n.puzzleDesc,
+                  rootNavigator: true,
+                  builder: (context) => PuzzleScreen(
+                    angle: angle,
+                    initialPuzzleContext: data,
+                  ),
+                ).then((_) {
+                  ref.invalidate(nextPuzzleProvider(angle));
+                });
+              },
+            );
+          }
+        },
+        loading: () => const _PuzzleButton(),
+        error: (e, s) {
+          debugPrint(
+            'SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s',
+          );
+          return const _PuzzleButton();
+        },
+      ),
+    );
+  }
+}
+
+class StreakButton extends StatelessWidget {
+  const StreakButton({required this.connectivity, super.key});
+
+  final AsyncValue<ConnectivityStatus> connectivity;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: Styles.bodySectionBottomPadding,
+      child: CardButton(
+        icon: const Icon(
+          LichessIcons.streak,
+          size: 44,
+        ),
+        title: Text(
+          'Puzzle Streak',
+          style: Styles.sectionTitle,
+        ),
+        subtitle: Text(
+          context.l10n.puzzleStreakDescription.characters
+                  .takeWhile((c) => c != '.')
+                  .toString() +
+              (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
+        ),
+        onTap: connectivity.when(
+          data: (data) => data.isOnline
+              ? () {
+                  pushPlatformRoute(
+                    context,
+                    rootNavigator: true,
+                    builder: (context) => const StreakScreen(),
+                  );
+                }
+              : null,
+          loading: () => null,
+          error: (_, __) => null,
+        ),
+      ),
+    );
+  }
+}
+
+class StormButton extends StatelessWidget {
+  const StormButton({required this.connectivity, super.key});
+
+  final AsyncValue<ConnectivityStatus> connectivity;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: Styles.bodySectionBottomPadding,
+      child: CardButton(
+        icon: const Icon(
+          LichessIcons.storm,
+          size: 44,
+        ),
+        title: Text(
+          'Puzzle Storm',
+          style: Styles.sectionTitle,
+        ),
+        subtitle: const Text(
+          'Solve as many puzzles as possible in 3 minutes.',
+        ),
+        onTap: connectivity.when(
+          data: (data) => data.isOnline
+              ? () {
+                  pushPlatformRoute(
+                    context,
+                    rootNavigator: true,
+                    builder: (context) => const StormScreen(),
+                  );
+                }
+              : null,
+          loading: () => null,
+          error: (_, __) => null,
+        ),
+      ),
+    );
+  }
+}
+
+class PuzzleThemeButton extends StatelessWidget {
+  const PuzzleThemeButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: Styles.bodySectionBottomPadding,
+      child: CardButton(
+        icon: const Icon(PuzzleIcons.mix, size: 44),
+        title: Text(
+          context.l10n.puzzlePuzzleThemes,
+          style: Styles.sectionTitle,
+        ),
+        subtitle: const Text(
+          'Choose puzzles by theme or opening.',
+        ),
+        onTap: () {
+          pushPlatformRoute(
+            context,
+            builder: (context) => const PuzzleThemesScreen(),
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -302,7 +382,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
           children: [
             Padding(
               padding: Styles.bodySectionPadding,
-              child: PuzzleHistoryBoards(data.take(10).toIList()),
+              child: PuzzleHistoryBoards(data.take(8).toIList()),
             ),
           ],
         );
