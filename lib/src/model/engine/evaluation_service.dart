@@ -103,7 +103,7 @@ class EvaluationService {
     final context = _context;
     final engine = _engine;
     if (context == null || engine == null) {
-      assert(false, 'EvaluationService not initialized');
+      assert(false, 'Engine not initialized');
       return null;
     }
 

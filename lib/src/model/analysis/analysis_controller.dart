@@ -54,7 +54,7 @@ class AnalysisController extends _$AnalysisController {
 
   @override
   AnalysisState build(AnalysisOptions options) {
-    final evaluationService = ref.read(evaluationServiceProvider);
+    final evaluationService = ref.watch(evaluationServiceProvider);
 
     ref.onDispose(() {
       _startEngineEvalTimer?.cancel();
@@ -145,14 +145,14 @@ class AnalysisController extends _$AnalysisController {
     );
 
     if (analysisState.isEngineAvailable) {
-      ref.read(evaluationServiceProvider).initEngine(
-            _evaluationContext,
-            options: EvaluationOptions(
-              multiPv: prefs.numEvalLines,
-              cores: prefs.numEngineCores,
-            ),
-          );
-      _startEngineEvalTimer = Timer(const Duration(milliseconds: 200), () {
+      evaluationService.initEngine(
+        _evaluationContext,
+        options: EvaluationOptions(
+          multiPv: prefs.numEvalLines,
+          cores: prefs.numEngineCores,
+        ),
+      );
+      _startEngineEvalTimer = Timer(const Duration(milliseconds: 250), () {
         _startEngineEval();
       });
     }
@@ -193,7 +193,7 @@ class AnalysisController extends _$AnalysisController {
     _setPath(path);
   }
 
-  void toggleLocalEvaluation() {
+  Future<void> toggleLocalEvaluation() async {
     ref
         .read(analysisPreferencesProvider.notifier)
         .toggleEnableLocalEvaluation();
@@ -204,7 +204,7 @@ class AnalysisController extends _$AnalysisController {
 
     if (state.isEngineAvailable) {
       final prefs = ref.read(analysisPreferencesProvider);
-      ref.read(evaluationServiceProvider).initEngine(
+      await ref.read(evaluationServiceProvider).initEngine(
             _evaluationContext,
             options: EvaluationOptions(
               multiPv: prefs.numEvalLines,
