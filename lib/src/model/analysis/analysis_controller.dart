@@ -193,6 +193,21 @@ class AnalysisController extends _$AnalysisController {
     _setPath(path);
   }
 
+  void promoteVaritation(UciPath path, bool toMainline) {
+    _root.promoteAt(path, toMainline: toMainline);
+    state = state.copyWith(
+      isOnMainline: _root.isOnMainline(state.currentPath),
+      root: _root.view,
+    );
+  }
+
+  void deleteFromHere(UciPath path) {
+    _root.deleteAt(path);
+    state = state.copyWith(
+      root: _root.view,
+    );
+  }
+
   Future<void> toggleLocalEvaluation() async {
     ref
         .read(analysisPreferencesProvider.notifier)
