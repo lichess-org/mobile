@@ -293,10 +293,10 @@ packages:
     dependency: "direct main"
     description:
       name: cupertino_http
-      sha256: "93cdb8a3aa8bc71caf62fdaca66e613871a6aa1388c7cd7f39b6366b5d2f5af6"
+      sha256: b4c900b2bc458965093b60dc9841d3ab43f42e974ce779ef96d8bea56dbd34e0
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.2.0"
   cupertino_icons:
     dependency: "direct main"
     description:
