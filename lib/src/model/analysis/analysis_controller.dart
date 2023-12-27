@@ -145,15 +145,18 @@ class AnalysisController extends _$AnalysisController {
     );
 
     if (analysisState.isEngineAvailable) {
-      evaluationService.initEngine(
+      evaluationService
+          .initEngine(
         _evaluationContext,
         options: EvaluationOptions(
           multiPv: prefs.numEvalLines,
           cores: prefs.numEngineCores,
         ),
-      );
-      _startEngineEvalTimer = Timer(const Duration(milliseconds: 250), () {
-        _startEngineEval();
+      )
+          .then((_) {
+        _startEngineEvalTimer = Timer(const Duration(milliseconds: 250), () {
+          _startEngineEval();
+        });
       });
     }
 
