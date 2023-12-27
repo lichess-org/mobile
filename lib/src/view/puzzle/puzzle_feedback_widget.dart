@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
@@ -23,6 +24,9 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet =
         ref.watch(boardPreferencesProvider.select((value) => value.pieceSet));
+    final boardTheme =
+        ref.watch(boardPreferencesProvider.select((state) => state.boardTheme));
+    final brightness = ref.watch(currentBrightnessProvider);
 
     final piece = state.pov == Side.white
         ? cg.PieceKind.whiteKing
@@ -81,10 +85,12 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
             leading: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4.0),
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: brightness == Brightness.light
+                    ? boardTheme.colors.lightSquare
+                    : boardTheme.colors.darkSquare,
               ),
               child: Padding(
-                padding: const EdgeInsets.all(3.0),
+                padding: const EdgeInsets.all(2.0),
                 child: Image.asset(
                   asset.assetName,
                   width: 48,
