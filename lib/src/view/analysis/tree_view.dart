@@ -393,6 +393,7 @@ class InlineMove extends ConsumerWidget {
         BottomSheetAction(
           leading: Icon(Icons.delete, color: Theme.of(context).iconTheme.color),
           label: Text(context.l10n.deleteFromHere),
+          isDestructiveAction: true,
           onPressed: (ctx) {
             ref.read(ctrlProvider.notifier).deleteFromHere(path);
           },
