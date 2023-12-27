@@ -403,12 +403,14 @@ class AdaptiveInkWell extends StatefulWidget {
   const AdaptiveInkWell({
     required this.child,
     this.onTap,
+    this.onLongPress,
     this.borderRadius,
     super.key,
   });
 
   final Widget child;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final BorderRadius? borderRadius;
 
   @override
@@ -424,11 +426,13 @@ class _AdaptiveInkWellState extends State<AdaptiveInkWell> {
       case TargetPlatform.android:
         return InkWell(
           onTap: widget.onTap,
+          onLongPress: widget.onLongPress,
           borderRadius: widget.borderRadius,
           child: widget.child,
         );
       case TargetPlatform.iOS:
         return GestureDetector(
+          onLongPress: widget.onLongPress,
           onTap: widget.onTap,
           onTapDown: (_) {
             if (widget.onTap == null) return;
