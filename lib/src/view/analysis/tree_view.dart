@@ -435,9 +435,10 @@ class _Comments extends StatelessWidget {
           isDismissible: true,
           isScrollControlled: true,
           builder: (context) => DraggableScrollableSheet(
-            maxChildSize: 0.7,
             initialChildSize: 0.3,
             expand: false,
+            snap: true,
+            snapSizes: const [.3, .7],
             builder: (context, scrollController) => SingleChildScrollView(
               controller: scrollController,
               child: Padding(
