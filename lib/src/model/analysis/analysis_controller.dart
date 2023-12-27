@@ -172,7 +172,7 @@ class AnalysisController extends _$AnalysisController {
     if (!state.position.isLegal(move)) return;
     final (newPath, isNewNode) = _root.addMoveAt(state.currentPath, move);
     if (newPath != null) {
-      _setPath(newPath, isNewNode: isNewNode);
+      _setPath(newPath, shouldRecomputeRootView: isNewNode);
     }
   }
 
@@ -194,6 +194,19 @@ class AnalysisController extends _$AnalysisController {
 
   void userJump(UciPath path) {
     _setPath(path);
+  }
+
+  void promoteVaritation(UciPath path, bool toMainline) {
+    _root.promoteAt(path, toMainline: toMainline);
+    state = state.copyWith(
+      isOnMainline: _root.isOnMainline(state.currentPath),
+      root: _root.view,
+    );
+  }
+
+  void deleteFromHere(UciPath path) {
+    _root.deleteAt(path);
+    _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
   Future<void> toggleLocalEvaluation() async {
@@ -288,7 +301,7 @@ class AnalysisController extends _$AnalysisController {
 
   void _setPath(
     UciPath path, {
-    bool isNewNode = false,
+    bool shouldRecomputeRootView = false,
     bool replaying = false,
   }) {
     final pathChange = state.currentPath != path;
@@ -327,8 +340,8 @@ class AnalysisController extends _$AnalysisController {
         lastMove: currentNode.sanMove.move,
         currentBranchOpening: opening,
         // root view is only used to display move list, so we need to
-        // recompute the root view only when a new node is added
-        root: isNewNode ? _root.view : state.root,
+        // recompute the root view only when the nodelist length changes
+        root: shouldRecomputeRootView ? _root.view : state.root,
       );
     } else {
       state = state.copyWith(

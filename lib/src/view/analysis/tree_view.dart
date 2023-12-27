@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
@@ -325,6 +326,8 @@ class InlineMove extends ConsumerWidget {
         AdaptiveInkWell(
           borderRadius: borderRadius,
           onTap: () => ref.read(ctrlProvider.notifier).userJump(path),
+          onLongPress: () =>
+              _showContextActions(context, ref, path, isSideline),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
             decoration: isCurrentMove
@@ -354,6 +357,47 @@ class InlineMove extends ConsumerWidget {
             ),
           ),
         if (endSideline) Text(')', style: textStyle),
+      ],
+    );
+  }
+
+  Future<void> _showContextActions(
+    BuildContext context,
+    WidgetRef ref,
+    UciPath path,
+    bool isSideline,
+  ) {
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        if (isSideline)
+          BottomSheetAction(
+            leading: Icon(
+              Icons.expand_less,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            label: Text(context.l10n.promoteVariation),
+            onPressed: (ctx) {
+              ref.read(ctrlProvider.notifier).promoteVaritation(path, false);
+            },
+          ),
+        if (isSideline)
+          BottomSheetAction(
+            leading:
+                Icon(Icons.check, color: Theme.of(context).iconTheme.color),
+            label: Text(context.l10n.makeMainLine),
+            onPressed: (ctx) {
+              ref.read(ctrlProvider.notifier).promoteVaritation(path, true);
+            },
+          ),
+        BottomSheetAction(
+          leading: Icon(Icons.delete, color: Theme.of(context).iconTheme.color),
+          label: Text(context.l10n.deleteFromHere),
+          isDestructiveAction: true,
+          onPressed: (ctx) {
+            ref.read(ctrlProvider.notifier).deleteFromHere(path);
+          },
+        ),
       ],
     );
   }
@@ -391,9 +435,10 @@ class _Comments extends StatelessWidget {
           isDismissible: true,
           isScrollControlled: true,
           builder: (context) => DraggableScrollableSheet(
-            maxChildSize: 0.7,
             initialChildSize: 0.3,
             expand: false,
+            snap: true,
+            snapSizes: const [.3, .7],
             builder: (context, scrollController) => SingleChildScrollView(
               controller: scrollController,
               child: Padding(
