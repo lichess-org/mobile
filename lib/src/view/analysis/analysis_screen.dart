@@ -753,27 +753,29 @@ class _EngineDepth extends ConsumerWidget {
                 popoverTransitionBuilder: (_, child) => child,
               );
             },
-            child: Container(
-              width: 20.0,
-              height: 20.0,
-              padding: const EdgeInsets.all(2.0),
-              decoration: BoxDecoration(
-                color: defaultTargetPlatform == TargetPlatform.android
-                    ? Theme.of(context).colorScheme.secondary
-                    : CupertinoTheme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(4.0),
-              ),
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Text(
-                  '${math.min(99, depth)}',
-                  style: TextStyle(
-                    color: defaultTargetPlatform == TargetPlatform.android
-                        ? Theme.of(context).colorScheme.onSecondary
-                        : CupertinoTheme.of(context).primaryContrastingColor,
-                    fontFeatures: const [
-                      FontFeature.tabularFigures(),
-                    ],
+            child: RepaintBoundary(
+              child: Container(
+                width: 20.0,
+                height: 20.0,
+                padding: const EdgeInsets.all(2.0),
+                decoration: BoxDecoration(
+                  color: defaultTargetPlatform == TargetPlatform.android
+                      ? Theme.of(context).colorScheme.secondary
+                      : CupertinoTheme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: Text(
+                    '${math.min(99, depth)}',
+                    style: TextStyle(
+                      color: defaultTargetPlatform == TargetPlatform.android
+                          ? Theme.of(context).colorScheme.onSecondary
+                          : CupertinoTheme.of(context).primaryContrastingColor,
+                      fontFeatures: const [
+                        FontFeature.tabularFigures(),
+                      ],
+                    ),
                   ),
                 ),
               ),
