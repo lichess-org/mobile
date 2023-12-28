@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 
 import 'archived_game_screen_providers.dart';
 
+/// Screen for viewing an archived game.
 class ArchivedGameScreen extends ConsumerWidget {
   const ArchivedGameScreen({
     required this.gameData,
@@ -148,8 +149,8 @@ class _BoardBody extends ConsumerWidget {
     return gameCursor.when(
       data: (data) {
         final (game, cursor) = data;
-        final whiteClock = game.whiteClockAt(cursor);
-        final blackClock = game.blackClockAt(cursor);
+        final whiteClock = game.archivedWhiteClockAt(cursor);
+        final blackClock = game.archivedBlackClockAt(cursor);
         final black = GamePlayer(
           key: const ValueKey('black-player'),
           player: gameData.black,

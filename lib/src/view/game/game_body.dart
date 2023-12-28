@@ -125,6 +125,10 @@ class GameBody extends ConsumerWidget {
         final position = gameState.game.positionAt(gameState.stepCursor);
         final sideToMove = position.turn;
         final youAre = gameState.game.youAre ?? Side.white;
+        final archivedBlackClock =
+            gameState.game.archivedBlackClockAt(gameState.stepCursor);
+        final archivedWhiteClock =
+            gameState.game.archivedWhiteClockAt(gameState.stepCursor);
 
         final black = GamePlayer(
           player: gameState.game.black,
@@ -149,7 +153,9 @@ class GameBody extends ConsumerWidget {
           clock: gameState.game.meta.clock != null
               ? CountdownClock(
                   key: blackClockKey,
-                  duration: gameState.game.clock!.black,
+                  duration: archivedBlackClock ?? gameState.game.clock!.black,
+                  displayActive:
+                      archivedBlackClock != null && sideToMove == Side.black,
                   active: gameState.activeClockSide == Side.black,
                   emergencyThreshold: youAre == Side.black
                       ? gameState.game.meta.clock?.emergency
@@ -186,7 +192,9 @@ class GameBody extends ConsumerWidget {
           clock: gameState.game.meta.clock != null
               ? CountdownClock(
                   key: whiteClockKey,
-                  duration: gameState.game.clock!.white,
+                  duration: archivedWhiteClock ?? gameState.game.clock!.white,
+                  displayActive:
+                      archivedWhiteClock != null && sideToMove == Side.white,
                   active: gameState.activeClockSide == Side.white,
                   emergencyThreshold: youAre == Side.white
                       ? gameState.game.meta.clock?.emergency

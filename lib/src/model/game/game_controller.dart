@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:chessground/chessground.dart' as cg;
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -18,6 +20,7 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
@@ -25,6 +28,7 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:logging/logging.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_controller.freezed.dart';
@@ -72,9 +76,11 @@ class GameController extends _$GameController {
     });
 
     return stream.firstWhere((e) => e.topic == 'full').then(
-      (event) {
+      (event) async {
         final fullEvent =
             GameFullEvent.fromJson(event.data as Map<String, dynamic>);
+
+        PlayableGame game = fullEvent.game;
 
         _socketEventVersion = fullEvent.socketEventVersion;
 
@@ -82,9 +88,13 @@ class GameController extends _$GameController {
           chatNotifier.setMessages(fullEvent.game.messages!);
         }
 
+        if (fullEvent.game.meta.clock != null && fullEvent.game.finished) {
+          game = await _enrichGameWithArchivedClockTimes(game);
+        }
+
         return GameState(
-          game: fullEvent.game,
-          stepCursor: fullEvent.game.steps.length - 1,
+          game: game,
+          stepCursor: game.steps.length - 1,
           stopClockWaitingForServerAck: false,
         );
       },
@@ -771,6 +781,40 @@ class GameController extends _$GameController {
           ),
         );
     }
+  }
+
+  Future<PlayableGame> _enrichGameWithArchivedClockTimes(
+    PlayableGame game,
+  ) async {
+    final clocksResult =
+        await ref.read(gameRepositoryProvider).getGameClockTimes(game.id);
+    return clocksResult.fold(
+      (clocks) {
+        final initialTime = game.meta.clock!.initial;
+        final newSteps = game.steps.mapIndexed((index, element) {
+          if (index == 0) {
+            return element.copyWith(
+              archivedWhiteClock: initialTime,
+              archivedBlackClock: initialTime,
+            );
+          }
+          final prevClock = index > 1 ? clocks[index - 2] : initialTime;
+          final stepClock = clocks[index - 1];
+          return element.copyWith(
+            archivedWhiteClock: index.isOdd ? stepClock : prevClock,
+            archivedBlackClock: index.isEven ? stepClock : prevClock,
+          );
+        }).toIList();
+
+        return game.copyWith(
+          steps: newSteps,
+        );
+      },
+      (e, _) {
+        _logger.warning('Could not get game clocks: $e');
+        return game;
+      },
+    );
   }
 
   AuthSocket get _socket => ref.read(authSocketProvider);
