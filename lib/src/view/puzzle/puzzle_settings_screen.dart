@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
@@ -38,7 +39,7 @@ class _Body extends ConsumerWidget {
             showDivider: true,
             children: [
               SwitchSettingTile(
-                title: const Text('Jump to next puzzle immediately'),
+                title: Text(context.l10n.puzzleJumpToNextPuzzleImmediately),
                 value: autoNext,
                 onChanged: (value) {
                   ref
