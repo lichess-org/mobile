@@ -1,4 +1,5 @@
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
@@ -27,7 +28,10 @@ Future<bool> lobbyGameIsPlayable(
   final (gameId, fromRematch: _) =
       await ref.watch(lobbyGameProvider(seek).future);
   return ref.watch(
-    gameControllerProvider(gameId).selectAsync((state) => state.game.playable),
+    gameControllerProvider(gameId).selectAsync(
+      (state) =>
+          state.game.speed != Speed.correspondence && state.game.playable,
+    ),
   );
 }
 
@@ -37,7 +41,10 @@ Future<bool> gameIsPlayable(
   GameFullId gameId,
 ) {
   return ref.watch(
-    gameControllerProvider(gameId).selectAsync((state) => state.game.playable),
+    gameControllerProvider(gameId).selectAsync(
+      (state) =>
+          state.game.speed != Speed.correspondence && state.game.playable,
+    ),
   );
 }
 

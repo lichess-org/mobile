@@ -59,8 +59,6 @@ class InitialStandaloneGameParams with _$InitialStandaloneGameParams {
 /// The [seek] parameter is only used in the [LobbyGameScreen]. If [seek] is not
 /// null, it will display a button to get a new opponent and the game
 /// provider will be [lobbyGameProvider].
-/// If [seek] is null the game provider will be the [onlineGameProvider]
-/// parameterized with the [initialStandAloneParams.id].
 class GameBody extends ConsumerWidget {
   /// Constructs a [GameBody].
   ///
@@ -71,6 +69,7 @@ class GameBody extends ConsumerWidget {
     required this.id,
     required this.whiteClockKey,
     required this.blackClockKey,
+    required this.loadGame,
     this.isRematch = false,
   }) : assert(
           (seek != null || initialStandAloneParams != null) &&
@@ -92,6 +91,9 @@ class GameBody extends ConsumerWidget {
   ///
   /// Only useful for the loading screen from lobby.
   final bool isRematch;
+
+  /// Loads another game.
+  final void Function(GameFullId id) loadGame;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -272,9 +274,9 @@ class GameBody extends ConsumerWidget {
             ),
             _GameBottomBar(
               seek: seek,
-              initialStandAloneId: initialStandAloneParams?.id,
               id: id,
               gameState: gameState,
+              loadGame: loadGame,
             ),
           ],
         );
@@ -349,17 +351,7 @@ class GameBody extends ConsumerWidget {
       if (state.requireValue.redirectGameId != null) {
         // Be sure to pop any dialogs that might be on top of the game screen.
         Navigator.of(context).popUntil((route) => route is! RawDialogRoute);
-        if (seek != null) {
-          ref
-              .read(lobbyGameProvider(seek!).notifier)
-              .rematch(state.requireValue.redirectGameId!);
-        } else if (initialStandAloneParams != null) {
-          ref
-              .read(
-                standaloneGameProvider(initialStandAloneParams!.id).notifier,
-              )
-              .newGame(state.requireValue.redirectGameId!);
-        }
+        loadGame(state.requireValue.redirectGameId!);
       }
     }
   }
@@ -368,15 +360,15 @@ class GameBody extends ConsumerWidget {
 class _GameBottomBar extends ConsumerWidget {
   const _GameBottomBar({
     this.seek,
-    required this.initialStandAloneId,
     required this.id,
     required this.gameState,
+    required this.loadGame,
   });
 
   final GameSeek? seek;
-  final GameFullId? initialStandAloneId;
   final GameFullId id;
   final GameState gameState;
+  final void Function(GameFullId id) loadGame;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -526,8 +518,7 @@ class _GameBottomBar extends ConsumerWidget {
                 const SizedBox(
                   width: 44.0,
                 ),
-              if (gameState.game.speed == Speed.correspondence &&
-                  initialStandAloneId != null)
+              if (gameState.game.speed == Speed.correspondence)
                 Expanded(
                   child: BottomBarButton(
                     label: 'Go to the next game',
@@ -538,15 +529,7 @@ class _GameBottomBar extends ConsumerWidget {
                             .whereNot((g) => g.fullId == id)
                             .firstWhereOrNull((g) => g.isMyTurn);
                         return nextTurn != null
-                            ? () {
-                                ref
-                                    .read(
-                                      standaloneGameProvider(
-                                        initialStandAloneId!,
-                                      ).notifier,
-                                    )
-                                    .newGame(nextTurn.fullId);
-                              }
+                            ? () => loadGame(nextTurn.fullId)
                             : null;
                       },
                       orElse: () => null,

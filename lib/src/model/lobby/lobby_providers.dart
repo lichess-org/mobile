@@ -50,22 +50,6 @@ class LobbyGame extends _$LobbyGame {
   CreateGameService get _service => ref.read(createGameServiceProvider);
 }
 
-/// The [StandaloneGame] provider is used by [StandAloneGameScreen] to provide the game
-/// and optionally next games if there are rematches, or a tournament, or if the
-/// user switches to another correspondence game.
-@riverpod
-class StandaloneGame extends _$StandaloneGame {
-  @override
-  GameFullId build(GameFullId initialId) {
-    return initialId;
-  }
-
-  // ignore: use_setters_to_change_properties
-  void newGame(GameFullId id) {
-    state = id;
-  }
-}
-
 /// The [LobbyNumbers] provider is used to display the number of players and
 /// games on lichess in real time.
 @riverpod

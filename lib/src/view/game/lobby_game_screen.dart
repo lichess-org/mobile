@@ -111,6 +111,9 @@ class _LoadLobbyGame extends ConsumerWidget {
           whiteClockKey: whiteClockKey,
           blackClockKey: blackClockKey,
           isRematch: isRematch,
+          loadGame: (id) {
+            ref.read(lobbyGameProvider(seek).notifier).rematch(id);
+          },
         );
       },
       loading: () => PopScope(

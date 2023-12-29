@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/lobby/lobby_providers.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -16,8 +15,6 @@ import 'game_common_widgets.dart';
 /// Such games are issued from challenges, tournaments, or any other source which
 /// provides a game id.
 /// There is no way to get a new opponent from this screen.
-///
-/// This screen watches the [onlineGameProvider] for the game id.
 class StandaloneGameScreen extends ConsumerStatefulWidget {
   const StandaloneGameScreen({
     required this.params,
@@ -35,6 +32,14 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
     with RouteAware, ImmersiveMode {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
+
+  late GameFullId _gameId;
+
+  @override
+  void initState() {
+    super.initState();
+    _gameId = widget.params.id;
+  }
 
   @override
   void didChangeDependencies() {
@@ -59,15 +64,14 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
 
   @override
   Widget build(BuildContext context) {
-    final gameId = ref.watch(standaloneGameProvider(widget.params.id));
     return PlatformWidget(
       androidBuilder: (context) => _androidBuilder(
         context,
-        gameId: gameId,
+        gameId: _gameId,
       ),
       iosBuilder: (context) => _iosBuilder(
         context,
-        gameId: gameId,
+        gameId: _gameId,
       ),
     );
   }
@@ -84,6 +88,7 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
         id: gameId,
         whiteClockKey: _whiteClockKey,
         blackClockKey: _blackClockKey,
+        loadGame: _loadGame,
       ),
     );
   }
@@ -100,7 +105,14 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
         id: gameId,
         whiteClockKey: _whiteClockKey,
         blackClockKey: _blackClockKey,
+        loadGame: _loadGame,
       ),
     );
+  }
+
+  void _loadGame(GameFullId id) {
+    setState(() {
+      _gameId = id;
+    });
   }
 }
