@@ -344,6 +344,17 @@ class PuzzleController extends _$PuzzleController {
         // ignore: avoid_manual_providers_as_generated_provider_dependency
         ref.read(sessionNotifier).setRatingDiffs(rounds);
       }
+
+      if (next != null &&
+          result == PuzzleResult.win &&
+          initialContext.userId != null &&
+          ref.read(
+            puzzlePreferencesProvider(initialContext.userId)
+                .select((state) => state.autoNext),
+          )) {
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        loadPuzzle(next);
+      }
     } else {
       // one fail and streak is over
       if (result == PuzzleResult.lose) {
