@@ -1,12 +1,12 @@
-import 'dart:async';
-
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen();
@@ -43,12 +43,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // when a user inputs text with character > 3 use this provider
-    // ref.watch(autoCompleteUserProvider(term))
-    // here 'term' is the string from the input field.
-    // the call should be debounded for 150 millis as the user might be typing
-    // to debounce maybe user a timer and cancel it
-    // also send the result to the body
     return Scaffold(
       appBar: AppBar(
         title: TextField(
@@ -95,6 +89,21 @@ class _UserList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SizedBox.shrink();
+    return ListView.separated(
+      separatorBuilder: (context, index) => const PlatformDivider(
+        height: 1,
+        cupertinoHasLeading: true,
+      ),
+      itemCount: userList.length,
+      itemBuilder: (context, index) => UserListTile.fromLightUser(
+        userList[index],
+        onTap: () => {
+          pushPlatformRoute(
+            context,
+            builder: (ctx) => UserScreen(user: userList[index]),
+          ),
+        },
+      ),
+    );
   }
 }
