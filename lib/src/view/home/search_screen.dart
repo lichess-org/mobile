@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
@@ -87,10 +90,16 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        automaticallyImplyLeading: false,
         middle: CupertinoTextField(
+          prefix: const Icon(Icons.search),
           placeholder: 'Search Lichess',
           showCursor: true,
           controller: _searchController,
+        ),
+        trailing: NoPaddingTextButton(
+          child: Text(context.l10n.close),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       child: _Body(_term),
@@ -109,7 +118,17 @@ class _Body extends ConsumerWidget {
       return SafeArea(
         child: autoComplete.when(
           data: (users) => _UserList(users),
-          error: (e, s) => Text('$e'),
+          error: (e, s) {
+            debugPrint(
+              'SEVERE: [SearchScreen] could not lead leaderboard data; $e\n $s',
+            );
+            return Center(
+              child: Padding(
+                padding: Styles.bodySectionPadding,
+                child: const Text('Could not load search result.'),
+              ),
+            );
+          },
           loading: () =>
               const Center(child: CircularProgressIndicator.adaptive()),
         ),
@@ -127,21 +146,23 @@ class _UserList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ListView.separated(
-      separatorBuilder: (context, index) => const PlatformDivider(
-        height: 1,
-        cupertinoHasLeading: true,
-      ),
-      itemCount: userList.length,
-      itemBuilder: (context, index) => UserListTile.fromLightUser(
-        userList[index],
-        onTap: () => {
-          pushPlatformRoute(
-            context,
-            builder: (ctx) => UserScreen(user: userList[index]),
-          ),
-        },
-      ),
-    );
+    return userList.isEmpty
+        ? const Center(child: Text('No Result'))
+        : ListView.separated(
+            separatorBuilder: (context, index) => const PlatformDivider(
+              height: 1,
+              cupertinoHasLeading: true,
+            ),
+            itemCount: userList.length,
+            itemBuilder: (context, index) => UserListTile.fromLightUser(
+              userList[index],
+              onTap: () => {
+                pushPlatformRoute(
+                  context,
+                  builder: (ctx) => UserScreen(user: userList[index]),
+                ),
+              },
+            ),
+          );
   }
 }

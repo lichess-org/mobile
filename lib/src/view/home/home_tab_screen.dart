@@ -118,11 +118,11 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 },
               ),
         actions: [
-          const _SearchButton(),
           if (session != null)
             const _RelationButton()
           else
             const SignInWidget(),
+          const _SearchButton(),
           const _SettingsButton(),
         ],
       ),
@@ -163,6 +163,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (session != null) const _RelationButton(),
+                  const _SearchButton(),
                   const _SettingsButton(),
                 ],
               ),
@@ -704,19 +705,20 @@ class _SearchButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: 'searchBar',
-      child: AppBarIconButton(
-        icon: const Icon(Icons.search),
-        semanticsLabel: 'Search Lichess',
-        onPressed: () {
-          pushPlatformRoute(
-            context,
-            title: context.l10n.friends,
-            builder: (_) => const SearchScreen(),
-          );
-        },
-      ),
+    final button = AppBarIconButton(
+      icon: const Icon(Icons.search),
+      semanticsLabel: 'Search Lichess',
+      onPressed: () {
+        pushPlatformRoute(
+          context,
+          title: context.l10n.friends,
+          builder: (_) => const SearchScreen(),
+        );
+      },
     );
+
+    return defaultTargetPlatform == TargetPlatform.iOS
+        ? button
+        : Hero(tag: 'searchBar', child: button);
   }
 }
