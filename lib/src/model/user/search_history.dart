@@ -20,7 +20,8 @@ class SearchHistory extends _$SearchHistory {
 
     return stored != null
         ? SearchHistoryState.fromJson(
-            jsonDecode(stored) as Map<String, dynamic>)
+            jsonDecode(stored) as Map<String, dynamic>,
+          )
         : SearchHistoryState(history: IList());
   }
 

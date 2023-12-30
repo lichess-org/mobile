@@ -28,17 +28,22 @@ class SearchScreen extends ConsumerStatefulWidget {
 class _SearchScreenState extends ConsumerState<SearchScreen> {
   final _searchController = TextEditingController();
   final saveHistoryDebouncer = Debouncer(_kSaveHistoryDebouncTimer);
+  final searchFocus = FocusNode();
   String? _term;
 
   @override
   void initState() {
     super.initState();
     _searchController.addListener(_onSearchChanged);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      searchFocus.requestFocus();
+    });
   }
 
   @override
   void dispose() {
     _searchController.dispose();
+    searchFocus.dispose();
     super.dispose();
   }
 
@@ -93,6 +98,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               ],
               hintText: 'Search Lichess',
               controller: _searchController,
+              focusNode: searchFocus,
             ),
           ),
         ),
@@ -106,6 +112,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       navigationBar: CupertinoNavigationBar(
         automaticallyImplyLeading: false,
         middle: CupertinoSearchTextField(
+          focusNode: searchFocus,
           placeholder: 'Search Lichess',
           controller: _searchController,
         ),
