@@ -18,6 +18,16 @@ import 'player.dart';
 
 part 'playable_game.freezed.dart';
 
+/// A game that can be played or watched.
+///
+/// The [youAre] field is null if the game is being watched as a spectator, and
+/// represents the side that the current player is playing as otherwise.
+///
+/// Typically used for a game in progress, or a finished game that is owned by
+/// the current logged in player.
+///
+/// See also:
+/// - [ArchivedGame] for a game that is finished and not owned by the current user.
 @freezed
 class PlayableGame
     with _$PlayableGame, BaseGame, IndexableSteps
@@ -59,7 +69,8 @@ class PlayableGame
   ///
   /// Currently, those endpoints are supported:
   /// - GET /api/mobile/my-games
-  /// - game socket (/play/<gameFullId>/v6) 'full' event
+  /// - player game socket (/play/<gameFullId>/v6) 'full' event
+  /// - watcher game socket (/watch/<gameId>/<side>/v6) 'full' event
   factory PlayableGame.fromServerJson(Map<String, dynamic> json) {
     return _playableGameFromPick(pick(json).required());
   }
