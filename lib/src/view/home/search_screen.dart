@@ -35,16 +35,14 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   void initState() {
     super.initState();
     _searchController.addListener(_onSearchChanged);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      searchFocus.requestFocus();
-    });
+    // searchFocus.requestFocus();
   }
 
   @override
   void dispose() {
+    super.dispose();
     _searchController.dispose();
     searchFocus.dispose();
-    super.dispose();
   }
 
   void _onSearchChanged() {
@@ -86,6 +84,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           builder: (context, controller) => Hero(
             tag: 'searchBar',
             child: SearchBar(
+              // onTap: () => searchFocus.requestFocus(),
+              // focusNode: searchFocus,
               leading: const Icon(Icons.search),
               trailing: [
                 if (_searchController.text.isNotEmpty)
@@ -98,7 +98,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               ],
               hintText: 'Search Lichess',
               controller: _searchController,
-              focusNode: searchFocus,
             ),
           ),
         ),
@@ -112,7 +111,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       navigationBar: CupertinoNavigationBar(
         automaticallyImplyLeading: false,
         middle: CupertinoSearchTextField(
-          focusNode: searchFocus,
+          // focusNode: searchFocus,
           placeholder: 'Search Lichess',
           controller: _searchController,
         ),
