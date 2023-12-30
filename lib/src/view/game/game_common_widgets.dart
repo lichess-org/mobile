@@ -40,27 +40,27 @@ class GameAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isPlayableProvider = id != null
-        ? gameIsPlayableProvider(id!)
-        : lobbyGameIsPlayableProvider(seek!);
-    final isPlayableAsync = ref.watch(isPlayableProvider);
+    final shouldPreventGoingBackAsync = id != null
+        ? ref.watch(shouldPreventGoingBackProvider(id!))
+        : const AsyncValue.data(true);
 
     return AppBar(
-      leading: isPlayableAsync.maybeWhen<Widget?>(
-        data: (isPlayable) => isPlayable ? pingRating : null,
+      leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
+        data: (prevent) => prevent ? pingRating : null,
         orElse: () => pingRating,
       ),
       title: seek != null
           ? _LobbyGameTitle(seek: seek!)
           : StandaloneGameTitle(id: id!),
       actions: [
-        SettingsButton(
-          onPressed: () => showAdaptiveBottomSheet<void>(
-            context: context,
-            isScrollControlled: true,
-            builder: (_) => GameSettings(seek: seek, id: id),
+        if (id != null)
+          SettingsButton(
+            onPressed: () => showAdaptiveBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              builder: (_) => GameSettings(id: id!),
+            ),
           ),
-        ),
       ],
     );
   }
@@ -87,26 +87,28 @@ class GameCupertinoNavBar extends ConsumerWidget
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isPlayableProvider = id != null
-        ? gameIsPlayableProvider(id!)
-        : lobbyGameIsPlayableProvider(seek!);
-    final isPlayableAsync = ref.watch(isPlayableProvider);
+    final shouldPreventGoingBackAsync = id != null
+        ? ref.watch(shouldPreventGoingBackProvider(id!))
+        : const AsyncValue.data(true);
+
     return CupertinoNavigationBar(
       padding: Styles.cupertinoAppBarTrailingWidgetPadding,
-      leading: isPlayableAsync.maybeWhen<Widget?>(
-        data: (isPlayable) => isPlayable ? pingRating : null,
+      leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
+        data: (prevent) => prevent ? pingRating : null,
         orElse: () => pingRating,
       ),
       middle: seek != null
           ? _LobbyGameTitle(seek: seek!)
           : StandaloneGameTitle(id: id!),
-      trailing: SettingsButton(
-        onPressed: () => showAdaptiveBottomSheet<void>(
-          context: context,
-          isScrollControlled: true,
-          builder: (_) => GameSettings(seek: seek, id: id),
-        ),
-      ),
+      trailing: id != null
+          ? SettingsButton(
+              onPressed: () => showAdaptiveBottomSheet<void>(
+                context: context,
+                isScrollControlled: true,
+                builder: (_) => GameSettings(id: id!),
+              ),
+            )
+          : null,
     );
   }
 

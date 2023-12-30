@@ -28,3 +28,27 @@ Future<void> pushPlatformRoute(
           ),
   );
 }
+
+Future<void> pushReplacementPlatformRoute(
+  BuildContext context, {
+  required WidgetBuilder builder,
+  bool rootNavigator = false,
+  bool fullscreenDialog = false,
+  String? title,
+}) {
+  return Navigator.of(
+    context,
+    rootNavigator: rootNavigator,
+  ).pushReplacement<void, void>(
+    defaultTargetPlatform == TargetPlatform.iOS
+        ? CupertinoPageRoute(
+            builder: builder,
+            title: title,
+            fullscreenDialog: fullscreenDialog,
+          )
+        : MaterialPageRoute(
+            builder: builder,
+            fullscreenDialog: fullscreenDialog,
+          ),
+  );
+}

@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
+import 'package:lichess_mobile/src/view/lobby/lobby_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -72,7 +72,7 @@ class PlayScreenBody extends ConsumerWidget {
                 pushPlatformRoute(
                   context,
                   rootNavigator: true,
-                  builder: (_) => LobbyGameScreen(
+                  builder: (_) => LobbyScreen(
                     seek: GameSeek.fastPairingFromPrefs(playPrefs, session),
                   ),
                 );

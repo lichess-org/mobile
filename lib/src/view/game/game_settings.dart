@@ -4,8 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
-import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/lobby/lobby_providers.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -14,16 +12,10 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 
 import 'game_screen_providers.dart';
 
-/// Common settings widget for the [LobbyGameScreen] and [StandaloneGameScreen].
 class GameSettings extends ConsumerWidget {
-  const GameSettings({this.id, this.seek, super.key})
-      : assert(
-          (seek != null || id != null) && !(seek != null && id != null),
-          'Either seek or id must be provided, but not both.',
-        );
+  const GameSettings({required this.id, super.key});
 
-  final GameSeek? seek;
-  final GameFullId? id;
+  final GameFullId id;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,9 +25,7 @@ class GameSettings extends ConsumerWidget {
       ),
     );
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final gameIdAsync = seek != null
-        ? ref.watch(lobbyGameProvider(seek!))
-        : AsyncValue.data((id!, fromRematch: false));
+    final prefsAsync = ref.watch(gamePrefsProvider(id));
 
     return ModalSheetScaffold(
       title: Text(context.l10n.settingsSettings),
@@ -71,42 +61,36 @@ class GameSettings extends ConsumerWidget {
                   .togglePieceAnimation();
             },
           ),
-          ...gameIdAsync.maybeWhen(
+          ...prefsAsync.maybeWhen(
             data: (data) {
-              final (gameId, fromRematch: _) = data;
-              final ctrlProvider = gameControllerProvider(gameId);
-              final prefsAsync = ref.watch(gamePrefsProvider(gameId));
-              return prefsAsync.maybeWhen(
-                data: (data) {
-                  return [
-                    if (data.prefs?.submitMove == true)
-                      SwitchSettingTile(
-                        title: Text(
-                          context.l10n.preferencesMoveConfirmation,
-                        ),
-                        value: data.shouldConfirmMove,
-                        onChanged: (value) {
-                          ref
-                              .read(ctrlProvider.notifier)
-                              .toggleMoveConfirmation();
-                        },
-                      ),
-                    if (data.prefs?.zenMode == Zen.gameAuto)
-                      SwitchSettingTile(
-                        title: Text(
-                          context.l10n.preferencesZenMode,
-                        ),
-                        value: data.isZenModeEnabled,
-                        onChanged: (value) {
-                          ref.read(ctrlProvider.notifier).toggleZenMode();
-                        },
-                      ),
-                  ];
-                },
-                orElse: () => [],
-              );
+              return [
+                if (data.prefs?.submitMove == true)
+                  SwitchSettingTile(
+                    title: Text(
+                      context.l10n.preferencesMoveConfirmation,
+                    ),
+                    value: data.shouldConfirmMove,
+                    onChanged: (value) {
+                      ref
+                          .read(gameControllerProvider(id).notifier)
+                          .toggleMoveConfirmation();
+                    },
+                  ),
+                if (data.prefs?.zenMode == Zen.gameAuto)
+                  SwitchSettingTile(
+                    title: Text(
+                      context.l10n.preferencesZenMode,
+                    ),
+                    value: data.isZenModeEnabled,
+                    onChanged: (value) {
+                      ref
+                          .read(gameControllerProvider(id).notifier)
+                          .toggleZenMode();
+                    },
+                  ),
+              ];
             },
-            orElse: () => const [SizedBox.shrink()],
+            orElse: () => [],
           ),
           const SizedBox(height: 16.0),
         ],

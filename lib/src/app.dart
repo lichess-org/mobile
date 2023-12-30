@@ -23,7 +23,6 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/game/game_body.dart';
 import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 
 class LoadingAppScreen extends ConsumerWidget {
