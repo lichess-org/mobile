@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_widget.dart';
 import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
+import 'package:lichess_mobile/src/view/home/search_screen.dart';
 import 'package:lichess_mobile/src/view/play/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
@@ -117,6 +118,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 },
               ),
         actions: [
+          const _SearchButton(),
           if (session != null)
             const _RelationButton()
           else
@@ -691,6 +693,25 @@ class _RelationButton extends ConsumerWidget {
           title: context.l10n.friends,
           builder: (_) => const RelationScreen(),
           fullscreenDialog: true,
+        );
+      },
+    );
+  }
+}
+
+class _SearchButton extends StatelessWidget {
+  const _SearchButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBarIconButton(
+      icon: const Icon(Icons.search),
+      semanticsLabel: 'Search Lichess',
+      onPressed: () {
+        pushPlatformRoute(
+          context,
+          title: context.l10n.friends,
+          builder: (_) => const SearchScreen(),
         );
       },
     );
