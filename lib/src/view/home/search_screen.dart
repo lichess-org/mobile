@@ -1,4 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -6,6 +7,7 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
@@ -33,29 +35,65 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   void _onSearchChanged() {
     final term = _searchController.text;
-    if (term.length > 3) {
+    if (term.length >= 3) {
       ref.read(autoCompleteUserProvider(term));
       setState(() {
         _term = term;
+      });
+    } else {
+      setState(() {
+        _term = null;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    return PlatformWidget(
+      androidBuilder: _androidBuilder,
+      iosBuilder: _iosBuilder,
+    );
+  }
+
+  Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextField(
-          controller: _searchController,
-          style: const TextStyle(color: Colors.white),
-          cursorColor: Colors.white,
-          decoration: const InputDecoration(
-            hintText: 'Search Lichess',
-            border: InputBorder.none,
+        toolbarHeight: 80, // Custom height to fit the search bar
+        title: SearchAnchor(
+          suggestionsBuilder: (context, controller) => [],
+          builder: (context, controller) => Hero(
+            tag: 'searchBar',
+            child: SearchBar(
+              leading: const Icon(Icons.search),
+              trailing: [
+                if (_searchController.text.isNotEmpty)
+                  IconButton(
+                    onPressed: () => _searchController.clear(),
+                    icon: const Icon(
+                      Icons.close,
+                    ),
+                  ),
+              ],
+              hintText: 'Search Lichess',
+              controller: _searchController,
+            ),
           ),
         ),
       ),
       body: _Body(_term),
+    );
+  }
+
+  Widget _iosBuilder(BuildContext context) {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: CupertinoTextField(
+          placeholder: 'Search Lichess',
+          showCursor: true,
+          controller: _searchController,
+        ),
+      ),
+      child: _Body(_term),
     );
   }
 }

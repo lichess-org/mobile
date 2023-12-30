@@ -704,16 +704,19 @@ class _SearchButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBarIconButton(
-      icon: const Icon(Icons.search),
-      semanticsLabel: 'Search Lichess',
-      onPressed: () {
-        pushPlatformRoute(
-          context,
-          title: context.l10n.friends,
-          builder: (_) => const SearchScreen(),
-        );
-      },
+    return Hero(
+      tag: 'searchBar',
+      child: AppBarIconButton(
+        icon: const Icon(Icons.search),
+        semanticsLabel: 'Search Lichess',
+        onPressed: () {
+          pushPlatformRoute(
+            context,
+            title: context.l10n.friends,
+            builder: (_) => const SearchScreen(),
+          );
+        },
+      ),
     );
   }
 }

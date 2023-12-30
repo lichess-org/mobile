@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -7,6 +8,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 class UserListTile extends StatelessWidget {
@@ -15,6 +17,7 @@ class UserListTile extends StatelessWidget {
     this.title,
     this.isOnline,
     this.isPatron,
+    this.flair,
     this.onTap,
     this.isFullUser,
     this.userPerfs,
@@ -30,6 +33,7 @@ class UserListTile extends StatelessWidget {
       user.title,
       isOnline,
       user.isPatron,
+      user.flair,
       onTap,
       true,
       user.perfs,
@@ -42,6 +46,7 @@ class UserListTile extends StatelessWidget {
       user.title,
       user.isOnline,
       user.isPatron,
+      user.flair,
       onTap,
       false,
       null,
@@ -50,9 +55,10 @@ class UserListTile extends StatelessWidget {
 
   final String? title;
   final String username;
-  final VoidCallback? onTap;
+  final String? flair;
   final bool? isOnline;
   final bool? isPatron;
+  final VoidCallback? onTap;
 
   final bool isFullUser;
   final IMap<Perf, UserPerf>? userPerfs;
@@ -84,10 +90,20 @@ class UserListTile extends StatelessWidget {
             ],
             Flexible(
               child: Text(
-                username,
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
+                username,
               ),
             ),
+            if (flair != null) ...[
+              const SizedBox(width: 5),
+              CachedNetworkImage(
+                imageUrl: lichessFlairSrc(flair!),
+                errorWidget: (_, __, ___) => kEmptyWidget,
+                width: DefaultTextStyle.of(context).style.fontSize,
+                height: DefaultTextStyle.of(context).style.fontSize,
+              ),
+            ],
           ],
         ),
       ),
