@@ -13,6 +13,8 @@ import 'user_repository.dart';
 
 part 'user_repository_providers.g.dart';
 
+const _kAutoCompleteDebounceTimer = Duration(milliseconds: 300);
+
 @Riverpod(keepAlive: true)
 UserRepository userRepository(UserRepositoryRef ref) {
   final apiClient = ref.watch(authClientProvider);
@@ -110,9 +112,7 @@ Future<IList<LightUser>> autoCompleteUser(
   // debounce calls as user might be typing
   var didDispose = false;
   ref.onDispose(() => didDispose = true);
-  // Maybe make debounced time as a constant
-  await Future<void>.delayed(const Duration(milliseconds: 300));
-  // What can we do instead of throwing an exception
+  await Future<void>.delayed(_kAutoCompleteDebounceTimer);
   if (didDispose) {
     throw Exception('Cancelled');
   }
