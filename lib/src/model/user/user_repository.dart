@@ -107,9 +107,33 @@ class UserRepository {
       );
     });
   }
+
+  FutureResult<IList<LightUser>> autocompleteUser(String term) {
+    return apiClient
+        .get(
+          Uri.parse(
+            '$kLichessHost/api/player/autocomplete?term=$term&friend=1&object=1',
+          ),
+        )
+        .flatMap(
+          (response) => readJsonObjectFromResponse(
+            response,
+            mapper: _autocompleteFromJson,
+            logger: _log,
+          ),
+        );
+  }
 }
 
 // --
+IList<LightUser> _autocompleteFromJson(Map<String, dynamic> json) =>
+    _autocompleteFromPick(pick(json).required());
+
+IList<LightUser> _autocompleteFromPick(RequiredPick pick) {
+  return pick('result')
+      .asListOrThrow((userPick) => userPick.asLightUserOrThrow())
+      .toIList();
+}
 
 UserActivity _userActivityFromJson(Map<String, dynamic> json) =>
     _userActivityFromPick(pick(json).required());
