@@ -44,6 +44,7 @@ class PuzzlePrefState with _$PuzzlePrefState {
   const factory PuzzlePrefState({
     required UserId? id,
     required PuzzleDifficulty difficulty,
+
     /// If `true`, will show next puzzle after successful completion. This has
     /// no effect on puzzle streaks, which always show next puzzle. Defaults to
     /// `false`.
