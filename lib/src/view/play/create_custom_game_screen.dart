@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
+import 'package:lichess_mobile/src/view/lobby/lobby_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
@@ -20,8 +20,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 
 import 'common_play_widgets.dart';
 
-class CustomPlayScreen extends StatelessWidget {
-  const CustomPlayScreen();
+class CreateCustomGameScreen extends StatelessWidget {
+  const CreateCustomGameScreen();
 
   @override
   Widget build(BuildContext context) {
@@ -242,7 +242,7 @@ class _Body extends ConsumerWidget {
                         context,
                         rootNavigator: true,
                         builder: (BuildContext context) {
-                          return LobbyGameScreen(
+                          return LobbyScreen(
                             seek: GameSeek.customFromPrefs(
                               preferences,
                               session,

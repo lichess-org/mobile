@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/lobby/lobby_providers.dart';
+import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
@@ -84,7 +84,7 @@ class LobbyGameLoadingBoard extends StatelessWidget {
           children: [
             if (isRematch == false)
               BottomBarButton(
-                onTap: () => Navigator.of(context).pop(),
+                onTap: () => Navigator.of(context, rootNavigator: true).pop(),
                 label: context.l10n.cancel,
                 showLabel: true,
                 icon: CupertinoIcons.xmark,

@@ -20,7 +20,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_widget.dart';
-import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
+import 'package:lichess_mobile/src/view/lobby/lobby_screen.dart';
 import 'package:lichess_mobile/src/view/play/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
@@ -563,7 +563,7 @@ class _PreferredSetup extends ConsumerWidget {
           context,
           rootNavigator: true,
           builder: (BuildContext context) {
-            return LobbyGameScreen(
+            return LobbyScreen(
               seek: seek,
             );
           },

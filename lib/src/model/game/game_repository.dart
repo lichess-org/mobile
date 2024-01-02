@@ -44,6 +44,21 @@ class GameRepository {
     });
   }
 
+  /// TODO consider having a separate endpoint to get only the data we need
+  /// or having it directly in the websocket message
+  FutureResult<PostGameData> getPostGameData(GameId id) {
+    return apiClient.get(
+      Uri.parse('$kLichessHost/game/export/$id?accuracy=1&clocks=1'),
+      headers: {'Accept': 'application/json'},
+    ).flatMap((response) {
+      return readJsonObjectFromResponse(
+        response,
+        mapper: _getPostGameDataFromJson,
+        logger: _log,
+      );
+    });
+  }
+
   FutureResult<String> getGameAnalysisPgn(GameId id) {
     return apiClient.get(
       Uri.parse('$kLichessHost/game/export/$id?literate=1&clocks=0'),
@@ -114,6 +129,31 @@ class GameRepository {
 
 // --
 
+PostGameData _getPostGameDataFromJson(
+  Map<String, dynamic> json,
+) {
+  final pick = Pick(json).required();
+  final clocks = pick('clocks').asListOrNull<Duration>(
+    (p0) => Duration(milliseconds: p0.asIntOrThrow() * 10),
+  );
+  final whiteAnalysis = pick('players', 'white', 'analysis').letOrNull(
+    (p0) => _playerAnalysisFromPick(p0.required()),
+  );
+  final blackAnalysis = pick('players', 'black', 'analysis').letOrNull(
+    (p0) => _playerAnalysisFromPick(p0.required()),
+  );
+  return PostGameData(
+    clocks: IList(clocks ?? []),
+    opening: pick('opening').letOrNull(_openingFromPick),
+    analysis: whiteAnalysis != null && blackAnalysis != null
+        ? (
+            white: whiteAnalysis,
+            black: blackAnalysis,
+          )
+        : null,
+  );
+}
+
 ArchivedGame _makeArchivedGameFromJson(Map<String, dynamic> json) =>
     _archivedGameFromPick(pick(json).required());
 
@@ -158,8 +198,8 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
             sanMove: SanMove(san, move),
             position: position,
             diff: MaterialDiff.fromBoard(position.board),
-            whiteClock: index.isOdd ? stepClock : clock,
-            blackClock: index.isEven ? stepClock : clock,
+            archivedWhiteClock: index.isOdd ? stepClock : clock,
+            archivedBlackClock: index.isEven ? stepClock : clock,
           ),
         );
         clock = stepClock;
@@ -175,6 +215,7 @@ ArchivedGameData _makeArchivedGameDataFromJson(Map<String, dynamic> json) =>
 ArchivedGameData _archivedGameDataFromPick(RequiredPick pick) {
   return ArchivedGameData(
     id: pick('id').asGameIdOrThrow(),
+    fullId: pick('fullId').asGameFullIdOrNull(),
     rated: pick('rated').asBoolOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),
     perf: pick('perf').asPerfOrThrow(),

@@ -13,8 +13,8 @@ import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:share_plus/share_plus.dart';
@@ -40,27 +40,27 @@ class GameAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isPlayableProvider = id != null
-        ? gameIsPlayableProvider(id!)
-        : lobbyGameIsPlayableProvider(seek!);
-    final isPlayableAsync = ref.watch(isPlayableProvider);
+    final shouldPreventGoingBackAsync = id != null
+        ? ref.watch(shouldPreventGoingBackProvider(id!))
+        : const AsyncValue.data(true);
 
     return AppBar(
-      leading: isPlayableAsync.maybeWhen<Widget?>(
-        data: (isPlayable) => isPlayable ? pingRating : null,
+      leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
+        data: (prevent) => prevent ? pingRating : null,
         orElse: () => pingRating,
       ),
       title: seek != null
           ? _LobbyGameTitle(seek: seek!)
           : StandaloneGameTitle(id: id!),
       actions: [
-        SettingsButton(
-          onPressed: () => showAdaptiveBottomSheet<void>(
-            context: context,
-            isScrollControlled: true,
-            builder: (_) => GameSettings(seek: seek, id: id),
+        if (id != null)
+          SettingsButton(
+            onPressed: () => pushPlatformRoute(
+              context,
+              fullscreenDialog: true,
+              builder: (_) => GameSettings(id: id!),
+            ),
           ),
-        ),
       ],
     );
   }
@@ -87,26 +87,29 @@ class GameCupertinoNavBar extends ConsumerWidget
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isPlayableProvider = id != null
-        ? gameIsPlayableProvider(id!)
-        : lobbyGameIsPlayableProvider(seek!);
-    final isPlayableAsync = ref.watch(isPlayableProvider);
+    final shouldPreventGoingBackAsync = id != null
+        ? ref.watch(shouldPreventGoingBackProvider(id!))
+        : const AsyncValue.data(true);
+
     return CupertinoNavigationBar(
       padding: Styles.cupertinoAppBarTrailingWidgetPadding,
-      leading: isPlayableAsync.maybeWhen<Widget?>(
-        data: (isPlayable) => isPlayable ? pingRating : null,
+      leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
+        data: (prevent) => prevent ? pingRating : null,
         orElse: () => pingRating,
       ),
       middle: seek != null
           ? _LobbyGameTitle(seek: seek!)
           : StandaloneGameTitle(id: id!),
-      trailing: SettingsButton(
-        onPressed: () => showAdaptiveBottomSheet<void>(
-          context: context,
-          isScrollControlled: true,
-          builder: (_) => GameSettings(seek: seek, id: id),
-        ),
-      ),
+      trailing: id != null
+          ? SettingsButton(
+              onPressed: () => pushPlatformRoute(
+                context,
+                fullscreenDialog: true,
+                title: context.l10n.settingsSettings,
+                builder: (_) => GameSettings(id: id!),
+              ),
+            )
+          : null,
     );
   }
 

@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
@@ -25,6 +26,19 @@ class GameSeek with _$GameSeek {
     Side? side,
     (int, int)? ratingRange,
   }) = _GameSeek;
+
+  // TODO create seek from game id
+  // this method does not take into account the rating range
+  factory GameSeek.newOpponentFromGame(PlayableGame game) {
+    return GameSeek(
+      clock: game.meta.clock != null
+          ? (game.meta.clock!.initial, game.meta.clock!.increment)
+          : null,
+      rated: game.meta.rated,
+      variant: game.variant,
+      side: game.youAre?.opposite,
+    );
+  }
 
   factory GameSeek.fastPairingFromPrefs(
     PlayPrefs playPref,
