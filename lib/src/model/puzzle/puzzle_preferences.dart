@@ -48,7 +48,8 @@ class PuzzlePrefState with _$PuzzlePrefState {
     /// If `true`, will show next puzzle after successful completion. This has
     /// no effect on puzzle streaks, which always show next puzzle. Defaults to
     /// `false`.
-    required bool autoNext,
+    @Default(false)
+    bool autoNext,
   }) = _PuzzlePrefState;
 
   factory PuzzlePrefState.defaults({UserId? id}) => PuzzlePrefState(
