@@ -173,18 +173,6 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
                   ],
                 ),
                 children: [
-                  // if (hours > 0) ...[
-                  //   TextSpan(
-                  //     text: ':',
-                  //     style: TextStyle(
-                  //       color: widget.active &&
-                  //               timeLeft.inSeconds.remainder(2) == 0
-                  //           ? clockStyle.activeTextColor.withOpacity(0.5)
-                  //           : null,
-                  //     ),
-                  //   ),
-                  //   TextSpan(text: mins.toString().padLeft(2, '0')),
-                  // ],
                   if (showTenths)
                     TextSpan(
                       text:
