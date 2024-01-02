@@ -42,10 +42,10 @@ class LobbyScreen extends ConsumerStatefulWidget {
   final GameSeek seek;
 
   @override
-  ConsumerState<LobbyScreen> createState() => _GameScreenState();
+  ConsumerState<LobbyScreen> createState() => _LobbyScreenState();
 }
 
-class _GameScreenState extends ConsumerState<LobbyScreen>
+class _LobbyScreenState extends ConsumerState<LobbyScreen>
     with RouteAware, ImmersiveMode {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
