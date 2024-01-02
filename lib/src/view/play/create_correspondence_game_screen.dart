@@ -38,8 +38,8 @@ import 'common_play_widgets.dart';
 
 enum _ViewMode { create, challenges }
 
-class CorrespondencePlayScreen extends StatelessWidget {
-  const CorrespondencePlayScreen();
+class CreateCorrespondenceGameScreen extends StatelessWidget {
+  const CreateCorrespondenceGameScreen();
 
   @override
   Widget build(BuildContext context) {

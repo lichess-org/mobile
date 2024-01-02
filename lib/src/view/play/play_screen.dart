@@ -9,12 +9,12 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/lobby/lobby_screen.dart';
+import 'package:lichess_mobile/src/view/play/create_correspondence_game_screen.dart';
+import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-import './correspondence_play_screen.dart';
-import './custom_play_screen.dart';
 import './time_control_modal.dart';
 
 class PlayScreen extends StatelessWidget {
@@ -89,7 +89,7 @@ class PlayScreenBody extends ConsumerWidget {
                 pushPlatformRoute(
                   context,
                   title: context.l10n.custom,
-                  builder: (_) => const CustomPlayScreen(),
+                  builder: (_) => const CreateCustomGameScreen(),
                 );
               },
               child: Text(context.l10n.custom),
@@ -105,7 +105,7 @@ class PlayScreenBody extends ConsumerWidget {
                 pushPlatformRoute(
                   context,
                   title: context.l10n.correspondence,
-                  builder: (_) => const CorrespondencePlayScreen(),
+                  builder: (_) => const CreateCorrespondenceGameScreen(),
                 );
               },
               child: Text(context.l10n.correspondence),

@@ -20,8 +20,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 
 import 'common_play_widgets.dart';
 
-class CustomPlayScreen extends StatelessWidget {
-  const CustomPlayScreen();
+class CreateCustomGameScreen extends StatelessWidget {
+  const CreateCustomGameScreen();
 
   @override
   Widget build(BuildContext context) {
