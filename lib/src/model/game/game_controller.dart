@@ -799,7 +799,7 @@ class GameController extends _$GameController {
     return postGameData.fold(
       (data) {
         IList<GameStep> newSteps = game.steps;
-        if (data.clocks != null) {
+        if (game.meta.clock != null && data.clocks != null) {
           final initialTime = game.meta.clock!.initial;
           newSteps = game.steps.mapIndexed((index, element) {
             if (index == 0) {
@@ -830,8 +830,8 @@ class GameController extends _$GameController {
           ),
         );
       },
-      (e, _) {
-        _logger.warning('Could not get game clocks: $e');
+      (e, s) {
+        _logger.warning('Could not get post game data', e, s);
         return game;
       },
     );

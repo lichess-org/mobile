@@ -498,7 +498,8 @@ class _GameBottomBar extends ConsumerWidget {
                 const SizedBox(
                   width: 44.0,
                 ),
-              if (gameState.game.speed == Speed.correspondence)
+              if (gameState.game.speed == Speed.correspondence &&
+                  !gameState.game.finished)
                 Expanded(
                   child: BottomBarButton(
                     label: 'Go to the next game',
