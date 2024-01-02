@@ -3,7 +3,7 @@ description: Lichess mobile app V2
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 0.6.8+000608 # see README.md for details about versioning
+version: 0.6.9+000609 # see README.md for details about versioning
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
