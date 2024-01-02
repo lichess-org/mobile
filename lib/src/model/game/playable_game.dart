@@ -95,7 +95,6 @@ class PlayableGame
 
   bool get isPlayerTurn => lastPosition.turn == youAre;
   bool get finished => status.value >= GameStatus.mate.value;
-  bool get playing => status.value > GameStatus.started.value && !finished;
   bool get aborted => status == GameStatus.aborted;
 
   bool get playable => status.value < GameStatus.aborted.value;
