@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -43,9 +44,6 @@ import 'game_screen_providers.dart';
 /// This widget is responsible for displaying the board, the clocks, the players,
 /// and the bottom bar.
 class GameBody extends ConsumerWidget {
-  /// Constructs a [GameBody].
-  ///
-  /// You must provide either [seek] or [initialStandAloneParams], but not both.
   const GameBody({
     required this.id,
     required this.whiteClockKey,
@@ -350,7 +348,12 @@ class _GameBottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
-    final chatState = ref.watch(chatControllerProvider(id));
+    final gamePrefs = ref.watch(gamePreferencesProvider);
+
+    final chatState =
+        !gameState.isZenModeEnabled && gamePrefs.enableChat == true
+            ? ref.watch(chatControllerProvider(id))
+            : null;
 
     return Container(
       color: defaultTargetPlatform == TargetPlatform.iOS
@@ -513,7 +516,7 @@ class _GameBottomBar extends ConsumerWidget {
                     ),
                   ),
                 ),
-              if (!gameState.isZenModeEnabled)
+              if (chatState != null)
                 Expanded(
                   child: BottomBarButton(
                     label: context.l10n.chat,

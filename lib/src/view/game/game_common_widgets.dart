@@ -13,8 +13,8 @@ import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:share_plus/share_plus.dart';
@@ -55,9 +55,9 @@ class GameAppBar extends ConsumerWidget implements PreferredSizeWidget {
       actions: [
         if (id != null)
           SettingsButton(
-            onPressed: () => showAdaptiveBottomSheet<void>(
-              context: context,
-              isScrollControlled: true,
+            onPressed: () => pushPlatformRoute(
+              context,
+              fullscreenDialog: true,
               builder: (_) => GameSettings(id: id!),
             ),
           ),
@@ -102,9 +102,10 @@ class GameCupertinoNavBar extends ConsumerWidget
           : StandaloneGameTitle(id: id!),
       trailing: id != null
           ? SettingsButton(
-              onPressed: () => showAdaptiveBottomSheet<void>(
-                context: context,
-                isScrollControlled: true,
+              onPressed: () => pushPlatformRoute(
+                context,
+                fullscreenDialog: true,
+                title: context.l10n.settingsSettings,
                 builder: (_) => GameSettings(id: id!),
               ),
             )

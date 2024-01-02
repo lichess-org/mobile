@@ -31,10 +31,11 @@ Future<bool> shouldPreventGoingBack(
   );
 }
 
+/// User game preferences, defined server-side.
 @riverpod
 Future<({GamePrefs? prefs, bool shouldConfirmMove, bool isZenModeEnabled})>
-    gamePrefs(
-  GamePrefsRef ref,
+    userGamePrefs(
+  UserGamePrefsRef ref,
   GameFullId gameId,
 ) async {
   final prefs = await ref.watch(
