@@ -175,6 +175,7 @@ class PlayableGameMeta with _$PlayableGameMeta {
     int? daysPerTurn,
     int? startedAtTurn,
     ISet<GameRule>? rules,
+    LightOpening? opening,
   }) = _PlayableGameMeta;
 }
 
@@ -278,4 +279,13 @@ class GameStep with _$GameStep {
     /// game is finished.
     Duration? archivedBlackClock,
   }) = _GameStep;
+}
+
+@freezed
+class PostGameData with _$PostGameData {
+  const factory PostGameData({
+    IList<Duration>? clocks,
+    ({PlayerAnalysis white, PlayerAnalysis black})? analysis,
+    LightOpening? opening,
+  }) = _PostGameData;
 }

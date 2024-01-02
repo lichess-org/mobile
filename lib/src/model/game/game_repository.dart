@@ -44,14 +44,16 @@ class GameRepository {
     });
   }
 
-  FutureResult<IList<Duration>> getGameClockTimes(GameId id) {
+  /// TODO consider having a separate endpoint to get only the data we need
+  /// or having it directly in the websocket message
+  FutureResult<PostGameData> getPostGameData(GameId id) {
     return apiClient.get(
-      Uri.parse('$kLichessHost/game/export/$id?clocks=1'),
+      Uri.parse('$kLichessHost/game/export/$id?accuracy=1&clocks=1'),
       headers: {'Accept': 'application/json'},
     ).flatMap((response) {
       return readJsonObjectFromResponse(
         response,
-        mapper: _getGameClockTimesFromJson,
+        mapper: _getPostGameDataFromJson,
         logger: _log,
       );
     });
@@ -127,14 +129,29 @@ class GameRepository {
 
 // --
 
-IList<Duration> _getGameClockTimesFromJson(
+PostGameData _getPostGameDataFromJson(
   Map<String, dynamic> json,
 ) {
   final pick = Pick(json).required();
   final clocks = pick('clocks').asListOrNull<Duration>(
     (p0) => Duration(milliseconds: p0.asIntOrThrow() * 10),
   );
-  return IList(clocks ?? []);
+  final whiteAnalysis = pick('players', 'white', 'analysis').letOrNull(
+    (p0) => _playerAnalysisFromPick(p0.required()),
+  );
+  final blackAnalysis = pick('players', 'black', 'analysis').letOrNull(
+    (p0) => _playerAnalysisFromPick(p0.required()),
+  );
+  return PostGameData(
+    clocks: IList(clocks ?? []),
+    opening: pick('opening').letOrNull(_openingFromPick),
+    analysis: whiteAnalysis != null && blackAnalysis != null
+        ? (
+            white: whiteAnalysis,
+            black: blackAnalysis,
+          )
+        : null,
+  );
 }
 
 ArchivedGame _makeArchivedGameFromJson(Map<String, dynamic> json) =>

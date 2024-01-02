@@ -88,8 +88,8 @@ class GameController extends _$GameController {
           chatNotifier.setMessages(fullEvent.game.messages!);
         }
 
-        if (fullEvent.game.meta.clock != null && fullEvent.game.finished) {
-          game = await _enrichGameWithArchivedClockTimes(game);
+        if (fullEvent.game.finished) {
+          game = await _addPostGameData(game);
         }
 
         return GameState(
@@ -597,6 +597,14 @@ class GameController extends _$GameController {
               .updateGame(gameFullId, newState.game);
         }
 
+        _addPostGameData(newState.game).then((value) {
+          state = AsyncValue.data(
+            newState.copyWith(
+              game: value,
+            ),
+          );
+        });
+
         state = AsyncValue.data(newState);
 
       case 'clockInc':
@@ -783,31 +791,43 @@ class GameController extends _$GameController {
     }
   }
 
-  Future<PlayableGame> _enrichGameWithArchivedClockTimes(
+  Future<PlayableGame> _addPostGameData(
     PlayableGame game,
   ) async {
-    final clocksResult =
-        await ref.read(gameRepositoryProvider).getGameClockTimes(game.id);
-    return clocksResult.fold(
-      (clocks) {
-        final initialTime = game.meta.clock!.initial;
-        final newSteps = game.steps.mapIndexed((index, element) {
-          if (index == 0) {
+    final postGameData =
+        await ref.read(gameRepositoryProvider).getPostGameData(game.id);
+    return postGameData.fold(
+      (data) {
+        IList<GameStep> newSteps = game.steps;
+        if (data.clocks != null) {
+          final initialTime = game.meta.clock!.initial;
+          newSteps = game.steps.mapIndexed((index, element) {
+            if (index == 0) {
+              return element.copyWith(
+                archivedWhiteClock: initialTime,
+                archivedBlackClock: initialTime,
+              );
+            }
+            final prevClock = index > 1 ? data.clocks![index - 2] : initialTime;
+            final stepClock = data.clocks![index - 1];
             return element.copyWith(
-              archivedWhiteClock: initialTime,
-              archivedBlackClock: initialTime,
+              archivedWhiteClock: index.isOdd ? stepClock : prevClock,
+              archivedBlackClock: index.isEven ? stepClock : prevClock,
             );
-          }
-          final prevClock = index > 1 ? clocks[index - 2] : initialTime;
-          final stepClock = clocks[index - 1];
-          return element.copyWith(
-            archivedWhiteClock: index.isOdd ? stepClock : prevClock,
-            archivedBlackClock: index.isEven ? stepClock : prevClock,
-          );
-        }).toIList();
+          }).toIList();
+        }
 
         return game.copyWith(
           steps: newSteps,
+          meta: game.meta.copyWith(
+            opening: data.opening,
+          ),
+          white: game.white.copyWith(
+            analysis: data.analysis?.white,
+          ),
+          black: game.black.copyWith(
+            analysis: data.analysis?.black,
+          ),
         );
       },
       (e, _) {
@@ -922,5 +942,6 @@ class GameState with _$GameState {
         initialMoveCursor: stepCursor,
         orientation: game.youAre ?? Side.white,
         id: game.id,
+        opening: game.meta.opening,
       );
 }
