@@ -943,5 +943,6 @@ class GameState with _$GameState {
         orientation: game.youAre ?? Side.white,
         id: game.id,
         opening: game.meta.opening,
+        serverAnalysis: game.serverAnalysis,
       );
 }

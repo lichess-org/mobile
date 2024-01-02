@@ -66,6 +66,11 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
           padding: const EdgeInsets.only(bottom: 16.0),
           child: GameResult(game: gameState.game),
         ),
+        if (gameState.game.white.analysis != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: PlayerSummary(game: gameState.game),
+          ),
         if (gameState.game.me?.offeringRematch == true)
           SecondaryButton(
             semanticsLabel: context.l10n.cancelRematchOffer,
