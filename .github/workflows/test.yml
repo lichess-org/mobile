@@ -21,7 +21,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          channel: stable
+          channel: beta
       - run: flutter doctor -v
 
       - name: Install dependencies
