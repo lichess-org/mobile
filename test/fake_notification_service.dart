@@ -1,12 +1,12 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:lichess_mobile/src/firebase_messaging.dart';
+import 'package:lichess_mobile/src/notification_service.dart';
 
-class FakeFirebaseMessagingService implements FirebaseMessagingService {
+class FakeNotificationService implements NotificationService {
   @override
   Future<void> processDataMessage(RemoteMessage message) async {}
 
   @override
-  FirebaseMessagingServiceRef get ref => throw UnimplementedError();
+  NotificationServiceRef get ref => throw UnimplementedError();
 
   @override
   Future<void> registerToken(String token) async {}
