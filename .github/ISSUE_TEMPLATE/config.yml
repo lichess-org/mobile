@@ -2,7 +2,7 @@ blank_issues_enabled: false
 contact_links:
   - name: Website
     url: https://github.com/lichess-org/lila/issues
-    about: Issues about the website are tracked in a seperate repository.
+    about: Issues about the lichess website are tracked in a seperate repository.
   - name: Old Mobile app
     url: https://github.com/lichess-org/lichobile/issues
     about: Issues for the old mobile app are tracked in a separate repository. Please check for duplicates first.

@@ -1,8 +1,7 @@
 ---
 name: Other
-about: Other issue or enhancement for the website.
+about: Other issue, feature request or enhancement for mobile app.
 title: ''
 labels: ''
 assignees: ''
 ---
-
