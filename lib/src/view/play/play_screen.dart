@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/lobby/lobby_screen.dart';
+import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';

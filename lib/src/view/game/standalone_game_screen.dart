@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
-import 'package:lichess_mobile/src/view/lobby/lobby_screen.dart';
+import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 import 'game_body.dart';
