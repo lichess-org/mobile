@@ -6,12 +6,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
-import 'package:lichess_mobile/src/firebase_messaging.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/notification_service.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,7 +22,7 @@ import './fake_crashlytics.dart';
 import './model/auth/fake_auth_repository.dart';
 import './model/auth/fake_session_storage.dart';
 import './model/common/service/fake_sound_service.dart';
-import 'fake_firebase_messaging.dart';
+import 'fake_notification_service.dart';
 
 class MockSoundPool extends Mock implements Soundpool {}
 
@@ -51,8 +51,7 @@ Future<ProviderContainer> makeContainer({
   final container = ProviderContainer(
     overrides: [
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
-      firebaseMessagingServiceProvider
-          .overrideWithValue(FakeFirebaseMessagingService()),
+      notificationServiceProvider.overrideWithValue(FakeNotificationService()),
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       sharedPreferencesProvider.overrideWithValue(sharedPreferences),
       authRepositoryProvider.overrideWithValue(FakeAuthRepository()),

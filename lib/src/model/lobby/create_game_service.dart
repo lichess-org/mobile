@@ -48,12 +48,7 @@ class CreateGameService {
 
     await readyStream.first;
 
-    await Result.release(
-      lobbyRepo.createSeek(
-        seek,
-        sri: socket.sri,
-      ),
-    );
+    await Result.release(lobbyRepo.createSeek(seek, sri: socket.sri));
 
     return completer.future;
   }

@@ -88,9 +88,11 @@ mixin IndexableSteps on BaseGame {
 
   Position positionAt(int cursor) => steps[cursor].position;
 
-  Duration? whiteClockAt(int cursor) => steps[cursor].whiteClock;
+  Duration? archivedWhiteClockAt(int cursor) =>
+      steps[cursor].archivedWhiteClock;
 
-  Duration? blackClockAt(int cursor) => steps[cursor].blackClock;
+  Duration? archivedBlackClockAt(int cursor) =>
+      steps[cursor].archivedBlackClock;
 
   Move? get lastMove {
     return steps.last.sanMove?.move;
@@ -173,6 +175,7 @@ class PlayableGameMeta with _$PlayableGameMeta {
     int? daysPerTurn,
     int? startedAtTurn,
     ISet<GameRule>? rules,
+    LightOpening? opening,
   }) = _PlayableGameMeta;
 }
 
@@ -202,6 +205,10 @@ class ArchivedGameData with _$ArchivedGameData {
 
   const factory ArchivedGameData({
     required GameId id,
+
+    /// If the full game id is available, it means this is a game owned by the
+    /// current logged in user.
+    GameFullId? fullId,
     required bool rated,
     required Speed speed,
     required Perf perf,
@@ -264,10 +271,21 @@ class GameStep with _$GameStep {
     SanMove? sanMove,
     MaterialDiff? diff,
 
-    /// The remaining white clock time at this step. Only for archived game.
-    Duration? whiteClock,
+    /// The remaining white clock time at this step. Only available when the
+    /// game is finished.
+    Duration? archivedWhiteClock,
 
-    /// The remaining black clock time at this step. Only for archived game.
-    Duration? blackClock,
+    /// The remaining black clock time at this step. Only available when the
+    /// game is finished.
+    Duration? archivedBlackClock,
   }) = _GameStep;
+}
+
+@freezed
+class PostGameData with _$PostGameData {
+  const factory PostGameData({
+    IList<Duration>? clocks,
+    ({PlayerAnalysis white, PlayerAnalysis black})? analysis,
+    LightOpening? opening,
+  }) = _PostGameData;
 }

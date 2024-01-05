@@ -11,22 +11,22 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'firebase_messaging.g.dart';
+part 'notification_service.g.dart';
 
 @Riverpod(keepAlive: true)
-FirebaseMessagingService firebaseMessagingService(
-  FirebaseMessagingServiceRef ref,
+NotificationService notificationService(
+  NotificationServiceRef ref,
 ) {
-  return FirebaseMessagingService(
-    Logger('FirebaseMessagingService'),
+  return NotificationService(
+    Logger('NotificationServiceService'),
     ref: ref,
   );
 }
 
-class FirebaseMessagingService {
-  FirebaseMessagingService(this._log, {required this.ref});
+class NotificationService {
+  NotificationService(this._log, {required this.ref});
 
-  final FirebaseMessagingServiceRef ref;
+  final NotificationServiceRef ref;
   final Logger _log;
 
   Future<void> registerDevice() async {

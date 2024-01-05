@@ -11,8 +11,7 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
-import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/lobby/lobby_providers.dart';
+import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -21,10 +20,16 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'status_l10n.dart';
 
 class GameResultDialog extends ConsumerStatefulWidget {
-  const GameResultDialog({required this.id, this.seek});
+  const GameResultDialog({
+    required this.id,
+    required this.onNewOpponentCallback,
+    super.key,
+  });
 
   final GameFullId id;
-  final GameSeek? seek;
+
+  /// Callback to load a new opponent.
+  final void Function(PlayableGame game) onNewOpponentCallback;
 
   @override
   ConsumerState<GameResultDialog> createState() => _GameEndDialogState();
@@ -66,6 +71,11 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
           padding: const EdgeInsets.only(bottom: 16.0),
           child: GameResult(game: gameState.game),
         ),
+        if (gameState.game.white.analysis != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: PlayerSummary(game: gameState.game),
+          ),
         if (gameState.game.me?.offeringRematch == true)
           SecondaryButton(
             semanticsLabel: context.l10n.cancelRematchOffer,
@@ -86,17 +96,14 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
             glowing: gameState.game.opponent?.offeringRematch == true,
             child: Text(context.l10n.rematch),
           ),
-        if (gameState.canGetNewOpponent && widget.seek != null)
+        if (gameState.canGetNewOpponent)
           SecondaryButton(
             semanticsLabel: context.l10n.newOpponent,
             onPressed: _activateButtons
                 ? () {
-                    ref
-                        .read(lobbyGameProvider(widget.seek!).notifier)
-                        .newOpponent();
-                    // Other alert dialogs may be shown before this one, so be sure to pop them all
                     Navigator.of(context)
                         .popUntil((route) => route is! RawDialogRoute);
+                    widget.onNewOpponentCallback(gameState.game);
                   }
                 : null,
             child: Text(context.l10n.newOpponent),

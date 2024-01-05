@@ -11,16 +11,17 @@ If you want to contribute, please read the [contributing guide](./CONTRIBUTING.m
 
 ## Setup
 
-Follow the [official flutter guide](https://docs.flutter.dev/get-started/install).
+1. Follow the [Flutter guide](https://docs.flutter.dev/get-started/install) to
+   install Flutter and the platform of you choice (iOS and/or Android). **Note, if you're on Linux**, you should install flutter manually because there is an [issue](https://github.com/lichess-org/mobile/issues/123) with snapd when building Stockfish. Note that this project is not meant to be run on web platform.
+2. Switch to the beta channel by running `flutter channel beta` and `flutter
+   upgrade`
+3. Ensure Flutter is correctly configured by running `flutter doctor`
 
-**Note, if you're on Linux**, you should install flutter manually because there is an [issue](https://github.com/lichess-org/mobile/issues/123) with snapd when building Stockfish.
+### Flutter version
 
-This project is meant to run on iOS and Android, so you need to follow the
-"Platform setup" section of that guide to install the iOS and/or Android platform.
+While the app is in beta we'll use the `beta` channel of Flutter.
 
-Note that this project is not meant to be run on web platform.
-
-### Using FVM for Flutter Version Management
+#### Flutter Version Management
 
 If you want to use FVM to manage your Flutter versions effectively, please consult the [FVM (Flutter Version Management) guide](https://fvm.app/docs/getting_started/installation) for comprehensive instructions on installing Flutter on your specific operating system.
 
@@ -37,7 +38,8 @@ The mobile application is configured by default to target `http://127.0.0.1:9663
 
 ## Run
 
-First run the code generator:
+We don't commit generated code to the repository. So you need to run the code
+generator first:
 
 ```sh
 flutter pub get
@@ -46,7 +48,7 @@ dart run build_runner watch
 
 Check you have some connected device with: `flutter devices`.
 
-If you target an android device you need to run these commands so the device can reach the local lila instance:
+If you target an android emulator you need to run these commands so the device can reach the local lila instance:
 
 ```sh
 adb reverse tcp:9663 tcp:9663

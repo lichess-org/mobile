@@ -1,8 +1,7 @@
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
-import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/lobby/lobby_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_screen_providers.g.dart';
@@ -20,31 +19,23 @@ class IsBoardTurned extends _$IsBoardTurned {
 }
 
 @riverpod
-Future<bool> lobbyGameIsPlayable(
-  LobbyGameIsPlayableRef ref,
-  GameSeek seek,
-) async {
-  final (gameId, fromRematch: _) =
-      await ref.watch(lobbyGameProvider(seek).future);
-  return ref.watch(
-    gameControllerProvider(gameId).selectAsync((state) => state.game.playable),
-  );
-}
-
-@riverpod
-Future<bool> gameIsPlayable(
-  GameIsPlayableRef ref,
+Future<bool> shouldPreventGoingBack(
+  ShouldPreventGoingBackRef ref,
   GameFullId gameId,
 ) {
   return ref.watch(
-    gameControllerProvider(gameId).selectAsync((state) => state.game.playable),
+    gameControllerProvider(gameId).selectAsync(
+      (state) =>
+          state.game.speed != Speed.correspondence && state.game.playable,
+    ),
   );
 }
 
+/// User game preferences, defined server-side.
 @riverpod
 Future<({GamePrefs? prefs, bool shouldConfirmMove, bool isZenModeEnabled})>
-    gamePrefs(
-  GamePrefsRef ref,
+    userGamePrefs(
+  UserGamePrefsRef ref,
   GameFullId gameId,
 ) async {
   final prefs = await ref.watch(

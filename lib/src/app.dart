@@ -11,7 +11,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/main.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/firebase_messaging.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
@@ -19,12 +18,12 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/notification_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/correspondence/correspondence_game_screen.dart';
-import 'package:lichess_mobile/src/view/game/game_body.dart';
+import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 
 class LoadingAppScreen extends ConsumerWidget {
   const LoadingAppScreen({super.key});
@@ -210,7 +209,7 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
   Future<void> _setupPushNotifications() async {
     // Listen for incoming messages while the app is in the foreground.
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      ref.read(firebaseMessagingServiceProvider).processDataMessage(message);
+      ref.read(notificationServiceProvider).processDataMessage(message);
     });
 
     // Listen for incoming messages while the app is in the background.
@@ -231,11 +230,11 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
     // Listen for token refresh and update the token on the server accordingly.
     _fcmTokenRefreshSubscription =
         FirebaseMessaging.instance.onTokenRefresh.listen((String token) {
-      ref.read(firebaseMessagingServiceProvider).registerToken(token);
+      ref.read(notificationServiceProvider).registerToken(token);
     });
 
     // Register the device with the server.
-    ref.read(firebaseMessagingServiceProvider).registerDevice();
+    ref.read(notificationServiceProvider).registerDevice();
 
     // Get any messages which caused the application to open from
     // a terminated state.
@@ -270,7 +269,7 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
           pushPlatformRoute(
             context,
             rootNavigator: true,
-            builder: (_) => CorrespondenceGameScreen(
+            builder: (_) => StandaloneGameScreen(
               params: InitialStandaloneGameParams(
                 id: GameFullId(gameFullId),
               ),
