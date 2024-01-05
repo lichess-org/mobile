@@ -5,9 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
+import 'package:lichess_mobile/src/view/lobby/lobby_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 import 'game_body.dart';
@@ -93,7 +97,8 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
               : const StandaloneGameLoadingBoard(),
           whiteClockKey: _whiteClockKey,
           blackClockKey: _blackClockKey,
-          loadGameCallback: _loadGame,
+          onLoadGameCallback: _loadGame,
+          onNewOpponentCallback: _onNewOpponent,
         ),
       ),
       iosBuilder: (context) => CupertinoPageScaffold(
@@ -110,7 +115,8 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
               : const StandaloneGameLoadingBoard(),
           whiteClockKey: _whiteClockKey,
           blackClockKey: _blackClockKey,
-          loadGameCallback: _loadGame,
+          onLoadGameCallback: _loadGame,
+          onNewOpponentCallback: _onNewOpponent,
         ),
       ),
     );
@@ -120,5 +126,15 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
     setState(() {
       _gameId = id;
     });
+  }
+
+  void _onNewOpponent(PlayableGame game) {
+    pushReplacementPlatformRoute(
+      context,
+      rootNavigator: true,
+      builder: (_) => LobbyScreen(
+        seek: GameSeek.newOpponentFromGame(game),
+      ),
+    );
   }
 }

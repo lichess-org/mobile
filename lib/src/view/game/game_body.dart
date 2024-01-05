@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
-import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -24,7 +24,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
 import 'package:lichess_mobile/src/view/game/message_screen.dart';
-import 'package:lichess_mobile/src/view/lobby/lobby_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -48,16 +47,13 @@ class GameBody extends ConsumerWidget {
     required this.id,
     required this.whiteClockKey,
     required this.blackClockKey,
-    required this.loadGameCallback,
+    required this.onLoadGameCallback,
+    required this.onNewOpponentCallback,
     required this.loadingBoardWidget,
-    this.seek,
   });
 
   /// The [GameFullId] of the game.
   final GameFullId id;
-
-  /// The [GameSeek] used to get a new opponent when the game is coming from lobby.
-  final GameSeek? seek;
 
   /// [GlobalKey] for the white clock.
   ///
@@ -74,7 +70,10 @@ class GameBody extends ConsumerWidget {
   /// Callback to load a new game. Used when the game is finished and the user
   /// wants to play a rematch, or when switching through games in correspondence
   /// chess.
-  final void Function(GameFullId id) loadGameCallback;
+  final void Function(GameFullId id) onLoadGameCallback;
+
+  /// Callback to load a new opponent.
+  final void Function(PlayableGame game) onNewOpponentCallback;
 
   /// Board widget to display when the game is loading.
   ///
@@ -264,10 +263,10 @@ class GameBody extends ConsumerWidget {
                 ),
               ),
               _GameBottomBar(
-                seek: seek,
                 id: id,
                 gameState: gameState,
-                loadGameCallback: loadGameCallback,
+                onLoadGameCallback: onLoadGameCallback,
+                onNewOpponentCallback: onNewOpponentCallback,
               ),
             ],
           ),
@@ -302,7 +301,10 @@ class GameBody extends ConsumerWidget {
           if (context.mounted) {
             showAdaptiveDialog<void>(
               context: context,
-              builder: (context) => GameResultDialog(id: id, seek: seek),
+              builder: (context) => GameResultDialog(
+                id: id,
+                onNewOpponentCallback: onNewOpponentCallback,
+              ),
               barrierDismissible: true,
             );
           }
@@ -326,7 +328,7 @@ class GameBody extends ConsumerWidget {
       if (state.requireValue.redirectGameId != null) {
         // Be sure to pop any dialogs that might be on top of the game screen.
         Navigator.of(context).popUntil((route) => route is! RawDialogRoute);
-        loadGameCallback(state.requireValue.redirectGameId!);
+        onLoadGameCallback(state.requireValue.redirectGameId!);
       }
     }
   }
@@ -334,16 +336,16 @@ class GameBody extends ConsumerWidget {
 
 class _GameBottomBar extends ConsumerWidget {
   const _GameBottomBar({
-    this.seek,
     required this.id,
     required this.gameState,
-    required this.loadGameCallback,
+    required this.onLoadGameCallback,
+    required this.onNewOpponentCallback,
   });
 
-  final GameSeek? seek;
   final GameFullId id;
   final GameState gameState;
-  final void Function(GameFullId id) loadGameCallback;
+  final void Function(GameFullId id) onLoadGameCallback;
+  final void Function(PlayableGame game) onNewOpponentCallback;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -510,7 +512,7 @@ class _GameBottomBar extends ConsumerWidget {
                             .whereNot((g) => g.fullId == id)
                             .firstWhereOrNull((g) => g.isMyTurn);
                         return nextTurn != null
-                            ? () => loadGameCallback(nextTurn.fullId)
+                            ? () => onLoadGameCallback(nextTurn.fullId)
                             : null;
                       },
                       orElse: () => null,
@@ -730,29 +732,10 @@ class _GameBottomBar extends ConsumerWidget {
                   .proposeOrAcceptRematch();
             },
           ),
-        if (gameState.canGetNewOpponent && seek != null)
+        if (gameState.canGetNewOpponent)
           BottomSheetAction(
             label: Text(context.l10n.newOpponent),
-            onPressed: (_) {
-              pushReplacementPlatformRoute(
-                context,
-                rootNavigator: true,
-                builder: (_) => LobbyScreen(seek: seek!),
-              );
-            },
-          )
-        else if (gameState.canGetNewOpponent)
-          BottomSheetAction(
-            label: Text(context.l10n.newOpponent),
-            onPressed: (_) {
-              pushReplacementPlatformRoute(
-                context,
-                rootNavigator: true,
-                builder: (_) => LobbyScreen(
-                  seek: GameSeek.newOpponentFromGame(gameState.game),
-                ),
-              );
-            },
+            onPressed: (_) => onNewOpponentCallback(gameState.game),
           ),
         if (gameState.game.finished)
           BottomSheetAction(
@@ -760,7 +743,10 @@ class _GameBottomBar extends ConsumerWidget {
             onPressed: (_) {
               showAdaptiveDialog<void>(
                 context: context,
-                builder: (context) => GameResultDialog(id: id, seek: seek),
+                builder: (context) => GameResultDialog(
+                  id: id,
+                  onNewOpponentCallback: onNewOpponentCallback,
+                ),
                 barrierDismissible: true,
               );
             },

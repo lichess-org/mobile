@@ -73,20 +73,27 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen>
 
   @override
   Widget build(BuildContext context) {
-    final gameIdAsync = ref.watch(_lobbyGameProvider(widget.seek));
+    // `.unwrapPrevious()` is mandatory here because we want to discard the
+    // previous game and show the loading board while searching for a new
+    // opponent.
+    final gameIdAsync =
+        ref.watch(_lobbyGameProvider(widget.seek)).unwrapPrevious();
+
     return gameIdAsync.when(
       data: (data) {
         final (gameId, fromRematch: isRematch) = data;
         final body = GameBody(
-          seek: widget.seek,
           id: gameId,
           loadingBoardWidget: isRematch
               ? const StandaloneGameLoadingBoard()
               : LobbyGameLoadingBoard(widget.seek),
           whiteClockKey: _whiteClockKey,
           blackClockKey: _blackClockKey,
-          loadGameCallback: (id) {
+          onLoadGameCallback: (id) {
             ref.read(_lobbyGameProvider(widget.seek).notifier).rematch(id);
+          },
+          onNewOpponentCallback: (_) {
+            ref.invalidate(_lobbyGameProvider(widget.seek));
           },
         );
         return PlatformWidget(

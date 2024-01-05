@@ -11,20 +11,25 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
-import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/lobby/lobby_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 import 'status_l10n.dart';
 
 class GameResultDialog extends ConsumerStatefulWidget {
-  const GameResultDialog({required this.id, this.seek});
+  const GameResultDialog({
+    required this.id,
+    required this.onNewOpponentCallback,
+    super.key,
+  });
 
   final GameFullId id;
-  final GameSeek? seek;
+
+  /// Callback to load a new opponent.
+  final void Function(PlayableGame game) onNewOpponentCallback;
 
   @override
   ConsumerState<GameResultDialog> createState() => _GameEndDialogState();
@@ -91,36 +96,14 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
             glowing: gameState.game.opponent?.offeringRematch == true,
             child: Text(context.l10n.rematch),
           ),
-        if (gameState.canGetNewOpponent && widget.seek != null)
+        if (gameState.canGetNewOpponent)
           SecondaryButton(
             semanticsLabel: context.l10n.newOpponent,
             onPressed: _activateButtons
                 ? () {
                     Navigator.of(context)
                         .popUntil((route) => route is! RawDialogRoute);
-                    pushReplacementPlatformRoute(
-                      context,
-                      rootNavigator: true,
-                      builder: (_) => LobbyScreen(seek: widget.seek!),
-                    );
-                  }
-                : null,
-            child: Text(context.l10n.newOpponent),
-          )
-        else if (gameState.canGetNewOpponent)
-          SecondaryButton(
-            semanticsLabel: context.l10n.newOpponent,
-            onPressed: _activateButtons
-                ? () {
-                    Navigator.of(context)
-                        .popUntil((route) => route is! RawDialogRoute);
-                    pushReplacementPlatformRoute(
-                      context,
-                      rootNavigator: true,
-                      builder: (_) => LobbyScreen(
-                        seek: GameSeek.newOpponentFromGame(gameState.game),
-                      ),
-                    );
+                    widget.onNewOpponentCallback(gameState.game);
                   }
                 : null,
             child: Text(context.l10n.newOpponent),
