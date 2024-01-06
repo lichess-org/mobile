@@ -841,9 +841,12 @@ class ServerAnalysisSummary extends ConsumerWidget {
         children: [
           AcplChart(options),
           if (serverAnalysis != null) ...[
-            const SizedBox(height: 16.0),
-            _PlayerStats(Side.white, serverAnalysis.white, pgnHeaders),
-            _PlayerStats(Side.black, serverAnalysis.black, pgnHeaders),
+            Row(
+              children: [
+                _PlayerStats(Side.white, serverAnalysis.white, pgnHeaders),
+                _PlayerStats(Side.black, serverAnalysis.black, pgnHeaders),
+              ],
+            ),
           ],
         ],
       ),
@@ -867,41 +870,60 @@ class _PlayerStats extends StatelessWidget {
         ? pgnHeaders.get('White') ?? context.l10n.white
         : pgnHeaders.get('Black') ?? context.l10n.black;
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '${playerTitle != null ? '$playerTitle ' : ''}$playerName',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
+    return SizedBox(
+      width: MediaQuery.of(context).size.width / 2,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${playerTitle != null ? '$playerTitle ' : ''}$playerName',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+              softWrap: true,
             ),
-          ),
-          Text(context.l10n.nbInaccuracies(data.inaccuracies)),
-          Text(context.l10n.nbMistakes(data.mistakes)),
-          Text(context.l10n.nbBlunders(data.blunders)),
-          if (data.acpl != null)
-            Text('${data.acpl} ${context.l10n.averageCentipawnLoss}'),
-          if (data.accuracy != null)
-            Row(
-              children: [
-                Text('${data.accuracy}% ${context.l10n.accuracy}'),
-                const SizedBox(width: 8.0),
-                PlatformIconButton(
-                  icon: Icons.info_outline_rounded,
-                  semanticsLabel: 'More info',
-                  padding: EdgeInsets.zero,
-                  onTap: () async {
-                    await launchUrl(
-                      Uri.parse('https://lichess.org/page/accuracy'),
-                    );
-                  },
-                ),
-              ],
+            Text(
+              context.l10n.nbInaccuracies(data.inaccuracies),
+              softWrap: true,
             ),
-        ],
+            Text(
+              context.l10n.nbMistakes(data.mistakes),
+              softWrap: true,
+            ),
+            Text(
+              context.l10n.nbBlunders(data.blunders),
+              softWrap: true,
+            ),
+            if (data.acpl != null)
+              Text(
+                '${data.acpl} ${context.l10n.averageCentipawnLoss}',
+                softWrap: true,
+              ),
+            if (data.accuracy != null)
+              Row(
+                children: [
+                  Text(
+                    '${data.accuracy}% ${context.l10n.accuracy}',
+                    softWrap: true,
+                  ),
+                  const SizedBox(width: 8.0),
+                  PlatformIconButton(
+                    icon: Icons.info_outline_rounded,
+                    semanticsLabel: 'More info',
+                    padding: EdgeInsets.zero,
+                    onTap: () async {
+                      await launchUrl(
+                        Uri.parse('https://lichess.org/page/accuracy'),
+                      );
+                    },
+                  ),
+                ],
+              ),
+          ],
+        ),
       ),
     );
   }
