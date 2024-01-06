@@ -841,7 +841,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
         children: [
           AcplChart(options),
           if (serverAnalysis != null) ...[
-            Row(
+            Wrap(
               children: [
                 _PlayerStats(Side.white, serverAnalysis.white, pgnHeaders),
                 _PlayerStats(Side.black, serverAnalysis.black, pgnHeaders),
@@ -869,9 +869,10 @@ class _PlayerStats extends StatelessWidget {
     final playerName = side == Side.white
         ? pgnHeaders.get('White') ?? context.l10n.white
         : pgnHeaders.get('Black') ?? context.l10n.black;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return SizedBox(
-      width: MediaQuery.of(context).size.width / 2,
+      width: screenWidth > 350 ? screenWidth / 2 : screenWidth,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
