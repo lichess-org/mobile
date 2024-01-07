@@ -835,30 +835,123 @@ class ServerAnalysisSummary extends ConsumerWidget {
     final pgnHeaders = ref.watch(
       analysisControllerProvider(options).select((value) => value.pgnHeaders),
     );
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AcplChart(options),
-          if (serverAnalysis != null) ...[
-            Wrap(
-              children: [
-                _PlayerStats(Side.white, serverAnalysis.white, pgnHeaders),
-                _PlayerStats(Side.black, serverAnalysis.black, pgnHeaders),
-              ],
+          if (serverAnalysis != null)
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Table(
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                columnWidths: const {
+                  0: FlexColumnWidth(1),
+                  1: FlexColumnWidth(1),
+                  2: FlexColumnWidth(1),
+                },
+                children: [
+                  TableRow(
+                    children: [
+                      _SummaryPlayerName(Side.white, pgnHeaders),
+                      const SizedBox(width: 0),
+                      _SummaryPlayerName(Side.black, pgnHeaders),
+                    ],
+                  ),
+                  for (final item in [
+                    (
+                      serverAnalysis.white.inaccuracies.toString(),
+                      'Inaccuracies',
+                      serverAnalysis.black.inaccuracies.toString()
+                    ),
+                    (
+                      serverAnalysis.white.inaccuracies.toString(),
+                      'Mistakes',
+                      serverAnalysis.black.inaccuracies.toString()
+                    ),
+                    (
+                      serverAnalysis.white.inaccuracies.toString(),
+                      'Blunders',
+                      serverAnalysis.black.inaccuracies.toString()
+                    ),
+                    if (serverAnalysis.white.acpl != null &&
+                        serverAnalysis.black.acpl != null)
+                      (
+                        serverAnalysis.white.acpl.toString(),
+                        context.l10n.averageCentipawnLoss,
+                        serverAnalysis.black.acpl.toString(),
+                      ),
+                  ])
+                    TableRow(
+                      children: [
+                        _SummaryNumber(item.$1),
+                        Text(
+                          item.$2,
+                          softWrap: true,
+                        ),
+                        _SummaryNumber(item.$3),
+                      ],
+                    ),
+                  if (serverAnalysis.white.accuracy != null &&
+                      serverAnalysis.black.accuracy != null)
+                    TableRow(
+                      children: [
+                        _SummaryNumber('${serverAnalysis.white.accuracy}%'),
+                        Center(
+                          child: Row(
+                            children: [
+                              Text(
+                                context.l10n.accuracy,
+                                softWrap: true,
+                              ),
+                              const SizedBox(width: 8.0),
+                              PlatformIconButton(
+                                icon: Icons.info_outline_rounded,
+                                semanticsLabel: 'More info',
+                                padding: EdgeInsets.zero,
+                                onTap: () async {
+                                  await launchUrl(
+                                    Uri.parse(
+                                      'https://lichess.org/page/accuracy',
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        _SummaryNumber('${serverAnalysis.black.accuracy}%'),
+                      ],
+                    ),
+                ],
+              ),
             ),
-          ],
         ],
       ),
     );
   }
 }
 
-class _PlayerStats extends StatelessWidget {
-  const _PlayerStats(this.side, this.data, this.pgnHeaders);
+class _SummaryNumber extends StatelessWidget {
+  const _SummaryNumber(this.data);
+  final String data;
 
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      heightFactor: 1.4,
+      child: Text(
+        data,
+        softWrap: true,
+      ),
+    );
+  }
+}
+
+class _SummaryPlayerName extends StatelessWidget {
+  const _SummaryPlayerName(this.side, this.pgnHeaders);
   final Side side;
-  final PlayerAnalysis data;
   final IMap<String, String> pgnHeaders;
 
   @override
@@ -869,61 +962,33 @@ class _PlayerStats extends StatelessWidget {
     final playerName = side == Side.white
         ? pgnHeaders.get('White') ?? context.l10n.white
         : pgnHeaders.get('Black') ?? context.l10n.black;
-    final screenWidth = MediaQuery.of(context).size.width;
 
-    return SizedBox(
-      width: screenWidth > 350 ? screenWidth / 2 : screenWidth,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${playerTitle != null ? '$playerTitle ' : ''}$playerName',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
+    return TableCell(
+      verticalAlignment: TableCellVerticalAlignment.bottom,
+      child: Center(
+        heightFactor: 1.4,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 8, bottom: 8),
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 2.0,
+            children: [
+              Icon(
+                side == Side.white
+                    ? CupertinoIcons.circle
+                    : CupertinoIcons.circle_filled,
+                color: Colors.black,
+                size: 14,
               ),
-              softWrap: true,
-            ),
-            Text(
-              context.l10n.nbInaccuracies(data.inaccuracies),
-              softWrap: true,
-            ),
-            Text(
-              context.l10n.nbMistakes(data.mistakes),
-              softWrap: true,
-            ),
-            Text(
-              context.l10n.nbBlunders(data.blunders),
-              softWrap: true,
-            ),
-            if (data.acpl != null)
               Text(
-                '${data.acpl} ${context.l10n.averageCentipawnLoss}',
+                '${playerTitle != null ? '$playerTitle ' : ''}$playerName',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
                 softWrap: true,
               ),
-            if (data.accuracy != null)
-              Row(
-                children: [
-                  Text(
-                    '${data.accuracy}% ${context.l10n.accuracy}',
-                    softWrap: true,
-                  ),
-                  const SizedBox(width: 8.0),
-                  PlatformIconButton(
-                    icon: Icons.info_outline_rounded,
-                    semanticsLabel: 'More info',
-                    padding: EdgeInsets.zero,
-                    onTap: () async {
-                      await launchUrl(
-                        Uri.parse('https://lichess.org/page/accuracy'),
-                      );
-                    },
-                  ),
-                ],
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
