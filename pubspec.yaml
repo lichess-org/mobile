@@ -22,7 +22,7 @@ dependencies:
   device_info_plus: ^9.0.2
   fast_immutable_collections: ^9.0.0
   firebase_core: ^2.15.0
-  firebase_crashlytics: ^3.3.4
+  firebase_crashlytics: ^3.4.9
   firebase_messaging: ^14.7.8
   fl_chart: ^0.66.0
   flutter:
