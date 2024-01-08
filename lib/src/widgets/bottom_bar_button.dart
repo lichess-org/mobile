@@ -13,6 +13,7 @@ class BottomBarButton extends StatelessWidget {
     this.highlighted = false,
     this.showLabel = false,
     this.showTooltip = true,
+    this.tooltip,
     super.key,
   });
 
@@ -24,6 +25,10 @@ class BottomBarButton extends StatelessWidget {
   final bool highlighted;
   final bool showLabel;
   final bool showTooltip;
+
+  /// In case we want to override the tooltip message. If null, the [label] will
+  /// be used.
+  final String? tooltip;
 
   bool get enabled => onTap != null;
 
