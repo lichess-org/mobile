@@ -121,8 +121,9 @@ class _Body extends ConsumerWidget {
                         onTap: () => {
                           pushPlatformRoute(
                             context,
-                            builder: (context) =>
-                                UserScreen(user: user.lightUser),
+                            builder: (context) => UserScreen.fromLightUser(
+                              lightUser: user.lightUser,
+                            ),
                           ),
                         },
                         padding: defaultTargetPlatform == TargetPlatform.iOS

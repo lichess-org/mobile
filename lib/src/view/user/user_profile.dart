@@ -1,15 +1,23 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:linkify/linkify.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -17,7 +25,7 @@ import 'countries.dart';
 
 const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 
-class UserProfile extends StatelessWidget {
+class UserProfile extends ConsumerWidget {
   const UserProfile({
     required this.user,
     this.bioMaxLines,
@@ -28,7 +36,7 @@ class UserProfile extends StatelessWidget {
   final int? bioMaxLines;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final userFullName = user.profile?.fullName != null
         ? Text(
             user.profile!.fullName!,
@@ -47,10 +55,38 @@ class UserProfile extends StatelessWidget {
               child: userFullName,
             ),
           if (user.profile?.bio != null)
-            Text(
-              user.profile!.bio!,
+            Linkify(
+              onOpen: (link) async {
+                if (link.originText.startsWith('@')) {
+                  final userId =
+                      UserId.fromUserName(link.originText.substring(1));
+                  try {
+                    final user =
+                        await ref.read(UserProvider(id: userId).future);
+                    if (context.mounted) {
+                      pushPlatformRoute(
+                        context,
+                        builder: (ctx) => UserScreen.fromUser(
+                          user: user,
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      showPlatformSnackbar(context, 'User does not exist');
+                    }
+                  }
+                } else {
+                  launchUrl(Uri.parse(link.url));
+                }
+              },
+              linkifiers: const [
+                UrlLinkifier(),
+                EmailLinkifier(),
+                UserTagLinkifier(),
+              ],
+              text: user.profile!.bio!,
               maxLines: bioMaxLines,
-              overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontStyle: FontStyle.italic),
             ),
           const SizedBox(height: 10),

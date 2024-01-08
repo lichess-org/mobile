@@ -189,8 +189,9 @@ class GamePlayer extends StatelessWidget {
                           ? () {
                               pushPlatformRoute(
                                 context,
-                                builder: (context) =>
-                                    UserScreen(user: player.user!),
+                                builder: (context) => UserScreen.fromLightUser(
+                                  lightUser: player.user!,
+                                ),
                               );
                             }
                           : null,
