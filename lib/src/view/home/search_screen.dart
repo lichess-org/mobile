@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
@@ -133,24 +134,8 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (term != null) {
-      final autoComplete = ref.watch(autoCompleteUserProvider(term!));
       return SafeArea(
-        child: autoComplete.when(
-          data: (users) => _UserList(users),
-          error: (e, s) {
-            debugPrint(
-              'SEVERE: [SearchScreen] could not lead leaderboard data; $e\n $s',
-            );
-            return Center(
-              child: Padding(
-                padding: Styles.bodySectionPadding,
-                child: const Text('Could not load search result.'),
-              ),
-            );
-          },
-          loading: () =>
-              const Center(child: CircularProgressIndicator.adaptive()),
-        ),
+        child: _UserList(term!),
       );
     } else {
       final searchHistory = ref.watch(searchHistoryProvider).history;
@@ -184,18 +169,26 @@ class _Body extends ConsumerWidget {
 }
 
 class _UserList extends ConsumerWidget {
-  const _UserList(this.userList);
+  const _UserList(this.term);
 
-  final IList<LightUser> userList;
+  final String term;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return userList.isEmpty
-        ? const Center(child: Text('No Result'))
-        : SingleChildScrollView(
-            child: ListSection(
-              showDividerBetweenTiles: true,
-              children: userList
+    final autoComplete = ref.watch(autoCompleteUserProvider(term));
+    return SingleChildScrollView(
+      child: ListSection(
+        header: Row(
+          children: [
+            const Icon(Icons.person),
+            const SizedBox(width: 8),
+            Text('Players with "$term"'),
+          ],
+        ),
+        showDividerBetweenTiles: true,
+        children: autoComplete.when(
+          data: (userList) => userList.isNotEmpty
+              ? userList
                   .map(
                     (user) => UserListTile.fromLightUser(
                       user,
@@ -207,8 +200,12 @@ class _UserList extends ConsumerWidget {
                       },
                     ),
                   )
-                  .toList(),
-            ),
-          );
+                  .toList()
+              : const [Center(child: Text('No Result'))],
+          error: (e, s) => const [Center(child: Text('Error Loading Results'))],
+          loading: () => const [SizedBox(height: 8), CenterLoadingIndicator()],
+        ),
+      ),
+    );
   }
 }
