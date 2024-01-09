@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -72,6 +73,8 @@ class GameSetup with _$GameSetup {
         speedFromCustom,
       );
 
+  /// Returns the rating range for the custom setup, or null if the user
+  /// doesn't have a rating for the custom setup perf.
   (int, int)? ratingRangeFromCustom(User user) {
     final perf = user.perfs[perfFromCustom];
     if (perf == null) return null;
@@ -81,6 +84,8 @@ class GameSetup with _$GameSetup {
     return (min, max);
   }
 
+  /// Returns the rating range for the correspondence setup, or null if the user
+  /// doesn't have a rating for the correspondence setup perf.
   (int, int)? ratingRangeFromCorrespondence(User user) {
     final perf = user.perfs[Perf.correspondence];
     if (perf == null) return null;
@@ -101,12 +106,14 @@ class GameSetup with _$GameSetup {
 
 @Riverpod(keepAlive: true)
 class GameSetupPreferences extends _$GameSetupPreferences {
-  static const prefKey = 'preferences.game_setup';
+  static String _prefKey(AuthSessionState? session) =>
+      'preferences.game_setup.${session?.user.id ?? '**anon**'}';
 
   @override
   GameSetup build() {
+    final session = ref.watch(authSessionProvider);
     final prefs = ref.watch(sharedPreferencesProvider);
-    final stored = prefs.getString(prefKey);
+    final stored = prefs.getString(_prefKey(session));
     return stored != null
         ? GameSetup.fromJson(
             jsonDecode(stored) as Map<String, dynamic>,
@@ -168,8 +175,9 @@ class GameSetupPreferences extends _$GameSetupPreferences {
 
   Future<void> _save(GameSetup newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
+    final session = ref.read(authSessionProvider);
     await prefs.setString(
-      prefKey,
+      _prefKey(session),
       jsonEncode(newState.toJson()),
     );
     state = newState;
