@@ -91,6 +91,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               ],
               hintText: 'Search Lichess',
               controller: _searchController,
+              autoFocus: true,
             ),
           ),
         ),
