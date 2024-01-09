@@ -7,104 +7,112 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
-import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'game_seek.freezed.dart';
 
+/// A seek is a request to play a game with a specific time control, variant,
+/// and rating range.
+///
+/// See corresponding API docs:
+/// https://lichess.org/api#tag/Board/operation/apiBoardSeek
 @freezed
 class GameSeek with _$GameSeek {
   const GameSeek._();
 
-  @Assert('clock != null || days != null')
+  @Assert(
+    '(clock != null || days != null) && (ratingDelta == null || ratingRange == null)',
+  )
   const factory GameSeek({
     (Duration time, Duration increment)? clock,
     int? days,
     required bool rated,
     Variant? variant,
     Side? side,
+
+    /// Rating range
     (int, int)? ratingRange,
+
+    /// Rating delta to apply to the user's current rating.
+    (int, int)? ratingDelta,
   }) = _GameSeek;
 
-  // TODO create seek from game id
-  // this method does not take into account the rating range
-  factory GameSeek.newOpponentFromGame(PlayableGame game) {
+  /// Construct a game seek from saved [GameSetup], using the predefined fast
+  /// pairing time controls.
+  factory GameSeek.fastPairing(GameSetup setup, AuthSessionState? session) {
+    return GameSeek(
+      clock: (
+        Duration(seconds: setup.timeIncrement.time),
+        Duration(seconds: setup.timeIncrement.increment),
+      ),
+      rated: session != null,
+    );
+  }
+
+  /// Construct a game seek from saved [GameSetup], using all the custom params.
+  factory GameSeek.custom(GameSetup setup, User? account) {
+    return GameSeek(
+      clock: (
+        Duration(seconds: setup.customTimeSeconds),
+        Duration(seconds: setup.customIncrementSeconds),
+      ),
+      rated: account != null && setup.customRated,
+      variant: setup.customVariant,
+      side: setup.customRated == true || setup.customSide == PlayableSide.random
+          ? null
+          : setup.customSide == PlayableSide.white
+              ? Side.white
+              : Side.black,
+      ratingRange:
+          account != null ? setup.ratingRangeFromCustom(account) : null,
+    );
+  }
+
+  /// Construct a correspondence seek from saved [GameSetup].
+  factory GameSeek.correspondence(GameSetup setup, User? account) {
+    return GameSeek(
+      days: setup.correspondenceDaysPerTurn,
+      rated: account != null && setup.correspondenceRated,
+      variant: setup.correspondenceVariant,
+      side: setup.correspondenceRated == true ||
+              setup.correspondenceSide == PlayableSide.random
+          ? null
+          : setup.correspondenceSide == PlayableSide.white
+              ? Side.white
+              : Side.black,
+      ratingRange:
+          account != null ? setup.ratingRangeFromCorrespondence(account) : null,
+    );
+  }
+
+  /// Construct a game seek from a playable game to find a new opponent, using
+  /// the same time control, variant and rated status.
+  factory GameSeek.newOpponentFromGame(PlayableGame game, GameSetup setup) {
     return GameSeek(
       clock: game.meta.clock != null
           ? (game.meta.clock!.initial, game.meta.clock!.increment)
           : null,
       rated: game.meta.rated,
       variant: game.variant,
-      side: game.youAre?.opposite,
+      ratingDelta:
+          game.meta.source == GameSource.lobby ? setup.customRatingDelta : null,
     );
   }
 
-  factory GameSeek.fastPairingFromPrefs(
-    PlayPrefs playPref,
-    AuthSessionState? session,
-  ) {
-    return GameSeek(
-      clock: (
-        Duration(seconds: playPref.timeIncrement.time),
-        Duration(seconds: playPref.timeIncrement.increment),
-      ),
-      rated: session != null,
-    );
-  }
-
-  factory GameSeek.customFromPrefs(
-    PlayPrefs playPref,
-    AuthSessionState? session,
-    UserPerf? userPerf,
-  ) {
-    return GameSeek(
-      clock: (
-        Duration(seconds: playPref.customTimeSeconds),
-        Duration(seconds: playPref.customIncrementSeconds),
-      ),
-      rated: session != null && playPref.customRated,
-      variant: playPref.customVariant,
-      side: playPref.customRated == true ||
-              playPref.customSide == PlayableSide.random
-          ? null
-          : playPref.customSide == PlayableSide.white
-              ? Side.white
-              : Side.black,
-      ratingRange: userPerf != null && userPerf.provisional != true
-          ? (
-              math.max(0, userPerf.rating + playPref.customRatingRange.$1),
-              userPerf.rating + playPref.customRatingRange.$2
-            )
-          : null,
-    );
-  }
-
-  factory GameSeek.correspondenceFromPrefs(
-    PlayPrefs playPref,
-    AuthSessionState? session,
-    UserPerf? userPerf,
-  ) {
-    return GameSeek(
-      days: playPref.correspondenceDaysPerTurn,
-      rated: session != null && playPref.correspondenceRated,
-      variant: playPref.correspondenceVariant,
-      side: playPref.correspondenceRated == true ||
-              playPref.correspondenceSide == PlayableSide.random
-          ? null
-          : playPref.correspondenceSide == PlayableSide.white
-              ? Side.white
-              : Side.black,
-      ratingRange: userPerf != null && userPerf.provisional != true
-          ? (
-              math.max(
-                0,
-                userPerf.rating + playPref.correspondenceRatingRange.$1,
-              ),
-              userPerf.rating + playPref.correspondenceRatingRange.$2
-            )
-          : null,
-    );
+  /// Returns a copy of this seek with the rating range set to the user's
+  /// current rating +/- the rating delta.
+  GameSeek withRatingRangeOf(User user) {
+    if (ratingDelta == null) return this;
+    final userPerf = user.perfs[perf];
+    if (userPerf == null) return this;
+    if (userPerf.provisional == true) return this;
+    final min = math.max(0, userPerf.rating + ratingDelta!.$1);
+    final max = userPerf.rating + ratingDelta!.$2;
+    final range = (min, max);
+    return copyWith(ratingRange: range, ratingDelta: null);
   }
 
   TimeIncrement? get timeIncrement => clock != null

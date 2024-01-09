@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' as math;
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
@@ -6,28 +7,111 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'play_preferences.freezed.dart';
-part 'play_preferences.g.dart';
-
-const _prefKey = 'preferences.play';
+part 'game_setup.freezed.dart';
+part 'game_setup.g.dart';
 
 enum PlayableSide { random, white, black }
 
 enum SeekMode { fast, custom }
 
+@Freezed(fromJson: true, toJson: true)
+class GameSetup with _$GameSetup {
+  const GameSetup._();
+
+  const factory GameSetup({
+    // fast game
+    required TimeIncrement timeIncrement,
+
+    // custom game
+    required int customTimeSeconds,
+    required int customIncrementSeconds,
+    required Variant customVariant,
+    required bool customRated,
+    required PlayableSide customSide,
+    required (int, int) customRatingDelta,
+
+    // correspondence game
+    int? correspondenceDaysPerTurn,
+    required Variant correspondenceVariant,
+    required bool correspondenceRated,
+    required PlayableSide correspondenceSide,
+    required (int, int) correspondenceRatingDelta,
+
+    // prefered seek mode, set after a seek is made
+    required SeekMode seekMode,
+  }) = _GameSetup;
+
+  static const defaults = GameSetup(
+    timeIncrement: TimeIncrement(180, 0),
+    customTimeSeconds: 180,
+    customIncrementSeconds: 0,
+    customVariant: Variant.standard,
+    customRated: false,
+    customSide: PlayableSide.random,
+    customRatingDelta: (-500, 500),
+    correspondenceDaysPerTurn: 3,
+    correspondenceVariant: Variant.standard,
+    correspondenceRated: false,
+    correspondenceSide: PlayableSide.random,
+    correspondenceRatingDelta: (-500, 500),
+    seekMode: SeekMode.fast,
+  );
+
+  Speed get speedFromCustom => Speed.fromTimeIncrement(
+        TimeIncrement(
+          customTimeSeconds,
+          customIncrementSeconds,
+        ),
+      );
+
+  Perf get perfFromCustom => Perf.fromVariantAndSpeed(
+        customVariant,
+        speedFromCustom,
+      );
+
+  (int, int)? ratingRangeFromCustom(User user) {
+    final perf = user.perfs[perfFromCustom];
+    if (perf == null) return null;
+    if (perf.provisional == true) return null;
+    final min = math.max(0, perf.rating + customRatingDelta.$1);
+    final max = perf.rating + customRatingDelta.$2;
+    return (min, max);
+  }
+
+  (int, int)? ratingRangeFromCorrespondence(User user) {
+    final perf = user.perfs[Perf.correspondence];
+    if (perf == null) return null;
+    if (perf.provisional == true) return null;
+    final min = math.max(0, perf.rating + correspondenceRatingDelta.$1);
+    final max = perf.rating + correspondenceRatingDelta.$2;
+    return (min, max);
+  }
+
+  factory GameSetup.fromJson(Map<String, dynamic> json) {
+    try {
+      return _$GameSetupFromJson(json);
+    } catch (_) {
+      return defaults;
+    }
+  }
+}
+
 @Riverpod(keepAlive: true)
-class PlayPreferences extends _$PlayPreferences {
+class GameSetupPreferences extends _$GameSetupPreferences {
+  static const prefKey = 'preferences.game_setup';
+
   @override
-  PlayPrefs build() {
+  GameSetup build() {
     final prefs = ref.watch(sharedPreferencesProvider);
-    final stored = prefs.getString(_prefKey);
+    final stored = prefs.getString(prefKey);
     return stored != null
-        ? PlayPrefs.fromJson(
+        ? GameSetup.fromJson(
             jsonDecode(stored) as Map<String, dynamic>,
           )
-        : PlayPrefs.defaults;
+        : GameSetup.defaults;
   }
 
   Future<void> setTimeControl(TimeIncrement timeInc) {
@@ -59,7 +143,7 @@ class PlayPreferences extends _$PlayPreferences {
   }
 
   Future<void> setCustomRatingRange(int min, int max) {
-    return _save(state.copyWith(customRatingRange: (min, max)));
+    return _save(state.copyWith(customRatingDelta: (min, max)));
   }
 
   Future<void> setCorrespondenceDaysPerTurn(int? days) {
@@ -79,80 +163,16 @@ class PlayPreferences extends _$PlayPreferences {
   }
 
   Future<void> setCorrespondenceRatingRange(int min, int max) {
-    return _save(state.copyWith(correspondenceRatingRange: (min, max)));
+    return _save(state.copyWith(correspondenceRatingDelta: (min, max)));
   }
 
-  Future<void> _save(PlayPrefs newState) async {
+  Future<void> _save(GameSetup newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(
-      _prefKey,
+      prefKey,
       jsonEncode(newState.toJson()),
     );
     state = newState;
-  }
-}
-
-@Freezed(fromJson: true, toJson: true)
-class PlayPrefs with _$PlayPrefs {
-  const PlayPrefs._();
-
-  const factory PlayPrefs({
-    // fast game pref
-    required TimeIncrement timeIncrement,
-
-    // custom game prefs
-    required int customTimeSeconds,
-    required int customIncrementSeconds,
-    required Variant customVariant,
-    required bool customRated,
-    required PlayableSide customSide,
-    required (int, int) customRatingRange,
-
-    // correspondence game prefs
-    int? correspondenceDaysPerTurn,
-    required Variant correspondenceVariant,
-    required bool correspondenceRated,
-    required PlayableSide correspondenceSide,
-    required (int, int) correspondenceRatingRange,
-
-    // prefered seek mode, set after a seek is made
-    required SeekMode seekMode,
-  }) = _PlayPrefs;
-
-  static const defaults = PlayPrefs(
-    timeIncrement: TimeIncrement(180, 0),
-    customTimeSeconds: 180,
-    customIncrementSeconds: 0,
-    customVariant: Variant.standard,
-    customRated: false,
-    customSide: PlayableSide.random,
-    customRatingRange: (-500, 500),
-    correspondenceDaysPerTurn: 3,
-    correspondenceVariant: Variant.standard,
-    correspondenceRated: false,
-    correspondenceSide: PlayableSide.random,
-    correspondenceRatingRange: (-500, 500),
-    seekMode: SeekMode.fast,
-  );
-
-  Speed get speedFromCustom => Speed.fromTimeIncrement(
-        TimeIncrement(
-          customTimeSeconds,
-          customIncrementSeconds,
-        ),
-      );
-
-  Perf get perfFromCustom => Perf.fromVariantAndSpeed(
-        customVariant,
-        speedFromCustom,
-      );
-
-  factory PlayPrefs.fromJson(Map<String, dynamic> json) {
-    try {
-      return _$PlayPrefsFromJson(json);
-    } catch (_) {
-      return defaults;
-    }
   }
 }
 

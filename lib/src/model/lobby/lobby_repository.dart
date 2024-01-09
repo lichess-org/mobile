@@ -20,8 +20,8 @@ part 'lobby_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 LobbyRepository lobbyRepository(LobbyRepositoryRef ref) {
-  // lobbyRepository gets its own httpClient because it needs to be able to
-  // close it independently from the rest of the app.
+  // lobbyRepository gets its own httpClient because we need to be able to
+  // close it independently from the rest of the app to be able to cancel a seek.
   final httpClient = http.Client();
   final crashlytics = ref.watch(crashlyticsProvider);
   final logger = Logger('LobbyAuthClient');
