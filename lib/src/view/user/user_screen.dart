@@ -13,7 +13,12 @@ import 'user_activity.dart';
 import 'user_profile.dart';
 
 class UserScreen extends ConsumerWidget {
-  const UserScreen._({this.lightUser, this.user, super.key});
+  const UserScreen._({this.lightUser, this.user, super.key})
+      : assert(
+          (lightUser != null || user != null) &&
+              !(lightUser != null && user != null),
+          'Either lightUser or User should be provided but not both',
+        );
 
   const factory UserScreen.fromUser({required User user, Key? key}) =
       UserScreen._;

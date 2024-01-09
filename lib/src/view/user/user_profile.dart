@@ -34,6 +34,7 @@ class UserProfile extends ConsumerWidget {
   final User user;
 
   final int? bioMaxLines;
+  static const bioStyle = TextStyle(fontStyle: FontStyle.italic);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -62,7 +63,7 @@ class UserProfile extends ConsumerWidget {
                       UserId.fromUserName(link.originText.substring(1));
                   try {
                     final user =
-                        await ref.read(UserProvider(id: userId).future);
+                        await ref.read(userProvider(id: userId).future);
                     if (context.mounted) {
                       pushPlatformRoute(
                         context,
@@ -87,7 +88,13 @@ class UserProfile extends ConsumerWidget {
               ],
               text: user.profile!.bio!,
               maxLines: bioMaxLines,
-              style: const TextStyle(fontStyle: FontStyle.italic),
+              style: bioStyle,
+              overflow: TextOverflow.ellipsis,
+              linkStyle: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: Colors.blueAccent)
+                  .merge(bioStyle),
             ),
           const SizedBox(height: 10),
           if (user.profile?.fideRating != null)
