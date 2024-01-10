@@ -19,7 +19,6 @@ class UserListTile extends StatelessWidget {
     this.isPatron,
     this.flair,
     this.onTap,
-    this.isFullUser,
     this.userPerfs,
   );
 
@@ -35,7 +34,6 @@ class UserListTile extends StatelessWidget {
       user.isPatron,
       user.flair,
       onTap,
-      true,
       user.perfs,
     );
   }
@@ -48,7 +46,6 @@ class UserListTile extends StatelessWidget {
       user.isPatron,
       user.flair,
       onTap,
-      false,
       null,
     );
   }
@@ -60,7 +57,6 @@ class UserListTile extends StatelessWidget {
   final bool? isPatron;
   final VoidCallback? onTap;
 
-  final bool isFullUser;
   final IMap<Perf, UserPerf>? userPerfs;
 
   @override
@@ -107,7 +103,7 @@ class UserListTile extends StatelessWidget {
           ],
         ),
       ),
-      subtitle: isFullUser ? _UserRating(perfs: userPerfs!) : null,
+      subtitle: userPerfs != null ? _UserRating(perfs: userPerfs!) : null,
     );
   }
 }

@@ -444,7 +444,6 @@ class _SearchButton extends StatelessWidget {
       onPressed: () {
         pushPlatformRoute(
           context,
-          title: context.l10n.friends,
           fullscreenDialog: true,
           builder: (_) => const SearchScreen(),
         );
