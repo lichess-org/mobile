@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_widget.dart';
 import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
+import 'package:lichess_mobile/src/view/home/search_screen.dart';
 import 'package:lichess_mobile/src/view/play/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
@@ -116,11 +117,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 },
               ),
         actions: [
+          const _SearchButton(),
+          const _SettingsButton(),
           if (session != null)
             const _RelationButton()
           else
             const SignInWidget(),
-          const _SettingsButton(),
         ],
       ),
       body: RefreshIndicator(
@@ -159,8 +161,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (session != null) const _RelationButton(),
+                  const _SearchButton(),
                   const _SettingsButton(),
+                  if (session != null) const _RelationButton(),
                 ],
               ),
             ),
@@ -426,6 +429,25 @@ class _HomeBody extends ConsumerWidget {
         _OfflineCorrespondencePreview(),
       ];
     }
+  }
+}
+
+class _SearchButton extends StatelessWidget {
+  const _SearchButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBarIconButton(
+      icon: const Icon(Icons.search),
+      semanticsLabel: 'Search Lichess',
+      onPressed: () {
+        pushPlatformRoute(
+          context,
+          fullscreenDialog: true,
+          builder: (_) => const SearchScreen(),
+        );
+      },
+    );
   }
 }
 
