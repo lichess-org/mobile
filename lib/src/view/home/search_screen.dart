@@ -97,10 +97,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        transitionBetweenRoutes: false,
         automaticallyImplyLeading: false,
-        middle: Hero(
-          tag: 'search',
+        middle: SizedBox(
+          height: 36.0,
           child: CupertinoSearchTextField(
             placeholder: 'Search Lichess',
             controller: _searchController,

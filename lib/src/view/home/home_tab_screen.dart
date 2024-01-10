@@ -162,8 +162,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (session != null) const _RelationButton(),
+                  const _SearchButton(),
                   const _SettingsButton(),
+                  if (session != null) const _RelationButton(),
                 ],
               ),
             ),
@@ -362,7 +363,6 @@ class _HomeBody extends ConsumerWidget {
               child: Column(
                 children: [
                   SizedBox(height: 16.0),
-                  _SearchBar(),
                   PlayScreenBody(),
                 ],
               ),
@@ -387,7 +387,6 @@ class _HomeBody extends ConsumerWidget {
     } else {
       return [
         const SizedBox(height: 8.0),
-        const _SearchBar(),
         const _PreferredSetup(),
         const _MostRecentOngoingGamePreview(),
         const RecentGames(),
@@ -432,33 +431,6 @@ class _HomeBody extends ConsumerWidget {
       ];
     }
   }
-}
-
-class _SearchBar extends StatelessWidget {
-  const _SearchBar();
-
-  @override
-  Widget build(BuildContext context) {
-    return Theme.of(context).platform == TargetPlatform.iOS
-        ? Padding(
-            padding: Styles.horizontalBodyPadding
-                .add(const EdgeInsets.symmetric(vertical: 8.0)),
-            child: Hero(
-              tag: 'search',
-              child: CupertinoSearchTextField(
-                placeholder: 'Search Lichess',
-                onTap: () => _goToSearchScreen(context),
-              ),
-            ),
-          )
-        : const SizedBox.shrink();
-  }
-
-  void _goToSearchScreen(BuildContext context) => pushPlatformRoute(
-        context,
-        title: context.l10n.friends,
-        builder: (_) => const SearchScreen(),
-      );
 }
 
 class _SearchButton extends StatelessWidget {
