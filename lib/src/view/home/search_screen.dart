@@ -80,6 +80,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             if (_searchController.text.isNotEmpty)
               IconButton(
                 onPressed: () => _searchController.clear(),
+                tooltip: 'Clear',
                 icon: const Icon(
                   Icons.close,
                 ),
@@ -199,12 +200,15 @@ class _UserList extends ConsumerWidget {
                   Center(child: Text('No Result')),
                 ],
               ),
-        error: (e, s) => const Column(
-          children: [
-            SizedBox(height: 16.0),
-            Center(child: Text('Error Loading Results')),
-          ],
-        ),
+        error: (e, _) {
+          debugPrint('Error loading search results: $e');
+          return const Column(
+            children: [
+              SizedBox(height: 16.0),
+              Center(child: Text('Error Loading Results')),
+            ],
+          );
+        },
         loading: () => const Column(
           children: [
             SizedBox(height: 16.0),
