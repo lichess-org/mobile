@@ -74,26 +74,20 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80, // Custom height to fit the search bar
-        title: SearchAnchor(
-          suggestionsBuilder: (context, controller) => [],
-          builder: (context, controller) => Hero(
-            tag: 'searchBar',
-            child: SearchBar(
-              leading: const Icon(Icons.search),
-              trailing: [
-                if (_searchController.text.isNotEmpty)
-                  IconButton(
-                    onPressed: () => _searchController.clear(),
-                    icon: const Icon(
-                      Icons.close,
-                    ),
-                  ),
-              ],
-              hintText: 'Search Lichess',
-              controller: _searchController,
-              autoFocus: true,
-            ),
-          ),
+        title: SearchBar(
+          leading: const Icon(Icons.search),
+          trailing: [
+            if (_searchController.text.isNotEmpty)
+              IconButton(
+                onPressed: () => _searchController.clear(),
+                icon: const Icon(
+                  Icons.close,
+                ),
+              ),
+          ],
+          hintText: 'Search Lichess',
+          controller: _searchController,
+          autoFocus: true,
         ),
       ),
       body: _Body(_term, setSearchText),
@@ -103,11 +97,15 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        transitionBetweenRoutes: false,
         automaticallyImplyLeading: false,
-        middle: CupertinoSearchTextField(
-          placeholder: 'Search Lichess',
-          controller: _searchController,
-          autofocus: true,
+        middle: Hero(
+          tag: 'search',
+          child: CupertinoSearchTextField(
+            placeholder: 'Search Lichess',
+            controller: _searchController,
+            autofocus: true,
+          ),
         ),
         trailing: NoPaddingTextButton(
           child: Text(context.l10n.close),
