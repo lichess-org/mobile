@@ -8,8 +8,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -490,30 +489,34 @@ class _PreferredSetup extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playPrefs = ref.watch(playPreferencesProvider);
+    final gameSetup = ref.watch(gameSetupPreferencesProvider);
     final session = ref.watch(authSessionProvider);
 
-    GameSeek seek = GameSeek.fastPairingFromPrefs(playPrefs, session);
-
-    if (playPrefs.seekMode == SeekMode.custom) {
-      final account = ref.watch(accountProvider);
-      final UserPerf? userPerf = account.maybeWhen(
-        data: (data) {
-          if (data == null) {
-            return null;
-          }
-          return data.perfs[playPrefs.perfFromCustom];
+    if (gameSetup.seekMode == SeekMode.custom) {
+      final accountAsync = ref.watch(accountProvider);
+      return accountAsync.maybeWhen(
+        data: (account) {
+          return _buildBoardPreview(
+            context,
+            GameSeek.custom(gameSetup, account),
+          );
         },
-        orElse: () => null,
+        orElse: () =>
+            _buildBoardPreview(context, GameSeek.custom(gameSetup, null)),
       );
-      seek = GameSeek.customFromPrefs(playPrefs, session, userPerf);
     }
 
+    return _buildBoardPreview(
+      context,
+      GameSeek.fastPairing(gameSetup, session),
+    );
+  }
+
+  Widget _buildBoardPreview(BuildContext context, GameSeek seek) {
     final timeControl = seek.timeIncrement?.display ??
         '${context.l10n.daysPerTurn}: ${seek.days}';
     final mode =
         seek.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
-
     return SmallBoardPreview(
       orientation: seek.side?.cg ?? Side.white.cg,
       fen: kInitialFEN,

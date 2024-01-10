@@ -6,8 +6,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
@@ -50,213 +49,211 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final account = ref.watch(accountProvider);
-    final preferences = ref.watch(playPreferencesProvider);
+    final accountAsync = ref.watch(accountProvider);
+    final preferences = ref.watch(gameSetupPreferencesProvider);
     final session = ref.watch(authSessionProvider);
     final isValidTimeControl = preferences.customTimeSeconds > 0 ||
         preferences.customIncrementSeconds > 0;
 
-    final UserPerf? userPerf = account.maybeWhen(
-      data: (data) {
-        if (data == null) {
-          return null;
-        }
-        return data.perfs[preferences.perfFromCustom];
-      },
-      orElse: () => null,
-    );
+    return accountAsync.when(
+      data: (account) {
+        final userPerf = account?.perfs[preferences.perfFromCustom];
 
-    return Center(
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          Builder(
-            builder: (context) {
-              int customTimeSeconds = preferences.customTimeSeconds;
-              return StatefulBuilder(
-                builder: (context, setState) {
-                  return PlatformListTile(
-                    harmonizeCupertinoTitleStyle: true,
-                    title: Text.rich(
-                      TextSpan(
-                        text: '${context.l10n.minutesPerSide}: ',
-                        children: [
+        return Center(
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              Builder(
+                builder: (context) {
+                  int customTimeSeconds = preferences.customTimeSeconds;
+                  return StatefulBuilder(
+                    builder: (context, setState) {
+                      return PlatformListTile(
+                        harmonizeCupertinoTitleStyle: true,
+                        title: Text.rich(
                           TextSpan(
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                            text: _clockTimeLabel(customTimeSeconds),
+                            text: '${context.l10n.minutesPerSide}: ',
+                            children: [
+                              TextSpan(
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                                text: _clockTimeLabel(customTimeSeconds),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    subtitle: NonLinearSlider(
-                      value: customTimeSeconds,
-                      values: kAvailableTimesInSeconds,
-                      labelBuilder: _clockTimeLabel,
-                      onChange: defaultTargetPlatform == TargetPlatform.iOS
-                          ? (num value) {
-                              setState(() {
-                                customTimeSeconds = value.toInt();
-                              });
-                            }
-                          : null,
-                      onChangeEnd: (num value) {
-                        setState(() {
-                          customTimeSeconds = value.toInt();
-                        });
-                        ref
-                            .read(playPreferencesProvider.notifier)
-                            .setCustomTimeSeconds(value.toInt());
-                      },
-                    ),
-                  );
-                },
-              );
-            },
-          ),
-          Builder(
-            builder: (context) {
-              int customIncrementSeconds = preferences.customIncrementSeconds;
-              return StatefulBuilder(
-                builder: (context, setState) {
-                  return PlatformListTile(
-                    harmonizeCupertinoTitleStyle: true,
-                    title: Text.rich(
-                      TextSpan(
-                        text: '${context.l10n.incrementInSeconds}: ',
-                        children: [
-                          TextSpan(
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                            text: customIncrementSeconds.toString(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    subtitle: NonLinearSlider(
-                      value: customIncrementSeconds,
-                      values: kAvailableIncrementsInSeconds,
-                      onChange: defaultTargetPlatform == TargetPlatform.iOS
-                          ? (num value) {
-                              setState(() {
-                                customIncrementSeconds = value.toInt();
-                              });
-                            }
-                          : null,
-                      onChangeEnd: (num value) {
-                        setState(() {
-                          customIncrementSeconds = value.toInt();
-                        });
-                        ref
-                            .read(playPreferencesProvider.notifier)
-                            .setCustomIncrementSeconds(value.toInt());
-                      },
-                    ),
-                  );
-                },
-              );
-            },
-          ),
-          PlatformListTile(
-            harmonizeCupertinoTitleStyle: true,
-            title: Text(context.l10n.variant),
-            trailing: AdaptiveTextButton(
-              onPressed: () {
-                showChoicePicker(
-                  context,
-                  choices: [Variant.standard, Variant.chess960],
-                  selectedItem: preferences.customVariant,
-                  labelBuilder: (Variant variant) => Text(variant.label),
-                  onSelectedItemChanged: (Variant variant) {
-                    ref
-                        .read(playPreferencesProvider.notifier)
-                        .setCustomVariant(variant);
-                  },
-                );
-              },
-              child: Text(preferences.customVariant.label),
-            ),
-          ),
-          ExpandedSection(
-            expand: preferences.customRated == false,
-            child: PlatformListTile(
-              harmonizeCupertinoTitleStyle: true,
-              title: Text(context.l10n.side),
-              trailing: AdaptiveTextButton(
-                onPressed: () {
-                  showChoicePicker<PlayableSide>(
-                    context,
-                    choices: PlayableSide.values,
-                    selectedItem: preferences.customSide,
-                    labelBuilder: (PlayableSide side) =>
-                        Text(_customSideLabel(context, side)),
-                    onSelectedItemChanged: (PlayableSide side) {
-                      ref
-                          .read(playPreferencesProvider.notifier)
-                          .setCustomSide(side);
+                        ),
+                        subtitle: NonLinearSlider(
+                          value: customTimeSeconds,
+                          values: kAvailableTimesInSeconds,
+                          labelBuilder: _clockTimeLabel,
+                          onChange: defaultTargetPlatform == TargetPlatform.iOS
+                              ? (num value) {
+                                  setState(() {
+                                    customTimeSeconds = value.toInt();
+                                  });
+                                }
+                              : null,
+                          onChangeEnd: (num value) {
+                            setState(() {
+                              customTimeSeconds = value.toInt();
+                            });
+                            ref
+                                .read(gameSetupPreferencesProvider.notifier)
+                                .setCustomTimeSeconds(value.toInt());
+                          },
+                        ),
+                      );
                     },
                   );
                 },
-                child: Text(_customSideLabel(context, preferences.customSide)),
               ),
-            ),
-          ),
-          if (session != null)
-            PlatformListTile(
-              harmonizeCupertinoTitleStyle: true,
-              title: Text(context.l10n.rated),
-              trailing: Switch.adaptive(
-                value: preferences.customRated,
-                onChanged: (bool value) {
-                  ref
-                      .read(playPreferencesProvider.notifier)
-                      .setCustomRated(value);
+              Builder(
+                builder: (context) {
+                  int customIncrementSeconds =
+                      preferences.customIncrementSeconds;
+                  return StatefulBuilder(
+                    builder: (context, setState) {
+                      return PlatformListTile(
+                        harmonizeCupertinoTitleStyle: true,
+                        title: Text.rich(
+                          TextSpan(
+                            text: '${context.l10n.incrementInSeconds}: ',
+                            children: [
+                              TextSpan(
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                                text: customIncrementSeconds.toString(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        subtitle: NonLinearSlider(
+                          value: customIncrementSeconds,
+                          values: kAvailableIncrementsInSeconds,
+                          onChange: defaultTargetPlatform == TargetPlatform.iOS
+                              ? (num value) {
+                                  setState(() {
+                                    customIncrementSeconds = value.toInt();
+                                  });
+                                }
+                              : null,
+                          onChangeEnd: (num value) {
+                            setState(() {
+                              customIncrementSeconds = value.toInt();
+                            });
+                            ref
+                                .read(gameSetupPreferencesProvider.notifier)
+                                .setCustomIncrementSeconds(value.toInt());
+                          },
+                        ),
+                      );
+                    },
+                  );
                 },
               ),
-            ),
-          if (userPerf != null)
-            PlayRatingRange(
-              perf: userPerf,
-              ratingRange: preferences.customRatingRange,
-              setRatingRange: (int subtract, int add) {
-                ref
-                    .read(playPreferencesProvider.notifier)
-                    .setCustomRatingRange(subtract, add);
-              },
-            ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: FatButton(
-              semanticsLabel: context.l10n.createAGame,
-              onPressed: isValidTimeControl
-                  ? () {
-                      ref
-                          .read(playPreferencesProvider.notifier)
-                          .setSeekMode(SeekMode.custom);
-                      pushPlatformRoute(
+              PlatformListTile(
+                harmonizeCupertinoTitleStyle: true,
+                title: Text(context.l10n.variant),
+                trailing: AdaptiveTextButton(
+                  onPressed: () {
+                    showChoicePicker(
+                      context,
+                      choices: [Variant.standard, Variant.chess960],
+                      selectedItem: preferences.customVariant,
+                      labelBuilder: (Variant variant) => Text(variant.label),
+                      onSelectedItemChanged: (Variant variant) {
+                        ref
+                            .read(gameSetupPreferencesProvider.notifier)
+                            .setCustomVariant(variant);
+                      },
+                    );
+                  },
+                  child: Text(preferences.customVariant.label),
+                ),
+              ),
+              ExpandedSection(
+                expand: preferences.customRated == false,
+                child: PlatformListTile(
+                  harmonizeCupertinoTitleStyle: true,
+                  title: Text(context.l10n.side),
+                  trailing: AdaptiveTextButton(
+                    onPressed: () {
+                      showChoicePicker<PlayableSide>(
                         context,
-                        rootNavigator: true,
-                        builder: (BuildContext context) {
-                          return LobbyScreen(
-                            seek: GameSeek.customFromPrefs(
-                              preferences,
-                              session,
-                              userPerf,
-                            ),
-                          );
+                        choices: PlayableSide.values,
+                        selectedItem: preferences.customSide,
+                        labelBuilder: (PlayableSide side) =>
+                            Text(_customSideLabel(context, side)),
+                        onSelectedItemChanged: (PlayableSide side) {
+                          ref
+                              .read(gameSetupPreferencesProvider.notifier)
+                              .setCustomSide(side);
                         },
                       );
-                    }
-                  : null,
-              child: Text(context.l10n.createAGame),
-            ),
+                    },
+                    child:
+                        Text(_customSideLabel(context, preferences.customSide)),
+                  ),
+                ),
+              ),
+              if (session != null)
+                PlatformListTile(
+                  harmonizeCupertinoTitleStyle: true,
+                  title: Text(context.l10n.rated),
+                  trailing: Switch.adaptive(
+                    value: preferences.customRated,
+                    onChanged: (bool value) {
+                      ref
+                          .read(gameSetupPreferencesProvider.notifier)
+                          .setCustomRated(value);
+                    },
+                  ),
+                ),
+              if (userPerf != null)
+                PlayRatingRange(
+                  perf: userPerf,
+                  ratingDelta: preferences.customRatingDelta,
+                  onRatingDeltaChange: (int subtract, int add) {
+                    ref
+                        .read(gameSetupPreferencesProvider.notifier)
+                        .setCustomRatingRange(subtract, add);
+                  },
+                ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: FatButton(
+                  semanticsLabel: context.l10n.createAGame,
+                  onPressed: isValidTimeControl
+                      ? () {
+                          ref
+                              .read(gameSetupPreferencesProvider.notifier)
+                              .setSeekMode(SeekMode.custom);
+                          pushPlatformRoute(
+                            context,
+                            rootNavigator: true,
+                            builder: (BuildContext context) {
+                              return LobbyScreen(
+                                seek: GameSeek.custom(preferences, account),
+                              );
+                            },
+                          );
+                        }
+                      : null,
+                  child: Text(context.l10n.createAGame),
+                ),
+              ),
+            ],
           ),
-        ],
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      error: (error, stackTrace) => const Center(
+        child: Text('Could not load account data'),
       ),
     );
   }
