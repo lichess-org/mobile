@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
-const _kSaveHistoryDebouncTimer = Duration(milliseconds: 500);
+const _kSaveHistoryDebouncTimer = Duration(seconds: 2);
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen();
@@ -135,19 +135,19 @@ class _Body extends ConsumerWidget {
           child: searchHistory.isEmpty
               ? kEmptyWidget
               : ListSection(
-                  header: const Text('Recent'),
+                  header: const Text('Recent searches'),
+                  headerTrailing: NoPaddingTextButton(
+                    child: const Text('Clear'),
+                    onPressed: () =>
+                        ref.read(searchHistoryProvider.notifier).clear(),
+                  ),
                   showDividerBetweenTiles: true,
+                  hasLeading: true,
                   children: searchHistory
                       .map(
                         (term) => PlatformListTile(
                           leading: const Icon(Icons.history),
                           title: Text(term),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.close),
-                            onPressed: () => ref
-                                .read(searchHistoryProvider.notifier)
-                                .removeTerm(term),
-                          ),
                           onTap: () => onRecentSearchTap(term),
                         ),
                       )
@@ -168,33 +168,49 @@ class _UserList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final autoComplete = ref.watch(autoCompleteUserProvider(term));
     return SingleChildScrollView(
-      child: ListSection(
-        header: Row(
+      child: autoComplete.when(
+        data: (userList) => userList.isNotEmpty
+            ? ListSection(
+                header: Row(
+                  children: [
+                    const Icon(Icons.person),
+                    const SizedBox(width: 8),
+                    Text('Players with "$term"'),
+                  ],
+                ),
+                hasLeading: true,
+                showDividerBetweenTiles: true,
+                children: userList
+                    .map(
+                      (user) => UserListTile.fromLightUser(
+                        user,
+                        onTap: () => {
+                          pushPlatformRoute(
+                            context,
+                            builder: (ctx) => UserScreen(user: user),
+                          ),
+                        },
+                      ),
+                    )
+                    .toList(),
+              )
+            : const Column(
+                children: [
+                  SizedBox(height: 16.0),
+                  Center(child: Text('No Result')),
+                ],
+              ),
+        error: (e, s) => const Column(
           children: [
-            const Icon(Icons.person),
-            const SizedBox(width: 8),
-            Text('Players with "$term"'),
+            SizedBox(height: 16.0),
+            Center(child: Text('Error Loading Results')),
           ],
         ),
-        showDividerBetweenTiles: true,
-        children: autoComplete.when(
-          data: (userList) => userList.isNotEmpty
-              ? userList
-                  .map(
-                    (user) => UserListTile.fromLightUser(
-                      user,
-                      onTap: () => {
-                        pushPlatformRoute(
-                          context,
-                          builder: (ctx) => UserScreen(user: user),
-                        ),
-                      },
-                    ),
-                  )
-                  .toList()
-              : const [Center(child: Text('No Result'))],
-          error: (e, s) => const [Center(child: Text('Error Loading Results'))],
-          loading: () => const [SizedBox(height: 8), CenterLoadingIndicator()],
+        loading: () => const Column(
+          children: [
+            SizedBox(height: 16.0),
+            CenterLoadingIndicator(),
+          ],
         ),
       ),
     );

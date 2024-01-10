@@ -40,14 +40,11 @@ class SearchHistory extends _$SearchHistory {
     state = newState;
   }
 
-  Future<void> removeTerm(String term) async {
-    if (state.history.contains(term)) {
-      final newList = state.history.remove(term);
-      final newState = state.copyWith(history: newList);
-      final prefs = ref.read(sharedPreferencesProvider);
-      await prefs.setString(prefKey, jsonEncode(newState.toJson()));
-      state = newState;
-    }
+  Future<void> clear() async {
+    final newState = state.copyWith(history: IList());
+    final prefs = ref.read(sharedPreferencesProvider);
+    await prefs.setString(prefKey, jsonEncode(newState.toJson()));
+    state = newState;
   }
 }
 
