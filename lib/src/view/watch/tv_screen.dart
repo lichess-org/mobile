@@ -256,7 +256,7 @@ class _BottomBar extends ConsumerWidget {
             children: [
               Expanded(
                 child: BottomBarButton(
-                  label: context.l10n.menu,
+                  label: context.l10n.flipBoard,
                   onTap: () {
                     //_showAnalysisMenu(context, ref);
                   },
