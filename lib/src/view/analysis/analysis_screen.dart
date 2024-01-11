@@ -973,9 +973,7 @@ class _SummaryPlayerName extends StatelessWidget {
         heightFactor: 1.4,
         child: Padding(
           padding: const EdgeInsets.only(bottom: 4),
-          child: Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: 2.0,
+          child: Column(
             children: [
               Icon(
                 side == Side.white
