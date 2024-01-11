@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
@@ -15,7 +16,6 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -260,94 +260,108 @@ class _BodyState extends ConsumerState<_Body> {
           ),
         ),
         Container(
-          padding: Styles.horizontalBodyPadding,
           color: defaultTargetPlatform == TargetPlatform.iOS
               ? CupertinoTheme.of(context).barBackgroundColor
               : Theme.of(context).bottomAppBarTheme.color,
           child: SafeArea(
             top: false,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                BottomBarButton(
-                  label: context.l10n.flipBoard,
-                  onTap: () {
-                    setState(() {
-                      isBoardTurned = !isBoardTurned;
-                    });
-                  },
-                  icon: Icons.swap_vert,
-                ),
-                BottomBarButton(
-                  label: context.l10n.analysis,
-                  onTap: () {
-                    pushPlatformRoute(
-                      context,
-                      builder: (_) => AnalysisScreen(
-                        options: AnalysisOptions(
-                          isLocalEvaluationAllowed: false,
-                          variant: game.variant,
-                          pgn: game.pgn,
-                          initialMoveCursor: stepCursor,
-                          orientation: game.youAre,
-                          id: game.id,
-                        ),
-                        title: context.l10n.analysis,
+            child: SizedBox(
+              height: kBottomBarHeight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Expanded(
+                    child: BottomBarButton(
+                      label: context.l10n.flipBoard,
+                      onTap: () {
+                        setState(() {
+                          isBoardTurned = !isBoardTurned;
+                        });
+                      },
+                      icon: Icons.swap_vert,
+                    ),
+                  ),
+                  Expanded(
+                    child: BottomBarButton(
+                      label: context.l10n.analysis,
+                      onTap: () {
+                        pushPlatformRoute(
+                          context,
+                          builder: (_) => AnalysisScreen(
+                            options: AnalysisOptions(
+                              isLocalEvaluationAllowed: false,
+                              variant: game.variant,
+                              pgn: game.pgn,
+                              initialMoveCursor: stepCursor,
+                              orientation: game.youAre,
+                              id: game.id,
+                            ),
+                            title: context.l10n.analysis,
+                          ),
+                        );
+                      },
+                      icon: Icons.biotech,
+                    ),
+                  ),
+                  Expanded(
+                    child: BottomBarButton(
+                      label: 'Go to the next game',
+                      icon: Icons.skip_next,
+                      onTap: offlineOngoingGames.maybeWhen(
+                        data: (games) {
+                          final nextTurn = games
+                              .whereNot((g) => g.$2.id == game.id)
+                              .firstWhereOrNull((g) => g.$2.isPlayerTurn);
+                          return nextTurn != null
+                              ? () {
+                                  widget.onGameChanged(nextTurn);
+                                }
+                              : null;
+                        },
+                        orElse: () => null,
                       ),
-                    );
-                  },
-                  icon: Icons.biotech,
-                ),
-                BottomBarButton(
-                  label: 'Go to the next game',
-                  icon: Icons.skip_next,
-                  onTap: offlineOngoingGames.maybeWhen(
-                    data: (games) {
-                      final nextTurn = games
-                          .whereNot((g) => g.$2.id == game.id)
-                          .firstWhereOrNull((g) => g.$2.isPlayerTurn);
-                      return nextTurn != null
+                    ),
+                  ),
+                  Expanded(
+                    child: BottomBarButton(
+                      label: 'Clear saved move',
+                      onTap: game.registeredMoveAtPgn != null
                           ? () {
-                              widget.onGameChanged(nextTurn);
+                              showConfirmDialog<void>(
+                                context,
+                                title: const Text('Clear saved move'),
+                                isDestructiveAction: true,
+                                onConfirm: (_) => deleteRegisteredMove(),
+                              );
                             }
-                          : null;
-                    },
-                    orElse: () => null,
+                          : null,
+                      icon: Icons.save,
+                    ),
                   ),
-                ),
-                BottomBarButton(
-                  label: 'Clear saved move',
-                  onTap: game.registeredMoveAtPgn != null
-                      ? () {
-                          showConfirmDialog<void>(
-                            context,
-                            title: const Text('Clear saved move'),
-                            isDestructiveAction: true,
-                            onConfirm: (_) => deleteRegisteredMove(),
-                          );
-                        }
-                      : null,
-                  icon: Icons.save,
-                ),
-                RepeatButton(
-                  onLongPress: canGoBackward ? () => moveBackward() : null,
-                  child: BottomBarButton(
-                    onTap: canGoBackward ? () => moveBackward() : null,
-                    label: 'Previous',
-                    icon: CupertinoIcons.chevron_back,
-                    showTooltip: false,
+                  Expanded(
+                    child: RepeatButton(
+                      onLongPress: canGoBackward ? () => moveBackward() : null,
+                      child: BottomBarButton(
+                        onTap: canGoBackward ? () => moveBackward() : null,
+                        label: 'Previous',
+                        icon: CupertinoIcons.chevron_back,
+                        showTooltip: false,
+                      ),
+                    ),
                   ),
-                ),
-                RepeatButton(
-                  onLongPress: canGoForward ? () => moveForward() : null,
-                  child: BottomBarButton(
-                    onTap: canGoForward ? () => moveForward() : null,
-                    label: context.l10n.next,
-                    icon: CupertinoIcons.chevron_forward,
-                    showTooltip: false,
+                  Expanded(
+                    child: RepeatButton(
+                      onLongPress: canGoForward ? () => moveForward() : null,
+                      child: BottomBarButton(
+                        onTap: canGoForward ? () => moveForward() : null,
+                        label: context.l10n.next,
+                        icon: CupertinoIcons.chevron_forward,
+                        showTooltip: false,
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

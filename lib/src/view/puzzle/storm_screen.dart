@@ -625,7 +625,10 @@ class _BottomBar extends ConsumerWidget {
                 icon: Icons.delete,
                 label: context.l10n.stormNewRun.split(' ').take(2).join(' '),
                 showLabel: true,
-                onTap: () => ref.invalidate(stormProvider),
+                onTap: () {
+                  puzzleState.clock.reset();
+                  ref.invalidate(stormProvider);
+                },
               ),
               if (puzzleState.clock.isActive)
                 BottomBarButton(

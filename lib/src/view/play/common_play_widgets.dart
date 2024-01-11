@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -11,14 +11,14 @@ import 'package:lichess_mobile/src/widgets/rating.dart';
 class PlayRatingRange extends StatefulWidget {
   const PlayRatingRange({
     required this.perf,
-    required this.ratingRange,
-    required this.setRatingRange,
+    required this.ratingDelta,
+    required this.onRatingDeltaChange,
     super.key,
   });
 
   final UserPerf perf;
-  final (int, int) ratingRange;
-  final void Function(int, int) setRatingRange;
+  final (int, int) ratingDelta;
+  final void Function(int, int) onRatingDeltaChange;
 
   @override
   State<PlayRatingRange> createState() => _PlayRatingRangeState();
@@ -31,7 +31,7 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
   @override
   void initState() {
     super.initState();
-    final (subtract, add) = widget.ratingRange;
+    final (subtract, add) = widget.ratingDelta;
     _subtract = subtract;
     _add = add;
   }
@@ -39,7 +39,7 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
   @override
   void didUpdateWidget(PlayRatingRange oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final (subtract, add) = widget.ratingRange;
+    final (subtract, add) = widget.ratingDelta;
     _subtract = subtract;
     _add = add;
   }
@@ -72,7 +72,7 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
                         : null,
                     onChangeEnd: isRatingRangeAvailable
                         ? (num value) {
-                            widget.setRatingRange(value.toInt(), _add);
+                            widget.onRatingDeltaChange(value.toInt(), _add);
                           }
                         : null,
                   ),
@@ -104,7 +104,10 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
                         : null,
                     onChangeEnd: isRatingRangeAvailable
                         ? (num value) {
-                            widget.setRatingRange(_subtract, value.toInt());
+                            widget.onRatingDeltaChange(
+                              _subtract,
+                              value.toInt(),
+                            );
                           }
                         : null,
                   ),

@@ -18,6 +18,7 @@ class LightUser with _$LightUser {
     String? title,
     String? flair,
     bool? isPatron,
+    bool? isOnline,
   }) = _LightUser;
 
   factory LightUser.fromJson(Map<String, dynamic> json) =>
@@ -41,6 +42,7 @@ extension LightUserExtension on Pick {
         title: requiredPick('title').asStringOrNull(),
         flair: requiredPick('flair').asStringOrNull(),
         isPatron: requiredPick('patron').asBoolOrNull(),
+        isOnline: requiredPick('online').asBoolOrNull(),
       );
     }
     throw PickException(
