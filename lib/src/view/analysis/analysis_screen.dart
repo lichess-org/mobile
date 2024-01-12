@@ -897,13 +897,6 @@ class ServerAnalysisSummary extends ConsumerWidget {
                           'Blunders',
                           serverAnalysis.black.inaccuracies.toString()
                         ),
-                        if (serverAnalysis.white.acpl != null &&
-                            serverAnalysis.black.acpl != null)
-                          (
-                            serverAnalysis.white.acpl.toString(),
-                            context.l10n.averageCentipawnLoss,
-                            serverAnalysis.black.acpl.toString(),
-                          ),
                       ])
                         TableRow(
                           children: [
@@ -916,6 +909,25 @@ class ServerAnalysisSummary extends ConsumerWidget {
                               ),
                             ),
                             _SummaryNumber(item.$3),
+                          ],
+                        ),
+                      if (serverAnalysis.white.acpl != null &&
+                          serverAnalysis.black.acpl != null)
+                        TableRow(
+                          children: [
+                            _SummaryNumber(
+                              serverAnalysis.white.acpl.toString(),
+                            ),
+                            Center(
+                              heightFactor: 1.5,
+                              child: Text(
+                                context.l10n.averageCentipawnLoss,
+                                softWrap: true,
+                              ),
+                            ),
+                            _SummaryNumber(
+                              serverAnalysis.black.acpl.toString(),
+                            ),
                           ],
                         ),
                     ],
