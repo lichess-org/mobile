@@ -70,7 +70,31 @@ abstract class Node {
   }
 
   /// Selects all nodes on that path.
-  Iterable<Branch> nodesOn(UciPath path) sync* {
+  Iterable<Node> nodesOn(UciPath path) sync* {
+    UciPath currentPath = path;
+
+    Branch? pickChild(Node node) {
+      final id = currentPath.head;
+      if (id == null) {
+        return null;
+      }
+      return node.childById(id);
+    }
+
+    Node current = this;
+    Node? child;
+
+    yield current;
+
+    while ((child = pickChild(current)) != null) {
+      yield child!;
+      current = child;
+      currentPath = currentPath.tail;
+    }
+  }
+
+  /// Selects all branches on that path.
+  Iterable<Branch> branchesOn(UciPath path) sync* {
     UciPath currentPath = path;
 
     Branch? pickChild(Node node) {
@@ -187,7 +211,7 @@ abstract class Node {
     for (int i = nodes.length - 2; i >= 0; i--) {
       final node = nodes[i + 1];
       final parent = nodes[i];
-      if (parent.children[0].id != node.id) {
+      if (node is Branch && parent.children[0].id != node.id) {
         parent.children.remove(node);
         parent.children.insert(0, node);
         if (!toMainline) break;
@@ -229,8 +253,7 @@ abstract class Node {
 
   /// Gets the parent node at the given path
   Node parentAt(UciPath path) {
-    final parentPath = path.penultimate;
-    return nodeAt(parentPath);
+    return nodeAt(path.penultimate);
   }
 }
 
