@@ -923,6 +923,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
                               child: Text(
                                 context.l10n.averageCentipawnLoss,
                                 softWrap: true,
+                                textAlign: TextAlign.center,
                               ),
                             ),
                             _SummaryNumber(
@@ -990,6 +991,7 @@ class _SummaryPlayerName extends StatelessWidget {
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
+                textAlign: TextAlign.center,
                 softWrap: true,
               ),
             ],
