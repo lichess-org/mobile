@@ -154,6 +154,7 @@ class GameBody extends ConsumerWidget {
                   ? CorrespondenceClock(
                       duration: gameState.game.correspondenceClock!.black,
                       active: gameState.activeClockSide == Side.black,
+                      onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                     )
                   : null,
         );
@@ -193,6 +194,7 @@ class GameBody extends ConsumerWidget {
                   ? CorrespondenceClock(
                       duration: gameState.game.correspondenceClock!.white,
                       active: gameState.activeClockSide == Side.white,
+                      onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                     )
                   : null,
         );

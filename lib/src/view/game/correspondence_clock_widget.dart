@@ -10,12 +10,19 @@ import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 
 class CorrespondenceClock extends ConsumerStatefulWidget {
+  /// The duration left on the clock.
   final Duration duration;
+
+  /// If [active] is `true`, the clock starts counting down.
   final bool active;
+
+  /// Callback when the clock reaches zero.
+  final VoidCallback? onFlag;
 
   const CorrespondenceClock({
     required this.duration,
     required this.active,
+    this.onFlag,
     super.key,
   });
 
@@ -41,6 +48,7 @@ class _CorrespondenceClockState extends ConsumerState<CorrespondenceClock> {
         timeLeft = timeLeft - _stopwatch.elapsed;
         _stopwatch.reset();
         if (timeLeft <= Duration.zero) {
+          widget.onFlag?.call();
           timeLeft = Duration.zero;
           stopClock();
         }
