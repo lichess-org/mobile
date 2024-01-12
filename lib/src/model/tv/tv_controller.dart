@@ -187,7 +187,6 @@ class TvController extends _$TvController {
           game: curState.game.copyWith(
             steps: curState.game.steps.add(newStep),
           ),
-          stepCursor: curState.stepCursor + 1,
         );
 
         if (newState.game.clock != null && data.clock != null) {
@@ -196,14 +195,19 @@ class TvController extends _$TvController {
             black: data.clock!.black,
           );
         }
+        if (!curState.isReplaying) {
+          newState = newState.copyWith(
+            stepCursor: newState.stepCursor + 1,
+          );
+
+          if (data.san.contains('x')) {
+            _soundService.play(Sound.capture);
+          } else {
+            _soundService.play(Sound.move);
+          }
+        }
 
         state = AsyncData(newState);
-
-        if (data.san.contains('x')) {
-          _soundService.play(Sound.capture);
-        } else {
-          _soundService.play(Sound.move);
-        }
 
       case 'tvSelect':
         final json = event.data as Map<String, dynamic>;
@@ -225,6 +229,8 @@ class TvState with _$TvState {
     required int stepCursor,
     required Side orientation,
   }) = _TvState;
+
+  bool get isReplaying => stepCursor < game.steps.length - 1;
 
   Side? get activeClockSide {
     if (game.clock == null) {
