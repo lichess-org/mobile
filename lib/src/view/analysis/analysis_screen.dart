@@ -855,12 +855,32 @@ class ServerAnalysisSummary extends ConsumerWidget {
                     },
                     children: [
                       TableRow(
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(color: Colors.grey),
+                          ),
+                        ),
                         children: [
                           _SummaryPlayerName(Side.white, pgnHeaders),
                           const SizedBox(width: 0),
                           _SummaryPlayerName(Side.black, pgnHeaders),
                         ],
                       ),
+                      if (serverAnalysis.white.accuracy != null &&
+                          serverAnalysis.black.accuracy != null)
+                        TableRow(
+                          children: [
+                            _SummaryNumber('${serverAnalysis.white.accuracy}%'),
+                            Center(
+                              heightFactor: 1.8,
+                              child: Text(
+                                context.l10n.accuracy,
+                                softWrap: true,
+                              ),
+                            ),
+                            _SummaryNumber('${serverAnalysis.black.accuracy}%'),
+                          ],
+                        ),
                       for (final item in [
                         (
                           serverAnalysis.white.inaccuracies.toString(),
@@ -888,42 +908,14 @@ class ServerAnalysisSummary extends ConsumerWidget {
                         TableRow(
                           children: [
                             _SummaryNumber(item.$1),
-                            Text(
-                              item.$2,
-                              softWrap: true,
-                            ),
-                            _SummaryNumber(item.$3),
-                          ],
-                        ),
-                      if (serverAnalysis.white.accuracy != null &&
-                          serverAnalysis.black.accuracy != null)
-                        TableRow(
-                          children: [
-                            _SummaryNumber('${serverAnalysis.white.accuracy}%'),
                             Center(
-                              child: Row(
-                                children: [
-                                  Text(
-                                    context.l10n.accuracy,
-                                    softWrap: true,
-                                  ),
-                                  const SizedBox(width: 8.0),
-                                  PlatformIconButton(
-                                    icon: Icons.info_outline_rounded,
-                                    semanticsLabel: 'More info',
-                                    padding: EdgeInsets.zero,
-                                    onTap: () async {
-                                      await launchUrl(
-                                        Uri.parse(
-                                          'https://lichess.org/page/accuracy',
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
+                              heightFactor: 1.2,
+                              child: Text(
+                                item.$2,
+                                softWrap: true,
                               ),
                             ),
-                            _SummaryNumber('${serverAnalysis.black.accuracy}%'),
+                            _SummaryNumber(item.$3),
                           ],
                         ),
                     ],
@@ -944,7 +936,6 @@ class _SummaryNumber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      heightFactor: 1.4,
       child: Text(
         data,
         softWrap: true,
@@ -972,7 +963,7 @@ class _SummaryPlayerName extends StatelessWidget {
       child: Center(
         heightFactor: 1.4,
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 4),
+          padding: const EdgeInsets.only(bottom: 1),
           child: Column(
             children: [
               Icon(
