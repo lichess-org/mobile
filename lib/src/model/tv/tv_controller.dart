@@ -100,6 +100,15 @@ class TvController extends _$TvController {
     state = AsyncValue.data(newState);
   }
 
+  void toggleBoard() {
+    if (state.hasValue) {
+      final curState = state.requireValue;
+      state = AsyncValue.data(
+        curState.copyWith(orientation: curState.orientation.opposite),
+      );
+    }
+  }
+
   void cursorForward() {
     if (state.hasValue) {
       final curState = state.requireValue;
