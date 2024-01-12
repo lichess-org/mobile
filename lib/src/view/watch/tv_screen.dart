@@ -276,12 +276,19 @@ class _BottomBar extends ConsumerWidget {
               ),
               Expanded(
                 child: RepeatButton(
-                  onLongPress: () {},
-                  // canGoBack ? () => _moveBackward(ref) : null,
+                  onLongPress: ref
+                          .read(tvControllerProvider(tvChannel, game).notifier)
+                          .canGoBack()
+                      ? () => _moveBackward(ref)
+                      : null,
                   child: BottomBarButton(
                     key: const ValueKey('goto-previous'),
-                    onTap: () => _moveBackward(
-                        ref), //canGoBack ? () => _moveBackward(ref) : null,
+                    onTap: ref
+                            .read(
+                                tvControllerProvider(tvChannel, game).notifier)
+                            .canGoBack()
+                        ? () => _moveBackward(ref)
+                        : null,
                     label: 'Previous',
                     icon: CupertinoIcons.chevron_back,
                     showTooltip: false,
@@ -290,14 +297,21 @@ class _BottomBar extends ConsumerWidget {
               ),
               Expanded(
                 child: RepeatButton(
-                  onLongPress: () {},
-                  //canGoNext ? () => _moveForward(ref) : null,
+                  onLongPress: ref
+                          .read(tvControllerProvider(tvChannel, game).notifier)
+                          .canGoForward()
+                      ? () => _moveForward(ref)
+                      : null,
                   child: BottomBarButton(
                     key: const ValueKey('goto-next'),
                     icon: CupertinoIcons.chevron_forward,
                     label: context.l10n.next,
-                    onTap: () => _moveForward(
-                        ref), //canGoNext ? () => _moveForward(ref) : null,
+                    onTap: ref
+                            .read(
+                                tvControllerProvider(tvChannel, game).notifier)
+                            .canGoForward()
+                        ? () => _moveForward(ref)
+                        : null,
                     showTooltip: false,
                   ),
                 ),
