@@ -285,7 +285,8 @@ class _BottomBar extends ConsumerWidget {
                     key: const ValueKey('goto-previous'),
                     onTap: ref
                             .read(
-                                tvControllerProvider(tvChannel, game).notifier)
+                              tvControllerProvider(tvChannel, game).notifier,
+                            )
                             .canGoBack()
                         ? () => _moveBackward(ref)
                         : null,
@@ -308,7 +309,8 @@ class _BottomBar extends ConsumerWidget {
                     label: context.l10n.next,
                     onTap: ref
                             .read(
-                                tvControllerProvider(tvChannel, game).notifier)
+                              tvControllerProvider(tvChannel, game).notifier,
+                            )
                             .canGoForward()
                         ? () => _moveForward(ref)
                         : null,
