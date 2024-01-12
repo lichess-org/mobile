@@ -156,14 +156,17 @@ class _Body extends ConsumerWidget {
             child: asyncGame.when(
               data: (gameState) {
                 final game = gameState.game;
+                final position =
+                    gameState.game.positionAt(gameState.stepCursor);
+                final sideToMove = position.turn;
 
                 final boardData = cg.BoardData(
                   interactableSide: cg.InteractableSide.none,
                   orientation: gameState.orientation.cg,
-                  fen: game.lastPosition.fen,
-                  sideToMove: game.lastPosition.turn.cg,
-                  lastMove: game.lastMove?.cg,
-                  isCheck: game.lastPosition.isCheck,
+                  fen: position.fen,
+                  sideToMove: sideToMove.cg,
+                  lastMove: game.moveAt(gameState.stepCursor)?.cg,
+                  isCheck: position.isCheck,
                 );
                 final blackPlayerWidget = GamePlayer(
                   player: game.black.setOnGame(true),
@@ -234,13 +237,23 @@ class _Body extends ConsumerWidget {
             ),
           ),
         ),
-        _BottomBar(),
+        _BottomBar(
+          tvChannel: channel,
+          game: initialGame,
+        ),
       ],
     );
   }
 }
 
 class _BottomBar extends ConsumerWidget {
+  const _BottomBar({
+    required this.tvChannel,
+    required this.game,
+  });
+  final TvChannel tvChannel;
+  final (GameId id, Side orientation)? game;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -269,9 +282,8 @@ class _BottomBar extends ConsumerWidget {
                   // canGoBack ? () => _moveBackward(ref) : null,
                   child: BottomBarButton(
                     key: const ValueKey('goto-previous'),
-                    onTap: () {
-                      //canGoBack ? () => _moveBackward(ref) : null,
-                    },
+                    onTap: () => _moveBackward(
+                        ref), //canGoBack ? () => _moveBackward(ref) : null,
                     label: 'Previous',
                     icon: CupertinoIcons.chevron_back,
                     showTooltip: false,
@@ -286,8 +298,8 @@ class _BottomBar extends ConsumerWidget {
                     key: const ValueKey('goto-next'),
                     icon: CupertinoIcons.chevron_forward,
                     label: context.l10n.next,
-                    onTap: () {},
-                    //canGoNext ? () => _moveForward(ref) : null,
+                    onTap: () => _moveForward(
+                        ref), //canGoNext ? () => _moveForward(ref) : null,
                     showTooltip: false,
                   ),
                 ),
@@ -297,5 +309,13 @@ class _BottomBar extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  void _moveBackward(WidgetRef ref) {
+    ref.read(tvControllerProvider(tvChannel, game).notifier).cursorBackward();
+  }
+
+  void _moveForward(WidgetRef ref) {
+    ref.read(tvControllerProvider(tvChannel, game).notifier).cursorForward();
   }
 }

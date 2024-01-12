@@ -100,6 +100,45 @@ class TvController extends _$TvController {
     state = AsyncValue.data(newState);
   }
 
+  void cursorForward() {
+    if (state.hasValue) {
+      final curState = state.requireValue;
+      if (curState.stepCursor < curState.game.steps.length - 1) {
+        state = AsyncValue.data(
+          curState.copyWith(stepCursor: curState.stepCursor + 1),
+        );
+        final san = curState.game.stepAt(curState.stepCursor + 1).sanMove?.san;
+        if (san != null) {
+          _playReplayMoveSound(san);
+        }
+      }
+    }
+  }
+
+  void cursorBackward() {
+    if (state.hasValue) {
+      final curState = state.requireValue;
+      if (curState.stepCursor > 0) {
+        state = AsyncValue.data(
+          curState.copyWith(stepCursor: curState.stepCursor - 1),
+        );
+        final san = curState.game.stepAt(curState.stepCursor - 1).sanMove?.san;
+        if (san != null) {
+          _playReplayMoveSound(san);
+        }
+      }
+    }
+  }
+
+  void _playReplayMoveSound(String san) {
+    final soundService = ref.read(soundServiceProvider);
+    if (san.contains('x')) {
+      soundService.play(Sound.capture);
+    } else {
+      soundService.play(Sound.move);
+    }
+  }
+
   void _handleSocketEvent(SocketEvent event) {
     final currentEventVersion = _socketEventVersion;
 
