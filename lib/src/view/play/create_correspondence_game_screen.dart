@@ -221,12 +221,15 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
 
     return challengesAsync.when(
       data: (challenges) {
+        final supportedChallenges = challenges
+            .where((challenge) => challenge.variant.isSupported)
+            .toList();
         return ListView.separated(
-          itemCount: challenges.length,
+          itemCount: supportedChallenges.length,
           separatorBuilder: (context, index) =>
               const PlatformDivider(height: 1, cupertinoHasLeading: true),
           itemBuilder: (context, index) {
-            final challenge = challenges[index];
+            final challenge = supportedChallenges[index];
             final time = challenge.days == null
                 ? '∞'
                 : '${context.l10n.daysPerTurn}: ${challenge.days}';

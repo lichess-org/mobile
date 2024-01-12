@@ -70,7 +70,7 @@ class LobbyRepository {
   FutureResult<IList<CorrespondenceChallenge>> getCorrespondenceChallenges() {
     return authClient.get(
       Uri.parse('$kLichessHost/lobby/seeks'),
-      headers: {'Accept': 'application/json'},
+      headers: {'Accept': 'application/vnd.lichess.v5+json'},
     ).flatMap(
       (response) => readJsonListOfObjectsFromResponse(
         response,
@@ -91,7 +91,7 @@ CorrespondenceChallenge _correspondenceSeekFromPick(RequiredPick pick) {
     username: pick('username').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrThrow(),
-    variant: pick('variant').asVariantOrNull(),
+    variant: pick('variant').asVariantOrThrow(),
     perf: pick('perf').asPerfOrThrow(),
     rated: pick('mode').asIntOrThrow() == 1,
     days: pick('days').asIntOrNull(),
