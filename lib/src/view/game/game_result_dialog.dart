@@ -102,7 +102,7 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
             onPressed: _activateButtons
                 ? () {
                     Navigator.of(context)
-                        .popUntil((route) => route is! RawDialogRoute);
+                        .popUntil((route) => route is! PopupRoute);
                     widget.onNewOpponentCallback(gameState.game);
                   }
                 : null,
