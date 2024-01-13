@@ -28,6 +28,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -221,12 +222,15 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
 
     return challengesAsync.when(
       data: (challenges) {
+        final supportedChallenges = challenges
+            .where((challenge) => challenge.variant.isSupported)
+            .toList();
         return ListView.separated(
-          itemCount: challenges.length,
+          itemCount: supportedChallenges.length,
           separatorBuilder: (context, index) =>
               const PlatformDivider(height: 1, cupertinoHasLeading: true),
           itemBuilder: (context, index) {
-            final challenge = challenges[index];
+            final challenge = supportedChallenges[index];
             final time = challenge.days == null
                 ? '∞'
                 : '${context.l10n.daysPerTurn}: ${challenge.days}';
@@ -281,19 +285,26 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                   subtitle: Text(subtitle),
                   onTap: isMySeek
                       ? null
-                      : () {
-                          showConfirmDialog<void>(
-                            context,
-                            title: Text(context.l10n.accept),
-                            isDestructiveAction: true,
-                            onConfirm: (_) {
-                              _socket.send(
-                                'joinSeek',
-                                challenge.id.toString(),
+                      : session == null
+                          ? () {
+                              showPlatformSnackbar(
+                                context,
+                                context.l10n.youNeedAnAccountToDoThat,
+                              );
+                            }
+                          : () {
+                              showConfirmDialog<void>(
+                                context,
+                                title: Text(context.l10n.accept),
+                                isDestructiveAction: true,
+                                onConfirm: (_) {
+                                  _socket.send(
+                                    'joinSeek',
+                                    challenge.id.toString(),
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
                 ),
               ),
             );

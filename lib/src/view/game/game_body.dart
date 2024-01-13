@@ -154,6 +154,7 @@ class GameBody extends ConsumerWidget {
                   ? CorrespondenceClock(
                       duration: gameState.game.correspondenceClock!.black,
                       active: gameState.activeClockSide == Side.black,
+                      onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                     )
                   : null,
         );
@@ -193,6 +194,7 @@ class GameBody extends ConsumerWidget {
                   ? CorrespondenceClock(
                       duration: gameState.game.correspondenceClock!.white,
                       active: gameState.activeClockSide == Side.white,
+                      onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                     )
                   : null,
         );
@@ -327,7 +329,7 @@ class GameBody extends ConsumerWidget {
 
       if (state.requireValue.redirectGameId != null) {
         // Be sure to pop any dialogs that might be on top of the game screen.
-        Navigator.of(context).popUntil((route) => route is! RawDialogRoute);
+        Navigator.of(context).popUntil((route) => route is! PopupRoute);
         onLoadGameCallback(state.requireValue.redirectGameId!);
       }
     }
@@ -681,7 +683,6 @@ class _GameBottomBar extends ConsumerWidget {
         if (gameState.game.resignable)
           BottomSheetAction(
             label: Text(context.l10n.resign),
-            dismissOnPress: false,
             onPressed: gameState.shouldConfirmResignAndDrawOffer
                 ? (context) => _showConfirmDialog(
                       context,
@@ -770,22 +771,19 @@ class _GameBottomBar extends ConsumerWidget {
     required Widget description,
     required VoidCallback onConfirm,
   }) async {
-    await Navigator.of(context).maybePop();
-    if (context.mounted) {
-      final result = await showAdaptiveDialog<bool>(
-        context: context,
-        builder: (context) => YesNoDialog(
-          title: const Text('Are you sure?'),
-          content: description,
-          onYes: () {
-            return Navigator.of(context).pop(true);
-          },
-          onNo: () => Navigator.of(context).pop(false),
-        ),
-      );
-      if (result == true) {
-        onConfirm();
-      }
+    final result = await showAdaptiveDialog<bool>(
+      context: context,
+      builder: (context) => YesNoDialog(
+        title: const Text('Are you sure?'),
+        content: description,
+        onYes: () {
+          return Navigator.of(context).pop(true);
+        },
+        onNo: () => Navigator.of(context).pop(false),
+      ),
+    );
+    if (result == true) {
+      onConfirm();
     }
   }
 }
