@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -13,7 +15,7 @@ typedef AccountPrefState = ({
   // game display
   Zen zenMode,
   BooleanPref showRatings,
-  // game behavior
+  // game behaviour
   BooleanPref premove,
   AutoQueen autoQueen,
   AutoThreefold autoThreefold,
@@ -22,6 +24,8 @@ typedef AccountPrefState = ({
   SubmitMove submitMove,
   // clock
   Moretime moretime,
+  // privacy
+  BooleanPref follow,
 });
 
 /// A provider that tells if the user has wants to see ratings in the app.
@@ -44,6 +48,7 @@ final defaultAccountPreferences = (
   submitMove: SubmitMove({
     SubmitMoveChoice.correspondence,
   }),
+  follow: const BooleanPref(true),
 );
 
 /// Get the account preferences for the current user.
@@ -83,6 +88,7 @@ class AccountPreferences extends _$AccountPreferences {
   Future<void> setConfirmResign(BooleanPref value) =>
       _setPref('confirmResign', value);
   Future<void> setSubmitMove(SubmitMove value) => _setPref('submitMove', value);
+  Future<void> setFollow(BooleanPref value) => _setPref('follow', value);
 
   Future<void> _setPref<T>(String key, AccountPref<T> value) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
