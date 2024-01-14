@@ -79,6 +79,7 @@ dev_dependencies:
   riverpod_generator: ^2.1.0
   riverpod_lint: ^2.3.3
   sqflite_common_ffi: ^2.2.3
+  stream_channel: ^2.1.2
 
 flutter:
   # The following line ensures that the Material Icons font is

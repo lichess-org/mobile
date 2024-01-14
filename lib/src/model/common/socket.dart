@@ -474,6 +474,9 @@ class WebSocketChannelFactory {
   const WebSocketChannelFactory();
 
   /// Creates a [WebSocketChannel] from the given [url].
+  ///
+  /// Throws a [TimeoutException] if the connection takes too long.
+  /// Throws a [SocketException] if the connection fails.
   Future<WebSocketChannel> create(
     String url, {
     Map<String, dynamic>? headers,
