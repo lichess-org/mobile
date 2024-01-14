@@ -27,7 +27,7 @@ void main() {
       (WidgetTester tester) async {
         final app = await buildTestApp(
           tester,
-          home: const UserScreen.fromLightUser(lightUser: testUser),
+          home: const UserScreen(user: testUser),
           overrides: [
             httpClientProvider.overrideWithValue(mockClient),
           ],

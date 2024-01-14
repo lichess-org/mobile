@@ -123,8 +123,8 @@ class _OnlineFriendsWidget extends ConsumerWidget {
                 onTap: () => pushPlatformRoute(
                   context,
                   title: user.name,
-                  builder: (_) => UserScreen.fromLightUser(
-                    lightUser: user,
+                  builder: (_) => UserScreen(
+                    user: user,
                   ),
                 ),
               ),

@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -16,7 +15,6 @@ import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:linkify/linkify.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
@@ -61,22 +59,12 @@ class UserProfile extends ConsumerWidget {
                 if (link.originText.startsWith('@')) {
                   final userId =
                       UserId.fromUserName(link.originText.substring(1));
-                  try {
-                    final user =
-                        await ref.read(userProvider(id: userId).future);
-                    if (context.mounted) {
-                      pushPlatformRoute(
-                        context,
-                        builder: (ctx) => UserScreen.fromUser(
-                          user: user,
-                        ),
-                      );
-                    }
-                  } catch (e) {
-                    if (context.mounted) {
-                      showPlatformSnackbar(context, 'User does not exist');
-                    }
-                  }
+                  pushPlatformRoute(
+                    context,
+                    builder: (ctx) => UserScreen(
+                      user: LightUser(id: userId, name: userId.value),
+                    ),
+                  );
                 } else {
                   launchUrl(Uri.parse(link.url));
                 }

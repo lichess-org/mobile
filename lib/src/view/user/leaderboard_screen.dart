@@ -181,8 +181,8 @@ class LeaderboardListTile extends StatelessWidget {
   void _handleTap(BuildContext context) {
     pushPlatformRoute(
       context,
-      builder: (context) => UserScreen.fromLightUser(
-        lightUser: user.lightUser,
+      builder: (context) => UserScreen(
+        user: user.lightUser,
       ),
     );
   }

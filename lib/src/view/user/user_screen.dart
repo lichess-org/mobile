@@ -13,23 +13,9 @@ import 'user_activity.dart';
 import 'user_profile.dart';
 
 class UserScreen extends ConsumerWidget {
-  const UserScreen._({this.lightUser, this.user, super.key})
-      : assert(
-          (lightUser != null || user != null) &&
-              !(lightUser != null && user != null),
-          'Either lightUser or User should be provided but not both',
-        );
+  const UserScreen({required this.user, super.key});
 
-  const factory UserScreen.fromUser({required User user, Key? key}) =
-      UserScreen._;
-
-  const factory UserScreen.fromLightUser({
-    required LightUser lightUser,
-    Key? key,
-  }) = UserScreen._;
-
-  final LightUser? lightUser;
-  final User? user;
+  final LightUser user;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,58 +27,42 @@ class UserScreen extends ConsumerWidget {
   }
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
-    if (user != null) {
-      return Scaffold(
-        appBar: AppBar(title: UserFullNameWidget(user: user!.lightUser)),
-        body: _UserProfileListView(user!),
-      );
-    } else {
-      final asyncUser = ref.watch(userProvider(id: lightUser!.id));
-      return Scaffold(
-        appBar: AppBar(
-          title: UserFullNameWidget(user: lightUser),
-        ),
-        body: asyncUser.when(
-          data: (user) => _UserProfileListView(user),
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, _) {
-            return FullScreenRetryRequest(
-              onRetry: () => ref.invalidate(userProvider(id: lightUser!.id)),
-            );
-          },
-        ),
-      );
-    }
+    final asyncUser = ref.watch(userProvider(id: user.id));
+    return Scaffold(
+      appBar: AppBar(
+        title: UserFullNameWidget(user: user),
+      ),
+      body: asyncUser.when(
+        data: (user) => _UserProfileListView(user),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, _) {
+          return FullScreenRetryRequest(
+            onRetry: () => ref.invalidate(userProvider(id: user.id)),
+          );
+        },
+      ),
+    );
   }
 
   Widget _buildIos(BuildContext context, WidgetRef ref) {
-    if (user != null) {
-      return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: UserFullNameWidget(user: user!.lightUser),
+    final asyncUser = ref.watch(userProvider(id: user.id));
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: UserFullNameWidget(user: user),
+      ),
+      child: asyncUser.when(
+        data: (user) => SafeArea(
+          child: _UserProfileListView(user),
         ),
-        child: _UserProfileListView(user!),
-      );
-    } else {
-      final asyncUser = ref.watch(userProvider(id: lightUser!.id));
-      return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: UserFullNameWidget(user: lightUser),
-        ),
-        child: asyncUser.when(
-          data: (user) => SafeArea(
-            child: _UserProfileListView(user),
-          ),
-          loading: () =>
-              const Center(child: CircularProgressIndicator.adaptive()),
-          error: (error, _) {
-            return FullScreenRetryRequest(
-              onRetry: () => ref.invalidate(userProvider(id: lightUser!.id)),
-            );
-          },
-        ),
-      );
-    }
+        loading: () =>
+            const Center(child: CircularProgressIndicator.adaptive()),
+        error: (error, _) {
+          return FullScreenRetryRequest(
+            onRetry: () => ref.invalidate(userProvider(id: user.id)),
+          );
+        },
+      ),
+    );
   }
 }
 
