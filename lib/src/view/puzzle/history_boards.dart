@@ -60,7 +60,7 @@ class _PuzzleHistoryState extends ConsumerState<PuzzleHistoryBoards> {
                         setState(() => isLoading = true);
                         puzzle = await ref.read(puzzleProvider(e.id).future);
                       } catch (e) {
-                        if (mounted) {
+                        if (context.mounted) {
                           showPlatformSnackbar(
                             context,
                             e.toString(),
@@ -68,7 +68,7 @@ class _PuzzleHistoryState extends ConsumerState<PuzzleHistoryBoards> {
                           );
                         }
                       } finally {
-                        if (mounted) {
+                        if (context.mounted) {
                           setState(() => isLoading = false);
                           if (puzzle != null) {
                             pushPlatformRoute(

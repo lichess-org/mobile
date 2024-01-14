@@ -12,12 +12,11 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
-import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -29,6 +28,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -222,12 +222,15 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
 
     return challengesAsync.when(
       data: (challenges) {
+        final supportedChallenges = challenges
+            .where((challenge) => challenge.variant.isSupported)
+            .toList();
         return ListView.separated(
-          itemCount: challenges.length,
+          itemCount: supportedChallenges.length,
           separatorBuilder: (context, index) =>
               const PlatformDivider(height: 1, cupertinoHasLeading: true),
           itemBuilder: (context, index) {
-            final challenge = challenges[index];
+            final challenge = supportedChallenges[index];
             final time = challenge.days == null
                 ? '∞'
                 : '${context.l10n.daysPerTurn}: ${challenge.days}';
@@ -282,19 +285,26 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                   subtitle: Text(subtitle),
                   onTap: isMySeek
                       ? null
-                      : () {
-                          showConfirmDialog<void>(
-                            context,
-                            title: Text(context.l10n.accept),
-                            isDestructiveAction: true,
-                            onConfirm: (_) {
-                              _socket.send(
-                                'joinSeek',
-                                challenge.id.toString(),
+                      : session == null
+                          ? () {
+                              showPlatformSnackbar(
+                                context,
+                                context.l10n.youNeedAnAccountToDoThat,
+                              );
+                            }
+                          : () {
+                              showConfirmDialog<void>(
+                                context,
+                                title: Text(context.l10n.accept),
+                                isDestructiveAction: true,
+                                onConfirm: (_) {
+                                  _socket.send(
+                                    'joinSeek',
+                                    challenge.id.toString(),
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
                 ),
               ),
             );
@@ -324,171 +334,169 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
 
   @override
   Widget build(BuildContext context) {
-    final account = ref.watch(accountProvider);
-    final preferences = ref.watch(playPreferencesProvider);
-    final session = ref.watch(authSessionProvider);
+    final accountAsync = ref.watch(accountProvider);
+    final preferences = ref.watch(gameSetupPreferencesProvider);
 
-    final UserPerf? userPerf = account.maybeWhen(
-      data: (data) {
-        if (data == null) {
-          return null;
-        }
-        return data.perfs[Perf.correspondence];
-      },
-      orElse: () => null,
-    );
-
-    return Center(
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          Builder(
-            builder: (context) {
-              int daysPerTurn = preferences.correspondenceDaysPerTurn ?? -1;
-              return StatefulBuilder(
-                builder: (context, setState) {
-                  return PlatformListTile(
-                    harmonizeCupertinoTitleStyle: true,
-                    title: Text.rich(
-                      TextSpan(
-                        text: '${context.l10n.daysPerTurn}: ',
-                        children: [
+    return accountAsync.when(
+      data: (account) {
+        final userPerf = account?.perfs[preferences.perfFromCustom];
+        return Center(
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              Builder(
+                builder: (context) {
+                  int daysPerTurn = preferences.correspondenceDaysPerTurn ?? -1;
+                  return StatefulBuilder(
+                    builder: (context, setState) {
+                      return PlatformListTile(
+                        harmonizeCupertinoTitleStyle: true,
+                        title: Text.rich(
                           TextSpan(
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                            text: _daysLabel(daysPerTurn),
+                            text: '${context.l10n.daysPerTurn}: ',
+                            children: [
+                              TextSpan(
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                                text: _daysLabel(daysPerTurn),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    subtitle: NonLinearSlider(
-                      value: daysPerTurn,
-                      values: kAvailableDaysPerTurn,
-                      labelBuilder: _daysLabel,
-                      onChange: defaultTargetPlatform == TargetPlatform.iOS
-                          ? (num value) {
-                              setState(() {
-                                daysPerTurn = value.toInt();
-                              });
-                            }
-                          : null,
-                      onChangeEnd: (num value) {
-                        setState(() {
-                          daysPerTurn = value.toInt();
-                        });
-                        ref
-                            .read(playPreferencesProvider.notifier)
-                            .setCorrespondenceDaysPerTurn(
-                              value == -1 ? null : value.toInt(),
-                            );
-                      },
-                    ),
-                  );
-                },
-              );
-            },
-          ),
-          PlatformListTile(
-            harmonizeCupertinoTitleStyle: true,
-            title: Text(context.l10n.variant),
-            trailing: AdaptiveTextButton(
-              onPressed: () {
-                showChoicePicker(
-                  context,
-                  choices: [Variant.standard, Variant.chess960],
-                  selectedItem: preferences.correspondenceVariant,
-                  labelBuilder: (Variant variant) => Text(variant.label),
-                  onSelectedItemChanged: (Variant variant) {
-                    ref
-                        .read(playPreferencesProvider.notifier)
-                        .setCorrespondenceVariant(variant);
-                  },
-                );
-              },
-              child: Text(preferences.correspondenceVariant.label),
-            ),
-          ),
-          ExpandedSection(
-            expand: preferences.correspondenceRated == false,
-            child: PlatformListTile(
-              harmonizeCupertinoTitleStyle: true,
-              title: Text(context.l10n.side),
-              trailing: AdaptiveTextButton(
-                onPressed: () {
-                  showChoicePicker<PlayableSide>(
-                    context,
-                    choices: PlayableSide.values,
-                    selectedItem: preferences.correspondenceSide,
-                    labelBuilder: (PlayableSide side) =>
-                        Text(_customSideLabel(context, side)),
-                    onSelectedItemChanged: (PlayableSide side) {
-                      ref
-                          .read(playPreferencesProvider.notifier)
-                          .setCorrespondenceSide(side);
+                        ),
+                        subtitle: NonLinearSlider(
+                          value: daysPerTurn,
+                          values: kAvailableDaysPerTurn,
+                          labelBuilder: _daysLabel,
+                          onChange: defaultTargetPlatform == TargetPlatform.iOS
+                              ? (num value) {
+                                  setState(() {
+                                    daysPerTurn = value.toInt();
+                                  });
+                                }
+                              : null,
+                          onChangeEnd: (num value) {
+                            setState(() {
+                              daysPerTurn = value.toInt();
+                            });
+                            ref
+                                .read(gameSetupPreferencesProvider.notifier)
+                                .setCorrespondenceDaysPerTurn(
+                                  value == -1 ? null : value.toInt(),
+                                );
+                          },
+                        ),
+                      );
                     },
                   );
                 },
-                child: Text(
-                  _customSideLabel(context, preferences.correspondenceSide),
+              ),
+              PlatformListTile(
+                harmonizeCupertinoTitleStyle: true,
+                title: Text(context.l10n.variant),
+                trailing: AdaptiveTextButton(
+                  onPressed: () {
+                    showChoicePicker(
+                      context,
+                      choices: [Variant.standard, Variant.chess960],
+                      selectedItem: preferences.correspondenceVariant,
+                      labelBuilder: (Variant variant) => Text(variant.label),
+                      onSelectedItemChanged: (Variant variant) {
+                        ref
+                            .read(gameSetupPreferencesProvider.notifier)
+                            .setCorrespondenceVariant(variant);
+                      },
+                    );
+                  },
+                  child: Text(preferences.correspondenceVariant.label),
                 ),
               ),
-            ),
-          ),
-          if (session != null)
-            PlatformListTile(
-              harmonizeCupertinoTitleStyle: true,
-              title: Text(context.l10n.rated),
-              trailing: Switch.adaptive(
-                value: preferences.correspondenceRated,
-                onChanged: (bool value) {
-                  ref
-                      .read(playPreferencesProvider.notifier)
-                      .setCorrespondenceRated(value);
+              ExpandedSection(
+                expand: preferences.correspondenceRated == false,
+                child: PlatformListTile(
+                  harmonizeCupertinoTitleStyle: true,
+                  title: Text(context.l10n.side),
+                  trailing: AdaptiveTextButton(
+                    onPressed: () {
+                      showChoicePicker<PlayableSide>(
+                        context,
+                        choices: PlayableSide.values,
+                        selectedItem: preferences.correspondenceSide,
+                        labelBuilder: (PlayableSide side) =>
+                            Text(_customSideLabel(context, side)),
+                        onSelectedItemChanged: (PlayableSide side) {
+                          ref
+                              .read(gameSetupPreferencesProvider.notifier)
+                              .setCorrespondenceSide(side);
+                        },
+                      );
+                    },
+                    child: Text(
+                      _customSideLabel(context, preferences.correspondenceSide),
+                    ),
+                  ),
+                ),
+              ),
+              if (account != null)
+                PlatformListTile(
+                  harmonizeCupertinoTitleStyle: true,
+                  title: Text(context.l10n.rated),
+                  trailing: Switch.adaptive(
+                    value: preferences.correspondenceRated,
+                    onChanged: (bool value) {
+                      ref
+                          .read(gameSetupPreferencesProvider.notifier)
+                          .setCorrespondenceRated(value);
+                    },
+                  ),
+                ),
+              if (userPerf != null)
+                PlayRatingRange(
+                  perf: userPerf,
+                  ratingDelta: preferences.correspondenceRatingDelta,
+                  onRatingDeltaChange: (int subtract, int add) {
+                    ref
+                        .read(gameSetupPreferencesProvider.notifier)
+                        .setCorrespondenceRatingRange(subtract, add);
+                  },
+                ),
+              const SizedBox(height: 20),
+              FutureBuilder(
+                future: _pendingCreateGame,
+                builder: (context, snapshot) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: FatButton(
+                      semanticsLabel: context.l10n.createAGame,
+                      onPressed:
+                          snapshot.connectionState == ConnectionState.waiting
+                              ? null
+                              : () async {
+                                  _pendingCreateGame = ref
+                                      .read(createGameServiceProvider)
+                                      .newCorrespondenceGame(
+                                        GameSeek.correspondence(
+                                          preferences,
+                                          account,
+                                        ),
+                                      );
+
+                                  await _pendingCreateGame;
+                                  widget.setViewMode(_ViewMode.challenges);
+                                },
+                      child: Text(context.l10n.createAGame),
+                    ),
+                  );
                 },
               ),
-            ),
-          if (userPerf != null)
-            PlayRatingRange(
-              perf: userPerf,
-              ratingRange: preferences.correspondenceRatingRange,
-              setRatingRange: (int subtract, int add) {
-                ref
-                    .read(playPreferencesProvider.notifier)
-                    .setCorrespondenceRatingRange(subtract, add);
-              },
-            ),
-          const SizedBox(height: 20),
-          FutureBuilder(
-            future: _pendingCreateGame,
-            builder: (context, snapshot) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: FatButton(
-                  semanticsLabel: context.l10n.createAGame,
-                  onPressed: snapshot.connectionState == ConnectionState.waiting
-                      ? null
-                      : () async {
-                          _pendingCreateGame = ref
-                              .read(createGameServiceProvider)
-                              .newCorrespondenceGame(
-                                GameSeek.correspondenceFromPrefs(
-                                  preferences,
-                                  session,
-                                  userPerf,
-                                ),
-                              );
-
-                          await _pendingCreateGame;
-                          widget.setViewMode(_ViewMode.challenges);
-                        },
-                  child: Text(context.l10n.createAGame),
-                ),
-              );
-            },
+            ],
           ),
-        ],
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      error: (error, stackTrace) => const Center(
+        child: Text('Could not load account data'),
       ),
     );
   }

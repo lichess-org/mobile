@@ -259,7 +259,7 @@ extension ChessExtension on Pick {
   Variant? asVariantOrNull() {
     if (value == null) return null;
     try {
-      return asVariantOrNull();
+      return asVariantOrThrow();
     } catch (_) {
       return null;
     }

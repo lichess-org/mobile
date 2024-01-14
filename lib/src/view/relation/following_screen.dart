@@ -4,20 +4,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/relation/relation_ctrl.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'following_screen.g.dart';
@@ -117,7 +114,9 @@ class _Body extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      child: PlatformListTile(
+                      child: UserListTile.fromUser(
+                        user,
+                        _isOnline(user, data.$2),
                         onTap: () => {
                           pushPlatformRoute(
                             context,
@@ -126,37 +125,6 @@ class _Body extends ConsumerWidget {
                             ),
                           ),
                         },
-                        padding: defaultTargetPlatform == TargetPlatform.iOS
-                            ? Styles.bodyPadding
-                            : null,
-                        leading: _OnlineOrPatron(
-                          patron: user.isPatron,
-                          online: _isOnline(user, data.$2),
-                        ),
-                        title: Padding(
-                          padding: const EdgeInsets.only(right: 5.0),
-                          child: Row(
-                            children: [
-                              if (user.title != null) ...[
-                                Text(
-                                  user.title!,
-                                  style: const TextStyle(
-                                    color: LichessColors.brag,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(width: 5),
-                              ],
-                              Flexible(
-                                child: Text(
-                                  user.username,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        subtitle: _UserRating(user: user),
                       ),
                     );
                   },
@@ -180,66 +148,5 @@ class _Body extends ConsumerWidget {
 
   bool _isOnline(User user, IList<LightUser> followingOnlines) {
     return followingOnlines.any((v) => v.id == user.id);
-  }
-}
-
-class _UserRating extends StatelessWidget {
-  const _UserRating({required this.user});
-
-  final User user;
-
-  @override
-  Widget build(BuildContext context) {
-    List<Perf> userPerfs = Perf.values.where((element) {
-      final p = user.perfs[element];
-      return p != null &&
-          p.numberOfGames > 0 &&
-          p.ratingDeviation < kClueLessDeviation;
-    }).toList(growable: false);
-
-    if (userPerfs.isEmpty) return const SizedBox.shrink();
-
-    userPerfs.sort(
-      (p1, p2) => user.perfs[p1]!.numberOfGames
-          .compareTo(user.perfs[p2]!.numberOfGames),
-    );
-    userPerfs = userPerfs.reversed.toList();
-
-    final rating = user.perfs[userPerfs.first]?.rating.toString() ?? '?';
-    final icon = userPerfs.first.icon;
-
-    return Row(
-      children: [
-        Icon(icon, size: 16),
-        const SizedBox(width: 5),
-        Text(rating),
-      ],
-    );
-  }
-}
-
-class _OnlineOrPatron extends StatelessWidget {
-  const _OnlineOrPatron({
-    this.patron,
-    required this.online,
-  });
-
-  final bool? patron;
-  final bool online;
-
-  @override
-  Widget build(BuildContext context) {
-    if (patron != null) {
-      return Icon(
-        LichessIcons.patron,
-        color: online ? LichessColors.good : LichessColors.grey,
-      );
-    } else {
-      return Icon(
-        CupertinoIcons.circle_fill,
-        size: 20,
-        color: online ? LichessColors.good : LichessColors.grey,
-      );
-    }
   }
 }

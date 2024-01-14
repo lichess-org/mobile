@@ -472,7 +472,8 @@ class _DifficultySelector extends ConsumerWidget {
           PuzzleDifficulty selectedDifficulty = difficulty;
           return BottomBarButton(
             icon: Icons.tune,
-            label: context.l10n.puzzleDifficultyLevel,
+            label: puzzleDifficultyL10n(context, difficulty),
+            tooltip: context.l10n.puzzleDifficultyLevel,
             showLabel: true,
             onTap: !data.isOnline || state.isChangingDifficulty
                 ? null

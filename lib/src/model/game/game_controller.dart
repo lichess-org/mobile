@@ -597,14 +597,6 @@ class GameController extends _$GameController {
               .updateGame(gameFullId, newState.game);
         }
 
-        _addPostGameData(newState.game).then((value) {
-          state = AsyncValue.data(
-            newState.copyWith(
-              game: value,
-            ),
-          );
-        });
-
         state = AsyncValue.data(newState);
 
       case 'clockInc':

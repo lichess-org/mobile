@@ -13,6 +13,8 @@ import 'user_repository.dart';
 
 part 'user_repository_providers.g.dart';
 
+const _kAutoCompleteDebounceTimer = Duration(milliseconds: 300);
+
 @Riverpod(keepAlive: true)
 UserRepository userRepository(UserRepositoryRef ref) {
   final apiClient = ref.watch(authClientProvider);
@@ -99,5 +101,23 @@ Future<Leaderboard> leaderboard(LeaderboardRef ref) async {
   if (result.isError) {
     link.close();
   }
+  return result.asFuture;
+}
+
+@riverpod
+Future<IList<LightUser>> autoCompleteUser(
+  AutoCompleteUserRef ref,
+  String term,
+) async {
+  // debounce calls as user might be typing
+  var didDispose = false;
+  ref.onDispose(() => didDispose = true);
+  await Future<void>.delayed(_kAutoCompleteDebounceTimer);
+  if (didDispose) {
+    throw Exception('Cancelled');
+  }
+
+  final repo = ref.watch(userRepositoryProvider);
+  final result = await repo.autocompleteUser(term);
   return result.asFuture;
 }

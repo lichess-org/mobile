@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -129,11 +130,12 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
   }
 
   void _onNewOpponent(PlayableGame game) {
+    final savedSetup = ref.read(gameSetupPreferencesProvider);
     pushReplacementPlatformRoute(
       context,
       rootNavigator: true,
       builder: (_) => LobbyScreen(
-        seek: GameSeek.newOpponentFromGame(game),
+        seek: GameSeek.newOpponentFromGame(game, savedSetup),
       ),
     );
   }

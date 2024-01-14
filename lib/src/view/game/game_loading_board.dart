@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';

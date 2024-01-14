@@ -307,6 +307,10 @@ class AnalysisController extends _$AnalysisController {
     final pathChange = state.currentPath != path;
     final (currentNode, opening) = _nodeOpeningAt(_root, path);
 
+    // root view is only used to display move list, so we need to
+    // recompute the root view only when the nodelist length changes
+    final rootView = shouldRecomputeRootView ? _root.view : state.root;
+
     if (currentNode is Branch) {
       if (!replaying) {
         final isForward = path.size > state.currentPath.size;
@@ -339,9 +343,7 @@ class AnalysisController extends _$AnalysisController {
         currentNode: AnalysisCurrentNode.fromNode(currentNode),
         lastMove: currentNode.sanMove.move,
         currentBranchOpening: opening,
-        // root view is only used to display move list, so we need to
-        // recompute the root view only when the nodelist length changes
-        root: shouldRecomputeRootView ? _root.view : state.root,
+        root: rootView,
       );
     } else {
       state = state.copyWith(
@@ -350,6 +352,7 @@ class AnalysisController extends _$AnalysisController {
         currentNode: AnalysisCurrentNode.fromNode(currentNode),
         currentBranchOpening: opening,
         lastMove: null,
+        root: rootView,
       );
     }
 
@@ -361,7 +364,7 @@ class AnalysisController extends _$AnalysisController {
   Future<void> _fetchOpening(Node fromNode, UciPath path) async {
     if (!kOpeningAllowedVariants.contains(options.variant)) return;
 
-    final moves = fromNode.nodesOn(path).map((node) => node.sanMove.move);
+    final moves = fromNode.branchesOn(path).map((node) => node.sanMove.move);
     if (moves.isEmpty) return;
     if (moves.length > 40) return;
 
@@ -385,7 +388,7 @@ class AnalysisController extends _$AnalysisController {
         .read(evaluationServiceProvider)
         .start(
           state.currentPath,
-          _root.nodesOn(state.currentPath).map(Step.fromNode),
+          _root.branchesOn(state.currentPath).map(Step.fromNode),
           initialPositionEval: _root.eval,
           shouldEmit: (work) => work.path == state.currentPath,
         )

@@ -13,7 +13,7 @@ class CorrespondenceChallenge with _$CorrespondenceChallenge {
     required String username,
     String? title,
     required int rating,
-    Variant? variant,
+    required Variant variant,
     required Perf perf,
     required bool rated,
     int? days,
