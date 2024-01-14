@@ -4,7 +4,6 @@ import 'package:async/async.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -41,7 +40,7 @@ class TvController extends _$TvController {
     return _connectWebsocket(initialGame);
   }
 
-  AuthSocket get _socket => ref.read(authSocketProvider);
+  SocketClient get _socket => ref.read(socketClientProvider);
   TvRepository get _tvRepository => ref.read(tvRepositoryProvider);
   SoundService get _soundService => ref.read(soundServiceProvider);
 

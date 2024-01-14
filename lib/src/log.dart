@@ -8,7 +8,7 @@ import 'package:logging/logging.dart';
 const _loggersToShowInTerminal = {
   'AuthClient',
   'LobbyAuthClient',
-  'AuthSocket',
+  'SocketClient',
 };
 
 void setupLogger() {

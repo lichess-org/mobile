@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -14,7 +13,7 @@ class LobbyNumbers extends _$LobbyNumbers {
 
   @override
   ({int nbPlayers, int nbGames})? build() {
-    final stream = ref.watch(authSocketProvider).stream;
+    final stream = ref.watch(socketClientProvider).stream;
 
     ref.onDispose(() {
       _socketSubscription?.cancel();

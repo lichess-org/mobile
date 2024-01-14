@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -83,7 +82,7 @@ class RelationCtrl extends _$RelationCtrl {
     }
   }
 
-  AuthSocket get _socket => ref.read(authSocketProvider);
+  SocketClient get _socket => ref.read(socketClientProvider);
 
   LightUser _parseFriend(String friend) {
     final splitted = friend.split(' ');

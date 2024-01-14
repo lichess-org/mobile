@@ -9,7 +9,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -213,7 +212,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
     super.dispose();
   }
 
-  AuthSocket get _socket => ref.read(authSocketProvider);
+  SocketClient get _socket => ref.read(socketClientProvider);
 
   @override
   Widget build(BuildContext context) {
