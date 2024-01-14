@@ -220,6 +220,7 @@ AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
     submitMove: SubmitMove.fromInt(
       pick('submitMove').asIntOrThrow(),
     ),
+    follow: BooleanPref(pick('follow').asBoolOrThrow()),
   );
 }
 

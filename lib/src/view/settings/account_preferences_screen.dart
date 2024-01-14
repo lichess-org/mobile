@@ -320,6 +320,29 @@ class _AccountPreferencesScreenState
                   ),
                 ],
               ),
+              ListSection(
+                header: Text(
+                  context.l10n.preferencesPrivacy,
+                ),
+                hasLeading: false,
+                children: [
+                  SwitchSettingTile(
+                    title: Text(
+                      context.l10n.letOtherPlayersFollowYou,
+                    ),
+                    value: data.follow.value,
+                    onChanged: isLoading
+                        ? null
+                        : (value) {
+                            _setPref(
+                              () => ref
+                                  .read(accountPreferencesProvider.notifier)
+                                  .setFollow(BooleanPref(value)),
+                            );
+                          },
+                  ),
+                ],
+              ),
             ],
           ),
         );
