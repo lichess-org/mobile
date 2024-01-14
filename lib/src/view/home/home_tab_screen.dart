@@ -8,8 +8,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -20,7 +19,8 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_widget.dart';
-import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
+import 'package:lichess_mobile/src/view/home/search_screen.dart';
 import 'package:lichess_mobile/src/view/play/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
@@ -117,11 +117,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 },
               ),
         actions: [
+          const _SearchButton(),
+          const _SettingsButton(),
           if (session != null)
             const _RelationButton()
           else
             const SignInWidget(),
-          const _SettingsButton(),
         ],
       ),
       body: RefreshIndicator(
@@ -160,8 +161,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (session != null) const _RelationButton(),
+                  const _SearchButton(),
                   const _SettingsButton(),
+                  if (session != null) const _RelationButton(),
                 ],
               ),
             ),
@@ -430,6 +432,25 @@ class _HomeBody extends ConsumerWidget {
   }
 }
 
+class _SearchButton extends StatelessWidget {
+  const _SearchButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBarIconButton(
+      icon: const Icon(Icons.search),
+      semanticsLabel: 'Search Lichess',
+      onPressed: () {
+        pushPlatformRoute(
+          context,
+          fullscreenDialog: true,
+          builder: (_) => const SearchScreen(),
+        );
+      },
+    );
+  }
+}
+
 class _SettingsButton extends StatelessWidget {
   const _SettingsButton();
 
@@ -490,30 +511,34 @@ class _PreferredSetup extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playPrefs = ref.watch(playPreferencesProvider);
+    final gameSetup = ref.watch(gameSetupPreferencesProvider);
     final session = ref.watch(authSessionProvider);
 
-    GameSeek seek = GameSeek.fastPairingFromPrefs(playPrefs, session);
-
-    if (playPrefs.seekMode == SeekMode.custom) {
-      final account = ref.watch(accountProvider);
-      final UserPerf? userPerf = account.maybeWhen(
-        data: (data) {
-          if (data == null) {
-            return null;
-          }
-          return data.perfs[playPrefs.perfFromCustom];
+    if (gameSetup.seekMode == SeekMode.custom) {
+      final accountAsync = ref.watch(accountProvider);
+      return accountAsync.maybeWhen(
+        data: (account) {
+          return _buildBoardPreview(
+            context,
+            GameSeek.custom(gameSetup, account),
+          );
         },
-        orElse: () => null,
+        orElse: () =>
+            _buildBoardPreview(context, GameSeek.custom(gameSetup, null)),
       );
-      seek = GameSeek.customFromPrefs(playPrefs, session, userPerf);
     }
 
+    return _buildBoardPreview(
+      context,
+      GameSeek.fastPairing(gameSetup, session),
+    );
+  }
+
+  Widget _buildBoardPreview(BuildContext context, GameSeek seek) {
     final timeControl = seek.timeIncrement?.display ??
         '${context.l10n.daysPerTurn}: ${seek.days}';
     final mode =
         seek.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
-
     return SmallBoardPreview(
       orientation: seek.side?.cg ?? Side.white.cg,
       fen: kInitialFEN,
@@ -563,7 +588,7 @@ class _PreferredSetup extends ConsumerWidget {
           context,
           rootNavigator: true,
           builder: (BuildContext context) {
-            return LobbyGameScreen(
+            return LobbyScreen(
               seek: seek,
             );
           },

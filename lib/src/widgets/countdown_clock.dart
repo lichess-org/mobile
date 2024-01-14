@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,14 +12,27 @@ import 'package:lichess_mobile/src/utils/layout.dart';
 ///
 /// The clock starts only when [active] is `true`.
 class CountdownClock extends ConsumerStatefulWidget {
+  /// The duration left on the clock.
   final Duration duration;
+
+  /// If [timeLeft] is less than [emergencyThreshold], the clock will change
+  /// its background color to [ClockStyle.emergencyBackgroundColor] activeBackgroundColor
   final Duration? emergencyThreshold;
+
+  /// If [active] is `true`, the clock starts counting down.
   final bool active;
+
+  /// Callback when the clock reaches zero.
   final VoidCallback? onFlag;
+
+  /// Contrary to [active], [displayActive] does not start the clock, but only
+  /// changes the display style.
+  final bool? displayActive;
 
   const CountdownClock({
     required this.duration,
     required this.active,
+    this.displayActive,
     this.emergencyThreshold,
     this.onFlag,
     super.key,
@@ -125,11 +137,13 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-          color: widget.active
-              ? isEmergency
-                  ? clockStyle.emergencyBackgroundColor
-                  : clockStyle.activeBackgroundColor
-              : clockStyle.backgroundColor,
+          color: widget.displayActive == true
+              ? clockStyle.activeBackgroundColor
+              : widget.active
+                  ? isEmergency
+                      ? clockStyle.emergencyBackgroundColor
+                      : clockStyle.activeBackgroundColor
+                  : clockStyle.backgroundColor,
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
@@ -137,13 +151,17 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
             maxScaleFactor: kMaxClockTextScaleFactor,
             child: RichText(
               text: TextSpan(
-                text: hours > 0 ? '$hours' : '$mins:$secs',
+                text: hours > 0
+                    ? '$hours:${mins.toString().padLeft(2, '0')}:$secs'
+                    : '$mins:$secs',
                 style: TextStyle(
-                  color: widget.active
-                      ? isEmergency
-                          ? clockStyle.emergencyTextColor
-                          : clockStyle.activeTextColor
-                      : clockStyle.textColor,
+                  color: widget.displayActive == true
+                      ? clockStyle.activeTextColor
+                      : widget.active
+                          ? isEmergency
+                              ? clockStyle.emergencyTextColor
+                              : clockStyle.activeTextColor
+                          : clockStyle.textColor,
                   fontSize: 26,
                   height:
                       remainingHeight < kSmallRemainingHeightLeftBoardThreshold
@@ -154,18 +172,6 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
                   ],
                 ),
                 children: [
-                  if (hours > 0) ...[
-                    TextSpan(
-                      text: ':',
-                      style: TextStyle(
-                        color: widget.active &&
-                                timeLeft.inSeconds.remainder(2) == 0
-                            ? clockStyle.activeTextColor.withOpacity(0.5)
-                            : null,
-                      ),
-                    ),
-                    TextSpan(text: mins.toString().padLeft(2, '0')),
-                  ],
                   if (showTenths)
                     TextSpan(
                       text:

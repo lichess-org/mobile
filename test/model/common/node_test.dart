@@ -46,10 +46,22 @@ void main() {
       expect(nodeWithVariation.children[1].children.length, 2);
     });
 
-    test('nodesOn, simple', () {
+    test('nodesOn', () {
       final root = Root.fromPgnMoves('e4 e5');
       final path = UciPath.fromId(UciCharPair.fromUci('e2e4'));
-      final nodeList = root.nodesOn(path);
+      final nodeList = root.nodesOn(path).toList();
+      expect(nodeList.length, equals(2));
+      expect(nodeList[0], equals(root));
+      expect(
+        nodeList[1],
+        equals(root.nodeAt(path) as Branch),
+      );
+    });
+
+    test('branchesOn, simple', () {
+      final root = Root.fromPgnMoves('e4 e5');
+      final path = UciPath.fromId(UciCharPair.fromUci('e2e4'));
+      final nodeList = root.branchesOn(path);
       expect(nodeList.length, equals(1));
       expect(
         nodeList.first,
@@ -57,7 +69,7 @@ void main() {
       );
     });
 
-    test('nodesOn, with variation', () {
+    test('branchesOn, with variation', () {
       final root = Root.fromPgnMoves('e4 e5 Nf3');
       final move = Move.fromUci('b1c3')!;
       final (newPath, _) = root.addMoveAt(
@@ -75,7 +87,7 @@ void main() {
         equals(root.nodeAt(root.mainlinePath) as Branch),
       );
 
-      final nodeList = root.nodesOn(newPath);
+      final nodeList = root.branchesOn(newPath);
       expect(nodeList.length, equals(3));
       expect(nodeList.last, equals(newNode));
     });
@@ -173,7 +185,7 @@ void main() {
       final (nodePath, _) = root.addNodeAt(fromPath, branch);
 
       expect(
-        root.nodesOn(nodePath!),
+        root.branchesOn(nodePath!),
         equals([
           root.children.first,
           branch,
@@ -197,7 +209,7 @@ void main() {
       });
 
       expect(
-        root.nodesOn(nodePath),
+        root.branchesOn(nodePath),
         equals([
           root.children.first,
           newNode!,
@@ -368,6 +380,13 @@ void main() {
       expect(root.mainline.last, equals(root.children.first));
     });
 
+    test('deleteAt, root element', () {
+      final root = Root.fromPgnMoves('e4');
+      final path = UciPath.fromIds([UciCharPair.fromUci('e2e4')]);
+      root.deleteAt(path);
+      expect(root.mainline.length, equals(0));
+    });
+
     test('promoteAt', () {
       const pgn = '1. e4 d5 2. exd5 Qxd5 (2... Nf6 3. c4 (3. Nc3)) 3. Nc3';
       final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
@@ -413,6 +432,24 @@ void main() {
         root.makePgn(),
         equals(
           '1. e4 d5 2. exd5 Nf6 ( 2... Qxd5 3. Nc3 ) 3. Nc3 ( 3. c4 ) *\n',
+        ),
+      );
+    });
+
+    test('promoteAt, root node', () {
+      const pgn = '1. e4 (1. d4)';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      final path = UciPath.fromUciMoves(['d2d4']);
+      expect(root.nodeAt(path), isNotNull);
+      root.promoteAt(path, toMainline: false);
+      expect(
+        root.mainline.map((n) => n.sanMove.san).toList(),
+        equals(['d4']),
+      );
+      expect(
+        root.makePgn(),
+        equals(
+          '1. d4 ( 1. e4 ) *\n',
         ),
       );
     });

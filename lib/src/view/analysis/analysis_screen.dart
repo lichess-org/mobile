@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:chessground/chessground.dart' as cg;
 import 'package:collection/collection.dart';
@@ -12,12 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
-import 'package:lichess_mobile/src/model/settings/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -753,27 +752,29 @@ class _EngineDepth extends ConsumerWidget {
                 popoverTransitionBuilder: (_, child) => child,
               );
             },
-            child: Container(
-              width: 20.0,
-              height: 20.0,
-              padding: const EdgeInsets.all(2.0),
-              decoration: BoxDecoration(
-                color: defaultTargetPlatform == TargetPlatform.android
-                    ? Theme.of(context).colorScheme.secondary
-                    : CupertinoTheme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(4.0),
-              ),
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Text(
-                  '${math.min(99, depth)}',
-                  style: TextStyle(
-                    color: defaultTargetPlatform == TargetPlatform.android
-                        ? Theme.of(context).colorScheme.onSecondary
-                        : CupertinoTheme.of(context).primaryContrastingColor,
-                    fontFeatures: const [
-                      FontFeature.tabularFigures(),
-                    ],
+            child: RepaintBoundary(
+              child: Container(
+                width: 20.0,
+                height: 20.0,
+                padding: const EdgeInsets.all(2.0),
+                decoration: BoxDecoration(
+                  color: defaultTargetPlatform == TargetPlatform.android
+                      ? Theme.of(context).colorScheme.secondary
+                      : CupertinoTheme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: Text(
+                    '${math.min(99, depth)}',
+                    style: TextStyle(
+                      color: defaultTargetPlatform == TargetPlatform.android
+                          ? Theme.of(context).colorScheme.onSecondary
+                          : CupertinoTheme.of(context).primaryContrastingColor,
+                      fontFeatures: const [
+                        FontFeature.tabularFigures(),
+                      ],
+                    ),
                   ),
                 ),
               ),

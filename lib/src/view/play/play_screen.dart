@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/game/lobby_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
+import 'package:lichess_mobile/src/view/play/create_correspondence_game_screen.dart';
+import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-import './correspondence_play_screen.dart';
-import './custom_play_screen.dart';
 import './time_control_modal.dart';
 
 class PlayScreen extends StatelessWidget {
@@ -47,7 +47,7 @@ class PlayScreenBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playPrefs = ref.watch(playPreferencesProvider);
+    final playPrefs = ref.watch(gameSetupPreferencesProvider);
     final session = ref.watch(authSessionProvider);
     return Center(
       child: Column(
@@ -66,14 +66,14 @@ class PlayScreenBody extends ConsumerWidget {
               semanticsLabel: context.l10n.quickPairing,
               onPressed: () {
                 ref
-                    .read(playPreferencesProvider.notifier)
+                    .read(gameSetupPreferencesProvider.notifier)
                     .setSeekMode(SeekMode.fast);
 
                 pushPlatformRoute(
                   context,
                   rootNavigator: true,
-                  builder: (_) => LobbyGameScreen(
-                    seek: GameSeek.fastPairingFromPrefs(playPrefs, session),
+                  builder: (_) => LobbyScreen(
+                    seek: GameSeek.fastPairing(playPrefs, session),
                   ),
                 );
               },
@@ -89,7 +89,7 @@ class PlayScreenBody extends ConsumerWidget {
                 pushPlatformRoute(
                   context,
                   title: context.l10n.custom,
-                  builder: (_) => const CustomPlayScreen(),
+                  builder: (_) => const CreateCustomGameScreen(),
                 );
               },
               child: Text(context.l10n.custom),
@@ -105,7 +105,7 @@ class PlayScreenBody extends ConsumerWidget {
                 pushPlatformRoute(
                   context,
                   title: context.l10n.correspondence,
-                  builder: (_) => const CorrespondencePlayScreen(),
+                  builder: (_) => const CreateCorrespondenceGameScreen(),
                 );
               },
               child: Text(context.l10n.correspondence),
@@ -120,8 +120,9 @@ class PlayScreenBody extends ConsumerWidget {
 class _TimeControlButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timeControlPref = ref
-        .watch(playPreferencesProvider.select((prefs) => prefs.timeIncrement));
+    final timeControlPref = ref.watch(
+      gameSetupPreferencesProvider.select((prefs) => prefs.timeIncrement),
+    );
 
     final content = Row(
       mainAxisSize: MainAxisSize.min,

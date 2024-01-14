@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:lichess_mobile/src/model/settings/play_preferences.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -15,12 +15,13 @@ class TimeControlModal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timeControlPref = ref
-        .watch(playPreferencesProvider.select((prefs) => prefs.timeIncrement));
+    final timeControlPref = ref.watch(
+      gameSetupPreferencesProvider.select((prefs) => prefs.timeIncrement),
+    );
 
     void onSelected(TimeIncrement choice) {
       Navigator.pop(context);
-      ref.read(playPreferencesProvider.notifier).setTimeControl(choice);
+      ref.read(gameSetupPreferencesProvider.notifier).setTimeControl(choice);
     }
 
     return SafeArea(

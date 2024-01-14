@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -48,12 +49,15 @@ class CreateGameService {
 
     await readyStream.first;
 
-    await Result.release(
-      lobbyRepo.createSeek(
-        seek,
-        sri: socket.sri,
-      ),
-    );
+    GameSeek actualSeek = seek;
+    if (seek.ratingDelta != null) {
+      final account = await ref.read(accountProvider.future);
+      if (account != null) {
+        actualSeek = actualSeek.withRatingRangeOf(account);
+      }
+    }
+
+    await Result.release(lobbyRepo.createSeek(actualSeek, sri: socket.sri));
 
     return completer.future;
   }

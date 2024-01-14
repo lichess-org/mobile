@@ -20,8 +20,9 @@ part 'lobby_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 LobbyRepository lobbyRepository(LobbyRepositoryRef ref) {
-  // lobbyRepository gets its own httpClient because it needs to be able to
-  // close it independently from the rest of the app.
+  // lobbyRepository gets its own httpClient because we need to be able to
+  // close it independently from the rest of the app to be able to cancel a seek.
+  // See [CreateGameService] for more details.
   final httpClient = http.Client();
   final crashlytics = ref.watch(crashlyticsProvider);
   final logger = Logger('LobbyAuthClient');
@@ -69,7 +70,7 @@ class LobbyRepository {
   FutureResult<IList<CorrespondenceChallenge>> getCorrespondenceChallenges() {
     return authClient.get(
       Uri.parse('$kLichessHost/lobby/seeks'),
-      headers: {'Accept': 'application/json'},
+      headers: {'Accept': 'application/vnd.lichess.v5+json'},
     ).flatMap(
       (response) => readJsonListOfObjectsFromResponse(
         response,
@@ -90,7 +91,7 @@ CorrespondenceChallenge _correspondenceSeekFromPick(RequiredPick pick) {
     username: pick('username').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrThrow(),
-    variant: pick('variant').asVariantOrNull(),
+    variant: pick('variant').asVariantOrThrow(),
     perf: pick('perf').asPerfOrThrow(),
     rated: pick('mode').asIntOrThrow() == 1,
     days: pick('days').asIntOrNull(),

@@ -1,10 +1,10 @@
 import 'package:async/async.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/firebase_messaging.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/notification_service.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -59,7 +59,7 @@ class AuthController extends _$AuthController {
     state = result.fold(
       (session) {
         ref.read(authSessionProvider.notifier).update(session);
-        ref.read(firebaseMessagingServiceProvider).registerDevice();
+        ref.read(notificationServiceProvider).registerDevice();
         return const AsyncValue.data(null);
       },
       (e, st) {
@@ -73,7 +73,7 @@ class AuthController extends _$AuthController {
     await Future<void>.delayed(const Duration(milliseconds: 500));
     final result = await ref.read(authRepositoryProvider).signOut();
     if (result.isValue) {
-      ref.read(firebaseMessagingServiceProvider).unregister();
+      ref.read(notificationServiceProvider).unregister();
       await ref.read(authSessionProvider.notifier).delete();
     }
     state = result.asAsyncValue;

@@ -110,7 +110,7 @@ class PuzzleController extends _$PuzzleController {
     _addMove(move);
 
     if (state.mode == PuzzleMode.play) {
-      final nodeList = _gameTree.nodesOn(state.currentPath).toList();
+      final nodeList = _gameTree.branchesOn(state.currentPath).toList();
       final movesToTest =
           nodeList.sublist(state.initialPath.size).map((e) => e.sanMove);
 
@@ -460,7 +460,7 @@ class PuzzleController extends _$PuzzleController {
           .read(evaluationServiceProvider)
           .start(
             state.currentPath,
-            _gameTree.nodesOn(state.currentPath).map(Step.fromNode),
+            _gameTree.branchesOn(state.currentPath).map(Step.fromNode),
             initialPositionEval: _gameTree.eval,
             shouldEmit: (work) => work.path == state.currentPath,
           )
