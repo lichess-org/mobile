@@ -25,21 +25,10 @@ const kSRIStorageKey = 'socket_random_identifier';
 const kDefaultSocketRoute = '/socket/v5';
 
 const _kDefaultConnectTimeout = Duration(seconds: 10);
-
-/// The delay between the next ping after receiving a pong.
 const _kPingDelay = Duration(milliseconds: 2500);
-
-/// The maximum lag before considering the connection as lost.
 const _kPingMaxLag = Duration(seconds: 9);
 const _kAutoReconnectDelay = Duration(milliseconds: 3500);
-
-/// The delay before closing the socket if idle (no subscription).
-///
-/// This is a short delay to allow for reconnections when changing screen.
 const _kIdleTimeout = Duration(seconds: 5);
-
-/// The delay before closing the socket if the app is in background and the socket
-/// is still connected (this is the case when playing a game).
 const _kDisconnectOnBackgroundTimeout = Duration(minutes: 20);
 
 /// Lichess websocket client.
@@ -58,22 +47,47 @@ const _kDisconnectOnBackgroundTimeout = Duration(minutes: 20);
 /// then filtered if they don't match the called route. This helps detecting when a
 /// subscription is not cancelled properly and targeting a no longer active route.
 ///
-/// The caller cannot close the connection.
 /// This is the responsibility of the caller to cancel the subscription(s) when
 /// the route changes, or when the socket is no longer needed.
 /// The socket will close itself after a short delay when there are no more
 /// subscriptions.
 class SocketClient {
-  SocketClient(this._ref, this._log);
+  SocketClient(
+    this._ref,
+    this._log, {
+    this.pingDelay = _kPingDelay,
+    this.pingMaxLag = _kPingMaxLag,
+    this.autoReconnectDelay = _kAutoReconnectDelay,
+    this.idleTimeout = _kIdleTimeout,
+    this.disconnectOnBackgroundTimeout = _kDisconnectOnBackgroundTimeout,
+  });
+
+  /// The delay between the next ping after receiving a pong.
+  final Duration pingDelay;
+
+  /// The maximum lag before considering the connection as lost.
+  final Duration pingMaxLag;
+
+  /// The delay before reconnecting after a connection failure.
+  final Duration autoReconnectDelay;
+
+  /// The delay before closing the socket if idle (no subscription).
+  ///
+  /// This is a short delay to allow for reconnections when changing screen.
+  final Duration idleTimeout;
+
+  /// The delay before closing the socket if the app is in background and the socket
+  /// is still connected (this is the case when playing a game).
+  final Duration disconnectOnBackgroundTimeout;
 
   late final AppLifecycleListener _appLifecycleListener = AppLifecycleListener(
     onHide: () {
       _closeInBackgroundTimer?.cancel();
       _closeInBackgroundTimer = Timer(
-        _kDisconnectOnBackgroundTimeout,
+        disconnectOnBackgroundTimeout,
         () {
           _log.info(
-            'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, terminating socket.',
+            'App is in background for ${disconnectOnBackgroundTimeout.inMinutes}m, terminating socket.',
           );
           _closeAndForget();
         },
@@ -318,13 +332,13 @@ class SocketClient {
       _log.info('WebSocket connection established.');
       _averageLag.value = Duration.zero;
       _sendPing();
-      _schedulePing(_kPingDelay);
+      _schedulePing(pingDelay);
       _readyStreamController.add(route);
       _resendAcks();
     } catch (error) {
       _log.severe('WebSocket connection failed.', error);
       _averageLag.value = Duration.zero;
-      _scheduleReconnect(_kAutoReconnectDelay);
+      _scheduleReconnect(autoReconnectDelay);
     }
   }
 
@@ -337,14 +351,14 @@ class SocketClient {
   /// Called when the last listener is removed from the socket stream.
   void _onStreamCancel() {
     _log.fine('WebSocket event stream idle, closing.');
-    _closeAndForget(delay: _kIdleTimeout);
+    _closeAndForget(delay: idleTimeout);
   }
 
   void _handleEvent(SocketEvent event) {
     switch (event.topic) {
       case '_pong':
       case 'n':
-        _handlePong(_kPingDelay);
+        _handlePong(pingDelay);
       case 'ack':
         _onServerAck(event);
     }
@@ -370,7 +384,7 @@ class SocketClient {
           : 'p',
     );
     _lastPing = DateTime.now();
-    _scheduleReconnect(_kPingMaxLag);
+    _scheduleReconnect(pingMaxLag);
   }
 
   void _handlePong(Duration pingDelay) {

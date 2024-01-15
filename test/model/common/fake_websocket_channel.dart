@@ -19,6 +19,8 @@ class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
       createFunction();
 }
 
+/// A fake implementation of [WebSocketChannel] that allows to simulate
+/// incoming messages from the server.
 class FakeWebSocketChannel implements WebSocketChannel {
   static bool isPing(dynamic data) =>
       data is String && data == 'p' ||
@@ -28,6 +30,9 @@ class FakeWebSocketChannel implements WebSocketChannel {
 
   final _incomingController = StreamController<dynamic>.broadcast();
   final _outcomingController = StreamController<dynamic>.broadcast();
+
+  /// Whether the server should send a pong response to a ping request.
+  bool shouldSendPong = true;
 
   Future<int> get sentMessagesCount => _outcomingController.stream.length;
   Stream<dynamic> get sentMessages => _outcomingController.stream;
@@ -119,7 +124,7 @@ class FakeWebSocketSink implements WebSocketSink {
     _channel._outcomingController.add(data);
 
     // Simulates pong response
-    if (FakeWebSocketChannel.isPing(data)) {
+    if (_channel.shouldSendPong && FakeWebSocketChannel.isPing(data)) {
       Future<void>.delayed(const Duration(milliseconds: 5), () {
         _channel._incomingController.add('0');
       });
