@@ -31,6 +31,8 @@ class MockSoundPool extends Mock implements Soundpool {}
 
 class MockDatabase extends Mock implements Database {}
 
+const shouldLog = false;
+
 Future<ProviderContainer> makeContainer({
   List<Override>? overrides,
   AuthSessionState? userSession,
@@ -42,14 +44,14 @@ Future<ProviderContainer> makeContainer({
     kSRIStorageKey: 'test',
   });
 
-  // Logger.root.onRecord.listen((record) {
-  //   if (record.level > Level.WARNING) {
-  //     final time = DateFormat.Hms().format(record.time);
-  //     debugPrint(
-  //       '${record.level.name} at $time [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error}' : ''}',
-  //     );
-  //   }
-  // });
+  Logger.root.onRecord.listen((record) {
+    if (shouldLog && record.level >= Level.FINE) {
+      final time = DateFormat.Hms().format(record.time);
+      debugPrint(
+        '${record.level.name} at $time [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error}' : ''}',
+      );
+    }
+  });
 
   final container = ProviderContainer(
     overrides: [

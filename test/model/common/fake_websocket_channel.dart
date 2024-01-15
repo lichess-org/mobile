@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:async/src/stream_sink_transformer.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -22,9 +23,19 @@ class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
 /// A fake implementation of [WebSocketChannel] that allows to simulate
 /// incoming messages from the server.
 class FakeWebSocketChannel implements WebSocketChannel {
-  static bool isPing(dynamic data) =>
-      data is String && data == 'p' ||
-      data is Map<String, dynamic> && data['t'] == 'p';
+  static bool isPing(dynamic data) {
+    if (data is! String) {
+      return false;
+    }
+    if (data == 'p') {
+      return true;
+    }
+    final json = jsonDecode(data);
+    if (json is Map<String, dynamic>) {
+      return json['t'] == 'p';
+    }
+    return false;
+  }
 
   final _readyFuture = Future<void>.delayed(const Duration(milliseconds: 20));
 
@@ -125,7 +136,7 @@ class FakeWebSocketSink implements WebSocketSink {
 
     // Simulates pong response
     if (_channel.shouldSendPong && FakeWebSocketChannel.isPing(data)) {
-      Future<void>.delayed(const Duration(milliseconds: 5), () {
+      Future<void>.delayed(const Duration(milliseconds: 2), () {
         _channel._incomingController.add('0');
       });
     }

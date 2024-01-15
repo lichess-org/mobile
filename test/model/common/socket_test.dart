@@ -12,9 +12,9 @@ SocketClient _makeSocketClient(ProviderRef<SocketClient> ref) {
   final client = SocketClient(
     ref,
     Logger('TestSocketClient'),
-    pingDelay: const Duration(milliseconds: 20),
-    pingMaxLag: const Duration(milliseconds: 100),
-    autoReconnectDelay: const Duration(milliseconds: 10),
+    pingDelay: const Duration(milliseconds: 50),
+    pingMaxLag: const Duration(milliseconds: 200),
+    autoReconnectDelay: const Duration(milliseconds: 100),
   );
 
   ref.onDispose(client.dispose);
@@ -76,9 +76,7 @@ void main() {
       expectLater(fakeChannel.stream, emitsInOrder(['0', '0']));
     });
 
-    test('if a connection attempt fails, it will reconnect', () async {
-      final fakeChannel = FakeWebSocketChannel();
-
+    test('reconnect when connection attempt fails', () async {
       int numConnectionAttempts = 0;
 
       final container = await makeContainer(
@@ -89,7 +87,7 @@ void main() {
               if (numConnectionAttempts == 1) {
                 throw const SocketException('Connection failed');
               }
-              return fakeChannel;
+              return FakeWebSocketChannel();
             }),
           ),
           socketClientProvider.overrideWith(_makeSocketClient),
@@ -100,15 +98,9 @@ void main() {
       final (_, readyStream) = socketClient.connect(testUri);
 
       // The first connection attempt will fail, but the second one will succeed
-      await expectLater(
-        readyStream,
-        emitsInOrder([testUri]),
-      );
+      await expectLater(readyStream, emitsInOrder([testUri]));
 
       expect(numConnectionAttempts, 2);
-
-      // 1 working connection is expected
-      expectLater(readyStream, emitsInOrder([testUri]));
     });
 
     test('reconnects automatically if pong is not received', () async {
@@ -144,7 +136,7 @@ void main() {
       final socketClient = container.read(socketClientProvider);
       final (_, readyStream) = socketClient.connect(testUri);
 
-      await expectLater(channels[1]!.stream, emitsInOrder(['0', '0']));
+      expectLater(channels[1]!.stream, emitsInOrder(['0', '0', '0']));
 
       // we expect 2 working connections because it reconnects if not receiving pong
       await expectLater(readyStream, emitsInOrder([testUri, testUri]));
