@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -36,6 +39,15 @@ class UserScreen extends ConsumerWidget {
         data: (user) => _UserProfileListView(user),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) {
+          if (error is NotFoundException) {
+            return Center(
+              child: Text(
+                textAlign: TextAlign.center,
+                context.l10n.usernameNotFound(user.name),
+                style: Styles.bold,
+              ),
+            );
+          }
           return FullScreenRetryRequest(
             onRetry: () => ref.invalidate(userProvider(id: user.id)),
           );
@@ -57,6 +69,15 @@ class UserScreen extends ConsumerWidget {
         loading: () =>
             const Center(child: CircularProgressIndicator.adaptive()),
         error: (error, _) {
+          if (error is NotFoundException) {
+            return Center(
+              child: Text(
+                textAlign: TextAlign.center,
+                context.l10n.usernameNotFound(user.name),
+                style: Styles.bold,
+              ),
+            );
+          }
           return FullScreenRetryRequest(
             onRetry: () => ref.invalidate(userProvider(id: user.id)),
           );
