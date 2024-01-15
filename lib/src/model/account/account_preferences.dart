@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -15,7 +13,7 @@ typedef AccountPrefState = ({
   // game display
   Zen zenMode,
   BooleanPref showRatings,
-  // game behaviour
+  // game behavior
   BooleanPref premove,
   AutoQueen autoQueen,
   AutoThreefold autoThreefold,
