@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
@@ -103,6 +104,9 @@ class SocketClient {
   int _pongCount = 0;
   DateTime _lastPing = DateTime.now();
 
+  /// The average lag computed from ping/pong protocol.
+  final ValueNotifier<Duration> _averageLag = ValueNotifier(Duration.zero);
+
   StreamSubscription<SocketEvent>? _socketStreamSubscription;
 
   /// The list of acknowledgeable messages.
@@ -129,10 +133,15 @@ class SocketClient {
   /// The socket connection ready broadcast stream.
   ///
   /// This stream emits each time a new websocket is connected.
-  Stream<void> get readyStream => _readyStreamController.stream;
+  Stream<Uri> get readyStream => _readyStreamController.stream;
 
   /// The Socket Random Identifier.
   String get sri => _ref.read(sriProvider);
+
+  /// The average lag computed from ping/pong protocol.
+  ///
+  /// A duration of zero means the socket is not connected.
+  ValueListenable<Duration> get averageLag => _averageLag;
 
   /// Creates a new WebSocket channel.
   ///
@@ -171,7 +180,7 @@ class SocketClient {
     if (forceReconnect == false &&
         _channel != null &&
         _channel!.closeCode == null &&
-        _ref.read(averageLagProvider) != Duration.zero &&
+        _averageLag.value != Duration.zero &&
         route == _route) {
       // Already connected to the given route, we still want to notify the caller
       // that the socket is ready.
@@ -210,8 +219,7 @@ class SocketClient {
         'd': {
           if (data != null && data is Map<String, Object>) ...data,
           'a': ackId,
-          if (withLag == true)
-            'l': _ref.read(averageLagProvider).inMilliseconds,
+          if (withLag == true) 'l': _averageLag.value.inMilliseconds,
         },
       };
       _acks.add((DateTime.now(), ackId, message));
@@ -221,8 +229,7 @@ class SocketClient {
         if (data != null && data is Map<String, Object>)
           'd': {
             ...data,
-            if (withLag == true)
-              'l': _ref.read(averageLagProvider).inMilliseconds,
+            if (withLag == true) 'l': _averageLag.value.inMilliseconds,
           }
         else if (data != null)
           'd': data,
@@ -253,8 +260,8 @@ class SocketClient {
     _closeTimer = Timer(
       delay ?? Duration.zero,
       () {
-        _disconnect();
-        _ref.read(averageLagProvider.notifier).reset();
+        disconnect();
+        _averageLag.value = Duration.zero;
         if (_route == null) {
           return;
         }
@@ -266,7 +273,7 @@ class SocketClient {
 
   /// Connect or reconnect the WebSocket.
   Future<void> _doConnect(Uri route) async {
-    _disconnect();
+    disconnect();
     _pongCount = 0;
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
@@ -309,14 +316,14 @@ class SocketClient {
       }).listen(_handleEvent);
 
       _log.info('WebSocket connection established.');
-      _ref.read(averageLagProvider.notifier).reset();
+      _averageLag.value = Duration.zero;
       _sendPing();
       _schedulePing(_kPingDelay);
       _readyStreamController.add(route);
       _resendAcks();
     } catch (error) {
       _log.severe('WebSocket connection failed.', error);
-      _ref.read(averageLagProvider.notifier).reset();
+      _averageLag.value = Duration.zero;
       _scheduleReconnect(_kAutoReconnectDelay);
     }
   }
@@ -358,7 +365,7 @@ class SocketClient {
       _pongCount % 10 == 2
           ? jsonEncode({
               't': 'p',
-              'l': (_ref.read(averageLagProvider).inMilliseconds * 0.1).round(),
+              'l': (_averageLag.value.inMilliseconds * 0.1).round(),
             })
           : 'p',
     );
@@ -380,14 +387,14 @@ class SocketClient {
 
     // Average first 4 pings, then switch to decaying average.
     final mix = _pongCount > 4 ? 0.1 : 1 / _pongCount;
-    _ref.read(averageLagProvider.notifier).add(currentLag, mix);
+    _averageLag.value += (currentLag - _averageLag.value) * mix;
   }
 
   void _scheduleReconnect(Duration delay) {
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(delay, () {
       if (_route != null) {
-        _ref.read(averageLagProvider.notifier).reset();
+        _averageLag.value = Duration.zero;
         _log.info('Reconnecting WebSocket.');
         _doConnect(_route!);
       }
@@ -412,7 +419,7 @@ class SocketClient {
   }
 
   /// Disconnects websocket connection but keeps the reference to the current route.
-  void _disconnect() {
+  void disconnect() {
     _sink?.close().then((_) {
       _log.fine('WebSocket connection was closed by client.');
     }).catchError((Object? error) {
@@ -444,19 +451,26 @@ String sri(SriRef ref) {
 }
 
 /// Average lag computed from WebSocket ping/pong protocol.
-///
-/// An empty duration means the socket is not connected.
 @riverpod
 class AverageLag extends _$AverageLag {
   @override
-  Duration build() => Duration.zero;
+  Duration build() {
+    final listenable = ref.watch(socketClientProvider).averageLag;
 
-  void reset() {
-    state = Duration.zero;
+    listenable.addListener(_listener);
+
+    ref.onDispose(() {
+      listenable.removeListener(_listener);
+    });
+
+    return listenable.value;
   }
 
-  void add(Duration currentLag, double mix) {
-    state += (currentLag - state) * mix;
+  void _listener() {
+    final newLag = ref.read(socketClientProvider).averageLag.value;
+    if (state != newLag) {
+      state = newLag;
+    }
   }
 }
 

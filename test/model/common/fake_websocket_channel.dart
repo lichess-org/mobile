@@ -1,33 +1,49 @@
 import 'dart:async';
 
 import 'package:async/src/stream_sink_transformer.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:stream_channel/stream_channel.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
+  final FutureOr<WebSocketChannel> Function() createFunction;
+
+  const FakeWebSocketChannelFactory(this.createFunction);
+
+  @override
+  Future<WebSocketChannel> create(
+    String url, {
+    Map<String, dynamic>? headers,
+    Duration timeout = const Duration(seconds: 1),
+  }) async =>
+      createFunction();
+}
+
 class FakeWebSocketChannel implements WebSocketChannel {
-  final List<dynamic> _sentMessages = <dynamic>[];
-  final _readyFuture = Future<void>.delayed(const Duration(milliseconds: 50));
+  static bool isPing(dynamic data) =>
+      data is String && data == 'p' ||
+      data is Map<String, dynamic> && data['t'] == 'p';
 
-  /// The controller for the stream that this channel provides (incoming messages).
-  final StreamController<dynamic> _controller = StreamController<dynamic>();
+  final _readyFuture = Future<void>.delayed(const Duration(milliseconds: 20));
 
-  FakeWebSocketChannel();
+  final _incomingController = StreamController<dynamic>.broadcast();
+  final _outcomingController = StreamController<dynamic>.broadcast();
 
-  int get sentMessagesCount => _sentMessages.length;
-  List<dynamic> get sentMessages => _sentMessages;
+  Future<int> get sentMessagesCount => _outcomingController.stream.length;
+  Stream<dynamic> get sentMessages => _outcomingController.stream;
 
   /// Simulates incoming messages from the server.
   Future<void> addIncomingMessages(Iterable<dynamic> messages) async {
     await Future<void>.delayed(const Duration(milliseconds: 10), () {
-      _controller.addStream(Stream<dynamic>.fromIterable(messages));
+      _incomingController.addStream(Stream<dynamic>.fromIterable(messages));
     });
   }
 
   @override
-  int? get closeCode => _controller.isClosed ? 1000 : null;
+  int? get closeCode => _incomingController.isClosed ? 1000 : null;
 
   @override
-  String? get closeReason => _controller.isClosed ? 'OK' : null;
+  String? get closeReason => _incomingController.isClosed ? 'OK' : null;
 
   @override
   String? get protocol => null;
@@ -39,7 +55,7 @@ class FakeWebSocketChannel implements WebSocketChannel {
   WebSocketSink get sink => FakeWebSocketSink(this);
 
   @override
-  Stream<dynamic> get stream => _controller.stream;
+  Stream<dynamic> get stream => _incomingController.stream;
 
   @override
   void pipe(StreamChannel<dynamic> other) {
@@ -100,24 +116,32 @@ class FakeWebSocketSink implements WebSocketSink {
 
   @override
   void add(dynamic data) {
-    _channel._sentMessages.add(data);
+    _channel._outcomingController.add(data);
+
+    // Simulates pong response
+    if (FakeWebSocketChannel.isPing(data)) {
+      Future<void>.delayed(const Duration(milliseconds: 5), () {
+        _channel._incomingController.add('0');
+      });
+    }
   }
 
   @override
   void addError(Object error, [StackTrace? stackTrace]) {}
 
   @override
-  Future<dynamic> addStream(Stream<dynamic> stream) async {
-    _channel._sentMessages.addAll(await stream.toList());
+  Future<dynamic> addStream(Stream<dynamic> stream) {
+    return stream.forEach(add);
   }
 
   @override
   Future<void> close([int? closeCode, String? closeReason]) async {
-    await Future.delayed(const Duration(milliseconds: 20), () {
-      _channel._controller.close();
+    await Future.delayed(const Duration(milliseconds: 10), () {
+      _channel._incomingController.close();
+      _channel._outcomingController.close();
     });
   }
 
   @override
-  Future<dynamic> get done => _channel._controller.done;
+  Future<dynamic> get done => _channel._incomingController.done;
 }
