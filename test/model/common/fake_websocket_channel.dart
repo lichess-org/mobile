@@ -39,10 +39,15 @@ class FakeWebSocketChannel implements WebSocketChannel {
 
   final _readyFuture = Future<void>.delayed(const Duration(milliseconds: 20));
 
+  /// The controller for incoming (from server) messages.
   final _incomingController = StreamController<dynamic>.broadcast();
+
+  /// The controller for outgoing (to server) messages.
   final _outcomingController = StreamController<dynamic>.broadcast();
 
   /// Whether the server should send a pong response to a ping request.
+  ///
+  /// Can be used to simulate a faulty connection.
   bool shouldSendPong = true;
 
   Future<int> get sentMessagesCount => _outcomingController.stream.length;
@@ -74,9 +79,7 @@ class FakeWebSocketChannel implements WebSocketChannel {
   Stream<dynamic> get stream => _incomingController.stream;
 
   @override
-  void pipe(StreamChannel<dynamic> other) {
-    // TODO: implement pipe
-  }
+  void pipe(StreamChannel<dynamic> other) {}
 
   @override
   StreamChannel<S> transform<S>(
