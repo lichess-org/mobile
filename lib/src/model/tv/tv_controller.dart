@@ -100,21 +100,14 @@ class TvController extends _$TvController {
     state = AsyncValue.data(newState);
   }
 
-  bool canGoBack() {
-    if (state.hasValue) {
-      final curState = state.requireValue;
-      return curState.stepCursor > 0;
-    }
-    return false;
-  }
+  bool canGoBack() =>
+      state.mapOrNull(data: (d) => d.value.stepCursor > 0) ?? false;
 
-  bool canGoForward() {
-    if (state.hasValue) {
-      final curState = state.requireValue;
-      return curState.stepCursor < curState.game.steps.length - 1;
-    }
-    return false;
-  }
+  bool canGoForward() =>
+      state.mapOrNull(
+        data: (d) => d.value.stepCursor < d.value.game.steps.length - 1,
+      ) ??
+      false;
 
   void toggleBoard() {
     if (state.hasValue) {
