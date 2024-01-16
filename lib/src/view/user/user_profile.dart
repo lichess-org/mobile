@@ -57,12 +57,14 @@ class UserProfile extends ConsumerWidget {
             Linkify(
               onOpen: (link) async {
                 if (link.originText.startsWith('@')) {
-                  final userId =
-                      UserId.fromUserName(link.originText.substring(1));
+                  final username = link.originText.substring(1);
                   pushPlatformRoute(
                     context,
                     builder: (ctx) => UserScreen(
-                      user: LightUser(id: userId, name: userId.value),
+                      user: LightUser(
+                        id: UserId.fromUserName(username),
+                        name: username,
+                      ),
                     ),
                   );
                 } else {
