@@ -23,8 +23,6 @@ SocketClient _makeSocketClient(ProviderRef<SocketClient> ref) {
 }
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-
   final testUri = Uri.parse(kDefaultSocketRoute);
 
   group('Socket', () {

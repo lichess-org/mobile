@@ -59,7 +59,6 @@ class SocketClient {
     this.pingMaxLag = _kPingMaxLag,
     this.autoReconnectDelay = _kAutoReconnectDelay,
     this.idleTimeout = _kIdleTimeout,
-    this.disconnectOnBackgroundTimeout = _kDisconnectOnBackgroundTimeout,
   });
 
   /// The delay between the next ping after receiving a pong.
@@ -75,28 +74,6 @@ class SocketClient {
   ///
   /// This is a short delay to allow for reconnections when changing screen.
   final Duration idleTimeout;
-
-  /// The delay before closing the socket if the app is in background and the socket
-  /// is still connected (this is the case when playing a game).
-  final Duration disconnectOnBackgroundTimeout;
-
-  late final AppLifecycleListener _appLifecycleListener = AppLifecycleListener(
-    onHide: () {
-      _closeInBackgroundTimer?.cancel();
-      _closeInBackgroundTimer = Timer(
-        disconnectOnBackgroundTimeout,
-        () {
-          _log.info(
-            'App is in background for ${disconnectOnBackgroundTimeout.inMinutes}m, terminating socket.',
-          );
-          _closeAndForget();
-        },
-      );
-    },
-    onShow: () {
-      _closeInBackgroundTimer?.cancel();
-    },
-  );
 
   late final StreamController<SocketEvent> _streamController =
       StreamController<SocketEvent>.broadcast(
@@ -114,7 +91,6 @@ class SocketClient {
   Timer? _reconnectTimer;
   Timer? _ackResendTimer;
   Timer? _closeTimer;
-  Timer? _closeInBackgroundTimer;
   int _pongCount = 0;
   DateTime _lastPing = DateTime.now();
 
@@ -253,10 +229,24 @@ class SocketClient {
   }
 
   void dispose() {
-    _closeAndForget();
+    closeAndForget();
     _streamController.close();
     _readyStreamController.close();
-    _appLifecycleListener.dispose();
+  }
+
+  /// Disconnects websocket connection but keeps the reference to the current route.
+  void disconnect() {
+    _sink?.close().then((_) {
+      _log.fine('WebSocket connection was closed by client.');
+    }).catchError((Object? error) {
+      _log.warning('WebSocket connection could not be closed.', error);
+    });
+    _channel = null;
+    _socketStreamSubscription?.cancel();
+    _pingTimer?.cancel();
+    _reconnectTimer?.cancel();
+    _ackResendTimer?.cancel();
+    _averageLag.value = Duration.zero;
   }
 
   /// Closes and forget the WebSocket connection.
@@ -265,7 +255,7 @@ class SocketClient {
   ///
   /// If a delay is provided, the connection will be closed after the delay.
   /// If a new connection is created before the delay, the close will be cancelled.
-  void _closeAndForget({Duration? delay}) {
+  void closeAndForget({Duration? delay}) {
     _log.fine(
       'Terminating connection ${delay == null ? 'now' : 'in ${delay.inSeconds}s'}.',
     );
@@ -347,7 +337,7 @@ class SocketClient {
   /// Called when the last listener is removed from the socket stream.
   void _onStreamCancel() {
     _log.fine('WebSocket event stream idle, closing.');
-    _closeAndForget(delay: idleTimeout);
+    closeAndForget(delay: idleTimeout);
   }
 
   void _handleEvent(SocketEvent event) {
@@ -426,28 +416,36 @@ class SocketClient {
       }
     }
   }
-
-  /// Disconnects websocket connection but keeps the reference to the current route.
-  void disconnect() {
-    _sink?.close().then((_) {
-      _log.fine('WebSocket connection was closed by client.');
-    }).catchError((Object? error) {
-      _log.warning('WebSocket connection could not be closed.', error);
-    });
-    _channel = null;
-    _socketStreamSubscription?.cancel();
-    _pingTimer?.cancel();
-    _reconnectTimer?.cancel();
-    _ackResendTimer?.cancel();
-    _averageLag.value = Duration.zero;
-  }
 }
 
 @Riverpod(keepAlive: true)
 SocketClient socketClient(SocketClientRef ref) {
-  final client = SocketClient(ref, Logger('SocketClient'));
+  final logger = Logger('SocketClient');
+  final client = SocketClient(ref, logger);
+  Timer? closeInBackgroundTimer;
+
+  final appLifecycleListener = AppLifecycleListener(
+    onHide: () {
+      closeInBackgroundTimer?.cancel();
+      closeInBackgroundTimer = Timer(
+        _kDisconnectOnBackgroundTimeout,
+        () {
+          logger.info(
+            'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, terminating socket.',
+          );
+          client.closeAndForget();
+        },
+      );
+    },
+    onShow: () {
+      closeInBackgroundTimer?.cancel();
+    },
+  );
+
   ref.onDispose(() {
     client.dispose();
+    closeInBackgroundTimer?.cancel();
+    appLifecycleListener.dispose();
   });
   return client;
 }
