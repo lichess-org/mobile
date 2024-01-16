@@ -841,7 +841,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
           if (serverAnalysis != null)
             Center(
               child: SizedBox(
-                width: math.min(MediaQuery.of(context).size.width, 500),
+                width: math.min(MediaQuery.sizeOf(context).width, 500),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Table(
@@ -860,7 +860,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
                         ),
                         children: [
                           _SummaryPlayerName(Side.white, pgnHeaders),
-                          const SizedBox(width: 0),
+                          const SizedBox.shrink(),
                           _SummaryPlayerName(Side.black, pgnHeaders),
                         ],
                       ),
@@ -981,7 +981,6 @@ class _SummaryPlayerName extends StatelessWidget {
                 side == Side.white
                     ? CupertinoIcons.circle
                     : CupertinoIcons.circle_filled,
-                color: Colors.black,
                 size: 14,
               ),
               Text(

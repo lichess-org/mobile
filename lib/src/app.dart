@@ -143,7 +143,11 @@ class _AppState extends ConsumerState<Application> {
                 ? CupertinoColors.systemGroupedBackground
                 : null,
           ),
-          child: Material(child: child),
+          child: IconTheme(
+            // This is needed to avoid the icon color being overridden by the cupertino theme (blue)
+            data: IconTheme.of(context),
+            child: Material(child: child),
+          ),
         );
       },
       home: const _EntryPointWidget(),
