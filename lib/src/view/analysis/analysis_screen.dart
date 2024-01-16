@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -33,7 +32,6 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:popover/popover.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'analysis_pgn_tags.dart';
 import 'analysis_settings.dart';
@@ -834,27 +832,132 @@ class ServerAnalysisSummary extends ConsumerWidget {
     final pgnHeaders = ref.watch(
       analysisControllerProvider(options).select((value) => value.pgnHeaders),
     );
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AcplChart(options),
-          if (serverAnalysis != null) ...[
-            const SizedBox(height: 16.0),
-            _PlayerStats(Side.white, serverAnalysis.white, pgnHeaders),
-            _PlayerStats(Side.black, serverAnalysis.black, pgnHeaders),
-          ],
+          if (serverAnalysis != null)
+            Center(
+              child: SizedBox(
+                width: math.min(MediaQuery.sizeOf(context).width, 500),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Table(
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                    columnWidths: const {
+                      0: FlexColumnWidth(1),
+                      1: FlexColumnWidth(1),
+                      2: FlexColumnWidth(1),
+                    },
+                    children: [
+                      TableRow(
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(color: Colors.grey),
+                          ),
+                        ),
+                        children: [
+                          _SummaryPlayerName(Side.white, pgnHeaders),
+                          const SizedBox.shrink(),
+                          _SummaryPlayerName(Side.black, pgnHeaders),
+                        ],
+                      ),
+                      if (serverAnalysis.white.accuracy != null &&
+                          serverAnalysis.black.accuracy != null)
+                        TableRow(
+                          children: [
+                            _SummaryNumber('${serverAnalysis.white.accuracy}%'),
+                            Center(
+                              heightFactor: 1.8,
+                              child: Text(
+                                context.l10n.accuracy,
+                                softWrap: true,
+                              ),
+                            ),
+                            _SummaryNumber('${serverAnalysis.black.accuracy}%'),
+                          ],
+                        ),
+                      for (final item in [
+                        (
+                          serverAnalysis.white.inaccuracies.toString(),
+                          'Inaccuracies',
+                          serverAnalysis.black.inaccuracies.toString()
+                        ),
+                        (
+                          serverAnalysis.white.inaccuracies.toString(),
+                          'Mistakes',
+                          serverAnalysis.black.inaccuracies.toString()
+                        ),
+                        (
+                          serverAnalysis.white.inaccuracies.toString(),
+                          'Blunders',
+                          serverAnalysis.black.inaccuracies.toString()
+                        ),
+                      ])
+                        TableRow(
+                          children: [
+                            _SummaryNumber(item.$1),
+                            Center(
+                              heightFactor: 1.2,
+                              child: Text(
+                                item.$2,
+                                softWrap: true,
+                              ),
+                            ),
+                            _SummaryNumber(item.$3),
+                          ],
+                        ),
+                      if (serverAnalysis.white.acpl != null &&
+                          serverAnalysis.black.acpl != null)
+                        TableRow(
+                          children: [
+                            _SummaryNumber(
+                              serverAnalysis.white.acpl.toString(),
+                            ),
+                            Center(
+                              heightFactor: 1.5,
+                              child: Text(
+                                context.l10n.averageCentipawnLoss,
+                                softWrap: true,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            _SummaryNumber(
+                              serverAnalysis.black.acpl.toString(),
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
   }
 }
 
-class _PlayerStats extends StatelessWidget {
-  const _PlayerStats(this.side, this.data, this.pgnHeaders);
+class _SummaryNumber extends StatelessWidget {
+  const _SummaryNumber(this.data);
+  final String data;
 
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        data,
+        softWrap: true,
+      ),
+    );
+  }
+}
+
+class _SummaryPlayerName extends StatelessWidget {
+  const _SummaryPlayerName(this.side, this.pgnHeaders);
   final Side side;
-  final PlayerAnalysis data;
   final IMap<String, String> pgnHeaders;
 
   @override
@@ -866,41 +969,31 @@ class _PlayerStats extends StatelessWidget {
         ? pgnHeaders.get('White') ?? context.l10n.white
         : pgnHeaders.get('Black') ?? context.l10n.black;
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '${playerTitle != null ? '$playerTitle ' : ''}$playerName',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(context.l10n.nbInaccuracies(data.inaccuracies)),
-          Text(context.l10n.nbMistakes(data.mistakes)),
-          Text(context.l10n.nbBlunders(data.blunders)),
-          if (data.acpl != null)
-            Text('${data.acpl} ${context.l10n.averageCentipawnLoss}'),
-          if (data.accuracy != null)
-            Row(
-              children: [
-                Text('${data.accuracy}% ${context.l10n.accuracy}'),
-                const SizedBox(width: 8.0),
-                PlatformIconButton(
-                  icon: Icons.info_outline_rounded,
-                  semanticsLabel: 'More info',
-                  padding: EdgeInsets.zero,
-                  onTap: () async {
-                    await launchUrl(
-                      Uri.parse('https://lichess.org/page/accuracy'),
-                    );
-                  },
+    return TableCell(
+      verticalAlignment: TableCellVerticalAlignment.bottom,
+      child: Center(
+        heightFactor: 1.4,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 1),
+          child: Column(
+            children: [
+              Icon(
+                side == Side.white
+                    ? CupertinoIcons.circle
+                    : CupertinoIcons.circle_filled,
+                size: 14,
+              ),
+              Text(
+                '${playerTitle != null ? '$playerTitle ' : ''}$playerName',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
-        ],
+                textAlign: TextAlign.center,
+                softWrap: true,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
