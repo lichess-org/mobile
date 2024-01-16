@@ -29,12 +29,10 @@ void main() {
 
   group('Socket', () {
     test('emits a ready event', () async {
-      final fakeChannel = FakeWebSocketChannel();
-
       final container = await makeContainer(
         overrides: [
           webSocketChannelFactoryProvider.overrideWith(
-            (_) => FakeWebSocketChannelFactory(() => fakeChannel),
+            (_) => FakeWebSocketChannelFactory(() => FakeWebSocketChannel()),
           ),
           socketClientProvider.overrideWith(_makeSocketClient),
         ],
@@ -43,7 +41,9 @@ void main() {
       final socketClient = container.read(socketClientProvider);
       final (_, readyStream) = socketClient.connect(testUri);
 
-      expectLater(readyStream, emitsInOrder([testUri]));
+      await expectLater(readyStream, emitsInOrder([testUri]));
+
+      socketClient.disconnect();
     });
 
     test('handles ping/pong', () async {
@@ -59,7 +59,7 @@ void main() {
       );
 
       final socketClient = container.read(socketClientProvider);
-      final (_, _) = socketClient.connect(testUri);
+      final (_, readyStream) = socketClient.connect(testUri);
 
       int sentPingCount = 0;
       fakeChannel.sentMessages.forEach((message) {
@@ -72,11 +72,14 @@ void main() {
         }
       });
 
+      // 1 ready event is expected
+      expectLater(readyStream, emitsInOrder([testUri]));
+
       // 2 pong messages are expected since we're closing just after 3 pings
-      expectLater(fakeChannel.stream, emitsInOrder(['0', '0']));
+      await expectLater(fakeChannel.stream, emitsInOrder(['0', '0']));
     });
 
-    test('reconnect when connection attempt fails', () async {
+    test('reconnects when connection attempt fails', () async {
       int numConnectionAttempts = 0;
 
       final container = await makeContainer(
@@ -101,6 +104,8 @@ void main() {
       await expectLater(readyStream, emitsInOrder([testUri]));
 
       expect(numConnectionAttempts, 2);
+
+      socketClient.disconnect();
     });
 
     test('reconnects automatically if pong is not received', () async {
@@ -140,6 +145,13 @@ void main() {
 
       // we expect 2 working connections because it reconnects if not receiving pong
       await expectLater(readyStream, emitsInOrder([testUri, testUri]));
+
+      // check the the first connection was closed, no need to check the close
+      // code since it will alway be 1000 in our fake channel
+      expect(channels[1]!.closeCode, isNotNull);
+      expect(channels[2]!.closeCode, isNull);
+
+      socketClient.disconnect();
     });
   });
 }

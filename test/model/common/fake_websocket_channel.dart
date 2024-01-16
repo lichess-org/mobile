@@ -137,9 +137,12 @@ class FakeWebSocketSink implements WebSocketSink {
   void add(dynamic data) {
     _channel._outcomingController.add(data);
 
-    // Simulates pong response
+    // Simulates pong response if connection is not closed
     if (_channel.shouldSendPong && FakeWebSocketChannel.isPing(data)) {
-      Future<void>.delayed(const Duration(milliseconds: 2), () {
+      Future<void>.delayed(const Duration(milliseconds: 5), () {
+        if (_channel._incomingController.isClosed) {
+          return;
+        }
         _channel._incomingController.add('0');
       });
     }
@@ -154,11 +157,10 @@ class FakeWebSocketSink implements WebSocketSink {
   }
 
   @override
-  Future<void> close([int? closeCode, String? closeReason]) async {
-    await Future.delayed(const Duration(milliseconds: 10), () {
-      _channel._incomingController.close();
-      _channel._outcomingController.close();
-    });
+  Future<void> close([int? closeCode, String? closeReason]) {
+    return Future.wait([
+      _channel._incomingController.close(),
+    ]);
   }
 
   @override
