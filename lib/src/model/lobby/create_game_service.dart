@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
@@ -31,7 +30,7 @@ class CreateGameService {
       throw StateError('Already creating a game.');
     }
 
-    final socket = ref.read(authSocketProvider);
+    final socket = ref.read(socketClientProvider);
     final lobbyRepo = ref.read(lobbyRepositoryProvider);
     final (stream, readyStream) = socket.connect(Uri(path: '/lobby/socket/v5'));
     final completer = Completer<GameFullId>();
@@ -47,9 +46,13 @@ class CreateGameService {
 
     _log.info('Creating new online game');
 
+    // wait for the socket to be ready
     await readyStream.first;
 
     GameSeek actualSeek = seek;
+
+    // if we have a rating delta, we need to get the account to get the rating
+    // and set the rating range
     if (seek.ratingDelta != null) {
       final account = await ref.read(accountProvider.future);
       if (account != null) {
@@ -70,7 +73,7 @@ class CreateGameService {
     await Result.release(
       lobbyRepo.createSeek(
         seek,
-        sri: ref.read(authSocketProvider).sri,
+        sri: ref.read(socketClientProvider).sri,
       ),
     );
   }

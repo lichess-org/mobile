@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -14,7 +13,7 @@ part 'chat_controller.g.dart';
 class ChatController extends _$ChatController {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
-  AuthSocket get _socket => ref.read(authSocketProvider);
+  SocketClient get _socket => ref.read(socketClientProvider);
 
   @override
   ChatState build(ID chatContext) {

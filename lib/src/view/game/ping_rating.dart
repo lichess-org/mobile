@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:signal_strength_indicator/signal_strength_indicator.dart';
 

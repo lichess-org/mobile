@@ -10,7 +10,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
@@ -62,7 +61,7 @@ class GameController extends _$GameController {
 
   @override
   Future<GameState> build(GameFullId gameFullId) {
-    final socket = ref.watch(authSocketProvider);
+    final socket = ref.watch(socketClientProvider);
     final chatNotifier = ref.watch(chatControllerProvider(gameFullId).notifier);
     final (stream, _) = socket.connect(Uri(path: '/play/$gameFullId/v6'));
     _socketEventVersion = null;
@@ -829,7 +828,7 @@ class GameController extends _$GameController {
     );
   }
 
-  AuthSocket get _socket => ref.read(authSocketProvider);
+  SocketClient get _socket => ref.read(socketClientProvider);
 }
 
 @freezed

@@ -1,17 +1,20 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/notification_service.dart';
+import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +31,8 @@ class MockSoundPool extends Mock implements Soundpool {}
 
 class MockDatabase extends Mock implements Database {}
 
+const shouldLog = false;
+
 Future<ProviderContainer> makeContainer({
   List<Override>? overrides,
   AuthSessionState? userSession,
@@ -39,14 +44,14 @@ Future<ProviderContainer> makeContainer({
     kSRIStorageKey: 'test',
   });
 
-  // Logger.root.onRecord.listen((record) {
-  //   if (record.level > Level.WARNING) {
-  //     final time = DateFormat.Hms().format(record.time);
-  //     debugPrint(
-  //       '${record.level.name} at $time [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error}' : ''}',
-  //     );
-  //   }
-  // });
+  Logger.root.onRecord.listen((record) {
+    if (shouldLog && record.level >= Level.FINE) {
+      final time = DateFormat.Hms().format(record.time);
+      debugPrint(
+        '${record.level.name} at $time [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error}' : ''}',
+      );
+    }
+  });
 
   final container = ProviderContainer(
     overrides: [

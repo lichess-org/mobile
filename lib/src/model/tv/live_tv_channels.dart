@@ -4,7 +4,6 @@ import 'package:async/async.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:lichess_mobile/src/model/auth/auth_socket.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/tv/tv_socket_events.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -33,7 +32,7 @@ class LiveTvChannels extends _$LiveTvChannels {
     return _doStartWatching();
   }
 
-  AuthSocket get _socket => ref.read(authSocketProvider);
+  SocketClient get _socket => ref.read(socketClientProvider);
 
   /// Start watching the TV games
   Future<void> startWatching() async {
