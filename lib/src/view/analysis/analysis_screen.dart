@@ -1073,7 +1073,7 @@ class AcplChart extends ConsumerWidget {
               lineBarsData: [
                 LineChartBarData(
                   spots: spots,
-                  isCurved: true,
+                  isCurved: false,
                   barWidth: 1,
                   color: mainLineColor,
                   aboveBarData: BarAreaData(
