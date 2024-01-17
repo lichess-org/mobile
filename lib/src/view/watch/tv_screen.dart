@@ -270,8 +270,8 @@ class _BottomBar extends ConsumerWidget {
               Expanded(
                 child: BottomBarButton(
                   label: context.l10n.flipBoard,
-                  onTap: () => _toggleBoard(ref),
-                  icon: Icons.swap_vert,
+                  onTap: () => _flipBoard(ref),
+                  icon: CupertinoIcons.arrow_2_squarepath,
                 ),
               ),
               Expanded(
@@ -325,7 +325,7 @@ class _BottomBar extends ConsumerWidget {
     );
   }
 
-  void _toggleBoard(WidgetRef ref) {
+  void _flipBoard(WidgetRef ref) {
     ref.read(tvControllerProvider(tvChannel, game).notifier).toggleBoard();
   }
 
