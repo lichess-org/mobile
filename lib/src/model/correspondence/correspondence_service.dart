@@ -65,7 +65,7 @@ class CorrespondenceService {
 
         ref
             .read(gameRepositoryProvider)
-            .getPlayableGamesByIds(
+            .getMyGamesByIds(
               ISet(games.map((e) => e.id)),
             )
             .forEach((playableGames) {

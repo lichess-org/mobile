@@ -81,7 +81,11 @@ class GameRepository {
     );
   }
 
-  FutureResult<IList<PlayableGame>> getPlayableGamesByIds(ISet<GameId> ids) {
+  /// Returns the games of the current user, given a list of ids.
+  FutureResult<IList<PlayableGame>> getMyGamesByIds(ISet<GameId> ids) {
+    if (ids.isEmpty) {
+      return Future.value(Result.value(IList<PlayableGame>()));
+    }
     return apiClient
         .get(
           Uri.parse(
