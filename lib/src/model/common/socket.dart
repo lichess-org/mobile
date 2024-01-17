@@ -243,17 +243,23 @@ class SocketClient {
   }
 
   /// Disconnects websocket connection but keeps the reference to the current route.
-  void disconnect() {
-    _sink?.close().then((_) {
-      _log.fine('WebSocket connection was closed by client.');
-    }).catchError((Object? error) {
-      _log.warning('WebSocket connection could not be closed.', error);
-    });
+  ///
+  /// Returns a [Future] that completes when the connection is closed.
+  Future<void> disconnect() {
+    final future = _sink?.close().then((_) {
+          _log.fine('WebSocket connection was closed by client.');
+          _averageLag.value = Duration.zero;
+        }).catchError((Object? error) {
+          _log.warning('WebSocket connection could not be closed.', error);
+        }) ??
+        Future.value();
     _channel = null;
     _socketStreamSubscription?.cancel();
     _pingTimer?.cancel();
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
+
+    return future;
   }
 
   /// Closes and forget the WebSocket connection.

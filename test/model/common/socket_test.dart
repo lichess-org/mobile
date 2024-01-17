@@ -80,7 +80,10 @@ void main() {
         greaterThanOrEqualTo(40),
       );
 
-      socketClient.disconnect();
+      await socketClient.disconnect();
+
+      // after disconnecting the average lag is zero again
+      expect(socketClient.averageLag.value, Duration.zero);
     });
 
     test('handles ping/pong', () async {
