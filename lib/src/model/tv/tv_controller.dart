@@ -99,6 +99,63 @@ class TvController extends _$TvController {
     state = AsyncValue.data(newState);
   }
 
+  bool canGoBack() =>
+      state.mapOrNull(data: (d) => d.value.stepCursor > 0) ?? false;
+
+  bool canGoForward() =>
+      state.mapOrNull(
+        data: (d) => d.value.stepCursor < d.value.game.steps.length - 1,
+      ) ??
+      false;
+
+  void toggleBoard() {
+    if (state.hasValue) {
+      final curState = state.requireValue;
+      state = AsyncValue.data(
+        curState.copyWith(orientation: curState.orientation.opposite),
+      );
+    }
+  }
+
+  void cursorForward() {
+    if (state.hasValue) {
+      final curState = state.requireValue;
+      if (curState.stepCursor < curState.game.steps.length - 1) {
+        state = AsyncValue.data(
+          curState.copyWith(stepCursor: curState.stepCursor + 1),
+        );
+        final san = curState.game.stepAt(curState.stepCursor + 1).sanMove?.san;
+        if (san != null) {
+          _playReplayMoveSound(san);
+        }
+      }
+    }
+  }
+
+  void cursorBackward() {
+    if (state.hasValue) {
+      final curState = state.requireValue;
+      if (curState.stepCursor > 0) {
+        state = AsyncValue.data(
+          curState.copyWith(stepCursor: curState.stepCursor - 1),
+        );
+        final san = curState.game.stepAt(curState.stepCursor - 1).sanMove?.san;
+        if (san != null) {
+          _playReplayMoveSound(san);
+        }
+      }
+    }
+  }
+
+  void _playReplayMoveSound(String san) {
+    final soundService = ref.read(soundServiceProvider);
+    if (san.contains('x')) {
+      soundService.play(Sound.capture);
+    } else {
+      soundService.play(Sound.move);
+    }
+  }
+
   void _handleSocketEvent(SocketEvent event) {
     final currentEventVersion = _socketEventVersion;
 
@@ -147,7 +204,6 @@ class TvController extends _$TvController {
           game: curState.game.copyWith(
             steps: curState.game.steps.add(newStep),
           ),
-          stepCursor: curState.stepCursor + 1,
         );
 
         if (newState.game.clock != null && data.clock != null) {
@@ -156,14 +212,19 @@ class TvController extends _$TvController {
             black: data.clock!.black,
           );
         }
+        if (!curState.isReplaying) {
+          newState = newState.copyWith(
+            stepCursor: newState.stepCursor + 1,
+          );
+
+          if (data.san.contains('x')) {
+            _soundService.play(Sound.capture);
+          } else {
+            _soundService.play(Sound.move);
+          }
+        }
 
         state = AsyncData(newState);
-
-        if (data.san.contains('x')) {
-          _soundService.play(Sound.capture);
-        } else {
-          _soundService.play(Sound.move);
-        }
 
       case 'tvSelect':
         final json = event.data as Map<String, dynamic>;
@@ -185,6 +246,8 @@ class TvState with _$TvState {
     required int stepCursor,
     required Side orientation,
   }) = _TvState;
+
+  bool get isReplaying => stepCursor < game.steps.length - 1;
 
   Side? get activeClockSide {
     if (game.clock == null) {
