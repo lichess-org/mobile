@@ -99,7 +99,8 @@ class SocketClient {
   int _pongCount = 0;
   DateTime _lastPing = DateTime.now();
 
-  final _averageLag = ValueNotifier(Duration.zero);
+  /// The average lag computed from ping/pong protocol.
+  final ValueNotifier<Duration> _averageLag = ValueNotifier(Duration.zero);
 
   StreamSubscription<SocketEvent>? _socketStreamSubscription;
 
@@ -251,7 +252,6 @@ class SocketClient {
     _pingTimer?.cancel();
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
-    _averageLag.value = Duration.zero;
   }
 
   /// Closes and forget the WebSocket connection.
@@ -269,6 +269,7 @@ class SocketClient {
       delay ?? Duration.zero,
       () {
         disconnect();
+        _averageLag.value = Duration.zero;
         if (_route == null) {
           return;
         }
@@ -320,12 +321,14 @@ class SocketClient {
       }).listen(_handleEvent);
 
       _log.info('WebSocket connection established.');
+      _averageLag.value = Duration.zero;
       _sendPing();
       _schedulePing(pingDelay);
       _readyStreamController.add(route);
       _resendAcks();
     } catch (error) {
       _log.severe('WebSocket connection failed.', error);
+      _averageLag.value = Duration.zero;
       _scheduleReconnect(autoReconnectDelay);
     }
   }
@@ -396,6 +399,7 @@ class SocketClient {
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(delay, () {
       if (_route != null) {
+        _averageLag.value = Duration.zero;
         _log.info('Reconnecting WebSocket.');
         _doConnect(_route!);
       }
