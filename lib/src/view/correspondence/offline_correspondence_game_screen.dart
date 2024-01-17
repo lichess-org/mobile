@@ -278,7 +278,7 @@ class _BodyState extends ConsumerState<_Body> {
                           isBoardTurned = !isBoardTurned;
                         });
                       },
-                      icon: Icons.swap_vert,
+                      icon: CupertinoIcons.arrow_2_squarepath,
                     ),
                   ),
                   Expanded(

@@ -10,9 +10,12 @@ import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -146,88 +149,191 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncGame = ref.watch(tvControllerProvider(channel, initialGame));
 
-    return SafeArea(
-      child: Center(
-        child: asyncGame.when(
-          data: (gameState) {
-            final game = gameState.game;
+    return Column(
+      children: [
+        Expanded(
+          child: SafeArea(
+            child: asyncGame.when(
+              data: (gameState) {
+                final game = gameState.game;
+                final position =
+                    gameState.game.positionAt(gameState.stepCursor);
+                final sideToMove = position.turn;
 
-            final boardData = cg.BoardData(
-              interactableSide: cg.InteractableSide.none,
-              orientation: gameState.orientation.cg,
-              fen: game.lastPosition.fen,
-              sideToMove: game.lastPosition.turn.cg,
-              lastMove: game.lastMove?.cg,
-              isCheck: game.lastPosition.isCheck,
-            );
-            final blackPlayerWidget = GamePlayer(
-              player: game.black.setOnGame(true),
-              clock: gameState.game.clock != null
-                  ? CountdownClock(
-                      key: blackClockKey,
-                      duration: gameState.game.clock!.black,
-                      active: gameState.activeClockSide == Side.black,
-                    )
-                  : null,
-              materialDiff: game.lastMaterialDiffAt(Side.black),
-            );
-            final whitePlayerWidget = GamePlayer(
-              player: game.white.setOnGame(true),
-              clock: gameState.game.clock != null
-                  ? CountdownClock(
-                      key: whiteClockKey,
-                      duration: gameState.game.clock!.white,
-                      active: gameState.activeClockSide == Side.white,
-                    )
-                  : null,
-              materialDiff: game.lastMaterialDiffAt(Side.white),
-            );
-            return BoardTable(
-              boardData: boardData,
-              boardSettingsOverrides: const BoardSettingsOverrides(
-                animationDuration: Duration.zero,
+                final boardData = cg.BoardData(
+                  interactableSide: cg.InteractableSide.none,
+                  orientation: gameState.orientation.cg,
+                  fen: position.fen,
+                  sideToMove: sideToMove.cg,
+                  lastMove: game.moveAt(gameState.stepCursor)?.cg,
+                  isCheck: position.isCheck,
+                );
+                final blackPlayerWidget = GamePlayer(
+                  player: game.black.setOnGame(true),
+                  clock: gameState.game.clock != null
+                      ? CountdownClock(
+                          key: blackClockKey,
+                          duration: gameState.game.clock!.black,
+                          active: gameState.activeClockSide == Side.black,
+                        )
+                      : null,
+                  materialDiff: game.lastMaterialDiffAt(Side.black),
+                );
+                final whitePlayerWidget = GamePlayer(
+                  player: game.white.setOnGame(true),
+                  clock: gameState.game.clock != null
+                      ? CountdownClock(
+                          key: whiteClockKey,
+                          duration: gameState.game.clock!.white,
+                          active: gameState.activeClockSide == Side.white,
+                        )
+                      : null,
+                  materialDiff: game.lastMaterialDiffAt(Side.white),
+                );
+                return BoardTable(
+                  boardData: boardData,
+                  boardSettingsOverrides: const BoardSettingsOverrides(
+                    animationDuration: Duration.zero,
+                  ),
+                  topTable: gameState.orientation == Side.white
+                      ? blackPlayerWidget
+                      : whitePlayerWidget,
+                  bottomTable: gameState.orientation == Side.white
+                      ? whitePlayerWidget
+                      : blackPlayerWidget,
+                  moves: game.steps
+                      .skip(1)
+                      .map((e) => e.sanMove!.san)
+                      .toList(growable: false),
+                  currentMoveIndex: gameState.stepCursor,
+                );
+              },
+              loading: () => const BoardTable(
+                topTable: kEmptyWidget,
+                bottomTable: kEmptyWidget,
+                boardData: cg.BoardData(
+                  interactableSide: cg.InteractableSide.none,
+                  orientation: cg.Side.white,
+                  fen: kEmptyFen,
+                ),
+                showMoveListPlaceholder: true,
               ),
-              topTable: gameState.orientation == Side.white
-                  ? blackPlayerWidget
-                  : whitePlayerWidget,
-              bottomTable: gameState.orientation == Side.white
-                  ? whitePlayerWidget
-                  : blackPlayerWidget,
-              moves: game.steps
-                  .skip(1)
-                  .map((e) => e.sanMove!.san)
-                  .toList(growable: false),
-              currentMoveIndex: gameState.stepCursor,
-            );
-          },
-          loading: () => const BoardTable(
-            topTable: kEmptyWidget,
-            bottomTable: kEmptyWidget,
-            boardData: cg.BoardData(
-              interactableSide: cg.InteractableSide.none,
-              orientation: cg.Side.white,
-              fen: kEmptyFen,
+              error: (err, stackTrace) {
+                debugPrint(
+                  'SEVERE: [TvScreen] could not load stream; $err\n$stackTrace',
+                );
+                return const BoardTable(
+                  topTable: kEmptyWidget,
+                  bottomTable: kEmptyWidget,
+                  boardData: cg.BoardData(
+                    fen: kEmptyFen,
+                    interactableSide: cg.InteractableSide.none,
+                    orientation: cg.Side.white,
+                  ),
+                  errorMessage: 'Could not load TV stream.',
+                  showMoveListPlaceholder: true,
+                );
+              },
             ),
-            showMoveListPlaceholder: true,
           ),
-          error: (err, stackTrace) {
-            debugPrint(
-              'SEVERE: [TvScreen] could not load stream; $err\n$stackTrace',
-            );
-            return const BoardTable(
-              topTable: kEmptyWidget,
-              bottomTable: kEmptyWidget,
-              boardData: cg.BoardData(
-                fen: kEmptyFen,
-                interactableSide: cg.InteractableSide.none,
-                orientation: cg.Side.white,
+        ),
+        _BottomBar(
+          tvChannel: channel,
+          game: initialGame,
+        ),
+      ],
+    );
+  }
+}
+
+class _BottomBar extends ConsumerWidget {
+  const _BottomBar({
+    required this.tvChannel,
+    required this.game,
+  });
+  final TvChannel tvChannel;
+  final (GameId id, Side orientation)? game;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      color: Theme.of(context).platform == TargetPlatform.iOS
+          ? CupertinoTheme.of(context).barBackgroundColor
+          : Theme.of(context).bottomAppBarTheme.color,
+      child: SafeArea(
+        top: false,
+        child: SizedBox(
+          height: kBottomBarHeight,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Expanded(
+                child: BottomBarButton(
+                  label: context.l10n.flipBoard,
+                  onTap: () => _flipBoard(ref),
+                  icon: CupertinoIcons.arrow_2_squarepath,
+                ),
               ),
-              errorMessage: 'Could not load TV stream.',
-              showMoveListPlaceholder: true,
-            );
-          },
+              Expanded(
+                child: RepeatButton(
+                  onLongPress: ref
+                          .read(tvControllerProvider(tvChannel, game).notifier)
+                          .canGoBack()
+                      ? () => _moveBackward(ref)
+                      : null,
+                  child: BottomBarButton(
+                    key: const ValueKey('goto-previous'),
+                    onTap: ref
+                            .read(
+                              tvControllerProvider(tvChannel, game).notifier,
+                            )
+                            .canGoBack()
+                        ? () => _moveBackward(ref)
+                        : null,
+                    label: 'Previous',
+                    icon: CupertinoIcons.chevron_back,
+                    showTooltip: false,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: RepeatButton(
+                  onLongPress: ref
+                          .read(tvControllerProvider(tvChannel, game).notifier)
+                          .canGoForward()
+                      ? () => _moveForward(ref)
+                      : null,
+                  child: BottomBarButton(
+                    key: const ValueKey('goto-next'),
+                    icon: CupertinoIcons.chevron_forward,
+                    label: context.l10n.next,
+                    onTap: ref
+                            .read(
+                              tvControllerProvider(tvChannel, game).notifier,
+                            )
+                            .canGoForward()
+                        ? () => _moveForward(ref)
+                        : null,
+                    showTooltip: false,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void _flipBoard(WidgetRef ref) {
+    ref.read(tvControllerProvider(tvChannel, game).notifier).toggleBoard();
+  }
+
+  void _moveBackward(WidgetRef ref) {
+    ref.read(tvControllerProvider(tvChannel, game).notifier).cursorBackward();
+  }
+
+  void _moveForward(WidgetRef ref) {
+    ref.read(tvControllerProvider(tvChannel, game).notifier).cursorForward();
   }
 }

@@ -120,8 +120,9 @@ class _Body extends ConsumerWidget {
                         onTap: () => {
                           pushPlatformRoute(
                             context,
-                            builder: (context) =>
-                                UserScreen(user: user.lightUser),
+                            builder: (context) => UserScreen(
+                              user: user.lightUser,
+                            ),
                           ),
                         },
                       ),
