@@ -99,8 +99,7 @@ class SocketClient {
   int _pongCount = 0;
   DateTime _lastPing = DateTime.now();
 
-  /// The average lag computed from ping/pong protocol.
-  final ValueNotifier<Duration> _averageLag = ValueNotifier(Duration.zero);
+  final _averageLag = ValueNotifier(Duration.zero);
 
   StreamSubscription<SocketEvent>? _socketStreamSubscription;
 
@@ -137,6 +136,9 @@ class SocketClient {
   ///
   /// A duration of zero means the socket is not connected.
   ValueListenable<Duration> get averageLag => _averageLag;
+
+  /// Whether the socket is connected.
+  bool get isConnected => averageLag.value != Duration.zero;
 
   /// Creates a new WebSocket channel.
   ///

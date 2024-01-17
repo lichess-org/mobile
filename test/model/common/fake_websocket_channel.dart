@@ -16,12 +16,27 @@ class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
     String url, {
     Map<String, dynamic>? headers,
     Duration timeout = const Duration(seconds: 1),
-  }) async =>
-      createFunction();
+  }) async {
+    // in the real implementation the channel is returned after the [WebSocket]
+    // is connected, so we need to simulate this delay
+    await Future<void>.delayed(const Duration(milliseconds: 5));
+    return createFunction();
+  }
 }
 
-/// A fake implementation of [WebSocketChannel] that allows to simulate
-/// incoming messages from the server.
+/// A fake implementation of [WebSocketChannel]
+///
+/// This implementation allows to simulate incoming messages from the server
+/// with the [addIncomingMessages] method.
+///
+/// By default the server sends a pong response to a ping request, but this
+/// behavior can be changed by setting [shouldSendPong] to false.
+///
+/// It also allows to increase the lag of the connection by setting the
+/// [connectionLag] property.
+///
+/// The [sentMessages] and [sentMessagesExceptPing] streams can be used to
+/// verify that the client sends the expected messages.
 class FakeWebSocketChannel implements WebSocketChannel {
   static bool isPing(dynamic data) {
     if (data is! String) {
@@ -37,8 +52,6 @@ class FakeWebSocketChannel implements WebSocketChannel {
     return false;
   }
 
-  final _readyFuture = Future<void>.delayed(const Duration(milliseconds: 20));
-
   /// The controller for incoming (from server) messages.
   final _incomingController = StreamController<dynamic>.broadcast();
 
@@ -49,6 +62,9 @@ class FakeWebSocketChannel implements WebSocketChannel {
   ///
   /// Can be used to simulate a faulty connection.
   bool shouldSendPong = true;
+
+  /// The lag of the connection (duration before pong response) in milliseconds.
+  Duration connectionLag = const Duration(milliseconds: 10);
 
   /// The stream of all outgoing messages.
   Stream<dynamic> get sentMessages => _outcomingController.stream;
@@ -74,7 +90,7 @@ class FakeWebSocketChannel implements WebSocketChannel {
   String? get protocol => null;
 
   @override
-  Future<void> get ready => _readyFuture;
+  Future<void> get ready => Future<void>.value();
 
   @override
   WebSocketSink get sink => FakeWebSocketSink(this);
@@ -143,7 +159,7 @@ class FakeWebSocketSink implements WebSocketSink {
 
     // Simulates pong response if connection is not closed
     if (_channel.shouldSendPong && FakeWebSocketChannel.isPing(data)) {
-      Future<void>.delayed(const Duration(milliseconds: 5), () {
+      Future<void>.delayed(_channel.connectionLag, () {
         if (_channel._incomingController.isClosed) {
           return;
         }

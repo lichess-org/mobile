@@ -27,11 +27,12 @@ void main() {
   final testUri = Uri.parse(kDefaultSocketRoute);
 
   group('Socket', () {
-    test('emits a ready event', () async {
+    test('computes average lag', () async {
+      final fakeChannel = FakeWebSocketChannel();
       final container = await makeContainer(
         overrides: [
           webSocketChannelFactoryProvider.overrideWith(
-            (_) => FakeWebSocketChannelFactory(() => FakeWebSocketChannel()),
+            (_) => FakeWebSocketChannelFactory(() => fakeChannel),
           ),
           socketClientProvider.overrideWith(_makeSocketClient),
         ],
@@ -40,7 +41,44 @@ void main() {
       final socketClient = container.read(socketClientProvider);
       final (_, readyStream) = socketClient.connect(testUri);
 
-      await expectLater(readyStream, emitsInOrder([testUri]));
+      // before the connection is ready the average lag is zero
+      expect(socketClient.averageLag.value, Duration.zero);
+
+      await readyStream.first;
+
+      // after the connection is ready the average lag is still zero since
+      // there was no ping/pong exchange yet
+      expect(socketClient.averageLag.value, Duration.zero);
+
+      // at this time the first ping is sent, wait for the pong
+      await expectLater(fakeChannel.stream, emits('0'));
+
+      // after the ping/pong exchange the average lag is computed
+      expect(
+        socketClient.averageLag.value.inMilliseconds,
+        greaterThanOrEqualTo(10),
+      );
+
+      // wait for more ping/pong exchanges
+      await expectLater(fakeChannel.stream, emitsInOrder(['0', '0', '0', '0']));
+
+      // average lag is still the same
+      expect(
+        socketClient.averageLag.value.inMilliseconds,
+        greaterThanOrEqualTo(10),
+      );
+
+      // increase the lag of the connection
+      fakeChannel.connectionLag = const Duration(milliseconds: 100);
+
+      // wait for more ping/pong exchanges
+      await expectLater(fakeChannel.stream, emitsInOrder(['0', '0', '0', '0']));
+
+      // average lag should be higher
+      expect(
+        socketClient.averageLag.value.inMilliseconds,
+        greaterThanOrEqualTo(40),
+      );
 
       socketClient.disconnect();
     });
@@ -140,13 +178,16 @@ void main() {
       final socketClient = container.read(socketClientProvider);
       final (_, readyStream) = socketClient.connect(testUri);
 
+      await readyStream.first;
+
+      // will only receive 3 pings since the server stops responding to pings
       expectLater(channels[1]!.stream, emitsInOrder(['0', '0', '0']));
 
-      // we expect 2 working connections because it reconnects if not receiving pong
-      await expectLater(readyStream, emitsInOrder([testUri, testUri]));
+      // we expect another connection because it reconnects if not receiving pong
+      await expectLater(readyStream, emits(testUri));
 
-      // check the the first connection was closed, no need to check the close
-      // code since it will alway be 1000 in our fake channel
+      // check the the first connection was closed
+      // no need to check the close code since it will alway be 1000 in our fake channel
       expect(channels[1]!.closeCode, isNotNull);
       expect(channels[2]!.closeCode, isNull);
 
