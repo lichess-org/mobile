@@ -15,6 +15,7 @@ SocketClient _makeSocketClient(ProviderRef<SocketClient> ref) {
     pingDelay: const Duration(milliseconds: 50),
     pingMaxLag: const Duration(milliseconds: 200),
     autoReconnectDelay: const Duration(milliseconds: 100),
+    resendAckDelay: const Duration(milliseconds: 100),
   );
 
   ref.onDispose(client.dispose);
@@ -148,6 +149,48 @@ void main() {
       // code since it will alway be 1000 in our fake channel
       expect(channels[1]!.closeCode, isNotNull);
       expect(channels[2]!.closeCode, isNull);
+
+      socketClient.disconnect();
+    });
+
+    test('handles ackable messages', () async {
+      final fakeChannel = FakeWebSocketChannel();
+
+      final container = await makeContainer(
+        overrides: [
+          webSocketChannelFactoryProvider.overrideWith(
+            (_) => FakeWebSocketChannelFactory(() => fakeChannel),
+          ),
+          socketClientProvider.overrideWith(_makeSocketClient),
+        ],
+      );
+
+      final socketClient = container.read(socketClientProvider);
+      final (_, readyStream) = socketClient.connect(testUri);
+
+      await readyStream.first;
+
+      // send a message that requires an ack
+      socketClient.send('test', {'data': 'ackable'}, ackable: true);
+
+      // several messages are expected, since the server didn't ack the message
+      await expectLater(
+        fakeChannel.sentMessagesExceptPing,
+        emitsInOrder([
+          '{"t":"test","d":{"data":"ackable","a":1}}',
+          '{"t":"test","d":{"data":"ackable","a":1}}',
+          '{"t":"test","d":{"data":"ackable","a":1}}',
+        ]),
+      );
+
+      // server acks the message
+      await fakeChannel.addIncomingMessages(['{"t":"ack","d":1}']);
+
+      // no more messages are expected
+      await expectLater(
+        fakeChannel.sentMessagesExceptPing,
+        emitsInOrder([]),
+      );
 
       socketClient.disconnect();
     });

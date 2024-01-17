@@ -28,6 +28,7 @@ const _kDefaultConnectTimeout = Duration(seconds: 10);
 const _kPingDelay = Duration(milliseconds: 2500);
 const _kPingMaxLag = Duration(seconds: 9);
 const _kAutoReconnectDelay = Duration(milliseconds: 3500);
+const _kResendAckDelay = Duration(milliseconds: 1500);
 const _kIdleTimeout = Duration(seconds: 5);
 const _kDisconnectOnBackgroundTimeout = Duration(minutes: 20);
 
@@ -58,6 +59,7 @@ class SocketClient {
     this.pingDelay = _kPingDelay,
     this.pingMaxLag = _kPingMaxLag,
     this.autoReconnectDelay = _kAutoReconnectDelay,
+    this.resendAckDelay = _kResendAckDelay,
     this.idleTimeout = _kIdleTimeout,
   });
 
@@ -69,6 +71,9 @@ class SocketClient {
 
   /// The delay before reconnecting after a connection failure.
   final Duration autoReconnectDelay;
+
+  /// The delay before resending an ack.
+  final Duration resendAckDelay;
 
   /// The delay before closing the socket if idle (no subscription).
   ///
@@ -279,10 +284,7 @@ class SocketClient {
     _pongCount = 0;
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
-    _ackResendTimer = Timer.periodic(
-      const Duration(milliseconds: 1500),
-      (_) => _resendAcks(),
-    );
+    _ackResendTimer = Timer.periodic(resendAckDelay, (_) => _resendAcks());
 
     final session = _ref.read(authSessionProvider);
     final pInfo = _ref.read(packageInfoProvider);
@@ -349,7 +351,7 @@ class SocketClient {
         _onServerAck(event);
     }
 
-    if (event != SocketEvent.pong) {
+    if (event != SocketEvent.pong && event.topic != 'ack') {
       _streamController.add(event);
     }
   }

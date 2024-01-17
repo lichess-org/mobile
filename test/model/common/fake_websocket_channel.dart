@@ -50,14 +50,18 @@ class FakeWebSocketChannel implements WebSocketChannel {
   /// Can be used to simulate a faulty connection.
   bool shouldSendPong = true;
 
-  Future<int> get sentMessagesCount => _outcomingController.stream.length;
+  /// The stream of all outgoing messages.
   Stream<dynamic> get sentMessages => _outcomingController.stream;
+
+  /// The stream of all outgoing messages except ping requests.
+  Stream<dynamic> get sentMessagesExceptPing =>
+      _outcomingController.stream.where((message) => !isPing(message));
 
   /// Simulates incoming messages from the server.
   Future<void> addIncomingMessages(Iterable<dynamic> messages) async {
-    await Future<void>.delayed(const Duration(milliseconds: 10), () {
-      _incomingController.addStream(Stream<dynamic>.fromIterable(messages));
-    });
+    await Future<void>.delayed(const Duration(milliseconds: 5));
+    return _incomingController
+        .addStream(Stream<dynamic>.fromIterable(messages));
   }
 
   @override
