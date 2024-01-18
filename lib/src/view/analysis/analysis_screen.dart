@@ -18,7 +18,6 @@ import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -35,6 +34,7 @@ import 'package:share_plus/share_plus.dart';
 
 import 'analysis_pgn_tags.dart';
 import 'analysis_settings.dart';
+import 'annotations.dart';
 import 'tree_view.dart';
 
 class AnalysisScreen extends ConsumerWidget {
@@ -280,10 +280,7 @@ class _Board extends ConsumerWidget {
     );
 
     final currentNode = analysisState.currentNode;
-    final annotation = _annotationFrom(
-      currentNode.nags,
-      fromLichessAnalysis: analysisState.hasServerAnalysis,
-    );
+    final annotation = makeAnnotation(currentNode.nags);
 
     final bestMoves = evalBestMoves ?? currentNode.eval?.bestMoves;
 
@@ -331,43 +328,6 @@ class _Board extends ConsumerWidget {
       ),
     );
   }
-}
-
-cg.Annotation? _annotationFrom(
-  Iterable<int>? nags, {
-  bool fromLichessAnalysis = false,
-}) {
-  final nag = nags?.firstOrNull;
-  if (nag == null) {
-    return null;
-  }
-  return switch (nag) {
-    1 => const cg.Annotation(
-        symbol: '!',
-        color: Colors.lightGreen,
-      ),
-    3 => const cg.Annotation(
-        symbol: '!!',
-        color: Colors.teal,
-      ),
-    5 => const cg.Annotation(
-        symbol: '!?',
-        color: Colors.lightBlue,
-      ),
-    6 => cg.Annotation(
-        symbol: '?!',
-        color: fromLichessAnalysis ? LichessColors.cyan : Colors.amber,
-      ),
-    2 => cg.Annotation(
-        symbol: '?',
-        color: fromLichessAnalysis ? const Color(0xFFe69f00) : Colors.orange,
-      ),
-    4 => cg.Annotation(
-        symbol: '??',
-        color: fromLichessAnalysis ? const Color(0xFFdf5353) : Colors.red,
-      ),
-    int() => null,
-  };
 }
 
 class _EngineGaugeVertical extends ConsumerWidget {

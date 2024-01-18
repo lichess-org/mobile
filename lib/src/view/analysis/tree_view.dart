@@ -10,12 +10,13 @@ import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+
+import 'annotations.dart';
 
 // fast replay debounce delay, same as piece animation duration, to avoid piece
 // animation jank at the end of the replay
@@ -250,17 +251,7 @@ Color? _textColor(BuildContext context, double opacity, [int? nag]) {
           .color
           ?.withOpacity(opacity);
 
-  return nag != null
-      ? [
-          defaultColor,
-          Colors.lightGreen,
-          const Color(0xFFe69f00),
-          Colors.teal,
-          const Color(0xFFdf5353),
-          Colors.lightBlue,
-          LichessColors.cyan,
-        ][nag]
-      : defaultColor;
+  return nag != null && nag > 0 ? nagColorMap[nag] : defaultColor;
 }
 
 class InlineMove extends ConsumerWidget {
