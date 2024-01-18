@@ -292,7 +292,7 @@ class InlineMove extends ConsumerWidget {
             color: _textColor(context, 0.6, branch.nags?.firstOrNull),
           )
         : baseTextStyle.copyWith(
-            color: _textColor(context, 0.6, branch.nags?.firstOrNull),
+            color: _textColor(context, 1, branch.nags?.firstOrNull),
             fontWeight: FontWeight.w600,
           );
 
