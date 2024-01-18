@@ -1063,7 +1063,7 @@ class AcplChart extends ConsumerWidget {
                     final closestNodeIndex = closestSpot.x.round();
                     ref
                         .read(analysisControllerProvider(options).notifier)
-                        .jumpToNthNode(closestNodeIndex);
+                        .jumpToNthNodeOnMainline(closestNodeIndex);
                   }
                 },
               ),

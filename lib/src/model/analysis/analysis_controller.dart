@@ -184,7 +184,7 @@ class AnalysisController extends _$AnalysisController {
     );
   }
 
-  void jumpToNthNode(int n) {
+  void jumpToNthNodeOnMainline(int n) {
     UciPath path = _root.mainlinePath;
     while (!path.penultimate.isEmpty) {
       path = path.penultimate;
