@@ -184,6 +184,31 @@ class AnalysisController extends _$AnalysisController {
     );
   }
 
+  void jumpToNthNode(int n) {
+    UciPath path = _root.mainlinePath;
+    while (!path.penultimate.isEmpty) {
+      path = path.penultimate;
+    }
+    Node? node = _root.nodeAt(path);
+    int count = 0;
+
+    while (node != null && count < n) {
+      if (node.children.isNotEmpty) {
+        path = path + node.children.first.id;
+        node = _root.nodeAt(path);
+        count++;
+      } else {
+        break;
+      }
+    }
+
+    if (node != null) {
+      _setPath(
+        path,
+      );
+    }
+  }
+
   void toggleBoard() {
     state = state.copyWith(pov: state.pov.opposite);
   }

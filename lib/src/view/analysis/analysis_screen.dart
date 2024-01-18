@@ -1042,13 +1042,37 @@ class AcplChart extends ConsumerWidget {
           padding: const EdgeInsets.all(16.0),
           child: LineChart(
             LineChartData(
-              lineTouchData: const LineTouchData(enabled: false),
+              lineTouchData: LineTouchData(
+                enabled: false,
+                touchCallback:
+                    (FlTouchEvent event, LineTouchResponse? touchResponse) {
+                  if (event is FlTapUpEvent) {
+                    final touchX = event.localPosition.dx;
+                    final chartWidth = context.size!.width -
+                        32; // Insets on both sides of the chart of 16
+                    final minX = spots.first.x;
+                    final maxX = spots.last.x;
+                    final touchXDataValue =
+                        minX + (touchX / chartWidth) * (maxX - minX);
+                    final closestSpot = spots.reduce(
+                      (a, b) => (a.x - touchXDataValue).abs() <
+                              (b.x - touchXDataValue).abs()
+                          ? a
+                          : b,
+                    );
+                    final closestNodeIndex = closestSpot.x.round();
+                    ref
+                        .read(analysisControllerProvider(options).notifier)
+                        .jumpToNthNode(closestNodeIndex);
+                  }
+                },
+              ),
               minY: -1.0,
               maxY: 1.0,
               lineBarsData: [
                 LineChartBarData(
                   spots: spots,
-                  isCurved: true,
+                  isCurved: false,
                   barWidth: 1,
                   color: mainLineColor,
                   aboveBarData: BarAreaData(
