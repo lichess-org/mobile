@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -240,14 +241,26 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
   }
 }
 
-Color? _textColor(BuildContext context, double opacity) {
-  return defaultTargetPlatform == TargetPlatform.android
+Color? _textColor(BuildContext context, double opacity, [int? nag]) {
+  final defaultColor = defaultTargetPlatform == TargetPlatform.android
       ? Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(opacity)
       : CupertinoTheme.of(context)
           .textTheme
           .textStyle
           .color
           ?.withOpacity(opacity);
+
+  return nag != null
+      ? [
+          defaultColor,
+          Colors.lightGreen,
+          const Color(0xFFe69f00),
+          Colors.teal,
+          const Color(0xFFdf5353),
+          Colors.lightBlue,
+          LichessColors.cyan,
+        ][nag]
+      : defaultColor;
 }
 
 class InlineMove extends ConsumerWidget {
@@ -285,9 +298,12 @@ class InlineMove extends ConsumerWidget {
     final textStyle = isSideline
         ? TextStyle(
             fontFamily: 'ChessFont',
-            color: _textColor(context, 0.6),
+            color: _textColor(context, 0.6, branch.nags?.firstOrNull),
           )
-        : baseTextStyle;
+        : baseTextStyle.copyWith(
+            color: _textColor(context, 0.6, branch.nags?.firstOrNull),
+            fontWeight: FontWeight.w600,
+          );
 
     final indexTextStyle = baseTextStyle.copyWith(
       color: _textColor(context, 0.6),
@@ -342,8 +358,7 @@ class InlineMove extends ConsumerWidget {
                   (branch.nags != null ? _displayNags(branch.nags!) : ''),
               style: isCurrentMove
                   ? textStyle.copyWith(
-                      color: _textColor(context, 1),
-                      fontWeight: FontWeight.w600,
+                      color: _textColor(context, 1, branch.nags?.firstOrNull),
                     )
                   : textStyle,
             ),
