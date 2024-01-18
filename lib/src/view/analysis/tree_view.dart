@@ -302,6 +302,7 @@ class InlineMove extends ConsumerWidget {
           )
         : baseTextStyle.copyWith(
             color: _textColor(context, 0.6, branch.nags?.firstOrNull),
+            fontWeight: FontWeight.w600,
           );
 
     final indexTextStyle = baseTextStyle.copyWith(
@@ -358,7 +359,6 @@ class InlineMove extends ConsumerWidget {
               style: isCurrentMove
                   ? textStyle.copyWith(
                       color: _textColor(context, 1, branch.nags?.firstOrNull),
-                      fontWeight: FontWeight.w600,
                     )
                   : textStyle,
             ),
