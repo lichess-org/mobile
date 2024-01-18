@@ -16,6 +16,8 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
+import 'annotations.dart';
+
 // fast replay debounce delay, same as piece animation duration, to avoid piece
 // animation jank at the end of the replay
 const kFastReplayDebounceDelay = Duration(milliseconds: 150);
@@ -240,14 +242,16 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
   }
 }
 
-Color? _textColor(BuildContext context, double opacity) {
-  return defaultTargetPlatform == TargetPlatform.android
+Color? _textColor(BuildContext context, double opacity, [int? nag]) {
+  final defaultColor = defaultTargetPlatform == TargetPlatform.android
       ? Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(opacity)
       : CupertinoTheme.of(context)
           .textTheme
           .textStyle
           .color
           ?.withOpacity(opacity);
+
+  return nag != null && nag > 0 ? nagColorMap[nag] : defaultColor;
 }
 
 class InlineMove extends ConsumerWidget {
@@ -285,9 +289,12 @@ class InlineMove extends ConsumerWidget {
     final textStyle = isSideline
         ? TextStyle(
             fontFamily: 'ChessFont',
-            color: _textColor(context, 0.6),
+            color: _textColor(context, 0.6, branch.nags?.firstOrNull),
           )
-        : baseTextStyle;
+        : baseTextStyle.copyWith(
+            color: _textColor(context, 0.6, branch.nags?.firstOrNull),
+            fontWeight: FontWeight.w600,
+          );
 
     final indexTextStyle = baseTextStyle.copyWith(
       color: _textColor(context, 0.6),
@@ -342,8 +349,7 @@ class InlineMove extends ConsumerWidget {
                   (branch.nags != null ? _displayNags(branch.nags!) : ''),
               style: isCurrentMove
                   ? textStyle.copyWith(
-                      color: _textColor(context, 1),
-                      fontWeight: FontWeight.w600,
+                      color: _textColor(context, 1, branch.nags?.firstOrNull),
                     )
                   : textStyle,
             ),
