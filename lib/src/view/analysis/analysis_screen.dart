@@ -972,9 +972,8 @@ class _SummaryPlayerName extends StatelessWidget {
     return TableCell(
       verticalAlignment: TableCellVerticalAlignment.bottom,
       child: Center(
-        heightFactor: 1.4,
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 1),
+          padding: const EdgeInsets.only(bottom: 5),
           child: Column(
             children: [
               Icon(
