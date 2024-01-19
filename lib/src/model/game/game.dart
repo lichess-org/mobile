@@ -3,6 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -253,6 +254,7 @@ class ArchivedGame
     required Perf perf,
     required Player white,
     required Player black,
+    IList<ExternalEval>? evals,
   }) = _ArchivedGame;
 }
 
@@ -287,23 +289,6 @@ class PostGameData with _$PostGameData {
     IList<Duration>? clocks,
     ({PlayerAnalysis white, PlayerAnalysis black})? analysis,
     LightOpening? opening,
+    IList<ExternalEval>? evals,
   }) = _PostGameData;
-}
-
-@freezed
-class MoveAnalysis with _$MoveAnalysis {
-  const factory MoveAnalysis({
-    int? eval,
-    UCIMove? best,
-    String? variation,
-    AnalysisJudgment? judgment,
-  }) = _MoveAnalysis;
-}
-
-@freezed
-class AnalysisJudgment with _$AnalysisJudgment {
-  const factory AnalysisJudgment({
-    required String name,
-    required String comment,
-  }) = _AnalysisJugdment;
 }

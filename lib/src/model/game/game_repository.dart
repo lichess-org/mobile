@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -155,6 +156,22 @@ PostGameData _getPostGameDataFromJson(
   return PostGameData(
     clocks: IList(clocks ?? []),
     opening: pick('opening').letOrNull(_openingFromPick),
+    evals: pick('analysis')
+        .asListOrNull<ExternalEval>(
+          (p0) => ExternalEval(
+            cp: p0('eval').asIntOrNull(),
+            mate: p0('mate').asIntOrNull(),
+            bestMove: p0('best').asStringOrNull(),
+            variation: p0('variation').asStringOrNull(),
+            judgment: p0('judgment').letOrNull(
+              (j) => (
+                name: j('name').asStringOrThrow(),
+                comment: j('comment').asStringOrThrow(),
+              ),
+            ),
+          ),
+        )
+        ?.lock,
     analysis: whiteAnalysis != null && blackAnalysis != null
         ? (
             white: whiteAnalysis,

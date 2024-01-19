@@ -77,10 +77,10 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
           padding: const EdgeInsets.only(bottom: 16.0),
           child: GameResult(game: gameState.game),
         ),
-        if (gameState.serverEvalution != null)
+        if (gameState.game.evals != null)
           Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
-            child: _AcplChart(evals: gameState.serverEvalution!),
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: _AcplChart(evals: gameState.game.evals!),
           ),
         if (gameState.game.white.analysis != null)
           Padding(
@@ -128,11 +128,12 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
               textAlign: TextAlign.center,
             ),
           ),
-        if (gameState.game.analysable && gameState.serverEvalution == null)
+        if (gameState.game.analysable &&
+            gameState.game.evals == null &&
+            gameState.game.white.analysis == null)
           FutureBuilder(
             future: _pendingAnalysisRequestFuture,
             builder: (context, snapshot) {
-              print('snapshot: $snapshot');
               return SecondaryButton(
                 semanticsLabel: context.l10n.requestAComputerAnalysis,
                 onPressed: _activateButtons
@@ -144,7 +145,6 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
                                   .read(ctrlProvider.notifier)
                                   .requestServerAnalysis()
                                   .catchError((Object e) {
-                                print(e);
                                 if (context.mounted) {
                                   showPlatformSnackbar(
                                     context,
@@ -224,40 +224,46 @@ class _AcplChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    // yes it looks like below/above are inverted in fl_chart
+    final belowLineColor = Colors.white.withOpacity(0.4);
+    final aboveLineColor = Colors.grey.shade800.withOpacity(0.6);
     final spots = evals
         .mapIndexed(
           (i, e) => FlSpot(i.toDouble(), e.winningChances(Side.white)),
         )
         .toList(growable: false);
-    return Center(
-      child: AspectRatio(
-        aspectRatio: 2.3,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: LineChart(
-            LineChartData(
-              minY: -1.0,
-              maxY: 1.0,
-              lineBarsData: [
-                LineChartBarData(
-                  spots: spots,
-                  isCurved: false,
-                  barWidth: 1,
-                  aboveBarData: BarAreaData(
-                    show: true,
-                    applyCutOffY: true,
-                  ),
-                  belowBarData: BarAreaData(
-                    show: true,
-                    applyCutOffY: true,
-                  ),
-                  dotData: const FlDotData(
-                    show: false,
-                  ),
+    return AspectRatio(
+      aspectRatio: 2.5,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 2.0),
+        child: LineChart(
+          LineChartData(
+            minY: -1.0,
+            maxY: 1.0,
+            lineBarsData: [
+              LineChartBarData(
+                spots: spots,
+                isCurved: true,
+                color: Colors.transparent,
+                barWidth: 1,
+                aboveBarData: BarAreaData(
+                  show: true,
+                  color: aboveLineColor,
+                  applyCutOffY: true,
                 ),
-              ],
-            ),
+                belowBarData: BarAreaData(
+                  show: true,
+                  color: belowLineColor,
+                  applyCutOffY: true,
+                ),
+                dotData: const FlDotData(
+                  show: false,
+                ),
+              ),
+            ],
+            gridData: const FlGridData(show: false),
+            borderData: FlBorderData(show: false),
+            titlesData: const FlTitlesData(show: false),
           ),
         ),
       ),

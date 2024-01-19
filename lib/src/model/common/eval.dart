@@ -22,6 +22,8 @@ class ExternalEval with _$ExternalEval implements Eval {
     required int? mate,
     int? depth,
     UCIMove? bestMove,
+    String? variation,
+    ({String name, String comment})? judgment,
   }) = _ExternalEval;
 
   @override
