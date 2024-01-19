@@ -289,3 +289,21 @@ class PostGameData with _$PostGameData {
     LightOpening? opening,
   }) = _PostGameData;
 }
+
+@freezed
+class MoveAnalysis with _$MoveAnalysis {
+  const factory MoveAnalysis({
+    int? eval,
+    UCIMove? best,
+    String? variation,
+    AnalysisJudgment? judgment,
+  }) = _MoveAnalysis;
+}
+
+@freezed
+class AnalysisJudgment with _$AnalysisJudgment {
+  const factory AnalysisJudgment({
+    required String name,
+    required String comment,
+  }) = _AnalysisJugdment;
+}

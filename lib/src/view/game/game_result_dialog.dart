@@ -1,11 +1,15 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
@@ -16,6 +20,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 import 'status_l10n.dart';
 
@@ -39,6 +44,7 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
   late Timer _buttonActivationTimer;
   bool _activateButtons = false;
   Future<void>? _pendingPgnFuture;
+  Future<void>? _pendingAnalysisRequestFuture;
 
   @override
   void initState() {
@@ -71,6 +77,11 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
           padding: const EdgeInsets.only(bottom: 16.0),
           child: GameResult(game: gameState.game),
         ),
+        if (gameState.serverEvalution != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: _AcplChart(evals: gameState.serverEvalution!),
+          ),
         if (gameState.game.white.analysis != null)
           Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
@@ -82,7 +93,10 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
             onPressed: () {
               ref.read(ctrlProvider.notifier).declineRematch();
             },
-            child: Text(context.l10n.cancelRematchOffer),
+            child: Text(
+              context.l10n.cancelRematchOffer,
+              textAlign: TextAlign.center,
+            ),
           )
         else if (gameState.canOfferRematch)
           SecondaryButton(
@@ -94,7 +108,10 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
                   }
                 : null,
             glowing: gameState.game.opponent?.offeringRematch == true,
-            child: Text(context.l10n.rematch),
+            child: Text(
+              context.l10n.rematch,
+              textAlign: TextAlign.center,
+            ),
           ),
         if (gameState.canGetNewOpponent)
           SecondaryButton(
@@ -106,7 +123,45 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
                     widget.onNewOpponentCallback(gameState.game);
                   }
                 : null,
-            child: Text(context.l10n.newOpponent),
+            child: Text(
+              context.l10n.newOpponent,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        if (gameState.game.analysable && gameState.serverEvalution == null)
+          FutureBuilder(
+            future: _pendingAnalysisRequestFuture,
+            builder: (context, snapshot) {
+              print('snapshot: $snapshot');
+              return SecondaryButton(
+                semanticsLabel: context.l10n.requestAComputerAnalysis,
+                onPressed: _activateButtons
+                    ? snapshot.connectionState == ConnectionState.waiting
+                        ? null
+                        : () {
+                            setState(() {
+                              _pendingAnalysisRequestFuture = ref
+                                  .read(ctrlProvider.notifier)
+                                  .requestServerAnalysis()
+                                  .catchError((Object e) {
+                                print(e);
+                                if (context.mounted) {
+                                  showPlatformSnackbar(
+                                    context,
+                                    e.toString(),
+                                    type: SnackBarType.error,
+                                  );
+                                }
+                              });
+                            });
+                          }
+                    : null,
+                child: Text(
+                  context.l10n.requestAComputerAnalysis,
+                  textAlign: TextAlign.center,
+                ),
+              );
+            },
           ),
         FutureBuilder(
           future: _pendingPgnFuture,
@@ -137,7 +192,10 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
                         );
                       }
                     },
-              child: Text(context.l10n.analysis),
+              child: Text(
+                context.l10n.analysis,
+                textAlign: TextAlign.center,
+              ),
             );
           },
         ),
@@ -156,6 +214,54 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
         ),
       );
     }
+  }
+}
+
+class _AcplChart extends StatelessWidget {
+  final IList<ExternalEval> evals;
+
+  const _AcplChart({required this.evals});
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    final spots = evals
+        .mapIndexed(
+          (i, e) => FlSpot(i.toDouble(), e.winningChances(Side.white)),
+        )
+        .toList(growable: false);
+    return Center(
+      child: AspectRatio(
+        aspectRatio: 2.3,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: LineChart(
+            LineChartData(
+              minY: -1.0,
+              maxY: 1.0,
+              lineBarsData: [
+                LineChartBarData(
+                  spots: spots,
+                  isCurved: false,
+                  barWidth: 1,
+                  aboveBarData: BarAreaData(
+                    show: true,
+                    applyCutOffY: true,
+                  ),
+                  belowBarData: BarAreaData(
+                    show: true,
+                    applyCutOffY: true,
+                  ),
+                  dotData: const FlDotData(
+                    show: false,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 

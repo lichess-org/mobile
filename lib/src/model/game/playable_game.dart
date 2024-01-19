@@ -123,6 +123,8 @@ class PlayableGame
       !isPlayerTurn &&
       resignable &&
       (meta.rules == null || !meta.rules!.contains(GameRule.noClaimWin));
+
+  bool get analysable => finished && steps.length > 4;
 }
 
 PlayableGame _playableGameFromPick(RequiredPick pick) {

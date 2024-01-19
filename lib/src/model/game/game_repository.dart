@@ -59,6 +59,12 @@ class GameRepository {
     });
   }
 
+  FutureResult<void> requestServerAnalysis(GameId id) {
+    return apiClient.post(
+      Uri.parse('$kLichessHost/$id/request-analysis'),
+    );
+  }
+
   FutureResult<String> getGameAnalysisPgn(GameId id) {
     return apiClient.get(
       Uri.parse('$kLichessHost/game/export/$id?literate=1&clocks=0'),

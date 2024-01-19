@@ -1,9 +1,13 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
 part 'game_socket_events.freezed.dart';
@@ -118,3 +122,93 @@ GameEndEvent _gameEndEventFromPick(RequiredPick pick) {
     ),
   );
 }
+
+@freezed
+class ServerEvalEvent with _$ServerEvalEvent {
+  const ServerEvalEvent._();
+
+  const factory ServerEvalEvent({
+    // only pick the mainline evals for now
+    // TODO consider adding support for merging the JSON tree into our [Node] tree
+    required IList<ExternalEval> evals,
+    ServerAnalysis? analysis,
+    GameDivision? division,
+  }) = _ServerEvalEvent;
+
+  bool get isAnalysisIncomplete =>
+      evals.any((e) => e.cp == null || e.mate != null);
+
+  factory ServerEvalEvent.fromJson(Map<String, dynamic> json) =>
+      _serverEvalEventFromPick(pick(json).required());
+}
+
+ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
+  Map<String, dynamic> node = pick('tree').asMapOrThrow<String, dynamic>();
+  final eval = node['eval'] as Map<String, dynamic>?;
+
+  final List<ExternalEval> evals = [
+    ExternalEval(
+      cp: eval?['cp'] as int?,
+      mate: eval?['mate'] as int?,
+      bestMove: eval?['best'] as String?,
+    ),
+  ];
+
+  while ((node['children'] as List<dynamic>).isNotEmpty) {
+    final children = node['children'] as List<dynamic>;
+    final firstChild = children.first as Map<String, dynamic>;
+    final eval = firstChild['eval'] as Map<String, dynamic>?;
+    evals.add(
+      ExternalEval(
+        cp: eval?['cp'] as int?,
+        mate: eval?['mate'] as int?,
+        bestMove: eval?['best'] as String?,
+      ),
+    );
+    node = firstChild;
+  }
+
+  return ServerEvalEvent(
+    evals: evals.lock,
+    analysis: pick('analysis').letOrNull(
+      (it) => (
+        id: GameId(it('id').asStringOrThrow()),
+        white: it('white').letOrThrow(
+          (pa) => PlayerAnalysis(
+            inaccuracies: pa('inaccuracy').asIntOrThrow(),
+            mistakes: pa('mistake').asIntOrThrow(),
+            blunders: pa('blunder').asIntOrThrow(),
+            acpl: pa('acpl').asIntOrNull(),
+            accuracy: pa('accuracy').asIntOrNull(),
+          ),
+        ),
+        black: it('black').letOrThrow(
+          (pa) => PlayerAnalysis(
+            inaccuracies: pa('inaccuracy').asIntOrThrow(),
+            mistakes: pa('mistake').asIntOrThrow(),
+            blunders: pa('blunder').asIntOrThrow(),
+            acpl: pa('acpl').asIntOrNull(),
+            accuracy: pa('accuracy').asIntOrNull(),
+          ),
+        ),
+      ),
+    ),
+    division: pick('division').letOrNull(
+      (it) => (
+        middle: it('middle').asIntOrNull(),
+        end: it('end').asIntOrNull(),
+      ),
+    ),
+  );
+}
+
+typedef ServerAnalysis = ({
+  GameId id,
+  PlayerAnalysis white,
+  PlayerAnalysis black,
+});
+
+typedef GameDivision = ({
+  int? middle,
+  int? end,
+});

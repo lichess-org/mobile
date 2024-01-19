@@ -118,7 +118,7 @@ class AnalysisController extends _$AnalysisController {
             .whereNotNull()
             .map(
               (eval) => ExternalEval(
-                eval: eval.pawns,
+                cp: eval.pawns != null ? cpFromEval(eval.pawns!) : null,
                 mate: eval.mate,
                 depth: eval.depth,
               ),
@@ -528,7 +528,9 @@ class AnalysisState with _$AnalysisState {
         savedEval: currentNode.eval ??
             (currentNode.pgnEval != null
                 ? ExternalEval(
-                    eval: currentNode.pgnEval!.pawns,
+                    cp: currentNode.pgnEval!.pawns != null
+                        ? cpFromEval(currentNode.pgnEval!.pawns!)
+                        : null,
                     mate: currentNode.pgnEval!.mate,
                     depth: currentNode.pgnEval!.depth,
                   )

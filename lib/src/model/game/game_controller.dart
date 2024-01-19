@@ -10,7 +10,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -311,6 +313,21 @@ class GameController extends _$GameController {
 
   void declineRematch() {
     _socket.send('rematch-no', null);
+  }
+
+  Future<void> requestServerAnalysis() {
+    return state.mapOrNull(
+          data: (d) {
+            if (!d.value.game.finished) {
+              return Future<void>.error(
+                'Cannot request server analysis on a non finished game',
+              );
+            }
+            final service = ref.read(serverAnalysisServiceProvider);
+            return service.requestAnalysis(gameFullId);
+          },
+        ) ??
+        Future<void>.value();
   }
 
   void _sendMoveToSocket(
@@ -779,6 +796,24 @@ class GameController extends _$GameController {
             redirectGameId: fullId,
           ),
         );
+
+      case 'analysisProgress':
+        final data =
+            ServerEvalEvent.fromJson(event.data as Map<String, dynamic>);
+        final curState = state.requireValue;
+        state = AsyncValue.data(
+          curState.copyWith(
+            serverEvalution: data.evals,
+            game: curState.game.copyWith(
+              white: curState.game.white.copyWith(
+                analysis: data.analysis?.white,
+              ),
+              black: curState.game.black.copyWith(
+                analysis: data.analysis?.black,
+              ),
+            ),
+          ),
+        );
     }
   }
 
@@ -854,6 +889,9 @@ class GameState with _$GameState {
 
     /// Game full id used to redirect to the new game of the rematch
     GameFullId? redirectGameId,
+
+    /// Server move evaluations, only available after the game is finished
+    IList<ExternalEval>? serverEvalution,
   }) = _GameState;
 
   // preferences

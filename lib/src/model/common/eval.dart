@@ -12,17 +12,17 @@ sealed class Eval {
   double winningChances(Side side);
 }
 
+/// The eval from an external engine, typically lichess server side stockfish.
 @freezed
 class ExternalEval with _$ExternalEval implements Eval {
   const ExternalEval._();
 
   const factory ExternalEval({
-    required double? eval,
+    required int? cp,
     required int? mate,
-    required int? depth,
-  }) = _ServerEval;
-
-  int? get cp => eval != null ? cpFromEval(eval!) : null;
+    int? depth,
+    UCIMove? bestMove,
+  }) = _ExternalEval;
 
   @override
   String get evalString => _evalString(cp, mate);
@@ -33,14 +33,15 @@ class ExternalEval with _$ExternalEval implements Eval {
   double get _whiteWinningChances {
     if (mate != null) {
       return mateWinningChances(mate!);
-    } else if (eval != null) {
-      return cpWinningChances(cpFromEval(eval!));
+    } else if (cp != null) {
+      return cpWinningChances(cp!);
     } else {
       return 0;
     }
   }
 }
 
+/// The eval from the client's own engine, typically stockfish.
 @freezed
 class ClientEval with _$ClientEval implements Eval {
   const ClientEval._();
