@@ -846,14 +846,14 @@ class ServerAnalysisSummary extends ConsumerWidget {
                           serverAnalysis.black.inaccuracies.toString()
                         ),
                         (
-                          serverAnalysis.white.inaccuracies.toString(),
+                          serverAnalysis.white.mistakes.toString(),
                           'Mistakes',
-                          serverAnalysis.black.inaccuracies.toString()
+                          serverAnalysis.black.mistakes.toString()
                         ),
                         (
-                          serverAnalysis.white.inaccuracies.toString(),
+                          serverAnalysis.white.blunders.toString(),
                           'Blunders',
-                          serverAnalysis.black.inaccuracies.toString()
+                          serverAnalysis.black.blunders.toString()
                         ),
                       ])
                         TableRow(
