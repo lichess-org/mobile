@@ -34,7 +34,6 @@ class ServerAnalysisService {
     final completer = Completer<void>();
 
     _socketSubscription = stream.listen((event) {
-      print(event);
       // complete on first analysisProgress event
       if (event.topic == 'analysisProgress') {
         completer.complete();
