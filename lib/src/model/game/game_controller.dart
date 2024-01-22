@@ -64,7 +64,8 @@ class GameController extends _$GameController {
   Future<GameState> build(GameFullId gameFullId) {
     final socket = ref.watch(socketClientProvider);
     final chatNotifier = ref.watch(chatControllerProvider(gameFullId).notifier);
-    final (stream, _) = socket.connect(Uri(path: '/play/$gameFullId/v6'));
+    final (stream, _) =
+        socket.connect(Uri(path: '/play/$gameFullId/v6'), forceReconnect: true);
     _socketEventVersion = null;
     _socketSubscription?.cancel();
     _socketSubscription = stream.listen(_handleSocketEvent);
