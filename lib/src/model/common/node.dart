@@ -24,7 +24,7 @@ abstract class Node {
 
   final Position position;
 
-  /// The evaluation of the position.
+  /// The client evaluation of the position.
   ClientEval? eval;
 
   /// The opening associated with this node.
@@ -205,6 +205,22 @@ abstract class Node {
     parentAt(path).children.removeWhere((child) => child.id == path.last);
   }
 
+  /// Hides the variation from the node at the given path.
+  void hideVariationAt(UciPath path) {
+    final nodes = nodesOn(path).toList();
+    for (int i = nodes.length - 2; i >= 0; i--) {
+      final node = nodes[i + 1];
+      final parent = nodes[i];
+      if (node is Branch && parent.children.length > 1) {
+        for (final child in parent.children) {
+          if (child.id == node.id) {
+            child.isHidden = true;
+          }
+        }
+      }
+    }
+  }
+
   /// Promotes the node at the given path.
   void promoteAt(UciPath path, {required bool toMainline}) {
     final nodes = nodesOn(path).toList();
@@ -266,11 +282,16 @@ class Branch extends Node {
     super.eval,
     super.opening,
     required this.sanMove,
+    this.isHidden = false,
+    this.lichessAnalysisComments,
     // below are fields from dartchess [PgnNodeData]
     this.startingComments,
     this.comments,
     this.nags,
   });
+
+  /// Whether the branch should be hidden in the tree view.
+  bool isHidden;
 
   /// The id of the branch, using a concise notation of associated move.
   UciCharPair get id => UciCharPair.fromMove(sanMove.move);
@@ -287,6 +308,11 @@ class Branch extends Node {
   /// Numeric Annotation Glyphs for the move.
   final List<int>? nags;
 
+  /// Lichess analysis comments.
+  ///
+  /// These are standard PGN comments, but get a special treatment.
+  final List<PgnComment>? lichessAnalysisComments;
+
   @override
   ViewBranch get view => ViewBranch(
         position: position,
@@ -294,6 +320,8 @@ class Branch extends Node {
         eval: eval,
         opening: opening,
         children: IList(children.map((child) => child.view)),
+        isHidden: isHidden,
+        lichessAnalysisComments: lichessAnalysisComments?.lock,
         startingComments: startingComments?.lock,
         comments: comments?.lock,
         nags: nags?.lock,
@@ -353,9 +381,11 @@ class Root extends Node {
   /// Any non legal move will be ignored.
   /// An optional callback can be provided to be called on each visited node.
   factory Root.fromPgnGame(
-    PgnGame game, [
+    PgnGame game, {
+    bool isLichessAnalysis = false,
+    bool hideVariations = false,
     void Function(Root root, Branch branch, bool isMainline)? onVisitNode,
-  ]) {
+  }) {
     final root = Root(
       position: PgnGame.startingPosition(game.headers),
     );
@@ -375,16 +405,28 @@ class Root extends Node {
           final branch = Branch(
             sanMove: SanMove(childFrom.data.san, move),
             position: newPos,
-            startingComments: childFrom.data.startingComments
-                ?.map(
-                  (c) => PgnComment.fromPgn(c),
-                )
-                .toList(growable: false),
-            comments: childFrom.data.comments
-                ?.map(
-                  (c) => PgnComment.fromPgn(c),
-                )
-                .toList(growable: false),
+            isHidden: hideVariations && childIdx > 0,
+            lichessAnalysisComments: isLichessAnalysis
+                ? childFrom.data.comments
+                    ?.map(
+                      (c) => PgnComment.fromPgn(c),
+                    )
+                    .toList(growable: false)
+                : null,
+            startingComments: isLichessAnalysis
+                ? null
+                : childFrom.data.startingComments
+                    ?.map(
+                      (c) => PgnComment.fromPgn(c),
+                    )
+                    .toList(growable: false),
+            comments: isLichessAnalysis
+                ? null
+                : childFrom.data.comments
+                    ?.map(
+                      (c) => PgnComment.fromPgn(c),
+                    )
+                    .toList(growable: false),
             nags: childFrom.data.nags,
           );
 
@@ -475,6 +517,7 @@ abstract class ViewNode {
   Opening? get opening;
   IList<PgnComment>? get startingComments;
   IList<PgnComment>? get comments;
+  IList<PgnComment>? get lichessAnalysisComments;
   IList<int>? get nags;
 }
 
@@ -504,6 +547,9 @@ class ViewRoot with _$ViewRoot implements ViewNode {
   IList<PgnComment>? get comments => null;
 
   @override
+  IList<PgnComment>? get lichessAnalysisComments => null;
+
+  @override
   IList<int>? get nags => null;
 }
 
@@ -517,7 +563,9 @@ class ViewBranch with _$ViewBranch implements ViewNode {
     required Position position,
     Opening? opening,
     required IList<ViewBranch> children,
+    @Default(false) bool isHidden,
     ClientEval? eval,
+    IList<PgnComment>? lichessAnalysisComments,
     IList<PgnComment>? startingComments,
     IList<PgnComment>? comments,
     IList<int>? nags,
@@ -530,6 +578,16 @@ class ViewBranch with _$ViewBranch implements ViewNode {
   /// Has at least one non empty comment text.
   bool get hasTextComment =>
       comments?.any((c) => c.text?.isNotEmpty == true) == true;
+
+  /// Has at least one non empty lichess analysis comment text.
+  bool get hasLichessAnalysisTextComment =>
+      lichessAnalysisComments?.any((c) => c.text?.isNotEmpty == true) == true;
+
+  Duration? get clock {
+    final clockComment =
+        lichessAnalysisComments?.firstWhereOrNull((c) => c.clock != null);
+    return clockComment?.clock;
+  }
 
   @override
   UciCharPair get id => UciCharPair.fromMove(sanMove.move);

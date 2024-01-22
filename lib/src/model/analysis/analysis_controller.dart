@@ -85,17 +85,22 @@ class AnalysisController extends _$AnalysisController {
     final pgnHeaders = IMap(game.headers);
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
-    _root = Root.fromPgnGame(game, (root, branch, isMainline) {
-      if (isMainline &&
-          options.initialMoveCursor != null &&
-          branch.position.ply <= options.initialMoveCursor!) {
-        path = path + branch.id;
-        lastMove = branch.sanMove.move;
-      }
-      if (isMainline && options.opening == null && branch.position.ply <= 2) {
-        _fetchOpening(root, path);
-      }
-    });
+    _root = Root.fromPgnGame(
+      game,
+      isLichessAnalysis: options.id is GameId,
+      hideVariations: true,
+      onVisitNode: (root, branch, isMainline) {
+        if (isMainline &&
+            options.initialMoveCursor != null &&
+            branch.position.ply <= options.initialMoveCursor!) {
+          path = path + branch.id;
+          lastMove = branch.sanMove.move;
+        }
+        if (isMainline && options.opening == null && branch.position.ply <= 2) {
+          _fetchOpening(root, path);
+        }
+      },
+    );
 
     final currentPath =
         options.initialMoveCursor == null ? _root.mainlinePath : path;
@@ -108,12 +113,12 @@ class AnalysisController extends _$AnalysisController {
     // We know ACPL chart data is available in the PGN if the server analysis is
     // available.
     // Works only for lichess games.
-    // TODO use another way to detect if the PGN contains ACPL data
     final acplChartData = options.serverAnalysis != null
         ? _root.mainline
             .map(
-              (node) =>
-                  node.comments?.firstWhereOrNull((c) => c.eval != null)?.eval,
+              (node) => node.lichessAnalysisComments
+                  ?.firstWhereOrNull((c) => c.eval != null)
+                  ?.eval,
             )
             .whereNotNull()
             .map(
@@ -172,7 +177,11 @@ class AnalysisController extends _$AnalysisController {
     if (!state.position.isLegal(move)) return;
     final (newPath, isNewNode) = _root.addMoveAt(state.currentPath, move);
     if (newPath != null) {
-      _setPath(newPath, shouldRecomputeRootView: isNewNode);
+      _setPath(
+        newPath,
+        shouldRecomputeRootView: isNewNode,
+        shouldForceShowVariation: true,
+      );
     }
   }
 
@@ -203,9 +212,7 @@ class AnalysisController extends _$AnalysisController {
     }
 
     if (node != null) {
-      _setPath(
-        path,
-      );
+      userJump(path);
     }
   }
 
@@ -221,7 +228,20 @@ class AnalysisController extends _$AnalysisController {
     _setPath(path);
   }
 
-  void promoteVaritation(UciPath path, bool toMainline) {
+  void showAllVariations(UciPath path) {
+    final parent = _root.parentAt(path);
+    for (final node in parent.children) {
+      node.isHidden = false;
+    }
+    state = state.copyWith(root: _root.view);
+  }
+
+  void hideVariation(UciPath path) {
+    _root.hideVariationAt(path);
+    state = state.copyWith(root: _root.view);
+  }
+
+  void promoteVariation(UciPath path, bool toMainline) {
     _root.promoteAt(path, toMainline: toMainline);
     state = state.copyWith(
       isOnMainline: _root.isOnMainline(state.currentPath),
@@ -326,15 +346,28 @@ class AnalysisController extends _$AnalysisController {
 
   void _setPath(
     UciPath path, {
+    bool shouldForceShowVariation = false,
     bool shouldRecomputeRootView = false,
     bool replaying = false,
   }) {
     final pathChange = state.currentPath != path;
     final (currentNode, opening) = _nodeOpeningAt(_root, path);
 
+    // always show variation if the user plays a move
+    if (shouldForceShowVariation &&
+        currentNode is Branch &&
+        currentNode.isHidden) {
+      _root.updateAt(path, (node) {
+        if (node is Branch) node.isHidden = false;
+      });
+    }
+
     // root view is only used to display move list, so we need to
     // recompute the root view only when the nodelist length changes
-    final rootView = shouldRecomputeRootView ? _root.view : state.root;
+    // or a variation is hidden/shown
+    final rootView = shouldForceShowVariation || shouldRecomputeRootView
+        ? _root.view
+        : state.root;
 
     if (currentNode is Branch) {
       if (!replaying) {
@@ -525,16 +558,7 @@ class AnalysisState with _$AnalysisState {
         orientation: pov,
         isLocalEngineAvailable: isEngineAvailable,
         position: position,
-        savedEval: currentNode.eval ??
-            (currentNode.pgnEval != null
-                ? ExternalEval(
-                    cp: currentNode.pgnEval!.pawns != null
-                        ? cpFromEval(currentNode.pgnEval!.pawns!)
-                        : null,
-                    mate: currentNode.pgnEval!.mate,
-                    depth: currentNode.pgnEval!.depth,
-                  )
-                : null),
+        savedEval: currentNode.eval ?? currentNode.serverEval,
       );
 }
 
@@ -549,6 +573,7 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
     SanMove? sanMove,
     Opening? opening,
     ClientEval? eval,
+    IList<PgnComment>? lichessAnalysisComments,
     IList<PgnComment>? startingComments,
     IList<PgnComment>? comments,
     IList<int>? nags,
@@ -563,6 +588,7 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
         hasChild: node.children.isNotEmpty,
         opening: node.opening,
         eval: node.eval,
+        lichessAnalysisComments: IList(node.lichessAnalysisComments),
         startingComments: IList(node.startingComments),
         comments: IList(node.comments),
         nags: IList(node.nags),
@@ -578,6 +604,18 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
     }
   }
 
-  PgnEvaluation? get pgnEval =>
-      comments?.firstWhereOrNull((c) => c.eval != null)?.eval;
+  /// The evaluation from the PGN comments.
+  ///
+  /// For now we only trust the eval coming from lichess analysis.
+  ExternalEval? get serverEval {
+    final pgnEval =
+        lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval;
+    return pgnEval != null
+        ? ExternalEval(
+            cp: pgnEval.pawns != null ? cpFromEval(pgnEval.pawns!) : null,
+            mate: pgnEval.mate,
+            depth: pgnEval.depth,
+          )
+        : null;
+  }
 }

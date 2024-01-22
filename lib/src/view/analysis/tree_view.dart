@@ -10,11 +10,12 @@ import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 
 import 'annotations.dart';
 
@@ -107,12 +108,14 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     final rootComments = ref.watch(
       ctrlProvider.select((value) => value.pgnRootComments),
     );
+
     final shouldShowComments = ref.watch(
       analysisPreferencesProvider.select((value) => value.showPgnComments),
     );
 
     final List<Widget> moveWidgets = _buildTreeWidget(
-      ctrlProvider,
+      widget.options,
+      parent: root,
       nodes: root.children,
       shouldShowComments: shouldShowComments,
       inMainline: true,
@@ -163,7 +166,8 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
   }
 
   List<Widget> _buildTreeWidget(
-    AnalysisControllerProvider ctrlProvider, {
+    AnalysisOptions options, {
+    required ViewNode parent,
     required IList<ViewBranch> nodes,
     required bool inMainline,
     required bool startSideline,
@@ -180,8 +184,9 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     // add the first child
     widgets.add(
       InlineMove(
-        ctrlProvider,
+        options,
         path: newPath,
+        parent: parent,
         branch: firstChild,
         isCurrentMove: currentMove,
         key: currentMove ? currentMoveKey : null,
@@ -194,6 +199,8 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
 
     // add the sidelines if present
     for (var i = 1; i < nodes.length; i++) {
+      final node = nodes[i];
+      if (node.isHidden) continue;
       // start new sideline from mainline on a new line
       if (inMainline) {
         widgets.add(
@@ -202,7 +209,8 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
             child: Wrap(
               spacing: kInlineMoveSpacing,
               children: _buildTreeWidget(
-                ctrlProvider,
+                options,
+                parent: parent,
                 nodes: [nodes[i]].lockUnsafe,
                 shouldShowComments: shouldShowComments,
                 inMainline: false,
@@ -215,7 +223,8 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
       } else {
         widgets.addAll(
           _buildTreeWidget(
-            ctrlProvider,
+            options,
+            parent: parent,
             nodes: [nodes[i]].lockUnsafe,
             shouldShowComments: shouldShowComments,
             inMainline: false,
@@ -229,7 +238,8 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     // add the children of the first child
     widgets.addAll(
       _buildTreeWidget(
-        ctrlProvider,
+        options,
+        parent: firstChild,
         nodes: firstChild.children,
         shouldShowComments: shouldShowComments,
         inMainline: inMainline,
@@ -256,8 +266,9 @@ Color? _textColor(BuildContext context, double opacity, [int? nag]) {
 
 class InlineMove extends ConsumerWidget {
   const InlineMove(
-    this.ctrlProvider, {
+    this.options, {
     required this.path,
+    required this.parent,
     required this.branch,
     required this.shouldShowComments,
     required this.isCurrentMove,
@@ -267,8 +278,9 @@ class InlineMove extends ConsumerWidget {
     this.endSideline = false,
   });
 
-  final AnalysisControllerProvider ctrlProvider;
+  final AnalysisOptions options;
   final UciPath path;
+  final ViewNode parent;
   final ViewBranch branch;
   final bool shouldShowComments;
   final bool isCurrentMove;
@@ -284,6 +296,7 @@ class InlineMove extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = analysisControllerProvider(options);
     final move = branch.sanMove;
     final ply = branch.position.ply;
     final textStyle = isSideline
@@ -312,6 +325,9 @@ class InlineMove extends ConsumerWidget {
               )
             : null);
 
+    final moveWithNag =
+        move.san + (branch.nags != null ? _displayNags(branch.nags!) : '');
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -333,22 +349,40 @@ class InlineMove extends ConsumerWidget {
         AdaptiveInkWell(
           borderRadius: borderRadius,
           onTap: () => ref.read(ctrlProvider.notifier).userJump(path),
-          onLongPress: () =>
-              _showContextActions(context, ref, path, isSideline),
+          onLongPress: () {
+            showAdaptiveBottomSheet<void>(
+              context: context,
+              isDismissible: true,
+              isScrollControlled: true,
+              showDragHandle: true,
+              builder: (context) => _MoveContextMenu(
+                options,
+                title: ply.isOdd
+                    ? '${(ply / 2).ceil()}. $moveWithNag'
+                    : '${(ply / 2).ceil()}... $moveWithNag',
+                path: path,
+                parent: parent,
+                branch: branch,
+                isSideline: isSideline,
+              ),
+            );
+          },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
             decoration: isCurrentMove
                 ? BoxDecoration(
-                    color: Theme.of(context).focusColor,
+                    color: Theme.of(context).platform == TargetPlatform.iOS
+                        ? CupertinoColors.systemGrey3.resolveFrom(context)
+                        : Theme.of(context).focusColor,
                     shape: BoxShape.rectangle,
                     borderRadius: borderRadius,
                   )
                 : null,
             child: Text(
-              move.san +
-                  (branch.nags != null ? _displayNags(branch.nags!) : ''),
+              moveWithNag,
               style: isCurrentMove
                   ? textStyle.copyWith(
+                      fontWeight: FontWeight.bold,
                       color: _textColor(context, 1, branch.nags?.firstOrNull),
                     )
                   : textStyle,
@@ -366,45 +400,142 @@ class InlineMove extends ConsumerWidget {
       ],
     );
   }
+}
 
-  Future<void> _showContextActions(
-    BuildContext context,
-    WidgetRef ref,
-    UciPath path,
-    bool isSideline,
-  ) {
-    return showAdaptiveActionSheet(
-      context: context,
-      actions: [
-        if (isSideline)
-          BottomSheetAction(
-            leading: Icon(
-              Icons.expand_less,
-              color: Theme.of(context).iconTheme.color,
-            ),
-            label: Text(context.l10n.promoteVariation),
-            onPressed: (ctx) {
-              ref.read(ctrlProvider.notifier).promoteVaritation(path, false);
-            },
+class _MoveContextMenu extends ConsumerWidget {
+  const _MoveContextMenu(
+    this.options, {
+    required this.title,
+    required this.path,
+    required this.parent,
+    required this.branch,
+    required this.isSideline,
+  });
+
+  final String title;
+  final AnalysisOptions options;
+  final UciPath path;
+  final ViewNode parent;
+  final ViewBranch branch;
+  final bool isSideline;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = analysisControllerProvider(options);
+
+    return DraggableScrollableSheet(
+      initialChildSize: .4,
+      expand: false,
+      snap: true,
+      snapSizes: const [.4, .7],
+      builder: (context, scrollController) => SingleChildScrollView(
+        controller: scrollController,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    if (branch.clock != null)
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.punch_clock,
+                          ),
+                          const SizedBox(width: 4.0),
+                          Text(
+                            branch.clock!.toHoursMinutesSeconds(),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
+              if (branch.hasLichessAnalysisTextComment)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 8.0,
+                  ),
+                  child: Text(
+                    branch.lichessAnalysisComments!
+                        .map((c) => c.text ?? '')
+                        .join(' ')
+                        .replaceAll('\n', ' '),
+                  ),
+                ),
+              if (branch.hasTextComment)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 8.0,
+                  ),
+                  child: Text(
+                    branch.comments!
+                        .map((c) => c.text ?? '')
+                        .join(' ')
+                        .replaceAll('\n', ' '),
+                  ),
+                ),
+              const PlatformDivider(indent: 0),
+              if (parent.children.any((c) => c.isHidden))
+                BottomSheetContextMenuAction(
+                  icon: Icons.visibility,
+                  child: const Text('Show variations'),
+                  onPressed: () {
+                    ref.read(ctrlProvider.notifier).showAllVariations(path);
+                  },
+                ),
+              if (isSideline)
+                BottomSheetContextMenuAction(
+                  icon: Icons.visibility_off,
+                  child: const Text('Hide variation'),
+                  onPressed: () {
+                    ref.read(ctrlProvider.notifier).hideVariation(path);
+                  },
+                ),
+              if (isSideline)
+                BottomSheetContextMenuAction(
+                  icon: Icons.expand_less,
+                  child: Text(context.l10n.promoteVariation),
+                  onPressed: () {
+                    ref
+                        .read(ctrlProvider.notifier)
+                        .promoteVariation(path, false);
+                  },
+                ),
+              if (isSideline)
+                BottomSheetContextMenuAction(
+                  icon: Icons.check,
+                  child: Text(context.l10n.makeMainLine),
+                  onPressed: () {
+                    ref
+                        .read(ctrlProvider.notifier)
+                        .promoteVariation(path, true);
+                  },
+                ),
+              BottomSheetContextMenuAction(
+                icon: Icons.delete,
+                child: Text(context.l10n.deleteFromHere),
+                onPressed: () {
+                  ref.read(ctrlProvider.notifier).deleteFromHere(path);
+                },
+              ),
+            ],
           ),
-        if (isSideline)
-          BottomSheetAction(
-            leading:
-                Icon(Icons.check, color: Theme.of(context).iconTheme.color),
-            label: Text(context.l10n.makeMainLine),
-            onPressed: (ctx) {
-              ref.read(ctrlProvider.notifier).promoteVaritation(path, true);
-            },
-          ),
-        BottomSheetAction(
-          leading: Icon(Icons.delete, color: Theme.of(context).iconTheme.color),
-          label: Text(context.l10n.deleteFromHere),
-          isDestructiveAction: true,
-          onPressed: (ctx) {
-            ref.read(ctrlProvider.notifier).deleteFromHere(path);
-          },
         ),
-      ],
+      ),
     );
   }
 }

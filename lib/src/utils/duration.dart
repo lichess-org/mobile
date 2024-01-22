@@ -1,6 +1,15 @@
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 
 extension DurationExtensions on Duration {
+  /// Returns a string representation of this duration, like HH:MM:SS.
+  String toHoursMinutesSeconds() {
+    final String negativeSign = isNegative ? '-' : '';
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final String twoDigitMinutes = twoDigits(inMinutes.remainder(60).abs());
+    final String twoDigitSeconds = twoDigits(inSeconds.remainder(60).abs());
+    return '$negativeSign${twoDigits(inHours)}:$twoDigitMinutes:$twoDigitSeconds';
+  }
+
   String toDaysHoursMinutes(AppLocalizations l10n) {
     final days = inDays;
     final hours = inHours.remainder(24);

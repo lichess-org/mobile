@@ -68,7 +68,7 @@ class GameRepository {
 
   FutureResult<String> getGameAnalysisPgn(GameId id) {
     return apiClient.get(
-      Uri.parse('$kLichessHost/game/export/$id?literate=1&clocks=0'),
+      Uri.parse('$kLichessHost/game/export/$id?literate=1'),
       headers: {'Accept': 'application/x-chess-pgn'},
     ).map((r) => utf8.decode(r.bodyBytes));
   }
