@@ -474,7 +474,8 @@ class _Comments extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
           fontStyle: FontStyle.italic,
-          color: isSideline ? _textColor(context, 0.6) : null,
+          color:
+              isSideline ? _textColor(context, 0.6) : _textColor(context, 0.9),
         ),
       ),
     );
