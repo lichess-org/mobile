@@ -47,7 +47,9 @@ class ServerAnalysisService {
     _socketSubscription = stream.listen((event) {
       // complete on first analysisProgress event
       if (event.topic == 'analysisProgress') {
-        completer.complete();
+        if (!completer.isCompleted) {
+          completer.complete();
+        }
         final data =
             ServerEvalEvent.fromJson(event.data as Map<String, dynamic>);
 
