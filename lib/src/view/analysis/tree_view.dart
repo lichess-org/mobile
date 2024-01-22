@@ -507,7 +507,7 @@ class _MoveContextMenu extends ConsumerWidget {
               const PlatformDivider(indent: 0),
               if (parent.children.any((c) => c.isHidden))
                 BottomSheetContextMenuAction(
-                  icon: Icons.visibility,
+                  icon: Icons.subtitles,
                   child: const Text('Show variations'),
                   onPressed: () {
                     ref.read(ctrlProvider.notifier).showAllVariations(path);
@@ -515,7 +515,7 @@ class _MoveContextMenu extends ConsumerWidget {
                 ),
               if (isSideline)
                 BottomSheetContextMenuAction(
-                  icon: Icons.visibility_off,
+                  icon: Icons.subtitles_off,
                   child: const Text('Hide variation'),
                   onPressed: () {
                     ref.read(ctrlProvider.notifier).hideVariation(path);
