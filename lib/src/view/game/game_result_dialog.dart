@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/annotations.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
@@ -318,16 +319,54 @@ class PlayerSummary extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    Widget makeStatCol(
+      int value,
+      String Function(int count) labelFn,
+      Color? color,
+    ) {
+      return Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              value.toString(),
+              style: TextStyle(
+                fontSize: 18.0,
+                color: color,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 4.0),
+            FittedBox(
+              child: Text(
+                labelFn(value).replaceAll(RegExp(r'\d+'), '').trim(),
+                style: TextStyle(color: color),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.max,
       children: [
-        Text(context.l10n.nbInaccuracies(me.analysis!.inaccuracies)),
-        Text(context.l10n.nbMistakes(me.analysis!.mistakes)),
-        Text(context.l10n.nbBlunders(me.analysis!.blunders)),
-        if (me.analysis!.acpl != null)
-          Text('${me.analysis!.acpl} ${context.l10n.averageCentipawnLoss}'),
-        if (me.analysis!.accuracy != null)
-          Text('${me.analysis!.accuracy}% ${context.l10n.accuracy}'),
+        makeStatCol(
+          me.analysis!.inaccuracies,
+          context.l10n.nbInaccuracies,
+          me.analysis!.inaccuracies > 0 ? innacuracyColor : null,
+        ),
+        makeStatCol(
+          me.analysis!.mistakes,
+          context.l10n.nbMistakes,
+          me.analysis!.mistakes > 0 ? mistakeColor : null,
+        ),
+        makeStatCol(
+          me.analysis!.blunders,
+          context.l10n.nbBlunders,
+          me.analysis!.blunders > 0 ? blunderColor : null,
+        ),
       ],
     );
   }

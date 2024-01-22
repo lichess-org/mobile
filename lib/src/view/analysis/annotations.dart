@@ -2,11 +2,15 @@ import 'package:chessground/chessground.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 
+const innacuracyColor = LichessColors.cyan;
+const mistakeColor = Color(0xFFe69f00);
+const blunderColor = Color(0xFFdf5353);
+
 const nagColorMap = {
   1: Colors.lightGreen,
-  2: Color(0xFFe69f00),
+  2: mistakeColor,
   3: Colors.teal,
-  4: Color(0xFFdf5353),
+  4: blunderColor,
   5: Colors.lightBlue,
   6: LichessColors.cyan,
 };
@@ -35,11 +39,11 @@ Annotation? makeAnnotation(Iterable<int>? nags) {
       ),
     2 => const Annotation(
         symbol: '?',
-        color: Color(0xFFe69f00),
+        color: mistakeColor,
       ),
     4 => const Annotation(
         symbol: '??',
-        color: Color(0xFFdf5353),
+        color: blunderColor,
       ),
     int() => null,
   };

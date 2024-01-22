@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -842,17 +843,29 @@ class ServerAnalysisSummary extends ConsumerWidget {
                       for (final item in [
                         (
                           serverAnalysis.white.inaccuracies.toString(),
-                          'Inaccuracies',
+                          context.l10n
+                              .nbInaccuracies(2)
+                              .replaceAll('2', '')
+                              .trim()
+                              .capitalize(),
                           serverAnalysis.black.inaccuracies.toString()
                         ),
                         (
                           serverAnalysis.white.mistakes.toString(),
-                          'Mistakes',
+                          context.l10n
+                              .nbMistakes(2)
+                              .replaceAll('2', '')
+                              .trim()
+                              .capitalize(),
                           serverAnalysis.black.mistakes.toString()
                         ),
                         (
                           serverAnalysis.white.blunders.toString(),
-                          'Blunders',
+                          context.l10n
+                              .nbBlunders(2)
+                              .replaceAll('2', '')
+                              .trim()
+                              .capitalize(),
                           serverAnalysis.black.blunders.toString()
                         ),
                       ])
