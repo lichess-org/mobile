@@ -1,6 +1,14 @@
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 
 extension DurationExtensions on Duration {
+  String toMinutesSeconds() {
+    if (inHours == 0) {
+      return '${inMinutes.remainder(60)}:${inSeconds.remainder(60).toString().padLeft(2, '0')}';
+    } else {
+      return '$inHours:${inMinutes.remainder(60).toString().padLeft(2, '0')}:${inSeconds.remainder(60).toString().padLeft(2, '0')}';
+    }
+  }
+
   /// Returns a string representation of this duration, like HH:MM:SS.
   String toHoursMinutesSeconds() {
     final String negativeSign = isNegative ? '-' : '';

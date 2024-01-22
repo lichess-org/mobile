@@ -283,6 +283,7 @@ class Branch extends Node {
     super.opening,
     required this.sanMove,
     this.isHidden = false,
+    this.moveTime,
     this.lichessAnalysisComments,
     // below are fields from dartchess [PgnNodeData]
     this.startingComments,
@@ -298,6 +299,9 @@ class Branch extends Node {
 
   /// The associated move.
   final SanMove sanMove;
+
+  /// The duration of the move.
+  final Duration? moveTime;
 
   /// PGN comments before the move.
   final List<PgnComment>? startingComments;
@@ -321,6 +325,7 @@ class Branch extends Node {
         opening: opening,
         children: IList(children.map((child) => child.view)),
         isHidden: isHidden,
+        moveTime: moveTime,
         lichessAnalysisComments: lichessAnalysisComments?.lock,
         startingComments: startingComments?.lock,
         comments: comments?.lock,
@@ -393,6 +398,18 @@ class Root extends Node {
     final List<({PgnNode<PgnNodeData> from, Node to})> stack = [
       (from: game.moves, to: root),
     ];
+
+    Duration clockIncrement = Duration.zero;
+    try {
+      final seconds =
+          game.headers['TimeControl']?.split('+').map(int.parse).toList()[1] ??
+              0;
+      clockIncrement = Duration(seconds: seconds);
+    } catch (_) {}
+
+    Duration? whiteClock;
+    Duration? blackClock;
+
     while (stack.isNotEmpty) {
       final frame = stack.removeLast();
       for (int childIdx = 0;
@@ -402,38 +419,49 @@ class Root extends Node {
         final move = frame.to.position.parseSan(childFrom.data.san);
         if (move != null) {
           final newPos = frame.to.position.play(move);
+          final isMainline = stack.isEmpty;
+          final comments = childFrom.data.comments?.map(PgnComment.fromPgn);
+          final clock =
+              comments?.firstWhereOrNull((c) => c.clock != null)?.clock;
+
+          Duration? moveTime;
+
+          if (isMainline && clock != null) {
+            if (newPos.turn == Side.white) {
+              if (whiteClock != null) {
+                moveTime = whiteClock + clockIncrement - clock;
+              }
+
+              whiteClock = clock;
+            } else {
+              if (blackClock != null) {
+                moveTime = blackClock + clockIncrement - clock;
+              }
+              blackClock = clock;
+            }
+          }
+
           final branch = Branch(
             sanMove: SanMove(childFrom.data.san, move),
             position: newPos,
             isHidden: hideVariations && childIdx > 0,
-            lichessAnalysisComments: isLichessAnalysis
-                ? childFrom.data.comments
-                    ?.map(
-                      (c) => PgnComment.fromPgn(c),
-                    )
-                    .toList(growable: false)
-                : null,
+            moveTime: moveTime,
+            lichessAnalysisComments:
+                isLichessAnalysis ? comments?.toList(growable: false) : null,
             startingComments: isLichessAnalysis
                 ? null
                 : childFrom.data.startingComments
-                    ?.map(
-                      (c) => PgnComment.fromPgn(c),
-                    )
+                    ?.map(PgnComment.fromPgn)
                     .toList(growable: false),
-            comments: isLichessAnalysis
-                ? null
-                : childFrom.data.comments
-                    ?.map(
-                      (c) => PgnComment.fromPgn(c),
-                    )
-                    .toList(growable: false),
+            comments:
+                isLichessAnalysis ? null : comments?.toList(growable: false),
             nags: childFrom.data.nags,
           );
 
           frame.to.addChild(branch);
           stack.add((from: childFrom, to: branch));
 
-          onVisitNode?.call(root, branch, stack.length == 1);
+          onVisitNode?.call(root, branch, isMainline);
         }
       }
     }
@@ -564,6 +592,7 @@ class ViewBranch with _$ViewBranch implements ViewNode {
     Opening? opening,
     required IList<ViewBranch> children,
     @Default(false) bool isHidden,
+    Duration? moveTime,
     ClientEval? eval,
     IList<PgnComment>? lichessAnalysisComments,
     IList<PgnComment>? startingComments,

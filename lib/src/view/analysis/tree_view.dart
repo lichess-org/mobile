@@ -444,19 +444,39 @@ class _MoveContextMenu extends ConsumerWidget {
                   children: [
                     Text(
                       title,
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     if (branch.clock != null)
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(
-                            Icons.punch_clock,
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.punch_clock,
+                              ),
+                              const SizedBox(width: 4.0),
+                              Text(
+                                branch.clock!.toHoursMinutesSeconds(),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 4.0),
-                          Text(
-                            branch.clock!.toHoursMinutesSeconds(),
-                          ),
+                          if (branch.moveTime != null) ...[
+                            const SizedBox(height: 4.0),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.hourglass_bottom,
+                                ),
+                                const SizedBox(width: 4.0),
+                                Text(
+                                  branch.moveTime!.toMinutesSeconds(),
+                                ),
+                              ],
+                            ),
+                          ],
                         ],
                       ),
                   ],
@@ -471,8 +491,7 @@ class _MoveContextMenu extends ConsumerWidget {
                   child: Text(
                     branch.lichessAnalysisComments!
                         .map((c) => c.text ?? '')
-                        .join(' ')
-                        .replaceAll('\n', ' '),
+                        .join(' '),
                   ),
                 ),
               if (branch.hasTextComment)
@@ -482,10 +501,7 @@ class _MoveContextMenu extends ConsumerWidget {
                     vertical: 8.0,
                   ),
                   child: Text(
-                    branch.comments!
-                        .map((c) => c.text ?? '')
-                        .join(' ')
-                        .replaceAll('\n', ' '),
+                    branch.comments!.map((c) => c.text ?? '').join(' '),
                   ),
                 ),
               const PlatformDivider(indent: 0),
