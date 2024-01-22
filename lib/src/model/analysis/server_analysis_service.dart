@@ -55,7 +55,7 @@ class ServerAnalysisService {
 
         _analysisProgress.value = (gameId, data);
 
-        if (!data.isAnalysisIncomplete) {
+        if (data.isAnalysisIncomplete == false) {
           _socketSubscription?.cancel();
           _socketSubscription = null;
         }
