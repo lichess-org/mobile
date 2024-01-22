@@ -305,7 +305,7 @@ class InlineMove extends ConsumerWidget {
             color: _textColor(context, 0.6, branch.nags?.firstOrNull),
           )
         : baseTextStyle.copyWith(
-            color: _textColor(context, 1, branch.nags?.firstOrNull),
+            color: _textColor(context, 0.9, branch.nags?.firstOrNull),
             fontWeight: FontWeight.w600,
           );
 
@@ -606,7 +606,7 @@ class _Comments extends StatelessWidget {
         style: TextStyle(
           fontStyle: FontStyle.italic,
           color:
-              isSideline ? _textColor(context, 0.6) : _textColor(context, 0.9),
+              isSideline ? _textColor(context, 0.6) : _textColor(context, 0.7),
         ),
       ),
     );
