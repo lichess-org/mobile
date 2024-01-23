@@ -156,13 +156,16 @@ sealed class Opening {
   String get name;
 }
 
-@freezed
+@Freezed(fromJson: true, toJson: true)
 class LightOpening with _$LightOpening implements Opening {
   const LightOpening._();
   const factory LightOpening({
     required String eco,
     required String name,
   }) = _LightOpening;
+
+  factory LightOpening.fromJson(Map<String, dynamic> json) =>
+      _$LightOpeningFromJson(json);
 }
 
 @freezed

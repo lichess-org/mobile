@@ -38,20 +38,19 @@ class PlayableGame
   @Assert('steps.isNotEmpty')
   factory PlayableGame({
     required GameId id,
-    required PlayableGameMeta meta,
+    required GameMeta meta,
+    required GameSource source,
     required IList<GameStep> steps,
     String? initialFen,
     required GameStatus status,
     Side? winner,
-    required Variant variant,
-    required Speed speed,
-    required Perf perf,
     required Player white,
     required Player black,
     required bool moretimeable,
     required bool takebackable,
     IList<Message>? messages,
     IList<ExternalEval>? evals,
+    IList<Duration>? clocks,
 
     /// The side that the current player is playing as. This is null if viewing
     /// the game as a spectator.
@@ -161,10 +160,11 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
   return PlayableGame(
     id: requiredGamePick('id').asGameIdOrThrow(),
     meta: meta,
+    source: requiredGamePick('source').letOrThrow(
+      (pick) =>
+          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
+    ),
     initialFen: initialFen,
-    perf: meta.perf,
-    speed: meta.speed,
-    variant: meta.variant,
     steps: steps.toIList(),
     white: pick('white').letOrThrow(_playerFromUserGamePick),
     black: pick('black').letOrThrow(_playerFromUserGamePick),
@@ -194,16 +194,12 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
   );
 }
 
-PlayableGameMeta _playableGameMetaFromPick(RequiredPick pick) {
-  return PlayableGameMeta(
+GameMeta _playableGameMetaFromPick(RequiredPick pick) {
+  return GameMeta(
     rated: pick('game', 'rated').asBoolOrThrow(),
     speed: pick('game', 'speed').asSpeedOrThrow(),
     perf: pick('game', 'perf').asPerfOrThrow(),
     variant: pick('game', 'variant').asVariantOrThrow(),
-    source: pick('game', 'source').letOrThrow(
-      (pick) =>
-          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
-    ),
     clock: pick('clock').letOrNull(
       (cPick) => (
         initial: cPick('initial').asDurationFromSecondsOrThrow(),

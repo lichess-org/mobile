@@ -66,13 +66,6 @@ class GameRepository {
     );
   }
 
-  FutureResult<String> getGameAnalysisPgn(GameId id) {
-    return apiClient.get(
-      Uri.parse('$kLichessHost/game/export/$id?literate=1'),
-      headers: {'Accept': 'application/x-chess-pgn'},
-    ).map((r) => utf8.decode(r.bodyBytes));
-  }
-
   FutureResult<IList<ArchivedGameData>> getRecentGames(UserId userId) {
     return apiClient.get(
       Uri.parse(
@@ -140,9 +133,7 @@ class GameRepository {
 
 // --
 
-PostGameData _getPostGameDataFromJson(
-  Map<String, dynamic> json,
-) {
+PostGameData _getPostGameDataFromJson(Map<String, dynamic> json) {
   final pick = Pick(json).required();
   final clocks = pick('clocks').asListOrNull<Duration>(
     (p0) => Duration(milliseconds: p0.asIntOrThrow() * 10),
@@ -156,22 +147,7 @@ PostGameData _getPostGameDataFromJson(
   return PostGameData(
     clocks: IList(clocks ?? []),
     opening: pick('opening').letOrNull(_openingFromPick),
-    evals: pick('analysis')
-        .asListOrNull<ExternalEval>(
-          (p0) => ExternalEval(
-            cp: p0('eval').asIntOrNull(),
-            mate: p0('mate').asIntOrNull(),
-            bestMove: p0('best').asStringOrNull(),
-            variation: p0('variation').asStringOrNull(),
-            judgment: p0('judgment').letOrNull(
-              (j) => (
-                name: j('name').asStringOrThrow(),
-                comment: j('comment').asStringOrThrow(),
-              ),
-            ),
-          ),
-        )
-        ?.lock,
+    evals: _evalsFromPick(pick),
     analysis: whiteAnalysis != null && blackAnalysis != null
         ? (
             white: whiteAnalysis,
@@ -194,12 +170,23 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
 
   return ArchivedGame(
     id: data.id,
+    meta: GameMeta(
+      variant: data.variant,
+      speed: data.speed,
+      perf: data.perf,
+      rated: data.rated,
+      clock: data.clock != null
+          ? (
+              initial: data.clock!.initial,
+              increment: data.clock!.increment,
+              emergency: null,
+              moreTime: null
+            )
+          : null,
+    ),
     data: data,
-    perf: data.perf,
-    speed: data.speed,
     status: data.status,
     winner: data.winner,
-    variant: data.variant,
     initialFen: initialFen,
     isThreefoldRepetition: pick('threefold').asBoolOrNull(),
     white: data.white,
@@ -233,7 +220,28 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
       }
       return IList(steps);
     }),
+    clocks: IList(clocks ?? []),
+    evals: _evalsFromPick(pick),
   );
+}
+
+IList<ExternalEval>? _evalsFromPick(RequiredPick pick) {
+  return pick('analysis')
+      .asListOrNull<ExternalEval>(
+        (p0) => ExternalEval(
+          cp: p0('eval').asIntOrNull(),
+          mate: p0('mate').asIntOrNull(),
+          bestMove: p0('best').asStringOrNull(),
+          variation: p0('variation').asStringOrNull(),
+          judgment: p0('judgment').letOrNull(
+            (j) => (
+              name: j('name').asStringOrThrow(),
+              comment: j('comment').asStringOrThrow(),
+            ),
+          ),
+        ),
+      )
+      ?.lock;
 }
 
 ArchivedGameData _makeArchivedGameDataFromJson(Map<String, dynamic> json) =>

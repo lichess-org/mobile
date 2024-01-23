@@ -119,11 +119,11 @@ class _ContextMenu extends ConsumerWidget {
     final actions = [
       Builder(
         builder: (context) {
-          Future<void>? pgnFuture;
+          Future<void>? gameFuture;
           return StatefulBuilder(
             builder: (context, setState) {
               return FutureBuilder(
-                future: pgnFuture,
+                future: gameFuture,
                 builder: (context, snapshot) {
                   return BottomSheetContextMenuAction(
                     icon: Icons.biotech,
@@ -132,12 +132,12 @@ class _ContextMenu extends ConsumerWidget {
                             ? null
                             : () async {
                                 final future = ref.read(
-                                  gameAnalysisPgnProvider(id: game.id).future,
+                                  archivedGameProvider(id: game.id).future,
                                 );
                                 setState(() {
-                                  pgnFuture = future;
+                                  gameFuture = future;
                                 });
-                                final pgn = await future;
+                                final archivedGame = await future;
                                 if (context.mounted) {
                                   pushPlatformRoute(
                                     context,
@@ -146,7 +146,7 @@ class _ContextMenu extends ConsumerWidget {
                                       options: AnalysisOptions(
                                         isLocalEvaluationAllowed: true,
                                         variant: game.variant,
-                                        pgn: pgn,
+                                        pgn: archivedGame.makePgn(),
                                         orientation: orientation,
                                         id: game.id,
                                         serverAnalysis: serverAnalysis,

@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -44,7 +43,6 @@ class GameResultDialog extends ConsumerStatefulWidget {
 class _GameEndDialogState extends ConsumerState<GameResultDialog> {
   late Timer _buttonActivationTimer;
   bool _activateButtons = false;
-  Future<void>? _pendingPgnFuture;
   Future<void>? _pendingAnalysisRequestFuture;
 
   @override
@@ -164,41 +162,21 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
               );
             },
           ),
-        FutureBuilder(
-          future: _pendingPgnFuture,
-          builder: (context, snapshot) {
-            return SecondaryButton(
-              semanticsLabel: context.l10n.analysis,
-              onPressed: snapshot.connectionState == ConnectionState.waiting
-                  ? null
-                  : () async {
-                      final future = ref.read(
-                        gameAnalysisPgnProvider(
-                          id: gameState.game.id,
-                        ).future,
-                      );
-                      setState(() {
-                        _pendingPgnFuture = future;
-                      });
-                      final pgn = await future;
-                      if (context.mounted) {
-                        pushPlatformRoute(
-                          context,
-                          builder: (_) => AnalysisScreen(
-                            options: gameState.analysisOptions.copyWith(
-                              pgn: pgn,
-                            ),
-                            title: context.l10n.gameAnalysis,
-                          ),
-                        );
-                      }
-                    },
-              child: Text(
-                context.l10n.analysis,
-                textAlign: TextAlign.center,
+        SecondaryButton(
+          semanticsLabel: context.l10n.analysis,
+          onPressed: () {
+            pushPlatformRoute(
+              context,
+              builder: (_) => AnalysisScreen(
+                options: gameState.analysisOptions,
+                title: context.l10n.gameAnalysis,
               ),
             );
           },
+          child: Text(
+            context.l10n.analysis,
+            textAlign: TextAlign.center,
+          ),
         ),
       ],
     );
@@ -403,7 +381,7 @@ class GameResult extends StatelessWidget {
         Text(
           '${gameStatusL10n(
             context,
-            variant: game.variant,
+            variant: game.meta.variant,
             status: game.status,
             lastPosition: game.lastPosition,
             winner: game.winner,

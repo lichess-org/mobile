@@ -271,6 +271,73 @@ abstract class Node {
   Node parentAt(UciPath path) {
     return nodeAt(path.penultimate);
   }
+
+  /// Export the tree to a PGN string.
+  ///
+  /// Optionally, headers and initial game comments can be provided.
+  String makePgn([
+    IMap<String, String>? headers,
+    IList<PgnComment>? rootComments,
+  ]) {
+    final pgnNode = PgnNode<PgnNodeData>();
+    final List<({Node from, PgnNode<PgnNodeData> to})> stack = [
+      (from: this, to: pgnNode),
+    ];
+
+    while (stack.isNotEmpty) {
+      final frame = stack.removeLast();
+      for (int childIdx = 0;
+          childIdx < frame.from.children.length;
+          childIdx++) {
+        final childFrom = frame.from.children[childIdx];
+        final childTo = PgnChildNode(
+          PgnNodeData(
+            san: childFrom.sanMove.san,
+            startingComments: childFrom.startingComments
+                ?.map((c) => c.makeComment())
+                .toList(growable: false),
+            comments:
+                (childFrom.lichessAnalysisComments ?? childFrom.comments)?.map(
+              (c) {
+                final eval = childFrom.eval;
+                final pgnEval = eval?.cp != null
+                    ? PgnEvaluation.pawns(
+                        pawns: cpToPawns(eval!.cp!),
+                        depth: eval.depth,
+                      )
+                    : eval?.mate != null
+                        ? PgnEvaluation.mate(
+                            mate: eval!.mate,
+                            depth: eval.depth,
+                          )
+                        : c.eval;
+                return PgnComment(
+                  text: c.text,
+                  shapes: c.shapes,
+                  clock: c.clock,
+                  emt: c.emt,
+                  eval: pgnEval,
+                ).makeComment();
+              },
+            ).toList(growable: false),
+            nags: childFrom.nags,
+          ),
+        );
+        frame.to.children.add(childTo);
+        stack.add((from: childFrom, to: childTo));
+      }
+    }
+
+    final pgnGame = PgnGame(
+      headers: headers?.unlock ?? {},
+      moves: pgnNode,
+      comments:
+          rootComments?.map((c) => c.makeComment()).toList(growable: false) ??
+              [],
+    );
+
+    return pgnGame.makePgn();
+  }
 }
 
 /// A branch node of a game tree
@@ -283,7 +350,6 @@ class Branch extends Node {
     super.opening,
     required this.sanMove,
     this.isHidden = false,
-    this.moveTime,
     this.lichessAnalysisComments,
     // below are fields from dartchess [PgnNodeData]
     this.startingComments,
@@ -299,9 +365,6 @@ class Branch extends Node {
 
   /// The associated move.
   final SanMove sanMove;
-
-  /// The duration of the move.
-  final Duration? moveTime;
 
   /// PGN comments before the move.
   final List<PgnComment>? startingComments;
@@ -325,7 +388,6 @@ class Branch extends Node {
         opening: opening,
         children: IList(children.map((child) => child.view)),
         isHidden: isHidden,
-        moveTime: moveTime,
         lichessAnalysisComments: lichessAnalysisComments?.lock,
         startingComments: startingComments?.lock,
         comments: comments?.lock,
@@ -399,17 +461,6 @@ class Root extends Node {
       (from: game.moves, to: root),
     ];
 
-    Duration clockIncrement = Duration.zero;
-    try {
-      final seconds =
-          game.headers['TimeControl']?.split('+').map(int.parse).toList()[1] ??
-              0;
-      clockIncrement = Duration(seconds: seconds);
-    } catch (_) {}
-
-    Duration? whiteClock;
-    Duration? blackClock;
-
     while (stack.isNotEmpty) {
       final frame = stack.removeLast();
       for (int childIdx = 0;
@@ -421,31 +472,11 @@ class Root extends Node {
           final newPos = frame.to.position.play(move);
           final isMainline = stack.isEmpty;
           final comments = childFrom.data.comments?.map(PgnComment.fromPgn);
-          final clock =
-              comments?.firstWhereOrNull((c) => c.clock != null)?.clock;
-
-          Duration? moveTime;
-
-          if (isMainline && clock != null) {
-            if (newPos.turn == Side.white) {
-              if (whiteClock != null) {
-                moveTime = whiteClock + clockIncrement - clock;
-              }
-
-              whiteClock = clock;
-            } else {
-              if (blackClock != null) {
-                moveTime = blackClock + clockIncrement - clock;
-              }
-              blackClock = clock;
-            }
-          }
 
           final branch = Branch(
             sanMove: SanMove(childFrom.data.san, move),
             position: newPos,
             isHidden: hideVariations && childIdx > 0,
-            moveTime: moveTime,
             lichessAnalysisComments:
                 isLichessAnalysis ? comments?.toList(growable: false) : null,
             startingComments: isLichessAnalysis
@@ -466,72 +497,6 @@ class Root extends Node {
       }
     }
     return root;
-  }
-
-  /// Export the game tree to a PGN string.
-  ///
-  /// Optionally, headers and initial game comments can be provided.
-  String makePgn([
-    IMap<String, String>? headers,
-    IList<PgnComment>? rootComments,
-  ]) {
-    final pgnNode = PgnNode<PgnNodeData>();
-    final List<({Node from, PgnNode<PgnNodeData> to})> stack = [
-      (from: this, to: pgnNode),
-    ];
-
-    while (stack.isNotEmpty) {
-      final frame = stack.removeLast();
-      for (int childIdx = 0;
-          childIdx < frame.from.children.length;
-          childIdx++) {
-        final childFrom = frame.from.children[childIdx];
-        final childTo = PgnChildNode(
-          PgnNodeData(
-            san: childFrom.sanMove.san,
-            startingComments: childFrom.startingComments
-                ?.map((c) => c.makeComment())
-                .toList(growable: false),
-            comments: childFrom.comments?.map(
-              (c) {
-                final eval = childFrom.eval;
-                final pgnEval = eval?.cp != null
-                    ? PgnEvaluation.pawns(
-                        pawns: evalFromCp(eval!.cp!),
-                        depth: eval.depth,
-                      )
-                    : eval?.mate != null
-                        ? PgnEvaluation.mate(
-                            mate: eval!.mate,
-                            depth: eval.depth,
-                          )
-                        : c.eval;
-                return PgnComment(
-                  text: c.text,
-                  shapes: c.shapes,
-                  clock: c.clock,
-                  emt: c.emt,
-                  eval: pgnEval,
-                ).makeComment();
-              },
-            ).toList(growable: false),
-            nags: childFrom.nags,
-          ),
-        );
-        frame.to.children.add(childTo);
-        stack.add((from: childFrom, to: childTo));
-      }
-    }
-
-    final pgnGame = PgnGame(
-      headers: headers?.unlock ?? {},
-      moves: pgnNode,
-      comments:
-          rootComments?.map((c) => c.makeComment()).toList(growable: false) ??
-              [],
-    );
-
-    return pgnGame.makePgn();
   }
 }
 
@@ -592,7 +557,6 @@ class ViewBranch with _$ViewBranch implements ViewNode {
     Opening? opening,
     required IList<ViewBranch> children,
     @Default(false) bool isHidden,
-    Duration? moveTime,
     ClientEval? eval,
     IList<PgnComment>? lichessAnalysisComments,
     IList<PgnComment>? startingComments,
@@ -613,9 +577,15 @@ class ViewBranch with _$ViewBranch implements ViewNode {
       lichessAnalysisComments?.any((c) => c.text?.isNotEmpty == true) == true;
 
   Duration? get clock {
-    final clockComment =
-        lichessAnalysisComments?.firstWhereOrNull((c) => c.clock != null);
+    final clockComment = (lichessAnalysisComments ?? comments)
+        ?.firstWhereOrNull((c) => c.clock != null);
     return clockComment?.clock;
+  }
+
+  Duration? get elapsedMoveTime {
+    final clockComment = (lichessAnalysisComments ?? comments)
+        ?.firstWhereOrNull((c) => c.emt != null);
+    return clockComment?.emt;
   }
 
   @override

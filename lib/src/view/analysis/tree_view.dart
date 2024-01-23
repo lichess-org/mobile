@@ -424,10 +424,10 @@ class _MoveContextMenu extends ConsumerWidget {
     final ctrlProvider = analysisControllerProvider(options);
 
     return DraggableScrollableSheet(
-      initialChildSize: .4,
+      initialChildSize: .3,
       expand: false,
       snap: true,
-      snapSizes: const [.4, .7],
+      snapSizes: const [.3, .7],
       builder: (context, scrollController) => SingleChildScrollView(
         controller: scrollController,
         child: Padding(
@@ -458,11 +458,14 @@ class _MoveContextMenu extends ConsumerWidget {
                               ),
                               const SizedBox(width: 4.0),
                               Text(
-                                branch.clock!.toHoursMinutesSeconds(),
+                                branch.clock!.toHoursMinutesSeconds(
+                                  showTenths: branch.clock! <
+                                      const Duration(minutes: 1),
+                                ),
                               ),
                             ],
                           ),
-                          if (branch.moveTime != null) ...[
+                          if (branch.elapsedMoveTime != null) ...[
                             const SizedBox(height: 4.0),
                             Row(
                               mainAxisSize: MainAxisSize.min,
@@ -472,7 +475,8 @@ class _MoveContextMenu extends ConsumerWidget {
                                 ),
                                 const SizedBox(width: 4.0),
                                 Text(
-                                  branch.moveTime!.toMinutesSeconds(),
+                                  branch.elapsedMoveTime!
+                                      .toHoursMinutesSeconds(showTenths: true),
                                 ),
                               ],
                             ),

@@ -131,10 +131,9 @@ class PvData with _$PvData {
   }
 }
 
-double evalFromCp(int cp) =>
-    math.max(math.min((cp / 10).round() / 10, 99), -99);
+double cpToPawns(int cp) => cp / 100;
 
-int cpFromEval(double eval) => (eval * 100).round();
+int cpFromPawns(double pawns) => (pawns * 100).round();
 
 double cpWinningChances(int cp) =>
     _rawWinningChances(math.min(math.max(-1000, cp), 1000));
@@ -156,7 +155,7 @@ double _rawWinningChances(num cp) {
 
 String _evalString(int? cp, int? mate) {
   if (cp != null) {
-    final e = evalFromCp(cp);
+    final e = cpToPawns(cp);
     return e > 0 ? '+${e.toStringAsFixed(1)}' : e.toStringAsFixed(1);
   } else if (mate != null) {
     return '#$mate';

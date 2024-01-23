@@ -5,6 +5,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -27,6 +28,7 @@ class OfflineCorrespondenceGame
   factory OfflineCorrespondenceGame({
     required GameId id,
     required GameFullId fullId,
+    required GameMeta meta,
     @JsonKey(fromJson: _stepsFromJson, toJson: _stepsToJson)
     required IList<GameStep> steps,
     CorrespondenceClockData? clock,
@@ -49,6 +51,12 @@ class OfflineCorrespondenceGame
       _$OfflineCorrespondenceGameFromJson(json);
 
   Side get orientation => youAre;
+
+  @override
+  IList<Duration>? get clocks => null;
+
+  @override
+  IList<ExternalEval>? get evals => null;
 
   Player get me => youAre == Side.white ? white : black;
   Player get opponent => youAre == Side.white ? black : white;

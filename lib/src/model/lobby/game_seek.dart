@@ -96,9 +96,9 @@ class GameSeek with _$GameSeek {
           ? (game.meta.clock!.initial, game.meta.clock!.increment)
           : null,
       rated: game.meta.rated,
-      variant: game.variant,
+      variant: game.meta.variant,
       ratingDelta:
-          game.meta.source == GameSource.lobby ? setup.customRatingDelta : null,
+          game.source == GameSource.lobby ? setup.customRatingDelta : null,
     );
   }
 

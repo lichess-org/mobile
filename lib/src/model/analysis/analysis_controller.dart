@@ -123,7 +123,7 @@ class AnalysisController extends _$AnalysisController {
             .whereNotNull()
             .map(
               (eval) => ExternalEval(
-                cp: eval.pawns != null ? cpFromEval(eval.pawns!) : null,
+                cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
                 mate: eval.mate,
                 depth: eval.depth,
               ),
@@ -612,7 +612,7 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
         lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval;
     return pgnEval != null
         ? ExternalEval(
-            cp: pgnEval.pawns != null ? cpFromEval(pgnEval.pawns!) : null,
+            cp: pgnEval.pawns != null ? cpFromPawns(pgnEval.pawns!) : null,
             mate: pgnEval.mate,
             depth: pgnEval.depth,
           )
