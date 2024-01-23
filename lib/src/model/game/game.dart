@@ -62,7 +62,7 @@ abstract mixin class BaseGame {
           : null;
 
   /// Converts the game to a tree representation
-  Node makeTree() {
+  Root makeTree() {
     final initial = steps.first;
     final root = Root(position: initial.position);
     Node current = root;
