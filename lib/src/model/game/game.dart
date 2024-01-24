@@ -142,7 +142,6 @@ abstract mixin class BaseGame {
     return root;
   }
 
-  // TODO add glyph field to server response to be consistent with websocket API
   int? _judgmentNameToNag(String name) => switch (name) {
         'Inaccuracy' => 6,
         'Mistake' => 2,

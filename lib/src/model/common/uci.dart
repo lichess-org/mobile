@@ -13,6 +13,13 @@ class UciCharPair with _$UciCharPair {
 
   const factory UciCharPair(String a, String b) = _UciCharPair;
 
+  factory UciCharPair.fromStringId(String id) {
+    if (id.length != 2) {
+      throw ArgumentError('Invalid id $id');
+    }
+    return UciCharPair(id[0], id[1]);
+  }
+
   /// Creates a UciCharPair from a UCI move.
   ///
   /// Throws an [ArgumentError] if the move is invalid.

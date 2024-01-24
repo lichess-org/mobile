@@ -367,18 +367,18 @@ class Branch extends Node {
   final SanMove sanMove;
 
   /// PGN comments before the move.
-  final List<PgnComment>? startingComments;
+  List<PgnComment>? startingComments;
 
   /// PGN comments after the move.
-  final List<PgnComment>? comments;
+  List<PgnComment>? comments;
 
   /// Numeric Annotation Glyphs for the move.
-  final List<int>? nags;
+  List<int>? nags;
 
   /// Lichess analysis comments.
   ///
   /// These are standard PGN comments, but get a special treatment.
-  final List<PgnComment>? lichessAnalysisComments;
+  List<PgnComment>? lichessAnalysisComments;
 
   @override
   ViewBranch get view => ViewBranch(

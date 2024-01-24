@@ -128,9 +128,8 @@ class ServerEvalEvent with _$ServerEvalEvent {
   const ServerEvalEvent._();
 
   const factory ServerEvalEvent({
-    // only pick the mainline evals for now
-    // TODO consider adding support for merging the JSON tree into our [Node] tree
     required IList<ExternalEval> evals,
+    required Map<String, dynamic> tree,
     ServerAnalysis? analysis,
     GameDivision? division,
   }) = _ServerEvalEvent;
@@ -143,32 +142,57 @@ class ServerEvalEvent with _$ServerEvalEvent {
 }
 
 ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
-  Map<String, dynamic> node = pick('tree').asMapOrThrow<String, dynamic>();
-  final eval = node['eval'] as Map<String, dynamic>?;
-
-  final List<ExternalEval> evals = [
-    ExternalEval(
-      cp: eval?['cp'] as int?,
-      mate: eval?['mate'] as int?,
-      bestMove: eval?['best'] as String?,
-    ),
-  ];
+  final tree = pick('tree').asMapOrThrow<String, dynamic>();
+  Map<String, dynamic> node = tree;
+  final List<ExternalEval> evals = [];
 
   while ((node['children'] as List<dynamic>).isNotEmpty) {
     final children = node['children'] as List<dynamic>;
     final firstChild = children.first as Map<String, dynamic>;
     final eval = firstChild['eval'] as Map<String, dynamic>?;
+    final glyphs = firstChild['glyphs'] as List<dynamic>?;
+    final glyph = glyphs?.first as Map<String, dynamic>?;
+    final comments = firstChild['comments'] as List<dynamic>?;
+    final comment = comments?.first as Map<String, dynamic>?;
+    final judgment = glyph != null && comment != null
+        ? (
+            name: _nagToJugdmentName(glyph['id'] as int),
+            comment: comment['text'] as String,
+          )
+        : null;
+    final buffer = StringBuffer();
+    if (children.length > 1) {
+      Map<String, dynamic>? variationNode = children[1] as Map<String, dynamic>;
+      while (variationNode != null) {
+        final san = variationNode['san'] as String;
+        if (buffer.isEmpty) {
+          buffer.write(san);
+        } else {
+          buffer.write(' $san');
+        }
+        final nestedChildren = variationNode['children'] as List<dynamic>?;
+        if (nestedChildren != null && nestedChildren.isNotEmpty) {
+          variationNode = nestedChildren.first as Map<String, dynamic>;
+        } else {
+          break;
+        }
+      }
+    }
+    final variation = buffer.isEmpty ? null : buffer.toString();
     evals.add(
       ExternalEval(
         cp: eval?['cp'] as int?,
         mate: eval?['mate'] as int?,
         bestMove: eval?['best'] as String?,
+        judgment: judgment,
+        variation: variation,
       ),
     );
     node = firstChild;
   }
 
   return ServerEvalEvent(
+    tree: tree,
     evals: evals.lock,
     analysis: pick('analysis').letOrNull(
       (it) => (
@@ -201,6 +225,13 @@ ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
     ),
   );
 }
+
+String _nagToJugdmentName(int nag) => switch (nag) {
+      6 => 'Inaccuracy',
+      2 => 'Mistake',
+      4 => 'Blunder',
+      int() => '',
+    };
 
 typedef ServerAnalysis = ({
   GameId id,

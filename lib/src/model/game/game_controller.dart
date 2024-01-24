@@ -88,8 +88,8 @@ class GameController extends _$GameController {
         }
 
         if (fullEvent.game.finished) {
-          final result = await addPostGameData(game);
-          game = result.fold((data) => data.$2, (e, s) {
+          final result = await _getPostGameData();
+          game = result.fold((data) => _mergePostGameData(game, data), (e, s) {
             _logger.warning('Could not get post game data', e, s);
             return game;
           });
@@ -617,12 +617,11 @@ class GameController extends _$GameController {
 
         state = AsyncValue.data(newState);
 
-        addPostGameData(curState.game).then((result) {
+        _getPostGameData().then((result) {
           result.fold((data) {
+            final game = _mergePostGameData(state.requireValue.game, data);
             state = AsyncValue.data(
-              state.requireValue.copyWith(
-                game: data.$2,
-              ),
+              state.requireValue.copyWith(game: game),
             );
           }, (e, s) {
             _logger.warning('Could not get post game data', e, s);
@@ -829,29 +828,27 @@ class GameController extends _$GameController {
     }
   }
 
-  FutureResult<(PostGameData, PlayableGame)> addPostGameData(
+  FutureResult<PostGameData> _getPostGameData() {
+    return ref.read(gameRepositoryProvider).getPostGameData(gameFullId.gameId);
+  }
+
+  PlayableGame _mergePostGameData(
     PlayableGame game,
-  ) async {
-    final postGameData =
-        await ref.read(gameRepositoryProvider).getPostGameData(game.id);
-    return postGameData.map((data) {
-      return (
-        data,
-        game.copyWith(
-          clocks: data.clocks,
-          meta: game.meta.copyWith(
-            opening: data.opening,
-          ),
-          white: game.white.copyWith(
-            analysis: data.analysis?.white,
-          ),
-          black: game.black.copyWith(
-            analysis: data.analysis?.black,
-          ),
-          evals: data.evals,
-        )
-      );
-    });
+    PostGameData data,
+  ) {
+    return game.copyWith(
+      clocks: data.clocks,
+      meta: game.meta.copyWith(
+        opening: data.opening,
+      ),
+      white: game.white.copyWith(
+        analysis: data.analysis?.white,
+      ),
+      black: game.black.copyWith(
+        analysis: data.analysis?.black,
+      ),
+      evals: data.evals,
+    );
   }
 
   SocketClient get _socket => ref.read(socketClientProvider);

@@ -6,6 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
+import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -25,6 +26,7 @@ part 'analysis_controller.g.dart';
 
 @freezed
 class AnalysisOptions with _$AnalysisOptions {
+  const AnalysisOptions._();
   const factory AnalysisOptions({
     required ID id,
     required bool isLocalEvaluationAllowed,
@@ -42,6 +44,9 @@ class AnalysisOptions with _$AnalysisOptions {
     /// Optional server analysis to display player stats.
     ({PlayerAnalysis white, PlayerAnalysis black})? serverAnalysis,
   }) = _AnalysisOptions;
+
+  /// Whether the analysis is for a lichess game.
+  bool get isLichessGameAnalysis => id is GameFullId || id is GameId;
 }
 
 @riverpod
@@ -55,19 +60,25 @@ class AnalysisController extends _$AnalysisController {
   @override
   AnalysisState build(AnalysisOptions options) {
     final evaluationService = ref.watch(evaluationServiceProvider);
+    final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
     ref.onDispose(() {
       _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
       evaluationService.disposeEngine();
+      serverAnalysisService.lastAnalysisEvent
+          .removeListener(_listenToServerAnalysisEvents);
     });
+
+    serverAnalysisService.lastAnalysisEvent
+        .addListener(_listenToServerAnalysisEvents);
 
     UciPath path = UciPath.empty;
     Move? lastMove;
 
     final game = PgnGame.parsePgn(
       options.pgn,
-      initHeaders: () => options.id is GameId
+      initHeaders: () => options.isLichessGameAnalysis
           ? {}
           : {
               'Event': '?',
@@ -87,7 +98,7 @@ class AnalysisController extends _$AnalysisController {
 
     _root = Root.fromPgnGame(
       game,
-      isLichessAnalysis: options.id is GameId,
+      isLichessAnalysis: options.isLichessGameAnalysis,
       hideVariations: true,
       onVisitNode: (root, branch, isMainline) {
         if (isMainline &&
@@ -110,27 +121,6 @@ class AnalysisController extends _$AnalysisController {
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
 
-    // We know ACPL chart data is available in the PGN if the server analysis is
-    // available.
-    // Works only for lichess games.
-    final acplChartData = options.serverAnalysis != null
-        ? _root.mainline
-            .map(
-              (node) => node.lichessAnalysisComments
-                  ?.firstWhereOrNull((c) => c.eval != null)
-                  ?.eval,
-            )
-            .whereNotNull()
-            .map(
-              (eval) => ExternalEval(
-                cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
-                mate: eval.mate,
-                depth: eval.depth,
-              ),
-            )
-            .toList(growable: false)
-        : null;
-
     final analysisState = AnalysisState(
       variant: options.variant,
       id: options.id,
@@ -146,7 +136,8 @@ class AnalysisController extends _$AnalysisController {
       isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
       displayMode: DisplayMode.moves,
-      acplChartData: acplChartData?.lock,
+      playersAnalysis: options.serverAnalysis,
+      acplChartData: _makeAcplChartData(),
     );
 
     if (analysisState.isEngineAvailable) {
@@ -469,6 +460,88 @@ class AnalysisController extends _$AnalysisController {
           AnalysisCurrentNode.fromNode(_root.nodeAt(state.currentPath)),
     );
   }
+
+  void _listenToServerAnalysisEvents() {
+    final event =
+        ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value;
+    if (event?.$1 == state.id) {
+      _mergeOngoingAnalysis(_root, event!.$2.tree);
+      state = state.copyWith(
+        acplChartData: _makeAcplChartData(),
+        playersAnalysis: event.$2.analysis != null
+            ? (white: event.$2.analysis!.white, black: event.$2.analysis!.black)
+            : null,
+        root: _root.view,
+      );
+    }
+  }
+
+  void _mergeOngoingAnalysis(Node n1, Map<String, dynamic> n2) {
+    final eval = n2['eval'] as Map<String, dynamic>?;
+    print('eval: $eval');
+    final cp = eval?['cp'] as int?;
+    final mate = eval?['mate'] as int?;
+    print('cp: $cp');
+    final pgnEval = cp != null
+        ? PgnEvaluation.pawns(pawns: cpToPawns(cp))
+        : mate != null
+            ? PgnEvaluation.mate(mate: mate)
+            : null;
+    final glyphs = n2['glyphs'] as List<dynamic>?;
+    final glyph = glyphs?.first as Map<String, dynamic>?;
+    final comments = n2['comments'] as List<dynamic>?;
+    final comment = comments?.first as Map<String, dynamic>?;
+    final children = n2['children'] as List<dynamic>?;
+    if (n1 is Branch) {
+      print('pgnEval: $pgnEval');
+      if (pgnEval != null) {
+        n1.lichessAnalysisComments ??= [
+          PgnComment(eval: pgnEval, text: comment?['text'] as String?),
+        ];
+      }
+      if (glyph != null) {
+        n1.nags ??= [glyph['id'] as int];
+      }
+    }
+    for (final c in children ?? []) {
+      final n2child = c as Map<String, dynamic>;
+      final id = n2child['id'] as String;
+      final n1child = n1.childById(UciCharPair.fromStringId(id));
+      if (n1child != null) {
+        _mergeOngoingAnalysis(n1child, n2child);
+      } else {
+        final uci = n2child['uci'] as String;
+        final san = n2child['san'] as String;
+        final move = Move.fromUci(uci)!;
+        n1.addChild(
+          Branch(
+            position: n1.position.playUnchecked(move),
+            sanMove: SanMove(san, move),
+            isHidden: true,
+          ),
+        );
+      }
+    }
+  }
+
+  IList<ExternalEval>? _makeAcplChartData() {
+    final list = _root.mainline
+        .map(
+          (node) => node.lichessAnalysisComments
+              ?.firstWhereOrNull((c) => c.eval != null)
+              ?.eval,
+        )
+        .whereNotNull()
+        .map(
+          (eval) => ExternalEval(
+            cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
+            mate: eval.mate,
+            depth: eval.depth,
+          ),
+        )
+        .toList(growable: false);
+    return list.isEmpty ? null : IList(list);
+  }
 }
 
 enum DisplayMode {
@@ -523,6 +596,9 @@ class AnalysisState with _$AnalysisState {
 
     /// The opening of the current branch.
     Opening? currentBranchOpening,
+
+    /// Optional server analysis to display player stats.
+    ({PlayerAnalysis white, PlayerAnalysis black})? playersAnalysis,
 
     /// Optional ACPL chart data of the game, coming from lichess server analysis.
     IList<Eval>? acplChartData,

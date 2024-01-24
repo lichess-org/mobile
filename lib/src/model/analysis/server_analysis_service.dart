@@ -27,6 +27,9 @@ class ServerAnalysisService {
   ValueListenable<(GameId, ServerEvalEvent)?> get lastAnalysisEvent =>
       _analysisProgress;
 
+  /// The current game being analyzed.
+  GameId? currentGameAnalysis;
+
   /// Request server analysis for a game.
   ///
   /// This will return a future that completes when the server analysis is
@@ -37,6 +40,7 @@ class ServerAnalysisService {
     }
 
     _analysisProgress.value = null;
+    currentGameAnalysis = null;
 
     final socket = ref.read(socketClientProvider);
     final (stream, _) = socket.connect(Uri(path: '/play/$id/v6'));
@@ -58,6 +62,7 @@ class ServerAnalysisService {
         if (data.isAnalysisIncomplete == false) {
           _socketSubscription?.cancel();
           _socketSubscription = null;
+          currentGameAnalysis = null;
         }
       }
     });
@@ -67,8 +72,11 @@ class ServerAnalysisService {
     if (result.isError) {
       _socketSubscription?.cancel();
       _socketSubscription = null;
+      currentGameAnalysis = null;
       completer.completeError(result.asError!.error);
     }
+
+    currentGameAnalysis = gameId;
 
     return completer.future;
   }

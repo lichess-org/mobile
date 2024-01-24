@@ -152,11 +152,7 @@ class _Body extends ConsumerWidget {
         ref.watch(ctrlProvider.select((value) => value.hasAvailableEval));
 
     final showAnalysisSummary = ref.watch(
-      ctrlProvider.select(
-        (value) =>
-            value.acplChartData != null &&
-            value.displayMode == DisplayMode.summary,
-      ),
+      ctrlProvider.select((value) => value.displayMode == DisplayMode.summary),
     );
 
     return Column(
@@ -543,6 +539,10 @@ class _BottomBar extends ConsumerWidget {
     final displayMode = ref.watch(
       ctrlProvider.select((value) => value.displayMode),
     );
+    final canShowGameSummary = options.isLichessGameAnalysis &&
+        ref.watch(
+          ctrlProvider.select((value) => value.playersAnalysis != null),
+        );
 
     return Container(
       color: defaultTargetPlatform == TargetPlatform.iOS
@@ -564,7 +564,7 @@ class _BottomBar extends ConsumerWidget {
                   icon: Icons.menu,
                 ),
               ),
-              if (options.serverAnalysis != null)
+              if (canShowGameSummary)
                 Expanded(
                   child: BottomBarButton(
                     label: displayMode == DisplayMode.summary
@@ -789,17 +789,20 @@ class ServerAnalysisSummary extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverAnalysis = options.serverAnalysis;
-    final pgnHeaders = ref.watch(
-      analysisControllerProvider(options).select((value) => value.pgnHeaders),
+    final ctrlProvider = analysisControllerProvider(options);
+    final playersAnalysis = ref.watch(
+      ctrlProvider.select((value) => value.playersAnalysis),
     );
+    final pgnHeaders =
+        ref.watch(ctrlProvider.select((value) => value.pgnHeaders));
 
     return SingleChildScrollView(
       child: Column(
+        mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AcplChart(options),
-          if (serverAnalysis != null)
+          if (playersAnalysis != null)
             Center(
               child: SizedBox(
                 width: math.min(MediaQuery.sizeOf(context).width, 500),
@@ -825,11 +828,13 @@ class ServerAnalysisSummary extends ConsumerWidget {
                           _SummaryPlayerName(Side.black, pgnHeaders),
                         ],
                       ),
-                      if (serverAnalysis.white.accuracy != null &&
-                          serverAnalysis.black.accuracy != null)
+                      if (playersAnalysis.white.accuracy != null &&
+                          playersAnalysis.black.accuracy != null)
                         TableRow(
                           children: [
-                            _SummaryNumber('${serverAnalysis.white.accuracy}%'),
+                            _SummaryNumber(
+                              '${playersAnalysis.white.accuracy}%',
+                            ),
                             Center(
                               heightFactor: 1.8,
                               child: Text(
@@ -837,36 +842,38 @@ class ServerAnalysisSummary extends ConsumerWidget {
                                 softWrap: true,
                               ),
                             ),
-                            _SummaryNumber('${serverAnalysis.black.accuracy}%'),
+                            _SummaryNumber(
+                              '${playersAnalysis.black.accuracy}%',
+                            ),
                           ],
                         ),
                       for (final item in [
                         (
-                          serverAnalysis.white.inaccuracies.toString(),
+                          playersAnalysis.white.inaccuracies.toString(),
                           context.l10n
                               .nbInaccuracies(2)
                               .replaceAll('2', '')
                               .trim()
                               .capitalize(),
-                          serverAnalysis.black.inaccuracies.toString()
+                          playersAnalysis.black.inaccuracies.toString()
                         ),
                         (
-                          serverAnalysis.white.mistakes.toString(),
+                          playersAnalysis.white.mistakes.toString(),
                           context.l10n
                               .nbMistakes(2)
                               .replaceAll('2', '')
                               .trim()
                               .capitalize(),
-                          serverAnalysis.black.mistakes.toString()
+                          playersAnalysis.black.mistakes.toString()
                         ),
                         (
-                          serverAnalysis.white.blunders.toString(),
+                          playersAnalysis.white.blunders.toString(),
                           context.l10n
                               .nbBlunders(2)
                               .replaceAll('2', '')
                               .trim()
                               .capitalize(),
-                          serverAnalysis.black.blunders.toString()
+                          playersAnalysis.black.blunders.toString()
                         ),
                       ])
                         TableRow(
@@ -882,12 +889,12 @@ class ServerAnalysisSummary extends ConsumerWidget {
                             _SummaryNumber(item.$3),
                           ],
                         ),
-                      if (serverAnalysis.white.acpl != null &&
-                          serverAnalysis.black.acpl != null)
+                      if (playersAnalysis.white.acpl != null &&
+                          playersAnalysis.black.acpl != null)
                         TableRow(
                           children: [
                             _SummaryNumber(
-                              serverAnalysis.white.acpl.toString(),
+                              playersAnalysis.white.acpl.toString(),
                             ),
                             Center(
                               heightFactor: 1.5,
@@ -898,7 +905,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
                               ),
                             ),
                             _SummaryNumber(
-                              serverAnalysis.black.acpl.toString(),
+                              playersAnalysis.black.acpl.toString(),
                             ),
                           ],
                         ),
