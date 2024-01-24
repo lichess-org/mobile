@@ -17,18 +17,17 @@ ServerAnalysisService serverAnalysisService(ServerAnalysisServiceRef ref) {
 class ServerAnalysisService {
   ServerAnalysisService(this.ref);
 
-  StreamSubscription<SocketEvent>? _socketSubscription;
+  (GameFullId, StreamSubscription<SocketEvent>)? _socketSubscription;
+
+  Completer<void>? _analysisCompleter;
 
   final ServerAnalysisServiceRef ref;
 
-  final _analysisProgress = ValueNotifier<(GameId, ServerEvalEvent)?>(null);
+  final _analysisProgress = ValueNotifier<(GameFullId, ServerEvalEvent)?>(null);
 
   /// The last analysis progress event received from the server.
-  ValueListenable<(GameId, ServerEvalEvent)?> get lastAnalysisEvent =>
+  ValueListenable<(GameFullId, ServerEvalEvent)?> get lastAnalysisEvent =>
       _analysisProgress;
-
-  /// The current game being analyzed.
-  GameId? currentGameAnalysis;
 
   /// Request server analysis for a game.
   ///
@@ -36,47 +35,52 @@ class ServerAnalysisService {
   /// launched (but not when it is finished).
   Future<void> requestAnalysis(GameFullId id) async {
     if (_socketSubscription != null) {
-      throw Exception('You can only request analysis for one game at a time');
+      final (subId, _) = _socketSubscription!;
+      if (subId == id) {
+        return _analysisCompleter!.future;
+      } else {
+        return Future.error(
+          'You already have an ongoing requested analysis. Please wait for it to finish before starting a new one.',
+        );
+      }
     }
-
-    _analysisProgress.value = null;
-    currentGameAnalysis = null;
 
     final socket = ref.read(socketClientProvider);
     final (stream, _) = socket.connect(Uri(path: '/play/$id/v6'));
     final repo = ref.read(gameRepositoryProvider);
+
     final completer = Completer<void>();
-    final gameId = id.gameId;
 
-    _socketSubscription = stream.listen((event) {
-      // complete on first analysisProgress event
-      if (event.topic == 'analysisProgress') {
-        if (!completer.isCompleted) {
-          completer.complete();
+    _socketSubscription = (
+      id,
+      stream.listen((event) {
+        // complete on first analysisProgress event
+        if (event.topic == 'analysisProgress') {
+          if (!completer.isCompleted) {
+            completer.complete();
+          }
+          final data =
+              ServerEvalEvent.fromJson(event.data as Map<String, dynamic>);
+
+          _analysisProgress.value = (id, data);
+
+          if (data.isAnalysisIncomplete == false) {
+            _socketSubscription?.$2.cancel();
+            _socketSubscription = null;
+          }
         }
-        final data =
-            ServerEvalEvent.fromJson(event.data as Map<String, dynamic>);
+      })
+    );
 
-        _analysisProgress.value = (gameId, data);
-
-        if (data.isAnalysisIncomplete == false) {
-          _socketSubscription?.cancel();
-          _socketSubscription = null;
-          currentGameAnalysis = null;
-        }
-      }
-    });
-
-    final result = await repo.requestServerAnalysis(gameId);
+    final result = await repo.requestServerAnalysis(id.gameId);
 
     if (result.isError) {
-      _socketSubscription?.cancel();
+      _socketSubscription?.$2.cancel();
       _socketSubscription = null;
-      currentGameAnalysis = null;
       completer.completeError(result.asError!.error);
     }
 
-    currentGameAnalysis = gameId;
+    _analysisCompleter = completer;
 
     return completer.future;
   }

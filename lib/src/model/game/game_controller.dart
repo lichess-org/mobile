@@ -96,6 +96,7 @@ class GameController extends _$GameController {
         }
 
         return GameState(
+          gameFullId: gameFullId,
           game: game,
           stepCursor: game.steps.length - 1,
           stopClockWaitingForServerAck: false,
@@ -474,6 +475,7 @@ class GameController extends _$GameController {
 
         state = AsyncValue.data(
           GameState(
+            gameFullId: gameFullId,
             game: fullEvent.game,
             stepCursor: fullEvent.game.steps.length - 1,
             stopClockWaitingForServerAck: false,
@@ -859,6 +861,7 @@ class GameState with _$GameState {
   const GameState._();
 
   const factory GameState({
+    required GameFullId gameFullId,
     required PlayableGame game,
     required int stepCursor,
     int? lastDrawOfferAtPly,
@@ -954,7 +957,7 @@ class GameState with _$GameState {
         pgn: game.makePgn(),
         initialMoveCursor: stepCursor,
         orientation: game.youAre ?? Side.white,
-        id: game.id,
+        id: gameFullId,
         opening: game.meta.opening,
         serverAnalysis: game.serverAnalysis,
       );

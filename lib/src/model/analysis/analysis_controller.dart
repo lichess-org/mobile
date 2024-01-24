@@ -320,6 +320,14 @@ class AnalysisController extends _$AnalysisController {
     );
   }
 
+  Future<void> requestServerAnalysis() {
+    if (options.id is GameFullId && state.canRequestServerAnalysis) {
+      final service = ref.read(serverAnalysisServiceProvider);
+      return service.requestAnalysis(options.id as GameFullId);
+    }
+    return Future.value();
+  }
+
   /// Gets the node and maybe the associated branch opening at the given path.
   (Node, Opening?) _nodeOpeningAt(Node node, UciPath path, [Opening? opening]) {
     if (path.isEmpty) return (node, opening);
@@ -464,8 +472,8 @@ class AnalysisController extends _$AnalysisController {
   void _listenToServerAnalysisEvents() {
     final event =
         ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value;
-    if (event?.$1 == state.id) {
-      _mergeOngoingAnalysis(_root, event!.$2.tree);
+    if (event != null && event.$1 == state.id) {
+      _mergeOngoingAnalysis(_root, event.$2.tree);
       state = state.copyWith(
         acplChartData: _makeAcplChartData(),
         playersAnalysis: event.$2.analysis != null
@@ -478,10 +486,8 @@ class AnalysisController extends _$AnalysisController {
 
   void _mergeOngoingAnalysis(Node n1, Map<String, dynamic> n2) {
     final eval = n2['eval'] as Map<String, dynamic>?;
-    print('eval: $eval');
     final cp = eval?['cp'] as int?;
     final mate = eval?['mate'] as int?;
-    print('cp: $cp');
     final pgnEval = cp != null
         ? PgnEvaluation.pawns(pawns: cpToPawns(cp))
         : mate != null
@@ -491,19 +497,25 @@ class AnalysisController extends _$AnalysisController {
     final glyph = glyphs?.first as Map<String, dynamic>?;
     final comments = n2['comments'] as List<dynamic>?;
     final comment = comments?.first as Map<String, dynamic>?;
-    final children = n2['children'] as List<dynamic>?;
+    final children = n2['children'] as List<dynamic>? ?? [];
     if (n1 is Branch) {
-      print('pgnEval: $pgnEval');
       if (pgnEval != null) {
-        n1.lichessAnalysisComments ??= [
-          PgnComment(eval: pgnEval, text: comment?['text'] as String?),
-        ];
+        if (n1.lichessAnalysisComments == null) {
+          n1.lichessAnalysisComments = [
+            PgnComment(eval: pgnEval, text: comment?['text'] as String?),
+          ];
+        } else if (!n1.lichessAnalysisComments!
+            .any((c) => c.text == comment?['text'] as String?)) {
+          n1.lichessAnalysisComments!.add(
+            PgnComment(eval: pgnEval, text: comment?['text'] as String?),
+          );
+        }
       }
       if (glyph != null) {
         n1.nags ??= [glyph['id'] as int];
       }
     }
-    for (final c in children ?? []) {
+    for (final c in children) {
       final n2child = c as Map<String, dynamic>;
       final id = n2child['id'] as String;
       final n1child = n1.childById(UciCharPair.fromStringId(id));
@@ -517,7 +529,7 @@ class AnalysisController extends _$AnalysisController {
           Branch(
             position: n1.position.playUnchecked(move),
             sanMove: SanMove(san, move),
-            isHidden: true,
+            isHidden: children.length > 1,
           ),
         );
       }
@@ -554,6 +566,9 @@ class AnalysisState with _$AnalysisState {
   const AnalysisState._();
 
   const factory AnalysisState({
+    /// Analysis ID
+    required ID id,
+
     /// The variant of the analysis.
     required Variant variant,
 
@@ -572,9 +587,6 @@ class AnalysisState with _$AnalysisState {
 
     /// Whether the current path is on the mainline.
     required bool isOnMainline,
-
-    /// Analysis ID, useful for the evaluation context.
-    required ID id,
 
     /// The side to display the board from.
     required Side pov,
@@ -614,6 +626,12 @@ class AnalysisState with _$AnalysisState {
 
   IMap<String, ISet<String>> get validMoves =>
       algebraicLegalMoves(currentNode.position);
+
+  bool get canRequestServerAnalysis =>
+      id is GameFullId && !hasServerAnalysis && pgnHeaders['Result'] != '*';
+
+  bool get canShowGameSummary =>
+      hasServerAnalysis || (id is GameFullId && canRequestServerAnalysis);
 
   bool get hasServerAnalysis => acplChartData != null;
 

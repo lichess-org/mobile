@@ -295,7 +295,7 @@ abstract class Node {
             san: childFrom.sanMove.san,
             startingComments: childFrom.startingComments
                 ?.map((c) => c.makeComment())
-                .toList(growable: false),
+                .toList(),
             comments:
                 (childFrom.lichessAnalysisComments ?? childFrom.comments)?.map(
               (c) {
@@ -319,7 +319,7 @@ abstract class Node {
                   eval: pgnEval,
                 ).makeComment();
               },
-            ).toList(growable: false),
+            ).toList(),
             nags: childFrom.nags,
           ),
         );
@@ -331,9 +331,7 @@ abstract class Node {
     final pgnGame = PgnGame(
       headers: headers?.unlock ?? {},
       moves: pgnNode,
-      comments:
-          rootComments?.map((c) => c.makeComment()).toList(growable: false) ??
-              [],
+      comments: rootComments?.map((c) => c.makeComment()).toList() ?? [],
     );
 
     return pgnGame.makePgn();
@@ -478,14 +476,13 @@ class Root extends Node {
             position: newPos,
             isHidden: hideVariations && childIdx > 0,
             lichessAnalysisComments:
-                isLichessAnalysis ? comments?.toList(growable: false) : null,
+                isLichessAnalysis ? comments?.toList() : null,
             startingComments: isLichessAnalysis
                 ? null
                 : childFrom.data.startingComments
                     ?.map(PgnComment.fromPgn)
-                    .toList(growable: false),
-            comments:
-                isLichessAnalysis ? null : comments?.toList(growable: false),
+                    .toList(),
+            comments: isLichessAnalysis ? null : comments?.toList(),
             nags: childFrom.data.nags,
           );
 
