@@ -980,6 +980,8 @@ class _SummaryPlayerName extends StatelessWidget {
         ? pgnHeaders.get('White') ?? context.l10n.white
         : pgnHeaders.get('Black') ?? context.l10n.black;
 
+    final brightness = Theme.of(context).brightness;
+
     return TableCell(
       verticalAlignment: TableCellVerticalAlignment.bottom,
       child: Center(
@@ -989,8 +991,12 @@ class _SummaryPlayerName extends StatelessWidget {
             children: [
               Icon(
                 side == Side.white
-                    ? CupertinoIcons.circle
-                    : CupertinoIcons.circle_filled,
+                    ? brightness == Brightness.light
+                        ? CupertinoIcons.circle
+                        : CupertinoIcons.circle_filled
+                    : brightness == Brightness.light
+                        ? CupertinoIcons.circle_filled
+                        : CupertinoIcons.circle,
                 size: 14,
               ),
               Text(
