@@ -325,7 +325,7 @@ class AnalysisController extends _$AnalysisController {
       final service = ref.read(serverAnalysisServiceProvider);
       return service.requestAnalysis(options.id as GameFullId);
     }
-    return Future.value();
+    return Future.error('Cannot request server analysis');
   }
 
   /// Gets the node and maybe the associated branch opening at the given path.
@@ -496,19 +496,18 @@ class AnalysisController extends _$AnalysisController {
     final glyphs = n2['glyphs'] as List<dynamic>?;
     final glyph = glyphs?.first as Map<String, dynamic>?;
     final comments = n2['comments'] as List<dynamic>?;
-    final comment = comments?.first as Map<String, dynamic>?;
+    final comment =
+        (comments?.first as Map<String, dynamic>?)?['text'] as String?;
     final children = n2['children'] as List<dynamic>? ?? [];
+    final pgnComment =
+        pgnEval != null ? PgnComment(eval: pgnEval, text: comment) : null;
     if (n1 is Branch) {
-      if (pgnEval != null) {
+      if (pgnComment != null) {
         if (n1.lichessAnalysisComments == null) {
-          n1.lichessAnalysisComments = [
-            PgnComment(eval: pgnEval, text: comment?['text'] as String?),
-          ];
-        } else if (!n1.lichessAnalysisComments!
-            .any((c) => c.text == comment?['text'] as String?)) {
-          n1.lichessAnalysisComments!.add(
-            PgnComment(eval: pgnEval, text: comment?['text'] as String?),
-          );
+          n1.lichessAnalysisComments = [pgnComment];
+        } else {
+          n1.lichessAnalysisComments!.removeWhere((c) => c.eval != null);
+          n1.lichessAnalysisComments!.add(pgnComment);
         }
       }
       if (glyph != null) {
