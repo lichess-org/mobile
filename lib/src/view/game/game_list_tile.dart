@@ -149,6 +149,7 @@ class _ContextMenu extends ConsumerWidget {
                                         pgn: archivedGame.makePgn(),
                                         orientation: orientation,
                                         id: game.id,
+                                        opening: game.opening,
                                         serverAnalysis: serverAnalysis,
                                       ),
                                     ),
