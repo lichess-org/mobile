@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -133,65 +135,70 @@ Future<T?> showMaterialActionSheet<T>({
 }) {
   final defaultTextStyle =
       Theme.of(context).textTheme.titleMedium ?? const TextStyle(fontSize: 20);
+
+  final screenWidth = MediaQuery.of(context).size.width;
   return showDialog<T>(
     context: context,
     barrierDismissible: isDismissible,
     builder: (BuildContext context) {
       return Dialog(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              if (title != null) ...[
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Center(child: title),
-                ),
-              ],
-              ...actions.mapIndexed<Widget>((index, action) {
-                return InkWell(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(
-                      index == 0 ? 28 : 0,
-                    ),
-                    bottom: Radius.circular(
-                      index == actions.length - 1 ? 28 : 0,
-                    ),
-                  ),
-                  onTap: () {
-                    if (action.dismissOnPress) {
-                      Navigator.of(context).pop();
-                    }
-                    action.onPressed(context);
-                  },
-                  child: Padding(
+        child: SizedBox(
+          width: min(screenWidth, 500),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                if (title != null) ...[
+                  Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        if (action.leading != null) ...[
-                          action.leading!,
-                          const SizedBox(width: 15),
-                        ],
-                        Expanded(
-                          child: DefaultTextStyle(
-                            style: defaultTextStyle,
-                            textAlign: action.leading != null
-                                ? TextAlign.start
-                                : TextAlign.center,
-                            child: action.label,
-                          ),
-                        ),
-                        if (action.trailing != null) ...[
-                          const SizedBox(width: 10),
-                          action.trailing!,
-                        ],
-                      ],
-                    ),
+                    child: Center(child: title),
                   ),
-                );
-              }),
-            ],
+                ],
+                ...actions.mapIndexed<Widget>((index, action) {
+                  return InkWell(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(
+                        index == 0 ? 28 : 0,
+                      ),
+                      bottom: Radius.circular(
+                        index == actions.length - 1 ? 28 : 0,
+                      ),
+                    ),
+                    onTap: () {
+                      if (action.dismissOnPress) {
+                        Navigator.of(context).pop();
+                      }
+                      action.onPressed(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          if (action.leading != null) ...[
+                            action.leading!,
+                            const SizedBox(width: 15),
+                          ],
+                          Expanded(
+                            child: DefaultTextStyle(
+                              style: defaultTextStyle,
+                              textAlign: action.leading != null
+                                  ? TextAlign.start
+                                  : TextAlign.center,
+                              child: action.label,
+                            ),
+                          ),
+                          if (action.trailing != null) ...[
+                            const SizedBox(width: 10),
+                            action.trailing!,
+                          ],
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+              ],
+            ),
           ),
         ),
       );
