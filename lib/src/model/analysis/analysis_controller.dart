@@ -543,13 +543,14 @@ class AnalysisController extends _$AnalysisController {
               ?.firstWhereOrNull((c) => c.eval != null)
               ?.eval,
         )
-        .whereNotNull()
         .map(
-          (eval) => ExternalEval(
-            cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
-            mate: eval.mate,
-            depth: eval.depth,
-          ),
+          (eval) => eval != null
+              ? ExternalEval(
+                  cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
+                  mate: eval.mate,
+                  depth: eval.depth,
+                )
+              : const ExternalEval(cp: null, mate: null),
         )
         .toList(growable: false);
     return list.isEmpty ? null : IList(list);
