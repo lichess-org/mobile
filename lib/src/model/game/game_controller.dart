@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
@@ -830,24 +831,24 @@ class GameController extends _$GameController {
     }
   }
 
-  FutureResult<PostGameData> _getPostGameData() {
-    return ref.read(gameRepositoryProvider).getPostGameData(gameFullId.gameId);
+  FutureResult<ArchivedGame> _getPostGameData() {
+    return ref.read(gameRepositoryProvider).getGame(gameFullId.gameId);
   }
 
   PlayableGame _mergePostGameData(
     PlayableGame game,
-    PostGameData data,
+    ArchivedGame data,
   ) {
     return game.copyWith(
       clocks: data.clocks,
       meta: game.meta.copyWith(
-        opening: data.opening,
+        opening: data.meta.opening,
       ),
       white: game.white.copyWith(
-        analysis: data.analysis?.white,
+        analysis: data.white.analysis,
       ),
       black: game.black.copyWith(
-        analysis: data.analysis?.black,
+        analysis: data.black.analysis,
       ),
       evals: data.evals,
     );

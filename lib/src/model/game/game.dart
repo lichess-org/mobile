@@ -152,7 +152,6 @@ abstract mixin class BaseGame {
         String() => null,
       };
 
-  // TODO add game date pgn header
   String makePgn() {
     final node = makeTree();
     final pgn = node.makePgn(
