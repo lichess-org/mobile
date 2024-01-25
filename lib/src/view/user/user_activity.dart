@@ -94,18 +94,16 @@ class UserActivityEntry extends ConsumerWidget {
         ),
         if (entry.games != null)
           for (final gameEntry in entry.games!.entries)
-            PlatformListTile(
+            _UserActivityListTile(
               leading: Icon(
                 gameEntry.key.icon,
                 size: leadingIconSize,
               ),
-              title: Text(
-                context.l10n.activityPlayedNbGames(
-                  gameEntry.value.win +
-                      gameEntry.value.draw +
-                      gameEntry.value.loss,
-                  gameEntry.key.title,
-                ),
+              title: context.l10n.activityPlayedNbGames(
+                gameEntry.value.win +
+                    gameEntry.value.draw +
+                    gameEntry.value.loss,
+                gameEntry.key.title,
               ),
               subtitle: RatingPrefAware(
                 child: Row(
@@ -156,15 +154,13 @@ class UserActivityEntry extends ConsumerWidget {
               ),
             ),
         if (entry.puzzles != null)
-          PlatformListTile(
+          _UserActivityListTile(
             leading: Icon(
               LichessIcons.target,
               size: leadingIconSize,
             ),
-            title: Text(
-              context.l10n.activitySolvedNbPuzzles(
-                entry.puzzles!.win + entry.puzzles!.loss,
-              ),
+            title: context.l10n.activitySolvedNbPuzzles(
+              entry.puzzles!.win + entry.puzzles!.loss,
             ),
             subtitle: RatingPrefAware(
               child: Row(
@@ -213,16 +209,14 @@ class UserActivityEntry extends ConsumerWidget {
             ),
           ),
         if (entry.streak != null)
-          PlatformListTile(
+          _UserActivityListTile(
             leading: Icon(
               LichessIcons.streak,
               size: leadingIconSize,
             ),
-            title: Text(
-              context.l10n.stormPlayedNbRunsOfPuzzleStorm(
-                entry.streak!.runs,
-                'Puzzle Streak',
-              ),
+            title: context.l10n.stormPlayedNbRunsOfPuzzleStorm(
+              entry.streak!.runs,
+              'Puzzle Streak',
             ),
             subtitle: emptySubtitle,
             trailing: BriefGameResultBox(
@@ -232,16 +226,14 @@ class UserActivityEntry extends ConsumerWidget {
             ),
           ),
         if (entry.storm != null)
-          PlatformListTile(
+          _UserActivityListTile(
             leading: Icon(
               LichessIcons.storm,
               size: leadingIconSize,
             ),
-            title: Text(
-              context.l10n.stormPlayedNbRunsOfPuzzleStorm(
-                entry.storm!.runs,
-                'Puzzle Storm',
-              ),
+            title: context.l10n.stormPlayedNbRunsOfPuzzleStorm(
+              entry.storm!.runs,
+              'Puzzle Storm',
             ),
             subtitle: emptySubtitle,
             trailing: BriefGameResultBox(
@@ -251,17 +243,15 @@ class UserActivityEntry extends ConsumerWidget {
             ),
           ),
         if (entry.correspondenceEnds != null)
-          PlatformListTile(
+          _UserActivityListTile(
             leading: Icon(
               LichessIcons.correspondence,
               size: leadingIconSize,
             ),
-            title: Text(
-              context.l10n.activityCompletedNbGames(
-                entry.correspondenceEnds!.win +
-                    entry.correspondenceEnds!.draw +
-                    entry.correspondenceEnds!.loss,
-              ),
+            title: context.l10n.activityCompletedNbGames(
+              entry.correspondenceEnds!.win +
+                  entry.correspondenceEnds!.draw +
+                  entry.correspondenceEnds!.loss,
             ),
             subtitle: emptySubtitle,
             trailing: BriefGameResultBox(
@@ -272,15 +262,13 @@ class UserActivityEntry extends ConsumerWidget {
           ),
         if (entry.correspondenceMovesNb != null &&
             entry.correspondenceGamesNb != null)
-          PlatformListTile(
+          _UserActivityListTile(
             leading: Icon(
               LichessIcons.correspondence,
               size: leadingIconSize,
             ),
-            title: Text(
-              context.l10n.activityPlayedNbMoves(
-                entry.correspondenceMovesNb!,
-              ),
+            title: context.l10n.activityPlayedNbMoves(
+              entry.correspondenceMovesNb!,
             ),
             subtitle: Text(
               context.l10n.activityInNbCorrespondenceGames(
@@ -289,15 +277,13 @@ class UserActivityEntry extends ConsumerWidget {
             ),
           ),
         if (entry.tournamentNb != null)
-          PlatformListTile(
+          _UserActivityListTile(
             leading: Icon(
               Icons.emoji_events,
               size: leadingIconSize,
             ),
-            title: Text(
-              context.l10n.activityCompetedInNbTournaments(
-                entry.tournamentNb!,
-              ),
+            title: context.l10n.activityCompetedInNbTournaments(
+              entry.tournamentNb!,
             ),
             subtitle: entry.bestTournament != null
                 ? Text(
@@ -312,17 +298,39 @@ class UserActivityEntry extends ConsumerWidget {
                 : emptySubtitle,
           ),
         if (entry.followInNb != null)
-          PlatformListTile(
+          _UserActivityListTile(
             leading: Icon(
               Icons.thumb_up,
               size: leadingIconSize,
             ),
-            title: Text(
-              context.l10n.activityGainedNbFollowers(entry.followInNb!),
-            ),
+            title: context.l10n.activityGainedNbFollowers(entry.followInNb!),
             subtitle: emptySubtitle,
           ),
       ],
+    );
+  }
+}
+
+class _UserActivityListTile extends StatelessWidget {
+  const _UserActivityListTile({
+    required this.title,
+    this.subtitle,
+    this.trailing,
+    this.leading,
+  });
+
+  final String title;
+  final Widget? subtitle;
+  final Widget? trailing;
+  final Widget? leading;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformListTile(
+      leading: leading,
+      title: Text(title, maxLines: 2),
+      subtitle: subtitle,
+      trailing: trailing,
     );
   }
 }
