@@ -94,11 +94,13 @@ class PlayableGame
 
   bool get hasAI => white.isAI || black.isAI;
 
+  bool get imported => source == GameSource.import;
+
   bool get isPlayerTurn => lastPosition.turn == youAre;
   bool get finished => status.value >= GameStatus.mate.value;
   bool get aborted => status == GameStatus.aborted;
 
-  bool get playable => status.value < GameStatus.aborted.value;
+  bool get playable => status.value < GameStatus.aborted.value && !imported;
   bool get abortable =>
       playable &&
       lastPosition.fullmoves <= 1 &&
@@ -125,7 +127,9 @@ class PlayableGame
       resignable &&
       (meta.rules == null || !meta.rules!.contains(GameRule.noClaimWin));
 
-  bool get analysable => finished && steps.length > 4;
+  bool get userAnalysable =>
+      finished && steps.length > 4 ||
+      (playable && (clock == null || youAre == null));
 }
 
 PlayableGame _playableGameFromPick(RequiredPick pick) {
@@ -204,8 +208,8 @@ GameMeta _playableGameMetaFromPick(RequiredPick pick) {
       (cPick) => (
         initial: cPick('initial').asDurationFromSecondsOrThrow(),
         increment: cPick('increment').asDurationFromSecondsOrThrow(),
-        emergency: pick('emerg').asDurationFromSecondsOrNull(),
-        moreTime: pick('moretime').asDurationFromSecondsOrNull(),
+        emergency: cPick('emerg').asDurationFromSecondsOrNull(),
+        moreTime: cPick('moretime').asDurationFromSecondsOrNull(),
       ),
     ),
     daysPerTurn: pick('correspondence')
@@ -263,7 +267,7 @@ CorrespondenceClockData _correspondenceClockDataFromPick(RequiredPick pick) {
 }
 
 Message _messageFromPick(RequiredPick pick) {
-  return Message(
+  return (
     message: pick('t').asStringOrThrow(),
     username: pick('u').asStringOrThrow(),
   );

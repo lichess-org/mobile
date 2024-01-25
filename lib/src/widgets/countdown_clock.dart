@@ -25,14 +25,9 @@ class CountdownClock extends ConsumerStatefulWidget {
   /// Callback when the clock reaches zero.
   final VoidCallback? onFlag;
 
-  /// Contrary to [active], [displayActive] does not start the clock, but only
-  /// changes the display style.
-  final bool? displayActive;
-
   const CountdownClock({
     required this.duration,
     required this.active,
-    this.displayActive,
     this.emergencyThreshold,
     this.onFlag,
     super.key,
@@ -137,13 +132,11 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-          color: widget.displayActive == true
-              ? clockStyle.activeBackgroundColor
-              : widget.active
-                  ? isEmergency
-                      ? clockStyle.emergencyBackgroundColor
-                      : clockStyle.activeBackgroundColor
-                  : clockStyle.backgroundColor,
+          color: widget.active
+              ? isEmergency
+                  ? clockStyle.emergencyBackgroundColor
+                  : clockStyle.activeBackgroundColor
+              : clockStyle.backgroundColor,
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
@@ -155,13 +148,11 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
                     ? '$hours:${mins.toString().padLeft(2, '0')}:$secs'
                     : '$mins:$secs',
                 style: TextStyle(
-                  color: widget.displayActive == true
-                      ? clockStyle.activeTextColor
-                      : widget.active
-                          ? isEmergency
-                              ? clockStyle.emergencyTextColor
-                              : clockStyle.activeTextColor
-                          : clockStyle.textColor,
+                  color: widget.active
+                      ? isEmergency
+                          ? clockStyle.emergencyTextColor
+                          : clockStyle.activeTextColor
+                      : clockStyle.textColor,
                   fontSize: 26,
                   height:
                       remainingHeight < kSmallRemainingHeightLeftBoardThreshold

@@ -127,7 +127,7 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
               textAlign: TextAlign.center,
             ),
           ),
-        if (gameState.game.analysable &&
+        if (gameState.game.userAnalysable &&
             gameState.game.evals == null &&
             gameState.game.white.analysis == null)
           FutureBuilder(
@@ -162,22 +162,23 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
               );
             },
           ),
-        SecondaryButton(
-          semanticsLabel: context.l10n.analysis,
-          onPressed: () {
-            pushPlatformRoute(
-              context,
-              builder: (_) => AnalysisScreen(
-                options: gameState.analysisOptions,
-                title: context.l10n.gameAnalysis,
-              ),
-            );
-          },
-          child: Text(
-            context.l10n.analysis,
-            textAlign: TextAlign.center,
+        if (gameState.game.userAnalysable)
+          SecondaryButton(
+            semanticsLabel: context.l10n.analysis,
+            onPressed: () {
+              pushPlatformRoute(
+                context,
+                builder: (_) => AnalysisScreen(
+                  options: gameState.analysisOptions,
+                  title: context.l10n.gameAnalysis,
+                ),
+              );
+            },
+            child: Text(
+              context.l10n.analysis,
+              textAlign: TextAlign.center,
+            ),
           ),
-        ),
       ],
     );
 
