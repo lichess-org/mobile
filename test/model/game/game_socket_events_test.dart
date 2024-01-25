@@ -24,16 +24,18 @@ void main() {
     );
     expect(
       game.meta,
-      const GameMeta(
+      GameMeta(
+        createdAt:
+            DateTime.fromMillisecondsSinceEpoch(1685698678928, isUtc: true),
         rated: false,
         variant: Variant.standard,
         speed: Speed.classical,
         perf: Perf.classical,
         clock: (
-          initial: Duration(minutes: 10),
-          increment: Duration(seconds: 30),
-          emergency: Duration(seconds: 60),
-          moreTime: Duration(seconds: 15),
+          initial: const Duration(minutes: 10),
+          increment: const Duration(seconds: 30),
+          emergency: const Duration(seconds: 60),
+          moreTime: const Duration(seconds: 15),
         ),
         daysPerTurn: null,
         startedAtTurn: null,

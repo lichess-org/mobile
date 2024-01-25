@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -102,7 +102,7 @@ void main() {
   });
 }
 
-final gameData = ArchivedGameData(
+final gameData = LightArchivedGame(
   id: const GameId('qVChCOTc'),
   rated: false,
   speed: Speed.blitz,

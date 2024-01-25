@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -37,7 +37,7 @@ class GameListTile extends StatelessWidget {
     this.onTap,
   });
 
-  final ArchivedGameData game;
+  final LightArchivedGame game;
   final Side mySide;
 
   final IconData? icon;
@@ -97,7 +97,7 @@ class _ContextMenu extends ConsumerWidget {
     this.trailing,
   });
 
-  final ArchivedGameData game;
+  final LightArchivedGame game;
   final Side mySide;
 
   final IconData? icon;

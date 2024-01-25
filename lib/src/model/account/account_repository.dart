@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/common/errors.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -71,7 +72,7 @@ Future<IList<UserActivity>> accountActivity(AccountActivityRef ref) async {
 }
 
 @riverpod
-Future<IList<ArchivedGameData>> accountRecentGames(
+Future<IList<LightArchivedGame>> accountRecentGames(
   AccountRecentGamesRef ref,
 ) async {
   final session = ref.watch(authSessionProvider);

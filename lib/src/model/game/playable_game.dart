@@ -200,6 +200,7 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
 
 GameMeta _playableGameMetaFromPick(RequiredPick pick) {
   return GameMeta(
+    createdAt: pick('game', 'createdAt').asDateTimeFromMillisecondsOrThrow(),
     rated: pick('game', 'rated').asBoolOrThrow(),
     speed: pick('game', 'speed').asSpeedOrThrow(),
     perf: pick('game', 'perf').asPerfOrThrow(),

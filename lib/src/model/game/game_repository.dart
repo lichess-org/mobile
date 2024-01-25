@@ -1,26 +1,20 @@
 import 'dart:convert';
 
 import 'package:async/async.dart';
-import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';
-import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:logging/logging.dart';
 import 'package:result_extensions/result_extensions.dart';
 
 import 'game.dart';
-import 'game_status.dart';
-import 'material_diff.dart';
 import 'player.dart';
 
 class GameRepository {
@@ -39,7 +33,7 @@ class GameRepository {
     ).flatMap((response) {
       return readJsonObjectFromResponse(
         response,
-        mapper: _makeArchivedGameFromJson,
+        mapper: ArchivedGame.fromServerJson,
         logger: _log,
       );
     });
@@ -66,7 +60,7 @@ class GameRepository {
     );
   }
 
-  FutureResult<IList<ArchivedGameData>> getRecentGames(UserId userId) {
+  FutureResult<IList<LightArchivedGame>> getRecentGames(UserId userId) {
     return apiClient.get(
       Uri.parse(
         '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true&accuracy=true&opening=true',
@@ -75,7 +69,7 @@ class GameRepository {
     ).flatMap(
       (r) => readNdJsonListFromResponse(
         r,
-        mapper: _makeArchivedGameDataFromJson,
+        mapper: LightArchivedGame.fromServerJson,
         logger: _log,
       ),
     );
@@ -112,7 +106,7 @@ class GameRepository {
         );
   }
 
-  FutureResult<IList<ArchivedGameData>> getGamesByIds(ISet<GameId> ids) {
+  FutureResult<IList<LightArchivedGame>> getGamesByIds(ISet<GameId> ids) {
     return apiClient
         .post(
           Uri.parse(
@@ -124,7 +118,7 @@ class GameRepository {
         .flatMap(
           (r) => readNdJsonListFromResponse(
             r,
-            mapper: _makeArchivedGameDataFromJson,
+            mapper: LightArchivedGame.fromServerJson,
             logger: _log,
           ),
         );
@@ -147,7 +141,7 @@ PostGameData _getPostGameDataFromJson(Map<String, dynamic> json) {
   return PostGameData(
     clocks: IList(clocks ?? []),
     opening: pick('opening').letOrNull(_openingFromPick),
-    evals: _evalsFromPick(pick),
+    evals: gameEvalsFromPick(pick),
     analysis: whiteAnalysis != null && blackAnalysis != null
         ? (
             white: whiteAnalysis,
@@ -157,138 +151,10 @@ PostGameData _getPostGameDataFromJson(Map<String, dynamic> json) {
   );
 }
 
-ArchivedGame _makeArchivedGameFromJson(Map<String, dynamic> json) =>
-    _archivedGameFromPick(pick(json).required());
-
-ArchivedGame _archivedGameFromPick(RequiredPick pick) {
-  final data = _archivedGameDataFromPick(pick);
-  final clocks = pick('clocks').asListOrNull<Duration>(
-    (p0) => Duration(milliseconds: p0.asIntOrThrow() * 10),
-  );
-
-  final initialFen = pick('initialFen').asStringOrNull();
-
-  return ArchivedGame(
-    id: data.id,
-    meta: GameMeta(
-      variant: data.variant,
-      speed: data.speed,
-      perf: data.perf,
-      rated: data.rated,
-      clock: data.clock != null
-          ? (
-              initial: data.clock!.initial,
-              increment: data.clock!.increment,
-              emergency: null,
-              moreTime: null
-            )
-          : null,
-    ),
-    data: data,
-    status: data.status,
-    winner: data.winner,
-    initialFen: initialFen,
-    isThreefoldRepetition: pick('threefold').asBoolOrNull(),
-    white: data.white,
-    black: data.black,
-    steps: pick('moves').letOrThrow((it) {
-      final moves = it.asStringOrThrow().split(' ');
-      // assume lichess always send initialFen with fromPosition and chess960
-      Position position = (data.variant == Variant.fromPosition ||
-              data.variant == Variant.chess960)
-          ? Chess.fromSetup(Setup.parseFen(initialFen!))
-          : data.variant.initialPosition;
-      int index = 0;
-      final List<GameStep> steps = [GameStep(position: position)];
-      Duration? clock = data.clock?.initial;
-      for (final san in moves) {
-        final stepClock = clocks?[index];
-        index++;
-        final move = position.parseSan(san);
-        // assume lichess only sends correct moves
-        position = position.playUnchecked(move!);
-        steps.add(
-          GameStep(
-            sanMove: SanMove(san, move),
-            position: position,
-            diff: MaterialDiff.fromBoard(position.board),
-            archivedWhiteClock: index.isOdd ? stepClock : clock,
-            archivedBlackClock: index.isEven ? stepClock : clock,
-          ),
-        );
-        clock = stepClock;
-      }
-      return IList(steps);
-    }),
-    clocks: IList(clocks ?? []),
-    evals: _evalsFromPick(pick),
-  );
-}
-
-IList<ExternalEval>? _evalsFromPick(RequiredPick pick) {
-  return pick('analysis')
-      .asListOrNull<ExternalEval>(
-        (p0) => ExternalEval(
-          cp: p0('eval').asIntOrNull(),
-          mate: p0('mate').asIntOrNull(),
-          bestMove: p0('best').asStringOrNull(),
-          variation: p0('variation').asStringOrNull(),
-          judgment: p0('judgment').letOrNull(
-            (j) => (
-              name: j('name').asStringOrThrow(),
-              comment: j('comment').asStringOrThrow(),
-            ),
-          ),
-        ),
-      )
-      ?.lock;
-}
-
-ArchivedGameData _makeArchivedGameDataFromJson(Map<String, dynamic> json) =>
-    _archivedGameDataFromPick(pick(json).required());
-
-ArchivedGameData _archivedGameDataFromPick(RequiredPick pick) {
-  return ArchivedGameData(
-    id: pick('id').asGameIdOrThrow(),
-    fullId: pick('fullId').asGameFullIdOrNull(),
-    rated: pick('rated').asBoolOrThrow(),
-    speed: pick('speed').asSpeedOrThrow(),
-    perf: pick('perf').asPerfOrThrow(),
-    createdAt: pick('createdAt').asDateTimeFromMillisecondsOrThrow(),
-    lastMoveAt: pick('lastMoveAt').asDateTimeFromMillisecondsOrThrow(),
-    status: pick('status').asGameStatusOrThrow(),
-    white: pick('players', 'white').letOrThrow(_playerFromUserGamePick),
-    black: pick('players', 'black').letOrThrow(_playerFromUserGamePick),
-    winner: pick('winner').asSideOrNull(),
-    variant: pick('variant').asVariantOrThrow(),
-    lastFen: pick('lastFen').asStringOrNull(),
-    lastMove: pick('lastMove').asUciMoveOrNull(),
-    clock: pick('clock').letOrNull(_clockDataFromPick),
-    opening: pick('opening').letOrNull(_openingFromPick),
-  );
-}
-
 LightOpening _openingFromPick(RequiredPick pick) {
   return LightOpening(
     eco: pick('eco').asStringOrThrow(),
     name: pick('name').asStringOrThrow(),
-  );
-}
-
-ClockData _clockDataFromPick(RequiredPick pick) {
-  return ClockData(
-    initial: pick('initial').asDurationFromSecondsOrThrow(),
-    increment: pick('increment').asDurationFromSecondsOrThrow(),
-  );
-}
-
-Player _playerFromUserGamePick(RequiredPick pick) {
-  return Player(
-    user: pick('user').asLightUserOrNull(),
-    rating: pick('rating').asIntOrNull(),
-    ratingDiff: pick('ratingDiff').asIntOrNull(),
-    aiLevel: pick('aiLevel').asIntOrNull(),
-    analysis: pick('analysis').letOrNull(_playerAnalysisFromPick),
   );
 }
 

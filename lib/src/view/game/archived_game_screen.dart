@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -32,7 +32,7 @@ class ArchivedGameScreen extends ConsumerWidget {
     super.key,
   });
 
-  final ArchivedGameData gameData;
+  final LightArchivedGame gameData;
   final Side orientation;
 
   @override
@@ -91,7 +91,7 @@ class _GameTitle extends StatelessWidget {
     required this.gameData,
   });
 
-  final ArchivedGameData gameData;
+  final LightArchivedGame gameData;
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +117,7 @@ class _BoardBody extends ConsumerWidget {
     required this.orientation,
   });
 
-  final ArchivedGameData gameData;
+  final LightArchivedGame gameData;
   final Side orientation;
 
   @override
@@ -216,7 +216,7 @@ class _BottomBar extends ConsumerWidget {
   const _BottomBar({required this.gameData, required this.orientation});
 
   final Side orientation;
-  final ArchivedGameData gameData;
+  final LightArchivedGame gameData;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

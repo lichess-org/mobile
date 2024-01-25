@@ -67,7 +67,8 @@ IList<GameStep> _makeSteps(String pgn) {
 const gameId = GameId('g2bzFol8');
 final corresGame = OfflineCorrespondenceGame(
   id: gameId,
-  meta: const GameMeta(
+  meta: GameMeta(
+    createdAt: DateTime(2021, 1, 1),
     rated: true,
     perf: Perf.correspondence,
     speed: Speed.correspondence,

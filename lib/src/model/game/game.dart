@@ -1,6 +1,8 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -8,7 +10,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/common/time_increment.dart';
 
 import 'game_status.dart';
 import 'material_diff.dart';
@@ -16,6 +17,8 @@ import 'player.dart';
 
 part 'game.freezed.dart';
 part 'game.g.dart';
+
+final _dateFormat = DateFormat('yyyy.MM.dd');
 
 /// Common interface for playable and archived games.
 abstract mixin class BaseGame {
@@ -155,7 +158,8 @@ abstract mixin class BaseGame {
     final pgn = node.makePgn(
       IMap({
         'Event': '${meta.rated ? 'Rated' : ''} ${meta.perf.title} game',
-        'Site': 'https://lichess.org/$id',
+        'Site': '$kLichessHost/$id',
+        'Date': _dateFormat.format(meta.createdAt),
         'White': white.user?.name ??
             (white.aiLevel != null
                 ? 'Stockfish level ${white.aiLevel}'
@@ -174,13 +178,15 @@ abstract mixin class BaseGame {
         if (white.rating != null) 'WhiteElo': white.rating!.toString(),
         if (black.rating != null) 'BlackElo': black.rating!.toString(),
         if (white.ratingDiff != null)
-          'WhiteRatingDiff': white.ratingDiff!.toString(),
+          'WhiteRatingDiff':
+              '${white.ratingDiff! > 0 ? '+' : ''}${white.ratingDiff!}',
         if (black.ratingDiff != null)
-          'BlackRatingDiff': black.ratingDiff!.toString(),
+          'BlackRatingDiff':
+              '${black.ratingDiff! > 0 ? '+' : ''}${black.ratingDiff!}',
         'Variant': meta.variant.label,
         if (meta.clock != null)
           'TimeControl':
-              '${meta.clock!.initial.inMinutes}+${meta.clock!.increment.inSeconds}',
+              '${meta.clock!.initial.inSeconds}+${meta.clock!.increment.inSeconds}',
         if (initialFen != null) 'FEN': initialFen!,
         if (meta.opening != null) 'ECO': meta.opening!.eco,
         if (meta.opening != null) 'Opening': meta.opening!.name,
@@ -279,6 +285,7 @@ class GameMeta with _$GameMeta {
 
   @Assert('!(clock != null && daysPerTurn != null)')
   const factory GameMeta({
+    required DateTime createdAt,
     required bool rated,
     required Variant variant,
     required Speed speed,
@@ -323,71 +330,6 @@ class CorrespondenceClockData with _$CorrespondenceClockData {
 
   factory CorrespondenceClockData.fromJson(Map<String, dynamic> json) =>
       _$CorrespondenceClockDataFromJson(json);
-}
-
-@freezed
-class ArchivedGameData with _$ArchivedGameData {
-  const ArchivedGameData._();
-
-  const factory ArchivedGameData({
-    required GameId id,
-
-    /// If the full game id is available, it means this is a game owned by the
-    /// current logged in user.
-    GameFullId? fullId,
-    required bool rated,
-    required Speed speed,
-    required Perf perf,
-    required DateTime createdAt,
-    required DateTime lastMoveAt,
-    required GameStatus status,
-    required Player white,
-    required Player black,
-    required Variant variant,
-    LightOpening? opening,
-    String? lastFen,
-    Move? lastMove,
-    Side? winner,
-    ClockData? clock,
-  }) = _ArchivedGameData;
-
-  String get clockDisplay {
-    return TimeIncrement(
-      clock?.initial.inSeconds ?? 0,
-      clock?.increment.inSeconds ?? 0,
-    ).display;
-  }
-}
-
-@freezed
-class ArchivedGame
-    with _$ArchivedGame, BaseGame, IndexableSteps
-    implements BaseGame {
-  const ArchivedGame._();
-
-  @Assert('steps.isNotEmpty')
-  factory ArchivedGame({
-    required GameId id,
-    required GameMeta meta,
-    required ArchivedGameData data,
-    required IList<GameStep> steps,
-    String? initialFen,
-    required GameStatus status,
-    Side? winner,
-    bool? isThreefoldRepetition,
-    required Player white,
-    required Player black,
-    IList<ExternalEval>? evals,
-    IList<Duration>? clocks,
-  }) = _ArchivedGame;
-}
-
-@freezed
-class ClockData with _$ClockData {
-  const factory ClockData({
-    required Duration initial,
-    required Duration increment,
-  }) = _ClockData;
 }
 
 @freezed
