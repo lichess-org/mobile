@@ -291,6 +291,7 @@ class InlineMove extends ConsumerWidget {
   static const borderRadius = BorderRadius.all(Radius.circular(4.0));
   static const baseTextStyle = TextStyle(
     fontFamily: 'ChessFont',
+    fontSize: 16.0,
     height: 1.5,
   );
 
@@ -368,7 +369,7 @@ class InlineMove extends ConsumerWidget {
             );
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+            padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
             decoration: isCurrentMove
                 ? BoxDecoration(
                     color: Theme.of(context).platform == TargetPlatform.iOS
