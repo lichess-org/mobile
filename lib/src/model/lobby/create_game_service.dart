@@ -60,7 +60,13 @@ class CreateGameService {
       }
     }
 
-    await Result.release(lobbyRepo.createSeek(actualSeek, sri: socket.sri));
+    final result = await lobbyRepo.createSeek(actualSeek, sri: socket.sri);
+
+    if (result.isError) {
+      _socketSubscription?.cancel();
+      _socketSubscription = null;
+      completer.completeError(result.asError!.error);
+    }
 
     return completer.future;
   }
