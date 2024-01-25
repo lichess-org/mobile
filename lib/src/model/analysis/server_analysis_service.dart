@@ -37,7 +37,7 @@ class ServerAnalysisService {
     if (_socketSubscription != null) {
       final (subId, _) = _socketSubscription!;
       if (subId == id) {
-        return _analysisCompleter!.future;
+        return _analysisCompleter?.future;
       } else {
         return Future.error(
           'You already have an ongoing requested analysis. Please wait for it to finish before starting a new one.',
