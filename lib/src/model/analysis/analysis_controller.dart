@@ -633,7 +633,7 @@ class AnalysisState with _$AnalysisState {
   bool get canShowGameSummary =>
       hasServerAnalysis || (id is GameFullId && canRequestServerAnalysis);
 
-  bool get hasServerAnalysis => acplChartData != null;
+  bool get hasServerAnalysis => playersAnalysis != null;
 
   /// Whether an evaluation can be available
   bool get hasAvailableEval => isEngineAvailable || acplChartData != null;
