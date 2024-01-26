@@ -126,8 +126,15 @@ class StandaloneGameLoadingBoard extends StatelessWidget {
             ),
           ),
         ),
-        const _BottomBar(
-          children: [],
+        _BottomBar(
+          children: [
+            BottomBarButton(
+              onTap: () => Navigator.of(context, rootNavigator: true).pop(),
+              label: context.l10n.studyBack,
+              showLabel: true,
+              icon: Icons.exit_to_app,
+            ),
+          ],
         ),
       ],
     );

@@ -2,11 +2,11 @@ import 'package:async/async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'game.dart';
 import 'game_repository.dart';
 
 part 'game_repository_providers.g.dart';
@@ -24,13 +24,7 @@ Future<ArchivedGame> archivedGame(ArchivedGameRef ref, {required GameId id}) {
 }
 
 @riverpod
-Future<String> gameAnalysisPgn(GameAnalysisPgnRef ref, {required GameId id}) {
-  final repo = ref.watch(gameRepositoryProvider);
-  return Result.release(repo.getGameAnalysisPgn(id));
-}
-
-@riverpod
-Future<IList<ArchivedGameData>> userRecentGames(
+Future<IList<LightArchivedGame>> userRecentGames(
   UserRecentGamesRef ref, {
   required UserId userId,
 }) async {
@@ -44,7 +38,7 @@ Future<IList<ArchivedGameData>> userRecentGames(
 }
 
 @riverpod
-Future<IList<ArchivedGameData>> gamesById(
+Future<IList<LightArchivedGame>> gamesById(
   GamesByIdRef ref, {
   required ISet<GameId> ids,
 }) async {

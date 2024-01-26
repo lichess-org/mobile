@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -142,8 +141,6 @@ class GameBody extends ConsumerWidget {
               ? CountdownClock(
                   key: blackClockKey,
                   duration: archivedBlackClock ?? gameState.game.clock!.black,
-                  displayActive:
-                      archivedBlackClock != null && sideToMove == Side.black,
                   active: gameState.activeClockSide == Side.black,
                   emergencyThreshold: youAre == Side.black
                       ? gameState.game.meta.clock?.emergency
@@ -182,8 +179,6 @@ class GameBody extends ConsumerWidget {
               ? CountdownClock(
                   key: whiteClockKey,
                   duration: archivedWhiteClock ?? gameState.game.clock!.white,
-                  displayActive:
-                      archivedWhiteClock != null && sideToMove == Side.white,
                   active: gameState.activeClockSide == Side.white,
                   emergencyThreshold: youAre == Side.white
                       ? gameState.game.meta.clock?.emergency
@@ -204,7 +199,7 @@ class GameBody extends ConsumerWidget {
         final isBoardTurned = ref.watch(isBoardTurnedProvider);
 
         return PopScope(
-          canPop: gameState.game.speed == Speed.correspondence ||
+          canPop: gameState.game.meta.speed == Speed.correspondence ||
               !gameState.game.playable,
           child: Column(
             children: [
@@ -452,57 +447,26 @@ class _GameBottomBar extends ConsumerWidget {
                   ),
                 )
               else if (gameState.game.finished)
-                Builder(
-                  builder: (context) {
-                    Future<void>? pendingPgn;
-                    return StatefulBuilder(
-                      builder: (context, setState) {
-                        return FutureBuilder(
-                          future: pendingPgn,
-                          builder: (context, snapshot) {
-                            return Expanded(
-                              child: BottomBarButton(
-                                label: context.l10n.gameAnalysis,
-                                icon: Icons.biotech,
-                                onTap: snapshot.connectionState ==
-                                        ConnectionState.waiting
-                                    ? null
-                                    : () async {
-                                        final future = ref.read(
-                                          gameAnalysisPgnProvider(
-                                            id: gameState.game.id,
-                                          ).future,
-                                        );
-                                        setState(() {
-                                          pendingPgn = future;
-                                        });
-                                        final pgn = await future;
-                                        if (context.mounted) {
-                                          pushPlatformRoute(
-                                            context,
-                                            builder: (_) => AnalysisScreen(
-                                              options: gameState.analysisOptions
-                                                  .copyWith(
-                                                pgn: pgn,
-                                              ),
-                                              title: context.l10n.gameAnalysis,
-                                            ),
-                                          );
-                                        }
-                                      },
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    );
-                  },
+                Expanded(
+                  child: BottomBarButton(
+                    label: context.l10n.gameAnalysis,
+                    icon: Icons.biotech,
+                    onTap: () {
+                      pushPlatformRoute(
+                        context,
+                        builder: (_) => AnalysisScreen(
+                          options: gameState.analysisOptions,
+                          title: context.l10n.gameAnalysis,
+                        ),
+                      );
+                    },
+                  ),
                 )
               else
                 const SizedBox(
                   width: 44.0,
                 ),
-              if (gameState.game.speed == Speed.correspondence &&
+              if (gameState.game.meta.speed == Speed.correspondence &&
                   !gameState.game.finished)
                 Expanded(
                   child: BottomBarButton(
@@ -601,7 +565,7 @@ class _GameBottomBar extends ConsumerWidget {
           },
         ),
         if (gameState.game.playable &&
-            gameState.game.speed == Speed.correspondence)
+            gameState.game.meta.speed == Speed.correspondence)
           BottomSheetAction(
             label: Text(context.l10n.analysis),
             onPressed: (context) {

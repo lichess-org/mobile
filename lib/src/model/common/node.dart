@@ -24,7 +24,7 @@ abstract class Node {
 
   final Position position;
 
-  /// The evaluation of the position.
+  /// The client evaluation of the position.
   ClientEval? eval;
 
   /// The opening associated with this node.
@@ -205,6 +205,22 @@ abstract class Node {
     parentAt(path).children.removeWhere((child) => child.id == path.last);
   }
 
+  /// Hides the variation from the node at the given path.
+  void hideVariationAt(UciPath path) {
+    final nodes = nodesOn(path).toList();
+    for (int i = nodes.length - 2; i >= 0; i--) {
+      final node = nodes[i + 1];
+      final parent = nodes[i];
+      if (node is Branch && parent.children.length > 1) {
+        for (final child in parent.children) {
+          if (child.id == node.id) {
+            child.isHidden = true;
+          }
+        }
+      }
+    }
+  }
+
   /// Promotes the node at the given path.
   void promoteAt(UciPath path, {required bool toMainline}) {
     final nodes = nodesOn(path).toList();
@@ -255,6 +271,71 @@ abstract class Node {
   Node parentAt(UciPath path) {
     return nodeAt(path.penultimate);
   }
+
+  /// Export the tree to a PGN string.
+  ///
+  /// Optionally, headers and initial game comments can be provided.
+  String makePgn([
+    IMap<String, String>? headers,
+    IList<PgnComment>? rootComments,
+  ]) {
+    final pgnNode = PgnNode<PgnNodeData>();
+    final List<({Node from, PgnNode<PgnNodeData> to})> stack = [
+      (from: this, to: pgnNode),
+    ];
+
+    while (stack.isNotEmpty) {
+      final frame = stack.removeLast();
+      for (int childIdx = 0;
+          childIdx < frame.from.children.length;
+          childIdx++) {
+        final childFrom = frame.from.children[childIdx];
+        final childTo = PgnChildNode(
+          PgnNodeData(
+            san: childFrom.sanMove.san,
+            startingComments: childFrom.startingComments
+                ?.map((c) => c.makeComment())
+                .toList(),
+            comments:
+                (childFrom.lichessAnalysisComments ?? childFrom.comments)?.map(
+              (c) {
+                final eval = childFrom.eval;
+                final pgnEval = eval?.cp != null
+                    ? PgnEvaluation.pawns(
+                        pawns: cpToPawns(eval!.cp!),
+                        depth: eval.depth,
+                      )
+                    : eval?.mate != null
+                        ? PgnEvaluation.mate(
+                            mate: eval!.mate,
+                            depth: eval.depth,
+                          )
+                        : c.eval;
+                return PgnComment(
+                  text: c.text,
+                  shapes: c.shapes,
+                  clock: c.clock,
+                  emt: c.emt,
+                  eval: pgnEval,
+                ).makeComment();
+              },
+            ).toList(),
+            nags: childFrom.nags,
+          ),
+        );
+        frame.to.children.add(childTo);
+        stack.add((from: childFrom, to: childTo));
+      }
+    }
+
+    final pgnGame = PgnGame(
+      headers: headers?.unlock ?? {},
+      moves: pgnNode,
+      comments: rootComments?.map((c) => c.makeComment()).toList() ?? [],
+    );
+
+    return pgnGame.makePgn();
+  }
 }
 
 /// A branch node of a game tree
@@ -266,11 +347,16 @@ class Branch extends Node {
     super.eval,
     super.opening,
     required this.sanMove,
+    this.isHidden = false,
+    this.lichessAnalysisComments,
     // below are fields from dartchess [PgnNodeData]
     this.startingComments,
     this.comments,
     this.nags,
   });
+
+  /// Whether the branch should be hidden in the tree view.
+  bool isHidden;
 
   /// The id of the branch, using a concise notation of associated move.
   UciCharPair get id => UciCharPair.fromMove(sanMove.move);
@@ -279,13 +365,18 @@ class Branch extends Node {
   final SanMove sanMove;
 
   /// PGN comments before the move.
-  final List<PgnComment>? startingComments;
+  List<PgnComment>? startingComments;
 
   /// PGN comments after the move.
-  final List<PgnComment>? comments;
+  List<PgnComment>? comments;
 
   /// Numeric Annotation Glyphs for the move.
-  final List<int>? nags;
+  List<int>? nags;
+
+  /// Lichess analysis comments.
+  ///
+  /// These are standard PGN comments, but get a special treatment.
+  List<PgnComment>? lichessAnalysisComments;
 
   @override
   ViewBranch get view => ViewBranch(
@@ -294,6 +385,8 @@ class Branch extends Node {
         eval: eval,
         opening: opening,
         children: IList(children.map((child) => child.view)),
+        isHidden: isHidden,
+        lichessAnalysisComments: lichessAnalysisComments?.lock,
         startingComments: startingComments?.lock,
         comments: comments?.lock,
         nags: nags?.lock,
@@ -353,9 +446,11 @@ class Root extends Node {
   /// Any non legal move will be ignored.
   /// An optional callback can be provided to be called on each visited node.
   factory Root.fromPgnGame(
-    PgnGame game, [
+    PgnGame game, {
+    bool isLichessAnalysis = false,
+    bool hideVariations = false,
     void Function(Root root, Branch branch, bool isMainline)? onVisitNode,
-  ]) {
+  }) {
     final root = Root(
       position: PgnGame.startingPosition(game.headers),
     );
@@ -363,6 +458,7 @@ class Root extends Node {
     final List<({PgnNode<PgnNodeData> from, Node to})> stack = [
       (from: game.moves, to: root),
     ];
+
     while (stack.isNotEmpty) {
       final frame = stack.removeLast();
       for (int childIdx = 0;
@@ -372,96 +468,32 @@ class Root extends Node {
         final move = frame.to.position.parseSan(childFrom.data.san);
         if (move != null) {
           final newPos = frame.to.position.play(move);
+          final isMainline = stack.isEmpty;
+          final comments = childFrom.data.comments?.map(PgnComment.fromPgn);
+
           final branch = Branch(
             sanMove: SanMove(childFrom.data.san, move),
             position: newPos,
-            startingComments: childFrom.data.startingComments
-                ?.map(
-                  (c) => PgnComment.fromPgn(c),
-                )
-                .toList(growable: false),
-            comments: childFrom.data.comments
-                ?.map(
-                  (c) => PgnComment.fromPgn(c),
-                )
-                .toList(growable: false),
+            isHidden: hideVariations && childIdx > 0,
+            lichessAnalysisComments:
+                isLichessAnalysis ? comments?.toList() : null,
+            startingComments: isLichessAnalysis
+                ? null
+                : childFrom.data.startingComments
+                    ?.map(PgnComment.fromPgn)
+                    .toList(),
+            comments: isLichessAnalysis ? null : comments?.toList(),
             nags: childFrom.data.nags,
           );
 
           frame.to.addChild(branch);
           stack.add((from: childFrom, to: branch));
 
-          onVisitNode?.call(root, branch, stack.length == 1);
+          onVisitNode?.call(root, branch, isMainline);
         }
       }
     }
     return root;
-  }
-
-  /// Export the game tree to a PGN string.
-  ///
-  /// Optionally, headers and initial game comments can be provided.
-  String makePgn([
-    IMap<String, String>? headers,
-    IList<PgnComment>? rootComments,
-  ]) {
-    final pgnNode = PgnNode<PgnNodeData>();
-    final List<({Node from, PgnNode<PgnNodeData> to})> stack = [
-      (from: this, to: pgnNode),
-    ];
-
-    while (stack.isNotEmpty) {
-      final frame = stack.removeLast();
-      for (int childIdx = 0;
-          childIdx < frame.from.children.length;
-          childIdx++) {
-        final childFrom = frame.from.children[childIdx];
-        final childTo = PgnChildNode(
-          PgnNodeData(
-            san: childFrom.sanMove.san,
-            startingComments: childFrom.startingComments
-                ?.map((c) => c.makeComment())
-                .toList(growable: false),
-            comments: childFrom.comments?.map(
-              (c) {
-                final eval = childFrom.eval;
-                final pgnEval = eval?.cp != null
-                    ? PgnEvaluation.pawns(
-                        pawns: evalFromCp(eval!.cp!),
-                        depth: eval.depth,
-                      )
-                    : eval?.mate != null
-                        ? PgnEvaluation.mate(
-                            mate: eval!.mate,
-                            depth: eval.depth,
-                          )
-                        : c.eval;
-                return PgnComment(
-                  text: c.text,
-                  shapes: c.shapes,
-                  clock: c.clock,
-                  emt: c.emt,
-                  eval: pgnEval,
-                ).makeComment();
-              },
-            ).toList(growable: false),
-            nags: childFrom.nags,
-          ),
-        );
-        frame.to.children.add(childTo);
-        stack.add((from: childFrom, to: childTo));
-      }
-    }
-
-    final pgnGame = PgnGame(
-      headers: headers?.unlock ?? {},
-      moves: pgnNode,
-      comments:
-          rootComments?.map((c) => c.makeComment()).toList(growable: false) ??
-              [],
-    );
-
-    return pgnGame.makePgn();
   }
 }
 
@@ -475,6 +507,7 @@ abstract class ViewNode {
   Opening? get opening;
   IList<PgnComment>? get startingComments;
   IList<PgnComment>? get comments;
+  IList<PgnComment>? get lichessAnalysisComments;
   IList<int>? get nags;
 }
 
@@ -504,6 +537,9 @@ class ViewRoot with _$ViewRoot implements ViewNode {
   IList<PgnComment>? get comments => null;
 
   @override
+  IList<PgnComment>? get lichessAnalysisComments => null;
+
+  @override
   IList<int>? get nags => null;
 }
 
@@ -517,7 +553,9 @@ class ViewBranch with _$ViewBranch implements ViewNode {
     required Position position,
     Opening? opening,
     required IList<ViewBranch> children,
+    @Default(false) bool isHidden,
     ClientEval? eval,
+    IList<PgnComment>? lichessAnalysisComments,
     IList<PgnComment>? startingComments,
     IList<PgnComment>? comments,
     IList<int>? nags,
@@ -530,6 +568,22 @@ class ViewBranch with _$ViewBranch implements ViewNode {
   /// Has at least one non empty comment text.
   bool get hasTextComment =>
       comments?.any((c) => c.text?.isNotEmpty == true) == true;
+
+  /// Has at least one non empty lichess analysis comment text.
+  bool get hasLichessAnalysisTextComment =>
+      lichessAnalysisComments?.any((c) => c.text?.isNotEmpty == true) == true;
+
+  Duration? get clock {
+    final clockComment = (lichessAnalysisComments ?? comments)
+        ?.firstWhereOrNull((c) => c.clock != null);
+    return clockComment?.clock;
+  }
+
+  Duration? get elapsedMoveTime {
+    final clockComment = (lichessAnalysisComments ?? comments)
+        ?.firstWhereOrNull((c) => c.emt != null);
+    return clockComment?.emt;
+  }
 
   @override
   UciCharPair get id => UciCharPair.fromMove(sanMove.move);

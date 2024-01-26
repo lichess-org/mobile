@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -33,7 +33,7 @@ class RecentGames extends ConsumerWidget {
 
     final userId = user?.id ?? ref.watch(authSessionProvider)?.user.id;
 
-    Widget getResultIcon(ArchivedGameData game, Side mySide) {
+    Widget getResultIcon(LightArchivedGame game, Side mySide) {
       if (game.status == GameStatus.aborted ||
           game.status == GameStatus.noStart) {
         return const Icon(

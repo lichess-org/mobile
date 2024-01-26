@@ -291,7 +291,7 @@ class _BodyState extends ConsumerState<_Body> {
                             options: AnalysisOptions(
                               isLocalEvaluationAllowed: false,
                               variant: game.variant,
-                              pgn: game.pgn,
+                              pgn: game.makePgn(),
                               initialMoveCursor: stepCursor,
                               orientation: game.youAre,
                               id: game.id,

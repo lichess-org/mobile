@@ -12,17 +12,19 @@ sealed class Eval {
   double winningChances(Side side);
 }
 
+/// The eval from an external engine, typically lichess server side stockfish.
 @freezed
 class ExternalEval with _$ExternalEval implements Eval {
   const ExternalEval._();
 
   const factory ExternalEval({
-    required double? eval,
+    required int? cp,
     required int? mate,
-    required int? depth,
-  }) = _ServerEval;
-
-  int? get cp => eval != null ? cpFromEval(eval!) : null;
+    int? depth,
+    UCIMove? bestMove,
+    String? variation,
+    ({String name, String comment})? judgment,
+  }) = _ExternalEval;
 
   @override
   String get evalString => _evalString(cp, mate);
@@ -33,14 +35,15 @@ class ExternalEval with _$ExternalEval implements Eval {
   double get _whiteWinningChances {
     if (mate != null) {
       return mateWinningChances(mate!);
-    } else if (eval != null) {
-      return cpWinningChances(cpFromEval(eval!));
+    } else if (cp != null) {
+      return cpWinningChances(cp!);
     } else {
       return 0;
     }
   }
 }
 
+/// The eval from the client's own engine, typically stockfish.
 @freezed
 class ClientEval with _$ClientEval implements Eval {
   const ClientEval._();
@@ -128,10 +131,9 @@ class PvData with _$PvData {
   }
 }
 
-double evalFromCp(int cp) =>
-    math.max(math.min((cp / 10).round() / 10, 99), -99);
+double cpToPawns(int cp) => cp / 100;
 
-int cpFromEval(double eval) => (eval * 100).round();
+int cpFromPawns(double pawns) => (pawns * 100).round();
 
 double cpWinningChances(int cp) =>
     _rawWinningChances(math.min(math.max(-1000, cp), 1000));
@@ -153,7 +155,7 @@ double _rawWinningChances(num cp) {
 
 String _evalString(int? cp, int? mate) {
   if (cp != null) {
-    final e = evalFromCp(cp);
+    final e = cpToPawns(cp);
     return e > 0 ? '+${e.toStringAsFixed(1)}' : e.toStringAsFixed(1);
   } else if (mate != null) {
     return '#$mate';

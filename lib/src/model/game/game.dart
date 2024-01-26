@@ -1,12 +1,15 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/common/time_increment.dart';
 
 import 'game_status.dart';
 import 'material_diff.dart';
@@ -15,23 +18,27 @@ import 'player.dart';
 part 'game.freezed.dart';
 part 'game.g.dart';
 
+final _dateFormat = DateFormat('yyyy.MM.dd');
+
 /// Common interface for playable and archived games.
 abstract mixin class BaseGame {
   GameId get id;
 
+  GameMeta get meta;
+
   /// Game steps, cannot be empty.
   IList<GameStep> get steps;
+
+  IList<ExternalEval>? get evals;
+  IList<Duration>? get clocks;
 
   String? get initialFen;
 
   GameStatus get status;
+
   Side? get winner;
 
   bool? get isThreefoldRepetition;
-
-  Variant get variant;
-  Speed get speed;
-  Perf get perf;
 
   Player get white;
   Player get black;
@@ -56,20 +63,140 @@ abstract mixin class BaseGame {
       white.analysis != null && black.analysis != null
           ? (white: white.analysis!, black: black.analysis!)
           : null;
+
+  /// Converts the game to a tree representation
+  Root makeTree() {
+    final initial = steps.first;
+    final root = Root(position: initial.position);
+    Node current = root;
+    final clockIncrement = meta.clock?.increment ?? Duration.zero;
+    Duration? whiteClock;
+    Duration? blackClock;
+    for (var i = 1; i < steps.length; i++) {
+      final step = steps[i];
+      final eval = evals?.elementAtOrNull(i - 1);
+      final pgnEval = eval?.cp != null
+          ? PgnEvaluation.pawns(
+              pawns: cpToPawns(eval!.cp!),
+              depth: eval.depth,
+            )
+          : eval?.mate != null
+              ? PgnEvaluation.mate(
+                  mate: eval!.mate,
+                  depth: eval.depth,
+                )
+              : null;
+      final clock = clocks?.elementAtOrNull(i - 1);
+      Duration? emt;
+      if (clock != null) {
+        if (step.position.turn == Side.white) {
+          if (whiteClock != null) {
+            emt = whiteClock + clockIncrement - clock;
+          }
+
+          whiteClock = clock;
+        } else {
+          if (blackClock != null) {
+            emt = blackClock + clockIncrement - clock;
+          }
+          blackClock = clock;
+        }
+      }
+
+      final comment = eval != null || clock != null
+          ? PgnComment(
+              text: eval?.judgment?.comment,
+              clock: clock,
+              emt: emt,
+              eval: pgnEval,
+            )
+          : null;
+      final nag = eval?.judgment != null
+          ? _judgmentNameToNag(eval!.judgment!.name)
+          : null;
+      final nextNode = Branch(
+        sanMove: step.sanMove!,
+        position: step.position,
+        lichessAnalysisComments: comment != null ? [comment] : null,
+        nags: nag != null ? [nag] : null,
+      );
+      current.addChild(nextNode);
+
+      // add analysis variation if any
+      final variation = eval?.variation;
+      if (variation != null) {
+        Node variationNode = current;
+        Position position = current.position;
+        final moves = variation.split(' ');
+        for (final san in moves) {
+          final move = position.parseSan(san);
+          position = position.playUnchecked(move!);
+          final child = Branch(
+            sanMove: SanMove(san, move),
+            position: position,
+          );
+          variationNode.addChild(child);
+          variationNode = child;
+        }
+      }
+
+      current = nextNode;
+    }
+    return root;
+  }
+
+  int? _judgmentNameToNag(String name) => switch (name) {
+        'Inaccuracy' => 6,
+        'Mistake' => 2,
+        'Blunder' => 4,
+        String() => null,
+      };
+
+  String makePgn() {
+    final node = makeTree();
+    final pgn = node.makePgn(
+      IMap({
+        'Event': '${meta.rated ? 'Rated' : ''} ${meta.perf.title} game',
+        'Site': '$kLichessHost/$id',
+        'Date': _dateFormat.format(meta.createdAt),
+        'White': white.user?.name ??
+            (white.aiLevel != null
+                ? 'Stockfish level ${white.aiLevel}'
+                : 'Anonymous'),
+        'Black': black.user?.name ??
+            (black.aiLevel != null
+                ? 'Stockfish level ${black.aiLevel}'
+                : 'Anonymous'),
+        'Result': status.value >= GameStatus.mate.value
+            ? winner == null
+                ? '½-½'
+                : winner == Side.white
+                    ? '1-0'
+                    : '0-1'
+            : '*',
+        if (white.rating != null) 'WhiteElo': white.rating!.toString(),
+        if (black.rating != null) 'BlackElo': black.rating!.toString(),
+        if (white.ratingDiff != null)
+          'WhiteRatingDiff':
+              '${white.ratingDiff! > 0 ? '+' : ''}${white.ratingDiff!}',
+        if (black.ratingDiff != null)
+          'BlackRatingDiff':
+              '${black.ratingDiff! > 0 ? '+' : ''}${black.ratingDiff!}',
+        'Variant': meta.variant.label,
+        if (meta.clock != null)
+          'TimeControl':
+              '${meta.clock!.initial.inSeconds}+${meta.clock!.increment.inSeconds}',
+        if (initialFen != null) 'FEN': initialFen!,
+        if (meta.opening != null) 'ECO': meta.opening!.eco,
+        if (meta.opening != null) 'Opening': meta.opening!.name,
+      }),
+    );
+    return pgn;
+  }
 }
 
 /// A mixin that provides methods to access game data at a specific step.
 mixin IndexableSteps on BaseGame {
-  /// Internal PGN representation of the game.
-  ///
-  /// Contains the initial FEN if available. This is not meant to be used for
-  /// exporting the game.
-  String get pgn {
-    final fenHeader = initialFen != null ? '[FEN "$initialFen"]' : '';
-
-    return '$fenHeader\n$sanMoves';
-  }
-
   String get sanMoves => steps
       .where((e) => e.sanMove != null)
       .map((e) => e.sanMove!.san)
@@ -151,17 +278,17 @@ class GamePrefs with _$GamePrefs {
   }) = _GamePrefs;
 }
 
-@freezed
-class PlayableGameMeta with _$PlayableGameMeta {
-  const PlayableGameMeta._();
+@Freezed(fromJson: true, toJson: true)
+class GameMeta with _$GameMeta {
+  const GameMeta._();
 
   @Assert('!(clock != null && daysPerTurn != null)')
-  const factory PlayableGameMeta({
+  const factory GameMeta({
+    required DateTime createdAt,
     required bool rated,
     required Variant variant,
     required Speed speed,
     required Perf perf,
-    required GameSource source,
     ({
       Duration initial,
       Duration increment,
@@ -175,8 +302,13 @@ class PlayableGameMeta with _$PlayableGameMeta {
     int? daysPerTurn,
     int? startedAtTurn,
     ISet<GameRule>? rules,
+
+    /// Opening of the game, only available once finished
     LightOpening? opening,
-  }) = _PlayableGameMeta;
+  }) = _GameMeta;
+
+  factory GameMeta.fromJson(Map<String, dynamic> json) =>
+      _$GameMetaFromJson(json);
 }
 
 @freezed
@@ -197,71 +329,6 @@ class CorrespondenceClockData with _$CorrespondenceClockData {
 
   factory CorrespondenceClockData.fromJson(Map<String, dynamic> json) =>
       _$CorrespondenceClockDataFromJson(json);
-}
-
-@freezed
-class ArchivedGameData with _$ArchivedGameData {
-  const ArchivedGameData._();
-
-  const factory ArchivedGameData({
-    required GameId id,
-
-    /// If the full game id is available, it means this is a game owned by the
-    /// current logged in user.
-    GameFullId? fullId,
-    required bool rated,
-    required Speed speed,
-    required Perf perf,
-    required DateTime createdAt,
-    required DateTime lastMoveAt,
-    required GameStatus status,
-    required Player white,
-    required Player black,
-    required Variant variant,
-    LightOpening? opening,
-    String? lastFen,
-    Move? lastMove,
-    Side? winner,
-    ClockData? clock,
-  }) = _ArchivedGameData;
-
-  String get clockDisplay {
-    return TimeIncrement(
-      clock?.initial.inSeconds ?? 0,
-      clock?.increment.inSeconds ?? 0,
-    ).display;
-  }
-}
-
-@freezed
-class ArchivedGame
-    with _$ArchivedGame, BaseGame, IndexableSteps
-    implements BaseGame {
-  const ArchivedGame._();
-
-  @Assert('steps.isNotEmpty')
-  factory ArchivedGame({
-    required GameId id,
-    required ArchivedGameData data,
-    required IList<GameStep> steps,
-    String? initialFen,
-    required GameStatus status,
-    Side? winner,
-    bool? isThreefoldRepetition,
-    required Variant variant,
-    required Speed speed,
-    required Perf perf,
-    required Player white,
-    required Player black,
-  }) = _ArchivedGame;
-}
-
-@freezed
-class ClockData with _$ClockData {
-  const factory ClockData({
-    required Duration initial,
-    required Duration increment,
-  }) = _ClockData;
 }
 
 @freezed
@@ -287,5 +354,6 @@ class PostGameData with _$PostGameData {
     IList<Duration>? clocks,
     ({PlayerAnalysis white, PlayerAnalysis black})? analysis,
     LightOpening? opening,
+    IList<ExternalEval>? evals,
   }) = _PostGameData;
 }

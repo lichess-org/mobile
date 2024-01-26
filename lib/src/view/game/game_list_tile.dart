@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -37,7 +37,7 @@ class GameListTile extends StatelessWidget {
     this.onTap,
   });
 
-  final ArchivedGameData game;
+  final LightArchivedGame game;
   final Side mySide;
 
   final IconData? icon;
@@ -97,7 +97,7 @@ class _ContextMenu extends ConsumerWidget {
     this.trailing,
   });
 
-  final ArchivedGameData game;
+  final LightArchivedGame game;
   final Side mySide;
 
   final IconData? icon;
@@ -119,11 +119,11 @@ class _ContextMenu extends ConsumerWidget {
     final actions = [
       Builder(
         builder: (context) {
-          Future<void>? pgnFuture;
+          Future<void>? gameFuture;
           return StatefulBuilder(
             builder: (context, setState) {
               return FutureBuilder(
-                future: pgnFuture,
+                future: gameFuture,
                 builder: (context, snapshot) {
                   return BottomSheetContextMenuAction(
                     icon: Icons.biotech,
@@ -132,12 +132,12 @@ class _ContextMenu extends ConsumerWidget {
                             ? null
                             : () async {
                                 final future = ref.read(
-                                  gameAnalysisPgnProvider(id: game.id).future,
+                                  archivedGameProvider(id: game.id).future,
                                 );
                                 setState(() {
-                                  pgnFuture = future;
+                                  gameFuture = future;
                                 });
-                                final pgn = await future;
+                                final archivedGame = await future;
                                 if (context.mounted) {
                                   pushPlatformRoute(
                                     context,
@@ -146,9 +146,10 @@ class _ContextMenu extends ConsumerWidget {
                                       options: AnalysisOptions(
                                         isLocalEvaluationAllowed: true,
                                         variant: game.variant,
-                                        pgn: pgn,
+                                        pgn: archivedGame.makePgn(),
                                         orientation: orientation,
                                         id: game.id,
+                                        opening: game.opening,
                                         serverAnalysis: serverAnalysis,
                                       ),
                                     ),

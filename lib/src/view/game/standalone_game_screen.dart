@@ -3,12 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
@@ -48,7 +46,7 @@ class StandaloneGameScreen extends ConsumerStatefulWidget {
 }
 
 class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
-    with RouteAware, ImmersiveMode {
+    with ImmersiveMode {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
 
@@ -58,27 +56,6 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
   void initState() {
     super.initState();
     _gameId = widget.params.id;
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final route = ModalRoute.of(context);
-    if (route != null && route is PageRoute) {
-      rootNavPageRouteObserver.subscribe(this, route);
-    }
-  }
-
-  @override
-  void dispose() {
-    rootNavPageRouteObserver.unsubscribe(this);
-    super.dispose();
-  }
-
-  @override
-  void didPop() {
-    super.didPop();
-    ref.invalidate(accountRecentGamesProvider);
   }
 
   @override

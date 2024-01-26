@@ -26,7 +26,7 @@ Future<bool> shouldPreventGoingBack(
   return ref.watch(
     gameControllerProvider(gameId).selectAsync(
       (state) =>
-          state.game.speed != Speed.correspondence && state.game.playable,
+          state.game.meta.speed != Speed.correspondence && state.game.playable,
     ),
   );
 }
@@ -62,7 +62,7 @@ Future<({GamePrefs? prefs, bool shouldConfirmMove, bool isZenModeEnabled})>
 ///
 /// This is data that won't change during the game.
 @riverpod
-Future<PlayableGameMeta> gameMeta(
+Future<GameMeta> gameMeta(
   GameMetaRef ref,
   GameFullId gameId,
 ) async {

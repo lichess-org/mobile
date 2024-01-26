@@ -1,9 +1,13 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
 part 'game_socket_events.freezed.dart';
@@ -118,3 +122,124 @@ GameEndEvent _gameEndEventFromPick(RequiredPick pick) {
     ),
   );
 }
+
+@freezed
+class ServerEvalEvent with _$ServerEvalEvent {
+  const ServerEvalEvent._();
+
+  const factory ServerEvalEvent({
+    required IList<ExternalEval> evals,
+    required Map<String, dynamic> tree,
+    ServerAnalysis? analysis,
+    GameDivision? division,
+  }) = _ServerEvalEvent;
+
+  bool get isAnalysisIncomplete =>
+      evals.any((e) => e.cp == null || e.mate != null);
+
+  factory ServerEvalEvent.fromJson(Map<String, dynamic> json) =>
+      _serverEvalEventFromPick(pick(json).required());
+}
+
+ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
+  final tree = pick('tree').asMapOrThrow<String, dynamic>();
+  Map<String, dynamic> node = tree;
+  final List<ExternalEval> evals = [];
+
+  while ((node['children'] as List<dynamic>).isNotEmpty) {
+    final children = node['children'] as List<dynamic>;
+    final firstChild = children.first as Map<String, dynamic>;
+    final eval = firstChild['eval'] as Map<String, dynamic>?;
+    final glyphs = firstChild['glyphs'] as List<dynamic>?;
+    final glyph = glyphs?.first as Map<String, dynamic>?;
+    final comments = firstChild['comments'] as List<dynamic>?;
+    final comment = comments?.first as Map<String, dynamic>?;
+    final judgment = glyph != null && comment != null
+        ? (
+            name: _nagToJugdmentName(glyph['id'] as int),
+            comment: comment['text'] as String,
+          )
+        : null;
+    final buffer = StringBuffer();
+    if (children.length > 1) {
+      Map<String, dynamic>? variationNode = children[1] as Map<String, dynamic>;
+      while (variationNode != null) {
+        final san = variationNode['san'] as String;
+        if (buffer.isEmpty) {
+          buffer.write(san);
+        } else {
+          buffer.write(' $san');
+        }
+        final nestedChildren = variationNode['children'] as List<dynamic>?;
+        if (nestedChildren != null && nestedChildren.isNotEmpty) {
+          variationNode = nestedChildren.first as Map<String, dynamic>;
+        } else {
+          break;
+        }
+      }
+    }
+    final variation = buffer.isEmpty ? null : buffer.toString();
+    evals.add(
+      ExternalEval(
+        cp: eval?['cp'] as int?,
+        mate: eval?['mate'] as int?,
+        bestMove: eval?['best'] as String?,
+        judgment: judgment,
+        variation: variation,
+      ),
+    );
+    node = firstChild;
+  }
+
+  return ServerEvalEvent(
+    tree: tree,
+    evals: evals.lock,
+    analysis: pick('analysis').letOrNull(
+      (it) => (
+        id: GameId(it('id').asStringOrThrow()),
+        white: it('white').letOrThrow(
+          (pa) => PlayerAnalysis(
+            inaccuracies: pa('inaccuracy').asIntOrThrow(),
+            mistakes: pa('mistake').asIntOrThrow(),
+            blunders: pa('blunder').asIntOrThrow(),
+            acpl: pa('acpl').asIntOrNull(),
+            accuracy: pa('accuracy').asIntOrNull(),
+          ),
+        ),
+        black: it('black').letOrThrow(
+          (pa) => PlayerAnalysis(
+            inaccuracies: pa('inaccuracy').asIntOrThrow(),
+            mistakes: pa('mistake').asIntOrThrow(),
+            blunders: pa('blunder').asIntOrThrow(),
+            acpl: pa('acpl').asIntOrNull(),
+            accuracy: pa('accuracy').asIntOrNull(),
+          ),
+        ),
+      ),
+    ),
+    division: pick('division').letOrNull(
+      (it) => (
+        middle: it('middle').asIntOrNull(),
+        end: it('end').asIntOrNull(),
+      ),
+    ),
+  );
+}
+
+String _nagToJugdmentName(int nag) => switch (nag) {
+      6 => 'Inaccuracy',
+      2 => 'Mistake',
+      4 => 'Blunder',
+      int() => '',
+    };
+
+typedef ServerAnalysis = ({
+  GameId id,
+  PlayerAnalysis white,
+  PlayerAnalysis black,
+});
+
+typedef GameDivision = ({
+  int? middle,
+  int? end,
+});

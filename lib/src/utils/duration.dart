@@ -1,6 +1,18 @@
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 
 extension DurationExtensions on Duration {
+  /// Returns a string representation of this duration, like H:MM:SS.mm.
+  ///
+  /// If [showTenths] is `true` and the duration is less than one hour, the
+  /// representation is H:MM:SS.mm, otherwise it is H:MM:SS.
+  String toHoursMinutesSeconds({bool showTenths = false}) {
+    if (inHours == 0) {
+      return '${inMinutes.remainder(60)}:${inSeconds.remainder(60).toString().padLeft(2, '0')}${showTenths ? '.${inMilliseconds.remainder(1000) ~/ 10 % 10}' : ''}';
+    } else {
+      return '$inHours:${inMinutes.remainder(60).toString().padLeft(2, '0')}:${inSeconds.remainder(60).toString().padLeft(2, '0')}';
+    }
+  }
+
   String toDaysHoursMinutes(AppLocalizations l10n) {
     final days = inDays;
     final hours = inHours.remainder(24);

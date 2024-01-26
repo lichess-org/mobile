@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -151,11 +152,7 @@ class _Body extends ConsumerWidget {
         ref.watch(ctrlProvider.select((value) => value.hasAvailableEval));
 
     final showAnalysisSummary = ref.watch(
-      ctrlProvider.select(
-        (value) =>
-            value.acplChartData != null &&
-            value.displayMode == DisplayMode.summary,
-      ),
+      ctrlProvider.select((value) => value.displayMode == DisplayMode.summary),
     );
 
     return Column(
@@ -539,9 +536,10 @@ class _BottomBar extends ConsumerWidget {
         ref.watch(ctrlProvider.select((value) => value.canGoBack));
     final canGoNext =
         ref.watch(ctrlProvider.select((value) => value.canGoNext));
-    final displayMode = ref.watch(
-      ctrlProvider.select((value) => value.displayMode),
-    );
+    final displayMode =
+        ref.watch(ctrlProvider.select((value) => value.displayMode));
+    final canShowGameSummary =
+        ref.watch(ctrlProvider.select((value) => value.canShowGameSummary));
 
     return Container(
       color: defaultTargetPlatform == TargetPlatform.iOS
@@ -563,7 +561,7 @@ class _BottomBar extends ConsumerWidget {
                   icon: Icons.menu,
                 ),
               ),
-              if (options.serverAnalysis != null)
+              if (canShowGameSummary)
                 Expanded(
                   child: BottomBarButton(
                     label: displayMode == DisplayMode.summary
@@ -788,115 +786,168 @@ class ServerAnalysisSummary extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverAnalysis = options.serverAnalysis;
-    final pgnHeaders = ref.watch(
-      analysisControllerProvider(options).select((value) => value.pgnHeaders),
-    );
+    final ctrlProvider = analysisControllerProvider(options);
+    final playersAnalysis =
+        ref.watch(ctrlProvider.select((value) => value.playersAnalysis));
+    final pgnHeaders =
+        ref.watch(ctrlProvider.select((value) => value.pgnHeaders));
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AcplChart(options),
-          if (serverAnalysis != null)
-            Center(
-              child: SizedBox(
-                width: math.min(MediaQuery.sizeOf(context).width, 500),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Table(
-                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                    columnWidths: const {
-                      0: FlexColumnWidth(1),
-                      1: FlexColumnWidth(1),
-                      2: FlexColumnWidth(1),
-                    },
-                    children: [
-                      TableRow(
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: Colors.grey),
-                          ),
-                        ),
+    return playersAnalysis != null
+        ? SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AcplChart(options),
+                Center(
+                  child: SizedBox(
+                    width: math.min(MediaQuery.sizeOf(context).width, 500),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Table(
+                        defaultVerticalAlignment:
+                            TableCellVerticalAlignment.middle,
+                        columnWidths: const {
+                          0: FlexColumnWidth(1),
+                          1: FlexColumnWidth(1),
+                          2: FlexColumnWidth(1),
+                        },
                         children: [
-                          _SummaryPlayerName(Side.white, pgnHeaders),
-                          const SizedBox.shrink(),
-                          _SummaryPlayerName(Side.black, pgnHeaders),
+                          TableRow(
+                            decoration: const BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(color: Colors.grey),
+                              ),
+                            ),
+                            children: [
+                              _SummaryPlayerName(Side.white, pgnHeaders),
+                              const SizedBox.shrink(),
+                              _SummaryPlayerName(Side.black, pgnHeaders),
+                            ],
+                          ),
+                          if (playersAnalysis.white.accuracy != null &&
+                              playersAnalysis.black.accuracy != null)
+                            TableRow(
+                              children: [
+                                _SummaryNumber(
+                                  '${playersAnalysis.white.accuracy}%',
+                                ),
+                                Center(
+                                  heightFactor: 1.8,
+                                  child: Text(
+                                    context.l10n.accuracy,
+                                    softWrap: true,
+                                  ),
+                                ),
+                                _SummaryNumber(
+                                  '${playersAnalysis.black.accuracy}%',
+                                ),
+                              ],
+                            ),
+                          for (final item in [
+                            (
+                              playersAnalysis.white.inaccuracies.toString(),
+                              context.l10n
+                                  .nbInaccuracies(2)
+                                  .replaceAll('2', '')
+                                  .trim()
+                                  .capitalize(),
+                              playersAnalysis.black.inaccuracies.toString()
+                            ),
+                            (
+                              playersAnalysis.white.mistakes.toString(),
+                              context.l10n
+                                  .nbMistakes(2)
+                                  .replaceAll('2', '')
+                                  .trim()
+                                  .capitalize(),
+                              playersAnalysis.black.mistakes.toString()
+                            ),
+                            (
+                              playersAnalysis.white.blunders.toString(),
+                              context.l10n
+                                  .nbBlunders(2)
+                                  .replaceAll('2', '')
+                                  .trim()
+                                  .capitalize(),
+                              playersAnalysis.black.blunders.toString()
+                            ),
+                          ])
+                            TableRow(
+                              children: [
+                                _SummaryNumber(item.$1),
+                                Center(
+                                  heightFactor: 1.2,
+                                  child: Text(
+                                    item.$2,
+                                    softWrap: true,
+                                  ),
+                                ),
+                                _SummaryNumber(item.$3),
+                              ],
+                            ),
+                          if (playersAnalysis.white.acpl != null &&
+                              playersAnalysis.black.acpl != null)
+                            TableRow(
+                              children: [
+                                _SummaryNumber(
+                                  playersAnalysis.white.acpl.toString(),
+                                ),
+                                Center(
+                                  heightFactor: 1.5,
+                                  child: Text(
+                                    context.l10n.averageCentipawnLoss,
+                                    softWrap: true,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                _SummaryNumber(
+                                  playersAnalysis.black.acpl.toString(),
+                                ),
+                              ],
+                            ),
                         ],
                       ),
-                      if (serverAnalysis.white.accuracy != null &&
-                          serverAnalysis.black.accuracy != null)
-                        TableRow(
-                          children: [
-                            _SummaryNumber('${serverAnalysis.white.accuracy}%'),
-                            Center(
-                              heightFactor: 1.8,
-                              child: Text(
-                                context.l10n.accuracy,
-                                softWrap: true,
-                              ),
-                            ),
-                            _SummaryNumber('${serverAnalysis.black.accuracy}%'),
-                          ],
-                        ),
-                      for (final item in [
-                        (
-                          serverAnalysis.white.inaccuracies.toString(),
-                          'Inaccuracies',
-                          serverAnalysis.black.inaccuracies.toString()
-                        ),
-                        (
-                          serverAnalysis.white.mistakes.toString(),
-                          'Mistakes',
-                          serverAnalysis.black.mistakes.toString()
-                        ),
-                        (
-                          serverAnalysis.white.blunders.toString(),
-                          'Blunders',
-                          serverAnalysis.black.blunders.toString()
-                        ),
-                      ])
-                        TableRow(
-                          children: [
-                            _SummaryNumber(item.$1),
-                            Center(
-                              heightFactor: 1.2,
-                              child: Text(
-                                item.$2,
-                                softWrap: true,
-                              ),
-                            ),
-                            _SummaryNumber(item.$3),
-                          ],
-                        ),
-                      if (serverAnalysis.white.acpl != null &&
-                          serverAnalysis.black.acpl != null)
-                        TableRow(
-                          children: [
-                            _SummaryNumber(
-                              serverAnalysis.white.acpl.toString(),
-                            ),
-                            Center(
-                              heightFactor: 1.5,
-                              child: Text(
-                                context.l10n.averageCentipawnLoss,
-                                softWrap: true,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            _SummaryNumber(
-                              serverAnalysis.black.acpl.toString(),
-                            ),
-                          ],
-                        ),
-                    ],
+                    ),
                   ),
                 ),
+              ],
+            ),
+          )
+        : Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Builder(
+                builder: (context) {
+                  Future<void>? pendingRequest;
+                  return StatefulBuilder(
+                    builder: (context, setState) {
+                      return FutureBuilder<void>(
+                        future: pendingRequest,
+                        builder: (context, snapshot) {
+                          return SecondaryButton(
+                            semanticsLabel:
+                                context.l10n.requestAComputerAnalysis,
+                            onPressed: snapshot.connectionState ==
+                                    ConnectionState.waiting
+                                ? null
+                                : () {
+                                    setState(() {
+                                      pendingRequest = ref
+                                          .read(ctrlProvider.notifier)
+                                          .requestServerAnalysis();
+                                    });
+                                  },
+                            child: Text(context.l10n.requestAComputerAnalysis),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
               ),
             ),
-        ],
-      ),
-    );
+          );
   }
 }
 
@@ -929,6 +980,8 @@ class _SummaryPlayerName extends StatelessWidget {
         ? pgnHeaders.get('White') ?? context.l10n.white
         : pgnHeaders.get('Black') ?? context.l10n.black;
 
+    final brightness = Theme.of(context).brightness;
+
     return TableCell(
       verticalAlignment: TableCellVerticalAlignment.bottom,
       child: Center(
@@ -938,8 +991,12 @@ class _SummaryPlayerName extends StatelessWidget {
             children: [
               Icon(
                 side == Side.white
-                    ? CupertinoIcons.circle
-                    : CupertinoIcons.circle_filled,
+                    ? brightness == Brightness.light
+                        ? CupertinoIcons.circle
+                        : CupertinoIcons.circle_filled
+                    : brightness == Brightness.light
+                        ? CupertinoIcons.circle_filled
+                        : CupertinoIcons.circle,
                 size: 14,
               ),
               Text(

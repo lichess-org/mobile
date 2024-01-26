@@ -56,6 +56,8 @@ class GameFullId extends ID {
       _$GameFullIdFromJson(json);
 
   Map<String, dynamic> toJson() => _$GameFullIdToJson(this);
+
+  GameId get gameId => GameId(value.substring(0, 8));
 }
 
 @JsonSerializable()

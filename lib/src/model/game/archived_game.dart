@@ -1,0 +1,244 @@
+import 'package:dartchess/dartchess.dart';
+import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/game/material_diff.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
+
+import 'game.dart';
+import 'game_status.dart';
+import 'player.dart';
+
+part 'archived_game.freezed.dart';
+
+typedef ClockData = ({
+  Duration initial,
+  Duration increment,
+});
+
+/// A lichess game exported from the API.
+///
+/// This represents a game that is finished and not owned by the current user.
+/// See [PlayableGame] for a game that is in progress or owned by the current user.
+@freezed
+class ArchivedGame
+    with _$ArchivedGame, BaseGame, IndexableSteps
+    implements BaseGame {
+  const ArchivedGame._();
+
+  @Assert('steps.isNotEmpty')
+  factory ArchivedGame({
+    required GameId id,
+    required GameMeta meta,
+    // TODO refactor to not include this field
+    required LightArchivedGame data,
+    required IList<GameStep> steps,
+    String? initialFen,
+    required GameStatus status,
+    Side? winner,
+    bool? isThreefoldRepetition,
+    required Player white,
+    required Player black,
+    IList<ExternalEval>? evals,
+    IList<Duration>? clocks,
+  }) = _ArchivedGame;
+
+  /// Create an archived game from the lichess api.
+  ///
+  /// Currently, those endpoints are supported:
+  /// - GET /game/export/<id>
+  factory ArchivedGame.fromServerJson(Map<String, dynamic> json) {
+    return _archivedGameFromPick(pick(json).required());
+  }
+}
+
+/// A lichess game exported from the API, with less data than [ArchivedGame].
+///
+/// This is commonly used to display a list of games.
+/// Lichess endpoints that return this data:
+/// - GET /api/games/user/<userId>
+/// - GET /api/games/export/_ids
+@freezed
+class LightArchivedGame with _$LightArchivedGame {
+  const LightArchivedGame._();
+
+  const factory LightArchivedGame({
+    required GameId id,
+
+    /// If the full game id is available, it means this is a game owned by the
+    /// current logged in user.
+    GameFullId? fullId,
+    required bool rated,
+    required Speed speed,
+    required Perf perf,
+    required DateTime createdAt,
+    required DateTime lastMoveAt,
+    required GameStatus status,
+    required Player white,
+    required Player black,
+    required Variant variant,
+    LightOpening? opening,
+    String? lastFen,
+    Move? lastMove,
+    Side? winner,
+    ClockData? clock,
+  }) = _ArchivedGameData;
+
+  factory LightArchivedGame.fromServerJson(Map<String, dynamic> json) {
+    return _lightArchivedGameFromPick(pick(json).required());
+  }
+
+  String get clockDisplay {
+    return TimeIncrement(
+      clock?.initial.inSeconds ?? 0,
+      clock?.increment.inSeconds ?? 0,
+    ).display;
+  }
+}
+
+IList<ExternalEval>? gameEvalsFromPick(RequiredPick pick) {
+  return pick('analysis')
+      .asListOrNull<ExternalEval>(
+        (p0) => ExternalEval(
+          cp: p0('eval').asIntOrNull(),
+          mate: p0('mate').asIntOrNull(),
+          bestMove: p0('best').asStringOrNull(),
+          variation: p0('variation').asStringOrNull(),
+          judgment: p0('judgment').letOrNull(
+            (j) => (
+              name: j('name').asStringOrThrow(),
+              comment: j('comment').asStringOrThrow(),
+            ),
+          ),
+        ),
+      )
+      ?.lock;
+}
+
+ArchivedGame _archivedGameFromPick(RequiredPick pick) {
+  final data = _lightArchivedGameFromPick(pick);
+  final clocks = pick('clocks').asListOrNull<Duration>(
+    (p0) => Duration(milliseconds: p0.asIntOrThrow() * 10),
+  );
+
+  final initialFen = pick('initialFen').asStringOrNull();
+
+  return ArchivedGame(
+    id: data.id,
+    meta: GameMeta(
+      createdAt: data.createdAt,
+      variant: data.variant,
+      speed: data.speed,
+      perf: data.perf,
+      rated: data.rated,
+      clock: data.clock != null
+          ? (
+              initial: data.clock!.initial,
+              increment: data.clock!.increment,
+              emergency: null,
+              moreTime: null
+            )
+          : null,
+    ),
+    data: data,
+    status: data.status,
+    winner: data.winner,
+    initialFen: initialFen,
+    isThreefoldRepetition: pick('threefold').asBoolOrNull(),
+    white: data.white,
+    black: data.black,
+    steps: pick('moves').letOrThrow((it) {
+      final moves = it.asStringOrThrow().split(' ');
+      // assume lichess always send initialFen with fromPosition and chess960
+      Position position = (data.variant == Variant.fromPosition ||
+              data.variant == Variant.chess960)
+          ? Chess.fromSetup(Setup.parseFen(initialFen!))
+          : data.variant.initialPosition;
+      int index = 0;
+      final List<GameStep> steps = [GameStep(position: position)];
+      Duration? clock = data.clock?.initial;
+      for (final san in moves) {
+        final stepClock = clocks?[index];
+        index++;
+        final move = position.parseSan(san);
+        // assume lichess only sends correct moves
+        position = position.playUnchecked(move!);
+        steps.add(
+          GameStep(
+            sanMove: SanMove(san, move),
+            position: position,
+            diff: MaterialDiff.fromBoard(position.board),
+            archivedWhiteClock: index.isOdd ? stepClock : clock,
+            archivedBlackClock: index.isEven ? stepClock : clock,
+          ),
+        );
+        clock = stepClock;
+      }
+      return IList(steps);
+    }),
+    clocks: IList(clocks ?? []),
+    evals: gameEvalsFromPick(pick),
+  );
+}
+
+LightArchivedGame _lightArchivedGameFromPick(RequiredPick pick) {
+  return LightArchivedGame(
+    id: pick('id').asGameIdOrThrow(),
+    fullId: pick('fullId').asGameFullIdOrNull(),
+    rated: pick('rated').asBoolOrThrow(),
+    speed: pick('speed').asSpeedOrThrow(),
+    perf: pick('perf').asPerfOrThrow(),
+    createdAt: pick('createdAt').asDateTimeFromMillisecondsOrThrow(),
+    lastMoveAt: pick('lastMoveAt').asDateTimeFromMillisecondsOrThrow(),
+    status: pick('status').asGameStatusOrThrow(),
+    white: pick('players', 'white').letOrThrow(_playerFromUserGamePick),
+    black: pick('players', 'black').letOrThrow(_playerFromUserGamePick),
+    winner: pick('winner').asSideOrNull(),
+    variant: pick('variant').asVariantOrThrow(),
+    lastFen: pick('lastFen').asStringOrNull(),
+    lastMove: pick('lastMove').asUciMoveOrNull(),
+    clock: pick('clock').letOrNull(_clockDataFromPick),
+    opening: pick('opening').letOrNull(_openingFromPick),
+  );
+}
+
+LightOpening _openingFromPick(RequiredPick pick) {
+  return LightOpening(
+    eco: pick('eco').asStringOrThrow(),
+    name: pick('name').asStringOrThrow(),
+  );
+}
+
+ClockData _clockDataFromPick(RequiredPick pick) {
+  return (
+    initial: pick('initial').asDurationFromSecondsOrThrow(),
+    increment: pick('increment').asDurationFromSecondsOrThrow(),
+  );
+}
+
+Player _playerFromUserGamePick(RequiredPick pick) {
+  return Player(
+    user: pick('user').asLightUserOrNull(),
+    rating: pick('rating').asIntOrNull(),
+    ratingDiff: pick('ratingDiff').asIntOrNull(),
+    aiLevel: pick('aiLevel').asIntOrNull(),
+    analysis: pick('analysis').letOrNull(_playerAnalysisFromPick),
+  );
+}
+
+PlayerAnalysis _playerAnalysisFromPick(RequiredPick pick) {
+  return PlayerAnalysis(
+    inaccuracies: pick('inaccuracy').asIntOrThrow(),
+    mistakes: pick('mistake').asIntOrThrow(),
+    blunders: pick('blunder').asIntOrThrow(),
+    acpl: pick('acpl').asIntOrNull(),
+    accuracy: pick('accuracy').asIntOrNull(),
+  );
+}

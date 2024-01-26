@@ -4,6 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -37,19 +38,19 @@ class PlayableGame
   @Assert('steps.isNotEmpty')
   factory PlayableGame({
     required GameId id,
-    required PlayableGameMeta meta,
+    required GameMeta meta,
+    required GameSource source,
     required IList<GameStep> steps,
     String? initialFen,
     required GameStatus status,
     Side? winner,
-    required Variant variant,
-    required Speed speed,
-    required Perf perf,
     required Player white,
     required Player black,
     required bool moretimeable,
     required bool takebackable,
     IList<Message>? messages,
+    IList<ExternalEval>? evals,
+    IList<Duration>? clocks,
 
     /// The side that the current player is playing as. This is null if viewing
     /// the game as a spectator.
@@ -93,11 +94,13 @@ class PlayableGame
 
   bool get hasAI => white.isAI || black.isAI;
 
+  bool get imported => source == GameSource.import;
+
   bool get isPlayerTurn => lastPosition.turn == youAre;
   bool get finished => status.value >= GameStatus.mate.value;
   bool get aborted => status == GameStatus.aborted;
 
-  bool get playable => status.value < GameStatus.aborted.value;
+  bool get playable => status.value < GameStatus.aborted.value && !imported;
   bool get abortable =>
       playable &&
       lastPosition.fullmoves <= 1 &&
@@ -123,6 +126,10 @@ class PlayableGame
       !isPlayerTurn &&
       resignable &&
       (meta.rules == null || !meta.rules!.contains(GameRule.noClaimWin));
+
+  bool get userAnalysable =>
+      finished && steps.length > 4 ||
+      (playable && (clock == null || youAre == null));
 }
 
 PlayableGame _playableGameFromPick(RequiredPick pick) {
@@ -157,10 +164,11 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
   return PlayableGame(
     id: requiredGamePick('id').asGameIdOrThrow(),
     meta: meta,
+    source: requiredGamePick('source').letOrThrow(
+      (pick) =>
+          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
+    ),
     initialFen: initialFen,
-    perf: meta.perf,
-    speed: meta.speed,
-    variant: meta.variant,
     steps: steps.toIList(),
     white: pick('white').letOrThrow(_playerFromUserGamePick),
     black: pick('black').letOrThrow(_playerFromUserGamePick),
@@ -190,22 +198,19 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
   );
 }
 
-PlayableGameMeta _playableGameMetaFromPick(RequiredPick pick) {
-  return PlayableGameMeta(
+GameMeta _playableGameMetaFromPick(RequiredPick pick) {
+  return GameMeta(
+    createdAt: pick('game', 'createdAt').asDateTimeFromMillisecondsOrThrow(),
     rated: pick('game', 'rated').asBoolOrThrow(),
     speed: pick('game', 'speed').asSpeedOrThrow(),
     perf: pick('game', 'perf').asPerfOrThrow(),
     variant: pick('game', 'variant').asVariantOrThrow(),
-    source: pick('game', 'source').letOrThrow(
-      (pick) =>
-          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
-    ),
     clock: pick('clock').letOrNull(
       (cPick) => (
         initial: cPick('initial').asDurationFromSecondsOrThrow(),
         increment: cPick('increment').asDurationFromSecondsOrThrow(),
-        emergency: pick('emerg').asDurationFromSecondsOrNull(),
-        moreTime: pick('moretime').asDurationFromSecondsOrNull(),
+        emergency: cPick('emerg').asDurationFromSecondsOrNull(),
+        moreTime: cPick('moretime').asDurationFromSecondsOrNull(),
       ),
     ),
     daysPerTurn: pick('correspondence')
@@ -263,7 +268,7 @@ CorrespondenceClockData _correspondenceClockDataFromPick(RequiredPick pick) {
 }
 
 Message _messageFromPick(RequiredPick pick) {
-  return Message(
+  return (
     message: pick('t').asStringOrThrow(),
     username: pick('u').asStringOrThrow(),
   );

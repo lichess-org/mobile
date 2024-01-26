@@ -56,7 +56,7 @@ class ChatController extends _$ChatController {
         final username = data['u'] as String;
         state = state.copyWith(
           messages: state.messages.add(
-            Message(
+            (
               message: message,
               username: username,
             ),
@@ -77,10 +77,4 @@ class ChatState with _$ChatState {
   }) = _ChatState;
 }
 
-@immutable
-class Message {
-  final String username;
-  final String message;
-
-  const Message({required this.username, required this.message});
-}
+typedef Message = ({String username, String message});
