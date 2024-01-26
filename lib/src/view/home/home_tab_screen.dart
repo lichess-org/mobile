@@ -10,8 +10,8 @@ import 'package:lichess_mobile/src/model/correspondence/correspondence_game_stor
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
@@ -28,7 +28,6 @@ import 'package:lichess_mobile/src/view/relation/relation_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
-import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -144,7 +143,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
           slivers: [
             CupertinoSliverNavigationBar(
               padding: const EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
-              largeTitle: Text(context.l10n.play),
               leading: session == null
                   ? const SignInWidget()
                   : AppBarTextButton(
@@ -362,6 +360,7 @@ class _HomeBody extends ConsumerWidget {
               child: Column(
                 children: [
                   SizedBox(height: 16.0),
+                  _HelloWidget(),
                   PlayScreenBody(),
                 ],
               ),
@@ -386,6 +385,7 @@ class _HomeBody extends ConsumerWidget {
     } else {
       return [
         const SizedBox(height: 8.0),
+        const _HelloWidget(),
         const _PreferredSetup(),
         const _MostRecentOngoingGamePreview(),
         const RecentGames(),
@@ -405,6 +405,7 @@ class _HomeBody extends ConsumerWidget {
               child: Column(
                 children: [
                   SizedBox(height: 16.0),
+                  _HelloWidget(),
                   PlayScreenBody(),
                 ],
               ),
@@ -426,6 +427,7 @@ class _HomeBody extends ConsumerWidget {
     } else {
       return const [
         SizedBox(height: 8.0),
+        _HelloWidget(),
         _OfflineCorrespondencePreview(),
       ];
     }
@@ -463,6 +465,29 @@ class _SettingsButton extends StatelessWidget {
         builder: (_) => const SettingsScreen(),
       ),
     );
+  }
+}
+
+class _HelloWidget extends ConsumerWidget {
+  const _HelloWidget();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+    return session != null
+        ? Padding(
+            padding: Styles.horizontalBodyPadding
+                .add(Styles.sectionBottomPadding)
+                .add(const EdgeInsets.only(top: 8.0)),
+            child: Text(
+              'Hello, ${session.user.name}',
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )
+        : const SizedBox.shrink();
   }
 }
 
@@ -518,82 +543,56 @@ class _PreferredSetup extends ConsumerWidget {
       final accountAsync = ref.watch(accountProvider);
       return accountAsync.maybeWhen(
         data: (account) {
-          return _buildBoardPreview(
+          return _buildButton(
             context,
             GameSeek.custom(gameSetup, account),
           );
         },
-        orElse: () =>
-            _buildBoardPreview(context, GameSeek.custom(gameSetup, null)),
+        orElse: () => _buildButton(context, GameSeek.custom(gameSetup, null)),
       );
     }
 
-    return _buildBoardPreview(
+    return _buildButton(
       context,
       GameSeek.fastPairing(gameSetup, session),
     );
   }
 
-  Widget _buildBoardPreview(BuildContext context, GameSeek seek) {
+  Widget _buildButton(BuildContext context, GameSeek seek) {
     final timeControl = seek.timeIncrement?.display ??
         '${context.l10n.daysPerTurn}: ${seek.days}';
     final mode =
         seek.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
-    return SmallBoardPreview(
-      orientation: seek.side?.cg ?? Side.white.cg,
-      fen: kInitialFEN,
-      description: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          const Text(
-            'Play online',
-            style: Styles.boardPreviewTitle,
-          ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+
+    final side =
+        ' • ${seek.side == null ? context.l10n.randomColor : seek.side == Side.white ? context.l10n.white : context.l10n.black}';
+    return Padding(
+      padding: Styles.horizontalBodyPadding,
+      child: CardButton(
+        icon: Icon(seek.perf.icon, size: 44, color: LichessColors.brag),
+        title: Text(context.l10n.createAGame, style: Styles.sectionTitle),
+        subtitle: Row(
+          children: [
+            Text('$timeControl$mode$side'),
+            if (seek.ratingRange != null) ...[
               Text(
-                seek.side == null
-                    ? context.l10n.randomColor
-                    : seek.side == Side.white
-                        ? context.l10n.white
-                        : context.l10n.black,
+                ' • ${seek.ratingRange!.$1}-${seek.ratingRange!.$2}',
               ),
-              const SizedBox(height: 8.0),
-              Row(
-                children: [
-                  Icon(
-                    seek.perf.icon,
-                    size: 20,
-                    color: DefaultTextStyle.of(context).style.color,
-                  ),
-                  const SizedBox(width: 5),
-                  Text('$timeControl$mode'),
-                ],
-              ),
-              if (seek.ratingRange != null) ...[
-                const SizedBox(height: 8.0),
-                Text(
-                  '${seek.ratingRange!.$1}-${seek.ratingRange!.$2}',
-                ),
-              ],
             ],
-          ),
-        ],
+          ],
+        ),
+        onTap: () {
+          pushPlatformRoute(
+            context,
+            rootNavigator: true,
+            builder: (BuildContext context) {
+              return LobbyScreen(
+                seek: seek,
+              );
+            },
+          );
+        },
       ),
-      onTap: () {
-        pushPlatformRoute(
-          context,
-          rootNavigator: true,
-          builder: (BuildContext context) {
-            return LobbyScreen(
-              seek: seek,
-            );
-          },
-        );
-      },
     );
   }
 }

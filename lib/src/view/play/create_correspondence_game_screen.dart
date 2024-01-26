@@ -97,7 +97,7 @@ class _AndroidBodyState extends State<_AndroidBody>
           controller: _tabController,
           tabs: <Widget>[
             Tab(text: context.l10n.createAGame),
-            Tab(text: context.l10n.preferencesNotifyChallenge),
+            const Tab(text: 'Join a game'),
           ],
         ),
       ),
@@ -141,8 +141,7 @@ class _CupertinoBodyState extends State<_CupertinoBody> {
               groupValue: _selectedSegment,
               children: {
                 _ViewMode.create: Text(context.l10n.createAGame),
-                _ViewMode.challenges:
-                    Text(context.l10n.preferencesNotifyChallenge),
+                _ViewMode.challenges: const Text('Join a game'),
               },
               onValueChanged: (_ViewMode? view) {
                 if (view != null) {

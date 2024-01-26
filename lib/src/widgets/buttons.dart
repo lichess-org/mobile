@@ -360,6 +360,9 @@ class _CardButtonState extends State<CardButton> {
           ),
         );
       case TargetPlatform.iOS:
+        final textColor = TextStyle(
+          color: CupertinoTheme.of(context).textTheme.textStyle.color,
+        );
         return GestureDetector(
           onTap: widget.onTap,
           onTapDown: (_) => _onTapDown(),
@@ -377,6 +380,8 @@ class _CardButtonState extends State<CardButton> {
                     data: ListTileThemeData(
                       iconColor:
                           CupertinoColors.systemGrey.resolveFrom(context),
+                      subtitleTextStyle: textColor,
+                      titleTextStyle: textColor,
                     ),
                     child: ListTile(
                       leading: widget.icon,

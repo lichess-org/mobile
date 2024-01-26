@@ -46,7 +46,7 @@ class GameSetup with _$GameSetup {
   }) = _GameSetup;
 
   static const defaults = GameSetup(
-    timeIncrement: TimeIncrement(180, 0),
+    timeIncrement: TimeIncrement(600, 0),
     customTimeSeconds: 180,
     customIncrementSeconds: 0,
     customVariant: Variant.standard,

@@ -56,33 +56,36 @@ class PlayScreenBody extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: _TimeControlButton(),
-          ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: FatButton(
-              semanticsLabel: context.l10n.quickPairing,
-              onPressed: () {
-                ref
-                    .read(gameSetupPreferencesProvider.notifier)
-                    .setSeekMode(SeekMode.fast);
+            padding: Styles.horizontalBodyPadding,
+            child: Row(
+              children: [
+                SizedBox(width: 150.0, child: _TimeControlButton()),
+                const SizedBox(width: 8.0),
+                Expanded(
+                  child: FatButton(
+                    semanticsLabel: context.l10n.play,
+                    onPressed: () {
+                      ref
+                          .read(gameSetupPreferencesProvider.notifier)
+                          .setSeekMode(SeekMode.fast);
 
-                pushPlatformRoute(
-                  context,
-                  rootNavigator: true,
-                  builder: (_) => LobbyScreen(
-                    seek: GameSeek.fastPairing(playPrefs, session),
+                      pushPlatformRoute(
+                        context,
+                        rootNavigator: true,
+                        builder: (_) => LobbyScreen(
+                          seek: GameSeek.fastPairing(playPrefs, session),
+                        ),
+                      );
+                    },
+                    child: Text(context.l10n.play, style: Styles.bold),
                   ),
-                );
-              },
-              child: Text(context.l10n.quickPairing),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 20),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: Styles.horizontalBodyPadding,
             child: SecondaryButton(
               semanticsLabel: context.l10n.custom,
               onPressed: () {
@@ -98,7 +101,7 @@ class PlayScreenBody extends ConsumerWidget {
           if (defaultTargetPlatform != TargetPlatform.iOS)
             const SizedBox(height: 20),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: Styles.horizontalBodyPadding,
             child: SecondaryButton(
               semanticsLabel: context.l10n.correspondence,
               onPressed: () {
@@ -128,16 +131,13 @@ class _TimeControlButton extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 28.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(timeControlPref.speed.icon, size: 20),
-                const SizedBox(width: 5),
-                Text(timeControlPref.display, style: Styles.timeControl),
-              ],
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(timeControlPref.speed.icon, size: 20),
+              const SizedBox(width: 5),
+              Text(timeControlPref.display, style: Styles.timeControl),
+            ],
           ),
         ),
         const Icon(Icons.keyboard_arrow_down, size: 28.0),
@@ -151,7 +151,7 @@ class _TimeControlButton extends ConsumerWidget {
           child: PlatformCard(
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
+                horizontal: 8.0,
                 vertical: 10.0,
               ),
               child: content,
