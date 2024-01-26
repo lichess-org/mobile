@@ -252,7 +252,12 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
   }
 }
 
-Color? _textColor(BuildContext context, double opacity, [int? nag]) {
+Color? _textColor(
+  BuildContext context,
+  double opacity, {
+  bool isLichessGameAnalysis = true,
+  int? nag,
+}) {
   final defaultColor = defaultTargetPlatform == TargetPlatform.android
       ? Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(opacity)
       : CupertinoTheme.of(context)
@@ -261,7 +266,7 @@ Color? _textColor(BuildContext context, double opacity, [int? nag]) {
           .color
           ?.withOpacity(opacity);
 
-  return nag != null && nag > 0 ? nagColorMap[nag] : defaultColor;
+  return nag != null && nag > 0 ? nagColor(nag) : defaultColor;
 }
 
 class InlineMove extends ConsumerWidget {
@@ -303,10 +308,10 @@ class InlineMove extends ConsumerWidget {
     final textStyle = isSideline
         ? TextStyle(
             fontFamily: 'ChessFont',
-            color: _textColor(context, 0.6, branch.nags?.firstOrNull),
+            color: _textColor(context, 0.6),
           )
         : baseTextStyle.copyWith(
-            color: _textColor(context, 0.9, branch.nags?.firstOrNull),
+            color: _textColor(context, 0.9),
             fontWeight: FontWeight.w600,
           );
 
@@ -326,8 +331,8 @@ class InlineMove extends ConsumerWidget {
               )
             : null);
 
-    final moveWithNag =
-        move.san + (branch.nags != null ? _displayNags(branch.nags!) : '');
+    final moveWithNag = move.san +
+        (branch.nags != null ? moveAnnotationChar(branch.nags!) : '');
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -384,9 +389,21 @@ class InlineMove extends ConsumerWidget {
               style: isCurrentMove
                   ? textStyle.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: _textColor(context, 1, branch.nags?.firstOrNull),
+                      color: _textColor(
+                        context,
+                        1,
+                        isLichessGameAnalysis: options.isLichessGameAnalysis,
+                        nag: branch.nags?.firstOrNull,
+                      ),
                     )
-                  : textStyle,
+                  : textStyle.copyWith(
+                      color: _textColor(
+                        context,
+                        0.9,
+                        isLichessGameAnalysis: options.isLichessGameAnalysis,
+                        nag: branch.nags?.firstOrNull,
+                      ),
+                    ),
             ),
           ),
         ),
@@ -559,22 +576,6 @@ class _MoveContextMenu extends ConsumerWidget {
       ),
     );
   }
-}
-
-String _displayNags(Iterable<int> nags) {
-  return nags
-      .map(
-        (nag) => switch (nag) {
-          1 => '!',
-          2 => '?',
-          3 => '‼',
-          4 => '⁇',
-          5 => '⁉',
-          6 => '⁈',
-          int() => '',
-        },
-      )
-      .join('');
 }
 
 class _Comments extends StatelessWidget {

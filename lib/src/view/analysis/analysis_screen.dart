@@ -185,7 +185,7 @@ class _Body extends ConsumerWidget {
                             ),
                             child: Row(
                               children: [
-                                _Board(ctrlProvider, boardSize),
+                                _Board(options, boardSize),
                                 if (hasEval && showEvaluationGauge)
                                   _EngineGaugeVertical(ctrlProvider),
                               ],
@@ -231,10 +231,10 @@ class _Body extends ConsumerWidget {
                               padding: const EdgeInsets.all(
                                 kTabletBoardTableSidePadding,
                               ),
-                              child: _Board(ctrlProvider, boardSize),
+                              child: _Board(options, boardSize),
                             )
                           else
-                            _Board(ctrlProvider, boardSize),
+                            _Board(options, boardSize),
                           if (showAnalysisSummary)
                             Expanded(child: ServerAnalysisSummary(options))
                           else
@@ -257,13 +257,14 @@ class _Body extends ConsumerWidget {
 }
 
 class _Board extends ConsumerWidget {
-  const _Board(this.ctrlProvider, this.boardSize);
+  const _Board(this.options, this.boardSize);
 
-  final AnalysisControllerProvider ctrlProvider;
+  final AnalysisOptions options;
   final double boardSize;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = analysisControllerProvider(options);
     final analysisState = ref.watch(ctrlProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final showBestMoveArrow = ref.watch(

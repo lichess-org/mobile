@@ -6,14 +6,33 @@ const innacuracyColor = LichessColors.cyan;
 const mistakeColor = Color(0xFFe69f00);
 const blunderColor = Color(0xFFdf5353);
 
-const nagColorMap = {
-  1: Colors.lightGreen,
-  2: mistakeColor,
-  3: Colors.teal,
-  4: blunderColor,
-  5: Colors.lightBlue,
-  6: LichessColors.cyan,
-};
+Color? nagColor(int nag) {
+  return switch (nag) {
+    1 => Colors.lightGreen,
+    2 => mistakeColor,
+    3 => Colors.teal,
+    4 => blunderColor,
+    5 => LichessColors.purple,
+    6 => LichessColors.cyan,
+    int() => null,
+  };
+}
+
+String moveAnnotationChar(Iterable<int> nags) {
+  return nags
+      .map(
+        (nag) => switch (nag) {
+          1 => '!',
+          2 => '?',
+          3 => '!!',
+          4 => '??',
+          5 => '!?',
+          6 => '?!',
+          int() => '',
+        },
+      )
+      .join('');
+}
 
 Annotation? makeAnnotation(Iterable<int>? nags) {
   final nag = nags?.firstOrNull;
@@ -31,7 +50,7 @@ Annotation? makeAnnotation(Iterable<int>? nags) {
       ),
     5 => const Annotation(
         symbol: '!?',
-        color: Colors.lightBlue,
+        color: Colors.purple,
       ),
     6 => const Annotation(
         symbol: '?!',
