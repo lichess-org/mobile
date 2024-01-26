@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 class PuzzleSettingsScreen extends StatelessWidget {
   const PuzzleSettingsScreen({super.key, required this.userId});
 
-  final UserId userId;
+  final UserId? userId;
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +23,15 @@ class PuzzleSettingsScreen extends StatelessWidget {
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Puzzle settings')),
+      appBar: AppBar(title: Text(context.l10n.settingsSettings)),
       body: _Body(userId: userId),
     );
   }
 
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text('Puzzle settings'),
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(context.l10n.settingsSettings),
       ),
       child: _Body(userId: userId),
     );
@@ -41,7 +41,7 @@ class PuzzleSettingsScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   const _Body({required this.userId});
 
-  final UserId userId;
+  final UserId? userId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

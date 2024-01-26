@@ -93,7 +93,7 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
       appBar: AppBar(
         actions: [
           ToggleSoundButton(),
-          if (userId != null) _PuzzleSettingsButton(userId: userId),
+          _PuzzleSettingsButton(userId: userId),
         ],
         title: _Title(angle: widget.angle),
       ),
@@ -535,7 +535,7 @@ class _DifficultySelector extends ConsumerWidget {
 class _PuzzleSettingsButton extends StatelessWidget {
   const _PuzzleSettingsButton({required this.userId});
 
-  final UserId userId;
+  final UserId? userId;
 
   @override
   Widget build(BuildContext context) {
@@ -543,6 +543,7 @@ class _PuzzleSettingsButton extends StatelessWidget {
       onPressed: () => pushPlatformRoute(
         context,
         title: context.l10n.settingsSettings,
+        fullscreenDialog: true,
         builder: (_) => PuzzleSettingsScreen(userId: userId),
       ),
     );
