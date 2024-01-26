@@ -636,7 +636,11 @@ class AnalysisState with _$AnalysisState {
   bool get hasServerAnalysis => playersAnalysis != null;
 
   /// Whether an evaluation can be available
-  bool get hasAvailableEval => isEngineAvailable || acplChartData != null;
+  bool get hasAvailableEval =>
+      isEngineAvailable ||
+      (isLocalEvaluationAllowed &&
+          acplChartData != null &&
+          acplChartData!.isNotEmpty);
 
   /// Whether the engine is available for evaluation
   bool get isEngineAvailable =>
