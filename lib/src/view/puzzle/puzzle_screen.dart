@@ -116,7 +116,7 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
           mainAxisSize: MainAxisSize.min,
           children: [
             ToggleSoundButton(),
-            if (userId != null) _PuzzleSettingsButton(userId: userId),
+            _PuzzleSettingsButton(userId: userId),
           ],
         ),
       ),

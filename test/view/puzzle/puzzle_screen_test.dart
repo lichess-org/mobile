@@ -455,7 +455,7 @@ void main() {
     );
 
     testWidgets(
-      'does not show settings icon if user is not logged in',
+      'show settings icon if user is not logged in',
       variant: kPlatformVariant,
       (tester) async {
         final app = await buildTestApp(
@@ -472,7 +472,7 @@ void main() {
 
         await tester.pumpWidget(app);
 
-        expect(find.byType(SettingsButton), findsNothing);
+        expect(find.byType(SettingsButton), findsOneWidget);
       },
     );
   });
