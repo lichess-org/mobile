@@ -19,11 +19,18 @@ class PuzzlePreferences extends _$PuzzlePreferences {
     final stored = prefs.getString(_makeKey(id));
     return stored != null
         ? PuzzlePrefState.fromJson(jsonDecode(stored) as Map<String, dynamic>)
-        : PuzzlePrefState(id: id, difficulty: PuzzleDifficulty.normal);
+        : PuzzlePrefState.defaults(id: id);
   }
 
   Future<void> setDifficulty(PuzzleDifficulty difficulty) async {
     final newState = state.copyWith(difficulty: difficulty);
+    final prefs = ref.read(sharedPreferencesProvider);
+    await prefs.setString(_makeKey(id), jsonEncode(newState.toJson()));
+    state = newState;
+  }
+
+  Future<void> setAutoNext(bool autoNext) async {
+    final newState = state.copyWith(autoNext: autoNext);
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(_makeKey(id), jsonEncode(newState.toJson()));
     state = newState;
@@ -37,7 +44,18 @@ class PuzzlePrefState with _$PuzzlePrefState {
   const factory PuzzlePrefState({
     required UserId? id,
     required PuzzleDifficulty difficulty,
+
+    /// If `true`, will show next puzzle after successful completion. This has
+    /// no effect on puzzle streaks, which always show next puzzle. Defaults to
+    /// `false`.
+    @Default(false) bool autoNext,
   }) = _PuzzlePrefState;
+
+  factory PuzzlePrefState.defaults({UserId? id}) => PuzzlePrefState(
+        id: id,
+        difficulty: PuzzleDifficulty.normal,
+        autoNext: false,
+      );
 
   factory PuzzlePrefState.fromJson(Map<String, dynamic> json) =>
       _$PuzzlePrefStateFromJson(json);

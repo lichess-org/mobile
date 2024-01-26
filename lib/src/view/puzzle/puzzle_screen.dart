@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -22,8 +23,10 @@ import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
@@ -84,9 +87,14 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
   }
 
   Widget _androidBuilder(BuildContext context) {
+    final userId = widget.initialPuzzleContext?.userId;
+
     return Scaffold(
       appBar: AppBar(
-        actions: [ToggleSoundButton()],
+        actions: [
+          ToggleSoundButton(),
+          _PuzzleSettingsButton(userId: userId),
+        ],
         title: _Title(angle: widget.angle),
       ),
       body: widget.initialPuzzleContext != null
@@ -98,11 +106,19 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
   }
 
   Widget _iosBuilder(BuildContext context) {
+    final userId = widget.initialPuzzleContext?.userId;
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         padding: Styles.cupertinoAppBarTrailingWidgetPadding,
         middle: _Title(angle: widget.angle),
-        trailing: ToggleSoundButton(),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ToggleSoundButton(),
+            if (userId != null) _PuzzleSettingsButton(userId: userId),
+          ],
+        ),
       ),
       child: widget.initialPuzzleContext != null
           ? _Body(
@@ -512,6 +528,24 @@ class _DifficultySelector extends ConsumerWidget {
       ),
       loading: () => const ButtonLoadingIndicator(),
       error: (_, __) => const SizedBox.shrink(),
+    );
+  }
+}
+
+class _PuzzleSettingsButton extends StatelessWidget {
+  const _PuzzleSettingsButton({required this.userId});
+
+  final UserId? userId;
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsButton(
+      onPressed: () => pushPlatformRoute(
+        context,
+        title: context.l10n.settingsSettings,
+        fullscreenDialog: true,
+        builder: (_) => PuzzleSettingsScreen(userId: userId),
+      ),
     );
   }
 }
