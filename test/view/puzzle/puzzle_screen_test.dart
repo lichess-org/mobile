@@ -15,6 +15,8 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_settings_screen.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../test_app.dart';
@@ -41,6 +43,7 @@ void main() {
   group('PuzzleScreen', () {
     testWidgets(
       'meets accessibility guidelines',
+      variant: kPlatformVariant,
       (WidgetTester tester) async {
         final SemanticsHandle handle = tester.ensureSemantics();
 
@@ -63,11 +66,11 @@ void main() {
         await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
         handle.dispose();
       },
-      variant: kPlatformVariant,
     );
 
     testWidgets(
       'Loads puzzle directly by passing PuzzleContext',
+      variant: kPlatformVariant,
       (tester) async {
         final app = await buildTestApp(
           tester,
@@ -86,7 +89,6 @@ void main() {
         expect(find.byType(cg.Board), findsOneWidget);
         expect(find.text('Your turn'), findsOneWidget);
       },
-      variant: kPlatformVariant,
     );
 
     testWidgets('Loads next puzzle when no initialPuzzleContext is passed',
@@ -128,6 +130,7 @@ void main() {
 
     testWidgets(
       'solves a puzzle and loads the next one',
+      variant: kPlatformVariant,
       (tester) async {
         final mockClient = MockClient((request) {
           if (request.url.path == '/api/puzzle/batch/mix') {
@@ -235,11 +238,11 @@ void main() {
         // await for view solution timer
         await tester.pump(const Duration(seconds: 4));
       },
-      variant: kPlatformVariant,
     );
 
     testWidgets(
       'fails a puzzle',
+      variant: kPlatformVariant,
       (tester) async {
         final mockClient = MockClient((request) {
           if (request.url.path == '/api/puzzle/batch/mix') {
@@ -336,11 +339,11 @@ void main() {
         // called once to save solution and once after fetching a new puzzle
         verify(saveDBReq).called(2);
       },
-      variant: kPlatformVariant,
     );
 
     testWidgets(
       'view solution',
+      variant: kPlatformVariant,
       (tester) async {
         final mockClient = MockClient((request) {
           if (request.url.path == '/api/puzzle/batch/mix') {
@@ -415,7 +418,62 @@ void main() {
         // called once to save solution and once after fetching a new puzzle
         verify(saveDBReq).called(2);
       },
+    );
+
+    testWidgets(
+      'shows settings icon if user is logged in',
       variant: kPlatformVariant,
+      (tester) async {
+        const userId = UserId('test_userId');
+        final app = await buildTestApp(
+          tester,
+          home: PuzzleScreen(
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            initialPuzzleContext: PuzzleContext(
+              puzzle: puzzle,
+              angle: const PuzzleTheme(PuzzleThemeKey.mix),
+              userId: userId,
+            ),
+          ),
+        );
+
+        await tester.pumpWidget(app);
+
+        expect(find.byType(SettingsButton), findsOneWidget);
+
+        await tester.tap(find.byType(SettingsButton));
+        await tester.pumpAndSettle();
+
+        expect(
+          find.byWidgetPredicate(
+            (widget) =>
+                widget is PuzzleSettingsScreen && widget.userId == userId,
+          ),
+          findsOneWidget,
+        );
+      },
+    );
+
+    testWidgets(
+      'does not show settings icon if user is not logged in',
+      variant: kPlatformVariant,
+      (tester) async {
+        final app = await buildTestApp(
+          tester,
+          home: PuzzleScreen(
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            initialPuzzleContext: PuzzleContext(
+              puzzle: puzzle,
+              angle: const PuzzleTheme(PuzzleThemeKey.mix),
+              userId: null,
+            ),
+          ),
+        );
+
+        await tester.pumpWidget(app);
+
+        expect(find.byType(SettingsButton), findsNothing);
+      },
     );
   });
 }
