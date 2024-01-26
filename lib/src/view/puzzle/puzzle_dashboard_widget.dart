@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
-import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
@@ -18,8 +17,7 @@ import 'package:lichess_mobile/src/widgets/stat_card.dart';
 class PuzzleDashboardWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final day = ref.watch(daysProvider);
-    final puzzleDashboard = ref.watch(puzzleDashboardProvider(day.days));
+    final puzzleDashboard = ref.watch(puzzleDashboardProvider);
 
     return puzzleDashboard.when(
       data: (data) {

@@ -116,7 +116,7 @@ void main() {
 
       final container = await makeTestContainer(mockClient);
       final repo = container.read(puzzleRepositoryProvider);
-      final result = await repo.puzzleDashboard(30);
+      final result = await repo.puzzleDashboard();
 
       expect(result.isValue, true);
     });

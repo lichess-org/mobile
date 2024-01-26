@@ -191,9 +191,9 @@ class PuzzleRepository {
         );
   }
 
-  FutureResult<PuzzleDashboard> puzzleDashboard(int days) {
+  FutureResult<PuzzleDashboard> puzzleDashboard() {
     return apiClient
-        .get(Uri.parse('$kLichessHost/api/puzzle/dashboard/$days'))
+        .get(Uri.parse('$kLichessHost/api/puzzle/dashboard/30'))
         .flatMap((response) {
       return readJsonObjectFromResponse(
         response,
