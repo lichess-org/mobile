@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -38,6 +40,25 @@ class GameResultDialog extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<GameResultDialog> createState() => _GameEndDialogState();
+}
+
+Widget _adaptiveDialog(BuildContext context, Widget content) {
+  if (defaultTargetPlatform == TargetPlatform.iOS) {
+    return CupertinoAlertDialog(
+      content: content,
+    );
+  } else {
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Dialog(
+      child: SizedBox(
+        width: min(screenWidth, kMaterialPopupMenuMaxWidth),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: content,
+        ),
+      ),
+    );
+  }
 }
 
 class _GameEndDialogState extends ConsumerState<GameResultDialog> {
@@ -182,18 +203,7 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
       ],
     );
 
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return CupertinoAlertDialog(
-        content: content,
-      );
-    } else {
-      return Dialog(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: content,
-        ),
-      );
-    }
+    return _adaptiveDialog(context, content);
   }
 }
 
@@ -268,18 +278,7 @@ class ArchivedGameResultDialog extends StatelessWidget {
       ],
     );
 
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return CupertinoAlertDialog(
-        content: content,
-      );
-    } else {
-      return Dialog(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: content,
-        ),
-      );
-    }
+    return _adaptiveDialog(context, content);
   }
 }
 
