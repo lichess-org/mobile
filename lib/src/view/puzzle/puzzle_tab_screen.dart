@@ -25,7 +25,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/history_boards.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_dashboard_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -36,8 +35,6 @@ import 'puzzle_screen.dart';
 import 'puzzle_themes_screen.dart';
 import 'storm_screen.dart';
 import 'streak_screen.dart';
-
-final daysProvider = StateProvider<Days>((ref) => Days.month);
 
 class PuzzleTabScreen extends ConsumerStatefulWidget {
   const PuzzleTabScreen({super.key});
@@ -60,8 +57,7 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
 
   Widget _androidBuilder(BuildContext context, AuthSessionState? userSession) {
     return Scaffold(
-      appBar:
-          AppBar(title: Text(context.l10n.puzzles), actions: [DaysSelector()]),
+      appBar: AppBar(title: Text(context.l10n.puzzles)),
       body: userSession != null
           ? RefreshIndicator(
               key: _androidRefreshKey,
@@ -79,7 +75,6 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
         slivers: [
           CupertinoSliverNavigationBar(
             largeTitle: Text(context.l10n.puzzles),
-            trailing: DaysSelector(),
           ),
           if (userSession != null)
             CupertinoSliverRefreshControl(
@@ -97,7 +92,7 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
   Future<void> _refreshData() {
     return Future.wait([
       ref.refresh(puzzleRecentActivityProvider.future),
-      ref.refresh(puzzleDashboardProvider(ref.read(daysProvider).days).future),
+      ref.refresh(puzzleDashboardProvider.future),
     ]);
   }
 }
@@ -432,60 +427,6 @@ class _PuzzleButton extends StatelessWidget {
       ),
       onTap: onTap,
     );
-  }
-}
-
-class DaysSelector extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
-    final day = ref.watch(daysProvider);
-    return session != null
-        ? AppBarTextButton(
-            onPressed: () => showChoicePicker(
-              context,
-              choices: Days.values,
-              selectedItem: day,
-              labelBuilder: (t) => Text(_daysL10n(context, t)),
-              onSelectedItemChanged: (newDay) {
-                ref.read(daysProvider.notifier).state = newDay;
-              },
-            ),
-            child: Text(_daysL10n(context, day)),
-          )
-        : const SizedBox.shrink();
-  }
-}
-
-enum Days {
-  oneday(1),
-  twodays(2),
-  week(7),
-  twoweeks(14),
-  month(30),
-  twomonths(60),
-  threemonths(90);
-
-  const Days(this.days);
-  final int days;
-}
-
-String _daysL10n(BuildContext context, Days day) {
-  switch (day) {
-    case Days.oneday:
-      return context.l10n.nbDays(1);
-    case Days.twodays:
-      return context.l10n.nbDays(2);
-    case Days.week:
-      return context.l10n.nbDays(7);
-    case Days.twoweeks:
-      return context.l10n.nbDays(14);
-    case Days.month:
-      return context.l10n.nbDays(30);
-    case Days.twomonths:
-      return context.l10n.nbDays(60);
-    case Days.threemonths:
-      return context.l10n.nbDays(90);
   }
 }
 

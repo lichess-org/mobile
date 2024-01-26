@@ -84,11 +84,10 @@ Future<IMap<String, int>> savedOpeningBatches(
 @riverpod
 Future<PuzzleDashboard> puzzleDashboard(
   PuzzleDashboardRef ref,
-  int days,
 ) async {
   final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(puzzleRepositoryProvider);
-  final result = await repo.puzzleDashboard(days);
+  final result = await repo.puzzleDashboard();
   if (result.isError) {
     link.close();
   }
