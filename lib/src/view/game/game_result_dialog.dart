@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
@@ -38,6 +39,25 @@ class GameResultDialog extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<GameResultDialog> createState() => _GameEndDialogState();
+}
+
+Widget _adaptiveDialog(BuildContext context, Widget content) {
+  if (defaultTargetPlatform == TargetPlatform.iOS) {
+    return CupertinoAlertDialog(
+      content: content,
+    );
+  } else {
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Dialog(
+      child: SizedBox(
+        width: min(screenWidth, 500),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: content,
+        ),
+      ),
+    );
+  }
 }
 
 class _GameEndDialogState extends ConsumerState<GameResultDialog> {
@@ -182,18 +202,7 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
       ],
     );
 
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return CupertinoAlertDialog(
-        content: content,
-      );
-    } else {
-      return Dialog(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: content,
-        ),
-      );
-    }
+    return _adaptiveDialog(context, content);
   }
 }
 
@@ -268,18 +277,7 @@ class ArchivedGameResultDialog extends StatelessWidget {
       ],
     );
 
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return CupertinoAlertDialog(
-        content: content,
-      );
-    } else {
-      return Dialog(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: content,
-        ),
-      );
-    }
+    return _adaptiveDialog(context, content);
   }
 }
 
