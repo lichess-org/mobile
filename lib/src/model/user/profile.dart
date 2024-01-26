@@ -76,7 +76,7 @@ class SocialLink with _$SocialLink {
   static SocialLink? fromUrl(String url) {
     final uri = Uri.tryParse(url);
     if (uri == null) return null;
-    final host = uri.host;
+    final host = uri.host.replaceAll(RegExp(r'www\.'), '');
     final site =
         LinkSite.values.firstWhereOrNull((e) => e.domains.contains(host));
 
