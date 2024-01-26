@@ -99,7 +99,7 @@ class AnalysisController extends _$AnalysisController {
     _root = Root.fromPgnGame(
       game,
       isLichessAnalysis: options.isLichessGameAnalysis,
-      hideVariations: true,
+      hideVariations: options.isLichessGameAnalysis,
       onVisitNode: (root, branch, isMainline) {
         if (isMainline &&
             options.initialMoveCursor != null &&
@@ -536,6 +536,9 @@ class AnalysisController extends _$AnalysisController {
   }
 
   IList<ExternalEval>? _makeAcplChartData() {
+    if (!_root.mainline.any((node) => node.lichessAnalysisComments != null)) {
+      return null;
+    }
     final list = _root.mainline
         .map(
           (node) => node.lichessAnalysisComments
