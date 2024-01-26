@@ -571,12 +571,15 @@ class _PreferredSetup extends ConsumerWidget {
       child: CardButton(
         icon: Icon(seek.perf.icon, size: 44, color: LichessColors.brag),
         title: Text(context.l10n.createAGame, style: Styles.sectionTitle),
-        subtitle: Row(
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 4.0),
             Text('$timeControl$mode$side'),
             if (seek.ratingRange != null) ...[
+              const SizedBox(height: 4.0),
               Text(
-                ' • ${seek.ratingRange!.$1}-${seek.ratingRange!.$2}',
+                '${seek.ratingRange!.$1}-${seek.ratingRange!.$2}',
               ),
             ],
           ],
