@@ -197,10 +197,10 @@ packages:
     dependency: "direct main"
     description:
       name: chessground
-      sha256: "33d012cca6ce0b55c956a1251af33bc86c15eca1cd22f16c8474ddcc6c65f65d"
+      sha256: f40ba7696be7e856442ffede294ad010e2651c3d3be3eb81c09ad9a6355a5cf2
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.1"
   ci:
     dependency: transitive
     description:
@@ -341,10 +341,10 @@ packages:
     dependency: "direct main"
     description:
       name: dartchess
-      sha256: c79e79f279e09b3b6e4cb870ea0b178964d6e4cde6190d100f690dbff196527a
+      sha256: "616f824c1381b613ae73ae49442a2ec9a942be5884a7b07f31aca6577e8fd2d5"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.0"
+    version: "0.6.1"
   dbus:
     dependency: transitive
     description:
@@ -397,10 +397,10 @@ packages:
     dependency: "direct main"
     description:
       name: fast_immutable_collections
-      sha256: b910ccdc99bb38a2abbce07c5afb8f81d4e222a892e4d095a548b99814837b0c
+      sha256: "062bc1eacb6e09c4a67ba5d6387c85b44c21b9e3ed91f8d35691712c00aa559f"
       url: "https://pub.dev"
     source: hosted
-    version: "9.2.1"
+    version: "10.0.0"
   ffi:
     dependency: transitive
     description:
