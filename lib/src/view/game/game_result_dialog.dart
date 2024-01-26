@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -50,7 +51,7 @@ Widget _adaptiveDialog(BuildContext context, Widget content) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Dialog(
       child: SizedBox(
-        width: min(screenWidth, 500),
+        width: min(screenWidth, kMaterialPopupMenuMaxWidth),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: content,
