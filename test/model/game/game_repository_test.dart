@@ -99,7 +99,7 @@ void main() {
       final game = result.asValue!.value;
 
       expect(game.data.id, const GameId('qVChCOTc'));
-      expect(game.data.opening?.eco, 'C20');
+      expect(game.meta.opening?.eco, 'C20');
     });
 
     test('threeCheck game', () async {

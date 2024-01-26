@@ -146,6 +146,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
               moreTime: null
             )
           : null,
+      opening: data.opening,
     ),
     data: data,
     status: data.status,
