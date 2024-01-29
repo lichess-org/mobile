@@ -311,13 +311,13 @@ class CupertinoIconButton extends StatelessWidget {
 class CardButton extends StatefulWidget {
   const CardButton({
     super.key,
-    required this.icon,
+    this.icon,
     required this.title,
     this.subtitle,
     required this.onTap,
   });
 
-  final Widget icon;
+  final Widget? icon;
   final Widget title;
   final Widget? subtitle;
   final VoidCallback? onTap;
@@ -331,7 +331,7 @@ class _CardButtonState extends State<CardButton> {
 
   void _onTapDown() {
     if (widget.onTap == null) return;
-    setState(() => scale = 0.96);
+    setState(() => scale = 0.98);
   }
 
   void _onTapCancel() {
@@ -373,6 +373,7 @@ class _CardButtonState extends State<CardButton> {
             child: Opacity(
               opacity: widget.onTap == null ? 0.4 : 1.0,
               child: PlatformCard(
+                elevation: 0.2,
                 child: Padding(
                   padding: const EdgeInsets.all(6.0),
                   child: ListTileTheme(

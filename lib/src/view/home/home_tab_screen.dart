@@ -489,11 +489,17 @@ class _CustomGameButton extends StatelessWidget {
     return Padding(
       padding: Styles.bodySectionBottomPadding,
       child: CardButton(
-        icon: const Icon(
-          Icons.tune,
-          size: 40,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.tune,
+              size: 28,
+            ),
+            const SizedBox(width: 8.0),
+            Text(context.l10n.custom, style: Styles.callout),
+          ],
         ),
-        title: Text(context.l10n.custom, style: Styles.callout),
         onTap: () {
           pushPlatformRoute(
             context,
@@ -514,13 +520,19 @@ class _CorrespondenceGameButton extends StatelessWidget {
     return Padding(
       padding: Styles.bodySectionBottomPadding,
       child: CardButton(
-        icon: const Icon(
-          LichessIcons.correspondence,
-          size: 40,
-        ),
-        title: Text(
-          context.l10n.correspondence,
-          style: Styles.callout,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              LichessIcons.correspondence,
+              size: 28,
+            ),
+            const SizedBox(width: 8.0),
+            Text(
+              context.l10n.correspondence,
+              style: Styles.callout,
+            ),
+          ],
         ),
         onTap: () {
           pushPlatformRoute(
@@ -567,6 +579,7 @@ class _QuickGameButton extends ConsumerWidget {
       padding:
           Styles.horizontalBodyPadding.add(const EdgeInsets.only(top: 6.0)),
       child: PlatformCard(
+        elevation: defaultTargetPlatform == TargetPlatform.iOS ? 0.2 : null,
         child: Row(
           children: [
             SizedBox(
