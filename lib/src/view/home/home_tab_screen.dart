@@ -1,4 +1,3 @@
-import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -366,22 +365,29 @@ class _HelloWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
-    const style = TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
+    const style = TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
+
+    // fetch the account user to be sure we have the latest data (flair, etc.)
+    final accountUser = ref.watch(accountProvider).maybeWhen(
+          data: (data) => data?.lightUser,
+          orElse: () => null,
+        );
 
     return session != null
         ? Padding(
-            padding: Styles.horizontalBodyPadding
-                .add(Styles.sectionBottomPadding)
-                .add(const EdgeInsets.only(top: 8.0)),
+            padding: Styles.bodyPadding.add(const EdgeInsets.only(top: 8.0)),
             child: Row(
               children: [
-                const Icon(Icons.wb_sunny, size: 28),
+                const Icon(Icons.wb_sunny, size: 28, color: LichessColors.brag),
                 const SizedBox(width: 5.0),
                 const Text(
                   'Hello, ',
                   style: style,
                 ),
-                UserFullNameWidget(user: session.user, style: style),
+                UserFullNameWidget(
+                  user: accountUser ?? session.user,
+                  style: style,
+                ),
               ],
             ),
           )
@@ -542,6 +548,7 @@ class _QuickGameButton extends ConsumerWidget {
           children: [
             SizedBox(
               width: 165.0,
+              height: 65.0,
               child: AdaptiveInkWell(
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10),
@@ -568,45 +575,14 @@ class _QuickGameButton extends ConsumerWidget {
               ),
             ),
             Expanded(
-              child: defaultTargetPlatform == TargetPlatform.iOS
-                  ? CupertinoButton.filled(
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
-                      ),
-                      onPressed: () {
-                        pushPlatformRoute(
-                          context,
-                          rootNavigator: true,
-                          builder: (_) => LobbyScreen(
-                            seek: GameSeek.fastPairing(playPrefs, session),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Center(
-                          child: Text(context.l10n.play, style: Styles.callout),
+              child: SizedBox(
+                height: 65.0,
+                child: defaultTargetPlatform == TargetPlatform.iOS
+                    ? CupertinoButton.filled(
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
                         ),
-                      ),
-                    )
-                  : FilledButtonTheme(
-                      data: FilledButtonThemeData(
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all(
-                            const EdgeInsets.symmetric(vertical: 8.0),
-                          ),
-                          shape: MaterialStateProperty.all(
-                            const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(10),
-                                bottomRight: Radius.circular(10),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      child: FilledButton(
                         onPressed: () {
                           pushPlatformRoute(
                             context,
@@ -623,80 +599,48 @@ class _QuickGameButton extends ConsumerWidget {
                                 Text(context.l10n.play, style: Styles.callout),
                           ),
                         ),
+                      )
+                    : FilledButtonTheme(
+                        data: FilledButtonThemeData(
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all(
+                              const EdgeInsets.symmetric(vertical: 8.0),
+                            ),
+                            shape: MaterialStateProperty.all(
+                              const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        child: FilledButton(
+                          onPressed: () {
+                            pushPlatformRoute(
+                              context,
+                              rootNavigator: true,
+                              builder: (_) => LobbyScreen(
+                                seek: GameSeek.fastPairing(playPrefs, session),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Center(
+                              child: Text(
+                                context.l10n.play,
+                                style: Styles.callout,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+              ),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _PreferredSetup extends ConsumerWidget {
-  const _PreferredSetup();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final gameSetup = ref.watch(gameSetupPreferencesProvider);
-    final session = ref.watch(authSessionProvider);
-
-    if (gameSetup.seekMode == SeekMode.custom) {
-      final accountAsync = ref.watch(accountProvider);
-      return accountAsync.maybeWhen(
-        data: (account) {
-          return _buildButton(
-            context,
-            GameSeek.custom(gameSetup, account),
-          );
-        },
-        orElse: () => _buildButton(context, GameSeek.custom(gameSetup, null)),
-      );
-    }
-
-    return _buildButton(
-      context,
-      GameSeek.fastPairing(gameSetup, session),
-    );
-  }
-
-  Widget _buildButton(BuildContext context, GameSeek seek) {
-    final timeControl = seek.timeIncrement?.display ??
-        '${context.l10n.daysPerTurn}: ${seek.days}';
-    final mode =
-        seek.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
-
-    final side =
-        ' • ${seek.side == null ? context.l10n.randomColor : seek.side == Side.white ? context.l10n.white : context.l10n.black}';
-    return Padding(
-      padding: Styles.horizontalBodyPadding,
-      child: CardButton(
-        icon: Icon(seek.perf.icon, size: 44, color: LichessColors.brag),
-        title: Text(context.l10n.createAGame, style: Styles.sectionTitle),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 4.0),
-            Text('$timeControl$mode$side'),
-            if (seek.ratingRange != null) ...[
-              const SizedBox(height: 4.0),
-              Text(
-                '${seek.ratingRange!.$1}-${seek.ratingRange!.$2}',
-              ),
-            ],
-          ],
-        ),
-        onTap: () {
-          pushPlatformRoute(
-            context,
-            rootNavigator: true,
-            builder: (BuildContext context) {
-              return LobbyScreen(
-                seek: seek,
-              );
-            },
-          );
-        },
       ),
     );
   }
