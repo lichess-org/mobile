@@ -20,7 +20,7 @@ dependencies:
   dartchess: ^0.6.1
   deep_pick: ^1.0.0
   device_info_plus: ^9.0.2
-  fast_immutable_collections: ^10.0.0
+  fast_immutable_collections: ^10.1.0
   firebase_core: ^2.15.0
   firebase_crashlytics: ^3.3.4
   firebase_messaging: ^14.7.8
