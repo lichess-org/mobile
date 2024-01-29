@@ -362,7 +362,7 @@ class _HelloWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
-    const style = TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
+    const style = TextStyle(fontSize: 22);
 
     // fetch the account user to be sure we have the latest data (flair, etc.)
     final accountUser = ref.watch(accountProvider).maybeWhen(
