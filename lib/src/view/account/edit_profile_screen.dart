@@ -249,6 +249,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             controller: TextEditingController(text: initialLinks),
             maxLength: 3000,
             maxLines: 4,
+            textInputAction: TextInputAction.newline,
             description:
                 'Mastodon, Facebook, GitHub, Chess.com, ...\r\n${context.l10n.oneUrlPerLine}',
           ),
