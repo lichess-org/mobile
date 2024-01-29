@@ -175,51 +175,43 @@ class _ChoiceChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-        return ChoiceChip(
-          label: label,
-          labelStyle: Styles.timeControl,
-          selected: selected,
-          onSelected: onSelected,
-        );
-      case TargetPlatform.iOS:
-        return Container(
-          decoration: BoxDecoration(
-            color: CupertinoColors.secondarySystemGroupedBackground
-                .resolveFrom(context),
-            borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            border: selected
-                ? Border.fromBorderSide(
-                    BorderSide(
-                      color: CupertinoColors.activeBlue.resolveFrom(context),
-                      width: 2.0,
-                    ),
-                  )
-                : const Border.fromBorderSide(
-                    BorderSide(
-                      color: Colors.transparent,
-                      width: 2.0,
-                    ),
-                  ),
-          ),
-          child: AdaptiveInkWell(
-            borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            onTap: () => onSelected(true),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Center(
-                child: DefaultTextStyle.merge(
-                  style: Styles.timeControl,
-                  child: label,
+    return Container(
+      decoration: BoxDecoration(
+        color: defaultTargetPlatform == TargetPlatform.iOS
+            ? CupertinoColors.secondarySystemGroupedBackground
+                .resolveFrom(context)
+            : Theme.of(context).colorScheme.surfaceVariant,
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        border: selected
+            ? Border.fromBorderSide(
+                BorderSide(
+                  color: defaultTargetPlatform == TargetPlatform.iOS
+                      ? CupertinoColors.activeBlue.resolveFrom(context)
+                      : Theme.of(context).colorScheme.primary,
+                  width: 2.0,
+                ),
+              )
+            : const Border.fromBorderSide(
+                BorderSide(
+                  color: Colors.transparent,
+                  width: 2.0,
                 ),
               ),
+      ),
+      child: AdaptiveInkWell(
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        onTap: () => onSelected(true),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          child: Center(
+            child: DefaultTextStyle.merge(
+              style: Styles.timeControl,
+              child: label,
             ),
           ),
-        );
-      default:
-        throw UnsupportedError('Unsupported platform');
-    }
+        ),
+      ),
+    );
   }
 }
 

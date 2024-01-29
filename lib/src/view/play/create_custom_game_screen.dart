@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
@@ -244,7 +245,7 @@ class _Body extends ConsumerWidget {
                           );
                         }
                       : null,
-                  child: Text(context.l10n.createAGame),
+                  child: Text(context.l10n.studyStart, style: Styles.bold),
                 ),
               ),
             ],

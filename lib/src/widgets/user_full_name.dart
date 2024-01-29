@@ -94,8 +94,10 @@ class UserFullNameWidget extends ConsumerWidget {
           CachedNetworkImage(
             imageUrl: lichessFlairSrc(user!.flair!),
             errorWidget: (_, __, ___) => kEmptyWidget,
-            width: DefaultTextStyle.of(context).style.fontSize,
-            height: DefaultTextStyle.of(context).style.fontSize,
+            width:
+                style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
+            height:
+                style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
           ),
         ],
         if (shouldShowRating && ratingStr != null) ...[

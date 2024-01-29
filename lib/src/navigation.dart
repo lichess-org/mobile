@@ -4,17 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 
 enum BottomTab {
-  play(Icons.home),
+  home(Icons.home),
   puzzles(PuzzleIcons.mix),
   tools(CupertinoIcons.wrench),
   watch(Icons.live_tv);
@@ -25,7 +23,7 @@ enum BottomTab {
 
   String label(AppLocalizations strings) {
     switch (this) {
-      case BottomTab.play:
+      case BottomTab.home:
         return strings.play;
       case BottomTab.puzzles:
         return strings.puzzles;
@@ -38,12 +36,12 @@ enum BottomTab {
 }
 
 final currentBottomTabProvider =
-    StateProvider<BottomTab>((ref) => BottomTab.play);
+    StateProvider<BottomTab>((ref) => BottomTab.home);
 
 final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
   final currentTab = ref.watch(currentBottomTabProvider);
   switch (currentTab) {
-    case BottomTab.play:
+    case BottomTab.home:
       return homeNavigatorKey;
     case BottomTab.puzzles:
       return puzzlesNavigatorKey;
@@ -57,7 +55,7 @@ final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
 final currentRootScrollControllerProvider = Provider<ScrollController>((ref) {
   final currentTab = ref.watch(currentBottomTabProvider);
   switch (currentTab) {
-    case BottomTab.play:
+    case BottomTab.home:
       return homeScrollController;
     case BottomTab.puzzles:
       return puzzlesScrollController;
@@ -110,11 +108,7 @@ class BottomNavScaffold extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
-    final isHomeRoot = ref.watch(isHomeRootProvider);
     final tabs = ref.watch(tabsProvider);
-    final isHandset = getScreenType(context) == ScreenType.handset;
-    final shouldRemoveTabBarBorder =
-        isHandset && currentTab == BottomTab.play && isHomeRoot;
 
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -142,14 +136,6 @@ class BottomNavScaffold extends ConsumerWidget {
         return CupertinoTabScaffold(
           tabBuilder: _iOSTabBuilder,
           tabBar: CupertinoTabBar(
-            border: shouldRemoveTabBarBorder
-                ? const Border(top: BorderSide.none)
-                : const Border(
-                    top: BorderSide(
-                      color: Styles.cupertinoDefaultTabBarBorderColor,
-                      width: 0.0, // 0.0 means one physical pixel
-                    ),
-                  ),
             currentIndex: currentTab.index,
             items: [
               for (final tab in tabs)

@@ -10,6 +10,10 @@ abstract class Styles {
     fontSize: 20.0,
     fontWeight: FontWeight.bold,
   );
+  static const callout = TextStyle(
+    fontSize: 18.0,
+    fontWeight: FontWeight.w600,
+  );
   static TextStyle get sectionTitle => TextStyle(
         fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
         letterSpacing:
@@ -40,6 +44,12 @@ abstract class Styles {
   static const bodyPadding =
       EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0);
   static const verticalBodyPadding = EdgeInsets.symmetric(vertical: 16.0);
+
+  // colors
+  static Color? expansionTileColor(BuildContext context) =>
+      defaultTargetPlatform == TargetPlatform.iOS
+          ? CupertinoColors.secondaryLabel.resolveFrom(context)
+          : null;
 
   /// Gets horizontal padding according to platform.
   static const horizontalBodyPadding = EdgeInsets.symmetric(horizontal: 16.0);
