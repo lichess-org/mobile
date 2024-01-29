@@ -162,7 +162,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                     },
                     icon: const Icon(CupertinoIcons.profile_circled),
                   ),
-            largeTitle: const Text('lichess.org'),
+            largeTitle: const Text('Home'),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -252,7 +252,7 @@ class _HomeBody extends ConsumerWidget {
                 children: [
                   SizedBox(height: 8.0),
                   _CreateAGameSection(isExpanded: true),
-                  _MostRecentOngoingGamePreview(),
+                  _OngoingGamesPreview(maxGamesToShow: 4),
                 ],
               ),
             ),
@@ -275,7 +275,7 @@ class _HomeBody extends ConsumerWidget {
         const SizedBox(height: 8.0),
         const _HelloWidget(),
         const _CreateAGameSection(isExpanded: false),
-        const _MostRecentOngoingGamePreview(),
+        const _OngoingGamesPreview(maxGamesToShow: 1),
         const RecentGames(),
         RatingPrefAware(child: LeaderboardWidget()),
       ];
@@ -305,7 +305,7 @@ class _HomeBody extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(height: 8.0),
-                  _OfflineCorrespondencePreview(),
+                  _OfflineCorrespondencePreview(maxGamesToShow: 4),
                 ],
               ),
             ),
@@ -316,7 +316,7 @@ class _HomeBody extends ConsumerWidget {
       return const [
         SizedBox(height: 8.0),
         _HelloWidget(),
-        _OfflineCorrespondencePreview(),
+        _OfflineCorrespondencePreview(maxGamesToShow: 2),
       ];
     }
   }
@@ -669,22 +669,20 @@ class _QuickGameButton extends ConsumerWidget {
   }
 }
 
-class _MostRecentOngoingGamePreview extends ConsumerWidget {
-  const _MostRecentOngoingGamePreview();
+class _OngoingGamesPreview extends ConsumerWidget {
+  const _OngoingGamesPreview({required this.maxGamesToShow});
+
+  final int maxGamesToShow;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
     return ongoingGames.maybeWhen(
       data: (data) {
-        final game = data.firstOrNull;
-        if (game == null) {
-          return const SizedBox.shrink();
-        }
-
-        return _OngoingGamePreview(
-          data: data,
-          child: OngoingGamePreview(game: game),
+        return _GamePreview(
+          list: data,
+          maxGamesToShow: maxGamesToShow,
+          builder: (el) => OngoingGamePreview(game: el),
           moreScreenBuilder: (_) => const OngoingGamesScreen(),
         );
       },
@@ -694,7 +692,9 @@ class _MostRecentOngoingGamePreview extends ConsumerWidget {
 }
 
 class _OfflineCorrespondencePreview extends ConsumerWidget {
-  const _OfflineCorrespondencePreview();
+  const _OfflineCorrespondencePreview({required this.maxGamesToShow});
+
+  final int maxGamesToShow;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -702,16 +702,12 @@ class _OfflineCorrespondencePreview extends ConsumerWidget {
         ref.watch(offlineOngoingCorrespondenceGamesProvider);
     return offlineCorresGames.maybeWhen(
       data: (data) {
-        final first = data.firstOrNull;
-        if (first == null) {
-          return const SizedBox.shrink();
-        }
-
-        return _OngoingGamePreview(
-          data: data.map((e) => e.$2).toIList(),
-          child: OfflineCorrespondenceGamePreview(
-            game: first.$2,
-            lastModified: first.$1,
+        return _GamePreview(
+          list: data,
+          maxGamesToShow: maxGamesToShow,
+          builder: (el) => OfflineCorrespondenceGamePreview(
+            game: el.$2,
+            lastModified: el.$1,
           ),
           moreScreenBuilder: (_) => const OfflineCorrespondenceGamesScreen(),
         );
@@ -721,18 +717,24 @@ class _OfflineCorrespondencePreview extends ConsumerWidget {
   }
 }
 
-class _OngoingGamePreview<T> extends StatelessWidget {
-  const _OngoingGamePreview({
-    required this.data,
-    required this.child,
+class _GamePreview<T> extends StatelessWidget {
+  const _GamePreview({
+    required this.list,
+    required this.builder,
     required this.moreScreenBuilder,
+    required this.maxGamesToShow,
   });
-  final IList<T> data;
-  final Widget child;
+  final IList<T> list;
+  final Widget Function(T data) builder;
   final Widget Function(BuildContext) moreScreenBuilder;
+  final int maxGamesToShow;
 
   @override
   Widget build(BuildContext context) {
+    if (list.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -746,18 +748,18 @@ class _OngoingGamePreview<T> extends StatelessWidget {
             children: [
               Flexible(
                 child: Text(
-                  context.l10n.nbGamesInPlay(data.length),
+                  context.l10n.nbGamesInPlay(list.length),
                   style: Styles.sectionTitle,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              if (data.length > 1) ...[
+              if (list.length > maxGamesToShow) ...[
                 const SizedBox(width: 6.0),
                 NoPaddingTextButton(
                   onPressed: () {
                     pushPlatformRoute(
                       context,
-                      title: context.l10n.nbGamesInPlay(data.length),
+                      title: context.l10n.nbGamesInPlay(list.length),
                       builder: moreScreenBuilder,
                     );
                   },
@@ -767,7 +769,7 @@ class _OngoingGamePreview<T> extends StatelessWidget {
             ],
           ),
         ),
-        child,
+        for (final data in list.take(maxGamesToShow)) builder(data),
       ],
     );
   }
