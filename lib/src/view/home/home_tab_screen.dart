@@ -25,7 +25,6 @@ import 'package:lichess_mobile/src/view/play/create_correspondence_game_screen.d
 import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
 import 'package:lichess_mobile/src/view/play/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
-import 'package:lichess_mobile/src/view/play/play_screen.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/view/relation/relation_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
@@ -285,27 +284,24 @@ class _HomeBody extends ConsumerWidget {
   List<Widget> _offlineWidgets(bool isTablet) {
     if (isTablet) {
       return const [
+        _HelloWidget(),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              flex: 3,
               child: Column(
                 children: [
-                  SizedBox(height: 16.0),
-                  _HelloWidget(),
-                  PlayScreenBody(),
+                  SizedBox(height: 8.0),
+                  _OfflineCorrespondencePreview(maxGamesToShow: 4),
                 ],
               ),
             ),
             Expanded(
-              flex: 4,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(height: 8.0),
-                  _OfflineCorrespondencePreview(maxGamesToShow: 4),
                 ],
               ),
             ),
