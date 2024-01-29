@@ -106,9 +106,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivity = ref.watch(connectivityChangesProvider);
 
-    final expansionTileColor = defaultTargetPlatform == TargetPlatform.iOS
-        ? CupertinoColors.secondaryLabel.resolveFrom(context)
-        : null;
+    final expansionTileColor = Styles.expansionTileColor(context);
 
     final isTablet = getScreenType(context) == ScreenType.tablet;
 
@@ -252,9 +250,9 @@ class StreakButton extends StatelessWidget {
           LichessIcons.streak,
           size: 44,
         ),
-        title: Text(
+        title: const Text(
           'Puzzle Streak',
-          style: Styles.sectionTitle,
+          style: Styles.callout,
         ),
         subtitle: Text(
           context.l10n.puzzleStreakDescription.characters
@@ -294,9 +292,9 @@ class StormButton extends StatelessWidget {
           LichessIcons.storm,
           size: 44,
         ),
-        title: Text(
+        title: const Text(
           'Puzzle Storm',
-          style: Styles.sectionTitle,
+          style: Styles.callout,
         ),
         subtitle: const Text(
           'Solve as many puzzles as possible in 3 minutes.',
@@ -330,7 +328,7 @@ class PuzzleThemeButton extends StatelessWidget {
         icon: const Icon(PuzzleIcons.mix, size: 44),
         title: Text(
           context.l10n.puzzlePuzzleThemes,
-          style: Styles.sectionTitle,
+          style: Styles.callout,
         ),
         subtitle: const Text(
           'Choose puzzles by theme or opening.',

@@ -62,7 +62,7 @@ class _Body extends StatelessWidget {
           ),
           title: Text(
             context.l10n.analysis,
-            style: Styles.sectionTitle,
+            style: Styles.callout,
           ),
           onTap: () => pushPlatformRoute(
             context,

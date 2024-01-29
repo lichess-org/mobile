@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -21,16 +22,21 @@ import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_widget.dart';
 import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
 import 'package:lichess_mobile/src/view/home/search_screen.dart';
+import 'package:lichess_mobile/src/view/play/create_correspondence_game_screen.dart';
+import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
 import 'package:lichess_mobile/src/view/play/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
+import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/view/relation/relation_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 final isHomeRootProvider = StateProvider<bool>((ref) => true);
 
@@ -127,9 +133,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       body: RefreshIndicator(
         key: _androidRefreshKey,
         onRefresh: () => _refreshData(),
-        child: const _HomeScaffold(
-          child: _HomeBody(),
-        ),
+        child: const _HomeBody(),
       ),
     );
   }
@@ -137,44 +141,47 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   Widget _iosBuilder(BuildContext context) {
     final session = ref.watch(authSessionProvider);
     return CupertinoPageScaffold(
-      child: _HomeScaffold(
-        child: CustomScrollView(
-          controller: homeScrollController,
-          slivers: [
-            CupertinoSliverNavigationBar(
-              padding: const EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
-              leading: session == null
-                  ? const SignInWidget()
-                  : AppBarTextButton(
-                      onPressed: () {
-                        ref.invalidate(accountProvider);
-                        Navigator.of(context).push(
-                          CupertinoPageRoute<void>(
-                            builder: (context) => const ProfileScreen(),
-                          ),
-                        );
-                      },
-                      child: Text(session.user.name),
-                    ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const _SearchButton(),
-                  const _SettingsButton(),
-                  if (session != null) const _RelationButton(),
-                ],
-              ),
+      child: CustomScrollView(
+        controller: homeScrollController,
+        slivers: [
+          CupertinoSliverNavigationBar(
+            padding: EdgeInsetsDirectional.only(
+              start: session == null ? 16.0 : 8.0,
+              end: 8.0,
             ),
-            CupertinoSliverRefreshControl(
-              onRefresh: () => _refreshData(),
+            leading: session == null
+                ? const SignInWidget()
+                : AppBarIconButton(
+                    semanticsLabel: context.l10n.profile,
+                    onPressed: () {
+                      ref.invalidate(accountProvider);
+                      Navigator.of(context).push(
+                        CupertinoPageRoute<void>(
+                          builder: (context) => const ProfileScreen(),
+                        ),
+                      );
+                    },
+                    icon: const Icon(CupertinoIcons.profile_circled),
+                  ),
+            largeTitle: const Text('lichess.org'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const _SearchButton(),
+                const _SettingsButton(),
+                if (session != null) const _RelationButton(),
+              ],
             ),
-            const SliverToBoxAdapter(child: _ConnectivityBanner()),
-            const SliverSafeArea(
-              top: false,
-              sliver: _HomeBody(),
-            ),
-          ],
-        ),
+          ),
+          CupertinoSliverRefreshControl(
+            onRefresh: () => _refreshData(),
+          ),
+          const SliverToBoxAdapter(child: _ConnectivityBanner()),
+          const SliverSafeArea(
+            top: false,
+            sliver: _HomeBody(),
+          ),
+        ],
       ),
     );
   }
@@ -184,121 +191,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       ref.refresh(accountRecentGamesProvider.future),
       ref.refresh(ongoingGamesProvider.future),
     ]);
-  }
-}
-
-/// Scaffold with a sticky Create Game button at the bottom
-class _HomeScaffold extends StatelessWidget {
-  const _HomeScaffold({
-    required this.child,
-  });
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    final isHandset = getScreenType(context) == ScreenType.handset;
-    return SafeArea(
-      top: false,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: child,
-          ),
-          if (isHandset)
-            Container(
-              height: 80,
-              decoration: BoxDecoration(
-                color: CupertinoTheme.of(context).barBackgroundColor,
-                border: const Border(
-                  top: BorderSide(
-                    color: Styles.cupertinoDefaultTabBarBorderColor,
-                    width: 0.0,
-                  ),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15.0)
-                    .add(Styles.horizontalBodyPadding),
-                child: MediaQuery.withClampedTextScaling(
-                  maxScaleFactor: 1.1,
-                  child: CupertinoButton.filled(
-                    child: DefaultTextStyle.merge(
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      child: Text(context.l10n.createAGame),
-                    ),
-                    onPressed: () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.createAGame,
-                        builder: (_) => const PlayScreen(),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    final navigationBarTheme = NavigationBarTheme.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-    final isHandset = getScreenType(context) == ScreenType.handset;
-    return SafeArea(
-      top: false,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: child,
-          ),
-          if (isHandset)
-            Material(
-              color: navigationBarTheme.backgroundColor ?? colorScheme.surface,
-              elevation: navigationBarTheme.elevation ?? 3.0,
-              shadowColor: navigationBarTheme.shadowColor ?? Colors.transparent,
-              surfaceTintColor: navigationBarTheme.surfaceTintColor ??
-                  colorScheme.surfaceTint,
-              child: SizedBox(
-                height: 80,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0)
-                      .add(Styles.horizontalBodyPadding),
-                  child: FilledButton.tonal(
-                    style: FilledButton.styleFrom(
-                      textStyle: const TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    child: Text(context.l10n.createAGame),
-                    onPressed: () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.createAGame,
-                        builder: (_) => const PlayScreen(),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
   }
 }
 
@@ -372,7 +264,7 @@ class _HomeBody extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const SizedBox(height: 8.0),
-                  const _PreferredSetup(),
+                  const _CreateAGameSection(),
                   const _MostRecentOngoingGamePreview(),
                   const RecentGames(),
                   RatingPrefAware(child: LeaderboardWidget()),
@@ -386,7 +278,7 @@ class _HomeBody extends ConsumerWidget {
       return [
         const SizedBox(height: 8.0),
         const _HelloWidget(),
-        const _PreferredSetup(),
+        const _CreateAGameSection(),
         const _MostRecentOngoingGamePreview(),
         const RecentGames(),
         RatingPrefAware(child: LeaderboardWidget()),
@@ -474,17 +366,23 @@ class _HelloWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
+    const style = TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
+
     return session != null
         ? Padding(
             padding: Styles.horizontalBodyPadding
                 .add(Styles.sectionBottomPadding)
                 .add(const EdgeInsets.only(top: 8.0)),
-            child: Text(
-              'Hello, ${session.user.name}',
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+            child: Row(
+              children: [
+                const Icon(Icons.wb_sunny, size: 28),
+                const SizedBox(width: 5.0),
+                const Text(
+                  'Hello, ',
+                  style: style,
+                ),
+                UserFullNameWidget(user: session.user, style: style),
+              ],
             ),
           )
         : const SizedBox.shrink();
@@ -527,6 +425,210 @@ class _ConnectivityBanner extends ConsumerWidget {
       },
       loading: () => const SizedBox.shrink(),
       error: (error, stack) => const SizedBox.shrink(),
+    );
+  }
+}
+
+class _CreateAGameSection extends ConsumerWidget {
+  const _CreateAGameSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final expansionTileColor = Styles.expansionTileColor(context);
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: Styles.horizontalBodyPadding,
+            child: Text(context.l10n.createAGame, style: Styles.sectionTitle),
+          ),
+          const _QuickGameButton(),
+          Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+              title: Text(
+                context.l10n.more,
+              ),
+              tilePadding: Styles.horizontalBodyPadding,
+              iconColor: expansionTileColor,
+              collapsedIconColor: expansionTileColor,
+              textColor: expansionTileColor,
+              collapsedTextColor: expansionTileColor,
+              controlAffinity: ListTileControlAffinity.leading,
+              children: [
+                Padding(
+                  padding: Styles.bodySectionBottomPadding,
+                  child: CardButton(
+                    icon: const Icon(
+                      Icons.tune,
+                      size: 40,
+                    ),
+                    title: Text(context.l10n.custom, style: Styles.callout),
+                    onTap: () {
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n.custom,
+                        builder: (_) => const CreateCustomGameScreen(),
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: Styles.bodySectionBottomPadding,
+                  child: CardButton(
+                    icon: const Icon(
+                      LichessIcons.correspondence,
+                      size: 40,
+                    ),
+                    title: Text(
+                      context.l10n.correspondence,
+                      style: Styles.callout,
+                    ),
+                    onTap: () {
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n.correspondence,
+                        builder: (_) => const CreateCorrespondenceGameScreen(),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _QuickGameButton extends ConsumerWidget {
+  const _QuickGameButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final playPrefs = ref.watch(gameSetupPreferencesProvider);
+    final session = ref.watch(authSessionProvider);
+
+    final timeControl = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              playPrefs.timeIncrement.speed.icon,
+              size: 28,
+            ),
+            const SizedBox(width: 6.0),
+            Text(
+              playPrefs.timeIncrement.display,
+              style: Styles.timeControl.copyWith(fontSize: 18),
+            ),
+          ],
+        ),
+        const Icon(Icons.keyboard_arrow_down, size: 28.0),
+      ],
+    );
+
+    return Padding(
+      padding:
+          Styles.horizontalBodyPadding.add(const EdgeInsets.only(top: 6.0)),
+      child: PlatformCard(
+        child: Row(
+          children: [
+            SizedBox(
+              width: 165.0,
+              child: AdaptiveInkWell(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Center(child: timeControl),
+                ),
+                onTap: () {
+                  final double screenHeight = MediaQuery.sizeOf(context).height;
+                  showAdaptiveBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    showDragHandle: true,
+                    constraints: BoxConstraints(
+                      maxHeight: screenHeight - (screenHeight / 10),
+                    ),
+                    builder: (BuildContext context) {
+                      return const TimeControlModal();
+                    },
+                  );
+                },
+              ),
+            ),
+            Expanded(
+              child: defaultTargetPlatform == TargetPlatform.iOS
+                  ? CupertinoButton.filled(
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(10),
+                        bottomRight: Radius.circular(10),
+                      ),
+                      onPressed: () {
+                        pushPlatformRoute(
+                          context,
+                          rootNavigator: true,
+                          builder: (_) => LobbyScreen(
+                            seek: GameSeek.fastPairing(playPrefs, session),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Center(
+                          child: Text(context.l10n.play, style: Styles.callout),
+                        ),
+                      ),
+                    )
+                  : FilledButtonTheme(
+                      data: FilledButtonThemeData(
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all(
+                            const EdgeInsets.symmetric(vertical: 8.0),
+                          ),
+                          shape: MaterialStateProperty.all(
+                            const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      child: FilledButton(
+                        onPressed: () {
+                          pushPlatformRoute(
+                            context,
+                            rootNavigator: true,
+                            builder: (_) => LobbyScreen(
+                              seek: GameSeek.fastPairing(playPrefs, session),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Center(
+                            child:
+                                Text(context.l10n.play, style: Styles.callout),
+                          ),
+                        ),
+                      ),
+                    ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

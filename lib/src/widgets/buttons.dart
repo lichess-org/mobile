@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -360,9 +361,7 @@ class _CardButtonState extends State<CardButton> {
           ),
         );
       case TargetPlatform.iOS:
-        final textColor = TextStyle(
-          color: CupertinoTheme.of(context).textTheme.textStyle.color,
-        );
+        final textColor = DefaultTextStyle.of(context).style.color;
         return GestureDetector(
           onTap: widget.onTap,
           onTapDown: (_) => _onTapDown(),
@@ -380,8 +379,10 @@ class _CardButtonState extends State<CardButton> {
                     data: ListTileThemeData(
                       iconColor:
                           CupertinoColors.systemGrey.resolveFrom(context),
-                      subtitleTextStyle: textColor,
-                      titleTextStyle: textColor,
+                      titleTextStyle: TextStyle(color: textColor),
+                      subtitleTextStyle: TextStyle(
+                        color: textColor?.withOpacity(Styles.subtitleOpacity),
+                      ),
                     ),
                     child: ListTile(
                       leading: widget.icon,
@@ -410,6 +411,7 @@ class AdaptiveInkWell extends StatefulWidget {
     this.onTap,
     this.onLongPress,
     this.borderRadius,
+    this.splashColor,
     super.key,
   });
 
@@ -417,6 +419,7 @@ class AdaptiveInkWell extends StatefulWidget {
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final BorderRadius? borderRadius;
+  final Color? splashColor;
 
   @override
   State<AdaptiveInkWell> createState() => _AdaptiveInkWellState();
@@ -457,7 +460,8 @@ class _AdaptiveInkWellState extends State<AdaptiveInkWell> {
               decoration: BoxDecoration(
                 borderRadius: widget.borderRadius,
                 color: _isPressed
-                    ? CupertinoColors.systemGrey5.resolveFrom(context)
+                    ? widget.splashColor ??
+                        CupertinoColors.systemGrey5.resolveFrom(context)
                     : null,
               ),
               child: widget.child,

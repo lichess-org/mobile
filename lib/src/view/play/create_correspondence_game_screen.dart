@@ -466,7 +466,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: FatButton(
-                      semanticsLabel: context.l10n.createAGame,
+                      semanticsLabel: context.l10n.play,
                       onPressed:
                           snapshot.connectionState == ConnectionState.waiting
                               ? null
@@ -483,7 +483,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                                   await _pendingCreateGame;
                                   widget.setViewMode(_ViewMode.challenges);
                                 },
-                      child: Text(context.l10n.createAGame),
+                      child: Text(context.l10n.play, style: Styles.bold),
                     ),
                   );
                 },
