@@ -245,7 +245,7 @@ class _Body extends ConsumerWidget {
                           );
                         }
                       : null,
-                  child: Text(context.l10n.play, style: Styles.bold),
+                  child: Text(context.l10n.studyStart, style: Styles.bold),
                 ),
               ),
             ],
