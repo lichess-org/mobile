@@ -243,28 +243,25 @@ class _HomeBody extends ConsumerWidget {
   List<Widget> _onlineWidgets(bool isTablet) {
     if (isTablet) {
       return [
+        const _HelloWidget(),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Expanded(
-              flex: 3,
               child: Column(
                 children: [
-                  SizedBox(height: 16.0),
-                  _HelloWidget(),
-                  PlayScreenBody(),
+                  SizedBox(height: 8.0),
+                  _CreateAGameSection(isExpanded: true),
+                  _MostRecentOngoingGamePreview(),
                 ],
               ),
             ),
             Expanded(
-              flex: 4,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const SizedBox(height: 8.0),
-                  const _CreateAGameSection(),
-                  const _MostRecentOngoingGamePreview(),
                   const RecentGames(),
                   RatingPrefAware(child: LeaderboardWidget()),
                 ],
@@ -277,7 +274,7 @@ class _HomeBody extends ConsumerWidget {
       return [
         const SizedBox(height: 8.0),
         const _HelloWidget(),
-        const _CreateAGameSection(),
+        const _CreateAGameSection(isExpanded: false),
         const _MostRecentOngoingGamePreview(),
         const RecentGames(),
         RatingPrefAware(child: LeaderboardWidget()),
@@ -436,7 +433,9 @@ class _ConnectivityBanner extends ConsumerWidget {
 }
 
 class _CreateAGameSection extends ConsumerWidget {
-  const _CreateAGameSection();
+  const _CreateAGameSection({this.isExpanded = false});
+
+  final bool isExpanded;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -452,60 +451,84 @@ class _CreateAGameSection extends ConsumerWidget {
             child: Text(context.l10n.createAGame, style: Styles.sectionTitle),
           ),
           const _QuickGameButton(),
-          Theme(
-            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-            child: ExpansionTile(
-              title: Text(
-                context.l10n.more,
+          if (isExpanded) ...const [
+            SizedBox(height: 16.0),
+            _CustomGameButton(),
+            _CorrespondenceGameButton(),
+          ] else
+            Theme(
+              data:
+                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              child: ExpansionTile(
+                title: Text(
+                  context.l10n.more,
+                ),
+                tilePadding: Styles.horizontalBodyPadding,
+                iconColor: expansionTileColor,
+                collapsedIconColor: expansionTileColor,
+                textColor: expansionTileColor,
+                collapsedTextColor: expansionTileColor,
+                controlAffinity: ListTileControlAffinity.leading,
+                children: const [
+                  _CustomGameButton(),
+                  _CorrespondenceGameButton(),
+                ],
               ),
-              tilePadding: Styles.horizontalBodyPadding,
-              iconColor: expansionTileColor,
-              collapsedIconColor: expansionTileColor,
-              textColor: expansionTileColor,
-              collapsedTextColor: expansionTileColor,
-              controlAffinity: ListTileControlAffinity.leading,
-              children: [
-                Padding(
-                  padding: Styles.bodySectionBottomPadding,
-                  child: CardButton(
-                    icon: const Icon(
-                      Icons.tune,
-                      size: 40,
-                    ),
-                    title: Text(context.l10n.custom, style: Styles.callout),
-                    onTap: () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.custom,
-                        builder: (_) => const CreateCustomGameScreen(),
-                      );
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: Styles.bodySectionBottomPadding,
-                  child: CardButton(
-                    icon: const Icon(
-                      LichessIcons.correspondence,
-                      size: 40,
-                    ),
-                    title: Text(
-                      context.l10n.correspondence,
-                      style: Styles.callout,
-                    ),
-                    onTap: () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.correspondence,
-                        builder: (_) => const CreateCorrespondenceGameScreen(),
-                      );
-                    },
-                  ),
-                ),
-              ],
             ),
-          ),
         ],
+      ),
+    );
+  }
+}
+
+class _CustomGameButton extends StatelessWidget {
+  const _CustomGameButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: Styles.bodySectionBottomPadding,
+      child: CardButton(
+        icon: const Icon(
+          Icons.tune,
+          size: 40,
+        ),
+        title: Text(context.l10n.custom, style: Styles.callout),
+        onTap: () {
+          pushPlatformRoute(
+            context,
+            title: context.l10n.custom,
+            builder: (_) => const CreateCustomGameScreen(),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _CorrespondenceGameButton extends StatelessWidget {
+  const _CorrespondenceGameButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: Styles.bodySectionBottomPadding,
+      child: CardButton(
+        icon: const Icon(
+          LichessIcons.correspondence,
+          size: 40,
+        ),
+        title: Text(
+          context.l10n.correspondence,
+          style: Styles.callout,
+        ),
+        onTap: () {
+          pushPlatformRoute(
+            context,
+            title: context.l10n.correspondence,
+            builder: (_) => const CreateCorrespondenceGameScreen(),
+          );
+        },
       ),
     );
   }
