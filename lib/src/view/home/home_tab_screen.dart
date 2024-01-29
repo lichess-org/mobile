@@ -162,7 +162,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                     },
                     icon: const Icon(CupertinoIcons.profile_circled),
                   ),
-            largeTitle: const Text('Home'),
+            largeTitle: Text(context.l10n.play),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -555,7 +555,7 @@ class _QuickGameButton extends ConsumerWidget {
             const SizedBox(width: 6.0),
             Text(
               playPrefs.timeIncrement.display,
-              style: Styles.timeControl.copyWith(fontSize: 18),
+              style: Styles.timeControl.copyWith(fontSize: 16),
             ),
           ],
         ),
@@ -570,7 +570,7 @@ class _QuickGameButton extends ConsumerWidget {
         child: Row(
           children: [
             SizedBox(
-              width: 165.0,
+              width: 162.0,
               height: 65.0,
               child: AdaptiveInkWell(
                 borderRadius: const BorderRadius.only(
@@ -602,6 +602,10 @@ class _QuickGameButton extends ConsumerWidget {
                 height: 65.0,
                 child: defaultTargetPlatform == TargetPlatform.iOS
                     ? CupertinoButton.filled(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8.0,
+                          horizontal: 6.0,
+                        ),
                         borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(10),
                           bottomRight: Radius.circular(10),
@@ -615,12 +619,9 @@ class _QuickGameButton extends ConsumerWidget {
                             ),
                           );
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Center(
-                            child:
-                                Text(context.l10n.play, style: Styles.callout),
-                          ),
+                        child: Text(
+                          context.l10n.studyStart,
+                          style: Styles.bold,
                         ),
                       )
                     : FilledButtonTheme(
@@ -651,11 +652,9 @@ class _QuickGameButton extends ConsumerWidget {
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Center(
-                              child: Text(
-                                context.l10n.play,
-                                style: Styles.callout,
-                              ),
+                            child: Text(
+                              context.l10n.play,
+                              style: Styles.callout,
                             ),
                           ),
                         ),

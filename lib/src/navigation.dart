@@ -24,7 +24,7 @@ enum BottomTab {
   String label(AppLocalizations strings) {
     switch (this) {
       case BottomTab.home:
-        return 'Home';
+        return strings.play;
       case BottomTab.puzzles:
         return strings.puzzles;
       case BottomTab.tools:
@@ -212,7 +212,7 @@ class BottomNavScaffold extends ConsumerWidget {
     switch (index) {
       case 0:
         return CupertinoTabView(
-          defaultTitle: 'Home',
+          defaultTitle: context.l10n.play,
           navigatorKey: homeNavigatorKey,
           navigatorObservers: [
             homeRouteObserver,
