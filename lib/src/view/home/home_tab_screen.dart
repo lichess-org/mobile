@@ -653,7 +653,7 @@ class _QuickGameButton extends ConsumerWidget {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: Text(
-                              context.l10n.play,
+                              context.l10n.studyStart,
                               style: Styles.callout,
                             ),
                           ),
