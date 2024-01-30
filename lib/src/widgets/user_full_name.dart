@@ -65,8 +65,9 @@ class UserFullNameWidget extends ConsumerWidget {
             padding: const EdgeInsets.only(right: 5),
             child: Icon(
               LichessIcons.patron,
-              size: DefaultTextStyle.of(context).style.fontSize,
-              color: DefaultTextStyle.of(context).style.color,
+              size: style?.fontSize ??
+                  DefaultTextStyle.of(context).style.fontSize,
+              color: style?.color ?? DefaultTextStyle.of(context).style.color,
             ),
           ),
         if (user?.title != null) ...[
