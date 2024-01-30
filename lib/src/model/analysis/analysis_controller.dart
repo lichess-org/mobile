@@ -40,6 +40,7 @@ class AnalysisOptions with _$AnalysisOptions {
     required String pgn,
     int? initialMoveCursor,
     LightOpening? opening,
+    Division? division,
 
     /// Optional server analysis to display player stats.
     ({PlayerAnalysis white, PlayerAnalysis black})? serverAnalysis,

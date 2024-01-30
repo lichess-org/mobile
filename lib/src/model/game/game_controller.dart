@@ -961,5 +961,6 @@ class GameState with _$GameState {
         id: gameFullId,
         opening: game.meta.opening,
         serverAnalysis: game.serverAnalysis,
+        division: game.meta.division,
       );
 }

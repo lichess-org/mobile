@@ -305,6 +305,9 @@ class GameMeta with _$GameMeta {
 
     /// Opening of the game, only available once finished
     LightOpening? opening,
+
+    /// Game phases of the game, only avaible once finished
+    Division? division,
   }) = _GameMeta;
 
   factory GameMeta.fromJson(Map<String, dynamic> json) =>

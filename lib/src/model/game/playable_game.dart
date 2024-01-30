@@ -223,6 +223,7 @@ GameMeta _playableGameMetaFromPick(RequiredPick pick) {
         ),
       ),
     ),
+    division: pick('division').letOrNull(_divisionFromPick),
   );
 }
 
@@ -271,5 +272,12 @@ Message _messageFromPick(RequiredPick pick) {
   return (
     message: pick('t').asStringOrThrow(),
     username: pick('u').asStringOrThrow(),
+  );
+}
+
+Division _divisionFromPick(RequiredPick pick) {
+  return Division(
+    middlegame: pick('middle').asDoubleOrNull(),
+    endgame: pick('end').asDoubleOrNull(),
   );
 }

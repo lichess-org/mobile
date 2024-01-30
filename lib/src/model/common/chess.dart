@@ -168,6 +168,17 @@ class LightOpening with _$LightOpening implements Opening {
       _$LightOpeningFromJson(json);
 }
 
+@Freezed(fromJson: true, toJson: true)
+class Division with _$Division {
+  const factory Division({
+    double? middlegame,
+    double? endgame,
+  }) = _Division;
+
+  factory Division.fromJson(Map<String, dynamic> json) =>
+      _$DivisionFromJson(json);
+}
+
 @freezed
 class FullOpening with _$FullOpening implements Opening {
   const FullOpening._();
