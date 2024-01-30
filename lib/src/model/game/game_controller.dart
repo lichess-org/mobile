@@ -82,8 +82,6 @@ class GameController extends _$GameController {
 
         PlayableGame game = fullEvent.game;
 
-        _socketEventVersion = fullEvent.socketEventVersion;
-
         if (fullEvent.game.messages != null) {
           chatNotifier.setMessages(fullEvent.game.messages!);
         }
@@ -95,6 +93,8 @@ class GameController extends _$GameController {
             return game;
           });
         }
+
+        _socketEventVersion = fullEvent.socketEventVersion;
 
         return GameState(
           gameFullId: gameFullId,
