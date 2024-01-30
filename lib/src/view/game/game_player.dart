@@ -59,23 +59,19 @@ class GamePlayer extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            if (player.user?.isPatron == true)
+            Icon(
+              player.onGame == true ? Icons.cloud : Icons.cloud_off,
+              color: player.onGame == true ? LichessColors.green : null,
+              size: 14,
+            ),
+            const SizedBox(width: 5),
+            if (player.user?.isPatron == true) ...[
               Icon(
                 LichessIcons.patron,
-                size: 14,
-                color:
-                    player.onGame == true ? LichessColors.green : Colors.grey,
-              )
-            else
-              Icon(
-                player.onGame == true
-                    ? CupertinoIcons.circle_fill
-                    : CupertinoIcons.circle,
-                size: 14,
-                color:
-                    player.onGame == true ? LichessColors.green : Colors.grey,
+                size: playerFontSize,
               ),
-            const SizedBox(width: 5),
+              const SizedBox(width: 5),
+            ],
             if (player.user?.title != null) ...[
               Text(
                 player.user!.title!,
