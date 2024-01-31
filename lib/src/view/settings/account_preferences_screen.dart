@@ -91,6 +91,10 @@ class _AccountPreferencesScreenState
                   ),
                   SwitchSettingTile(
                     title: Text(context.l10n.preferencesShowPlayerRatings),
+                    subtitle: Text(
+                      context.l10n.preferencesExplainShowPlayerRatings,
+                      maxLines: 5,
+                    ),
                     value: data.showRatings.value,
                     onChanged: isLoading
                         ? null
@@ -101,8 +105,6 @@ class _AccountPreferencesScreenState
                                   .setShowRatings(BooleanPref(value)),
                             );
                           },
-                    additionalInfo:
-                        context.l10n.preferencesExplainShowPlayerRatings,
                   ),
                 ],
               ),
@@ -273,7 +275,7 @@ class _AccountPreferencesScreenState
                         }
                       });
                     },
-                    additionalInfo: context
+                    explanation: context
                         .l10n.preferencesExplainCanThenBeTemporarilyDisabled,
                   ),
                 ],

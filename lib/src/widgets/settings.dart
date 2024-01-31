@@ -11,7 +11,7 @@ class SettingsListTile extends StatelessWidget {
     required this.settingsLabel,
     required this.settingsValue,
     required this.onTap,
-    this.additionalInfo,
+    this.explanation,
     this.showCupertinoTrailingValue = true,
     super.key,
   });
@@ -24,7 +24,8 @@ class SettingsListTile extends StatelessWidget {
   final String settingsValue;
   final void Function() onTap;
 
-  final String? additionalInfo;
+  /// The optional explanation of the settings.
+  final String? explanation;
 
   /// Whether to show the value in the trailing position on iOS.
   ///
@@ -33,36 +34,35 @@ class SettingsListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tile = PlatformListTile(
-      leading: icon,
-      title: _SettingsTitle(
-        title: settingsLabel,
-        additionalInfo: additionalInfo,
-      ),
-      additionalInfo: showCupertinoTrailingValue ? Text(settingsValue) : null,
-      subtitle: defaultTargetPlatform == TargetPlatform.android
-          ? Text(
-              settingsValue,
-              style:
-                  TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-            )
-          : null,
-      onTap: onTap,
-      trailing: defaultTargetPlatform == TargetPlatform.iOS
-          ? const CupertinoListTileChevron()
-          : null,
-    );
     return Semantics(
       container: true,
       button: true,
       label: '$settingsLabel: $settingsValue',
       excludeSemantics: true,
-      child: additionalInfo != null
-          ? _SettingsInfoTooltip(
-              message: additionalInfo!,
-              child: tile,
-            )
-          : tile,
+      child: PlatformListTile(
+        leading: icon,
+        title: _SettingsTitle(title: settingsLabel),
+        additionalInfo: showCupertinoTrailingValue ? Text(settingsValue) : null,
+        subtitle: defaultTargetPlatform == TargetPlatform.android
+            ? Text(
+                settingsValue,
+                style: TextStyle(
+                  color: textShade(context, Styles.subtitleOpacity),
+                ),
+              )
+            : explanation != null
+                ? Text(explanation!, maxLines: 5)
+                : null,
+        onTap: onTap,
+        trailing: defaultTargetPlatform == TargetPlatform.iOS
+            ? const CupertinoListTileChevron()
+            : explanation != null
+                ? _SettingsInfoTooltip(
+                    message: explanation!,
+                    child: const Icon(Icons.info_outline),
+                  )
+                : null,
+      ),
     );
   }
 }
@@ -72,7 +72,6 @@ class SwitchSettingTile extends StatelessWidget {
     required this.title,
     this.subtitle,
     required this.value,
-    this.additionalInfo,
     this.onChanged,
     this.leading,
     super.key,
@@ -80,32 +79,21 @@ class SwitchSettingTile extends StatelessWidget {
 
   final Text title;
   final Widget? subtitle;
-  final String? additionalInfo;
   final bool value;
   final void Function(bool value)? onChanged;
   final Widget? leading;
 
   @override
   Widget build(BuildContext context) {
-    final tile = PlatformListTile(
+    return PlatformListTile(
       leading: leading,
-      title: _SettingsTitle(
-        title: title,
-        additionalInfo: additionalInfo,
-      ),
+      title: _SettingsTitle(title: title),
       subtitle: subtitle,
       trailing: Switch.adaptive(
         value: value,
         onChanged: onChanged,
       ),
     );
-
-    return additionalInfo != null
-        ? _SettingsInfoTooltip(
-            message: additionalInfo!,
-            child: tile,
-          )
-        : tile;
   }
 }
 
@@ -122,6 +110,7 @@ class _SettingsInfoTooltip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tooltip(
       message: message,
+      triggerMode: TooltipTriggerMode.tap,
       margin: const EdgeInsets.symmetric(horizontal: 16.0),
       showDuration: const Duration(seconds: 4),
       child: child,
@@ -130,13 +119,9 @@ class _SettingsInfoTooltip extends StatelessWidget {
 }
 
 class _SettingsTitle extends StatelessWidget {
-  const _SettingsTitle({
-    required this.title,
-    this.additionalInfo,
-  });
+  const _SettingsTitle({required this.title});
 
   final Text title;
-  final String? additionalInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -147,17 +132,6 @@ class _SettingsTitle extends StatelessWidget {
         TextSpan(
           children: [
             title.textSpan ?? TextSpan(text: title.data),
-            if (additionalInfo != null)
-              WidgetSpan(
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 5.0),
-                  child: Icon(
-                    defaultTargetPlatform == TargetPlatform.iOS
-                        ? CupertinoIcons.info
-                        : Icons.info_outline,
-                  ),
-                ),
-              ),
           ],
         ),
       ),
