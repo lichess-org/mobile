@@ -17,7 +17,7 @@ class OngoingGame with _$OngoingGame {
     required String fen,
     required Perf perf,
     required Speed speed,
-    required LightUser opponent,
+    LightUser? opponent,
     required GameSource source,
     required bool isMyTurn,
     int? opponentRating,

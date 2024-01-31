@@ -241,7 +241,7 @@ OngoingGame _ongoingGameFromPick(RequiredPick pick) {
       (pick) =>
           GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
     ),
-    opponent: pick('opponent').asLightUserOrThrow(),
+    opponent: pick('opponent').asLightUserOrNull(),
     opponentRating: pick('opponent', 'rating').asIntOrNull(),
     opponentAiLevel: pick('opponent', 'aiLevel').asIntOrNull(),
     secondsLeft: pick('secondsLeft').asIntOrNull(),
