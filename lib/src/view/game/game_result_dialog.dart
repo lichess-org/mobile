@@ -230,6 +230,7 @@ class _AcplChart extends StatelessWidget {
           LineChartData(
             minY: -1.0,
             maxY: 1.0,
+            lineTouchData: const LineTouchData(enabled: false),
             lineBarsData: [
               LineChartBarData(
                 spots: spots,
