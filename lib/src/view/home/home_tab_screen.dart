@@ -543,7 +543,7 @@ class _CorrespondenceGameButton extends StatelessWidget {
 }
 
 class _QuickGameButton extends ConsumerWidget {
-  const _QuickGameButton();
+  const ,_QuickGameButton();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -627,8 +627,7 @@ class _QuickGameButton extends ConsumerWidget {
                         },
                         child: Text(
                           context.l10n.studyStart,
-                          style: Styles.bold
-                              .copyWith(color: CupertinoColors.white),
+                          style: Styles.bold,
                         ),
                       )
                     : FilledButtonTheme(
