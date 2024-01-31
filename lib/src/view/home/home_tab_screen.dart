@@ -549,6 +549,7 @@ class _QuickGameButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
     final session = ref.watch(authSessionProvider);
+    const buttonHeight = 55.0;
 
     final timeControl = Row(
       mainAxisSize: MainAxisSize.min,
@@ -580,16 +581,13 @@ class _QuickGameButton extends ConsumerWidget {
           children: [
             SizedBox(
               width: 162.0,
-              height: 65.0,
+              height: buttonHeight,
               child: AdaptiveInkWell(
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10),
                   bottomLeft: Radius.circular(10),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Center(child: timeControl),
-                ),
+                child: Center(child: timeControl),
                 onTap: () {
                   final double screenHeight = MediaQuery.sizeOf(context).height;
                   showAdaptiveBottomSheet<void>(
@@ -608,11 +606,10 @@ class _QuickGameButton extends ConsumerWidget {
             ),
             Expanded(
               child: SizedBox(
-                height: 65.0,
+                height: buttonHeight,
                 child: defaultTargetPlatform == TargetPlatform.iOS
                     ? CupertinoButton.filled(
                         padding: const EdgeInsets.symmetric(
-                          vertical: 8.0,
                           horizontal: 6.0,
                         ),
                         borderRadius: const BorderRadius.only(
@@ -630,15 +627,13 @@ class _QuickGameButton extends ConsumerWidget {
                         },
                         child: Text(
                           context.l10n.studyStart,
-                          style: Styles.bold,
+                          style: Styles.bold
+                              .copyWith(color: CupertinoColors.white),
                         ),
                       )
                     : FilledButtonTheme(
                         data: FilledButtonThemeData(
                           style: ButtonStyle(
-                            padding: MaterialStateProperty.all(
-                              const EdgeInsets.symmetric(vertical: 8.0),
-                            ),
                             shape: MaterialStateProperty.all(
                               const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(

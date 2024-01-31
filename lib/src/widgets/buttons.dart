@@ -350,7 +350,7 @@ class _CardButtonState extends State<CardButton> {
               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
               onTap: widget.onTap,
               child: Padding(
-                padding: const EdgeInsets.all(6.0),
+                padding: const EdgeInsets.symmetric(horizontal: 6.0),
                 child: ListTile(
                   leading: widget.icon,
                   title: widget.title,
@@ -375,7 +375,7 @@ class _CardButtonState extends State<CardButton> {
               child: PlatformCard(
                 elevation: 0.2,
                 child: Padding(
-                  padding: const EdgeInsets.all(6.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
                   child: ListTileTheme(
                     data: ListTileThemeData(
                       iconColor:
