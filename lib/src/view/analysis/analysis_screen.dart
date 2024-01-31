@@ -1055,7 +1055,7 @@ class AcplChart extends ConsumerWidget {
 
     return Center(
       child: AspectRatio(
-        aspectRatio: 2.3,
+        aspectRatio: 2.5,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: LineChart(

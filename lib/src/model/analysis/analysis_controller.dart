@@ -541,20 +541,34 @@ class AnalysisController extends _$AnalysisController {
     }
     final list = _root.mainline
         .map(
-          (node) => node.lichessAnalysisComments
-              ?.firstWhereOrNull((c) => c.eval != null)
-              ?.eval,
-        )
+      (node) => (
+        node.position.isCheckmate,
+        node.position.turn,
+        node.lichessAnalysisComments
+            ?.firstWhereOrNull((c) => c.eval != null)
+            ?.eval
+      ),
+    )
         .map(
-          (eval) => eval != null
-              ? ExternalEval(
-                  cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
-                  mate: eval.mate,
-                  depth: eval.depth,
-                )
-              : const ExternalEval(cp: null, mate: null),
-        )
-        .toList(growable: false);
+      (el) {
+        final (isCheckmate, side, eval) = el;
+        return eval != null
+            ? ExternalEval(
+                cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
+                mate: eval.mate,
+                depth: eval.depth,
+              )
+            : ExternalEval(
+                cp: null,
+                // hack to display checkmate as the max eval
+                mate: isCheckmate
+                    ? side == Side.white
+                        ? -1
+                        : 1
+                    : null,
+              );
+      },
+    ).toList(growable: false);
     return list.isEmpty ? null : IList(list);
   }
 }
