@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -66,14 +66,18 @@ class UserListTile extends StatelessWidget {
       padding: defaultTargetPlatform == TargetPlatform.iOS
           ? Styles.bodyPadding
           : null,
-      leading: _OnlineOrPatron(
-        patron: isPatron,
-        online: isOnline,
+      leading: Icon(
+        isOnline == true ? Icons.cloud : Icons.cloud_off,
+        color: isOnline == true ? LichessColors.good : null,
       ),
       title: Padding(
         padding: const EdgeInsets.only(right: 5.0),
         child: Row(
           children: [
+            if (isPatron == true) ...[
+              const Icon(LichessIcons.patron),
+              const SizedBox(width: 5),
+            ],
             if (title != null) ...[
               Text(
                 title!,
@@ -139,33 +143,5 @@ class _UserRating extends StatelessWidget {
         Text(rating),
       ],
     );
-  }
-}
-
-class _OnlineOrPatron extends StatelessWidget {
-  const _OnlineOrPatron({
-    required this.patron,
-    required this.online,
-  });
-
-  final bool? patron;
-  final bool? online;
-
-  @override
-  Widget build(BuildContext context) {
-    if (patron != null) {
-      return Icon(
-        LichessIcons.patron,
-        color:
-            online != null && online! ? LichessColors.good : LichessColors.grey,
-      );
-    } else {
-      return Icon(
-        CupertinoIcons.circle_fill,
-        size: 20,
-        color:
-            online != null && online! ? LichessColors.good : LichessColors.grey,
-      );
-    }
   }
 }

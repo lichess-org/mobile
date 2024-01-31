@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:logging/logging.dart';
+import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'streamer.dart';
@@ -26,6 +27,25 @@ Future<User> user(UserRef ref, {required UserId id}) async {
   final link = ref.cacheFor(const Duration(minutes: 5));
   final repo = ref.watch(userRepositoryProvider);
   final result = await repo.getUser(id);
+  if (result.isError) {
+    link.close();
+  }
+  return result.asFuture;
+}
+
+@riverpod
+Future<(User, UserStatus)> userAndStatus(
+  UserAndStatusRef ref, {
+  required UserId id,
+}) async {
+  final link = ref.cacheFor(const Duration(minutes: 5));
+  final repo = ref.watch(userRepositoryProvider);
+  final result = await repo.getUser(id).flatMap((user) {
+    return repo.getUsersStatuses({id}.lock).map((statuses) {
+      final status = statuses.first;
+      return (user, status);
+    });
+  });
   if (result.isError) {
     link.close();
   }

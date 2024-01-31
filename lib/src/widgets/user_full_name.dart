@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -17,6 +16,7 @@ class UserFullNameWidget extends ConsumerWidget {
     this.aiLevel,
     this.rating,
     this.provisional,
+    this.shouldShowOnline = false,
     this.style,
     super.key,
   });
@@ -26,6 +26,7 @@ class UserFullNameWidget extends ConsumerWidget {
     required this.aiLevel,
     this.rating,
     this.provisional,
+    this.shouldShowOnline = false,
     this.style,
     super.key,
   });
@@ -39,6 +40,9 @@ class UserFullNameWidget extends ConsumerWidget {
   /// Whether the rating is provisional.
   final bool? provisional;
   final TextStyle? style;
+
+  /// Whether to show the online status.
+  final bool? shouldShowOnline;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -60,6 +64,16 @@ class UserFullNameWidget extends ConsumerWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (user != null && shouldShowOnline == true)
+          Padding(
+            padding: const EdgeInsets.only(right: 5),
+            child: Icon(
+              user?.isOnline == true ? Icons.cloud : Icons.cloud_off,
+              size: style?.fontSize ??
+                  DefaultTextStyle.of(context).style.fontSize,
+              color: user?.isOnline == true ? LichessColors.good : null,
+            ),
+          ),
         if (user?.isPatron == true)
           Padding(
             padding: const EdgeInsets.only(right: 5),

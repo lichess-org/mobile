@@ -30,13 +30,20 @@ class UserScreen extends ConsumerWidget {
   }
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
-    final asyncUser = ref.watch(userProvider(id: user.id));
+    final asyncUser = ref.watch(userAndStatusProvider(id: user.id));
+    final updatedLightUser = asyncUser.maybeWhen(
+      data: (data) => data.$1.lightUser.copyWith(isOnline: data.$2.online),
+      orElse: () => null,
+    );
     return Scaffold(
       appBar: AppBar(
-        title: UserFullNameWidget(user: user),
+        title: UserFullNameWidget(
+          user: updatedLightUser ?? user,
+          shouldShowOnline: updatedLightUser != null,
+        ),
       ),
       body: asyncUser.when(
-        data: (user) => _UserProfileListView(user),
+        data: (data) => _UserProfileListView(data.$1),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) {
           if (error is NotFoundException) {
@@ -57,14 +64,21 @@ class UserScreen extends ConsumerWidget {
   }
 
   Widget _buildIos(BuildContext context, WidgetRef ref) {
-    final asyncUser = ref.watch(userProvider(id: user.id));
+    final asyncUser = ref.watch(userAndStatusProvider(id: user.id));
+    final updatedLightUser = asyncUser.maybeWhen(
+      data: (data) => data.$1.lightUser.copyWith(isOnline: data.$2.online),
+      orElse: () => null,
+    );
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: UserFullNameWidget(user: user),
+        middle: UserFullNameWidget(
+          user: updatedLightUser ?? user,
+          shouldShowOnline: updatedLightUser != null,
+        ),
       ),
       child: asyncUser.when(
-        data: (user) => SafeArea(
-          child: _UserProfileListView(user),
+        data: (data) => SafeArea(
+          child: _UserProfileListView(data.$1),
         ),
         loading: () =>
             const Center(child: CircularProgressIndicator.adaptive()),
