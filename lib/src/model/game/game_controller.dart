@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:chessground/chessground.dart' as cg;
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -88,7 +90,9 @@ class GameController extends _$GameController {
 
         if (fullEvent.game.finished) {
           final result = await _getPostGameData();
-          game = result.fold((data) => _mergePostGameData(game, data), (e, s) {
+          game = result.fold(
+              (data) => _mergePostGameData(game, data, rewriteSteps: true),
+              (e, s) {
             _logger.warning('Could not get post game data', e, s);
             return game;
           });
@@ -837,9 +841,34 @@ class GameController extends _$GameController {
 
   PlayableGame _mergePostGameData(
     PlayableGame game,
-    ArchivedGame data,
-  ) {
+    ArchivedGame data, {
+    /// Whether to rewrite the steps with the clock data from the archived game
+    ///
+    /// This should not be done when the game has just finished, because we
+    /// don't want to confuse the user with a changing clock.
+    bool rewriteSteps = false,
+  }) {
+    IList<GameStep> newSteps = game.steps;
+    if (rewriteSteps && game.meta.clock != null && data.clocks != null) {
+      final initialTime = game.meta.clock!.initial;
+      newSteps = game.steps.mapIndexed((index, element) {
+        if (index == 0) {
+          return element.copyWith(
+            archivedWhiteClock: initialTime,
+            archivedBlackClock: initialTime,
+          );
+        }
+        final prevClock = index > 1 ? data.clocks![index - 2] : initialTime;
+        final stepClock = data.clocks![index - 1];
+        return element.copyWith(
+          archivedWhiteClock: index.isOdd ? stepClock : prevClock,
+          archivedBlackClock: index.isEven ? stepClock : prevClock,
+        );
+      }).toIList();
+    }
+
     return game.copyWith(
+      steps: newSteps,
       clocks: data.clocks,
       meta: game.meta.copyWith(
         opening: data.meta.opening,
