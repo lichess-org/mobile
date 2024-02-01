@@ -32,8 +32,6 @@ const kProvisionalDeviation = 110;
 const kClueLessDeviation = 230;
 
 // UI
-// TODO use [FormFactor] instead of [kTabletThreshold]
-const kTabletThreshold = 600;
 const kCardTextScaleFactor = 1.64;
 const kMaxClockTextScaleFactor = 1.94;
 const kEmptyWidget = SizedBox.shrink();
