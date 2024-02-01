@@ -543,7 +543,7 @@ class _CorrespondenceGameButton extends StatelessWidget {
 }
 
 class _QuickGameButton extends ConsumerWidget {
-  const ,_QuickGameButton();
+  const _QuickGameButton();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
