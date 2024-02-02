@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/utils/badge_service.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
@@ -117,5 +118,15 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  // update badge
+  final badge = message.data['lichess.iosBadge'] as String?;
+  if (badge != null) {
+    try {
+      badgeService.setBadge(int.parse(badge));
+    } catch (e) {
+      debugPrint('Could not parse badge: $badge');
+    }
   }
 }
