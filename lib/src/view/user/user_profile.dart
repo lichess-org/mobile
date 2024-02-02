@@ -113,9 +113,10 @@ class UserProfile extends ConsumerWidget {
               padding: const EdgeInsets.only(bottom: 5),
               child: Location(profile: user.profile!),
             ),
-          Text(
-            '${context.l10n.memberSince} ${DateFormat.yMMMMd().format(user.createdAt)}',
-          ),
+          if (user.createdAt != null)
+            Text(
+              '${context.l10n.memberSince} ${DateFormat.yMMMMd().format(user.createdAt!)}',
+            ),
           if (user.seenAt != null) ...[
             const SizedBox(height: 5),
             Text(context.l10n.lastSeenActive(timeago.format(user.seenAt!))),
