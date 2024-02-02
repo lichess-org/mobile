@@ -15,12 +15,12 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
 
 import 'firebase_options.dart';
 import 'src/app.dart';
-import 'src/constants.dart';
 
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -54,7 +54,7 @@ Future<void> main() async {
   if (defaultTargetPlatform == TargetPlatform.android) {
     final view = widgetsBinding.platformDispatcher.views.first;
     final data = MediaQueryData.fromView(view);
-    if (data.size.shortestSide < kTabletThreshold) {
+    if (data.size.shortestSide < FormFactor.tablet) {
       await SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp],
       );

@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
@@ -15,6 +14,7 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart' as cg;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
@@ -99,7 +99,7 @@ class _BodyState extends ConsumerState<_Body> {
           );
         }
         final crossAxisCount =
-            MediaQuery.sizeOf(context).width > kTabletThreshold ? 4 : 2;
+            MediaQuery.sizeOf(context).width > FormFactor.tablet ? 4 : 2;
         final columnsGap = _kPuzzlePadding * crossAxisCount + _kPuzzlePadding;
         final boardWidth =
             (MediaQuery.sizeOf(context).width - columnsGap) / crossAxisCount;

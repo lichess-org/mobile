@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -164,7 +165,7 @@ class _Body extends ConsumerWidget {
               builder: (context, constraints) {
                 final aspectRatio = constraints.biggest.aspectRatio;
                 final defaultBoardSize = constraints.biggest.shortestSide;
-                final isTablet = defaultBoardSize > kTabletThreshold;
+                final isTablet = defaultBoardSize > FormFactor.tablet;
                 final remainingHeight =
                     constraints.maxHeight - defaultBoardSize;
                 final isSmallScreen =
