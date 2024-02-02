@@ -90,7 +90,7 @@ class BoardTable extends ConsumerWidget {
         final aspectRatio = constraints.biggest.aspectRatio;
         final defaultBoardSize = constraints.biggest.shortestSide;
 
-        final isTablet = getScreenType(context) == ScreenType.tablet;
+        final isTablet = defaultBoardSize > FormFactor.tablet;
         final boardSize = isTablet
             ? defaultBoardSize - kTabletBoardTableSidePadding * 2
             : defaultBoardSize;

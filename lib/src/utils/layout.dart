@@ -16,9 +16,9 @@ double estimateRemainingHeightLeftBoard(BuildContext context) {
 
 // ignore: avoid_classes_with_only_static_members
 abstract class FormFactor {
-  static double desktop = 900;
-  static double tablet = 600;
-  static double handset = 300;
+  static const double desktop = 900;
+  static const double tablet = 600;
+  static const double handset = 300;
 }
 
 enum ScreenType { watch, handset, tablet, desktop }

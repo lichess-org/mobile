@@ -165,7 +165,7 @@ class _Body extends ConsumerWidget {
               builder: (context, constraints) {
                 final aspectRatio = constraints.biggest.aspectRatio;
                 final defaultBoardSize = constraints.biggest.shortestSide;
-                final isTablet = getScreenType(context) == ScreenType.tablet;
+                final isTablet = defaultBoardSize > FormFactor.tablet;
                 final remainingHeight =
                     constraints.maxHeight - defaultBoardSize;
                 final isSmallScreen =
