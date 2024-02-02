@@ -25,11 +25,15 @@ class CountdownClock extends ConsumerStatefulWidget {
   /// Callback when the clock reaches zero.
   final VoidCallback? onFlag;
 
+  /// Callback with the remaining duration when the clock stops
+  final ValueSetter<Duration>? onStop;
+
   const CountdownClock({
     required this.duration,
     required this.active,
     this.emergencyThreshold,
     this.onFlag,
+    this.onStop,
     super.key,
   });
 
@@ -69,6 +73,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   void stopClock() {
     _timer?.cancel();
     _stopwatch.stop();
+    widget.onStop?.call(timeLeft);
   }
 
   void _playEmergencyFeedback() {
@@ -80,8 +85,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
       _nextEmergency = DateTime.now().add(_emergencyDelay);
       ref.read(soundServiceProvider).play(Sound.lowTime);
       HapticFeedback.heavyImpact();
-    } else if (widget.emergencyThreshold != null &&
-        timeLeft > widget.emergencyThreshold! * 1.5) {
+    } else if (widget.emergencyThreshold != null && timeLeft > widget.emergencyThreshold! * 1.5) {
       _shouldPlayEmergencyFeedback = true;
     }
   }
@@ -101,10 +105,9 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
     if (widget.duration != oldClock.duration) {
       timeLeft = widget.duration;
     }
-    if (widget.active) {
-      startClock();
-    } else {
-      stopClock();
+
+    if (widget.active != oldClock.active) {
+      widget.active ? startClock() : stopClock();
     }
   }
 
@@ -120,12 +123,9 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
     final mins = timeLeft.inMinutes.remainder(60);
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
     final showTenths = timeLeft < const Duration(seconds: 10);
-    final isEmergency = widget.emergencyThreshold != null &&
-        timeLeft <= widget.emergencyThreshold!;
+    final isEmergency = widget.emergencyThreshold != null && timeLeft <= widget.emergencyThreshold!;
     final brightness = ref.watch(currentBrightnessProvider);
-    final clockStyle = brightness == Brightness.dark
-        ? ClockStyle.darkThemeStyle
-        : ClockStyle.lightThemeStyle;
+    final clockStyle = brightness == Brightness.dark ? ClockStyle.darkThemeStyle : ClockStyle.lightThemeStyle;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
     return RepaintBoundary(
@@ -144,9 +144,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
             maxScaleFactor: kMaxClockTextScaleFactor,
             child: RichText(
               text: TextSpan(
-                text: hours > 0
-                    ? '$hours:${mins.toString().padLeft(2, '0')}:$secs'
-                    : '$mins:$secs',
+                text: hours > 0 ? '$hours:${mins.toString().padLeft(2, '0')}:$secs' : '$mins:$secs',
                 style: TextStyle(
                   color: widget.active
                       ? isEmergency
@@ -154,10 +152,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
                           : clockStyle.activeTextColor
                       : clockStyle.textColor,
                   fontSize: 26,
-                  height:
-                      remainingHeight < kSmallRemainingHeightLeftBoardThreshold
-                          ? 1.0
-                          : null,
+                  height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 1.0 : null,
                   fontFeatures: const [
                     FontFeature.tabularFigures(),
                   ],
@@ -165,14 +160,12 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
                 children: [
                   if (showTenths)
                     TextSpan(
-                      text:
-                          '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
+                      text: '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
                       style: const TextStyle(fontSize: 20),
                     ),
                   if (!widget.active && timeLeft < const Duration(seconds: 1))
                     TextSpan(
-                      text:
-                          '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
+                      text: '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
                       style: const TextStyle(fontSize: 18),
                     ),
                 ],
