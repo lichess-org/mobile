@@ -1034,9 +1034,10 @@ class AcplChart extends ConsumerWidget {
 
     VerticalLine phaseVerticalBar(double x, String label) => VerticalLine(
           x: x,
-          color: Theme.of(context).colorScheme.tertiary,
-          strokeWidth: 1.0,
+          color: const Color(0xFF707070),
+          strokeWidth: 0.5,
           label: VerticalLineLabel(
+            style: const TextStyle(fontSize: 10),
             labelResolver: (line) => label,
             show: true,
           ),
