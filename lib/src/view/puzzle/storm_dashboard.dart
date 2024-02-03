@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -14,7 +13,7 @@ import 'package:lichess_mobile/src/widgets/stat_card.dart';
 class StormDashboardModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return defaultTargetPlatform == TargetPlatform.iOS
+    return Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               middle: Text(context.l10n.stormHighscores),

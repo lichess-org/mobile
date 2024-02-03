@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -65,13 +64,13 @@ class PingRating extends ConsumerWidget {
             maxValue: 4,
             value: pingRating,
             size: size,
-            inactiveColor: defaultTargetPlatform == TargetPlatform.iOS
+            inactiveColor: Theme.of(context).platform == TargetPlatform.iOS
                 ? CupertinoDynamicColor.resolve(
                     CupertinoColors.systemGrey,
                     context,
                   ).withOpacity(0.2)
                 : Colors.grey.withOpacity(0.2),
-            levels: defaultTargetPlatform == TargetPlatform.iOS
+            levels: Theme.of(context).platform == TargetPlatform.iOS
                 ? cupertinoLevels
                 : materialLevels,
           ),

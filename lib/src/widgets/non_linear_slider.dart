@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Platform adaptive slider that allows for non-linear values.
@@ -47,7 +46,7 @@ class _NonLinearSliderState extends State<NonLinearSlider> {
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity: defaultTargetPlatform != TargetPlatform.iOS ||
+      opacity: Theme.of(context).platform != TargetPlatform.iOS ||
               widget.onChangeEnd != null
           ? 1
           : 0.5,

@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -110,7 +109,7 @@ class BottomNavScaffold extends ConsumerWidget {
     final currentTab = ref.watch(currentBottomTabProvider);
     final tabs = ref.watch(tabsProvider);
 
-    switch (defaultTargetPlatform) {
+    switch (Theme.of(context).platform) {
       case TargetPlatform.android:
         return NavigatorPopHandler(
           onPop: () async {
@@ -145,7 +144,7 @@ class BottomNavScaffold extends ConsumerWidget {
           ),
         );
       default:
-        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
         return const SizedBox.shrink();
     }
   }

@@ -164,13 +164,13 @@ class _SessionItem extends StatelessWidget {
 
   Color get good => brightness == Brightness.light
       ? LichessColors.good.shade300
-      : defaultTargetPlatform == TargetPlatform.iOS
+      : defaultTargetPlatform  == TargetPlatform.iOS
           ? LichessColors.good.shade600
           : LichessColors.good.shade400;
 
   Color get error => brightness == Brightness.light
       ? LichessColors.error.shade300
-      : defaultTargetPlatform == TargetPlatform.iOS
+      : defaultTargetPlatform  == TargetPlatform.iOS
           ? LichessColors.error.shade600
           : LichessColors.error.shade400;
 

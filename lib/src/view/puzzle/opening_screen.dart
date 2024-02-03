@@ -1,6 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -68,7 +67,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final titleStyle = defaultTargetPlatform == TargetPlatform.iOS
+    final titleStyle = Theme.of(context).platform == TargetPlatform.iOS
         ? TextStyle(
             color: CupertinoTheme.of(context).textTheme.textStyle.color,
           )
@@ -124,10 +123,10 @@ class _OpeningFamily extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collapsedIconColor = defaultTargetPlatform == TargetPlatform.iOS
+    final collapsedIconColor = Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoColors.secondaryLabel.resolveFrom(context)
         : null;
-    final tileColor = defaultTargetPlatform == TargetPlatform.iOS
+    final tileColor = Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoColors.systemBlue.resolveFrom(context)
         : null;
 
@@ -211,7 +210,7 @@ class _OpeningTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformListTile(
-      leading: defaultTargetPlatform == TargetPlatform.iOS
+      leading: Theme.of(context).platform == TargetPlatform.iOS
           ? null
           : const SizedBox.shrink(),
       title: Text(
