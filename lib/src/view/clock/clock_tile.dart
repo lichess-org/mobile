@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
@@ -33,7 +31,6 @@ class ClockTile extends ConsumerWidget {
     final state = ref.watch(clockControllerProvider);
 
     bool isActive() => state.activePlayer == playerType;
-
     bool isLoser() => state.loser == playerType;
 
     Color getBackgroundColor() {
@@ -68,6 +65,7 @@ class ClockTile extends ConsumerWidget {
                 child: AnimatedCrossFade(
                   duration: const Duration(milliseconds: 300),
                   firstChild: CountdownClock(
+                    key: Key('${state.id}-$playerType'),
                     lightColorStyle: _lightClock,
                     darkColorStyle: _darkClockStyle,
                     duration: state.getDuration(playerType),
@@ -76,9 +74,7 @@ class ClockTile extends ConsumerWidget {
                       ref.read(clockControllerProvider.notifier).setLoser(playerType);
                     },
                     onStop: (remaining) {
-                      scheduleMicrotask(() {
-                        ref.read(clockControllerProvider.notifier).updateDuration(playerType, remaining);
-                      });
+                      ref.read(clockControllerProvider.notifier).updateDuration(playerType, remaining);
                     },
                   ),
                   secondChild: const Icon(Icons.flag),

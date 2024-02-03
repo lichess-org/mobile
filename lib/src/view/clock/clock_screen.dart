@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
+import 'package:lichess_mobile/src/view/clock/clock_settings.dart';
 import 'package:lichess_mobile/src/view/clock/clock_tile.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -43,8 +44,17 @@ class _Body extends ConsumerWidget {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Expanded(child: ClockTile(playerType: ClockPlayerType.top,)),
-        Expanded(child: ClockTile(playerType: ClockPlayerType.bottom,)),
+        Expanded(
+          child: ClockTile(
+            playerType: ClockPlayerType.top,
+          ),
+        ),
+        ClockSettings(),
+        Expanded(
+          child: ClockTile(
+            playerType: ClockPlayerType.bottom,
+          ),
+        ),
       ],
     );
   }

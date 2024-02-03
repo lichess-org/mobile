@@ -81,7 +81,9 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   void stopClock() {
     _timer?.cancel();
     _stopwatch.stop();
-    widget.onStop?.call(timeLeft);
+    scheduleMicrotask(() {
+      widget.onStop?.call(timeLeft);
+    });
   }
 
   void _playEmergencyFeedback() {

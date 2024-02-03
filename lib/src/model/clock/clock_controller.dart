@@ -22,6 +22,7 @@ class ClockState with _$ClockState {
   const ClockState._();
 
   const factory ClockState({
+    required int id,
     required ClockOptions options,
     required Duration playerTopTime,
     required Duration playerBottomTime,
@@ -36,6 +37,16 @@ class ClockState with _$ClockState {
     );
 
     return ClockState(
+      id: DateTime.now().millisecondsSinceEpoch,
+      options: options,
+      playerTopTime: options.time,
+      playerBottomTime: options.time,
+    );
+  }
+
+  factory ClockState.fromOptions(ClockOptions options) {
+    return ClockState(
+      id: DateTime.now().millisecondsSinceEpoch,
       options: options,
       playerTopTime: options.time,
       playerBottomTime: options.time,
@@ -63,7 +74,7 @@ class ClockController extends _$ClockController {
   }
 
   void updateDuration(ClockPlayerType playerType, Duration duration) {
-    if(state.loser != null) return;
+    if (state.loser != null || state.activePlayer == null) return;
 
     if (playerType == ClockPlayerType.top) {
       state = state.copyWith(playerTopTime: duration + state.options.increment);
@@ -71,8 +82,12 @@ class ClockController extends _$ClockController {
       state = state.copyWith(playerBottomTime: duration + state.options.increment);
     }
   }
-  
-  void setLoser(ClockPlayerType playerType){
+
+  void setLoser(ClockPlayerType playerType) {
     state = state.copyWith(activePlayer: null, loser: playerType);
+  }
+
+  void reset() {
+    state = ClockState.fromOptions(state.options);
   }
 }
