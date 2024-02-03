@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -64,7 +63,7 @@ class Application extends ConsumerStatefulWidget {
 class _AppState extends ConsumerState<Application> {
   @override
   void initState() {
-    if (defaultTargetPlatform == TargetPlatform.android) {
+    if (Theme.of(context).platform == TargetPlatform.android) {
       setOptimalDisplayMode();
     }
 
@@ -114,7 +113,7 @@ class _AppState extends ConsumerState<Application> {
               ? 60
               : null,
         ),
-        textTheme: defaultTargetPlatform == TargetPlatform.iOS
+        textTheme: Theme.of(context).platform == TargetPlatform.iOS
             ? brightness == Brightness.light
                 ? Typography.blackCupertino
                 : Typography.whiteCupertino

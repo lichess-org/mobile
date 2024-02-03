@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -62,7 +61,7 @@ class _AccountPreferencesScreenState
                     settingsValue: data.zenMode.label(context),
                     showCupertinoTrailingValue: false,
                     onTap: () {
-                      if (defaultTargetPlatform == TargetPlatform.android) {
+                      if (Theme.of(context).platform == TargetPlatform.android) {
                         showChoicePicker(
                           context,
                           choices: Zen.values,
@@ -151,7 +150,7 @@ class _AccountPreferencesScreenState
                     settingsValue: data.takeback.label(context),
                     showCupertinoTrailingValue: false,
                     onTap: () {
-                      if (defaultTargetPlatform == TargetPlatform.android) {
+                      if (Theme.of(context).platform == TargetPlatform.android) {
                         showChoicePicker(
                           context,
                           choices: Takeback.values,
@@ -186,7 +185,7 @@ class _AccountPreferencesScreenState
                     settingsValue: data.autoQueen.label(context),
                     showCupertinoTrailingValue: false,
                     onTap: () {
-                      if (defaultTargetPlatform == TargetPlatform.android) {
+                      if (Theme.of(context).platform == TargetPlatform.android) {
                         showChoicePicker(
                           context,
                           choices: AutoQueen.values,
@@ -222,7 +221,7 @@ class _AccountPreferencesScreenState
                     settingsValue: data.autoThreefold.label(context),
                     showCupertinoTrailingValue: false,
                     onTap: () {
-                      if (defaultTargetPlatform == TargetPlatform.android) {
+                      if (Theme.of(context).platform == TargetPlatform.android) {
                         showChoicePicker(
                           context,
                           choices: AutoThreefold.values,
@@ -293,7 +292,7 @@ class _AccountPreferencesScreenState
                     settingsValue: data.moretime.label(context),
                     showCupertinoTrailingValue: false,
                     onTap: () {
-                      if (defaultTargetPlatform == TargetPlatform.android) {
+                      if (Theme.of(context).platform == TargetPlatform.android) {
                         showChoicePicker(
                           context,
                           choices: Moretime.values,
@@ -353,7 +352,7 @@ class _AccountPreferencesScreenState
       error: (err, stack) => Center(child: Text(err.toString())),
     );
 
-    return defaultTargetPlatform == TargetPlatform.android
+    return Theme.of(context).platform == TargetPlatform.android
         ? Scaffold(
             appBar: AppBar(
               title: Text(context.l10n.preferencesPreferences),

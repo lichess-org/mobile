@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -367,7 +366,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                           value: daysPerTurn,
                           values: kAvailableDaysPerTurn,
                           labelBuilder: _daysLabel,
-                          onChange: defaultTargetPlatform == TargetPlatform.iOS
+                          onChange: Theme.of(context).platform == TargetPlatform.iOS
                               ? (num value) {
                                   setState(() {
                                     daysPerTurn = value.toInt();

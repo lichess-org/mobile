@@ -1,7 +1,6 @@
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -108,7 +107,7 @@ class BoardTable extends ConsumerWidget {
                     padding: const EdgeInsets.all(16.0),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: defaultTargetPlatform == TargetPlatform.iOS
+                        color: Theme.of(context).platform == TargetPlatform.iOS
                             ? CupertinoColors.secondarySystemBackground
                                 .resolveFrom(context)
                             : Theme.of(context).colorScheme.background,
@@ -500,7 +499,7 @@ class InlineMoveItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 4),
         decoration: ShapeDecoration(
           color: current == true
-              ? defaultTargetPlatform == TargetPlatform.iOS
+              ? Theme.of(context).platform == TargetPlatform.iOS
                   ? CupertinoDynamicColor.resolve(
                       CupertinoColors.secondarySystemBackground,
                       context,

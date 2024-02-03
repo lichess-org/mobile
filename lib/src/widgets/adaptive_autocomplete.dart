@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
@@ -24,7 +23,7 @@ class AdaptiveAutoComplete<T extends Object> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return defaultTargetPlatform == TargetPlatform.iOS
+    return Theme.of(context).platform == TargetPlatform.iOS
         ? RawAutocomplete<T>(
             initialValue: initialValue,
             optionsBuilder: optionsBuilder,

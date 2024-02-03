@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -89,7 +88,7 @@ class _Body extends ConsumerWidget {
                           value: customTimeSeconds,
                           values: kAvailableTimesInSeconds,
                           labelBuilder: _clockTimeLabel,
-                          onChange: defaultTargetPlatform == TargetPlatform.iOS
+                          onChange: Theme.of(context).platform == TargetPlatform.iOS
                               ? (num value) {
                                   setState(() {
                                     customTimeSeconds = value.toInt();
@@ -135,7 +134,7 @@ class _Body extends ConsumerWidget {
                         subtitle: NonLinearSlider(
                           value: customIncrementSeconds,
                           values: kAvailableIncrementsInSeconds,
-                          onChange: defaultTargetPlatform == TargetPlatform.iOS
+                          onChange: Theme.of(context).platform == TargetPlatform.iOS
                               ? (num value) {
                                   setState(() {
                                     customIncrementSeconds = value.toInt();

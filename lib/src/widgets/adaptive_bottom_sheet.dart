@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -24,7 +23,7 @@ Future<T?> showAdaptiveBottomSheet<T>({
     isScrollControlled: isScrollControlled,
     useRootNavigator: useRootNavigator,
     useSafeArea: useSafeArea,
-    shape: defaultTargetPlatform == TargetPlatform.iOS
+    shape: Theme.of(context).platform == TargetPlatform.iOS
         ? const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(10.0),
@@ -32,13 +31,13 @@ Future<T?> showAdaptiveBottomSheet<T>({
           )
         : null,
     constraints: constraints,
-    backgroundColor: defaultTargetPlatform == TargetPlatform.iOS
+    backgroundColor: Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoDynamicColor.resolve(
             CupertinoColors.tertiarySystemGroupedBackground,
             context,
           )
         : null,
-    elevation: defaultTargetPlatform == TargetPlatform.iOS ? 0 : null,
+    elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0 : null,
     builder: builder,
   );
 }
@@ -64,7 +63,7 @@ class ModalSheetScaffold extends StatelessWidget {
     return SafeArea(
       child: Column(
         children: [
-          if (defaultTargetPlatform == TargetPlatform.iOS)
+          if (Theme.of(context).platform == TargetPlatform.iOS)
             Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(

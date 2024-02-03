@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -132,7 +131,7 @@ class _EditDialog extends ConsumerWidget {
       ],
     );
 
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
       return CupertinoAlertDialog(
         content: content,
       );

@@ -31,7 +31,7 @@ class FatButton extends StatelessWidget {
       button: true,
       label: semanticsLabel,
       excludeSemantics: true,
-      child: defaultTargetPlatform == TargetPlatform.iOS
+      child: Theme.of(context).platform == TargetPlatform.iOS
           ? CupertinoButton.filled(onPressed: onPressed, child: child)
           : FilledButton(
               onPressed: onPressed,
@@ -113,7 +113,7 @@ class _SecondaryButtonState extends State<SecondaryButton>
       button: true,
       label: widget.semanticsLabel,
       excludeSemantics: true,
-      child: defaultTargetPlatform == TargetPlatform.iOS
+      child: Theme.of(context).platform == TargetPlatform.iOS
           ? CupertinoButton(
               color: widget.glowing
                   ? CupertinoTheme.of(context)
@@ -153,7 +153,7 @@ class AppBarTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return defaultTargetPlatform == TargetPlatform.iOS
+    return Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: onPressed,
@@ -181,7 +181,7 @@ class AppBarIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return defaultTargetPlatform == TargetPlatform.iOS
+    return Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoIconButton(
             padding: EdgeInsets.zero,
             semanticsLabel: semanticsLabel,
@@ -227,7 +227,7 @@ class AdaptiveTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return defaultTargetPlatform == TargetPlatform.iOS
+    return Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoButton(
             onPressed: onPressed,
             child: child,
@@ -253,7 +253,7 @@ class NoPaddingTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return defaultTargetPlatform == TargetPlatform.iOS
+    return Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: onPressed,
@@ -341,7 +341,7 @@ class _CardButtonState extends State<CardButton> {
 
   @override
   Widget build(BuildContext context) {
-    switch (defaultTargetPlatform) {
+    switch (Theme.of(context).platform) {
       case TargetPlatform.android:
         return Opacity(
           opacity: widget.onTap == null ? 0.4 : 1.0,
@@ -397,7 +397,7 @@ class _CardButtonState extends State<CardButton> {
           ),
         );
       default:
-        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
         return const SizedBox.shrink();
     }
   }
@@ -431,7 +431,7 @@ class _AdaptiveInkWellState extends State<AdaptiveInkWell> {
 
   @override
   Widget build(BuildContext context) {
-    switch (defaultTargetPlatform) {
+    switch (Theme.of(context).platform) {
       case TargetPlatform.android:
         return InkWell(
           onTap: widget.onTap,
@@ -470,7 +470,7 @@ class _AdaptiveInkWellState extends State<AdaptiveInkWell> {
           ),
         );
       default:
-        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
         return const SizedBox.shrink();
     }
   }
@@ -588,7 +588,7 @@ class PlatformIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (defaultTargetPlatform) {
+    switch (Theme.of(context).platform) {
       case TargetPlatform.android:
         final themeData = Theme.of(context);
         return Theme(
@@ -620,7 +620,7 @@ class PlatformIconButton extends StatelessWidget {
           ),
         );
       default:
-        assert(false, 'Unexpected Platform $defaultTargetPlatform');
+        assert(false, 'Unexpected Platform ${Theme.of(context).platform}');
         return const SizedBox.shrink();
     }
   }
