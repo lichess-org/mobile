@@ -34,6 +34,18 @@ class ClockTile extends ConsumerWidget {
 
     bool isActive() => state.activePlayer == playerType;
 
+    bool isLoser() => state.loser == playerType;
+
+    Color getBackgroundColor() {
+      if (isLoser()) {
+        return Colors.redAccent;
+      } else if (isActive()) {
+        return themeData.colorScheme.primary;
+      } else {
+        return Colors.grey;
+      }
+    }
+
     return Container(
       margin: const EdgeInsets.all(8),
       decoration: const BoxDecoration(
@@ -41,9 +53,9 @@ class ClockTile extends ConsumerWidget {
       ),
       clipBehavior: Clip.hardEdge,
       child: Material(
-        color: isActive() ? themeData.colorScheme.primary : Colors.grey,
+        color: getBackgroundColor(),
         child: InkWell(
-          onTap: isActive()
+          onTap: isActive() || (state.activePlayer == null && state.loser == null)
               ? () {
                   ref.read(clockControllerProvider.notifier).endTurn(playerType);
                 }
@@ -53,16 +65,24 @@ class ClockTile extends ConsumerWidget {
             child: FittedBox(
               child: RotatedBox(
                 quarterTurns: playerType == ClockPlayerType.top ? 2 : 0,
-                child: CountdownClock(
-                  lightColorStyle: _lightClock,
-                  darkColorStyle: _darkClockStyle,
-                  duration: state.getDuration(playerType),
-                  active: isActive(),
-                  onStop: (remaining) {
-                    scheduleMicrotask(() {
-                      ref.read(clockControllerProvider.notifier).updateDuration(playerType, remaining);
-                    });
-                  },
+                child: AnimatedCrossFade(
+                  duration: const Duration(milliseconds: 300),
+                  firstChild: CountdownClock(
+                    lightColorStyle: _lightClock,
+                    darkColorStyle: _darkClockStyle,
+                    duration: state.getDuration(playerType),
+                    active: isActive(),
+                    onFlag: () {
+                      ref.read(clockControllerProvider.notifier).setLoser(playerType);
+                    },
+                    onStop: (remaining) {
+                      scheduleMicrotask(() {
+                        ref.read(clockControllerProvider.notifier).updateDuration(playerType, remaining);
+                      });
+                    },
+                  ),
+                  secondChild: const Icon(Icons.flag),
+                  crossFadeState: isLoser() ? CrossFadeState.showSecond : CrossFadeState.showFirst,
                 ),
               ),
             ),
