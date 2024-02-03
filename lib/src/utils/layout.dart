@@ -1,17 +1,14 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
-final _appBarHeight = defaultTargetPlatform == TargetPlatform.iOS ? 44.0 : 56.0;
-
-/// Returns the estimated height of screen left the board
 double estimateRemainingHeightLeftBoard(BuildContext context) {
   final size = MediaQuery.sizeOf(context);
   final padding = MediaQuery.paddingOf(context);
   final safeViewportHeight = size.height - padding.top - padding.bottom;
   final boardSize = size.width;
-
-  return safeViewportHeight - boardSize - _appBarHeight - kBottomBarHeight;
+  /// Returns the estimated height of screen left the board
+  final appBarHeight = Theme.of(context).platform == TargetPlatform.iOS ? 44.0 : 56.0;
+  return safeViewportHeight - boardSize - appBarHeight - kBottomBarHeight;
 }
 
 // ignore: avoid_classes_with_only_static_members
