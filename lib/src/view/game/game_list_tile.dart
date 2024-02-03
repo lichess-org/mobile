@@ -69,7 +69,9 @@ class GameListTile extends StatelessWidget {
       leading: icon != null
           ? Icon(
               icon,
-              size: Theme.of(context).platform == TargetPlatform.iOS ? 26.0 : 36.0,
+              size: Theme.of(context).platform == TargetPlatform.iOS
+                  ? 26.0
+                  : 36.0,
             )
           : null,
       title: playerTitle,

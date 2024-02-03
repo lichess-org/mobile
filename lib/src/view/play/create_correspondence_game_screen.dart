@@ -366,13 +366,14 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                           value: daysPerTurn,
                           values: kAvailableDaysPerTurn,
                           labelBuilder: _daysLabel,
-                          onChange: Theme.of(context).platform == TargetPlatform.iOS
-                              ? (num value) {
-                                  setState(() {
-                                    daysPerTurn = value.toInt();
-                                  });
-                                }
-                              : null,
+                          onChange:
+                              Theme.of(context).platform == TargetPlatform.iOS
+                                  ? (num value) {
+                                      setState(() {
+                                        daysPerTurn = value.toInt();
+                                      });
+                                    }
+                                  : null,
                           onChangeEnd: (num value) {
                             setState(() {
                               daysPerTurn = value.toInt();

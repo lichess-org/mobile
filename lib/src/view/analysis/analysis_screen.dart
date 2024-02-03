@@ -699,12 +699,13 @@ class _EngineDepth extends ConsumerWidget {
                 },
                 direction: PopoverDirection.top,
                 width: 240,
-                backgroundColor: Theme.of(context).platform == TargetPlatform.android
-                    ? Theme.of(context).dialogBackgroundColor
-                    : CupertinoDynamicColor.resolve(
-                        CupertinoColors.tertiarySystemBackground,
-                        context,
-                      ),
+                backgroundColor:
+                    Theme.of(context).platform == TargetPlatform.android
+                        ? Theme.of(context).dialogBackgroundColor
+                        : CupertinoDynamicColor.resolve(
+                            CupertinoColors.tertiarySystemBackground,
+                            context,
+                          ),
                 transitionDuration: Duration.zero,
                 popoverTransitionBuilder: (_, child) => child,
               );
@@ -725,7 +726,8 @@ class _EngineDepth extends ConsumerWidget {
                   child: Text(
                     '${math.min(99, depth)}',
                     style: TextStyle(
-                      color: Theme.of(context).platform == TargetPlatform.android
+                      color: Theme.of(context).platform ==
+                              TargetPlatform.android
                           ? Theme.of(context).colorScheme.onSecondary
                           : CupertinoTheme.of(context).primaryContrastingColor,
                       fontFeatures: const [

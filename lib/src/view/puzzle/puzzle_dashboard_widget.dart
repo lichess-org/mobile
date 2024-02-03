@@ -142,8 +142,9 @@ class PuzzleChart extends StatelessWidget {
             fillColor: Theme.of(context).platform == TargetPlatform.iOS
                 ? null
                 : chartColor.withOpacity(0.2),
-            borderColor:
-                Theme.of(context).platform == TargetPlatform.iOS ? null : chartColor,
+            borderColor: Theme.of(context).platform == TargetPlatform.iOS
+                ? null
+                : chartColor,
             dataEntries: puzzleData
                 .map((theme) => RadarEntry(value: theme.performance.toDouble()))
                 .toList(),

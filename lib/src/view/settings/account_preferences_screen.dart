@@ -61,7 +61,8 @@ class _AccountPreferencesScreenState
                     settingsValue: data.zenMode.label(context),
                     showCupertinoTrailingValue: false,
                     onTap: () {
-                      if (Theme.of(context).platform == TargetPlatform.android) {
+                      if (Theme.of(context).platform ==
+                          TargetPlatform.android) {
                         showChoicePicker(
                           context,
                           choices: Zen.values,
@@ -150,7 +151,8 @@ class _AccountPreferencesScreenState
                     settingsValue: data.takeback.label(context),
                     showCupertinoTrailingValue: false,
                     onTap: () {
-                      if (Theme.of(context).platform == TargetPlatform.android) {
+                      if (Theme.of(context).platform ==
+                          TargetPlatform.android) {
                         showChoicePicker(
                           context,
                           choices: Takeback.values,
@@ -185,7 +187,8 @@ class _AccountPreferencesScreenState
                     settingsValue: data.autoQueen.label(context),
                     showCupertinoTrailingValue: false,
                     onTap: () {
-                      if (Theme.of(context).platform == TargetPlatform.android) {
+                      if (Theme.of(context).platform ==
+                          TargetPlatform.android) {
                         showChoicePicker(
                           context,
                           choices: AutoQueen.values,
@@ -221,7 +224,8 @@ class _AccountPreferencesScreenState
                     settingsValue: data.autoThreefold.label(context),
                     showCupertinoTrailingValue: false,
                     onTap: () {
-                      if (Theme.of(context).platform == TargetPlatform.android) {
+                      if (Theme.of(context).platform ==
+                          TargetPlatform.android) {
                         showChoicePicker(
                           context,
                           choices: AutoThreefold.values,
@@ -292,7 +296,8 @@ class _AccountPreferencesScreenState
                     settingsValue: data.moretime.label(context),
                     showCupertinoTrailingValue: false,
                     onTap: () {
-                      if (Theme.of(context).platform == TargetPlatform.android) {
+                      if (Theme.of(context).platform ==
+                          TargetPlatform.android) {
                         showChoicePicker(
                           context,
                           choices: Moretime.values,

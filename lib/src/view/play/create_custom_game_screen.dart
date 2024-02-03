@@ -88,13 +88,14 @@ class _Body extends ConsumerWidget {
                           value: customTimeSeconds,
                           values: kAvailableTimesInSeconds,
                           labelBuilder: _clockTimeLabel,
-                          onChange: Theme.of(context).platform == TargetPlatform.iOS
-                              ? (num value) {
-                                  setState(() {
-                                    customTimeSeconds = value.toInt();
-                                  });
-                                }
-                              : null,
+                          onChange:
+                              Theme.of(context).platform == TargetPlatform.iOS
+                                  ? (num value) {
+                                      setState(() {
+                                        customTimeSeconds = value.toInt();
+                                      });
+                                    }
+                                  : null,
                           onChangeEnd: (num value) {
                             setState(() {
                               customTimeSeconds = value.toInt();
@@ -134,13 +135,14 @@ class _Body extends ConsumerWidget {
                         subtitle: NonLinearSlider(
                           value: customIncrementSeconds,
                           values: kAvailableIncrementsInSeconds,
-                          onChange: Theme.of(context).platform == TargetPlatform.iOS
-                              ? (num value) {
-                                  setState(() {
-                                    customIncrementSeconds = value.toInt();
-                                  });
-                                }
-                              : null,
+                          onChange:
+                              Theme.of(context).platform == TargetPlatform.iOS
+                                  ? (num value) {
+                                      setState(() {
+                                        customIncrementSeconds = value.toInt();
+                                      });
+                                    }
+                                  : null,
                           onChangeEnd: (num value) {
                             setState(() {
                               customIncrementSeconds = value.toInt();

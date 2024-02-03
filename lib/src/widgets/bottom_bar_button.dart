@@ -105,7 +105,8 @@ class BottomBarButton extends StatelessWidget {
                           fit: BoxFit.contain,
                           child: DefaultTextStyle.merge(
                             style: TextStyle(
-                              color: Theme.of(context).platform == TargetPlatform.iOS
+                              color: Theme.of(context).platform ==
+                                      TargetPlatform.iOS
                                   ? Colors.white
                                   : materialThemeData.colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,
