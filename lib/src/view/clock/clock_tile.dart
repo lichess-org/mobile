@@ -5,6 +5,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 
+const _darkClockStyle = ClockStyle(
+  textColor: Colors.white,
+  activeTextColor: Colors.black,
+  emergencyTextColor: Colors.white,
+  backgroundColor: Colors.transparent,
+  activeBackgroundColor: Colors.transparent,
+  emergencyBackgroundColor: Color(0xFF673431),
+);
+
+const _lightClock = ClockStyle(
+  textColor: Colors.white,
+  activeTextColor: Colors.black,
+  emergencyTextColor: Colors.black,
+  backgroundColor: Colors.transparent,
+  activeBackgroundColor: Colors.transparent,
+  emergencyBackgroundColor: Color(0xFFF2CCCC),
+);
+
 class ClockTile extends ConsumerWidget {
   final ClockPlayerType playerType;
   const ClockTile({required this.playerType, super.key});
@@ -14,6 +32,8 @@ class ClockTile extends ConsumerWidget {
     final themeData = Theme.of(context);
     final state = ref.watch(clockControllerProvider);
 
+    bool isActive() => state.activePlayer == playerType;
+
     return Container(
       margin: const EdgeInsets.all(8),
       decoration: const BoxDecoration(
@@ -21,19 +41,23 @@ class ClockTile extends ConsumerWidget {
       ),
       clipBehavior: Clip.hardEdge,
       child: Material(
-        color: themeData.colorScheme.primary.withOpacity(0.5),
+        color: isActive() ? themeData.colorScheme.primary : Colors.grey,
         child: InkWell(
-          onTap: () {
-            ref.read(clockControllerProvider.notifier).endTurn(playerType);
-          },
+          onTap: isActive()
+              ? () {
+                  ref.read(clockControllerProvider.notifier).endTurn(playerType);
+                }
+              : null,
           child: Padding(
             padding: const EdgeInsets.all(40),
             child: FittedBox(
               child: RotatedBox(
                 quarterTurns: playerType == ClockPlayerType.top ? 2 : 0,
                 child: CountdownClock(
+                  lightColorStyle: _lightClock,
+                  darkColorStyle: _darkClockStyle,
                   duration: state.getDuration(playerType),
-                  active: state.activePlayer == playerType,
+                  active: isActive(),
                   onStop: (remaining) {
                     scheduleMicrotask(() {
                       ref.read(clockControllerProvider.notifier).updateDuration(playerType, remaining);
